@@ -42,6 +42,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
 
         public Dictionary<string,string> ErrorMessages { get; set; }
         public string RedirectButtonMessage { get; set; }
+        public string HiddenFlashMessageInformation { get; set; }
     }
 
     public enum FlashMessageSeverityLevel

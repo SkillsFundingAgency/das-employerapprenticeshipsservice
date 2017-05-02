@@ -32,9 +32,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, userIdClaim);
 
-            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+
+            if (flashMessage!=null)
             {
-                response.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
+                response.FlashMessage = flashMessage;
+                response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
             }
 
             return View(response);

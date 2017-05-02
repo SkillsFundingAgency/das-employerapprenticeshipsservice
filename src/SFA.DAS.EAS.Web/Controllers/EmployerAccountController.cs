@@ -2,7 +2,6 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
 using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -174,9 +173,15 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("summary");
             }
 
-            TempData["employerAccountCreated"] = enteredData.OrganisationType.ToString();
-            TempData["successHeader"] = "Account created";
+            var flashmessage = new FlashMessageViewModel
+            {
+                Headline = "Account created",
+                HiddenFlashMessageInformation = enteredData.OrganisationType.ToString(),
+                Severity = FlashMessageSeverityLevel.Complete
+            };
 
+            AddFlashMessageToCookie(flashmessage);
+            
             return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
@@ -206,8 +211,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     Severity = FlashMessageSeverityLevel.Success
                 };
 
-                TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
-
+                AddFlashMessageToCookie(flashmessage);
+                
                 return RedirectToAction("Index", "EmployerTeam");
             }
 

@@ -134,14 +134,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         }
 
         [Test]
-        public async Task ThenIfTheAccountIsSucessfullyCreatedThenTheFlashMessageIsAddedToTempData()
+        public async Task ThenIfTheAccountIsSucessfullyCreatedThenTheFlashMessageIsAddedToCookieStorage()
         {
             //Act
             await _employerAccountController.CreateAccount();
 
             //Assert
-            Assert.IsTrue(_employerAccountController.TempData.ContainsKey("successHeader"));
-
+            _flashMessage.Verify(x=>x.Create(It.Is<FlashMessageViewModel>(c=>c.Headline.Equals("Account created") && c.Severity.Equals(FlashMessageSeverityLevel.Complete)),"sfa-das-employerapprenticeshipsservice-flashmessage",1),Times.Once);
         }
 
 
@@ -153,8 +152,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             await _employerAccountController.CreateAccount();
 
             //Assert
-            Assert.IsTrue(_employerAccountController.TempData.ContainsKey("employerAccountCreated"));
-            Assert.AreEqual("Charities", _employerAccountController.TempData["employerAccountCreated"]);
+            _flashMessage.Verify(x => x.Create(It.Is<FlashMessageViewModel>(c => c.HiddenFlashMessageInformation.Equals("Charities")), "sfa-das-employerapprenticeshipsservice-flashmessage", 1), Times.Once);
 
         }
     }
