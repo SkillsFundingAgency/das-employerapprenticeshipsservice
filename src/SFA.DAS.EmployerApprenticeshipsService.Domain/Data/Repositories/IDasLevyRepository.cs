@@ -18,11 +18,12 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<DasDeclaration> GetLastSubmissionForScheme(string empRef);
         Task<DasDeclaration> GetSubmissionByEmprefPayrollYearAndMonth(string empRef, string payrollYear, short payrollMonth);
         Task ProcessDeclarations();
-        Task<List<TransactionLine>> GetTransactions(long accountId);
+        Task<List<TransactionLine>> GetTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
+        Task<int> GetPreviousTransactionsCount(long accountId, DateTime fromDate);
         Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds);
         Task CreateNewPeriodEnd(PeriodEnd periodEnd);
         Task<PeriodEnd> GetLatestPeriodEnd();
-        Task<List<TransactionLine>> GetTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
+        Task<List<TransactionLine>> GetTransactionDetailsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
         Task CreatePaymentData(PaymentDetails paymentDetails);
         Task<Payment> GetPaymentData(Guid paymentId);
         Task ProcessPaymentData();

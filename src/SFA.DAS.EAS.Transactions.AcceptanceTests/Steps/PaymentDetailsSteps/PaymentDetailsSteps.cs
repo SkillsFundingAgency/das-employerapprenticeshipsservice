@@ -198,7 +198,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
             var repository = _container.GetInstance<IDasLevyRepository>();
 
-            var transactions = repository.GetTransactionsByDateRange(accountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).Result;
+            var transactions = repository.GetTransactionDetailsByDateRange(accountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
@@ -220,7 +220,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
             var repository = _container.GetInstance<IDasLevyRepository>();
 
-            var transactions = repository.GetTransactionsByDateRange(accountId, periodEnd.CompletionDateTime.AddDays(-1), periodEnd.CompletionDateTime.AddDays(1)).Result;
+            var transactions = repository.GetTransactionDetailsByDateRange(accountId, periodEnd.CompletionDateTime.AddDays(-1), periodEnd.CompletionDateTime.AddDays(1)).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
@@ -240,7 +240,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
             var repository = _container.GetInstance<IDasLevyRepository>();
 
-            var transactions = repository.GetTransactionsByDateRange(accountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).Result;
+            var transactions = repository.GetTransactionDetailsByDateRange(accountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 

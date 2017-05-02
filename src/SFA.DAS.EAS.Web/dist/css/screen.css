@@ -2136,6 +2136,16 @@ input[type=number] {
   }
 }
 
+.mobile-hide-inline {
+  display: none;
+}
+
+@media (min-width: 641px) {
+  .mobile-hide-inline {
+    display: inline;
+  }
+}
+
 .mobile-hide-cell {
   display: none;
 }
@@ -2211,6 +2221,48 @@ dl.inline.course-details {
   .secondary-text {
     font-size: 16px;
     line-height: 1.25;
+  }
+}
+
+.data {
+  background: #912b88;
+  color: white;
+  padding: 15px;
+}
+
+.data dl {
+  display: table;
+}
+
+.data dl dt {
+  display: table-footer-group;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+@media (min-width: 641px) {
+  .data dl dt {
+    font-size: 19px;
+    line-height: 1.3157894737;
+  }
+}
+
+.data dl dd {
+  display: table-header-group;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 32px;
+  line-height: 1.09375;
+}
+
+@media (min-width: 641px) {
+  .data dl dd {
+    font-size: 48px;
+    line-height: 1.0416666667;
   }
 }
 
@@ -2858,6 +2910,96 @@ a#link-settings:focus {
   line-height: 1.1em;
   top: 3px;
   display: block;
+}
+
+.previous-next-navigation {
+  margin: 40px -3px;
+  padding: 3px;
+  overflow: hidden;
+}
+
+.previous-next-navigation li {
+  display: block;
+  padding: 0;
+  margin: 0;
+  width: 50%;
+  float: left;
+}
+
+.previous-next-navigation li a {
+  display: block;
+  padding: 15px 0 15px 38px;
+  text-decoration: none;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+@media (min-width: 641px) {
+  .previous-next-navigation li a {
+    font-size: 24px;
+    line-height: 1.25;
+  }
+}
+
+.previous-next-navigation li a:before {
+  background: url("/dist/images/arrow-sprite.png");
+  background-position: -4px -2px;
+  margin-top: -2px;
+  margin-left: -30px;
+  display: block;
+  float: left;
+  width: 30px;
+  height: 40px;
+  content: " ";
+}
+
+@media (min-width: 641px) {
+  .previous-next-navigation li a:before {
+    margin-top: 6px;
+  }
+}
+
+.previous-next-navigation li a:hover {
+  background: #f8f8f8;
+}
+
+.previous-next-navigation li a:focus {
+  background: #dee0e2;
+}
+
+.previous-next-navigation li .detail {
+  display: block;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+@media (min-width: 641px) {
+  .previous-next-navigation li .detail {
+    font-size: 19px;
+    line-height: 1.3157894737;
+  }
+}
+
+.previous-next-navigation li.next {
+  text-align: right;
+  float: right;
+}
+
+.previous-next-navigation li.next a {
+  padding: 15px 38px 15px 0;
+}
+
+.previous-next-navigation li.next a:before {
+  float: right;
+  margin-left: 0;
+  margin-right: -30px;
+  background-position: -86px -2px;
 }
 
 .govuk-box-highlight {

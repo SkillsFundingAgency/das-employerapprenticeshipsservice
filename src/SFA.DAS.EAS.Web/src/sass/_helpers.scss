@@ -10,6 +10,13 @@
     }
 }
 
+.mobile-hide-inline {
+    display: none;
+    @include media(tablet) {
+        display: inline;
+    }
+}
+
 .mobile-hide-cell {
     display: none;
     @include media(tablet) {

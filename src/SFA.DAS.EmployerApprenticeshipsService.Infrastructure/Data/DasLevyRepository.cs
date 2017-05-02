@@ -157,12 +157,14 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 commandType: CommandType.StoredProcedure));
         }
 
-        public async Task<List<TransactionLine>> GetTransactions(long accountId)
+        public async Task<List<TransactionLine>> GetTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@fromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day), DbType.DateTime);
+                parameters.Add("@toDate", new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59), DbType.DateTime);
 
                 return await c.QueryAsync<TransactionEntity>(
                     sql: "[employer_financial].[GetTransactionLines_ByAccountId]",
@@ -171,6 +173,23 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
             
             return MapTransactions(result);
+        }
+
+        public async Task<int> GetPreviousTransactionsCount(long accountId, DateTime fromDate)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@fromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day), DbType.DateTime);
+
+                return await c.ExecuteScalarAsync<int>(
+                    sql: "[employer_financial].[GetPreviousTransactionsCount]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result;
         }
 
         public async Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds)
@@ -219,7 +238,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<List<TransactionLine>> GetTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
+        public async Task<List<TransactionLine>> GetTransactionDetailsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
         {
             var result = await WithConnection(async c =>
             {
@@ -331,6 +350,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                         break;
 
                     case TransactionItemType.Payment:
+                    case TransactionItemType.SFACoInvestment:
+                    case TransactionItemType.EmployerCoInvestment:
                         transactions.Add(_mapper.Map<PaymentTransactionLine>(entity));
                         break;
 

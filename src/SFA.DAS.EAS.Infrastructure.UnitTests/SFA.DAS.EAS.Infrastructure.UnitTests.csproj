@@ -145,6 +145,7 @@
     <Compile Include="Services\DasAccountServiceTests\WhenIUpdatePayeSchemeNames.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetAccountBalances.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetEnglishFractionForAnEmpref.cs" />
+    <Compile Include="Services\DasLevyServiceTests\WhenIGetPreviousTransactionCount.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTheLastDeclarationForAPayeRef.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTransactionDetailInformation.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTransactionInformation.cs" />

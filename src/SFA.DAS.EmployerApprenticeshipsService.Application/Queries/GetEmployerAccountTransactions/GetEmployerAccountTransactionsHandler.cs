@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using MediatR;
 using NLog;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
@@ -38,20 +37,23 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
-            var response = await _dasLevyService.GetTransactionsByAccountId(message.AccountId);
+            var transactions = await _dasLevyService.GetAccountTransactionsByDateRange(message.AccountId, message.FromDate, message.ToDate);
 
-            if (!response.Any())
+            var hasPreviousTransactions = await _dasLevyService.GetPreviousAccountTransaction(message.AccountId, message.FromDate, message.ExternalUserId) > 0;
+            
+            if (!transactions.Any())
             {
-                return GetResponse(message.HashedAccountId, message.AccountId);
+                return GetResponse(message.HashedAccountId, message.AccountId, hasPreviousTransactions);
             }
 
             var transactionSummaries = new List<TransactionLine>();
+            var coinvestmentTransaction = new List<PaymentTransactionLine>();
 
-            foreach (var transaction in response)
+            foreach (var transaction in transactions)
             {
                 if (transaction.GetType() == typeof(LevyDeclarationTransactionLine))
                 {
-                    transaction.Description = transaction.Amount >= 0 ? "Credit" : "Adjustment";
+                    transaction.Description = transaction.Amount >= 0 ? "Levy" : "Levy adjustment";
                 }
                 else if (transaction.GetType() == typeof(PaymentTransactionLine))
                 {
@@ -61,30 +63,54 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                     {
                     	var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(
                         Convert.ToInt32(paymentTransaction.UkPrn));
-
-                    	transaction.Description = $"Payment to provider {providerName.Provider.ProviderName}";
+                        
+                    	transaction.Description = $"{providerName.Provider.ProviderName}";
                     }
                     catch (Exception ex)
                     {
                         transaction.Description = "Training provider - name not recognised";
                         _logger.Info(ex, $"Provider not found for UkPrn:{paymentTransaction.UkPrn}");
-                    }                     
+                    }
+
+                    if (paymentTransaction.TransactionType == TransactionItemType.SFACoInvestment ||
+                        paymentTransaction.TransactionType == TransactionItemType.EmployerCoInvestment)
+                    {
+                        coinvestmentTransaction.Add(paymentTransaction);
+                        continue;
+                    }
                 }
 
                 transactionSummaries.Add(transaction);
             }
-            
-            return GetResponse(message.HashedAccountId, message.AccountId, transactionSummaries);
+
+            var groupsCoinvestmentTransactions = coinvestmentTransaction.GroupBy(t => t.Description);
+
+            var combinedCoInvestedTransactions = groupsCoinvestmentTransactions.Select(t => new TransactionLine
+            {
+                AccountId = t.First().AccountId,
+                TransactionType = TransactionItemType.CoInvestment,
+                Amount = t.Sum(a => a.Amount),
+                Description = $"Co-invested - {t.Key}",
+                SubTransactions = new List<TransactionLine>(t.ToList()),
+                TransactionDate = t.Max(a => a.TransactionDate),
+                DateCreated = t.Max(a => a.DateCreated),
+                Balance = t.Min(a => a.Balance)
+            });
+
+            transactionSummaries.AddRange(combinedCoInvestedTransactions);
+
+
+            return GetResponse(message.HashedAccountId, message.AccountId, transactionSummaries, hasPreviousTransactions);
         }
 
 
-        private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId)
+        private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId, bool hasPreviousTransactions)
         {
-            return GetResponse(hashedAccountId, accountId, new List<TransactionLine>());
+            return GetResponse(hashedAccountId, accountId, new List<TransactionLine>(), hasPreviousTransactions);
         }
 
         private static GetEmployerAccountTransactionsResponse GetResponse(
-            string hashedAccountId, long accountId, ICollection<TransactionLine> transactions)
+            string hashedAccountId, long accountId, ICollection<TransactionLine> transactions, bool hasPreviousTransactions)
         {
             return new GetEmployerAccountTransactionsResponse
             {
@@ -93,9 +119,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                     HashedAccountId = hashedAccountId,
                     AccountId = accountId,
                     TransactionLines = transactions
-                }
+                },
+                AccountHasPreviousTransactions = hasPreviousTransactions
+                
             };
         }
-        
     }
 }

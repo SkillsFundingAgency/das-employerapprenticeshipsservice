@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
             _accountId = 1;
 
             _dasLevyRepository = new Mock<IDasLevyRepository>();
-            _dasLevyRepository.Setup(x => x.GetTransactionsByDateRange(
+            _dasLevyRepository.Setup(x => x.GetTransactionDetailsByDateRange(
                     It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                             .ReturnsAsync(new List<TransactionLine>
                             {
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
             await RequestHandler.Handle(Query);
 
             //Assert
-            _dasLevyRepository.Verify(x=>x.GetTransactionsByDateRange(Query.AccountId, Query.FromDate, Query.ToDate));
+            _dasLevyRepository.Verify(x=>x.GetTransactionDetailsByDateRange(Query.AccountId, Query.FromDate, Query.ToDate));
         }
 
         [Test]

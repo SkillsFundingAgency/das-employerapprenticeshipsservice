@@ -39,6 +39,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.Policies.Add(new ConfigurationPolicy<TokenServiceApiClientConfiguration>("SFA.DAS.TokenServiceApiClient"));
 				c.Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
                 c.Policies.Add<LoggingPolicy>();
+                c.Policies.Add<CurrentDatePolicy>();
                 c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
                 c.Policies.Add(new ExecutionPolicyPolicy());
                 c.AddRegistry<DefaultRegistry>();
