@@ -46,6 +46,7 @@
       <Setting name="LogLevel" value="Debug" />
       <Setting name="LoggingRedisKey" value="" />
       <Setting name="LoggingRedisConnectionString" value="" />
+      <Setting name="ProcessPayments" value="true" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

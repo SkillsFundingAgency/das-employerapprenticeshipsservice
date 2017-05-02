@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>()))
                 .Returns(new ProvidersView
                 {
-                    Provider = new Provider()
+                    Provider = new Domain.Models.ApprenticeshipProvider.Provider()
                         {
                             Name = ProviderName
                         }

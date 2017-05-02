@@ -3,7 +3,7 @@
     public class ServiceUnavailableException : HttpException
     {
         public ServiceUnavailableException()
-            : base(500, "Service is unavailable")
+            : base(503, "Service is unavailable")
         {
         }
     }

@@ -111,7 +111,7 @@ namespace SFA.DAS.EAS.Application
             return new ProvidersView
             {
                 CreatedDate = DateTime.UtcNow,
-                Provider = new Provider()
+                Provider = new Domain.Models.ApprenticeshipProvider.Provider()
                 {
                     Ukprn = provider.Ukprn,
                     ProviderName = provider.ProviderName,

@@ -70,6 +70,7 @@
       <Setting name="InstrumentationKey" />
       <Setting name="LoggingRedisConnectionString" />
       <Setting name="LoggingRedisKey" />
+      <Setting name="ProcessPayments" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>

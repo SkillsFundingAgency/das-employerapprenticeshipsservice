@@ -104,12 +104,12 @@
     <Reference Include="SFA.DAS.Notifications.Api.Client">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Payments.Events.Api.Client, Version=1.0.0.16420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.16420\lib\net45\SFA.DAS.Payments.Events.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.0.0.27426, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.27426\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Payments.Events.Api.Types, Version=1.0.0.16420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.16420\lib\net45\SFA.DAS.Payments.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.0.0.27426, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.27426\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.26699, Culture=neutral, processorArchitecture=MSIL">
@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\EmployerApprenticeshipApiConfiguration.cs" />
+    <Compile Include="Http\InternalServerErrorException.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
     <Compile Include="Interfaces\ICurrentDateTime.cs" />
     <Compile Include="Http\HttpException.cs" />

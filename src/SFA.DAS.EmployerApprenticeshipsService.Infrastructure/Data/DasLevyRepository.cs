@@ -5,17 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Dapper;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Entities.Transaction;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
-using SFA.DAS.Payments.Events.Api.Types;
-using Payment = SFA.DAS.Payments.Events.Api.Types.Payment;
+using SFA.DAS.Provider.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {

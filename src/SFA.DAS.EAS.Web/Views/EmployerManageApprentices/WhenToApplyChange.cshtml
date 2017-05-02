@@ -14,12 +14,13 @@
             @Html.AntiForgeryToken()
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             
-            <h1 class="heading-xlarge">When should this apprentice be stopped?</h1>
+            <h1 class="heading-xlarge">Date of status change</h1>
             
             <fieldset>
+                <p class="form-label-bold">When did this apprentice stop?</p>
                 <div class="form-group">
-                    <legend class="visually-hidden">When should this apprentice be stopped?</legend>
-
+                    <legend class="visually-hidden">Date of status change</legend>
+                   
                     @Html.ValidationMessage("WhenToMakeChange", "Please choose an option", new { id = "error-message-WhenToMakeChange" })
                     <label for=@($"WhenToMakeChange-{WhenToMakeChangeOptions.Immediately}") class="block-label selection-button-radio">
                         @Html.RadioButton("WhenToMakeChange", WhenToMakeChangeOptions.Immediately, new { id = $"WhenToMakeChange-{WhenToMakeChangeOptions.Immediately}" })
