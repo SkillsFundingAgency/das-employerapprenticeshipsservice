@@ -1,5 +1,4 @@
 using System;
-using SFA.DAS.Payments.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Domain.Models.Payments
 {

@@ -71,6 +71,7 @@
       <Setting name="InstrumentationKey" />
       <Setting name="LoggingRedisConnectionString"/>
       <Setting name="LoggingRedisKey"/>
+      <Setting name="ProcessPayments" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Fake" protocol="tcp" port="50122" />
