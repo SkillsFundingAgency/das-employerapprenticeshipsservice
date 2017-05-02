@@ -12,6 +12,10 @@
     <thead>
     <tr>
         <th></th>
+        @if (Model.IsDataLockOrigin)
+        {
+            <th scope="col">Period</th>
+        }
         <th scope="col">@currentValuHeader</th>
         <th scope="col">Changed to</th>
     </tr>
@@ -81,6 +85,12 @@
     {
         <tr>
             <th scope="row">Cost</th>
+            @if (Model.IsDataLockOrigin && Model.OriginalApprenticeship.StartDate.HasValue)
+            {
+                <td>
+                    @Model.OriginalApprenticeship.StartDate.Value.ToGdsFormat()
+                </td>
+            }
             <td>@Model.OriginalApprenticeship.Cost.FormatCost() </td>
             <td class="changed-item">@FormatCost(Model.Cost)</td>
             @Html.Hidden("Cost", Model.Cost)

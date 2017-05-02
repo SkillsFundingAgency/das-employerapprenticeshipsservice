@@ -17,6 +17,7 @@ using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Commands.ReviewApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Commands.UndoApprenticeshipUpdate;
@@ -224,8 +225,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     viewModel.OriginalApprenticeship = apprenticeship.Apprenticeship;
                     viewModel.HashedAccountId = hashedAccountId;
                     viewModel.HashedApprenticeshipId = hashedApprenticeshipId;
-
                     viewModel.ProviderName = apprenticeship.Apprenticeship.ProviderName;
+                    viewModel.IsDataLockOrigin = 
+                        apprenticeship.Apprenticeship.DataLockTriageStatus == TriageStatus.Change;
 
                     return new OrchestratorResponse<UpdateApprenticeshipViewModel>
                     {
