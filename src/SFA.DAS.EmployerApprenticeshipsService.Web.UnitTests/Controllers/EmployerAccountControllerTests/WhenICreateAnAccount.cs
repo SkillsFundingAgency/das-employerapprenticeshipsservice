@@ -146,7 +146,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
 
         [Test]
-        public async Task ThenIfTheAccountIsSucessfullyCreatedThenTheOrganisationTypeIsAddedToTempData()
+        public async Task ThenIfTheAccountIsSucessfullyCreatedThenTheOrganisationTypeIsAddedToFlashMessageCookie()
         {
             //Act
             await _employerAccountController.CreateAccount();
