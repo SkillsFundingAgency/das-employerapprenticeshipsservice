@@ -14,7 +14,7 @@
       <Setting name="LoggingRedisKey" value="" />
       <Setting name="TokenCertificateThumbprint" value="6B7ACC520305BFDB4F7252DAEB2177CC091FAAE1" />
       <Setting name="ShowPayeHistory" value="true" />
-      <Setting name="CurrentTime" value="2017-06-01 10:00:00" />
+      <Setting name="CurrentTime" value="" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="5CAEC03A02C9191059F0C18F4983F7F5A3EA7808" thumbprintAlgorithm="sha1" />
