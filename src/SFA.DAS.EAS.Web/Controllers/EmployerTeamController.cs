@@ -2,7 +2,6 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Newtonsoft.Json;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
@@ -47,9 +46,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("view")]
         public async Task<ActionResult> ViewTeam(string hashedAccountId)
         {
-            var userAddedEmail = TempData.ContainsKey("userAdded") ? TempData["userAdded"].ToString() : string.Empty;
             
-            var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), userAddedEmail);
+            var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+            if (flashMessage != null)
+            {
+                response.FlashMessage = flashMessage;
+            }
 
             return View(response);
         }
@@ -72,7 +76,15 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (response.Status == HttpStatusCode.OK)
             {
-                TempData["userAdded"] = model.Email;
+                var flashMessage = new FlashMessageViewModel
+                {
+                    HiddenFlashMessageInformation = "page-invite-team-member-sent",
+                    Severity = FlashMessageSeverityLevel.Success,
+                    Headline = "Invitation sent",
+                    Message = $"You've sent an invitation to <strong>{model.Email}</strong>"
+                };
+                AddFlashMessageToCookie(flashMessage);
+
                 return RedirectToAction("ViewTeam");
             }
                 
@@ -142,7 +154,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     return RedirectToAction("ViewTeam", new { HashedAccountId = hashedAccountId });
 
                 var response = await _employerTeamOrchestrator.Remove(userId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-                TempData["userDeleted"] = "true";
+                
                 return View("ViewTeam", response);
             }
             catch (InvalidRequestException e)
@@ -181,7 +193,6 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (response.Status == HttpStatusCode.OK)
             {
-                TempData["userRoleChange"] = "true";
                 return View("ViewTeam", response);
             }
             
