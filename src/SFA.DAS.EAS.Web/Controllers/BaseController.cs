@@ -50,13 +50,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 return base.View(viewName, masterName, model);
             }
-
-            var flashMessage = GetHomePageSucessMessage();
-            if (flashMessage != null)
-            {
-                orchestratorResponse.FlashMessage = flashMessage;
-            }
-
+            
             var invalidRequestException = orchestratorResponse.Exception as InvalidRequestException;
 
             if (invalidRequestException != null)
@@ -168,30 +162,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return toggle.WhiteList.Any(pattern => Regex.IsMatch(userEmail, pattern, RegexOptions.IgnoreCase));
         }
 
-        protected FlashMessageViewModel GetHomePageSucessMessage()
-        {
-            if (TempData.ContainsKey("successHeader") || TempData.ContainsKey("successMessage"))
-            {
-                var successMessageViewModel = new FlashMessageViewModel();
-                object message;
-                successMessageViewModel.Severity = FlashMessageSeverityLevel.Success;
-                if (TempData.TryGetValue("successHeader", out message))
-                {
-                    successMessageViewModel.Headline = message.ToString();
-                }
-                if (TempData.TryGetValue("successCompany", out message))
-                {
-                    successMessageViewModel.Message = message.ToString();
-                }
-                if (TempData.TryGetValue("successMessage", out message))
-                {
-                    successMessageViewModel.SubMessage = message.ToString();
-                }
-                return successMessageViewModel;
-            }
-            return null;
-        }
-
+        
         public void AddFlashMessageToCookie(FlashMessageViewModel model)
         {
             _flashMessage.Delete(FlashMessageCookieName);
