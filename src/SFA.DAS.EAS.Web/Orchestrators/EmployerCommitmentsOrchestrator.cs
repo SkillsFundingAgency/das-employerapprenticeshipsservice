@@ -316,7 +316,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship, string externalUserId)
+        public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship, string externalUserId, string userName, string userEmail)
         {
             var accountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId);
             var commitmentId = _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
@@ -330,7 +330,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
                     Apprenticeship = await _apprenticeshipMapper.MapFromAsync(apprenticeship),
-                    UserId = externalUserId
+                    UserId = externalUserId,
+                    UserEmailAddress = userEmail,
+                    UserDisplayName = userName
                 });
             }, apprenticeship.HashedAccountId, externalUserId);
         }
