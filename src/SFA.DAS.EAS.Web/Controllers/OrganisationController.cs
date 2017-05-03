@@ -325,10 +325,14 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var response = await _orchestrator.CreateLegalEntity(request);
             
-            TempData["extraCompanyAdded"] = "true";
-            
-            TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-            
+            var flashMessage = new FlashMessageViewModel
+            {
+                HiddenFlashMessageInformation = "page-organisations-added",
+                Headline = $"{response.Data.EmployerAgreement.LegalEntityName} has been added",
+                Severity = FlashMessageSeverityLevel.Success
+            };
+            AddFlashMessageToCookie(flashMessage);
+
             return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
         }
         
