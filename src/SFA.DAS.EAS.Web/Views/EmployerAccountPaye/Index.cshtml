@@ -6,7 +6,7 @@
     ViewBag.Title = "PAYE schemes";
     ViewBag.Section = "paye";
 
-    if (!string.IsNullOrEmpty(Model.FlashMessage.HiddenFlashMessageInformation))
+    if (!string.IsNullOrEmpty(Model.FlashMessage?.HiddenFlashMessageInformation))
     {
         ViewBag.PageID = Model.FlashMessage.HiddenFlashMessageInformation;
     }
