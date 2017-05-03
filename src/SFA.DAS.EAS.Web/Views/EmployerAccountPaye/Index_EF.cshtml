@@ -6,15 +6,9 @@
     ViewBag.Title = "PAYE schemes";
     ViewBag.Section = "paye";
 
-    if (TempData.ContainsKey("payeSchemeAdded"))
+    if (!string.IsNullOrEmpty(Model.FlashMessage.HiddenFlashMessageInformation))
     {
-        ViewBag.PageID = "page-paye-scheme-added";
-        TempData.Remove("payeSchemeAdded");
-    }
-    if (TempData.ContainsKey("payeSchemeDeleted"))
-    {
-        ViewBag.PageID = "page-paye-scheme-deleted";
-        TempData.Remove("payeSchemeDeleted");
+        ViewBag.PageID = Model.FlashMessage.HiddenFlashMessageInformation;
     }
 }
 
