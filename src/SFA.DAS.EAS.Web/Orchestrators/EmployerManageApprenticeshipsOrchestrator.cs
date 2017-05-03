@@ -491,15 +491,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return programmes.TrainingProgrammes;
         }
 
-        public async Task CreateApprenticeshipUpdate(UpdateApprenticeshipViewModel apprenticeship,
-            string hashedAccountId, string userId)
+        public async Task CreateApprenticeshipUpdate(UpdateApprenticeshipViewModel apprenticeship, string hashedAccountId, string userId, string userName, string userEmail)
         {
             var employerId = _hashingService.DecodeValue(hashedAccountId);
             await _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
             {
                 EmployerId = employerId,
                 ApprenticeshipUpdate = _apprenticeshipMapper.MapFrom(apprenticeship),
-                UserId = userId
+                UserId = userId,
+                UserEmailAddress = userEmail,
+                UserDisplayName = userName
             });
         }
 

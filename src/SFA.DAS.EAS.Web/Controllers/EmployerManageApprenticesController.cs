@@ -303,7 +303,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
             }
             
-            await _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            await _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
+                    OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
             var flashmessage = new FlashMessageViewModel
             {

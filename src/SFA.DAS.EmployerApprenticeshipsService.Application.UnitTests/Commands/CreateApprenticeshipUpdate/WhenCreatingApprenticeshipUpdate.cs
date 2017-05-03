@@ -55,16 +55,24 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateApprenticeshipUpdate
             //Arrange
             var command = new CreateApprenticeshipUpdateCommand
             {
-                ApprenticeshipUpdate = new ApprenticeshipUpdate(),
+                ApprenticeshipUpdate = new ApprenticeshipUpdate { ApprenticeshipId = 987 },
                 EmployerId = 321,
-                UserId = "Tester"
+                UserId = "Tester",
+                UserEmailAddress = "test@email.com",
+                UserDisplayName = "Bob"
             };
 
             //Act
             await _handler.Handle(command);
 
             //Assert
-            _commitmentsApi.Verify(x => x.CreateApprenticeshipUpdate(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ApprenticeshipUpdateRequest>()), Times.Once);
+            _commitmentsApi.Verify(
+                x =>
+                    x.CreateApprenticeshipUpdate(command.EmployerId, command.ApprenticeshipUpdate.ApprenticeshipId,
+                        It.Is<ApprenticeshipUpdateRequest>(
+                            y =>
+                                y.ApprenticeshipUpdate == command.ApprenticeshipUpdate && y.UserId == command.UserId && y.LastUpdatedByInfo.Name == command.UserDisplayName &&
+                                y.LastUpdatedByInfo.EmailAddress == command.UserEmailAddress)), Times.Once);
         }
     }
 }
