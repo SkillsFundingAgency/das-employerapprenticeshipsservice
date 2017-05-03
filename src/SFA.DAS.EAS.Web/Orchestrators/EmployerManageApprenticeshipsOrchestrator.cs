@@ -414,8 +414,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task UpdateStatus(string hashedAccountId, string hashedApprenticeshipId,
-            ChangeStatusViewModel model, string externalUserId)
+        public async Task UpdateStatus(string hashedAccountId, string hashedApprenticeshipId, ChangeStatusViewModel model, string externalUserId, string userName, string userEmail)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
@@ -441,7 +440,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ApprenticeshipId = apprenticeshipId,
                     EmployerAccountId = accountId,
                     ChangeType = (Domain.Models.Apprenticeship.ChangeStatusType) model.ChangeType,
-                    DateOfChange = model.DateOfChange.DateTime.Value
+                    DateOfChange = model.DateOfChange.DateTime.Value,
+                    UserEmailAddress = userEmail,
+                    UserDisplayName = userName
                 });
 
             }, hashedAccountId, externalUserId);

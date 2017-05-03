@@ -13,7 +13,7 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using FluentValidation.Mvc;
 using SFA.DAS.EAS.Web.Extensions;
-
+using SFA.DAS.EmployerUsers.WebClientComponents;
 using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers
@@ -189,7 +189,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (model.ChangeConfirmed.HasValue && !model.ChangeConfirmed.Value)
                 return RedirectToRoute("OnProgrammeApprenticeshipDetails");
 
-            await _orchestrator.UpdateStatus(hashedAccountId, hashedApprenticeshipId, model, OwinWrapper.GetClaimValue(@"sub"));
+            await _orchestrator.UpdateStatus(hashedAccountId, hashedApprenticeshipId, model, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
+                    OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
             var flashmessage = new FlashMessageViewModel
             {
