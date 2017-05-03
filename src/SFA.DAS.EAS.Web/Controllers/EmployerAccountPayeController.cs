@@ -108,7 +108,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             
             var flashMessage = new FlashMessageViewModel
             {
-                Severity = FlashMessageSeverityLevel.Complete,
+                Severity = FlashMessageSeverityLevel.Success,
                 Headline = $"You've added {model.PayeScheme}",
                 HiddenFlashMessageInformation = "page-paye-scheme-added"
             };
