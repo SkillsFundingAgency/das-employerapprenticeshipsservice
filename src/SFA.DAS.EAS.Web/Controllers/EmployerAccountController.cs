@@ -44,12 +44,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("gatewayInform")]
         public ActionResult GatewayInform()
         {
-            var flashMessageViewModel = new FlashMessageViewModel();
-            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
-            {
-                flashMessageViewModel = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
-            }
-
             var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>
             {
                 Data = new GatewayInformViewModel
@@ -58,8 +52,15 @@ namespace SFA.DAS.EAS.Web.Controllers
                     BreadcrumbUrl = Url.Action("SelectEmployer", "EmployerAccount"),
                     ConfirmUrl = Url.Action("Gateway", "EmployerAccount"),
                 },
-                FlashMessage = flashMessageViewModel
+             
             };
+
+            var flashMessageViewModel = GetFlashMessageViewModelFromCookie();
+
+            if (flashMessageViewModel != null)
+            {
+                gatewayInformViewModel.FlashMessage = flashMessageViewModel;
+            }
 
             return View(gatewayInformViewModel);
         }
@@ -84,8 +85,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     _logger.Warn($"Gateway response does not indicate success. Status = {response.Status}.");
                     response.Status = HttpStatusCode.OK;
 
-                    TempData["FlashMessage"] = JsonConvert.SerializeObject(response.FlashMessage);
-
+                    AddFlashMessageToCookie(response.FlashMessage);
+                    
                     return RedirectToAction("GatewayInform");
                 }
 
