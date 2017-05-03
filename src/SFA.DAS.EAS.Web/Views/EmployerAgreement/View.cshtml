@@ -23,11 +23,11 @@
     <div class="column-two-thirds">
         <table>
             <tr>
-                <th>Accepted by:</th>
+                <th><span class="no-wrap">Accepted by:</span></th>
                 <td>@Model.Data.EmployerAgreement.SignedByName</td>
             </tr>
             <tr>
-                <th>On behalf of:</th>
+                <th><span class="no-wrap">On behalf of:</span></th>
                 <td>@Model.Data.EmployerAgreement.LegalEntityName</td>
             </tr>
             <tr>
@@ -35,7 +35,7 @@
                 <td><span class="table-address">@Model.Data.EmployerAgreement.LegalEntityAddress</span></td>
             </tr>
             <tr>
-                <th>Accepted on:</th>
+                <th><span class="no-wrap">Accepted on:</span></th>
                 <td>@Model.Data.EmployerAgreement.SignedDate.Value.ToLongDateString()</td>
             </tr>
         </table>
