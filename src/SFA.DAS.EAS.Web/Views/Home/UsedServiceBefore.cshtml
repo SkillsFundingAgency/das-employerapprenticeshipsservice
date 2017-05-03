@@ -2,7 +2,9 @@
 @{ViewBag.Title = "Have you used this service before?"; }
 @{ViewBag.HideNav = "true"; }
 
-@{ var errorMessage = TempData["Error"] as string; }
+@{
+    var errorMessage = Model?.GetType().GetProperty("ErrorMessage") != null ? Model.ErrorMessage as string : "";
+}
 
 @if (!string.IsNullOrWhiteSpace(errorMessage))
 {

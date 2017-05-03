@@ -7,10 +7,9 @@
     ViewBag.Section = "home";
     ViewBag.PageID = "page-company-homepage";
 
-    if (TempData.ContainsKey("employerAccountCreated"))
+    if (!string.IsNullOrEmpty(Model.Data.EmployerAccountType))
     {
-        ViewBag.PageID = $"page-employer-account-created-{TempData["employerAccountCreated"]}";
-        TempData.Remove("employerAccountCreated");
+        ViewBag.PageID = $"page-employer-account-created-{Model.Data.EmployerAccountType}";
     }
 }
 

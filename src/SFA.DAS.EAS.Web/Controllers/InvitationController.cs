@@ -91,8 +91,14 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, OwinWrapper.GetClaimValue("sub"));
             
-            TempData["successHeader"] = "Invitation accepted";
-            TempData["successMessage"] = $"You can now access the {invitationItem.AccountName} account";
+            var flashMessage = new FlashMessageViewModel
+            {
+                Headline = "Invitation accepted",
+                Message = $"You can now access the {invitationItem.AccountName} account",
+                Severity = FlashMessageSeverityLevel.Success
+            };
+            AddFlashMessageToCookie(flashMessage);
+
 
             return RedirectToAction("Index", "Home");
         }

@@ -40,18 +40,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
                 ControllerContext = _controllerContext.Object
             };
         }
-
-        [Test]
-        public void ThenWhenIChangedMyPasswordTheViewDataIsPopulatedWithPasswordChangedInformation()
-        {
-            //Act
-            _homeController.HandlePasswordChanged();
-
-            //Assert
-            Assert.AreEqual("/user-changed-password", _homeController.TempData["virtualPageUrl"]);
-            Assert.AreEqual("User Action - Changed Password", _homeController.TempData["virtualPageTitle"]);
-        }
-
+        
         [Test]
         public void ThenThePasswordChangedActionCreatsARedirectToRouteResultToTheIndex()
         {
@@ -65,38 +54,27 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             Assert.IsNotNull(actualRedirect);
             Assert.AreEqual("Index", actualRedirect.RouteValues["action"]);
         }
-
+        
         [Test]
-        public void ThenWhenICreateAnAccountTheViewDataIsPopulatedWithTheAccountCreatedInformation()
-        {
-            //Act
-            _homeController.HandleNewRegistration();
-
-            //Assert
-            Assert.AreEqual("/user-created-account", _homeController.TempData["virtualPageUrl"]);
-            Assert.AreEqual("User Action - Created Account", _homeController.TempData["virtualPageTitle"]);
-        }
-
-        [Test]
-        public async Task ThenIfTheHandleEmailChangedIsCancelledAndTheQueryParamIsSetTheTempDataValuesAreNotSet()
+        public async Task ThenIfTheHandleEmailChangedIsCancelledAndTheQueryParamIsSetTheCookieValuesAreNotSet()
         {
             //Act
             await _homeController.HandleEmailChanged(true);
 
             //Assert
-            Assert.IsFalse(_homeController.TempData.ContainsKey("successMessage"));
+            _flashMessage.Verify(x=>x.Create(It.Is<FlashMessageViewModel>(c=>c.Headline.Equals("You've changed your email")),It.IsAny<string>(),1),Times.Never);
             _owinWrapper.Verify(x => x.UpdateClaims(), Times.Never);
         }
 
 
         [Test]
-        public void ThenIfTheHandlePasswordChangedIsCancelledAndTheQueryParamIsSetTheTempDataValuesAreNotSet()
+        public void ThenIfTheHandlePasswordChangedIsCancelledAndTheQueryParamIsSetTheCookieValuesAreNotSet()
         {
             //Act
             _homeController.HandlePasswordChanged(true);
 
             //Assert
-            Assert.IsFalse(_homeController.TempData.ContainsKey("successMessage"));
+            _flashMessage.Verify(x => x.Create(It.Is<FlashMessageViewModel>(c => c.Headline.Equals("You've changed your password")), It.IsAny<string>(), 1), Times.Never);
         }
 
         [Test]
