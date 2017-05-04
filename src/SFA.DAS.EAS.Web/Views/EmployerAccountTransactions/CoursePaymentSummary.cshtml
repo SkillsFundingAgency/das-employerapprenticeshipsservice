@@ -1,5 +1,4 @@
 ﻿@using System.Globalization
-@using SFA.DAS.EAS.Domain.Models.Transaction
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ProviderPaymentsSummaryViewModel>
 
 @{
@@ -44,10 +43,10 @@
             {
                 <tr class="responsive-tr">
                     <td>@coursePaymentSummary.CourseName</td>
-                    <td>@coursePaymentSummary.LevyPaymentAmount.ToString("C0")</td>
-                    <td>@coursePaymentSummary.SFACoInvestmentAmount.ToString("C0")</td>
-                    <td>@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C0")</td>
-                    <td>@coursePaymentSummary.TotalAmount.ToString("C0")</td>
+                    <td>@coursePaymentSummary.LevyPaymentAmount.ToString("C0", culture)</td>
+                    <td>@coursePaymentSummary.SFACoInvestmentAmount.ToString("C0", culture)</td>
+                    <td>@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C0", culture)</td>
+                    <td>@coursePaymentSummary.TotalAmount.ToString("C0", culture)</td>
                 </tr>
             }
             </tbody>
