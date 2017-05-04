@@ -408,8 +408,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Message = message,
                 Severity = FlashMessageSeverityLevel.Okay
             };
-            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
-
+            
             AddFlashMessageToCookie(flashmessage);
         }
 

@@ -1,7 +1,7 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementViewModel>
 @{
     ViewBag.PageID = "agreement-about";
-    ViewBag.Title = "About your ESFA agreement";
+    ViewBag.Title = "About your agreement";
     ViewBag.Section = "organisations";
 } 
 <div class="grid-row header-index">
@@ -9,7 +9,7 @@
         
         <h1 class="heading-xlarge">
             <span class="heading-secondary">@Model.Data.EmployerAgreement.LegalEntityName</span>
-            About your ESFA agreement
+            About your agreement
         </h1>
 
         <p>This agreement creates a legal contract between <b>@Model.Data.EmployerAgreement.LegalEntityName</b> and the <b>Education and Skills Funding Agency (ESFA)</b>. It allows ESFA to pay your training providers for apprenticeships.</p>

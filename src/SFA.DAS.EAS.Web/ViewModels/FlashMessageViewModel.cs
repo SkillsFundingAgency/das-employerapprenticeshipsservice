@@ -21,16 +21,18 @@ namespace SFA.DAS.EAS.Web.ViewModels
             {
                 switch (Severity)
                 {
-                    case FlashMessageSeverityLevel.Success:
+                    case FlashMessageSeverityLevel.Complete:
                         return "govuk-box-highlight";
+                    case FlashMessageSeverityLevel.Success:
+                        return "success-summary";
                     case FlashMessageSeverityLevel.Error:
                         return "error-summary";
                     case FlashMessageSeverityLevel.Danger:
                         return "panel panel-danger";
                     case FlashMessageSeverityLevel.Info:
-                        return "panel panel-info";
+                        return "info-summary";
                     case FlashMessageSeverityLevel.Warning:
-                        return "panel panel-warning";
+                        return "warning-summary";
                     case FlashMessageSeverityLevel.Okay:
                         return "panel panel-border-wide alert-default flash-alert";
                 }
@@ -40,10 +42,12 @@ namespace SFA.DAS.EAS.Web.ViewModels
 
         public Dictionary<string,string> ErrorMessages { get; set; }
         public string RedirectButtonMessage { get; set; }
+        public string HiddenFlashMessageInformation { get; set; }
     }
 
     public enum FlashMessageSeverityLevel
     {
+        Complete,
         Success,
         Info,
         Danger,

@@ -2,7 +2,6 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -30,19 +29,14 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements")]
-        public async Task<ActionResult> Index(string hashedAccountId, FlashMessageViewModel flashMessage)
+        public async Task<ActionResult> Index(string hashedAccountId)
         {
             var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            if (TempData.ContainsKey("agreementSigned"))
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+            if (flashMessage!=null)
             {
-                model.FlashMessage = new FlashMessageViewModel
-                {
-                    Headline = "Agreement signed",
-                    Severity = FlashMessageSeverityLevel.Success
-                };
-
-                TempData.Remove("agreementSigned");
+                model.FlashMessage = flashMessage;
             }
 
             return View(model);
@@ -94,7 +88,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (response.Status == HttpStatusCode.OK)
             {
-                TempData["agreementSigned"] = "true";
+                var flashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Agreement signed",
+                    Severity = FlashMessageSeverityLevel.Success
+                };
+                AddFlashMessageToCookie(flashMessage);
 
                 return RedirectToAction("Index", new { hashedAccountId });
             }

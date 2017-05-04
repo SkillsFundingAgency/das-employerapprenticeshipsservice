@@ -1,6 +1,4 @@
-﻿@using SFA.DAS.EAS.Domain
-@using SFA.DAS.EAS.Domain.Extensions
-@using SFA.DAS.EAS.Domain.Models.EmployerAgreement
+﻿@using SFA.DAS.EAS.Domain.Models.EmployerAgreement
 @using SFA.DAS.EAS.Web;
 
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementListViewModel>
@@ -9,10 +7,9 @@
     ViewBag.Title = "Organisations";
     ViewBag.Section = "organisations";
 
-    if (TempData.ContainsKey("extraCompanyAdded"))
+    if (!string.IsNullOrEmpty(Model.FlashMessage?.HiddenFlashMessageInformation))
     {
-        ViewBag.PageID = "page-organisations-added";
-        TempData.Remove("extraCompanyAdded");
+        ViewBag.PageID = Model.FlashMessage.HiddenFlashMessageInformation;
     }
 }
 
