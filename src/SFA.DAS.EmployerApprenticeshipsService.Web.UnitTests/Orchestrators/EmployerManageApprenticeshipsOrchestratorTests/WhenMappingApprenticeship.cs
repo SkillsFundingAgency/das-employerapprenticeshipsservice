@@ -111,7 +111,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                                         new Apprenticeship
                                         {
                                             PaymentStatus = PaymentStatus.Active,
-                                            StartDate = new DateTime(1998, 11, 1)
+                                            StartDate = new DateTime(1998, 11, 1),
+                                            PendingUpdateOriginator = Originator.Employer
                                         }
                 });
 
@@ -139,7 +140,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                 .ReturnsAsync(new GetApprenticeshipQueryResponse
                 {
                     Apprenticeship =
-                        new Apprenticeship { PaymentStatus = PaymentStatus.Active, StartDate = new DateTime(1998, 11, 1) }
+                        new Apprenticeship {
+                            PaymentStatus = PaymentStatus.Active
+                          , StartDate = new DateTime(1998, 11, 1)
+                          , PendingUpdateOriginator = Originator.Provider}
                 });
 
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipUpdateRequest>()))
