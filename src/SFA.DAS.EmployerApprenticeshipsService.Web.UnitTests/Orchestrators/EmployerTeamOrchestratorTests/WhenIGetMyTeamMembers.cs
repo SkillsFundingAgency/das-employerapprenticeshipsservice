@@ -29,22 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 
             _orchestrator = new EmployerTeamOrchestrator(_mediator.Object,_configuration);
         }
-
-        [Test]
-        public async Task ThenTheGetTeamMembersCallWillShowASuccessMessageIfAnEmailHasBeenPassed()
-        {
-            //Arrange
-            var expectedEmail = "test@test.com";
-
-            //Act
-            var actual = await _orchestrator.GetTeamMembers("ABF45", "123", expectedEmail);
-
-            //Assert
-            Assert.IsNotNull(actual.FlashMessage);
-            Assert.AreEqual("Invitation sent", actual.FlashMessage.Headline);
-            Assert.AreEqual($"You've sent an invitation to <strong>{expectedEmail}</strong>", actual.FlashMessage.Message);
-        }
-
+        
         [Test]
         public async Task ThenTheTeamMembersArePopulatedToTheResponse()
         {

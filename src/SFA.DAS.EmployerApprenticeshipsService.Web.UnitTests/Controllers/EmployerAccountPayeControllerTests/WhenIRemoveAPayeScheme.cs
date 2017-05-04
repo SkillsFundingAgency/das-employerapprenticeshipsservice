@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
             Assert.IsNotNull(actualRedirect);
             Assert.AreEqual("Index", actualRedirect.RouteValues["Action"]);
             Assert.AreEqual("EmployerAccountPaye", actualRedirect.RouteValues["Controller"]);
-            Assert.IsTrue(_controller.TempData.ContainsKey("successHeader"));
+            _flashMessage.Verify(x => x.Create(It.Is<FlashMessageViewModel>(c => c.HiddenFlashMessageInformation.Equals("page-paye-scheme-deleted")), It.IsAny<string>(), 1));
         }
 
         [Test]

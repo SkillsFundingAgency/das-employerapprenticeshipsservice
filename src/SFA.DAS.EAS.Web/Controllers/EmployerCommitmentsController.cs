@@ -365,8 +365,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Severity = FlashMessageSeverityLevel.Okay
             };
 
-            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
-
+            AddFlashMessageToCookie(flashmessage);
+            
             var anyCohortWithCurrentStatus = 
                 await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(viewModel.HashedAccountId, GetSessionRequestStatus());
 
@@ -527,7 +527,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Severity = FlashMessageSeverityLevel.Info
             };
 
-            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+            AddFlashMessageToCookie(flashmessage);
+
             return RedirectToAction("YourCohorts", new { hashedAccountId = viewModel.HashedAccountId });
         }
 
@@ -719,8 +720,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 await _employerCommitmentsOrchestrator.DeleteApprenticeship(viewModel, OwinWrapper.GetClaimValue(@"sub"));
 
                 var flashMessage = new FlashMessageViewModel { Severity = FlashMessageSeverityLevel.Okay, Message = string.Format($"Apprentice record for {viewModel.ApprenticeshipName} deleted") };
-                TempData["FlashMessage"] = JsonConvert.SerializeObject(flashMessage);
-
+                AddFlashMessageToCookie(flashMessage);
+                
                 return RedirectToAction("Details", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId });
             }
 
@@ -825,9 +826,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private void SetFlashMessageOnModel<T>(OrchestratorResponse<T> model)
         {
-            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+            if (flashMessage!=null)
             {
-                var flashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
                 model.FlashMessage = flashMessage;
             }
         }

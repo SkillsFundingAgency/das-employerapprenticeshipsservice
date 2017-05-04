@@ -866,7 +866,6 @@
     <Content Include="Views\Shared\AccessDenied.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
     <Content Include="Views\EmployerAgreement\Index.cshtml" />
-    <Content Include="Views\EmployerAgreement\Add.cshtml" />
     <Content Include="Views\EmployerAgreement\View.cshtml" />
     <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -1003,7 +1002,6 @@
     <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
     <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
     <Content Include="src\sass\_agreement.scss" />
-    <Content Include="Views\EmployerAgreement\Details.cshtml" />
     <Content Include="Views\Error\InvalidState.cshtml" />
     <Content Include="Views\EmployerCommitments\AgreementNotSigned.cshtml" />
     <Content Include="Views\Shared\_SetupAccount.cshtml" />
@@ -1024,7 +1022,9 @@
     <Content Include="Views\EmployerManageApprentices\WhenToApplyChange.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index_DEC.cshtml" />
     <Content Include="Views\EmployerManageApprentices\RequestRestart.cshtml" />
+    <Content Include="src\sass\_notifications.scss" />
     <Content Include="src\sass\_navigation.scss" />
+    <Content Include="Views\EmployerAgreement\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

@@ -43,19 +43,14 @@ namespace SFA.DAS.EAS.Web.Controllers
                 }
 
                 var accounts = await _homeOrchestrator.GetUserAccounts(userId);
+                
+                var flashMessage = GetFlashMessageViewModelFromCookie();
 
-                if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
+                if (flashMessage != null)
                 {
-                    accounts.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
+                    accounts.FlashMessage = flashMessage;
                 }
-                else
-                {
-                    accounts.Data.ErrorMessage = (string)TempData["errorMessage"];
-                    accounts.Data.FlashMessage = new FlashMessageViewModel
-                    {
-                        Headline = (string)TempData["successMessage"]
-                    };
-                }
+                
                 if (accounts.Data.Accounts.AccountList.Count > 1)
                 {
                     return View(accounts);
@@ -111,11 +106,11 @@ namespace SFA.DAS.EAS.Web.Controllers
                 case 1: return RedirectToAction("WhatYoullNeed"); //No I have not used the service before
                 case 2: return RedirectToAction("SignIn"); // Yes I have used the service
                 default:
-                    TempData["Error"] = "You must select an option to continue.";
-
+                    
                     var model = new
                     {
-                        HideHeaderSignInLink = true
+                        HideHeaderSignInLink = true,
+                        ErrorMessage = "You must select an option to continue."
                     };
 
                     return View(model); //No option entered
@@ -156,9 +151,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("register/new")]
         public ActionResult HandleNewRegistration()
         {
-            TempData["virtualPageUrl"] = @"/user-created-account";
-            TempData["virtualPageTitle"] = @"User Action - Created Account";
-
             return RedirectToAction("Index");
         }
 
@@ -169,9 +161,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (!userCancelled)
             {
-                TempData["successMessage"] = @"You've changed your password";
-                TempData["virtualPageUrl"] = @"/user-changed-password";
-                TempData["virtualPageTitle"] = @"User Action - Changed Password";
+                var flashMessage = new FlashMessageViewModel
+                {
+                    Severity = FlashMessageSeverityLevel.Success,
+                    Headline = "You've changed your password"
+                };
+                AddFlashMessageToCookie(flashMessage);
             }
 
             return RedirectToAction("Index");
@@ -184,9 +179,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (!userCancelled)
             {
-                TempData["successMessage"] = @"You've changed your email";
-                TempData["virtualPageUrl"] = @"/user-changed-email";
-                TempData["virtualPageTitle"] = @"User Action - Changed Email";
+                var flashMessage = new FlashMessageViewModel
+                {
+                    Severity = FlashMessageSeverityLevel.Success,
+                    Headline = "You've changed your email"
+                };
+                AddFlashMessageToCookie(flashMessage);
 
                 await OwinWrapper.UpdateClaims();
 

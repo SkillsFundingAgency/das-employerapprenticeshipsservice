@@ -23,19 +23,19 @@
     <div class="column-two-thirds">
         <table>
             <tr>
-                <th>Accepted by:</th>
+                <th scope="row"><span class="no-wrap">Accepted by:</span></th>
                 <td>@Model.Data.EmployerAgreement.SignedByName</td>
             </tr>
             <tr>
-                <th>On behalf of:</th>
+                <th scope="row"><span class="no-wrap">On behalf of:</span></th>
                 <td>@Model.Data.EmployerAgreement.LegalEntityName</td>
             </tr>
             <tr>
-                <th>Address:</th>
+                <th scope="row">Address:</th>
                 <td><span class="table-address">@Model.Data.EmployerAgreement.LegalEntityAddress</span></td>
             </tr>
             <tr>
-                <th>Accepted on:</th>
+                <th scope="row"><span class="no-wrap">Accepted on:</span></th>
                 <td>@Model.Data.EmployerAgreement.SignedDate.Value.ToLongDateString()</td>
             </tr>
         </table>
@@ -47,8 +47,8 @@
             <h1>
                 <span class="organisation-logo">
                     <span>
-                        Skills Funding <br>
-                        Agency
+                        Education &amp; Skills <br>
+                        Funding Agency
                     </span>
                 </span>
             </h1>

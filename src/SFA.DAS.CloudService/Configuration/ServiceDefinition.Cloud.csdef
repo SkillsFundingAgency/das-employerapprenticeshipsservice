@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ServiceDefinition name="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6" upgradeDomainCount="5">
-  <WebRole name="SFA.DAS.EAS.Web" vmsize="Standard_D2_v2">
+<ServiceDefinition name="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
+  <WebRole name="SFA.DAS.EAS.Web" vmsize="Small">
+    <Runtime executionContext="elevated" />
     <Startup>
+      <Task commandLine="AppInit.cmd" executionContext="elevated" taskType="simple" />
       <Task commandLine="StartUp\IIS.bat" executionContext="elevated" taskType="background">
       </Task>
     </Startup>
@@ -21,15 +23,15 @@
       <Setting name="InstrumentationKey" />
       <Setting name="LogLevel" />
       <Setting name="RedisConnection" />
-      <Setting name="LoggingRedisConnectionString"/>
-      <Setting name="LoggingRedisKey"/>
-      <Setting name="TokenCertificateThumbprint"/>
+      <Setting name="LoggingRedisConnectionString" />
+      <Setting name="LoggingRedisKey" />
+      <Setting name="TokenCertificateThumbprint" />
       <Setting name="ShowPayeHistory" />
       <Setting name="CurrentTime" />
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-pp-eas-ilb"/>
-      <InputEndpoint name="HttpIn" protocol="http" port="80" loadBalancer="das-pp-eas-ilb"/>
+      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" />
+      <InputEndpoint name="HttpIn" protocol="http" port="80" />
     </Endpoints>
     <Certificates>
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
@@ -37,7 +39,7 @@
     <Imports>
     </Imports>
   </WebRole>
-  <WorkerRole name="SFA.DAS.EAS.LevyDeclarationProvider.Worker" vmsize="Standard_D1_v2">
+  <WorkerRole name="SFA.DAS.EAS.LevyDeclarationProvider.Worker" vmsize="Small">
     <Runtime executionContext="elevated" />
     <Startup>
       <Task commandLine="StartUp\IIS.bat" executionContext="elevated" taskType="background">
@@ -49,20 +51,17 @@
       <Setting name="EnvironmentName" />
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
-      <Setting name="LoggingRedisConnectionString"/>
-      <Setting name="LoggingRedisKey"/>
+      <Setting name="LoggingRedisConnectionString" />
+      <Setting name="LoggingRedisKey" />
       <Setting name="DeclarationsEnabled" />
       <Setting name="TokenServiceCertificateThumbprint" />
     </ConfigurationSettings>
-    <Endpoints>
-      <InputEndpoint name="Fake" protocol="tcp" port="50121" />
-    </Endpoints>
     <LocalResources>
     </LocalResources>
     <Imports>
     </Imports>
   </WorkerRole>
-  <WorkerRole name="SFA.DAS.EAS.PaymentProvider.Worker" vmsize="Standard_D1_v2">
+  <WorkerRole name="SFA.DAS.EAS.PaymentProvider.Worker" vmsize="Small">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="StorageConnectionString" />
@@ -70,12 +69,9 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="LogLevel" />
       <Setting name="InstrumentationKey" />
-      <Setting name="LoggingRedisConnectionString"/>
-      <Setting name="LoggingRedisKey"/>
+      <Setting name="LoggingRedisConnectionString" />
+      <Setting name="LoggingRedisKey" />
       <Setting name="ProcessPayments" />
     </ConfigurationSettings>
-    <Endpoints>
-      <InputEndpoint name="Fake" protocol="tcp" port="50122" />
-    </Endpoints>
   </WorkerRole>
 </ServiceDefinition>
