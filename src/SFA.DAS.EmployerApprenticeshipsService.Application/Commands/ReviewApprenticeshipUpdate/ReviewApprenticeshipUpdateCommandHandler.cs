@@ -8,6 +8,7 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 
 namespace SFA.DAS.EAS.Application.Commands.ReviewApprenticeshipUpdate
 {
@@ -39,8 +40,8 @@ namespace SFA.DAS.EAS.Application.Commands.ReviewApprenticeshipUpdate
                 new ApprenticeshipUpdateSubmission
                     {
                         UpdateStatus = command.IsApproved ? ApprenticeshipUpdateStatus.Approved : ApprenticeshipUpdateStatus.Rejected,
-                        UserId = command.UserId
-                        
+                        UserId = command.UserId,
+                        LastUpdatedByInfo = new LastUpdateInfo {  EmailAddress = command.UserEmailAddress, Name = command.UserDisplayName }
                     });
         }
     }

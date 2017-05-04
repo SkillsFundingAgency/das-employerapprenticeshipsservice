@@ -346,7 +346,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (undoChanges.Value)
             {
-                await _orchestrator.SubmitUndoApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+                await _orchestrator.SubmitUndoApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
+                    OwinWrapper.GetClaimValue(DasClaimTypes.Email));
                 SetOkayMessage("Changes undone");
             }
             
@@ -377,7 +378,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View(viewmodel);
             }
 
-            await _orchestrator.SubmitReviewApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), approveChanges.Value);
+            await _orchestrator.SubmitReviewApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), approveChanges.Value,
+                OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName), OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
             var message = approveChanges.Value ? "Changes approved" : "Changes rejected";
             SetOkayMessage(message);
