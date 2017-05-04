@@ -316,7 +316,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship, string externalUserId)
+        public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship, string externalUserId, string userName, string userEmail)
         {
             var accountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId);
             var commitmentId = _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
@@ -330,7 +330,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
                     Apprenticeship = await _apprenticeshipMapper.MapFromAsync(apprenticeship),
-                    UserId = externalUserId
+                    UserId = externalUserId,
+                    UserEmailAddress = userEmail,
+                    UserDisplayName = userName
                 });
             }, apprenticeship.HashedAccountId, externalUserId);
         }
@@ -844,7 +846,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     }, hashedAccountId, externalUserId);
         }
 
-        public async Task DeleteCommitment(string hashedAccountId, string hashedCommitmentId, string externalUserId)
+        public async Task DeleteCommitment(string hashedAccountId, string hashedCommitmentId, string externalUserId, string userName, string userEmail)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
@@ -857,7 +859,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     AccountId = accountId,
                     CommitmentId = commitmentId,
-                    UserId = externalUserId
+                    UserId = externalUserId,
+                    UserDisplayName = userName,
+                    UserEmailAddress = userEmail
                 });
             }, hashedAccountId, externalUserId);
         }
@@ -938,7 +942,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
         }
 
-        public async Task DeleteApprenticeship(DeleteApprenticeshipConfirmationViewModel model, string externalUser)
+        public async Task DeleteApprenticeship(DeleteApprenticeshipConfirmationViewModel model, string externalUser, string userName, string userEmail)
         {
             var accountId = _hashingService.DecodeValue(model.HashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(model.HashedApprenticeshipId);
@@ -955,7 +959,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         {
                             AccountId = accountId,
                             ApprenticeshipId = apprenticeshipId,
-                            UserId = externalUser
+                            UserId = externalUser,
+                            UserDisplayName = userName,
+                            UserEmailAddress = userEmail
                         });
 
                     }, model.HashedAccountId, externalUser);

@@ -32,11 +32,19 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
 
             MockMediator.Setup(x => x.SendAsync(It.IsAny<DeleteApprenticeshipCommand>())).ReturnsAsync(new Unit());
 
+            var expectedName = "Bob";
+            var expectedEmailAddress = "test@email.com";
+
             //Act
-            await EmployerCommitmentOrchestrator.DeleteApprenticeship(model, "externalUserId");
+            await EmployerCommitmentOrchestrator.DeleteApprenticeship(model, "externalUserId", expectedName, expectedEmailAddress);
 
             //Assert
-            MockMediator.Verify(x=> x.SendAsync(It.Is<DeleteApprenticeshipCommand>(c=> c.AccountId == 123L && c.ApprenticeshipId == 456L)), Times.Once);
+            MockMediator.Verify(
+                x =>
+                    x.SendAsync(
+                        It.Is<DeleteApprenticeshipCommand>(
+                            c => c.AccountId == 123L && c.ApprenticeshipId == 456L && c.UserId == "externalUserId" && c.UserDisplayName == expectedName && c.UserEmailAddress == expectedEmailAddress)),
+                Times.Once);
         }
     }
 }

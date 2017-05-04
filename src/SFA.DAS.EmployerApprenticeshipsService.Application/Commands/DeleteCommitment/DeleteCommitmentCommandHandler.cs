@@ -2,10 +2,9 @@
 using System.Threading.Tasks;
 
 using MediatR;
-
-using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.EAS.Application.Validation;
 
 namespace SFA.DAS.EAS.Application.Commands.DeleteCommitment
@@ -36,7 +35,8 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteCommitment
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            await _commitmentsService.DeleteEmployerCommitment(message.AccountId, message.CommitmentId, new DeleteRequest { UserId = message.UserId });
+            await _commitmentsService.DeleteEmployerCommitment(message.AccountId, message.CommitmentId,
+                new DeleteRequest { UserId = message.UserId, LastUpdatedByInfo = new LastUpdateInfo { EmailAddress = message.UserEmailAddress, Name = message.UserDisplayName } });
         }
     }
 }

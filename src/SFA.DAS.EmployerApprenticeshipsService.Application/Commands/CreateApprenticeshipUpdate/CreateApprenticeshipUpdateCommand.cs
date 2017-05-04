@@ -12,5 +12,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateApprenticeshipUpdate
         public string UserId { get; set; }
         public long EmployerId { get; set; }
         public ApprenticeshipUpdate ApprenticeshipUpdate { get; set; }
+        public string UserDisplayName { get; set; }
+        public string UserEmailAddress { get; set; }
     }
 }
