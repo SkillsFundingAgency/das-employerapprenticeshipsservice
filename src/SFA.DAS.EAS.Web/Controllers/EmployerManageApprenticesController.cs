@@ -194,7 +194,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var flashmessage = new FlashMessageViewModel
             {
-                Message = model.ChangeType.Value == ChangeStatusType.Resume ? "Apprentice resumed." : "Apprentice stopped.",
+                Message = GetStatusMessage(model.ChangeType),
                 Severity = FlashMessageSeverityLevel.Okay
             };
 
@@ -425,6 +425,22 @@ namespace SFA.DAS.EAS.Web.Controllers
                 ErrorMessages = errorDictionary,
                 Severity = FlashMessageSeverityLevel.Error
             };
+        }
+
+        private static string GetStatusMessage(ChangeStatusType? model)
+        {
+            if (model == null) return "";
+            switch (model.Value)
+            {
+                case ChangeStatusType.Pause:
+                    return "Apprentice paused.";
+                case ChangeStatusType.Stop:
+                    return "Apprentice stopped.";
+                case ChangeStatusType.Resume:
+                case ChangeStatusType.None:
+                    return "Apprentice resumed.";
+            }
+            return string.Empty;
         }
     }
 }
