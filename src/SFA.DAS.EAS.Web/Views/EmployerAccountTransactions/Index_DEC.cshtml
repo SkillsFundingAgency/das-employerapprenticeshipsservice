@@ -21,6 +21,10 @@
             Your transactions 
             <span class="heading-secondary">@displayingMonthDate.ToGdsFormatWithoutDay()</span>
         </h1>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-one-third">
         @if (Model.Data.CurrentTime < new DateTime(2017, 05, 20) && Model.Data.Model.Data.TransactionLines.Count == 0)
         {
             <p>
@@ -32,10 +36,14 @@
             <div class="data">
                 <dl>
                     <dt>Current balance</dt>
-                    <dd>@Model.Data.Model.CurrentBalance.ToString("C2", culture)</dd>
+                    @{ 
+                        var balance = @Model.Data.Model.CurrentBalance.ToString("C0", culture);
+                        var balanceClass = balance.Length > 10 ? "number-large" : String.Empty;
+                    }
+                    <dd class="@balanceClass">@balance</dd>
                 </dl>
             </div>
-        }
+                        }
     </div>
 </div>
 <div class="grid-row">
