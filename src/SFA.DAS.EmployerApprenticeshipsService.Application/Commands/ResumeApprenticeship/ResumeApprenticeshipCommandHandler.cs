@@ -3,7 +3,7 @@
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
-
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using Task = System.Threading.Tasks.Task;
 
 namespace SFA.DAS.EAS.Application.Commands.ResumeApprenticeship
@@ -27,9 +27,12 @@ namespace SFA.DAS.EAS.Application.Commands.ResumeApprenticeship
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            var apprenticeship = await _commitmentApi.GetEmployerApprenticeship(message.EmployerAccountId, message.ApprenticeshipId);
-
-            var apprenticeshipSubmission = new ApprenticeshipSubmission { PaymentStatus = PaymentStatus.Active, UserId = message.UserId };
+            var apprenticeshipSubmission = new ApprenticeshipSubmission
+            {
+                PaymentStatus = PaymentStatus.Active,
+                UserId = message.UserId,
+                LastUpdatedByInfo = new LastUpdateInfo { EmailAddress = message.UserEmailAddress, Name = message.UserDisplayName }
+            };
             await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.ApprenticeshipId, apprenticeshipSubmission);
         }
     }

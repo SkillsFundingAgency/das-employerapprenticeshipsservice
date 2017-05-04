@@ -11,5 +11,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateApprenticeshipStatus
         public string UserId { get; set; }
         public ChangeStatusType ChangeType { get; set; }
         public DateTime DateOfChange { get; set; }
+        public string UserDisplayName { get; set; }
+        public string UserEmailAddress { get; set; }
     }
 }

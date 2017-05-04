@@ -357,7 +357,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             await _employerCommitmentsOrchestrator
-                .DeleteCommitment(viewModel.HashedAccountId, viewModel.HashedCommitmentId, OwinWrapper.GetClaimValue("sub"));
+                .DeleteCommitment(viewModel.HashedAccountId, viewModel.HashedCommitmentId, OwinWrapper.GetClaimValue("sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName), OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
             var flashmessage = new FlashMessageViewModel
             {
@@ -420,7 +420,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             try
             {
-                await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship, OwinWrapper.GetClaimValue(@"sub"));
+                await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
+                    OwinWrapper.GetClaimValue(DasClaimTypes.Email));
             }
             catch (InvalidRequestException ex)
             {
@@ -717,7 +718,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (viewModel.DeleteConfirmed.HasValue && viewModel.DeleteConfirmed.Value)
             {
-                await _employerCommitmentsOrchestrator.DeleteApprenticeship(viewModel, OwinWrapper.GetClaimValue(@"sub"));
+                await _employerCommitmentsOrchestrator.DeleteApprenticeship(viewModel, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName), OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
                 var flashMessage = new FlashMessageViewModel { Severity = FlashMessageSeverityLevel.Okay, Message = string.Format($"Apprentice record for {viewModel.ApprenticeshipName} deleted") };
                 AddFlashMessageToCookie(flashMessage);
