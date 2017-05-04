@@ -4,20 +4,19 @@
 
 @{
     var culture = new CultureInfo("en-GB");
-    var paymentType = "Credit";
+    var paymentType = "Levy";
     if (Model.Data.Amount < 0)
     {
         paymentType = "Adjustment";
     }
     ViewBag.PageID = "page-transaction-details";
-    ViewBag.Title = paymentType + " details";
+    ViewBag.Title = paymentType;
     ViewBag.Section = "finance";
 }
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">@paymentType details</h1>
+        <h1 class="heading-xlarge">@paymentType</h1>
         <p class="lede">@paymentType made on @Model.Data.TransactionDate.ToGdsFormatFull().</p>
-        <p>Levy declared to HMRC might include negative adjustments from previous months. </p>
     </div>
 </div>
 <div class="grid-row">
@@ -26,10 +25,11 @@
             <thead>
                 <tr>
                     <th id="th-ps" scope="col">PAYE scheme</th>
-                    <th id="th-ld" class="numeric" scope="col">Levy amount</th>
+                    <th id="th-pd" scope="col">Payroll date</th>
+                    <th id="th-ld" class="numeric" scope="col">Levy paid to HMRC</th>
                     <th id="th-ef" class="numeric" scope="col">English %</th>
                     <th id="th-tu" class="numeric" scope="col">10% Top up</th>
-                    <th id="th-pi" class="numeric" scope="col">Amount</th>
+                    <th id="th-pi" class="numeric" scope="col">Your funds</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,6 +38,9 @@
                     <tr class="responsive-tr">
                         <td headers="th-ps">
                             @aggregationLineItem.EmpRef
+                        </td>
+                        <td headers="th-pd">
+                           TODO
                         </td>
                         <td headers="th-ld" class="numeric">
                             @(aggregationLineItem.Amount.ToString("C2", culture))
@@ -54,7 +57,7 @@
                     </tr>
                 }
                 <tr class="total">
-                    <th scope="row" colspan="4" id="th-total"><span class="vh">Total</span></th>
+                    <th scope="row" colspan="5" id="th-total"><span class="vh">Total</span></th>
                     <td class="numeric" headers="th-total">@Model.Data.Amount.ToString("C2", culture)</td>
                 </tr>
             </tbody>
