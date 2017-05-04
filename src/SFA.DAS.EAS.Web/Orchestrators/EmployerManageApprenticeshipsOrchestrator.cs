@@ -236,8 +236,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }, hashedAccountId, externalUserId);
         }
 
-        public async Task SubmitUndoApprenticeshipUpdate(string hashedAccountId, string hashedApprenticeshipId,
-            string userId)
+        public async Task SubmitUndoApprenticeshipUpdate(string hashedAccountId, string hashedApprenticeshipId, string userId, string userName, string userEmail)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
@@ -245,14 +244,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger.Debug($"Undoing pending update for : AccountId {accountId}, ApprenticeshipId: {apprenticeshipId}");
 
             await CheckUserAuthorization(async () =>
-            {
-                await _mediator.SendAsync(new UndoApprenticeshipUpdateCommand
                 {
-                    AccountId = accountId,
-                    ApprenticeshipId = apprenticeshipId,
-                    UserId = userId
-                });
-            }
+                    await _mediator.SendAsync(new UndoApprenticeshipUpdateCommand
+                    {
+                        AccountId = accountId,
+                        ApprenticeshipId = apprenticeshipId,
+                        UserId = userId,
+                        UserDisplayName = userName,
+                        UserEmailAddress = userEmail
+                    });
+                }
                 , hashedAccountId, userId);
         }
 
@@ -412,8 +413,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task UpdateStatus(string hashedAccountId, string hashedApprenticeshipId,
-            ChangeStatusViewModel model, string externalUserId)
+        public async Task UpdateStatus(string hashedAccountId, string hashedApprenticeshipId, ChangeStatusViewModel model, string externalUserId, string userName, string userEmail)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
@@ -439,7 +439,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ApprenticeshipId = apprenticeshipId,
                     EmployerAccountId = accountId,
                     ChangeType = (Domain.Models.Apprenticeship.ChangeStatusType) model.ChangeType,
-                    DateOfChange = model.DateOfChange.DateTime.Value
+                    DateOfChange = model.DateOfChange.DateTime.Value,
+                    UserEmailAddress = userEmail,
+                    UserDisplayName = userName
                 });
 
             }, hashedAccountId, externalUserId);
@@ -488,15 +490,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return programmes.TrainingProgrammes;
         }
 
-        public async Task CreateApprenticeshipUpdate(UpdateApprenticeshipViewModel apprenticeship,
-            string hashedAccountId, string userId)
+        public async Task CreateApprenticeshipUpdate(UpdateApprenticeshipViewModel apprenticeship, string hashedAccountId, string userId, string userName, string userEmail)
         {
             var employerId = _hashingService.DecodeValue(hashedAccountId);
             await _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
             {
                 EmployerId = employerId,
                 ApprenticeshipUpdate = _apprenticeshipMapper.MapFrom(apprenticeship),
-                UserId = userId
+                UserId = userId,
+                UserEmailAddress = userEmail,
+                UserDisplayName = userName
             });
         }
 
@@ -542,22 +545,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _apprenticshipsViewModelCookieStorageService.Create(model, CookieName);
         }
 
-        public async Task SubmitReviewApprenticeshipUpdate(string hashedAccountId, string hashedApprenticeshipId,
-            string userId, bool isApproved)
+        public async Task SubmitReviewApprenticeshipUpdate(string hashedAccountId, string hashedApprenticeshipId, string userId, bool isApproved, string userName, string userEmail)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
             await CheckUserAuthorization(async () =>
-            {
-                await _mediator.SendAsync(new ReviewApprenticeshipUpdateCommand
                 {
-                    AccountId = accountId,
-                    ApprenticeshipId = apprenticeshipId,
-                    UserId = userId,
-                    IsApproved = isApproved
-                });
-            }
+                    await _mediator.SendAsync(new ReviewApprenticeshipUpdateCommand
+                    {
+                        AccountId = accountId,
+                        ApprenticeshipId = apprenticeshipId,
+                        UserId = userId,
+                        IsApproved = isApproved,
+                        UserDisplayName = userName,
+                        UserEmailAddress = userEmail
+                    });
+                }
                 , hashedAccountId, userId);
         }
 

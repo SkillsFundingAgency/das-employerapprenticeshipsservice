@@ -141,6 +141,7 @@
   <ItemGroup>
     <Compile Include="Commands\AddPayeToAccountTests\WhenIAddPayeToAnAccount.cs" />
     <Compile Include="Commands\AddPayeToAccountTests\WhenIValidateTheCommand.cs" />
+    <Compile Include="Commands\CreateApprenticeshipTests\WhenCreatingAnApprenticeship.cs" />
     <Compile Include="Commands\UpdateApprenticeshipStatusTests\WhenUpdatingApprenticeshipStatusToStopped.cs" />
     <Compile Include="Commands\UpdateApprenticeshipStatusTests\WhenValidatingTheUpdateApprenticeshipStatusCommand.cs" />
     <Compile Include="Commands\UpdateApprenticeshipStatusTests\WhenUpdatingApprenticeshipStatus.cs" />

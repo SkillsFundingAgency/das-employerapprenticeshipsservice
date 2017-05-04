@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Newtonsoft.Json;
+
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -16,6 +16,7 @@ using FluentValidation.Mvc;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.EAS.Web.Exceptions;
 using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -190,7 +191,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (model.ChangeConfirmed.HasValue && !model.ChangeConfirmed.Value)
                 return RedirectToRoute("OnProgrammeApprenticeshipDetails");
 
-            await _orchestrator.UpdateStatus(hashedAccountId, hashedApprenticeshipId, model, OwinWrapper.GetClaimValue(@"sub"));
+            await _orchestrator.UpdateStatus(hashedAccountId, hashedApprenticeshipId, model, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
+                    OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
             var flashmessage = new FlashMessageViewModel
             {
@@ -303,7 +305,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
             }
             
-            await _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            await _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
+                    OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
             var flashmessage = new FlashMessageViewModel
             {
@@ -345,7 +348,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (undoChanges.Value)
             {
-                await _orchestrator.SubmitUndoApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+                await _orchestrator.SubmitUndoApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
+                    OwinWrapper.GetClaimValue(DasClaimTypes.Email));
                 SetOkayMessage("Changes undone");
             }
             
@@ -376,7 +380,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View(viewmodel);
             }
 
-            await _orchestrator.SubmitReviewApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), approveChanges.Value);
+            await _orchestrator.SubmitReviewApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), approveChanges.Value,
+                OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName), OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
             var message = approveChanges.Value ? "Changes approved" : "Changes rejected";
             SetOkayMessage(message);

@@ -38,14 +38,21 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
             var command = new DeleteApprenticeshipCommand
             {
                 AccountId = 1,
-                ApprenticeshipId = 2
+                ApprenticeshipId = 2,
+                UserId = "ABC123",
+                UserDisplayName = "Bob",
+                UserEmailAddress = "test@email.com"
             };
 
             //Act
             await _handler.Handle(command);
 
             //Assert
-            _commitmentsService.Verify(x => x.DeleteEmployerApprenticeship(It.Is<long>(l=> l==command.AccountId), It.Is<long>(l=>l == command.ApprenticeshipId), It.IsAny<DeleteRequest>()), Times.Once);
+            _commitmentsService.Verify(
+                x =>
+                    x.DeleteEmployerApprenticeship(command.AccountId, command.ApprenticeshipId,
+                        It.Is<DeleteRequest>(r => r.UserId == command.UserId && r.LastUpdatedByInfo.Name == command.UserDisplayName && r.LastUpdatedByInfo.EmailAddress == command.UserEmailAddress)),
+                Times.Once);
         }
 
         [Test]
