@@ -115,8 +115,11 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
                     Amount = Convert.ToDecimal(tableRow["Payment_Amount"]),
                     TransactionType = TransactionType.Learning,
                     ProgrammeType = tableRow["Payment_Type"].ToLower().Equals("levy") ? 1 : 2,
-                    DeliveryPeriod = new CalendarPeriod {Month = 1, Year = 2016},
-                    CollectionPeriod = new NamedCalendarPeriod {Id = "1617-R12", Month = 1, Year = 2016},
+                    DeliveryPeriodMonth = 1,
+                    DeliveryPeriodYear = 2016,
+                    CollectionPeriodId = "1617-R12",
+                    CollectionPeriodMonth = 1,
+                    CollectionPeriodYear = 2016,
                     FundingSource =
                         tableRow["Payment_Type"].ToLower().Equals("levy")
                             ? FundingSource.Levy

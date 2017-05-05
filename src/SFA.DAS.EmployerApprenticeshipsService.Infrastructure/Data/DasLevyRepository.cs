@@ -207,7 +207,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToList();
         }
 
-        //TODO refactor not to use PeriodEnd type here
         public async Task CreateNewPeriodEnd(PeriodEnd periodEnd)
         {
             await WithConnection(async c =>
@@ -267,11 +266,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@Uln", details.Uln, DbType.Int64);
                 parameters.Add("@AccountId", details.EmployerAccountId, DbType.Int64);
                 parameters.Add("@ApprenticeshipId", details.ApprenticeshipId, DbType.Int64);
-                parameters.Add("@DeliveryPeriodMonth", details.DeliveryPeriod.Month, DbType.Int32);
-                parameters.Add("@DeliveryPeriodYear", details.DeliveryPeriod.Year, DbType.Int32);
-                parameters.Add("@CollectionPeriodId", details.CollectionPeriod.Id, DbType.String);
-                parameters.Add("@CollectionPeriodMonth", details.CollectionPeriod.Month, DbType.Int32);
-                parameters.Add("@CollectionPeriodYear", details.CollectionPeriod.Year, DbType.Int32);
+                parameters.Add("@DeliveryPeriodMonth", details.DeliveryPeriodMonth, DbType.Int32);
+                parameters.Add("@DeliveryPeriodYear", details.DeliveryPeriodYear, DbType.Int32);
+                parameters.Add("@CollectionPeriodId", details.CollectionPeriodId, DbType.String);
+                parameters.Add("@CollectionPeriodMonth", details.CollectionPeriodMonth, DbType.Int32);
+                parameters.Add("@CollectionPeriodYear", details.CollectionPeriodYear, DbType.Int32);
                 parameters.Add("@EvidenceSubmittedOn", details.EvidenceSubmittedOn, DbType.DateTime);
                 parameters.Add("@EmployerAccountVersion", details.EmployerAccountVersion, DbType.String);
                 parameters.Add("@ApprenticeshipVersion", details.ApprenticeshipVersion, DbType.String);
