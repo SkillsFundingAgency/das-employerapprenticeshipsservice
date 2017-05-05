@@ -40,7 +40,7 @@
                             @aggregationLineItem.EmpRef
                         </td>
                         <td headers="th-pd">
-                           TODO
+                           @aggregationLineItem.PayrollDate.ToGdsFormatFull()
                         </td>
                         <td headers="th-ld" class="numeric">
                             @(aggregationLineItem.Amount.ToString("C2", culture))
