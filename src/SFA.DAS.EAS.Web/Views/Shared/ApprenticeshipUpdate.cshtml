@@ -91,7 +91,7 @@
     {
         <tr>
             <th scope="row">Reference</th>
-            <td>@Model.OriginalApprenticeship.EmployerRef</td>
+            <td>@Model.OriginalApprenticeship.EmployerReference</td>
             <td class="changed-item">@Model.EmployerRef</td>
             @Html.Hidden("EmployerRef", Model.EmployerRef)
         </tr>
@@ -101,7 +101,7 @@
 
 @functions
 {
-    private static string GetNameChange(Apprenticeship originalApprenticeship, UpdateApprenticeshipViewModel update)
+    private static string GetNameChange(ApprenticeshipDetailsViewModel originalApprenticeship, UpdateApprenticeshipViewModel update)
     {
         var first = !string.IsNullOrWhiteSpace(update.FirstName) ? update.FirstName : originalApprenticeship.FirstName;
         var last = !string.IsNullOrWhiteSpace(update.LastName) ? update.LastName : originalApprenticeship.LastName;
