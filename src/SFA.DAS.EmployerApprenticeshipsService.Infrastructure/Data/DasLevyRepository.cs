@@ -12,7 +12,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
-using SFA.DAS.Provider.Events.Api.Types;
+
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -214,13 +214,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@PeriodEndId", periodEnd.Id, DbType.String);
-                parameters.Add("@CalendarPeriodMonth", periodEnd.CalendarPeriod.Month, DbType.Int32);
-                parameters.Add("@CalendarPeriodYear", periodEnd.CalendarPeriod.Year, DbType.Int32);
-                parameters.Add("@AccountDataValidAt", periodEnd.ReferenceData.AccountDataValidAt, DbType.DateTime);
-                parameters.Add("@CommitmentDataValidAt", periodEnd.ReferenceData.CommitmentDataValidAt, DbType.DateTime);
+                parameters.Add("@CalendarPeriodMonth", periodEnd.CalendarPeriodMonth, DbType.Int32);
+                parameters.Add("@CalendarPeriodYear", periodEnd.CalendarPeriodYear, DbType.Int32);
+                parameters.Add("@AccountDataValidAt", periodEnd.AccountDataValidAt, DbType.DateTime);
+                parameters.Add("@CommitmentDataValidAt", periodEnd.CommitmentDataValidAt, DbType.DateTime);
                 parameters.Add("@CompletionDateTime", periodEnd.CompletionDateTime, DbType.DateTime);
-                parameters.Add("@PaymentsForPeriod", periodEnd.Links.PaymentsForPeriod, DbType.String);
-                
+                parameters.Add("@PaymentsForPeriod", periodEnd.PaymentsForPeriod, DbType.String);
+
                 return await c.ExecuteAsync(
                     sql: "[employer_financial].[CreatePeriodEnd]",
                     param: parameters,

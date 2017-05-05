@@ -24,6 +24,7 @@ using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
 using StructureMap;
 using TechTalk.SpecFlow;
+using PeriodEnd = SFA.DAS.EAS.Domain.Models.Payments.PeriodEnd;
 
 namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 {
@@ -139,7 +140,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             ScenarioContext.Current["paymentCollectionDate"] = collectionDate;
 
             //Creates a payment that has been submitted for this month
-            var payment = new Payment
+            var payment = new Provider.Events.Api.Types.Payment
             {
                 Id = Guid.NewGuid().ToString(),
                 Ukprn = 100,
@@ -160,7 +161,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             ScenarioContext.Current["payment"] = payment;
 
             _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1))
-                .ReturnsAsync(new PageOfResults<Payment> { Items = new[] { payment } });
+                .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment> { Items = new[] { payment } });
         }
 
         [When(@"payment details are updated")]
@@ -191,7 +192,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
 
             var accountId = (long)ScenarioContext.Current["AccountId"];
-            var payment = (Payment)ScenarioContext.Current["payment"];
+            var payment = (Provider.Events.Api.Types.Payment)ScenarioContext.Current["payment"];
 
             var repository = _container.GetInstance<IDasLevyRepository>();
             
@@ -280,8 +281,8 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
             //If a period end for this month already exists then use it
             if (latestPeriodEnd != null &&
-                latestPeriodEnd.CalendarPeriod.Month == DateTime.Now.Month &&
-                latestPeriodEnd.CalendarPeriod.Year == DateTime.Now.Year)
+                latestPeriodEnd.CalendarPeriodMonth == DateTime.Now.Month &&
+                latestPeriodEnd.CalendarPeriodYear == DateTime.Now.Year)
             {
                 return latestPeriodEnd;
             }
@@ -289,16 +290,13 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             //Else creates a new period end for this month 
             var periodEnd = new PeriodEnd
             {
-                CalendarPeriod = new CalendarPeriod { Month = DateTime.Now.Month, Year = DateTime.Now.Year },
+                Id = DateTime.Now.ToString("ddmmyyHHMMss"),
+                CalendarPeriodMonth = DateTime.Now.Month,
+                CalendarPeriodYear = DateTime.Now.Year ,
                 CompletionDateTime = DateTime.Now,
-                Id = $"Test Period: {DateTime.Now.Ticks}",
-                ReferenceData =
-                    new ReferenceDataDetails
-                    {
-                        AccountDataValidAt = DateTime.Now,
-                        CommitmentDataValidAt = DateTime.Now
-                    },
-                Links = new PeriodEndLinks { PaymentsForPeriod = "" }
+                AccountDataValidAt = DateTime.Now,
+                CommitmentDataValidAt = DateTime.Now,
+                PaymentsForPeriod = string.Empty
             };
 
             repository.CreateNewPeriodEnd(periodEnd).Wait();

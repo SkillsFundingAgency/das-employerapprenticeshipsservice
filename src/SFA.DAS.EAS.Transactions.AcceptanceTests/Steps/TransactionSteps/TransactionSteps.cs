@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -39,7 +38,6 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
             _eventsApi = new Mock<IEventsApi>();
 
             _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
-
         }
 
         [AfterFeature]
@@ -47,7 +45,6 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
         {
             _container.Dispose();
         }
-
 
         [When(@"I have the following submissions")]
         public void WhenIHaveTheFollowingSubmissions(Table table)
@@ -85,7 +82,6 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
                 }
 
                 dasLevyRepository.CreateEmployerDeclaration(dasDeclaration, tableRow["Paye_scheme"], accountId).Wait();
-                
             }
 
             var englishFractionRepository = _container.GetInstance<IEnglishFractionRepository>();
@@ -101,8 +97,6 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
             }
 
             dasLevyRepository.ProcessDeclarations().Wait();
-
-
         }
 
         [When(@"I have the following payments")]
@@ -149,15 +143,16 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
 
             ScenarioContext.Current["payments"] = paymentsList;
 
-            dasLevyRepository.CreateNewPeriodEnd(new PeriodEnd
+            dasLevyRepository.CreateNewPeriodEnd(new Domain.Models.Payments.PeriodEnd
             {
-                CalendarPeriod = new CalendarPeriod {Month = 1, Year = 2016},
+                CalendarPeriodMonth = 1,
+                CalendarPeriodYear = 2016,
                 CompletionDateTime = DateTime.Now,
                 Id = "1617-R12",
-                ReferenceData = new ReferenceDataDetails { AccountDataValidAt = DateTime.Now,CommitmentDataValidAt = DateTime.Now},
-                Links = new PeriodEndLinks { PaymentsForPeriod = ""}
+                AccountDataValidAt = DateTime.Now,
+                CommitmentDataValidAt = DateTime.Now,
+                PaymentsForPeriod = string.Empty
             }).Wait();
-
 
             dasLevyRepository.ProcessPaymentData().Wait();
         }
