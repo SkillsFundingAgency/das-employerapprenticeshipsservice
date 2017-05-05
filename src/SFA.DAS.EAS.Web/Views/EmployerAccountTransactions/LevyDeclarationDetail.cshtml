@@ -16,7 +16,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@paymentType</h1>
-        <p class="lede">@paymentType made on @Model.Data.TransactionDate.ToGdsFormatFull().</p>
+        <p>Date <b>@Model.Data.TransactionDate.ToGdsFormatFull()</b></p>
     </div>
 </div>
 <div class="grid-row">
@@ -67,6 +67,9 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         @Html.Partial("_WhatIsEnglishPercentage")
+        <div class="panel panel-border-wide panel-filled-purple panel-top-margin">
+            <p><a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/employer-enquiries" target="_blank">Contact HMRC</a> is the amount levied isn't what you expected. </p>
+        </div>
     </div>
 </div>
 
