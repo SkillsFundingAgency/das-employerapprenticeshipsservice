@@ -80,21 +80,24 @@ this.ScenarioSetup(scenarioInfo);
                         "Payroll_Year",
                         "Payroll_Month",
                         "English_Fraction",
-                        "SubmissionDate"});
+                        "SubmissionDate",
+                        "CreatedDate"});
             table1.AddRow(new string[] {
                         "223/ABC",
                         "1000",
                         "16-17",
                         "11",
                         "1",
-                        "2017-03-18"});
+                        "2017-03-18",
+                        "2017-03-23"});
             table1.AddRow(new string[] {
                         "223/ABC",
                         "1100",
                         "16-17",
                         "12",
                         "1",
-                        "2017-03-18"});
+                        "2017-04-18",
+                        "2017-04-23"});
 #line 8
  testRunner.When("I have the following submissions", ((string)(null)), table1, "When ");
 #line 12
@@ -119,28 +122,32 @@ this.ScenarioSetup(scenarioInfo);
                         "Payroll_Year",
                         "Payroll_Month",
                         "English_Fraction",
-                        "SubmissionDate"});
+                        "SubmissionDate",
+                        "CreatedDate"});
             table2.AddRow(new string[] {
                         "123/ABC",
                         "1000",
                         "16-17",
                         "11",
                         "1",
-                        "2017-03-18"});
+                        "2017-03-17",
+                        ""});
             table2.AddRow(new string[] {
                         "456/ABC",
                         "1000",
                         "16-17",
                         "11",
                         "1",
-                        "2017-03-18"});
+                        "2017-03-18",
+                        "2017-03-23"});
             table2.AddRow(new string[] {
                         "123/ABC",
                         "1100",
                         "16-17",
                         "12",
                         "1",
-                        "2017-04-18"});
+                        "2017-04-18",
+                        "2017-04-23"});
 #line 16
  testRunner.When("I have the following submissions", ((string)(null)), table2, "When ");
 #line 21
