@@ -33,7 +33,7 @@
             <div class="data-wrap">
                 <div class="data">
                     <dl>
-                        <dt>Current balance</dt>
+                        <dt>Current funds</dt>
                         @{
                             var balance = @Model.Data.Model.CurrentBalance.ToString("C0", culture);
                             var balanceClass = string.Empty;
@@ -49,17 +49,24 @@
                     </dl>
                 </div>
             </div>
-         }
+          }
     </div>
 </div>
 <div class="grid-row">
     <div class="column-full">
-        @if (Model.Data.Model.Data.TransactionLines.Count == 0 && Model.Data.CurrentTime > new DateTime(2017, 05, 20))
+
+        @if (Model.Data.Model.Data.TransactionLines.Count == 0)
         {
             <p class="panel panel-info">
-                No transaction data exists for this account, please try again later.
+                @if (Model.Data.IsLatestMonth)
+                {
+                    <span>No transactions yet.</span>
+                } 
+                else 
+                {
+                    <span>No transactions.</span>
+                }
             </p>
-            
         }
         else if(Model.Data.Model.Data.TransactionLines.Count != 0)
         {
