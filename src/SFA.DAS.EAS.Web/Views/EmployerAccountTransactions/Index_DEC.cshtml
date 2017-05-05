@@ -16,15 +16,12 @@
 }
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         <h1 class="heading-xlarge">
             Your transactions 
             <span class="heading-secondary">@displayingMonthDate.ToGdsFormatWithoutDay()</span>
         </h1>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-one-third">
+
         @if (Model.Data.CurrentTime < new DateTime(2017, 05, 20) && Model.Data.Model.Data.TransactionLines.Count == 0)
         {
             <p>
@@ -33,17 +30,26 @@
         }
         else if (Model.Data.IsLatestMonth)
         {
-            <div class="data">
-                <dl>
-                    <dt>Current balance</dt>
-                    @{ 
-                        var balance = @Model.Data.Model.CurrentBalance.ToString("C0", culture);
-                        var balanceClass = balance.Length > 10 ? "number-large" : String.Empty;
-                    }
-                    <dd class="@balanceClass">@balance</dd>
-                </dl>
-            </div>
+            <div class="data-wrap">
+                <div class="data">
+                    <dl>
+                        <dt>Current balance</dt>
+                        @{
+                            var balance = @Model.Data.Model.CurrentBalance.ToString("C0", culture);
+                            var balanceClass = string.Empty;
+
+                            if (balance.Length > 8)
+                                balanceClass = "long";
+
+                            if (balance.Length > 10)
+                                balanceClass = "longer";
+
                         }
+                        <dd class="@balanceClass">@balance</dd>
+                    </dl>
+                </div>
+            </div>
+         }
     </div>
 </div>
 <div class="grid-row">
