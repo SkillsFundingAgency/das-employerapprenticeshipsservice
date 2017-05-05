@@ -24,11 +24,9 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 
         public DateTimeViewModel EndDate { get; set; }
 
-
         public string EmployerRef { get; set; }
 
-
-        public Apprenticeship OriginalApprenticeship { get; set; }
+        public ApprenticeshipDetailsViewModel OriginalApprenticeship { get; set; }
 
         public bool? ChangesConfirmed { get; set; }
 
