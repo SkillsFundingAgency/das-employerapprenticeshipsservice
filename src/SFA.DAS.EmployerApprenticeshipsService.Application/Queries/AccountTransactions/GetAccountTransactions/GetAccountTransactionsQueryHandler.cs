@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions
@@ -9,12 +8,12 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
     public class GetAccountTransactionsQueryHandler : IAsyncRequestHandler<GetAccountTransactionsRequest, GetAccountTransactionsResponse>
     {
         private readonly IValidator<GetAccountTransactionsRequest> _validator;
-        private readonly IDasLevyRepository _dasLevyRepository;
+        private readonly ITransactionRepository _transactionRepository;
         
-        public GetAccountTransactionsQueryHandler(IValidator<GetAccountTransactionsRequest> validator, IDasLevyRepository dasLevyRepository)
+        public GetAccountTransactionsQueryHandler(IValidator<GetAccountTransactionsRequest> validator, ITransactionRepository transactionRepository)
         {
             _validator = validator;
-            _dasLevyRepository = dasLevyRepository;
+            _transactionRepository = transactionRepository;
         }
 
         public async Task<GetAccountTransactionsResponse> Handle(GetAccountTransactionsRequest message)
@@ -26,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var result = await _dasLevyRepository.GetTransactionsByDateRange(message.AccountId, message.FromDate, message.ToDate);
+            var result = await _transactionRepository.GetTransactionsByDateRange(message.AccountId, message.FromDate, message.ToDate);
 
             return new GetAccountTransactionsResponse {TransactionLines = result};
         }

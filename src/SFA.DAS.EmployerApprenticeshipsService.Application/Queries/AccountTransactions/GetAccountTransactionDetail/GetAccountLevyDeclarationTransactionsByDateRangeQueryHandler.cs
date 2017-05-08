@@ -9,14 +9,14 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
     public class GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler : IAsyncRequestHandler<GetAccountTransactionsByDateRangeQuery,GetAccountLevyDeclationTransactionsByDateRangeResponse>
     {
         private readonly IValidator<GetAccountTransactionsByDateRangeQuery> _validator;
-        private readonly IDasLevyRepository _dasLevyRepository;
+        private readonly ITransactionRepository _transactionRepository;
         private readonly IHmrcDateService _hmrcDateService;
 
 
-        public GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler(IValidator<GetAccountTransactionsByDateRangeQuery> validator, IDasLevyRepository dasLevyRepository, IHmrcDateService hmrcDateService)
+        public GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler(IValidator<GetAccountTransactionsByDateRangeQuery> validator, ITransactionRepository transactionRepository, IHmrcDateService hmrcDateService)
         {
             _validator = validator;
-            _dasLevyRepository = dasLevyRepository;
+            _transactionRepository = transactionRepository;
             _hmrcDateService = hmrcDateService;
         }
 
@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var transactions = await _dasLevyRepository.GetTransactionDetailsByDateRange(message.AccountId, message.FromDate,
+            var transactions = await _transactionRepository.GetTransactionDetailsByDateRange(message.AccountId, message.FromDate,
                 message.ToDate);
 
             foreach (var transaction in transactions)

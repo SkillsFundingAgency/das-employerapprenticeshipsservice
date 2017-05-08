@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionsTests
 {
     public class WhenIGetAccountTransactions : QueryBaseTest<GetAccountTransactionsQueryHandler,GetAccountTransactionsRequest, GetAccountTransactionsResponse>
     {
-        private Mock<IDasLevyRepository> _repository;
+        private Mock<ITransactionRepository> _repository;
         public override GetAccountTransactionsRequest Query { get; set; }
         public override GetAccountTransactionsQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountTransactionsRequest>> RequestValidator { get; set; }
@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionsTests
         {
             SetUp();
 
-            _repository = new Mock<IDasLevyRepository>();
+            _repository = new Mock<ITransactionRepository>();
 
             Query = new GetAccountTransactionsRequest {AccountId = ExpectedAccountId, FromDate = DateTime.Now.AddDays(-1), ToDate = DateTime.Now.AddDays(1) };
 

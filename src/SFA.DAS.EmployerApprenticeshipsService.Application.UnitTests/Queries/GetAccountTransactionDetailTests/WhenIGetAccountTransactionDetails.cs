@@ -5,7 +5,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
@@ -15,7 +14,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
 {
     public class WhenIGetAccountTransactionDetails : QueryBaseTest<GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler, GetAccountTransactionsByDateRangeQuery, GetAccountLevyDeclationTransactionsByDateRangeResponse>
     {
-        private Mock<IDasLevyRepository> _dasLevyRepository;
+        private Mock<ITransactionRepository> _transactionRepository;
         private DateTime _fromDate;
         private DateTime _toDate;
         private long _accountId;
@@ -33,8 +32,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
             _toDate = DateTime.Now.AddDays(-2);
             _accountId = 1;
 
-            _dasLevyRepository = new Mock<IDasLevyRepository>();
-            _dasLevyRepository.Setup(x => x.GetTransactionDetailsByDateRange(
+            _transactionRepository = new Mock<ITransactionRepository>();
+            _transactionRepository.Setup(x => x.GetTransactionDetailsByDateRange(
                     It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                             .ReturnsAsync(new List<TransactionLine>
                             {
@@ -51,7 +50,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
 
             SetUp();
 
-            RequestHandler = new GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler(RequestValidator.Object, _dasLevyRepository.Object, _hmrcDataService.Object);
+            RequestHandler = new GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler(RequestValidator.Object, _transactionRepository.Object, _hmrcDataService.Object);
         }
 
         [Test]
@@ -61,7 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
             await RequestHandler.Handle(Query);
 
             //Assert
-            _dasLevyRepository.Verify(x=>x.GetTransactionDetailsByDateRange(Query.AccountId, Query.FromDate, Query.ToDate));
+            _transactionRepository.Verify(x=>x.GetTransactionDetailsByDateRange(Query.AccountId, Query.FromDate, Query.ToDate));
         }
 
         [Test]
