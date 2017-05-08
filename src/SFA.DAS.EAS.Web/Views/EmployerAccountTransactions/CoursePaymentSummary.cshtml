@@ -11,7 +11,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Payment details</h1>
-        
+
         <div>
             <div>
                 <span>Date:</span>
@@ -22,51 +22,66 @@
                 <span class="bold">@Model.Data.ProviderName</span>
             </div>
         </div>
-        
-        <br />
-        <br />
-        <br />
+        </div></div>
+        <div class="grid-row">
+            <div class="column-full">
 
-        <table class="tableResponsive">
-            <thead>
-            <tr>
-                <th scope="col">Course</th>
-                <th scope="col">Paid from levy</th>
-                <th scope="col">90% paid by Government</th>
-                <th scope="col">10% by you</th>
-                <th scope="col">Amount</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var coursePaymentSummary in Model.Data.CoursePayments)
-            {
-                <tr class="responsive-tr">
-                    <td>@coursePaymentSummary.CourseName</td>
-                    <td>@coursePaymentSummary.LevyPaymentAmount.ToString("C0", culture)</td>
-                    <td>@coursePaymentSummary.SFACoInvestmentAmount.ToString("C0", culture)</td>
-                    <td>@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C0", culture)</td>
-                    <td>@coursePaymentSummary.TotalAmount.ToString("C0", culture)</td>
-                </tr>
-            }
-            </tbody>
-        </table>
-        
-        <div>
-            <p>Your payments to the provide include:</p>
-            <ul>
-                <li class="list-bullet">any co-investment contributions you need to make</li>
-                <li class="list-bullet">the costs of any apprenticeships above the <a href="#">funding caps</a></li>
-            </ul>
+                <table class="responsive">
+                    <thead>
+                        <tr>
+                            <th colspan="2"></th>
+                            <th class="highlight colgroup" scope="colgroup" colspan="2">Co-investment</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr>
+                            <th scope="col">Course</th>
+                            <th scope="col" class="numeric">Paid from levy</th>
+                            <th scope="col" class="numeric highlight">90% paid by Government</th>
+                            <th scope="col" class="numeric highlight">10% by you</th>
+                            <th scope="col" class="numeric">Amount</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var coursePaymentSummary in Model.Data.CoursePayments)
+                    {
+                        <tr>
+                            <td data-label="Course">@coursePaymentSummary.CourseName</td>
+                            <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C0", culture)</td>
+                            <td class="numeric highlight" data-label="90% paid by Government">@coursePaymentSummary.SFACoInvestmentAmount.ToString("C0", culture)</td>
+                            <td class="numeric highlight" data-label="10% paid by you">@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C0", culture)</td>
+                            <td class="numeric" data-label="Amount">@coursePaymentSummary.TotalAmount.ToString("C0", culture)</td>
+                            <td>-</td>
+                        </tr>
+                    }
+                    </tbody>
+                    <tfoot>
+                        <tr class="total">
+                            <td data-label="Totals"> </td>
+                            <td data-label="Paid from levy" class="total numeric nowrap">-£875.00</td>
+                            <td data-label="90% paid by Government" class="total numeric nowrap">-£1,012.50</td>
+                            <td data-label="10% paid by you" class="total numeric nowrap">-£112.50	</td>
+                            <td data-label="Amount" class="total numeric nowrap">-£2,000.00</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="panel">
+                    <p>Your payments to the provide include:</p>
+                    <ul class="list-bullet">
+                        <li>any co-investment contributions you need to make</li>
+                        <li>the costs of any apprenticeships above the <a href="#">funding caps</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
-            <li><a href="@Url.Action("Index", "EmployerAccountTransactions")">Your transactions</a></li>
-            <li>Debit details</li>
-        </ol>
-    </div>
-}
+        @section breadcrumb {
+            <div class="breadcrumbs">
+                <ol role="navigation">
+                    <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+                    <li><a href="@Url.Action("Index", "EmployerAccountTransactions")">Your transactions</a></li>
+                    <li>Debit details</li>
+                </ol>
+            </div>
+        }
