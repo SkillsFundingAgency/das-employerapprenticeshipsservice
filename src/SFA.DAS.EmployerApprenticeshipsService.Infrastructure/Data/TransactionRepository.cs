@@ -11,7 +11,7 @@ using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 
-namespace SFA.DAS.EAS.Infrastructure
+namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class TransactionRepository : BaseRepository, ITransactionRepository
     {
