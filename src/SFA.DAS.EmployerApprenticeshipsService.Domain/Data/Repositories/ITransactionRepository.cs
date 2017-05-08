@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using SFA.DAS.EAS.Domain.Models.Transaction;
+
+namespace SFA.DAS.EAS.Domain.Data.Repositories
+{
+    public interface ITransactionRepository
+    {
+        Task<List<TransactionLine>> GetTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
+
+        Task<List<TransactionLine>> GetTransactionDetailsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
+
+        Task<List<TransactionLine>> GetCourseTransactionByDateRange(string courseName, long accountId,
+            DateTime fromDate, DateTime toDate);
+
+        Task<int> GetPreviousTransactionsCount(long accountId, DateTime fromDate);
+    }
+}

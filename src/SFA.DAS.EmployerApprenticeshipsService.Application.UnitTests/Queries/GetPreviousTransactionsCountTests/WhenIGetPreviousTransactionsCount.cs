@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPreviousTransactionsCount
     public class WhenIGetPreviousTransactionsCount : QueryBaseTest<GetPreviousTransactionsCountRequestHandler, GetPreviousTransactionsCountRequest, GetPreviousTransactionsCountResponse>
     {
         private const int TransactionCount = 2;
-        private Mock<IDasLevyRepository> _repository;
+        private Mock<ITransactionRepository> _repository;
 
         public override GetPreviousTransactionsCountRequest Query { get; set; }
         public override GetPreviousTransactionsCountRequestHandler RequestHandler { get; set; }
@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPreviousTransactionsCount
         [SetUp]
         public void Arrange()
         {
-            _repository = new Mock<IDasLevyRepository>();
+            _repository = new Mock<ITransactionRepository>();
             _repository.Setup(x => x.GetPreviousTransactionsCount(It.IsAny<long>(), It.IsAny<DateTime>()))
                        .ReturnsAsync(TransactionCount);
 
