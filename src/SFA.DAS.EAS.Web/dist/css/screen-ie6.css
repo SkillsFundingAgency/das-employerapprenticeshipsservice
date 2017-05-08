@@ -1961,6 +1961,10 @@ main, .header-inner {
   float: right;
 }
 
+.hgroup {
+  margin-bottom: 40px;
+}
+
 aside.sidebar {
   font-size: 14px;
   border-top: 10px solid #005ea5;

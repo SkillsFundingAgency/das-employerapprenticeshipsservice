@@ -2326,6 +2326,10 @@ main, .header-inner {
   }
 }
 
+.hgroup {
+  margin-bottom: 40px;
+}
+
 aside.sidebar {
   font-size: 14px;
 }
