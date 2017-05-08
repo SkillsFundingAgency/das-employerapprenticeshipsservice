@@ -1029,6 +1029,7 @@
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\CoursePaymentSummary.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\CoursePaymentDetails.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\Index_ORG.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
