@@ -1023,6 +1023,7 @@
     <Content Include="src\sass\_notifications.scss" />
     <Content Include="src\sass\_navigation.scss" />
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\Index_ORG.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
