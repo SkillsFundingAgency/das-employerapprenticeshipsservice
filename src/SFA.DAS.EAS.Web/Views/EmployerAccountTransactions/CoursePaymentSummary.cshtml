@@ -58,10 +58,10 @@
                     <tfoot>
                         <tr class="total">
                             <td data-label="Totals"> </td>
-                            <td data-label="Paid from levy" class="total numeric nowrap">-£875.00</td>
-                            <td data-label="90% paid by Government" class="total numeric nowrap">-£1,012.50</td>
-                            <td data-label="10% paid by you" class="total numeric nowrap">-£112.50	</td>
-                            <td data-label="Amount" class="total numeric nowrap">-£2,000.00</td>
+                            <td data-label="Paid from levy" class="total numeric nowrap">@Model.Data.LevyPaymentsTotal.ToString("C0", culture)</td>
+                            <td data-label="90% paid by Government" class="total numeric nowrap">@Model.Data.SFACoInvestmentsTotal.ToString("C0", culture)</td>
+                            <td data-label="10% paid by you" class="total numeric nowrap">@Model.Data.EmployerCoInvestmentsTotal.ToString("C0", culture)</td>
+                            <td data-label="Amount" class="total numeric nowrap">@Model.Data.PaymentsTotal.ToString("C0", culture)</td>
                             <td></td>
                         </tr>
                     </tfoot>
