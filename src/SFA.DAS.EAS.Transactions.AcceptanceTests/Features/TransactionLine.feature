@@ -6,18 +6,18 @@
 Scenario: Transaction History levy declarations
 	Given I have an account
 	When I have the following submissions
-		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |SubmissionDate |
-		| 223/ABC     | 1000       | 16-17        | 11            | 1                |2017-03-18     |
-		| 223/ABC     | 1100       | 16-17        | 12            | 1                |2017-03-18     |
+		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction | SubmissionDate | CreatedDate |
+		| 223/ABC     | 1000       | 16-17        | 11            | 1                | 2017-03-18     | 2017-03-23  |
+		| 223/ABC     | 1100       | 16-17        | 12            | 1                | 2017-04-18     | 2017-04-23  |
 	Then the balance should be 1210 on the screen									  
 
 Scenario: Transaction History levy declarations with multiple schemes
 	Given I have an account
 	When I have the following submissions
-		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |SubmissionDate |
-		| 123/ABC     | 1000       | 16-17        | 11            | 1                |2017-03-18     |
-		| 456/ABC     | 1000       | 16-17        | 11            | 1                |2017-03-18     |
-		| 123/ABC     | 1100       | 16-17        | 12            | 1                |2017-04-18     |
+		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |SubmissionDate |CreatedDate |
+		| 123/ABC     | 1000       | 16-17        | 11            | 1                |2017-03-17     |			  |
+		| 456/ABC     | 1000       | 16-17        | 11            | 1                |2017-03-18     |2017-03-23  |
+		| 123/ABC     | 1100       | 16-17        | 12            | 1                |2017-04-18     |2017-04-23  |
 	Then the balance should be 2310 on the screen									  
 
 Scenario: Transaction History levy declarations over Payroll_year

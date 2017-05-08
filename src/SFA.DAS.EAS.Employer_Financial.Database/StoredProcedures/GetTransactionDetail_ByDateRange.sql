@@ -21,9 +21,12 @@ select
     tl.TransactionType,
 	null as UkPrn,
 	null as PeriodEnd,
-	DateCreated
+	DateCreated,
+	ld.PayrollYear,
+	ld.PayrollMonth
 from [employer_financial].TransactionLine tl
 inner join [employer_financial].LevyDeclarationTopup ldt on ldt.SubmissionId = tl.SubmissionId
+inner join [employer_financial].LevyDeclaration ld on ld.submissionid = tl.submissionid
 OUTER APPLY
 (
 	SELECT TOP 1 Amount
@@ -55,7 +58,9 @@ select
     tl.TransactionType,
 	p.Ukprn as UkPrn,
 	p.PeriodEnd as PeriodEnd,
-	DateCreated
+	DateCreated,
+	null as PayrollYear,
+	null as PayrollMonth
 from [employer_financial].TransactionLine tl
 inner join [employer_financial].Payment p on p.PeriodEnd = tl.PeriodEnd and p.AccountId = tl.AccountId
 inner join [employer_financial].PaymentMetaData meta on p.PaymentMetaDataId = meta.Id

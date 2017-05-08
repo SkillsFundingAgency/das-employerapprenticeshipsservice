@@ -26,5 +26,6 @@ AS
 	) dervx on dervx.AccountId = tl.AccountId
 	inner join 
 		@accountIds acc on acc.AccountId = tl.AccountId
+	where tl.TransactionType in (1,2,3)
 	Group by tl.AccountId
 

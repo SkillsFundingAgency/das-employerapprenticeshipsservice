@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionD
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 
@@ -18,6 +19,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
         private DateTime _fromDate;
         private DateTime _toDate;
         private long _accountId;
+        private Mock<IHmrcDateService> _hmrcDataService;
         public override GetAccountTransactionsByDateRangeQuery Query { get; set; }
         public override GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountTransactionsByDateRangeQuery>> RequestValidator { get; set; }
@@ -25,6 +27,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
         [SetUp]
         public void Arrange()
         {
+            _hmrcDataService = new Mock<IHmrcDateService>();
+
             _fromDate = DateTime.Now.AddDays(-10);
             _toDate = DateTime.Now.AddDays(-2);
             _accountId = 1;
@@ -34,7 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
                     It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                             .ReturnsAsync(new List<TransactionLine>
                             {
-                                new LevyDeclarationTransactionLine()
+                                new LevyDeclarationTransactionLine {PayrollMonth = 1,PayrollYear = "16-17"}
                             });
 
             Query = new GetAccountTransactionsByDateRangeQuery
@@ -47,7 +51,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
 
             SetUp();
 
-            RequestHandler = new GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler(RequestValidator.Object, _dasLevyRepository.Object);
+            RequestHandler = new GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler(RequestValidator.Object, _dasLevyRepository.Object, _hmrcDataService.Object);
         }
 
         [Test]
@@ -69,6 +73,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
             //Assert
             Assert.IsNotNull(actual);
             Assert.IsNotEmpty(actual.Transactions);
+        }
+
+        [Test]
+        public async Task ThenThePayrollDateIsCorrectlyMapped()
+        {
+            //Act
+            await RequestHandler.Handle(Query);
+
+            //Assert
+            _hmrcDataService.Verify(x=>x.GetDateFromPayrollYearMonth(It.IsAny<string>(), It.IsAny<int>()), Times.Once);
         }
     }
 }

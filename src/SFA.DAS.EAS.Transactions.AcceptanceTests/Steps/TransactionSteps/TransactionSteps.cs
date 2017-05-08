@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -7,6 +8,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.TestCommon.DbCleanup;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -97,6 +99,23 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
             }
 
             dasLevyRepository.ProcessDeclarations().Wait();
+
+            lineCount = 1;
+
+            var updateTransactionLine = _container.GetInstance<IUpdateTransactionLine>();
+
+            foreach (var tableRow in table.Rows)
+            {
+                var subId = lineCount;
+                
+                if (tableRow.ContainsKey("CreatedDate") && !string.IsNullOrEmpty(tableRow["CreatedDate"]))
+                {
+                    updateTransactionLine.Execute(subId, DateTime.Parse(tableRow["CreatedDate"])).Wait();
+                }
+                lineCount++;
+
+            }
+
         }
 
         [When(@"I have the following payments")]

@@ -1,10 +1,8 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail
 {
@@ -12,12 +10,14 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
     {
         private readonly IValidator<GetAccountTransactionsByDateRangeQuery> _validator;
         private readonly IDasLevyRepository _dasLevyRepository;
+        private readonly IHmrcDateService _hmrcDateService;
 
 
-        public GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler(IValidator<GetAccountTransactionsByDateRangeQuery> validator, IDasLevyRepository dasLevyRepository)
+        public GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler(IValidator<GetAccountTransactionsByDateRangeQuery> validator, IDasLevyRepository dasLevyRepository, IHmrcDateService hmrcDateService)
         {
             _validator = validator;
             _dasLevyRepository = dasLevyRepository;
+            _hmrcDateService = hmrcDateService;
         }
 
         public async Task<GetAccountLevyDeclationTransactionsByDateRangeResponse> Handle(GetAccountTransactionsByDateRangeQuery message)
@@ -31,6 +31,14 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
 
             var transactions = await _dasLevyRepository.GetTransactionDetailsByDateRange(message.AccountId, message.FromDate,
                 message.ToDate);
+
+            foreach (var transaction in transactions)
+            {
+                if (!string.IsNullOrEmpty(transaction.PayrollYear) && transaction.PayrollMonth != 0)
+                {
+                    transaction.PayrollDate = _hmrcDateService.GetDateFromPayrollYearMonth(transaction.PayrollYear, transaction.PayrollMonth);
+                }
+            }
 
             return new GetAccountLevyDeclationTransactionsByDateRangeResponse { Transactions = transactions };
         }
