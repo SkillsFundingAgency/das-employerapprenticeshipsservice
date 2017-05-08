@@ -99,6 +99,7 @@
     <Build Include="StoredProcedures\GetLevyDeclarations_ByAccountPayrollMonthPayrollYear.sql" />
     <Build Include="StoredProcedures\GetPreviousTransactionsCount.sql" />
     <Build Include="StoredProcedures\UpdateTransactionLineDate_BySubmissionId.sql" />
+    <Build Include="StoredProcedures\GetCourseTransactionsByDateRange.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

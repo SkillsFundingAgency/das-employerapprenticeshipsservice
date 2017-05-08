@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [employer_financial].[GetTransactionDetail_ByDateRange]
+﻿CREATE PROCEDURE [employer_financial].[GetProviderTransactions_ByDateRange]
 	@accountId bigint,
 	@fromDate datetime,
 	@toDate datetime
@@ -11,11 +11,7 @@ select
     ldt.Amount as TopUp,
     tl.EmpRef,
 	null as CourseName,
-	null as CourseLevel,
-	null as CourseStartDate,
 	null as ProviderName,
-	null as ApprenticeName,
-	null as ApprenticeNINumber,	
     tl.TransactionDate,
     tl.Amount as LineAmount,
     tl.TransactionType,
@@ -48,19 +44,15 @@ select
     null as TopUp,
     null as empref,
 	meta.ApprenticeshipCourseName as CourseName,
-	meta.ApprenticeshipCourseLevel as CourseLevel,
-	meta.ApprenticeshipCourseStartDate as CourseStartDate,
 	meta.ProviderName as ProviderName,
-	meta.ApprenticeName, 
-	meta.ApprenticeNINumber,	
     (tl.TransactionDate) as transactiondate,
     (p.Amount) as LineAmount,
     tl.TransactionType,
 	p.Ukprn as UkPrn,
 	p.PeriodEnd as PeriodEnd,
 	DateCreated,
-	null as PayrollYear,
-	null as PayrollMonth
+	[CollectionPeriodYear] as PayrollYear,
+	[CollectionPeriodMonth] as PayrollMonth
 from [employer_financial].TransactionLine tl
 inner join [employer_financial].Payment p on p.PeriodEnd = tl.PeriodEnd and p.AccountId = tl.AccountId
 inner join [employer_financial].PaymentMetaData meta on p.PaymentMetaDataId = meta.Id
