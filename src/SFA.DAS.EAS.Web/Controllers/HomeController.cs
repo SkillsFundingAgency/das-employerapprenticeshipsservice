@@ -43,7 +43,13 @@ namespace SFA.DAS.EAS.Web.Controllers
                 }
 
                 var accounts = await _homeOrchestrator.GetUserAccounts(userId);
-                
+
+                if (accounts.Data.Accounts.AccountList.Count == 1)
+                {
+                    var account = accounts.Data.Accounts.AccountList.FirstOrDefault();
+                    return RedirectToAction("Index", "EmployerTeam", new { HashedAccountId = account.HashedId });
+                }
+
                 var flashMessage = GetFlashMessageViewModelFromCookie();
 
                 if (flashMessage != null)
@@ -55,13 +61,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 {
                     return View(accounts);
                 }
-                if (accounts.Data.Accounts.AccountList.Count == 1)
-                {
-                    var account = accounts.Data.Accounts.AccountList.FirstOrDefault();
-                    return RedirectToAction("Index", "EmployerTeam", new { HashedAccountId = account.HashedId });
-
-                }
-                return View("SetupAccount");
+                
+                return View("SetupAccount", accounts);
 
             }
 
