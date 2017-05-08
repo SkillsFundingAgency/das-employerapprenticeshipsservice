@@ -95,7 +95,58 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             var result = await _orchestrator.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
 
-            result.Data.Status.Should().Be("On programme");
+            result.Data.Status.Should().Be("Live");
+        }
+
+        [Test]
+        public async Task ShouldSetStatusTextForApprenticeshipWhenPaused()
+        {
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
+                .ReturnsAsync(new GetApprenticeshipQueryResponse
+                {
+                    Apprenticeship = new Apprenticeship { PaymentStatus = PaymentStatus.Paused }
+                });
+
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipUpdateRequest>()))
+                .ReturnsAsync(new GetApprenticeshipUpdateResponse());
+
+            var result = await _orchestrator.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
+
+            result.Data.Status.Should().Be("Paused");
+        }
+
+        [Test]
+        public async Task ShouldSetStatusTextForApprenticeshipWhenStoped()
+        {
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
+                .ReturnsAsync(new GetApprenticeshipQueryResponse
+                {
+                    Apprenticeship = new Apprenticeship { PaymentStatus = PaymentStatus.Withdrawn }
+                });
+
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipUpdateRequest>()))
+                .ReturnsAsync(new GetApprenticeshipUpdateResponse());
+
+            var result = await _orchestrator.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
+
+            result.Data.Status.Should().Be("Stopped");
+        }
+
+        [Test]
+        public async Task ShouldSetStatusTextForApprenticeshipWhenCompleted()
+        {
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
+                .ReturnsAsync(new GetApprenticeshipQueryResponse
+                {
+                    Apprenticeship = new Apprenticeship { PaymentStatus = PaymentStatus.Completed }
+                });
+
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipUpdateRequest>()))
+                .ReturnsAsync(new GetApprenticeshipUpdateResponse());
+
+            var result = await _orchestrator.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
+
+            result.Data.Status.Should().Be("Finished");
         }
 
         [Test]

@@ -293,13 +293,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 case PaymentStatus.PendingApproval:
                     return "Approval needed";
                 case PaymentStatus.Active:
-                    return waitingToStart ? "Waiting to start" : "On programme";
+                    return waitingToStart ? "Waiting to start" : "Live";
                 case PaymentStatus.Paused:
                     return "Paused";
                 case PaymentStatus.Withdrawn:
                     return "Stopped";
                 case PaymentStatus.Completed:
-                    return "Completed";
+                    return "Finished";
                 case PaymentStatus.Deleted:
                     return "Deleted";
                 default:
