@@ -178,7 +178,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 Headline = "Account created",
                 HiddenFlashMessageInformation = enteredData.OrganisationType.ToString(),
-                Severity = FlashMessageSeverityLevel.Complete
+                Severity = FlashMessageSeverityLevel.Success
             };
 
             AddFlashMessageToCookie(flashmessage);
