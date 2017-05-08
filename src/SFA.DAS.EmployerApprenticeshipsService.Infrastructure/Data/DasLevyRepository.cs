@@ -12,7 +12,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
-using SFA.DAS.Provider.Events.Api.Types;
+
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -207,20 +207,19 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToList();
         }
 
-        //TODO refactor not to use PeriodEnd type here
         public async Task CreateNewPeriodEnd(PeriodEnd periodEnd)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@PeriodEndId", periodEnd.Id, DbType.String);
-                parameters.Add("@CalendarPeriodMonth", periodEnd.CalendarPeriod.Month, DbType.Int32);
-                parameters.Add("@CalendarPeriodYear", periodEnd.CalendarPeriod.Year, DbType.Int32);
-                parameters.Add("@AccountDataValidAt", periodEnd.ReferenceData.AccountDataValidAt, DbType.DateTime);
-                parameters.Add("@CommitmentDataValidAt", periodEnd.ReferenceData.CommitmentDataValidAt, DbType.DateTime);
+                parameters.Add("@CalendarPeriodMonth", periodEnd.CalendarPeriodMonth, DbType.Int32);
+                parameters.Add("@CalendarPeriodYear", periodEnd.CalendarPeriodYear, DbType.Int32);
+                parameters.Add("@AccountDataValidAt", periodEnd.AccountDataValidAt, DbType.DateTime);
+                parameters.Add("@CommitmentDataValidAt", periodEnd.CommitmentDataValidAt, DbType.DateTime);
                 parameters.Add("@CompletionDateTime", periodEnd.CompletionDateTime, DbType.DateTime);
-                parameters.Add("@PaymentsForPeriod", periodEnd.Links.PaymentsForPeriod, DbType.String);
-                
+                parameters.Add("@PaymentsForPeriod", periodEnd.PaymentsForPeriod, DbType.String);
+
                 return await c.ExecuteAsync(
                     sql: "[employer_financial].[CreatePeriodEnd]",
                     param: parameters,
@@ -267,11 +266,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@Uln", details.Uln, DbType.Int64);
                 parameters.Add("@AccountId", details.EmployerAccountId, DbType.Int64);
                 parameters.Add("@ApprenticeshipId", details.ApprenticeshipId, DbType.Int64);
-                parameters.Add("@DeliveryPeriodMonth", details.DeliveryPeriod.Month, DbType.Int32);
-                parameters.Add("@DeliveryPeriodYear", details.DeliveryPeriod.Year, DbType.Int32);
-                parameters.Add("@CollectionPeriodId", details.CollectionPeriod.Id, DbType.String);
-                parameters.Add("@CollectionPeriodMonth", details.CollectionPeriod.Month, DbType.Int32);
-                parameters.Add("@CollectionPeriodYear", details.CollectionPeriod.Year, DbType.Int32);
+                parameters.Add("@DeliveryPeriodMonth", details.DeliveryPeriodMonth, DbType.Int32);
+                parameters.Add("@DeliveryPeriodYear", details.DeliveryPeriodYear, DbType.Int32);
+                parameters.Add("@CollectionPeriodId", details.CollectionPeriodId, DbType.String);
+                parameters.Add("@CollectionPeriodMonth", details.CollectionPeriodMonth, DbType.Int32);
+                parameters.Add("@CollectionPeriodYear", details.CollectionPeriodYear, DbType.Int32);
                 parameters.Add("@EvidenceSubmittedOn", details.EvidenceSubmittedOn, DbType.DateTime);
                 parameters.Add("@EmployerAccountVersion", details.EmployerAccountVersion, DbType.String);
                 parameters.Add("@ApprenticeshipVersion", details.ApprenticeshipVersion, DbType.String);

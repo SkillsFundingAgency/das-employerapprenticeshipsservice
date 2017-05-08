@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -12,6 +13,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.Messaging;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
+
 
 namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
 {
@@ -81,12 +83,23 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
 
             var response = await _mediator.SendAsync(new GetAllEmployerAccountsRequest());
             
-            foreach (var periodEnd in periodsToProcess)
+            foreach (var paymentsPeriodEnd in periodsToProcess)
             {
+                var periodEnd = new Domain.Models.Payments.PeriodEnd
+                {
+                    Id = paymentsPeriodEnd.Id,
+                    CalendarPeriodMonth = paymentsPeriodEnd.CalendarPeriod?.Month ?? 0,
+                    CalendarPeriodYear = paymentsPeriodEnd.CalendarPeriod?.Year ?? 0,
+                    CompletionDateTime = paymentsPeriodEnd.CompletionDateTime,
+                    AccountDataValidAt = paymentsPeriodEnd.ReferenceData?.AccountDataValidAt,
+                    CommitmentDataValidAt = paymentsPeriodEnd.ReferenceData?.CommitmentDataValidAt,
+                    PaymentsForPeriod = paymentsPeriodEnd.Links?.PaymentsForPeriod ?? string.Empty
+                };
+
                 _logger.Info($"Creating period end {periodEnd.Id}");
                 await _mediator.SendAsync(new CreateNewPeriodEndCommand {NewPeriodEnd = periodEnd});
 
-                if (periodEnd.ReferenceData?.AccountDataValidAt == null || periodEnd.ReferenceData?.CommitmentDataValidAt == null)
+                if (!periodEnd.AccountDataValidAt.HasValue || !periodEnd.CommitmentDataValidAt.HasValue)
                 {
                     continue;
                 }
@@ -97,7 +110,7 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
 
                     await _publisher.PublishAsync(new PaymentProcessorQueueMessage
                     {
-                        AccountPaymentUrl = $"{periodEnd.Links.PaymentsForPeriod}&employeraccountid={account.Id}",
+                        AccountPaymentUrl = $"{periodEnd.PaymentsForPeriod}&employeraccountid={account.Id}",
                         AccountId = account.Id,
                         PeriodEndId = periodEnd.Id
                     });

@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Provider.Events.Api.Types;
+﻿
+using SFA.DAS.EAS.Domain.Models.Payments;
 
 namespace SFA.DAS.EAS.Application.Queries.Payments.GetCurrentPeriodEnd
 {
