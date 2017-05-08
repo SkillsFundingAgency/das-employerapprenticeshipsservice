@@ -109,8 +109,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task<OrchestratorResponse<ApprenticeshipDetailsViewModel>> GetApprenticeship(
-            string hashedAccountId, string hashedApprenticeshipId, string externalUserId)
+        public async Task<OrchestratorResponse<ApprenticeshipDetailsViewModel>> GetApprenticeship(string hashedAccountId, string hashedApprenticeshipId, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
@@ -217,7 +216,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             ApprenticeshipId = apprenticeshipId
                         });
 
-                    var apprenticeship = await _mediator.SendAsync(
+                    var apprenticeshipResult = await _mediator.SendAsync(
                         new GetApprenticeshipQueryRequest
                         {
                             AccountId = accountId,
@@ -225,11 +224,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         });
 
                     var viewModel = _apprenticeshipMapper.MapFrom(data.ApprenticeshipUpdate);
-                    viewModel.OriginalApprenticeship = apprenticeship.Apprenticeship;
+
+                    var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(apprenticeshipResult.Apprenticeship, null);
+                    viewModel.OriginalApprenticeship = apprenticeship;
                     viewModel.HashedAccountId = hashedAccountId;
                     viewModel.HashedApprenticeshipId = hashedApprenticeshipId;
 
-                    viewModel.ProviderName = apprenticeship.Apprenticeship.ProviderName;
+                    viewModel.ProviderName = apprenticeshipResult.Apprenticeship.ProviderName;
 
                     return new OrchestratorResponse<UpdateApprenticeshipViewModel>
                     {
@@ -526,14 +527,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
             var accountId = _hashingService.DecodeValue(hashedAccountId);
 
-            var apprenticeship = await _mediator.SendAsync(
+            var apprenticeshipResult = await _mediator.SendAsync(
                 new GetApprenticeshipQueryRequest
                 {
                     AccountId = accountId,
                     ApprenticeshipId = apprenticeshipId
                 });
-
-            mappedModel.OriginalApprenticeship = apprenticeship.Apprenticeship;
+            var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(apprenticeshipResult.Apprenticeship, null);
+            mappedModel.OriginalApprenticeship = apprenticeship;
             mappedModel.HashedAccountId = hashedAccountId;
             mappedModel.HashedApprenticeshipId = hashedApprenticeshipId;
 

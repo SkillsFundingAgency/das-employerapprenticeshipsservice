@@ -5,8 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateNewPeriodEnd;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.Provider.Events.Api.Types;
-
+using SFA.DAS.EAS.Domain.Models.Payments;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateNewPeriodEndTests
 {
@@ -52,14 +51,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateNewPeriodEndTests
         public async Task ThenTheRepositoryIsCalledWhenTheMessageIsValid()
         {
             //Arrange
-            var command = new CreateNewPeriodEndCommand { NewPeriodEnd = new PeriodEnd { CalendarPeriod = new CalendarPeriod { Month = 1, Year = 1 } } };
+            var command = new CreateNewPeriodEndCommand { NewPeriodEnd = new PeriodEnd { CalendarPeriodMonth = 1, CalendarPeriodYear = 1 } };
             
             //Act
             await _handler.Handle(command);
 
             //Assert
             _repository.Verify(x=>x.CreateNewPeriodEnd(It.IsAny<PeriodEnd>()));
-            
         }
     }
 }

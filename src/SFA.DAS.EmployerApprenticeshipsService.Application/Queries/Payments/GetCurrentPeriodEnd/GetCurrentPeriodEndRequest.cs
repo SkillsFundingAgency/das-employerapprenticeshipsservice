@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MediatR;
+﻿using MediatR;
 
 namespace SFA.DAS.EAS.Application.Queries.Payments.GetCurrentPeriodEnd
 {

@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         private void SetupMapperMock()
         {
             _mapper = new Mock<IMapper>();
-            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Payment>()))
+            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Provider.Events.Api.Types.Payment>()))
                 .Returns(() => _standardPayment);
         }
 
@@ -118,7 +118,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         public async Task ThenTheAppreticeshipsApiIsCalledToGetFrameworkDetails()
         {
             //Arrange
-            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Payment>()))
+            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Provider.Events.Api.Types.Payment>()))
                      .Returns(() => _frameworkPayment);
 
             //Act
@@ -173,7 +173,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         public async Task ThenIShouldGetCorrectFrameworkCourseName()
         {
             //Arrange
-            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Payment>()))
+            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Provider.Events.Api.Types.Payment>()))
                     .Returns(() => _frameworkPayment);
 
             //Act
@@ -260,7 +260,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         public async Task ThenShouldLogWarningIfApprenticeshipsApiCallFailsWhenGettingFrameworks()
         {
             //Arrange
-            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Payment>()))
+            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Provider.Events.Api.Types.Payment>()))
                   .Returns(() => _frameworkPayment);
             _apprenticeshipInfoService.Setup(x => x.GetFrameworksAsync(It.IsAny<bool>()))
                                       .Throws<WebException>();
@@ -279,9 +279,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             const int numberOfPages = 3;
 
             _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
-                .ReturnsAsync(new PageOfResults<Payment>
+                .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment>
                 {
-                    Items = new[]{ new Payment(), new Payment() },
+                    Items = new[]{ new Provider.Events.Api.Types.Payment(), new Provider.Events.Api.Types.Payment() },
                     TotalNumberOfPages = numberOfPages
                 });
 
@@ -356,9 +356,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         {
             _paymentsApiClient = new Mock<IPaymentsEventsApiClient>();
             _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
-                .ReturnsAsync(new PageOfResults<Payment>
+                .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment>
                 {
-                    Items = new[]{ new Payment() }
+                    Items = new[]{ new Provider.Events.Api.Types.Payment() }
                 });
         }
 

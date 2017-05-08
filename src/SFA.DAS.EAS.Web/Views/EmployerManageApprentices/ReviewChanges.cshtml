@@ -30,17 +30,16 @@
                     }
 
                     <label class="block-label selection-button-radio" for="changes-approve-true">
-                        @Html.RadioButton("ApproveChanges", true, new { id = "changes-approve-true" })
+                        @Html.RadioButton("ChangesConfirmed", true, new { id = "changes-approve-true" })
                         Yes, approve these changes
                     </label>
                     <label class="block-label selection-button-radio" for="changes-approve-false">
-                        @Html.RadioButton("ApproveChanges", false, new { id = "changes-approve-false" })
+                        @Html.RadioButton("ChangesConfirmed", false, new { id = "changes-approve-false" })
                         No, reject these changes
                     </label>
                 </fieldset>
             </div>
 
-            @Html.Hidden("OriginalApprenticeshipDecoded", @Json.Encode(Model.Data.OriginalApprenticeship))
             <button type="submit" class="button" aria-label="Continue">Continue</button>
 
             <a class="button-link" href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId })" aria-label="Back to apprentice details">

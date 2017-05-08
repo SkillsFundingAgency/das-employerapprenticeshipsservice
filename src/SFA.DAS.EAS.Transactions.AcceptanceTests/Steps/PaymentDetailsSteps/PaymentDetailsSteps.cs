@@ -24,6 +24,7 @@ using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
 using StructureMap;
 using TechTalk.SpecFlow;
+using PeriodEnd = SFA.DAS.EAS.Domain.Models.Payments.PeriodEnd;
 
 namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 {
@@ -126,39 +127,28 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             var accountId = (long)ScenarioContext.Current["AccountId"];
 
             var dasLevyRepository = _container.GetInstance<IDasLevyRepository>();
-
-            var periodEnd = dasLevyRepository.GetLatestPeriodEnd().Result;
-
-            if (periodEnd == null)
-            {
-                periodEnd = new PeriodEnd
-                {
-                    CalendarPeriod = new CalendarPeriod {Month = 1, Year = 2016},
-                    CompletionDateTime = DateTime.Now,
-                    Id = "1617-R12",
-                    ReferenceData =
-                        new ReferenceDataDetails
-                        {
-                            AccountDataValidAt = DateTime.Now,
-                            CommitmentDataValidAt = DateTime.Now
-                        },
-                    Links = new PeriodEndLinks {PaymentsForPeriod = ""}
-                };
-
-                dasLevyRepository.CreateNewPeriodEnd(periodEnd).Wait();
-            }
-
+            
+            var periodEnd = GetCurrentMonthPeriodEnd(dasLevyRepository);
+            
             ScenarioContext.Current["periodEnd"] = periodEnd;
 
-            var payment = new Payment
+            //Simulating a payment for last month fee of a course that has been submitted this month 
+            var deliveryDate = DateTime.Now.AddMonths(-1);
+            var collectionDate = DateTime.Now;
+
+            ScenarioContext.Current["paymentDeliveryDate"] = deliveryDate;
+            ScenarioContext.Current["paymentCollectionDate"] = collectionDate;
+
+            //Creates a payment that has been submitted for this month
+            var payment = new Provider.Events.Api.Types.Payment
             {
                 Id = Guid.NewGuid().ToString(),
                 Ukprn = 100,
                 StandardCode = standard.Code,
                 ApprenticeshipId = apprenticeship.Id,
-                DeliveryPeriod = new CalendarPeriod { Month = 3, Year = 2017 },
+                DeliveryPeriod = new CalendarPeriod { Month = deliveryDate.Month, Year = deliveryDate.Year },
                 Amount = 200,
-                CollectionPeriod = new NamedCalendarPeriod { Id = periodEnd.Id, Month = 3, Year = 2017 },
+                CollectionPeriod = new NamedCalendarPeriod { Id = periodEnd.Id, Month = collectionDate.Month, Year = collectionDate.Year },
                 TransactionType = TransactionType.Learning,
                 EvidenceSubmittedOn = DateTime.Now.AddDays(-5),
                 Uln = 123,
@@ -171,9 +161,8 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             ScenarioContext.Current["payment"] = payment;
 
             _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1))
-                .ReturnsAsync(new PageOfResults<Payment> { Items = new[] { payment } });
+                .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment> { Items = new[] { payment } });
         }
-
 
         [When(@"payment details are updated")]
         public void WhenPaymentDetailsAreUpdated()
@@ -193,12 +182,21 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         [Then(@"the updated payment details should be stored")]
         public void ThenTheUpdatedPaymentDetailsShouldBeStored()
         {
+            var collectionDate = (DateTime) ScenarioContext.Current["paymentCollectionDate"];
+            var transactionMonthStart = new DateTime(collectionDate.Year, collectionDate.Month, 1, 0, 0, 0);
+            var transactionMonthEnd = new DateTime(
+                collectionDate.Year, 
+                collectionDate.Month, 
+                DateTime.DaysInMonth(collectionDate.Year, collectionDate.Month),
+                23,59,59);
+
+
             var accountId = (long)ScenarioContext.Current["AccountId"];
-            var payment = (Payment)ScenarioContext.Current["payment"];
+            var payment = (Provider.Events.Api.Types.Payment)ScenarioContext.Current["payment"];
 
             var repository = _container.GetInstance<IDasLevyRepository>();
-
-            var transactions = repository.GetTransactionDetailsByDateRange(accountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).Result;
+            
+            var transactions = repository.GetTransactionDetailsByDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
@@ -215,12 +213,18 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             var accountId = (long)ScenarioContext.Current["AccountId"];
             var standard = (Standard)ScenarioContext.Current["standard"];
             var apprenticeship = (Apprenticeship)ScenarioContext.Current["apprenticeship"];
-            var periodEnd = (PeriodEnd)ScenarioContext.Current["periodEnd"];
+            var collectionDate = (DateTime)ScenarioContext.Current["paymentCollectionDate"];
+            var transactionMonthStart = new DateTime(collectionDate.Year, collectionDate.Month, 1);
+            var transactionMonthEnd = new DateTime(
+                collectionDate.Year,
+                collectionDate.Month,
+                DateTime.DaysInMonth(collectionDate.Year, collectionDate.Month),
+                23, 59, 59);
 
 
             var repository = _container.GetInstance<IDasLevyRepository>();
 
-            var transactions = repository.GetTransactionDetailsByDateRange(accountId, periodEnd.CompletionDateTime.AddDays(-1), periodEnd.CompletionDateTime.AddDays(1)).Result;
+            var transactions = repository.GetTransactionDetailsByDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
@@ -238,9 +242,17 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             var accountId = (long)ScenarioContext.Current["AccountId"];
             var apprenticeship = (Apprenticeship)ScenarioContext.Current["apprenticeship"];
 
+            var collectionDate = (DateTime)ScenarioContext.Current["paymentCollectionDate"];
+            var transactionMonthStart = new DateTime(collectionDate.Year, collectionDate.Month, 1);
+            var transactionMonthEnd = new DateTime(
+                collectionDate.Year,
+                collectionDate.Month,
+                DateTime.DaysInMonth(collectionDate.Year, collectionDate.Month),
+                23, 59, 59);
+
             var repository = _container.GetInstance<IDasLevyRepository>();
 
-            var transactions = repository.GetTransactionDetailsByDateRange(accountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).Result;
+            var transactions = repository.GetTransactionDetailsByDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
@@ -261,6 +273,35 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
             var mapper = config.CreateMapper();
             _container.Inject(typeof(IMapper), mapper);
+        }
+
+        private static PeriodEnd GetCurrentMonthPeriodEnd(IDasLevyRepository repository)
+        {
+            var latestPeriodEnd = repository.GetLatestPeriodEnd().Result;
+
+            //If a period end for this month already exists then use it
+            if (latestPeriodEnd != null &&
+                latestPeriodEnd.CalendarPeriodMonth == DateTime.Now.Month &&
+                latestPeriodEnd.CalendarPeriodYear == DateTime.Now.Year)
+            {
+                return latestPeriodEnd;
+            }
+
+            //Else creates a new period end for this month 
+            var periodEnd = new PeriodEnd
+            {
+                Id = DateTime.Now.ToString("ddmmyyHHMMss"),
+                CalendarPeriodMonth = DateTime.Now.Month,
+                CalendarPeriodYear = DateTime.Now.Year ,
+                CompletionDateTime = DateTime.Now,
+                AccountDataValidAt = DateTime.Now,
+                CommitmentDataValidAt = DateTime.Now,
+                PaymentsForPeriod = string.Empty
+            };
+
+            repository.CreateNewPeriodEnd(periodEnd).Wait();
+
+            return periodEnd;
         }
     }
 }

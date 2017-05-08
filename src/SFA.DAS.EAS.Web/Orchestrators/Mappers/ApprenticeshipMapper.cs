@@ -198,9 +198,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 
         public ApprenticeshipUpdate MapFrom(UpdateApprenticeshipViewModel viewModel)
         {
+            var apprenticeshipId = _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
             return new ApprenticeshipUpdate
             {
-                ApprenticeshipId = viewModel.OriginalApprenticeship.Id,
+                ApprenticeshipId =  apprenticeshipId,
                 Cost = viewModel.Cost.AsNullableDecimal(),
                 DateOfBirth = viewModel.DateOfBirth?.DateTime,
                 FirstName = viewModel.FirstName,
@@ -239,6 +240,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             Func<string, string, string> changedOrNull = (a, edit) => 
                 a?.Trim() == edit?.Trim() ? null : edit;
 
+            var apprenticeshipDetailsViewModel = MapToApprenticeshipDetailsViewModel(original, null);
             var model = new UpdateApprenticeshipViewModel
             {
                 FirstName = changedOrNull(original.FirstName, edited.FirstName),
@@ -254,7 +256,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                     ? null
                     : edited.EndDate,
                 EmployerRef = changedOrNull(original.EmployerRef, edited.EmployerRef),
-                OriginalApprenticeship = original
+                OriginalApprenticeship = apprenticeshipDetailsViewModel
             };
 
             if (!string.IsNullOrWhiteSpace(edited.TrainingCode) && original.TrainingCode != edited.TrainingCode)
