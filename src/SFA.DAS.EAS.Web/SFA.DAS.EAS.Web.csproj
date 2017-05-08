@@ -385,6 +385,8 @@
     <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Extensions\ValidationResultExtensions.cs" />
     <Compile Include="Validators\ChangeStatusViewModelValidator.cs" />
+    <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusChoiceViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ValidateWhenToApplyChangeResult.cs" />
@@ -1026,6 +1028,7 @@
     <Content Include="src\sass\_navigation.scss" />
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\CoursePaymentSummary.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\CoursePaymentDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

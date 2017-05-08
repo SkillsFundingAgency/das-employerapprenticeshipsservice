@@ -258,5 +258,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
             };
         }
+
+        public virtual async Task<OrchestratorResponse<CoursePaymentDetailsViewModel>> GetCoursePaymentDetails(
+            string courseName, string hashedAccountId, DateTime fromDate, DateTime toDate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,0 +1,76 @@
+﻿@using System.Globalization
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.CoursePaymentDetailsViewModel>
+
+@{
+    var culture = new CultureInfo("en-GB");
+    ViewBag.PageID = "page-course-payment-details";
+    ViewBag.Title = "Payment details";
+    ViewBag.Section = "finance";
+
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Payment details</h1>
+        
+        <div>
+            <div>
+                <span>Date:</span>
+                <span class="bold">@Model.Data.PaymentDate.ToString("dd MMMM yyyy")</span>
+            </div>
+            <div>
+                <span>Payment to</span>
+                <span class="bold">@Model.Data.ProviderName</span>
+            </div>
+            <div>
+                <span>Course</span>
+                <span class="bold">@Model.Data.ProviderName</span>
+            </div>
+        </div>
+        
+        <br />
+        <br />
+        <br />
+
+        <table class="tableResponsive">
+            <thead>
+            <tr>
+                <th scope="col">Apprentice</th>
+                <th scope="col">Paid from levy</th>
+                <th scope="col">90% paid by Government</th>
+                <th scope="col">10% by you</th>
+                <th scope="col">Amount</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var coursePaymentSummary in Model.Data.ApprenticePayments)
+            {
+                <tr class="responsive-tr">
+                    <td>@coursePaymentSummary.ApprenticeName</td>
+                    <td>@coursePaymentSummary.LevyPaymentAmount.ToString("C0", culture)</td>
+                    <td>@coursePaymentSummary.SFACoInvestmentAmount.ToString("C0", culture)</td>
+                    <td>@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C0", culture)</td>
+                    <td>@coursePaymentSummary.TotalAmount.ToString("C0", culture)</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        
+        <div>
+            <p>Your payments to the provide include:</p>
+            <ul>
+                <li class="list-bullet">any co-investment contributions you need to make</li>
+                <li class="list-bullet">the costs of any apprenticeships above the <a href="#">funding caps</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAccountTransactions")">Your transactions</a></li>
+            <li>Debit details</li>
+        </ol>
+    </div>
+}

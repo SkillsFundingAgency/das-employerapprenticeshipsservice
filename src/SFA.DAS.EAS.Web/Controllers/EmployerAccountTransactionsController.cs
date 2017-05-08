@@ -57,5 +57,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View("CoursePaymentSummary", viewModel);
         }
+
+        [Route("balance/payment/details")]
+        public async Task<ActionResult> CoursePaymentDetails(string courseName, string hashedAccountId, DateTime fromDate, DateTime toDate)
+        {
+           throw new NotImplementedException();
+        }
     }
 }
