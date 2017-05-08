@@ -3235,7 +3235,7 @@ table.responsive tr th.tw-70 {
   width: 70%;
 }
 
-.panel p {
+.panel p, .panel li {
   font-size: 14px;
   font-size: 16px;
 }
