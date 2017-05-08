@@ -140,7 +140,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             await _employerAccountController.CreateAccount();
 
             //Assert
-            _flashMessage.Verify(x=>x.Create(It.Is<FlashMessageViewModel>(c=>c.Headline.Equals("Account created") && c.Severity.Equals(FlashMessageSeverityLevel.Complete)),"sfa-das-employerapprenticeshipsservice-flashmessage",1),Times.Once);
+            _flashMessage.Verify(x=>x.Create(It.Is<FlashMessageViewModel>(c=>c.Headline.Equals("Account created") && c.Severity.Equals(FlashMessageSeverityLevel.Success)),"sfa-das-employerapprenticeshipsservice-flashmessage",1),Times.Once);
         }
 
 
