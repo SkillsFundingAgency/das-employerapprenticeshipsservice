@@ -385,6 +385,7 @@
     <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Extensions\ValidationResultExtensions.cs" />
     <Compile Include="Validators\ChangeStatusViewModelValidator.cs" />
+    <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusChoiceViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ValidateWhenToApplyChangeResult.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\WhenToMakeChangeViewModel.cs" />
@@ -444,6 +445,7 @@
     <Compile Include="ViewModels\ManageApprenticeships\ConfirmationStateChangeViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\WhenToMakeChangeOptions.cs" />
     <Compile Include="ViewModels\Organisation\EmployerAgreementPdfViewModel.cs" />
+    <Compile Include="ViewModels\ProviderPaymentsSummaryViewModel.cs" />
     <Compile Include="ViewModels\YourCohortsViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
     <Compile Include="ViewModels\Organisation\AddLegalEntityViewModel.cs" />
@@ -1023,6 +1025,7 @@
     <Content Include="src\sass\_notifications.scss" />
     <Content Include="src\sass\_navigation.scss" />
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\CoursePaymentSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
