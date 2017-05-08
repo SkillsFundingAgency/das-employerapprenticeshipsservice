@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             await AddPayeSchemes(message, emprefs, returnValue);
 
-            await RefreshLevy(returnValue);
+            await RefreshLevy(returnValue, emprefs);
 
             await NotifyAccountCreated(hashedAccountId);
 
@@ -107,12 +107,16 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             }
         }
 
-        private async Task RefreshLevy(CreateAccountResult returnValue)
+        private async Task RefreshLevy(CreateAccountResult returnValue, string[] emprefs)
         {
-            await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage
+            foreach (var empref in emprefs)
             {
-                AccountId = returnValue.AccountId
-            });
+                await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage
+                {
+                    AccountId = returnValue.AccountId,
+                    PayeRef = empref
+                });
+            }
         }
 
         private async Task<User> GetUser(CreateAccountCommand message)
