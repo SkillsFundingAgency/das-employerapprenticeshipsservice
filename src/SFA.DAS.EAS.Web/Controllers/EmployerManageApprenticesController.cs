@@ -306,9 +306,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             await _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
                     OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
+            var approvalMsg = NeedReapproval(apprenticeship)
+                ? "Your training provider needs to approve these changes."
+                : string.Empty;
+
             var flashmessage = new FlashMessageViewModel
             {
-                Message = $"You suggested changes to the record for {orginalApp.Data.FirstName} {orginalApp.Data.LastName}. Your training provider needs to approve these changes.",
+                Message = $"You suggested changes to the record for {orginalApp.Data.FirstName} {orginalApp.Data.LastName}. {approvalMsg}",
                 Severity = FlashMessageSeverityLevel.Okay
             };
 
@@ -427,6 +431,19 @@ namespace SFA.DAS.EAS.Web.Controllers
                 ErrorMessages = errorDictionary,
                 Severity = FlashMessageSeverityLevel.Error
             };
+        }
+
+        private bool NeedReapproval(UpdateApprenticeshipViewModel model)
+        {
+            return
+                   !string.IsNullOrEmpty(model.FirstName)
+                || !string.IsNullOrEmpty(model.LastName)
+                || model.DateOfBirth?.DateTime != null
+                || !string.IsNullOrEmpty(model.TrainingCode)
+                || model.StartDate?.DateTime != null
+                || model.EndDate?.DateTime != null
+                || !string.IsNullOrEmpty(model.Cost)
+                ;
         }
     }
 }
