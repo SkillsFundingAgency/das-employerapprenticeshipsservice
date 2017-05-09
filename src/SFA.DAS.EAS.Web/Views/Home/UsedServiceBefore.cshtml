@@ -3,7 +3,7 @@
 @{ViewBag.HideNav = "true"; }
 
 @{
-    var errorMessage = Model?.GetType().GetProperty("ErrorMessage") != null ? Model.ErrorMessage as string : "";
+    var errorMessage = Model?.GetType().GetProperty("ErrorMessage") != null ? Model.GetType().GetProperty("ErrorMessage").GetValue(Model,null) as string : "";
 }
 
 @if (!string.IsNullOrWhiteSpace(errorMessage))
