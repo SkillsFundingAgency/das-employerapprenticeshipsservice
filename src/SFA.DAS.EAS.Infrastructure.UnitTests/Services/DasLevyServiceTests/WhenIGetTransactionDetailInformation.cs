@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
         public async Task ThenTheMediatorMethodIsCalled()
         {
             //Act
-            await _dasLevyService.GetTransactionDetailsByDateRange< LevyDeclarationTransactionLine>
+            await _dasLevyService.GetAccountProviderTransactionsByDateRange< LevyDeclarationTransactionLine>
                         (_accountId, _fromDate, _toDate, _externalUserId);
 
             //Assert
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
         public async Task ThenTheResponseFromTheQueryIsReturned()
         {
             //Act
-            var actual = await _dasLevyService.GetTransactionDetailsByDateRange<LevyDeclarationTransactionLine>
+            var actual = await _dasLevyService.GetAccountProviderTransactionsByDateRange<LevyDeclarationTransactionLine>
                                     (_accountId, _fromDate, _toDate, _externalUserId);
 
             //Assert
@@ -79,7 +79,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
                 });
 
             //Act
-            var actual = await _dasLevyService.GetTransactionDetailsByDateRange<LevyDeclarationTransactionLine>
+            var actual = await _dasLevyService.GetAccountProviderTransactionsByDateRange<LevyDeclarationTransactionLine>
                                     (_accountId, _fromDate, _toDate, _externalUserId);
 
             //Assert

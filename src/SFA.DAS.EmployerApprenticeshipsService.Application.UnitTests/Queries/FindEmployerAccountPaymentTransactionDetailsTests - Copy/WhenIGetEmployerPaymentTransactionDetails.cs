@@ -12,7 +12,7 @@ using SFA.DAS.EAS.Domain.Models.Payments;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries
 {
-    public class WhenIGetEmployerPaymentTransactionDetails : QueryBaseTest<FindEmployerAccountPaymentTransactionsHandler, FindEmployerAccountPaymentTransactionsQuery, FindEmployerAccountPaymentTransactionsResponse>
+    public class WhenIGetEmployerPaymentTransactionDetails : QueryBaseTest<GetAccountProviderTransactionsHandler, GetAccountProviderTransactionsQuery, GetAccountProviderTransactionsResponse>
     {
         private const string ProviderName = "Test Provider";
 
@@ -25,9 +25,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
         private string _externalUserId;
       
         private Mock<IApprenticeshipInfoServiceWrapper> _apprenticeshipInfoService;
-        public override FindEmployerAccountPaymentTransactionsQuery Query { get; set; }
-        public override FindEmployerAccountPaymentTransactionsHandler RequestHandler { get; set; }
-        public override Mock<IValidator<FindEmployerAccountPaymentTransactionsQuery>> RequestValidator { get; set; }
+        public override GetAccountProviderTransactionsQuery Query { get; set; }
+        public override GetAccountProviderTransactionsHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetAccountProviderTransactionsQuery>> RequestValidator { get; set; }
        
         [SetUp]
         public void Arrange()
@@ -44,14 +44,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(_accountId);
 
             _dasLevyService = new Mock<IDasLevyService>();
-            _dasLevyService.Setup(x => x.GetTransactionDetailsByDateRange<PaymentTransactionLine>
+            _dasLevyService.Setup(x => x.GetAccountProviderTransactionsByDateRange<PaymentTransactionLine>
                                             (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                            .ReturnsAsync(new List<PaymentTransactionLine>
                 {
                     new PaymentTransactionLine { ProviderName = ProviderName }
                 });
 
-            Query = new FindEmployerAccountPaymentTransactionsQuery
+            Query = new GetAccountProviderTransactionsQuery
             {
                 HashedAccountId = _hashedAccountId,
                 FromDate = _fromDate,
@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
                         }
                 });
 
-            RequestHandler = new FindEmployerAccountPaymentTransactionsHandler(
+            RequestHandler = new GetAccountProviderTransactionsHandler(
                 RequestValidator.Object, 
                 _dasLevyService.Object,
                 _hashingService.Object);
@@ -83,7 +83,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
 
             //Assert
             _hashingService.Verify(x => x.DecodeValue(_hashedAccountId), Times.Once);
-            _dasLevyService.Verify(x=>x.GetTransactionDetailsByDateRange<PaymentTransactionLine>
+            _dasLevyService.Verify(x=>x.GetAccountProviderTransactionsByDateRange<PaymentTransactionLine>
                                             (_accountId, _fromDate, _toDate, _externalUserId));
         }
 
@@ -102,11 +102,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
         public void ThenAnUnauhtorizedExceptionIsThrownIfTheValidationResultReturnsUnauthorized()
         {
             //Arrange
-            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<FindEmployerAccountPaymentTransactionsQuery>()))
+            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
                             .ReturnsAsync(new ValidationResult {IsUnauthorized = true});
 
             //Act Assert
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(new FindEmployerAccountPaymentTransactionsQuery()));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(new GetAccountProviderTransactionsQuery()));
         }
 
         [Test]
@@ -124,7 +124,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
         {
             //Arrange
             var transactionDate = DateTime.Now.AddDays(-2);
-            _dasLevyService.Setup(x => x.GetTransactionDetailsByDateRange<PaymentTransactionLine>
+            _dasLevyService.Setup(x => x.GetAccountProviderTransactionsByDateRange<PaymentTransactionLine>
                                            (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                            .ReturnsAsync(new List<PaymentTransactionLine>
                {
@@ -142,7 +142,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
         public void ThenANotFoundExceptionShouldBeThrowIfNoTransactionsAreFound()
         {
             //Arrange
-            _dasLevyService.Setup(x => x.GetTransactionDetailsByDateRange<PaymentTransactionLine>
+            _dasLevyService.Setup(x => x.GetAccountProviderTransactionsByDateRange<PaymentTransactionLine>
                     (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                 .ReturnsAsync(new List<PaymentTransactionLine>());
 

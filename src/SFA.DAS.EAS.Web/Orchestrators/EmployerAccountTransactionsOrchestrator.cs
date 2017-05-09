@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             try
             {
-                var data = await _mediator.SendAsync(new FindEmployerAccountPaymentTransactionsQuery
+                var data = await _mediator.SendAsync(new GetAccountProviderTransactionsQuery
                 {
                     HashedAccountId = hashedId,
                     FromDate = fromDate,
@@ -136,7 +136,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             try
             {
-                var data = await _mediator.SendAsync(new FindEmployerAccountPaymentTransactionsQuery
+                var data = await _mediator.SendAsync(new GetAccountProviderTransactionsQuery
                 {
                     HashedAccountId = hashedId,
                     FromDate = fromDate,

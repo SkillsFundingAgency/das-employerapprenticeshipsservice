@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
-        private FindEmployerAccountPaymentTransactionsResponse _response;
+        private GetAccountProviderTransactionsResponse _response;
         private Mock<ICurrentDateTime> _currentTime;
 
         [SetUp]
@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             _mediator = new Mock<IMediator>();
             _currentTime = new Mock<ICurrentDateTime>();
 
-            _response = new FindEmployerAccountPaymentTransactionsResponse
+            _response = new GetAccountProviderTransactionsResponse
             {
                 ProviderName = "Test Provider",
                 TransactionDate = DateTime.Now,
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 }
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindEmployerAccountPaymentTransactionsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
                 .ReturnsAsync(_response);
 
             _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object);
@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             var payment2 = new PaymentTransactionLine { CourseName = "Test Course", LineAmount = 50, TransactionType = TransactionItemType.Payment };
             var expectedTotal = payment1.LineAmount + payment2.LineAmount;
 
-            _response = new FindEmployerAccountPaymentTransactionsResponse
+            _response = new GetAccountProviderTransactionsResponse
             {
                 ProviderName = "Test Provider",
                 TransactionDate = DateTime.Now,
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 Transactions = new List<PaymentTransactionLine> { payment1, payment2 }
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindEmployerAccountPaymentTransactionsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
                 .ReturnsAsync(_response);
 
             //Act
@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             var payment2 = new PaymentTransactionLine { CourseName = "Test Course", LineAmount = 50, TransactionType = TransactionItemType.SFACoInvestment };
             var expectedTotal = payment1.LineAmount + payment2.LineAmount;
 
-            _response = new FindEmployerAccountPaymentTransactionsResponse
+            _response = new GetAccountProviderTransactionsResponse
             {
                 ProviderName = "Test Provider",
                 TransactionDate = DateTime.Now,
@@ -92,7 +92,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 Transactions = new List<PaymentTransactionLine> { payment1, payment2 }
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindEmployerAccountPaymentTransactionsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
                 .ReturnsAsync(_response);
 
             //Act
@@ -110,7 +110,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             var payment2 = new PaymentTransactionLine { CourseName = "Test Course", LineAmount = 50, TransactionType = TransactionItemType.EmployerCoInvestment };
             var expectedTotal = payment1.LineAmount + payment2.LineAmount;
 
-            _response = new FindEmployerAccountPaymentTransactionsResponse
+            _response = new GetAccountProviderTransactionsResponse
             {
                 ProviderName = "Test Provider",
                 TransactionDate = DateTime.Now,
@@ -118,7 +118,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 Transactions = new List<PaymentTransactionLine> { payment1, payment2 }
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindEmployerAccountPaymentTransactionsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
                 .ReturnsAsync(_response);
 
             //Act
@@ -138,7 +138,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
            
             var expectedTotal = payment1.LineAmount + payment2.LineAmount + payment3.LineAmount;
 
-            _response = new FindEmployerAccountPaymentTransactionsResponse
+            _response = new GetAccountProviderTransactionsResponse
             {
                 ProviderName = "Test Provider",
                 TransactionDate = DateTime.Now,
@@ -146,7 +146,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 Transactions = new List<PaymentTransactionLine> { payment1, payment2, payment3 }
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindEmployerAccountPaymentTransactionsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
                 .ReturnsAsync(_response);
 
             //Act
@@ -177,7 +177,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                                         payment5.LineAmount +
                                         payment6.LineAmount;
 
-            _response = new FindEmployerAccountPaymentTransactionsResponse
+            _response = new GetAccountProviderTransactionsResponse
             {
                 ProviderName = "Test Provider",
                 TransactionDate = DateTime.Now,
@@ -185,7 +185,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 Transactions = new List<PaymentTransactionLine> { payment1, payment2, payment3, payment4, payment5, payment6 }
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindEmployerAccountPaymentTransactionsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
                 .ReturnsAsync(_response);
 
             //Act
@@ -206,7 +206,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 ExternalUser);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<FindEmployerAccountPaymentTransactionsQuery>(
+            _mediator.Verify(x => x.SendAsync(It.Is<GetAccountProviderTransactionsQuery>(
                 q => q.HashedAccountId.Equals(HashedAccountId) &&
                      q.FromDate.Equals(_fromDate) &&
                      q.ToDate.Equals(_toDate) &&
@@ -217,7 +217,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenIfNoTransactionsAreFoundANotFoundStatusIsReturned()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindEmployerAccountPaymentTransactionsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
                 .ThrowsAsync(new NotFoundException(string.Empty));
 
             //Act
@@ -232,7 +232,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenIfUserIsNotAuthorisedAUnauthorisedStatusIsReturned()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindEmployerAccountPaymentTransactionsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
                 .ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
@@ -247,7 +247,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenIfRequestIsNotValidABadRequestStatusIsReturned()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindEmployerAccountPaymentTransactionsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
                 .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
