@@ -60,7 +60,9 @@ select mainUpdate.* from
 			
 			x.EmpRef as EmpRef,
 			null as PeriodEnd,
-			null as UkPrn
+			null as UkPrn,
+			0 as SfaCoInvestmentAmount,
+			0 as EmployerCoInvestmentAmount
 		FROM 
 			[employer_financial].[GetLevyDeclarations] x
 		inner join
@@ -80,7 +82,9 @@ select mainUpdate.* from
 			((x.endofyearadjustmentamount * ISNULL(x.EnglishFraction,0)) - ldt.amount) * -1 as Amount,
 			x.EmpRef as EmpRef,
 			null as PeriodEnd,
-			null as UkPrn
+			null as UkPrn,
+			0 as SfaCoInvestmentAmount,
+			0 as EmployerCoInvestmentAmount
 		FROM 
 			[employer_financial].[GetLevyDeclarations] x
 		inner join
