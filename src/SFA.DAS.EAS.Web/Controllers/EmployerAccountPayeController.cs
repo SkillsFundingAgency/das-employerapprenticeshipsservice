@@ -34,6 +34,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+            if (flashMessage != null)
+            {
+                model.FlashMessage = flashMessage;
+            }
+
             return View(model);
         }
 
@@ -99,10 +105,15 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 return View(result);
             }
-
-            TempData["payeSchemeAdded"] = "true";
-            TempData["successHeader"] = $"You've added {model.PayeScheme}";
             
+            var flashMessage = new FlashMessageViewModel
+            {
+                Severity = FlashMessageSeverityLevel.Success,
+                Headline = $"You've added {model.PayeScheme}",
+                HiddenFlashMessageInformation = "page-paye-scheme-added"
+            };
+            AddFlashMessageToCookie(flashMessage);
+
             return RedirectToAction("Index", "EmployerAccountPaye", new {model.HashedAccountId });
         }
 
@@ -140,8 +151,13 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("Remove",result);
             }
 
-            TempData["payeSchemeDeleted"] = "true";
-            TempData["successHeader"] = $"You've removed {model.PayeRef}";
+            var flashMessage = new FlashMessageViewModel
+            {
+                Severity = FlashMessageSeverityLevel.Success,
+                Headline = $"You've removed {model.PayeRef}",
+                HiddenFlashMessageInformation = "page-paye-scheme-deleted"
+            };
+            AddFlashMessageToCookie(flashMessage);
             
             return RedirectToAction("Index", "EmployerAccountPaye", new {model.HashedAccountId});
         }

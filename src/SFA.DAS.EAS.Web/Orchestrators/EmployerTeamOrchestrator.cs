@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(
-            string hashedId, string userId, string userAdded = "")
+            string hashedId, string userId)
         {
             try
             {
@@ -102,18 +102,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             ExternalUserId = userId
                         });
 
-                var flashMessage = new FlashMessageViewModel();
-
-                if (!string.IsNullOrWhiteSpace(userAdded))
-                {
-                    flashMessage = new FlashMessageViewModel
-                    {
-                        Severity = FlashMessageSeverityLevel.Success,
-                        Headline = "Invitation sent",
-                        Message = $"You've sent an invitation to <strong>{userAdded}</strong>"
-                    };
-                }
-
                 return new OrchestratorResponse<EmployerTeamMembersViewModel>
                 {
                     Status = HttpStatusCode.OK,
@@ -121,8 +109,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         HashedAccountId = hashedId,
                         TeamMembers = response.TeamMembers
-                    },
-                    FlashMessage = flashMessage
+                    }
+                
                 };
             }
             catch (InvalidRequestException ex)
@@ -341,6 +329,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         Headline = "Team member removed",
                         Message = $"You've removed <strong>{ userResponse.User.Email}</strong>",
+                        HiddenFlashMessageInformation = "page-team-member-deleted",
                         Severity = FlashMessageSeverityLevel.Success
                     };
                 }
@@ -419,6 +408,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         Severity = FlashMessageSeverityLevel.Success,
                         Headline = "Team member updated",
+                        HiddenFlashMessageInformation = "page-team-member-role-changed",
                         Message = $"{email} can now {RoleStrings.GetRoleDescriptionToLower(role)}"
                     };
                 }

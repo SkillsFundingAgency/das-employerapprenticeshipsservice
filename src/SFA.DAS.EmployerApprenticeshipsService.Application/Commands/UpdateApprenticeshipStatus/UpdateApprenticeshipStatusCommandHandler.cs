@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Application.Validation;
 using System;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 
 namespace SFA.DAS.EAS.Application.Commands.UpdateApprenticeshipStatus
 {
@@ -38,7 +39,8 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateApprenticeshipStatus
             {
                 PaymentStatus = DeterminePaymentStatusForChange(command.ChangeType),
                 DateOfChange = command.DateOfChange,
-                UserId = command.UserId
+                UserId = command.UserId,
+                LastUpdatedByInfo = new LastUpdateInfo { EmailAddress = command.UserEmailAddress, Name = command.UserDisplayName }
             };
 
             await ValidateDateOfChange(command, validationResult);

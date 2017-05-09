@@ -5,7 +5,6 @@ using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
-using SFA.DAS.Provider.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Domain.Data.Repositories
 {

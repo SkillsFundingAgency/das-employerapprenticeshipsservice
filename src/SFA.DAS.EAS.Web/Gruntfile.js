@@ -39,6 +39,6 @@ module.exports = function(grunt) {
   })
 
   // Default task(s).
-  grunt.registerTask('default', ['sass']);
+  grunt.registerTask('default', ['sass', 'watch']);
 
 };

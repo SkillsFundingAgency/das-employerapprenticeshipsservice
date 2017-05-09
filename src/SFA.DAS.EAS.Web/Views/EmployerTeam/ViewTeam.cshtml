@@ -10,37 +10,13 @@
     ViewBag.Title = "Manage team members";
     ViewBag.Section = "team";
 
-    if (TempData.ContainsKey("userAdded"))
+    if (!string.IsNullOrEmpty(Model.FlashMessage?.HiddenFlashMessageInformation))
     {
-        ViewBag.PageID = "page-invite-team-member-sent";
-        TempData.Remove("userAdded");
+        ViewBag.PageID = Model.FlashMessage.HiddenFlashMessageInformation;
     }
-
-    if (TempData.ContainsKey("userDeleted"))
-    {
-        ViewBag.PageID = "page-team-member-deleted";
-        TempData.Remove("userDeleted");
-    }
-
-    if (TempData.ContainsKey("userRoleChange"))
-    {
-        ViewBag.PageID = "page-team-member-role-changed";
-        TempData.Remove("userRoleChange");
-    }
+    
 }
 
-
-
-@if (!string.IsNullOrWhiteSpace(Model.Data.SuccessMessage))
-{
-    <div class="grid-row">
-        <div class="column-full">
-            <div class="panel panel-info">
-                @Model.Data.SuccessMessage
-            </div>
-        </div>
-    </div>
-}
 <div class="grid-row header-index">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Your team</h1>

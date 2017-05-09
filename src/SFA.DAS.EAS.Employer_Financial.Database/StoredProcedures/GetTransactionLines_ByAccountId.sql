@@ -3,12 +3,16 @@
 	@fromDate datetime,
 	@toDate datetime
 AS
+
 select 
     main.*
-    ,SUM(Amount) OVER(ORDER BY DateCreated,Transactiontype,ukprn asc
-        RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW ) 
-         AS Balance
+    ,bal.balance AS Balance
 from
+(
+	select Sum(amount) as balance,accountid 
+	from employer_financial.TransactionLine 
+	WHERE AccountId = @accountId and transactiontype in (1,2,3) group by accountid) as bal
+left join
 (
     SELECT 
        [AccountId]
@@ -20,5 +24,5 @@ from
   WHERE AccountId = @accountId AND DateCreated >= @fromDate AND DateCreated <= @toDate
   GROUP BY DateCreated ,AccountId, UKPRN,[TransactionType]
   
-) as main
+) as main on main.AccountId = bal.AccountId
 order by DateCreated desc, TransactionType desc, ukprn desc

@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return dateToCompare > dateProcessed;
         }
 
-        private static DateTime GetDateRange(string payrollYear, out DateTime endDate)
+        private DateTime GetDateRange(string payrollYear, out DateTime endDate)
         {
             var payrollSplit = payrollYear.Split('-');
 
@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return startDate;
         }
 
-        private static DateTime GetDateFromPayrollYearMonth(string payrollYear, int payrollMonth)
+        public DateTime GetDateFromPayrollYearMonth(string payrollYear, int payrollMonth)
         {
             var yearToUse = 2000;
             int monthToUse;
@@ -65,5 +65,6 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             
             return new DateTime(yearToUse,monthToUse,21);
         }
+       
     }
 }

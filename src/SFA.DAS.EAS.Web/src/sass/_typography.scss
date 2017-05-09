@@ -55,12 +55,18 @@ dl.inline {
     margin: 0;
 }
 
+.data-wrap {
+    @extend %contain-floats;
+    margin: 0 (-$gutter-half);
+}
+
 .data {
-    background: $fuschia;
-    color: white;
-    padding: 15px;
     dl {
-        display: table;
+   
+        @include box-sizing(border-box);
+        padding: 15px; 
+        background: $fuschia;
+        color: white;
         dt {
             display: table-footer-group;
             @include bold-19;
@@ -68,6 +74,31 @@ dl.inline {
         dd {
             display: table-header-group;
             @include bold-48;
+        }
+    }
+    @include media(tablet) { 
+        padding: 0 $gutter-half;
+        float: left;
+        width: 50%;
+        @include box-sizing(border-box);
+        dd.long {
+            font-size: 42px;
+            line-height: 50px;
+        }
+        dd.longer {
+            font-size: 32px;
+            line-height: 50px;
+        }
+    }
+    @include media(960px) {
+        width: 33.33%;
+        dd.long {
+            font-size: 48px;
+            line-height: 50px;
+        }
+        dd.longer {
+            font-size: 42px;
+            line-height: 50px;
         }
     }
 }

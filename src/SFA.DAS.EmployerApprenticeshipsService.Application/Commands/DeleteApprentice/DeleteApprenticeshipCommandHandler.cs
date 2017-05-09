@@ -4,6 +4,7 @@ using MediatR;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.EAS.Application.Validation;
 
 namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
@@ -36,7 +37,8 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            await _commitmentsService.DeleteEmployerApprenticeship(message.AccountId, message.ApprenticeshipId, new DeleteRequest { UserId = message.UserId });
+            await _commitmentsService.DeleteEmployerApprenticeship(message.AccountId, message.ApprenticeshipId,
+                new DeleteRequest { UserId = message.UserId, LastUpdatedByInfo = new LastUpdateInfo { EmailAddress = message.UserEmailAddress, Name = message.UserDisplayName } });
         }
     }
 }

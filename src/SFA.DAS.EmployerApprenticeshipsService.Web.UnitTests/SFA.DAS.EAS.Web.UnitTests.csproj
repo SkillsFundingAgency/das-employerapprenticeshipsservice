@@ -78,8 +78,8 @@
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.44.0.28906, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.44.0.28906\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.49.0.29544, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.49.0.29544\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.EmployerUsers.WebClientComponents, Version=1.0.0.4388, Culture=neutral, processorArchitecture=MSIL">
@@ -184,6 +184,7 @@
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenICreateAnAgreement.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetThePdfAgreement.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\OrchestratorTestBase.cs" />
+    <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenCreatingApprenticeship.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenDeletingApprenticeship.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingtLegalEntitySignedAgreement.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingDeleteApprenticeshipConfirmation.cs" />

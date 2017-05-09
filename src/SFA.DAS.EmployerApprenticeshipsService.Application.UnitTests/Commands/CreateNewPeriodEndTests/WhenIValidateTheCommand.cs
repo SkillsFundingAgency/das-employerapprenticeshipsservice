@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateNewPeriodEnd;
-using SFA.DAS.Provider.Events.Api.Types;
+using SFA.DAS.EAS.Domain.Models.Payments;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateNewPeriodEndTests
 {

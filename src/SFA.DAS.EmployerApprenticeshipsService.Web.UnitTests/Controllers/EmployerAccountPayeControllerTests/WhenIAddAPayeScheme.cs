@@ -79,7 +79,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
             await _controller.ConfirmPayeScheme(ExpectedAccountId, new AddNewPayeSchemeViewModel());
 
             //Assert
-            Assert.IsTrue(_controller.TempData.ContainsKey("successHeader"));
+            _flashMessage.Verify(x=>x.Create(It.Is<FlashMessageViewModel>(c=>c.HiddenFlashMessageInformation.Equals("page-paye-scheme-added")),It.IsAny<string>(), 1));
         }
     }
 }

@@ -35,7 +35,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateApprenticeshipStatusT
                 ApprenticeshipId = 4L,
                 UserId = "externalUserId",
                 ChangeType = ChangeStatusType.Stop,
-                DateOfChange = DateTime.UtcNow.Date
+                DateOfChange = DateTime.UtcNow.Date,
+                UserEmailAddress = "test@email.com",
+                UserDisplayName = "Bob"
             };
 
             var apprenticeshipFromApi = new Apprenticeship { StartDate = DateTime.UtcNow.AddMonths(-2).Date };
@@ -61,7 +63,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateApprenticeshipStatusT
             await _handler.Handle(_validCommand);
 
             _mockCommitmentApi.Verify(x => x.PatchEmployerApprenticeship(
-                It.IsAny<long>(), It.IsAny<long>(), It.Is<ApprenticeshipSubmission>(y => y.PaymentStatus == expectedStatus)));
+                _validCommand.EmployerAccountId, _validCommand.ApprenticeshipId,
+                It.Is<ApprenticeshipSubmission>(
+                    y => y.PaymentStatus == expectedStatus && y.LastUpdatedByInfo.Name == _validCommand.UserDisplayName && y.LastUpdatedByInfo.EmailAddress == _validCommand.UserEmailAddress)));
         }
 
         [Test]

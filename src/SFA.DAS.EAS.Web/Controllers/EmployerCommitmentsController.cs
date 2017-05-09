@@ -357,7 +357,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             await _employerCommitmentsOrchestrator
-                .DeleteCommitment(viewModel.HashedAccountId, viewModel.HashedCommitmentId, OwinWrapper.GetClaimValue("sub"));
+                .DeleteCommitment(viewModel.HashedAccountId, viewModel.HashedCommitmentId, OwinWrapper.GetClaimValue("sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName), OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
             var flashmessage = new FlashMessageViewModel
             {
@@ -365,8 +365,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Severity = FlashMessageSeverityLevel.Okay
             };
 
-            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
-
+            AddFlashMessageToCookie(flashmessage);
+            
             var anyCohortWithCurrentStatus = 
                 await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(viewModel.HashedAccountId, GetSessionRequestStatus());
 
@@ -420,7 +420,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             try
             {
-                await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship, OwinWrapper.GetClaimValue(@"sub"));
+                await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
+                    OwinWrapper.GetClaimValue(DasClaimTypes.Email));
             }
             catch (InvalidRequestException ex)
             {
@@ -527,7 +528,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Severity = FlashMessageSeverityLevel.Info
             };
 
-            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+            AddFlashMessageToCookie(flashmessage);
+
             return RedirectToAction("YourCohorts", new { hashedAccountId = viewModel.HashedAccountId });
         }
 
@@ -716,11 +718,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (viewModel.DeleteConfirmed.HasValue && viewModel.DeleteConfirmed.Value)
             {
-                await _employerCommitmentsOrchestrator.DeleteApprenticeship(viewModel, OwinWrapper.GetClaimValue(@"sub"));
+                await _employerCommitmentsOrchestrator.DeleteApprenticeship(viewModel, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName), OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
                 var flashMessage = new FlashMessageViewModel { Severity = FlashMessageSeverityLevel.Okay, Message = string.Format($"Apprentice record for {viewModel.ApprenticeshipName} deleted") };
-                TempData["FlashMessage"] = JsonConvert.SerializeObject(flashMessage);
-
+                AddFlashMessageToCookie(flashMessage);
+                
                 return RedirectToAction("Details", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId });
             }
 
@@ -825,9 +827,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private void SetFlashMessageOnModel<T>(OrchestratorResponse<T> model)
         {
-            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+            if (flashMessage!=null)
             {
-                var flashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
                 model.FlashMessage = flashMessage;
             }
         }
