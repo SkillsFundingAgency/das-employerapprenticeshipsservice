@@ -398,7 +398,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 || data.StartDate != null
                 || data.EndDate != null
                 || data.Cost != null
-                || !string.IsNullOrEmpty(data.EmployerRef);
+                || data.EmployerRef != null;
         }
 
         private async Task<bool> IsUserRoleAuthorized(string hashedAccountId, params Role[] roles)
