@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -88,12 +89,12 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                 }
                 return;
             }
-          
+            var timer = Stopwatch.StartNew();
+
             var employerAccountId = message.Content.AccountId;
             var payeRef = message.Content.PayeRef;
 
-            _logger.Info($"Processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}");
-
+            _logger.Trace($"Processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}");
             
             var employerDataList = new List<EmployerLevyData>();
 
@@ -111,16 +112,16 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                 });
             }
             
-
-            
             await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
             {
                 AccountId = employerAccountId,
                 EmployerLevyData = employerDataList
             });
             
-
             await message.CompleteAsync();
+
+            timer.Stop();
+            _logger.Trace($"Finished processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}. Completed in {timer.Elapsed:g} (hh:mm:ss:ms)");
         }
 
         private async Task ProcessScheme(string payeRef, GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse, ICollection<EmployerLevyData> employerDataList)
