@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
     public interface ITransactionRepository
     {
-        Task<List<TransactionLine>> GetTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
+        Task<List<TransactionLine>> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
 
         Task<List<TransactionLine>> GetTransactionDetailsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
 

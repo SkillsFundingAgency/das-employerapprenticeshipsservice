@@ -39,14 +39,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionsTests
             await RequestHandler.Handle(Query);
 
             //Assert
-            _repository.Verify(x=>x.GetTransactionsByDateRange(ExpectedAccountId, Query.FromDate, Query.ToDate), Times.Once);
+            _repository.Verify(x=>x.GetAccountTransactionsByDateRange(ExpectedAccountId, Query.FromDate, Query.ToDate), Times.Once);
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Arrange
-            _repository.Setup(x => x.GetTransactionsByDateRange(ExpectedAccountId, Query.FromDate, Query.ToDate))
+            _repository.Setup(x => x.GetAccountTransactionsByDateRange(ExpectedAccountId, Query.FromDate, Query.ToDate))
                        .ReturnsAsync(new List<TransactionLine> {new TransactionLine()});
 
             //Act
