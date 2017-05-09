@@ -15,7 +15,6 @@ using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.Levy;
-using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
@@ -91,27 +90,18 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
             }
           
             var employerAccountId = message.Content.AccountId;
+            var payeRef = message.Content.PayeRef;
 
-            _logger.Info($"Processing LevyDeclaration for {employerAccountId}");
-
-            var employerSchemesResult = await _dasAccountService.GetAccountSchemes(employerAccountId);
-
-            if (employerSchemesResult?.SchemesList == null)
-            {
-                await message.CompleteAsync();
-                return;
-            }
-
-            var employerDataList = new List<EmployerLevyData>();
+            _logger.Info($"Processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}");
 
             
-            var englishFractionUpdateResponse =
-            await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
+            var employerDataList = new List<EmployerLevyData>();
 
-            foreach (var scheme in employerSchemesResult.SchemesList)
-            {
-                await ProcessScheme(scheme, englishFractionUpdateResponse, employerDataList);
-            }
+            var englishFractionUpdateResponse = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
+
+            
+            await ProcessScheme(payeRef, englishFractionUpdateResponse, employerDataList);
+            
 
             if (englishFractionUpdateResponse.UpdateRequired)
             {
@@ -133,21 +123,21 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
             await message.CompleteAsync();
         }
 
-        private async Task ProcessScheme(PayeScheme scheme, GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse, ICollection<EmployerLevyData> employerDataList)
+        private async Task ProcessScheme(string payeRef, GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse, ICollection<EmployerLevyData> employerDataList)
         {
             if (HmrcProcessingEnabled || FractionProcessingOnly)
             {
                 await _mediator.SendAsync(new UpdateEnglishFractionsCommand
                 {
-                    EmployerReference = scheme.Ref,
+                    EmployerReference = payeRef,
                     EnglishFractionUpdateResponse = englishFractionUpdateResponse
                 });
 
-                await _dasAccountService.UpdatePayeScheme(scheme.Ref);
+                await _dasAccountService.UpdatePayeScheme(payeRef);
             }
 
             var levyDeclarationQueryResult = HmrcProcessingEnabled || DeclarationProcessingOnly ?
-                await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery {EmpRef = scheme.Ref}) : null;
+                await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery {EmpRef = payeRef }) : null;
 
             var employerData = new EmployerLevyData();
 
@@ -170,7 +160,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                         SubmissionId = declaration.SubmissionId
                     };
 
-                    employerData.EmpRef = scheme.Ref;
+                    employerData.EmpRef = payeRef;
                     employerData.Declarations.Declarations.Add(dasDeclaration);
                 }
 
