@@ -8,14 +8,14 @@ using SFA.DAS.EAS.Domain.Models.Payments;
 
 namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
 {
-    public class FindEmployerAccountPaymentTransactionsHandler : IAsyncRequestHandler<FindEmployerAccountPaymentTransactionsQuery, FindEmployerAccountPaymentTransactionsResponse>
+    public class GetAccountProviderTransactionsHandler : IAsyncRequestHandler<GetAccountProviderTransactionsQuery, GetAccountProviderTransactionsResponse>
     {
-        private readonly IValidator<FindEmployerAccountPaymentTransactionsQuery> _validator;
+        private readonly IValidator<GetAccountProviderTransactionsQuery> _validator;
         private readonly IDasLevyService _dasLevyService;
         private readonly IHashingService _hashingService;
 
-        public FindEmployerAccountPaymentTransactionsHandler(
-            IValidator<FindEmployerAccountPaymentTransactionsQuery> validator, 
+        public GetAccountProviderTransactionsHandler(
+            IValidator<GetAccountProviderTransactionsQuery> validator, 
             IDasLevyService dasLevyService,
             IHashingService hashingService)
         {
@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
             _hashingService = hashingService;
         }
 
-        public async Task<FindEmployerAccountPaymentTransactionsResponse> Handle(FindEmployerAccountPaymentTransactionsQuery message)
+        public async Task<GetAccountProviderTransactionsResponse> Handle(GetAccountProviderTransactionsQuery message)
         {
             var validationResult = await _validator.ValidateAsync(message);
 
@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
 
             var firstTransaction = transactions.First();
 
-            return new FindEmployerAccountPaymentTransactionsResponse
+            return new GetAccountProviderTransactionsResponse
             {
                 ProviderName = firstTransaction.ProviderName,
                 TransactionDate = firstTransaction.TransactionDate,
