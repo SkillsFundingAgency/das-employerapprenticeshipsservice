@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
 
@@ -15,7 +16,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
         private readonly IHashingService _hashingService;
 
         public GetAccountProviderTransactionsHandler(
-            IValidator<GetAccountProviderTransactionsQuery> validator, 
+            IValidator<GetAccountProviderTransactionsQuery> validator,
             IDasLevyService dasLevyService,
             IHashingService hashingService)
         {
@@ -39,7 +40,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
             }
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            var transactions = await _dasLevyService.GetTransactionDetailsByDateRange<PaymentTransactionLine>
+            var transactions = await _dasLevyService.GetAccountProviderTransactionsByDateRange<PaymentTransactionLine>
                                     (accountId, message.FromDate, message.ToDate, message.ExternalUserId);
 
             if (!transactions.Any())
