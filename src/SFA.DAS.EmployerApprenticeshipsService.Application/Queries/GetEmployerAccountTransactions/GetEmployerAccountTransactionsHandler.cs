@@ -45,64 +45,46 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             {
                 return GetResponse(message.HashedAccountId, message.AccountId, hasPreviousTransactions);
             }
-
-            var transactionSummaries = new List<TransactionLine>();
-            var coinvestmentTransaction = new List<PaymentTransactionLine>();
-
+            
             foreach (var transaction in transactions)
             {
-                if (transaction.GetType() == typeof(LevyDeclarationTransactionLine))
-                {
-                    transaction.Description = transaction.Amount >= 0 ? "Levy" : "Levy adjustment";
-                }
-                else if (transaction.GetType() == typeof(PaymentTransactionLine))
-                {
-                    var paymentTransaction = (PaymentTransactionLine) transaction;
-                    
-                    try
-                    {
-                    	var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(
-                        Convert.ToInt32(paymentTransaction.UkPrn));
-                        
-                    	transaction.Description = $"{providerName.Provider.ProviderName}";
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Description = "Training provider - name not recognised";
-                        _logger.Info(ex, $"Provider not found for UkPrn:{paymentTransaction.UkPrn}");
-                    }
-
-                    if (paymentTransaction.TransactionType == TransactionItemType.SFACoInvestment ||
-                        paymentTransaction.TransactionType == TransactionItemType.EmployerCoInvestment)
-                    {
-                        coinvestmentTransaction.Add(paymentTransaction);
-                        continue;
-                    }
-                }
-
-                transactionSummaries.Add(transaction);
+                GenerateTransactionDescription(transaction);
             }
-
-            var groupsCoinvestmentTransactions = coinvestmentTransaction.GroupBy(t => t.Description);
-
-            var combinedCoInvestedTransactions = groupsCoinvestmentTransactions.Select(t => new TransactionLine
-            {
-                AccountId = t.First().AccountId,
-                TransactionType = TransactionItemType.CoInvestment,
-                Amount = t.Sum(a => a.Amount),
-                Description = $"Co-invested - {t.Key}",
-                SubTransactions = new List<TransactionLine>(t.ToList()),
-                TransactionDate = t.Max(a => a.TransactionDate),
-                DateCreated = t.Max(a => a.DateCreated),
-                Balance = t.Min(a => a.Balance)
-            });
-
-            transactionSummaries.AddRange(combinedCoInvestedTransactions);
-
-
-            return GetResponse(message.HashedAccountId, message.AccountId, transactionSummaries, hasPreviousTransactions);
+            
+            return GetResponse(message.HashedAccountId, message.AccountId, transactions, hasPreviousTransactions);
         }
 
+        private void GenerateTransactionDescription(TransactionLine transaction)
+        {
+            if (transaction.GetType() == typeof(LevyDeclarationTransactionLine))
+            {
+                transaction.Description = transaction.Amount >= 0 ? "Levy" : "Levy adjustment";
+            }
+            else if (transaction.GetType() == typeof(PaymentTransactionLine))
+            {
+                var paymentTransaction = (PaymentTransactionLine)transaction;
+
+                transaction.Description = GetPaymentTransactionDescription(paymentTransaction);
+            }
+        }
+
+        private string GetPaymentTransactionDescription(PaymentTransactionLine transaction)
+        {
+            try
+            {
+                var ukprn = Convert.ToInt32(transaction.UkPrn);
+                var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(ukprn);
+                var transactionPrefix = transaction.IsCoInvested ? "Co-investment - " : string.Empty;
+
+                return $"{transactionPrefix}{providerName.Provider.ProviderName}";
+            }
+            catch (Exception ex)
+            {
+                _logger.Info(ex, $"Provider not found for UkPrn:{transaction.UkPrn}");
+            }
+
+            return "Training provider - name not recognised";
+        }
 
         private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId, bool hasPreviousTransactions)
         {
