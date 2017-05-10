@@ -119,6 +119,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                     SystemId = "x",
                     Tokens = new Dictionary<string, string> {
                         { "account_name", caller.AccountName },
+                        { "first_name", message.Name },
+                        { "inviter_name", $"{caller.FirstName} {caller.LastName}"},
                         { "base_url", _employerApprenticeshipsServiceConfiguration.DashboardUrl },
                         { "expiry_date", expiryDate.ToString("dd MMM yyy")}
                     }
