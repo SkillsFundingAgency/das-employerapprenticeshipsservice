@@ -12,6 +12,8 @@ using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using System;
 using SFA.DAS.EAS.Infrastructure.Services;
 using System.Threading.Tasks;
+
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
 using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
@@ -109,7 +111,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                                         new Apprenticeship
                                         {
                                             PaymentStatus = PaymentStatus.Active,
-                                            StartDate = new DateTime(1998, 11, 1)
+                                            StartDate = new DateTime(1998, 11, 1),
+                                            PendingUpdateOriginator = Originator.Employer
                                         }
                 });
 
@@ -137,7 +140,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                 .ReturnsAsync(new GetApprenticeshipQueryResponse
                 {
                     Apprenticeship =
-                        new Apprenticeship { PaymentStatus = PaymentStatus.Active, StartDate = new DateTime(1998, 11, 1) }
+                        new Apprenticeship {
+                            PaymentStatus = PaymentStatus.Active
+                          , StartDate = new DateTime(1998, 11, 1)
+                          , PendingUpdateOriginator = Originator.Provider}
                 });
 
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipUpdateRequest>()))
@@ -151,6 +157,17 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
             result.Data.PendingChanges.Should().Be(PendingChanges.ReadyForApproval);
         }
-        
+
+        [Test]
+        public void HelloWorld()
+        {
+            var ap = new Apprenticeship
+                         {
+                             DataLockTriageStatus = TriageStatus.Restart
+                         };
+
+            var result = _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(ap);
+            result.HasDataLockError.Should().BeTrue();
+        }
     }
 }
