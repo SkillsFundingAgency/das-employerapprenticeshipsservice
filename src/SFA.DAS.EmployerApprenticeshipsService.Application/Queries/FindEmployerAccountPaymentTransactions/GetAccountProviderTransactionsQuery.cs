@@ -3,7 +3,7 @@ using MediatR;
 
 namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
 {
-    public class FindEmployerAccountPaymentTransactionsQuery : IAsyncRequest<FindEmployerAccountPaymentTransactionsResponse>
+    public class GetAccountProviderTransactionsQuery : IAsyncRequest<GetAccountProviderTransactionsResponse>
     {
         public string HashedAccountId { get; set; }
         public DateTime FromDate { get; set; }

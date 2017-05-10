@@ -7,10 +7,10 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetPreviousTransac
 {
     public class GetPreviousTransactionsCountRequestHandler : IAsyncRequestHandler<GetPreviousTransactionsCountRequest, GetPreviousTransactionsCountResponse>
     {
-        private readonly IDasLevyRepository _repository;
+        private readonly ITransactionRepository _repository;
         private readonly IValidator<GetPreviousTransactionsCountRequest> _validator;
 
-        public GetPreviousTransactionsCountRequestHandler(IDasLevyRepository repository, IValidator<GetPreviousTransactionsCountRequest> validator)
+        public GetPreviousTransactionsCountRequestHandler(ITransactionRepository repository, IValidator<GetPreviousTransactionsCountRequest> validator)
         {
             _repository = repository;
             _validator = validator;

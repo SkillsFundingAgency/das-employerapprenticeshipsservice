@@ -1,26 +1,25 @@
 using System;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
 {
-    public class FindEmployerAccountPaymentTransactionsQueryValidator : IValidator<FindEmployerAccountPaymentTransactionsQuery>
+    public class GetAccountProviderTransactionsQueryValidator : IValidator<GetAccountProviderTransactionsQuery>
     {
         private readonly IMembershipRepository _membershipRepository;
 
-        public FindEmployerAccountPaymentTransactionsQueryValidator(IMembershipRepository membershipRepository)
+        public GetAccountProviderTransactionsQueryValidator(IMembershipRepository membershipRepository)
         {
             _membershipRepository = membershipRepository;
         }
 
-        public ValidationResult Validate(FindEmployerAccountPaymentTransactionsQuery item)
+        public ValidationResult Validate(GetAccountProviderTransactionsQuery item)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(FindEmployerAccountPaymentTransactionsQuery item)
+        public async Task<ValidationResult> ValidateAsync(GetAccountProviderTransactionsQuery item)
         {
             var result = new ValidationResult();
 

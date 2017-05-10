@@ -53,9 +53,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance/payment/details")]
         public async Task<ActionResult> PaymentDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
         {
-            var viewModel = await _accountTransactionsOrchestrator.FindAccountPaymentTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
+            var viewModel = await _accountTransactionsOrchestrator.GetCoursePayments(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
 
-            return View("PaymentDetails", viewModel);
+            return View("CoursePaymentSummary", viewModel);
         }
     }
 }
