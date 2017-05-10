@@ -222,13 +222,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                     var viewModel = _apprenticeshipMapper.MapFrom(data.ApprenticeshipUpdate);
 
-                    var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(apprenticeshipResult.Apprenticeship, null);
+                    var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(apprenticeshipResult.Apprenticeship);
                     viewModel.OriginalApprenticeship = apprenticeship;
                     viewModel.HashedAccountId = hashedAccountId;
                     viewModel.HashedApprenticeshipId = hashedApprenticeshipId;
-                    viewModel.ProviderName = apprenticeship.Apprenticeship.ProviderName;
+                    viewModel.ProviderName = apprenticeship.ProviderName;
                     viewModel.IsDataLockOrigin = 
-                        apprenticeship.Apprenticeship.DataLockTriageStatus == TriageStatus.Change;
+                        apprenticeship.DataLockTriageStatus == TriageStatus.Change;
 
                     return new OrchestratorResponse<UpdateApprenticeshipViewModel>
                     {
@@ -531,7 +531,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     AccountId = accountId,
                     ApprenticeshipId = apprenticeshipId
                 });
-            var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(apprenticeshipResult.Apprenticeship, null);
+            var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(apprenticeshipResult.Apprenticeship);
             mappedModel.OriginalApprenticeship = apprenticeship;
             mappedModel.HashedAccountId = hashedAccountId;
             mappedModel.HashedApprenticeshipId = hashedApprenticeshipId;

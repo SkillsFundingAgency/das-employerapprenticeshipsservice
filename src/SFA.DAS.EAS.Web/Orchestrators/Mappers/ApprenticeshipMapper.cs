@@ -71,7 +71,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                             && new []{ PaymentStatus.Active, PaymentStatus.Paused,  }.Contains(apprenticeship.PaymentStatus),
                 CanEditStatus = !(new List<PaymentStatus> { PaymentStatus.Completed, PaymentStatus.Withdrawn }).Contains(apprenticeship.PaymentStatus),
                 HasDataLockError = apprenticeship.DataLockTriageStatus != null 
-                                && apprenticeship.DataLockTriageStatus == TriageStatus.Restart
+                                && apprenticeship.DataLockTriageStatus == TriageStatus.Restart,
+                DataLockTriageStatus = apprenticeship.DataLockTriageStatus ?? TriageStatus.Unknown
             };
         }
         
@@ -239,7 +240,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             Func<string, string, string> changedOrNull = (a, edit) => 
                 a?.Trim() == edit?.Trim() ? null : edit;
 
-            var apprenticeshipDetailsViewModel = MapToApprenticeshipDetailsViewModel(original, null);
+            var apprenticeshipDetailsViewModel = MapToApprenticeshipDetailsViewModel(original);
             var model = new UpdateApprenticeshipViewModel
             {
                 FirstName = changedOrNull(original.FirstName, edited.FirstName),
