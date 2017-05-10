@@ -7,4 +7,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ApprenticeshipCourseName" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="48c0e86c-d733-46d1-a515-71b599772a5d" ChangeDateTime="05/09/2017 10:57:24">
+    <Property Name="ElementName" Value="[employer_financial].[TransactionLine].[CoInvestment_SFA]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_financial].[TransactionLine]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SfaCoInvestmentAmount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1e04c0e5-6d1d-44ce-8a0a-8e80696b7d1a" ChangeDateTime="05/09/2017 10:58:06">
+    <Property Name="ElementName" Value="[employer_financial].[TransactionLine].[CoInvestment_Employer]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_financial].[TransactionLine]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="EmployerCoInvestmentAmount" />
+  </Operation>
 </Operations>

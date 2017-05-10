@@ -220,5 +220,53 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             model.TrainingName.Should().Be("Standard Title");
             model.TrainingType.Should().Be(TrainingType.Standard);
         }
+
+        [Test]
+        public async Task UpdateReferenceFieldWhenEmpty()
+        {
+            var a = new Apprenticeship
+            {
+                FirstName = "Kalle",
+                LastName = "Abba",
+                EmployerRef = "This is a reference",
+                Cost = 4.0M
+            };
+
+            var updated = new ApprenticeshipViewModel
+            {
+                EmployerRef = "",
+            };
+
+            var model = await _mappingTjänst.CompareAndMapToApprenticeshipViewModel(a, updated);
+
+            model.FirstName.Should().BeNull();
+            model.LastName.Should().BeNull();
+            model.EmployerRef.Should().Be("");
+            model.Cost.Should().BeNull();
+        }
+
+        [Test]
+        public async Task ShouldNotUpdateRefIfNotChanged()
+        {
+            var a = new Apprenticeship
+            {
+                FirstName = "Kalle",
+                LastName = "Abba",
+                EmployerRef = "Hello",
+                Cost = 4.0M
+            };
+
+            var updated = new ApprenticeshipViewModel
+            {
+                EmployerRef = null,
+            };
+
+            var model = await _mappingTjänst.CompareAndMapToApprenticeshipViewModel(a, updated);
+
+            model.FirstName.Should().BeNull();
+            model.LastName.Should().BeNull();
+            model.EmployerRef.Should().Be("");
+            model.Cost.Should().BeNull();
+        }
     }
 }

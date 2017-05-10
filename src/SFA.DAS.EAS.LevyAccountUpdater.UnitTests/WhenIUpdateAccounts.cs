@@ -5,9 +5,9 @@ using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Messages;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater;
 using SFA.DAS.Messaging;
 
@@ -21,11 +21,13 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.UnitTests
         private AccountUpdater _updater;
         private List<Account> _accounts;
         private Mock<ILogger> _logger;
+        private Mock<IEmployerSchemesRepository> _employerSchemesRepository;
 
         [SetUp]
         public void Init()
         {
             _employerAccountRepository = new Mock<IEmployerAccountRepository>();
+            _employerSchemesRepository = new Mock<IEmployerSchemesRepository>();
             _messagePublisher = new Mock<IMessagePublisher>();
             _logger = new Mock<ILogger>();
 
@@ -35,23 +37,35 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.UnitTests
                 new Account { Id = 2 }
             };
 
-            _updater = new AccountUpdater(_employerAccountRepository.Object, _messagePublisher.Object, _logger.Object);
-
             _employerAccountRepository.Setup(x => x.GetAllAccounts()).ReturnsAsync(_accounts);
-            _messagePublisher.Setup(x => x.PublishAsync(It.IsAny<EmployerRefreshLevyQueueMessage>())).Returns(Task.Delay(0));
+
+            _employerSchemesRepository.Setup(x => x.GetSchemesByEmployerId(It.IsAny<long>())).ReturnsAsync(new PayeSchemes());
+            _employerSchemesRepository.Setup(x => x.GetSchemesByEmployerId(1)).ReturnsAsync(new PayeSchemes
+            {
+                SchemesList = new List<PayeScheme>
+                {
+                    new PayeScheme
+                    {
+                        AccountId = 1,
+                        Ref = "123ABC"
+                    }
+                }
+            });
+
+            _updater = new AccountUpdater(_employerAccountRepository.Object, _messagePublisher.Object, _logger.Object, _employerSchemesRepository.Object);
         }
 
         [Test]
-        public async Task ThenAnUpdateAccountMessageShouldBeAddedToTheProcessQueue()
+        public async Task ThenAnUpdateAccountMessageShouldBeAddedToTheProcessQueueForEachAccountPayeScheme()
         {
             //Act
             await _updater.RunUpdate();
 
             //Assert
             _employerAccountRepository.Verify(x => x.GetAllAccounts(), Times.Once);
-            _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<EmployerRefreshLevyQueueMessage>()), Times.Exactly(2));
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(m => m.AccountId.Equals(1))), Times.Once);
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(m => m.AccountId.Equals(2))), Times.Once);
+            _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<EmployerRefreshLevyQueueMessage>()), Times.Exactly(1));
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(m => m.AccountId.Equals(1) && m.PayeRef.Equals("123ABC"))), Times.Once);
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(m => m.AccountId.Equals(2))), Times.Never);
         }
 
         [Test]

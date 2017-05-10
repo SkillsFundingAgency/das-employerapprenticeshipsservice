@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionsTests
 {
     public class WhenIGetAccountTransactions : QueryBaseTest<GetAccountTransactionsQueryHandler,GetAccountTransactionsRequest, GetAccountTransactionsResponse>
     {
-        private Mock<IDasLevyRepository> _repository;
+        private Mock<ITransactionRepository> _repository;
         public override GetAccountTransactionsRequest Query { get; set; }
         public override GetAccountTransactionsQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountTransactionsRequest>> RequestValidator { get; set; }
@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionsTests
         {
             SetUp();
 
-            _repository = new Mock<IDasLevyRepository>();
+            _repository = new Mock<ITransactionRepository>();
 
             Query = new GetAccountTransactionsRequest {AccountId = ExpectedAccountId, FromDate = DateTime.Now.AddDays(-1), ToDate = DateTime.Now.AddDays(1) };
 
@@ -39,14 +39,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionsTests
             await RequestHandler.Handle(Query);
 
             //Assert
-            _repository.Verify(x=>x.GetTransactionsByDateRange(ExpectedAccountId, Query.FromDate, Query.ToDate), Times.Once);
+            _repository.Verify(x=>x.GetAccountTransactionsByDateRange(ExpectedAccountId, Query.FromDate, Query.ToDate), Times.Once);
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Arrange
-            _repository.Setup(x => x.GetTransactionsByDateRange(ExpectedAccountId, Query.FromDate, Query.ToDate))
+            _repository.Setup(x => x.GetAccountTransactionsByDateRange(ExpectedAccountId, Query.FromDate, Query.ToDate))
                        .ReturnsAsync(new List<TransactionLine> {new TransactionLine()});
 
             //Act

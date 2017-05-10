@@ -194,7 +194,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             var accountId = (long)ScenarioContext.Current["AccountId"];
             var payment = (Provider.Events.Api.Types.Payment)ScenarioContext.Current["payment"];
 
-            var repository = _container.GetInstance<IDasLevyRepository>();
+            var repository = _container.GetInstance<ITransactionRepository>();
             
             var transactions = repository.GetTransactionDetailsByDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
 
@@ -222,7 +222,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
                 23, 59, 59);
 
 
-            var repository = _container.GetInstance<IDasLevyRepository>();
+            var repository = _container.GetInstance<ITransactionRepository>();
 
             var transactions = repository.GetTransactionDetailsByDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
 
@@ -250,7 +250,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
                 DateTime.DaysInMonth(collectionDate.Year, collectionDate.Month),
                 23, 59, 59);
 
-            var repository = _container.GetInstance<IDasLevyRepository>();
+            var repository = _container.GetInstance<ITransactionRepository>();
 
             var transactions = repository.GetTransactionDetailsByDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -15,7 +16,6 @@ using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.Levy;
-using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
@@ -89,29 +89,20 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                 }
                 return;
             }
-          
+            var timer = Stopwatch.StartNew();
+
             var employerAccountId = message.Content.AccountId;
+            var payeRef = message.Content.PayeRef;
 
-            _logger.Info($"Processing LevyDeclaration for {employerAccountId}");
-
-            var employerSchemesResult = await _dasAccountService.GetAccountSchemes(employerAccountId);
-
-            if (employerSchemesResult?.SchemesList == null)
-            {
-                await message.CompleteAsync();
-                return;
-            }
-
+            _logger.Trace($"Processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}");
+            
             var employerDataList = new List<EmployerLevyData>();
 
-            
-            var englishFractionUpdateResponse =
-            await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
+            var englishFractionUpdateResponse = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
 
-            foreach (var scheme in employerSchemesResult.SchemesList)
-            {
-                await ProcessScheme(scheme, englishFractionUpdateResponse, employerDataList);
-            }
+            
+            await ProcessScheme(payeRef, englishFractionUpdateResponse, employerDataList);
+            
 
             if (englishFractionUpdateResponse.UpdateRequired)
             {
@@ -121,33 +112,33 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                 });
             }
             
-
-            
             await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
             {
                 AccountId = employerAccountId,
                 EmployerLevyData = employerDataList
             });
             
-
             await message.CompleteAsync();
+
+            timer.Stop();
+            _logger.Trace($"Finished processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}. Completed in {timer.Elapsed:g} (hh:mm:ss:ms)");
         }
 
-        private async Task ProcessScheme(PayeScheme scheme, GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse, ICollection<EmployerLevyData> employerDataList)
+        private async Task ProcessScheme(string payeRef, GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse, ICollection<EmployerLevyData> employerDataList)
         {
             if (HmrcProcessingEnabled || FractionProcessingOnly)
             {
                 await _mediator.SendAsync(new UpdateEnglishFractionsCommand
                 {
-                    EmployerReference = scheme.Ref,
+                    EmployerReference = payeRef,
                     EnglishFractionUpdateResponse = englishFractionUpdateResponse
                 });
 
-                await _dasAccountService.UpdatePayeScheme(scheme.Ref);
+                await _dasAccountService.UpdatePayeScheme(payeRef);
             }
 
             var levyDeclarationQueryResult = HmrcProcessingEnabled || DeclarationProcessingOnly ?
-                await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery {EmpRef = scheme.Ref}) : null;
+                await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery {EmpRef = payeRef }) : null;
 
             var employerData = new EmployerLevyData();
 
@@ -170,7 +161,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                         SubmissionId = declaration.SubmissionId
                     };
 
-                    employerData.EmpRef = scheme.Ref;
+                    employerData.EmpRef = payeRef;
                     employerData.Declarations.Declarations.Add(dasDeclaration);
                 }
 
