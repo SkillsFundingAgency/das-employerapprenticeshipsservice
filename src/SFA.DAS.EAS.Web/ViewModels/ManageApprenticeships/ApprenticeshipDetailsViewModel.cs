@@ -2,6 +2,8 @@
 
 using Microsoft.SqlServer.Server;
 
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
+
 namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 {
     public class ApprenticeshipDetailsViewModel
@@ -39,6 +41,8 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public bool EnableEdit { get; set; }
 
         public bool HasDataLockError { get; set; }
+
+        public TriageStatus DataLockTriageStatus { get; set; }
     }
 
     public enum PendingChanges
