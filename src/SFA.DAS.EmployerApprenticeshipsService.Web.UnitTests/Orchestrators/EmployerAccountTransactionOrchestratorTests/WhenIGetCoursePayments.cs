@@ -80,9 +80,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenIShouldGetTotalsByCourseForSFACoInvestmentPayments()
         {
             //Arrange
-            var payment1 = new PaymentTransactionLine { CourseName = "Test Course", LineAmount = 100, TransactionType = TransactionItemType.SFACoInvestment };
-            var payment2 = new PaymentTransactionLine { CourseName = "Test Course", LineAmount = 50, TransactionType = TransactionItemType.SFACoInvestment };
-            var expectedTotal = payment1.LineAmount + payment2.LineAmount;
+            var payment1 = new PaymentTransactionLine { CourseName = "Test Course", SfaCoInvestmentAmount = 100, TransactionType = TransactionItemType.Payment };
+            var payment2 = new PaymentTransactionLine { CourseName = "Test Course", SfaCoInvestmentAmount = 50, TransactionType = TransactionItemType.Payment };
+            var expectedTotal = payment1.SfaCoInvestmentAmount + payment2.SfaCoInvestmentAmount;
 
             _response = new GetAccountProviderTransactionsResponse
             {
@@ -106,9 +106,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenIShouldGetTotalsByCourseForEmployerCoInvestmentPayments()
         {
             //Arrange
-            var payment1 = new PaymentTransactionLine { CourseName = "Test Course", LineAmount = 100, TransactionType = TransactionItemType.EmployerCoInvestment };
-            var payment2 = new PaymentTransactionLine { CourseName = "Test Course", LineAmount = 50, TransactionType = TransactionItemType.EmployerCoInvestment };
-            var expectedTotal = payment1.LineAmount + payment2.LineAmount;
+            var payment1 = new PaymentTransactionLine { CourseName = "Test Course", EmployerCoInvestmentAmount = 100, TransactionType = TransactionItemType.Payment };
+            var payment2 = new PaymentTransactionLine { CourseName = "Test Course", EmployerCoInvestmentAmount = 50, TransactionType = TransactionItemType.Payment };
+            var expectedTotal = payment1.EmployerCoInvestmentAmount + payment2.EmployerCoInvestmentAmount;
 
             _response = new GetAccountProviderTransactionsResponse
             {
@@ -132,18 +132,23 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenIShouldGetTotalsByCourseForPaymentOverallTotal()
         {
             //Arrange
-            var payment1 = new PaymentTransactionLine { CourseName = "Test Course", LineAmount = 100, TransactionType = TransactionItemType.Payment };
-            var payment2 = new PaymentTransactionLine { CourseName = "Test Course", LineAmount = 90, TransactionType = TransactionItemType.SFACoInvestment };
-            var payment3 = new PaymentTransactionLine { CourseName = "Test Course", LineAmount = 10, TransactionType = TransactionItemType.EmployerCoInvestment };
-           
-            var expectedTotal = payment1.LineAmount + payment2.LineAmount + payment3.LineAmount;
+            var payment = new PaymentTransactionLine
+            {
+                CourseName = "Test Course",
+                LineAmount = 100,
+                SfaCoInvestmentAmount = 90,
+                EmployerCoInvestmentAmount = 10,
+                TransactionType = TransactionItemType.Payment
+            };
+          
+            var expectedTotal = payment.LineAmount + payment.SfaCoInvestmentAmount + payment.EmployerCoInvestmentAmount;
 
             _response = new GetAccountProviderTransactionsResponse
             {
                 ProviderName = "Test Provider",
                 TransactionDate = DateTime.Now,
                 Total = expectedTotal,
-                Transactions = new List<PaymentTransactionLine> { payment1, payment2, payment3 }
+                Transactions = new List<PaymentTransactionLine> { payment }
             };
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
@@ -160,29 +165,40 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenIShouldGetTotalsForAllCourses()
         {
             //Arrange
-            var payment1 = new PaymentTransactionLine { CourseName = "Test Course", LineAmount = 100, TransactionType = TransactionItemType.Payment };
-            var payment2 = new PaymentTransactionLine { CourseName = "Test Course", LineAmount = 90, TransactionType = TransactionItemType.SFACoInvestment };
-            var payment3 = new PaymentTransactionLine { CourseName = "Test Course", LineAmount = 10, TransactionType = TransactionItemType.EmployerCoInvestment };
-            var payment4 = new PaymentTransactionLine { CourseName = "Test Course 2", LineAmount = 100, TransactionType = TransactionItemType.Payment };
-            var payment5 = new PaymentTransactionLine { CourseName = "Test Course 2", LineAmount = 90, TransactionType = TransactionItemType.SFACoInvestment };
-            var payment6 = new PaymentTransactionLine { CourseName = "Test Course 2", LineAmount = 10, TransactionType = TransactionItemType.EmployerCoInvestment };
+            var payment1 = new PaymentTransactionLine
+            {
+                CourseName = "Test Course",
+                LineAmount = 100,
+                SfaCoInvestmentAmount = 90,
+                EmployerCoInvestmentAmount = 10,
+                TransactionType = TransactionItemType.Payment
+            };
 
-            var expectedLevyPaymentsTotal = payment1.LineAmount + payment4.LineAmount;
-            var expectedSFACoInvestmentTotal = payment2.LineAmount + payment5.LineAmount;
-            var expectedEmployerCoInvestmentTotal = payment3.LineAmount + payment6.LineAmount;
+            var payment2 = new PaymentTransactionLine
+            {
+                CourseName = "Test Course 2",
+                LineAmount = 100,
+                SfaCoInvestmentAmount = 90,
+                EmployerCoInvestmentAmount = 10,
+                TransactionType = TransactionItemType.Payment
+            };
+
+            var expectedLevyPaymentsTotal = payment1.LineAmount + payment2.LineAmount;
+            var expectedSFACoInvestmentTotal = payment1.SfaCoInvestmentAmount + payment2.SfaCoInvestmentAmount;
+            var expectedEmployerCoInvestmentTotal = payment1.EmployerCoInvestmentAmount + payment2.EmployerCoInvestmentAmount;
             var expectedPaymentsTotal = payment1.LineAmount + 
-                                        payment2.LineAmount + 
-                                        payment3.LineAmount +
-                                        payment4.LineAmount +
-                                        payment5.LineAmount +
-                                        payment6.LineAmount;
+                                        payment1.SfaCoInvestmentAmount + 
+                                        payment1.EmployerCoInvestmentAmount +
+                                        payment2.LineAmount +
+                                        payment2.SfaCoInvestmentAmount +
+                                        payment2.EmployerCoInvestmentAmount;
 
             _response = new GetAccountProviderTransactionsResponse
             {
                 ProviderName = "Test Provider",
                 TransactionDate = DateTime.Now,
                 Total = expectedPaymentsTotal,
-                Transactions = new List<PaymentTransactionLine> { payment1, payment2, payment3, payment4, payment5, payment6 }
+                Transactions = new List<PaymentTransactionLine> { payment1, payment2 }
             };
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
