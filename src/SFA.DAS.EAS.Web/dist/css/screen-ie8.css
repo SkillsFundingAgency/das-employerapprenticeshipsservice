@@ -1,4 +1,4 @@
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
@@ -16,19 +16,19 @@
   margin: 0 -15px;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
@@ -46,13 +46,13 @@
   margin: 0 -15px;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
@@ -1837,14 +1837,27 @@ dl.inline.course-details {
   margin: 0;
 }
 
+.data-wrap {
+  margin: 0 -15px;
+}
+
 .data {
-  background: #912b88;
-  color: white;
-  padding: 15px;
+  padding: 0 15px;
+  float: left;
+  width: 50%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 33.33%;
 }
 
 .data dl {
-  display: table;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 15px;
+  background: #912b88;
+  color: white;
 }
 
 .data dl dt {
@@ -1867,6 +1880,26 @@ dl.inline.course-details {
   line-height: 1.09375;
   font-size: 48px;
   line-height: 1.0416666667;
+}
+
+.data dd.long {
+  font-size: 42px;
+  line-height: 50px;
+}
+
+.data dd.longer {
+  font-size: 32px;
+  line-height: 50px;
+}
+
+.data dd.long {
+  font-size: 48px;
+  line-height: 50px;
+}
+
+.data dd.longer {
+  font-size: 42px;
+  line-height: 50px;
 }
 
 main, .header-inner {
@@ -3985,7 +4018,7 @@ table .float-right, h2 .float-right {
 }
 
 .hr-bottom {
-  margin-top: 22px;
+  margin-top: 20px;
 }
 
 #add-apprentice-entry hr,
@@ -4052,7 +4085,8 @@ table .float-right, h2 .float-right {
 
 #apprentice-details .finishEditingBtn {
   float: none;
-  margin-bottom: 20px;
+  margin-bottom: 3px;
+  margin-right: 10px;
 }
 
 .form-group #StartDate_Month,
@@ -4291,6 +4325,28 @@ body input::-webkit-contacts-auto-fill-button {
 
 h2 .float-right {
   font-size: 19px;
+}
+
+#review-cohorts .column-one-third {
+  height: 190px;
+}
+
+#review-cohorts .all-apps h2.bold-xlarge {
+  font-size: 80px;
+}
+
+#review-cohorts .incomplete-apps h2.bold-xlarge {
+  font-size: 80px;
+}
+
+.purple-border {
+  border: 5px solid #2e358b;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.total-cost .bold-xlarge {
+  font-size: 38px;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

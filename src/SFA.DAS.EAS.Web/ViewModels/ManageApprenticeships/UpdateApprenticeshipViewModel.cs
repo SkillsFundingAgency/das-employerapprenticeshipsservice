@@ -1,4 +1,6 @@
-﻿using FluentValidation.Attributes;
+﻿using System.ComponentModel.DataAnnotations;
+
+using FluentValidation.Attributes;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
@@ -24,11 +26,10 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 
         public DateTimeViewModel EndDate { get; set; }
 
-
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string EmployerRef { get; set; }
 
-
-        public Apprenticeship OriginalApprenticeship { get; set; }
+        public ApprenticeshipDetailsViewModel OriginalApprenticeship { get; set; }
 
         public bool? ChangesConfirmed { get; set; }
 
@@ -39,5 +40,7 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public string ProviderName { get; set; }
 
         public string ChangesConfirmedError => GetErrorMessage(nameof(ChangesConfirmed));
+
+        public bool IsDataLockOrigin { get; set; }
     }
 }

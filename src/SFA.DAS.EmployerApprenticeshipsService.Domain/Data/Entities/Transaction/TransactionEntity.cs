@@ -13,6 +13,8 @@ namespace SFA.DAS.EAS.Domain.Data.Entities.Transaction
         public decimal Amount { get; set; }
         public decimal Balance { get; set; }
         public decimal LineAmount { get; set; }
+        public string PayrollYear { get; set; }
+        public int PayrollMonth { get; set; }
 
         //Levy Declaration fields
         public long SubmissionId { get; set; }

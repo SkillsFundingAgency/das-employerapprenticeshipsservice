@@ -18,7 +18,7 @@
     margin-bottom: 20px;
 }
 .hr-bottom {
-    margin-top: 22px;
+    margin-top: 20px;
 }
 // add apprentice entry
 #add-apprentice-entry,
@@ -78,7 +78,8 @@
     #empty-alert-top{margin-top:30px;}
     .finishEditingBtn{
         float:none;
-        margin-bottom:20px;
+        margin-bottom:3px;
+        margin-right:10px;
     }
 }
 
@@ -324,7 +325,33 @@ body {
   .float-right{font-size:19px;}
  } 
 
+#review-cohorts{ 
+    .column-one-third{
+         @include media(tablet) {height:190px;}
+    }
+    .all-apps{
+        h2.bold-xlarge{
+             @include media(tablet) {font-size:80px;}
+        }
+    }
+    .incomplete-apps{
+        h2.bold-xlarge{
+             @include media(tablet) {font-size:80px;}
+        }
+     }
+}
 
+.purple-border{
+    border:5px solid $purple;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.total-cost{
+    .bold-xlarge{
+        font-size:38px;
+    }
+}
 
 //all mobile media query breakpoints
 //==================================

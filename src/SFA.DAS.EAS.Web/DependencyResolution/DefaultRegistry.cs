@@ -83,6 +83,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
             For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
+            For<IDataLockApi>().Use<DataLockApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<IValidationApi>().Use<ValidationApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
 
             For<IEventsApi>().Use<EventsApi>()
@@ -147,7 +148,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("SFA.DAS.EAS"));
 
             var mappingProfiles = new List<Profile>();
-            
+
             foreach (var assembly in assemblies)
             {
                 var profiles = Assembly.Load(assembly.FullName).GetTypes()
@@ -159,9 +160,9 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             }
 
             var config = new MapperConfiguration(cfg =>
-           {
-               mappingProfiles.ForEach(cfg.AddProfile);
-           });
+            {
+                mappingProfiles.ForEach(cfg.AddProfile);
+            });
 
             var mapper = config.CreateMapper();
 

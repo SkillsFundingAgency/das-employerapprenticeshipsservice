@@ -12,6 +12,10 @@
     <thead>
     <tr>
         <th></th>
+        @if (Model.IsDataLockOrigin)
+        {
+            <th scope="col">Period</th>
+        }
         <th scope="col">@currentValuHeader</th>
         <th scope="col">Changed to</th>
     </tr>
@@ -52,6 +56,8 @@
             <td>@Model.OriginalApprenticeship.TrainingName </td>
             <td class="changed-item">@Model.TrainingName</td>
             @Html.Hidden("TrainingCode", Model.TrainingCode)
+            @Html.Hidden("TrainingName", Model.TrainingName)
+            @Html.Hidden("TrainingType", Model.TrainingType)
         </tr>
     }
 
@@ -59,6 +65,10 @@
     {
         <tr>
             <th scope="row">Planned training start date</th>
+            @if (Model.IsDataLockOrigin)
+            {
+                <td>--</td>
+            }
             <td>@Model.OriginalApprenticeship.StartDate.Value.ToGdsFormat() </td>
             <td class="changed-item">@Model.StartDate.DateTime.Value.ToGdsFormat()</td>
             @Html.Hidden("StartDate.Month", Model.StartDate.Month)
@@ -70,6 +80,10 @@
     {
         <tr>
             <th scope="row">Planned training end date</th>
+            @if (Model.IsDataLockOrigin)
+            {
+                <td>--</td>
+            }
             <td>@Model.OriginalApprenticeship.EndDate.Value.ToGdsFormat() </td>
             <td class="changed-item">@Model.EndDate.DateTime.Value.ToGdsFormat()</td>
             @Html.Hidden("EndDate.Month", Model.EndDate.Month)
@@ -81,6 +95,12 @@
     {
         <tr>
             <th scope="row">Cost</th>
+            @if (Model.IsDataLockOrigin && Model.OriginalApprenticeship.StartDate.HasValue)
+            {
+                <td>
+                    @Model.OriginalApprenticeship.StartDate.Value.ToGdsFormat()
+                </td>
+            }
             <td>@Model.OriginalApprenticeship.Cost.FormatCost() </td>
             <td class="changed-item">@FormatCost(Model.Cost)</td>
             @Html.Hidden("Cost", Model.Cost)
@@ -91,7 +111,7 @@
     {
         <tr>
             <th scope="row">Reference</th>
-            <td>@Model.OriginalApprenticeship.EmployerRef</td>
+            <td>@Model.OriginalApprenticeship.EmployerReference</td>
             <td class="changed-item">@Model.EmployerRef</td>
             @Html.Hidden("EmployerRef", Model.EmployerRef)
         </tr>
@@ -101,7 +121,7 @@
 
 @functions
 {
-    private static string GetNameChange(Apprenticeship originalApprenticeship, UpdateApprenticeshipViewModel update)
+    private static string GetNameChange(ApprenticeshipDetailsViewModel originalApprenticeship, UpdateApprenticeshipViewModel update)
     {
         var first = !string.IsNullOrWhiteSpace(update.FirstName) ? update.FirstName : originalApprenticeship.FirstName;
         var last = !string.IsNullOrWhiteSpace(update.LastName) ? update.LastName : originalApprenticeship.LastName;

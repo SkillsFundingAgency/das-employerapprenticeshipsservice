@@ -1,5 +1,4 @@
-﻿@using SFA.DAS.Commitments.Api.Types.Apprenticeship
-@using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
+﻿@using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 @model SFA.DAS.EAS.Web.OrchestratorResponse<UpdateApprenticeshipViewModel>
 @{
     ViewBag.Title = "Confirm changes";
@@ -39,22 +38,10 @@
                     </fieldset>
                 </div>
 
-                @Html.Hidden("OriginalApprenticeshipDecoded", @Json.Encode(Model.Data.OriginalApprenticeship))
                 <button type="submit" class="button" aria-label="Finish">Finish</button>
-</form>
+        </form>
     </div>
 </div>
-    
-@functions
-{
-    private static string GetNameChange(Apprenticeship originalApprenticeship, UpdateApprenticeshipViewModel update)
-    {
-        var first = !string.IsNullOrWhiteSpace(update.FirstName) ? update.FirstName : originalApprenticeship.FirstName;
-        var last = !string.IsNullOrWhiteSpace(update.LastName) ? update.LastName : originalApprenticeship.LastName;
-        return $"{first} {last}";
-    }
-}
-
 
 @section breadcrumb {
     <div class="breadcrumbs">
