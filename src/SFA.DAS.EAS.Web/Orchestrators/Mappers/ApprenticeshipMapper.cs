@@ -255,7 +255,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 EndDate = original.EndDate == edited.EndDate.DateTime 
                     ? null
                     : edited.EndDate,
-                EmployerRef = changedOrNull(original.EmployerRef, edited.EmployerRef),
+                EmployerRef =  original.EmployerRef?.Trim() == edited.EmployerRef?.Trim()
+                            || (string.IsNullOrEmpty(original.EmployerRef)  && string.IsNullOrEmpty(edited.EmployerRef))
+                    ? null 
+                    : edited.EmployerRef ?? "",
                 OriginalApprenticeship = apprenticeshipDetailsViewModel
             };
 
