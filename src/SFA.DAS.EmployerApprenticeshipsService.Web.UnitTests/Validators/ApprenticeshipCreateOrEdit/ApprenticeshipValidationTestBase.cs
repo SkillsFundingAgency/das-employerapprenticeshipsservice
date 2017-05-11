@@ -13,13 +13,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators.ApprenticeshipCreateOrEdit
     {
         protected readonly Mock<ICurrentDateTime> CurrentDateTime = new Mock<ICurrentDateTime>();
 
-        protected readonly ApprenticeshipViewModelValidator Validator = new ApprenticeshipViewModelValidator(new WebApprenticeshipValidationText(), new CurrentDateTime(), new AcademicYear(new CurrentDateTime()));
+        protected ApprenticeshipViewModelValidator Validator;
         protected ApprenticeshipViewModel ValidModel;
 
         [SetUp]
         public void BaseSetup()
         {
             CurrentDateTime.Setup(x => x.Now).Returns(new DateTime(2018, 5, 1));
+
+            Validator = new ApprenticeshipViewModelValidator(new WebApprenticeshipValidationText(), CurrentDateTime.Object, new AcademicYear(CurrentDateTime.Object));
 
             ValidModel = new ApprenticeshipViewModel { ULN = "1001234567", FirstName = "TestFirstName", LastName = "TestLastName" };
         }
