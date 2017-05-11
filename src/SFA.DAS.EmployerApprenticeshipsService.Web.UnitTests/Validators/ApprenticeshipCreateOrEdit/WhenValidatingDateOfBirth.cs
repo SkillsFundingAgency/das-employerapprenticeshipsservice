@@ -26,9 +26,21 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators.ApprenticeshipCreateOrEdit
             result.Errors[0].ErrorMessage.Should().Be(expected);
         }
 
+        [TestCase(1, 1, 1900)]
+        public void ShouldFailValidationOnDateOfBirthTooOld(int? day, int? month, int? year)
+        {
+            var expected = "Enter a valid year - the apprentice must be younger than 115 at the start of the current teaching year";
+            ValidModel.DateOfBirth = new DateTimeViewModel(day, month, year);
+
+            var result = Validator.Validate(ValidModel);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors[0].ErrorMessage.Should().Be(expected);
+        }
+
         [TestCase(null, null, null)]
         [TestCase(5, 9, 1998)]
-        [TestCase(1, 1, 1900)]
+
         public void ShouldNotFailValidationOnDateOfBirth(int? day, int? month, int? year)
         {
             ValidModel.DateOfBirth = new DateTimeViewModel(day, month, year);
