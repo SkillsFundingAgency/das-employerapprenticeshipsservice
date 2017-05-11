@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetEnglishFrationDetail;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetLastLevyDeclaration;
@@ -37,25 +37,32 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return result.TransactionLines;
         }
 
-        public async Task<ICollection<AccountBalance>> GetAllAccountBalances()
+        public Task<ICollection<T>> GetAccountLevyTransactionsByDateRange<T>(long accountId, long ukprn, DateTime fromDate, DateTime toDate,
+            string externalUserId) where T : TransactionLine
         {
-            var result = await _mediator.SendAsync(new GetAccountBalancesRequest());
-
-            return result.Accounts;
+            throw new NotImplementedException();
         }
 
-        public async Task<ICollection<T>> GetAccountProviderTransactionsByDateRange<T>(
-            long accountId, DateTime fromDate, DateTime toDate, string externalUserId) where T : TransactionLine
+        public async Task<ICollection<T>> GetAccountProviderPaymentsByDateRange<T>(
+            long accountId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId) where T : TransactionLine
         {
-            var result = await _mediator.SendAsync(new GetAccountTransactionsByDateRangeQuery
+            var result = await _mediator.SendAsync(new GetAccountProviderPaymentsByDateRangeQuery
             {
                 AccountId = accountId,
+                UkPrn = ukprn,
                 FromDate = fromDate,
                 ToDate = toDate,
                 ExternalUserId = externalUserId
             });
 
             return result?.Transactions?.OfType<T>().ToList() ?? new List<T>();
+        }
+
+        public async Task<ICollection<AccountBalance>> GetAllAccountBalances()
+        {
+            var result = await _mediator.SendAsync(new GetAccountBalancesRequest());
+
+            return result.Accounts;
         }
 
         public async Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef)

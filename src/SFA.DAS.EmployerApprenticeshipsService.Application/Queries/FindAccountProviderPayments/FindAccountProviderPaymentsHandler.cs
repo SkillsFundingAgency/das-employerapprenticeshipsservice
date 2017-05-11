@@ -3,20 +3,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
 
-namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
+namespace SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments
 {
-    public class GetAccountProviderTransactionsHandler : IAsyncRequestHandler<GetAccountProviderTransactionsQuery, GetAccountProviderTransactionsResponse>
+    public class FindAccountProviderPaymentsHandler : IAsyncRequestHandler<FindAccountProviderPaymentsQuery, FindAccountProviderPaymentsResponse>
     {
-        private readonly IValidator<GetAccountProviderTransactionsQuery> _validator;
+        private readonly IValidator<FindAccountProviderPaymentsQuery> _validator;
         private readonly IDasLevyService _dasLevyService;
         private readonly IHashingService _hashingService;
 
-        public GetAccountProviderTransactionsHandler(
-            IValidator<GetAccountProviderTransactionsQuery> validator,
+        public FindAccountProviderPaymentsHandler(
+            IValidator<FindAccountProviderPaymentsQuery> validator,
             IDasLevyService dasLevyService,
             IHashingService hashingService)
         {
@@ -25,7 +24,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
             _hashingService = hashingService;
         }
 
-        public async Task<GetAccountProviderTransactionsResponse> Handle(GetAccountProviderTransactionsQuery message)
+        public async Task<FindAccountProviderPaymentsResponse> Handle(FindAccountProviderPaymentsQuery message)
         {
             var validationResult = await _validator.ValidateAsync(message);
 
@@ -40,8 +39,8 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
             }
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            var transactions = await _dasLevyService.GetAccountProviderTransactionsByDateRange<PaymentTransactionLine>
-                                    (accountId, message.FromDate, message.ToDate, message.ExternalUserId);
+            var transactions = await _dasLevyService.GetAccountProviderPaymentsByDateRange<PaymentTransactionLine>
+                                    (accountId, message.UkPrn, message.FromDate, message.ToDate, message.ExternalUserId);
 
             if (!transactions.Any())
             {
@@ -50,7 +49,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
 
             var firstTransaction = transactions.First();
 
-            return new GetAccountProviderTransactionsResponse
+            return new FindAccountProviderPaymentsResponse
             {
                 ProviderName = firstTransaction.ProviderName,
                 TransactionDate = firstTransaction.TransactionDate,

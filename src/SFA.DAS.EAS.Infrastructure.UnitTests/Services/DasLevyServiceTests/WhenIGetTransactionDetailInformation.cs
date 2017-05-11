@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Infrastructure.Services;
@@ -29,8 +29,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
             _externalUserId = "test";
 
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTransactionsByDateRangeQuery>()))
-                     .ReturnsAsync(new GetAccountLevyDeclationTransactionsByDateRangeResponse
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderPaymentsByDateRangeQuery>()))
+                     .ReturnsAsync(new GetAccountProviderPaymentsByDateRangeResponse
                     {
                         Transactions= new List<TransactionLine>
                         {
@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
 
             //Assert
             _mediator.Verify(x => 
-                x.SendAsync(It.Is<GetAccountTransactionsByDateRangeQuery>(c => 
+                x.SendAsync(It.Is<GetAccountProviderPaymentsByDateRangeQuery>(c => 
                     c.AccountId.Equals(_accountId) &&
                     c.FromDate.Equals(_fromDate) && 
                     c.ToDate.Equals(_toDate) &&
@@ -72,8 +72,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
         public async Task ThenIfNullIsReturnedFromTheResponseEmptyListIsReturnedFromTheCall()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTransactionsByDateRangeQuery>()))
-                .ReturnsAsync(new GetAccountLevyDeclationTransactionsByDateRangeResponse
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderPaymentsByDateRangeQuery>()))
+                .ReturnsAsync(new GetAccountProviderPaymentsByDateRangeResponse
                 {
                     Transactions = null
                 });

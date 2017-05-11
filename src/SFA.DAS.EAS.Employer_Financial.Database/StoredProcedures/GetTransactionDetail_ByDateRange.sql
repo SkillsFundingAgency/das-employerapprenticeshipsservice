@@ -23,7 +23,9 @@ select
 	null as PeriodEnd,
 	DateCreated,
 	ld.PayrollYear,
-	ld.PayrollMonth
+	ld.PayrollMonth,
+	tl.SfaCoInvestmentAmount,
+	tl.EmployerCoInvestmentAmount
 from [employer_financial].TransactionLine tl
 inner join [employer_financial].LevyDeclarationTopup ldt on ldt.SubmissionId = tl.SubmissionId
 inner join [employer_financial].LevyDeclaration ld on ld.submissionid = tl.submissionid
@@ -37,7 +39,8 @@ OUTER APPLY
 ) t
 where    tl.DateCreated >= @fromDate AND 
         tl.DateCreated <= @toDate AND 
-        tl.AccountId = @accountId
+        tl.AccountId = @accountId 
+		
 
 union all
 
@@ -60,10 +63,13 @@ select
 	p.PeriodEnd as PeriodEnd,
 	DateCreated,
 	null as PayrollYear,
-	null as PayrollMonth
+	null as PayrollMonth,
+	tl.SfaCoInvestmentAmount,
+	tl.EmployerCoInvestmentAmount
 from [employer_financial].TransactionLine tl
-inner join [employer_financial].Payment p on p.PeriodEnd = tl.PeriodEnd and p.AccountId = tl.AccountId
+inner join [employer_financial].Payment p on p.PeriodEnd = tl.PeriodEnd and p.AccountId = tl.AccountId and p.Ukprn = tl.UkPrn
 inner join [employer_financial].PaymentMetaData meta on p.PaymentMetaDataId = meta.Id
 where   tl.DateCreated >= @fromDate AND 
         tl.DateCreated <= @toDate AND 
-        tl.AccountId = @accountId
+        tl.AccountId = @accountId AND
+		p.Ukprn = @ukprn

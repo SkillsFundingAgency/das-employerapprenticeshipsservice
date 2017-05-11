@@ -1,32 +1,36 @@
 using System;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 
-namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail
+namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments
 {
-    public class GetAccountTransactionsByDateRangeValidator : IValidator<GetAccountTransactionsByDateRangeQuery>
+    public class GetAccountProviderPaymentsByDateRangeValidator : IValidator<GetAccountProviderPaymentsByDateRangeQuery>
     {
         private readonly IMembershipRepository _membershipRepository;
 
-        public GetAccountTransactionsByDateRangeValidator(IMembershipRepository membershipRepository)
+        public GetAccountProviderPaymentsByDateRangeValidator(IMembershipRepository membershipRepository)
         {
             _membershipRepository = membershipRepository;
         }
 
-        public ValidationResult Validate(GetAccountTransactionsByDateRangeQuery item)
+        public ValidationResult Validate(GetAccountProviderPaymentsByDateRangeQuery item)
         {
            throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetAccountTransactionsByDateRangeQuery item)
+        public async Task<ValidationResult> ValidateAsync(GetAccountProviderPaymentsByDateRangeQuery item)
         {
             var validationResult = new ValidationResult();
 
             if (item.AccountId == 0)
             {
                 validationResult.AddError(nameof(item.AccountId), "Account ID has not been supplied");
+            }
+
+            if (item.AccountId == 0)
+            {
+                validationResult.AddError(nameof(item.UkPrn), "UKPRN has not been supplied");
             }
 
             if (string.IsNullOrEmpty(item.ExternalUserId))

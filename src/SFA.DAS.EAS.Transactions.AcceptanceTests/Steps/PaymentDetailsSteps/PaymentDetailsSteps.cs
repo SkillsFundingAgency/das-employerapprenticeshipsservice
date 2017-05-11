@@ -196,7 +196,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
             var repository = _container.GetInstance<ITransactionRepository>();
             
-            var transactions = repository.GetTransactionDetailsByDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
+            var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
@@ -224,7 +224,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
             var repository = _container.GetInstance<ITransactionRepository>();
 
-            var transactions = repository.GetTransactionDetailsByDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
+            var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
@@ -252,7 +252,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
             var repository = _container.GetInstance<ITransactionRepository>();
 
-            var transactions = repository.GetTransactionDetailsByDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
+            var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 

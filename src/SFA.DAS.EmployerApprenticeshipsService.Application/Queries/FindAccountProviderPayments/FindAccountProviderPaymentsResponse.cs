@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Models.Payments;
 
-namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
+namespace SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments
 {
-    public class GetAccountProviderTransactionsResponse
+    public class FindAccountProviderPaymentsResponse
     {
         public string ProviderName { get; set; }
         public DateTime TransactionDate { get; set; }

@@ -1,9 +1,9 @@
 ﻿using System;
 using MediatR;
 
-namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail
+namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTransactions
 {
-    public class GetAccountTransactionsByDateRangeQuery : IAsyncRequest<GetAccountLevyDeclationTransactionsByDateRangeResponse>
+    public class GetAccountLevyTransactionsQuery : IAsyncRequest<GetAccountLevyTransactionsResponse>
     {
         public long AccountId { get; set; }
         public DateTime FromDate { get; set; }

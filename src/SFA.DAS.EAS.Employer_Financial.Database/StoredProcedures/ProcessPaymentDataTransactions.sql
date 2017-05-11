@@ -13,12 +13,12 @@ select mainUpdate.* from
             Max(pe.CompletionDateTime) as TransactionDate,
             3 as TransactionType,
             null as LevyDeclared,
-            Sum(x.Amount) * -1 Amount,
-            Sum(ISNULL(pco.Amount, 0)) * -1 as SfaCoInvestmentAmount,
-            Sum(ISNULL(pci.Amount, 0)) * -1 as EmployerCoInvestmentAmount,
+            Sum(p.Amount) * -1 Amount,
             null as empref,
             x.PeriodEnd,
-            x.UkPrn
+            x.UkPrn,
+            Sum(ISNULL(pco.Amount, 0)) * -1 as SfaCoInvestmentAmount,
+            Sum(ISNULL(pci.Amount, 0)) * -1 as EmployerCoInvestmentAmount
         FROM 
             employer_financial.[Payment] x
 		inner join [employer_financial].[PeriodEnd] pe 
