@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Domain.Interfaces
             where T : TransactionLine;
 
         Task<ICollection<T>> GetAccountLevyTransactionsByDateRange<T>(
-            long accountId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
+            long accountId, DateTime fromDate, DateTime toDate, string externalUserId)
             where T : TransactionLine;
 
         Task<ICollection<AccountBalance>> GetAllAccountBalances();

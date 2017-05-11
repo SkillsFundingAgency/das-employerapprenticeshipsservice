@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -33,7 +28,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTran
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var transactions = await _transactionRepository.get(
+            var transactions = await _transactionRepository.GetAccountLevyTransactionsByDateRange(
                 message.AccountId,
                 message.FromDate,
                 message.ToDate);

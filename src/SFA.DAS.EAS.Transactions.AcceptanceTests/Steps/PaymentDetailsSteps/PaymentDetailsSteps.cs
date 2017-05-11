@@ -196,7 +196,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
             var repository = _container.GetInstance<ITransactionRepository>();
             
-            var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
+            var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, payment.Ukprn, transactionMonthStart, transactionMonthEnd).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
@@ -220,11 +220,11 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
                 collectionDate.Month,
                 DateTime.DaysInMonth(collectionDate.Year, collectionDate.Month),
                 23, 59, 59);
-
+            var payment = (Provider.Events.Api.Types.Payment)ScenarioContext.Current["payment"];
 
             var repository = _container.GetInstance<ITransactionRepository>();
 
-            var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
+            var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, payment.Ukprn, transactionMonthStart, transactionMonthEnd).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
@@ -249,10 +249,11 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
                 collectionDate.Month,
                 DateTime.DaysInMonth(collectionDate.Year, collectionDate.Month),
                 23, 59, 59);
+            var payment = (Provider.Events.Api.Types.Payment)ScenarioContext.Current["payment"];
 
             var repository = _container.GetInstance<ITransactionRepository>();
 
-            var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, transactionMonthStart, transactionMonthEnd).Result;
+            var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, payment.Ukprn, transactionMonthStart, transactionMonthEnd).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 

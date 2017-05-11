@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTransactions;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetEnglishFrationDetail;
@@ -37,10 +38,18 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return result.TransactionLines;
         }
 
-        public Task<ICollection<T>> GetAccountLevyTransactionsByDateRange<T>(long accountId, long ukprn, DateTime fromDate, DateTime toDate,
+        public async Task<ICollection<T>> GetAccountLevyTransactionsByDateRange<T>(long accountId, DateTime fromDate, DateTime toDate,
             string externalUserId) where T : TransactionLine
         {
-            throw new NotImplementedException();
+            var result = await _mediator.SendAsync(new GetAccountLevyTransactionsQuery
+            {
+                AccountId = accountId,
+                FromDate = fromDate,
+                ToDate = toDate,
+                ExternalUserId = externalUserId
+            });
+
+            return result?.Transactions?.OfType<T>().ToList() ?? new List<T>();
         }
 
         public async Task<ICollection<T>> GetAccountProviderPaymentsByDateRange<T>(

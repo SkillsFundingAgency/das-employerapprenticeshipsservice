@@ -51,8 +51,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         [Test]
         public async Task ThenARequestShouldBeMadeForPaymentDetails()
         {
+            //Arrange
+            const long ukprn = 10;
+
             //Act
-            await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, _fromDate, _toDate,
+            await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, ukprn, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert
@@ -67,7 +70,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenPaymentsDetailsShouldBeReturned()
         {
             //Act
-            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, _fromDate, _toDate,
+            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, 10, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert
@@ -84,7 +87,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                      .ThrowsAsync(new NotFoundException(string.Empty));
 
             //Act
-            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, _fromDate, _toDate,
+            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, 10, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert
@@ -99,7 +102,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                      .ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
-            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, _fromDate, _toDate,
+            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, 10, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert
@@ -114,7 +117,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                      .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
-            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, _fromDate, _toDate,
+            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, 10, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert

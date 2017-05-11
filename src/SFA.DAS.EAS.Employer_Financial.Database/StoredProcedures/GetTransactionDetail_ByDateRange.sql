@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetTransactionDetail_ByDateRange]
 	@accountId bigint,
-	@fromDate datetime,
+	@ukprn bigint,
+ 	@fromDate datetime,
 	@toDate datetime
 
 AS
