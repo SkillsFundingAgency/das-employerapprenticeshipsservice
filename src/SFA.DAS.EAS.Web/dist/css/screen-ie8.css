@@ -1914,6 +1914,10 @@ main, .header-inner {
   float: right;
 }
 
+.hgroup {
+  margin-bottom: 40px;
+}
+
 aside.sidebar {
   font-size: 14px;
   border-top: 10px solid #005ea5;
@@ -3188,7 +3192,7 @@ table.responsive tr th.tw-70 {
   width: 70%;
 }
 
-.panel p {
+.panel p, .panel li {
   font-size: 14px;
   font-size: 16px;
 }
