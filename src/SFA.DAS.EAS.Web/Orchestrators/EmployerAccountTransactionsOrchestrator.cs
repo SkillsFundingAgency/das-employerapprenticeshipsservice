@@ -95,8 +95,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Status = HttpStatusCode.OK,
                     Data = new ProviderPaymentsSummaryViewModel
                     {
+                        HashedAccountId = hashedId,
+                        UkPrn = ukprn,
                         ProviderName = data.ProviderName,
                         PaymentDate = data.TransactionDate,
+                        FromDate = fromDate,
+                        ToDate = toDate,
                         CoursePayments = coursePaymentSummaries,
                         LevyPaymentsTotal = coursePaymentSummaries.Sum(p => p.LevyPaymentAmount),
                         SFACoInvestmentsTotal = coursePaymentSummaries.Sum(p => p.SFACoInvestmentAmount),

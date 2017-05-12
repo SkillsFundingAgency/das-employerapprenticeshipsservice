@@ -42,12 +42,24 @@
             @foreach (var coursePaymentSummary in Model.Data.CoursePayments)
             {
                 <tr>
-                    <td data-label="Course">@coursePaymentSummary.CourseName</td>
+                    <td data-label="Course">@coursePaymentSummary.CourseName Level @coursePaymentSummary.CourseLevel</td>
                     <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C0", culture)</td>
                     <td class="numeric highlight" data-label="Government contribution">@coursePaymentSummary.SFACoInvestmentAmount.ToString("C0", culture)</td>
                     <td class="numeric highlight" data-label="Your contribution">@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C0", culture)</td>
                     <td class="numeric" data-label="Amount">@coursePaymentSummary.TotalAmount.ToString("C0", culture)</td>
-                    <td>-</td>
+                    <td>
+                        <a title="View details " href="@Url.Action("CoursePaymentSummary", "EmployerAccountTransactions",
+                                                      new
+                                                      {
+                                                          HashedAccountId = Model.Data.HashedAccountId,
+                                                          Ukprn = Model.Data.UkPrn,
+                                                          CourseName = coursePaymentSummary.CourseName,
+                                                          Model.Data.FromDate,
+                                                          Model.Data.ToDate
+                                                      })">
+                            Details <span class="vh"></span>
+                        </a>
+                    </td>
                 </tr>
             }
             </tbody>

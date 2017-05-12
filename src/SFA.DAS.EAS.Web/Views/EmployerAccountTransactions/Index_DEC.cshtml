@@ -110,7 +110,7 @@
                             {
                                 var paymentTransaction = aggregationLine as PaymentTransactionLine;
                                 
-                                <a title="View details for the transaction on @date" href="@Url.Action("PaymentDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate = fromDate,toDate = toDate, ukPrn =  paymentTransaction.UkPrn})">
+                                <a title="View details for the transaction on @date" href="@Url.Action("ProviderPaymentSummary", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, ukPrn = paymentTransaction?.UkPrn, fromDate = fromDate,toDate = toDate })">
                                     Details <span class="vh"> for the transaction on @date</span>
                                     
                                 </a>
