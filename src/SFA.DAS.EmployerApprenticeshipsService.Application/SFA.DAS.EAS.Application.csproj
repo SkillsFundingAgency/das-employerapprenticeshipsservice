@@ -285,6 +285,10 @@
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountCourseTransactions\GetAccountCourseTransactionsQuery.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountCourseTransactions\GetAccountCourseTransactionsQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountCourseTransactions\GetAccountCourseTransactionsQueryValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountCourseTransactions\GetAccountCourseTransactionsResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountLevyTransactions\GetAccountLevyTransactionsQuery.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountLevyTransactions\GetAccountLevyTransactionsQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountLevyTransactions\GetAccountLevyTransactionsQueryValidator.cs" />
