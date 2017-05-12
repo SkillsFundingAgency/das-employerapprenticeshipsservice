@@ -68,7 +68,22 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public bool DoesSubmissionPreDateLevy(string payrollYear)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(payrollYear))
+            {
+                return false;
+            }
+
+            var yearSplit = payrollYear.Split('-');
+
+            int result;
+            if(int.TryParse(yearSplit[0], out result))
+            {
+                if (result <= 16)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
