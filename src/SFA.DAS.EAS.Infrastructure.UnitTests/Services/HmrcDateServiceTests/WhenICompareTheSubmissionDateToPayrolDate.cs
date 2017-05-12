@@ -146,5 +146,18 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
             //Assert
             Assert.IsFalse(actual);
         }
+
+        [TestCase("16-17",true)]
+        [TestCase("15-16", true)]
+        [TestCase("17-18", false)]
+        [TestCase("", false)]
+        public void ThenIfThePayrollYearIsBeforeTheLevyWasIntroducedFalseIsReturned(string payrollYear, bool expectedResult)
+        {
+            //Act
+            var actual = _hmrcDateService.DoesSubmissionPreDateLevy(payrollYear);
+
+            //Assert
+            Assert.AreEqual(expectedResult, actual);
+        }
     }
 }

@@ -65,6 +65,25 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             
             return new DateTime(yearToUse,monthToUse,21);
         }
-       
+
+        public bool DoesSubmissionPreDateLevy(string payrollYear)
+        {
+            if (string.IsNullOrEmpty(payrollYear))
+            {
+                return false;
+            }
+
+            var yearSplit = payrollYear.Split('-');
+
+            int result;
+            if(int.TryParse(yearSplit[0], out result))
+            {
+                if (result <= 16)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
