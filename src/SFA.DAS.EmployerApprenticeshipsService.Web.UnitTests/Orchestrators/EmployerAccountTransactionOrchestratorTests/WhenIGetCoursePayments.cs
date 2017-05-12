@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 .ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser);
+            var result = await _orchestrator.GetProviderPaymentSummary(HashedAccountId, 10, _fromDate, _toDate, ExternalUser);
 
             //Assert
             Assert.AreEqual(expectedTotal, result.Data.CoursePayments.First().LevyPaymentAmount);
@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 .ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser);
+            var result = await _orchestrator.GetProviderPaymentSummary(HashedAccountId, 10,_fromDate, _toDate, ExternalUser);
 
             //Assert
             Assert.AreEqual(expectedTotal, result.Data.CoursePayments.First().SFACoInvestmentAmount);
@@ -122,7 +122,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 .ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser);
+            var result = await _orchestrator.GetProviderPaymentSummary(HashedAccountId, 10, _fromDate, _toDate, ExternalUser);
 
             //Assert
             Assert.AreEqual(expectedTotal, result.Data.CoursePayments.First().EmployerCoInvestmentAmount);
@@ -155,7 +155,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 .ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser);
+            var result = await _orchestrator.GetProviderPaymentSummary(HashedAccountId, 10, _fromDate, _toDate, ExternalUser);
 
             //Assert
             Assert.AreEqual(expectedTotal, result.Data.CoursePayments.First().TotalAmount);
@@ -205,7 +205,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 .ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser);
+            var result = await _orchestrator.GetProviderPaymentSummary(HashedAccountId, 10, _fromDate, _toDate, ExternalUser);
 
             //Assert
             Assert.AreEqual(expectedLevyPaymentsTotal, result.Data.LevyPaymentsTotal);

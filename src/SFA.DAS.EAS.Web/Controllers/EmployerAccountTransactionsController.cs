@@ -50,18 +50,20 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View("LevyDeclarationDetail", viewModel);
         }
 
-        [Route("balance/payment/details")]
-        public async Task<ActionResult> PaymentDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
+        [Route("balance/provider/summary")]
+        public async Task<ActionResult> ProviderPaymentSummary(string hashedAccountId, long ukprn, DateTime fromDate, DateTime toDate)
         {
-            var viewModel = await _accountTransactionsOrchestrator.GetCoursePayments(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
+            var viewModel = await _accountTransactionsOrchestrator.GetProviderPaymentSummary(hashedAccountId, ukprn, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
 
-            return View("CoursePaymentSummary", viewModel);
+            return View("ProviderPaymentSummary", viewModel);
         }
 
-        [Route("balance/payment/details")]
-        public async Task<ActionResult> CoursePaymentDetails(string courseName, string hashedAccountId, DateTime fromDate, DateTime toDate)
+        [Route("balance/course/summary")]
+        public async Task<ActionResult> CoursePaymentSummary(string hashedAccountId, long ukprn, string courseName, DateTime fromDate, DateTime toDate)
         {
-           throw new NotImplementedException();
+            var viewModel = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(hashedAccountId, ukprn, courseName, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
+
+            return View("CoursePaymentSummary", viewModel);
         }
     }
 }

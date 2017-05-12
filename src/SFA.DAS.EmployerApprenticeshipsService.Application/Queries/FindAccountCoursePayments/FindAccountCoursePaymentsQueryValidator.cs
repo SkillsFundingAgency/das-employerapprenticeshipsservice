@@ -23,9 +23,9 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments
         {
             var validationResult = new ValidationResult();
 
-            if (item.AccountId == 0)
+            if (string.IsNullOrEmpty(item.HashedAccountId))
             {
-                validationResult.AddError(nameof(item.AccountId), "Account ID has not been supplied");
+                validationResult.AddError(nameof(item.HashedAccountId), "Hashed Account ID has not been supplied");
             }
 
             if (item.UkPrn == 0)
@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments
             if (!validationResult.IsValid())
                 return validationResult;
 
-            var memberView = await _membershipRepository.GetCaller(item.AccountId, item.ExternalUserId);
+            var memberView = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
 
             if (memberView != null)
                 return validationResult;
