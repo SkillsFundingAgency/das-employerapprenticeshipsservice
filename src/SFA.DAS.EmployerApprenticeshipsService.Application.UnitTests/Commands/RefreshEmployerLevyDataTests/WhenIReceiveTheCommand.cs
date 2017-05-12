@@ -235,7 +235,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
         {
             //Arrange
             var data = RefreshEmployerLevyDataCommandObjectMother.CreateLevyDataWithFutureSubmissions(ExpectedEmpRef, DateTime.Now);
-            _hmrcDateService.Setup(x => x.DoesSubmissionPreDateLevy(It.IsAny<string>(), It.IsAny<int>())).Returns(true);
+            _hmrcDateService.Setup(x => x.DoesSubmissionPreDateLevy(It.IsAny<string>())).Returns(true);
 
             //Act
             await _refreshEmployerLevyDataCommandHandler.Handle(data);

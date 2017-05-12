@@ -93,7 +93,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 
         private bool DoesSubmissionPreDateTheLevy(DasDeclaration dasDeclaration)
         {
-            return dasDeclaration.PayrollMonth.HasValue && _hmrcDateService.DoesSubmissionPreDateLevy(dasDeclaration.PayrollYear, dasDeclaration.PayrollMonth.Value);
+            return _hmrcDateService.DoesSubmissionPreDateLevy(dasDeclaration.PayrollYear);
 
         }
 
