@@ -83,13 +83,14 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@courseName", courseName, DbType.String);
                 parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@ukprn", ukprn, DbType.Int64);
+                parameters.Add("@courseName", courseName, DbType.String);
                 parameters.Add("@fromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day), DbType.DateTime);
                 parameters.Add("@toDate", new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59), DbType.DateTime);
 
                 return await c.QueryAsync<TransactionEntity>(
-                    sql: "[employer_financial].[GetCourseTransactions_ByDateRange]",
+                    sql: "[employer_financial].[GetPaymentDetail_ByAccountProviderCourseAndDateRange]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
