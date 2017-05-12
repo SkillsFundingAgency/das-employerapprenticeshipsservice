@@ -4,22 +4,22 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCourseTransactions
+namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCoursePayments
 {
-    public class GetAccountCourseTransactionsQueryHandler : IAsyncRequestHandler<GetAccountCourseTransactionsQuery, GetAccountCourseTransactionsResponse>
+    public class GetAccountCoursePaymentsQueryHandler : IAsyncRequestHandler<GetAccountCoursePaymentsQuery, GetAccountCoursePaymentsResponse>
     {
-        private readonly IValidator<GetAccountCourseTransactionsQuery> _validator;
+        private readonly IValidator<GetAccountCoursePaymentsQuery> _validator;
         private readonly ITransactionRepository _transactionRepository;
         private readonly IHmrcDateService _hmrcDateService;
         
-        public GetAccountCourseTransactionsQueryHandler(IValidator<GetAccountCourseTransactionsQuery> validator, ITransactionRepository transactionRepository, IHmrcDateService hmrcDateService)
+        public GetAccountCoursePaymentsQueryHandler(IValidator<GetAccountCoursePaymentsQuery> validator, ITransactionRepository transactionRepository, IHmrcDateService hmrcDateService)
         {
             _validator = validator;
             _transactionRepository = transactionRepository;
             _hmrcDateService = hmrcDateService;
         }
 
-    public async Task<GetAccountCourseTransactionsResponse> Handle(GetAccountCourseTransactionsQuery message)
+    public async Task<GetAccountCoursePaymentsResponse> Handle(GetAccountCoursePaymentsQuery message)
     {
             var validationResult = await _validator.ValidateAsync(message);
 
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCourseTr
                 }
             }
 
-            return new GetAccountCourseTransactionsResponse { Transactions = transactions };
+            return new GetAccountCoursePaymentsResponse { Transactions = transactions };
         }
     }
 }

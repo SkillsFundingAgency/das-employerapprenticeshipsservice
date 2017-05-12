@@ -1,9 +1,9 @@
 using System;
 using MediatR;
 
-namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCourseTransactions
+namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCoursePayments
 {
-    public class GetAccountCourseTransactionsQuery : IAsyncRequest<GetAccountCourseTransactionsResponse>
+    public class GetAccountCoursePaymentsQuery : IAsyncRequest<GetAccountCoursePaymentsResponse>
     {
         public long AccountId { get; set; }
         public long UkPrn { get; set; }

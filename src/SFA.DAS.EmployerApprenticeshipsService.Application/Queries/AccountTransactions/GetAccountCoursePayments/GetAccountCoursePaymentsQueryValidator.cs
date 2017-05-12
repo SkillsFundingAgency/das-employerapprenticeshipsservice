@@ -3,23 +3,23 @@ using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 
-namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCourseTransactions
+namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCoursePayments
 {
-    public class GetAccountCourseTransactionsQueryValidator : IValidator<GetAccountCourseTransactionsQuery>
+    public class GetAccountCoursePaymentsQueryValidator : IValidator<GetAccountCoursePaymentsQuery>
     {
         private readonly IMembershipRepository _membershipRepository;
 
-        public GetAccountCourseTransactionsQueryValidator(IMembershipRepository membershipRepository)
+        public GetAccountCoursePaymentsQueryValidator(IMembershipRepository membershipRepository)
         {
             _membershipRepository = membershipRepository;
         }
 
-        public ValidationResult Validate(GetAccountCourseTransactionsQuery item)
+        public ValidationResult Validate(GetAccountCoursePaymentsQuery item)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetAccountCourseTransactionsQuery item)
+        public async Task<ValidationResult> ValidateAsync(GetAccountCoursePaymentsQuery item)
         {
             var validationResult = new ValidationResult();
 
