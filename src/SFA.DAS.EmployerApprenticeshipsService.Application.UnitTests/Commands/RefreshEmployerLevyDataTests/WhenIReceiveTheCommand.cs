@@ -229,5 +229,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             _mediator.Verify(x => x.SendAsync(It.Is<PublishGenericEventCommand>(y => y.Event == expectedGenericEvents[0])), Times.Exactly(1));
             _mediator.Verify(x => x.SendAsync(It.Is<PublishGenericEventCommand>(y => y.Event == expectedGenericEvents[1])), Times.Exactly(1));
         }
+
+        [Test]
+        public async Task ThenIfThePayrollYearPreDatesTheLevyItIsNotProcessed()
+        {
+            //Arrange
+            var data = RefreshEmployerLevyDataCommandObjectMother.CreateLevyDataWithFutureSubmissions(ExpectedEmpRef, DateTime.Now);
+            _hmrcDateService.Setup(x => x.DoesSubmissionPreDateLevy(It.IsAny<string>(), It.IsAny<int>())).Returns(true);
+
+            //Act
+            await _refreshEmployerLevyDataCommandHandler.Handle(data);
+
+            //Assert
+            _levyRepository.Verify(x => x.CreateEmployerDeclaration(It.IsAny<DasDeclaration>(), It.IsAny<string>(), It.IsAny<long>()), Times.Never);
+        }
     }
 }

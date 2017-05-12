@@ -65,6 +65,10 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             
             return new DateTime(yearToUse,monthToUse,21);
         }
-       
+
+        public bool DoesSubmissionPreDateLevy(string payrollYear, int payrollMonth)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

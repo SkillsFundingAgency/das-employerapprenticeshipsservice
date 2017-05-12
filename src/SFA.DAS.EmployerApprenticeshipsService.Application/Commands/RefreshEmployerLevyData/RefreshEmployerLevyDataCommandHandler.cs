@@ -57,6 +57,12 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 
                     if (declaration == null)
                     {
+
+                        if (DoesSubmissionPreDateTheLevy(dasDeclaration))
+                        {
+                            continue;
+                        }
+
                         if (IsSubmissionForFuturePeriod(dasDeclaration))
                         {
                             continue;
@@ -83,6 +89,12 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
                 await _mediator.PublishAsync(new ProcessDeclarationsEvent());
                 await PublishDeclarationUpdatedEvents(message.AccountId, savedDeclarations);
             }
+        }
+
+        private bool DoesSubmissionPreDateTheLevy(DasDeclaration dasDeclaration)
+        {
+            return dasDeclaration.PayrollMonth.HasValue && _hmrcDateService.DoesSubmissionPreDateLevy(dasDeclaration.PayrollYear, dasDeclaration.PayrollMonth.Value);
+
         }
 
         private bool IsSubmissionForFuturePeriod(DasDeclaration dasDeclaration)
