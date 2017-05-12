@@ -71,7 +71,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     FromDate = fromDate,
                     ToDate = toDate,
                     ExternalUserId = externalUserId,
-                    UkPrn = ukPrn
                 });
 
                 var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.CourseStartDate });
