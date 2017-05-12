@@ -3,25 +3,30 @@ using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 
-namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
+namespace SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments
 {
-    public class GetAccountProviderTransactionsQueryValidator : IValidator<GetAccountProviderTransactionsQuery>
+    public class FindAccountProviderPaymentsQueryValidator : IValidator<FindAccountProviderPaymentsQuery>
     {
         private readonly IMembershipRepository _membershipRepository;
 
-        public GetAccountProviderTransactionsQueryValidator(IMembershipRepository membershipRepository)
+        public FindAccountProviderPaymentsQueryValidator(IMembershipRepository membershipRepository)
         {
             _membershipRepository = membershipRepository;
         }
 
-        public ValidationResult Validate(GetAccountProviderTransactionsQuery item)
+        public ValidationResult Validate(FindAccountProviderPaymentsQuery item)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetAccountProviderTransactionsQuery item)
+        public async Task<ValidationResult> ValidateAsync(FindAccountProviderPaymentsQuery item)
         {
             var result = new ValidationResult();
+
+            if (item.UkPrn == default(long))
+            {
+                result.AddError(nameof(item.UkPrn), "UkPrn has not been supplied");
+            }
 
             if (item.FromDate == DateTime.MinValue)
             {

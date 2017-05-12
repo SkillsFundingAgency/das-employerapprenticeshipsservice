@@ -4,8 +4,8 @@ using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application;
+using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
-using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -59,16 +59,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<ProviderPaymentsSummaryViewModel>> GetCoursePayments(
-            string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
+            string hashedId, DateTime fromDate, DateTime toDate, string externalUserId, long ukPrn)
         {
             try
             {
-                var data = await _mediator.SendAsync(new GetAccountProviderTransactionsQuery
+                var data = await _mediator.SendAsync(new FindAccountProviderPaymentsQuery
                 {
                     HashedAccountId = hashedId,
                     FromDate = fromDate,
                     ToDate = toDate,
-                    ExternalUserId = externalUserId
+                    ExternalUserId = externalUserId,
+                    UkPrn = ukPrn
                 });
 
                 var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.CourseStartDate });
@@ -130,13 +131,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<PaymentTransactionViewModel>> FindAccountPaymentTransactions(
-            string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
+            string hashedId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
         {
             try
             {
-                var data = await _mediator.SendAsync(new GetAccountProviderTransactionsQuery
+                var data = await _mediator.SendAsync(new FindAccountProviderPaymentsQuery
                 {
                     HashedAccountId = hashedId,
+                    UkPrn = ukprn,
                     FromDate = fromDate,
                     ToDate = toDate,
                     ExternalUserId = externalUserId
