@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return MapTransactions(result);
         }
 
-        public async Task<List<TransactionLine>> GetCourseTransactionByDateRange(string courseName, long accountId, DateTime fromDate, DateTime toDate)
+        public async Task<List<TransactionLine>> GetAccountCoursePaymentsByDateRange(long accountId, long ukprn, string courseName, DateTime fromDate, DateTime toDate)
         {
             var result = await WithConnection(async c =>
             {
