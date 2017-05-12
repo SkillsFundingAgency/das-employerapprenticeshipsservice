@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Web.Validators
     public class ApprovedApprenticeshipViewModelValidator : ApprenticeshipCoreValidator
     {
         public ApprovedApprenticeshipViewModelValidator()
-            : base(new WebApprenticeshipValidationText(), new CurrentDateTime())
+            : base(new WebApprenticeshipValidationText(), new CurrentDateTime(), new AcademicYear(new CurrentDateTime()))
         {
         }
 

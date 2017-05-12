@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +14,6 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired;
 using SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.Messaging;
@@ -26,6 +24,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
     public class WhenHandlingTheTask
     {
         private const int ExpectedAccountId = 123456;
+        private const string ExpectedPayeRef = "YHG/123LJH";
         private LevyDeclaration _levyDeclaration;
         private Mock<IPollingMessageReceiver> _pollingMessageReceiver;
         private Mock<IMediator> _mediator;
@@ -45,7 +44,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             _pollingMessageReceiver = new Mock<IPollingMessageReceiver>();
             _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>()).
                 ReturnsAsync(new FileSystemMessage<EmployerRefreshLevyQueueMessage>(stubDataFile, stubDataFile,
-                new EmployerRefreshLevyQueueMessage { AccountId = ExpectedAccountId })).Callback(() => { _cancellationTokenSource.Cancel(); });
+                new EmployerRefreshLevyQueueMessage { AccountId = ExpectedAccountId, PayeRef = ExpectedPayeRef})).Callback(() => { _cancellationTokenSource.Cancel(); });
 
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(new GetEmployerAccountQuery { AccountId = ExpectedAccountId })).ReturnsAsync(new GetEmployerAccountResponse());
@@ -57,7 +56,6 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             _mediator.Setup(x => x.SendAsync(It.IsAny<UpdateEnglishFractionsCommand>())).ReturnsAsync(Unit.Value);
 
             _dasAccountService = new Mock<IDasAccountService>();
-            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new PayeSchemes());
 
             _logger = new Mock<ILogger>();
 
@@ -74,17 +72,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             _pollingMessageReceiver.Verify(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>(), Times.Once);
         }
 
-
-        [Test]
-        public async Task ThenTheSchemesAreRetrunedFromTheService()
-        {
-            //Act
-            await _levyDeclaration.RunAsync(_cancellationTokenSource.Token);
-
-            //Assert
-            _dasAccountService.Verify(x => x.GetAccountSchemes(ExpectedAccountId), Times.Once);
-        }
-
+        
         [Test]
         public async Task ThenTheCommandIsNotCalledIfTheMessageIsEmpty()
         {
@@ -125,10 +113,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
         public async Task ThenWhenHmrcHaveUpdatedTheirEnglishFractionCalculationsIShouldUpdateTheLevyCalculations()
         {
             //Assign
-            var expectedAccessToken = "myaccesstoken";
-            var expectedEmpref = "123/fgh456";
-            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new PayeSchemes { SchemesList = new List<PayeScheme> { new PayeScheme { AccessToken = expectedAccessToken, AccountId = ExpectedAccountId, Id = 1, Ref = expectedEmpref, RefreshToken = "token" } } });
-            _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.EmpRef.Equals(expectedEmpref)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(expectedEmpref));
+            _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.EmpRef.Equals(ExpectedPayeRef)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(ExpectedPayeRef));
 
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEnglishFractionUpdateRequiredRequest>()))
@@ -143,25 +128,12 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<UpdateEnglishFractionsCommand>()), Times.Once);
         }
-
-        [Test]
-        public async Task ThenTheLevyCalculationShouldNotBeUpdateIfTheyAreTheLatest()
-        {
-            //Act
-            await _levyDeclaration.RunAsync(_cancellationTokenSource.Token);
-
-            //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<UpdateEnglishFractionsCommand>()), Times.Never);
-        }
-
+        
         [Test]
         public async Task ThenTheLastCalculationDateForEnglishFractionIsUpdatedIfItHasChanged()
         {
             //Arrange
-            var expectedAccessToken = "myaccesstoken";
-            var expectedEmpref = "123/fgh456";
-            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new PayeSchemes { SchemesList = new List<PayeScheme> { new PayeScheme { AccessToken = expectedAccessToken, AccountId = ExpectedAccountId, Id = 1, Ref = expectedEmpref, RefreshToken = "token" } } });
-            _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.EmpRef.Equals(expectedEmpref)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(expectedEmpref));
+            _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.EmpRef.Equals(ExpectedPayeRef)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(ExpectedPayeRef));
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEnglishFractionUpdateRequiredRequest>()))
                .ReturnsAsync(new GetEnglishFractionUpdateRequiredResponse
                {
@@ -194,9 +166,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             //Arrange
             ConfigurationManager.AppSettings["DeclarationsEnabled"] = "fractions";
             var expectedAccessToken = "myaccesstoken";
-            var expectedEmpref = "123/fgh456";
-            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new PayeSchemes { SchemesList = new List<PayeScheme> { new PayeScheme { AccessToken = expectedAccessToken, AccountId = ExpectedAccountId, Id = 1, Ref = expectedEmpref, RefreshToken = "token" } } });
-            _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.EmpRef.Equals(expectedEmpref)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(expectedEmpref));
+            _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.EmpRef.Equals(ExpectedPayeRef)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(ExpectedPayeRef));
 
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEnglishFractionUpdateRequiredRequest>()))
@@ -221,12 +191,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
         {
             //Arrange
             ConfigurationManager.AppSettings["DeclarationsEnabled"] = "declarations";
-            var expectedAccessToken = "myaccesstoken";
-            var expectedEmpref = "123/fgh456";
-            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new PayeSchemes { SchemesList = new List<PayeScheme> { new PayeScheme { AccessToken = expectedAccessToken, AccountId = ExpectedAccountId, Id = 1, Ref = expectedEmpref, RefreshToken = "token" } } });
-            _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.EmpRef.Equals(expectedEmpref)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(expectedEmpref));
-
-
+            _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.EmpRef.Equals(ExpectedPayeRef)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(ExpectedPayeRef));
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEnglishFractionUpdateRequiredRequest>()))
                .ReturnsAsync(new GetEnglishFractionUpdateRequiredResponse
                {
@@ -238,7 +203,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<UpdateEnglishFractionsCommand>()), Times.Never);
-            _dasAccountService.Verify(x => x.UpdatePayeScheme(expectedEmpref), Times.Never);
+            _dasAccountService.Verify(x => x.UpdatePayeScheme(ExpectedPayeRef), Times.Never);
             _mediator.Verify(x => x.SendAsync(It.IsAny<RefreshEmployerLevyDataCommand>()), Times.Once);
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetHMRCLevyDeclarationQuery>()), Times.Once);
 
@@ -249,12 +214,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
         public async Task ThenTheCallToUpdateExistingPayeInformationIsMadeForNewAndExistingSchemes(bool updateRequired)
         {
             //Arrange
-            var expectedAccessToken = "myaccesstoken";
-            var expectedEmpref = "123/fgh456";
-            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new PayeSchemes { SchemesList = new List<PayeScheme> { new PayeScheme { AccessToken = expectedAccessToken, AccountId = ExpectedAccountId, Id = 1, Ref = expectedEmpref, RefreshToken = "token" } } });
-            _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.EmpRef.Equals(expectedEmpref)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(expectedEmpref));
-
-
+            _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.EmpRef.Equals(ExpectedPayeRef)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(ExpectedPayeRef));
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEnglishFractionUpdateRequiredRequest>()))
                .ReturnsAsync(new GetEnglishFractionUpdateRequiredResponse
                {
@@ -265,7 +225,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             await _levyDeclaration.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
-            _dasAccountService.Verify(x => x.UpdatePayeScheme(expectedEmpref), Times.Once);
+            _dasAccountService.Verify(x => x.UpdatePayeScheme(ExpectedPayeRef), Times.Once);
         }
     }
 }

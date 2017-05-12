@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return result.Accounts;
         }
 
-        public async Task<ICollection<T>> GetTransactionDetailsByDateRange<T>(
+        public async Task<ICollection<T>> GetAccountProviderTransactionsByDateRange<T>(
             long accountId, DateTime fromDate, DateTime toDate, string externalUserId) where T : TransactionLine
         {
             var result = await _mediator.SendAsync(new GetAccountTransactionsByDateRangeQuery

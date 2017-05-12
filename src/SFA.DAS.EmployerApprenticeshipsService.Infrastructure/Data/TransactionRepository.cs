@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             _mapper = mapper;
         }
 
-        public async Task<List<TransactionLine>> GetTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
+        public async Task<List<TransactionLine>> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
         {
             var result = await WithConnection(async c =>
             {

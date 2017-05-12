@@ -20,9 +20,11 @@ left join
       ,Sum(Amount) as Amount
       ,UkPrn
       ,DateCreated
+	  ,SfaCoInvestmentAmount
+	  ,EmployerCoInvestmentAmount
   FROM [employer_financial].[TransactionLine]
   WHERE AccountId = @accountId AND DateCreated >= @fromDate AND DateCreated <= @toDate
-  GROUP BY DateCreated ,AccountId, UKPRN,[TransactionType]
+  GROUP BY DateCreated, AccountId, UKPRN, SfaCoInvestmentAmount, EmployerCoInvestmentAmount, [TransactionType]
   
 ) as main on main.AccountId = bal.AccountId
 order by DateCreated desc, TransactionType desc, ukprn desc

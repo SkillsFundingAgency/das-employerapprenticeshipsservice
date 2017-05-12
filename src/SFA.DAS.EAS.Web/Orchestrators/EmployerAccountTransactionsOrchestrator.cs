@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             try
             {
-                var data = await _mediator.SendAsync(new FindEmployerAccountPaymentTransactionsQuery
+                var data = await _mediator.SendAsync(new GetAccountProviderTransactionsQuery
                 {
                     HashedAccountId = hashedId,
                     FromDate = fromDate,
@@ -76,8 +76,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var coursePaymentSummaries = courseGroups.Select(x =>
                 {
                     var levyPayments = x.Where(p => p.TransactionType == TransactionItemType.Payment).ToList();
-                    var sfaCoInvestments = x.Where(p => p.TransactionType == TransactionItemType.SFACoInvestment).ToList();
-                    var employerCoInvestments = x.Where(p => p.TransactionType == TransactionItemType.EmployerCoInvestment).ToList();
 
                     return new CoursePaymentSummaryViewModel
                     {
@@ -85,8 +83,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         CourseLevel = x.Key.CourseLevel,
                         CourseStartDate = x.Key.CourseStartDate,
                         LevyPaymentAmount = levyPayments.Sum(p => p.LineAmount),
-                        SFACoInvestmentAmount = sfaCoInvestments.Sum(p => p.LineAmount),
-                        EmployerCoInvestmentAmount = employerCoInvestments.Sum(p => p.LineAmount)
+                        EmployerCoInvestmentAmount = levyPayments.Sum(p => p.EmployerCoInvestmentAmount),
+                        SFACoInvestmentAmount = levyPayments.Sum(p => p.SfaCoInvestmentAmount)
                     };
                 }).ToList();
 
@@ -136,7 +134,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             try
             {
-                var data = await _mediator.SendAsync(new FindEmployerAccountPaymentTransactionsQuery
+                var data = await _mediator.SendAsync(new GetAccountProviderTransactionsQuery
                 {
                     HashedAccountId = hashedId,
                     FromDate = fromDate,

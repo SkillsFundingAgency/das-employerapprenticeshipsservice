@@ -34,6 +34,19 @@
                     </p>
                 </div>
             }
+            else if (Model.Data.HasDataLockError)
+            {
+                <div class="panel panel-border-wide">
+                    <h3>
+                        IRL data mismatch
+                    </h3>
+                    <p>
+                        The apprentice's details are different in your organisation's ILR submission.
+                        This may result in a payment failure.
+                    </p>
+                        <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
+                </div>
+            }
 
             <h2 class="heading-medium visually-hidden">Apprentice status</h2>
             <table id="app-status" class="details-list">

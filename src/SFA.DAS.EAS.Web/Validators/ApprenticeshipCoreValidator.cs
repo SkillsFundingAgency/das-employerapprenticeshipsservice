@@ -14,11 +14,14 @@ namespace SFA.DAS.EAS.Web.Validators
         protected static readonly Func<string, int, bool> HaveNumberOfDigitsFewerThan = (str, length) => { return (str?.Count(char.IsDigit) ?? 0) < length; };
         private readonly IApprenticeshipValidationErrorText _validationText;
         private readonly ICurrentDateTime _currentDateTime;
+        private readonly IAcademicYear _academicYear;
 
-        public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime)
+        public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText,
+            ICurrentDateTime currentDateTime, IAcademicYear academicYear)
         {
             _validationText = validationText;
             _currentDateTime = currentDateTime;
+            _academicYear = academicYear;
 
             ValidateFirstName();
 
@@ -75,10 +78,8 @@ namespace SFA.DAS.EAS.Web.Validators
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .NotNull().WithMessage(_validationText.DateOfBirth01.Text).WithErrorCode(_validationText.DateOfBirth01.ErrorCode)
                 .Must(ValidateDateOfBirth).WithMessage(_validationText.DateOfBirth01.Text).WithErrorCode(_validationText.DateOfBirth01.ErrorCode)
-                .Must((apprenticship, dob) =>
-                {
-                    return WillApprenticeBeAtLeast15AtStartOfTraining(apprenticship, dob);
-                }).WithMessage(_validationText.DateOfBirth02.Text).WithErrorCode(_validationText.DateOfBirth02.ErrorCode);
+                .Must(WillApprenticeBeAtLeast15AtStartOfTraining).WithMessage(_validationText.DateOfBirth02.Text).WithErrorCode(_validationText.DateOfBirth02.ErrorCode)
+                .Must(WillApprenticeBeNoMoreThan115AtTheStartOfTheCurrentTeachingYear).WithMessage(_validationText.DateOfBirth06.Text).WithErrorCode(_validationText.DateOfBirth06.ErrorCode);
         }
 
         protected virtual void ValidateStartDate()
@@ -87,7 +88,8 @@ namespace SFA.DAS.EAS.Web.Validators
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .NotNull().WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
                 .Must(ValidateDateWithoutDay).WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
-                .Must(NotBeBeforeMay2017).WithMessage(_validationText.LearnStartDate02.Text).WithErrorCode(_validationText.LearnStartDate02.ErrorCode);
+                .Must(NotBeBeforeMay2017).WithMessage(_validationText.LearnStartDate02.Text).WithErrorCode(_validationText.LearnStartDate02.ErrorCode)
+                .Must(StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear).WithMessage(_validationText.LearnStartDate05.Text).WithErrorCode(_validationText.LearnStartDate05.ErrorCode);
         }
 
         protected virtual void ValidateEndDate()
@@ -129,6 +131,17 @@ namespace SFA.DAS.EAS.Web.Validators
             if (startDate < dobDate.Value.AddYears(age)) age--;
 
             return age >= 15;
+        }
+
+        private bool WillApprenticeBeNoMoreThan115AtTheStartOfTheCurrentTeachingYear(DateTimeViewModel dob)
+        {
+            var age = _academicYear.CurrentAcademicYearStartDate.Year - dob.DateTime.Value.Year;
+            return age <= 115;
+        }
+
+        private bool StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear(DateTimeViewModel startDate)
+        {
+            return startDate.DateTime.Value <= _academicYear.CurrentAcademicYearEndDate.AddYears(1);
         }
 
         private bool BeGreaterThenStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)

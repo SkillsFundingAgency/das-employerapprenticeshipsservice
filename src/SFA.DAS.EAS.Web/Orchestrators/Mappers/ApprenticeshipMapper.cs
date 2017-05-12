@@ -8,10 +8,10 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using System;
 using System.Collections.Generic;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Web.Extensions;
@@ -41,17 +41,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             _mediator = mediator;
         }
 
-        public ApprenticeshipDetailsViewModel MapToApprenticeshipDetailsViewModel(Apprenticeship apprenticeship, ApprenticeshipUpdate apprenticeshipUpdate)
+        public ApprenticeshipDetailsViewModel MapToApprenticeshipDetailsViewModel(Apprenticeship apprenticeship)
         {
-            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
-                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-
             var pendingChange = PendingChanges.None;
-            if (apprenticeshipUpdate?.Originator == Originator.Employer)
+            if (apprenticeship.PendingUpdateOriginator == Originator.Employer)
                 pendingChange = PendingChanges.WaitingForApproval;
-            if (apprenticeshipUpdate?.Originator == Originator.Provider)
+            if (apprenticeship.PendingUpdateOriginator == Originator.Provider)
                 pendingChange = PendingChanges.ReadyForApproval;
-
+            
             var statusText = MapPaymentStatus(apprenticeship.PaymentStatus, apprenticeship.StartDate);
 
             return new ApprenticeshipDetailsViewModel
@@ -67,12 +64,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 Status = statusText,
                 ProviderName = apprenticeship.ProviderName,
                 PendingChanges = pendingChange,
-                RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
+                Alert = MapRecordStatus(apprenticeship.PendingUpdateOriginator, apprenticeship.DataLockTriageStatus),
                 EmployerReference = apprenticeship.EmployerRef,
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 EnableEdit = pendingChange == PendingChanges.None
                             && new []{ PaymentStatus.Active, PaymentStatus.Paused,  }.Contains(apprenticeship.PaymentStatus),
-                CanEditStatus = !(new List<PaymentStatus> { PaymentStatus.Completed, PaymentStatus.Withdrawn }).Contains(apprenticeship.PaymentStatus)
+                CanEditStatus = !(new List<PaymentStatus> { PaymentStatus.Completed, PaymentStatus.Withdrawn }).Contains(apprenticeship.PaymentStatus),
+                HasDataLockError = apprenticeship.DataLockTriageStatus != null 
+                                && apprenticeship.DataLockTriageStatus == TriageStatus.Restart,
+                DataLockTriageStatus = apprenticeship.DataLockTriageStatus ?? TriageStatus.Unknown
             };
         }
         
@@ -240,7 +240,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             Func<string, string, string> changedOrNull = (a, edit) => 
                 a?.Trim() == edit?.Trim() ? null : edit;
 
-            var apprenticeshipDetailsViewModel = MapToApprenticeshipDetailsViewModel(original, null);
+            var apprenticeshipDetailsViewModel = MapToApprenticeshipDetailsViewModel(original);
             var model = new UpdateApprenticeshipViewModel
             {
                 FirstName = changedOrNull(original.FirstName, edited.FirstName),
@@ -255,7 +255,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 EndDate = original.EndDate == edited.EndDate.DateTime 
                     ? null
                     : edited.EndDate,
-                EmployerRef = changedOrNull(original.EmployerRef, edited.EmployerRef),
+                EmployerRef =  original.EmployerRef?.Trim() == edited.EmployerRef?.Trim()
+                            || (string.IsNullOrEmpty(original.EmployerRef)  && string.IsNullOrEmpty(edited.EmployerRef))
+                    ? null 
+                    : edited.EmployerRef ?? "",
                 OriginalApprenticeship = apprenticeshipDetailsViewModel
             };
 
@@ -293,13 +296,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 case PaymentStatus.PendingApproval:
                     return "Approval needed";
                 case PaymentStatus.Active:
-                    return waitingToStart ? "Waiting to start" : "On programme";
+                    return waitingToStart ? "Waiting to start" : "Live";
                 case PaymentStatus.Paused:
                     return "Paused";
                 case PaymentStatus.Withdrawn:
                     return "Stopped";
                 case PaymentStatus.Completed:
-                    return "Completed";
+                    return "Finished";
                 case PaymentStatus.Deleted:
                     return "Deleted";
                 default:
@@ -307,13 +310,29 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             }
         }
 
-        private string MapRecordStatus(Originator? pendingUpdateOriginator)
+        private string MapRecordStatus(Originator? pendingUpdateOriginator, TriageStatus? dataLockTriageStatus)
         {
-            if (pendingUpdateOriginator == null) return string.Empty;
+            var changeText = string.Empty;
+            var dataLockText = string.Empty;
 
-            return pendingUpdateOriginator == Originator.Employer
-                ? "Changes pending" 
-                : "Changes for review" ;
+            if (pendingUpdateOriginator != null)
+            {
+                changeText = pendingUpdateOriginator == Originator.Employer
+                    ? "Changes pending" 
+                    : "Changes for review" ;
+            }
+
+            if (dataLockTriageStatus != null)
+            {
+                switch (dataLockTriageStatus)
+                {
+                    case TriageStatus.Restart:
+                        dataLockText = "Changes requested";
+                        break;
+                }
+            }
+
+            return !string.IsNullOrEmpty(dataLockText) ? dataLockText : changeText;
         }
     }
 }

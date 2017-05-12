@@ -91,12 +91,12 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
                 var notificationCommand = BuildNotificationCommand(
                     email,
                     commitment,
-                    message.LastAction);
+                    message.LastAction, message.UserDisplayName);
                 await _mediator.SendAsync(notificationCommand);
             }
         }
 
-        private SendNotificationCommand BuildNotificationCommand(string email, CommitmentView commitment, LastAction action)
+        private SendNotificationCommand BuildNotificationCommand(string email, CommitmentView commitment, LastAction action, string userDisplayName)
         {
             return new SendNotificationCommand
             {
@@ -109,7 +109,8 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
                     SystemId = "x",
                     Tokens = new Dictionary<string, string> {
                         { "type", action == LastAction.Approve ? "approval" : "review" },
-                        { "cohort_reference", commitment.Reference }
+                        { "cohort_reference", commitment.Reference },
+                        { "first_name",  userDisplayName}
                     }
                 }
             };
