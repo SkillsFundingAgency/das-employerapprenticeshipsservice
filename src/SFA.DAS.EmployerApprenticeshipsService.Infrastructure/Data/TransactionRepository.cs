@@ -128,8 +128,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                         break;
 
                     case TransactionItemType.Payment:
-                    case TransactionItemType.SFACoInvestment:
-                    case TransactionItemType.EmployerCoInvestment:
                         transactions.Add(_mapper.Map<PaymentTransactionLine>(entity));
                         break;
 
