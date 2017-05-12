@@ -10,12 +10,16 @@ namespace SFA.DAS.EAS.Domain.Interfaces
     public interface IDasLevyService
     {
         Task<ICollection<TransactionLine>> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
+        
+        Task<ICollection<T>> GetAccountProviderPaymentsByDateRange<T>(
+            long accountId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
+            where T : TransactionLine;
 
-        Task<ICollection<AccountBalance>> GetAllAccountBalances();
-
-        Task<ICollection<T>> GetAccountProviderTransactionsByDateRange<T>(
+        Task<ICollection<T>> GetAccountLevyTransactionsByDateRange<T>(
             long accountId, DateTime fromDate, DateTime toDate, string externalUserId)
             where T : TransactionLine;
+
+        Task<ICollection<AccountBalance>> GetAllAccountBalances();
 
         Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef);
 

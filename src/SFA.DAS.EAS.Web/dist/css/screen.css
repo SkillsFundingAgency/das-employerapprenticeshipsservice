@@ -2326,6 +2326,10 @@ main, .header-inner {
   }
 }
 
+.hgroup {
+  margin-bottom: 40px;
+}
+
 aside.sidebar {
   font-size: 14px;
 }
@@ -3677,12 +3681,12 @@ table.responsive tr.total {
   }
 }
 
-.panel p {
+.panel p, .panel li {
   font-size: 14px;
 }
 
 @media (min-width: 641px) {
-  .panel p {
+  .panel p, .panel li {
     font-size: 16px;
   }
 }

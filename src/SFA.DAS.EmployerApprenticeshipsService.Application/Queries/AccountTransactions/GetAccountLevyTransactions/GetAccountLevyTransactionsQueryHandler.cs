@@ -4,32 +4,33 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail
+namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTransactions
 {
-    public class GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler : IAsyncRequestHandler<GetAccountTransactionsByDateRangeQuery,GetAccountLevyDeclationTransactionsByDateRangeResponse>
+    public class GetAccountLevyTransactionsQueryHandler : IAsyncRequestHandler<GetAccountLevyTransactionsQuery, GetAccountLevyTransactionsResponse>
     {
-        private readonly IValidator<GetAccountTransactionsByDateRangeQuery> _validator;
+        private readonly IValidator<GetAccountLevyTransactionsQuery> _validator;
         private readonly ITransactionRepository _transactionRepository;
         private readonly IHmrcDateService _hmrcDateService;
-
-
-        public GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler(IValidator<GetAccountTransactionsByDateRangeQuery> validator, ITransactionRepository transactionRepository, IHmrcDateService hmrcDateService)
+        
+        public GetAccountLevyTransactionsQueryHandler(IValidator<GetAccountLevyTransactionsQuery> validator, ITransactionRepository transactionRepository, IHmrcDateService hmrcDateService)
         {
             _validator = validator;
             _transactionRepository = transactionRepository;
             _hmrcDateService = hmrcDateService;
         }
 
-        public async Task<GetAccountLevyDeclationTransactionsByDateRangeResponse> Handle(GetAccountTransactionsByDateRangeQuery message)
-        {
+    public async Task<GetAccountLevyTransactionsResponse> Handle(GetAccountLevyTransactionsQuery message)
+    {
             var validationResult = await _validator.ValidateAsync(message);
-            
+
             if (!validationResult.IsValid())
             {
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var transactions = await _transactionRepository.GetTransactionDetailsByDateRange(message.AccountId, message.FromDate,
+            var transactions = await _transactionRepository.GetAccountLevyTransactionsByDateRange(
+                message.AccountId,
+                message.FromDate,
                 message.ToDate);
 
             foreach (var transaction in transactions)
@@ -40,7 +41,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
                 }
             }
 
-            return new GetAccountLevyDeclationTransactionsByDateRangeResponse { Transactions = transactions };
+            return new GetAccountLevyTransactionsResponse { Transactions = transactions };
         }
     }
 }
