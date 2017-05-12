@@ -255,7 +255,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 EndDate = original.EndDate == edited.EndDate.DateTime 
                     ? null
                     : edited.EndDate,
-                EmployerRef = changedOrNull(original.EmployerRef, edited.EmployerRef),
+                EmployerRef =  original.EmployerRef?.Trim() == edited.EmployerRef?.Trim()
+                            || (string.IsNullOrEmpty(original.EmployerRef)  && string.IsNullOrEmpty(edited.EmployerRef))
+                    ? null 
+                    : edited.EmployerRef ?? "",
                 OriginalApprenticeship = apprenticeshipDetailsViewModel
             };
 
@@ -293,13 +296,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 case PaymentStatus.PendingApproval:
                     return "Approval needed";
                 case PaymentStatus.Active:
-                    return waitingToStart ? "Waiting to start" : "On programme";
+                    return waitingToStart ? "Waiting to start" : "Live";
                 case PaymentStatus.Paused:
                     return "Paused";
                 case PaymentStatus.Withdrawn:
                     return "Stopped";
                 case PaymentStatus.Completed:
-                    return "Completed";
+                    return "Finished";
                 case PaymentStatus.Deleted:
                     return "Deleted";
                 default:

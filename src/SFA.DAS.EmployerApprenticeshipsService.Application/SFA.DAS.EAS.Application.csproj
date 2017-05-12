@@ -305,10 +305,10 @@
     <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountRequestHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountRequestValidator.cs" />
     <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountResponse.cs" />
-    <Compile Include="Queries\FindEmployerAccountPaymentTransactions\FindEmployerAccountPaymentTransactionsHandler.cs" />
-    <Compile Include="Queries\FindEmployerAccountPaymentTransactions\FindEmployerAccountPaymentTransactionsQuery.cs" />
-    <Compile Include="Queries\FindEmployerAccountPaymentTransactions\FindEmployerAccountPaymentTransactionsQueryValidator.cs" />
-    <Compile Include="Queries\FindEmployerAccountPaymentTransactions\FindEmployerAccountPaymentTransactionsResponse.cs" />
+    <Compile Include="Queries\FindEmployerAccountPaymentTransactions\GetAccountProviderTransactionsHandler.cs" />
+    <Compile Include="Queries\FindEmployerAccountPaymentTransactions\GetAccountProviderTransactionsQuery.cs" />
+    <Compile Include="Queries\FindEmployerAccountPaymentTransactions\GetAccountProviderTransactionsQueryValidator.cs" />
+    <Compile Include="Queries\FindEmployerAccountPaymentTransactions\GetAccountProviderTransactionsResponse.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsQueryHandler.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsResponse.cs" />

@@ -196,7 +196,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var flashmessage = new FlashMessageViewModel
             {
-                Message = model.ChangeType.Value == ChangeStatusType.Resume ? "Apprentice resumed." : "Apprentice stopped.",
+                Message = GetStatusMessage(model.ChangeType),
                 Severity = FlashMessageSeverityLevel.Okay
             };
 
@@ -308,9 +308,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             await _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
                     OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
+            var approvalMsg = NeedReapproval(apprenticeship)
+                ? "Your training provider needs to approve these changes."
+                : string.Empty;
+
             var flashmessage = new FlashMessageViewModel
             {
-                Message = $"You suggested changes to the record for {orginalApp.Data.FirstName} {orginalApp.Data.LastName}. Your training provider needs to approve these changes.",
+                Message = $"You suggested changes to the record for {orginalApp.Data.FirstName} {orginalApp.Data.LastName}. {approvalMsg}",
                 Severity = FlashMessageSeverityLevel.Okay
             };
 
@@ -411,7 +415,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 || data.StartDate != null
                 || data.EndDate != null
                 || data.Cost != null
-                || !string.IsNullOrEmpty(data.EmployerRef);
+                || data.EmployerRef != null;
         }
 
         private async Task<bool> IsUserRoleAuthorized(string hashedAccountId, params Role[] roles)
@@ -440,6 +444,35 @@ namespace SFA.DAS.EAS.Web.Controllers
                 ErrorMessages = errorDictionary,
                 Severity = FlashMessageSeverityLevel.Error
             };
+        }
+
+        private static string GetStatusMessage(ChangeStatusType? model)
+        {
+            if (model == null) return "";
+            switch (model.Value)
+            {
+                case ChangeStatusType.Pause:
+                    return "Apprentice paused.";
+                case ChangeStatusType.Stop:
+                    return "Apprentice stopped.";
+                case ChangeStatusType.Resume:
+                case ChangeStatusType.None:
+                    return "Apprentice resumed.";
+            }
+            return string.Empty;    
+        }
+        
+        private bool NeedReapproval(UpdateApprenticeshipViewModel model)
+        {
+            return
+                   !string.IsNullOrEmpty(model.FirstName)
+                || !string.IsNullOrEmpty(model.LastName)
+                || model.DateOfBirth?.DateTime != null
+                || !string.IsNullOrEmpty(model.TrainingCode)
+                || model.StartDate?.DateTime != null
+                || model.EndDate?.DateTime != null
+                || !string.IsNullOrEmpty(model.Cost)
+                ;
         }
     }
 }

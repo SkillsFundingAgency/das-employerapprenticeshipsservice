@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Domain.Interfaces
 
         Task<ICollection<AccountBalance>> GetAllAccountBalances();
 
-        Task<ICollection<T>> GetTransactionDetailsByDateRange<T>(
+        Task<ICollection<T>> GetAccountProviderTransactionsByDateRange<T>(
             long accountId, DateTime fromDate, DateTime toDate, string externalUserId)
             where T : TransactionLine;
 

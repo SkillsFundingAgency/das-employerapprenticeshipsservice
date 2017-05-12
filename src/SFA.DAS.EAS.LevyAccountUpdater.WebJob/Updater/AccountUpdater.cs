@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,16 +18,17 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater
         private readonly IEmployerAccountRepository _accountRepository;
         private readonly IMessagePublisher _messagePublisher;
         private readonly ILogger _logger;
+        private readonly IEmployerSchemesRepository _employerSchemesRepository;
 
         [QueueName]
         public string get_employer_levy { get; set; }
 
-        public AccountUpdater(IEmployerAccountRepository accountRepository, IMessagePublisher messagePublisher,
-            ILogger logger)
+        public AccountUpdater(IEmployerAccountRepository accountRepository, IMessagePublisher messagePublisher, ILogger logger, IEmployerSchemesRepository employerSchemesRepository)
         {
             _accountRepository = accountRepository;
             _messagePublisher = messagePublisher;
             _logger = logger;
+            _employerSchemesRepository = employerSchemesRepository;
         }
 
         public async Task RunUpdate()
@@ -41,13 +43,24 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater
 
                 _logger.Debug($"{ServiceName}: Updating {employerAccounts.Count} levy accounts");
 
-                var tasks = employerAccounts.Select(
-                    x =>
-                    {
-                        _logger.Trace($"{ServiceName}: Creating update levy account message for account {x.Name} (ID: {x.Id})");
-                        return _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage {AccountId = x.Id});
-                    }).ToArray();
+                var tasks = new List<Task>();
 
+                foreach (var account in employerAccounts)
+                {
+                    var schemes = await _employerSchemesRepository.GetSchemesByEmployerId(account.Id);
+
+                    if (schemes?.SchemesList == null)
+                    {
+                        continue;
+                    }
+
+                    foreach (var scheme in schemes.SchemesList)
+                    {
+                        _logger.Trace($"{ServiceName}: Creating update levy account message for account {account.Name} (ID: {account.Id}) scheme {scheme.Ref}");
+                        tasks.Add(_messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage { AccountId = account.Id, PayeRef = scheme.Ref}));
+                    }
+                }
+                
                 await Task.WhenAll(tasks);
 
                 _logger.Info($"{ServiceName}: update schedule completed in {timer.Elapsed:g} (hh:mm:ss:ms)");

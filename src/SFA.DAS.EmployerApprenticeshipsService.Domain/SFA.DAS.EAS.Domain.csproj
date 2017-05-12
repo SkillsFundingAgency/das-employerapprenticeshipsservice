@@ -142,7 +142,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\EmployerApprenticeshipApiConfiguration.cs" />
+    <Compile Include="Data\Repositories\ITransactionRepository.cs" />
     <Compile Include="Http\InternalServerErrorException.cs" />
+    <Compile Include="Interfaces\IAcademicYear.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
     <Compile Include="Interfaces\ICurrentDateTime.cs" />
     <Compile Include="Http\HttpException.cs" />

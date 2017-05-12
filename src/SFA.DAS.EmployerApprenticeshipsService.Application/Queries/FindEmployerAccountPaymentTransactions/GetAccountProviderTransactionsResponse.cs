@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Domain.Models.Payments;
 
 namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
 {
-    public class FindEmployerAccountPaymentTransactionsResponse
+    public class GetAccountProviderTransactionsResponse
     {
         public string ProviderName { get; set; }
         public DateTime TransactionDate { get; set; }

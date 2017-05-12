@@ -4576,7 +4576,7 @@ table .float-right, h2 .float-right {
 }
 
 .hr-bottom {
-  margin-top: 22px;
+  margin-top: 20px;
 }
 
 #add-apprentice-entry hr,
@@ -4648,7 +4648,8 @@ table .float-right, h2 .float-right {
 
 #apprentice-details .finishEditingBtn {
   float: none;
-  margin-bottom: 20px;
+  margin-bottom: 3px;
+  margin-right: 10px;
 }
 
 .form-group #StartDate_Month,
@@ -4923,6 +4924,34 @@ body input::-webkit-contacts-auto-fill-button {
 
 h2 .float-right {
   font-size: 19px;
+}
+
+@media (min-width: 641px) {
+  #review-cohorts .column-one-third {
+    height: 190px;
+  }
+}
+
+@media (min-width: 641px) {
+  #review-cohorts .all-apps h2.bold-xlarge {
+    font-size: 80px;
+  }
+}
+
+@media (min-width: 641px) {
+  #review-cohorts .incomplete-apps h2.bold-xlarge {
+    font-size: 80px;
+  }
+}
+
+.purple-border {
+  border: 5px solid #2e358b;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.total-cost .bold-xlarge {
+  font-size: 38px;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

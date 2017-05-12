@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
 
@@ -57,12 +58,83 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
+        public async Task<OrchestratorResponse<ProviderPaymentsSummaryViewModel>> GetCoursePayments(
+            string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
+        {
+            try
+            {
+                var data = await _mediator.SendAsync(new GetAccountProviderTransactionsQuery
+                {
+                    HashedAccountId = hashedId,
+                    FromDate = fromDate,
+                    ToDate = toDate,
+                    ExternalUserId = externalUserId
+                });
+
+                var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.CourseStartDate });
+
+                var coursePaymentSummaries = courseGroups.Select(x =>
+                {
+                    var levyPayments = x.Where(p => p.TransactionType == TransactionItemType.Payment).ToList();
+
+                    return new CoursePaymentSummaryViewModel
+                    {
+                        CourseName = x.Key.CourseName,
+                        CourseLevel = x.Key.CourseLevel,
+                        CourseStartDate = x.Key.CourseStartDate,
+                        LevyPaymentAmount = levyPayments.Sum(p => p.LineAmount),
+                        EmployerCoInvestmentAmount = levyPayments.Sum(p => p.EmployerCoInvestmentAmount),
+                        SFACoInvestmentAmount = levyPayments.Sum(p => p.SfaCoInvestmentAmount)
+                    };
+                }).ToList();
+
+                return new OrchestratorResponse<ProviderPaymentsSummaryViewModel>
+                {
+                    Status = HttpStatusCode.OK,
+                    Data = new ProviderPaymentsSummaryViewModel
+                    {
+                        ProviderName = data.ProviderName,
+                        PaymentDate = data.TransactionDate,
+                        CoursePayments = coursePaymentSummaries,
+                        LevyPaymentsTotal = coursePaymentSummaries.Sum(p => p.LevyPaymentAmount),
+                        SFACoInvestmentsTotal = coursePaymentSummaries.Sum(p => p.SFACoInvestmentAmount),
+                        EmployerCoInvestmentsTotal = coursePaymentSummaries.Sum(p => p.EmployerCoInvestmentAmount),
+                        PaymentsTotal = coursePaymentSummaries.Sum(p => p.TotalAmount)
+                    }
+                };
+            }
+            catch (NotFoundException e)
+            {
+                return new OrchestratorResponse<ProviderPaymentsSummaryViewModel>
+                {
+                    Status = HttpStatusCode.NotFound,
+                    Exception = e
+                };
+            }
+            catch (InvalidRequestException e)
+            {
+                return new OrchestratorResponse<ProviderPaymentsSummaryViewModel>
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = e
+                };
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                return new OrchestratorResponse<ProviderPaymentsSummaryViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = e
+                };
+            }
+        }
+
         public async Task<OrchestratorResponse<PaymentTransactionViewModel>> FindAccountPaymentTransactions(
             string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
         {
             try
             {
-                var data = await _mediator.SendAsync(new FindEmployerAccountPaymentTransactionsQuery
+                var data = await _mediator.SendAsync(new GetAccountProviderTransactionsQuery
                 {
                     HashedAccountId = hashedId,
                     FromDate = fromDate,

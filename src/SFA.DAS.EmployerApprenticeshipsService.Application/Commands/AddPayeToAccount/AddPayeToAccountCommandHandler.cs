@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
             await AddAuditEntry(message, accountId);
 
-            await RefreshLevy(accountId);
+            await RefreshLevy(accountId, message.Empref);
 
             await NotifyPayeSchemeAdded(message.HashedAccountId, message.Empref);
         }
@@ -100,12 +100,13 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             await _mediator.SendAsync(new PublishGenericEventCommand {Event = genericEvent});
         }
 
-        private async Task RefreshLevy(long accountId)
+        private async Task RefreshLevy(long accountId, string payeRef)
         {
             await _messagePublisher.PublishAsync(
                 new EmployerRefreshLevyQueueMessage
                 {
-                    AccountId = accountId
+                    AccountId = accountId,
+                    PayeRef = payeRef
                 });
         }
 
