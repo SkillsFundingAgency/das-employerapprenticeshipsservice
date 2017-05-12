@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<ProviderPaymentsSummaryViewModel>> GetCoursePayments(
-            string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
+            string hashedId, DateTime fromDate, DateTime toDate, string externalUserId, long ukPrn)
         {
             try
             {
@@ -68,7 +68,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = hashedId,
                     FromDate = fromDate,
                     ToDate = toDate,
-                    ExternalUserId = externalUserId
+                    ExternalUserId = externalUserId,
+                    UkPrn = ukPrn
                 });
 
                 var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.CourseStartDate });

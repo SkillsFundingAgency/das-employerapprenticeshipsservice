@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -19,6 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
     {
         private const string HashedAccountId = "123ABC";
         private const string ExternalUser = "Test user";
+        private const long ExpectedUkPrn = 46789465;
         private readonly DateTime _fromDate = DateTime.Now.AddDays(-20);
         private readonly DateTime _toDate = DateTime.Now.AddDays(-20);
 
@@ -44,12 +46,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 }
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindAccountProviderPaymentsQuery>()))
-                .ReturnsAsync(_response);
+            _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
             _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object);
         }
 
+        
         [Test]
         public async Task ThenIShouldGetTotalsByCourseForLevyPayments()
         {
@@ -65,12 +67,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 Total = expectedTotal,
                 Transactions = new List<PaymentTransactionLine> { payment1, payment2 }
             };
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindAccountProviderPaymentsQuery>()))
-                .ReturnsAsync(_response);
+            _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser);
+            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser, ExpectedUkPrn);
 
             //Assert
             Assert.AreEqual(expectedTotal, result.Data.CoursePayments.First().LevyPaymentAmount);
@@ -91,12 +91,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 Total = expectedTotal,
                 Transactions = new List<PaymentTransactionLine> { payment1, payment2 }
             };
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindAccountProviderPaymentsQuery>()))
-                .ReturnsAsync(_response);
+            _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser);
+            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser, ExpectedUkPrn);
 
             //Assert
             Assert.AreEqual(expectedTotal, result.Data.CoursePayments.First().SFACoInvestmentAmount);
@@ -117,12 +115,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 Total = expectedTotal,
                 Transactions = new List<PaymentTransactionLine> { payment1, payment2 }
             };
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindAccountProviderPaymentsQuery>()))
-                .ReturnsAsync(_response);
+            _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser);
+            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser, ExpectedUkPrn);
 
             //Assert
             Assert.AreEqual(expectedTotal, result.Data.CoursePayments.First().EmployerCoInvestmentAmount);
@@ -150,12 +146,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 Total = expectedTotal,
                 Transactions = new List<PaymentTransactionLine> { payment }
             };
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindAccountProviderPaymentsQuery>()))
-                .ReturnsAsync(_response);
+            _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser);
+            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser, ExpectedUkPrn);
 
             //Assert
             Assert.AreEqual(expectedTotal, result.Data.CoursePayments.First().TotalAmount);
@@ -200,12 +194,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 Total = expectedPaymentsTotal,
                 Transactions = new List<PaymentTransactionLine> { payment1, payment2 }
             };
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<FindAccountProviderPaymentsQuery>()))
-                .ReturnsAsync(_response);
+            _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser);
+            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser, ExpectedUkPrn);
 
             //Assert
             Assert.AreEqual(expectedLevyPaymentsTotal, result.Data.LevyPaymentsTotal);
@@ -213,26 +205,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             Assert.AreEqual(expectedEmployerCoInvestmentTotal, result.Data.EmployerCoInvestmentsTotal);
             Assert.AreEqual(expectedPaymentsTotal, result.Data.PaymentsTotal);
         }
-
-        [Test]
-        public async Task ThenARequestShouldBeMadeForPaymentDetails()
-        {
-            //Arrange
-            const long ukprn = 10;
-
-            //Act
-            await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, ukprn, _fromDate, _toDate,
-                ExternalUser);
-
-            //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<FindAccountProviderPaymentsQuery>(
-                q => q.HashedAccountId.Equals(HashedAccountId) &&
-                     q.UkPrn.Equals(ukprn) &&
-                     q.FromDate.Equals(_fromDate) &&
-                     q.ToDate.Equals(_toDate) &&
-                     q.ExternalUserId.Equals(ExternalUser))));
-        }
-
+        
         [Test]
         public async Task ThenIfNoTransactionsAreFoundANotFoundStatusIsReturned()
         {
@@ -277,5 +250,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
         }
+
+        private Expression<Func<IMediator, Task<FindAccountProviderPaymentsResponse>>> AssertExpressionValidation()
+        {
+            return x => x.SendAsync(It.Is<FindAccountProviderPaymentsQuery>(c => c.ExternalUserId.Equals(ExternalUser)
+                                                                                 && c.FromDate.Equals(_fromDate)
+                                                                                 && c.ToDate.Equals(_toDate)
+                                                                                 && c.HashedAccountId.Equals(HashedAccountId)
+                                                                                 && c.UkPrn.Equals(ExpectedUkPrn)));
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using SFA.DAS.EAS.Domain.Models.Payments
 @using SFA.DAS.EAS.Domain.Models.Transaction
 @using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.TransactionViewResultViewModel>
@@ -35,14 +36,17 @@
                     <dl>
                         <dt>Current funds</dt>
                         @{
-                            var balance = @Model.Data.Model.CurrentBalance.ToString("C0", culture);
+                            var balance = Model.Data.Model.CurrentBalance.ToString("C0", culture);
                             var balanceClass = string.Empty;
 
                             if (balance.Length > 8)
+                            {
                                 balanceClass = "long";
-
+                            }
                             if (balance.Length > 10)
+                            {
                                 balanceClass = "longer";
+                            }
 
                         }
                         <dd class="@balanceClass">@balance</dd>
@@ -104,7 +108,9 @@
                             }
                             else if (aggregationLine.TransactionType == TransactionItemType.Payment)
                             {
-                                <a title="View details for the transaction on @date" href="@Url.Action("PaymentDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
+                                var paymentTransaction = aggregationLine as PaymentTransactionLine;
+                                
+                                <a title="View details for the transaction on @date" href="@Url.Action("PaymentDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate = fromDate,toDate = toDate, ukPrn =  paymentTransaction.UkPrn})">
                                     Details <span class="vh"> for the transaction on @date</span>
                                     
                                 </a>
