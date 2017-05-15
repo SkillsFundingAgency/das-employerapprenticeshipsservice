@@ -2,6 +2,7 @@
 	@accountId BIGINT,
 	@ukprn BIGINT,
 	@courseName NVARCHAR(MAX),
+	@courseLevel INT,
 	@fromDate DATETIME,
 	@toDate DATETIME
 AS
@@ -35,4 +36,5 @@ where   tl.DateCreated >= @fromDate AND
         tl.DateCreated <= @toDate AND 
         tl.AccountId = @accountId AND
 		p.Ukprn = @ukprn AND
-		meta.ApprenticeshipCourseName = @courseName
+		meta.ApprenticeshipCourseName = @courseName AND
+		meta.ApprenticeshipCourseLevel = @courseLevel

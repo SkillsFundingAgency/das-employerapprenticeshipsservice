@@ -15,7 +15,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
 
         public EmployerAccountTransactionsController(IOwinWrapper owinWrapper, IFeatureToggle featureToggle, 
-            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage) 
+            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService,
+            ICookieStorageService<FlashMessageViewModel> flashMessage) 
             : base(owinWrapper, featureToggle,multiVariantTestingService,flashMessage)
         {
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
@@ -59,11 +60,15 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [Route("balance/course/summary")]
-        public async Task<ActionResult> CoursePaymentSummary(string hashedAccountId, long ukprn, string courseName, DateTime fromDate, DateTime toDate)
+        public async Task<ActionResult> CoursePaymentSummary(string hashedAccountId, long ukprn, string courseName, 
+            int courseLevel, DateTime fromDate, DateTime toDate)
         {
-            var viewModel = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(hashedAccountId, ukprn, courseName, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
+            var viewModel = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(
+                                                                        hashedAccountId, ukprn, courseName, courseLevel, 
+                                                                        fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
 
             return View("CoursePaymentSummary", viewModel);
         }
+
     }
 }

@@ -32,6 +32,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCoursePa
                 message.AccountId,
                 message.UkPrn,
                 message.CourseName,
+                message.CourseLevel,
                 message.FromDate,
                 message.ToDate);
 

@@ -263,9 +263,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
             };
         }
-
+        
         public virtual async Task<OrchestratorResponse<CoursePaymentDetailsViewModel>> GetCoursePaymentSummary(
-            string hashedAccountId, long ukprn, string courseName, DateTime fromDate, DateTime toDate, string externalUserId)
+            string hashedAccountId, long ukprn, string courseName, int courseLevel,
+            DateTime fromDate, DateTime toDate, string externalUserId)
         {
             try
             {
@@ -274,12 +275,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     UkPrn = ukprn,
                     CourseName = courseName,
+                    CourseLevel = courseLevel,
                     FromDate = fromDate,
                     ToDate = toDate,
                     ExternalUserId = externalUserId
                 });
 
-                var apprenticePaymentGroups = data.Transactions.GroupBy(x => new {x.ApprenticeName, x.ApprenticeNINumber});
+                var apprenticePaymentGroups = data.Transactions.GroupBy(x => new { x.ApprenticeName, x.ApprenticeNINumber });
 
                 var paymentSummaries = apprenticePaymentGroups.Select(pg =>
                 {
@@ -296,7 +298,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         EmployerCoInvestmentAmount = payments.Sum(p => p.EmployerCoInvestmentAmount)
                     };
                 });
-                
+
                 return new OrchestratorResponse<CoursePaymentDetailsViewModel>
                 {
                     Status = HttpStatusCode.OK,

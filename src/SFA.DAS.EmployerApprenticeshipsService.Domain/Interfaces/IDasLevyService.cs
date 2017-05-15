@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Domain.Interfaces
             where T : TransactionLine;
 
         Task<ICollection<T>> GetAccountCoursePaymentsByDateRange<T>(
-            long accountId, long ukprn, string courseName, DateTime fromDate, DateTime toDate, string externalUserId)
+            long accountId, long ukprn, string courseName, int courseLevel, DateTime fromDate, DateTime toDate, string externalUserId)
             where T : TransactionLine;
 
         Task<ICollection<AccountBalance>> GetAllAccountBalances();
