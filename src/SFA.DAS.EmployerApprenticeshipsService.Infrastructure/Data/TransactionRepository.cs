@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@ukprn", ukprn, DbType.Int64);
                 parameters.Add("@courseName", courseName, DbType.String);
-                parameters.Add("@courseLevel", courseName, DbType.Int32);
+                parameters.Add("@courseLevel", courseLevel, DbType.Int32);
                 parameters.Add("@fromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day), DbType.DateTime);
                 parameters.Add("@toDate", new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59), DbType.DateTime);
 

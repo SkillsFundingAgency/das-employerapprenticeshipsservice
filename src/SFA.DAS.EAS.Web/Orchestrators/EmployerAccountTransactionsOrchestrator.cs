@@ -299,6 +299,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     };
                 });
 
+                var apprenticePayments = paymentSummaries.ToList();
+
                 return new OrchestratorResponse<CoursePaymentDetailsViewModel>
                 {
                     Status = HttpStatusCode.OK,
@@ -307,7 +309,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         ProviderName = data.ProviderName,
                         CourseName = data.CourseName,
                         PaymentDate = data.TransactionDate,
-                        ApprenticePayments = paymentSummaries.ToList()
+                        LevyPaymentsTotal = apprenticePayments.Sum(p => p.LevyPaymentAmount),
+                        SFACoInvestmentTotal = apprenticePayments.Sum(p => p.SFACoInvestmentAmount),
+                        EmployerCoInvestmentTotal = apprenticePayments.Sum(p => p.EmployerCoInvestmentAmount),
+                        ApprenticePayments = apprenticePayments
                     }
                 };
             }
