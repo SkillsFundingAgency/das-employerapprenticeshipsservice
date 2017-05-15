@@ -53,7 +53,25 @@ $warning-colour:    $orange;
 
 .notification-wrapper {
     .error-summary, .info-summary, .success-summary, .warning-summary {
-        margin-bottom: 0;
+        margin-bottom: 30px;
+        @include media(tablet) {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.error-summary:not(.validation-summary-max-funding) {
+    h1 {
+        display: none;
+        & + p {
+            display: none;
+        }
+    }
+}
+
+.error-summary-standalone {
+    .error-summary {
+        margin-bottom: 0
     }
 }
 
@@ -65,7 +83,6 @@ $warning-colour:    $orange;
 // Info notification styles
 .info-summary {
   border-color:$info-colour;
-
   .info-summary-list {
     a {
       color: $info-colour;
@@ -79,7 +96,6 @@ $warning-colour:    $orange;
 // Success notification styles
 .success-summary {
   border-color:$success-colour;
-
   .success-summary-list {
     a {
       color: $success-colour;
@@ -93,7 +109,6 @@ $warning-colour:    $orange;
 // Warning notification styles
 .warning-summary {
   border-color:$warning-colour;
-
   .warning-summary-list {
     a {
       color: $warning-colour;

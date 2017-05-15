@@ -2546,6 +2546,19 @@ a#link-settings:focus {
 }
 
 .notification-wrapper .error-summary, .notification-wrapper .info-summary, .notification-wrapper .success-summary, .notification-wrapper .warning-summary {
+  margin-bottom: 30px;
+  margin-bottom: 0;
+}
+
+.error-summary:not(.validation-summary-max-funding) h1 {
+  display: none;
+}
+
+.error-summary:not(.validation-summary-max-funding) h1 + p {
+  display: none;
+}
+
+.error-summary-standalone .error-summary {
   margin-bottom: 0;
 }
 
@@ -2704,22 +2717,6 @@ legend {
 
 .button-start {
   background-image: url("/dist/images/icon-pointer.png");
-}
-
-.error-summary-wrapper .error-summary {
-  margin-bottom: 0;
-}
-
-.error-summary:not(.validation-summary-max-funding) h1 {
-  display: none;
-}
-
-.error-summary:not(.validation-summary-max-funding) h1 + p {
-  display: none;
-}
-
-.error-summary-standalone .error-summary {
-  margin-bottom: 0;
 }
 
 .button-secondary {
