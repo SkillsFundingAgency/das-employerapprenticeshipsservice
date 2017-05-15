@@ -407,6 +407,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [Route("paymentorder/", Name = "PaymentOrder")]
+        public ActionResult PaymentOrder(string hashedAccountId)
+        {
+            return View();
+        }
+
         private bool AnyChanges(UpdateApprenticeshipViewModel data)
         {
             return
