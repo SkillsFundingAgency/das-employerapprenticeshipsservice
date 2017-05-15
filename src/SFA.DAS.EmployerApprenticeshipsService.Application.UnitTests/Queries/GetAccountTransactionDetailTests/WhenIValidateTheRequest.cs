@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -13,14 +13,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
 {
     public class WhenIValidateTheRequest
     {
-        private GetAccountTransactionsByDateRangeValidator _validator;
+        private GetAccountProviderPaymentsByDateRangeValidator _validator;
         private Mock<IMembershipRepository> _membershipRepository;
 
         [SetUp]
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _validator = new GetAccountTransactionsByDateRangeValidator(_membershipRepository.Object);
+            _validator = new GetAccountProviderPaymentsByDateRangeValidator(_membershipRepository.Object);
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
                                  .ReturnsAsync(new MembershipView());
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountTransactionsByDateRangeQuery
+            var actual = await _validator.ValidateAsync(new GetAccountProviderPaymentsByDateRangeQuery
             {
                 AccountId = 1,
                 ExternalUserId = "2",
@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
                                  .ReturnsAsync(new MembershipView());
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountTransactionsByDateRangeQuery());
+            var actual = await _validator.ValidateAsync(new GetAccountProviderPaymentsByDateRangeQuery());
 
             //Assert
             Assert.IsFalse(actual.IsValid());
@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountTransactionsByDateRangeQuery()
+            var actual = await _validator.ValidateAsync(new GetAccountProviderPaymentsByDateRangeQuery()
             {
                 AccountId = 1,
                 ExternalUserId = "2",
