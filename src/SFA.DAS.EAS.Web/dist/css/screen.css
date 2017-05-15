@@ -3017,12 +3017,24 @@ a#link-settings:focus {
 }
 
 .notification-wrapper .error-summary, .notification-wrapper .info-summary, .notification-wrapper .success-summary, .notification-wrapper .warning-summary {
+  margin-top: 30px;
   margin-bottom: 30px;
 }
 
 @media (min-width: 641px) {
   .notification-wrapper .error-summary, .notification-wrapper .info-summary, .notification-wrapper .success-summary, .notification-wrapper .warning-summary {
+    margin-top: 60px;
     margin-bottom: 0;
+  }
+}
+
+.breadcrumbs + .notification-wrapper .error-summary, .breadcrumbs + .notification-wrapper .info-summary, .breadcrumbs + .notification-wrapper .success-summary, .breadcrumbs + .notification-wrapper .warning-summary {
+  margin-top: 15px;
+}
+
+@media (min-width: 641px) {
+  .breadcrumbs + .notification-wrapper .error-summary, .breadcrumbs + .notification-wrapper .info-summary, .breadcrumbs + .notification-wrapper .success-summary, .breadcrumbs + .notification-wrapper .warning-summary {
+    margin-top: 30px;
   }
 }
 

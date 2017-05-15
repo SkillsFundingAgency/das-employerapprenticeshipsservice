@@ -53,9 +53,20 @@ $warning-colour:    $orange;
 
 .notification-wrapper {
     .error-summary, .info-summary, .success-summary, .warning-summary {
+        margin-top: 30px;
         margin-bottom: 30px;
         @include media(tablet) {
+            margin-top: 60px;
             margin-bottom: 0;
+        }
+    }
+}
+
+.breadcrumbs + .notification-wrapper {
+    .error-summary, .info-summary, .success-summary, .warning-summary {
+        margin-top: 15px;
+        @include media(tablet) {
+            margin-top: 30px;
         }
     }
 }
