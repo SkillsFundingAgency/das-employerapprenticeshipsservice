@@ -4535,7 +4535,7 @@ h2 .float-right {
   background: #fff;
   border: 1px solid #bfc1c3;
   text-align: center;
-  padding: 4px;
+  padding: 7px 4px 4px 4px;
 }
 
 #sort-it li label {
