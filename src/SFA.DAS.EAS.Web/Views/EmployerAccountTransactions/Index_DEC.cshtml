@@ -91,14 +91,31 @@
                    
                     <tr>
                         <td>
-                            <span class="no-wrap">@{var date = aggregationLine.DateCreated.ToGdsFormat();} @date </span>
+                            <span class="no-wrap">@{var date = aggregationLine.TransactionDate.ToGdsFormat();} @date </span>
                         </td>
                         <td class="mobile-hide-cell">
                             <span class="description">
                                 @aggregationLine.Description
                             </span>
                         </td>
-                        <td class="numeric"> <span class="no-wrap"> @(aggregationLine.Amount.ToString("C2", culture)) </span> </td>
+                        
+                        @{
+                            var transactionAmount = aggregationLine.Amount;
+
+                            if (aggregationLine.TransactionType == TransactionItemType.Payment)
+                            {
+                                var paymentTransaction = aggregationLine as PaymentTransactionLine;
+
+                                if (paymentTransaction != null)
+                                {
+                                    transactionAmount += paymentTransaction.EmployerCoInvestmentAmount +
+                                             paymentTransaction.SfaCoInvestmentAmount;
+                                }
+                            }
+                        }
+                      
+                        <td class="numeric"> <span class="no-wrap"> @(transactionAmount.ToString("C2", culture)) </span> </td>
+                       
                         <td class="link-right">
                             @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
                                  aggregationLine.TransactionType == TransactionItemType.TopUp)
