@@ -24,6 +24,10 @@ namespace SFA.DAS.EAS.Web
             bundles.Add(new ScriptBundle("~/bundles/characterLimitation").Include(                
                     "~/dist/javascripts/character-limit.js"
                     ));
+            bundles.Add(new ScriptBundle("~/bundles/sortable").Include(
+                 "~/dist/javascripts/sortable.min.js",
+                  "~/dist/javascripts/drag-drop.js"
+                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryvalcustom").Include(
                       "~/Scripts/jquery.validate.js", "~/Scripts/jquery.validate.unobtrusive.custom.js"));
