@@ -4237,8 +4237,7 @@ table .float-right, h2 .float-right {
   margin-left: 2%;
 }
 
-#apprentice-details .delete-button,
-#edit-apprentice .delete-button {
+#apprentice-details .delete-button {
   background-color: #b10e1e;
   float: right;
   margin: 15px 0;
@@ -4551,12 +4550,61 @@ h2 .float-right {
   content: " ";
 }
 
-#edit-apprentices-detail hr {
-  margin-top: 0;
+#sort-it input {
+  font-size: 1em;
 }
 
-#edit-apprentices-detail .optional-ref {
-  margin-bottom: 0;
+/* prevent zoom in mobile */
+#sort-it ol {
+  /* list style is faked with number inputs */
+  list-style: none;
+  padding: 0;
+  margin-bottom: 40px;
+}
+
+#sort-it li {
+  position: relative;
+  min-height: 1em;
+  cursor: move;
+  padding: 1em 1em 1em 3.5em;
+  background: #dee0e2;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+#sort-it li input {
+  /* Move these to visually fake the ol numbers */
+  position: absolute;
+  width: 1.75em;
+  left: .55em;
+  top: 0.7em;
+  text-align: right;
+  background: #fff;
+  border: 1px solid #bfc1c3;
+  text-align: center;
+  padding: 4px;
+}
+
+#sort-it li label {
+  /* visually hidden offscreen so it still benefits screen readers */
+  position: absolute;
+  left: -9999px;
+}
+
+#manual-sort {
+  margin-right: 20px;
+}
+
+/* sortable plugin styles when dragged */
+#sort-it .dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+}
+
+#sort-it li.placeholder {
+  position: relative;
+  background: #28a197;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
@@ -4618,4 +4666,23 @@ h2 .float-right {
     margin-top: 5px;
     word-wrap: break-word;
   }
+}
+
+#edit-apprentice .delete-button {
+  background-color: #b10e1e;
+  float: right;
+  margin: 15px 0;
+  margin: auto;
+}
+
+#confirm-delete .heading-large {
+  margin-bottom: 0;
+}
+
+#confirm-delete .heading-small {
+  margin-top: 0;
+}
+
+#confirm-delete .secondary-text {
+  color: #6f777b;
 }
