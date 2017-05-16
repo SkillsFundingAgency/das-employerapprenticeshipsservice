@@ -4546,6 +4546,7 @@ h2 .float-right {
 
 #manual-sort {
   margin-right: 20px;
+  margin-bottom: 20px;
 }
 
 /* sortable plugin styles when dragged */
