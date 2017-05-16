@@ -308,6 +308,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         ProviderName = data.ProviderName,
                         CourseName = data.CourseName,
+                        CourseLevel = data.CourseLevel,
                         PaymentDate = data.TransactionDate,
                         LevyPaymentsTotal = apprenticePayments.Sum(p => p.LevyPaymentAmount),
                         SFACoInvestmentTotal = apprenticePayments.Sum(p => p.SFACoInvestmentAmount),

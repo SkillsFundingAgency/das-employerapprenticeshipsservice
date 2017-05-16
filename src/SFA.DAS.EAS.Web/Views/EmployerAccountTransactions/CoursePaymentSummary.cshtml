@@ -23,7 +23,15 @@
             </div>
             <div>
                 <span>Course</span>
-                <span class="bold">@Model.Data.CourseName</span>
+                @{
+                    var courseTitle = Model.Data.CourseName;
+
+                    if (Model.Data.CourseLevel.HasValue)
+                    {
+                        courseTitle += $" Level {Model.Data.CourseLevel.Value}";
+                    }
+                }
+                <span class="bold">@courseTitle</span>
             </div>
         </div>
         
