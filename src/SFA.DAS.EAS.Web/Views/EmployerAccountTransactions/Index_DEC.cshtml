@@ -86,8 +86,9 @@
                 <tbody>
                 @foreach (var aggregationLine in Model.Data.Model.Data.TransactionLines)
                 {
-                    var fromDate = aggregationLine.DateCreated;
-                    var toDate = aggregationLine.DateCreated.AddHours(23);
+                    var fromDate = new DateTime(Model.Data.Year, Model.Data.Month, 1);
+                    var toDate = new DateTime(Model.Data.Year, Model.Data.Month, DateTime.DaysInMonth(Model.Data.Year, Model.Data.Month), 23, 59, 59);
+                   
                     <tr>
                         <td>
                             <span class="no-wrap">@{var date = aggregationLine.DateCreated.ToGdsFormat();} @date </span>
@@ -110,7 +111,7 @@
                             {
                                 var paymentTransaction = aggregationLine as PaymentTransactionLine;
                                 
-                                <a title="View details for the transaction on @date" href="@Url.Action("ProviderPaymentSummary", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, ukPrn = paymentTransaction?.UkPrn, fromDate = fromDate,toDate = toDate })">
+                                <a title="View details for the transaction on @date" href="@Url.Action("ProviderPaymentSummary", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, ukPrn = paymentTransaction?.UkPrn, fromDate = fromDate, toDate = toDate })">
                                     Details <span class="vh"> for the transaction on @date</span>
                                     
                                 </a>

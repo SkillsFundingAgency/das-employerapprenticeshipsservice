@@ -285,15 +285,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 var paymentSummaries = apprenticePaymentGroups.Select(pg =>
                 {
-                    var levyTransactions = pg.Where(x => x.TransactionType == TransactionItemType.Declaration ||
-                                                         x.TransactionType == TransactionItemType.TopUp).ToList();
-
                     var payments = pg.Where(x => x.TransactionType == TransactionItemType.Payment).ToList();
 
                     return new AprrenticeshipPaymentSummaryViewModel
                     {
                         ApprenticeName = pg.Key.ApprenticeName,
-                        LevyPaymentAmount = levyTransactions.Sum(t => t.LineAmount),
+                        LevyPaymentAmount = payments.Sum(t => t.LineAmount),
                         SFACoInvestmentAmount = payments.Sum(p => p.SfaCoInvestmentAmount),
                         EmployerCoInvestmentAmount = payments.Sum(p => p.EmployerCoInvestmentAmount)
                     };
