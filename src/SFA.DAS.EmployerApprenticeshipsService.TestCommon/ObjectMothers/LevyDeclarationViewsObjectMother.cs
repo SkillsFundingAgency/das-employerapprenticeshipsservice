@@ -18,7 +18,20 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                 PayrollMonth = 2,
                 PayrollYear = "17-18",
                 SubmissionDate = new DateTime(2016, 05, 14),
-                SubmissionId = 1542
+                SubmissionId = 1542,
+                CreatedDate = DateTime.Now.AddDays(-1),
+                DateCeased = null,
+                EndOfYearAdjustment = false,
+                EndOfYearAdjustmentAmount = 0,
+                HmrcSubmissionId = 45,
+                InactiveFrom = null,
+                InactiveTo = null,
+                LastSubmission = 1,
+                LevyAllowanceForYear = 10000,
+                TopUp = 100,
+                TopUpPercentage = 0.1m,
+                TotalAmount = 435,
+                LevyDeclaredInMonth = 34857
             };
             
             return new List<LevyDeclarationView> {item};
