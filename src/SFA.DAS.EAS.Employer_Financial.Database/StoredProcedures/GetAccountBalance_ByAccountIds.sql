@@ -28,4 +28,11 @@ AS
 		@accountIds acc on acc.AccountId = tl.AccountId
 	where tl.TransactionType in (1,2,3)
 	Group by tl.AccountId
+union
+	select 
+		accountid,
+		0 as Balance,
+		IsLevyPayer
+	from
+		[employer_financial].levyOverride
 
