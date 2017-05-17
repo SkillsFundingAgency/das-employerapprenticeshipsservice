@@ -201,7 +201,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
             Assert.AreEqual(accountId, paymentTransaction.AccountId);
-            Assert.AreEqual(payment.Amount, paymentTransaction.LineAmount);
+            Assert.AreEqual(payment.Amount, paymentTransaction.LineAmount * -1);
             Assert.AreEqual(TransactionItemType.Payment, paymentTransaction.TransactionType);
             Assert.AreEqual(payment.Ukprn, paymentTransaction.UkPrn);
             Assert.AreEqual(payment.CollectionPeriod.Id, paymentTransaction.PeriodEnd);
