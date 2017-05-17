@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Account.Api.Client
         public async Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetPageOfAccounts(int pageNumber = 1, int pageSize = 1000, DateTime? toDate = null)
         {
             var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/accounts?page={pageNumber}&pageSize={pageSize}";
+            var url = $"{baseUrl}api/accounts?pageNumber={pageNumber}&pageSize={pageSize}";
             if (toDate.HasValue)
             {
                 var formattedToDate = toDate.Value.ToString("yyyyMMdd");
