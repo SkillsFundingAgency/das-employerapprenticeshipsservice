@@ -36,7 +36,10 @@
                     <dl>
                         <dt>Current funds</dt>
                         @{
-                            var balance = Model.Data.Model.CurrentBalance.ToString("C0", culture);
+                            //We never show a negative levy balance
+                            var currentBalance = Model.Data.Model.CurrentBalance > 0 ? Model.Data.Model.CurrentBalance : 0;
+
+                            var balance = currentBalance.ToString("C0", culture);
                             var balanceClass = string.Empty;
 
                             if (balance.Length > 8)
