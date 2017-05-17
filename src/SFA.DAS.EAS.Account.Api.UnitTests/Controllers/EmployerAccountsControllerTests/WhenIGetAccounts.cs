@@ -111,5 +111,57 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
 
             model.Content.Data.First().Balance.Should().Be(0);
         }
+
+        [Test]
+        public async Task ThenTheIsLevyPayerFlagDefaultsToTrueIfThereAreNoTransactions()
+        {
+            //Arrange
+            var accountsResponse = new GetPagedEmployerAccountsResponse
+            {
+                AccountsCount = 2,
+                Accounts = new List<Domain.Data.Entities.Account.Account>
+                    {
+                        new Domain.Data.Entities.Account.Account {HashedId = "ABC123", Id = 123, Name = "Test 1"},
+                        new Domain.Data.Entities.Account.Account {HashedId = "ABC999", Id = 987, Name = "Test 2"}
+                    }
+            };
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(new GetAccountBalancesResponse {Accounts = new List<AccountBalance>()});
+
+            //Act
+            var actual = await Controller.GetAccounts();
+
+            //Assert
+            var model = actual as OkNegotiatedContentResult<PagedApiResponseViewModel<AccountWithBalanceViewModel>>;
+            Assert.IsNotNull(model);
+            Assert.IsNotEmpty(model.Content.Data);
+            Assert.IsTrue(model.Content.Data.All(c=>c.IsLevyPayer));
+        }
+
+        [Test]
+        public async Task ThenIfThereIsDataFromTheAccountBalanceQueryThenTheLevyOverFlagIsUsed()
+        {
+            var accountsResponse = new GetPagedEmployerAccountsResponse
+            {
+                AccountsCount = 2,
+                Accounts = new List<Domain.Data.Entities.Account.Account>
+                    {
+                        new Domain.Data.Entities.Account.Account {HashedId = "ABC123", Id = 123, Name = "Test 1"},
+                        new Domain.Data.Entities.Account.Account {HashedId = "ABC999", Id = 987, Name = "Test 2"}
+                    }
+            };
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(new GetAccountBalancesResponse { Accounts = new List<AccountBalance> {new AccountBalance {AccountId = 123,Balance=1,IsLevyPayer = 0} } });
+
+            //Act
+            var actual = await Controller.GetAccounts();
+
+            //Assert
+            var model = actual as OkNegotiatedContentResult<PagedApiResponseViewModel<AccountWithBalanceViewModel>>;
+            Assert.IsNotNull(model);
+            Assert.IsNotEmpty(model.Content.Data);
+            Assert.IsFalse(model.Content.Data.Single(x=>x.AccountId.Equals(123)).IsLevyPayer);
+            Assert.IsTrue(model.Content.Data.Single(x=>x.AccountId.Equals(987)).IsLevyPayer);
+        }
     }
 }
