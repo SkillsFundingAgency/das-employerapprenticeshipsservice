@@ -164,7 +164,12 @@ $(".clickable").on('click touchstart', (function () {
     return false;
 }));
 
+// apprentice filter page :: expand/collapse functionality
+$('.container-head').on('click touchstart', (function () {
+    $(this).toggleClass('showHide');
+    $(this).next().toggleClass("hideOptions");
 
+}));
 
 
 

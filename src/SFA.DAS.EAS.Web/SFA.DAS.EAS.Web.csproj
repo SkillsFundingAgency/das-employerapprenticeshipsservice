@@ -539,6 +539,8 @@
     <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
     <Content Include="dist\images\arrow-sprite.png" />
+    <Content Include="dist\images\option-select-toggle-sprite.png" />
+    <Content Include="dist\images\pagination-arrow-sprite.png" />
     <Content Include="dist\javascripts\character-limit.js" />
     <Content Include="Views\EmployerManageApprentices\EditStartedApprenticeship.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
