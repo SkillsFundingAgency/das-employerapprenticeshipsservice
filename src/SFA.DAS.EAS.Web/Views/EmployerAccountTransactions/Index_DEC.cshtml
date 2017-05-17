@@ -62,7 +62,7 @@
 <div class="grid-row">
     <div class="column-full">
 
-        @if (Model.Data.Model.Data.TransactionLines.Count == 0)
+        @if (Model.Data.Model.Data.TransactionLines.All(c => c.TransactionType == TransactionItemType.Unknown))
         {
             <p class="panel panel-info">
                 @if (Model.Data.IsLatestMonth)
@@ -75,7 +75,7 @@
                 }
             </p>
         }
-        else if(Model.Data.Model.Data.TransactionLines.Count != 0)
+        else if(Model.Data.Model.Data.TransactionLines.Count(c => c.TransactionType == TransactionItemType.Unknown) != 0)
         {
             <table>
                 <thead>
