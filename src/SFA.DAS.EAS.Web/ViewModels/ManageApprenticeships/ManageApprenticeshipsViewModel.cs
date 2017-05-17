@@ -6,6 +6,8 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
     {
         public IEnumerable<ApprenticeshipDetailsViewModel> Apprenticeships { get; set; }
 
+        public ApprenticeshipFiltersViewModel Filters { get; set; }
+
         public string HashedAccountId { get; set; }
     }
 }

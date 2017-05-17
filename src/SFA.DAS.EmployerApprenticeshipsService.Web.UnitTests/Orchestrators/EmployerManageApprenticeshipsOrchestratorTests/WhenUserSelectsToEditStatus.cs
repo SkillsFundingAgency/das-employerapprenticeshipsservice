@@ -59,7 +59,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                 new ApprovedApprenticeshipViewModelValidator(),
                 new CurrentDateTime(),
                 Mock.Of<ILogger>(),
-                _cookieStorageService.Object);
+                _cookieStorageService.Object,
+                Mock.Of<IApprenticeshipFiltersMapper>());
         }
 
         [TestCase(PaymentStatus.Active)]
