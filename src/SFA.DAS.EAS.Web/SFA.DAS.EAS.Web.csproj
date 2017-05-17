@@ -1017,8 +1017,6 @@
     <Content Include="Views\EmployerManageApprentices\ConfirmChanges.cshtml" />
     <Content Include="Views\Shared\EditApprenticeship.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\Index_EF.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\Details_EF.cshtml" />
     <Content Include="Views\EmployerManageApprentices\ReviewChanges.cshtml" />
     <Content Include="src\sass\_accordions.scss" />
     <Content Include="Views\EmployerManageApprentices\ChangeStatus.cshtml" />

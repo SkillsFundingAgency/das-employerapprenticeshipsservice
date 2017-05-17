@@ -1,4 +1,4 @@
-﻿ 
+﻿
 @using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAccountPayeListViewModel>
 @{
@@ -33,7 +33,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Added PAYE schemes</th>
-
+                        <th scope="col">English %</th>
                         <th scope="col"><span class="vh">Action</span></th>
                     </tr>
                 </thead>
@@ -43,7 +43,20 @@
                         var englishFractionPercentage = (scheme.EnglishFraction?.Amount ?? 1);
                         <tr>
                             <td>@scheme.PayeRef</td>
-                            
+
+                            @if (englishFractionPercentage == 1)
+                            {
+                                <td>100%</td>
+                            }
+                            else if (englishFractionPercentage == 0)
+                            {
+                                <td>0%</td>
+                            }
+                            else
+                            {
+                                <td>@englishFractionPercentage.ToString("P3")</td>
+                            }
+
                             <td class="link-right">
                                 <a aria-label="Details for PAYE scheme @scheme.PayeRef"
                                    title="Details for PAYE scheme @scheme.PayeRef"
@@ -53,7 +66,14 @@
                     }
                 </tbody>
             </table>
-            
+
+
+            @Html.Partial("_WhatIsEnglishPercentage")
+
+            <div class="panel panel-filled-purple panel-top-margin">
+                <p><a href="https://www.surveymonkey.co.uk/r/CDZXRQL" target="_blank" id="link-ef-questionnaire">Give us your feedback</a> if your English percentage isn't what you expected. </p>
+            </div>
+
         }
         else
         {

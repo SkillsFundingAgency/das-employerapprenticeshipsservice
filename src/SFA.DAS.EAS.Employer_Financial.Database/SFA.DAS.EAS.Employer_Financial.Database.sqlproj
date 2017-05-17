@@ -71,7 +71,7 @@
   <ItemGroup>
     <Build Include="Tables\EnglishFraction.sql" />
     <Build Include="Tables\LevyDeclaration.sql" />
-    <Build Include="Views\GetLevyDeclarations.sql" />
+    <Build Include="Views\GetLevyDeclarationAndTopUp.sql" />
     <Build Include="Schemas\employer_transactions.sql" />
     <Build Include="StoredProcedures\Cleardown.sql" />
     <Build Include="StoredProcedures\CreateDeclaration.sql" />
@@ -100,6 +100,8 @@
     <Build Include="StoredProcedures\GetPreviousTransactionsCount.sql" />
     <Build Include="StoredProcedures\UpdateTransactionLineDate_BySubmissionId.sql" />
     <Build Include="StoredProcedures\GetPaymentDetail_ByAccountProviderAndDateRange.sql" />
+    <Build Include="Tables\LevyOverride.sql" />
+    <Build Include="Views\GetLevyDeclaration.sql" />
     <Build Include="StoredProcedures\GetPaymentDetail_ByAccountProviderCourseAndDateRange.sql" />
   </ItemGroup>
   <ItemGroup>
