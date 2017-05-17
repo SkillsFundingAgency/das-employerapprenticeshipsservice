@@ -23,5 +23,7 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public decimal EnglishFraction { get; set; }
         public decimal TopUpPercentage { get; set; }
         public decimal TopUp { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal LevyDeclaredInMonth { get; set; }
     }
 }
