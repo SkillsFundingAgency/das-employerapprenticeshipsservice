@@ -8,29 +8,19 @@
     ViewBag.Title = "Manage your apprentices";
 }
 
-
     <h1 class="heading-xlarge">Manage your apprentices</h1>
 
-
 <div class="grid-row">
+
     <div class="column-one-third">
-
         <form method="GET" action="@Url.Action("ListAll")" novalidate="novalidate">
-
-            @Html.Partial("ApprenticeshipFilters", Model.Data.Filters)
-
-            <br />
-
+            @Html.Partial("ApprenticeshipFilters", Model.Data.Filters)          
             <button type="submit" class="button" value="Filter">Filter</button>
-            <button type="submit" name="Reset" value="Reset">Clear</button>
-
-
+            <a href="@Url.Action("Index")" title="Reset" class="button text-link">Reset</a>
         </form>
-
     </div>
+
     <div class="column-two-thirds">
-
-
         @if (!Model.Data.Apprenticeships.Any())
         {
             <div class="panel panel-border-wide alert-default">

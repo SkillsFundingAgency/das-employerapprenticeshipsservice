@@ -4005,12 +4005,12 @@ table .float-right, h2 .float-right {
     margin-top: 5px;
   }
   #manage-all-apprentices td:nth-of-type(3):before {
-    content: "Training status";
+    content: "Status";
     font-weight: normal;
     margin-top: 5px;
   }
   #manage-all-apprentices td:nth-of-type(4):before {
-    content: "Record status";
+    content: "Alerts";
     font-weight: normal;
     margin-top: 5px;
   }
@@ -4412,7 +4412,7 @@ h2 .float-right {
   display: none;
 }
 
-.provider-list-view th {
+#manage-all-apprentices .tableResponsive th {
   font-size: 16px;
 }
 
