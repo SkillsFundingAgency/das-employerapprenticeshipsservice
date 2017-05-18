@@ -10,23 +10,25 @@
 }
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Payment: apprentice details</h1>
-        <dl class="inline">
-            <dt>Date:</dt>
-            <dd class="bold">@Model.Data.PaymentDate.ToString("dd MMMM yyyy")</dd>
-            <dt>Payment to</dt>
-            <dd class="bold">@Model.Data.ProviderName</dd>
-            <dt>Course</dt>
-            @{
-                var courseTitle = Model.Data.CourseName;
+        <div class="hgroup">
+            <h1 class="heading-xlarge">Payment: apprentice details</h1>
+            <dl class="inline">
+                <dt>Date:</dt>
+                <dd class="bold">@Model.Data.PaymentDate.ToString("dd MMMM yyyy")</dd>
+                <dt>Payment to</dt>
+                <dd class="bold">@Model.Data.ProviderName</dd>
+                <dt>Course</dt>
+                @{
+                    var courseTitle = Model.Data.CourseName;
 
-                if (Model.Data.CourseLevel.HasValue)
-                {
-                    courseTitle += $" Level {Model.Data.CourseLevel.Value}";
+                    if (Model.Data.CourseLevel.HasValue)
+                    {
+                        courseTitle += $" Level {Model.Data.CourseLevel.Value}";
+                    }
                 }
-            }
-            <dd class="bold">@courseTitle</dd>
-        </dl>
+                <dd class="bold">@courseTitle</dd>
+            </dl>
+        </div>
     </div>
 </div>    
 
@@ -42,10 +44,9 @@
             <tr>
                 <th scope="col" class="tw-20">Apprentice</th>
                 <th scope="col" class="numeric tw-20">Paid from levy</th>
-                <th scope="col" class="numeric tw-20 highlight">90% paid by Government</th>
-                <th scope="col" class="numeric tw-20 highlight">10% by you</th>
-                <th scope="col" class="numeric tw-15">Amount</th>
-                <th scope="col" class="tw-5"></th>
+                <th scope="col" class="numeric tw-20 highlight">Government contribution</th>
+                <th scope="col" class="numeric tw-20 highlight">Your contribution</th>
+                <th scope="col" class="numeric tw-20">Amount</th>
             </tr>
             </thead>
             <tbody>
@@ -67,10 +68,12 @@
                     <td data-label="Government contribution" class="highlight total numeric nowrap">@Model.Data.SFACoInvestmentTotal.ToString("C0", culture)</td>
                     <td data-label="Your contribution" class="highlight total numeric nowrap">@Model.Data.EmployerCoInvestmentTotal.ToString("C0", culture)</td>
                     <td data-label="Amount" class="total numeric nowrap">@Model.Data.PaymentsTotal.ToString("C0", culture)</td>
-                    <td></td>
                 </tr>
             </tfoot>
         </table>
+        <div class="panel">
+            <p>It's up to you and your training provider to decide how and when your contribution is paid.</p>
+        </div>
     </div>
 </div>
 
