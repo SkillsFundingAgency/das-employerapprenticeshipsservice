@@ -4385,8 +4385,7 @@ h2 .float-right {
   position: relative;
   background-color: #fff;
   max-height: 200px;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: hidden;
 }
 
 .filter-option-select .options-container label {
@@ -4399,6 +4398,13 @@ h2 .float-right {
   padding: 7px 0 7px 2px;
   border-bottom: 1px solid #bfc1c3;
   cursor: pointer;
+}
+
+.filter-option-select .options-container label span {
+  display: block;
+  float: left;
+  border: 1px solid red;
+  padding-left: 30px;
 }
 
 .filter-option-select .showHide {
