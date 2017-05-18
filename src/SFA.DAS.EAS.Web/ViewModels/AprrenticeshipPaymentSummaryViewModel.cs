@@ -1,12 +1,8 @@
-﻿using System;
-
-namespace SFA.DAS.EAS.Web.ViewModels
+﻿namespace SFA.DAS.EAS.Web.ViewModels
 {
-    public class CoursePaymentSummaryViewModel
+    public class AprrenticeshipPaymentSummaryViewModel
     {
-        public string CourseName { get; set; }
-        public int? CourseLevel { get; set; }
-        public DateTime? CourseStartDate { get; set; }
+        public string ApprenticeName { get; set; }
         public decimal LevyPaymentAmount { get; set; }
         public decimal SFACoInvestmentAmount { get; set; }
         public decimal EmployerCoInvestmentAmount { get; set; }

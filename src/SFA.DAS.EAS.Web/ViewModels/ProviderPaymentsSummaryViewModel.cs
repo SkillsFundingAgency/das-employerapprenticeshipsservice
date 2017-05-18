@@ -5,8 +5,12 @@ namespace SFA.DAS.EAS.Web.ViewModels
 {
     public class ProviderPaymentsSummaryViewModel
     {
+        public string HashedAccountId { get; set; }
+        public long UkPrn { get; set; }
         public string ProviderName { get; set; }
         public DateTime PaymentDate { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }    
 
         public decimal LevyPaymentsTotal { get; set; }
         public decimal SFACoInvestmentsTotal { get; set; }
