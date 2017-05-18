@@ -32,7 +32,8 @@ function getInitialOrder(obj) {
     var num = 1;
     $(obj).each(function () {
         //set object initial order data based on order in DOM
-        $(this).find('input[type="number"]').val(num).attr('data-initial-value', num);
+        //$(this).find('input[type="number"]').val(num).attr('data-initial-value', num);
+        $(this).find('input[type="number"]').val(num).attr('value', num);
         num++;
     });
     $(obj).find('input[type="number"]').attr('max', $(obj).length); //give it an html5 max attr based on num of objects
