@@ -3045,6 +3045,7 @@ tr.total td {
   font-weight: 700;
 }
 
+.nowrap,
 .no-wrap {
   white-space: nowrap;
 }
