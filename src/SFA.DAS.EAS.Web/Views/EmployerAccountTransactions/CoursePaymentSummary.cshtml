@@ -4,7 +4,7 @@
 @{
     var culture = new CultureInfo("en-GB");
     ViewBag.PageID = "page-course-payment-details";
-    ViewBag.Title = "Payment details";
+    ViewBag.Title = "Payment: apprentice details";
     ViewBag.Section = "finance";
 
 }
@@ -14,19 +14,19 @@
             <h1 class="heading-xlarge">Payment: apprentice details</h1>
             <dl class="inline">
                 <dt>Date:</dt>
-                <dd class="bold">@Model.Data.PaymentDate.ToString("dd MMMM yyyy")</dd>
+                <dd>@Model.Data.PaymentDate.ToString("dd MMMM yyyy")</dd>
                 <dt>Payment to</dt>
-                <dd class="bold">@Model.Data.ProviderName</dd>
+                <dd>@Model.Data.ProviderName</dd>
                 <dt>Course</dt>
                 @{
                     var courseTitle = Model.Data.CourseName;
 
                     if (Model.Data.CourseLevel.HasValue)
                     {
-                        courseTitle += $" Level {Model.Data.CourseLevel.Value}";
+                        courseTitle += $" level {Model.Data.CourseLevel.Value}";
                     }
                 }
-                <dd class="bold">@courseTitle</dd>
+                <dd>@courseTitle</dd>
             </dl>
         </div>
     </div>
@@ -64,10 +64,10 @@
             <tfoot>
                 <tr class="total">
                     <td data-label="Totals"> </td>
-                    <td data-label="Paid from levy" class="total numeric nowrap">@Model.Data.LevyPaymentsTotal.ToString("C0", culture)</td>
-                    <td data-label="Government contribution" class="highlight total numeric nowrap">@Model.Data.SFACoInvestmentTotal.ToString("C0", culture)</td>
-                    <td data-label="Your contribution" class="highlight total numeric nowrap">@Model.Data.EmployerCoInvestmentTotal.ToString("C0", culture)</td>
-                    <td data-label="Amount" class="total numeric nowrap">@Model.Data.PaymentsTotal.ToString("C0", culture)</td>
+                    <td data-label="Paid from levy" class="total numeric no-wrap">@Model.Data.LevyPaymentsTotal.ToString("C0", culture)</td>
+                    <td data-label="Government contribution" class="highlight total numeric no-wrap">@Model.Data.SFACoInvestmentTotal.ToString("C0", culture)</td>
+                    <td data-label="Your contribution" class="highlight total numeric no-wrap">@Model.Data.EmployerCoInvestmentTotal.ToString("C0", culture)</td>
+                    <td data-label="Amount" class="total numeric no-wrap">@Model.Data.PaymentsTotal.ToString("C0", culture)</td>
                 </tr>
             </tfoot>
         </table>
