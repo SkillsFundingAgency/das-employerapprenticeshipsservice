@@ -64,6 +64,6 @@ namespace SFA.DAS.EAS.Web.Validators.Messages
         public ValidationMessage StdCode03 { get { throw new NotImplementedException(); } }
 
         public ValidationMessage TrainingCode01 =>
-            new ValidationMessage("Training code cannot be empty", "DefaultErrorCode");
+            new ValidationMessage("Training course can't be empty", "DefaultErrorCode");
     }
 }
