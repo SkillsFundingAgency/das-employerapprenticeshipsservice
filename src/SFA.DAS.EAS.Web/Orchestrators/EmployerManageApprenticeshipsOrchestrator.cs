@@ -27,7 +27,9 @@ using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Application.Queries.ValidateStatusChangeDate;
 using SFA.DAS.EAS.Application.Commands.UpdateApprenticeshipStatus;
 using SFA.DAS.EAS.Application.Queries.ApprenticeshipSearch;
+using SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock;
+using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -621,6 +623,50 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                     }
                            };
             }, hashedAccountId, userId);
+        }
+
+        public async Task<OrchestratorResponse<PaymentOrderViewModel>> GetPaymentOrder(string hashedAccountId, string user)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+
+            _logger.Trace(
+                $"Getting payment order. AccountId: {accountId}");
+
+            return await CheckUserAuthorization(
+                async () =>
+                    {
+                        var data = await _mediator.SendAsync(new GetProviderPaymentPriorityRequest { AccountId = accountId });
+                        var result = _apprenticeshipMapper.MapPayment(data.Data);
+                        return new OrchestratorResponse<PaymentOrderViewModel>
+                                   {
+                                       Data = result
+                                   };
+                    }, hashedAccountId, user);
+        }
+
+        public async Task<OrchestratorResponse<PaymentOrderViewModel>> UpdatePaymentOrder(string hashedAccountId, string user, IEnumerable<PaymentOrderItem> paymentItems)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+
+            _logger.Trace(
+                $"Getting payment order. AccountId: {accountId}");
+
+            return await CheckUserAuthorization(
+                async () =>
+                    {
+                        await _mediator.SendAsync(new UpdateProviderPaymentPriorityCommand
+                                                {
+                                                    AccountId = accountId,
+                                                    Data = _apprenticeshipMapper.MapPayment(paymentItems)
+                                                });
+
+                    var data = await _mediator.SendAsync(new GetProviderPaymentPriorityRequest { AccountId = accountId });
+                    var result = _apprenticeshipMapper.MapPayment(data.Data);
+                    return new OrchestratorResponse<PaymentOrderViewModel>
+                    {
+                        Data = result
+                    };
+                }, hashedAccountId, user);
         }
     }
 }
