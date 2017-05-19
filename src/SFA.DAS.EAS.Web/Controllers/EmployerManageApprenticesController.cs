@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -416,10 +417,23 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("paymentorder", Name = "PaymentOrderPost")]
-        public async Task<ActionResult> PaymentOrderPost(string hashedAccountId, IEnumerable<PaymentOrderItem> paymentOrderItem)
+        public async Task<ActionResult> PaymentOrderPost(string hashedAccountId, PaymentOrderViewModel paymentOrderItem)
         {
-            var model = await _orchestrator.UpdatePaymentOrder(hashedAccountId, OwinWrapper.GetClaimValue("sub"), paymentOrderItem);
+            if (!ModelState.IsValid)
+            {
+                var newModel = await _orchestrator.GetPaymentOrder(hashedAccountId, OwinWrapper.GetClaimValue("sub"));
+                newModel.Data = paymentOrderItem;
+                return View("PaymentOrder", newModel);
+            }
+            var model = await _orchestrator.UpdatePaymentOrder(hashedAccountId, OwinWrapper.GetClaimValue("sub"), paymentOrderItem.Items);
+
+            model.FlashMessage = new FlashMessageViewModel
+                                     {
+                                         Message = "Payment order updated",
+                                         Severity = FlashMessageSeverityLevel.Okay
+                                     };
             return View("PaymentOrder", model);
         }
 

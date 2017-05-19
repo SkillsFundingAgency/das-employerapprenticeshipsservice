@@ -41,8 +41,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                                 };
             var mapped = _sut.MapPayment(inputData);
 
-            mapped.PaymentOrderItems.Count().Should().Be(3);
-            var first = mapped.PaymentOrderItems.Single(m => m.ProviderId == 111);
+            mapped.Items.Count().Should().Be(3);
+            var first = mapped.Items.Single(m => m.ProviderId == 111);
             first.ProviderName.Should().Be("Provider 1");
             first.InitialOrder.Should().Be(1);
             first.NewOrder.Should().Be(1);
