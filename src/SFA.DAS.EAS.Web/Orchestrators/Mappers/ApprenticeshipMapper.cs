@@ -285,10 +285,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                                  })
                                  .OrderBy(m => m.InitialOrder );
 
-            return new PaymentOrderViewModel
-                       {
-                           PaymentOrderItems = items
-                       };
+            return new PaymentOrderViewModel { Items = items };
         }
 
         public List<GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI> MapPayment(IEnumerable<PaymentOrderItem> paymentItems)

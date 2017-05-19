@@ -13,32 +13,34 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Default payment order</h1>
+        @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-        @*<form method="POST" action="@Url.Action("PaymentOrderPost")" novalidate="novalidate" id="sort-it">
+        <h1 class="heading-xlarge">Default payment order</h1>
+        <form method="POST" action="@Url.Action("PaymentOrderPost")" novalidate="novalidate" id="sort-it">
             @Html.AntiForgeryToken()
             <ol>
                 @{
                     var itemCount = -1;
                 }
-                @foreach (var item in Model.Data.PaymentOrderItems)
+                @foreach (var item in Model.Data.Items)
                 {
                     itemCount++;
                     <li>
                         @item.ProviderName
-                        <label for="custom-number-@item.InitialOrder">New order:</label>
-                        <input id="custom-number-@item.InitialOrder" name="paymentOrderItem[@itemCount].NewOrder" type="number" value="@item.InitialOrder">
-                        @Html.Hidden($"paymentOrderItem[{itemCount}].InitialOrder", item.InitialOrder)
-                        @Html.Hidden($"paymentOrderItem[{itemCount}].ProviderId", item.ProviderId)
-                        @Html.Hidden($"paymentOrderItem[{itemCount}].ProviderName", item.ProviderName)
+                        <label for="paymentOrderItem.items[@itemCount].NewOrder">New order:</label>
+                        <input id="custom-number-@item.InitialOrder" name="paymentOrderItem.items[@itemCount].NewOrder" max="@Model.Data.Items.Count()" type="number" value="@item.InitialOrder">
+                        @Html.Hidden($"paymentOrderItem.items[{itemCount}].InitialOrder", item.InitialOrder)
+                        @Html.Hidden($"paymentOrderItem.items[{itemCount}].ProviderId", item.ProviderId)
+                        @Html.Hidden($"paymentOrderItem.items[{itemCount}].ProviderName", item.ProviderName)
                     </li>
                 }
             </ol>
 
             <input id="manual-sort" class="button" type="submit" value="Save">
             <a class="button text-link" href="#Continue to wherever" title="continue">Continue to wherever</a>
-        </form>*@
-        <h1 class="heading-xlarge">Default payment order</h1>
+        </form>
+
+        @*<h1 class="heading-xlarge">Default payment order</h1>
             <form id="sort-it">
                 <ol>
                     <li>
@@ -79,7 +81,7 @@
                 </ol>
                 <input id="manual-sort" class="button" type="submit" value="Save">
                 <a class="button text-link" href="#Continue to wherever" title="continue">Continue to wherever</a>
-            </form>
+            </form>*@
 
         </div>
     </div>
