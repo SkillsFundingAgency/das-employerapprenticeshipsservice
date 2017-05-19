@@ -1,5 +1,4 @@
 ﻿$(function () {
-    // uses http://johnny.github.io/jquery-sortable/js/jquery-sortable-min.js
     $('#sort-it ol').sortable({
         onDrop: function (item) {
             $(item).removeClass("dragged").removeAttr("style");
@@ -23,7 +22,7 @@
     //bind to form submission
     $('#sort-it').submit(function (e) {
         reorderItems('#sort-it li', '#sort-it ol');
-        e.preventDefault();
+        //e.preventDefault(); // to test the order for keyboard entered values - uncomment this line out 
     })
 
 }); // end doc ready
@@ -40,9 +39,9 @@ function getInitialOrder(obj) {
 }
 
 function updateAllNumbers(currObj, targets) {
-    var delta = currObj.val() - currObj.attr('data-initial-value'), //if positive, the object went down in order. If negative, it went up.
+    var delta = currObj.val() - currObj.attr('value'), //if positive, the object went down in order. If negative, it went up.
             c = parseInt(currObj.val(), 10), //value just entered by user
-            cI = parseInt(currObj.attr('data-initial-value'), 10), //original object val before change
+            cI = parseInt(currObj.attr('value'), 10), //original object val before change
             top = $(targets).length;
 
     //if the user enters a number too high or low, cap it
@@ -65,7 +64,7 @@ function updateAllNumbers(currObj, targets) {
         //(but ignore if no value given yet)
         $(targets).each(function () {
             if ($(this).val() !== "") {
-                $(this).attr('data-initial-value', $(this).val());
+                $(this).attr('value', $(this).val());
             }
         });
     });
