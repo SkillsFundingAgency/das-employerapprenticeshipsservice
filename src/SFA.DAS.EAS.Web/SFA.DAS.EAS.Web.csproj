@@ -386,6 +386,7 @@
     <Compile Include="ViewModels\ManageApprenticeships\ApprenticeshipFiltersViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusChoiceViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\DataLockStatusViewModel.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\PaymentOrderViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ValidateWhenToApplyChangeResult.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\WhenToMakeChangeViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusNavigationLocation.cs" />

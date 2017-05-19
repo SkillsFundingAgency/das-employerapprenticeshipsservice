@@ -408,10 +408,19 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("paymentorder/", Name = "PaymentOrder")]
-        public ActionResult PaymentOrder(string hashedAccountId)
+        [Route("paymentorder", Name = "PaymentOrder")]
+        public async Task<ActionResult> PaymentOrder(string hashedAccountId)
         {
-            return View();
+            var model = await _orchestrator.GetPaymentOrder(hashedAccountId, OwinWrapper.GetClaimValue("sub"));
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("paymentorder", Name = "PaymentOrderPost")]
+        public async Task<ActionResult> PaymentOrderPost(string hashedAccountId, IEnumerable<PaymentOrderItem> paymentOrderItem)
+        {
+            var model = await _orchestrator.UpdatePaymentOrder(hashedAccountId, OwinWrapper.GetClaimValue("sub"), paymentOrderItem);
+            return View("PaymentOrder", model);
         }
 
         private bool AnyChanges(UpdateApprenticeshipViewModel data)

@@ -1,4 +1,4 @@
-﻿
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.PaymentOrderViewModel>
 
 @{
     ViewBag.Title = "Default payment order";
@@ -13,57 +13,81 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Default payment order</h1>
 
-                    <h1 class="heading-xlarge">Default payment order</h1>
-                    <form id="sort-it">
-                        <ol>
-                            <li>
-                                DEFENCE MINISTRY
-                                <label for="custom-number-1">New order:</label>
-                                <input id="custom-number-1" name="custom-number-1" type="number" value="1">
-                            </li>
-                            <li>
-                                VALTECH LIMITED
-                                <label for="custom-number-2">New order:</label>
-                                <input id="custom-number-2" name="custom-number-2" type="number" value="2">
-                            </li>
-                            <li>
-                                MARKS &amp; SPENCERS
-                                <label for="custom-number-3">New order:</label>
-                                <input id="custom-number-3" name="custom-number-3" type="number" value="3">
-                            </li>
-                            <li>
-                                JOHN LEWIS PARTNERSHIP
-                                <label for="custom-number-4">New order:</label>
-                                <input id="custom-number-4" name="custom-number-4" type="number" value="4">
-                            </li>
-                            <li>
-                                EDUCATIONAL AND SKILLS FUNDING AGENCY
-                                <label for="custom-number-5">New order:</label>
-                                <input id="custom-number-5" name="custom-number-5" type="number" value="5">
-                            </li>
-                            <li>
-                                INTELECTUAL PROPERTY OFFICE
-                                <label for="custom-number-6">New order:</label>
-                                <input id="custom-number-6" name="custom-number6" type="number" value="6">
-                            </li>
-                            <li>
-                                NATIONAL HEALTH SERVICE (NHS)
-                                <label for="custom-number-7">New order:</label>
-                                <input id="custom-number-7" name="custom-number-7" type="number" value="7">
-                            </li>
-                        </ol>
-                        <input id="manual-sort" class="button" type="submit" value="Save">
-                        <a class="button text-link" href="#Continue to wherever" title="continue">Continue to wherever</a>
-                    </form>
+        @*<form method="POST" action="@Url.Action("PaymentOrderPost")" novalidate="novalidate" id="sort-it">
+            @Html.AntiForgeryToken()
+            <ol>
+                @{
+                    var itemCount = -1;
+                }
+                @foreach (var item in Model.Data.PaymentOrderItems)
+                {
+                    itemCount++;
+                    <li>
+                        @item.ProviderName
+                        <label for="custom-number-@item.InitialOrder">New order:</label>
+                        <input id="custom-number-@item.InitialOrder" name="paymentOrderItem[@itemCount].NewOrder" type="number" value="@item.InitialOrder">
+                        @Html.Hidden($"paymentOrderItem[{itemCount}].InitialOrder", item.InitialOrder)
+                        @Html.Hidden($"paymentOrderItem[{itemCount}].ProviderId", item.ProviderId)
+                        @Html.Hidden($"paymentOrderItem[{itemCount}].ProviderName", item.ProviderName)
+                    </li>
+                }
+            </ol>
 
-</div>
+            <input id="manual-sort" class="button" type="submit" value="Save">
+            <a class="button text-link" href="#Continue to wherever" title="continue">Continue to wherever</a>
+        </form>*@
+        <h1 class="heading-xlarge">Default payment order</h1>
+            <form id="sort-it">
+                <ol>
+                    <li>
+                        DEFENCE MINISTRY
+                        <label for="custom-number-1">New order:</label>
+                        <input id="custom-number-1" name="custom-number-1" type="number" value="1">
+                    </li>
+                    <li>
+                        VALTECH LIMITED
+                        <label for="custom-number-2">New order:</label>
+                        <input id="custom-number-2" name="custom-number-2" type="number" value="2">
+                    </li>
+                    <li>
+                        MARKS &amp; SPENCERS
+                        <label for="custom-number-3">New order:</label>
+                        <input id="custom-number-3" name="custom-number-3" type="number" value="3">
+                    </li>
+                    <li>
+                        JOHN LEWIS PARTNERSHIP
+                        <label for="custom-number-4">New order:</label>
+                        <input id="custom-number-4" name="custom-number-4" type="number" value="4">
+                    </li>
+                    <li>
+                        EDUCATIONAL AND SKILLS FUNDING AGENCY
+                        <label for="custom-number-5">New order:</label>
+                        <input id="custom-number-5" name="custom-number-5" type="number" value="5">
+                    </li>
+                    <li>
+                        INTELECTUAL PROPERTY OFFICE
+                        <label for="custom-number-6">New order:</label>
+                        <input id="custom-number-6" name="custom-number6" type="number" value="6">
+                    </li>
+                    <li>
+                        NATIONAL HEALTH SERVICE (NHS)
+                        <label for="custom-number-7">New order:</label>
+                        <input id="custom-number-7" name="custom-number-7" type="number" value="7">
+                    </li>
+                </ol>
+                <input id="manual-sort" class="button" type="submit" value="Save">
+                <a class="button text-link" href="#Continue to wherever" title="continue">Continue to wherever</a>
+            </form>
+
         </div>
+    </div>
 
 
 
-        @section breadcrumb {
-            <div class="breadcrumbs">
-                <a href="@Url.Action("ListAll", "EmployerManageApprentices")" aria-label="Back" class="back-link">xxxxxxxxxxx</a>
-            </div>
-        }
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back" class="back-link">Back to start page</a>
+    </div>
+}
