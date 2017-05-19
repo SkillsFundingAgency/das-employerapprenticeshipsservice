@@ -1,10 +1,17 @@
 using System.Collections.Generic;
 
+using FluentValidation.Attributes;
+
+using SFA.DAS.EAS.Web.Validators;
+
 namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 {
-    public class PaymentOrderViewModel
+    [Validator(typeof(PaymentOrderViewModelValidator))]
+    public class PaymentOrderViewModel : ViewModelBase
     {
-        public IEnumerable<PaymentOrderItem> PaymentOrderItems { get; set; }
+        public IEnumerable<PaymentOrderItem> Items { get; set; }
+
+        public string ChangesConfirmedError => GetErrorMessage(nameof(Items));
     }
 
     public class PaymentOrderItem
