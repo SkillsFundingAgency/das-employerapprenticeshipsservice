@@ -15,8 +15,8 @@
     <div class="column-one-third">
         <form method="GET" action="@Url.Action("ListAll")" novalidate="novalidate">
             @Html.Partial("ApprenticeshipFilters", Model.Data.Filters)          
-            <button type="submit" class="button" value="Filter">Filter</button>
-            <a href="@Url.Action("Index")" title="Reset" class="button text-link">Reset</a>
+            <button type="submit" class="button" value="Filter">Filter apprentices</button>
+            <p><a href="@Url.Action("Index")" title="Reset" class="button text-link reset-link">Reset</a></p>
         </form>
     </div>
 

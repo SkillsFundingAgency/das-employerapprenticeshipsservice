@@ -388,8 +388,7 @@ body {
                     text-transform: none;  
                     padding: 7px 0 7px 2px;
                     border-bottom: 1px solid #bfc1c3;  
-                    cursor: pointer;
-                    span{display:block; float:left; border:1px solid red; padding-left:30px;}
+                    cursor: pointer;                
                     }
             }
           .showHide {
@@ -408,6 +407,10 @@ body {
 #manage-all-apprentices {
     .tableResponsive{
         th{font-size:16px;}
+    }
+    .reset-link{
+        padding-left:0;
+        margin-top:10px;
     }
 }
 

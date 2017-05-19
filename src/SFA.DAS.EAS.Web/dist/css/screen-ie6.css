@@ -4455,13 +4455,6 @@ h2 .float-right {
   cursor: pointer;
 }
 
-.filter-option-select .options-container label span {
-  display: block;
-  float: left;
-  border: 1px solid red;
-  padding-left: 30px;
-}
-
 .filter-option-select .showHide {
   background: url(/dist/css/images/option-select-toggle-sprite.png) no-repeat;
   background-position: right -77px;
@@ -4476,6 +4469,11 @@ h2 .float-right {
 
 #manage-all-apprentices .tableResponsive th {
   font-size: 16px;
+}
+
+#manage-all-apprentices .reset-link {
+  padding-left: 0;
+  margin-top: 10px;
 }
 
 .previous-next-navigation {
