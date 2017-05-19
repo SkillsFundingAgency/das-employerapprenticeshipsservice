@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         [Route("all")]
         [OutputCache(CacheProfile = "NoCache")]
-        public async Task<ActionResult> ListAll(string hashedAccountId, ApprenticeshipFiltersViewModel filtersViewModel, string reset)
+        public async Task<ActionResult> ListAll(string hashedAccountId, ApprenticeshipFiltersViewModel filtersViewModel)
         {
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
                 return View("AccessDenied");
@@ -51,7 +51,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             var model = await _orchestrator
                 .GetApprenticeships(hashedAccountId,
                 filtersViewModel,
-                !string.IsNullOrWhiteSpace(reset),
                 OwinWrapper.GetClaimValue(@"sub"));
 
             RemoveFlashMessageFromCookie();

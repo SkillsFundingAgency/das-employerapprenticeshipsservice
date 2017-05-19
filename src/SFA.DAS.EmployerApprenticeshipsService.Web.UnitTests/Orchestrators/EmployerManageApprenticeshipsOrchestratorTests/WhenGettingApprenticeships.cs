@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
         public async Task ThenShouldMapFiltersToSearchQuery()
         {
             //Act
-            await _orchestrator.GetApprenticeships("hashedAccountId", new ApprenticeshipFiltersViewModel(), false, "UserId");
+            await _orchestrator.GetApprenticeships("hashedAccountId", new ApprenticeshipFiltersViewModel(), "UserId");
 
             //Assert
             _mockApprenticeshipFiltersMapper.Verify(
@@ -79,7 +79,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
         public async Task ThenShouldMapSearchResultsToViewModel()
         {
             //Act
-            await _orchestrator.GetApprenticeships("hashedAccountId", new ApprenticeshipFiltersViewModel(), false, "UserId");
+            await _orchestrator.GetApprenticeships("hashedAccountId", new ApprenticeshipFiltersViewModel(), "UserId");
 
             //Assert
             _mockApprenticeshipFiltersMapper.Verify(
@@ -91,7 +91,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
         public async Task ThenShouldCallMediatorToQueryApprenticeships()
         {
             //Act
-            await _orchestrator.GetApprenticeships("hashedAccountId", new ApprenticeshipFiltersViewModel(), false, "UserId");
+            await _orchestrator.GetApprenticeships("hashedAccountId", new ApprenticeshipFiltersViewModel(), "UserId");
 
             //Assert
             _mockMediator.Verify(x => x.SendAsync(It.IsAny<ApprenticeshipSearchQueryRequest>()), Times.Once);

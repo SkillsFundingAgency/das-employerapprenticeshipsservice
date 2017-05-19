@@ -83,7 +83,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<ManageApprenticeshipsViewModel>> GetApprenticeships(
-            string hashedAccountId, ApprenticeshipFiltersViewModel filters, bool reset, string externalUserId)
+            string hashedAccountId, ApprenticeshipFiltersViewModel filters, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             _logger.Info($"Getting On-programme apprenticeships for empployer: {accountId}");
@@ -91,8 +91,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return await CheckUserAuthorization(async () =>
             {
 
-                var searchQuery = reset ? new ApprenticeshipSearchQuery()
-                    : _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters);
+                var searchQuery = _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters);
 
                 var searchResponse = await _mediator.SendAsync(new ApprenticeshipSearchQueryRequest
                 {
@@ -112,7 +111,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     HashedAccountId = hashedAccountId,
                     Apprenticeships = apprenticeships,
-                    Filters = filterOptions
+                    Filters = filterOptions,
+                    TotalApprenticeships = searchResponse.TotalApprenticeships
                 };
 
                 return new OrchestratorResponse<ManageApprenticeshipsViewModel>
