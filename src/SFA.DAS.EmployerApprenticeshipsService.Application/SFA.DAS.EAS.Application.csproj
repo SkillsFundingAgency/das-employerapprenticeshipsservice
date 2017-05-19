@@ -150,6 +150,9 @@
     <Compile Include="Commands\UpdatePayeInformation\UpdatePayeInformationCommand.cs" />
     <Compile Include="Commands\UpdatePayeInformation\UpdatePayeInformationCommandHandler.cs" />
     <Compile Include="Commands\UpdatePayeInformation\UpdatePayeInformationValidator.cs" />
+    <Compile Include="Commands\UpdateProviderPaymentPriority\UpdateProviderPaymentPriorityValidator.cs" />
+    <Compile Include="Commands\UpdateProviderPaymentPriority\UpdateProviderPaymentPriorityCommand.cs" />
+    <Compile Include="Commands\UpdateProviderPaymentPriority\UpdateProviderPaymentPriorityCommandHandler.cs" />
     <Compile Include="Extensions\ApprenticeshipExtensions.cs" />
     <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommand.cs" />
@@ -359,6 +362,9 @@
     <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmplyoerAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLockResponse.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLockQueryHandler.cs" />
+    <Compile Include="Queries\GetProviderPaymentPriority\FakePaymentPriorityStore.cs" />
+    <Compile Include="Queries\GetProviderPaymentPriority\GetProviderPaymentPriorityHandler.cs" />
+    <Compile Include="Queries\GetProviderPaymentPriority\GetProviderPaymentPriorityRequest.cs" />
     <Compile Include="Queries\GetApprenticeshipDetails\GetApprenticeshipDetailsHandler.cs" />
     <Compile Include="Queries\GetApprenticeshipDetails\GetApprenticeshipDetailsQuery.cs" />
     <Compile Include="Queries\GetApprenticeshipDetails\GetApprenticeshipDetailsQueryValidator.cs" />
@@ -486,6 +492,7 @@
     <Compile Include="Queries\GetPostcodeAddress\GetPostcodeAddressRequest.cs" />
     <Compile Include="Queries\GetPostcodeAddress\GetPostcodeAddressResponse.cs" />
     <Compile Include="Queries\GetPostcodeAddress\GetPostcodeAddressValidator.cs" />
+    <Compile Include="Queries\GetProviderPaymentPriority\GetProviderPaymentPriorityResponse.cs" />
     <Compile Include="Queries\GetProviders\GetProvidersQueryHandler.cs" />
     <Compile Include="Queries\GetProviders\GetProvidersQueryRequest.cs" />
     <Compile Include="Queries\GetProviders\GetProvidersQueryResponse.cs" />

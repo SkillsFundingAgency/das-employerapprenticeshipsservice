@@ -143,6 +143,7 @@
   <ItemGroup>
     <Compile Include="Configuration\EmployerApprenticeshipApiConfiguration.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
+    <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Http\InternalServerErrorException.cs" />
     <Compile Include="Http\RequestTimeOutException.cs" />
     <Compile Include="Interfaces\IAcademicYear.cs" />

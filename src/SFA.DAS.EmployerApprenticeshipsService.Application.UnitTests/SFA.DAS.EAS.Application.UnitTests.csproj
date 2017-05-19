@@ -190,6 +190,7 @@
     <Compile Include="Commands\UpdateEnglishFractions\WhenISendTheUpdateEnglishFractionsCommand.cs" />
     <Compile Include="Commands\UpdatePayeInformationTests\WhenUpdatingPayeInformation.cs" />
     <Compile Include="Commands\UpdatePayeInformationTests\WhenValidatingTheCommand.cs" />
+    <Compile Include="Commands\UpdateProviderPaymentPriority\WhenValidationUpdateProviderPaymentPriority.cs" />
     <Compile Include="Commands\UpsertRegisteredUserTests\WhenUpsertingAUser.cs" />
     <Compile Include="Events\ProcessDeclarationTests\WhenIProcessDeclarations.cs" />
     <Compile Include="Events\ProcessPaymentTests\WhenIProcessPaymentData.cs" />

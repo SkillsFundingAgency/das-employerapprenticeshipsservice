@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
+using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
 using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
@@ -273,7 +274,37 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             return model;
         }
 
-        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
+        public PaymentOrderViewModel MapPayment(List<GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI> data)
+        {
+            var items = data.Select(m => new PaymentOrderItem
+                                 {
+                                     ProviderId = m.ProviderId,
+                                     ProviderName = m.ProviderName,
+                                     InitialOrder = m.PaymentPriority,
+                                     NewOrder = m.PaymentPriority
+                                 })
+                                 .OrderBy(m => m.InitialOrder );
+
+            return new PaymentOrderViewModel
+                       {
+                           PaymentOrderItems = items
+                       };
+        }
+
+        public List<GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI> MapPayment(IEnumerable<PaymentOrderItem> paymentItems)
+        {
+            var mappedItems = paymentItems.Select(m => new GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI
+            {
+                ProviderId = m.ProviderId,
+                ProviderName = m.ProviderName,
+                PaymentPriority = m.NewOrder,
+            });
+
+            return mappedItems.ToList();
+        }
+
+
+    private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
             // TODO: LWA - Need to check is this is called multiple times in a single request.
             var trainingProgrammes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest());
