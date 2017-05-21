@@ -254,6 +254,7 @@
     <Compile Include="Services\AcademicYear.cs" />
     <Compile Include="Services\AddressLookupService.cs" />
     <Compile Include="Services\AuditService.cs" />
+    <Compile Include="Services\AzureAdAuthenticationService.cs" />
     <Compile Include="Services\AzureServiceBase.cs" />
     <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />
     <Compile Include="Services\CookieStorageService.cs" />
