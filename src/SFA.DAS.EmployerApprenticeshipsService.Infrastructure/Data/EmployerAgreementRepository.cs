@@ -117,5 +117,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return result.FirstOrDefault();
         }
+
+        public Task<EmployerAgreementView> GetLatestAccountLegalEntityAgreement(string hashedAccountId, string hashedLegalEntityId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
