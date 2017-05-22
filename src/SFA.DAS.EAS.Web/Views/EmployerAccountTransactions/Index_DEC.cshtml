@@ -36,10 +36,7 @@
                     <dl>
                         <dt>Current funds</dt>
                         @{
-                            //We never show a negative levy balance
-                            var currentBalance = Model.Data.Model.CurrentBalance > 0 ? Model.Data.Model.CurrentBalance : 0;
-
-                            var balance = currentBalance.ToString("C0", culture);
+                            var balance = Model.Data.Model.CurrentBalance.ToString("C0", culture);
                             var balanceClass = string.Empty;
 
                             if (balance.Length > 8)
@@ -62,7 +59,7 @@
 <div class="grid-row">
     <div class="column-full">
 
-        @if (Model.Data.Model.Data.TransactionLines.Count == 0)
+        @if (Model.Data.Model.Data.TransactionLines.All(c => c.TransactionType == TransactionItemType.Unknown))
         {
             <p class="panel panel-info">
                 @if (Model.Data.IsLatestMonth)
@@ -75,7 +72,7 @@
                 }
             </p>
         }
-        else if(Model.Data.Model.Data.TransactionLines.Count != 0)
+        else
         {
             <table>
                 <thead>
@@ -94,7 +91,7 @@
                    
                     <tr>
                         <td>
-                            <span class="no-wrap">@{var date = aggregationLine.TransactionDate.ToGdsFormat();} @date </span>
+                            <span class="no-wrap">@{var date = aggregationLine.DateCreated.ToGdsFormat();} @date </span>
                         </td>
                         <td class="mobile-hide-cell">
                             <span class="description">

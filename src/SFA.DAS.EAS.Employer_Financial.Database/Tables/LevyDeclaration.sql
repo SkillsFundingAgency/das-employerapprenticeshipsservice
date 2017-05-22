@@ -17,3 +17,7 @@
 	[InactiveTo] DATETIME NULL,
 	[HmrcSubmissionId] BIGINT NULL
 )
+
+GO
+
+CREATE INDEX [IX_LevyDeclaration_submissionid] ON [employer_financial].[LevyDeclaration] (submissionId)

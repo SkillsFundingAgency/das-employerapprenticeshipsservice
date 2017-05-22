@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
@@ -31,6 +33,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         private Mock<IPaymentsEventsApiClient> _paymentsApiClient;
         private Mock<IMapper> _mapper;
         private Mock<ILogger> _logger;
+        private Mock<ICacheProvider> _cacheProvider;
 
         private PaymentService _paymentService;
         private Framework _framework;
@@ -50,12 +53,15 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             SetupMapperMock();
             SetupLoggerMock();
 
+            _cacheProvider = new Mock<ICacheProvider>();
+
             _paymentService = new PaymentService(
                 _paymentsApiClient.Object,
                 _commitmentsApiClient.Object,
                 _apprenticeshipInfoService.Object,
                 _mapper.Object,
-                _logger.Object);
+                _logger.Object,
+                _cacheProvider.Object);
         }
 
         private void SetupLoggerMock()
@@ -92,6 +98,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             _commitmentsApiClient.Verify(x => x.GetEmployerApprenticeship(AccountId, _apprenticeship.Id), Times.Once);
         }
 
+
         [Test]
         public async Task ThenTheAppreticeshipsApiIsCalledToGetProviderDetails()
         {
@@ -104,6 +111,24 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         }
 
         [Test]
+        public async Task ThenSubsequentCallsToTheApprenticeshipApiAreReadFromTheCache()
+        {
+            //Arrange
+            _cacheProvider.SetupSequence(
+                x => x.Get<ProvidersView>($"{nameof(ProvidersView)}_{_provider.Ukprn.ToString()}"))
+                .Returns(null)
+                .Returns(new ProvidersView {Provider = new Domain.Models.ApprenticeshipProvider.Provider()});
+
+            //Act
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+
+            //Assert
+            _apprenticeshipInfoService.Verify(x => x.GetProvider(_provider.Ukprn), Times.Once);
+            _cacheProvider.Verify(x => x.Get<ProvidersView>($"{nameof(ProvidersView)}_{_provider.Ukprn.ToString()}"), Times.Exactly(2));
+        }
+
+        [Test]
         public async Task ThenTheAppreticeshipsApiIsCalledToGetStandardDetails()
         {
             //Act
@@ -112,6 +137,25 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             //Assert
             _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Once);
             _apprenticeshipInfoService.Verify(x => x.GetFrameworksAsync(false), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenSubsequentCallsToGetStandardDetailsAreReadFromTheCache()
+        {
+            //Arrange
+            _cacheProvider.SetupSequence(
+                x => x.Get<StandardsView>(nameof(StandardsView)))
+                .Returns(null)
+                .Returns(new StandardsView { Standards = new List<Standard>()});
+            
+
+            //Act
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+
+            //Assert
+            _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Once);
+            _cacheProvider.Verify(x => x.Get<StandardsView>(nameof(StandardsView)), Times.Exactly(2));
         }
 
         [Test]
@@ -127,6 +171,26 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             //Assert
             _apprenticeshipInfoService.Verify(x => x.GetFrameworksAsync(false), Times.Once);
             _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenSubsequentCallsToGetFrameworksAreReadFromTheCache()
+        {
+            //Arrange
+            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Provider.Events.Api.Types.Payment>()))
+                     .Returns(() => _frameworkPayment);
+            _cacheProvider.SetupSequence(
+                x => x.Get<FrameworksView>(nameof(FrameworksView)))
+                .Returns(null)
+                .Returns(new FrameworksView { Frameworks = new List<Framework>() });
+
+            //Act
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+
+            //Assert
+            _apprenticeshipInfoService.Verify(x => x.GetFrameworksAsync(false), Times.Once);
+            _cacheProvider.Verify(x => x.Get<FrameworksView>(nameof(FrameworksView)), Times.Exactly(2));
         }
 
         [Test]

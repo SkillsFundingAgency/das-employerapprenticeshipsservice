@@ -9,3 +9,7 @@
 	[CompletionDateTime] Datetime not null,
 	[PaymentsForPeriod] nvarchar(250) not null
 )
+
+GO
+
+CREATE INDEX [IX_PeriodEnd_PeriodEndId] ON [employer_financial].[PeriodEnd] ([PeriodEndId])

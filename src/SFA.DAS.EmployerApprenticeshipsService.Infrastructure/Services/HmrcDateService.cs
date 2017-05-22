@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 monthToUse = payrollMonth + 3;
             }
             
-            return new DateTime(yearToUse,monthToUse,21);
+            return new DateTime(yearToUse,monthToUse,19);
         }
 
         public bool DoesSubmissionPreDateLevy(string payrollYear)

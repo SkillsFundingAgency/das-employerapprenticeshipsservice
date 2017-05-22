@@ -23,15 +23,17 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly ITokenServiceApiClient _tokenServiceApiClient;
         private readonly ExecutionPolicy _executionPolicy;
         private readonly ICacheProvider _cacheProvider;
+        private readonly IAzureAdAuthenticationService _azureAdAuthenticationService;
 
 
-        public HmrcService(EmployerApprenticeshipsServiceConfiguration configuration, IHttpClientWrapper httpClientWrapper, ITokenServiceApiClient tokenServiceApiClient, [RequiredPolicy(HmrcExecutionPolicy.Name)] ExecutionPolicy executionPolicy, ICacheProvider cacheProvider)
+        public HmrcService(EmployerApprenticeshipsServiceConfiguration configuration, IHttpClientWrapper httpClientWrapper, ITokenServiceApiClient tokenServiceApiClient, [RequiredPolicy(HmrcExecutionPolicy.Name)] ExecutionPolicy executionPolicy, ICacheProvider cacheProvider, IAzureAdAuthenticationService azureAdAuthenticationService)
         {
             _configuration = configuration;
             _httpClientWrapper = httpClientWrapper;
             _tokenServiceApiClient = tokenServiceApiClient;
             _executionPolicy = executionPolicy;
             _cacheProvider = cacheProvider;
+            _azureAdAuthenticationService = azureAdAuthenticationService;
 
             _httpClientWrapper.BaseUrl = _configuration.Hmrc.BaseUrl;
             _httpClientWrapper.AuthScheme = "Bearer";
@@ -172,8 +174,21 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<string> GetOgdAccessToken()
         {
-            var accessToken = await _tokenServiceApiClient.GetPrivilegedAccessTokenAsync();
-            return accessToken.AccessCode;
+            if (_configuration.Hmrc.UseHiDataFeed)
+            {
+                var accessToken =
+                    await _azureAdAuthenticationService.GetAuthenticationResult(_configuration.Hmrc.ClientId,
+                            _configuration.Hmrc.AzureAppKey, _configuration.Hmrc.AzureResourceId,
+                            _configuration.Hmrc.AzureTenant);
+
+                return accessToken;
+            }
+            else
+            {
+                var accessToken = await _tokenServiceApiClient.GetPrivilegedAccessTokenAsync();
+                return accessToken.AccessCode;
+            }
+            
         }
     }
 }
