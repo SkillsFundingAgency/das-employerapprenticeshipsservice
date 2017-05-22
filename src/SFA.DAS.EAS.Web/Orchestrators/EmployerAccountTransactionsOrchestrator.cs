@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         HashedAccountId = hashedId,
                         UkPrn = ukprn,
                         ProviderName = data.ProviderName,
-                        PaymentDate = data.TransactionDate,
+                        PaymentDate = data.DateCreated,
                         FromDate = fromDate,
                         ToDate = toDate,
                         CoursePayments = coursePaymentSummaries,
