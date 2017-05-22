@@ -13,7 +13,7 @@ select mainUpdate.* from
             Max(pe.CompletionDateTime) as TransactionDate,
             3 as TransactionType,
             null as LevyDeclared,
-            Sum(p.Amount) * -1 Amount,
+            Sum(ISNULL(p.Amount, 0)) * -1 Amount,
             null as empref,
             x.PeriodEnd,
             x.UkPrn,
@@ -33,7 +33,7 @@ select mainUpdate.* from
             x.UkPrn,x.PeriodEnd,x.accountId
     ) mainUpdate
     inner join (
-        select accountid,ukprn,periodend from [employer_financial].Payment where FundingSource = 1        
+        select accountid,ukprn,periodend from [employer_financial].Payment where FundingSource IN (1,2,3)      
     EXCEPT
         select accountid,ukprn,periodend from [employer_financial].transactionline where TransactionType = 3
     ) dervx on dervx.accountId = mainUpdate.accountId and dervx.PeriodEnd = mainUpdate.PeriodEnd and dervx.Ukprn = mainUpdate.ukprn

@@ -11,6 +11,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments
         public string CourseName { get; set; }
         public int? CourseLevel { get; set; }
         public DateTime TransactionDate { get; set; }
+        public DateTime DateCreated { get; set; }
         public List<PaymentTransactionLine> Transactions { get; set; }
         public decimal Total { get; set; }
     }

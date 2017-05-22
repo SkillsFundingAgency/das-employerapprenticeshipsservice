@@ -57,6 +57,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments
                 CourseName = firstTransaction.CourseName,
                 CourseLevel = firstTransaction.CourseLevel,
                 TransactionDate = firstTransaction.TransactionDate,
+                DateCreated = firstTransaction.DateCreated,
                 Transactions = transactions.ToList(),
                 Total = transactions.Sum(c => c.LineAmount)
             };

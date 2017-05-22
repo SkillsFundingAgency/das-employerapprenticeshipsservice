@@ -53,6 +53,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments
             {
                 ProviderName = firstTransaction.ProviderName,
                 TransactionDate = firstTransaction.TransactionDate,
+                DateCreated = firstTransaction.DateCreated,
                 Transactions = transactions.ToList(),
                 Total = transactions.Sum(c => c.LineAmount)
             };
