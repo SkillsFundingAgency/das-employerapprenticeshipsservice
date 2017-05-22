@@ -5,8 +5,8 @@ using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using System.Threading.Tasks;
 
+using SFA.DAS.Commitments.Api.Types.ProviderPayment;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
-using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
 
 namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 {
@@ -28,9 +28,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 
         UpdateApprenticeshipViewModel MapFrom(ApprenticeshipUpdate apprenticeshipUpdate);
 
-        PaymentOrderViewModel MapPayment(List<GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI> data);
+        PaymentOrderViewModel MapPayment(IList<ProviderPaymentPriorityItem> data);
 
-        List<GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI> MapPayment(
-            IEnumerable<PaymentOrderItem> paymentItems);
+        List<ProviderPaymentPriorityItem> MapPayment(IEnumerable<PaymentOrderItem> paymentItems);
     }
 }

@@ -12,9 +12,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
+using SFA.DAS.Commitments.Api.Types.ProviderPayment;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
-using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
 using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
@@ -274,27 +274,27 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             return model;
         }
 
-        public PaymentOrderViewModel MapPayment(List<GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI> data)
+        public PaymentOrderViewModel MapPayment(IList<ProviderPaymentPriorityItem> data)
         {
             var items = data.Select(m => new PaymentOrderItem
                                  {
                                      ProviderId = m.ProviderId,
                                      ProviderName = m.ProviderName,
-                                     InitialOrder = m.PaymentPriority,
-                                     NewOrder = m.PaymentPriority
+                                     InitialOrder = m.PriorityOrder,
+                                     NewOrder = m.PriorityOrder
                                  })
                                  .OrderBy(m => m.InitialOrder );
 
             return new PaymentOrderViewModel { Items = items };
         }
 
-        public List<GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI> MapPayment(IEnumerable<PaymentOrderItem> paymentItems)
+        public List<ProviderPaymentPriorityItem> MapPayment(IEnumerable<PaymentOrderItem> paymentItems)
         {
-            var mappedItems = paymentItems.Select(m => new GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI
+            var mappedItems = paymentItems.Select(m => new ProviderPaymentPriorityItem
             {
                 ProviderId = m.ProviderId,
                 ProviderName = m.ProviderName,
-                PaymentPriority = m.NewOrder,
+                PriorityOrder = m.NewOrder,
             });
 
             return mappedItems.ToList();
