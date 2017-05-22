@@ -18,21 +18,27 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority
                 return result;
             }
 
-            if (item.Data.Any(m => m.PaymentPriority < 1))
+            if (item.Data.Any(m => m.PriorityOrder < 1))
             {
                 result.AddError("PaymentPriority.LessThan1", "Provider payment priority cannot be less than 1");
             }
 
-            if (item.Data.Any(m => m.PaymentPriority > item.Data.Count()))
+            if (item.Data.Any(m => m.PriorityOrder > item.Data.Count()))
             {
                 result.AddError("PaymentPriority.GreaterThan", "Provider payment priority cannot have a priority order hight than the number of providers");
             }
 
-            if (item.Data.DistinctBy(m => m.PaymentPriority).Count() != item.Data.Count())
+            if (item.Data.DistinctBy(m => m.PriorityOrder).Count() != item.Data.Count())
             {
-                var priorities  = string.Join(",", item.Data.Select(m => m.PaymentPriority));
+                var priorities  = string.Join(",", item.Data.Select(m => m.PriorityOrder));
                 result.AddError("PaymentPriority.Duplication", $"Provider payment priority cannot contains duplication of payment priority. {priorities}");
             }
+
+            if (string.IsNullOrEmpty(item.UserId))
+            {
+                result.AddError($"{nameof(item.UserId)}", $"{nameof(item.UserId)} cannot be null or empty");
+            }
+
 
             return result;
         }

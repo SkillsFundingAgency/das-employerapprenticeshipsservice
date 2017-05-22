@@ -2,7 +2,7 @@
 
 using MediatR;
 
-using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
+using SFA.DAS.Commitments.Api.Types.ProviderPayment;
 
 namespace SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority
 {
@@ -10,7 +10,12 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority
     {
         public long AccountId { get; set; }
 
-        public IEnumerable<GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI> Data { get; set; }
+        public IEnumerable<ProviderPaymentPriorityItem> Data { get; set; }
 
+        public string UserId { get; set; }
+
+        public string UserEmailAddress { get; set; }
+
+        public string UserDisplayName { get; set; }
     }
 }

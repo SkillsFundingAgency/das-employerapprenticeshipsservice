@@ -427,7 +427,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 newModel.Data = paymentOrderItem;
                 return View("PaymentOrder", newModel);
             }
-            var model = await _orchestrator.UpdatePaymentOrder(hashedAccountId, OwinWrapper.GetClaimValue("sub"), paymentOrderItem.Items);
+            var model = await _orchestrator.UpdatePaymentOrder(hashedAccountId, paymentOrderItem.Items, OwinWrapper.GetClaimValue("sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
+                    OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
             model.FlashMessage = new FlashMessageViewModel
                                      {

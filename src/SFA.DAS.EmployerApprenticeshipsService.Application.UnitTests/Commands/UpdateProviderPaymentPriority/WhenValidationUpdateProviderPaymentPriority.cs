@@ -4,8 +4,8 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 
+using SFA.DAS.Commitments.Api.Types.ProviderPayment;
 using SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority;
-using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateProviderPaymentPriority
 {
@@ -25,14 +25,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateProviderPaymentPriori
         {
             var command = new UpdateProviderPaymentPriorityCommand
                               {
-                                  Data = new List<GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI>
+                                  Data = new List<ProviderPaymentPriorityItem>
                                              {
-                                                 new GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI
-                                                    { ProviderId = 222, PaymentPriority = 2, ProviderName = "p2"},
-                                                 new GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI
-                                                    { ProviderId = 111, PaymentPriority = -1, ProviderName = "p1"},
-                                                 new GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI
-                                                    { ProviderId = 333, PaymentPriority = 3, ProviderName = "p3"}
+                                                 new ProviderPaymentPriorityItem
+                                                    { ProviderId = 222, PriorityOrder = 2, ProviderName = "p2"},
+                                                 new ProviderPaymentPriorityItem
+                                                    { ProviderId = 111, PriorityOrder = -1, ProviderName = "p1"},
+                                                 new ProviderPaymentPriorityItem
+                                                    { ProviderId = 333, PriorityOrder = 3, ProviderName = "p3"}
                                              }
                               };
             var validationResult = _sut.Validate(command);
@@ -51,14 +51,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateProviderPaymentPriori
         {
             var command = new UpdateProviderPaymentPriorityCommand
             {
-                Data = new List<GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI>
+                Data = new List<ProviderPaymentPriorityItem>
                                              {
-                                                 new GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI
-                                                    { ProviderId = 111, PaymentPriority = 1, ProviderName = "p1"},
-                                                 new GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI
-                                                    { ProviderId = 222, PaymentPriority = 2, ProviderName = "p2"},
-                                                 new GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI
-                                                    { ProviderId = 333, PaymentPriority = 4, ProviderName = "p3"}
+                                                 new ProviderPaymentPriorityItem
+                                                    { ProviderId = 111, PriorityOrder = 1, ProviderName = "p1"},
+                                                 new ProviderPaymentPriorityItem
+                                                    { ProviderId = 222, PriorityOrder = 2, ProviderName = "p2"},
+                                                 new ProviderPaymentPriorityItem
+                                                    { ProviderId = 333, PriorityOrder = 4, ProviderName = "p3"}
                                              }
             };
             var validationResult = _sut.Validate(command);
@@ -77,14 +77,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateProviderPaymentPriori
         {
             var command = new UpdateProviderPaymentPriorityCommand
             {
-                Data = new List<GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI>
+                Data = new List<ProviderPaymentPriorityItem>
                                              {
-                                                 new GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI
-                                                    { ProviderId = 111, PaymentPriority = 1, ProviderName = "p1"},
-                                                 new GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI
-                                                    { ProviderId = 222, PaymentPriority = 1, ProviderName = "p2"},
-                                                 new GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI
-                                                    { ProviderId = 333, PaymentPriority = 3, ProviderName = "p3"}
+                                                 new ProviderPaymentPriorityItem
+                                                    { ProviderId = 111, PriorityOrder = 1, ProviderName = "p1"},
+                                                 new ProviderPaymentPriorityItem
+                                                    { ProviderId = 222, PriorityOrder = 1, ProviderName = "p2"},
+                                                 new ProviderPaymentPriorityItem
+                                                    { ProviderId = 333, PriorityOrder = 3, ProviderName = "p3"}
                                              }
             };
             var validationResult = _sut.Validate(command);
@@ -103,10 +103,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateProviderPaymentPriori
         {
             var command = new UpdateProviderPaymentPriorityCommand
             {
-                Data = new List<GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI>
+                Data = new List<ProviderPaymentPriorityItem>
                                              {
-                                                 new GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI
-                                                    { ProviderId = 111, PaymentPriority = 1, ProviderName = "p1"}
+                                                 new ProviderPaymentPriorityItem
+                                                    { ProviderId = 111, PriorityOrder = 1, ProviderName = "p1"}
                                              }
             };
             var validationResult = _sut.Validate(command);
@@ -126,7 +126,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateProviderPaymentPriori
         {
             var command = new UpdateProviderPaymentPriorityCommand
             {
-                Data = new List<GetProviderPaymentPriorityHandler.ProviderPaymentPriorityItemAPI>()
+                Data = new List<ProviderPaymentPriorityItem>()
             };
             var validationResult = _sut.Validate(command);
 
