@@ -19,8 +19,8 @@ SELECT
 	,MAX(meta.ApprenticeshipCourseStartDate) as CourseStartDate
 	,MAX(meta.ApprenticeName) as ApprenticeName
 	,MAX(meta.ApprenticeNINumber) as ApprenticeNINumber	
-	,(SUM(pays3.Amount) * -1) as SfaCoInvestmentAmount
-	,(SUM(pays2.Amount) * -1) as EmployerCoInvestmentAmount	
+	,(SUM(pays2.Amount) * -1) as SfaCoInvestmentAmount
+	,(SUM(pays3.Amount) * -1) as EmployerCoInvestmentAmount	
   FROM [employer_financial].[Payment] p
   inner JOIN [employer_financial].[PaymentMetaData] meta ON p.PaymentMetaDataId = meta.Id
   inner join (select PeriodEnd,AccountId,ukprn,TransactionDate, DateCreated from employer_financial.TransactionLine where DateCreated >= @fromDate AND 

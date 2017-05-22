@@ -164,6 +164,93 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
                 .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment> { Items = new[] { payment } });
         }
 
+        [When(@"I make a co-investment payment for the apprenticeship")]
+        public void WhenIMakeACo_InvestmentPaymentForTheApprenticeship()
+        {
+            var standard = (Standard)ScenarioContext.Current["standard"];
+            var apprenticeship = (Apprenticeship)ScenarioContext.Current["apprenticeship"];
+            var accountId = (long)ScenarioContext.Current["AccountId"];
+
+            var dasLevyRepository = _container.GetInstance<IDasLevyRepository>();
+
+            var periodEnd = GetCurrentMonthPeriodEnd(dasLevyRepository);
+
+            ScenarioContext.Current["periodEnd"] = periodEnd;
+
+            //Simulating a payment for last month fee of a course that has been submitted this month 
+            var deliveryDate = DateTime.Now.AddMonths(-1);
+            var collectionDate = DateTime.Now;
+
+            ScenarioContext.Current["paymentDeliveryDate"] = deliveryDate;
+            ScenarioContext.Current["paymentCollectionDate"] = collectionDate;
+
+            //Creates a payment that has been submitted for this month
+            var payment = new Provider.Events.Api.Types.Payment
+            {
+                Id = Guid.NewGuid().ToString(),
+                Ukprn = 100,
+                StandardCode = standard.Code,
+                ApprenticeshipId = apprenticeship.Id,
+                DeliveryPeriod = new CalendarPeriod { Month = deliveryDate.Month, Year = deliveryDate.Year },
+                Amount = 200,
+                CollectionPeriod = new NamedCalendarPeriod { Id = periodEnd.Id, Month = collectionDate.Month, Year = collectionDate.Year },
+                TransactionType = TransactionType.Learning,
+                EvidenceSubmittedOn = DateTime.Now.AddDays(-5),
+                Uln = 123,
+                EmployerAccountVersion = "1.0",
+                EmployerAccountId = accountId.ToString(),
+                FundingSource = FundingSource.Levy,
+                ApprenticeshipVersion = "1.0"
+                
+            };
+
+            var sfaPayment = new Provider.Events.Api.Types.Payment
+            {
+                Id = Guid.NewGuid().ToString(),
+                Ukprn = 100,
+                StandardCode = standard.Code,
+                ApprenticeshipId = apprenticeship.Id,
+                DeliveryPeriod = new CalendarPeriod { Month = deliveryDate.Month, Year = deliveryDate.Year },
+                Amount = 90,
+                CollectionPeriod = new NamedCalendarPeriod { Id = periodEnd.Id, Month = collectionDate.Month, Year = collectionDate.Year },
+                TransactionType = TransactionType.Learning,
+                EvidenceSubmittedOn = DateTime.Now.AddDays(-5),
+                Uln = 123,
+                EmployerAccountVersion = "1.0",
+                EmployerAccountId = accountId.ToString(),
+                FundingSource = FundingSource.CoInvestedSfa,
+                ApprenticeshipVersion = "1.0"
+
+            };
+
+            var employerPayment = new Provider.Events.Api.Types.Payment
+            {
+                Id = Guid.NewGuid().ToString(),
+                Ukprn = 100,
+                StandardCode = standard.Code,
+                ApprenticeshipId = apprenticeship.Id,
+                DeliveryPeriod = new CalendarPeriod { Month = deliveryDate.Month, Year = deliveryDate.Year },
+                Amount = 10,
+                CollectionPeriod = new NamedCalendarPeriod { Id = periodEnd.Id, Month = collectionDate.Month, Year = collectionDate.Year },
+                TransactionType = TransactionType.Learning,
+                EvidenceSubmittedOn = DateTime.Now.AddDays(-5),
+                Uln = 123,
+                EmployerAccountVersion = "1.0",
+                EmployerAccountId = accountId.ToString(),
+                FundingSource = FundingSource.CoInvestedEmployer,
+                ApprenticeshipVersion = "1.0"
+
+            };
+
+            ScenarioContext.Current["payment"] = payment;
+            ScenarioContext.Current["sfaPayment"] = sfaPayment;
+            ScenarioContext.Current["employerPayment"] = employerPayment;
+
+            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1))
+                .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment> { Items = new[] { payment, sfaPayment, employerPayment } });
+        }
+
+
         [When(@"payment details are updated")]
         public void WhenPaymentDetailsAreUpdated()
         {
@@ -235,7 +322,42 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             Assert.AreEqual(standard.Title, paymentTransaction.CourseName);
             Assert.AreEqual(expectedStartDate, courseStartDate);
         }
-        
+
+        [Then(@"the apprenticeship course details are stored with coinvestment figures")]
+        public void ThenTheApprenticeshipCourseDetailsAreStoredWithCoinvestmentFigures()
+        {
+            var accountId = (long)ScenarioContext.Current["AccountId"];
+            var standard = (Standard)ScenarioContext.Current["standard"];
+            var apprenticeship = (Apprenticeship)ScenarioContext.Current["apprenticeship"];
+            var collectionDate = (DateTime)ScenarioContext.Current["paymentCollectionDate"];
+            var transactionMonthStart = new DateTime(collectionDate.Year, collectionDate.Month, 1);
+            var transactionMonthEnd = new DateTime(
+                collectionDate.Year,
+                collectionDate.Month,
+                DateTime.DaysInMonth(collectionDate.Year, collectionDate.Month),
+                23, 59, 59);
+
+            var payment = (Provider.Events.Api.Types.Payment)ScenarioContext.Current["payment"];
+            var sfaPayment = (Provider.Events.Api.Types.Payment)ScenarioContext.Current["sfaPayment"];
+            var employerPayment = (Provider.Events.Api.Types.Payment)ScenarioContext.Current["employerPayment"];
+
+            var repository = _container.GetInstance<ITransactionRepository>();
+
+            var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, payment.Ukprn, transactionMonthStart, transactionMonthEnd).Result;
+
+            var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
+
+            var expectedStartDate = apprenticeship.StartDate?.ToShortDateString() ?? "expectedDateNotFound";
+            var courseStartDate = paymentTransaction.CourseStartDate?.ToShortDateString() ?? "courseStartDateNotFound";
+
+            Assert.AreEqual(standard.Level, paymentTransaction.CourseLevel);
+            Assert.AreEqual(standard.Title, paymentTransaction.CourseName);
+            Assert.AreEqual(expectedStartDate, courseStartDate);
+            Assert.AreEqual(sfaPayment.Amount * -1, paymentTransaction.SfaCoInvestmentAmount);
+            Assert.AreEqual(employerPayment.Amount * -1, paymentTransaction.EmployerCoInvestmentAmount);
+        }
+
+
         [Then(@"the apprenticeship learner details are stored")]
         public void ThenTheApprenticeshipLearnerDetailsAreStored()
         {
@@ -249,8 +371,9 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
                 collectionDate.Month,
                 DateTime.DaysInMonth(collectionDate.Year, collectionDate.Month),
                 23, 59, 59);
-            var payment = (Provider.Events.Api.Types.Payment)ScenarioContext.Current["payment"];
 
+            var payment = (Provider.Events.Api.Types.Payment)ScenarioContext.Current["payment"];
+          
             var repository = _container.GetInstance<ITransactionRepository>();
 
             var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, payment.Ukprn, transactionMonthStart, transactionMonthEnd).Result;
