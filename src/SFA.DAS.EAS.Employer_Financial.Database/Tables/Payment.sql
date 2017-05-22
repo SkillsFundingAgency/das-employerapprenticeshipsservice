@@ -19,3 +19,13 @@
 	[PeriodEnd] VARCHAR(25) not null, 
     [PaymentMetaDataId] BIGINT NOT NULL,     
 )
+
+GO
+
+CREATE INDEX [IX_Payment_AccountId] ON [employer_financial].[Payment] (AccountId) INCLUDE (UKPrn,periodend,fundingsource)
+
+GO
+
+CREATE INDEX [IX_Payment_PaymentMetaDataId] ON [employer_financial].[Payment] ([PaymentMetaDataId])
+
+GO
