@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.RemoveLegalEntity;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -15,9 +16,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
         private RemoveLegalEntityCommandValidator _removeLegalEntityCommandValidator;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
+        private Mock<IHashingService> _hashingService;
 
         private const string ExpectedHashedAccountId = "12313";
         private const string ExpectedHashedLegalEntityId = "GFDSF567";
+        private const long ExpectedAccountId = 123123777;
+        private const long ExpectedLegalEntityId = 46435;
         private const string ExpectedUserId = "AFGF456";
         private const string ExpectedNonOwnerUserId = "AGVFF456";
 
@@ -28,11 +32,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
             _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedAccountId, ExpectedUserId)).ReturnsAsync(new MembershipView {RoleId = (short) Role.Owner});
             _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedAccountId, ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView { RoleId = (short)Role.Transactor });
 
+            _hashingService = new Mock<IHashingService>();
+            _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountId)).Returns(ExpectedAccountId);
+            _hashingService.Setup(x => x.DecodeValue(ExpectedHashedLegalEntityId)).Returns(ExpectedLegalEntityId);
+
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
             _employerAgreementRepository.Setup(
-                x => x.GetLatestAccountLegalEntityAgreement(ExpectedHashedAccountId, ExpectedHashedLegalEntityId)).ReturnsAsync(new EmployerAgreementView { Status = EmployerAgreementStatus.Pending});
+                x => x.GetLatestAccountLegalEntityAgreement(ExpectedAccountId, ExpectedLegalEntityId)).ReturnsAsync(new EmployerAgreementView { Status = EmployerAgreementStatus.Pending});
 
-            _removeLegalEntityCommandValidator = new RemoveLegalEntityCommandValidator(_membershipRepository.Object, _employerAgreementRepository.Object);
+            _removeLegalEntityCommandValidator = new RemoveLegalEntityCommandValidator(_membershipRepository.Object, _employerAgreementRepository.Object, _hashingService.Object);
         }
 
         [Test]
@@ -74,7 +82,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
         {
             //Arrange
             _employerAgreementRepository.Setup(
-                x => x.GetLatestAccountLegalEntityAgreement(ExpectedHashedAccountId, ExpectedHashedLegalEntityId)).ReturnsAsync(new EmployerAgreementView { Status = EmployerAgreementStatus.Signed });
+                x => x.GetLatestAccountLegalEntityAgreement(ExpectedAccountId, ExpectedLegalEntityId)).ReturnsAsync(new EmployerAgreementView { Status = EmployerAgreementStatus.Signed });
 
             //Act
             var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, HashedLegalEntityId = ExpectedHashedLegalEntityId, UserId = ExpectedUserId });

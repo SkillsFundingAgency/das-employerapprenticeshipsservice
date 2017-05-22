@@ -15,6 +15,6 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task CreateEmployerAgreementTemplate(string templateRef, string text);
         Task<EmployerAgreementTemplate> GetEmployerAgreementTemplate(int templateId);
         Task<EmployerAgreementTemplate> GetLatestAgreementTemplate();
-        Task<EmployerAgreementView> GetLatestAccountLegalEntityAgreement(string hashedAccountId, string hashedLegalEntityId);
+        Task<EmployerAgreementView> GetLatestAccountLegalEntityAgreement(long accountId, long legalEntityId);
     }
 }

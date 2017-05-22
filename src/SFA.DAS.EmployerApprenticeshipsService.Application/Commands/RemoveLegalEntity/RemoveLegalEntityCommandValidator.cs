@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
@@ -11,11 +12,13 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
     {
         private readonly IMembershipRepository _membershipRepository;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
+        private readonly IHashingService _hashingService;
 
-        public RemoveLegalEntityCommandValidator(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository)
+        public RemoveLegalEntityCommandValidator(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService)
         {
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
+            _hashingService = hashingService;
         }
 
         public ValidationResult Validate(RemoveLegalEntityCommand item)
@@ -45,7 +48,6 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
                 return validationResult;
             }
 
-
             var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
 
             if (member == null || !member.RoleId.Equals((short)Role.Owner))
@@ -53,8 +55,11 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
                 validationResult.IsUnauthorized = true;
                 return validationResult;
             }
-            
-            var agreement = await _employerAgreementRepository.GetLatestAccountLegalEntityAgreement(item.HashedAccountId, item.HashedLegalEntityId);
+
+            var accountId = _hashingService.DecodeValue(item.HashedAccountId);
+            var legalEntityId = _hashingService.DecodeValue(item.HashedLegalEntityId);
+
+            var agreement = await _employerAgreementRepository.GetLatestAccountLegalEntityAgreement(accountId, legalEntityId);
 
             if (agreement.Status == EmployerAgreementStatus.Signed)
             {

@@ -118,9 +118,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.FirstOrDefault();
         }
 
-        public Task<EmployerAgreementView> GetLatestAccountLegalEntityAgreement(string hashedAccountId, string hashedLegalEntityId)
+        public async Task<EmployerAgreementView> GetLatestAccountLegalEntityAgreement(long accountId, long legalEntityId)
         {
-            throw new NotImplementedException();
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@AccountId", accountId, DbType.Int64);
+                parameters.Add("@LegalEntityId", legalEntityId, DbType.Int64);
+
+                return await c.QueryAsync<EmployerAgreementView>(
+                    sql: "[employer_account].[GetEmployerAgreement_ByAccountIdAndLegalEntityId]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.SingleOrDefault();
         }
     }
 }
