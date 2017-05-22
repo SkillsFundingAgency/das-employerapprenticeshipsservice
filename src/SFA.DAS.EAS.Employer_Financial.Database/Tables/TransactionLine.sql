@@ -16,3 +16,6 @@
 GO
 
 CREATE INDEX [IX_TransactionLine_submissionId] ON [employer_financial].[TransactionLine] (SubmissionId)
+GO
+CREATE INDEX [IX_TransactionLine_AccountId] ON [employer_financial].[TransactionLine] (AccountId) INCLUDE (UKPrn,periodend,TransactionType)
+GO
