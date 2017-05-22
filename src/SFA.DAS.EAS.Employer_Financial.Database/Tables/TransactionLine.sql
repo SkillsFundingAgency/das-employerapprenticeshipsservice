@@ -13,3 +13,6 @@
     SfaCoInvestmentAmount DECIMAL(18, 4) NOT NULL DEFAULT 0, 
     EmployerCoInvestmentAmount DECIMAL(18, 4) NOT NULL DEFAULT 0,
 )
+GO
+
+CREATE INDEX [IX_TransactionLine_submissionId] ON [employer_financial].[TransactionLine] (SubmissionId)
