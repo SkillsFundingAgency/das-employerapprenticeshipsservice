@@ -362,7 +362,6 @@
     <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmplyoerAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLockResponse.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLockQueryHandler.cs" />
-    <Compile Include="Queries\GetProviderPaymentPriority\FakePaymentPriorityStore.cs" />
     <Compile Include="Queries\GetProviderPaymentPriority\GetProviderPaymentPriorityHandler.cs" />
     <Compile Include="Queries\GetProviderPaymentPriority\GetProviderPaymentPriorityRequest.cs" />
     <Compile Include="Queries\GetApprenticeshipDetails\GetApprenticeshipDetailsHandler.cs" />

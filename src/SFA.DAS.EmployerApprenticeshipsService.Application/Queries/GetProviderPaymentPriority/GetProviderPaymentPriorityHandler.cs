@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using MediatR;
-
-using NLog;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 
@@ -13,45 +10,21 @@ namespace SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority
     public class GetProviderPaymentPriorityHandler :
         IAsyncRequestHandler<GetProviderPaymentPriorityRequest, GetProviderPaymentPriorityResponse>
     {
-        private readonly IEmployerCommitmentApi _dataLockApi;
+        private readonly IEmployerCommitmentApi _commitmentApi;
 
-        private readonly ILogger _logger;
-
-        public GetProviderPaymentPriorityHandler(IEmployerCommitmentApi commitmentApi, ILogger logger)
+        public GetProviderPaymentPriorityHandler(IEmployerCommitmentApi commitmentApi)
         {
             if (commitmentApi == null)
                 throw new ArgumentNullException(nameof(commitmentApi));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
 
-            _dataLockApi = commitmentApi;
-            _logger = logger;
+            _commitmentApi = commitmentApi;
         }
 
-        public Task<GetProviderPaymentPriorityResponse> Handle(GetProviderPaymentPriorityRequest message)
+        public async Task<GetProviderPaymentPriorityResponse> Handle(GetProviderPaymentPriorityRequest message)
         {
-            var data = new GetProviderPaymentPriorityResponse { Data = FakePaymentPriorityStore.GetData() };
+            var data = await _commitmentApi.GetCustomProviderPaymentPriority(message.AccountId);   
 
-            return Task.Run(() => data);
+            return new GetProviderPaymentPriorityResponse { Data = data };
         }
-
-        // API things
-
-        
-
-        public class ProviderPaymentPriorityAPI
-        {
-            public IEnumerable<ProviderPaymentPriorityItemAPI> PaymentOrderItems { get; set; }
-        }
-
-        public class ProviderPaymentPriorityItemAPI
-        {
-            public string ProviderName { get; set; }
-
-            public long ProviderId { get; set; }
-
-            public int PaymentPriority { get; set; }
-        }
-        
     }
 }
