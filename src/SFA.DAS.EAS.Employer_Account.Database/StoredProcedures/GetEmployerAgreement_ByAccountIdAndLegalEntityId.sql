@@ -26,3 +26,4 @@ AS
 			on	acc.Id = aea.AccountId
 	WHERE ea.LegalEntityId = @LegalEntityId 
 	AND ea.AccountId = @AccountId
+	And ea.StatusId <> 5
