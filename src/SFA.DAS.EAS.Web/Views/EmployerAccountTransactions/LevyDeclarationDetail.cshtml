@@ -37,7 +37,8 @@
                 {
                     <tr class="responsive-tr">
                         <td headers="th-ps">
-                            @aggregationLineItem.EmpRef
+                            <span>@aggregationLineItem.EmpRef</span>
+                            <span>@aggregationLineItem.PayeSchemeName</span>
                         </td>
                         <td headers="th-pd">
                            @aggregationLineItem.PayrollDate.ToGdsFormatWithoutDayAbbrMonth()
