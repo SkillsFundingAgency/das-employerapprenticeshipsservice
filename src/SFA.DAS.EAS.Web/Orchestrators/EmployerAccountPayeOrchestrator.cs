@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EAS.Application.Queries.GetMember;
+using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -204,17 +205,25 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var response = new OrchestratorResponse<PayeSchemeDetailViewModel>();
             try
             {
-                var result = await Mediator.SendAsync(new GetEmployerEnglishFractionQuery
+                var englishFractionResult = await Mediator.SendAsync(new GetEmployerEnglishFractionQuery
                 {
                     HashedAccountId = hashedAccountId,
                     EmpRef = empRef,
                     UserId = userId
                 });
-                response.Data = new PayeSchemeDetailViewModel
+
+                var payeSchemeResult = await Mediator.SendAsync(new GetPayeSchemeByRefQuery
                 {
-                    Fractions = result.Fractions,
-                    EmpRef = result.EmpRef,
-                    EmpRefAdded = result.EmpRefAddedDate
+                    HashedAccountId = hashedAccountId,
+                    Ref = empRef
+                });
+
+                    response.Data = new PayeSchemeDetailViewModel
+                {
+                    Fractions = englishFractionResult.Fractions,
+                    EmpRef = englishFractionResult.EmpRef,
+                    PayeSchemeName = payeSchemeResult.PayeScheme.Name,
+                    EmpRefAdded = englishFractionResult.EmpRefAddedDate
                 };
                 return response;
             }
