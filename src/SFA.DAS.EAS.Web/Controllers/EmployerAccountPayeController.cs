@@ -105,11 +105,14 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 return View(result);
             }
+
+            var payeSchemeName = string.IsNullOrEmpty(model.PayeName) ? "this PAYE scheme" : model.PayeName;
             
             var flashMessage = new FlashMessageViewModel
             {
                 Severity = FlashMessageSeverityLevel.Success,
-                Headline = $"You've added {model.PayeScheme}",
+                Headline = $"{model.PayeScheme} has been added",
+                SubMessage = $"Levy funds from {payeSchemeName} will now credit your account",
                 HiddenFlashMessageInformation = "page-paye-scheme-added"
             };
             AddFlashMessageToCookie(flashMessage);
@@ -155,6 +158,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 Severity = FlashMessageSeverityLevel.Success,
                 Headline = $"You've removed {model.PayeRef}",
+                SubMessage = model.PayeSchemeName,
                 HiddenFlashMessageInformation = "page-paye-scheme-deleted"
             };
             AddFlashMessageToCookie(flashMessage);
