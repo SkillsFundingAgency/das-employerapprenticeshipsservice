@@ -1,6 +1,4 @@
-﻿using SFA.DAS.EAS.Domain.Models.Time;
-
-namespace SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse
+﻿namespace SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse
 {
     public class Framework : ITrainingProgramme
     {
@@ -12,7 +10,7 @@ namespace SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse
         public string PathwayName { get; set; }
         public int ProgrammeType { get; set; }
         public string Title { get; set; }
-        public Duration Duration { get; set; }
+        public int Duration { get; set; }
         public int MaxFunding { get; set; }
     }
 }
