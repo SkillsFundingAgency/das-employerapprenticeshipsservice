@@ -62,6 +62,7 @@
 <div class="form-group @(!string.IsNullOrEmpty(Model.Apprenticeship.TrainingCodeError) ? "error" : "")">
     <hr />
     <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
+    <span class="form-hint">Start typing in the name of the course or choose an option from the list</span>
     <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
         <option value="">Please select</option>
         @foreach (var apprenticeshipProduct in Model.ApprenticeshipProgrammes)
@@ -148,6 +149,7 @@
     <hr />
     <label for="Cost">
         <span class="form-label-bold">Total agreed training cost (excluding VAT)</span>
+        <span class="form-hint">Enter the price, including any end-point assessment costs, in whole pounds.</span>
         <span class="form-hint">For example, for £1,500 enter 1500</span>
         @if (!string.IsNullOrEmpty(Model.Apprenticeship.CostError))
         {
@@ -163,7 +165,7 @@
 <div class="form-group  @(!string.IsNullOrEmpty(Model.Apprenticeship.EmployerRefError) ? "error" : "")">
     <hr />
     @Html.Label("EmployerRef", "Reference (optional)", new { @class = "form-label-bold" })
-    <span class="form-hint">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
+    <span class="form-hint">Add a reference, such as employee number or location - this won't be seen by the training provider</span>
     @if (!string.IsNullOrEmpty(Model.Apprenticeship.EmployerRefError))
     {
         <span class="error-message" id="error-message-EmployerRef">@Model.Apprenticeship.EmployerRefError</span>
