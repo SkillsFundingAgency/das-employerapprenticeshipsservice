@@ -226,11 +226,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Ref = empRef
                 });
 
-                    response.Data = new PayeSchemeDetailViewModel
+                response.Data = new PayeSchemeDetailViewModel
                 {
                     Fractions = englishFractionResult.Fractions,
                     EmpRef = englishFractionResult.EmpRef,
-                    PayeSchemeName = payeSchemeResult.PayeScheme.Name,
+                    PayeSchemeName = payeSchemeResult?.PayeScheme?.Name ?? string.Empty,
                     EmpRefAdded = englishFractionResult.EmpRefAddedDate
                 };
                 return response;
