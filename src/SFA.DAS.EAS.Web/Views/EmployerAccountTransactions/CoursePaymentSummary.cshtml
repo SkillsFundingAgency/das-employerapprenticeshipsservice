@@ -13,7 +13,7 @@
         <div class="hgroup">
             <h1 class="heading-xlarge">Payment: apprentice details</h1>
             <dl class="inline">
-                <dt>Date:</dt>
+                <dt>Date</dt>
                 <dd>@Model.Data.PaymentDate.ToString("dd MMMM yyyy")</dd>
                 <dt>Payment to</dt>
                 <dd>@Model.Data.ProviderName</dd>
@@ -81,7 +81,7 @@
 
 
 @section breadcrumb {
-    <div class="breadcrumbs">
+    <div class="breadcrumbs" id="js-breadcrumbs">
         <ol role="navigation">
             <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
             <li><a href="@Url.Action("Index", "EmployerAccountTransactions")">Your transactions</a></li>
