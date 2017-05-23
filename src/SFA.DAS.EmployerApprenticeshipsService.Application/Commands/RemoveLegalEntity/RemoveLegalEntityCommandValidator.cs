@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -58,6 +59,14 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
 
             var accountId = _hashingService.DecodeValue(item.HashedAccountId);
             var legalEntityId = _hashingService.DecodeValue(item.HashedLegalEntityId);
+
+            var legalEntites = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(accountId, false);
+
+            if (legalEntites != null && legalEntites.Count == 1)
+            {
+                validationResult.AddError(nameof(item.HashedLegalEntityId), "There must be at least one legal entity on the account");
+                return validationResult;
+            }
 
             var agreement = await _employerAgreementRepository.GetLatestAccountLegalEntityAgreement(accountId, legalEntityId);
 

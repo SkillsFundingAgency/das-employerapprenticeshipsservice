@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.RemoveLegalEntity;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
@@ -39,6 +40,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
             _employerAgreementRepository.Setup(
                 x => x.GetLatestAccountLegalEntityAgreement(ExpectedAccountId, ExpectedLegalEntityId)).ReturnsAsync(new EmployerAgreementView { Status = EmployerAgreementStatus.Pending});
+            _employerAgreementRepository.Setup(
+                x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId, false))
+                .ReturnsAsync(new List<LegalEntity>
+                {
+                    new LegalEntity {Id = 432244},
+                    new LegalEntity {Id = ExpectedLegalEntityId}
+                });
 
             _removeLegalEntityCommandValidator = new RemoveLegalEntityCommandValidator(_membershipRepository.Object, _employerAgreementRepository.Object, _hashingService.Object);
         }
@@ -100,6 +108,25 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
 
             //Assert
             Assert.IsTrue(actual.IsValid());
+        }
+
+        [Test]
+        public async Task ThenIfThereIsOnlyOneLegalEntityConnectedToTheAccountThenFalseIsReturned()
+        {
+            //Arrange
+            _employerAgreementRepository.Setup(
+                x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId, false))
+                .ReturnsAsync(new List<LegalEntity>
+                {
+                    new LegalEntity {Id = ExpectedLegalEntityId}
+                });
+
+            //Act
+            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = ExpectedUserId, HashedLegalEntityId = ExpectedHashedLegalEntityId });
+
+            //Assert
+            Assert.IsFalse(actual.IsValid());
+            Assert.Contains(new KeyValuePair<string, string>("HashedLegalEntityId", "There must be at least one legal entity on the account"), actual.ValidationDictionary);
         }
     }
 }
