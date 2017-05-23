@@ -24,7 +24,10 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Remove this scheme?</h1>
-        <h2 class="heading-medium">@Model.Data.PayeRef</h2>
+        <h2 class="heading-medium">
+            <span class="heading-secondary">@Model.Data.PayeSchemeName</span>
+            @Model.Data.PayeRef
+        </h2>
         <p>The @Model.Data.AccountName account will stop receiving funds through this PAYE scheme.</p>
         <form method="post" action="@Url.Action("RemovePaye","EmployerAccountPaye")">
             @Html.AntiForgeryToken()    

@@ -160,14 +160,22 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<RemovePayeSchemeViewModel>> GetRemovePayeSchemeModel(RemovePayeSchemeViewModel model)
         {
-            var response = await
+            var accountResponse = await
                     Mediator.SendAsync(new GetEmployerAccountHashedQuery
                     {
                         HashedAccountId = model.HashedAccountId,
                         UserId = model.UserId
                     });
 
-            model.AccountName = response.Account.Name;
+            var payeResponse = await
+                Mediator.SendAsync(new GetPayeSchemeByRefQuery
+                {
+                    HashedAccountId = model.HashedAccountId,
+                    Ref = model.PayeRef
+                });
+
+            model.AccountName = accountResponse.Account.Name;
+            model.PayeSchemeName = payeResponse.PayeScheme.Name;
 
             return new OrchestratorResponse<RemovePayeSchemeViewModel> {Data = model};
         }
