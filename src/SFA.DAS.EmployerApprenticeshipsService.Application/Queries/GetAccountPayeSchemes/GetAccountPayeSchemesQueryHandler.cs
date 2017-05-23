@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes
             
             foreach (var scheme in payeSchemes)
             {
-                scheme.EnglishFraction = await _englishFractionRepository.GetCurrentFractionForScheme(scheme.PayeRef);
+                scheme.EnglishFraction = await _englishFractionRepository.GetCurrentFractionForScheme(scheme.Ref);
             }
 
             return new GetAccountPayeSchemesResponse
