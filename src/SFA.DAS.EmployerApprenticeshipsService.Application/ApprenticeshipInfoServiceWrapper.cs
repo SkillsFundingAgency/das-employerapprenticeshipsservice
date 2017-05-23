@@ -132,7 +132,7 @@ namespace SFA.DAS.EAS.Application
                     Id = x.Id,
                     Code = long.Parse(x.Id),
                     Level = x.Level,
-                    Title = GetTitle(x.Title, x.Level),
+                    Title = GetTitle(x.Title, x.Level) + " (Standard)",
                     CourseName = x.Title, 
                     Duration = new Duration
                     {
