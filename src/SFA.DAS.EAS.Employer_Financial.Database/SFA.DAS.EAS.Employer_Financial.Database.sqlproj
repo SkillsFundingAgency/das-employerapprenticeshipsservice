@@ -71,7 +71,7 @@
   <ItemGroup>
     <Build Include="Tables\EnglishFraction.sql" />
     <Build Include="Tables\LevyDeclaration.sql" />
-    <Build Include="Views\GetLevyDeclarations.sql" />
+    <Build Include="Views\GetLevyDeclarationAndTopUp.sql" />
     <Build Include="Schemas\employer_transactions.sql" />
     <Build Include="StoredProcedures\Cleardown.sql" />
     <Build Include="StoredProcedures\CreateDeclaration.sql" />
@@ -86,7 +86,7 @@
     <Build Include="Tables\PeriodEnd.sql" />
     <Build Include="StoredProcedures\CreatePeriodEnd.sql" />
     <Build Include="StoredProcedures\GetLatestPeriodEnd.sql" />
-    <Build Include="StoredProcedures\GetTransactionDetail_ByDateRange.sql" />
+    <Build Include="StoredProcedures\GetLevyDetail_ByAccountIdAndDateRange.sql" />
     <Build Include="Tables\Payment.sql" />
     <Build Include="StoredProcedures\CreatePayment.sql" />
     <Build Include="StoredProcedures\GetPaymentData_ById.sql" />
@@ -99,6 +99,10 @@
     <Build Include="StoredProcedures\GetLevyDeclarations_ByAccountPayrollMonthPayrollYear.sql" />
     <Build Include="StoredProcedures\GetPreviousTransactionsCount.sql" />
     <Build Include="StoredProcedures\UpdateTransactionLineDate_BySubmissionId.sql" />
+    <Build Include="StoredProcedures\GetPaymentDetail_ByAccountProviderAndDateRange.sql" />
+    <Build Include="Tables\LevyOverride.sql" />
+    <Build Include="Views\GetLevyDeclaration.sql" />
+    <Build Include="StoredProcedures\GetPaymentDetail_ByAccountProviderCourseAndDateRange.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

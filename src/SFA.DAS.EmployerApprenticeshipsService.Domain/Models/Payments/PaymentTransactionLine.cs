@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Domain.Models.Payments
         public decimal SfaCoInvestmentAmount { get; set; }
         public decimal EmployerCoInvestmentAmount { get; set; }
 
-        public bool IsCoInvested => SfaCoInvestmentAmount + EmployerCoInvestmentAmount > 0;
+        public bool IsCoInvested => SfaCoInvestmentAmount != 0 || EmployerCoInvestmentAmount != 0;
 
         public ICollection<PaymentTransactionLine> SubPayments =>
             SubTransactions?.OfType<PaymentTransactionLine>().ToList() ??

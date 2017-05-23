@@ -8,3 +8,5 @@
 	[Amount] DECIMAL (18,4) not null default 0
 )
 GO
+
+CREATE INDEX [IX_LevyDeclarationtopup_submissionid] ON [employer_financial].[LevyDeclarationTopup] (submissionId)

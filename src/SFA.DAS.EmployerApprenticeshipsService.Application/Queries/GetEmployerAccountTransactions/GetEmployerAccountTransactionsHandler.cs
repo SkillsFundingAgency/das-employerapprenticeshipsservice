@@ -70,11 +70,12 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 
         private string GetPaymentTransactionDescription(PaymentTransactionLine transaction)
         {
+            var transactionPrefix = transaction.IsCoInvested ? "Co-investment - " : string.Empty;
+
             try
             {
                 var ukprn = Convert.ToInt32(transaction.UkPrn);
                 var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(ukprn);
-                var transactionPrefix = transaction.IsCoInvested ? "Co-investment - " : string.Empty;
 
                 return $"{transactionPrefix}{providerName.Provider.ProviderName}";
             }
@@ -83,7 +84,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 _logger.Info(ex, $"Provider not found for UkPrn:{transaction.UkPrn}");
             }
 
-            return "Training provider - name not recognised";
+            return $"{transactionPrefix}Training provider - name not recognised";
         }
 
         private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId, bool hasPreviousTransactions)

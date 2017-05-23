@@ -4,8 +4,9 @@ using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application;
+using SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments;
+using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
-using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -53,22 +54,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Amount = data.Total,
                     SubTransactions = data.Transactions,
-                    TransactionDate = data.Transactions.FirstOrDefault().DateCreated 
+                    TransactionDate = data.Transactions.First().DateCreated
                 }
             };
         }
 
-        public async Task<OrchestratorResponse<ProviderPaymentsSummaryViewModel>> GetCoursePayments(
-            string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
+        public async Task<OrchestratorResponse<ProviderPaymentsSummaryViewModel>> GetProviderPaymentSummary(
+            string hashedId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
         {
             try
             {
-                var data = await _mediator.SendAsync(new GetAccountProviderTransactionsQuery
+                var data = await _mediator.SendAsync(new FindAccountProviderPaymentsQuery
                 {
                     HashedAccountId = hashedId,
+                    UkPrn = ukprn,
                     FromDate = fromDate,
                     ToDate = toDate,
-                    ExternalUserId = externalUserId
+                    ExternalUserId = externalUserId,
                 });
 
                 var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.CourseStartDate });
@@ -93,8 +95,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Status = HttpStatusCode.OK,
                     Data = new ProviderPaymentsSummaryViewModel
                     {
+                        HashedAccountId = hashedId,
+                        UkPrn = ukprn,
                         ProviderName = data.ProviderName,
-                        PaymentDate = data.TransactionDate,
+                        PaymentDate = data.DateCreated,
+                        FromDate = fromDate,
+                        ToDate = toDate,
                         CoursePayments = coursePaymentSummaries,
                         LevyPaymentsTotal = coursePaymentSummaries.Sum(p => p.LevyPaymentAmount),
                         SFACoInvestmentsTotal = coursePaymentSummaries.Sum(p => p.SFACoInvestmentAmount),
@@ -130,13 +136,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<PaymentTransactionViewModel>> FindAccountPaymentTransactions(
-            string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
+            string hashedId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
         {
             try
             {
-                var data = await _mediator.SendAsync(new GetAccountProviderTransactionsQuery
+                var data = await _mediator.SendAsync(new FindAccountProviderPaymentsQuery
                 {
                     HashedAccountId = hashedId,
+                    UkPrn = ukprn,
                     FromDate = fromDate,
                     ToDate = toDate,
                     ExternalUserId = externalUserId
@@ -255,6 +262,82 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     AccountHasPreviousTransactions = data.AccountHasPreviousTransactions
                 }
             };
+        }
+        
+        public virtual async Task<OrchestratorResponse<CoursePaymentDetailsViewModel>> GetCoursePaymentSummary(
+            string hashedAccountId, long ukprn, string courseName, int courseLevel,
+            DateTime fromDate, DateTime toDate, string externalUserId)
+        {
+            try
+            {
+                var data = await _mediator.SendAsync(new FindAccountCoursePaymentsQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UkPrn = ukprn,
+                    CourseName = courseName,
+                    CourseLevel = courseLevel,
+                    FromDate = fromDate,
+                    ToDate = toDate,
+                    ExternalUserId = externalUserId
+                });
+
+                var apprenticePaymentGroups = data.Transactions.GroupBy(x => new { x.ApprenticeName, x.ApprenticeNINumber });
+
+                var paymentSummaries = apprenticePaymentGroups.Select(pg =>
+                {
+                    var payments = pg.Where(x => x.TransactionType == TransactionItemType.Payment).ToList();
+
+                    return new AprrenticeshipPaymentSummaryViewModel
+                    {
+                        ApprenticeName = pg.Key.ApprenticeName,
+                        LevyPaymentAmount = payments.Sum(t => t.LineAmount),
+                        SFACoInvestmentAmount = payments.Sum(p => p.SfaCoInvestmentAmount),
+                        EmployerCoInvestmentAmount = payments.Sum(p => p.EmployerCoInvestmentAmount)
+                    };
+                });
+
+                var apprenticePayments = paymentSummaries.ToList();
+
+                return new OrchestratorResponse<CoursePaymentDetailsViewModel>
+                {
+                    Status = HttpStatusCode.OK,
+                    Data = new CoursePaymentDetailsViewModel
+                    {
+                        ProviderName = data.ProviderName,
+                        CourseName = data.CourseName,
+                        CourseLevel = data.CourseLevel,
+                        PaymentDate = data.DateCreated,
+                        LevyPaymentsTotal = apprenticePayments.Sum(p => p.LevyPaymentAmount),
+                        SFACoInvestmentTotal = apprenticePayments.Sum(p => p.SFACoInvestmentAmount),
+                        EmployerCoInvestmentTotal = apprenticePayments.Sum(p => p.EmployerCoInvestmentAmount),
+                        ApprenticePayments = apprenticePayments
+                    }
+                };
+            }
+            catch (NotFoundException e)
+            {
+                return new OrchestratorResponse<CoursePaymentDetailsViewModel>
+                {
+                    Status = HttpStatusCode.NotFound,
+                    Exception = e
+                };
+            }
+            catch (InvalidRequestException e)
+            {
+                return new OrchestratorResponse<CoursePaymentDetailsViewModel>
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = e
+                };
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                return new OrchestratorResponse<CoursePaymentDetailsViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = e
+                };
+            }
         }
     }
 }

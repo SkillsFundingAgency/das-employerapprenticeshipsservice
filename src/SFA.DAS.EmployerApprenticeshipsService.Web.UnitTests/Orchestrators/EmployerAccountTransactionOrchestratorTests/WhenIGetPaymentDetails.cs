@@ -6,7 +6,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application;
-using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
+using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
-        private GetAccountProviderTransactionsResponse _response;
+        private FindAccountProviderPaymentsResponse _response;
         private Mock<ICurrentDateTime> _currentTime;
 
         [SetUp]
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             _mediator = new Mock<IMediator>();
             _currentTime = new Mock<ICurrentDateTime>();
 
-            _response = new GetAccountProviderTransactionsResponse
+            _response = new FindAccountProviderPaymentsResponse
             {
                 ProviderName = "Test Provider",
                 TransactionDate = DateTime.Now,
@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 }
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<FindAccountProviderPaymentsQuery>()))
                 .ReturnsAsync(_response);
 
             _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object);
@@ -51,12 +51,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         [Test]
         public async Task ThenARequestShouldBeMadeForPaymentDetails()
         {
+            //Arrange
+            const long ukprn = 10;
+
             //Act
-            await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, _fromDate, _toDate,
+            await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, ukprn, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetAccountProviderTransactionsQuery>(
+            _mediator.Verify(x => x.SendAsync(It.Is<FindAccountProviderPaymentsQuery>(
                 q => q.HashedAccountId.Equals(HashedAccountId) &&
                 q.FromDate.Equals(_fromDate) &&
                 q.ToDate.Equals(_toDate) &&
@@ -67,7 +70,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenPaymentsDetailsShouldBeReturned()
         {
             //Act
-            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, _fromDate, _toDate,
+            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, 10, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert
@@ -80,11 +83,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenIfNoTransactionsAreFoundANotFoundStatusIsReturned()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<FindAccountProviderPaymentsQuery>()))
                      .ThrowsAsync(new NotFoundException(string.Empty));
 
             //Act
-            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, _fromDate, _toDate,
+            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, 10, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert
@@ -95,11 +98,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenIfUserIsNotAuthorisedAUnauthorisedStatusIsReturned()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<FindAccountProviderPaymentsQuery>()))
                      .ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
-            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, _fromDate, _toDate,
+            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, 10, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert
@@ -110,11 +113,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenIfRequestIsNotValidABadRequestStatusIsReturned()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountProviderTransactionsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<FindAccountProviderPaymentsQuery>()))
                      .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
-            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, _fromDate, _toDate,
+            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, 10, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert

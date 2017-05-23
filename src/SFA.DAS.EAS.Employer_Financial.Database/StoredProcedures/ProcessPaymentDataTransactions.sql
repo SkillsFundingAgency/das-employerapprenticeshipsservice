@@ -13,12 +13,12 @@ select mainUpdate.* from
             Max(pe.CompletionDateTime) as TransactionDate,
             3 as TransactionType,
             null as LevyDeclared,
-            Sum(x.Amount) * -1 Amount,
-            Sum(ISNULL(pco.Amount, 0)) * -1 as SfaCoInvestmentAmount,
-            Sum(ISNULL(pci.Amount, 0)) * -1 as EmployerCoInvestmentAmount,
+            Sum(ISNULL(p.Amount, 0)) * -1 Amount,
             null as empref,
             x.PeriodEnd,
-            x.UkPrn
+            x.UkPrn,
+            Sum(ISNULL(pco.Amount, 0)) * -1 as SfaCoInvestmentAmount,
+            Sum(ISNULL(pci.Amount, 0)) * -1 as EmployerCoInvestmentAmount
         FROM 
             employer_financial.[Payment] x
 		inner join [employer_financial].[PeriodEnd] pe 
@@ -33,7 +33,7 @@ select mainUpdate.* from
             x.UkPrn,x.PeriodEnd,x.accountId
     ) mainUpdate
     inner join (
-        select accountid,ukprn,periodend from [employer_financial].Payment where FundingSource = 1        
+        select accountid,ukprn,periodend from [employer_financial].Payment where FundingSource IN (1,2,3)      
     EXCEPT
         select accountid,ukprn,periodend from [employer_financial].transactionline where TransactionType = 3
     ) dervx on dervx.accountId = mainUpdate.accountId and dervx.PeriodEnd = mainUpdate.PeriodEnd and dervx.Ukprn = mainUpdate.ukprn

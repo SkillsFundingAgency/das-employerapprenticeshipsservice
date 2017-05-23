@@ -23,7 +23,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             _mapper = mapper;
         }
 
-        public async Task<List<TransactionLine>> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
+        public async Task<List<TransactionLine>> GetAccountTransactionsByDateRange(
+            long accountId, DateTime fromDate, DateTime toDate)
         {
             var result = await WithConnection(async c =>
             {
@@ -41,7 +42,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return MapTransactions(result);
         }
 
-        public async Task<List<TransactionLine>> GetTransactionDetailsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
+        public async Task<List<TransactionLine>> GetAccountLevyTransactionsByDateRange(
+            long accountId, DateTime fromDate, DateTime toDate)
         {
             var result = await WithConnection(async c =>
             {
@@ -51,7 +53,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@toDate", new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59), DbType.DateTime);
 
                 return await c.QueryAsync<TransactionEntity>(
-                    sql: "[employer_financial].[GetTransactionDetail_ByDateRange]",
+                    sql: "[employer_financial].[GetLevyDetail_ByAccountIdAndDateRange]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -59,9 +61,46 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return MapTransactions(result);
         }
 
-        public Task<List<TransactionLine>> GetCourseTransactionByDateRange(string courseName, long accountId, DateTime fromDate, DateTime toDate)
+        public async Task<List<TransactionLine>> GetAccountTransactionByProviderAndDateRange(
+            long accountId, long ukprn, DateTime fromDate, DateTime toDate)
         {
-            throw new NotImplementedException();
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@ukprn", ukprn, DbType.Int64);
+                parameters.Add("@fromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day), DbType.DateTime);
+                parameters.Add("@toDate", new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59), DbType.DateTime);
+
+                return await c.QueryAsync<TransactionEntity>(
+                    sql: "[employer_financial].[GetPaymentDetail_ByAccountProviderAndDateRange]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return MapTransactions(result);
+        }
+
+        public async Task<List<TransactionLine>> GetAccountCoursePaymentsByDateRange(
+            long accountId, long ukprn, string courseName, int courseLevel, DateTime fromDate, DateTime toDate)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@ukprn", ukprn, DbType.Int64);
+                parameters.Add("@courseName", courseName, DbType.String);
+                parameters.Add("@courseLevel", courseLevel, DbType.Int32);
+                parameters.Add("@fromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day), DbType.DateTime);
+                parameters.Add("@toDate", new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59), DbType.DateTime);
+
+                return await c.QueryAsync<TransactionEntity>(
+                    sql: "[employer_financial].[GetPaymentDetail_ByAccountProviderCourseAndDateRange]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return MapTransactions(result);
         }
 
         public async Task<int> GetPreviousTransactionsCount(long accountId, DateTime fromDate)

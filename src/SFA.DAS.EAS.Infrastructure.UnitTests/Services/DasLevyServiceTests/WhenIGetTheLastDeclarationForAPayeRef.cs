@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetLastLevyDeclaration;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;

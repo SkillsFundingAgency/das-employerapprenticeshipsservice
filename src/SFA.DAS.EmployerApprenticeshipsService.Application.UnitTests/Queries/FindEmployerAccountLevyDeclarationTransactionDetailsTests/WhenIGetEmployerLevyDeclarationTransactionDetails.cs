@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.FindEmployerAccountLevyDecla
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(_accountId);
 
             _dasLevyService = new Mock<IDasLevyService>();
-            _dasLevyService.Setup(x => x.GetAccountProviderTransactionsByDateRange<LevyDeclarationTransactionLine>
+            _dasLevyService.Setup(x => x.GetAccountLevyTransactionsByDateRange<LevyDeclarationTransactionLine>
                                             (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                            .ReturnsAsync(new List<LevyDeclarationTransactionLine>()
                 {
@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.FindEmployerAccountLevyDecla
 
             //Assert
             _hashingService.Verify(x => x.DecodeValue(_hashedAccountId), Times.Once);
-            _dasLevyService.Verify(x=>x.GetAccountProviderTransactionsByDateRange<LevyDeclarationTransactionLine>
+            _dasLevyService.Verify(x=>x.GetAccountLevyTransactionsByDateRange<LevyDeclarationTransactionLine>
                                             (_accountId, _fromDate, _toDate, _externalUserId));
         }
 
@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.FindEmployerAccountLevyDecla
         public async Task ThenTheLineItemTotalIsCalculatedFromTheAmountTopupAndPercentageOfFraction()
         {
             //Arrange
-            _dasLevyService.Setup(x => x.GetAccountProviderTransactionsByDateRange<LevyDeclarationTransactionLine>
+            _dasLevyService.Setup(x => x.GetAccountLevyTransactionsByDateRange<LevyDeclarationTransactionLine>
                                             (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                            .ReturnsAsync(new List<LevyDeclarationTransactionLine>
             {

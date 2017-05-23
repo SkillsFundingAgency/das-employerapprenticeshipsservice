@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Http;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.TokenService.Api.Client;
@@ -27,6 +29,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private Mock<ITokenServiceApiClient> _tokenService;
+        private Mock<IAzureAdAuthenticationService> _azureAdAuthService;
 
 
         [SetUp]
@@ -41,7 +44,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
                     Scope = ExpectedScope,
                     ClientSecret = ExpectedClientSecret,
                     OgdSecret = "ABC1234FG",
-                    OgdClientId = ExpectedOgdClientId
+                    OgdClientId = ExpectedOgdClientId,
+                    AzureAppKey = "123TRG",
+                    AzureClientId = "TYG567",
+                    AzureResourceId = "Resource1",
+                    AzureTenant = "test",
+                    UseHiDataFeed = false
                 }
             };
 
@@ -50,7 +58,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             _tokenService = new Mock<ITokenServiceApiClient>();
             _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken { AccessCode = ExpectedAuthToken });
 
-            _hmrcService = new HmrcService( _configuration, _httpClientWrapper.Object, _tokenService.Object, new NoopExecutionPolicy(), null);
+            _azureAdAuthService = new Mock<IAzureAdAuthenticationService>();
+            _azureAdAuthService.Setup(x =>
+                    x.GetAuthenticationResult(_configuration.Hmrc.AzureClientId, _configuration.Hmrc.AzureAppKey,
+                        _configuration.Hmrc.AzureResourceId, _configuration.Hmrc.AzureTenant))
+                .ReturnsAsync( ExpectedAuthToken);
+
+            _hmrcService = new HmrcService( _configuration, _httpClientWrapper.Object, _tokenService.Object, new NoopExecutionPolicy(), null, _azureAdAuthService.Object);
         }
         
         [Test]
@@ -110,6 +124,21 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 
             //Assert
             _httpClientWrapper.Verify(x => x.Get<LevyDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfTheConfigurationIsSetToUseTheMiDataThenTheAzureAuthServiceIsCalled()
+        {
+            //Arrange
+            _configuration.Hmrc.UseHiDataFeed = true;
+
+
+            //Act
+            await _hmrcService.GetLevyDeclarations(EmpRef);
+
+            //Assert
+            _tokenService.Verify(x=>x.GetPrivilegedAccessTokenAsync(),Times.Never);
+            _azureAdAuthService.Verify(x=>x.GetAuthenticationResult(_configuration.Hmrc.ClientId, _configuration.Hmrc.AzureAppKey,_configuration.Hmrc.AzureResourceId,_configuration.Hmrc.AzureTenant),Times.Once);
         }
     }
 }

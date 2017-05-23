@@ -2326,6 +2326,10 @@ main, .header-inner {
   }
 }
 
+.hgroup {
+  margin-bottom: 40px;
+}
+
 aside.sidebar {
   font-size: 14px;
 }
@@ -3017,6 +3021,36 @@ a#link-settings:focus {
 }
 
 .notification-wrapper .error-summary, .notification-wrapper .info-summary, .notification-wrapper .success-summary, .notification-wrapper .warning-summary {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+@media (min-width: 641px) {
+  .notification-wrapper .error-summary, .notification-wrapper .info-summary, .notification-wrapper .success-summary, .notification-wrapper .warning-summary {
+    margin-top: 60px;
+    margin-bottom: 0;
+  }
+}
+
+.breadcrumbs + .notification-wrapper .error-summary, .breadcrumbs + .notification-wrapper .info-summary, .breadcrumbs + .notification-wrapper .success-summary, .breadcrumbs + .notification-wrapper .warning-summary {
+  margin-top: 15px;
+}
+
+@media (min-width: 641px) {
+  .breadcrumbs + .notification-wrapper .error-summary, .breadcrumbs + .notification-wrapper .info-summary, .breadcrumbs + .notification-wrapper .success-summary, .breadcrumbs + .notification-wrapper .warning-summary {
+    margin-top: 30px;
+  }
+}
+
+.error-summary:not(.validation-summary-max-funding) h1 {
+  display: none;
+}
+
+.error-summary:not(.validation-summary-max-funding) h1 + p {
+  display: none;
+}
+
+.error-summary-standalone .error-summary {
   margin-bottom: 0;
 }
 
@@ -3190,22 +3224,6 @@ legend {
 
 .button-start {
   background-image: url("/dist/images/icon-pointer.png");
-}
-
-.error-summary-wrapper .error-summary {
-  margin-bottom: 0;
-}
-
-.error-summary:not(.validation-summary-max-funding) h1 {
-  display: none;
-}
-
-.error-summary:not(.validation-summary-max-funding) h1 + p {
-  display: none;
-}
-
-.error-summary-standalone .error-summary {
-  margin-bottom: 0;
 }
 
 .button-secondary {
@@ -3494,6 +3512,7 @@ tr.total td {
   font-weight: 700;
 }
 
+.nowrap,
 .no-wrap {
   white-space: nowrap;
 }
@@ -3677,12 +3696,12 @@ table.responsive tr.total {
   }
 }
 
-.panel p {
+.panel p, .panel li {
   font-size: 14px;
 }
 
 @media (min-width: 641px) {
-  .panel p {
+  .panel p, .panel li {
     font-size: 16px;
   }
 }

@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
         public void ThenPayrollPeriodsAreProcessedInArrears()
         {
             //Arrange
-            var dateProcessed = new DateTime(2017, 04, 20);
+            var dateProcessed = new DateTime(2017, 04, 18);
 
             //Act
             var actual = _hmrcDateService.IsSubmissionForFuturePeriod("16-17", 12, dateProcessed);
@@ -112,7 +112,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
         public void ThenPayrollPeriodsAreProcessedInArrearsAndAfterTheTwentyFirstAreProcessed()
         {
             //Arrange
-            var dateProcessed = new DateTime(2017, 04, 22);
+            var dateProcessed = new DateTime(2017, 04, 20);
 
             //Act
             var actual = _hmrcDateService.IsSubmissionForFuturePeriod("16-17", 12, dateProcessed);
@@ -145,6 +145,19 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
 
             //Assert
             Assert.IsFalse(actual);
+        }
+
+        [TestCase("16-17",true)]
+        [TestCase("15-16", true)]
+        [TestCase("17-18", false)]
+        [TestCase("", false)]
+        public void ThenIfThePayrollYearIsBeforeTheLevyWasIntroducedFalseIsReturned(string payrollYear, bool expectedResult)
+        {
+            //Act
+            var actual = _hmrcDateService.DoesSubmissionPreDateLevy(payrollYear);
+
+            //Assert
+            Assert.AreEqual(expectedResult, actual);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using SFA.DAS.EAS.Domain.Models.Payments
 @using SFA.DAS.EAS.Domain.Models.Transaction
 @using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.TransactionViewResultViewModel>
@@ -35,14 +36,17 @@
                     <dl>
                         <dt>Current funds</dt>
                         @{
-                            var balance = @Model.Data.Model.CurrentBalance.ToString("C0", culture);
+                            var balance = Model.Data.Model.CurrentBalance.ToString("C0", culture);
                             var balanceClass = string.Empty;
 
                             if (balance.Length > 8)
+                            {
                                 balanceClass = "long";
-
+                            }
                             if (balance.Length > 10)
+                            {
                                 balanceClass = "longer";
+                            }
 
                         }
                         <dd class="@balanceClass">@balance</dd>
@@ -55,7 +59,7 @@
 <div class="grid-row">
     <div class="column-full">
 
-        @if (Model.Data.Model.Data.TransactionLines.Count == 0)
+        @if (Model.Data.Model.Data.TransactionLines.All(c => c.TransactionType == TransactionItemType.Unknown))
         {
             <p class="panel panel-info">
                 @if (Model.Data.IsLatestMonth)
@@ -68,7 +72,7 @@
                 }
             </p>
         }
-        else if(Model.Data.Model.Data.TransactionLines.Count != 0)
+        else
         {
             <table>
                 <thead>
@@ -82,8 +86,9 @@
                 <tbody>
                 @foreach (var aggregationLine in Model.Data.Model.Data.TransactionLines)
                 {
-                    var fromDate = aggregationLine.DateCreated;
-                    var toDate = aggregationLine.DateCreated.AddHours(23);
+                    var fromDate = new DateTime(Model.Data.Year, Model.Data.Month, 1);
+                    var toDate = new DateTime(Model.Data.Year, Model.Data.Month, DateTime.DaysInMonth(Model.Data.Year, Model.Data.Month), 23, 59, 59);
+                   
                     <tr>
                         <td>
                             <span class="no-wrap">@{var date = aggregationLine.DateCreated.ToGdsFormat();} @date </span>
@@ -93,7 +98,24 @@
                                 @aggregationLine.Description
                             </span>
                         </td>
-                        <td class="numeric"> <span class="no-wrap"> @(aggregationLine.Amount.ToString("C2", culture)) </span> </td>
+                        
+                        @{
+                            var transactionAmount = aggregationLine.Amount;
+
+                            if (aggregationLine.TransactionType == TransactionItemType.Payment)
+                            {
+                                var paymentTransaction = aggregationLine as PaymentTransactionLine;
+
+                                if (paymentTransaction != null)
+                                {
+                                    transactionAmount += paymentTransaction.EmployerCoInvestmentAmount +
+                                             paymentTransaction.SfaCoInvestmentAmount;
+                                }
+                            }
+                        }
+                      
+                        <td class="numeric"> <span class="no-wrap"> @(transactionAmount.ToString("C2", culture)) </span> </td>
+                       
                         <td class="link-right">
                             @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
                                  aggregationLine.TransactionType == TransactionItemType.TopUp)
@@ -104,7 +126,9 @@
                             }
                             else if (aggregationLine.TransactionType == TransactionItemType.Payment)
                             {
-                                <a title="View details for the transaction on @date" href="@Url.Action("PaymentDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
+                                var paymentTransaction = aggregationLine as PaymentTransactionLine;
+                                
+                                <a title="View details for the transaction on @date" href="@Url.Action("ProviderPaymentSummary", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, ukPrn = paymentTransaction?.UkPrn, fromDate = fromDate, toDate = toDate })">
                                     Details <span class="vh"> for the transaction on @date</span>
                                     
                                 </a>

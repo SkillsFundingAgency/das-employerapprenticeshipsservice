@@ -41,12 +41,12 @@
       <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=2.28.3.860, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.28.3\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.13.8.999, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms, Version=2.28.3.860, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.28.3\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.Platform, Version=3.13.8.999, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -285,10 +285,18 @@
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesValidator.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionsByDateRangeQuery.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountLevyDeclationTransactionsByDateRangeResponse.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionsByDateRangeValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountCoursePayments\GetAccountCoursePaymentsQuery.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountCoursePayments\GetAccountCoursePaymentsQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountCoursePayments\GetAccountCoursePaymentsQueryValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountCoursePayments\GetAccountCoursePaymentsResponse.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountLevyTransactions\GetAccountLevyTransactionsQuery.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountLevyTransactions\GetAccountLevyTransactionsQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountLevyTransactions\GetAccountLevyTransactionsQueryValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountLevyTransactions\GetAccountLevyTransactionsResponse.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeQuery.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeResponse.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeValidator.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsResponse.cs" />
@@ -305,10 +313,14 @@
     <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountRequestHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountRequestValidator.cs" />
     <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountResponse.cs" />
-    <Compile Include="Queries\FindEmployerAccountPaymentTransactions\GetAccountProviderTransactionsHandler.cs" />
-    <Compile Include="Queries\FindEmployerAccountPaymentTransactions\GetAccountProviderTransactionsQuery.cs" />
-    <Compile Include="Queries\FindEmployerAccountPaymentTransactions\GetAccountProviderTransactionsQueryValidator.cs" />
-    <Compile Include="Queries\FindEmployerAccountPaymentTransactions\GetAccountProviderTransactionsResponse.cs" />
+    <Compile Include="Queries\FindAccountProviderPayments\FindAccountProviderPaymentsHandler.cs" />
+    <Compile Include="Queries\FindAccountProviderPayments\FindAccountProviderPaymentsQuery.cs" />
+    <Compile Include="Queries\FindAccountProviderPayments\FindAccountProviderPaymentsQueryValidator.cs" />
+    <Compile Include="Queries\FindAccountProviderPayments\FindAccountProviderPaymentsResponse.cs" />
+    <Compile Include="Queries\FindAccountCoursePayments\FindAccountCoursePaymentsQuery.cs" />
+    <Compile Include="Queries\FindAccountCoursePayments\FindAccountCoursePaymentsQueryHandler.cs" />
+    <Compile Include="Queries\FindAccountCoursePayments\FindAccountCoursePaymentsQueryValidator.cs" />
+    <Compile Include="Queries\FindAccountCoursePayments\FindAccountCoursePaymentsResponse.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsQueryHandler.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsResponse.cs" />

@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             await _apiClient.GetPageOfAccounts(pageNumber, pageSize, new DateTime(toYear, toMonth, toDay));
 
             // Assert
-            var expectedUrl = $"http://some-url/api/accounts?page={pageNumber}&pageSize={pageSize}&toDate={toDateString}";
+            var expectedUrl = $"http://some-url/api/accounts?pageNumber={pageNumber}&pageSize={pageSize}&toDate={toDateString}";
             _httpClient.Verify(c => c.GetAsync(expectedUrl), Times.Once);
         }
 

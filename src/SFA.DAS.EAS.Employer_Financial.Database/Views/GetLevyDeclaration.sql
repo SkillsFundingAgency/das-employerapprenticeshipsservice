@@ -1,7 +1,5 @@
-﻿CREATE VIEW [employer_financial].[GetLevyDeclarations]
-AS
-
-
+﻿CREATE VIEW [employer_financial].[GetLevyDeclaration]
+AS 
 SELECT 
 	ld.Id AS Id,	
 	ld.AccountId as AccountId,
@@ -54,9 +52,3 @@ outer apply
 	from [employer_financial].[TopUpPercentage] tp
 	WHERE tp.[DateFrom] <= ld.[SubmissionDate]
 ) w
-
-GO
-
-
-
-

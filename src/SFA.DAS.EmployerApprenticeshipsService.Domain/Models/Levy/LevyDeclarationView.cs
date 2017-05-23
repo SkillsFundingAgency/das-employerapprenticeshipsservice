@@ -24,6 +24,8 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
         public DateTime? InactiveFrom { get; set; }
         public DateTime? InactiveTo { get; set; }
         public long HmrcSubmissionId { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal LevyDeclaredInMonth { get; set; }
 
         public DateTime? PayrollDate()
         {
