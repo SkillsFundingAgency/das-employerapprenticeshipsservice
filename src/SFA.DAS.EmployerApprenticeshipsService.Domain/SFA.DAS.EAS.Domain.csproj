@@ -200,7 +200,6 @@
     <Compile Include="Data\Repositories\IStandardsRepository.cs" />
     <Compile Include="Data\Repositories\IUserAccountRepository.cs" />
     <Compile Include="Data\Repositories\IUserRepository.cs" />
-    <Compile Include="Models\Time\Duration.cs" />
     <Compile Include="Models\Employer\EmployerInformation.cs" />
     <Compile Include="Data\Entities\Account\Account.cs" />
     <Compile Include="Data\Entities\Account\AccountBalance.cs" />
