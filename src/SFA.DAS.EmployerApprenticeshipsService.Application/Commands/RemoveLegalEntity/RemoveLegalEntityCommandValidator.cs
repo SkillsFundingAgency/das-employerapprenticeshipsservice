@@ -43,6 +43,10 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             {
                 validationResult.AddError(nameof(item.UserId));
             }
+            if (item.LegalAgreementId == 0)
+            {
+                validationResult.AddError(nameof(item.LegalAgreementId));
+            }
 
             if (!validationResult.IsValid())
             {
@@ -58,8 +62,6 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             }
 
             var accountId = _hashingService.DecodeValue(item.HashedAccountId);
-            var legalEntityId = _hashingService.DecodeValue(item.HashedLegalEntityId);
-
             var legalEntites = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(accountId, false);
 
             if (legalEntites != null && legalEntites.Count == 1)
@@ -68,11 +70,20 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
                 return validationResult;
             }
 
-            var agreement = await _employerAgreementRepository.GetLatestAccountLegalEntityAgreement(accountId, legalEntityId);
+            var agreement = await _employerAgreementRepository.GetEmployerAgreement(item.LegalAgreementId);
 
             if (agreement.Status == EmployerAgreementStatus.Signed)
             {
                 validationResult.AddError(nameof(item.HashedLegalEntityId), "Agreement has already been signed");
+                return validationResult;
+            }
+
+            
+            var legalEntityId = _hashingService.DecodeValue(item.HashedLegalEntityId);
+
+            if (agreement.AccountId != accountId || agreement.LegalEntityId != legalEntityId)
+            {
+                validationResult.IsUnauthorized = true;
                 return validationResult;
             }
 
