@@ -319,7 +319,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             {
                 changeText = pendingUpdateOriginator == Originator.Employer
                     ? "Changes pending" 
-                    : "Changes for review" ;
+                    : "Changes for review" ;    
             }
 
             if (dataLockTriageStatus != null)
