@@ -31,6 +31,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
                 if (signedOnly)
                     sql += " AND ea.StatusId = 2";
+                else
+                {
+                    sql += " AND ea.StatusId <> 5";
+                }
 
                 return await c.QueryAsync<LegalEntity>(
                     sql: sql,
@@ -133,6 +137,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
 
             return result.SingleOrDefault();
+        }
+
+        public async Task RemoveLegalEntityFromAccount(long agreementId)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@employerAgreementId", agreementId, DbType.Int64);
+
+                return await c.ExecuteAsync(
+                    sql: "[employer_account].[RemoveLegalEntityFromAccount]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+                
+            });
         }
     }
 }
