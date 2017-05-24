@@ -441,6 +441,7 @@
     <Compile Include="ViewModels\ManageApprenticeships\ConfirmationStateChangeViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\WhenToMakeChangeOptions.cs" />
     <Compile Include="ViewModels\Organisation\EmployerAgreementPdfViewModel.cs" />
+    <Compile Include="ViewModels\Organisation\LegalAgreementsToRemoveViewModel.cs" />
     <Compile Include="ViewModels\ProviderPaymentsSummaryViewModel.cs" />
     <Compile Include="ViewModels\YourCohortsViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />

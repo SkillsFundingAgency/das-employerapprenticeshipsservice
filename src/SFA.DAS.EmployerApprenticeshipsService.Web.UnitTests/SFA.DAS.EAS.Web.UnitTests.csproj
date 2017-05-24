@@ -183,6 +183,7 @@
     <Compile Include="Orchestrators\EmployerAccountTransactionOrchestratorTests\WhenIGetPaymentDetails.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenICreateAnAgreement.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetThePdfAgreement.cs" />
+    <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIRemoveAnAgreement.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\OrchestratorTestBase.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenCreatingApprenticeship.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenDeletingApprenticeship.cs" />
