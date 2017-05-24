@@ -117,6 +117,7 @@
     <Build Include="StoredProcedures\UpdatePayeName_ByRef.sql" />
     <Build Include="StoredProcedures\GetEmployerAgreement_ByAccountIdAndLegalEntityId.sql" />
     <Build Include="StoredProcedures\RemoveLegalEntityFromAccount.sql" />
+    <Build Include="StoredProcedures\GetEmployerAgreementsToRemove_ByAccountId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />

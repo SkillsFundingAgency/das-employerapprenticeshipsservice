@@ -154,9 +154,20 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public Task<List<RemoveEmployerAgreementView>> GetEmployerAgreementsToRemove(long accountId)
+        public async Task<List<RemoveEmployerAgreementView>> GetEmployerAgreementsToRemove(long accountId)
         {
-            throw new NotImplementedException();
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@AccountId", accountId, DbType.Int64);
+
+                return await c.QueryAsync<RemoveEmployerAgreementView>(
+                    sql: "[employer_account].[GetEmployerAgreementsToRemove_ByAccountId]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.ToList();
         }
     }
 }
