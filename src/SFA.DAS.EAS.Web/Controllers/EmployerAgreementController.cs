@@ -136,5 +136,31 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return new FileStreamResult(stream.Data.PdfStream, "application/pdf");
         }
+
+        [HttpGet]
+        [Route("agreements/remove")]
+        public async Task<ActionResult> GetOrganisationsToRemove(string hashedAccountId)
+        {
+
+            return View();
+        }
+
+        [HttpGet]
+        [Route("agreements/remove/{agreementId}")]
+        public async Task<ActionResult> ConfirmRemoveOrganisation(string agreementId, string hashedAccountId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("agreements/{agreementId}/sign")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RemoveOrganisation(string agreementId, string hashedAccountId)
+        {
+
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

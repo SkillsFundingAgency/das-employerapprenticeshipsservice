@@ -1025,6 +1025,8 @@
     <Content Include="Views\EmployerAccountTransactions\ProviderPaymentSummary.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\CoursePaymentSummary.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index_ORG.cshtml" />
+    <None Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
+    <None Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
