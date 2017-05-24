@@ -74,5 +74,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreements
             //Assert
             Assert.IsTrue(actual.Agreements.Any());
         }
+
+        [Test]
+        public async Task ThenIfThereIsOnlyOneResultReturnedItsCanBeRemovedValueIsSetToFalse()
+        {
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            Assert.IsFalse(actual.Agreements.First().CanBeRemoved);
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
@@ -36,6 +37,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
             var result = await _employerAgreementRepository.GetEmployerAgreementsToRemove(accountId);
+
+            if (result != null && result.Count == 1)
+            {
+                result.First().CanBeRemoved = false;
+            }
 
             return new GetAccountEmployerAgreementsRemoveResponse {Agreements = result };
         }
