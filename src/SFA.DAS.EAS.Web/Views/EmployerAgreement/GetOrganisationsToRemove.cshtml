@@ -1,1 +1,43 @@
-﻿
+﻿@{
+    ViewBag.PageID = "organisations-remove";
+    ViewBag.Title = "Remove an organisation";
+    ViewBag.Section = "organisations";
+}
+
+
+<div class="grid-row header-index">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">@ViewBag.Title</h1>
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-full">
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Organisation</th>
+                    <th scope="col"><span class="vh">Status</span></th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Great big old company Ltd</td>
+                    <td>Can't be removed because it has ongoing apprenticeships.</td>
+                </tr>
+                <tr>
+                    <td>I like my choices Ltd</td>
+                    <td><a href="">Remove <span class="vh"> {{ COMPANY NAME }}</span></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
+        </ol>
+    </div>
+}
