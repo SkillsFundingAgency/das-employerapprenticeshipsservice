@@ -1,1 +1,63 @@
-﻿
+﻿@{
+    ViewBag.PageID = "organisations-remove-confirmation";
+    ViewBag.Title = "Remove organisation";
+    ViewBag.Section = "organisations";
+}
+
+@if (1 == 1)
+{
+    <div class="grid-row notification-wrapper">
+        <div class="column-two-thirds">
+            <div tabindex="-1" role="group" class="error-summary">
+                <h1 id="error-summary" class="heading-medium error-summary-heading">
+                    Errors to fix
+                </h1>
+                <p>Check the following details:</p>
+                <ul class="error-summary-list">
+                    <li><a href="#confirm">Confirm you wish to remove the organisation</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="grid-row header-index">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            <span class="heading-secondary">{{ ORGANISATION NAME }}</span> 
+            Remove organisation
+        </h1>
+        <p class="lede">{{ ORGANISATION NAME }} will end its agreement with the <abbr title="Education and Skills Funding Agency">ESFA</abbr>.</p>
+        <form>
+            <div class="form-group @(1 == 1 ? "error" : "")">
+                <fieldset id="confirm">
+                    <legend class="heading-medium">Are you sure?</legend>
+                    @if (1 == 1)
+                    {
+                        <span class="error-message">Confirm you wish to remove the organisation</span>
+                    }
+                    <label class="block-label">
+                        <input type="radio" name="RemoveOrganisation" value="2" />
+                        <span class="heading-small">Yes, remove now</span>
+                    </label>
+                    <label class="block-label">
+                        <input type="radio" name="RemoveOrganisation" value="1" />
+                        <span class="heading-small">No, don't remove</span>
+                    </label>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="button">Continue</button>
+            </div>  
+        </form>
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
+        </ol>
+    </div>
+}
