@@ -30,9 +30,9 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
         {
             var existingFractions = (await _englishFractionRepository.GetAllEmployerFractions(message.EmployerReference)).ToList();
 
-            if (existingFractions.Any() && !message.EnglishFractionUpdateResponse.UpdateRequired)
+            if (existingFractions.Any() && !message.EnglishFractionUpdateResponse.UpdateRequired && TheFractionIsOlderOrEqualToTheUpdateDate(message, existingFractions))
             {
-                return;
+                return;   
             }
 
             DateTime? dateFrom = null;
@@ -91,6 +91,12 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
                 await _englishFractionRepository.CreateEmployerFraction(englishFraction, englishFraction.EmpRef);
             }
             
+        }
+
+        private static bool TheFractionIsOlderOrEqualToTheUpdateDate(UpdateEnglishFractionsCommand message, List<DasEnglishFraction> existingFractions)
+        {
+            return message.EnglishFractionUpdateResponse.DateCalculated <=
+                   existingFractions.OrderByDescending(x => x.DateCalculated).First().DateCalculated;
         }
     }
 
