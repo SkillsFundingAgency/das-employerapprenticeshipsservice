@@ -207,12 +207,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InviteMember.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\RemoveLegalEntity.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RemoveLegalEntity.feature</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steps\AddPayeScheme\AddPayeSchemeSteps.cs" />
     <Compile Include="Steps\AgreementSteps\AgreementSteps.cs" />
     <Compile Include="Steps\CommonSteps\AccountCreationSteps.cs" />
     <Compile Include="Steps\CommonSteps\GlobalTestSteps.cs" />
     <Compile Include="Steps\InviteMember\InviteMemberSteps.cs" />
+    <Compile Include="Steps\RemoveLegalEntity\RemoveLegalEntitySteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.config" />
@@ -236,6 +242,10 @@
     <None Include="Features\InviteMember.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>InviteMember.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\RemoveLegalEntity.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RemoveLegalEntity.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
