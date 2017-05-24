@@ -35,17 +35,13 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             {
                 validationResult.AddError(nameof(item.HashedAccountId));
             }
-            if (string.IsNullOrEmpty(item.HashedLegalEntityId))
-            {
-                validationResult.AddError(nameof(item.HashedLegalEntityId));
-            }
             if (string.IsNullOrEmpty(item.UserId))
             {
                 validationResult.AddError(nameof(item.UserId));
             }
-            if (item.LegalAgreementId == 0)
+            if (string.IsNullOrEmpty(item.HashedLegalAgreementId))
             {
-                validationResult.AddError(nameof(item.LegalAgreementId));
+                validationResult.AddError(nameof(item.HashedLegalAgreementId));
             }
 
             if (!validationResult.IsValid())
@@ -66,22 +62,21 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
 
             if (legalEntites != null && legalEntites.Count == 1)
             {
-                validationResult.AddError(nameof(item.HashedLegalEntityId), "There must be at least one legal entity on the account");
+                validationResult.AddError(nameof(item.HashedLegalAgreementId), "There must be at least one legal entity on the account");
                 return validationResult;
             }
 
-            var agreement = await _employerAgreementRepository.GetEmployerAgreement(item.LegalAgreementId);
+            var agreementId = _hashingService.DecodeValue(item.HashedLegalAgreementId);
+            var agreement = await _employerAgreementRepository.GetEmployerAgreement(agreementId);
 
             if (agreement.Status == EmployerAgreementStatus.Signed)
             {
-                validationResult.AddError(nameof(item.HashedLegalEntityId), "Agreement has already been signed");
+                validationResult.AddError(nameof(item.HashedLegalAgreementId), "Agreement has already been signed");
                 return validationResult;
             }
-
             
-            var legalEntityId = _hashingService.DecodeValue(item.HashedLegalEntityId);
-
-            if (agreement.AccountId != accountId || agreement.LegalEntityId != legalEntityId)
+            
+            if (agreement.AccountId != accountId )
             {
                 validationResult.IsUnauthorized = true;
                 return validationResult;

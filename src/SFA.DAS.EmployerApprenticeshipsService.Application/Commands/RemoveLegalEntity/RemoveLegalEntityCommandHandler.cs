@@ -47,36 +47,34 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
 
             if (validationResult.IsUnauthorized)
             {
-                _logger.Info($"User {message.UserId} tried to remove {message.HashedLegalEntityId} from Account {message.HashedAccountId}");
+                _logger.Info($"User {message.UserId} tried to remove {message.HashedLegalAgreementId} from Account {message.HashedAccountId}");
                 throw new UnauthorizedAccessException();
             }
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            var legalEntityId = _hashingService.DecodeValue(message.HashedLegalEntityId);
+            var legalAgreementId = _hashingService.DecodeValue(message.HashedLegalAgreementId);
 
-            await _employerAgreementRepository.RemoveLegalEntityFromAccount(message.LegalAgreementId);
+            await _employerAgreementRepository.RemoveLegalEntityFromAccount(legalAgreementId);
 
-            await AddAuditEntry(accountId, legalEntityId, message.LegalAgreementId);
-
-            var hashedAgreementId = _hashingService.HashValue(message.LegalAgreementId);
-
-            await CreateEvent(hashedAgreementId);
+            await AddAuditEntry(accountId, message.HashedLegalAgreementId);
+            
+            await CreateEvent(message.HashedLegalAgreementId);
         }
 
-        private async Task AddAuditEntry(long accountId, long legalEntityId, long employerAgreementId)
+        private async Task AddAuditEntry(long accountId,  string employerAgreementId)
         {
             await _mediator.SendAsync(new CreateAuditCommand
             {
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "UPDATED",
-                    Description = $"LegalEntity {legalEntityId} removed from account {accountId}",
+                    Description = $"EmployerAgreement {employerAgreementId} removed from account {accountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
                         PropertyUpdate.FromString("Status", EmployerAgreementStatus.Removed.ToString())
                     },
                     RelatedEntities = new List<Entity> { new Entity { Id = accountId.ToString(), Type = "Account" } },
-                    AffectedEntity = new Entity { Type = "EmployerAgreement", Id = employerAgreementId.ToString() }
+                    AffectedEntity = new Entity { Type = "EmployerAgreement", Id = employerAgreementId }
                 }
             });
         }

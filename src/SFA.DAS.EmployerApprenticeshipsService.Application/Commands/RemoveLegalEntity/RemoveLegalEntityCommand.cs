@@ -6,7 +6,6 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
     {
         public string HashedAccountId { get; set; }
         public string UserId { get; set; }
-        public string HashedLegalEntityId { get; set; }
-        public long LegalAgreementId { get; set; }
+        public string HashedLegalAgreementId { get; set; }
     }
 }
