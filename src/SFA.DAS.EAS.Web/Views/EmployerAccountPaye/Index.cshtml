@@ -43,8 +43,8 @@
                         var englishFractionPercentage = (scheme.EnglishFraction?.Amount ?? 1);
                         <tr>
                             <td>
-                                <div>@scheme.Ref</div>
-                                <div>@scheme.Name</div>
+                                @scheme.Ref
+                                <span class="responsive-detail">@scheme.Name</span>
                             </td>
 
                             @if (englishFractionPercentage == 1)
