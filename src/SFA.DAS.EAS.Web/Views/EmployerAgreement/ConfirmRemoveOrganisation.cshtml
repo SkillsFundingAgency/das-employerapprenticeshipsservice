@@ -4,7 +4,7 @@
     ViewBag.Section = "organisations";
 }
 
-@if (1 == 1)
+@if (1 == 2)
 {
     <div class="grid-row notification-wrapper">
         <div class="column-two-thirds">
@@ -29,20 +29,22 @@
         </h1>
         <p class="lede">{{ ORGANISATION NAME }} will end its agreement with the <abbr title="Education and Skills Funding Agency">ESFA</abbr>.</p>
         <form>
-            <div class="form-group @(1 == 1 ? "error" : "")">
+            <div class="form-group @(1 == 2 ? "error" : "")">
                 <fieldset id="confirm">
-                    <legend class="heading-medium">Are you sure?</legend>
-                    @if (1 == 1)
-                    {
-                        <span class="error-message">Confirm you wish to remove the organisation</span>
-                    }
+                    <legend>
+                        <span class="form-label-bold">Are you sure?</span>
+                        @if (1 == 2)
+                        {
+                            <span class="error-message">Confirm you wish to remove the organisation</span>
+                        }
+                    </legend>
                     <label class="block-label">
                         <input type="radio" name="RemoveOrganisation" value="2" />
-                        <span class="heading-small">Yes, remove now</span>
+                        <span class="form-label">Yes, remove now</span>
                     </label>
                     <label class="block-label">
                         <input type="radio" name="RemoveOrganisation" value="1" />
-                        <span class="heading-small">No, don't remove</span>
+                        <span class="form-label">No, don't remove</span>
                     </label>
                 </fieldset>
             </div>
