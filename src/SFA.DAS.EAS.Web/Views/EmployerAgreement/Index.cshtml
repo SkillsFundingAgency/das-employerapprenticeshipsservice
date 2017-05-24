@@ -34,13 +34,11 @@
         <table class="organisations">
             <thead>
                 <tr>
-                <th scope="col">Organisation</th>
-                    
-                        <th scope="col">Agreement</th>
-                        <th scope="col">Spending status</th>
-                        <th scope="col"><span class="vh">Action</span></th>
-                    
-                    
+                    <th scope="col">Organisation</th>
+                    <th scope="col">Agreement</th>
+                    <th scope="col">Spending status</th>
+                    <th scope="col"><span class="vh">Action</span></th>
+                </tr>
             </thead>
             <tbody>
 
@@ -80,9 +78,7 @@
                 }
             </tbody>
         </table>
-
-
-
+        <p><a href="@Url.Action("Remove", "EmployerAgreement", new {HashedAccountId = @Model.Data.HashedAccountId})">Remove an organisation from your account</a></p>
     </div>
 </div>
 @section breadcrumb {
