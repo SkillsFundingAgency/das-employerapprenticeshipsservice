@@ -153,5 +153,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 
             });
         }
+
+        public Task<List<RemoveEmployerAgreementView>> GetEmployerAgreementsToRemove(long accountId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

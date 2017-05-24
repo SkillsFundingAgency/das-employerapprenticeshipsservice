@@ -324,7 +324,9 @@
     <Compile Include="Queries\FindAccountCoursePayments\FindAccountCoursePaymentsQueryHandler.cs" />
     <Compile Include="Queries\FindAccountCoursePayments\FindAccountCoursePaymentsQueryValidator.cs" />
     <Compile Include="Queries\FindAccountCoursePayments\FindAccountCoursePaymentsResponse.cs" />
+    <Compile Include="Queries\GetAccountEmployerAgreementsRemove\GetAccountEmployerAgreementsRemoveQueryHandler.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementsRemove\GetAccountEmployerAgreementsRemoveRequest.cs" />
+    <Compile Include="Queries\GetAccountEmployerAgreementsRemove\GetAccountEmployerAgreementsRemoveResponse.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementsRemove\GetAccountEmployerAgreementsRemoveValidator.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsQueryHandler.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsRequest.cs" />
