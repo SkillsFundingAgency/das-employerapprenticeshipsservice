@@ -3,11 +3,13 @@
 	
 AS
 	SELECT 
+		ea.Id,
 		le.Name AS Name,
 		case 
 			when ea.StatusId = 1 then 1 
 			else 0 end 
-		as CanBeRemoved
+		as CanBeRemoved,
+		acc.HashedId as HashedAccountId
 		
 	FROM [employer_account].[LegalEntity] le
 		JOIN [employer_account].[EmployerAgreement] ea

@@ -24,6 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreements
         private const string ExpectedUserId = "456TGFD";
         private const string ExpectedHashedAccountId = "456TGFD";
         private const long ExpectedAccountId = 98172938;
+        private const long ExpectedAgreementId = 8765;
 
         [SetUp]
         public void Arrange()
@@ -36,11 +37,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreements
             _repository.Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))
                 .ReturnsAsync(new List<RemoveEmployerAgreementView>
                 {
-                    new RemoveEmployerAgreementView {Name = "test company", CanBeRemoved = true }   
+                    new RemoveEmployerAgreementView {Name = "test company", CanBeRemoved = true, Id = ExpectedAgreementId }   
                 });
 
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountId)).Returns(ExpectedAccountId);
+            _hashingService.Setup(x => x.HashValue(ExpectedAgreementId)).Returns("45TGBF");
 
             RequestHandler = new GetAccountEmployerAgreementsRemoveQueryHandler(RequestValidator.Object, _repository.Object,_hashingService.Object);
         }
@@ -83,6 +85,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreements
 
             //Assert
             Assert.IsFalse(actual.Agreements.First().CanBeRemoved);
+        }
+
+        [Test]
+        public async Task ThenTheAgreementIsHashedInTheResponse()
+        {
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            Assert.IsNotNull(actual.Agreements.First().HashedAgreementId);
+            Assert.IsNotEmpty(actual.Agreements.First().HashedAgreementId);
         }
     }
 }

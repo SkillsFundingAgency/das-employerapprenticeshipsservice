@@ -43,6 +43,15 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
                 result.First().CanBeRemoved = false;
             }
 
+            if(result!= null)
+            {
+                foreach (var removeEmployerAgreementView in result)
+                {
+                    removeEmployerAgreementView.HashedAgreementId = _hashingService.HashValue(removeEmployerAgreementView.Id);
+                }
+            }
+            
+
             return new GetAccountEmployerAgreementsRemoveResponse {Agreements = result };
         }
     }
