@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,7 +8,9 @@ using MediatR;
 using NLog;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
+using SFA.DAS.EAS.Application.Commands.RemoveLegalEntity;
 using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
+using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
@@ -375,6 +378,64 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
+        public virtual async Task<OrchestratorResponse<bool>>  RemoveLegalAgreement(ConfirmLegalAgreementToRemoveViewModel model, string userId)
+        {
+            var response = new OrchestratorResponse<bool>();
+
+            try
+            {
+                if (model.RemoveOrganisation == null)
+                {
+                    response.Status = HttpStatusCode.BadRequest;
+                    response.FlashMessage = new FlashMessageViewModel
+                    {
+                        Headline = "Errors to fix",
+                        Message = "Check the following details:",
+                        ErrorMessages = new Dictionary<string, string> { { "RemoveOrganisation", "Confirm you wish to remove the organisation" } },
+                        Severity = FlashMessageSeverityLevel.Error
+                    };
+                    return response;
+                }
+
+                if (model.RemoveOrganisation == 1)
+                {
+                    response.Status = HttpStatusCode.Continue;
+                    return response;
+                }
+
+                await _mediator.SendAsync(new RemoveLegalEntityCommand
+                {
+                    HashedAccountId = model.HashedAccountId,
+                    UserId = userId,
+                    HashedLegalAgreementId = model.HashedAgreementId
+                });
+
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = $"You have removed {model.Name}.",
+                    Severity = FlashMessageSeverityLevel.Success
+                };
+                response.Data = true;
+            }
+            catch (InvalidRequestException ex)
+            {
+                response.Status = HttpStatusCode.BadRequest;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = ex.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
+                response.Exception = ex;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+                response.Exception = ex;
+            }
+
+            return response;
         }
     }
 }

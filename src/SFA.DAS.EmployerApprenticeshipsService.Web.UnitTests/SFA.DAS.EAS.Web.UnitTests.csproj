@@ -186,6 +186,7 @@
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetTheConfirmRemoveAgreementModel.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetThePdfAgreement.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetAListOfAgreementsToRemove.cs" />
+    <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIRemoveTheLegalAgreement.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\OrchestratorTestBase.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenCreatingApprenticeship.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenDeletingApprenticeship.cs" />
