@@ -5118,62 +5118,9 @@ h2 .float-right {
   content: " ";
 }
 
-#sort-it input {
-  font-size: 1em;
-}
-
-/* prevent zoom in mobile */
-#sort-it ol {
-  /* list style is faked with number inputs */
-  list-style: none;
-  padding: 0;
-  margin-bottom: 40px;
-}
-
-#sort-it li {
-  position: relative;
-  min-height: 1em;
-  cursor: move;
-  padding: 1em 1em 1em 3.5em;
-  background: #dee0e2;
-  margin-bottom: 15px;
-  font-weight: bold;
-}
-
-#sort-it li input {
-  /* Move these to visually fake the ol numbers */
-  position: absolute;
-  width: 1.75em;
-  left: .55em;
-  top: 0.7em;
-  text-align: right;
-  background: #fff;
-  border: 1px solid #bfc1c3;
-  text-align: center;
-  padding: 7px 4px 4px 4px;
-}
-
-#sort-it li label {
-  /* visually hidden offscreen so it still benefits screen readers */
-  position: absolute;
-  left: -9999px;
-}
-
-#manual-sort {
-  margin-right: 20px;
-  margin-bottom: 20px;
-}
-
-/* sortable plugin styles when dragged */
-#sort-it .dragged {
-  position: absolute;
-  opacity: 0.5;
-  z-index: 2000;
-}
-
-#sort-it li.placeholder {
-  position: relative;
-  background: #28a197;
+#order-payment li {
+  list-style-type: decimal;
+  margin-bottom: 10px;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
