@@ -91,6 +91,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
         [Test]
         public async Task ThenTheOrchestratorIsCalledToRemoveTheOrg()
         {
+            //Arrange
+            _orchestrator.Setup(x => x.RemoveLegalAgreement(It.IsAny<ConfirmLegalAgreementToRemoveViewModel>(), ExpectedUserId))
+                .ReturnsAsync(new OrchestratorResponse<bool> { Status = HttpStatusCode.OK, FlashMessage = new FlashMessageViewModel() });
+
             //Act
             await _controller.RemoveOrganisation(ExpectedHashedAccountId, ExpectedHashedAgreementId, new ConfirmLegalAgreementToRemoveViewModel());
 
@@ -104,7 +108,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
         [TestCase(HttpStatusCode.OK, "Index", 1)]
         public async Task ThenTheActionRedirectsToTheCorrectViewWhenRemovingTheOrg(HttpStatusCode code, string viewName, int isFlashPopulated)
         {
-            //Assert
+            //Arrange
             _orchestrator.Setup(x => x.RemoveLegalAgreement(It.IsAny<ConfirmLegalAgreementToRemoveViewModel>(), ExpectedUserId))
                 .ReturnsAsync(new OrchestratorResponse<bool> {Status = code, FlashMessage = new FlashMessageViewModel()});
 
