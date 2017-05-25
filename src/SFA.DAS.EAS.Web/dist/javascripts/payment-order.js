@@ -2,6 +2,7 @@
 
     $(".provider-list").select2({
         minimumResultsForSearch: Infinity
+     
     });
 
 

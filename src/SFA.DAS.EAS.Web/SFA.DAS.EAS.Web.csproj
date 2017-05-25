@@ -541,7 +541,6 @@
     <Content Include="dist\css\images\pagination-arrow-sprite.png" />
     <Content Include="dist\javascripts\character-limit.js" />
     <Content Include="dist\javascripts\payment-order.js" />
-    <Content Include="dist\javascripts\sortable.min.js" />
     <Content Include="Views\EmployerManageApprentices\EditStartedApprenticeship.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Compile Include="WebRole.cs" />

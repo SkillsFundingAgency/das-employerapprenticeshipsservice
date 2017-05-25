@@ -5118,9 +5118,17 @@ h2 .float-right {
   content: " ";
 }
 
+#order-payment {
+  margin-bottom: 40px;
+}
+
 #order-payment li {
   list-style-type: decimal;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+#order-payment li .provider-list {
+  width: 350px;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
