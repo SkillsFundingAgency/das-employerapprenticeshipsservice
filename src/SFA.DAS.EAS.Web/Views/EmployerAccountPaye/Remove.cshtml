@@ -5,8 +5,8 @@
 
 @if (!Model.Data.Valid)
 {
-    <div class="grid-row">
-        <div class="column-full error-summary-wrapper">
+    <div class="grid-row notification-wrapper">
+        <div class="column-two-thirds">
             <div tabindex="-1" role="group" class="error-summary">
                 <h1 id="error-summary" class="heading-medium error-summary-heading">
                     Errors to fix
@@ -20,25 +20,28 @@
     </div>
 }
 
-
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Remove this scheme?</h1>
-        <h2 class="heading-medium">@Model.Data.PayeRef</h2>
-        <p>The @Model.Data.AccountName account will stop receiving funds through this PAYE scheme.</p>
+        <h1 class="heading-xlarge">
+            <span class="heading-secondary">@Model.Data.PayeSchemeName</span>
+            @Model.Data.PayeRef
+        </h1>
+        <h2 class="heading-medium">Remove this scheme?</h2>
+        <p>The <b>@Model.Data.AccountName</b> account will stop receiving funds through this PAYE scheme.</p>
         <form method="post" action="@Url.Action("RemovePaye","EmployerAccountPaye")">
             @Html.AntiForgeryToken()    
             <input type="hidden" value="@Model.Data.PayeRef" name="PayeRef"/>
             <input type="hidden" value="@Model.Data.HashedAccountId" name="HashedId"/>
-
             <div class="form-group @(Model.Data.Valid ? "" : "error")">
 
-                <fieldset class="" id="confirm">
-                    <legend class="vh">Remove this PAYE scheme</legend>
-                    @if (!Model.Data.Valid)
-                    {
-                        <span class="error-message">@Model.Data.RemoveSchemeErrorMessage</span>
-                    }
+                <fieldset id="confirm">
+                    <legend>
+                        <span class="vh">Remove this PAYE scheme</span>
+                        @if (!Model.Data.Valid)
+                        {
+                            <span class="error-message">@Model.Data.RemoveSchemeErrorMessage</span>
+                        }
+                    </legend>
                     <label class="block-label">
                         <input type="radio" name="RemoveScheme" value="2" />
                         <span class="heading-small">Yes, remove scheme</span>
