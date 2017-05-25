@@ -354,12 +354,16 @@ body {
     }
 }
 
+// payment order styles
 #order-payment{
-
+    margin-bottom:40px;
     li{
        list-style-type:decimal;
-       margin-bottom:10px;
-    
+       margin-bottom:20px;
+        .provider-list{
+            width:350px;
+            
+        }
     }
 }
 
