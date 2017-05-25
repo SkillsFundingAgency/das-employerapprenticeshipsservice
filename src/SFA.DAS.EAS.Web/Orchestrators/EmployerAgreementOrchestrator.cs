@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
@@ -296,6 +297,51 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return signedPdfEmployerAgreement;
 
+        }
+
+        public async Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, string userId)
+        {
+            var response = new OrchestratorResponse<LegalAgreementsToRemoveViewModel>();
+            try
+            {
+                var result = await _mediator.SendAsync(new GetAccountEmployerAgreementsRemoveRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = userId
+                });
+
+                response.Data = new LegalAgreementsToRemoveViewModel
+                {
+                    Agreements = result.Agreements
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                response.Status = HttpStatusCode.BadRequest;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = ex.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
+                response.Exception = ex;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+                response.Exception = ex;
+            }
+            return response;
+        }
+
+        public ConfirmLegalAgreementToRemoveViewModel GetConfirmRemoveOrganisationViewModel(string agreementId, string hashedAccountId)
+        {
+            return new ConfirmLegalAgreementToRemoveViewModel
+            {
+                AgreementId = agreementId,
+                HashedAccountId = hashedAccountId
+            };
         }
     }
 }

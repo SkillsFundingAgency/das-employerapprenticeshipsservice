@@ -141,8 +141,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/remove")]
         public async Task<ActionResult> GetOrganisationsToRemove(string hashedAccountId)
         {
+            var model = await _orchestrator.GetLegalAgreementsToRemove(hashedAccountId, OwinWrapper.GetClaimValue("sub"));
 
-            return View();
+            return View(model);
         }
 
         [HttpGet]
