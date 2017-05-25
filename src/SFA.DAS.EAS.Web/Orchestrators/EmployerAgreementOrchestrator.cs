@@ -299,7 +299,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
-        public async Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, string userId)
+        public virtual async  Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, string userId)
         {
             var response = new OrchestratorResponse<LegalAgreementsToRemoveViewModel>();
             try
@@ -335,13 +335,46 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public ConfirmLegalAgreementToRemoveViewModel GetConfirmRemoveOrganisationViewModel(string agreementId, string hashedAccountId)
+        public virtual async Task<OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string agreementId, string hashedAccountId, string userId)
         {
-            return new ConfirmLegalAgreementToRemoveViewModel
+            var response = new OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>();
+            try
             {
-                AgreementId = agreementId,
-                HashedAccountId = hashedAccountId
-            };
+                var result = await _mediator.SendAsync(new GetAccountEmployerAgreementRemoveRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = userId,
+                    HashedAgreementId = agreementId
+                });
+                response.Data = new ConfirmLegalAgreementToRemoveViewModel
+                {
+                    HashedAccountId = result.Agreement.HashedAccountId,
+                    HashedAgreementId = result.Agreement.HashedAgreementId,
+                    Id = result.Agreement.Id,
+                    Name = result.Agreement.Name
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                response.Status = HttpStatusCode.BadRequest;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = ex.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
+                response.Exception = ex;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+                response.Exception = ex;
+            }
+
+            return response;
+        }
+
         }
     }
 }
