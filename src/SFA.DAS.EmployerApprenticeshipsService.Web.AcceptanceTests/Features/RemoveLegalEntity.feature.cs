@@ -65,12 +65,12 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Remove legal entity")]
+        [NUnit.Framework.DescriptionAttribute("Remove legal entity when multiple exist on the account")]
         [NUnit.Framework.CategoryAttribute("mytag")]
         [NUnit.Framework.TestCaseAttribute("Owner", "can", new string[0])]
         [NUnit.Framework.TestCaseAttribute("Transactor", "cannot", new string[0])]
         [NUnit.Framework.TestCaseAttribute("Viewer", "cannot", new string[0])]
-        public virtual void RemoveLegalEntity(string account_Role, string result, string[] exampleTags)
+        public virtual void RemoveLegalEntityWhenMultipleExistOnTheAccount(string account_Role, string result, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "mytag"};
@@ -78,13 +78,49 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Features
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove legal entity", @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove legal entity when multiple exist on the account", @__tags);
 #line 7
 this.ScenarioSetup(scenarioInfo);
 #line 8
  testRunner.Given(string.Format("I am an account \"{0}\"", account_Role), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
+ testRunner.When("I have more than one legal entity with a \"pending\" status", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 10
  testRunner.Then(string.Format("I \"{0}\" remove a legal entity", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Unable to remove only legal entity on account")]
+        public virtual void UnableToRemoveOnlyLegalEntityOnAccount()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Unable to remove only legal entity on account", ((string[])(null)));
+#line 17
+this.ScenarioSetup(scenarioInfo);
+#line 18
+ testRunner.Given("I am an account \"Owner\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 19
+ testRunner.When("There is only one legal entity on the account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 20
+ testRunner.Then("I \"cannot\" remove a legal entity", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Remove legal entity status")]
+        public virtual void RemoveLegalEntityStatus()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove legal entity status", ((string[])(null)));
+#line 22
+this.ScenarioSetup(scenarioInfo);
+#line 23
+ testRunner.Given("I am an account \"Owner\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 24
+ testRunner.When("I have more than one legal entity with a \"signed\" status", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 25
+ testRunner.Then("I \"cannot\" remove a legal entity", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
