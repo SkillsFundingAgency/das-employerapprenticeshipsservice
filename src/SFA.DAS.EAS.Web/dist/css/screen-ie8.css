@@ -4516,6 +4516,11 @@ h2 .float-right {
   width: 350px;
 }
 
+.updated-alert {
+  padding: 20px 15px 15px;
+  border: 5px solid #28a197;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
