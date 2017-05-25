@@ -201,6 +201,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetAccountBalancesTests\WhenIGetAccountBalances.cs" />
     <Compile Include="Queries\GetAccountBalancesTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetAccountEmployerAgreementRemove\WhenIGetAccountEmployerAgreementToRemove.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementRemove\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementsRemove\WhenIGetAccountEmployerAgreementsToRemove.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementsRemove\WhenIValidateTheQuery.cs" />
