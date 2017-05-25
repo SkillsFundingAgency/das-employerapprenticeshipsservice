@@ -15,7 +15,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
-    public class WhenIRemoveAnAgreement
+    public class WhenIGetAListOfAgreementsToRemove
     {
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
@@ -58,6 +58,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
                                 && c.UserId.Equals(ExpectedUserId))),Times.Once);
         }
 
+
         [Test]
         public async Task ThenIfAnInvalidRequestExceptionIsThrownTheOrchestratorResponseContainsTheError()
         {
@@ -93,23 +94,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             //Assert
             Assert.IsTrue(actual.Data.Agreements.Any());
         }
-
-        [Test]
-        public async Task ThenWhenIRemoveAnAgreementTheMediatorCallIsMade()
-        {
-            
-        }
-
-        [Test]
-        public async Task ThenIfAnInvalidRequestExceptionIsThrownWhenRemovingTheAgreementItIsReturnedInTheOrchestratorResponse()
-        {
-            
-        }
-
-        [Test]
-        public async Task ThenIfAnUnauthorizedAccessExceptionIsThrownWhenRemovingTheAgreementItIsReturnedInTheOrchestratorResponse()
-        {
-            
-        }
+        
     }
 }
