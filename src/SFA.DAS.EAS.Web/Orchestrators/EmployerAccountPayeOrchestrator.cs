@@ -185,6 +185,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var response = new OrchestratorResponse<RemovePayeSchemeViewModel> {Data = model};
             try
             {
+                var result = await Mediator.SendAsync(new GetPayeSchemeByRefQuery
+                {
+                    HashedAccountId = model.HashedAccountId,
+                    Ref = model.PayeRef,
+                });
+
+                model.PayeSchemeName = result.PayeScheme.Name;
+
                 await Mediator.SendAsync(new RemovePayeFromAccountCommand
                 {
                     HashedAccountId = model.HashedAccountId,
@@ -192,8 +200,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     PayeRef = model.PayeRef,
                     RemoveScheme = model.RemoveScheme == 2
                 });
-                response.Data = model;
                 
+                response.Data = model;
             }
             catch (UnauthorizedAccessException)
             {

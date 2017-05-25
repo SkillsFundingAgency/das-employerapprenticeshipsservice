@@ -154,6 +154,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("Remove",result);
             }
 
+            model.PayeSchemeName = result.Data.PayeSchemeName;
+
             var flashMessage = new FlashMessageViewModel
             {
                 Severity = FlashMessageSeverityLevel.Success,
