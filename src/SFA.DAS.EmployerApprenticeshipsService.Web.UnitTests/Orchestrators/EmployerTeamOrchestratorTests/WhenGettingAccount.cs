@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 
             // Assert
             Assert.IsNotNull(actual);
-            Assert.IsFalse(actual.Data.RequiresAgreementSigning);
+            Assert.Zero(actual.Data.RequiresAgreementSigning);
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 
             // Assert
             Assert.IsNotNull(actual);
-            Assert.IsFalse(actual.Data.RequiresAgreementSigning);
+            Assert.Zero(actual.Data.RequiresAgreementSigning);
         }
     }
 }
