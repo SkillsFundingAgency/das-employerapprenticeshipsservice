@@ -51,8 +51,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 });
 
                 
-                var showSigningNotice = false;
-
+                var showSigningNotice = 0;
                 
                 var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
                 if (userRoleResponse.UserRole == Role.Owner || userRoleResponse.UserRole == Role.Transactor)
@@ -62,7 +61,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         HashedAccountId = accountId,
                         ExternalUserId = externalUserId
                     });
-                    showSigningNotice = agreementsResponse.EmployerAgreements.Any(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
+                    showSigningNotice = agreementsResponse.EmployerAgreements.Count(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
                 }
                 
 
@@ -70,7 +69,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var viewModel = new AccountDashboardViewModel
                 {
                     Account = accountResponse.Account,
-                    RequiresAgreementSigning = showSigningNotice
+                    RequiresAgreementSigning = showSigningNotice,
+                    UserRole = userRoleResponse.UserRole
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
