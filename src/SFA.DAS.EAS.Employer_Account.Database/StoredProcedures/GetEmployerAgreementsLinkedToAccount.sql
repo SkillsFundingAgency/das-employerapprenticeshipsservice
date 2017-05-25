@@ -19,4 +19,5 @@ BEGIN
 	JOIN [employer_account].[AccountEmployerAgreement] aea ON aea.[EmployerAgreementId] = ea.Id
 	JOIN [employer_account].[EmployerAgreementTemplate] eat ON eat.Id = ea.TemplateId
 	WHERE aea.AccountId = @accountId
+	and ea.StatusId <> 5
 END
