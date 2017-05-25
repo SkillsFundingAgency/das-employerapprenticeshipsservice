@@ -8,14 +8,15 @@
 
 @section pageSpecificJS {
     @Scripts.Render("~/bundles/apprentice")
-    @Scripts.Render("~/bundles/sortable")
+    @Scripts.Render("~/bundles/paymentOrder")
 }
 
 <div class="grid-row">
     <div class="column-two-thirds">
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-        <h1 class="heading-xlarge">Default payment order</h1>
+        <h1 class="heading-xlarge">Set payment order</h1>
+        <p>The training provider lister first will be paid first from your available funds.</p>
         <form method="POST" action="@Url.Action("PaymentOrderPost")" novalidate="novalidate" id="sort-it">
             @Html.AntiForgeryToken()
             <ol>
@@ -35,6 +36,51 @@
                     </li>
                 }
             </ol>
+
+
+            <!--static code-->
+            <ol id="order-payment">
+                <li>
+                    <select class="provider-list">
+                        <option value="AK">Alaska and the list of alaska</option>
+                        <option value="HI">Hawaii</option>
+                        <option value="CA">California</option>
+                        <option value="NV">Nevada</option>
+                        <option value="OR">Oregon</option>
+                        <option value="WA">Washington</option>
+                        <option value="AZ">Arizona</option>
+                        <option value="CO">Colorado</option>
+                        <option value="ID">Idaho</option>
+                        <option value="MT">Montana</option>
+                        <option value="NE">Nebraska</option>
+                        <option value="NM">New Mexico</option>
+                        <option value="ND">North Dakota</option>
+                        <option value="UT">Utah</option>
+                        <option value="WY">Wyoming</option>
+                    </select>
+                    </li>
+                <li>
+                    <select class="provider-list">
+                        <option value="AK">Alaska</option>
+                        <option value="HI">Hawaii</option>
+                        <option value="CA">California</option>
+                        <option value="NV">Nevada</option>
+                        <option value="OR">Oregon</option>
+                        <option value="WA">Washington</option>
+                        <option value="AZ">Arizona</option>
+                        <option value="CO">Colorado</option>
+                        <option value="ID">Idaho</option>
+                        <option value="MT">Montana</option>
+                        <option value="NE">Nebraska</option>
+                        <option value="NM">New Mexico</option>
+                        <option value="ND">North Dakota</option>
+                        <option value="UT">Utah</option>
+                        <option value="WY">Wyoming</option>
+                    </select>
+                </li>
+            </ol>
+
+
 
             <input id="manual-sort" class="button" type="submit" value="Save">
             <a class="button text-link" href="#Continue to wherever" title="continue">Continue to wherever</a>
