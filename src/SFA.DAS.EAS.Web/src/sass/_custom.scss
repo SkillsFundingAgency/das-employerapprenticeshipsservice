@@ -353,6 +353,147 @@ body {
     }
 }
 
+//start -- Apprentice Filter Styles
+.filter-option-select 
+{ 
+    margin-bottom: 30px;
+    background-color:$panel-colour;
+    padding: 5px;
+        .container-head {
+            padding-left: 5px;
+            background: url(/dist/css/images/option-select-toggle-sprite.png) no-repeat right 5px;
+            cursor: pointer;
+            display: block;
+            position: relative;
+            }
+        .option-select-label{
+            margin-right: 40px;
+            font-weight: bold;
+            padding: 5px;
+            text-transform:none;
+            display: block;
+            margin-top: 0;
+            }
+        .options-container {
+            position: relative;
+            background-color: #fff;          
+            max-height:200px; //container height
+            overflow:hidden;
+                label{
+                    font-size: 16px;
+                    line-height: 1.25; 
+                    padding-right: 10px;
+                    display:block;  
+                    font-weight: 400;
+                    text-transform: none;  
+                    padding: 7px 0 7px 2px;
+                    border-bottom: 1px solid #bfc1c3;  
+                    cursor: pointer;                
+                    }
+            }
+          .showHide {
+             background: url(/dist/css/images/option-select-toggle-sprite.png) no-repeat;
+             background-position: right -77px;
+             cursor: pointer;
+             display: block;
+             position: relative; 
+
+            }
+            .hideOptions {
+                display: none; 
+            }
+}
+
+#manage-all-apprentices {
+    .tableResponsive{
+        th{font-size:16px;}
+    }
+    .reset-link{
+        padding-left:0;
+        margin-top:10px;
+    }
+}
+
+// pagination
+.previous-next-navigation {
+  padding-left: 0;
+  position: relative;
+  overflow: hidden;
+  margin: 60px 0 0;
+  width: 100%; 
+    li 
+    {
+      font-family: "nta", Arial, sans-serif;
+      font-size: 20px;
+      line-height: 1.11111;
+      font-weight: 400;
+      text-transform: none;
+      font-size-adjust: 0.5;
+      display: block;
+      padding: 0;
+      margin: 0;
+      width: 50%;
+      float: left; 
+      a 
+      {
+      display: block;
+      text-decoration: none; 
+          span {
+          display: block;
+          font-family: "nta", Arial, sans-serif;
+          font-size: 12px;
+          line-height: 1.25;
+          font-weight: 400;
+          text-transform: none;
+          font-size-adjust: 0.5; 
+          }
+          &:hover {
+               background:$highlight-colour;
+              .page-numbers {text-decoration: underline;}
+          }
+          &:focus{
+               .page-numbers {text-decoration: underline;}
+          }
+      }
+      
+   }
+    li.next 
+    {
+      float: right;
+      text-align: right; 
+          a {padding: 15px 35px 15px 0;}
+          a:before {
+          background: transparent url("/dist/css/images/pagination-arrow-sprite.png") no-repeat -102px -11px;
+          margin: -4px -32px 0 0;
+          display: block;
+          float: right;
+          width: 30px;
+          height: 38px;
+          content: " "; }
+      }
+    li.previous
+        { 
+        a{padding: 15px 0 15px 35px; }
+        a:before 
+        {
+          background: transparent url("/dist/css/images/pagination-arrow-sprite.png") no-repeat -20px -11px;
+          margin: -4px 0 0 -32px;
+          display: block;
+          float: left;
+          width: 30px;
+          height: 38px;
+          content: " "; 
+        }
+        }
+}
+//end -- Apprentice Filter Styles
+
+
+
+
+
+
+
 //all mobile media query breakpoints
 //==================================
 @media only screen and (max-device-width: 640px),
