@@ -376,7 +376,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeship, string externalUserId)
+        public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeship, string externalUserId, string userName, string userEmail)
         {
             var accountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
@@ -391,7 +391,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     AccountId = accountId,
                     Apprenticeship = await _apprenticeshipMapper.MapFromAsync(apprenticeship),
-                    UserId = externalUserId
+                    UserId = externalUserId,
+                    UserName = userName,
+                    UserEmail = userEmail
                 });
             }, apprenticeship.HashedAccountId, externalUserId);
         }
