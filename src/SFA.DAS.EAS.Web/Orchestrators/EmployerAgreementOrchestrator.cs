@@ -381,19 +381,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<bool>>  RemoveLegalAgreement(ConfirmLegalAgreementToRemoveViewModel model, string userId)
         {
             var response = new OrchestratorResponse<bool>();
-
+            var errorModel = new FlashMessageViewModel();
             try
             {
                 if (model.RemoveOrganisation == null)
                 {
                     response.Status = HttpStatusCode.BadRequest;
-                    response.FlashMessage = new FlashMessageViewModel
-                    {
-                        Headline = "Errors to fix",
-                        Message = "Check the following details:",
-                        ErrorMessages = new Dictionary<string, string> { { "RemoveOrganisation", "Confirm you wish to remove the organisation" } },
-                        Severity = FlashMessageSeverityLevel.Error
-                    };
+                    response.FlashMessage =
+                        errorModel.CreateErrorFlashMessageViewModel(new Dictionary<string, string>
+                        {
+                            {"RemoveOrganisation", "Confirm you wish to remove the organisation"}
+                        });
                     return response;
                 }
 
@@ -419,14 +417,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (InvalidRequestException ex)
             {
+                
                 response.Status = HttpStatusCode.BadRequest;
-                response.FlashMessage = new FlashMessageViewModel
-                {
-                    Headline = "Errors to fix",
-                    Message = "Check the following details:",
-                    ErrorMessages = ex.ErrorMessages,
-                    Severity = FlashMessageSeverityLevel.Error
-                };
+                response.FlashMessage = errorModel.CreateErrorFlashMessageViewModel(ex.ErrorMessages);
                 response.Exception = ex;
             }
             catch (UnauthorizedAccessException ex)
