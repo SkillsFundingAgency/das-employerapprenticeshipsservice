@@ -355,12 +355,12 @@ only screen and (max-width: 480px) {
         margin-top: 5px;
     }
         #manage-all-apprentices td:nth-of-type(3):before {
-        content: "Training status";
+        content: "Status";
         font-weight: normal;
         margin-top: 5px;
     }
        #manage-all-apprentices td:nth-of-type(4):before {
-        content: "Record status";
+        content: "Alerts";
         font-weight: normal;
         margin-top: 5px;
     }
