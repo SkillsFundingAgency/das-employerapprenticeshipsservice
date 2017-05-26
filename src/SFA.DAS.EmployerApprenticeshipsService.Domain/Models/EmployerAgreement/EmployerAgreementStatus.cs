@@ -11,6 +11,8 @@ namespace SFA.DAS.EAS.Domain.Models.EmployerAgreement
         [Description("Expired")]
         Expired = 3,
         [Description("Superseded")]
-        Superseded = 4
+        Superseded = 4,
+        [Description("Removed")]
+        Removed = 5
     }
 }
