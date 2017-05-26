@@ -8,13 +8,20 @@
     ViewBag.Title = "Manage your apprentices";
 }
 
-<div class="grid-row">
-    <div class="column-full">
-        <div class="hgroup">
-            <h1 class="heading-xlarge">Manage your apprentices</h1>
-        </div>
+    <h1 class="heading-xlarge">Manage your apprentices</h1>
 
-        @if (!Model.Data.Apprenticeships.Any())
+<div class="grid-row">
+
+    <div class="column-one-third">
+        <form method="GET" action="@Url.Action("ListAll")" novalidate="novalidate">
+            @Html.Partial("ApprenticeshipFilters", Model.Data.Filters)          
+            <button type="submit" class="button" value="Filter">Filter apprentices</button>
+            <p><a href="@Url.Action("ListAll")" title="Reset" class="button text-link reset-link">Reset</a></p>
+        </form>
+    </div>
+
+    <div class="column-two-thirds">
+        @if (Model.Data.TotalApprenticeships == 0)
         {
             <div class="panel panel-border-wide alert-default">
                 <p>Once you and your training provider have approved a cohort, the apprentices from that cohort will appear here.</p>
@@ -60,6 +67,11 @@
                 }
                 </tbody>
             </table>
+
+            if (!Model.Data.Apprenticeships.Any())
+            {
+                <div>There are currently no apprentices that match your search.</div>
+            }
         }
     </div>
 </div>
