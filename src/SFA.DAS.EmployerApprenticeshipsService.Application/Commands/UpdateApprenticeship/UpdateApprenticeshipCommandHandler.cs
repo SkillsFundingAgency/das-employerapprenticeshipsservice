@@ -4,6 +4,7 @@ using MediatR;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 
 namespace SFA.DAS.EAS.Application.Commands.UpdateApprenticeship
 {
@@ -31,7 +32,8 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateApprenticeship
                 new ApprenticeshipRequest
                     {
                         Apprenticeship = message.Apprenticeship,
-                        UserId = message.UserId
+                        UserId = message.UserId,
+                        LastUpdatedByInfo = new LastUpdateInfo { EmailAddress = message.UserEmail, Name = message.UserName }
                     });
         }
     }
