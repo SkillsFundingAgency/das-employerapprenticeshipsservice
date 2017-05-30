@@ -62,6 +62,11 @@
 <div class="form-group @(!string.IsNullOrEmpty(Model.Apprenticeship.TrainingCodeError) ? "error" : "")">
     <hr />
     <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
+    <span class="form-hint">Start typing in the name of the course or choose an option from the list</span>
+    @if (!string.IsNullOrEmpty(Model.Apprenticeship.TrainingCodeError))
+    {
+        <span class="error-message" id="error-message-TrainingCode">Choose a training course for this apprentice</span>
+    }
     <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
         <option value="">Please select</option>
         @foreach (var apprenticeshipProduct in Model.ApprenticeshipProgrammes)

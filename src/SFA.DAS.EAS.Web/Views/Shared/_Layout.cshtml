@@ -123,6 +123,7 @@
                     <ul role="menubar">
                         @if (HttpContext.Current.User.Identity.IsAuthenticated)
                         {
+                            <li><a href="@Url.Action("Help", "Home")">Help</a></li>
                             <li class="has-sub-menu">
                                 <a href="/" role="menuitem">Settings</a>
                                 <ul role="menu">

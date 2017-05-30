@@ -283,6 +283,35 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
         }
 
         [Test]
+        public async Task ThenIfThereAreExistingFractionsNoFractionUpdateRequiredButAFractionDateInTheFutureTheApiIsCalled()
+        {
+            //Arrange
+            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference, It.IsAny<DateTime?>()))
+                .ReturnsAsync(new EnglishFractionDeclarations
+                {
+                    Empref = _employerReference,
+                    FractionCalculations = _fractionCalculations
+                });
+            _englishFractionRepository.Setup(x => x.GetAllEmployerFractions(_employerReference)).ReturnsAsync(new List<DasEnglishFraction> {new DasEnglishFraction
+            {
+                DateCalculated = new DateTime(2016,01,01),
+                 EmpRef = _employerReference,
+                    Amount = 0.45M,
+                    Id = "10"
+            } });
+
+            //Act
+            await _handler.Handle(new UpdateEnglishFractionsCommand
+            {
+                EmployerReference = _employerReference,
+                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { DateCalculated = new DateTime(2016, 01, 02), UpdateRequired = false }
+            });
+
+            //Assert
+            _hmrcService.Verify(x => x.GetEnglishFractions(_employerReference, It.IsAny<DateTime?>()), Times.Once);
+        }
+
+        [Test]
         public async Task ThenIfThereIsNotANewEnglishFractionCalculationAndTheFractionDoesNotExistThenItIsRetrievedFromHmrc()
         {
             //Arrange

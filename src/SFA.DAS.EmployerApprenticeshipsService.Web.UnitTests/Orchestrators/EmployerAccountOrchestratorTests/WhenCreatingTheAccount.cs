@@ -95,6 +95,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
                 OrganisationReferenceNumber = "ABC12345",
                 OrganisationRegisteredAddress = "My Address",
                 PayeReference = "123/abc",
+                EmployerRefName = "Test Scheme 1",
                 EmpRefNotFound = true
             };
 
@@ -111,6 +112,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             Assert.AreEqual(employerAccountData.OrganisationStatus, model.Data.OrganisationStatus);
             Assert.AreEqual(employerAccountData.OrganisationReferenceNumber, model.Data.OrganisationReferenceNumber);
             Assert.AreEqual(employerAccountData.PayeReference, model.Data.PayeReference);
+            Assert.AreEqual(employerAccountData.EmployerRefName, model.Data.EmployerRefName);
             Assert.AreEqual(employerAccountData.EmpRefNotFound, model.Data.EmpRefNotFound);
 
         }

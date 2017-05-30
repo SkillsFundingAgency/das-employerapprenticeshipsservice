@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -136,5 +137,53 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return new FileStreamResult(stream.Data.PdfStream, "application/pdf");
         }
+
+        [HttpGet]
+        [Route("agreements/remove")]
+        public async Task<ActionResult> GetOrganisationsToRemove(string hashedAccountId)
+        {
+            var model = await _orchestrator.GetLegalAgreementsToRemove(hashedAccountId, OwinWrapper.GetClaimValue("sub"));
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [Route("agreements/remove/{agreementId}")]
+        public async Task<ActionResult> ConfirmRemoveOrganisation(string agreementId, string hashedAccountId)
+        {
+            var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(agreementId, hashedAccountId, OwinWrapper.GetClaimValue("sub"));
+
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+            if (flashMessage != null)
+            {
+                model.FlashMessage = flashMessage;
+                model.Data.ErrorDictionary = model.FlashMessage.ErrorMessages;
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("agreements/remove/{agreementId}")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RemoveOrganisation(string hashedAccountId, string agreementId, ConfirmLegalAgreementToRemoveViewModel model)
+        {
+            var response = await _orchestrator.RemoveLegalAgreement(model, OwinWrapper.GetClaimValue("sub"));
+
+            if (response.Status == HttpStatusCode.OK)
+            {
+                AddFlashMessageToCookie(response.FlashMessage);
+
+                return RedirectToAction("Index", new { hashedAccountId });
+            }
+            if (response.Status == HttpStatusCode.BadRequest)
+            {
+                AddFlashMessageToCookie(response.FlashMessage);
+                return RedirectToAction("ConfirmRemoveOrganisation", new {hashedAccountId, agreementId});
+            }
+
+            return RedirectToAction("Index", new { hashedAccountId });
+        }
+
     }
 }

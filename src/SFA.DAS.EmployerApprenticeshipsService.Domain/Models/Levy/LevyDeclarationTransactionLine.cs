@@ -8,6 +8,7 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
     {
         public long SubmissionId { get; set; }
         public string EmpRef { get; set; }
+        public string PayeSchemeName { get; set; }
         public decimal EnglishFraction { get; set; }
         public decimal TopUp { get; set; }
         public decimal LineTotal { get; set; }

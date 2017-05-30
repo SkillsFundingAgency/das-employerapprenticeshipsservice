@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
+using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
@@ -46,6 +47,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ToDate = toDate,
                 ExternalUserId = externalUserId
             });
+
+            foreach (var transaction in data.Transactions)
+            {
+                var payeSchemeData = await _mediator.SendAsync(new GetPayeSchemeByRefQuery
+                {
+                    HashedAccountId = hashedId,
+                    Ref = transaction.EmpRef
+                });
+
+                transaction.PayeSchemeName = payeSchemeData?.PayeScheme?.Name ?? string.Empty;
+            }
+            
 
             return new OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>
             {

@@ -42,7 +42,10 @@
                     {
                         var englishFractionPercentage = (scheme.EnglishFraction?.Amount ?? 1);
                         <tr>
-                            <td>@scheme.PayeRef</td>
+                            <td>
+                                @scheme.Ref
+                                <span class="secondary-text">@scheme.Name</span>
+                            </td>
 
                             @if (englishFractionPercentage == 1)
                             {
@@ -58,9 +61,9 @@
                             }
 
                             <td class="link-right">
-                                <a aria-label="Details for PAYE scheme @scheme.PayeRef"
-                                   title="Details for PAYE scheme @scheme.PayeRef"
-                                   href="@Url.Action("Details", new {empRef = scheme.PayeRef.FormatPayeForUrl()})">Details<span class="vh"> for PAYE scheme @scheme.PayeRef</span></a>
+                                <a aria-label="Details for PAYE scheme @scheme.Ref"
+                                   title="Details for PAYE scheme @scheme.Ref"
+                                   href="@Url.Action("Details", new {empRef = scheme.Ref.FormatPayeForUrl()})">Details<span class="vh"> for PAYE scheme @scheme.Ref</span></a>
                             </td>
                         </tr>
                     }

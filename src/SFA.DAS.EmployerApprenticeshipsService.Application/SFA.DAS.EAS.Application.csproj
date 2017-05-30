@@ -144,6 +144,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommand.cs" />
+    <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommandHandler.cs" />
+    <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommandValidator.cs" />
     <Compile Include="Commands\UpdatePayeInformation\UpdatePayeInformationCommand.cs" />
     <Compile Include="Commands\UpdatePayeInformation\UpdatePayeInformationCommandHandler.cs" />
     <Compile Include="Commands\UpdatePayeInformation\UpdatePayeInformationValidator.cs" />
@@ -321,6 +324,14 @@
     <Compile Include="Queries\FindAccountCoursePayments\FindAccountCoursePaymentsQueryHandler.cs" />
     <Compile Include="Queries\FindAccountCoursePayments\FindAccountCoursePaymentsQueryValidator.cs" />
     <Compile Include="Queries\FindAccountCoursePayments\FindAccountCoursePaymentsResponse.cs" />
+    <Compile Include="Queries\GetAccountEmployerAgreementRemove\GetAccountEmployerAgreementRemoveQueryHandler.cs" />
+    <Compile Include="Queries\GetAccountEmployerAgreementRemove\GetAccountEmployerAgreementRemoveRequest.cs" />
+    <Compile Include="Queries\GetAccountEmployerAgreementRemove\GetAccountEmployerAgreementRemoveResponse.cs" />
+    <Compile Include="Queries\GetAccountEmployerAgreementRemove\GetAccountEmployerAgreementRemoveValidator.cs" />
+    <Compile Include="Queries\GetAccountEmployerAgreementsRemove\GetAccountEmployerAgreementsRemoveQueryHandler.cs" />
+    <Compile Include="Queries\GetAccountEmployerAgreementsRemove\GetAccountEmployerAgreementsRemoveRequest.cs" />
+    <Compile Include="Queries\GetAccountEmployerAgreementsRemove\GetAccountEmployerAgreementsRemoveResponse.cs" />
+    <Compile Include="Queries\GetAccountEmployerAgreementsRemove\GetAccountEmployerAgreementsRemoveValidator.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsQueryHandler.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsResponse.cs" />

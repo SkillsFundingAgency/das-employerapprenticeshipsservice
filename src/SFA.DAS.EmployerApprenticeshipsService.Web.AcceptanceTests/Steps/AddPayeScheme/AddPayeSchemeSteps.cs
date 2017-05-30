@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
                 RemoveScheme = 2,
                 UserId = userId,
                 AccountName = "",
-                PayeRef = scheme.PayeRef
+                PayeRef = scheme.Ref
             };
 
             try

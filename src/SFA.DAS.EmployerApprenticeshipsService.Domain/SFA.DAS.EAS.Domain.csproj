@@ -165,6 +165,7 @@
     <Compile Include="Models\EmployerAgreement\EmployerAgreementStatus.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementTemplate.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementView.cs" />
+    <Compile Include="Models\EmployerAgreement\RemoveEmployerAgreementView.cs" />
     <Compile Include="Models\EmployerAgreement\SignEmployerAgreement.cs" />
     <Compile Include="Models\Payments\Payment.cs" />
     <Compile Include="Models\Payments\PeriodEnd.cs" />
