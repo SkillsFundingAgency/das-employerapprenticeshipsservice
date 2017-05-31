@@ -7,7 +7,7 @@ AS
 select 
     tl.AccountId,
     tl.LevyDeclared as Amount,
-    t.Amount as EnglishFraction,
+    isnull(t.Amount,1) as EnglishFraction,
     ldt.Amount as TopUp,
     tl.EmpRef,
 	null as CourseName,
