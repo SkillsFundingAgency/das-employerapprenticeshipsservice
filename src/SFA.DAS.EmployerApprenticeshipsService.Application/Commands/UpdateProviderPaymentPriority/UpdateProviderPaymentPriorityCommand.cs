@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority
     {
         public long AccountId { get; set; }
 
-        public IEnumerable<ProviderPaymentPriorityItem> Data { get; set; }
+        public IEnumerable<long> ProviderPriorityOrder { get; set; }
 
         public string UserId { get; set; }
 

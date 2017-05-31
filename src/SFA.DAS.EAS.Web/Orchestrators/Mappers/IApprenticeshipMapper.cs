@@ -29,7 +29,5 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
         UpdateApprenticeshipViewModel MapFrom(ApprenticeshipUpdate apprenticeshipUpdate);
 
         PaymentOrderViewModel MapPayment(IList<ProviderPaymentPriorityItem> data);
-
-        List<ProviderPaymentPriorityItem> MapPayment(IEnumerable<PaymentOrderItem> paymentItems);
     }
 }
