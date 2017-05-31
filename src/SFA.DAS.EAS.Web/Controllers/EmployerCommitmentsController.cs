@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             ViewBag.HashedAccountId = hashedAccountId;
 
-            var response = await _employerCommitmentsOrchestrator.CheckAccountAuthorization(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var response = await _employerCommitmentsOrchestrator.GetIndexViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
             SetFlashMessageOnModel(response);
 
             return View(response);
