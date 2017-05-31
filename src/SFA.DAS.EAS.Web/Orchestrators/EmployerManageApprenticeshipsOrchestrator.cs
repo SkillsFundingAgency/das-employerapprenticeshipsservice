@@ -157,7 +157,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return await CheckUserAuthorization(async () =>
             {
                 await AssertApprenticeshipStatus(accountId, apprenticeshipId);
-                // TODO: LWA Assert that the apprenticeship can be edited - Story says should be allowed to go to edit details page??
 
                 var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
                 {
