@@ -2,6 +2,7 @@
 	@accountId BIGINT,
 	@ukprn BIGINT,
 	@courseName NVARCHAR(MAX),
+	@pathwayCode INT,
 	@courseLevel INT,
 	@fromDate DATETIME,
 	@toDate DATETIME
@@ -17,7 +18,8 @@ SELECT
 	,MAX(meta.ProviderName) as ProviderName
 	,(SUM(pays1.[Amount]) * -1) as LineAmount
 	,meta.ApprenticeshipCourseName as CourseName
-	,meta.ApprenticeshipCourseLevel	as CourseLevel  
+	,meta.ApprenticeshipCourseLevel	as CourseLevel 
+	,meta.PathwayName as PathwayName
 	,MAX(meta.ApprenticeshipCourseStartDate) as CourseStartDate
 	,MAX(meta.ApprenticeName) as ApprenticeName
 	,MAX(meta.ApprenticeNINumber) as ApprenticeNINumber	
@@ -34,5 +36,6 @@ SELECT
   p.AccountId = @accountid AND
   p.Ukprn = @ukprn AND
   meta.ApprenticeshipCourseName = @courseName AND
-  meta.ApprenticeshipCourseLevel = @courseLevel
-  group by p.AccountId, p.Ukprn, meta.ApprenticeshipCourseName, meta.ApprenticeshipCourseLevel, meta.ApprenticeName
+  meta.ApprenticeshipCourseLevel = @courseLevel AND
+  meta.PathwayCode = @pathwayCode
+  group by p.AccountId, p.Ukprn, meta.ApprenticeshipCourseName, meta.ApprenticeshipCourseLevel, meta.PathwayName, meta.ApprenticeName
