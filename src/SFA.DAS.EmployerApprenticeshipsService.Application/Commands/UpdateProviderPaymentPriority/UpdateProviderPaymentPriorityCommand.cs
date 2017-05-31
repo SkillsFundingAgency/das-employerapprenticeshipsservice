@@ -2,8 +2,6 @@
 
 using MediatR;
 
-using SFA.DAS.Commitments.Api.Types.ProviderPayment;
-
 namespace SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority
 {
     public class UpdateProviderPaymentPriorityCommand : IAsyncRequest

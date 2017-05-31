@@ -427,15 +427,10 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("PaymentOrder", newModel);
             }
 
-            var model = await _orchestrator.UpdatePaymentOrder(hashedAccountId, newProviderOrder.Priorities, OwinWrapper.GetClaimValue("sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
+            await _orchestrator.UpdatePaymentOrder(hashedAccountId, newProviderOrder.Priorities, OwinWrapper.GetClaimValue("sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
                     OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
-            model.FlashMessage = new FlashMessageViewModel
-                                     {
-                                         Message = "Payment order updated",
-                                         Severity = FlashMessageSeverityLevel.Okay
-                                     };
-            return View("PaymentOrder", model);
+            return RedirectToRoute("CommitmentsHome");
         }
 
         private void UpdatePriorityOrder(PaymentOrderViewModel data, ProviderPriorityReOrderViewModel paymentOrderItem)
