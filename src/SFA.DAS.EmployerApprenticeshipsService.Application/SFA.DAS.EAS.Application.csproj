@@ -219,11 +219,6 @@
     <Compile Include="Commands\RenameEmployerAccount\RenameEmployerAccountCommand.cs" />
     <Compile Include="Commands\RenameEmployerAccount\RenameEmployerAccountCommandHandler.cs" />
     <Compile Include="Commands\RenameEmployerAccount\RenameEmployerAccountCommandValidator.cs" />
-    <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommand.cs" />
-    <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommandHandler.cs" />
-    <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommandValidator.cs" />
-    <Compile Include="Commands\PauseApprenticeship\PauseApprenticeshipCommand.cs" />
-    <Compile Include="Commands\PauseApprenticeship\PauseApprenticeshipCommandValidator.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandHandler.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommand.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandValidator.cs" />
@@ -240,7 +235,6 @@
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandHandler.cs" />
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandValidator.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommand.cs" />
-    <Compile Include="Commands\PauseApprenticeship\PauseApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandHandler.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandValidator.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommand.cs" />
