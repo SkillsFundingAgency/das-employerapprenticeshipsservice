@@ -645,14 +645,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     }, hashedAccountId, user);
         }
 
-        public async Task<OrchestratorResponse<PaymentOrderViewModel>> UpdatePaymentOrder(string hashedAccountId, IEnumerable<long> paymentItems, string user, string userName, string userEmail)
+        public async Task UpdatePaymentOrder(string hashedAccountId, IEnumerable<long> paymentItems, string user, string userName, string userEmail)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
 
-            _logger.Trace(
-                $"Updating payment order. AccountId: {accountId}");
+            _logger.Trace($"Updating payment order. AccountId: {accountId}");
 
-            return await CheckUserAuthorization(
+            await CheckUserAuthorization(
                 async () =>
                     {
                         await _mediator.SendAsync(new UpdateProviderPaymentPriorityCommand
@@ -664,12 +663,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                                     UserDisplayName = userName
                         });
 
-                    var data = await _mediator.SendAsync(new GetProviderPaymentPriorityRequest { AccountId = accountId });
-                    var result = _apprenticeshipMapper.MapPayment(data.Data);
-                    return new OrchestratorResponse<PaymentOrderViewModel>
-                    {
-                        Data = result
-                    };
                 }, hashedAccountId, user);
         }
     }

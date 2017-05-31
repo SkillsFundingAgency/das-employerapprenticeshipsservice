@@ -1,10 +1,12 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.PaymentOrderViewModel>
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.PaymentOrderViewModel>
 
 @{
     ViewBag.Title = "Default payment order";
     ViewBag.PageId = "payment-order";
-}
 
+    var postModelName = "newProviderOrder.Priorities";
+}
 
 @section pageSpecificJS {
     @Scripts.Render("~/bundles/apprentice")
@@ -16,60 +18,42 @@
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
         <h1 class="heading-xlarge">Set payment order</h1>
-        <p>The training provider lister first will be paid first from your available funds.</p>
+            
         <form method="POST" action="@Url.Action("PaymentOrderPost")" novalidate="novalidate" id="sort-it">
             @Html.AntiForgeryToken()
-            @*<ol>
-                @{
-                    var itemCount = -1;
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(postModelName, "error")">
+
+                <p>The training provider lister first will be paid first from your available funds.</p>
+
+                <!--ALERT MESSAGE: html to use on alert page -->
+                <div class="updated-alert">
+                    <span>Payment order updated</span>
+                </div>
+
+                @functions{
+
+                    public IEnumerable<SelectListItem> GetList(int priorityNumber)
+                    {
+                        return Model.Data.Items.Select(x => new SelectListItem { Text = x.ProviderName, Value = x.ProviderId.ToString(), Selected = x.Priority == priorityNumber });
+                    }
                 }
-                @foreach (var item in Model.Data.Items)
-                {
-                    itemCount++;
-                    <li>
-                        @item.ProviderName
-                        <label for="paymentOrderItem.items[@itemCount].NewOrder">New order:</label>
-                        <input id="custom-number-@item.InitialOrder" name="paymentOrderItem.items[@itemCount].NewOrder" max="@Model.Data.Items.Count()" type="number" value="@item.InitialOrder">
-                        @Html.Hidden($"paymentOrderItem.items[{itemCount}].InitialOrder", item.InitialOrder)
-                        @Html.Hidden($"paymentOrderItem.items[{itemCount}].ProviderId", item.ProviderId)
-                        @Html.Hidden($"paymentOrderItem.items[{itemCount}].ProviderName", item.ProviderName)
-                    </li>
-                }
-            </ol>*@
 
-
-            <!--static code to use for the new design -->
-
-            <!--ALERT MESSAGE: html to use on alert page -->
-            <div class="updated-alert">
-                <span>Payment order updated</span>
+                <!--payment order list for iteration-->
+                <ol id="order-payment">
+                    @for (int i = 1; i <= Model.Data.Items.Count(); i++)
+                    {
+                        <li>
+                            <label class="visually-hidden" for="providerList">Select a provider to set order of payment</label>
+                            @Html.DropDownList($"{postModelName}[{i - 1}]", GetList(i), new { aria_label = "Select a provider", @class = "provider-list" })
+                        </li>
+                    }
+                </ol>
             </div>
-
-            @functions{
-
-                public IEnumerable<SelectListItem> GetList(int priorityNumber)
-                {
-                    return Model.Data.Items.Select(x => new SelectListItem { Text = x.ProviderName, Value = x.ProviderId.ToString(), Selected = x.Priority == priorityNumber });
-                }
-            }
-
-            <!--payment order list for iteration-->
-            <ol id="order-payment">
-                @for (int i = 1; i <= Model.Data.Items.Count(); i++)
-                {
-                    <li>
-                        <label class="visually-hidden" for="providerList">Select a provider to set order of payment</label>
-                        @Html.DropDownList($"newProviderOrder.Priorities[{i - 1}]", GetList(i), new { aria_label = "Select a provider", @class = "provider-list" })
-                    </li>
-                 }
-            </ol>
-
-            <input id="manual-sort" class="button" type="submit" value="Save and continue">
-            <a class="button text-link" href="#" title="continue">Cancel and return</a>
+                <input id="manual-sort" class="button" type="submit" value="Save and continue">
+                <a class="button text-link" href="#" title="continue">Cancel and return</a>
         </form>
-
-        </div>
     </div>
+</div>
 
 
 

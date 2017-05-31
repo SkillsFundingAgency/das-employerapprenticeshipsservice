@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("home")]
+        [Route("home", Name = "CommitmentsHome")]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
             ViewBag.HashedAccountId = hashedAccountId;

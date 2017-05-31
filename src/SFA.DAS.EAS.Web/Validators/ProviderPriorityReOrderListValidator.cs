@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Web.Validators
                 {
                     var hasDuplicates = x.GroupBy(y => y).Any(g => g.Count() > 1);
                     return !hasDuplicates;
-                }).WithMessage("TODO: LWA - Have repeated providers in the list");
+                }).WithMessage("Set payment order");
         }
     }
 }
