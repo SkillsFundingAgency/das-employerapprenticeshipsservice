@@ -287,7 +287,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             return new PaymentOrderViewModel { Items = items };
         }
 
-    private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
+        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
             // TODO: LWA - Need to check is this is called multiple times in a single request.
             var trainingProgrammes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest());

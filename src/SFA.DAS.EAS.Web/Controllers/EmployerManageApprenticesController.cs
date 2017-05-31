@@ -430,6 +430,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             await _orchestrator.UpdatePaymentOrder(hashedAccountId, newProviderOrder.Priorities, OwinWrapper.GetClaimValue("sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
                     OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
+            SetOkayMessage("Payment order updated");
+
             return RedirectToRoute("CommitmentsHome");
         }
 
