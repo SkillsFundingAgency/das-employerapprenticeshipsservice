@@ -105,35 +105,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             };
         }
 
-        public async Task<Apprenticeship> MapFromAsync(ApprenticeshipViewModel viewModel)
-        {
-            var apprenticeship = new Apprenticeship
-            {
-                CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
-                Id = string.IsNullOrWhiteSpace(viewModel.HashedApprenticeshipId) ? 0L : _hashingService.DecodeValue(viewModel.HashedApprenticeshipId),
-                FirstName = viewModel.FirstName,
-                LastName = viewModel.LastName,
-                DateOfBirth = viewModel.DateOfBirth.DateTime,
-                NINumber = viewModel.NINumber,
-                ULN = viewModel.ULN,
-                Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
-                StartDate = viewModel.StartDate.DateTime,
-                EndDate = viewModel.EndDate.DateTime,
-                ProviderRef = viewModel.ProviderRef,
-                EmployerRef = viewModel.EmployerRef
-            };
-
-            if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
-            {
-                var training = await GetTrainingProgramme(viewModel.TrainingCode);
-                apprenticeship.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
-                apprenticeship.TrainingCode = viewModel.TrainingCode;
-                apprenticeship.TrainingName = training.Title;
-            }
-
-            return apprenticeship;
-        }
-
         public async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
         {
             var apprenticeship = new Apprenticeship
@@ -162,7 +133,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 
             return apprenticeship;
         }
-        
 
         public Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
         {
