@@ -54,20 +54,20 @@
             {
                 <tr class="responsive-tr">
                     <td data-label="Apprentice">@coursePaymentSummary.ApprenticeName</td>
-                    <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C0", culture)</td>
-                    <td class="numeric highlight" data-label="Government contribution">@coursePaymentSummary.SFACoInvestmentAmount.ToString("C0", culture)</td>
-                    <td class="numeric highlight" data-label="Your contribution">@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C0", culture)</td>
-                    <td class="numeric" data-label="Amount">@coursePaymentSummary.TotalAmount.ToString("C0", culture)</td>
+                    <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C2", culture)</td>
+                    <td class="numeric highlight" data-label="Government contribution">@coursePaymentSummary.SFACoInvestmentAmount.ToString("C2", culture)</td>
+                    <td class="numeric highlight" data-label="Your contribution">@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C2", culture)</td>
+                    <td class="numeric" data-label="Amount">@coursePaymentSummary.TotalAmount.ToString("C2", culture)</td>
                 </tr>
             }
             </tbody>
             <tfoot>
                 <tr class="total">
                     <td data-label="Totals"> </td>
-                    <td data-label="Paid from levy" class="total numeric no-wrap">@Model.Data.LevyPaymentsTotal.ToString("C0", culture)</td>
-                    <td data-label="Government contribution" class="highlight total numeric no-wrap">@Model.Data.SFACoInvestmentTotal.ToString("C0", culture)</td>
-                    <td data-label="Your contribution" class="highlight total numeric no-wrap">@Model.Data.EmployerCoInvestmentTotal.ToString("C0", culture)</td>
-                    <td data-label="Amount" class="total numeric no-wrap">@Model.Data.PaymentsTotal.ToString("C0", culture)</td>
+                    <td data-label="Paid from levy" class="total numeric no-wrap">@Model.Data.LevyPaymentsTotal.ToString("C2", culture)</td>
+                    <td data-label="Government contribution" class="highlight total numeric no-wrap">@Model.Data.SFACoInvestmentTotal.ToString("C2", culture)</td>
+                    <td data-label="Your contribution" class="highlight total numeric no-wrap">@Model.Data.EmployerCoInvestmentTotal.ToString("C2", culture)</td>
+                    <td data-label="Amount" class="total numeric no-wrap">@Model.Data.PaymentsTotal.ToString("C2", culture)</td>
                 </tr>
             </tfoot>
         </table>
