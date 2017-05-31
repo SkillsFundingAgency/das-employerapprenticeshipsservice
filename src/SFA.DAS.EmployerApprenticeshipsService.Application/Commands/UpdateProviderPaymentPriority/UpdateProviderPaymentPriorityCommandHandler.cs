@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 using FluentValidation;
-
 using MediatR;
-
 using NLog;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -15,12 +12,10 @@ using SFA.DAS.Commitments.Api.Types.ProviderPayment;
 
 namespace SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority
 {
-    public class UpdateProviderPaymentPriorityCommandHandler : AsyncRequestHandler<UpdateProviderPaymentPriorityCommand>
+    public sealed class UpdateProviderPaymentPriorityCommandHandler : AsyncRequestHandler<UpdateProviderPaymentPriorityCommand>
     {
         private readonly Validation.IValidator<UpdateProviderPaymentPriorityCommand> _validator;
-
         private readonly IEmployerCommitmentApi _commitmentApi;
-
         private readonly ILogger _logger;
 
         public UpdateProviderPaymentPriorityCommandHandler(
