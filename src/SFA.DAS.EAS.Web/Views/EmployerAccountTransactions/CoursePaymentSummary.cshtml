@@ -53,7 +53,14 @@
             @foreach (var coursePaymentSummary in Model.Data.ApprenticePayments)
             {
                 <tr class="responsive-tr">
-                    <td data-label="Apprentice">@coursePaymentSummary.ApprenticeName</td>
+                    @if (string.IsNullOrEmpty(@coursePaymentSummary.ApprenticeName))
+                    {
+                        <td data-label="Apprentice"><em>Not available</em></td>
+                    }
+                    else
+                    {
+                        <td data-label="Apprentice">@coursePaymentSummary.ApprenticeName</td>
+                    }
                     <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C0", culture)</td>
                     <td class="numeric highlight" data-label="Government contribution">@coursePaymentSummary.SFACoInvestmentAmount.ToString("C0", culture)</td>
                     <td class="numeric highlight" data-label="Your contribution">@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C0", culture)</td>
