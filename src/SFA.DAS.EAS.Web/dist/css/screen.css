@@ -5055,7 +5055,7 @@ h2 .float-right {
 }
 
 #manage-all-apprentices li {
-  list-style-type: decimal;
+  list-style-type: none;
   margin-bottom: 10px;
 }
 
