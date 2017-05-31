@@ -430,7 +430,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             await _orchestrator.UpdatePaymentOrder(hashedAccountId, newProviderOrder.Priorities, OwinWrapper.GetClaimValue("sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
                     OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
-            SetOkayMessage("Payment order updated");
+            SetSuccessMessage("Payment order updated");
 
             return RedirectToRoute("CommitmentsHome");
         }
@@ -477,6 +477,17 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Severity = FlashMessageSeverityLevel.Okay
             };
             
+            AddFlashMessageToCookie(flashmessage);
+        }
+
+        private void SetSuccessMessage(string message)
+        {
+            var flashmessage = new FlashMessageViewModel
+            {
+                Message = message,
+                Severity = FlashMessageSeverityLevel.Success
+            };
+
             AddFlashMessageToCookie(flashmessage);
         }
 
