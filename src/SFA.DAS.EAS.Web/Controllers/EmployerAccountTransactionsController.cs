@@ -61,10 +61,10 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [Route("balance/course/summary")]
         public async Task<ActionResult> CoursePaymentSummary(string hashedAccountId, long ukprn, string courseName, 
-            int courseLevel, DateTime fromDate, DateTime toDate)
+            int courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
             var viewModel = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(
-                                                                        hashedAccountId, ukprn, courseName, courseLevel, 
+                                                                        hashedAccountId, ukprn, courseName, courseLevel, pathwayCode,
                                                                         fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
 
             return View("CoursePaymentSummary", viewModel);
