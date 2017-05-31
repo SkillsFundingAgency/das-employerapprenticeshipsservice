@@ -31,6 +31,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority
         protected override async Task HandleCore(UpdateProviderPaymentPriorityCommand command)
         {
             var validation = _validator.Validate(command);
+
             if (!validation.IsValid())
             {
                 var traceId = $"UpdatePPP.{DateTime.UtcNow.Ticks}";
@@ -48,19 +49,20 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority
 
         private static ProviderPaymentPrioritySubmission CreateProviderPaymentPrioritySubmission(UpdateProviderPaymentPriorityCommand command)
         {
-            var priorityUpdates =
-                command.ProviderPriorityOrder.Select(
-                    (m, index) => new ProviderPaymentPriorityUpdateItem { ProviderId = m, PriorityOrder = index + 1 })
-                    .ToList();
+            var priorityUpdates = command.ProviderPriorityOrder.Select((m, index) => new ProviderPaymentPriorityUpdateItem
+            {
+                ProviderId = m,
+                PriorityOrder = index + 1
+            }).ToList();
+
             var submission = new ProviderPaymentPrioritySubmission
                                  {
                                      Priorities = priorityUpdates,
-                                     LastUpdatedByInfo =
-                                         new LastUpdateInfo
-                                             {
-                                                 EmailAddress = command.UserEmailAddress,
-                                                 Name = command.UserDisplayName
-                                             },
+                                     LastUpdatedByInfo = new LastUpdateInfo
+                                     {
+                                         EmailAddress = command.UserEmailAddress,
+                                         Name = command.UserDisplayName
+                                     },
                                      UserId = command.UserId
                                  };
             return submission;
