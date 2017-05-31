@@ -54,8 +54,8 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority
         private static ProviderPaymentPrioritySubmission CreateProviderPaymentPrioritySubmission(UpdateProviderPaymentPriorityCommand command)
         {
             var priorityUpdates =
-                command.Data.Select(
-                    m => new ProviderPaymentPriorityUpdateItem { ProviderId = m.ProviderId, PriorityOrder = m.PriorityOrder })
+                command.ProviderPriorityOrder.Select(
+                    (m, index) => new ProviderPaymentPriorityUpdateItem { ProviderId = m, PriorityOrder = index + 1 })
                     .ToList();
             var submission = new ProviderPaymentPrioritySubmission
                                  {

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Authentication;
@@ -28,7 +26,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerManageApprenticeshipsOrchestrator _orchestrator;
 
         public EmployerManageApprenticesController(
-            EmployerManageApprenticeshipsOrchestrator orchestrator, 
+            EmployerManageApprenticeshipsOrchestrator orchestrator,
             IOwinWrapper owinWrapper,
             IFeatureToggle featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
@@ -71,7 +69,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 .GetApprenticeship(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
             var flashMessage = GetFlashMessageViewModelFromCookie();
 
-            if (flashMessage != null )
+            if (flashMessage != null)
             {
                 model.FlashMessage = flashMessage;
             }
@@ -161,7 +159,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View(new OrchestratorResponse<WhenToMakeChangeViewModel>() { Data = viewResponse.Data });
             }
 
-            return RedirectToRoute("StatusChangeConfirmation",  new { whenToMakeChange = model.WhenToMakeChange, dateOfChange = response.DateOfChange });
+            return RedirectToRoute("StatusChangeConfirmation", new { whenToMakeChange = model.WhenToMakeChange, dateOfChange = response.DateOfChange });
         }
 
         [HttpGet]
@@ -204,7 +202,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             };
 
             AddFlashMessageToCookie(flashmessage);
-            
+
             return RedirectToRoute("OnProgrammeApprenticeshipDetails");
         }
 
@@ -225,7 +223,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 model.FlashMessage = flashMessage;
                 model.Data.Apprenticeship.ErrorDictionary = flashMessage.ErrorMessages;
             }
-            
+
             return View(model);
         }
 
@@ -265,7 +263,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 return View("Edit", viewModel);
             }
-           
+
             var model = await _orchestrator.GetConfirmChangesModel(apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship);
 
             if (!AnyChanges(model.Data))
@@ -307,7 +305,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
             }
-            
+
             await _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
                     OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
@@ -336,7 +334,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
             return View(viewModel);
         }
-        
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -359,7 +357,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     OwinWrapper.GetClaimValue(DasClaimTypes.Email));
                 SetOkayMessage("Changes undone");
             }
-            
+
             return RedirectToAction("Details");
         }
 
@@ -401,8 +399,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedApprenticeshipId}/datalock/restart", Name = "RequestRestart")]
         public async Task<ActionResult> RequestRestart(string hashedAccountId, string hashedApprenticeshipId)
         {
-            var model = await  _orchestrator.GetDataLockStatus(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
-            if(model.Data.TriageStatus != TriageStatus.Restart)
+            var model = await _orchestrator.GetDataLockStatus(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            if (model.Data.TriageStatus != TriageStatus.Restart)
                 throw new InvalidStateException($"Apprenticeship data lock not is correct state, Current: {model.Data.TriageStatus}");
 
             return View(model);
@@ -419,15 +417,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("paymentorder", Name = "PaymentOrderPost")]
-        public async Task<ActionResult> PaymentOrderPost(string hashedAccountId, PaymentOrderViewModel paymentOrderItem)
+        public async Task<ActionResult> PaymentOrderPost(string hashedAccountId, ProviderPriorityReOrderViewModel newProviderOrder)
         {
             if (!ModelState.IsValid)
             {
                 var newModel = await _orchestrator.GetPaymentOrder(hashedAccountId, OwinWrapper.GetClaimValue("sub"));
-                newModel.Data = paymentOrderItem;
+                UpdatePriorityOrder(newModel.Data, newProviderOrder);
+
                 return View("PaymentOrder", newModel);
             }
-            var model = await _orchestrator.UpdatePaymentOrder(hashedAccountId, paymentOrderItem.Items, OwinWrapper.GetClaimValue("sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
+
+            var model = await _orchestrator.UpdatePaymentOrder(hashedAccountId, newProviderOrder.Priorities, OwinWrapper.GetClaimValue("sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
                     OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
             model.FlashMessage = new FlashMessageViewModel
@@ -436,6 +436,21 @@ namespace SFA.DAS.EAS.Web.Controllers
                                          Severity = FlashMessageSeverityLevel.Okay
                                      };
             return View("PaymentOrder", model);
+        }
+
+        private void UpdatePriorityOrder(PaymentOrderViewModel data, ProviderPriorityReOrderViewModel paymentOrderItem)
+        {
+            var newList = new List<PaymentOrderItem>(data.Items.Count());
+
+            for (int i = 0; i < paymentOrderItem.Priorities.Count; i++)
+            {
+                newList.Add(new PaymentOrderItem
+                {
+                    Priority = i + 1,
+                    ProviderId = paymentOrderItem.Priorities[i],
+                    ProviderName = data.Items.Single(x => x.ProviderId == paymentOrderItem.Priorities[i]).ProviderName
+                });
+            }
         }
 
         private bool AnyChanges(UpdateApprenticeshipViewModel data)
@@ -504,8 +519,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 || !string.IsNullOrEmpty(model.TrainingCode)
                 || model.StartDate?.DateTime != null
                 || model.EndDate?.DateTime != null
-                || !string.IsNullOrEmpty(model.Cost)
-                ;
+                || !string.IsNullOrEmpty(model.Cost);
         }
     }
 }

@@ -12,33 +12,21 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority
         {
             var result = new ValidationResult();
 
-            if (item.Data == null || item.Data.Count() < 2)
+            if (item.ProviderPriorityOrder == null || item.ProviderPriorityOrder.Count() < 2)
             {
-                result.AddError("PaymentPriority.NeedMoreThanOneItemsInList", "Need more than 1 item to set provider payment provider");
+                result.AddError("ProviderPriorityOrder", "Need more than 1 item to set provider payment priority");
                 return result;
             }
 
-            if (item.Data.Any(m => m.PriorityOrder < 1))
+            if (item.ProviderPriorityOrder.DistinctBy(m => m).Count() != item.ProviderPriorityOrder.Count())
             {
-                result.AddError("PaymentPriority.LessThan1", "Provider payment priority cannot be less than 1");
-            }
-
-            if (item.Data.Any(m => m.PriorityOrder > item.Data.Count()))
-            {
-                result.AddError("PaymentPriority.GreaterThan", "Provider payment priority cannot have a priority order hight than the number of providers");
-            }
-
-            if (item.Data.DistinctBy(m => m.PriorityOrder).Count() != item.Data.Count())
-            {
-                var priorities  = string.Join(",", item.Data.Select(m => m.PriorityOrder));
-                result.AddError("PaymentPriority.Duplication", $"Provider payment priority cannot contains duplication of payment priority. {priorities}");
+                result.AddError("ProviderPriorityOrder", $"Provider payment priority cannot contains duplication of provider id");
             }
 
             if (string.IsNullOrEmpty(item.UserId))
             {
                 result.AddError($"{nameof(item.UserId)}", $"{nameof(item.UserId)} cannot be null or empty");
             }
-
 
             return result;
         }
