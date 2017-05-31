@@ -280,26 +280,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                                  {
                                      ProviderId = m.ProviderId,
                                      ProviderName = m.ProviderName,
-                                     InitialOrder = m.PriorityOrder,
-                                     NewOrder = m.PriorityOrder
+                                     Priority = m.PriorityOrder
                                  })
-                                 .OrderBy(m => m.InitialOrder );
+                                 .OrderBy(m => m.ProviderName );
 
             return new PaymentOrderViewModel { Items = items };
         }
-
-        public List<ProviderPaymentPriorityItem> MapPayment(IEnumerable<PaymentOrderItem> paymentItems)
-        {
-            var mappedItems = paymentItems.Select(m => new ProviderPaymentPriorityItem
-            {
-                ProviderId = m.ProviderId,
-                ProviderName = m.ProviderName,
-                PriorityOrder = m.NewOrder,
-            });
-
-            return mappedItems.ToList();
-        }
-
 
     private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
