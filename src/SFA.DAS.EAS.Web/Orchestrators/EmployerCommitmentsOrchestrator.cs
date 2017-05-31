@@ -329,7 +329,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new CreateApprenticeshipCommand
                 {
                     AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
-                    Apprenticeship = await _apprenticeshipMapper.MapFromAsync(apprenticeship),
+                    Apprenticeship = await _apprenticeshipMapper.MapFrom(apprenticeship),
                     UserId = externalUserId,
                     UserEmailAddress = userEmail,
                     UserDisplayName = userName
@@ -390,7 +390,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new UpdateApprenticeshipCommand
                 {
                     AccountId = accountId,
-                    Apprenticeship = await _apprenticeshipMapper.MapFromAsync(apprenticeship),
+                    Apprenticeship = await _apprenticeshipMapper.MapFrom(apprenticeship),
                     UserId = externalUserId,
                     UserName = userName,
                     UserEmail = userEmail

@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 {
     public interface IApprenticeshipMapper
     {
-        Task<Apprenticeship> MapFromAsync(ApprenticeshipViewModel viewModel);
+        Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel);
 
         ApprenticeshipDetailsViewModel MapToApprenticeshipDetailsViewModel(Apprenticeship apprenticeship);
 
@@ -20,8 +20,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 
         Task<UpdateApprenticeshipViewModel> CompareAndMapToApprenticeshipViewModel(Apprenticeship original, ApprenticeshipViewModel edited);
 
-        Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel);
-        
         Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors);
 
         ApprenticeshipUpdate MapFrom(UpdateApprenticeshipViewModel viewModel);
