@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeship;

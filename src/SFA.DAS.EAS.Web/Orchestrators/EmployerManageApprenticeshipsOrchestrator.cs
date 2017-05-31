@@ -30,6 +30,7 @@ using SFA.DAS.EAS.Application.Queries.ApprenticeshipSearch;
 using SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock;
 using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
+using System.Net;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -636,6 +637,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         var data = await _mediator.SendAsync(new GetProviderPaymentPriorityRequest { AccountId = accountId });
                         var result = _apprenticeshipMapper.MapPayment(data.Data);
+
+                        if (result.Items == null || result.Items.Count() < 2)
+                            return new OrchestratorResponse<PaymentOrderViewModel> { Status = HttpStatusCode.NotFound };
 
                         return new OrchestratorResponse<PaymentOrderViewModel>
                                    {
