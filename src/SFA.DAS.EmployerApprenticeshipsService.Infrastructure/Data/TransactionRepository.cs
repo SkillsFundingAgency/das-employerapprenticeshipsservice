@@ -80,9 +80,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return MapTransactions(result);
         }
-
+        
         public async Task<List<TransactionLine>> GetAccountCoursePaymentsByDateRange(
-            long accountId, long ukprn, string courseName, int courseLevel, DateTime fromDate, DateTime toDate)
+            long accountId, long ukprn, string courseName, int courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
             var result = await WithConnection(async c =>
             {
@@ -91,6 +91,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@ukprn", ukprn, DbType.Int64);
                 parameters.Add("@courseName", courseName, DbType.String);
                 parameters.Add("@courseLevel", courseLevel, DbType.Int32);
+                parameters.Add("@pathwayCode", pathwayCode, DbType.Int32);
                 parameters.Add("@fromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day), DbType.DateTime);
                 parameters.Add("@toDate", new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59), DbType.DateTime);
 

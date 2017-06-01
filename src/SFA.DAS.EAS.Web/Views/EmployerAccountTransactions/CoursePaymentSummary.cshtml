@@ -19,7 +19,7 @@
                 <dd>@Model.Data.ProviderName</dd>
                 <dt>Course</dt>
                 @{
-                    var courseTitle = Model.Data.CourseName;
+                    var courseTitle = $"{Model.Data.CourseName}: {Model.Data.PathwayName}";
 
                     if (Model.Data.CourseLevel.HasValue)
                     {
