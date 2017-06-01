@@ -27,5 +27,15 @@ BEGIN
 
 	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
 
-	EXEC [employer_account].[CreateAccountEmployerAgreement] @accountId, @employerAgreementId	
+	EXEC [employer_account].[CreateAccountEmployerAgreement] @accountId, @employerAgreementId
+
+
+	INSERT INTO [employer_account].[UserLegalEntitySettings] (UserId, EmployerAgreementId, ReceiveNotifications)
+	SELECT m.UserId, a.Id, 1
+	FROM [employer_account].[EmployerAgreement] a
+	JOIN [employer_account].[Membership] m ON m.AccountId = a.AccountId
+	WHERE
+	a.LegalEntityId = @legalEntityId
+	AND a.AccountId = @accountId
+
 END

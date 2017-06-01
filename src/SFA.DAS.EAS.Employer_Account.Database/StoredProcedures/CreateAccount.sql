@@ -52,4 +52,7 @@ BEGIN
 	EXEC [employer_account].[CreateAccountHistory] @accountId, @employerRef,@addedDate
 
 	INSERT INTO [employer_account].[Membership](UserId, AccountId, RoleId) VALUES (@userId, @accountId, 1);
+
+	INSERT INTO [employer_account].[UserLegalEntitySettings] (UserId, EmployerAgreementId, ReceiveNotifications) VALUES (@userId, @employerAgreementId, 1)
+
 END

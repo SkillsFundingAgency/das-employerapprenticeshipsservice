@@ -21,5 +21,16 @@ BEGIN
 
 	INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [RoleId])
 	VALUES (@accountId, @userId, @roleId);	
+
+	
+	DECLARE @employerAgreementId BIGINT
+	SELECT @employerAgreementId = a.Id
+	FROM [employer_account].[EmployerAgreement] a
+	JOIN [employer_account].[Membership] m on m.AccountId = a.AccountId
+	WHERE a.AccountId = @accountId AND m.UserId = @userId
+
+	INSERT INTO [employer_account].[UserLegalEntitySettings] (UserId, EmployerAgreementId, ReceiveNotifications)
+	VALUES (@userId, @employerAgreementId, 1)
+
 END
 GO
