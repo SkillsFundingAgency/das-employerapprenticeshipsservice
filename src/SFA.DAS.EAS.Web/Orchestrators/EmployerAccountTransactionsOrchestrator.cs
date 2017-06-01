@@ -97,6 +97,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         CourseName = x.Key.CourseName,
                         CourseLevel = x.Key.CourseLevel,
                         PathwayName = x.Key.PathwayName,
+                        PathwayCode = levyPayments.Max(p => p.PathwayCode),
                         CourseStartDate = x.Key.CourseStartDate,
                         LevyPaymentAmount = levyPayments.Sum(p => p.LineAmount),
                         EmployerCoInvestmentAmount = levyPayments.Sum(p => p.EmployerCoInvestmentAmount),
@@ -290,6 +291,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     UkPrn = ukprn,
                     CourseName = courseName,
                     CourseLevel = courseLevel,
+                    PathwayCode = pathwayCode,
                     FromDate = fromDate,
                     ToDate = toDate,
                     ExternalUserId = externalUserId
