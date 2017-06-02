@@ -23,13 +23,7 @@
             <span class="heading-secondary">@displayingMonthDate.ToGdsFormatWithoutDay()</span>
         </h1>
 
-        @if (Model.Data.CurrentTime < new DateTime(2017, 05, 20) && Model.Data.Model.Data.TransactionLines.Count == 0)
-        {
-            <p>
-                No funds will be paid into your account until May 2017.
-            </p>
-        }
-        else if (Model.Data.IsLatestMonth)
+        @if (Model.Data.IsLatestMonth)
         {
             <div class="data-wrap">
                 <div class="data">
@@ -71,6 +65,17 @@
                     <span>No transactions.</span>
                 }
             </p>
+            if (!Model.Data.AccountHasPreviousTransactions)
+            {
+                <h2 class="heading-medium">Why can't I see my levy funds?</h2>
+                <p>Levy funds can take up to 24 hours to appear in your account.</p>
+                <p>Make sure:</p>
+                <ul class="list list-bullet">
+                    <li>you're logged into the correct account</li>
+                    <li>the correct PAYE schemes are added to the account</li>
+                    <li>your HMRC declarations are submitted by the 19th of the month</li>
+                </ul>
+            }
         }
         else
         {
