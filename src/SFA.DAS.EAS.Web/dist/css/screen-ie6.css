@@ -4413,6 +4413,33 @@ h2 .float-right {
   font-size: 38px;
 }
 
+#edit-apprentice .delete-button {
+  background-color: #b10e1e;
+  float: right;
+  margin: 15px 0;
+  margin: auto;
+}
+
+#confirm-delete .heading-large {
+  margin-bottom: 0;
+}
+
+#confirm-delete .heading-small {
+  margin-top: 0;
+}
+
+#confirm-delete .secondary-text {
+  color: #6f777b;
+}
+
+#edit-apprentices-detail hr {
+  margin-top: 0;
+}
+
+#edit-apprentices-detail .optional-ref {
+  margin-bottom: 0;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
@@ -4472,23 +4499,4 @@ h2 .float-right {
     margin-top: 5px;
     word-wrap: break-word;
   }
-}
-
-#edit-apprentice .delete-button {
-  background-color: #b10e1e;
-  float: right;
-  margin: 15px 0;
-  margin: auto;
-}
-
-#confirm-delete .heading-large {
-  margin-bottom: 0;
-}
-
-#confirm-delete .heading-small {
-  margin-top: 0;
-}
-
-#confirm-delete .secondary-text {
-  color: #6f777b;
 }
