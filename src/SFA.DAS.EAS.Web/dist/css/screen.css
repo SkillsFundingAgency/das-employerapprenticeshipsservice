@@ -5118,38 +5118,6 @@ h2 .float-right {
   content: " ";
 }
 
-#edit-apprentice .delete-button {
-  background-color: #b10e1e;
-  float: right;
-  margin: 15px 0;
-}
-
-@media (min-width: 641px) {
-  #edit-apprentice .delete-button {
-    margin: auto;
-  }
-}
-
-#confirm-delete .heading-large {
-  margin-bottom: 0;
-}
-
-#confirm-delete .heading-small {
-  margin-top: 0;
-}
-
-#confirm-delete .secondary-text {
-  color: #6f777b;
-}
-
-#edit-apprentices-detail hr {
-  margin-top: 0;
-}
-
-#edit-apprentices-detail .optional-ref {
-  margin-bottom: 0;
-}
-
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
