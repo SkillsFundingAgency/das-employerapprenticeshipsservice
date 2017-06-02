@@ -24,7 +24,6 @@ BEGIN
 
 	INSERT INTO [employer_account].[UserLegalEntitySettings] (UserId, EmployerAgreementId, ReceiveNotifications)
 	SELECT @userId, a.Id, 1
-	fom 
 	FROM [employer_account].[EmployerAgreement] a
 	JOIN [employer_account].[Membership] m on m.AccountId = a.AccountId AND m.UserId = @userId
 	WHERE
