@@ -191,21 +191,59 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task<List<UserLegalEntitySettings>> GetUserLegalEntitySettings(long userId, long accountId)
+        public async Task<List<UserNotificationSetting>> GetUserLegalEntitySettings(string userRef, long accountId)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@UserId", userId, DbType.Int64);
+                parameters.Add("@UserRef", Guid.Parse(userRef), DbType.Guid);
                 parameters.Add("@AccountId", accountId, DbType.Int64);
 
-                return await c.QueryAsync<UserLegalEntitySettings>(
+                return await c.QueryAsync<UserNotificationSetting>(
                     sql: "[employer_account].[GetUserLegalEntitySettings]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
 
             return result.ToList();
+        }
+
+        public async Task UpdateUserLegalEntitySettings(string userRef, long accountId, List<UserNotificationSetting> settings)
+        {
+            var settingsDataTable = GenerateSettingsDataTable(settings);
+
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@UserRef", Guid.Parse(userRef), DbType.Guid);
+                parameters.Add("@AccountId", accountId, DbType.Int64);
+                parameters.Add("@NotificationSettings", settingsDataTable.AsTableValuedParameter("employer_account.UserNotificationSettingsTable"));
+
+                return await c.ExecuteAsync(
+                    sql: "[employer_account].[UpdateUserLegalEntitySettings]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+        }
+
+        private static DataTable GenerateSettingsDataTable(List<UserNotificationSetting> settings)
+        {
+            var result = new DataTable();
+
+            result.Columns.Add("EmployerAgreementId", typeof(long));
+            result.Columns.Add("ReceiveNotifications", typeof(bool));
+
+            foreach (var setting in settings)
+            {
+                var row = result.NewRow();
+                row["EmployerAgreementId"] = setting.EmployerAgreementId;
+                row["ReceiveNotifications"] = setting.ReceiveNotifications;
+                result.Rows.Add(row);
+            }
+
+            return result;
+
+
         }
     }
 }

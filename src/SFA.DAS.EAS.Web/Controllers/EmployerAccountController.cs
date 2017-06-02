@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -231,6 +232,42 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(errorResponse);
         }
 
+        [HttpGet]
+        [Route("{HashedAccountId}/notification-settings")]
+        public async Task<ActionResult> NotificationSettings(string hashedAccountId)
+        {
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var vm = await _employerAccountOrchestrator.GetNotificationSettingsViewModel(hashedAccountId, userIdClaim);
+            return View(vm);
+        }
+
+        [HttpPost]
+        [Route("{HashedAccountId}/notification-settings")]
+        public async Task<ActionResult> NotificationSettings(string hashedAccountId, FormCollection collection)
+        {
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var vm = await _employerAccountOrchestrator.GetNotificationSettingsViewModel(hashedAccountId, userIdClaim);
+
+            //todo: how to do this more cleanly?
+
+            foreach (var key in collection.Keys)
+            {
+                long k;
+                if (long.TryParse(key.ToString(), out k))
+                {                  
+                    var setting = vm.Data.NotificationSettings.FirstOrDefault(x => x.EmployerAgreementId == k);
+                    if (setting != null)
+                    {
+                        setting.ReceiveNotifications = bool.Parse(collection[k.ToString()]);
+                    }
+                }
+            }
+
+            await _employerAccountOrchestrator.UpdateNotificationSettings(hashedAccountId, userIdClaim,
+                vm.Data.NotificationSettings);
+
+            return RedirectToAction("NotificationSettings", new { HashedAccountId = hashedAccountId });
+        }
 
         private string GetUserId()
         {

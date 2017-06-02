@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
@@ -8,12 +9,15 @@ using NLog;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
+using SFA.DAS.EAS.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate;
+using SFA.DAS.EAS.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.Settings;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
@@ -24,20 +28,22 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
+        private readonly IHashingService _hashingService;
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
         //Needed for tests
-        protected EmployerAccountOrchestrator()
+        protected EmployerAccountOrchestrator(IHashingService hashingService)
         {
-
+            _hashingService = hashingService;
         }
 
         public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieStorageService<EmployerAccountData> cookieService,
-            EmployerApprenticeshipsServiceConfiguration configuration)
+            EmployerApprenticeshipsServiceConfiguration configuration, IHashingService hashingService)
             : base(mediator, logger, cookieService, configuration)
         {
             _mediator = mediator;
             _logger = logger;
+            _hashingService = hashingService;
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateAccount(CreateAccountViewModel viewModel, HttpContextBase context)
@@ -239,6 +245,40 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
 
             return response;
+        }
+
+        public async Task<OrchestratorResponse<NotificationSettingsViewModel>> GetNotificationSettingsViewModel(
+            string hashedAccountId, string userRef)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+
+            var response = await _mediator.SendAsync(new GetUserNotificationSettingsQuery
+            {
+                AccountId = accountId,
+                UserRef = userRef
+            });
+
+            return new OrchestratorResponse<NotificationSettingsViewModel>
+            {
+                Data = new NotificationSettingsViewModel
+                {
+                    HashedId = userRef,
+                    NotificationSettings = response.NotificationSettings
+                },
+            };
+        }
+
+        public async Task UpdateNotificationSettings(
+            string hashedAccountId, string userRef, List<UserNotificationSetting> settings)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+
+            await _mediator.SendAsync(new UpdateUserNotificationSettingsCommand
+            {
+                AccountId = accountId,
+                UserRef = userRef,
+                Settings = settings
+            });          
         }
     }
 }

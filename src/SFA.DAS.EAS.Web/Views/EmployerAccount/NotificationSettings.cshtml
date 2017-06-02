@@ -1,0 +1,45 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.NotificationSettingsViewModel>
+
+<form method="post">
+
+    <div class="grid-row">
+        <div class="column-two-thirds">
+
+            <h1 class="heading-xlarge">Notification Settings</h1>
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" value="@Model.Data.HashedId" name="HashedId" />
+            
+            <table>
+                <thead>
+                    <tr>
+                        <td>Account name</td>
+                        <td>Emails</td>
+                        <td>No emails</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var setting in Model.Data.NotificationSettings)
+                    {
+                        var trueChecked = setting.ReceiveNotifications ? "checked=\"checked\"" : "";
+                        var falseChecked = !setting.ReceiveNotifications ? "checked=\"checked\"" : "";
+
+                        <tr>
+                            <td>@setting.LegalEntityName</td>
+                            <td><input type="radio" name="@setting.EmployerAgreementId" value="true" @trueChecked/></td>
+                            <td><input type="radio" name="@setting.EmployerAgreementId" value="false" @falseChecked/></td>
+                        </tr>
+                        
+                    }
+                </tbody>
+            </table>
+            
+            
+            <button type="submit" class="button">Update</button>
+
+        </div>
+    </div>
+
+</form>

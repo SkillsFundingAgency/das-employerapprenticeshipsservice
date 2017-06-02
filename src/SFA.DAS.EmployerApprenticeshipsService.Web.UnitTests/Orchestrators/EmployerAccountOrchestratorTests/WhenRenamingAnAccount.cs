@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
                 .ReturnsAsync(new GetUserAccountRoleResponse {UserRole = Role.Owner});
 
-            _orchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
+            _orchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration, Mock.Of<IHashingService>());
         }
 
         [Test]

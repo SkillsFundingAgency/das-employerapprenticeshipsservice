@@ -66,6 +66,7 @@
     <Folder Include="Schemas" />
     <Folder Include="Pre-deployment" />
     <Folder Include="Post-Deployment" />
+    <Folder Include="UserDefinedTypes" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="StoredProcedures\Cleardown.sql" />
@@ -120,6 +121,8 @@
     <Build Include="Tables\UserLegalEntitySettings.sql" />
     <Build Include="StoredProcedures\RemoveMembership.sql" />
     <Build Include="StoredProcedures\GetUserLegalEntitySettings.sql" />
+    <Build Include="UserDefinedTypes\UserNotificationSettingsTable.sql" />
+    <Build Include="StoredProcedures\UpdateUserLegalEntitySettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />

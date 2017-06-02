@@ -440,6 +440,7 @@
     <Compile Include="ViewModels\ManageApprenticeships\UpdateApprenticeshipViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ConfirmationStateChangeViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\WhenToMakeChangeOptions.cs" />
+    <Compile Include="ViewModels\NotificationSettingsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\ConfirmLegalAgreementToRemoveViewModel.cs" />
     <Compile Include="ViewModels\Organisation\EmployerAgreementPdfViewModel.cs" />
     <Compile Include="ViewModels\Organisation\LegalAgreementsToRemoveViewModel.cs" />
@@ -1029,6 +1030,7 @@
     <Content Include="Views\EmployerAccountTransactions\Index_ORG.cshtml" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
+    <Content Include="Views\EmployerAccount\NotificationSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
