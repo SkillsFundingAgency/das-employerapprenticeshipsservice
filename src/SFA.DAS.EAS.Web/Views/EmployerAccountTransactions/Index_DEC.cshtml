@@ -59,91 +59,96 @@
                 @if (Model.Data.IsLatestMonth)
                 {
                     <span>No transactions yet.</span>
-                } 
-                else 
+                }
+                else
                 {
                     <span>No transactions.</span>
                 }
             </p>
             if (!Model.Data.AccountHasPreviousTransactions)
             {
-                <h2 class="heading-medium">Why can't I see my levy funds?</h2>
-                <p>Levy funds can take up to 24 hours to appear in your account.</p>
-                <p>Make sure:</p>
-                <ul class="list list-bullet">
-                    <li>you're logged into the correct account</li>
-                    <li>the correct PAYE schemes are added to the account</li>
-                    <li>your HMRC declarations are submitted by the 19th of the month</li>
-                </ul>
+
+                <details>
+                    <summary><span class="summary">Why can't I see my levy funds?</span></summary>
+                    <div class="panel panel-info">
+                        <p>Levy funds can take up to 24 hours to appear in your account.</p>
+                        <p>Make sure:</p>
+                        <ul class="list list-bullet">
+                            <li>you're logged into the correct account</li>
+                            <li>the correct PAYE schemes are added to the account</li>
+                            <li>your HMRC declarations are submitted by the 19th of the month</li>
+                        </ul>
+                    </div>
+                </details>
             }
         }
         else
         {
             <table>
                 <thead>
-                <tr>
-                    <th scope="col"><span class="no-wrap">Payment date</span></th>
-                    <th scope="col" class="mobile-hide-cell">Description</th>
-                    <th scope="col" class="numeric">Amount</th>
-                    <th scope="col"><span class="vh">Action</span></th>
-                </tr>
+                    <tr>
+                        <th scope="col"><span class="no-wrap">Payment date</span></th>
+                        <th scope="col" class="mobile-hide-cell">Description</th>
+                        <th scope="col" class="numeric">Amount</th>
+                        <th scope="col"><span class="vh">Action</span></th>
+                    </tr>
                 </thead>
                 <tbody>
-                @foreach (var aggregationLine in Model.Data.Model.Data.TransactionLines)
-                {
-                    var fromDate = new DateTime(Model.Data.Year, Model.Data.Month, 1);
-                    var toDate = new DateTime(Model.Data.Year, Model.Data.Month, DateTime.DaysInMonth(Model.Data.Year, Model.Data.Month), 23, 59, 59);
-                   
-                    <tr>
-                        <td>
-                            <span class="no-wrap">@{var date = aggregationLine.DateCreated.ToGdsFormat();} @date </span>
-                        </td>
-                        <td class="mobile-hide-cell">
-                            <span class="description">
-                                @aggregationLine.Description
-                            </span>
-                        </td>
-                        
-                        @{
-                            var transactionAmount = aggregationLine.Amount;
+                    @foreach (var aggregationLine in Model.Data.Model.Data.TransactionLines)
+                    {
+                        var fromDate = new DateTime(Model.Data.Year, Model.Data.Month, 1);
+                        var toDate = new DateTime(Model.Data.Year, Model.Data.Month, DateTime.DaysInMonth(Model.Data.Year, Model.Data.Month), 23, 59, 59);
 
-                            if (aggregationLine.TransactionType == TransactionItemType.Payment)
-                            {
-                                var paymentTransaction = aggregationLine as PaymentTransactionLine;
+                        <tr>
+                            <td>
+                                <span class="no-wrap">@{var date = aggregationLine.DateCreated.ToGdsFormat();} @date </span>
+                            </td>
+                            <td class="mobile-hide-cell">
+                                <span class="description">
+                                    @aggregationLine.Description
+                                </span>
+                            </td>
 
-                                if (paymentTransaction != null)
+                            @{
+                                var transactionAmount = aggregationLine.Amount;
+
+                                if (aggregationLine.TransactionType == TransactionItemType.Payment)
                                 {
-                                    transactionAmount += paymentTransaction.EmployerCoInvestmentAmount +
-                                             paymentTransaction.SfaCoInvestmentAmount;
+                                    var paymentTransaction = aggregationLine as PaymentTransactionLine;
+
+                                    if (paymentTransaction != null)
+                                    {
+                                        transactionAmount += paymentTransaction.EmployerCoInvestmentAmount +
+                                                 paymentTransaction.SfaCoInvestmentAmount;
+                                    }
                                 }
                             }
-                        }
-                      
-                        <td class="numeric"> <span class="no-wrap"> @(transactionAmount.ToString("C2", culture)) </span> </td>
-                       
-                        <td class="link-right">
-                            @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
-                                 aggregationLine.TransactionType == TransactionItemType.TopUp)
-                            {
-                                <a title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
-                                    Details <span class="vh"> for the transaction on @date</span>
-                                </a>
-                            }
-                            else if (aggregationLine.TransactionType == TransactionItemType.Payment)
-                            {
-                                var paymentTransaction = aggregationLine as PaymentTransactionLine;
-                                
-                                <a title="View details for the transaction on @date" href="@Url.Action("ProviderPaymentSummary", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, ukPrn = paymentTransaction?.UkPrn, fromDate = fromDate, toDate = toDate })">
-                                    Details <span class="vh"> for the transaction on @date</span>
-                                    
-                                </a>
-                            }
-                        </td>
-                    </tr>
-                }
+
+                            <td class="numeric"> <span class="no-wrap"> @(transactionAmount.ToString("C2", culture)) </span> </td>
+
+                            <td class="link-right">
+                                @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
+                     aggregationLine.TransactionType == TransactionItemType.TopUp)
+                                {
+                                    <a title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
+                                        Details <span class="vh"> for the transaction on @date</span>
+                                    </a>
+                                }
+                                else if (aggregationLine.TransactionType == TransactionItemType.Payment)
+                                {
+                                    var paymentTransaction = aggregationLine as PaymentTransactionLine;
+
+                                    <a title="View details for the transaction on @date" href="@Url.Action("ProviderPaymentSummary", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, ukPrn = paymentTransaction?.UkPrn, fromDate = fromDate, toDate = toDate })">
+                                        Details <span class="vh"> for the transaction on @date</span>
+
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                                }
                 </tbody>
-            </table>            
-           }
+            </table>
+                                }
 
         <ul class="previous-next-navigation">
             @if (!Model.Data.IsFirstMonthOfLevy && Model.Data.AccountHasPreviousTransactions)
@@ -161,7 +166,7 @@
                     <a href="@Url.Action("Index")/@nextMonthDate.Year/@nextMonthDate.Month">
                         Next month
                         <span class="detail">@nextMonthDate.ToGdsFormatWithoutDay()</span>
-                        
+
                     </a>
                 </li>
             }
