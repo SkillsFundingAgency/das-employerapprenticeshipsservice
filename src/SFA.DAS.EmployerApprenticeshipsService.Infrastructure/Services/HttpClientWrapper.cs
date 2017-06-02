@@ -105,6 +105,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             {
                 case 404:
                     throw new ResourceNotFoundException(response.RequestMessage.RequestUri.ToString());
+                case 408:
+                    throw new RequestTimeOutException();
                 case 429:
                     throw new TooManyRequestsException();
                 case 500:
