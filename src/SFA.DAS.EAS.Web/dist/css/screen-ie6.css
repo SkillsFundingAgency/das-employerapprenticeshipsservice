@@ -4667,6 +4667,46 @@ Upda #edit-apprentices-detail .optional-ref {
   font-weight: bold;
 }
 
+  text-decoration: underline;
+}
+
+#manage-all-apprentices .previous-next-navigation li a:focus .page-numbers {
+  text-decoration: underline;
+}
+
+#manage-all-apprentices .previous-next-navigation li.next {
+  float: right;
+  text-align: right;
+}
+
+#manage-all-apprentices .previous-next-navigation li.next a {
+  padding: 15px 35px 15px 0;
+}
+
+#manage-all-apprentices .previous-next-navigation li.next a:before {
+  background: transparent url("/dist/css/images/pagination-arrow-sprite.png") no-repeat -102px -11px;
+  margin: -4px -32px 0 0;
+  display: block;
+  float: right;
+  width: 30px;
+  height: 38px;
+  content: " ";
+}
+
+#manage-all-apprentices .previous-next-navigation li.previous a {
+  padding: 15px 0 15px 35px;
+}
+
+#manage-all-apprentices .previous-next-navigation li.previous a:before {
+  background: transparent url("/dist/css/images/pagination-arrow-sprite.png") no-repeat -20px -11px;
+  margin: -4px 0 0 -32px;
+  display: block;
+  float: left;
+  width: 30px;
+  height: 38px;
+  content: " ";
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
