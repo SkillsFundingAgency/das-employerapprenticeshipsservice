@@ -30,12 +30,13 @@ BEGIN
 	EXEC [employer_account].[CreateAccountEmployerAgreement] @accountId, @employerAgreementId
 
 
-	INSERT INTO [employer_account].[UserLegalEntitySettings] (UserId, EmployerAgreementId, ReceiveNotifications)
-	SELECT m.UserId, a.Id, 1
-	FROM [employer_account].[EmployerAgreement] a
-	JOIN [employer_account].[Membership] m ON m.AccountId = a.AccountId
-	WHERE
-	a.LegalEntityId = @legalEntityId
-	AND a.AccountId = @accountId
+	IF(@legalEntityId is null)
+	BEGIN
+		INSERT INTO [employer_account].[UserLegalEntitySettings] (UserId, EmployerAgreementId, ReceiveNotifications)
+		select m.UserId, a.Id, 1
+		from [employer_account].[EmployerAgreement] a
+		join [employer_account].[Membership] m on m.AccountId = a.AccountId
+		where a.Id = @employerAgreementId
+	END
 
 END

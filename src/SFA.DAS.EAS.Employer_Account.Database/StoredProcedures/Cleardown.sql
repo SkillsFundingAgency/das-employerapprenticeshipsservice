@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [employer_account].[Cleardown]
 	@INCLUDEUSERTABLE TINYINT = 0
 AS
+	DELETE FROM [employer_account].[UserLegalEntitySettings];
 	DELETE FROM [employer_account].[AccountEmployerAgreement];
 	DELETE FROM [employer_account].[EmployerAgreement];
 	DELETE FROM [employer_account].[Invitation];
