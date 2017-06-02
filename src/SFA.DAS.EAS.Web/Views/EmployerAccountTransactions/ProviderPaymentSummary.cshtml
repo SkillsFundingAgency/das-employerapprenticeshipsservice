@@ -44,22 +44,45 @@
             @foreach (var coursePaymentSummary in Model.Data.CoursePayments)
             {
                 <tr>
-                    <td data-label="Course">@coursePaymentSummary.CourseName <span class="no-wrap">level @coursePaymentSummary.CourseLevel</span></td>
+                    <td data-label="Course">@coursePaymentSummary.CourseName: @coursePaymentSummary.PathwayName <span class="no-wrap">level @coursePaymentSummary.CourseLevel</span></td>
                     <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C2", culture)</td>
                     <td class="numeric highlight" data-label="Government contribution">@coursePaymentSummary.SFACoInvestmentAmount.ToString("C2", culture)</td>
                     <td class="numeric highlight" data-label="Your contribution">@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C2", culture)</td>
                     <td class="numeric" data-label="Amount">@coursePaymentSummary.TotalAmount.ToString("C2", culture)</td>
                     <td>
-                        <a title="View details of payment for @coursePaymentSummary.CourseName level @coursePaymentSummary.CourseLevel" href="@Url.Action("CoursePaymentSummary", "EmployerAccountTransactions",
-                                                      new
-                                                      {
-                                                          HashedAccountId = Model.Data.HashedAccountId,
-                                                          Ukprn = Model.Data.UkPrn,
-                                                          CourseName = coursePaymentSummary.CourseName,
-                                                          CourseLevel = coursePaymentSummary.CourseLevel,
-                                                          Model.Data.FromDate,
-                                                          Model.Data.ToDate
-                                                      })">
+                        @{
+                            var courseDetailsLink = string.Empty;
+
+                            if (string.IsNullOrEmpty(coursePaymentSummary.PathwayName))
+                            {
+                                courseDetailsLink = Url.Action("CourseStandardPaymentSummary", "EmployerAccountTransactions",
+                                    new
+                                    {
+                                        HashedAccountId = Model.Data.HashedAccountId,
+                                        Ukprn = Model.Data.UkPrn,
+                                        CourseName = coursePaymentSummary.CourseName,
+                                        CourseLevel = coursePaymentSummary.CourseLevel,
+                                        Model.Data.FromDate,
+                                        Model.Data.ToDate
+                                    });
+                            }
+                            else
+                            {
+                                courseDetailsLink = Url.Action("CourseFrameworkPaymentSummary", "EmployerAccountTransactions",
+                                    new
+                                    {
+                                        HashedAccountId = Model.Data.HashedAccountId,
+                                        Ukprn = Model.Data.UkPrn,
+                                        CourseName = coursePaymentSummary.CourseName,
+                                        CourseLevel = coursePaymentSummary.CourseLevel,
+                                        PathwayCode = coursePaymentSummary.PathwayCode,
+                                        Model.Data.FromDate,
+                                        Model.Data.ToDate
+                                    });
+                            }
+                        }
+
+                        <a title="View details of payment for @coursePaymentSummary.CourseName level @coursePaymentSummary.CourseLevel" href="@courseDetailsLink">
                             Details <span class="vh"> of payment for @coursePaymentSummary.CourseName level @coursePaymentSummary.CourseLevel</span>
                         </a>
                     </td>

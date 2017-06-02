@@ -25,5 +25,6 @@ namespace SFA.DAS.EAS.Domain.Models.Payments
         public int? FrameworkCode { get; set; }
         public int? ProgrammeType { get; set; }
         public int? PathwayCode { get; set; }
+        public string PathwayName { get; set; }
     }
 }

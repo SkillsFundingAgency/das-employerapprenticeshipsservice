@@ -248,6 +248,20 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         }
 
         [Test]
+        public async Task ThenIShouldGetCorrectFrameworkPathwayName()
+        {
+            //Arrange
+            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Provider.Events.Api.Types.Payment>()))
+                .Returns(() => _frameworkPayment);
+
+            //Act
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+
+            //Assert
+            Assert.AreEqual(_framework.PathwayName, details.First().PathwayName);
+        }
+
+        [Test]
         public async Task ThenIShouldGetCorrectApprenticeDetails()
         {
             //Act
@@ -369,6 +383,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
                 Title = FrameworkCourseName,
                 FrameworkCode = 20,
                 PathwayCode = 2,
+                PathwayName = "General",
                 ProgrammeType = 3
             };
 
