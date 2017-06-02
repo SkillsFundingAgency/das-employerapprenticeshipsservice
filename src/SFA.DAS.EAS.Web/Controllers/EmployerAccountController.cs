@@ -238,6 +238,19 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
             var vm = await _employerAccountOrchestrator.GetNotificationSettingsViewModel(hashedAccountId, userIdClaim);
+
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+            if (flashMessage == null)
+            {
+                flashMessage = new FlashMessageViewModel
+                {
+                    Severity = FlashMessageSeverityLevel.Info,
+                    Message = "Changes to these settings won't affect service emails, such as password resets"
+                };
+            }
+
+            vm.FlashMessage = flashMessage;
+
             return View(vm);
         }
 
@@ -265,6 +278,14 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             await _employerAccountOrchestrator.UpdateNotificationSettings(hashedAccountId, userIdClaim,
                 vm.Data.NotificationSettings);
+
+            var flashMessage = new FlashMessageViewModel
+            {
+                Severity = FlashMessageSeverityLevel.Success,
+                Message = "Settings updated"
+            };
+
+            AddFlashMessageToCookie(flashMessage);
 
             return RedirectToAction("NotificationSettings", new { HashedAccountId = hashedAccountId });
         }
