@@ -41,6 +41,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.ValidateStatusChangeDateQuer
         public async Task WhenDateIsInTheFutureAnValidationErrorReturned()
         {
             _testQuery.DateOfChange = new DateTime(2017, 7, 10); // Change date in the future
+            _mockCurrentDate.SetupGet(x => x.Now).Returns(DateTime.UtcNow.AddDays(-2)); // Started training
+            _apprenticeship.StartDate = DateTime.UtcNow.AddDays(2);
+            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
+                .ReturnsAsync(new GetApprenticeshipQueryResponse { Apprenticeship = _apprenticeship });
 
             var response = await _handler.Handle(_testQuery);
 
