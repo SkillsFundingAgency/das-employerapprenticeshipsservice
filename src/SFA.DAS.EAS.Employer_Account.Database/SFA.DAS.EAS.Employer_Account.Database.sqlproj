@@ -119,6 +119,7 @@
     <Build Include="StoredProcedures\GetEmployerAgreementsToRemove_ByAccountId.sql" />
     <Build Include="Tables\UserLegalEntitySettings.sql" />
     <Build Include="StoredProcedures\RemoveMembership.sql" />
+    <Build Include="StoredProcedures\GetUserLegalEntitySettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />

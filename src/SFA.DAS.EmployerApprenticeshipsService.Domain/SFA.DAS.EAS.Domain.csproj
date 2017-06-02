@@ -169,6 +169,7 @@
     <Compile Include="Models\EmployerAgreement\SignEmployerAgreement.cs" />
     <Compile Include="Models\Payments\Payment.cs" />
     <Compile Include="Models\Payments\PeriodEnd.cs" />
+    <Compile Include="Models\Settings\UserLegalEntitySettings.cs" />
     <Compile Include="Models\Transaction\AggregationData.cs" />
     <Compile Include="Models\Transaction\AggregationLine.cs" />
     <Compile Include="Models\Transaction\AggregationLineItem.cs" />

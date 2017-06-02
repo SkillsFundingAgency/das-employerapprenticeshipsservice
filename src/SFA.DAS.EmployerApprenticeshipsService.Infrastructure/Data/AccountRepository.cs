@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.PAYE;
+using SFA.DAS.EAS.Domain.Models.Settings;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -190,6 +191,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
+        public async Task<List<UserLegalEntitySettings>> GetUserLegalEntitySettings(long userId, long accountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@UserId", userId, DbType.Int64);
+                parameters.Add("@AccountId", accountId, DbType.Int64);
 
+                return await c.QueryAsync<UserLegalEntitySettings>(
+                    sql: "[employer_account].[GetUserLegalEntitySettings]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.ToList();
+        }
     }
 }
