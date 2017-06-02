@@ -37,7 +37,7 @@
     </Certificates>
   </Role>
   <Role name="SFA.DAS.EAS.PaymentProvider.Worker">
-    <Instances count="1" />
+    <Instances count="3" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
