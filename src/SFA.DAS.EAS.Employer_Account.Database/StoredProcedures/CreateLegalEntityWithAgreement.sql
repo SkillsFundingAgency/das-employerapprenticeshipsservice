@@ -27,16 +27,12 @@ BEGIN
 
 	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
 
-	EXEC [employer_account].[CreateAccountEmployerAgreement] @accountId, @employerAgreementId
+	EXEC [employer_account].[CreateAccountEmployerAgreement] @accountId, @employerAgreementId	
 
-
-	IF(@legalEntityId is null)
-	BEGIN
-		INSERT INTO [employer_account].[UserLegalEntitySettings] (UserId, EmployerAgreementId, ReceiveNotifications)
-		select m.UserId, a.Id, 1
-		from [employer_account].[EmployerAgreement] a
-		join [employer_account].[Membership] m on m.AccountId = a.AccountId
-		where a.Id = @employerAgreementId
-	END
+	INSERT INTO [employer_account].[UserLegalEntitySettings] (UserId, EmployerAgreementId, ReceiveNotifications)
+	select m.UserId, a.Id, 1
+	from [employer_account].[EmployerAgreement] a
+	join [employer_account].[Membership] m on m.AccountId = a.AccountId
+	where a.Id = @employerAgreementId
 
 END
