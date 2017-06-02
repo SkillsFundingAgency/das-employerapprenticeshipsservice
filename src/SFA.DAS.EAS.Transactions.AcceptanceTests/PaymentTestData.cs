@@ -254,7 +254,6 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests
             };
         }
         
-        
 
         private Domain.Models.Payments.PeriodEnd GetCurrentMonthPeriodEnd()
         {
