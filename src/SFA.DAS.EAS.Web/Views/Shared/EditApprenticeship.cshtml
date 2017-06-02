@@ -165,7 +165,7 @@
 
 </div>
 
-<div class="form-group  @(!string.IsNullOrEmpty(Model.Apprenticeship.EmployerRefError) ? "error" : "")">
+<div class="form-group optional-ref @(!string.IsNullOrEmpty(Model.Apprenticeship.EmployerRefError) ? "error" : "")">
     <hr />
     @Html.Label("EmployerRef", "Reference (optional)", new { @class = "form-label-bold" })
     <span class="form-hint">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
