@@ -500,8 +500,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (!ModelState.IsValid)
             {
                 var response = await _employerCommitmentsOrchestrator.GetFinishEditingViewModel(viewModel.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId);
-                response.Data = viewModel;
-
                 return View(response);
             }
 

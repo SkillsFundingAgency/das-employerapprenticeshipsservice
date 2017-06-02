@@ -8,6 +8,18 @@ namespace SFA.DAS.EAS.Web.ViewModels
         {
             ErrorMessages = new Dictionary<string, string>();
         }
+
+        public FlashMessageViewModel CreateErrorFlashMessageViewModel(Dictionary<string, string> errorMessages)
+        {
+            return new FlashMessageViewModel
+            {
+                Headline = "Errors to fix",
+                Message = "Check the following details:",
+                ErrorMessages = errorMessages,
+                Severity = FlashMessageSeverityLevel.Error
+            };
+        }
+
         public string Headline { get; set; }
 
         public string Message { get; set; }

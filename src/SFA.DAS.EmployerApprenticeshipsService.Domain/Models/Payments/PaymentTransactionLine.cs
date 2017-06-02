@@ -14,13 +14,15 @@ namespace SFA.DAS.EAS.Domain.Models.Payments
         public decimal LineAmount { get; set; }
         public string CourseName { get; set; }
         public int? CourseLevel { get; set; }
+        public string PathwayName { get; set; }
+        public int? PathwayCode { get; set; }
         public DateTime? CourseStartDate { get; set; }   
         public string ApprenticeName { get; set; }
         public string ApprenticeNINumber { get; set; }
         public decimal SfaCoInvestmentAmount { get; set; }
         public decimal EmployerCoInvestmentAmount { get; set; }
 
-        public bool IsCoInvested => SfaCoInvestmentAmount + EmployerCoInvestmentAmount > 0;
+        public bool IsCoInvested => SfaCoInvestmentAmount != 0 || EmployerCoInvestmentAmount != 0;
 
         public ICollection<PaymentTransactionLine> SubPayments =>
             SubTransactions?.OfType<PaymentTransactionLine>().ToList() ??

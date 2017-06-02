@@ -308,13 +308,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             await _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
                     OwinWrapper.GetClaimValue(DasClaimTypes.Email));
 
-            var approvalMsg = NeedReapproval(apprenticeship)
-                ? "Your training provider needs to approve these changes."
-                : string.Empty;
+            var message = NeedReapproval(apprenticeship)
+                ? "Suggested changes sent to training provider for approval, where needed."
+                : "Apprentice updated";
 
             var flashmessage = new FlashMessageViewModel
             {
-                Message = $"You suggested changes to the record for {orginalApp.Data.FirstName} {orginalApp.Data.LastName}. {approvalMsg}",
+                Message = message,
                 Severity = FlashMessageSeverityLevel.Okay
             };
 

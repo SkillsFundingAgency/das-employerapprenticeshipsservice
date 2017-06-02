@@ -130,6 +130,20 @@ sfa.forms = {
     }
 }
 
+sfa.backLink = {
+    init: function () {
+        var backLink = $('<a>')
+            .attr({ 'href': '#', 'class': 'link-back' })
+            .text('Back')
+            .on('click', function (e) { window.history.back(); e.preventDefault(); });
+        $('#js-breadcrumbs').html(backLink);
+    }
+}
+
+if ($('#js-breadcrumbs')) {
+    sfa.backLink.init();
+}
+
 window.onunload = function () {
     sfa.forms.removeDisabledAttr();
 };

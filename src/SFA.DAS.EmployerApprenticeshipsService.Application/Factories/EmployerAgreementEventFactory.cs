@@ -19,5 +19,10 @@ namespace SFA.DAS.EAS.Application.Factories
                ResourceUrl = $"{_configuration.BaseUrl}api/accounts/{hashedAccountId}/legalEntities/{hashedLegalEntityId}/agreements/{hashedAgreementId}"
            };
         }
+
+        public AgreementRemovedEvent RemoveAgreementEvent(string hashedAgreementId)
+        {
+            return new AgreementRemovedEvent {HashedAgreementId = hashedAgreementId};
+        }
     }
 }

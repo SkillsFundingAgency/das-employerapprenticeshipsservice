@@ -9,7 +9,9 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.Provider.Events.Api.Client;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
@@ -21,19 +23,16 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+        private readonly ICacheProvider _cacheProvider;
 
-        public PaymentService(
-            IPaymentsEventsApiClient paymentsEventsApiClient,
-            IEmployerCommitmentApi commitmentsApiClient,
-            IApprenticeshipInfoServiceWrapper apprenticeshipInfoService,
-            IMapper mapper,
-            ILogger logger)
+        public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient, IEmployerCommitmentApi commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService, IMapper mapper, ILogger logger, ICacheProvider cacheProvider)
         {
             _paymentsEventsApiClient = paymentsEventsApiClient;
             _commitmentsApiClient = commitmentsApiClient;
             _apprenticeshipInfoService = apprenticeshipInfoService;
             _mapper = mapper;
             _logger = logger;
+            _cacheProvider = cacheProvider;
         }
 
         public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId)
@@ -81,6 +80,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                     payment.CourseName = framework?.Title;
                     payment.CourseLevel = framework?.Level;
+                    payment.PathwayName = framework?.PathwayName;
                 }
                 else
                 {
@@ -122,7 +122,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                     {
                         return paymentDetails;
                     }
-                    
+
                     paymentDetails.AddRange(payments.Items.Select(x => _mapper.Map<PaymentDetails>(x)));
 
                     totalPages = payments.TotalNumberOfPages;
@@ -142,7 +142,17 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             {
                 try
                 {
-                    var providerView = _apprenticeshipInfoService.GetProvider(ukPrn);
+                    var providerView = _cacheProvider.Get<ProvidersView>($"{nameof(ProvidersView)}_{ukPrn}");
+
+                    if (providerView == null)
+                    {
+                        providerView = _apprenticeshipInfoService.GetProvider(ukPrn);
+                        if (providerView != null)
+                        {
+                            _cacheProvider.Set($"{nameof(ProvidersView)}_{ukPrn}", providerView, new TimeSpan(1, 0, 0));
+                        }
+                    }
+                    
                     return providerView?.Provider;
                 }
                 catch (Exception e)
@@ -154,12 +164,23 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             });
         }
 
+
         private async Task<Standard> GetStandard(long standardCode)
         {
             try
             {
-                var standardsView = await _apprenticeshipInfoService.GetStandardsAsync();
+                var standardsView = _cacheProvider.Get<StandardsView>(nameof(StandardsView));
 
+                if (standardsView == null)
+                {
+                    standardsView = await _apprenticeshipInfoService.GetStandardsAsync();
+
+                    if (standardsView != null)
+                    {
+                        _cacheProvider.Set(nameof(StandardsView), standardsView, new TimeSpan(1, 0, 0));
+                    }
+                }
+                
                 return standardsView.Standards.SingleOrDefault(s => s.Code.Equals(standardCode));
             }
             catch (Exception e)
@@ -174,8 +195,18 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             try
             {
-                var frameworksView = await _apprenticeshipInfoService.GetFrameworksAsync();
+                var frameworksView = _cacheProvider.Get<FrameworksView>(nameof(FrameworksView));
 
+                if (frameworksView == null)
+                {
+                    frameworksView = await _apprenticeshipInfoService.GetFrameworksAsync();
+
+                    if (frameworksView != null)
+                    {
+                        _cacheProvider.Set(nameof(FrameworksView),frameworksView, new TimeSpan(1,0,0));
+                    }
+                }
+                
                 return frameworksView.Frameworks.SingleOrDefault(f =>
                                      f.FrameworkCode.Equals(frameworkCode) &&
                                      f.ProgrammeType.Equals(programType) &&

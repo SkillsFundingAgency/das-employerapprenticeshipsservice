@@ -42,5 +42,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Factories.EmployerAgreementEventFact
             //Assert
             Assert.AreEqual(_apiConfiguration.BaseUrl + expectedApiUrlPostfix, @event.ResourceUrl);
         }
+
+        [Test]
+        public void ThenIGetTheCorrectParamtersSetWhenRemovingTheAgreement()
+        {
+            //Arrange
+            const string hashedAgreementId = "3GF3KH";
+
+            //Act
+            var actual = _factory.RemoveAgreementEvent(hashedAgreementId);
+
+            //Assert
+            Assert.AreEqual(hashedAgreementId, actual.HashedAgreementId);
+
+        }
     }
 }

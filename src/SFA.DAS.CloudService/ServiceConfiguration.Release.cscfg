@@ -30,14 +30,14 @@
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
-      <Setting name="DeclarationsEnabled" value="fractions" />
+      <Setting name="DeclarationsEnabled" value="both" />
       <Setting name="TokenServiceCertificateThumbprint" value="__TokenServiceCertificateThumbprint__" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
   </Role>
   <Role name="SFA.DAS.EAS.PaymentProvider.Worker">
-    <Instances count="1" />
+    <Instances count="3" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,8 +8,11 @@ using MediatR;
 using NLog;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
+using SFA.DAS.EAS.Application.Commands.RemoveLegalEntity;
 using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
+using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
@@ -296,6 +300,135 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return signedPdfEmployerAgreement;
 
+        }
+
+        public virtual async  Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, string userId)
+        {
+            var response = new OrchestratorResponse<LegalAgreementsToRemoveViewModel>();
+            try
+            {
+                var result = await _mediator.SendAsync(new GetAccountEmployerAgreementsRemoveRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = userId
+                });
+
+                response.Data = new LegalAgreementsToRemoveViewModel
+                {
+                    Agreements = result.Agreements
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                response.Status = HttpStatusCode.BadRequest;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = ex.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
+                response.Exception = ex;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+                response.Exception = ex;
+            }
+            return response;
+        }
+
+        public virtual async Task<OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string agreementId, string hashedAccountId, string userId)
+        {
+            var response = new OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>();
+            try
+            {
+                var result = await _mediator.SendAsync(new GetAccountEmployerAgreementRemoveRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = userId,
+                    HashedAgreementId = agreementId
+                });
+                response.Data = new ConfirmLegalAgreementToRemoveViewModel
+                {
+                    HashedAccountId = result.Agreement.HashedAccountId,
+                    HashedAgreementId = result.Agreement.HashedAgreementId,
+                    Id = result.Agreement.Id,
+                    Name = result.Agreement.Name
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                response.Status = HttpStatusCode.BadRequest;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = ex.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
+                response.Exception = ex;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+                response.Exception = ex;
+            }
+
+            return response;
+        }
+
+        public virtual async Task<OrchestratorResponse<bool>>  RemoveLegalAgreement(ConfirmLegalAgreementToRemoveViewModel model, string userId)
+        {
+            var response = new OrchestratorResponse<bool>();
+            var errorModel = new FlashMessageViewModel();
+            try
+            {
+                if (model.RemoveOrganisation == null)
+                {
+                    response.Status = HttpStatusCode.BadRequest;
+                    response.FlashMessage =
+                        errorModel.CreateErrorFlashMessageViewModel(new Dictionary<string, string>
+                        {
+                            {"RemoveOrganisation", "Confirm you wish to remove the organisation"}
+                        });
+                    return response;
+                }
+
+                if (model.RemoveOrganisation == 1)
+                {
+                    response.Status = HttpStatusCode.Continue;
+                    return response;
+                }
+
+                await _mediator.SendAsync(new RemoveLegalEntityCommand
+                {
+                    HashedAccountId = model.HashedAccountId,
+                    UserId = userId,
+                    HashedLegalAgreementId = model.HashedAgreementId
+                });
+
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = $"You have removed {model.Name}.",
+                    Severity = FlashMessageSeverityLevel.Success
+                };
+                response.Data = true;
+            }
+            catch (InvalidRequestException ex)
+            {
+                
+                response.Status = HttpStatusCode.BadRequest;
+                response.FlashMessage = errorModel.CreateErrorFlashMessageViewModel(ex.ErrorMessages);
+                response.Exception = ex;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+                response.Exception = ex;
+            }
+
+            return response;
         }
     }
 }

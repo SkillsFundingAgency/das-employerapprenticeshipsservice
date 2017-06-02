@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser, ExpectedUkPrn);
+            var result = await _orchestrator.GetProviderPaymentSummary(HashedAccountId, ExpectedUkPrn, _fromDate, _toDate, ExternalUser);
 
             //Assert
             Assert.AreEqual(expectedTotal, result.Data.CoursePayments.First().LevyPaymentAmount);
@@ -94,7 +94,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser, ExpectedUkPrn);
+            var result = await _orchestrator.GetProviderPaymentSummary(HashedAccountId, ExpectedUkPrn, _fromDate, _toDate, ExternalUser);
 
             //Assert
             Assert.AreEqual(expectedTotal, result.Data.CoursePayments.First().SFACoInvestmentAmount);
@@ -118,7 +118,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser, ExpectedUkPrn);
+            var result = await _orchestrator.GetProviderPaymentSummary(HashedAccountId, ExpectedUkPrn, _fromDate, _toDate, ExternalUser);
 
             //Assert
             Assert.AreEqual(expectedTotal, result.Data.CoursePayments.First().EmployerCoInvestmentAmount);
@@ -149,7 +149,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser, ExpectedUkPrn);
+            var result = await _orchestrator.GetProviderPaymentSummary(HashedAccountId, ExpectedUkPrn, _fromDate, _toDate, ExternalUser);
 
             //Assert
             Assert.AreEqual(expectedTotal, result.Data.CoursePayments.First().TotalAmount);
@@ -197,7 +197,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
             //Act
-            var result = await _orchestrator.GetCoursePayments(HashedAccountId, _fromDate, _toDate, ExternalUser, ExpectedUkPrn);
+            var result = await _orchestrator.GetProviderPaymentSummary(HashedAccountId, ExpectedUkPrn, _fromDate, _toDate, ExternalUser);
 
             //Assert
             Assert.AreEqual(expectedLevyPaymentsTotal, result.Data.LevyPaymentsTotal);
@@ -214,7 +214,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 .ThrowsAsync(new NotFoundException(string.Empty));
 
             //Act
-            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, 10, _fromDate, _toDate,
+            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, ExpectedUkPrn, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert
@@ -229,7 +229,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 .ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
-            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, 10, _fromDate, _toDate,
+            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, ExpectedUkPrn, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert
@@ -244,7 +244,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
-            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, 10, _fromDate, _toDate,
+            var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, ExpectedUkPrn, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert

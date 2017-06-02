@@ -1,0 +1,55 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.ConfirmLegalAgreementToRemoveViewModel>
+
+
+@{
+    ViewBag.PageID = "organisations-remove-confirmation";
+    ViewBag.Title = "Remove organisation";
+    ViewBag.Section = "organisations";
+}
+
+<div class="grid-row header-index">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            <span class="heading-secondary">@Model.Data.Name</span> 
+            Remove organisation
+        </h1>
+        <p class="lede">@Model.Data.Name will end its agreement with the <abbr title="Education and Skills Funding Agency">ESFA</abbr>.</p>
+        <form method="post" action="@Url.Action("RemoveOrganisation","EmployerAgreement")">
+            @Html.AntiForgeryToken()
+            <input type="hidden" value="@Model.Data.HashedAccountId" name="HashedAccountId" id="HashedAccountId"/>
+            <input type="hidden" value="@Model.Data.HashedAgreementId" name="HashedAgreementId" id="HashedAgreementId"/>
+            <input type="hidden" value="@Model.Data.Name" name="Name" id="Name"/>
+            <div class="form-group @(!string.IsNullOrEmpty(Model.Data.RemoveOrganisationError) ? "error" : "")">
+                <fieldset id="confirm">
+                    <legend>
+                        <span class="form-label-bold">Are you sure?</span>
+                        @if (!string.IsNullOrEmpty(Model.Data.RemoveOrganisationError))
+                        {
+                            <span class="error-message">@Model.Data.RemoveOrganisationError</span>
+                        }
+                    </legend>
+                    <label class="block-label">
+                        <input type="radio" name="RemoveOrganisation" value="2"/>
+                        <span class="form-label">Yes, remove now</span>
+                    </label>
+                    <label class="block-label">
+                        <input type="radio" name="RemoveOrganisation" value="1"/>
+                        <span class="form-label">No, don't remove</span>
+                    </label>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="button">Continue</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
+        </ol>
+    </div>
+}

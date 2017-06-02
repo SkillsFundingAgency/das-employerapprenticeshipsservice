@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Domain.Models.UserProfile
 
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AccountDashboardViewModel>
 
@@ -41,7 +42,7 @@
                 <h2 class="heading-medium">
                     <a href="@Url.Action("Index", "EmployerAccountTransactions")">Finance</a>
                 </h2>
-                <p>View transactions and forecast your funds.</p>
+                <p>View your financial transactions.</p>
    
                 <h2 class="heading-medium">
                     <a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a>
@@ -70,14 +71,22 @@
         </div>
     <div class="column-one-third">
        
-        @if (Model.Data.RequiresAgreementSigning)
+        @if (Model.Data.RequiresAgreementSigning > 0)
         {
             <section>
                 <div class="panel alert-default">
-                    <h3 class="heading-medium">Notice</h3>
-                    <p>
-                        There is an ESFA agreement that needs to be signed by the authorised person. You must <a href="@Url.Action("Index", "EmployerAgreement")">sign the agreement with ESFA</a> in order to release your funds so that you can pay your training provider.
-                    </p>
+                    <h3 class="heading-small">Spending not enabled (@Model.Data.RequiresAgreementSigning)</h3>
+
+                    @if (Model.Data.UserRole == Role.Owner)
+                    {
+                        <p>You need to <a href="@Url.Action("Index", "EmployerAgreement")">accept an agreement</a> to enable your organisations to spend funds.</p>
+                    }
+
+                    @if (Model.Data.UserRole == Role.Transactor)
+                    {
+                        <p>An agreement needs to be accepted to enable your organisations to spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View this agreement</a>.</p>
+                    }
+              
                 </div>
             </section>
         }

@@ -1,74 +1,94 @@
 ﻿@using System.Globalization
-@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ProviderPaymentsSummaryViewModel>
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.CoursePaymentDetailsViewModel>
 
 @{
     var culture = new CultureInfo("en-GB");
-    ViewBag.PageID = "page-course-payment-summary";
-    ViewBag.Title = "Payment details";
+    ViewBag.PageID = "page-course-payment-details";
+    ViewBag.Title = "Payment: apprentice details";
     ViewBag.Section = "finance";
 
 }
 <div class="grid-row">
     <div class="column-two-thirds">
         <div class="hgroup">
-            <h1 class="heading-xlarge">Payment details</h1>
-            <ul>
-                <li>Date <b>@Model.Data.PaymentDate.ToGdsFormat()</b></li>
-                <li>Payment to <b>@Model.Data.ProviderName</b></li>
-            </ul>
+            <h1 class="heading-xlarge">Payment: apprentice details</h1>
+            <dl class="inline">
+                <dt>Date</dt>
+                <dd>@Model.Data.PaymentDate.ToString("dd MMMM yyyy")</dd>
+                <dt>Payment to</dt>
+                <dd>@Model.Data.ProviderName</dd>
+                <dt>Course</dt>
+                @{
+                    var courseTitle = $"{Model.Data.CourseName}: {Model.Data.PathwayName}";
+
+                    if (Model.Data.CourseLevel.HasValue)
+                    {
+                        courseTitle += $" level {Model.Data.CourseLevel.Value}";
+                    }
+                }
+                <dd>@courseTitle</dd>
+            </dl>
         </div>
     </div>
-</div>
+</div>    
+
 <div class="grid-row">
     <div class="column-full">
         <table class="responsive">
             <thead>
-                <tr>
-                    <th colspan="2"></th>
-                    <th class="highlight colgroup" scope="colgroup" colspan="2">Co-investment</th>
-                    <th colspan="2"></th>
-                </tr>
-                <tr>
-                    <th scope="col" class="tw-20">Course</th>
-                    <th scope="col" class="numeric tw-20">Paid from levy</th>
-                    <th scope="col" class="numeric tw-20 highlight">Government contribution</th>
-                    <th scope="col" class="numeric tw-20 highlight">Your contribution</th>
-                    <th scope="col" class="numeric tw-15">Amount</th>
-                    <th scope="col" class="tw-5"><span class="vh">Action</span></th>
-                </tr>
+            <tr>
+                <th colspan="2"></th>
+                <th class="highlight colgroup" scope="colgroup" colspan="2">Co-investment</th>
+                <th colspan="2"></th>
+            </tr>
+            <tr>
+                <th scope="col" class="tw-20">Apprentice</th>
+                <th scope="col" class="numeric tw-20">Paid from levy</th>
+                <th scope="col" class="numeric tw-20 highlight">Government contribution</th>
+                <th scope="col" class="numeric tw-20 highlight">Your contribution</th>
+                <th scope="col" class="numeric tw-20">Amount</th>
+            </tr>
             </thead>
             <tbody>
-            @foreach (var coursePaymentSummary in Model.Data.CoursePayments)
+            @foreach (var coursePaymentSummary in Model.Data.ApprenticePayments)
             {
-                <tr>
-                    <td data-label="Course">@coursePaymentSummary.CourseName</td>
-                    <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C0", culture)</td>
-                    <td class="numeric highlight" data-label="Government contribution">@coursePaymentSummary.SFACoInvestmentAmount.ToString("C0", culture)</td>
-                    <td class="numeric highlight" data-label="Your contribution">@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C0", culture)</td>
-                    <td class="numeric" data-label="Amount">@coursePaymentSummary.TotalAmount.ToString("C0", culture)</td>
-                    <td>-</td>
+                <tr class="responsive-tr">
+                    @if (string.IsNullOrEmpty(@coursePaymentSummary.ApprenticeName))
+                    {
+                        <td data-label="Apprentice"><em>Not available</em></td>
+                    }
+                    else
+                    {
+                        <td data-label="Apprentice">@coursePaymentSummary.ApprenticeName</td>
+                    }
+                    <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C2", culture)</td>
+                    <td class="numeric highlight" data-label="Government contribution">@coursePaymentSummary.SFACoInvestmentAmount.ToString("C2", culture)</td>
+                    <td class="numeric highlight" data-label="Your contribution">@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C2", culture)</td>
+                    <td class="numeric" data-label="Amount">@coursePaymentSummary.TotalAmount.ToString("C2", culture)</td>
                 </tr>
             }
             </tbody>
             <tfoot>
                 <tr class="total">
                     <td data-label="Totals"> </td>
-                    <td data-label="Paid from levy" class="total numeric nowrap">@Model.Data.LevyPaymentsTotal.ToString("C0", culture)</td>
-                    <td data-label="Government contribution" class="total numeric nowrap">@Model.Data.SFACoInvestmentsTotal.ToString("C0", culture)</td>
-                    <td data-label="Your contribution" class="total numeric nowrap">@Model.Data.EmployerCoInvestmentsTotal.ToString("C0", culture)</td>
-                    <td data-label="Amount" class="total numeric nowrap">@Model.Data.PaymentsTotal.ToString("C0", culture)</td>
-                    <td></td>
+                    <td data-label="Paid from levy" class="total numeric no-wrap">@Model.Data.LevyPaymentsTotal.ToString("C2", culture)</td>
+                    <td data-label="Government contribution" class="highlight total numeric no-wrap">@Model.Data.SFACoInvestmentTotal.ToString("C2", culture)</td>
+                    <td data-label="Your contribution" class="highlight total numeric no-wrap">@Model.Data.EmployerCoInvestmentTotal.ToString("C2", culture)</td>
+                    <td data-label="Amount" class="total numeric no-wrap">@Model.Data.PaymentsTotal.ToString("C2", culture)</td>
                 </tr>
             </tfoot>
         </table>
-        <div class="panel panel-top-margin">
-            <p>It's up to you and your training provider to decide how and when your contribution is paid.</p>
+        <div class="panel">
+            <p>It's up to you and your training provider to decide when your contribution is paid.</p>
         </div>
     </div>
 </div>
+
+
+
+
 @section breadcrumb {
-    <div class="breadcrumbs">
+    <div class="breadcrumbs" id="js-breadcrumbs">
         <ol role="navigation">
             <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
             <li><a href="@Url.Action("Index", "EmployerAccountTransactions")">Your transactions</a></li>

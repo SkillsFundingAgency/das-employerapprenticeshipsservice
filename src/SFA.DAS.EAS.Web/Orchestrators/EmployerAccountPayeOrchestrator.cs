@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EAS.Application.Queries.GetMember;
+using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -159,14 +160,22 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<RemovePayeSchemeViewModel>> GetRemovePayeSchemeModel(RemovePayeSchemeViewModel model)
         {
-            var response = await
+            var accountResponse = await
                     Mediator.SendAsync(new GetEmployerAccountHashedQuery
                     {
                         HashedAccountId = model.HashedAccountId,
                         UserId = model.UserId
                     });
 
-            model.AccountName = response.Account.Name;
+            var payeResponse = await
+                Mediator.SendAsync(new GetPayeSchemeByRefQuery
+                {
+                    HashedAccountId = model.HashedAccountId,
+                    Ref = model.PayeRef
+                });
+
+            model.AccountName = accountResponse.Account.Name;
+            model.PayeSchemeName = payeResponse.PayeScheme.Name;
 
             return new OrchestratorResponse<RemovePayeSchemeViewModel> {Data = model};
         }
@@ -176,6 +185,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var response = new OrchestratorResponse<RemovePayeSchemeViewModel> {Data = model};
             try
             {
+                var result = await Mediator.SendAsync(new GetPayeSchemeByRefQuery
+                {
+                    HashedAccountId = model.HashedAccountId,
+                    Ref = model.PayeRef,
+                });
+
+                model.PayeSchemeName = result.PayeScheme.Name;
+
                 await Mediator.SendAsync(new RemovePayeFromAccountCommand
                 {
                     HashedAccountId = model.HashedAccountId,
@@ -183,8 +200,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     PayeRef = model.PayeRef,
                     RemoveScheme = model.RemoveScheme == 2
                 });
-                response.Data = model;
                 
+                response.Data = model;
             }
             catch (UnauthorizedAccessException)
             {
@@ -204,17 +221,25 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var response = new OrchestratorResponse<PayeSchemeDetailViewModel>();
             try
             {
-                var result = await Mediator.SendAsync(new GetEmployerEnglishFractionQuery
+                var englishFractionResult = await Mediator.SendAsync(new GetEmployerEnglishFractionQuery
                 {
                     HashedAccountId = hashedAccountId,
                     EmpRef = empRef,
                     UserId = userId
                 });
+
+                var payeSchemeResult = await Mediator.SendAsync(new GetPayeSchemeByRefQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    Ref = empRef
+                });
+
                 response.Data = new PayeSchemeDetailViewModel
                 {
-                    Fractions = result.Fractions,
-                    EmpRef = result.EmpRef,
-                    EmpRefAdded = result.EmpRefAddedDate
+                    Fractions = englishFractionResult.Fractions,
+                    EmpRef = englishFractionResult.EmpRef,
+                    PayeSchemeName = payeSchemeResult?.PayeScheme?.Name ?? string.Empty,
+                    EmpRefAdded = englishFractionResult.EmpRefAddedDate
                 };
                 return response;
             }

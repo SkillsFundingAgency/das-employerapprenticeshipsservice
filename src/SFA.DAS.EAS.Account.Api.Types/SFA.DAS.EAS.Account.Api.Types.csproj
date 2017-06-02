@@ -49,6 +49,7 @@
     <Compile Include="EmployerAgreementStatus.cs" />
     <Compile Include="Events\Account\AccountCreatedEvent.cs" />
     <Compile Include="Events\Account\AccountRenamedEvent.cs" />
+    <Compile Include="Events\Agreement\AgreementRemovedEvent.cs" />
     <Compile Include="Events\Agreement\AgreementSignedEvent.cs" />
     <Compile Include="Events\LegalEntity\LegalEntityCreatedEvent.cs" />
     <Compile Include="Events\Levy\LevyDeclarationUpdatedEvent.cs" />

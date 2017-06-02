@@ -12,6 +12,7 @@
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
       <Setting name="idaAudience" value="__idaAudience__" />
       <Setting name="idaTenant" value="__idaTenant__" />
+      <Setting name="InstrumentationKey" value="__AccInstrumentationKey__"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="0319EE6013CE54044F3C8189383A02C7A2C74EA1" thumbprintAlgorithm="sha1" />

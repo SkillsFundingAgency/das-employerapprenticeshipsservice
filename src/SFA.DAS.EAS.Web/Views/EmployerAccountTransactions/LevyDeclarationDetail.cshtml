@@ -37,10 +37,11 @@
                 {
                     <tr class="responsive-tr">
                         <td headers="th-ps">
-                            @aggregationLineItem.EmpRef
+                            <span>@aggregationLineItem.EmpRef</span>
+                            <span>@aggregationLineItem.PayeSchemeName</span>
                         </td>
                         <td headers="th-pd">
-                           @aggregationLineItem.PayrollDate.ToGdsFormatFull()
+                           @aggregationLineItem.PayrollDate.ToGdsFormatWithoutDayAbbrMonth()
                         </td>
                         <td headers="th-ld" class="numeric">
                             @(aggregationLineItem.Amount.ToString("C2", culture))
