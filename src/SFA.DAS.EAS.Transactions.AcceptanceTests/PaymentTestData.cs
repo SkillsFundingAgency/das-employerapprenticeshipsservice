@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
+using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.Provider.Events.Api.Types;
 using StructureMap;
 using TechTalk.SpecFlow;
@@ -65,11 +66,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests
             set => ScenarioContext.Current["Standard"] = value;
         }
 
-        public StandardsView StandardsView => new StandardsView
-        {
-            CreationDate = DateTime.Now,
-            Standards = new List<Standard> {Standard}
-        };
+        public StandardsView StandardsView => StandardObjectMother.CreateView(Standard);
         
         public Framework Framework
         {
@@ -77,11 +74,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests
             set => ScenarioContext.Current["Framework"] = value;
         }
 
-        public FrameworksView FrameworksView => new FrameworksView
-        {
-            CreatedDate = DateTime.Now,
-            Frameworks = new List<Framework> { Framework }
-        };
+        public FrameworksView FrameworksView => FrameworkObjectMother.CreateView(Framework);
 
         public Domain.Models.ApprenticeshipProvider.Provider Provider
         {
@@ -141,31 +134,11 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests
         {
             AccountId = 1L;
 
-            Apprenticeship = new Apprenticeship
-            {
-                Id = 1,
-                FirstName = "John",
-                LastName = "Doe",
-                NINumber = "AB 12 34 56 C",
-                StartDate = DateTime.Now.AddDays(20)
-            };
+            Apprenticeship = ApprenticeshipObjectMother.Create("John", "Doe");
 
-            Standard = new Standard
-            {
-                Code = 20,
-                Level = 3,
-                Title = "Testing"
-            };
+            Standard = StandardObjectMother.Create("Testing");
 
-            Framework = new Framework
-            {
-                Title = "Testing",
-                Level = 3,
-                FrameworkCode = 5,
-                ProgrammeType = 1,
-                PathwayCode = 2,
-                PathwayName = "General"
-            };
+            Framework = FrameworkObjectMother.Create("Testing", "General");
 
             Provider = new Domain.Models.ApprenticeshipProvider.Provider
             {
@@ -254,7 +227,6 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests
             };
         }
         
-
         private Domain.Models.Payments.PeriodEnd GetCurrentMonthPeriodEnd()
         {
             var repository = _container.GetInstance<IDasLevyRepository>();
