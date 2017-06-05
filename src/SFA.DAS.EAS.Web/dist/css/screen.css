@@ -4789,14 +4789,16 @@ table .float-right, h2 .float-right {
   }
 }
 
-#apprentice-details .delete-button {
+#apprentice-details .delete-button,
+#edit-apprentice .delete-button {
   background-color: #b10e1e;
   float: right;
   margin: 15px 0;
 }
 
 @media (min-width: 641px) {
-  #apprentice-details .delete-button {
+  #apprentice-details .delete-button,
+  #edit-apprentice .delete-button {
     margin: auto;
   }
 }
