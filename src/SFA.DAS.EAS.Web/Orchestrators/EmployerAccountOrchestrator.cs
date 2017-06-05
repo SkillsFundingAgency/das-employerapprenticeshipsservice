@@ -245,39 +245,5 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return response;
         }
-
-        public virtual async Task<OrchestratorResponse<NotificationSettingsViewModel>> GetNotificationSettingsViewModel(
-            string hashedAccountId, string userRef)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-
-            var response = await _mediator.SendAsync(new GetUserNotificationSettingsQuery
-            {
-                AccountId = accountId,
-                UserRef = userRef
-            });
-
-            return new OrchestratorResponse<NotificationSettingsViewModel>
-            {
-                Data = new NotificationSettingsViewModel
-                {
-                    HashedId = userRef,
-                    NotificationSettings = response.NotificationSettings
-                },
-            };
-        }
-
-        public virtual async Task UpdateNotificationSettings(
-            string hashedAccountId, string userRef, List<UserNotificationSetting> settings)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-
-            await _mediator.SendAsync(new UpdateUserNotificationSettingsCommand
-            {
-                AccountId = accountId,
-                UserRef = userRef,
-                Settings = settings
-            });          
-        }
     }
 }

@@ -18,30 +18,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
         }
 
         [Test]
-        public void ThenAccountIdMustBeSupplied()
-        {
-            //Arrange
-            var command = new UpdateUserNotificationSettingsCommand
-            {
-                UserRef = "REF",
-                Settings = new List<UserNotificationSetting>()
-            };
-
-            //Act
-            var result = _validator.Validate(command);
-
-            //Assert
-            Assert.IsFalse(result.IsValid());
-            Assert.IsTrue(result.ValidationDictionary.ContainsKey(nameof(command.AccountId)));
-        }
-
-        [Test]
         public void ThenUserRefMustBeSupplied()
         {
             //Arrange
             var command = new UpdateUserNotificationSettingsCommand
             {
-                AccountId = 1,
                 Settings = new List<UserNotificationSetting>()
             };
 
@@ -59,7 +40,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
             //Arrange
             var command = new UpdateUserNotificationSettingsCommand
             {
-                AccountId = 1,
                 UserRef = "REF",
                 Settings = null
             };

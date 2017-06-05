@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserNotificationSettings
                 .Returns(() => new ValidationResult());
 
             _repository = new Mock<IAccountRepository>();
-            _repository.Setup(x => x.GetUserLegalEntitySettings(It.IsAny<string>(), It.IsAny<long>()))
+            _repository.Setup(x => x.GetUserAccountSettings(It.IsAny<string>()))
                 .ReturnsAsync(new List<UserNotificationSetting>());
 
             _handler = new GetUserNotificationSettingsQueryHandler(_repository.Object, _validator.Object);
@@ -49,7 +49,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserNotificationSettings
             //Arrange
             var query = new GetUserNotificationSettingsQuery
             {
-                AccountId = 1,
                 UserRef = "REF"
             };
 
@@ -57,8 +56,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserNotificationSettings
             await _handler.Handle(query);
 
             //Assert
-            _repository.Verify(x => x.GetUserLegalEntitySettings(
-                It.Is<string>(s => s == "REF"), It.Is<long>(l => l == 1)));
+            _repository.Verify(x => x.GetUserAccountSettings(
+                It.Is<string>(s => s == "REF")));
         }
     }
 }

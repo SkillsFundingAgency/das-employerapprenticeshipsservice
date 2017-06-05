@@ -22,13 +22,8 @@ BEGIN
 	INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [RoleId])
 	VALUES (@accountId, @userId, @roleId);	
 
-	INSERT INTO [employer_account].[UserLegalEntitySettings] (UserId, EmployerAgreementId, ReceiveNotifications)
-	SELECT @userId, a.Id, 1
-	FROM [employer_account].[EmployerAgreement] a
-	JOIN [employer_account].[Membership] m on m.AccountId = a.AccountId AND m.UserId = @userId
-	WHERE
-	a.AccountId = @accountId 
-	AND m.UserId = @userId
+	INSERT INTO [employer_account].[UserAccountSettings] (UserId, AccountId, ReceiveNotifications)
+	VALUES (@userId, @accountId, 1)
 
 END
 GO

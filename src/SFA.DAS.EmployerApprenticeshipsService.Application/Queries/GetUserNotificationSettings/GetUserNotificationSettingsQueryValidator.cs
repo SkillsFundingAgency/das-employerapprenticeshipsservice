@@ -12,12 +12,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserNotificationSettings
 
             if(string.IsNullOrWhiteSpace(item.UserRef))
             {
-                result.AddError(nameof(item.UserRef), "UserRef has not been supplied");
-            }
-
-            if (item.AccountId < 1)
-            {
-                result.AddError(nameof(item.AccountId), "AccountId has not been supplied");
+                result.AddError(nameof(item.UserRef));
             }
 
             return result;

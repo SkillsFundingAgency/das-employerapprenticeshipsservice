@@ -376,7 +376,9 @@
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Extensions\ValidationResultExtensions.cs" />
+    <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
     <Compile Include="Validators\ChangeStatusViewModelValidator.cs" />
     <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
@@ -1030,7 +1032,7 @@
     <Content Include="Views\EmployerAccountTransactions\Index_ORG.cshtml" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
-    <Content Include="Views\EmployerAccount\NotificationSettings.cshtml" />
+    <Content Include="Views\Settings\NotificationSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

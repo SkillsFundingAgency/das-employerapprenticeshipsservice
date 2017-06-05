@@ -1,4 +1,5 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.NotificationSettingsViewModel>
+@{ViewBag.HideNav = "true"; }
 
 <form method="post">
 
@@ -27,9 +28,9 @@
                         var falseChecked = !setting.ReceiveNotifications ? "checked=\"checked\"" : "";
 
                         <tr>
-                            <td>@setting.LegalEntityName</td>
-                            <td><input type="radio" name="@setting.EmployerAgreementId" value="true" @trueChecked/></td>
-                            <td><input type="radio" name="@setting.EmployerAgreementId" value="false" @falseChecked/></td>
+                            <td>@setting.Name</td>
+                            <td><input type="radio" name="@setting.AccountId" value="true" @trueChecked/></td>
+                            <td><input type="radio" name="@setting.AccountId" value="false" @falseChecked/></td>
                         </tr>
                         
                     }
@@ -38,6 +39,10 @@
             
             
             <button type="submit" class="button">Update</button>
+            
+            <br/><br/>
+            
+            <a href="@Url.Action("Index", "Home")">Cancel</a>
 
         </div>
     </div>

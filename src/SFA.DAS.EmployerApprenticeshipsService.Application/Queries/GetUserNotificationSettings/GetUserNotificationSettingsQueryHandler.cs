@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserNotificationSettings
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var data = await _accountRepository.GetUserLegalEntitySettings(message.UserRef, message.AccountId);
+            var data = await _accountRepository.GetUserAccountSettings(message.UserRef);
 
             return new GetUserNotificationSettingsQueryResponse
             {

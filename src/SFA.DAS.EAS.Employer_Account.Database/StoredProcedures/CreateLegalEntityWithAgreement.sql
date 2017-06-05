@@ -29,8 +29,8 @@ BEGIN
 
 	EXEC [employer_account].[CreateAccountEmployerAgreement] @accountId, @employerAgreementId	
 
-	INSERT INTO [employer_account].[UserLegalEntitySettings] (UserId, EmployerAgreementId, ReceiveNotifications)
-	select m.UserId, a.Id, 1
+	INSERT INTO [employer_account].[UserAccountSettings] (UserId, AccountId, ReceiveNotifications)
+	select m.UserId, @accountId, 1
 	from [employer_account].[EmployerAgreement] a
 	join [employer_account].[Membership] m on m.AccountId = a.AccountId
 	where a.Id = @employerAgreementId

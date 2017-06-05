@@ -11,13 +11,10 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateUserNotificationSettings
             var validationResult = new ValidationResult();
 
             if (string.IsNullOrWhiteSpace(item.UserRef))
-                validationResult.AddError("UserRef", "No UserRef supplied");
-
-            if (item.AccountId < 1)
-                validationResult.AddError("AccountId", "No AccountId supplied");
+                validationResult.AddError(nameof(item.UserRef));
 
             if (item.Settings == null)
-                validationResult.AddError("Settings", "No Settings supplied");
+                validationResult.AddError(nameof(item.Settings));
 
             return validationResult;
         }

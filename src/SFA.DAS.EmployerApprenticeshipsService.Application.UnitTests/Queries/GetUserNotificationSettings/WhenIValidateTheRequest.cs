@@ -18,10 +18,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserNotificationSettings
         public void ThenUserRefMustBeSupplied()
         {
             //Arrange
-            var query = new GetUserNotificationSettingsQuery
-            {
-                AccountId = 1
-            };
+            var query = new GetUserNotificationSettingsQuery();
 
             //Act
             var result = _validator.Validate(query);
@@ -29,23 +26,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserNotificationSettings
             //Assert
             Assert.IsFalse(result.IsValid());
             Assert.IsTrue(result.ValidationDictionary.ContainsKey(nameof(query.UserRef)));
-        }
-
-        [Test]
-        public void ThenAccountIdMustBeSupplied()
-        {
-            //Arrange
-            var query = new GetUserNotificationSettingsQuery
-            {
-                UserRef = "TEST"
-            };
-
-            //Act
-            var result = _validator.Validate(query);
-
-            //Assert
-            Assert.IsFalse(result.IsValid());
-            Assert.IsTrue(result.ValidationDictionary.ContainsKey(nameof(query.AccountId)));
         }
     }
 }

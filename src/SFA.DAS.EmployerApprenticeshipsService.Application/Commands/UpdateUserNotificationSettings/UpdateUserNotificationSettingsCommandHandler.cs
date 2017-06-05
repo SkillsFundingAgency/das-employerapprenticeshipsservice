@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateUserNotificationSettings
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            await _accountRepository.UpdateUserLegalEntitySettings(message.UserRef, message.AccountId, message.Settings);
+            await _accountRepository.UpdateUserAccountSettings(message.UserRef, message.Settings);
         }
     }
 }

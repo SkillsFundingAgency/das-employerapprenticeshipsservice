@@ -10,8 +10,7 @@ BEGIN
 	WHERE AccountId = @AccountId AND UserId = @UserId;
 
 	DELETE s
-	FROM [employer_account].UserLegalEntitySettings s
-	join [employer_account].AccountEmployerAgreement a on a.EmployerAgreementId = s.EmployerAgreementId
-	where s.UserId = @UserId and a.AccountId = @AccountId
+	FROM [employer_account].[UserAccountSettings] s
+	where s.UserId = @UserId and s.Id = @AccountId
 
 END

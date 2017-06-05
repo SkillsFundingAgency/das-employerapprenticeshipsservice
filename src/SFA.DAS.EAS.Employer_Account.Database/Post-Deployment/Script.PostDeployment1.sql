@@ -111,13 +111,12 @@ IF OBJECT_ID('employer_account.GetNumberOfInvitations_ByUserId', 'P') IS NOT NUL
 -- Populate settings table for existing users --
 ------------------------------------------------
 
-if(not exists(select top 1 * from [employer_account].[UserLegalEntitySettings] ))
+if(not exists(select top 1 * from [employer_account].[UserAccountSettings] ))
 begin
 
-	insert into [employer_account].[UserLegalEntitySettings] (UserId, EmployerAgreementId, ReceiveNotifications)
+	insert into [employer_account].[UserAccountSettings] (UserId, AccountId, ReceiveNotifications)
 	select
-	m.UserId, a.Id, 1
-	from [employer_account].[EmployerAgreement] a
-	join [employer_account].[Membership] m on m.AccountId = a.AccountId
+	m.UserId, m.AccountId, 1
+	from [employer_account].[Membership] m
 
 end

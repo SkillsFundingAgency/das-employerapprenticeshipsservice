@@ -232,65 +232,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(errorResponse);
         }
 
-        [HttpGet]
-        [Route("{HashedAccountId}/notification-settings")]
-        public async Task<ActionResult> NotificationSettings(string hashedAccountId)
-        {
-            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
-            var vm = await _employerAccountOrchestrator.GetNotificationSettingsViewModel(hashedAccountId, userIdClaim);
-
-            var flashMessage = GetFlashMessageViewModelFromCookie();
-            if (flashMessage == null)
-            {
-                flashMessage = new FlashMessageViewModel
-                {
-                    Severity = FlashMessageSeverityLevel.Info,
-                    Message = "Changes to these settings won't affect service emails, such as password resets"
-                };
-            }
-
-            vm.FlashMessage = flashMessage;
-
-            return View(vm);
-        }
-
-        [HttpPost]
-        [Route("{HashedAccountId}/notification-settings")]
-        public async Task<ActionResult> NotificationSettings(string hashedAccountId, FormCollection collection)
-        {
-            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
-            var vm = await _employerAccountOrchestrator.GetNotificationSettingsViewModel(hashedAccountId, userIdClaim);
-
-            //todo: how to do this more cleanly?
-            //also, audit updates
-
-            foreach (var key in collection.Keys)
-            {
-                long k;
-                if (long.TryParse(key.ToString(), out k))
-                {                  
-                    var setting = vm.Data.NotificationSettings.FirstOrDefault(x => x.EmployerAgreementId == k);
-                    if (setting != null)
-                    {
-                        setting.ReceiveNotifications = bool.Parse(collection[k.ToString()]);
-                    }
-                }
-            }
-
-            await _employerAccountOrchestrator.UpdateNotificationSettings(hashedAccountId, userIdClaim,
-                vm.Data.NotificationSettings);
-
-            var flashMessage = new FlashMessageViewModel
-            {
-                Severity = FlashMessageSeverityLevel.Success,
-                Message = "Settings updated"
-            };
-
-            AddFlashMessageToCookie(flashMessage);
-
-            return RedirectToAction("NotificationSettings", new { HashedAccountId = hashedAccountId });
-        }
-
         private string GetUserId()
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");

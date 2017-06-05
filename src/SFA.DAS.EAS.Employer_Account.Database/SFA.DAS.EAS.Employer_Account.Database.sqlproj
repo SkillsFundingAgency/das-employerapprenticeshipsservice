@@ -118,11 +118,11 @@
     <Build Include="StoredProcedures\UpdatePayeName_ByRef.sql" />
     <Build Include="StoredProcedures\RemoveLegalEntityFromAccount.sql" />
     <Build Include="StoredProcedures\GetEmployerAgreementsToRemove_ByAccountId.sql" />
-    <Build Include="Tables\UserLegalEntitySettings.sql" />
+    <Build Include="Tables\UserAccountSettings.sql" />
     <Build Include="StoredProcedures\RemoveMembership.sql" />
-    <Build Include="StoredProcedures\GetUserLegalEntitySettings.sql" />
+    <Build Include="StoredProcedures\GetUserAccountSettings.sql" />
     <Build Include="UserDefinedTypes\UserNotificationSettingsTable.sql" />
-    <Build Include="StoredProcedures\UpdateUserLegalEntitySettings.sql" />
+    <Build Include="StoredProcedures\UpdateUserAccountSettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />

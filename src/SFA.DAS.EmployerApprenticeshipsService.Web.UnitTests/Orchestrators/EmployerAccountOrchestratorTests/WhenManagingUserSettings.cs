@@ -17,26 +17,21 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
     [TestFixture]
     public class WhenManagingUserSettings
     {
-        private EmployerAccountOrchestrator _orchestrator;
+        private UserSettingsOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
-        private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private Mock<IHashingService> _hashingService;
-
-        private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILogger>();
-            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
-            _configuration = new EmployerApprenticeshipsServiceConfiguration();
             _hashingService = new Mock<IHashingService>();
 
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(() => 123);
 
-            _orchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration, _hashingService.Object);
+            _orchestrator = new UserSettingsOrchestrator(_mediator.Object, _logger.Object, _hashingService.Object);
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserNotificationSettingsQuery>()))
                 .ReturnsAsync(new GetUserNotificationSettingsQueryResponse
@@ -52,11 +47,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         public async Task ThenTheMediatorIsCalledToRetrieveSettings()
         {
             //Act
-            await _orchestrator.GetNotificationSettingsViewModel("", "USERREF");
+            await _orchestrator.GetNotificationSettingsViewModel("USERREF");
 
             //Assert
             _mediator.Verify(x => x.SendAsync(
-                It.Is<GetUserNotificationSettingsQuery>(s => s.AccountId == 123 && s.UserRef == "USERREF")),
+                It.Is<GetUserNotificationSettingsQuery>(s => s.UserRef == "USERREF")),
                 Times.Once);
         }
 
@@ -67,13 +62,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             var settings = new List<UserNotificationSetting>();
 
             //Act
-            await _orchestrator.UpdateNotificationSettings("", "USERREF", settings);
+            await _orchestrator.UpdateNotificationSettings("USERREF", settings);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(
                 It.Is<UpdateUserNotificationSettingsCommand>(
-                    s=> s.AccountId == 123
-                    && s.UserRef == "USERREF"
+                    s => s.UserRef == "USERREF"
                     && s.Settings == settings)
                 ), Times.Once);
 

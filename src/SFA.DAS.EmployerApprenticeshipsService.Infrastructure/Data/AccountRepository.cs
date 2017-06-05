@@ -191,16 +191,15 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task<List<UserNotificationSetting>> GetUserLegalEntitySettings(string userRef, long accountId)
+        public async Task<List<UserNotificationSetting>> GetUserAccountSettings(string userRef)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@UserRef", Guid.Parse(userRef), DbType.Guid);
-                parameters.Add("@AccountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<UserNotificationSetting>(
-                    sql: "[employer_account].[GetUserLegalEntitySettings]",
+                    sql: "[employer_account].[GetUserAccountSettings]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -208,7 +207,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToList();
         }
 
-        public async Task UpdateUserLegalEntitySettings(string userRef, long accountId, List<UserNotificationSetting> settings)
+        public async Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings)
         {
             var settingsDataTable = GenerateSettingsDataTable(settings);
 
@@ -216,11 +215,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@UserRef", Guid.Parse(userRef), DbType.Guid);
-                parameters.Add("@AccountId", accountId, DbType.Int64);
                 parameters.Add("@NotificationSettings", settingsDataTable.AsTableValuedParameter("employer_account.UserNotificationSettingsTable"));
 
                 return await c.ExecuteAsync(
-                    sql: "[employer_account].[UpdateUserLegalEntitySettings]",
+                    sql: "[employer_account].[UpdateUserAccountSettings]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -230,13 +228,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             var result = new DataTable();
 
-            result.Columns.Add("EmployerAgreementId", typeof(long));
+            result.Columns.Add("AccountId", typeof(long));
             result.Columns.Add("ReceiveNotifications", typeof(bool));
 
             foreach (var setting in settings)
             {
                 var row = result.NewRow();
-                row["EmployerAgreementId"] = setting.EmployerAgreementId;
+                row["AccountId"] = setting.AccountId;
                 row["ReceiveNotifications"] = setting.ReceiveNotifications;
                 result.Rows.Add(row);
             }

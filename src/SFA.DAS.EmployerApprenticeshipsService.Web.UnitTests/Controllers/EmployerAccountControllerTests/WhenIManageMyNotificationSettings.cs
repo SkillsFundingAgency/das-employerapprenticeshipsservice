@@ -21,8 +21,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
     public class WhenIManageMyNotificationSettings : ControllerTestBase
     {
-        private EmployerAccountController _employerAccountController;
-        private Mock<EmployerAccountOrchestrator> _orchestrator;
+        private SettingsController _controller;
+        private Mock<UserSettingsOrchestrator> _orchestrator;
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         {
             base.Arrange(ExpectedRedirectUrl);
 
-            _orchestrator = new Mock<EmployerAccountOrchestrator>();
+            _orchestrator = new Mock<UserSettingsOrchestrator>();
 
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             var logger = new Mock<ILogger>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
-            _orchestrator.Setup(x => x.GetNotificationSettingsViewModel(It.IsAny<string>(), It.IsAny<string>()))
+            _orchestrator.Setup(x => x.GetNotificationSettingsViewModel(It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<NotificationSettingsViewModel>
                 {
                     Status = HttpStatusCode.OK,
@@ -51,11 +51,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             _orchestrator.Setup(x => x.UpdateNotificationSettings(
                 It.IsAny<string>(),
-                It.IsAny<string>(),
                 It.IsAny<List<UserNotificationSetting>>()))
                 .Returns(() => Task.FromResult(new Unit()));
 
-            _employerAccountController = new EmployerAccountController(_owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, logger.Object, _flashMessage.Object)
+            _controller = new SettingsController(_owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, logger.Object, _flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
@@ -69,11 +68,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
 
             //Act
-            await _employerAccountController.NotificationSettings("ABC123");
+            await _controller.NotificationSettings();
 
             //Assert
             _orchestrator.Verify(x => x.GetNotificationSettingsViewModel(
-                It.Is<string>(accountId => accountId == "ABC123"),
                 It.Is<string>(userRef => userRef == "TEST")
             ), Times.Once);
         }
@@ -87,11 +85,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             var postedData = new FormCollection();
 
             //Act
-            await _employerAccountController.NotificationSettings("ABC123", postedData);
+            await _controller.NotificationSettings(postedData);
 
             //Assert
             _orchestrator.Verify(x => x.UpdateNotificationSettings(
-                It.Is<string>(accountId => accountId == "ABC123"),
                 It.Is<string>(userRef => userRef == "TEST"),
                 It.IsAny<List<UserNotificationSetting>>()),
                 Times.Once);

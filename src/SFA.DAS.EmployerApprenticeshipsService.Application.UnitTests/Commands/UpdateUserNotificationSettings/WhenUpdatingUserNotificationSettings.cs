@@ -25,9 +25,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
                 .Returns(() => new ValidationResult());
 
             _repository = new Mock<IAccountRepository>();
-            _repository.Setup(x => x.UpdateUserLegalEntitySettings(
+            _repository.Setup(x => x.UpdateUserAccountSettings(
                 It.IsAny<string>(),
-                It.IsAny<long>(),
                 It.IsAny<List<UserNotificationSetting>>()
             )).Returns(() => Task.FromResult(new Unit()));
 
@@ -40,7 +39,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
             //Arrange
             var command = new UpdateUserNotificationSettingsCommand
             {
-                AccountId = 1,
                 UserRef = "REF",
                 Settings = new List<UserNotificationSetting>()
             };
@@ -58,7 +56,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
             //Arrange
             var command = new UpdateUserNotificationSettingsCommand
             {
-                AccountId = 1,
                 UserRef = "REF",
                 Settings = new List<UserNotificationSetting>()
             };
@@ -67,9 +64,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
             await _handler.Handle(command);
 
             //Assert
-            _repository.Verify(x => x.UpdateUserLegalEntitySettings(
+            _repository.Verify(x => x.UpdateUserAccountSettings(
                 It.Is<string>(s => s == "REF"),
-                It.Is<long>(l => l == 1),
                 It.IsAny<List<UserNotificationSetting>>()
                 ), Times.Once);
         }
