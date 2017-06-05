@@ -13,7 +13,6 @@
             <span class="heading-secondary">@Model.Data.Name</span> 
             Remove organisation
         </h1>
-        <p class="lede">@Model.Data.Name will end its agreement with the <abbr title="Education and Skills Funding Agency">ESFA</abbr>.</p>
         <form method="post" action="@Url.Action("RemoveOrganisation","EmployerAgreement")">
             @Html.AntiForgeryToken()
             <input type="hidden" value="@Model.Data.HashedAccountId" name="HashedAccountId" id="HashedAccountId"/>
