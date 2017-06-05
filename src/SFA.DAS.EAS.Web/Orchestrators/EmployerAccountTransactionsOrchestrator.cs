@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ExternalUserId = externalUserId,
                 });
 
-                var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.CourseStartDate });
+                var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.PathwayName, x.CourseStartDate });
 
                 var coursePaymentSummaries = courseGroups.Select(x =>
                 {
@@ -96,6 +96,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         CourseName = x.Key.CourseName,
                         CourseLevel = x.Key.CourseLevel,
+                        PathwayName = x.Key.PathwayName,
+                        PathwayCode = levyPayments.Max(p => p.PathwayCode),
                         CourseStartDate = x.Key.CourseStartDate,
                         LevyPaymentAmount = levyPayments.Sum(p => p.LineAmount),
                         EmployerCoInvestmentAmount = levyPayments.Sum(p => p.EmployerCoInvestmentAmount),
@@ -278,7 +280,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
         
         public virtual async Task<OrchestratorResponse<CoursePaymentDetailsViewModel>> GetCoursePaymentSummary(
-            string hashedAccountId, long ukprn, string courseName, int courseLevel,
+            string hashedAccountId, long ukprn, string courseName, int courseLevel, int? pathwayCode,
             DateTime fromDate, DateTime toDate, string externalUserId)
         {
             try
@@ -289,6 +291,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     UkPrn = ukprn,
                     CourseName = courseName,
                     CourseLevel = courseLevel,
+                    PathwayCode = pathwayCode,
                     FromDate = fromDate,
                     ToDate = toDate,
                     ExternalUserId = externalUserId
@@ -319,6 +322,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         ProviderName = data.ProviderName,
                         CourseName = data.CourseName,
                         CourseLevel = data.CourseLevel,
+                        PathwayName = data.PathwayName,
                         PaymentDate = data.DateCreated,
                         LevyPaymentsTotal = apprenticePayments.Sum(p => p.LevyPaymentAmount),
                         SFACoInvestmentTotal = apprenticePayments.Sum(p => p.SFACoInvestmentAmount),

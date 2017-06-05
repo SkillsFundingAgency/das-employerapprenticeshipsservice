@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             var transactions = await _dasLevyService.GetAccountCoursePaymentsByDateRange<PaymentTransactionLine>
-            (accountId, message.UkPrn, message.CourseName, message.CourseLevel, message.FromDate, message.ToDate,
+            (accountId, message.UkPrn, message.CourseName, message.CourseLevel, message.PathwayCode, message.FromDate, message.ToDate,
                 message.ExternalUserId);
 
             if (!transactions.Any())
@@ -56,6 +56,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments
                 ProviderName = firstTransaction.ProviderName,
                 CourseName = firstTransaction.CourseName,
                 CourseLevel = firstTransaction.CourseLevel,
+                PathwayName = firstTransaction.PathwayName,
                 TransactionDate = firstTransaction.TransactionDate,
                 DateCreated = firstTransaction.DateCreated,
                 Transactions = transactions.ToList(),

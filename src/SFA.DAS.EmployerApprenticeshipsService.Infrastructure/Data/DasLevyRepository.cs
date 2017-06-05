@@ -227,6 +227,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@FrameworkCode", details.FrameworkCode, DbType.Int32);
                 parameters.Add("@ProgrammeType", details.ProgrammeType, DbType.Int32);
                 parameters.Add("@PathwayCode", details.PathwayCode, DbType.Int32);
+                parameters.Add("@PathwayName", details.PathwayName, DbType.String);
                 parameters.Add("@CourseName", details.CourseName, DbType.String);
                 parameters.Add("@ApprenticeName", details.ApprenticeName, DbType.String);
                 parameters.Add("@ApprenticeNINumber", details.ApprenticeNINumber, DbType.String);

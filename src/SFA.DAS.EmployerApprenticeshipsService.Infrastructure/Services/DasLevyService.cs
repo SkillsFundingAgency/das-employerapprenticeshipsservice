@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         }
 
         public async Task<ICollection<T>> GetAccountCoursePaymentsByDateRange<T>(
-            long accountId, long ukprn, string courseName, int courseLevel, DateTime fromDate, 
+            long accountId, long ukprn, string courseName, int courseLevel, int? pathwayCode, DateTime fromDate, 
             DateTime toDate, string externalUserId) where T : TransactionLine
         {
             var result = await _mediator.SendAsync(new GetAccountCoursePaymentsQuery
@@ -78,6 +78,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 UkPrn = ukprn,
                 CourseName = courseName,
                 CourseLevel = courseLevel,
+                PathwayCode = pathwayCode,
                 FromDate = fromDate,
                 ToDate = toDate,
                 ExternalUserId = externalUserId

@@ -19,8 +19,8 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCoursePa
             _hmrcDateService = hmrcDateService;
         }
 
-    public async Task<GetAccountCoursePaymentsResponse> Handle(GetAccountCoursePaymentsQuery message)
-    {
+        public async Task<GetAccountCoursePaymentsResponse> Handle(GetAccountCoursePaymentsQuery message)
+        {
             var validationResult = await _validator.ValidateAsync(message);
 
             if (!validationResult.IsValid())
@@ -33,6 +33,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCoursePa
                 message.UkPrn,
                 message.CourseName,
                 message.CourseLevel,
+                message.PathwayCode,
                 message.FromDate,
                 message.ToDate);
 
