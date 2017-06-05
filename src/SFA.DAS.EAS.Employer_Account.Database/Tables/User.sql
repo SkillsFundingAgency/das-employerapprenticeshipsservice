@@ -6,3 +6,6 @@
     [FirstName] NVARCHAR(MAX) NULL, 
     [LastName] NVARCHAR(MAX) NULL
 )
+GO
+
+CREATE NONCLUSTERED INDEX [IX_User_UserRef] ON [employer_account].[User] ([UserRef]) WITH (ONLINE = ON)
