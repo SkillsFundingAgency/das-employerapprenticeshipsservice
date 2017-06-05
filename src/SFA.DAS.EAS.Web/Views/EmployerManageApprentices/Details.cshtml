@@ -37,14 +37,14 @@
             else if (Model.Data.HasDataLockError)
             {
                 <div class="panel panel-border-wide">
-                    <h3>
-                        ILR data mismatch
-                    </h3>
+                    <h3 class="heading-small">Changes requested</h3>
                     <p>
-                        The apprentice's details are different in your organisation's ILR submission.
-                        This may result in a payment failure.
+                       The apprentice's training provider has asked you to stop this apprentice and then add them to a 
+                        new cohort using updated training details.
                     </p>
-                        <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
+                    <p>
+                        <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details of request" class="">View details of request</a>
+                    </p>
                 </div>
             }
 
