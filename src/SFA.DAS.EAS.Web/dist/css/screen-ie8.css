@@ -4190,7 +4190,8 @@ table .float-right, h2 .float-right {
   margin-left: 2%;
 }
 
-#apprentice-details .delete-button {
+#apprentice-details .delete-button,
+#edit-apprentice .delete-button {
   background-color: #b10e1e;
   float: right;
   margin: 15px 0;
