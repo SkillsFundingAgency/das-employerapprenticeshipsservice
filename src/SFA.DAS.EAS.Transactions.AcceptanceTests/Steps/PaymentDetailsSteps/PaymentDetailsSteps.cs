@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             _paymentEventsApi = new Mock<IPaymentsEventsApiClient>();
             _employerCommitmentApi = new Mock<IEmployerCommitmentApi>();
             _apprenticeshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
-            
+
             _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
             _container.Inject(typeof(IPaymentsEventsApiClient), _paymentEventsApi.Object);
             _container.Inject(typeof(IEmployerCommitmentApi), _employerCommitmentApi.Object);
@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         [Given(@"I have an apprenticeship")]
         public void GivenIHaveAnApprenticeship()
         {
-            var accountId = (long) ScenarioContext.Current["AccountId"];
+            var accountId = (long)ScenarioContext.Current["AccountId"];
 
             var apprenticeship = new Apprenticeship
             {
@@ -104,6 +104,28 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
                 });
         }
 
+        [Given(@"I have a framework")]
+        public void GivenIHaveAFramework()
+        {
+            var framework = new Framework
+            {
+                Title = "Testing",
+                Level = 3,
+                FrameworkCode = 5,
+                ProgrammeType = 1,
+                PathwayCode = 2,
+                PathwayName = "General"
+            };
+            ScenarioContext.Current["framework"] = framework;
+
+            _apprenticeshipInfoService.Setup(x => x.GetFrameworksAsync(false))
+                .ReturnsAsync(new FrameworksView
+                {
+                    CreatedDate = DateTime.Now,
+                    Frameworks = new List<Framework> { framework }
+                });
+        }
+
         [Given(@"I have a provider")]
         public void GivenIHaveAProvider()
         {
@@ -112,24 +134,24 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             ScenarioContext.Current["provider"] = provider;
 
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
-                                      .Returns(new ProvidersView
-                                      {
-                                          CreatedDate = DateTime.Now,
-                                          Provider = provider
-                                      });
+                .Returns(new ProvidersView
+                {
+                    CreatedDate = DateTime.Now,
+                    Provider = provider
+                });
         }
 
-        [When(@"I make a payment for the apprenticeship")]
-        public void WhenIMakeAPaymentForTheApprenticeship()
+        [When(@"I make a payment for the apprenticeship standard")]
+        public void WhenIMakeAPaymentForTheApprenticeshipStandard()
         {
-            var standard = (Standard) ScenarioContext.Current["standard"];
+            var standard = (Standard)ScenarioContext.Current["standard"];
             var apprenticeship = (Apprenticeship)ScenarioContext.Current["apprenticeship"];
             var accountId = (long)ScenarioContext.Current["AccountId"];
 
             var dasLevyRepository = _container.GetInstance<IDasLevyRepository>();
-            
+
             var periodEnd = GetCurrentMonthPeriodEnd(dasLevyRepository);
-            
+
             ScenarioContext.Current["periodEnd"] = periodEnd;
 
             //Simulating a payment for last month fee of a course that has been submitted this month 
@@ -163,6 +185,54 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1))
                 .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment> { Items = new[] { payment } });
         }
+
+        [When(@"I make a payment for the apprenticeship framework")]
+        public void WhenIMakeAPaymentForTheApprenticeshipFramework()
+        {
+            var framework = (Framework)ScenarioContext.Current["framework"];
+            var apprenticeship = (Apprenticeship)ScenarioContext.Current["apprenticeship"];
+            var accountId = (long)ScenarioContext.Current["AccountId"];
+
+            var dasLevyRepository = _container.GetInstance<IDasLevyRepository>();
+
+            var periodEnd = GetCurrentMonthPeriodEnd(dasLevyRepository);
+
+            ScenarioContext.Current["periodEnd"] = periodEnd;
+
+            //Simulating a payment for last month fee of a course that has been submitted this month 
+            var deliveryDate = DateTime.Now.AddMonths(-1);
+            var collectionDate = DateTime.Now;
+
+            ScenarioContext.Current["paymentDeliveryDate"] = deliveryDate;
+            ScenarioContext.Current["paymentCollectionDate"] = collectionDate;
+
+            //Creates a payment that has been submitted for this month
+            var payment = new Provider.Events.Api.Types.Payment
+            {
+                Id = Guid.NewGuid().ToString(),
+                Ukprn = 100,
+                FrameworkCode = framework.FrameworkCode,
+                ProgrammeType = framework.ProgrammeType,
+                PathwayCode = framework.PathwayCode,
+                ApprenticeshipId = apprenticeship.Id,
+                DeliveryPeriod = new CalendarPeriod { Month = deliveryDate.Month, Year = deliveryDate.Year },
+                Amount = 200,
+                CollectionPeriod = new NamedCalendarPeriod { Id = periodEnd.Id, Month = collectionDate.Month, Year = collectionDate.Year },
+                TransactionType = TransactionType.Learning,
+                EvidenceSubmittedOn = DateTime.Now.AddDays(-5),
+                Uln = 123,
+                EmployerAccountVersion = "1.0",
+                EmployerAccountId = accountId.ToString(),
+                FundingSource = FundingSource.Levy,
+                ApprenticeshipVersion = "1.0"
+            };
+
+            ScenarioContext.Current["payment"] = payment;
+
+            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1))
+                .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment> { Items = new[] { payment } });
+        }
+
 
         [When(@"I make a co-investment payment for the apprenticeship")]
         public void WhenIMakeACo_InvestmentPaymentForTheApprenticeship()
@@ -201,7 +271,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
                 EmployerAccountId = accountId.ToString(),
                 FundingSource = FundingSource.Levy,
                 ApprenticeshipVersion = "1.0"
-                
+
             };
 
             var sfaPayment = new Provider.Events.Api.Types.Payment
@@ -250,11 +320,10 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
                 .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment> { Items = new[] { payment, sfaPayment, employerPayment } });
         }
 
-
         [When(@"payment details are updated")]
         public void WhenPaymentDetailsAreUpdated()
         {
-            var accountId = (long) ScenarioContext.Current["AccountId"];
+            var accountId = (long)ScenarioContext.Current["AccountId"];
             var mediator = _container.GetInstance<IMediator>();
             var periodEnd = (PeriodEnd)ScenarioContext.Current["periodEnd"];
 
@@ -265,24 +334,24 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
                 PaymentUrl = "test"
             }).Wait();
         }
-        
+
         [Then(@"the updated payment details should be stored")]
         public void ThenTheUpdatedPaymentDetailsShouldBeStored()
         {
-            var collectionDate = (DateTime) ScenarioContext.Current["paymentCollectionDate"];
+            var collectionDate = (DateTime)ScenarioContext.Current["paymentCollectionDate"];
             var transactionMonthStart = new DateTime(collectionDate.Year, collectionDate.Month, 1, 0, 0, 0);
             var transactionMonthEnd = new DateTime(
-                collectionDate.Year, 
-                collectionDate.Month, 
+                collectionDate.Year,
+                collectionDate.Month,
                 DateTime.DaysInMonth(collectionDate.Year, collectionDate.Month),
-                23,59,59);
+                23, 59, 59);
 
 
             var accountId = (long)ScenarioContext.Current["AccountId"];
             var payment = (Provider.Events.Api.Types.Payment)ScenarioContext.Current["payment"];
 
             var repository = _container.GetInstance<ITransactionRepository>();
-            
+
             var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, payment.Ukprn, transactionMonthStart, transactionMonthEnd).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
@@ -293,7 +362,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             Assert.AreEqual(payment.Ukprn, paymentTransaction.UkPrn);
             Assert.AreEqual(payment.CollectionPeriod.Id, paymentTransaction.PeriodEnd);
         }
-        
+
         [Then(@"the apprenticeship course details are stored")]
         public void ThenTheApprenticeshipCourseDetailsAreStored()
         {
@@ -357,7 +426,6 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             Assert.AreEqual(employerPayment.Amount * -1, paymentTransaction.EmployerCoInvestmentAmount);
         }
 
-
         [Then(@"the apprenticeship learner details are stored")]
         public void ThenTheApprenticeshipLearnerDetailsAreStored()
         {
@@ -373,7 +441,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
                 23, 59, 59);
 
             var payment = (Provider.Events.Api.Types.Payment)ScenarioContext.Current["payment"];
-          
+
             var repository = _container.GetInstance<ITransactionRepository>();
 
             var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, payment.Ukprn, transactionMonthStart, transactionMonthEnd).Result;
@@ -383,12 +451,35 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             Assert.AreEqual($"{apprenticeship.FirstName} {apprenticeship.LastName}", paymentTransaction.ApprenticeName);
             Assert.AreEqual(apprenticeship.NINumber, paymentTransaction.ApprenticeNINumber);
         }
-        
+
+        [Then(@"the apprenticeship pathway details are stored")]
+        public void ThenTheApprenticeshipPathwayDetailsAreStored()
+        {
+            var accountId = (long)ScenarioContext.Current["AccountId"];
+            var framework = (Framework)ScenarioContext.Current["framework"];
+            var collectionDate = (DateTime)ScenarioContext.Current["paymentCollectionDate"];
+            var transactionMonthStart = new DateTime(collectionDate.Year, collectionDate.Month, 1);
+            var transactionMonthEnd = new DateTime(
+                collectionDate.Year,
+                collectionDate.Month,
+                DateTime.DaysInMonth(collectionDate.Year, collectionDate.Month),
+                23, 59, 59);
+            var payment = (Provider.Events.Api.Types.Payment)ScenarioContext.Current["payment"];
+
+            var repository = _container.GetInstance<ITransactionRepository>();
+
+            var transactions = repository.GetAccountTransactionByProviderAndDateRange(accountId, payment.Ukprn, transactionMonthStart, transactionMonthEnd).Result;
+
+            var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
+
+            Assert.AreEqual(framework.PathwayName, paymentTransaction.PathwayName);
+        }
+
         private static void RegisterMapper()
         {
             var profiles = Assembly.Load("SFA.DAS.EAS.Infrastructure").GetTypes()
-                           .Where(t => typeof(Profile).IsAssignableFrom(t))
-                           .Select(t => (Profile)Activator.CreateInstance(t)).ToList();
+                .Where(t => typeof(Profile).IsAssignableFrom(t))
+                .Select(t => (Profile)Activator.CreateInstance(t)).ToList();
 
             var config = new MapperConfiguration(cfg =>
             {
@@ -416,7 +507,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             {
                 Id = DateTime.Now.ToString("ddmmyyHHMMss"),
                 CalendarPeriodMonth = DateTime.Now.Month,
-                CalendarPeriodYear = DateTime.Now.Year ,
+                CalendarPeriodYear = DateTime.Now.Year,
                 CompletionDateTime = DateTime.Now,
                 AccountDataValidAt = DateTime.Now,
                 CommitmentDataValidAt = DateTime.Now,

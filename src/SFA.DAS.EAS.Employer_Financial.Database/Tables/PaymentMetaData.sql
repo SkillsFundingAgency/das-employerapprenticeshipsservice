@@ -6,6 +6,7 @@
     [FrameworkCode] INT NULL, 	
     [ProgrammeType] INT NULL, 
     [PathwayCode] INT NULL, 
+	[PathwayName] VARCHAR(MAX) NULL,
     [ApprenticeshipCourseName] VARCHAR(MAX) NULL, 
 	[ApprenticeshipCourseStartDate] DATETIME NULL, 
 	[ApprenticeshipCourseLevel] INT NULL, 

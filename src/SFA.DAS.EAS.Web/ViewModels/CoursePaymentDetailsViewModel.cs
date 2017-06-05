@@ -7,6 +7,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
     {
         public string CourseName { get; set; }
         public int? CourseLevel { get; set; }
+        public string PathwayName { get; set; }
         public string ProviderName { get; set; }
         public DateTime PaymentDate { get; set; }
 

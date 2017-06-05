@@ -21,6 +21,7 @@
 	@FrameworkCode as INT,
 	@ProgrammeType as INT,
 	@PathwayCode as INT,
+	@PathwayName as VARCHAR(MAX),
 	@CourseName as VARCHAR(MAX),
 	@ApprenticeName as NVARCHAR(MAX),
 	@ApprenticeNINumber as VARCHAR(MAX),
@@ -34,6 +35,7 @@ INSERT INTO [employer_financial].[PaymentMetaData]
 			,FrameworkCode			
 			,ProgrammeType
 			,PathwayCode
+			,PathwayName
 			,ApprenticeshipCourseName
 			,ApprenticeName
 			,ApprenticeNINumber
@@ -45,6 +47,7 @@ INSERT INTO [employer_financial].[PaymentMetaData]
 			,@FrameworkCode			
 			,@ProgrammeType
 			,@PathwayCode
+			,@PathwayName
 			,@CourseName
 			,@ApprenticeName
 			,@ApprenticeNINumber

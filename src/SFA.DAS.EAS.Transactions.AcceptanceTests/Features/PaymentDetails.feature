@@ -9,7 +9,7 @@ Scenario: Payment details refreshed
 	And I have an apprenticeship	
 	And I have a standard
 	And I have a provider
-	When I make a payment for the apprenticeship     
+	When I make a payment for the apprenticeship standard    
 	And payment details are updated
 	Then the updated payment details should be stored
 
@@ -18,9 +18,19 @@ Scenario: Payment course details stored
 	And I have an apprenticeship	
 	And I have a standard
 	And I have a provider
-	When I make a payment for the apprenticeship     
+	When I make a payment for the apprenticeship standard        
 	And payment details are updated
 	Then the apprenticeship course details are stored
+
+	Scenario: Payment pathway details stored
+	Given I have an account
+	And I have an apprenticeship	
+	And I have a framework
+	And I have a provider
+	When I make a payment for the apprenticeship framework      
+	And payment details are updated
+	Then the apprenticeship pathway details are stored
+
 
 Scenario: Co-investment Payment course details stored
 	Given I have an account
@@ -36,6 +46,6 @@ Scenario: Payment learner details stored
 	And I have an apprenticeship	
 	And I have a standard
 	And I have a provider
-	When I make a payment for the apprenticeship     
+	When I make a payment for the apprenticeship standard       
 	And payment details are updated
 	Then the apprenticeship learner details are stored	

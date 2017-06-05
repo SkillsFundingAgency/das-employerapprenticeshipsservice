@@ -14,15 +14,17 @@ namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
         private readonly Policy TooManyRequestsPolicy;
         private readonly Policy ServiceUnavailablePolicy;
         private readonly Policy InternalServerErrorPolicy;
+        private readonly Policy RequestTimeoutPolicy;
 
         public HmrcExecutionPolicy(ILogger logger)
         {
             _logger = logger;
 
             TooManyRequestsPolicy = Policy.Handle<TooManyRequestsException>().WaitAndRetryForeverAsync((i) => new TimeSpan(0, 0, 10), (ex, ts) => OnRetryableFailure(ex));
+            RequestTimeoutPolicy = Policy.Handle<RequestTimeOutException>().WaitAndRetryForeverAsync((i) => new TimeSpan(0, 0, 10), (ex, ts) => OnRetryableFailure(ex));
             ServiceUnavailablePolicy = CreateAsyncRetryPolicy<ServiceUnavailableException>(5, new TimeSpan(0, 0, 10), OnRetryableFailure);
             InternalServerErrorPolicy = CreateAsyncRetryPolicy<InternalServerErrorException>(5, new TimeSpan(0, 0, 10), OnRetryableFailure);
-            RootPolicy = Policy.WrapAsync(TooManyRequestsPolicy, ServiceUnavailablePolicy, InternalServerErrorPolicy);
+            RootPolicy = Policy.WrapAsync(TooManyRequestsPolicy, ServiceUnavailablePolicy, InternalServerErrorPolicy, RequestTimeoutPolicy);
         }
 
         protected override T OnException<T>(Exception ex)
