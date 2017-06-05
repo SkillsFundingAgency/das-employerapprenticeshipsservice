@@ -246,7 +246,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<NotificationSettingsViewModel>> GetNotificationSettingsViewModel(
+        public virtual async Task<OrchestratorResponse<NotificationSettingsViewModel>> GetNotificationSettingsViewModel(
             string hashedAccountId, string userRef)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
@@ -267,7 +267,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task UpdateNotificationSettings(
+        public virtual async Task UpdateNotificationSettings(
             string hashedAccountId, string userRef, List<UserNotificationSetting> settings)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);

@@ -143,6 +143,7 @@
     <Compile Include="Controllers\BaseControllerTests\WhenOnActionExecuting.cs" />
     <Compile Include="Controllers\BaseControllerTests\WhenStoringFlashMessages.cs" />
     <Compile Include="Controllers\ControllerTestBase.cs" />
+    <Compile Include="Controllers\EmployerAccountControllerTests\WhenIManageMyNotificationSettings.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIRenameAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenICreateAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIHaveSelectedAnEmployer.cs" />
