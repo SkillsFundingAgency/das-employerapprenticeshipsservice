@@ -262,6 +262,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var vm = await _employerAccountOrchestrator.GetNotificationSettingsViewModel(hashedAccountId, userIdClaim);
 
             //todo: how to do this more cleanly?
+            //also, audit updates
 
             foreach (var key in collection.Keys)
             {

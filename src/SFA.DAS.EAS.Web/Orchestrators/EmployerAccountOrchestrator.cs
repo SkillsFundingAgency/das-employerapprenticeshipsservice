@@ -32,9 +32,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
         //Needed for tests
-        protected EmployerAccountOrchestrator(IHashingService hashingService)
+        protected EmployerAccountOrchestrator()
         {
-            _hashingService = hashingService;
         }
 
         public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieStorageService<EmployerAccountData> cookieService,
