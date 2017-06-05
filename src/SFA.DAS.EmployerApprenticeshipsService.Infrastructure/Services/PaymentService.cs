@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                         payment.ProgrammeType.Value,
                         payment.PathwayCode.Value);
 
-                    payment.CourseName = framework?.Title;
+                    payment.CourseName = framework?.FrameworkName;
                     payment.CourseLevel = framework?.Level;
                     payment.PathwayName = framework?.PathwayName;
                 }
