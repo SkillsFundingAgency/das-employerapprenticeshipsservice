@@ -391,7 +391,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             {
                 Id = "10",
                 Code = 10,
-                Title = StandardCourseName
+                CourseName = StandardCourseName
             };
 
             _apprenticeship = new Apprenticeship

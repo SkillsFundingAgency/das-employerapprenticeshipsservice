@@ -133,6 +133,7 @@ namespace SFA.DAS.EAS.Application
                     Code = long.Parse(x.Id),
                     Level = x.Level,
                     Title = GetTitle(x.Title, x.Level),
+                    CourseName = x.Title, 
                     Duration = new Duration
                     {
                         From = x.TypicalLength.From,

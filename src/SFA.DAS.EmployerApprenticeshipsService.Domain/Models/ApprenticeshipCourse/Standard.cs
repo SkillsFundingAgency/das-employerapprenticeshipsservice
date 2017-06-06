@@ -7,6 +7,7 @@ namespace SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse
         public string Id { get; set; }
         public long Code { get; set; }
         public string Title { get; set; }
+        public string CourseName { get; set; }
         public int Level { get; set; }
         public Duration Duration { get; set; }
         public int MaxFunding { get; set; }
