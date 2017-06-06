@@ -11,9 +11,8 @@ BEGIN
 	FROM [employer_account].[UserAccountSettings] s
 	join [employer_account].[Account] a on a.Id = s.AccountId
 	join [employer_account].[User] u on u.Id = s.UserId
-	join @NotificationSettings updated on updated.[AccountId] = s.AccountId
+	join @NotificationSettings updated on updated.AccountId = s.AccountId
 	where
 	u.UserRef = @UserRef
-	and a.Id = s.AccountId
 
 END

@@ -8,6 +8,7 @@ BEGIN
 	select
 	s.Id,
 	s.AccountId,
+	a.HashedId as HashedAccountId,
 	s.UserId,
 	a.[Name],
 	s.ReceiveNotifications

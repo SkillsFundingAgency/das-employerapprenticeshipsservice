@@ -7,8 +7,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserNotificationSettings
 {
     public class GetUserNotificationSettingsQueryHandler: IAsyncRequestHandler<GetUserNotificationSettingsQuery,GetUserNotificationSettingsQueryResponse>
     {
-        private IValidator<GetUserNotificationSettingsQuery> _validator;
-        private IAccountRepository _accountRepository;
+        private readonly IValidator<GetUserNotificationSettingsQuery> _validator;
+        private readonly IAccountRepository _accountRepository;
 
         public GetUserNotificationSettingsQueryHandler(IAccountRepository accountRepository, IValidator<GetUserNotificationSettingsQuery> validator)
         {

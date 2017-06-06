@@ -30,7 +30,7 @@
                         <tr>
                             <td>
                                 @setting.Name
-                                @Html.Hidden($"NotificationSettings[{i}].AccountId", setting.AccountId)
+                                @Html.Hidden($"NotificationSettings[{i}].HashedAccountId", setting.HashedAccountId)
                                 @Html.Hidden($"NotificationSettings[{i}].Name", setting.Name)
                                 @Html.Hidden($"NotificationSettings[{i}].Id", setting.Id)
                             </td>
