@@ -1,0 +1,18 @@
+﻿@using SFA.DAS.EAS.Domain
+@using SFA.DAS.EAS.Domain.Models.Organisation
+@{ 
+    ViewBag.PageID = "enter-organisation-type";
+    ViewBag.Title = "Add an organisation";
+    ViewBag.HideNav = "true";
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Search for your organisation</h1>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Index", "Home")" class="back-link">Back</a>
+    </div>
+}

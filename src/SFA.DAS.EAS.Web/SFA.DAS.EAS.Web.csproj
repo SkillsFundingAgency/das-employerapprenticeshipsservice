@@ -1029,6 +1029,8 @@
     <Content Include="Views\EmployerAccountTransactions\Index_ORG.cshtml" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
+    <Content Include="Views\EmployerAccountOrganisation\SearchForOrganisation.cshtml" />
+    <Content Include="Views\EmployerAccountOrganisation\SearchForOrganisationResults.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

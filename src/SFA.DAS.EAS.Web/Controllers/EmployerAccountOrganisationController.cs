@@ -40,6 +40,20 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [Route("search")]
+        public ActionResult SearchForOrganisation()
+        {
+            return View("SearchForOrganisation");
+        }
+
+        [HttpGet]
+        [Route("results")]
+        public ActionResult SearchForOrganisationResults()
+        {
+            return View("SearchForOrganisationResults");
+        }
+
+        [HttpGet]
         [Route("add")]
         public ActionResult AddOrganisation()
         {
