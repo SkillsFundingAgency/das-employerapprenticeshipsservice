@@ -1,18 +1,29 @@
 ﻿@using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Models.Organisation
+
 @{ 
-    ViewBag.PageID = "enter-organisation-type";
-    ViewBag.Title = "Add an organisation";
+    ViewBag.PageID = "search-for-organisation";
+    ViewBag.Title = "Search for your organisation";
     ViewBag.HideNav = "true";
 }
+
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Search for your organisation</h1>
+        <h1 class="heading-xlarge">@ViewBag.Title</h1>
+        <form>
+            <div class="form-group">
+                <label for="organisation-name">
+                    <span class="form-label-bold">Enter name</span>
+                </label>
+                <input type="text" id="organisation-name" name="" value="" class="form-control" />
+            </div>
+            <input class="button" type="submit" value="Search" />
+        </form>
     </div>
 </div>
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Index", "Home")" class="back-link">Back</a>
+        <a href="@Url.Action("Index", "Home")" class="link-back">Back</a>
     </div>
 }
