@@ -82,10 +82,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             //Arrange
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
 
-            var postedData = new FormCollection();
+            var payload = new NotificationSettingsViewModel();
 
             //Act
-            await _controller.NotificationSettings(postedData);
+            await _controller.NotificationSettings(payload);
 
             //Assert
             _orchestrator.Verify(x => x.UpdateNotificationSettings(

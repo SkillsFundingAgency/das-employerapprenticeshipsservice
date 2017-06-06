@@ -16,6 +16,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly ILogger _logger;
         private readonly IHashingService _hashingService;
 
+        //Needed for tests
+        public UserSettingsOrchestrator()
+        {
+        }
+
         public UserSettingsOrchestrator(IMediator mediator, ILogger logger, IHashingService hashingService)
         {
             _mediator = mediator;
@@ -44,11 +49,21 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual async Task UpdateNotificationSettings(
             string userRef, List<UserNotificationSetting> settings)
         {
+            DecodeAccountIds(settings);
+
             await _mediator.SendAsync(new UpdateUserNotificationSettingsCommand
             {
                 UserRef = userRef,
                 Settings = settings
             });
+        }
+
+        private void DecodeAccountIds(List<UserNotificationSetting> source)
+        {
+            foreach (var setting in source)
+            {
+                setting.AccountId = _hashingService.DecodeValue(setting.HashedAccountId);
+            }
         }
     }
 }

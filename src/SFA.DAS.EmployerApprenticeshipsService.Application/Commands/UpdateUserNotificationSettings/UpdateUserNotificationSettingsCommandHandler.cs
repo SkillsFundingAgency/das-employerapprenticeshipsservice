@@ -17,15 +17,12 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateUserNotificationSettings
         private readonly IAccountRepository _accountRepository;
         private readonly IValidator<UpdateUserNotificationSettingsCommand> _validator;
         private readonly IMediator _mediator;
-        private readonly IHashingService _hashingService;
 
         public UpdateUserNotificationSettingsCommandHandler(IAccountRepository accountRepository,
-            IValidator<UpdateUserNotificationSettingsCommand> validator, IMediator mediator, IHashingService hashingService)
+            IValidator<UpdateUserNotificationSettingsCommand> validator)
         {
             _accountRepository = accountRepository;
             _validator = validator;
-            _mediator = mediator;
-            _hashingService = hashingService;
         }
 
         protected override async Task HandleCore(UpdateUserNotificationSettingsCommand message)
@@ -35,21 +32,11 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateUserNotificationSettings
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            DecodeAccountIds(message.Settings);
-
             await _accountRepository.UpdateUserAccountSettings(message.UserRef, message.Settings);
 
             foreach (var setting in message.Settings)
             {
                 await AddAuditEntry(setting);
-            }
-        }
-
-        private void DecodeAccountIds(List<UserNotificationSetting> source)
-        {
-            foreach (var setting in source)
-            {
-                setting.AccountId = _hashingService.DecodeValue(setting.HashedAccountId);
             }
         }
 
