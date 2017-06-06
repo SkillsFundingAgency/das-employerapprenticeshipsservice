@@ -39,7 +39,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
-            var logger = new Mock<ILogger>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _orchestrator.Setup(x => x.GetNotificationSettingsViewModel(It.IsAny<string>()))
@@ -54,7 +53,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 It.IsAny<List<UserNotificationSetting>>()))
                 .Returns(() => Task.FromResult(new Unit()));
 
-            _controller = new SettingsController(_owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, logger.Object, _flashMessage.Object)
+            _controller = new SettingsController(_owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, _flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)

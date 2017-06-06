@@ -15,18 +15,15 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class SettingsController : BaseController
     {
         private readonly UserSettingsOrchestrator _userSettingsOrchestrator;
-        private readonly ILogger _logger;
 
         public SettingsController(IOwinWrapper owinWrapper,
             UserSettingsOrchestrator userSettingsOrchestrator,
             IFeatureToggle featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
-            ILogger logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             _userSettingsOrchestrator = userSettingsOrchestrator;
-            _logger = logger;
         }
 
         [HttpGet]
