@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
             {
                 Code = random.Next(1,9999),
                 Level = random.Next(1,5),
-                Title = title
+                CourseName = title
             };
         }
 
