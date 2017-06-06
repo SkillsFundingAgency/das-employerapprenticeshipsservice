@@ -19,10 +19,11 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateUserNotificationSettings
         private readonly IMediator _mediator;
 
         public UpdateUserNotificationSettingsCommandHandler(IAccountRepository accountRepository,
-            IValidator<UpdateUserNotificationSettingsCommand> validator)
+            IValidator<UpdateUserNotificationSettingsCommand> validator, IMediator mediator)
         {
             _accountRepository = accountRepository;
             _validator = validator;
+            _mediator = mediator;
         }
 
         protected override async Task HandleCore(UpdateUserNotificationSettingsCommand message)
