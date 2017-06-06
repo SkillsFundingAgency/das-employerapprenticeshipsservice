@@ -4,14 +4,17 @@ using System.Reflection;
 using AutoMapper;
 using MediatR;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.TestCommon.Extensions;
 using SFA.DAS.EAS.Web.Authentication;
@@ -36,8 +39,9 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         private static Mock<IPaymentsEventsApiClient> _paymentEventsApi;
         private static Mock<IEmployerCommitmentApi> _employerCommitmentApi;
         private static Mock<IApprenticeshipInfoServiceWrapper> _apprenticeshipInfoService;
+        private static Mock<ICacheProvider> _cacheProvider;
 
-        [BeforeFeature]
+        [BeforeScenario]
         public static void Arrange()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
@@ -47,27 +51,29 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             _paymentEventsApi = new Mock<IPaymentsEventsApiClient>();
             _employerCommitmentApi = new Mock<IEmployerCommitmentApi>();
             _apprenticeshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
+            _cacheProvider = new Mock<ICacheProvider>();
 
             _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
             _container.Inject(typeof(IPaymentsEventsApiClient), _paymentEventsApi.Object);
             _container.Inject(typeof(IEmployerCommitmentApi), _employerCommitmentApi.Object);
             _container.Inject(typeof(IApprenticeshipInfoServiceWrapper), _apprenticeshipInfoService.Object);
+            _container.Inject(typeof(ICacheProvider), _cacheProvider.Object);
+
+            _cacheProvider.Setup(x => x.Get<Standard>(It.IsAny<string>())).Returns((Standard) null);
+            _cacheProvider.Setup(x => x.Get<Framework>(It.IsAny<string>())).Returns((Framework) null);
 
             RegisterMapper();
 
+            ScenarioContext.Current.Clear();
+
             _testData = new PaymentTestData(_container);
+            _testData.PopulateTestData();
         }
 
-        [AfterFeature]
+        [AfterScenario]
         public static void TearDown()
         {
             _container.Dispose();
-        }
-
-        [BeforeScenario]
-        public void ArrangeScenario()
-        {
-            _testData.PopulateTestData();
         }
         
         [Given(@"I have an apprenticeship")]
@@ -184,9 +190,8 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             var transactionMonthEnd = _testData.PaymentCollectionDate.EndOfMonth();
 
             var repository = _container.GetInstance<ITransactionRepository>();
-
             var transactions = repository.GetAccountTransactionByProviderAndDateRange(_testData.AccountId, _testData.StandardPayment.Ukprn, transactionMonthStart, transactionMonthEnd).Result;
-
+           
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
             var expectedStartDate = _testData.Apprenticeship.StartDate?.ToShortDateString() ?? "expectedDateNotFound";
