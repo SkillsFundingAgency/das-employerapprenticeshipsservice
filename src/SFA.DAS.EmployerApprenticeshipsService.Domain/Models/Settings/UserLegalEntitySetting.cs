@@ -2,6 +2,7 @@ namespace SFA.DAS.EAS.Domain.Models.Settings
 {
     public class UserNotificationSetting
     {
+        public long Id { get; set; }
         public long AccountId { get; set; }
         public long UserId { get; set; }
         public string Name { get; set; }

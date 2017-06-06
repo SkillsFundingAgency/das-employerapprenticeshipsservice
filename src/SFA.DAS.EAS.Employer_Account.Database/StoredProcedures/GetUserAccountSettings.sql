@@ -6,6 +6,7 @@ AS
 BEGIN
 
 	select
+	s.Id,
 	s.AccountId,
 	s.UserId,
 	a.[Name],
