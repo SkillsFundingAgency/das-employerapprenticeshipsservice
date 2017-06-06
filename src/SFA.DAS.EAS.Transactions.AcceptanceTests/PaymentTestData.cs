@@ -1,7 +1,6 @@
 ﻿using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using System;
-using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
@@ -22,7 +21,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests
 
         public long AccountId
         {
-            get => (long)ScenarioContext.Current["AccountId"];
+            get { return (long) ScenarioContext.Current["AccountId"]; }
             set
             {
                 ScenarioContext.Current["AccountId"] = value;
@@ -47,12 +46,11 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests
                     StandardEmployerCoInvestmentPayment.EmployerAccountId = value.ToString();
                 }
             }
-
         }
 
         public Apprenticeship Apprenticeship
         {
-            get => GetProperty<Apprenticeship>("Apprenticeship");
+            get { return GetProperty<Apprenticeship>("Apprenticeship"); }
             set
             {
                 value.EmployerAccountId = AccountId;
@@ -62,72 +60,84 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests
 
         public Standard Standard
         {
-            get => GetProperty<Standard>("Standard");
-            set => ScenarioContext.Current["Standard"] = value;
+            get { return GetProperty<Standard>("Standard"); }
+            set { ScenarioContext.Current["Standard"] = value; }
         }
 
-        public StandardsView StandardsView => StandardObjectMother.CreateView(Standard);
-        
+        public StandardsView StandardsView
+        {
+            get { return StandardObjectMother.CreateView(Standard); }
+        }
+
         public Framework Framework
         {
-            get => GetProperty<Framework>("Framework");
-            set => ScenarioContext.Current["Framework"] = value;
+            get { return GetProperty<Framework>("Framework"); }
+            set { ScenarioContext.Current["Framework"] = value; }
         }
 
-        public FrameworksView FrameworksView => FrameworkObjectMother.CreateView(Framework);
+        public FrameworksView FrameworksView
+        {
+            get { return FrameworkObjectMother.CreateView(Framework); }
+        }
 
         public Domain.Models.ApprenticeshipProvider.Provider Provider
         {
-            get => GetProperty<Domain.Models.ApprenticeshipProvider.Provider>("Provider");
-            set => ScenarioContext.Current["Provider"] = value;
+            get { return GetProperty<Domain.Models.ApprenticeshipProvider.Provider>("Provider"); }
+            set { ScenarioContext.Current["Provider"] = value; }
         }
 
-        public ProvidersView ProvidersView => new ProvidersView
+        public ProvidersView ProvidersView
         {
-            CreatedDate = DateTime.Now,
-            Provider = Provider
-        };
+            get
+            {
+                return new ProvidersView
+                {
+                    CreatedDate = DateTime.Now,
+                    Provider = Provider
+                };
+            }
+        }
 
         public DateTime PaymentDeliveryDate
         {
-            get => GetProperty<DateTime>("PaymentDeliveryDate");
-            set => ScenarioContext.Current["PaymentDeliveryDate"] = value;
-    }
+            get { return GetProperty<DateTime>("PaymentDeliveryDate"); }
+            set { ScenarioContext.Current["PaymentDeliveryDate"] = value; }
+        }
 
         public DateTime PaymentCollectionDate
         {
-            get => GetProperty<DateTime>("PaymentCollectionDate");
-            set => ScenarioContext.Current["PaymentCollectionDate"] = value;
+            get { return GetProperty<DateTime>("PaymentCollectionDate"); }
+            set { ScenarioContext.Current["PaymentCollectionDate"] = value; }
         }
 
         public Payment StandardPayment
         {
-            get => GetProperty<Payment>("StandardPayment");
-            set => ScenarioContext.Current["StandardPayment"] = value;
+            get { return GetProperty<Payment>("StandardPayment"); }
+            set { ScenarioContext.Current["StandardPayment"] = value; }
         }
 
         public Payment StandardSFACoInvestmentPayment
         {
-            get => GetProperty<Payment>("StandardSFAPayment");
-            set => ScenarioContext.Current["StandardSFAPayment"] = value;
+            get { return GetProperty<Payment>("StandardSFAPayment"); }
+            set { ScenarioContext.Current["StandardSFAPayment"] = value; }
         }
 
         public Payment StandardEmployerCoInvestmentPayment
         {
-            get => GetProperty<Payment>("StandardEmployerPayment");
-            set => ScenarioContext.Current["StandardEmployerPayment"] = value;
+            get { return GetProperty<Payment>("StandardEmployerPayment"); }
+            set { ScenarioContext.Current["StandardEmployerPayment"] = value; }
         }
 
         public Payment FrameworkPayment
         {
-            get => GetProperty<Payment>("FrameworkPayment");
-            set => ScenarioContext.Current["FrameworkPayment"] = value;
+            get { return GetProperty<Payment>("FrameworkPayment"); }
+            set { ScenarioContext.Current["FrameworkPayment"] = value; }
         }
 
         public Domain.Models.Payments.PeriodEnd PeriodEnd
         {
-            get => GetProperty<Domain.Models.Payments.PeriodEnd>("periodEnd");
-            set => ScenarioContext.Current["periodEnd"] = value;
+            get { return GetProperty<Domain.Models.Payments.PeriodEnd>("periodEnd"); }
+            set { ScenarioContext.Current["periodEnd"] = value; }
         }
 
         public void PopulateTestData()
