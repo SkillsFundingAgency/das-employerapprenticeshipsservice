@@ -17,6 +17,7 @@ SELECT
 	,meta.ApprenticeshipCourseName as CourseName
 	,meta.ApprenticeshipCourseLevel	as CourseLevel
 	,meta.PathwayName as PathwayName
+	,MAX(meta.PathwayCode) as PathwayCode
 	,MAX(meta.ApprenticeshipCourseStartDate) as CourseStartDate
 	,MAX(meta.ApprenticeName) as ApprenticeName
 	,MAX(meta.ApprenticeNINumber) as ApprenticeNINumber	
