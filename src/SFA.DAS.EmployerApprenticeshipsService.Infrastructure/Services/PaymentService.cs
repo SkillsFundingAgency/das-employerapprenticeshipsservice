@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 {
                     var standard = await GetStandard(payment.StandardCode.Value);
 
-                    payment.CourseName = standard?.Title;
+                    payment.CourseName = standard?.CourseName;
                     payment.CourseLevel = standard?.Level;
                 }
                 else if (payment.FrameworkCode.HasValue && payment.ProgrammeType.HasValue && payment.PathwayCode.HasValue)

@@ -92,7 +92,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             {
                 Code = 20,
                 Level = 3,
-                Title = "Testing"
+                CourseName = "Testing"
             };
             ScenarioContext.Current["standard"] = standard;
 
@@ -388,7 +388,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             var courseStartDate = paymentTransaction.CourseStartDate?.ToShortDateString() ?? "courseStartDateNotFound";
 
             Assert.AreEqual(standard.Level, paymentTransaction.CourseLevel);
-            Assert.AreEqual(standard.Title, paymentTransaction.CourseName);
+            Assert.AreEqual(standard.CourseName, paymentTransaction.CourseName);
             Assert.AreEqual(expectedStartDate, courseStartDate);
         }
 
@@ -420,7 +420,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             var courseStartDate = paymentTransaction.CourseStartDate?.ToShortDateString() ?? "courseStartDateNotFound";
 
             Assert.AreEqual(standard.Level, paymentTransaction.CourseLevel);
-            Assert.AreEqual(standard.Title, paymentTransaction.CourseName);
+            Assert.AreEqual(standard.CourseName, paymentTransaction.CourseName);
             Assert.AreEqual(expectedStartDate, courseStartDate);
             Assert.AreEqual(sfaPayment.Amount * -1, paymentTransaction.SfaCoInvestmentAmount);
             Assert.AreEqual(employerPayment.Amount * -1, paymentTransaction.EmployerCoInvestmentAmount);
