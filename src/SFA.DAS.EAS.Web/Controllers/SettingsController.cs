@@ -53,29 +53,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [Route("notifications")]
-        public async Task<ActionResult> NotificationSettings(FormCollection collection)
+        public async Task<ActionResult> NotificationSettings(NotificationSettingsViewModel vm)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
-            var vm = await _userSettingsOrchestrator.GetNotificationSettingsViewModel(userIdClaim);
-
-            //todo: how to do this more cleanly?
-            //also, audit updates
-
-            foreach (var key in collection.Keys)
-            {
-                long k;
-                if (long.TryParse(key.ToString(), out k))
-                {
-                    var setting = vm.Data.NotificationSettings.FirstOrDefault(x => x.AccountId == k);
-                    if (setting != null)
-                    {
-                        setting.ReceiveNotifications = bool.Parse(collection[k.ToString()]);
-                    }
-                }
-            }
 
             await _userSettingsOrchestrator.UpdateNotificationSettings(userIdClaim,
-                vm.Data.NotificationSettings);
+                vm.NotificationSettings);
 
             var flashMessage = new FlashMessageViewModel
             {

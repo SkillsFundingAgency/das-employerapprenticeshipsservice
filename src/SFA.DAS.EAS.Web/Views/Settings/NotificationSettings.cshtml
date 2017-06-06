@@ -22,22 +22,29 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                    @foreach (var setting in Model.Data.NotificationSettings)
+                   
+                    @for (var i = 0; i < Model.Data.NotificationSettings.Count; i++)
                     {
-                        var trueChecked = setting.ReceiveNotifications ? "checked=\"checked\"" : "";
-                        var falseChecked = !setting.ReceiveNotifications ? "checked=\"checked\"" : "";
+                        var setting = Model.Data.NotificationSettings[i];
 
                         <tr>
-                            <td>@setting.Name</td>
-                            <td><input type="radio" name="@setting.AccountId" value="true" @trueChecked/></td>
-                            <td><input type="radio" name="@setting.AccountId" value="false" @falseChecked/></td>
+                            <td>
+                                @setting.Name
+                                @Html.Hidden($"NotificationSettings[{i}].AccountId", setting.AccountId)
+                                @Html.Hidden($"NotificationSettings[{i}].Name", setting.Name)
+                                @Html.Hidden($"NotificationSettings[{i}].Id", setting.Id)
+                            </td>
+                            <td>
+                                @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", true, setting.ReceiveNotifications)
+                            </td>
+                            <td>
+                                @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", false, !setting.ReceiveNotifications)
+                            </td>
                         </tr>
-                        
                     }
+
                 </tbody>
             </table>
-            
             
             <button type="submit" class="button">Update</button>
             
