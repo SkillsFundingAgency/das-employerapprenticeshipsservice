@@ -3714,6 +3714,10 @@ table.responsive tr th.tw-70 {
   box-sizing: border-box;
 }
 
+.search-results aside h2 {
+  margin-top: 15px;
+}
+
 .results-list ol li {
   border: 3px solid #fff;
   border-bottom: 1px solid #bfc1c3;
