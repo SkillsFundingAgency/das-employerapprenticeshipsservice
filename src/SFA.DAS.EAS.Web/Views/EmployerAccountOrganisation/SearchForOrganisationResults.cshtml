@@ -1,18 +1,153 @@
 ﻿@using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Models.Organisation
+
 @{ 
-    ViewBag.PageID = "enter-organisation-type";
-    ViewBag.Title = "Add an organisation";
+    ViewBag.PageID = "select-your-organisation";
+    ViewBag.Title = "Select your organisation";
     ViewBag.HideNav = "true";
 }
+
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Select your organisation</h1>
+        <h1 class="heading-xlarge">@ViewBag.Title</h1>
+        <form action="" method="POST">
+            <div class="search-field">
+                <fieldset class="search-input">
+                    <label for="publicBodyName">
+                        <span class="form-label-bold">Search results</span>
+                    </label>
+                    <input type="text" name="publicBodyName" id="publicBodyName" value="" class="form-control">
+                </fieldset>
+                <fieldset class="search-submit">
+                    <button type="submit" class="button">Search</button>
+                </fieldset>
+            </div>
+        </form>
+        <p>66 results found</p>
     </div>
+</div>
+
+<div class="grid-row search-results">
+    <aside>
+        <h2 class="heading-medium">Filter results</h2>
+        <div class="filter">
+            <h3>Organisation type</h3>
+            <label class="block-label selection-button-radio" for="ltd">
+                <input id="ltd" type="radio" name="org-type" value="ltd" /> Private limited company
+            </label>
+            <label class="block-label selection-button-radio" for="plc">
+                <input id="plc" type="radio" name="org-type" value="plc" /> Public limited company
+            </label>
+            <label class="block-label selection-button-radio" for="pb">
+                <input id="pb" type="radio" name="org-type" value="pb" /> Public body
+            </label>
+            <label class="block-label selection-button-radio" for="ipo">
+                <input id="ipo" type="radio" name="org-type" value="ipo" /> Industrial and provident organisation
+            </label>
+            <label class="block-label selection-button-radio" for="rc">
+                <input id="rc" type="radio" name="org-type" value="rc" /> Royal charter
+            </label>
+            <label class="block-label selection-button-radio" for="charity">
+                <input id="charity" type="radio" name="org-type" value="charity" /> Registered charity
+            </label>
+            <label class="block-label selection-button-radio" for="all">
+                <input id="all" type="radio" name="org-type" value="all" checked="checked" /> Show all 
+            </label>
+        </div>
+    </aside>
+    <section class="results-list">
+        <ol>
+            <li>
+                <article>
+                    <h1 class="heading-medium"><a href="#">20-20 Housing Co-operative Limited</a></h1>
+                    <dl class="inline">
+                        <dt>Address</dt>
+                        <dd>123 Some Street, Tiny Town, AB1 2CD</dd>
+                        <dt>Type</dt>
+                        <dd>Private limited company</dd>
+                    </dl>
+                </article>
+            </li>
+            <li>
+                <article>
+                    <h1 class="heading-medium"><a href="#">20-20 Housing Co-operative Limited</a></h1>
+                    <dl class="inline">
+                        <dt>Address</dt>
+                        <dd>123 Some Street, Tiny Town, AB1 2CD</dd>
+                        <dt>Type</dt>
+                        <dd>Private limited company</dd>
+                    </dl>
+                </article>
+            </li>
+            <li>
+                <article>
+                    <h1 class="heading-medium"><a href="#">20-20 Housing Co-operative Limited</a></h1>
+                    <dl class="inline">
+                        <dt>Address</dt>
+                        <dd>123 Some Street, Tiny Town, AB1 2CD</dd>
+                        <dt>Type</dt>
+                        <dd>Private limited company</dd>
+                    </dl>
+                </article>
+            </li>
+            <li class="added">
+                <article>
+                    <h1 class="heading-medium">20-20 Housing Co-operative Limited</h1>
+                    <dl class="inline">
+                        <dt>Address</dt>
+                        <dd>123 Some Street, Tiny Town, AB1 2CD</dd>
+                        <dt>Type</dt>
+                        <dd>Private limited company</dd>
+                    </dl>
+                    <p>Already added - <a href="">view my organisations</a></p>
+                </article>
+            </li>
+            <li>
+                <article>
+                    <h1 class="heading-medium"><a href="#">20-20 Housing Co-operative Limited</a></h1>
+                    <dl class="inline">
+                        <dt>Address</dt>
+                        <dd>123 Some Street, Tiny Town, AB1 2CD</dd>
+                        <dt>Type</dt>
+                        <dd>Private limited company</dd>
+                    </dl>
+                </article>
+            </li>
+            <li>
+                <article>
+                    <h1 class="heading-medium"><a href="#">20-20 Housing Co-operative Limited</a></h1>
+                    <dl class="inline">
+                        <dt>Address</dt>
+                        <dd>123 Some Street, Tiny Town, AB1 2CD</dd>
+                        <dt>Type</dt>
+                        <dd>Private limited company</dd>
+                    </dl>
+                </article>
+            </li>
+        </ol>
+        <nav>
+            <ul class="previous-next-navigation">
+                <li class="previous">
+                    <a href="#">
+                        Previous page
+                        <span class="detail">Page 1 of 12</span>
+                    </a>
+                </li>
+                <li class="next">
+                    <a href="#">
+                        Next page
+                        <span class="detail">Page 3 of 12</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </section>
+
+   
 </div>
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Index", "Home")" class="back-link">Back</a>
+        <a href="@Url.Action("Index", "Home")" class="link-back">Back</a>
     </div>
 }
