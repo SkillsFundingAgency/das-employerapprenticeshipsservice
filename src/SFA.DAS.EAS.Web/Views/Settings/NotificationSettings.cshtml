@@ -1,5 +1,6 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.NotificationSettingsViewModel>
 @{ViewBag.Title = "Notification Settings"; }
+@{  ViewBag.PageId = "notification-settings"; }
 @{ViewBag.HideNav = "true"; }
 
 <form method="post">
@@ -16,9 +17,9 @@
             <table>
                 <thead>
                     <tr>
-                        <td>Account name</td>
-                        <td>Emails</td>
-                        <td>No emails</td>
+                        <th scope="col">Account name</th>
+                        <th scope="col">Emails</th>
+                        <th scope="col">No emails</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,29 +29,43 @@
                         var setting = Model.Data.NotificationSettings[i];
 
                         <tr>
-                            <td>
-                                @setting.Name
+                            <td class="notification-row">
+                                    @setting.Name
+                                
                                 @Html.Hidden($"NotificationSettings[{i}].HashedAccountId", setting.HashedAccountId)
                                 @Html.Hidden($"NotificationSettings[{i}].Name", setting.Name)
                                 @Html.Hidden($"NotificationSettings[{i}].Id", setting.Id)
                             </td>
-                            <td>
-                                @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", true, setting.ReceiveNotifications)
+
+                            <td class="notification-row">
+
+                                @{  var trueId = $"NotificationSettings-true-{i}";
+                                    var falseId = $"NotificationSettings-false-{i}";
+
+                                    }
+
+                                <label for="@trueId" class="block-label selection-button-radio">
+                                    @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", true, setting.ReceiveNotifications, new { id = trueId } )
+                                    </label>
+                              
                             </td>
-                            <td>
-                                @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", false, !setting.ReceiveNotifications)
+
+                            <td class="notification-row">
+                                <label for="@falseId" class="block-label selection-button-radio">
+                                    @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", false, !setting.ReceiveNotifications, new { id = falseId })
+                                </label>
+
                             </td>
+                           
                         </tr>
                     }
 
                 </tbody>
-            </table>
-            
+            </table>        
             <button type="submit" class="button">Update</button>
+          
             
-            <br/><br/>
-            
-            <a href="@Url.Action("Index", "Home")">Cancel</a>
+            <a href="@Url.Action("Index", "Home")" class="button text-link">Cancel</a>
 
         </div>
     </div>
