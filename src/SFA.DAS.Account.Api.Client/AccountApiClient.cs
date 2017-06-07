@@ -84,6 +84,43 @@ namespace SFA.DAS.EAS.Account.Api.Client
             return JsonConvert.DeserializeObject<ICollection<AccountDetailViewModel>>(json);
         }
 
+        public async Task<LegalEntityViewModel> GetLegalEntity(string accountId, long id)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/legalentities/{id}";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<LegalEntityViewModel>(json);
+        }
+
+        public async Task<ICollection<ResourceViewModel>> GetLegalEntitiesConnectedToAccount(string accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/legalentities";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<List<ResourceViewModel>>(json);
+        }
+
+        public async Task<ICollection<ResourceViewModel>> GetPayeSchemesConnectedToAccount(string accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/payeschemes";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<List<ResourceViewModel>>(json);
+        }
+
+        public async Task<EmployerAgreementView> GetEmployerAgreement(string accountId, string legalEntityId, string agreementId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/legalEntities/{legalEntityId}/agreements/{agreementId}/agreement";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<EmployerAgreementView>(json);
+        }
+       
+
         public async Task<T> GetResource<T>(string uri) where T : IAccountResource
         {
             var absoluteUri = new Uri(new Uri(GetBaseUrl()), uri);
