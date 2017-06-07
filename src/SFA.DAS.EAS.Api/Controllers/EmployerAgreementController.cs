@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Api.Controllers
             return Ok(response);
         }
 
-        [Route("{agreementId}/agreement", Name = "AgreementById")]
+        [Route("{agreementId}/agreement", Name = "GetAgreement")]
         [ApiAuthorize(Roles = "ReadAllEmployerAgreements")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAgreementById(string agreementId)
