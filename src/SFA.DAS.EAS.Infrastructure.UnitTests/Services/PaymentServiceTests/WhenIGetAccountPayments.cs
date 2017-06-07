@@ -380,7 +380,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         {
             _framework = new Framework
             {
-                Title = FrameworkCourseName,
+                FrameworkName = FrameworkCourseName,
                 FrameworkCode = 20,
                 PathwayCode = 2,
                 PathwayName = "General",
@@ -391,7 +391,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             {
                 Id = "10",
                 Code = 10,
-                Title = StandardCourseName
+                CourseName = StandardCourseName
             };
 
             _apprenticeship = new Apprenticeship

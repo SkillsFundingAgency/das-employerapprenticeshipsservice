@@ -27,7 +27,10 @@ using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Application.Queries.ValidateStatusChangeDate;
 using SFA.DAS.EAS.Application.Commands.UpdateApprenticeshipStatus;
 using SFA.DAS.EAS.Application.Queries.ApprenticeshipSearch;
+using SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock;
+using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
+using System.Net;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -155,7 +158,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return await CheckUserAuthorization(async () =>
             {
                 await AssertApprenticeshipStatus(accountId, apprenticeshipId);
-                // TODO: LWA Assert that the apprenticeship can be edited - Story says should be allowed to go to edit details page??
 
                 var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
                 {
@@ -621,6 +623,50 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                     }
                            };
             }, hashedAccountId, userId);
+        }
+
+        public async Task<OrchestratorResponse<PaymentOrderViewModel>> GetPaymentOrder(string hashedAccountId, string user)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+
+            _logger.Trace(
+                $"Getting payment order. AccountId: {accountId}");
+
+            return await CheckUserAuthorization(
+                async () =>
+                    {
+                        var data = await _mediator.SendAsync(new GetProviderPaymentPriorityRequest { AccountId = accountId });
+                        var result = _apprenticeshipMapper.MapPayment(data.Data);
+
+                        if (result.Items == null || result.Items.Count() < 2)
+                            return new OrchestratorResponse<PaymentOrderViewModel> { Status = HttpStatusCode.NotFound };
+
+                        return new OrchestratorResponse<PaymentOrderViewModel>
+                                   {
+                                       Data = result
+                                   };
+                    }, hashedAccountId, user);
+        }
+
+        public async Task UpdatePaymentOrder(string hashedAccountId, IEnumerable<long> paymentItems, string user, string userName, string userEmail)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+
+            _logger.Trace($"Updating payment order. AccountId: {accountId}");
+
+            await CheckUserAuthorization(
+                async () =>
+                    {
+                        await _mediator.SendAsync(new UpdateProviderPaymentPriorityCommand
+                                                {
+                                                    AccountId = accountId,
+                                                    ProviderPriorityOrder = paymentItems,
+                                                    UserId = user,
+                                                    UserEmailAddress = userEmail,
+                                                    UserDisplayName = userName
+                        });
+
+                }, hashedAccountId, user);
         }
     }
 }

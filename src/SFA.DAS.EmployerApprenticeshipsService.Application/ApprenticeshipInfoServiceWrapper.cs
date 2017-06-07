@@ -126,6 +126,7 @@ namespace SFA.DAS.EAS.Application
                     Code = long.Parse(x.Id),
                     Level = x.Level,
                     Title = GetTitle(x.Title, x.Level) + " (Standard)",
+                    CourseName = x.Title, 
                     Duration = x.Duration,
                     MaxFunding = x.MaxFunding
                 }).ToList()

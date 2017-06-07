@@ -23,6 +23,16 @@ namespace SFA.DAS.EAS.Account.Api.Client
             _httpClient = httpClient;
         }
 
+        public async Task<AccountDetailViewModel> GetAccount(string hashedAccountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{hashedAccountId}";
+
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<AccountDetailViewModel>(json);
+        }
+
         public async Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetPageOfAccounts(int pageNumber = 1, int pageSize = 1000, DateTime? toDate = null)
         {
             var baseUrl = GetBaseUrl();
