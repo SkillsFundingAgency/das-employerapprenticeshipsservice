@@ -54,6 +54,26 @@ namespace SFA.DAS.EAS.Api.Controllers
             return Ok(result.Data);
         }
 
+        [Route("internal/{accountId}", Name = "GetAccountByInternalId")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAccount(long accountId)
+        {
+            var result = await _orchestrator.GetAccount(accountId);
+
+            if (result.Data == null)
+            {
+                return NotFound();
+            }
+
+            result.Data.LegalEntities.ForEach(x => CreateGetLegalEntityLink(result.Data.HashedAccountId, x));
+            result.Data.PayeSchemes.ForEach(x => CreateGetPayeSchemeLink(result.Data.HashedAccountId, x));
+            return Ok(result.Data);
+        }
+
+
+
+
         [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
         [ApiAuthorize(Roles = "ReadAllAccountUsers")]
         [HttpGet]
@@ -68,6 +88,22 @@ namespace SFA.DAS.EAS.Api.Controllers
            
             return Ok(result.Data);
         }
+
+        [Route("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
+        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAccountUsers(long accountId)
+        {
+            var result = await _orchestrator.GetAccountTeamMembers(accountId);
+
+            if (result.Data == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result.Data);
+        }
+        
 
         private void CreateGetLegalEntityLink(string hashedAccountId, ResourceViewModel legalEntity)
         {
