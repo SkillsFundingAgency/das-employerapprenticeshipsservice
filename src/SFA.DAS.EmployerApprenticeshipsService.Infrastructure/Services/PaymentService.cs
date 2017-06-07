@@ -55,6 +55,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                 foreach (var details in paymentDetails)
                 {
+                    details.PeriodEnd = periodEnd;
+
                     await GetProviderDetails(details);
                     await GetApprenticeshipDetails(employerAccountId, details);
                     await GetCourseDetails(details);
