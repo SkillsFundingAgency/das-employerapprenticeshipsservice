@@ -127,9 +127,9 @@
                             <li class="has-sub-menu">
                                 <a href="/" role="menuitem">Settings</a>
                                 <ul role="menu">
-                                    @if (string.IsNullOrWhiteSpace(ViewBag.HideNav))
-                                    {
                                     <li><a href="@Url.Action("ViewAccounts", "Home")" role="menuitem">Your accounts</a></li>
+                                    @if (string.IsNullOrWhiteSpace(ViewBag.HideNav))
+                                    {     
                                     <li><a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem">Rename account</a></li>
                                     }
                                     <li><a href="@UserLinksViewModel.ChangePasswordLink">Change your password</a></li>
