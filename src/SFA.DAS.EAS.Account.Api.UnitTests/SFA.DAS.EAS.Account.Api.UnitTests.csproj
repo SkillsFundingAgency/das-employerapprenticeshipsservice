@@ -119,6 +119,10 @@
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EAS.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
+      <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
+      <Name>SFA.DAS.EAS.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EAS.TestCommon.csproj">
       <Project>{05D7C094-E2C9-4CCD-B0D7-85D263254B26}</Project>
       <Name>SFA.DAS.EAS.TestCommon</Name>

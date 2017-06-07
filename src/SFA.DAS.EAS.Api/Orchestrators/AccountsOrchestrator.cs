@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Application.Queries.GetLevyDeclarationsByAccountAndPeriod;
 using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EAS.Application.Queries.GetTeamMembers;
+using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Api.Orchestrators
 {
@@ -22,14 +23,16 @@ namespace SFA.DAS.EAS.Api.Orchestrators
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
+        private readonly IHashingService _hashingService;
 
-        public AccountsOrchestrator(IMediator mediator, ILogger logger, IMapper mapper)
+        public AccountsOrchestrator(IMediator mediator, ILogger logger, IMapper mapper, IHashingService hashingService)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
             _logger = logger;
             _mapper = mapper;
+            _hashingService = hashingService;
         }
 
         public async Task<OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>> GetAllAccountsWithBalances(string toDate, int pageSize, int pageNumber)
@@ -60,6 +63,13 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             });
 
             return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>() { Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel>() { Data = data, Page = pageNumber, TotalPages = (accountsResult.AccountsCount / pageSize) + 1 } };
+        }
+
+        public async Task<OrchestratorResponse<AccountDetailViewModel>> GetAccount(long accountId)
+        {
+            var hashedAccountId = _hashingService.HashValue(accountId);
+            var response = await GetAccount(hashedAccountId);
+            return response;
         }
 
         public async Task<OrchestratorResponse<AccountDetailViewModel>> GetAccount(string hashedAccountId)
@@ -104,6 +114,16 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             return new OrchestratorResponse<PayeSchemeViewModel> { Data = viewModel };
         }
 
+        public async Task<OrchestratorResponse<ICollection<TeamMemberViewModel>>> GetAccountTeamMembers(long accountId)
+        {
+            var hashedAccountId = _hashingService.HashValue(accountId);
+
+            var response = await GetAccountTeamMembers(hashedAccountId);
+
+            return response;
+
+        }
+
         public async Task<OrchestratorResponse<ICollection<TeamMemberViewModel>>> GetAccountTeamMembers(string hashedAccountId)
         {
             _logger.Info($"Requesting team members for account {hashedAccountId}");
@@ -118,6 +138,8 @@ namespace SFA.DAS.EAS.Api.Orchestrators
                 Status = HttpStatusCode.OK
             };
         }
+
+
 
         public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
         {
