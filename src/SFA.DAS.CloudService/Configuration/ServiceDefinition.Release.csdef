@@ -63,7 +63,7 @@
     <Imports>
     </Imports>
   </WorkerRole>
-  <WorkerRole name="SFA.DAS.EAS.PaymentProvider.Worker" vmsize="Small">
+  <WorkerRole name="SFA.DAS.EAS.PaymentProvider.Worker" vmsize="Standard_D1_v2">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="StorageConnectionString" />
