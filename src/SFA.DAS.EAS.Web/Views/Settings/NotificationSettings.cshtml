@@ -44,14 +44,14 @@
 
                                     }
 
-                                <label for="@trueId" class="block-label selection-button-radio">
+                                <label for="@trueId" class="block-label selection-button-radio" aria-label="Send emails">
                                     @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", true, setting.ReceiveNotifications, new { id = trueId } )
                                     </label>
                               
                             </td>
 
                             <td class="notification-row">
-                                <label for="@falseId" class="block-label selection-button-radio">
+                                <label for="@falseId" class="block-label selection-button-radio" aria-label="Stop emails">
                                     @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", false, !setting.ReceiveNotifications, new { id = falseId })
                                 </label>
 
