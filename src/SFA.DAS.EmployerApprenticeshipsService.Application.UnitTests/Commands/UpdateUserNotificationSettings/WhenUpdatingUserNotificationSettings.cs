@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
                 It.IsAny<List<UserNotificationSetting>>()
             )).Returns(() => Task.FromResult(new Unit()));
 
-            _handler = new UpdateUserNotificationSettingsCommandHandler(_repository.Object, _validator.Object);
+            _handler = new UpdateUserNotificationSettingsCommandHandler(_repository.Object, _validator.Object, Mock.Of<IMediator>());
         }
 
         [Test]

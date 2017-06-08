@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
 
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(() => 123);
 
-            _orchestrator = new UserSettingsOrchestrator(_mediator.Object, _logger.Object, _hashingService.Object);
+            _orchestrator = new UserSettingsOrchestrator(_mediator.Object, _hashingService.Object, _logger.Object);
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserNotificationSettingsQuery>()))
                 .ReturnsAsync(new GetUserNotificationSettingsQueryResponse
