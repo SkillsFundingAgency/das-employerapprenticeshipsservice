@@ -4971,8 +4971,30 @@ h2 .float-right {
   padding: 20px;
 }
 
-.total-cost .bold-xlarge {
-  font-size: 38px;
+.dynamic-cost-display .bold-xlarge {
+  line-height: 82px;
+}
+
+@media (min-width: 641px) {
+  .dynamic-cost-display .long {
+    font-size: 42px;
+    line-height: 82px;
+  }
+  .dynamic-cost-display .longer {
+    font-size: 22px;
+    line-height: 82px;
+  }
+}
+
+@media (min-width: 960px) {
+  .dynamic-cost-display .long {
+    font-size: 48px;
+    line-height: 82px;
+  }
+  .dynamic-cost-display .longer {
+    font-size: 32px;
+    line-height: 82px;
+  }
 }
 
 #order-payment {

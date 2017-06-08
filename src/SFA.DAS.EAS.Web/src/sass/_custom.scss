@@ -348,9 +348,31 @@ body {
     padding: 20px;
 }
 
-.total-cost{
-    .bold-xlarge{
-        font-size:38px;
+//dynamic-class-mobile-views
+.dynamic-cost-display{
+    .bold-xlarge{     
+          line-height: 82px;
+    }
+     @include media(tablet) { 
+     
+      .long {
+            font-size: 42px;
+             line-height: 82px;
+        }
+        .longer {
+            font-size: 22px;
+            line-height: 82px;
+        }
+    }
+    @include media(960px) {       
+        .long {
+            font-size: 48px;
+            line-height: 82px;
+        }
+        .longer {
+            font-size: 32px;
+            line-height: 82px;
+        }
     }
 }
 
