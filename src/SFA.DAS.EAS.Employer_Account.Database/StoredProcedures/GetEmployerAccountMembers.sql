@@ -2,7 +2,7 @@
 	@hashedAccountId VARCHAR(MAX)	
 AS
 	SELECT 
-		tm.*, s.ReceiveNotifications 
+		tm.*, s.ReceiveNotifications AS CanReceiveNotifications
 	FROM 
 		[employer_account].[GetTeamMembers] tm
 	INNER JOIN
