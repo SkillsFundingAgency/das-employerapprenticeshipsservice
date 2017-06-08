@@ -349,7 +349,7 @@ body {
 }
 
 //dynamic-class-mobile-views
-.dynamic-cost-display{
+/*.dynamic-cost-display{
     .bold-xlarge{     
           line-height: 82px;
     }
@@ -374,7 +374,37 @@ body {
             line-height: 82px;
         }
     }
+}*/
+
+//dynamic-class-mobile-views
+.dynamic-cost-display{
+    .bold-xlarge{     
+          line-height: 82px;
+        
+    }
+     @include media(tablet) { 
+     
+      .long {
+            font-size: 26px;
+             line-height: 82px;
+        }
+        .longer {
+            font-size: 19px;
+            line-height: 82px;
+        }
+    }
+    @include media(960px) {       
+        .long {
+            font-size: 45px;
+            line-height: 82px;
+        }
+        .longer {
+            font-size: 32px;
+            line-height: 82px;
+        }
+    }
 }
+
 
 // payment order styles
 #order-payment{

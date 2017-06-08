@@ -4971,24 +4971,50 @@ h2 .float-right {
   padding: 20px;
 }
 
+/*.dynamic-cost-display{
+    .bold-xlarge{     
+          line-height: 82px;
+    }
+     @include media(tablet) { 
+     
+      .long {
+            font-size: 42px;
+             line-height: 82px;
+        }
+        .longer {
+            font-size: 22px;
+            line-height: 82px;
+        }
+    }
+    @include media(960px) {       
+        .long {
+            font-size: 48px;
+            line-height: 82px;
+        }
+        .longer {
+            font-size: 32px;
+            line-height: 82px;
+        }
+    }
+}*/
 .dynamic-cost-display .bold-xlarge {
   line-height: 82px;
 }
 
 @media (min-width: 641px) {
   .dynamic-cost-display .long {
-    font-size: 42px;
+    font-size: 26px;
     line-height: 82px;
   }
   .dynamic-cost-display .longer {
-    font-size: 22px;
+    font-size: 19px;
     line-height: 82px;
   }
 }
 
 @media (min-width: 960px) {
   .dynamic-cost-display .long {
-    font-size: 48px;
+    font-size: 45px;
     line-height: 82px;
   }
   .dynamic-cost-display .longer {
