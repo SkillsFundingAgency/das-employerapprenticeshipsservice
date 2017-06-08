@@ -107,4 +107,16 @@ IF OBJECT_ID('employer_account.GetNumberOfInvitations_ByUserId', 'P') IS NOT NUL
 		DROP PROCEDURE employer_account.GetNumberOfInvitations_ByUserId
 	END
 
+------------------------------------------------
+-- Populate settings table for existing users --
+------------------------------------------------
 
+if(not exists(select top 1 * from [employer_account].[UserAccountSettings] ))
+begin
+
+	insert into [employer_account].[UserAccountSettings] (UserId, AccountId, ReceiveNotifications)
+	select
+	m.UserId, m.AccountId, 1
+	from [employer_account].[Membership] m
+
+end
