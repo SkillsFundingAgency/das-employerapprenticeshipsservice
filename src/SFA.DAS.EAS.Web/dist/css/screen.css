@@ -4974,6 +4974,10 @@ h2 .float-right {
 }
 
 /*Email notification settings*/
+#notification-settings h1 {
+  margin-bottom: 0;
+}
+
 #notification-settings table {
   margin-bottom: 40px;
 }
