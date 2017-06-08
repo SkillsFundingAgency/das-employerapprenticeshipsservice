@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public async Task ThenTheLegalEntityIsReturned()
         {
             // Act
-            var response = await _apiClient.GetResource<LegalEntityViewModel>(_uri);
+            var response = await _apiClient.GetLegalEntity("ABC123",123);
 
             // Assert
             Assert.IsNotNull(response);

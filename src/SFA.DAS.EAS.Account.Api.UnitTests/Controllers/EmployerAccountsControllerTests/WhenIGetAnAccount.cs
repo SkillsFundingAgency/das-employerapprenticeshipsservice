@@ -7,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 
@@ -77,6 +78,25 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
 
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<NotFoundResult>(response);
+        }
+
+        [Test]
+        public async Task ThenIAmAbleToGetAnAccountByTheInternalId()
+        {
+            //Arrange
+            var accountId = 1923701937;
+            var hashedAccountId = "ABC123";
+            var accountResponse = new GetEmployerAccountByHashedIdResponse { Account = new AccountDetail() };
+
+            HashingService.Setup(x => x.HashValue(accountId)).Returns(hashedAccountId);
+            Mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(accountResponse);
+
+            //Act
+            var response = await Controller.GetAccount(accountId);
+
+            //Assert
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<AccountDetailViewModel>>(response);
         }
     }
 }

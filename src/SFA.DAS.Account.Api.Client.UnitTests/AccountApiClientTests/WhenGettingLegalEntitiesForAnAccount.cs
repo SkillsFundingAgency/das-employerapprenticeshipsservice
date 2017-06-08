@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public async Task ThenTheLegalEntitiesAreReturned()
         {
             // Act
-            var response = await _apiClient.GetResource<ResourceList>(_uri);
+            var response = await _apiClient.GetLegalEntitiesConnectedToAccount("ABC123");
 
             // Assert
             Assert.IsNotNull(response);

@@ -68,7 +68,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountApiClientTests\WhenGettingAccountDetailsByInternalId.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAccountUsers.cs" />
+    <Compile Include="AccountApiClientTests\WhenGettingAccountUsersByInternalId.cs" />
+    <Compile Include="AccountApiClientTests\WhenGettingAnEmployerAgreement.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAPayeScheme.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingALegalEntity.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAUsersAccounts.cs" />
