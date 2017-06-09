@@ -409,8 +409,8 @@ body {
         .options-container {
             position: relative;
             background-color: #fff;          
-            max-height:200px; //container height
-            overflow:hidden;
+            height:200px; //container height
+            overflow:auto;
                 label{
                     font-size: 16px;
                     line-height: 1.25; 
