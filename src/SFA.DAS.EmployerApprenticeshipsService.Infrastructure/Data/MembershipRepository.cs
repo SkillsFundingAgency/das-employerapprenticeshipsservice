@@ -56,13 +56,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@userId", userId, DbType.Int64);
-                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@UserId", userId, DbType.Int64);
+                parameters.Add("@AccountId", accountId, DbType.Int64);
 
                 return await c.ExecuteAsync(
-                    sql: "DELETE FROM [employer_account].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
+                    sql: "[employer_account].[RemoveMembership]",
                     param: parameters,
-                    commandType: CommandType.Text);
+                    commandType: CommandType.StoredProcedure);
             });
         }
 

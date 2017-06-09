@@ -13,9 +13,9 @@ namespace SFA.DAS.EAS.Domain.Models.AccountTeam
         public string Name { get; set; }
         public string UserRef { get; set; }
         public Role Role { get; set; }
-
         public InvitationStatus Status { get; set; }
         public DateTime ExpiryDate { get; set; }
         public string HashedInvitationId { get; set; }
+        public bool CanReceiveNotifications { get; set; }
     }
 }
