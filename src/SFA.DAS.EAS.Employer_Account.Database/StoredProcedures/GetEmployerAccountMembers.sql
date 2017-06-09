@@ -1,6 +1,16 @@
 ﻿CREATE PROCEDURE [employer_account].[GetEmployerAccountMembers]
 	@hashedAccountId VARCHAR(MAX)	
 AS
-	select tm.* from [employer_account].[GetTeamMembers] tm 
-    where tm.HashedId = @hashedAccountId
+	SELECT 
+		tm.*, s.ReceiveNotifications AS CanReceiveNotifications
+	FROM 
+		[employer_account].[GetTeamMembers] tm
+	INNER JOIN
+		[employer_account].[UserAccountSettings] s
+	ON
+		tm.Id = s.UserId
+	AND
+		tm.AccountId = s.AccountId
+    WHERE 
+		tm.HashedId = @hashedAccountId
 GO

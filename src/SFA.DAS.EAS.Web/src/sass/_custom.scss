@@ -372,6 +372,19 @@ body {
     border:5px solid $turquoise;
 }
 
+/*Email notification settings*/
+#notification-settings{
+    h1{
+        margin-bottom:0;
+    }
+    table{
+        margin-bottom:40px;
+    }
+    .notification-row{
+        padding:20px 0 30px 0;
+    }
+}
+
 //start -- Apprentice Filter Styles
 .filter-option-select 
 { 

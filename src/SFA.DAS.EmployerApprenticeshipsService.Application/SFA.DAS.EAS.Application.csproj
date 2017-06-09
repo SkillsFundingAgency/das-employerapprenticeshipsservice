@@ -153,6 +153,9 @@
     <Compile Include="Commands\UpdateProviderPaymentPriority\UpdateProviderPaymentPriorityValidator.cs" />
     <Compile Include="Commands\UpdateProviderPaymentPriority\UpdateProviderPaymentPriorityCommand.cs" />
     <Compile Include="Commands\UpdateProviderPaymentPriority\UpdateProviderPaymentPriorityCommandHandler.cs" />
+    <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommand.cs" />
+    <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommandHandler.cs" />
+    <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsValidator.cs" />
     <Compile Include="Extensions\ApprenticeshipExtensions.cs" />
     <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommand.cs" />
@@ -524,6 +527,10 @@
     <Compile Include="Queries\GetUserInvitations\GetUserInvitationsQueryHandler.cs" />
     <Compile Include="Queries\GetUserInvitations\GetUserInvitationsRequest.cs" />
     <Compile Include="Queries\GetUserInvitations\GetUserInvitationsResponse.cs" />
+    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQuery.cs" />
+    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQueryHandler.cs" />
+    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQueryResponse.cs" />
+    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQueryValidator.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQuery.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryHandler.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryResponse.cs" />

@@ -191,6 +191,8 @@
     <Compile Include="Commands\UpdatePayeInformationTests\WhenUpdatingPayeInformation.cs" />
     <Compile Include="Commands\UpdatePayeInformationTests\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\UpdateProviderPaymentPriority\WhenValidationUpdateProviderPaymentPriority.cs" />
+    <Compile Include="Commands\UpdateUserNotificationSettings\WhenUpdatingUserNotificationSettings.cs" />
+    <Compile Include="Commands\UpdateUserNotificationSettings\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUserTests\WhenUpsertingAUser.cs" />
     <Compile Include="Events\ProcessDeclarationTests\WhenIProcessDeclarations.cs" />
     <Compile Include="Events\ProcessPaymentTests\WhenIProcessPaymentData.cs" />
@@ -281,6 +283,8 @@
     <Compile Include="Queries\GetUserInvitations\WhenIRequestHowManyInvitationsIHave.cs" />
     <Compile Include="Queries\GetUserInvitations\WhenIRequestUserInvitations.cs" />
     <Compile Include="Queries\GetUserInvitations\WhenIValidateTheRequestForNumberOfInvitations.cs" />
+    <Compile Include="Queries\GetUserNotificationSettings\WhenIGetUserNotificationSettings.cs" />
+    <Compile Include="Queries\GetUserNotificationSettings\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUsersTests\WhenIGetUsers.cs" />
     <Compile Include="Queries\GetUserTest\WhenIGetAUser.cs" />
     <Compile Include="Queries\QueryBaseTest.cs" />

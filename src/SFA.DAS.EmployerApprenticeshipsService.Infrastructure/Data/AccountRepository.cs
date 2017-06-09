@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.PAYE;
+using SFA.DAS.EAS.Domain.Models.Settings;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -190,6 +191,57 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
+        public async Task<List<UserNotificationSetting>> GetUserAccountSettings(string userRef)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@UserRef", Guid.Parse(userRef), DbType.Guid);
 
+                return await c.QueryAsync<UserNotificationSetting>(
+                    sql: "[employer_account].[GetUserAccountSettings]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.ToList();
+        }
+
+        public async Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings)
+        {
+            var settingsDataTable = GenerateSettingsDataTable(settings);
+
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@UserRef", Guid.Parse(userRef), DbType.Guid);
+                parameters.Add("@NotificationSettings", settingsDataTable.AsTableValuedParameter("employer_account.UserNotificationSettingsTable"));
+
+                return await c.ExecuteAsync(
+                    sql: "[employer_account].[UpdateUserAccountSettings]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+        }
+
+        private static DataTable GenerateSettingsDataTable(List<UserNotificationSetting> settings)
+        {
+            var result = new DataTable();
+
+            result.Columns.Add("AccountId", typeof(long));
+            result.Columns.Add("ReceiveNotifications", typeof(bool));
+
+            foreach (var setting in settings)
+            {
+                var row = result.NewRow();
+                row["AccountId"] = setting.AccountId;
+                row["ReceiveNotifications"] = setting.ReceiveNotifications;
+                result.Rows.Add(row);
+            }
+
+            return result;
+
+
+        }
     }
 }
