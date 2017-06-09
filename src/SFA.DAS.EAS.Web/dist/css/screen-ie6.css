@@ -4432,6 +4432,19 @@ h2 .float-right {
   border: 5px solid #28a197;
 }
 
+/*Email notification settings*/
+#notification-settings h1 {
+  margin-bottom: 0;
+}
+
+#notification-settings table {
+  margin-bottom: 40px;
+}
+
+#notification-settings .notification-row {
+  padding: 20px 0 30px 0;
+}
+
 .filter-option-select {
   margin-bottom: 30px;
   background-color: #dee0e2;
