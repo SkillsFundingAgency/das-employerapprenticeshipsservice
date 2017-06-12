@@ -465,18 +465,23 @@ body {
 
 #manage-all-apprentices {
     .tableResponsive{
-        th{font-size:16px;}
+        th{
+            font-size:16px;
+
+        }
     }
     .reset-link{
         padding-left:0;
         margin-top:10px;
     }
+
     li{
        list-style-type:none;
        margin-bottom:10px;
     
     }
 }
+
 // pagination
 .previous-next-navigation {
   padding-left: 0;
