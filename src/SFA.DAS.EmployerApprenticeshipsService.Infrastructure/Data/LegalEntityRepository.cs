@@ -5,13 +5,14 @@ using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
-using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.Sql.Client;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class LegalEntityRepository : BaseRepository, ILegalEntityRepository
     {
-        public LegalEntityRepository(EmployerApprenticeshipsServiceConfiguration configuration) : base(configuration)
+        public LegalEntityRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger) : base(configuration.DatabaseConnectionString, logger)
         {
         }
 

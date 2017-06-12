@@ -3,18 +3,18 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.Sql.Client;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class AccountTeamRepository : BaseRepository, IAccountTeamRepository
     {
-        public AccountTeamRepository(EmployerApprenticeshipsServiceConfiguration configuration )
-            :base(configuration)
+        public AccountTeamRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+            :base(configuration.DatabaseConnectionString, logger)
         {
         }
 
