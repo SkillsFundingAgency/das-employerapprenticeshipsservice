@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public class EmployerAgreementView
+    public class EmployerAgreementView : IAccountResource
     {
         public long Id { get; set; }
         public long AccountId { get; set; }

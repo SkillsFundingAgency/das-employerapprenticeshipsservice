@@ -13,6 +13,7 @@ namespace SFA.DAS.EAS.Api.Mappings
                 .ForMember(target => target.DasAccountName, opt => opt.MapFrom(src => src.Name));
             CreateMap<LevyDeclarationView, LevyDeclarationViewModel>()
                 .ForMember(target => target.PayeSchemeReference, opt => opt.MapFrom(src => src.EmpRef));
+            CreateMap<Domain.Models.EmployerAgreement.EmployerAgreementView, EmployerAgreementView>();
         }
     }
 }
