@@ -1,7 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using AutoMapper;
+using Castle.Core.Internal;
+using FluentAssertions;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById;
@@ -13,14 +18,14 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AgreementOrchestratorT
     {
         private AgreementOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private IMapper _mapper;
         private EmployerAgreementView _agreement;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILogger>();
+            _mapper = ConfigureMapper();
             _agreement = new EmployerAgreementView();
 
             var response = new GetEmployerAgreementByIdResponse()
@@ -28,7 +33,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AgreementOrchestratorT
                 EmployerAgreement = _agreement
             };
 
-            _orchestrator = new AgreementOrchestrator(_mediator.Object, _logger.Object);
+            _orchestrator = new AgreementOrchestrator(_mediator.Object, _mapper);
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAgreementByIdRequest>()))
                 .ReturnsAsync(response);
@@ -44,7 +49,21 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AgreementOrchestratorT
             var result = await _orchestrator.GetAgreement(hashedAgreementId);
 
             //Assert
-            Assert.AreEqual(_agreement, result.Data);
+            result.Data.ShouldBeEquivalentTo(_agreement);
+        }
+
+        private IMapper ConfigureMapper()
+        {
+            var apiProfiles = Assembly.Load($"SFA.DAS.EAS.Api").GetTypes()
+                            .Where(t => typeof(Profile).IsAssignableFrom(t))
+                            .Select(t => (Profile)Activator.CreateInstance(t));
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                apiProfiles.ForEach(cfg.AddProfile);
+            });
+
+            return config.CreateMapper();
         }
     }
 }
