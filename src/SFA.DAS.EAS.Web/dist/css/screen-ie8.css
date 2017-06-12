@@ -4355,34 +4355,12 @@ h2 .float-right {
   padding: 20px;
 }
 
-/*.dynamic-cost-display{
-    .bold-xlarge{     
-          line-height: 82px;
-    }
-     @include media(tablet) { 
-     
-      .long {
-            font-size: 42px;
-             line-height: 82px;
-        }
-        .longer {
-            font-size: 22px;
-            line-height: 82px;
-        }
-    }
-    @include media(960px) {       
-        .long {
-            font-size: 48px;
-            line-height: 82px;
-        }
-        .longer {
-            font-size: 32px;
-            line-height: 82px;
-        }
-    }
-}*/
 .dynamic-cost-display .bold-xlarge {
   line-height: 82px;
+}
+
+.dynamic-cost-display .short {
+  font-size: 48px;
 }
 
 .dynamic-cost-display .long {

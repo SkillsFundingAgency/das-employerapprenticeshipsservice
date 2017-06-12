@@ -56,9 +56,14 @@
     <div class="column-one-third total-cost">
         <div class="dynamic-cost-display">
             @{
-                 var totalCost = Model.Data.Apprenticeships.Sum(x => x.Cost ?? 0).ToString("N0");              
+                var totalCost = Model.Data.Apprenticeships.Sum(x => x.Cost ?? 0).ToString("N0");
                 var totalClass = string.Empty;
               
+
+                if (totalCost.Length < 5)
+                {
+                    totalClass = "short";
+                }
                 if (totalCost.Length > 8)
                 {
                     totalClass = "long";
