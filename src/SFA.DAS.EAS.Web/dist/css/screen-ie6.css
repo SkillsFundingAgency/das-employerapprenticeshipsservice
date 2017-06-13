@@ -4615,11 +4615,11 @@ h2 .float-right {
   content: " ";
 }
 
-Upda #edit-apprentices-detail hr {
+#edit-apprentices-detail hr {
   margin-top: 0;
 }
 
-Upda #edit-apprentices-detail .optional-ref {
+#edit-apprentices-detail .optional-ref {
   margin-bottom: 0;
 }
 
@@ -4667,6 +4667,50 @@ Upda #edit-apprentices-detail .optional-ref {
   font-weight: bold;
 }
 
+#manage-all-apprentices .previous-next-navigation {
+  padding-left: 0;
+  position: relative;
+  overflow: hidden;
+  margin: 60px 0 0;
+  width: 100%;
+}
+
+#manage-all-apprentices .previous-next-navigation li {
+  font-family: "nta", Arial, sans-serif;
+  font-size: 20px;
+  line-height: 1.11111;
+  font-weight: 400;
+  text-transform: none;
+  font-size-adjust: 0.5;
+  display: block;
+  padding: 0;
+  margin: 0;
+  width: 50%;
+  float: left;
+}
+
+#manage-all-apprentices .previous-next-navigation li a {
+  display: block;
+  text-decoration: none;
+  font-size: 24px;
+  line-height: 0.9em;
+}
+
+#manage-all-apprentices .previous-next-navigation li a span {
+  display: block;
+  font-family: "nta", Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.25;
+  font-weight: 400;
+  text-transform: none;
+  font-size-adjust: 0.5;
+}
+
+#manage-all-apprentices .previous-next-navigation li a:hover {
+  background: #f8f8f8;
+}
+
+#manage-all-apprentices .previous-next-navigation li a:hover .page-numbers {
   text-decoration: underline;
 }
 
