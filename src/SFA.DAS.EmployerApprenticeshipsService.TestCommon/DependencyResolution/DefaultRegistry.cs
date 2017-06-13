@@ -15,6 +15,7 @@ using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.Events.Api.Client;
+using SFA.DAS.NLog.Logger;
 using StructureMap;
 using StructureMap.Graph;
 using WebGrease.Css.Extensions;
@@ -44,6 +45,8 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 
             For<ICache>().Use<InMemoryCache>();
             For<IEventsApi>().Use(() => eventApi.Object);
+
+            For<ILog>().Use(Mock.Of<ILog>());
 
             AddMediatrRegistrations();
 
