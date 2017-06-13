@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NLog;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -11,9 +11,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     {
         private readonly IAuditApiClient _auditApiClient;
         private readonly IAuditMessageFactory _factory;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
-        public AuditService(IAuditApiClient auditApiClient, IAuditMessageFactory factory, ILogger logger)
+        public AuditService(IAuditApiClient auditApiClient, IAuditMessageFactory factory, ILog logger)
         {
             _auditApiClient = auditApiClient;
             _factory = factory;

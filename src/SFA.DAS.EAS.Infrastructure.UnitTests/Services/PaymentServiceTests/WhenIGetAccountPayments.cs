@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Castle.Components.DictionaryAdapter;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
@@ -18,6 +17,7 @@ using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
 {
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         private Mock<IEmployerCommitmentApi> _commitmentsApiClient;
         private Mock<IPaymentsEventsApiClient> _paymentsApiClient;
         private Mock<IMapper> _mapper;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<ICacheProvider> _cacheProvider;
 
         private PaymentService _paymentService;
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
 
         private void SetupLoggerMock()
         {
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             _logger.Setup(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()));
             _logger.Setup(x => x.Warn(It.IsAny<Exception>(), It.IsAny<string>()));
         }

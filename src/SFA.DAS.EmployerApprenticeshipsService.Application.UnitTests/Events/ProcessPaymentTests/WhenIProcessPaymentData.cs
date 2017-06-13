@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Events.ProcessPaymentTests
 {
@@ -12,13 +11,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Events.ProcessPaymentTests
     {
         private ProcessPaymentEventHandler _eventHandler;
         private Mock<IDasLevyRepository> _dasLevyRepository;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
 
         [SetUp]
         public void Arrange()
         {
             _dasLevyRepository = new Mock<IDasLevyRepository>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _eventHandler = new ProcessPaymentEventHandler(_dasLevyRepository.Object,_logger.Object);
         }

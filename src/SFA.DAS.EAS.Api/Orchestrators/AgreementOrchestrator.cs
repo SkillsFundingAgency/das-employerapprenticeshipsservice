@@ -3,6 +3,7 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Api.Orchestrators
 {

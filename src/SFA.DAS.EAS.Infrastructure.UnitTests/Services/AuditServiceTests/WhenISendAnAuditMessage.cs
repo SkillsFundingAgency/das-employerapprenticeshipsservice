@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.AuditServiceTests
 {
@@ -17,14 +17,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.AuditServiceTests
         private AuditService _auditService;
         private Mock<IAuditApiClient> _auditApiClient;
         private Mock<IAuditMessageFactory> _auditMessageFactory;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
 
         [SetUp]
         public void Arrange()
         {
             _auditApiClient = new Mock<IAuditApiClient>();
             _auditMessageFactory = new Mock<IAuditMessageFactory>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _auditService = new AuditService(_auditApiClient.Object, _auditMessageFactory.Object, _logger.Object);
         }

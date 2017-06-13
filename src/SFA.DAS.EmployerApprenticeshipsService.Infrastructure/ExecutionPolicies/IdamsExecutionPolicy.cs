@@ -1,21 +1,20 @@
 using System;
 
-using NLog;
-
 using Polly;
 
 using SFA.DAS.EAS.Domain.Http;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
 {
     [PolicyName(Name)]
     public class IdamsExecutionPolicy : ExecutionPolicy
     {
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         public const string Name = "IDAMS Policy";
 
-        public IdamsExecutionPolicy(ILogger logger)
+        public IdamsExecutionPolicy(ILog logger)
         {
             _logger = logger;
 
@@ -32,7 +31,7 @@ namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
 
         private void OnRetryableFailure(Exception ex)
         {
-            _logger.Info(ex, $"Error calling IDAMS - {ex.Message} - Will retry");
+            _logger.Info($"Error calling IDAMS - {ex.Message} - Will retry");
         }
     }
 }

@@ -4,19 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json.Linq;
-using NLog;
 
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Infrastructure.ExecutionPolicies;
 using SFA.DAS.EAS.Infrastructure.Models;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class IdamsEmailServiceWrapper
     {
 
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         private readonly CommitmentNotificationConfiguration _configuration;
 
@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         private readonly ExecutionPolicy _executionPolicy;
 
         public IdamsEmailServiceWrapper(
-            ILogger logger,
+            ILog logger,
             EmployerApprenticeshipsServiceConfiguration configuration,
             IHttpClientWrapper httpClient,
             [RequiredPolicy(IdamsExecutionPolicy.Name)]ExecutionPolicy executionPolicy)

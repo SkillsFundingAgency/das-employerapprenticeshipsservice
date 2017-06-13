@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
@@ -10,7 +9,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater;
 using SFA.DAS.Messaging;
-
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.LevyAccountUpdater.UnitTests
 {
@@ -20,7 +19,7 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.UnitTests
         private Mock<IMessagePublisher> _messagePublisher;
         private AccountUpdater _updater;
         private List<Account> _accounts;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<IEmployerSchemesRepository> _employerSchemesRepository;
 
         [SetUp]
@@ -29,7 +28,7 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.UnitTests
             _employerAccountRepository = new Mock<IEmployerAccountRepository>();
             _employerSchemesRepository = new Mock<IEmployerSchemesRepository>();
             _messagePublisher = new Mock<IMessagePublisher>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _accounts = new List<Account>
             {
@@ -88,13 +87,13 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.UnitTests
             //Assign
             var exception = new Exception("Test exception");
             _employerAccountRepository.Setup(x => x.GetAllAccounts()).Throws(exception);
-            _logger.Setup(x => x.Error(It.IsAny<Exception>()));
+            _logger.Setup(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()));
 
             //Act
             Assert.ThrowsAsync<Exception>(async () => await _updater.RunUpdate());
 
             //Assert
-            _logger.Verify(x => x.Error(exception), Times.Once);
+            _logger.Verify(x => x.Error(exception, It.IsAny<string>()), Times.Once);
         }
     }
 }

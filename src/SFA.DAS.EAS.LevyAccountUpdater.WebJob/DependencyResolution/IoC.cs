@@ -30,7 +30,6 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.DependencyResolution {
             return new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
-                c.Policies.Add<LoggingPolicy>();
                 c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
                 c.AddRegistry<DefaultRegistry>();
             });

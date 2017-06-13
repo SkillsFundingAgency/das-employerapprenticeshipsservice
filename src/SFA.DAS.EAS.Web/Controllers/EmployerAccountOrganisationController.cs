@@ -4,15 +4,14 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
-using NLog;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -22,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly OrganisationOrchestrator _orchestrator;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         public EmployerAccountOrganisationController(
             IOwinWrapper owinWrapper,
@@ -30,7 +29,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             IFeatureToggle featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
             IMapper mapper,
-            ILogger logger,
+            ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage) 
             :base(owinWrapper, featureToggle,multiVariantTestingService, flashMessage)
         {

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using NLog;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTeamMembers
 {
@@ -10,12 +10,12 @@ namespace SFA.DAS.EAS.Application.Queries.GetTeamMembers
     {
         private readonly IAccountTeamRepository _repository;
         private readonly IValidator<GetTeamMembersRequest> _validator;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         public GetTeamMembersRequestHandler(
             IAccountTeamRepository repository, 
             IValidator<GetTeamMembersRequest> validator,
-            ILogger logger)
+            ILog logger)
         {
             _repository = repository;
             _validator = validator;

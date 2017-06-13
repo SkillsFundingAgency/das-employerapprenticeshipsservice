@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using NLog;
 using SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class AuthenticationOrchestraor
     {
         private readonly IMediator _mediator;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
-        public AuthenticationOrchestraor(IMediator mediator, ILogger logger)
+        public AuthenticationOrchestraor(IMediator mediator, ILog logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));

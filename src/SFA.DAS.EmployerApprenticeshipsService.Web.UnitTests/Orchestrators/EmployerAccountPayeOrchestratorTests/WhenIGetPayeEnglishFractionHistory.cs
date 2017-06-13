@@ -4,7 +4,6 @@ using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -12,13 +11,14 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
 {
     public class WhenIGetPayeEnglishFractionHistory
     {
         private EmployerApprenticeshipsServiceConfiguration _configuration;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private Mock<IMediator> _mediator;
         private EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             
             _configuration = new EmployerApprenticeshipsServiceConfiguration { Hmrc = new HmrcConfiguration() };
 
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _mediator = new Mock<IMediator>();

@@ -3,7 +3,6 @@ using System.Net;
 using AutoMapper;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
@@ -11,6 +10,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 {
@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
     {
         private OrganisationOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<IMapper> _mapper;
 
         private CreateOrganisationAddressRequest _request;
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                        $"{_request.TownOrCity}, {_request.County}, {_request.Postcode}";
            
             _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             _mapper = new Mock<IMapper>();
 
             _mapper.Setup(x => x.Map<CreateOrganisationAddressRequest>(It.IsAny<AddOrganisationAddressViewModel>()))

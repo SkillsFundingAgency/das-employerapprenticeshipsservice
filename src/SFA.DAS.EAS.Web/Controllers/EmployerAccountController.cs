@@ -3,12 +3,12 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
-using NLog;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -17,10 +17,10 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class EmployerAccountController : BaseController
     {
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator,
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ILogger logger, ICookieStorageService<FlashMessageViewModel> flashMessage)
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ILog logger, ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, featureToggle,multiVariantTestingService,flashMessage)
         {
             if (employerAccountOrchestrator == null)

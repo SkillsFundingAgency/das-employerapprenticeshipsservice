@@ -5,13 +5,13 @@ using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 {
@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         private RefreshPaymentDataCommand _command;
         private Mock<IDasLevyRepository> _dasLevyRepository;
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private PaymentDetails _paymentDetails;
 
         [SetUp]
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
                            .ReturnsAsync(new List<PaymentDetails> {_paymentDetails});
 
             _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             
             _handler = new RefreshPaymentDataCommandHandler(
                 _validator.Object, 

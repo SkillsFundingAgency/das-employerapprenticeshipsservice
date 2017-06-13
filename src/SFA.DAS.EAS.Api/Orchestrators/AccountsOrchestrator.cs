@@ -5,7 +5,6 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using NLog;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
@@ -15,17 +14,18 @@ using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EAS.Application.Queries.GetTeamMembers;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Api.Orchestrators
 {
     public class AccountsOrchestrator
     {
         private readonly IMediator _mediator;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private readonly IMapper _mapper;
         private readonly IHashingService _hashingService;
 
-        public AccountsOrchestrator(IMediator mediator, ILogger logger, IMapper mapper, IHashingService hashingService)
+        public AccountsOrchestrator(IMediator mediator, ILog logger, IMapper mapper, IHashingService hashingService)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));

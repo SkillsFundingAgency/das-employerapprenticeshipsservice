@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using MediatR;
-using NLog;
 using FluentValidation;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -28,6 +27,7 @@ using SFA.DAS.EAS.Application.Queries.ValidateStatusChangeDate;
 using SFA.DAS.EAS.Application.Commands.UpdateApprenticeshipStatus;
 using SFA.DAS.EAS.Application.Queries.ApprenticeshipSearch;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly IHashingService _hashingService;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IApprenticeshipFiltersMapper _apprenticeshipFiltersMapper;
 
@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             IApprenticeshipMapper apprenticeshipMapper,
             ApprovedApprenticeshipViewModelValidator apprenticeshipValidator,
             ICurrentDateTime currentDateTime,
-            ILogger logger,
+            ILog logger,
             ICookieStorageService<UpdateApprenticeshipViewModel> apprenticshipsViewModelCookieStorageService,
             IApprenticeshipFiltersMapper apprenticeshipFiltersMapper) : base(mediator, hashingService, logger)
         {

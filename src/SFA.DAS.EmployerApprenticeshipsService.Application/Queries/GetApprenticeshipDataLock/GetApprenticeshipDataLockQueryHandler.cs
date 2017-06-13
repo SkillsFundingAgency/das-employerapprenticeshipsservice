@@ -3,9 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using MediatR;
-using NLog;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock
 {
@@ -13,11 +13,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock
     {
         private readonly IDataLockApi _dataLockApi;
 
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         public GetApprenticeshipDataLockQueryHandler(
             IDataLockApi dataLockApi,
-            ILogger logger)
+            ILog logger)
         {
             if (dataLockApi == null)
                 throw new ArgumentNullException(nameof(dataLockApi));

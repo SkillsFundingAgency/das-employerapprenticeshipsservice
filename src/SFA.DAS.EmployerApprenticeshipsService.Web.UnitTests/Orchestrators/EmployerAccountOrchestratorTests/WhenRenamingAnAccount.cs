@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
@@ -14,13 +13,14 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests
 {
     public  class WhenRenamingAnAccount
     {
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<IMediator> _mediator;
         private EmployerAccountOrchestrator _orchestrator;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         public void Arrange()
         {
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             _mediator = new Mock<IMediator>();
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 

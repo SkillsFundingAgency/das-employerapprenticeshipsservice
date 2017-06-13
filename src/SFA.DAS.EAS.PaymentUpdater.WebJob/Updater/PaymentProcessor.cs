@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using NLog;
 using SFA.DAS.EAS.Application.Commands.CreateNewPeriodEnd;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Queries.GetAllEmployerAccounts;
@@ -13,7 +11,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.Messaging;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
-
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
 {
@@ -26,11 +24,11 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
         private readonly IPaymentsEventsApiClient _paymentsEventsApiClient;
         private readonly IMediator _mediator;
         private readonly IMessagePublisher _publisher;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private readonly PaymentsApiClientConfiguration _configuration;
 
 
-        public PaymentProcessor(IPaymentsEventsApiClient paymentsEventsApiClient, IMediator mediator, IMessagePublisher publisher, ILogger logger, PaymentsApiClientConfiguration configuration)
+        public PaymentProcessor(IPaymentsEventsApiClient paymentsEventsApiClient, IMediator mediator, IMessagePublisher publisher, ILog logger, PaymentsApiClientConfiguration configuration)
         {
             _paymentsEventsApiClient = paymentsEventsApiClient;
             _mediator = mediator;
