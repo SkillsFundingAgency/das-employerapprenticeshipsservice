@@ -210,7 +210,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             var details = await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
 
             //Assert
-            Assert.AreEqual(details.First().PeriodEnd, PeriodEnd);
+            Assert.AreEqual(PeriodEnd, details.First().PeriodEnd);
         }
 
         [Test]
