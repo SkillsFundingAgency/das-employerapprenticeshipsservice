@@ -10,30 +10,16 @@ namespace SFA.DAS.EAS.Api.Controllers
     public class EmployerAgreementController : ApiController
     {
         private readonly AgreementOrchestrator _orchestrator;
-        private readonly ILogger _logger;
-
-        public EmployerAgreementController(AgreementOrchestrator orchestrator, ILogger logger)
+        
+        public EmployerAgreementController(AgreementOrchestrator orchestrator)
         {
             _orchestrator = orchestrator;
-            _logger = logger;
         }
 
         [Route("{agreementId}", Name = "AgreementById")]
         [ApiAuthorize(Roles = "ReadAllEmployerAgreements")]
         [HttpGet]   
         public async Task<IHttpActionResult> GetAgreement(string agreementId)
-        {
-            var response = await _orchestrator.GetAgreement(agreementId);
-            
-            _logger.Info("Incorrect get agreement API call received");
-
-            return Ok(response);
-        }
-
-        [Route("{agreementId}/agreement", Name = "GetAgreement")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAgreements")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAgreementById(string agreementId)
         {
             var response = await _orchestrator.GetAgreement(agreementId);
 
@@ -44,6 +30,5 @@ namespace SFA.DAS.EAS.Api.Controllers
 
             return Ok(response.Data);
         }
-
     }
 }
