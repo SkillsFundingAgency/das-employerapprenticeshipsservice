@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
+
 @model SFA.DAS.EAS.Web.OrchestratorResponse<ApprenticeshipDetailsViewModel>
 
 @{
@@ -16,6 +17,7 @@
                     <h3 class="heading-small">Changes for review</h3>
                     <p>
                         There are changes to this apprentice's details that you need to review.
+                        Until you've reviewed the changes, you'll only be able to edit the apprentice's status.
                     </p>
                     <p>
                         <a href="@Url.RouteUrl("ReviewChanges")">Review changes</a>
@@ -36,16 +38,32 @@
             }
             else if (Model.Data.HasDataLockError)
             {
-                <div class="panel panel-border-wide">
-                    <h3>
-                        ILR data mismatch
-                    </h3>
-                    <p>
-                        The apprentice's details are different in your organisation's ILR submission.
-                        This may result in a payment failure.
-                    </p>
-                        <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
-                </div>
+                if (Model.Data.DataLockTriageStatus == TriageStatusViewModel.Restart)
+                 {
+                    <div class="panel panel-border-wide">
+                        <h3>
+                            ILR data mismatch
+                        </h3>
+                        <p>
+                            The apprentice's details are different in your organisation's ILR submission.
+                            This may result in a payment failure.
+                        </p>
+                            <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
+                    </div>
+                }
+                else if (Model.Data.DataLockTriageStatus == TriageStatusViewModel.Change)
+                {
+                    <div class="panel panel-border-wide">
+                        <h3>
+                            Changes requested
+                        </h3>
+                        <p>
+                            There are changes to this apprentice's details that you need to review.
+                            Until you've reviewed the changes, you'll only be able to edit the apprentice's status.
+                        </p>
+                        <a href="@Url.RouteUrl("RequestChanges")" aria-label="View details" class="">Review changes</a>
+                    </div>
+                }
             }
 
             <h2 class="heading-medium visually-hidden">Apprentice status</h2>

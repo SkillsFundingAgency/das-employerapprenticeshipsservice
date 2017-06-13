@@ -1,0 +1,35 @@
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.DataLockStatusViewModel>
+
+@{
+    ViewBag.Title = "Change Apprenticeship";
+}
+
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Review changes</h1>
+
+        <table>
+            <tr>
+                <td>Name</td>
+                <td>@Model.Data.LearnerName</td>
+            </tr>
+            @if (Model.Data.DateOfBirth != null)
+            {
+            <tr>
+                <td>Date of birth</td>
+                <td>@Model.Data.DateOfBirth.Value.ToGdsFormat()</td>
+            </tr>
+            }
+        </table>
+    </div>
+</div>
+
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId} )" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
+    </div>
+}

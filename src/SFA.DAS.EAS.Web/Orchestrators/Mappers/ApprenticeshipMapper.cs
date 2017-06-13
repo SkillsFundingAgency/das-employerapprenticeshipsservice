@@ -72,8 +72,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                             && new []{ PaymentStatus.Active, PaymentStatus.Paused,  }.Contains(apprenticeship.PaymentStatus),
                 CanEditStatus = !(new List<PaymentStatus> { PaymentStatus.Completed, PaymentStatus.Withdrawn }).Contains(apprenticeship.PaymentStatus),
                 HasDataLockError = apprenticeship.DataLockTriageStatus != null 
-                                && apprenticeship.DataLockTriageStatus == TriageStatus.Restart,
-                DataLockTriageStatus = apprenticeship.DataLockTriageStatus ?? TriageStatus.Unknown
+                                && (apprenticeship.DataLockTriageStatus == TriageStatus.Restart 
+                                  ||apprenticeship.DataLockTriageStatus == TriageStatus.Change ),
+                DataLockTriageStatus = (TriageStatusViewModel)(apprenticeship.DataLockTriageStatus ?? TriageStatus.Unknown)
             };
         }
         

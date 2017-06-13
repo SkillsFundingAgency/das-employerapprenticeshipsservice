@@ -20,5 +20,9 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public string ProviderName { get; set; }
 
         public TriageStatus TriageStatus { get; set; }
+
+        public string LearnerName { get; set; }
+
+        public DateTime? DateOfBirth { get; set; }
     }
 }

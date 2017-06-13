@@ -407,6 +407,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{hashedApprenticeshipId}/datalock/changes", Name = "RequestChanges")]
+        public async Task<ActionResult> RequestChanges(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            var model = await _orchestrator.GetDataLockStatus(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            if (model.Data.TriageStatus != TriageStatus.Change)
+                throw new InvalidStateException($"Apprenticeship data lock not is correct state, Current: {model.Data.TriageStatus}expecting {TriageStatus.Change}");
+
+            return View(model);
+        }
+
+        [HttpGet]
         [Route("paymentorder", Name = "PaymentOrder")]
         public async Task<ActionResult> PaymentOrder(string hashedAccountId)
         {

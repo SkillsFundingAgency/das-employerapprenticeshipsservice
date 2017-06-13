@@ -32,6 +32,8 @@ using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock;
 using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
 using System.Net;
 
+using AutoMapper.Execution;
+
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public sealed class EmployerManageApprenticeshipsOrchestrator : CommitmentsBaseOrchestrator
@@ -243,7 +245,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     viewModel.HashedApprenticeshipId = hashedApprenticeshipId;
                     viewModel.ProviderName = apprenticeship.ProviderName;
                     viewModel.IsDataLockOrigin = 
-                        apprenticeship.DataLockTriageStatus == TriageStatus.Change;
+                        apprenticeship.DataLockTriageStatus == (TriageStatusViewModel)TriageStatus.Change;
 
                     return new OrchestratorResponse<UpdateApprenticeshipViewModel>
                     {
@@ -619,7 +621,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                         IlrProgram = newProgram,
                                         PeriodStartData = new DateTime(2017, 08, 08),
                                         ProviderName = apprenticeship.Apprenticeship.ProviderName,
-                                        TriageStatus = dataLock.DataLockStatus.TriageStatus
+                                        TriageStatus = dataLock.DataLockStatus.TriageStatus,
+                                        LearnerName = apprenticeship.Apprenticeship.ApprenticeshipName,
+                                        DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth
                                     }
                            };
             }, hashedAccountId, userId);

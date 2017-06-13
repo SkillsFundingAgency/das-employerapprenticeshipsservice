@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 
         public bool HasDataLockError { get; set; }
 
-        public TriageStatus DataLockTriageStatus { get; set; }
+        public TriageStatusViewModel DataLockTriageStatus { get; set; }
     }
 
     public enum PendingChanges
@@ -50,5 +50,13 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         None = 0,
         ReadyForApproval = 1,
         WaitingForApproval = 2
+    }
+
+    public enum TriageStatusViewModel
+    {
+        Unknown = 0,
+        Change = 1,
+        Restart = 2,
+        FixIlr = 3
     }
 }
