@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
-using NLog;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -14,6 +13,7 @@ using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
+using SFA.DAS.NLog.Logger;
 using Payment = SFA.DAS.Provider.Events.Api.Types.Payment;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
@@ -24,10 +24,10 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly IEmployerCommitmentApi _commitmentsApiClient;
         private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoService;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private readonly ICacheProvider _cacheProvider;
 
-        public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient, IEmployerCommitmentApi commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService, IMapper mapper, ILogger logger, ICacheProvider cacheProvider)
+        public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient, IEmployerCommitmentApi commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService, IMapper mapper, ILog logger, ICacheProvider cacheProvider)
         {
             _paymentsEventsApiClient = paymentsEventsApiClient;
             _commitmentsApiClient = commitmentsApiClient;

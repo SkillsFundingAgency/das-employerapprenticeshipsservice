@@ -8,6 +8,7 @@ using SFA.DAS.EAS.PaymentUpdater.WebJob.Updater;
 using StructureMap;
 using StructureMap.Graph;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.PaymentUpdater.WebJob.DependencyResolution
 {
@@ -27,6 +28,7 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.DependencyResolution
 
             RegisterMapper();
             RegisterMediator();
+            RegisterLogger();
         }
 
         private void RegisterMediator()
@@ -51,6 +53,14 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.DependencyResolution
 
             For<IConfigurationProvider>().Use(config).Singleton();
             For<IMapper>().Use(mapper).Singleton();
+        }
+
+        private void RegisterLogger()
+        {
+            For<ILog>().Use(x => new NLogLogger(
+                x.ParentType,
+                null,
+                null)).AlwaysUnique();
         }
     }
 }

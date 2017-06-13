@@ -1,11 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Moq;
-using NLog;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Events;
 using SFA.DAS.EAS.Application.Events.ProcessDeclaration;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Events.ProcessDeclarationTests
 {
@@ -13,13 +11,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Events.ProcessDeclarationTests
     {
         private ProcessDeclarationsEventHandler _processDeclarationsEvent;
         private Mock<IDasLevyRepository> _dasLevyRepository;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
 
         [SetUp]
         public void Arrange()
         {
             _dasLevyRepository = new Mock<IDasLevyRepository>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _processDeclarationsEvent = new ProcessDeclarationsEventHandler(_dasLevyRepository.Object, _logger.Object);    
         }

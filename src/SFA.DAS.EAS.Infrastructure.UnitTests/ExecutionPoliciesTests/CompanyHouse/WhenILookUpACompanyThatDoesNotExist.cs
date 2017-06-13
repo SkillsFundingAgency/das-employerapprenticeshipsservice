@@ -1,21 +1,21 @@
 ﻿using System;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Infrastructure.ExecutionPolicies;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.ExecutionPoliciesTests.CompanyHouse
 {
     public class WhenILookUpACompanyThatDoesNotExist
     {
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private TestPolicy _policy;
 
         [SetUp]
         public void Arrange()
         {
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             _policy = new TestPolicy(_logger.Object);
         }
 
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.ExecutionPoliciesTests.CompanyHou
             _policy.TestThrowException(new ResourceNotFoundException(""));
 
             //Assert
-            _logger.Verify(x => x.Info(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
+            _logger.Verify(x => x.Info(It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.ExecutionPoliciesTests.CompanyHou
 
         private class TestPolicy : CompaniesHouseExecutionPolicy
         {
-            public TestPolicy(ILogger logger) : base(logger)
+            public TestPolicy(ILog logger) : base(logger)
             {
             }
 

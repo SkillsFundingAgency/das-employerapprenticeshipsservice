@@ -8,23 +8,23 @@ using SFA.DAS.EAS.Application.Commands.CreateInvitation;
 using SFA.DAS.EAS.Application.Queries.GetInvitation;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class InvitationOrchestrator
     {
         private readonly IMediator _mediator;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         protected InvitationOrchestrator()
         {
             
         }
 
-        public InvitationOrchestrator(IMediator mediator, ILogger logger)
+        public InvitationOrchestrator(IMediator mediator, ILog logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (InvalidRequestException ex)
             {
-                _logger.Info(ex);
+                _logger.Info(ex.Message);
             }
             
         }
@@ -104,7 +104,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             catch (InvalidRequestException ex)
             {
                 
-                _logger.Info(ex);
+                _logger.Info(ex.Message);
             }
 
             return new OrchestratorResponse<UserInvitationsViewModel>

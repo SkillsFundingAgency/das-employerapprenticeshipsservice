@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
@@ -14,6 +13,7 @@ using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 {
@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
     {
         private OrganisationOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<IMapper> _mapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             _mapper = new Mock<IMapper>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
 using MediatR;
-using NLog;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
@@ -26,13 +25,14 @@ using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class OrganisationOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly IMediator _mediator;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private readonly IMapper _mapper;
         private readonly ICookieStorageService<EmployerAccountData> _cookieService;
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
         }
 
-        public OrganisationOrchestrator(IMediator mediator, ILogger logger, IMapper mapper, ICookieStorageService<EmployerAccountData> cookieService)
+        public OrganisationOrchestrator(IMediator mediator, ILog logger, IMapper mapper, ICookieStorageService<EmployerAccountData> cookieService)
             : base(mediator)
         {
             _mediator = mediator;
@@ -219,7 +219,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             int charityRegistrationNumber;
             if (!int.TryParse(registrationNumber.Trim(), out charityRegistrationNumber))
             {
-                _logger.Error("Non-numeric registration number");
+                var exception = new ArgumentException("Non-numeric registration number", nameof(registrationNumber));
+                _logger.Error(exception, exception.Message);
             }
 
             GetCharityQueryResponse charityResult;

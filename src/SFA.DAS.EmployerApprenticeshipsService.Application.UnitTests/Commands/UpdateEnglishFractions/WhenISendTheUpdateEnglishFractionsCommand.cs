@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions;
 using SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired;
@@ -12,6 +11,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
 {
@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
         private UpdateEnglishFractionsCommandHandler _handler;
         private Mock<IHmrcService> _hmrcService;
         private Mock<IEnglishFractionRepository> _englishFractionRepository;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private List<DasEnglishFraction> _existingFractions;
         private string _employerReference;
         private List<FractionCalculation> _fractionCalculations;
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             _employerReference = "123/AB456";
             _englishFractionRepository = new Mock<IEnglishFractionRepository>();
             _hmrcService = new Mock<IHmrcService>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             _handler = new UpdateEnglishFractionsCommandHandler(_hmrcService.Object, _englishFractionRepository.Object, _logger.Object);
 
             _existingFractions = new List<DasEnglishFraction>

@@ -8,13 +8,15 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.Sql.Client;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class UserAccountRepository : BaseRepository, IUserAccountRepository
     {
-        public UserAccountRepository(EmployerApprenticeshipsServiceConfiguration configuration)
-            : base(configuration)
+        public UserAccountRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+            : base(configuration.DatabaseConnectionString, logger)
         {
         }
 

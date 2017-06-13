@@ -25,7 +25,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
                 c =>
                 {
                     c.AddRegistry<WhenAddingLogging.TestRegistry>();
-                    c.Policies.Add<LoggingPolicy>();
                     c.Scan(scan => {
                         scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                         scan.RegisterConcreteTypesAgainstTheFirstInterface();

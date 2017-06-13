@@ -2,17 +2,16 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using NLog;
-
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class ProviderEmailLookupService : IProviderEmailLookupService
     {
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         private readonly IdamsEmailServiceWrapper _idamsEmailServiceWrapper;
 
@@ -21,7 +20,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly CommitmentNotificationConfiguration _configuration;
 
         public ProviderEmailLookupService(
-            ILogger logger,
+            ILog logger,
             IdamsEmailServiceWrapper idamsEmailServiceWrapper,
             EmployerApprenticeshipsServiceConfiguration employerConfiguration,
             IApprenticeshipInfoServiceWrapper apprenticeshipInfoService)

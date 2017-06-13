@@ -1,24 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
     public class WhenIGetTheConfirmRemoveAgreementModel
     {
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private EmployerAgreementOrchestrator _orchestrator;
 
@@ -45,7 +44,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
                     
                 });
 
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 

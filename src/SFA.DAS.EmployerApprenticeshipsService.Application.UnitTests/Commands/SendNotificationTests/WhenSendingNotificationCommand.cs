@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Types;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendNotificationTests
 {
@@ -14,13 +14,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendNotificationTests
     {
         private SendNotificationCommandHandler _sendNotificationCommandHandler;
         private Mock<IValidator<SendNotificationCommand>>  _validator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<INotificationsApi> _notificationClient;
 
         [SetUp]
         public void Arrange()
         {
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _validator = new Mock<IValidator<SendNotificationCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<SendNotificationCommand>())).Returns(new ValidationResult());

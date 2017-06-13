@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 
 using SFA.DAS.Commitments.Api.Types;
@@ -15,6 +14,7 @@ using FluentAssertions;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
 {
@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _mockEmailLookup = new Mock<IProviderEmailLookupService>();
             _mockEmailLookup.Setup(m => m.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new List<string>());
 
-            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentApi.Object, _mockMediator.Object, config, _mockEmailLookup.Object, Mock.Of<ILogger>());
+            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentApi.Object, _mockMediator.Object, config, _mockEmailLookup.Object, Mock.Of<ILog>());
         }
 
         [Test]

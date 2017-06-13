@@ -4,20 +4,20 @@ using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.RemoveLegalEntity;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
     public class WhenIRemoveTheLegalAgreement
     {
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private EmployerAgreementOrchestrator _orchestrator;
 
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             _mediator = new Mock<IMediator>();
             //RemoveLegalEntityCommand
 
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 

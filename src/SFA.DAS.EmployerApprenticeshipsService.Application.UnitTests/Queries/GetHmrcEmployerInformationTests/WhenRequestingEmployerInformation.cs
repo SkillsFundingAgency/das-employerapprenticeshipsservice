@@ -3,15 +3,14 @@ using System.Data;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.PAYE;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcEmployerInformationTests
 {
@@ -21,7 +20,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcEmployerInformationTe
         private Mock<IValidator<GetHmrcEmployerInformationQuery>> _validator;
         private Mock<IHmrcService> _hmrcService;
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private const string ExpectedAuthToken = "token1";
         private const string ExpectedAuthTokenInUse = "token12";
         private const string ExpectedAuthTokenNoScheme = "token5";
@@ -32,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcEmployerInformationTe
         [SetUp]
         public void Arrange()
         {
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _hmrcService = new Mock<IHmrcService>();
             _hmrcService.Setup(x => x.DiscoverEmpref(ExpectedAuthToken)).ReturnsAsync(ExpectedEmpref);

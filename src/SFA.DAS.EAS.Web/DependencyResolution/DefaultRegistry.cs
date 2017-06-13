@@ -48,6 +48,8 @@ using StructureMap;
 using StructureMap.Graph;
 using StructureMap.TypeRules;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.EAS.Web.App_Start;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -99,6 +101,8 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             RegisterPostCodeAnywhereService();
 
             RegisterExecutionPolicies();
+
+            RegisterLogger();
         }
 
         private void RegisterExecutionPolicies()
@@ -216,6 +220,15 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
         {
             SystemDetailsViewModel.EnvironmentName = envName;
             SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
+
+        private void RegisterLogger()
+        {
+            For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
+            For<ILog>().Use(x => new NLogLogger(
+                x.ParentType,
+                x.GetInstance<IRequestContext>(),
+                null)).AlwaysUnique();
         }
     }
 }

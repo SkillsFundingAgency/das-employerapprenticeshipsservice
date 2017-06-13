@@ -2,13 +2,14 @@
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.Sql.Client;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.TestCommon.DbCleanup
 {
     public class CleanTransactionsDatabase : BaseRepository, ICleanTransactionsDatabase
     {
-        public CleanTransactionsDatabase(LevyDeclarationProviderConfiguration configuration) : base(configuration)
+        public CleanTransactionsDatabase(LevyDeclarationProviderConfiguration configuration, ILog logger) : base(configuration.DatabaseConnectionString, logger)
         {
         }
 

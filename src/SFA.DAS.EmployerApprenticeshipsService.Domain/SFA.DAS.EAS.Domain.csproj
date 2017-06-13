@@ -190,7 +190,6 @@
     <Compile Include="Configuration\EventsApiClientConfiguration.cs" />
     <Compile Include="Configuration\PostcodeAnywhereConfiguration.cs" />
     <Compile Include="Configuration\ReferenceDataApiClientConfiguration.cs" />
-    <Compile Include="Data\Repositories\BaseRepository.cs" />
     <Compile Include="Data\Repositories\IAccountRepository.cs" />
     <Compile Include="Data\Repositories\IAccountTeamRepository.cs" />
     <Compile Include="Data\Repositories\IEnglishFractionRepository.cs" />

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using NLog;
 using SFA.DAS.EAS.Api.Attributes;
 using SFA.DAS.EAS.Api.Orchestrators;
 

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
@@ -15,6 +10,7 @@ using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
 {
@@ -26,7 +22,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<IMapper> _mapper;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
         [SetUp]
@@ -51,7 +47,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
                         It.IsAny<OrganisationDetailsViewModel>()))
                 .Returns(new OrchestratorResponse<AddOrganisationAddressViewModel>());
 
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _controller = new OrganisationController(
                 _owinWrapper.Object,

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Application.Validation;
@@ -13,6 +12,7 @@ using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionsTests
 {
@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         private Mock<IDasLevyService> _dasLevyService;
         private GetEmployerAccountTransactionsQuery _request;
         private Mock<IApprenticeshipInfoServiceWrapper> _apprenticshipInfoService;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
 
         public override GetEmployerAccountTransactionsQuery Query { get; set; }
         public override GetEmployerAccountTransactionsHandler RequestHandler { get; set; }
@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 
             _apprenticshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
 
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             RequestHandler = new GetEmployerAccountTransactionsHandler(_dasLevyService.Object, RequestValidator.Object, _apprenticshipInfoService.Object, _logger.Object);
             Query = new GetEmployerAccountTransactionsQuery();
@@ -161,7 +161,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             
             //Assert
             Assert.AreEqual("Training provider - name not recognised", actual.Data.TransactionLines.First().Description);
-            _logger.Verify(x=>x.Info(It.IsAny<Exception>(),"Provider not found for UkPrn:1254545"));
+            _logger.Verify(x => x.Info(It.Is<string>(y => y.StartsWith("Provider not found for UkPrn:1254545"))));
         }
 
         [Test]

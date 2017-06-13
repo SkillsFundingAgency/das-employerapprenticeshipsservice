@@ -10,13 +10,15 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.PAYE;
+using SFA.DAS.Sql.Client;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class AccountRepository : BaseRepository, IAccountRepository
     {
-        public AccountRepository(EmployerApprenticeshipsServiceConfiguration configuration)
-            : base(configuration)
+        public AccountRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+            : base(configuration.DatabaseConnectionString, logger)
         {
         }
 
