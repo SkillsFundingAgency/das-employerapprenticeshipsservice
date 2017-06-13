@@ -9,9 +9,7 @@ using SFA.DAS.Apprenticeships.Api.Types.Exceptions;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
-using SFA.DAS.EAS.Domain.Models.Time;
 using Framework = SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse.Framework;
-using Provider = SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider.Provider;
 using Standard = SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse.Standard;
 
 namespace SFA.DAS.EAS.Application
@@ -95,12 +93,7 @@ namespace SFA.DAS.EAS.Application
                     Level = x.Level,
                     PathwayCode = x.PathwayCode,
                     PathwayName = x.PathwayName,
-                    Duration = x.TypicalLength  == null ? null : new Duration // TODO: LWA - Should frameworks have a null typical length?
-                    {
-                        From = x.TypicalLength.From,
-                        To = x.TypicalLength.To,
-                        Unit = x.TypicalLength.Unit
-                    },
+                    Duration = x.Duration,
                     MaxFunding = x.MaxFunding
                 }).ToList()
             };
@@ -132,14 +125,9 @@ namespace SFA.DAS.EAS.Application
                     Id = x.Id,
                     Code = long.Parse(x.Id),
                     Level = x.Level,
-                    Title = GetTitle(x.Title, x.Level),
+                    Title = GetTitle(x.Title, x.Level) + " (Standard)",
                     CourseName = x.Title, 
-                    Duration = new Duration
-                    {
-                        From = x.TypicalLength.From,
-                        To = x.TypicalLength.To,
-                        Unit = x.TypicalLength.Unit
-                    },
+                    Duration = x.Duration,
                     MaxFunding = x.MaxFunding
                 }).ToList()
             };

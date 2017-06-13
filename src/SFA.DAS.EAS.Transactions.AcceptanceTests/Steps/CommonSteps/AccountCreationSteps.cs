@@ -32,6 +32,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
         private string _externalUserId;
         private Mock<IValidator<GetAccountPayeSchemesQuery>> _validator;
         private Mock<IEventsApi> _eventsApi;
+        private PaymentTestData _testData;
 
         public AccountCreationSteps()
         {
@@ -47,6 +48,8 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
             _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
 
             _container.Inject(_validator.Object);
+
+            _testData = new PaymentTestData(_container);
         }
 
         [Given(@"I have an account")]
@@ -132,7 +135,9 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
             var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { UserRef = accountOwnerId }).Result;
 
             var account = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault();
-            ScenarioContext.Current["AccountId"] = account.Id;
+
+            _testData.AccountId = account?.Id ?? default(long);
+
             ScenarioContext.Current["HashedAccountId"] = account.HashedId;
         }
     }

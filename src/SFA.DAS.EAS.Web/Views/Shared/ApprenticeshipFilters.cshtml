@@ -1,0 +1,62 @@
+﻿@using System.Text
+@model SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.ApprenticeshipFiltersViewModel
+
+
+
+<div class="filter-option-select">
+    <div class="container-head js-container-head">
+        <div class="option-select-label">Status</div>
+    </div>
+    <div class="options-container">
+       @RenderFilterOptions("Status", Model.ApprenticeshipStatusOptions, Model.Status)
+    </div>
+</div>
+
+<div class="filter-option-select">
+    <div class="container-head js-container-head">
+        <div class="option-select-label">Alerts</div>
+    </div>
+    <div class="options-container">
+       @RenderFilterOptions("RecordStatus", Model.RecordStatusOptions, Model.RecordStatus)
+    </div>
+</div>
+
+
+<div class="filter-option-select">
+    <div class="container-head js-container-head">
+        <div class="option-select-label">Training Courses</div>
+    </div>
+    <div class="options-container">
+      @RenderFilterOptions("Course", Model.TrainingCourseOptions, Model.Course)
+    </div>
+</div>
+
+<div class="filter-option-select">
+    <div class="container-head js-container-head">
+        <div class="option-select-label">Provider</div>
+    </div>
+    <div class="options-container">
+        @RenderFilterOptions("Provider", Model.ProviderOrganisationOptions, Model.Provider)
+    </div>
+</div>
+
+
+@functions
+{
+    private static HtmlString RenderFilterOptions(string groupName, List<KeyValuePair<string, string>> options, List<string> selected)
+    {
+        var result = new StringBuilder();
+
+        foreach (var option in options)
+        {
+            var checkedAtt = selected != null && selected.Contains(option.Key) ? "checked=\"checked\"" : "";
+            result.Append($"<label for= \"{groupName}-{option.Key}\">");
+
+            result.Append($"<input name=\"{groupName}\" value =\"{option.Key}\" class=\"js-option-select\" id =\"{groupName}-{option.Key}\" type = \"checkbox\" {checkedAtt} aria-controls=\"js-search-results-info\">");
+            result.Append($"<span>{option.Value}</span>");
+            result.Append("</label>");
+        }
+
+        return new HtmlString(result.ToString());
+    }
+}

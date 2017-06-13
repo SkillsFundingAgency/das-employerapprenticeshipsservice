@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="AccountResourceList.cs" />
     <Compile Include="EmployerAgreementStatus.cs" />
+    <Compile Include="EmployerAgreementView.cs" />
     <Compile Include="Events\Account\AccountCreatedEvent.cs" />
     <Compile Include="Events\Account\AccountRenamedEvent.cs" />
     <Compile Include="Events\Agreement\AgreementRemovedEvent.cs" />

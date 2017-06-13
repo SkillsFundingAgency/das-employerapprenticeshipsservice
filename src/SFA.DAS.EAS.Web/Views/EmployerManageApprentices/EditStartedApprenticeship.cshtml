@@ -82,7 +82,8 @@
 
     <hr />
     <label for="Cost">
-        <span class="form-label-bold">Total agreed training cost (excluding VAT)</span>
+        <span class="form-label-bold">Total agreed apprenticeship price (excluding VAT)</span>
+        <span class="form-hint">Enter the price, including any end-point assessment costs, in whole pounds.</span>
         <span class="form-hint">For example, for £1,500 enter 1500</span>
         @if (!string.IsNullOrEmpty(Model.Apprenticeship.CostError))
         {
@@ -90,19 +91,21 @@
         }
     </label>
 
-    <span class="heading-small">£ </span>@Html.TextBox("Cost", Model.Apprenticeship.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = "Cost" })
+    <span class="heading-small">£ </span>@Html.TextBox("Cost", Model.Apprenticeship.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = "Cost", maxlength="7" })
 
 </div>
 
 <div class="form-group @(!string.IsNullOrEmpty(Model.Apprenticeship.EmployerRefError) ? "error" : "")">
     <hr/>
     @Html.Label("EmployerRef", "Reference (optional)", new { @class = "form-label-bold" })
-    <span class="form-hint">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
+    <span class="form-hint">Add a reference, such as employee number or location - this won't be seen by the training provider</span>
     @if (!string.IsNullOrEmpty(Model.Apprenticeship.EmployerRefError))
     {
         <span class="error-message" id="error-message-employerref">@Model.Apprenticeship.EmployerRefError</span>
     }
     @Html.TextBox("EmployerRef", Model.Apprenticeship.EmployerRef, new { @class = "form-control form-control-3-4" })
+    <p id="charCount-noJS">Enter up to a maximum of 20 characters</p>
+    <p id="charCount" style="display:none;"><span name="countchars" id="countchars"></span> characters remaining</p>
 </div>
 
 

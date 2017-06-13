@@ -13,6 +13,8 @@ using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.Provider.Events.Api.Client;
+using SFA.DAS.Provider.Events.Api.Types;
+using Payment = SFA.DAS.Provider.Events.Api.Types.Payment;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -37,58 +39,84 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId)
         {
-            var payments = await GetPayments(periodEnd, employerAccountId);
+            var populatedPayments = new List<PaymentDetails>();
 
-            if (!payments.Any())
+            var totalPages = 1;
+
+            for (var index = 1; index <= totalPages; index++)
             {
-                return new List<PaymentDetails>();
+                var payments = await GetPaymentsPage(employerAccountId, periodEnd, index);
+
+                if (payments == null) continue;
+
+                totalPages = payments.TotalNumberOfPages;
+
+                var paymentDetails = payments.Items.Select(x => _mapper.Map<PaymentDetails>(x)).ToArray();
+
+                foreach (var details in paymentDetails)
+                {
+                    details.PeriodEnd = periodEnd;
+
+                    await GetProviderDetails(details);
+                    await GetApprenticeshipDetails(employerAccountId, details);
+                    await GetCourseDetails(details);
+                }
+
+                populatedPayments.AddRange(paymentDetails);
             }
 
-            foreach (var payment in payments)
+            return populatedPayments;
+        }
+
+        private async Task GetCourseDetails(PaymentDetails payment)
+        {
+            payment.CourseName = string.Empty;
+
+            if (payment.StandardCode.HasValue)
             {
-                payment.PeriodEnd = periodEnd;
+                var standard = await GetStandard(payment.StandardCode.Value);
 
-                var provider = await GetProvider(Convert.ToInt32(payment.Ukprn));
-
-                if (provider != null)
-                {
-                    payment.ProviderName = provider.ProviderName;
-
-                    var apprenticeship = await GetApprenticeship(employerAccountId, payment.ApprenticeshipId);
-
-                    if (apprenticeship != null)
-                    {
-                        payment.ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}";
-                        payment.ApprenticeNINumber = apprenticeship.NINumber;
-                        payment.CourseStartDate = apprenticeship.StartDate;
-                    }
-                }
-
-                if (payment.StandardCode.HasValue)
-                {
-                    var standard = await GetStandard(payment.StandardCode.Value);
-
-                    payment.CourseName = standard?.CourseName;
-                    payment.CourseLevel = standard?.Level;
-                }
-                else if (payment.FrameworkCode.HasValue && payment.ProgrammeType.HasValue && payment.PathwayCode.HasValue)
-                {
-                    var framework = await GetFramework(
-                        payment.FrameworkCode.Value,
-                        payment.ProgrammeType.Value,
-                        payment.PathwayCode.Value);
-
-                    payment.CourseName = framework?.FrameworkName;
-                    payment.CourseLevel = framework?.Level;
-                    payment.PathwayName = framework?.PathwayName;
-                }
-                else
-                {
-                    payment.CourseName = string.Empty;
-                }
+                payment.CourseName = standard?.CourseName;
+                payment.CourseLevel = standard?.Level;
             }
+            else
+            {
+                await GetFrameworkCourseDetails(payment);
+            }
+        }
 
-            return payments;
+        private async Task GetFrameworkCourseDetails(PaymentDetails payment)
+        {
+            if (payment.FrameworkCode.HasValue && payment.ProgrammeType.HasValue && payment.PathwayCode.HasValue)
+            {
+                var framework = await GetFramework(
+                    payment.FrameworkCode.Value,
+                    payment.ProgrammeType.Value,
+                    payment.PathwayCode.Value);
+
+                payment.CourseName = framework?.FrameworkName;
+                payment.CourseLevel = framework?.Level;
+                payment.PathwayName = framework?.PathwayName;
+            }
+        }
+
+        private async Task GetProviderDetails(PaymentDetails payment)
+        {
+            var provider = await GetProvider(Convert.ToInt32(payment.Ukprn));
+
+            payment.ProviderName = provider?.ProviderName;
+        }
+
+        private async Task GetApprenticeshipDetails(long employerAccountId, PaymentDetails payment)
+        {
+            var apprenticeship = await GetApprenticeship(employerAccountId, payment.ApprenticeshipId);
+
+            if (apprenticeship != null)
+            {
+                payment.ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}";
+                payment.ApprenticeNINumber = apprenticeship.NINumber;
+                payment.CourseStartDate = apprenticeship.StartDate;
+            }
         }
 
         private async Task<Apprenticeship> GetApprenticeship(long employerAccountId, long apprenticeshipId)
@@ -106,34 +134,18 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return null;
         }
 
-        private async Task<ICollection<PaymentDetails>> GetPayments(string periodEnd, long employerAccountId)
+        private async Task<PageOfResults<Payment>> GetPaymentsPage(long employerAccountId, string periodEnd, int page)
         {
-            var paymentDetails = new List<PaymentDetails>();
-
             try
             {
-                var totalPages = 1;
-
-                for (var index = 0; index < totalPages; index++)
-                {
-                    var payments = await _paymentsEventsApiClient.GetPayments(periodEnd, employerAccountId.ToString(), index + 1);
-
-                    if (payments == null)
-                    {
-                        return paymentDetails;
-                    }
-
-                    paymentDetails.AddRange(payments.Items.Select(x => _mapper.Map<PaymentDetails>(x)));
-
-                    totalPages = payments.TotalNumberOfPages;
-                }
+                return await _paymentsEventsApiClient.GetPayments(periodEnd, employerAccountId.ToString(), page);
             }
             catch (WebException ex)
             {
                 _logger.Error(ex, $"Unable to get payment information for {periodEnd} accountid {employerAccountId}");
             }
 
-            return paymentDetails;
+            return null;
         }
 
         private Task<Domain.Models.ApprenticeshipProvider.Provider> GetProvider(int ukPrn)
@@ -171,17 +183,17 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             {
                 var standardsView = _cacheProvider.Get<StandardsView>(nameof(StandardsView));
 
-                if (standardsView == null)
-                {
-                    standardsView = await _apprenticeshipInfoService.GetStandardsAsync();
+                if (standardsView != null)
+                    return standardsView.Standards?.SingleOrDefault(s => s.Code.Equals(standardCode));
 
-                    if (standardsView != null)
-                    {
-                        _cacheProvider.Set(nameof(StandardsView), standardsView, new TimeSpan(1, 0, 0));
-                    }
+                standardsView = await _apprenticeshipInfoService.GetStandardsAsync();
+
+                if (standardsView != null)
+                {
+                    _cacheProvider.Set(nameof(StandardsView), standardsView, new TimeSpan(1, 0, 0));
                 }
-                
-                return standardsView.Standards.SingleOrDefault(s => s.Code.Equals(standardCode));
+
+                return standardsView?.Standards?.SingleOrDefault(s => s.Code.Equals(standardCode));
             }
             catch (Exception e)
             {
@@ -197,17 +209,20 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             {
                 var frameworksView = _cacheProvider.Get<FrameworksView>(nameof(FrameworksView));
 
-                if (frameworksView == null)
-                {
-                    frameworksView = await _apprenticeshipInfoService.GetFrameworksAsync();
+                if (frameworksView != null)
+                    return frameworksView.Frameworks.SingleOrDefault(f =>
+                        f.FrameworkCode.Equals(frameworkCode) &&
+                        f.ProgrammeType.Equals(programType) &&
+                        f.PathwayCode.Equals(pathwayCode));
 
-                    if (frameworksView != null)
-                    {
-                        _cacheProvider.Set(nameof(FrameworksView),frameworksView, new TimeSpan(1,0,0));
-                    }
+                frameworksView = await _apprenticeshipInfoService.GetFrameworksAsync();
+
+                if (frameworksView != null)
+                {
+                    _cacheProvider.Set(nameof(FrameworksView),frameworksView, new TimeSpan(1,0,0));
                 }
-                
-                return frameworksView.Frameworks.SingleOrDefault(f =>
+
+                return frameworksView?.Frameworks.SingleOrDefault(f =>
                                      f.FrameworkCode.Equals(frameworkCode) &&
                                      f.ProgrammeType.Equals(programType) &&
                                      f.PathwayCode.Equals(pathwayCode));

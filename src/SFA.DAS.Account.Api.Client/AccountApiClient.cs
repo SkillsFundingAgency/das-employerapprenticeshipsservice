@@ -23,6 +23,26 @@ namespace SFA.DAS.EAS.Account.Api.Client
             _httpClient = httpClient;
         }
 
+        public async Task<AccountDetailViewModel> GetAccount(string hashedAccountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{hashedAccountId}";
+
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<AccountDetailViewModel>(json);
+        }
+
+        public async Task<AccountDetailViewModel> GetAccount(long accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/internal/{accountId}";
+
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<AccountDetailViewModel>(json);
+        }
+
         public async Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetPageOfAccounts(int pageNumber = 1, int pageSize = 1000, DateTime? toDate = null)
         {
             var baseUrl = GetBaseUrl();
@@ -46,6 +66,15 @@ namespace SFA.DAS.EAS.Account.Api.Client
             return JsonConvert.DeserializeObject<ICollection<TeamMemberViewModel>>(json);
         }
 
+        public async Task<ICollection<TeamMemberViewModel>> GetAccountUsers(long accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/internal/{accountId}/users";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<ICollection<TeamMemberViewModel>>(json);
+        }
+
         public async Task<ICollection<AccountDetailViewModel>> GetUserAccounts(string userId)
         {
             var baseUrl = GetBaseUrl();
@@ -54,6 +83,43 @@ namespace SFA.DAS.EAS.Account.Api.Client
             var json = await _httpClient.GetAsync(url);
             return JsonConvert.DeserializeObject<ICollection<AccountDetailViewModel>>(json);
         }
+
+        public async Task<LegalEntityViewModel> GetLegalEntity(string accountId, long id)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/legalentities/{id}";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<LegalEntityViewModel>(json);
+        }
+
+        public async Task<ICollection<ResourceViewModel>> GetLegalEntitiesConnectedToAccount(string accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/legalentities";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<List<ResourceViewModel>>(json);
+        }
+
+        public async Task<ICollection<ResourceViewModel>> GetPayeSchemesConnectedToAccount(string accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/payeschemes";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<List<ResourceViewModel>>(json);
+        }
+
+        public async Task<EmployerAgreementView> GetEmployerAgreement(string accountId, string legalEntityId, string agreementId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/legalEntities/{legalEntityId}/agreements/{agreementId}/agreement";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<EmployerAgreementView>(json);
+        }
+       
 
         public async Task<T> GetResource<T>(string uri) where T : IAccountResource
         {
