@@ -34,5 +34,6 @@ BEGIN
 	from [employer_account].[EmployerAgreement] a
 	join [employer_account].[Membership] m on m.AccountId = a.AccountId
 	where a.Id = @employerAgreementId
+	and not exists(select 1 from [employer_account].[UserAccountSettings] where UserId = m.UserId and AccountId = @accountId)
 
 END
