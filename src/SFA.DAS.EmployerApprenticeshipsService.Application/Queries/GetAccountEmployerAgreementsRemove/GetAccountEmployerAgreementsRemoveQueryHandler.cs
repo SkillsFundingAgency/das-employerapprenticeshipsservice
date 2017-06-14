@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
 
                                 var commitmentConnctedToEntity =
                                     commitments.FirstOrDefault(
-                                        c => c.LegalEntityIdentifier.Equals(removeEmployerAgreementView.LegalEntityCode));
+                                        c => !string.IsNullOrEmpty(c.LegalEntityIdentifier) && c.LegalEntityIdentifier.Equals(removeEmployerAgreementView.LegalEntityCode));
 
                                 if (commitmentConnctedToEntity != null &&
                                     (commitmentConnctedToEntity.ActiveCount +

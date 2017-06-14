@@ -1,4 +1,7 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+using Moq;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.TestCommon.DbCleanup;
@@ -19,6 +22,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
         private static Container _container;
         private static Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private static Mock<IEventsApi> _eventsApi;
+        private static Mock<IEmployerCommitmentApi> _employerCommitmentsApi;
 
         [AfterScenario()]
         public static void Arrange()
@@ -27,8 +31,9 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
             _owinWrapper = new Mock<IOwinWrapper>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
-
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
+            _employerCommitmentsApi = new Mock<IEmployerCommitmentApi>();
+            
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi, _employerCommitmentsApi);
 
             var cleanDownDb = _container.GetInstance<ICleanDatabase>();
             cleanDownDb.Execute().Wait();

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
@@ -25,7 +28,8 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.RemoveLegalEntity
         private string _hashedAccountId;
         private static Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private static Mock<IEventsApi> _eventsApi;
-
+        private Mock<IEmployerCommitmentApi> _commitmentsApi;
+        
         [BeforeScenario()]
         public void Arrange()
         {
@@ -33,12 +37,42 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.RemoveLegalEntity
             _owinWrapper = new Mock<IOwinWrapper>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
+            _commitmentsApi= new Mock<IEmployerCommitmentApi>();
+            _commitmentsApi.Setup(x => x.GetEmployerAccountSummary(It.IsAny<long>()))
+                .ReturnsAsync(new List<ApprenticeshipStatusSummary>
+                {
+                    new ApprenticeshipStatusSummary {}
+                });
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi, _commitmentsApi);
+        }
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
+        [When(@"I have more than one legal entity with a ""(.*)"" status and an active commitment")]
+        public void WhenIHaveMoreThanOneLegalEntityWithAStatusAndAnActiveCommitment(string agreementStatus)
+        {
+            var accountId = (long)ScenarioContext.Current["AccountId"];
+            _commitmentsApi.Setup(x => x.GetEmployerAccountSummary(accountId))
+                .ReturnsAsync(new List<ApprenticeshipStatusSummary>
+                {
+                    new ApprenticeshipStatusSummary
+                    {
+                        ActiveCount = 1, LegalEntityIdentifier = "test"
+                    },
+                    new ApprenticeshipStatusSummary
+                    {
+                        ActiveCount = 1,LegalEntityIdentifier = ScenarioContext.Current["LegalEntityCode"].ToString()
+                    }
+                });
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi, _commitmentsApi);
+            CreateLegalEntityWithStatus(agreementStatus,"test");
         }
         
         [When(@"I have more than one legal entity with a ""(.*)"" status")]
         public void WhenIHaveMoreThanOneLegalEntityWithAStatus(string agreementStatus)
+        {
+            CreateLegalEntityWithStatus(agreementStatus, "test");
+        }
+
+        private static void CreateLegalEntityWithStatus(string agreementStatus, string legalEntityCode)
         {
             var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
             var userId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
@@ -51,14 +85,15 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.RemoveLegalEntity
                 HashedAccountId = hashedId,
                 Name = "second company",
                 ExternalUserId = userId,
-
+                Code = legalEntityCode
             }).Wait();
 
             if (agreementStatus.ToLower().Equals("signed"))
             {
                 var employerAgreementOrchestrator = _container.GetInstance<EmployerAgreementOrchestrator>();
 
-                var agreementsToRemove = employerAgreementOrchestrator.GetLegalAgreementsToRemove(hashedId, userId).Result;
+                var agreementsToRemove =
+                    employerAgreementOrchestrator.GetLegalAgreementsToRemove(hashedId, userId).Result;
 
                 foreach (var agreement in agreementsToRemove.Data.Agreements)
                 {
@@ -68,7 +103,6 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.RemoveLegalEntity
                 ScenarioContext.Current["ExpectBadRequestResult"] = "true";
             }
         }
-
 
         [When(@"There is only one legal entity on the account")]
         public void WhenThereIsOnlyOneLegalEntityOnTheAccount()
