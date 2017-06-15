@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
@@ -32,7 +33,9 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             var cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             var eventsApi = new Mock<IEventsApi>();
 
-            _container = IoC.CreateContainer(messagePublisher, owinWrapper, cookieService, eventsApi);
+            var commitmentsApi = new Mock<IEmployerCommitmentApi>();
+            
+            _container = IoC.CreateContainer(messagePublisher, owinWrapper, cookieService, eventsApi, commitmentsApi);
         }
 
         [AfterFeature]
