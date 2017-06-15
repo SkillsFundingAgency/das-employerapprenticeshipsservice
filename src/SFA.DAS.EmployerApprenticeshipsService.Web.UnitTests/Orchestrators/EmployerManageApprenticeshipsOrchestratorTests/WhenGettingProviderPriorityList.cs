@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
+using SFA.DAS.NLog.Logger;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -39,7 +40,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmEmployerManageA
                 apprenticeshipMapper,
                 Mock.Of<ApprovedApprenticeshipViewModelValidator>(),
                 new CurrentDateTime(),
-                Mock.Of<ILogger>(),
+                Mock.Of<ILog>(),
                 new Mock<ICookieStorageService<UpdateApprenticeshipViewModel>>().Object,
                 Mock.Of<IApprenticeshipFiltersMapper>());
         }

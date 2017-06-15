@@ -40,7 +40,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             _mediator = mediator;
             _logger = logger;
-            _hashingService = hashingService;
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateAccount(CreateAccountViewModel viewModel, HttpContextBase context)
