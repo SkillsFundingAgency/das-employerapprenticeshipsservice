@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             var result = await _client.SearchOrganisations(searchTerm);
 
-            var returnValue = result.Data.Select(x => _mapper.Map<Organisation>(x)).ToList();
+            var returnValue = result.Select(x => _mapper.Map<Organisation>(x)).ToList();
 
             return returnValue;
         }

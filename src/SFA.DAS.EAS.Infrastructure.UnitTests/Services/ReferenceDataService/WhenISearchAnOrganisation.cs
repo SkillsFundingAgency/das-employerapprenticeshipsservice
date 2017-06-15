@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             await _referenceDataService.SearchOrganisations(expectedSearchTerm);
 
             //Assert
-            _apiClient.Verify(x => x.SearchOrganisations(expectedSearchTerm, 1, 20, 500));
+            _apiClient.Verify(x => x.SearchOrganisations(expectedSearchTerm,500));
         }
 
         [Test]
@@ -80,14 +80,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                 Sector = "sector",
                 SubType = OrganisationSubType.Police
             };
-            _apiClient.Setup(x => x.SearchOrganisations(expectedSearchTerm, 1, 20, 500))
-                .ReturnsAsync(new PagedApiResponse<Organisation>
-                {
-                    Data = new List<Organisation>
+            _apiClient.Setup(x => x.SearchOrganisations(expectedSearchTerm, 500))
+                .ReturnsAsync(
+                    new List<Organisation>
                     {
                         expectedOrganisation
                     }
-                });
+                );
 
             //Act
             var actual = await _referenceDataService.SearchOrganisations(expectedSearchTerm);
