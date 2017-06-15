@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -29,6 +30,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
         private string _hashedAccountId;
         private static Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private static Mock<IEventsApi> _eventsApi;
+        private static Mock<IEmployerCommitmentApi> _commitmentsApi;
 
 
         [BeforeFeature]
@@ -38,8 +40,9 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
             _owinWrapper = new Mock<IOwinWrapper>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
+            _commitmentsApi = new Mock<IEmployerCommitmentApi>();
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi, _commitmentsApi);
         }
 
         [AfterFeature]

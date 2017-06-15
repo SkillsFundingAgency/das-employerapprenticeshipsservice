@@ -2,6 +2,7 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
@@ -26,8 +27,9 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AgreementSteps
             var owinWrapper = new Mock<IOwinWrapper>();
             var cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             var eventsApi = new Mock<IEventsApi>();
+            var commitmentsApi = new Mock<IEmployerCommitmentApi>();
 
-            _container = IoC.CreateContainer(messagePublisher, owinWrapper, cookieService, eventsApi);
+            _container = IoC.CreateContainer(messagePublisher, owinWrapper, cookieService, eventsApi, commitmentsApi);
         }
 
         [When(@"I sign Agreement")]
