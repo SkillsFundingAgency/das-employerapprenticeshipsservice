@@ -5,6 +5,18 @@ namespace SFA.DAS.EAS.Web.Extensions
     public static class DateTimeExtensions
     {
         /// <summary>
+        /// Returns DateTime for last day of month for given date
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static DateTime GetLastDayOfMonthDate(this DateTime date)
+        {
+            var lastDay = DateTime.DaysInMonth(date.Year, date.Month);
+
+            return new DateTime(date.Year, date.Month, lastDay);
+        }
+
+        /// <summary>
         /// GDS format: d MMM yyyy
         /// </summary>
         /// <param name="date"></param>
