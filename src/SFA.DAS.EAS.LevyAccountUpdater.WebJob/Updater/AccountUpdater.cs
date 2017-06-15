@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using NLog;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Domain.Attributes;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.Messaging;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater
 {
@@ -17,13 +15,13 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater
         private const string ServiceName = "SFA.DAS.EAS.LevyAccountUpdater";
         private readonly IEmployerAccountRepository _accountRepository;
         private readonly IMessagePublisher _messagePublisher;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private readonly IEmployerSchemesRepository _employerSchemesRepository;
 
         [QueueName]
         public string get_employer_levy { get; set; }
 
-        public AccountUpdater(IEmployerAccountRepository accountRepository, IMessagePublisher messagePublisher, ILogger logger, IEmployerSchemesRepository employerSchemesRepository)
+        public AccountUpdater(IEmployerAccountRepository accountRepository, IMessagePublisher messagePublisher, ILog logger, IEmployerSchemesRepository employerSchemesRepository)
         {
             _accountRepository = accountRepository;
             _messagePublisher = messagePublisher;
@@ -67,7 +65,7 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater
             }
             catch (Exception e)
             {
-                _logger.Error(e);
+                _logger.Error(e, "Error updating levy accounts");
                 throw;
             }
         }

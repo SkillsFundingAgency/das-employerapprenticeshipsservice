@@ -6,9 +6,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using NLog;
 using SFA.DAS.EAS.Domain.Http;
-using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -17,9 +16,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         public string AuthScheme { get; set; }
         public string BaseUrl { get; set; }
         public List<MediaTypeWithQualityHeaderValue> MediaTypeWithQualityHeaderValueList { get; set; }
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
-        public HttpClientWrapper(ILogger logger)
+        public HttpClientWrapper(ILog logger)
         {
             _logger = logger;
             MediaTypeWithQualityHeaderValueList = new List<MediaTypeWithQualityHeaderValue>();

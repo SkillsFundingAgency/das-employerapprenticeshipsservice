@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateNewPeriodEnd;
 using SFA.DAS.EAS.Application.Messages;
@@ -15,6 +14,7 @@ using SFA.DAS.EAS.PaymentUpdater.WebJob.Updater;
 using SFA.DAS.Messaging;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.UpdaterTests
 {
@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.UpdaterTests
         private Mock<IPaymentsEventsApiClient> _paymentsClient;
         private Mock<IMediator> _mediator;
         private Mock<IMessagePublisher> _messagePublisher;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private PaymentsApiClientConfiguration _configuration;
         private const long ExpectedAccountId = 12345444;
 
@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.UpdaterTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetCurrentPeriodEndRequest>())).ReturnsAsync(new GetPeriodEndResponse { CurrentPeriodEnd = new Domain.Models.Payments.PeriodEnd { Id = "123456" } });
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>())).ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = new List<Account> { new Account { Id = ExpectedAccountId } } });
 
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _configuration = new PaymentsApiClientConfiguration();
 

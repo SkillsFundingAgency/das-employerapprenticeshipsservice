@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
 using MediatR;
-using NLog;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
@@ -12,6 +11,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Notifications.Api.Types;
 using Task = System.Threading.Tasks.Task;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
 {
@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
 
         private readonly IProviderEmailLookupService _providerEmailLookupService;
 
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         private readonly SubmitCommitmentCommandValidator _validator;
 
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             IMediator mediator,
             EmployerApprenticeshipsServiceConfiguration configuration,
             IProviderEmailLookupService providerEmailLookupService,
-            ILogger logger)
+            ILog logger)
         {
             _commitmentApi = commitmentApi;
             _mediator = mediator;

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 
 using SFA.DAS.Commitments.Api.Types.Commitment;
@@ -9,12 +8,13 @@ using SFA.DAS.EAS.Application.Queries.GetCommitment;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
 {
     public abstract class OrchestratorTestBase
     {
-        private Mock<ILogger> _mockLogger;
+        private Mock<ILog> _mockLogger;
         private Mock<IHashingService> _mockHashingService;
         private Mock<ICommitmentStatusCalculator> _mockCalculator;
         private Mock<IApprenticeshipMapper> _mockApprenticeshipMapper;
@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
         public void Setup()
         {
             MockMediator = new Mock<IMediator>();
-            _mockLogger = new Mock<ILogger>();
+            _mockLogger = new Mock<ILog>();
             _mockCalculator = new Mock<ICommitmentStatusCalculator>();
             _mockApprenticeshipMapper = new Mock<IApprenticeshipMapper>();
             _mockCommitmentMapper = new Mock<ICommitmentMapper>();

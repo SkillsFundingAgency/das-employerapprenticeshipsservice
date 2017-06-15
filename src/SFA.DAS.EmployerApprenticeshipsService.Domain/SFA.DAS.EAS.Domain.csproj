@@ -82,12 +82,12 @@
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.60.0.31347, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.60.0.31347\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.65.0.33068, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.65.0.33068\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.60.0.31347, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.60.0.31347\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.65.0.33068, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.65.0.33068\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.EmployerUsers.WebClientComponents">
@@ -192,7 +192,6 @@
     <Compile Include="Configuration\EventsApiClientConfiguration.cs" />
     <Compile Include="Configuration\PostcodeAnywhereConfiguration.cs" />
     <Compile Include="Configuration\ReferenceDataApiClientConfiguration.cs" />
-    <Compile Include="Data\Repositories\BaseRepository.cs" />
     <Compile Include="Data\Repositories\IAccountRepository.cs" />
     <Compile Include="Data\Repositories\IAccountTeamRepository.cs" />
     <Compile Include="Data\Repositories\IEnglishFractionRepository.cs" />

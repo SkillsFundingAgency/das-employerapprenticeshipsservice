@@ -1,5 +1,4 @@
-﻿using MediatR;
-using NLog;
+using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeship;
 using SFA.DAS.EAS.Application.Commands.CreateCommitment;
@@ -37,6 +36,7 @@ using System.Threading.Tasks;
 
 using WebGrease.Css.Extensions;
 using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly IHashingService _hashingService;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private readonly ICommitmentStatusCalculator _statusCalculator;
 
         private readonly Func<int, string> _addPluralizationSuffix = i => i > 1 ? "s" : "";
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             ICommitmentStatusCalculator statusCalculator,
             IApprenticeshipMapper apprenticeshipMapper,
             ICommitmentMapper commitmentMapper,
-            ILogger logger) : base(mediator, hashingService, logger)
+            ILog logger) : base(mediator, hashingService, logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));

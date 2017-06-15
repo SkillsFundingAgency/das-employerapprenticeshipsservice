@@ -10,6 +10,8 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.Sql.Client;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -17,8 +19,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     {
         private readonly IMapper _mapper;
 
-        public TransactionRepository(LevyDeclarationProviderConfiguration configuration, IMapper mapper)
-            : base(configuration)
+        public TransactionRepository(LevyDeclarationProviderConfiguration configuration, IMapper mapper, ILog logger)
+            : base(configuration.DatabaseConnectionString, logger)
         {
             _mapper = mapper;
         }

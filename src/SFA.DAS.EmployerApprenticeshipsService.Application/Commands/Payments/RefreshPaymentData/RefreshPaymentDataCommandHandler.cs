@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
-using NLog;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 {
@@ -18,15 +18,15 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
         private readonly IPaymentService _paymentService;
         private readonly IDasLevyRepository _dasLevyRepository;
         private readonly IMediator _mediator;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
        
 
         public RefreshPaymentDataCommandHandler(
             IValidator<RefreshPaymentDataCommand> validator, 
             IPaymentService paymentService, 
             IDasLevyRepository dasLevyRepository, 
-            IMediator mediator, 
-            ILogger logger)
+            IMediator mediator,
+            ILog logger)
         {
             _validator = validator;
             _paymentService = paymentService;

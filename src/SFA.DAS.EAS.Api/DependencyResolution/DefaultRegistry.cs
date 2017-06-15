@@ -26,9 +26,12 @@ using WebGrease.Css.Extensions;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 
 namespace SFA.DAS.EAS.Api.DependencyResolution {
+    using SFA.DAS.EAS.Api.App_Start;
+    using SFA.DAS.NLog.Logger;
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
-	
+    using System.Web;
+
     public class DefaultRegistry : Registry {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
         private const string ServiceNamespace = "SFA.DAS";
@@ -49,6 +52,7 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
             //For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
             RegisterMapper();
             RegisterMediator();
+            RegisterLogger();
         }
         
 
@@ -80,6 +84,14 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
             For<IConfigurationProvider>().Use(config).Singleton();
             For<IMapper>().Use(mapper).Singleton();
         }
-        
+
+        private void RegisterLogger()
+        {
+            For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
+            For<ILog>().Use(x => new NLogLogger(
+                x.ParentType,
+                x.GetInstance<IRequestContext>(),
+                null)).AlwaysUnique();
+        }
     }
 }

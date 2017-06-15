@@ -4,7 +4,6 @@ using System.Data;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
-using NLog;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetGatewayInformation;
@@ -17,13 +16,14 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public abstract class EmployerVerificationOrchestratorBase
     {
         protected readonly IMediator Mediator;
-        protected readonly ILogger Logger;
+        protected readonly ILog Logger;
         protected readonly ICookieStorageService<EmployerAccountData> CookieService;
         protected readonly EmployerApprenticeshipsServiceConfiguration Configuration;
 
@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
-        protected EmployerVerificationOrchestratorBase(IMediator mediator, ILogger logger, ICookieStorageService<EmployerAccountData> cookieService, EmployerApprenticeshipsServiceConfiguration configuration)
+        protected EmployerVerificationOrchestratorBase(IMediator mediator, ILog logger, ICookieStorageService<EmployerAccountData> cookieService, EmployerApprenticeshipsServiceConfiguration configuration)
         {
             Mediator = mediator;
             Logger = logger;

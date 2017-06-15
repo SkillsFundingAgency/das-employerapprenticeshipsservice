@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateEnglishFractionCalculationDate;
 using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
@@ -18,6 +17,7 @@ using SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.FileSystem;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclarationTests
 {
@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
         private LevyDeclaration _levyDeclaration;
         private Mock<IPollingMessageReceiver> _pollingMessageReceiver;
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<IDasAccountService> _dasAccountService;
         private CancellationTokenSource _cancellationTokenSource;
 
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
 
             _dasAccountService = new Mock<IDasAccountService>();
 
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _levyDeclaration = new LevyDeclaration(_pollingMessageReceiver.Object, _mediator.Object, _logger.Object, _dasAccountService.Object);
         }

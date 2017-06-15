@@ -1,39 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using MediatR;
-using NLog;
 using SFA.DAS.EAS.Application;
-using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Application.Commands.RemoveLegalEntity;
 using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove;
-using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
-using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf;
-using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
-using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
 using SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
     {
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private readonly IMediator _mediator;
 
@@ -41,7 +33,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
         }
 
-        public EmployerAgreementOrchestrator(IMediator mediator, ILogger logger, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator)
+        public EmployerAgreementOrchestrator(IMediator mediator, ILog logger, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));

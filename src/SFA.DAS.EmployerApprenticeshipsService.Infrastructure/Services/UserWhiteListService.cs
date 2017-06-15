@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using NLog;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.WhileList;
 using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -12,9 +12,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     {
         private readonly ICacheProvider _cacheProvider;
         public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.WhiteList";
-        public sealed override ILogger Logger { get; set; }
+        public sealed override ILog Logger { get; set; }
 
-        public UserWhiteListService(ICacheProvider cacheProvider,ILogger logger)
+        public UserWhiteListService(ICacheProvider cacheProvider, ILog logger)
         {
             _cacheProvider = cacheProvider;
             Logger = logger;

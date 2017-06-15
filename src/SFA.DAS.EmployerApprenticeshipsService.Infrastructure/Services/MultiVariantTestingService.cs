@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Web.UI.WebControls;
-using NLog;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.UserView;
 using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -14,9 +12,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     {
         private readonly ICacheProvider _cacheProvider;
         public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.MultiVariantTesting";
-        public sealed override ILogger Logger { get; set; }
+        public sealed override ILog Logger { get; set; }
 
-        public MultiVariantTestingService(ICacheProvider cacheProvider, ILogger logger)
+        public MultiVariantTestingService(ICacheProvider cacheProvider, ILog logger)
         {
             _cacheProvider = cacheProvider;
             Logger = logger;

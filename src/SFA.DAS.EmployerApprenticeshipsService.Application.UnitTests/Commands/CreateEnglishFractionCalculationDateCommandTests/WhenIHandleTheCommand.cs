@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateEnglishFractionCalculationDate;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateEnglishFractionCalculationDateCommandTests
 {
@@ -16,7 +15,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateEnglishFractionCalcul
         private CreateEnglishFractionCalculationDateCommandHandler _handler;
         private Mock<IValidator<CreateEnglishFractionCalculationDateCommand>> _validator;
         private Mock<IEnglishFractionRepository> _englishFractionRepository;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private DateTime _expectedDate;
 
         [SetUp]
@@ -29,7 +28,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateEnglishFractionCalcul
 
             _englishFractionRepository = new Mock<IEnglishFractionRepository>();
 
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _handler = new CreateEnglishFractionCalculationDateCommandHandler(_validator.Object, _englishFractionRepository.Object, _logger.Object);
         }

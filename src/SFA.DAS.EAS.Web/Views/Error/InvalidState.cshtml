@@ -8,19 +8,14 @@
 <main id="content" role="main" class="error-404">
     <div class="grid-row">
         <div class="column-two-thirds">
-
             <div class="hgroup">
                 <h1 class="heading-xlarge">
                     Page not available
                 </h1>
             </div>
-
             <div class="inner">
-                <p>
-                    This page is no longer available - any changes you've made up to this point have been saved.
-                    <br/><br/>
-                    <a href="@Url.Action("Index", "EmployerTeam", new { hashedAccountId = @Model.HashedAccountId })">Return to the homepage</a>.
-                </p>
+                <p>This page is no longer available - any changes you've made up to this point have been saved.</p>
+                <p><a href="@Url.Action("Index", "EmployerTeam", new { hashedAccountId = @Model.HashedAccountId })">Return to the homepage</a>.</p>
             </div>
         </div>
     </div>

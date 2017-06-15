@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using NLog;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Events.ProcessPayment
 {
@@ -10,9 +9,9 @@ namespace SFA.DAS.EAS.Application.Events.ProcessPayment
 
     {
         private readonly IDasLevyRepository _dasLevyRepository;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
-        public ProcessPaymentEventHandler(IDasLevyRepository dasLevyRepository, ILogger logger)
+        public ProcessPaymentEventHandler(IDasLevyRepository dasLevyRepository, ILog logger)
         {
             _dasLevyRepository = dasLevyRepository;
             _logger = logger;

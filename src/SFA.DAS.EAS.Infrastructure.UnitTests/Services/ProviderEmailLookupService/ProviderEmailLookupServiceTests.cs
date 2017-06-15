@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 using FluentAssertions;
 using Moq;
-using NLog;
 using NUnit.Framework;
 
 using SFA.DAS.EAS.Domain.Configuration;
@@ -13,6 +12,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.ExecutionPolicies;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ProviderEmailLookupService
 {
@@ -42,13 +42,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ProviderEmailLookupServi
         public void SetUp()
         {
             _mockIdamsService = new Mock<IdamsEmailServiceWrapper>
-                (Mock.Of<ILogger>(), _config, Mock.Of<IHttpClientWrapper>(), Mock.Of<ExecutionPolicy>());
+                (Mock.Of<ILog>(), _config, Mock.Of<IHttpClientWrapper>(), Mock.Of<ExecutionPolicy>());
             _mockIdamsService.Setup(m => m.GetEmailsAsync(It.IsAny<long>())).ReturnsAsync(new List<string>());
             _mockIdamsService.Setup(m => m.GetSuperUserEmailsAsync(It.IsAny<long>())).ReturnsAsync(new List<string>());
 
             _mockApprenticeshipService = new Mock<IApprenticeshipInfoServiceWrapper>();
             _sut = new Infrastructure.Services.ProviderEmailLookupService(
-                Mock.Of<ILogger>(),
+                Mock.Of<ILog>(),
                 _mockIdamsService.Object,
                 _config,
                 _mockApprenticeshipService.Object

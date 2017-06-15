@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Azure;
-using NLog;
 using SFA.DAS.EAS.Application.Commands.CreateEnglishFractionCalculationDate;
 using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions;
@@ -17,6 +16,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.Messaging;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 {
@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
         private readonly IPollingMessageReceiver _pollingMessageReceiver;
         private readonly IMediator _mediator;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private readonly IDasAccountService _dasAccountService;
 
         private static bool HmrcProcessingEnabled => CloudConfigurationManager.GetSetting("DeclarationsEnabled")
@@ -39,8 +39,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
         private static bool FractionProcessingOnly => CloudConfigurationManager.GetSetting("DeclarationsEnabled")
             .Equals("fractions", StringComparison.CurrentCultureIgnoreCase);
 
-        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator, 
-            ILogger logger, IDasAccountService dasAccountService)
+        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator,
+            ILog logger, IDasAccountService dasAccountService)
         {
             _pollingMessageReceiver = pollingMessageReceiver;
             _mediator = mediator;

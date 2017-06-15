@@ -1,17 +1,16 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using NLog;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Events.ProcessDeclaration
 {
     public class ProcessDeclarationsEventHandler : IAsyncNotificationHandler<ProcessDeclarationsEvent>
     {
         private readonly IDasLevyRepository _dasLevyRepository;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
-        public ProcessDeclarationsEventHandler(IDasLevyRepository dasLevyRepository, ILogger logger)
+        public ProcessDeclarationsEventHandler(IDasLevyRepository dasLevyRepository, ILog logger)
         {
             _dasLevyRepository = dasLevyRepository;
             _logger = logger;

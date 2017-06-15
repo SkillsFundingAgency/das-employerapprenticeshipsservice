@@ -2,12 +2,12 @@
 
 using FluentAssertions;
 using Moq;
-using NLog;
 using NUnit.Framework;
 
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Data
 {
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Data
                 }
             };
             _mockHttpClientWrapper = new Mock<IHttpClientWrapper>();
-            _sut = new IdamsEmailServiceWrapper(Mock.Of<ILogger>(), config, _mockHttpClientWrapper.Object, new NoopExecutionPolicy());
+            _sut = new IdamsEmailServiceWrapper(Mock.Of<ILog>(), config, _mockHttpClientWrapper.Object, new NoopExecutionPolicy());
         }
 
         [Test]

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using NLog;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 {
@@ -18,9 +18,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
         private readonly IDasLevyService _dasLevyService;
         private readonly IValidator<GetEmployerAccountTransactionsQuery> _validator;
         private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoServiceWrapper;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
-        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService, IValidator<GetEmployerAccountTransactionsQuery> validator, IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper, ILogger logger)
+        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService, IValidator<GetEmployerAccountTransactionsQuery> validator, IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper, ILog logger)
         {
             _dasLevyService = dasLevyService;
             _validator = validator;
@@ -81,7 +81,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             }
             catch (Exception ex)
             {
-                _logger.Info(ex, $"Provider not found for UkPrn:{transaction.UkPrn}");
+                _logger.Info($"Provider not found for UkPrn:{transaction.UkPrn} - {ex.Message}");
             }
 
             return $"{transactionPrefix}Training provider - name not recognised";

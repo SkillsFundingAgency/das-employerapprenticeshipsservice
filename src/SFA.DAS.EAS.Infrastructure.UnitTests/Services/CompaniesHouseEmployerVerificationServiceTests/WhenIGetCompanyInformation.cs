@@ -2,19 +2,19 @@
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Domain.Models.Employer;
 using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.CompaniesHouseEmployerVerificationServiceTests
 {
     public class WhenIGetCompanyInformation
     {
         private CompaniesHouseEmployerVerificationService _companiesHouseEmployerVerificationService;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private const string ExpectedCompanyId = "123EDC";
@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.CompaniesHouseEmployerVe
         [SetUp]
         public void Arrange()
         {
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             _configuration = new EmployerApprenticeshipsServiceConfiguration
             {
                 CompaniesHouse = new CompaniesHouseConfiguration

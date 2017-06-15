@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Employer;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPostcodeAddressTests
 {
     public class WhenIGetAddressesFromAPostcode : QueryBaseTest<GetPostcodeAddressHandler,GetPostcodeAddressRequest,GetPostcodeAddressResponse>
     {
         private Mock<IAddressLookupService> _addressLookupService;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private ICollection<Address> _addresses;
 
         public override GetPostcodeAddressRequest Query { get; set; }
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPostcodeAddressTests
             };
 
             _addressLookupService = new Mock<IAddressLookupService>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _addressLookupService.Setup(x => x.GetAddressesByPostcode(It.IsAny<string>()))
                                  .ReturnsAsync(_addresses);

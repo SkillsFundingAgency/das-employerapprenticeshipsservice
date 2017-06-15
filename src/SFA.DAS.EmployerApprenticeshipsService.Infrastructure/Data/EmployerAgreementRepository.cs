@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.Sql.Client;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRepository
     {
-        public EmployerAgreementRepository(EmployerApprenticeshipsServiceConfiguration configuration) 
-            : base(configuration)
+        public EmployerAgreementRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger) 
+            : base(configuration.DatabaseConnectionString, logger)
         {
         }
 

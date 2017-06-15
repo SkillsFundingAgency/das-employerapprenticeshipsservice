@@ -2,18 +2,18 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.PAYE;
+using SFA.DAS.Sql.Client;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class EmployerSchemesRepository : BaseRepository, IEmployerSchemesRepository
     {
-        public EmployerSchemesRepository(EmployerApprenticeshipsServiceConfiguration configuration)
-            : base(configuration)
+        public EmployerSchemesRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+            : base(configuration.DatabaseConnectionString, logger)
         {
         }
 

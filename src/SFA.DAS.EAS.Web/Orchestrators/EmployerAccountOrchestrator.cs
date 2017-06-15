@@ -4,8 +4,6 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using MediatR;
-using Newtonsoft.Json;
-using NLog;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
@@ -21,14 +19,14 @@ using SFA.DAS.EAS.Domain.Models.Settings;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     {
         private readonly IMediator _mediator;
-        private readonly ILogger _logger;
-        private readonly IHashingService _hashingService;
+        private readonly ILog _logger;
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
         //Needed for tests
@@ -36,8 +34,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
         }
 
-        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieStorageService<EmployerAccountData> cookieService,
-            EmployerApprenticeshipsServiceConfiguration configuration, IHashingService hashingService)
+        public EmployerAccountOrchestrator(IMediator mediator, ILog logger, ICookieStorageService<EmployerAccountData> cookieService,
+            EmployerApprenticeshipsServiceConfiguration configuration)
             : base(mediator, logger, cookieService, configuration)
         {
             _mediator = mediator;
@@ -82,7 +80,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (InvalidRequestException ex)
             {
-                Logger.Info(ex,"Create Account Validation Error");
+                Logger.Info($"Create Account Validation Error: {ex.Message}");
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
                     Data = new EmployerAgreementViewModel(),

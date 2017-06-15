@@ -5,14 +5,15 @@ using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
-using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.Sql.Client;
 using SFA.DAS.EAS.Domain.Models.PAYE;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class PayeRepository : BaseRepository, IPayeRepository
     {
-        public PayeRepository(EmployerApprenticeshipsServiceConfiguration configuration) : base(configuration)
+        public PayeRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger) : base(configuration.DatabaseConnectionString, logger)
         {
         }
 

@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using NLog;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateEnglishFractionCalculationDate
 {
@@ -11,9 +10,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateEnglishFractionCalculationDate
     {
         private readonly IValidator<CreateEnglishFractionCalculationDateCommand> _validator;
         private readonly IEnglishFractionRepository _englishFractionRepository;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
-        public CreateEnglishFractionCalculationDateCommandHandler(IValidator<CreateEnglishFractionCalculationDateCommand> validator, IEnglishFractionRepository englishFractionRepository, ILogger logger)
+        public CreateEnglishFractionCalculationDateCommandHandler(IValidator<CreateEnglishFractionCalculationDateCommand> validator, IEnglishFractionRepository englishFractionRepository, ILog logger)
         {
             _validator = validator;
             _englishFractionRepository = englishFractionRepository;

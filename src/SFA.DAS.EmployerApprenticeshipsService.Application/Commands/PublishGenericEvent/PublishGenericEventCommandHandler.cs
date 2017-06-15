@@ -1,16 +1,16 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using NLog;
 using SFA.DAS.Events.Api.Client;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Commands.PublishGenericEvent
 {
     public class PublishGenericEventCommandHandler : IAsyncRequestHandler<PublishGenericEventCommand, PublishGenericEventCommandResponse>
     {
         private readonly IEventsApi _eventsApi;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
-        public PublishGenericEventCommandHandler(IEventsApi eventsApi, ILogger logger)
+        public PublishGenericEventCommandHandler(IEventsApi eventsApi, ILog logger)
         {
             _eventsApi = eventsApi;
             _logger = logger;

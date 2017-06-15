@@ -3,13 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.PaymentProvider.Worker.Providers;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.FileSystem;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProcessorTests
 {
@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
         private PaymentDataProcessor _paymentDataProcessor;
         private Mock<IPollingMessageReceiver> _messageReceiver;
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private  CancellationTokenSource _cancellationTokenSource;
         
         [SetUp]
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
                         PeriodEndId = ExpectedPeriodEndId
                     })).Callback(() => {_cancellationTokenSource.Cancel();});
 
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _paymentDataProcessor = new PaymentDataProcessor(_messageReceiver.Object, _mediator.Object, _logger.Object);
         }
