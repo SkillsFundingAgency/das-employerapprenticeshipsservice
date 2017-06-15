@@ -401,7 +401,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _orchestrator.GetDataLockStatus(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
             if (model.Data.TriageStatus != TriageStatus.Restart)
-                throw new InvalidStateException($"Apprenticeship data lock not is correct state, Current: {model.Data.TriageStatus}");
+                throw new InvalidStateException($"Apprenticeship data lock not is correct state, Current: {model.Data.TriageStatus} expected {TriageStatus.Restart}");
 
             return View(model);
         }
@@ -410,11 +410,31 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedApprenticeshipId}/datalock/changes", Name = "RequestChanges")]
         public async Task<ActionResult> RequestChanges(string hashedAccountId, string hashedApprenticeshipId)
         {
-            var model = await _orchestrator.GetDataLockStatus(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
-            if (model.Data.TriageStatus != TriageStatus.Change)
-                throw new InvalidStateException($"Apprenticeship data lock not is correct state, Current: {model.Data.TriageStatus}expecting {TriageStatus.Change}");
+            var model = await _orchestrator.GetDataLockChangeStatus(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+
+            // ToDo: Check for status?
+            //if (model.Data.TriageStatus != TriageStatus.Change)
+            //    throw new InvalidStateException($"Apprenticeship data lock not is correct state, Current: {model.Data.TriageStatus}expecting {TriageStatus.Change}");
 
             return View(model);
+        }
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/datalock/confirmchanges", Name = "ConfirmRequestChanges")]
+        public async Task<ActionResult> ConfirmRequestChanges(DataLockStatusViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.AddErrorsFromModelState(ModelState);
+                var viewModel = await _orchestrator.GetDataLockChangeStatus(model.HashedAccountId, model.HashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+                viewModel.Data.ErrorDictionary = model.ErrorDictionary;
+                return View("RequestChanges", viewModel);
+            }
+
+            await _orchestrator.ConfirmRequestChanges(model.HashedAccountId, model.HashedApprenticeshipId, OwinWrapper.GetClaimValue("sub"), model.ChangesConfirmed ?? false);
+            // Apply changes 
+            // Message?sky
+            return RedirectToAction("Details", new { model.HashedAccountId, model.HashedApprenticeshipId });
         }
 
         [HttpGet]

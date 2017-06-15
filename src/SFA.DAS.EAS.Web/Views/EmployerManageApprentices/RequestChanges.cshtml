@@ -17,13 +17,85 @@
             </tr>
             @if (Model.Data.DateOfBirth != null)
             {
-            <tr>
-                <td>Date of birth</td>
-                <td>@Model.Data.DateOfBirth.Value.ToGdsFormat()</td>
-            </tr>
+                <tr>
+                    <td>Date of birth</td>
+                    <td>@Model.Data.DateOfBirth.Value.ToGdsFormat()</td>
+                </tr>
             }
         </table>
-    </div>
+        @foreach (var p in Model.Data.PriceChanges)
+        {
+            <h3 class="heading-small">@p.Title</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td></td>
+                                    <td>Currently</td>
+                                    <td>Change to</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>From date</td>
+                                    <td>
+                                        @{
+                                            if (!p.MissingPriceHistory)
+                                            {
+                                                <span>@p.CurrentStartDate.Date.ToGdsFormat()</span>
+                                            }
+                                        }
+                                    </td>
+                                    <td>@p.IlrStartDate.Date.ToGdsFormat()</td>
+                                </tr>
+                                <tr>
+                                    <td>Total apprenticeship training price</td>
+                                    <td>
+                                        @{
+                                            if (!p.MissingPriceHistory)
+                                            {
+                                                <span>@p.CurrentCost.ToString("C")</span>
+                                            }
+                                        }
+                                    </td>
+                                    <td>@p.IlrCost.ToString("C")</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                }
+        <form method="POST" action="@Url.Action("ConfirmRequestChanges")" novalidate="novalidate">
+            @Html.AntiForgeryToken()
+            <h2 class="heading-medium">Are you happy to approve these changes?</h2>
+
+            <div class="form-group @(!string.IsNullOrEmpty(Model.Data.ChangesConfirmedError) ? "error" : "")">
+                <fieldset>
+                    <legend class="visually-hidden">Are you happy to approve these changes?</legend>
+
+                    <div id="ChangesConfirmed"></div>
+                    @if (!string.IsNullOrEmpty(Model.Data.ChangesConfirmedError))
+                    {
+                        <span class="error-message" id="error-message-ChangesConfirmed">@Model.Data.ChangesConfirmedError</span>
+                    }
+
+                    <label class="block-label selection-button-radio" for="changes-approve-true">
+                        @Html.RadioButton("ChangesConfirmed", true, new { id = "changes-approve-true" })
+                        Yes, approve these changes
+                    </label>
+                    <label class="block-label selection-button-radio" for="changes-approve-false">
+                        @Html.RadioButton("ChangesConfirmed", false, new { id = "changes-approve-false" })
+                        No, reject these changes
+                    </label>
+                </fieldset>
+            </div>
+
+            <button type="submit" class="button" aria-label="Continue">Continue</button>
+
+            <a class="button-link" href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId })" aria-label="Back to apprentice details">
+                Cancel and return
+            </a>
+            @Html.Hidden("HashedAccountId", Model.Data.HashedAccountId)
+            @Html.Hidden("HashedApprenticeshipId", Model.Data.HashedApprenticeshipId)
+        </form>
+</div>
 </div>
 
 

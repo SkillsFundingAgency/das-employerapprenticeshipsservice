@@ -40,9 +40,11 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 
         public bool EnableEdit { get; set; }
 
-        public bool HasDataLockError { get; set; }
-
         public TriageStatusViewModel DataLockTriageStatus { get; set; }
+
+        public bool PendingDataLockRestart { get; set; }
+
+        public bool PendingDataLockChange { get; set; }
     }
 
     public enum PendingChanges

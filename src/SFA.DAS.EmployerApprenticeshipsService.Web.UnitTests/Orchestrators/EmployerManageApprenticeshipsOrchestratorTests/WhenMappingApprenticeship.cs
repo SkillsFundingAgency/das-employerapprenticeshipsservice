@@ -209,17 +209,5 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
             result.Data.PendingChanges.Should().Be(PendingChanges.ReadyForApproval);
         }
-
-        [Test]
-        public void HelloWorld()
-        {
-            var ap = new Apprenticeship
-                         {
-                             DataLockTriageStatus = TriageStatus.Restart
-                         };
-
-            var result = _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(ap);
-            result.HasDataLockError.Should().BeTrue();
-        }
     }
 }

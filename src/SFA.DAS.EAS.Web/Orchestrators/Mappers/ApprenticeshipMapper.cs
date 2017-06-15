@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.Commitments.Api.Types.ProviderPayment;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
@@ -71,9 +72,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 EnableEdit = pendingChange == PendingChanges.None
                             && new []{ PaymentStatus.Active, PaymentStatus.Paused,  }.Contains(apprenticeship.PaymentStatus),
                 CanEditStatus = !(new List<PaymentStatus> { PaymentStatus.Completed, PaymentStatus.Withdrawn }).Contains(apprenticeship.PaymentStatus),
-                HasDataLockError = apprenticeship.DataLockTriageStatus != null 
-                                && (apprenticeship.DataLockTriageStatus == TriageStatus.Restart 
-                                  ||apprenticeship.DataLockTriageStatus == TriageStatus.Change ),
                 DataLockTriageStatus = (TriageStatusViewModel)(apprenticeship.DataLockTriageStatus ?? TriageStatus.Unknown)
             };
         }
@@ -256,6 +254,32 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                                  .OrderBy(m => m.ProviderName );
 
             return new PaymentOrderViewModel { Items = items };
+        }
+
+        public IList<PriceChange> MapPriceChanges(IEnumerable<DataLockStatus> dataLocks, List<PriceHistory> history)
+        {
+            // Only price DLs
+            var l = new List<PriceChange>();
+            var i = 0;
+            foreach (var dl in dataLocks)
+            {
+                i++;
+                var h = history
+                    .OrderByDescending(m => m.FromDate)
+                    .FirstOrDefault(m => m.FromDate <= dl.IlrEffectiveFromDate);
+
+                l.Add(new PriceChange
+                {
+                    Title = $"Change {i}",
+                    CurrentStartDate = h?.FromDate ?? DateTime.MinValue,
+                    CurrentCost = h?.Cost ?? default(decimal),
+                    IlrStartDate = dl.IlrEffectiveFromDate ?? DateTime.MinValue,
+                    IlrCost = dl.IlrTotalCost ?? default(decimal),
+                    MissingPriceHistory = h == null
+                });
+            }
+
+            return l;
         }
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
