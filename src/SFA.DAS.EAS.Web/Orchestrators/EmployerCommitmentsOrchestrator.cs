@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeship;
 using SFA.DAS.EAS.Application.Commands.CreateCommitment;
@@ -35,6 +35,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using WebGrease.Css.Extensions;
+using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -79,14 +80,21 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task<OrchestratorResponse<Account>> CheckAccountAuthorization(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<CommitmentsIndexViewModel>> GetIndexViewModel(string hashedAccountId, string externalUserId)
         {
-            return await CheckUserAuthorization(() =>
+            return await CheckUserAuthorization(async () =>
             {
-                return Task.FromResult(new OrchestratorResponse<Account>
+                var accountId = _hashingService.DecodeValue(hashedAccountId);
+
+                var response = await _mediator.SendAsync(new GetProviderPaymentPriorityRequest { AccountId = accountId });
+
+                return new OrchestratorResponse<CommitmentsIndexViewModel>
                 {
-                    Status = HttpStatusCode.OK
-                });
+                    Data = new CommitmentsIndexViewModel
+                    {
+                        ShowSetPaymentPriorityLink = response.Data != null && response.Data.Count > 1
+                    }
+                };
             }, hashedAccountId, externalUserId);
         }
 
@@ -328,7 +336,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new CreateApprenticeshipCommand
                 {
                     AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
-                    Apprenticeship = await _apprenticeshipMapper.MapFromAsync(apprenticeship),
+                    Apprenticeship = await _apprenticeshipMapper.MapFrom(apprenticeship),
                     UserId = externalUserId,
                     UserEmailAddress = userEmail,
                     UserDisplayName = userName
@@ -389,7 +397,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new UpdateApprenticeshipCommand
                 {
                     AccountId = accountId,
-                    Apprenticeship = await _apprenticeshipMapper.MapFromAsync(apprenticeship),
+                    Apprenticeship = await _apprenticeshipMapper.MapFrom(apprenticeship),
                     UserId = externalUserId,
                     UserName = userName,
                     UserEmail = userEmail
