@@ -172,6 +172,7 @@
     <Compile Include="Services\ProviderEmailLookupService\ProviderEmailLookupServiceTests.cs" />
     <Compile Include="Services\ReferenceDataService\WhenIGetACharity.cs" />
     <Compile Include="Services\PaymentServiceTests\WhenIGetAccountPayments.cs" />
+    <Compile Include="Services\ReferenceDataService\WhenISearchAnOrganisation.cs" />
     <Compile Include="Services\WhiteListTests\WhenIGetUserWhiteList.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -41,7 +42,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         public async Task<PagedResponse<PublicSectorOrganisation>> SearchPublicSectorOrganisation(string searchTerm, int pageNumber, int pageSize)
         {
             var dto = await _client.SearchPublicSectorOrganisation(searchTerm, pageNumber, pageSize);
-            
+
             var orgainsations = dto.Data.Select(x => _mapper.Map<PublicSectorOrganisation>(x)).ToList();
 
             return new PagedResponse<PublicSectorOrganisation>
@@ -50,6 +51,15 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 PageNumber = dto.PageNumber,
                 TotalPages = dto.TotalPages
             };
+        }
+
+        public async Task<IEnumerable<Organisation>> SearchOrganisations(string searchTerm)
+        {
+            var result = await _client.SearchOrganisations(searchTerm);
+
+            var returnValue = result.Data.Select(x => _mapper.Map<Organisation>(x)).ToList();
+
+            return returnValue;
         }
     }
 }

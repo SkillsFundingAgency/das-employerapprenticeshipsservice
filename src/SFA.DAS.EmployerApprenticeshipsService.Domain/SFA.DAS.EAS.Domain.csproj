@@ -170,8 +170,11 @@
     <Compile Include="Models\EmployerAgreement\EmployerAgreementView.cs" />
     <Compile Include="Models\EmployerAgreement\RemoveEmployerAgreementView.cs" />
     <Compile Include="Models\EmployerAgreement\SignEmployerAgreement.cs" />
+    <Compile Include="Models\Organisation\Address.cs" />
+    <Compile Include="Models\Organisation\OrganisationSubType.cs" />
     <Compile Include="Models\Payments\Payment.cs" />
     <Compile Include="Models\Payments\PeriodEnd.cs" />
+    <Compile Include="Models\ReferenceData\Organisation.cs" />
     <Compile Include="Models\Transaction\AggregationData.cs" />
     <Compile Include="Models\Transaction\AggregationLine.cs" />
     <Compile Include="Models\Transaction\AggregationLineItem.cs" />

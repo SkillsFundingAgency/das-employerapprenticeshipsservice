@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 
 namespace SFA.DAS.EAS.Domain.Interfaces
@@ -18,7 +19,7 @@ namespace SFA.DAS.EAS.Domain.Interfaces
            int pageNumber,
            int pageSize);
 
-        
 
+        Task<IEnumerable<Organisation>> SearchOrganisations(string searchTerm);
     }
 }
