@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             };
         }
 
-        public async Task<IEnumerable<Organisation>> SearchOrganisations(string searchTerm)
+        public async Task<PagedResponse<Organisation>> SearchOrganisations(string searchTerm,int pageNumber = 1, int pageSize = 25)
         {
             var cacheKey = $"SearchKey_{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(searchTerm))}";
 
@@ -73,8 +73,18 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                     
                 }
             }
-            
-            return result;
+
+            if (result == null)
+            {
+                return new PagedResponse<Organisation>();
+            }
+
+            return new PagedResponse<Organisation>
+            {
+                Data = result.Skip((pageNumber-1)*pageSize).Take(pageSize).ToList(),
+                TotalPages = ((result.Count+9) / pageSize) + 1,
+                PageNumber = pageNumber
+            };
         }
     }
 }

@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetOrganisations
                 return new GetOrganisationsResponse();
             }
 
-            return new GetOrganisationsResponse {Organisations = organisations.ToList()};
+            return new GetOrganisationsResponse {Organisations = organisations.Data.ToList()};
         }
     }
 }

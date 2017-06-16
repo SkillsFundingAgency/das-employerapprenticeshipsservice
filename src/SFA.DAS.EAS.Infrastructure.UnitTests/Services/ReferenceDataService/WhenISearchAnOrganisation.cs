@@ -48,24 +48,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                    SubType = Domain.Models.Organisation.OrganisationSubType.Police
                });
             var expectedSearchTerm = "Some Org";
-            _expectedOrganisation = new ReferenceData.Api.Client.Dto.Organisation
-            {
-                Name = "Company Name",
-                Type = ReferenceData.Api.Client.Dto.OrganisationType.Company,
-                Address = new ReferenceData.Api.Client.Dto.Address
-                {
-                    Line1 = "test 1",
-                    Line2 = "test 2",
-                    Line3 = "test 3",
-                    Line4 = "test 4",
-                    Line5 = "test 5",
-                    Postcode = "Test code"
-                },
-                Code = "ABC123",
-                RegistrationDate = new DateTime(2016, 10, 15),
-                Sector = "sector",
-                SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.Police
-            };
+            _expectedOrganisation = ArrangeOrganisation();
             _apiClient.Setup(x => x.SearchOrganisations(expectedSearchTerm, 500))
                 .ReturnsAsync(
                     new List<ReferenceData.Api.Client.Dto.Organisation>
@@ -102,8 +85,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             var actual = await _referenceDataService.SearchOrganisations(expectedSearchTerm);
 
             //Assert
-            actual.FirstOrDefault().ShouldBeEquivalentTo(_expectedOrganisation);
-            Assert.IsAssignableFrom<List<Domain.Models.ReferenceData.Organisation>>(actual);
+            actual.Data.FirstOrDefault().ShouldBeEquivalentTo(_expectedOrganisation);
+            Assert.IsAssignableFrom<PagedResponse<Organisation>>(actual);
         }
 
         [Test]
@@ -124,6 +107,52 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             _apiClient.Verify(x => x.SearchOrganisations(expectedSearchTerm, 500), Times.Once);
             _cacheProvider.Verify(x => x.Get<List<Organisation>>(searchKey), Times.Exactly(2));
             _cacheProvider.Verify(x => x.Set(searchKey, It.Is<List<Organisation>>(c => c != null), It.Is<DateTimeOffset>(c => c.Offset.Minutes.Equals(15))), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenTheResultsArePaged()
+        {
+            //Arrange
+            var expectedSearchTerm = "Some Org";
+            var organisations = new List<ReferenceData.Api.Client.Dto.Organisation>();
+            for (var i = 0; i <= 50; i++)
+            {
+                organisations.Add(ArrangeOrganisation());
+            }
+            _apiClient.Setup(x => x.SearchOrganisations(expectedSearchTerm, 500))
+               .ReturnsAsync(
+                   organisations
+               );
+
+            //Act
+            var actual = await _referenceDataService.SearchOrganisations(expectedSearchTerm,2);
+
+            //Assert
+            Assert.AreEqual(2, actual.PageNumber);
+            Assert.AreEqual(3, actual.TotalPages);
+            Assert.AreEqual(25, actual.Data.Count);
+        }
+
+        private static ReferenceData.Api.Client.Dto.Organisation ArrangeOrganisation()
+        {
+            return new ReferenceData.Api.Client.Dto.Organisation
+            {
+                Name = "Company Name",
+                Type = ReferenceData.Api.Client.Dto.OrganisationType.Company,
+                Address = new ReferenceData.Api.Client.Dto.Address
+                {
+                    Line1 = "test 1",
+                    Line2 = "test 2",
+                    Line3 = "test 3",
+                    Line4 = "test 4",
+                    Line5 = "test 5",
+                    Postcode = "Test code"
+                },
+                Code = "ABC123",
+                RegistrationDate = new DateTime(2016, 10, 15),
+                Sector = "sector",
+                SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.Police
+            };
         }
     }
 }
