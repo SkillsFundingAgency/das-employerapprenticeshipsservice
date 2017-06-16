@@ -66,13 +66,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 Status = statusText,
                 ProviderName = apprenticeship.ProviderName,
                 PendingChanges = pendingChange,
-                Alert = MapRecordStatus(apprenticeship.PendingUpdateOriginator, apprenticeship.DataLockTriageStatus),
+                Alerts = MapRecordStatus(apprenticeship.PendingUpdateOriginator, 
+                    apprenticeship.DataLockCourseTriaged, 
+                    apprenticeship.DataLockPriceTriaged),
                 EmployerReference = apprenticeship.EmployerRef,
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 EnableEdit = pendingChange == PendingChanges.None
                             && new []{ PaymentStatus.Active, PaymentStatus.Paused,  }.Contains(apprenticeship.PaymentStatus),
-                CanEditStatus = !(new List<PaymentStatus> { PaymentStatus.Completed, PaymentStatus.Withdrawn }).Contains(apprenticeship.PaymentStatus),
-                DataLockTriageStatus = (TriageStatusViewModel)(apprenticeship.DataLockTriageStatus ?? TriageStatus.Unknown)
+                CanEditStatus = !(new List<PaymentStatus> { PaymentStatus.Completed, PaymentStatus.Withdrawn }).Contains(apprenticeship.PaymentStatus)
             };
         }
         
@@ -319,29 +320,28 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             }
         }
 
-        private string MapRecordStatus(Originator? pendingUpdateOriginator, TriageStatus? dataLockTriageStatus)
+        private IEnumerable<string> MapRecordStatus(Originator? pendingUpdateOriginator, bool dataLockCourseTriaged, bool dataLockPriceTriaged)
         {
-            var changeText = string.Empty;
-            var dataLockText = string.Empty;
+            const string ChangesPending = "Changes pending";
+            const string ChangesForReview = "Changes for review";
+            const string ChangesRequested = "Changes requested";
+
+            var statuses = new List<string>();
 
             if (pendingUpdateOriginator != null)
             {
-                changeText = pendingUpdateOriginator == Originator.Employer
-                    ? "Changes pending" 
-                    : "Changes for review" ;    
+                var t = pendingUpdateOriginator == Originator.Employer 
+                    ? ChangesPending : ChangesForReview;
+                statuses.Add(t);
             }
 
-            if (dataLockTriageStatus != null)
-            {
-                switch (dataLockTriageStatus)
-                {
-                    case TriageStatus.Restart:
-                        dataLockText = "Changes requested";
-                        break;
-                }
-            }
+            if (dataLockCourseTriaged)
+                statuses.Add(ChangesRequested);
 
-            return !string.IsNullOrEmpty(dataLockText) ? dataLockText : changeText;
+            if (dataLockPriceTriaged)
+                statuses.Add(ChangesForReview);
+
+            return statuses.Distinct();
         }
     }
 }

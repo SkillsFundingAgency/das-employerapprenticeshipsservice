@@ -18,15 +18,11 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 
         public DateTime? PeriodStartData { get; set; }
 
-        public IList<PriceChange> PriceChanges { get; set; }
-
         public string HashedAccountId { get; set; }
 
         public string HashedApprenticeshipId { get; set; }
 
         public string ProviderName { get; set; }
-
-        public TriageStatus TriageStatus { get; set; }
 
         public string LearnerName { get; set; }
 
@@ -35,5 +31,7 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public string ChangesConfirmedError => GetErrorMessage(nameof(ChangesConfirmed));
 
         public bool? ChangesConfirmed { get; set; }
+
+        public IList<PriceChange> PriceChanges { get; set; }
     }
 }

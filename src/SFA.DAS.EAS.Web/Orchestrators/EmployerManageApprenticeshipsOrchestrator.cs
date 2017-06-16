@@ -260,8 +260,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     viewModel.HashedAccountId = hashedAccountId;
                     viewModel.HashedApprenticeshipId = hashedApprenticeshipId;
                     viewModel.ProviderName = apprenticeship.ProviderName;
-                    viewModel.IsDataLockOrigin = 
-                        apprenticeship.DataLockTriageStatus == (TriageStatusViewModel)TriageStatus.Change;
 
                     return new OrchestratorResponse<UpdateApprenticeshipViewModel>
                     {
@@ -643,7 +641,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                         IlrProgram = newProgram,
                                         PeriodStartData = new DateTime(2017, 08, 08),
                                         ProviderName = apprenticeship.Apprenticeship.ProviderName,
-                                        TriageStatus = dataLock.TriageStatus,
                                         LearnerName = apprenticeship.Apprenticeship.ApprenticeshipName,
                                         DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth
                                     }
@@ -678,7 +675,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             HashedApprenticeshipId = hashedApprenticeshipId,
                             PeriodStartData = new DateTime(2017, 08, 08),
                             ProviderName = apprenticeship.Apprenticeship.ProviderName,
-                            //TriageStatus = apprenticeship.Apprenticeship.DataLockTriageStatus ?? TriageStatus.Unknown,
                             LearnerName = apprenticeship.Apprenticeship.ApprenticeshipName,
                             DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth,
                             PriceChanges = _apprenticeshipMapper.MapPriceChanges(dataLockSummary.DataLockSummary.DataLockWithOnlyPriceMismatch, priceHistory.History)

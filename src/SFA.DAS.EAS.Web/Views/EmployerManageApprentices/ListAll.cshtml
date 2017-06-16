@@ -56,7 +56,12 @@
                             @apprenticeship.Status &nbsp;
                         </td>
                         <td>
-                            @apprenticeship.Alert &nbsp;
+                            @foreach (var a in apprenticeship.Alerts)
+                            {
+                                <div>
+                                    @a
+                                </div>
+                            }
                         </td>
                         <td>
                             <a href="@Url.Action("Details", new { Model.Data.HashedAccountId, hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })"

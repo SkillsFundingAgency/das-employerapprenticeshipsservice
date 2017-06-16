@@ -400,8 +400,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> RequestRestart(string hashedAccountId, string hashedApprenticeshipId)
         {
             var model = await _orchestrator.GetDataLockStatus(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
-            if (model.Data.TriageStatus != TriageStatus.Restart)
-                throw new InvalidStateException($"Apprenticeship data lock not is correct state, Current: {model.Data.TriageStatus} expected {TriageStatus.Restart}");
+            // ToDo: Check status?
+            //if (model.Data.TriageStatus != TriageStatus.Restart)
+            //    throw new InvalidStateException($"Apprenticeship data lock not is correct state, Current: {model.Data.TriageStatus} expected {TriageStatus.Restart}");
 
             return View(model);
         }

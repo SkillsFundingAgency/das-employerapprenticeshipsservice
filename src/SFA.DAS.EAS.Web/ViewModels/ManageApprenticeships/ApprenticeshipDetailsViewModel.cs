@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.SqlServer.Server;
 
@@ -32,15 +33,13 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         
         public bool CanEditStatus { get;  set; }
 
-        public string Alert { get; set; }
+        public IEnumerable<string> Alerts { get; set; }
 
         public string EmployerReference { get; set; }
 
         public string CohortReference { get; set; }
 
         public bool EnableEdit { get; set; }
-
-        public TriageStatusViewModel DataLockTriageStatus { get; set; }
 
         public bool PendingDataLockRestart { get; set; }
 
