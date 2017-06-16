@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.ReferenceData.Api.Client;
 
 
@@ -15,11 +17,13 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         private readonly IReferenceDataApiClient _client;
         private readonly IMapper _mapper;
+        private readonly ICacheProvider _cacheProvider;
 
-        public ReferenceDataService(IReferenceDataApiClient client, IMapper mapper)
+        public ReferenceDataService(IReferenceDataApiClient client, IMapper mapper, ICacheProvider cacheProvider)
         {
             _client = client;
             _mapper = mapper;
+            _cacheProvider = cacheProvider;
         }
 
         public async Task<Charity> GetCharity(int registrationNumber)
@@ -55,11 +59,22 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<IEnumerable<Organisation>> SearchOrganisations(string searchTerm)
         {
-            var result = await _client.SearchOrganisations(searchTerm);
+            var cacheKey = $"SearchKey_{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(searchTerm))}";
 
-            var returnValue = result.Select(x => _mapper.Map<Organisation>(x)).ToList();
+            var result = _cacheProvider.Get<List<Organisation>>(cacheKey);
+            if (result == null)
+            {
+                var orgs = await _client.SearchOrganisations(searchTerm);
 
-            return returnValue;
+                if (orgs != null)
+                {
+                    result = orgs.Select(x => _mapper.Map<Organisation>(x)).ToList();
+                    _cacheProvider.Set(cacheKey, result, new DateTimeOffset(DateTime.UtcNow).ToOffset(TimeSpan.FromMinutes(15)));
+                    
+                }
+            }
+            
+            return result;
         }
     }
 }

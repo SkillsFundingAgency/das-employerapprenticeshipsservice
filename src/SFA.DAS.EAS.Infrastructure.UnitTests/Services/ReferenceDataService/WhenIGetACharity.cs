@@ -3,6 +3,7 @@ using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.ReferenceData.Api.Client;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
@@ -30,7 +31,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             _mapper.Setup(x => x.Map<ReferenceData.Api.Client.Dto.Charity, Charity>(It.Is<ReferenceData.Api.Client.Dto.Charity>(c => c == null)))
                 .Returns(() => null);
 
-            _referenceDataService = new Infrastructure.Services.ReferenceDataService(_apiClient.Object, _mapper.Object);
+            _referenceDataService = new Infrastructure.Services.ReferenceDataService(_apiClient.Object, _mapper.Object, Mock.Of<ICacheProvider>());
         }
 
         [Test]

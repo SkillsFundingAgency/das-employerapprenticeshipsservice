@@ -6,8 +6,9 @@ using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.ReferenceData.Api.Client;
-using SFA.DAS.ReferenceData.Api.Client.Dto;
 using FluentAssertions;
+using SFA.DAS.EAS.Domain.Models.ReferenceData;
+using SFA.DAS.EAS.Infrastructure.Caching;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
 {
@@ -16,14 +17,66 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
         private Mock<IReferenceDataApiClient> _apiClient;
         private Infrastructure.Services.ReferenceDataService _referenceDataService;
         private Mock<IMapper> _mapper;
+        private Mock<ICacheProvider> _cacheProvider;
+        private ReferenceData.Api.Client.Dto.Organisation _expectedOrganisation;
 
         [SetUp]
         public void Arrange()
         {
+
             _apiClient = new Mock<IReferenceDataApiClient>();
             _mapper = new Mock<IMapper>();
 
-            _referenceDataService = new Infrastructure.Services.ReferenceDataService(_apiClient.Object, _mapper.Object);
+
+            _mapper.Setup(x => x.Map<Organisation>(It.IsAny<ReferenceData.Api.Client.Dto.Organisation>()))
+               .Returns(new Organisation
+               {
+                   Name = "Company Name",
+                   Type = Domain.Models.Organisation.OrganisationType.CompaniesHouse,
+                   Address = new Domain.Models.Organisation.Address
+                   {
+                       Line1 = "test 1",
+                       Line2 = "test 2",
+                       Line3 = "test 3",
+                       Line4 = "test 4",
+                       Line5 = "test 5",
+                       Postcode = "Test code"
+                   },
+                   Code = "ABC123",
+                   RegistrationDate = new DateTime(2016, 10, 15),
+                   Sector = "sector",
+                   SubType = Domain.Models.Organisation.OrganisationSubType.Police
+               });
+            var expectedSearchTerm = "Some Org";
+            _expectedOrganisation = new ReferenceData.Api.Client.Dto.Organisation
+            {
+                Name = "Company Name",
+                Type = ReferenceData.Api.Client.Dto.OrganisationType.Company,
+                Address = new ReferenceData.Api.Client.Dto.Address
+                {
+                    Line1 = "test 1",
+                    Line2 = "test 2",
+                    Line3 = "test 3",
+                    Line4 = "test 4",
+                    Line5 = "test 5",
+                    Postcode = "Test code"
+                },
+                Code = "ABC123",
+                RegistrationDate = new DateTime(2016, 10, 15),
+                Sector = "sector",
+                SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.Police
+            };
+            _apiClient.Setup(x => x.SearchOrganisations(expectedSearchTerm, 500))
+                .ReturnsAsync(
+                    new List<ReferenceData.Api.Client.Dto.Organisation>
+                    {
+                        _expectedOrganisation
+                    }
+                );
+
+            _cacheProvider = new Mock<ICacheProvider>();
+
+            _referenceDataService = new Infrastructure.Services.ReferenceDataService(_apiClient.Object, _mapper.Object, _cacheProvider.Object);
         }
 
         [Test]
@@ -36,64 +89,41 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             await _referenceDataService.SearchOrganisations(expectedSearchTerm);
 
             //Assert
-            _apiClient.Verify(x => x.SearchOrganisations(expectedSearchTerm,500));
+            _apiClient.Verify(x => x.SearchOrganisations(expectedSearchTerm, 500), Times.Once);
         }
 
         [Test]
         public async Task ThenTheDataIsReturnedFromTheApi()
         {
             //Arrange
-            _mapper.Setup(x => x.Map<Domain.Models.ReferenceData.Organisation>(It.IsAny<Organisation>()))
-                .Returns(new Domain.Models.ReferenceData.Organisation {
-                    Name = "Company Name",
-                    Type = Domain.Models.Organisation.OrganisationType.CompaniesHouse,
-                    Address = new Domain.Models.Organisation.Address
-                    {
-                        Line1 = "test 1",
-                        Line2 = "test 2",
-                        Line3 = "test 3",
-                        Line4 = "test 4",
-                        Line5 = "test 5",
-                        Postcode = "Test code"
-                    },
-                    Code = "ABC123",
-                    RegistrationDate = new DateTime(2016, 10, 15),
-                    Sector = "sector",
-                    SubType = Domain.Models.Organisation.OrganisationSubType.Police
-                });
             var expectedSearchTerm = "Some Org";
-            var expectedOrganisation = new Organisation
-            {
-                Name = "Company Name",
-                Type = OrganisationType.Company,
-                Address = new Address
-                {
-                    Line1 = "test 1",
-                    Line2 = "test 2",
-                    Line3 = "test 3",
-                    Line4 = "test 4",
-                    Line5 = "test 5",
-                    Postcode = "Test code"
-                },
-                Code = "ABC123",
-                RegistrationDate = new DateTime(2016,10,15),
-                Sector = "sector",
-                SubType = OrganisationSubType.Police
-            };
-            _apiClient.Setup(x => x.SearchOrganisations(expectedSearchTerm, 500))
-                .ReturnsAsync(
-                    new List<Organisation>
-                    {
-                        expectedOrganisation
-                    }
-                );
 
             //Act
             var actual = await _referenceDataService.SearchOrganisations(expectedSearchTerm);
 
             //Assert
-            actual.FirstOrDefault().ShouldBeEquivalentTo(expectedOrganisation);
+            actual.FirstOrDefault().ShouldBeEquivalentTo(_expectedOrganisation);
             Assert.IsAssignableFrom<List<Domain.Models.ReferenceData.Organisation>>(actual);
         }
-     }
+
+        [Test]
+        public async Task ThenSubsequentCallsAreRetrievedFromTheApi()
+        {
+            //Arrange
+            var expectedSearchTerm = "Some Org";
+            var searchKey = $"SearchKey_{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(expectedSearchTerm))}";
+            _cacheProvider.SetupSequence(c => c.Get<List<Organisation>>(searchKey))
+                .Returns(null)
+                .Returns(new List<Organisation> { new Organisation() });
+
+            //Act
+            await _referenceDataService.SearchOrganisations(expectedSearchTerm);
+            await _referenceDataService.SearchOrganisations(expectedSearchTerm);
+
+            //Assert
+            _apiClient.Verify(x => x.SearchOrganisations(expectedSearchTerm, 500), Times.Once);
+            _cacheProvider.Verify(x => x.Get<List<Organisation>>(searchKey), Times.Exactly(2));
+            _cacheProvider.Verify(x => x.Set(searchKey, It.Is<List<Organisation>>(c => c != null), It.Is<DateTimeOffset>(c => c.Offset.Minutes.Equals(15))), Times.Once);
+        }
+    }
 }
