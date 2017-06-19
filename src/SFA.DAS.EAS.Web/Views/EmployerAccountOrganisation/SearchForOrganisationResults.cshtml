@@ -59,11 +59,12 @@
         </div>
     </aside>
     <section class="results-list">
-        <ol>
+        
 
             @if (Model.Data != null)
             {
-                foreach (var organisation in Model.Data)
+                <ol>
+                @foreach (var organisation in Model.Data)
                 {
                     <li>
                         <article>
@@ -82,14 +83,13 @@
                         </article>
                     </li>
                 }
+                </ol>
             }
             else
             {
-                <li>
-                    <article>
-                        No results found
-                    </article>
-                </li>
+                 <p>No results found</p>
+
+                   
             }
 
             
@@ -108,7 +108,7 @@
                 </article>
             </li>*@
             
-        </ol>
+        
         @*<nav>
             <ul class="previous-next-navigation">
                 <li class="previous">
