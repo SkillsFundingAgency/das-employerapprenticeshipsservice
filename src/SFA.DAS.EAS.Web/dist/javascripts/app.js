@@ -140,9 +140,31 @@ sfa.backLink = {
     }
 }
 
+sfa.welcomeWizard = {
+    init: function () {
+        var that = this;
+        $('#welcome a.close').on('click', function (e) {
+            that.toggleStep($('#welcome ol > li:first-child'));
+            e.preventDefault();
+        });
+    },
+    toggleStep: function (step) {
+        if (step.hasClass('complete')) {
+            step.removeClass('complete');
+        } else {
+            step.addClass('complete');
+        }
+    }
+}
+
 if ($('#js-breadcrumbs')) {
     sfa.backLink.init();
 }
+
+if ($('#welcome')) {
+    sfa.welcomeWizard.init();
+}
+
 
 window.onunload = function () {
     sfa.forms.removeDisabledAttr();

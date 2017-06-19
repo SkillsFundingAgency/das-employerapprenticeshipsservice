@@ -3694,6 +3694,24 @@ table.responsive tr th.tw-70 {
   border-left-color: transparent;
 }
 
+#welcome {
+  border: 4px solid #2e358b;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 15px;
+}
+
+#welcome ol.todo-list > li {
+  margin-bottom: 15px;
+  border: 1px solid #bfc1c3;
+  padding: 15px;
+}
+
+#welcome ol.todo-list > li.complete {
+  background: #2e358b;
+  color: white;
+}
+
 .validation-summary-valid,
 .form-group .field-validation-valid {
   display: none;

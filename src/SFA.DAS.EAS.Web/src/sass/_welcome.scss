@@ -1,2 +1,18 @@
-﻿body {
+﻿#welcome {
+    border: 4px solid $purple;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 15px;
+
+    ol.todo-list {
+        > li {
+            margin-bottom:15px;
+            border: 1px solid $border-colour;
+            padding: 15px;
+            &.complete {
+                background: $purple;
+                color: white;
+            }
+        }
+    }
 }
