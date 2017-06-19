@@ -71,8 +71,10 @@
                             </h1>
                             <dl class="inline">
                                 <dt>Address</dt>
-                                @{var address = organisation.Address.GetAddress()}
-                                <dd>@address</dd>
+                                @{
+                                    var address = organisation.Address.GetAddress();
+                                }
+                                <dd>@(string.IsNullOrEmpty(address) ? "No address supplied" : address)</dd>
                                 <dt>Type</dt>
                                 <dd>@organisation.Type.ToString()</dd>
                             </dl>
