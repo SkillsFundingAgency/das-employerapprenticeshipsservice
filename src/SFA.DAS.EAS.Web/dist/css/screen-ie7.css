@@ -4619,6 +4619,34 @@ h2 .float-right {
   margin-bottom: 0;
 }
 
+#review-datalock-changes h2.heading-small {
+  margin-top: 40px;
+}
+
+#review-datalock-changes .core-detail {
+  margin-bottom: 30px;
+}
+
+#review-datalock-changes .core-detail td.first-child {
+  border-top: 1px solid #bfc1c3;
+}
+
+#review-datalock-changes .changes .current {
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+#review-datalock-changes .changes .changed {
+  font-weight: bold;
+}
+
+#review-datalock-changes #approve-changes a.break-line {
+  clear: both;
+  display: block;
+  padding-left: 0;
+  margin-top: 20px;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;

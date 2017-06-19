@@ -1,4 +1,9 @@
-﻿@using SFA.DAS.EAS.Web.Extensions
+﻿@{
+    ViewBag.Title = "Review Changes";
+    ViewBag.PageId = "review-datalock-changes";
+}
+
+@using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.DataLockStatusViewModel>
 
 @{
@@ -10,10 +15,10 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Review changes</h1>
 
-        <table>
+        <table class="core-detail">
             <tr>
-                <td>Name</td>
-                <td>@Model.Data.LearnerName</td>
+                <td class="first-child">Name</td>
+                <td class="first-child">@Model.Data.LearnerName</td>
             </tr>
             @if (Model.Data.DateOfBirth != null)
             {
@@ -23,15 +28,17 @@
                 </tr>
             }
         </table>
+
+        <p>@Model.Data.ProviderName has requested these changes:</p>
         @foreach (var p in Model.Data.PriceChanges)
         {
-            <h3 class="heading-small">@p.Title</h3>
-                        <table>
+            <h2 class="heading-small">@p.Title</h2>
+                        <table class="changes">
                             <thead>
                                 <tr>
-                                    <td></td>
-                                    <td>Currently</td>
-                                    <td>Change to</td>
+                                    <th></th>
+                                    <th class="current">Currently</th>
+                                    <th class="changed">Change to</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -45,7 +52,7 @@
                                             }
                                         }
                                     </td>
-                                    <td>@p.IlrStartDate.Date.ToGdsFormat()</td>
+                                    <td class="changed">@p.IlrStartDate.Date.ToGdsFormat()</td>
                                 </tr>
                                 <tr>
                                     <td>Total apprenticeship training price</td>
@@ -57,14 +64,14 @@
                                             }
                                         }
                                     </td>
-                                    <td>@p.IlrCost.ToString("C")</td>
+                                    <td class="changed">@p.IlrCost.ToString("C")</td>
                                 </tr>
                             </tbody>
                         </table>
                 }
-        <form method="POST" action="@Url.Action("ConfirmRequestChanges")" novalidate="novalidate">
+        <form method="POST" action="@Url.Action("ConfirmRequestChanges")" novalidate="novalidate" id="approve-changes">
             @Html.AntiForgeryToken()
-            <h2 class="heading-medium">Are you happy to approve these changes?</h2>
+            <h3 class="heading-medium">Are you happy to approve these changes?</h3>
 
             <div class="form-group @(!string.IsNullOrEmpty(Model.Data.ChangesConfirmedError) ? "error" : "")">
                 <fieldset>
@@ -88,10 +95,11 @@
             </div>
 
             <button type="submit" class="button" aria-label="Continue">Continue</button>
-
-            <a class="button-link" href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId })" aria-label="Back to apprentice details">
+           
+            <a class="button-link break-line" href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId })" aria-label="Back to apprentice details">
                 Cancel and return
             </a>
+            
             @Html.Hidden("HashedAccountId", Model.Data.HashedAccountId)
             @Html.Hidden("HashedApprenticeshipId", Model.Data.HashedApprenticeshipId)
         </form>
