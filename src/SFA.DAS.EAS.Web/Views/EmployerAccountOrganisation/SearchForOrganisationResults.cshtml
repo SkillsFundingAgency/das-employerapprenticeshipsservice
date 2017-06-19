@@ -1,6 +1,8 @@
 ﻿@using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Models.Organisation
 
+@model SFA.DAS.EAS.Web.OrchestratorResponse<List<SFA.DAS.EAS.Domain.Models.ReferenceData.Organisation>>
+
 @{ 
     ViewBag.PageID = "select-your-organisation";
     ViewBag.Title = "Select your organisation";
@@ -10,20 +12,20 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@ViewBag.Title</h1>
-        <form action="" method="POST">
+        <form action="@Url.Action("SearchForOrganisationResults")" method="POST">
             <div class="search-field">
                 <fieldset class="search-input">
-                    <label for="publicBodyName">
+                    <label for="searchTerm">
                         <span class="form-label-bold">Search results</span>
                     </label>
-                    <input type="text" name="publicBodyName" id="publicBodyName" value="" class="form-control">
+                    <input type="text" id="searchTerm" name="searchTerm" value="" class="form-control" />
                 </fieldset>
                 <fieldset class="search-submit">
                     <button type="submit" class="button">Search</button>
                 </fieldset>
             </div>
         </form>
-        <p>66 results found</p>
+        <p>@(Model.Data?.Count ?? 0) results found</p>
     </div>
 </div>
 
@@ -57,40 +59,39 @@
     </aside>
     <section class="results-list">
         <ol>
-            <li>
-                <article>
-                    <h1 class="heading-medium"><a href="#">20-20 Housing Co-operative Limited</a></h1>
-                    <dl class="inline">
-                        <dt>Address</dt>
-                        <dd>123 Some Street, Tiny Town, AB1 2CD</dd>
-                        <dt>Type</dt>
-                        <dd>Private limited company</dd>
-                    </dl>
-                </article>
-            </li>
-            <li>
-                <article>
-                    <h1 class="heading-medium"><a href="#">20-20 Housing Co-operative Limited</a></h1>
-                    <dl class="inline">
-                        <dt>Address</dt>
-                        <dd>123 Some Street, Tiny Town, AB1 2CD</dd>
-                        <dt>Type</dt>
-                        <dd>Private limited company</dd>
-                    </dl>
-                </article>
-            </li>
-            <li>
-                <article>
-                    <h1 class="heading-medium"><a href="#">20-20 Housing Co-operative Limited</a></h1>
-                    <dl class="inline">
-                        <dt>Address</dt>
-                        <dd>123 Some Street, Tiny Town, AB1 2CD</dd>
-                        <dt>Type</dt>
-                        <dd>Private limited company</dd>
-                    </dl>
-                </article>
-            </li>
-            <li class="added">
+
+            @if (Model.Data != null)
+            {
+                foreach (var organisation in Model.Data)
+                {
+                    <li>
+                        <article>
+                            <h1 class="heading-medium">
+                                <a href="#">@organisation.Name</a>
+                            </h1>
+                            <dl class="inline">
+                                <dt>Address</dt>
+                                @{var address = organisation.Address.GetAddress()}
+                                <dd>@address</dd>
+                                <dt>Type</dt>
+                                <dd>@organisation.Type.ToString()</dd>
+                            </dl>
+                        </article>
+                    </li>
+                }
+            }
+            else
+            {
+                <li>
+                    <article>
+                        No results found
+                    </article>
+                </li>
+            }
+
+            
+
+            @*<li class="added">
                 <article>
                     <h1 class="heading-medium">20-20 Housing Co-operative Limited</h1>
                     <dl class="inline">
@@ -99,33 +100,13 @@
                         <dt>Type</dt>
                         <dd>Private limited company</dd>
                     </dl>
-                    <p>Already added - <a href="">view my organisations</a></p>
+                    <p>Already added - <a href="">view my organisations</a>
+                    </p>
                 </article>
-            </li>
-            <li>
-                <article>
-                    <h1 class="heading-medium"><a href="#">20-20 Housing Co-operative Limited</a></h1>
-                    <dl class="inline">
-                        <dt>Address</dt>
-                        <dd>123 Some Street, Tiny Town, AB1 2CD</dd>
-                        <dt>Type</dt>
-                        <dd>Private limited company</dd>
-                    </dl>
-                </article>
-            </li>
-            <li>
-                <article>
-                    <h1 class="heading-medium"><a href="#">20-20 Housing Co-operative Limited</a></h1>
-                    <dl class="inline">
-                        <dt>Address</dt>
-                        <dd>123 Some Street, Tiny Town, AB1 2CD</dd>
-                        <dt>Type</dt>
-                        <dd>Private limited company</dd>
-                    </dl>
-                </article>
-            </li>
+            </li>*@
+            
         </ol>
-        <nav>
+        @*<nav>
             <ul class="previous-next-navigation">
                 <li class="previous">
                     <a href="#">
@@ -140,7 +121,7 @@
                     </a>
                 </li>
             </ul>
-        </nav>
+        </nav>*@
     </section>
 
    

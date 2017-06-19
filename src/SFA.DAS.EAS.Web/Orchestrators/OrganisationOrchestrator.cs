@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
+using SFA.DAS.EAS.Application.Queries.GetOrganisations;
 using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
 using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
@@ -587,6 +588,25 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Sector = request.Sector
                 }
             };
+        }
+
+        public async Task<OrchestratorResponse<List<Organisation>>>  SearchOrganisation(string searchTerm)
+        {
+            var response = new OrchestratorResponse<List<Organisation>>();
+
+            try
+            {
+                var result = await Mediator.SendAsync(new GetOrganisationsRequest { SearchTerm = searchTerm });
+                response.Data = result.Organisations;
+            }
+            catch (InvalidRequestException ex)
+            {
+                response.Exception = ex;
+                response.FlashMessage = new FlashMessageViewModel().CreateErrorFlashMessageViewModel(ex.ErrorMessages);
+                response.Status = HttpStatusCode.BadRequest;
+            }
+            
+            return response;
         }
     }
 }

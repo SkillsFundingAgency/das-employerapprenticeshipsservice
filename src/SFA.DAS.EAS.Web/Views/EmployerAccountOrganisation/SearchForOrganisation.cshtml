@@ -10,12 +10,12 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@ViewBag.Title</h1>
-        <form>
+        <form action="@Url.Action("SearchForOrganisationResults")" method="POST">
             <div class="form-group">
-                <label for="organisation-name">
+                <label for="searchTerm">
                     <span class="form-label-bold">Enter name</span>
                 </label>
-                <input type="text" id="organisation-name" name="" value="" class="form-control" />
+                <input type="text" id="searchTerm" name="searchTerm" value="" class="form-control" />
             </div>
             <input class="button" type="submit" value="Search" />
         </form>
