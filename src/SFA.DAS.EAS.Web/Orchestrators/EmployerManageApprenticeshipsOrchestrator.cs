@@ -146,19 +146,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var data = await _mediator.SendAsync(
                     new GetApprenticeshipQueryRequest {AccountId = accountId, ApprenticeshipId = apprenticeshipId});
 
-                var dataLock = await _mediator.SendAsync(
-                    new GetDataLockSummaryQueryRequest
-                    {
-                        ApprenticeshipId = apprenticeshipId
-                    });
-
                 var detailsViewModel =
                     _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(data.Apprenticeship);
 
-                detailsViewModel.PendingDataLockRestart = dataLock.DataLockSummary.DataLockWithCourseMismatch
-                    .Any(m => m.TriageStatus == TriageStatus.Restart);
-                detailsViewModel.PendingDataLockChange = dataLock.DataLockSummary.DataLockWithOnlyPriceMismatch
-                    .Any(m => m.TriageStatus == TriageStatus.Change);
+                detailsViewModel.PendingDataLockRestart = data.Apprenticeship.DataLockCourseTriaged;
+                detailsViewModel.PendingDataLockChange = data.Apprenticeship.DataLockPriceTriaged;
 
                 return new OrchestratorResponse<ApprenticeshipDetailsViewModel> {Data = detailsViewModel};
             }, hashedAccountId, externalUserId);
