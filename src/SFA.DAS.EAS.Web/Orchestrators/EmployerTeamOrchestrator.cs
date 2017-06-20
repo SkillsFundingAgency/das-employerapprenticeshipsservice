@@ -248,7 +248,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Resend(
-            string email, string hashedId, string externalUserId)
+            string email, string hashedId, string externalUserId, string name)
         {
             var response = await GetTeamMembers(hashedId, externalUserId);
 
@@ -261,6 +261,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Email = email,
                     AccountId = hashedId,
+                    FirstName = name,
                     ExternalUserId = externalUserId
                 });
 
