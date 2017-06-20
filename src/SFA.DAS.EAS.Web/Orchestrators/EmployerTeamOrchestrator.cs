@@ -264,6 +264,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
+                //Refresh team members view
+                response = await GetTeamMembers(hashedId, externalUserId);
                 response.Status = HttpStatusCode.OK;
                 response.FlashMessage = new FlashMessageViewModel
                 {
@@ -271,9 +273,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Headline = $"Invitation resent",
                     Message = $"You've resent an invitation to <strong>{email}</strong>"
                 };
-
-                //Refresh team members view
-                response = await GetTeamMembers(hashedId, externalUserId);
             }
             catch (InvalidRequestException e)
             {
