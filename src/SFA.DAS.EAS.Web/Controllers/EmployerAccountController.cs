@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -230,7 +231,6 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View(errorResponse);
         }
-
 
         private string GetUserId()
         {

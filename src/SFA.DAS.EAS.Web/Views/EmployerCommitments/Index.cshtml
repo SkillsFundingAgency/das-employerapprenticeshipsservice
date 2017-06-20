@@ -1,6 +1,7 @@
 ﻿@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web.ViewModels
 
-@model OrchestratorResponse
+@model OrchestratorResponse<CommitmentsIndexViewModel>
 
 @{
     ViewBag.PageID = "apprentices-home-page";
@@ -26,7 +27,7 @@
                 </div>
                 <div class="column-half ">
                     <h2 class="heading-medium"><a href="@Url.Action("YourCohorts")">Your cohorts</a></h2>
-                    <p class="rj-home-spacer">Review, edit, approve and add more apprentices to cohorts you’ve already started</p>
+                    <p class="rj-home-spacer">Review, edit, approve and add more apprentices to cohorts you’ve already started.</p>
                     <hr />
                 </div>
 
@@ -39,6 +40,18 @@
                     </p>
                     <hr />
                 </div>
+                @if (Model.Data.ShowSetPaymentPriorityLink)
+                {
+                    <div class="column-half">
+                        <h2 class="heading-medium">
+                            <a href="@Url.Action("PaymentOrder", "EmployerManageApprentices")">Set payment order</a>
+                        </h2>
+                        <p class="rj-home-spacer">
+                            View and change the order in which your providers are paid from your available funds.
+                        </p>
+                        <hr />
+                    </div>
+                }
             </div>
         </div>
     </div>
