@@ -124,9 +124,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("resend")]
-        public async Task<ActionResult> Resend(string hashedAccountId, string email)
+        public async Task<ActionResult> Resend(string hashedAccountId, string email, string name)
         {
-            var response = await _employerTeamOrchestrator.Resend(email, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var response = await _employerTeamOrchestrator.Resend(email, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), name);
             
             return View("ViewTeam", response);
         }
