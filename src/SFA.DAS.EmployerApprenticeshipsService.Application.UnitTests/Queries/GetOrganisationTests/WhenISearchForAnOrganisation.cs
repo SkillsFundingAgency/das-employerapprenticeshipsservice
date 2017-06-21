@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetOrganisationTests
             //Arrange
             var expectedSearchTerm = "My Company";
             _referenceDataService.Setup(x => x.SearchOrganisations(expectedSearchTerm,1,20))
-                .ReturnsAsync(new PagedResponse<Organisation>{ Data = new List<Organisation>()});
+                .ReturnsAsync(new PagedResponse<Organisation>{ Data = new List<Organisation> {new Organisation()} });
 
             //Act
             var actual = await RequestHandler.Handle(new GetOrganisationsRequest { SearchTerm = expectedSearchTerm });
