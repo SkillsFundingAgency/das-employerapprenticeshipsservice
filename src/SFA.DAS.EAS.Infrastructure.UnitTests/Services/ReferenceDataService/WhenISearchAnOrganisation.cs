@@ -106,7 +106,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             //Assert
             _apiClient.Verify(x => x.SearchOrganisations(expectedSearchTerm, 500), Times.Once);
             _cacheProvider.Verify(x => x.Get<List<Organisation>>(searchKey), Times.Exactly(2));
-            _cacheProvider.Verify(x => x.Set(searchKey, It.Is<List<Organisation>>(c => c != null), It.Is<DateTimeOffset>(c => c.Offset.Minutes.Equals(15))), Times.Once);
+            _cacheProvider.Verify(x => x.Set(searchKey, It.Is<List<Organisation>>(c => c != null), It.Is<TimeSpan>(c => c.Minutes.Equals(15))), Times.Once);
         }
 
         [Test]

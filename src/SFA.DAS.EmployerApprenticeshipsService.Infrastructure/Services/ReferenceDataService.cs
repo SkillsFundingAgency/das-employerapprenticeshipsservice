@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 if (orgs != null)
                 {
                     result = orgs.Select(x => _mapper.Map<Organisation>(x)).ToList();
-                    _cacheProvider.Set(cacheKey, result, new DateTimeOffset(DateTime.UtcNow).ToOffset(TimeSpan.FromMinutes(15)));
+                    _cacheProvider.Set(cacheKey, result,new TimeSpan(0,15,0));
                     
                 }
             }
