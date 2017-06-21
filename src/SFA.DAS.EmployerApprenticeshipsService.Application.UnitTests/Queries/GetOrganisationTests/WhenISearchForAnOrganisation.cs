@@ -45,16 +45,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetOrganisationTests
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Arrange
+            var expectedResponse = new PagedResponse<Organisation> { Data = new List<Organisation> { new Organisation() } };
             var expectedSearchTerm = "My Company";
-            _referenceDataService.Setup(x => x.SearchOrganisations(expectedSearchTerm,1,20))
-                .ReturnsAsync(new PagedResponse<Organisation>{ Data = new List<Organisation> {new Organisation()} });
+            _referenceDataService.Setup(x => x.SearchOrganisations(expectedSearchTerm,1,20)).ReturnsAsync(expectedResponse);
 
             //Act
             var actual = await RequestHandler.Handle(new GetOrganisationsRequest { SearchTerm = expectedSearchTerm });
 
             //Assert
-            Assert.IsNotNull(actual.Organisations);
-            Assert.AreEqual(1,actual.Organisations.Count);
+            Assert.AreSame(expectedResponse, actual.Organisations);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mapper = new Mock<IMapper>();
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationsRequest>()))
-                .ReturnsAsync(new GetOrganisationsResponse { Organisations = new List<Organisation>()});
+                .ReturnsAsync(new GetOrganisationsResponse { Organisations = new PagedResponse<Organisation>()});
 
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             var actual = await _orchestrator.SearchOrganisation(searchTerm);
 
             //Assert
-            Assert.IsAssignableFrom<OrchestratorResponse<List<Organisation>>>(actual);
+            Assert.IsAssignableFrom<OrchestratorResponse<PagedResponse<Organisation>>>(actual);
         }
 
         [Test]

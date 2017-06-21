@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -33,7 +32,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetOrganisations
                 return new GetOrganisationsResponse();
             }
 
-            return new GetOrganisationsResponse {Organisations = organisations.Data.ToList()};
+            return new GetOrganisationsResponse { Organisations = organisations };
         }
     }
 }

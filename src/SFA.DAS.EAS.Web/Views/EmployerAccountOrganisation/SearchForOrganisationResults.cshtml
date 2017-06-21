@@ -1,8 +1,5 @@
-﻿@using SFA.DAS.EAS.Domain
-@using SFA.DAS.EAS.Domain.Models.Organisation
-@using SFA.DAS.EAS.Web.Extensions
-
-@model SFA.DAS.EAS.Web.OrchestratorResponse<List<SFA.DAS.EAS.Domain.Models.ReferenceData.Organisation>>
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Domain.Models.ReferenceData.PagedResponse<SFA.DAS.EAS.Domain.Models.ReferenceData.Organisation>>
 
 @{ 
     ViewBag.PageID = "select-your-organisation";
@@ -64,7 +61,7 @@
             @if (Model.Data != null)
             {
                 <ol>
-                @foreach (var organisation in Model.Data)
+                @foreach (var organisation in Model.Data.Data)
                 {
                     <li>
                         <article>
@@ -88,8 +85,6 @@
             else
             {
                  <p>No results found</p>
-
-                   
             }
 
             
@@ -109,22 +104,28 @@
             </li>*@
             
         
-        @*<nav>
+        <nav>
             <ul class="previous-next-navigation">
-                <li class="previous">
-                    <a href="#">
-                        Previous page
-                        <span class="detail">Page 1 of 12</span>
-                    </a>
-                </li>
-                <li class="next">
-                    <a href="#">
-                        Next page
-                        <span class="detail">Page 3 of 12</span>
-                    </a>
-                </li>
+                @if (Model.Data.PageNumber > 1)
+                {
+                    <li class="previous">
+                        <a href="#">
+                            Previous page
+                            <span class="detail">Page @(Model.Data.PageNumber - 1) of @Model.Data.TotalPages</span>
+                        </a>
+                    </li>
+                }
+                @if (Model.Data.PageNumber < Model.Data.TotalPages)
+                {
+                    <li class="next">
+                        <a href="#">
+                            Next page
+                            <span class="detail">Page @(Model.Data.PageNumber + 1) of @Model.Data.TotalPages</span>
+                        </a>
+                    </li>
+                }
             </ul>
-        </nav>*@
+        </nav>
     </section>
 
    

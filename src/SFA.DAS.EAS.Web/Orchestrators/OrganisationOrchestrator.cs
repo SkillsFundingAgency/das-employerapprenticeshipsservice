@@ -590,9 +590,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<List<Organisation>>>  SearchOrganisation(string searchTerm)
+        public async Task<OrchestratorResponse<PagedResponse<Organisation>>> SearchOrganisation(string searchTerm)
         {
-            var response = new OrchestratorResponse<List<Organisation>>();
+            var response = new OrchestratorResponse<PagedResponse<Organisation>>();
 
             try
             {
