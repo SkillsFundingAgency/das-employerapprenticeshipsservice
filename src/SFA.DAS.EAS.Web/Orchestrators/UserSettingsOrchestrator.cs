@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Settings;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -14,14 +15,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly IHashingService _hashingService;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         //Needed for tests
         protected UserSettingsOrchestrator()
         {
         }
 
-        public UserSettingsOrchestrator(IMediator mediator, IHashingService hashingService, ILogger logger)
+        public UserSettingsOrchestrator(IMediator mediator, IHashingService hashingService, ILog logger)
         {
             _mediator = mediator;
             _hashingService = hashingService;
