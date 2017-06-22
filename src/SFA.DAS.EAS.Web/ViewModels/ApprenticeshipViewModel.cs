@@ -68,6 +68,8 @@ namespace SFA.DAS.EAS.Web.ViewModels
 
         public bool HasStarted { get; set; }
 
+        public bool IsInFirstCalendarMonthOfTraining { get; set; }
+
         public string FirstNameError => GetErrorMessage(nameof(FirstName));
         public string LastNameError => GetErrorMessage(nameof(LastName));
         public string DateOfBirthError => GetErrorMessage(nameof(DateOfBirth));

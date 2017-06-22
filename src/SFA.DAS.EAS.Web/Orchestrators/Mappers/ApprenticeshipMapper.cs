@@ -101,7 +101,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 AgreementStatus = apprenticeship.AgreementStatus,
                 ProviderRef = apprenticeship.ProviderRef,
                 EmployerRef = apprenticeship.EmployerRef,
-                HasStarted = !isStartDateInFuture
+                HasStarted = !isStartDateInFuture,
+                IsInFirstCalendarMonthOfTraining = CalculateIfInFirstCalendarMonthOfTraining(apprenticeship.StartDate)
             };
         }
 
@@ -255,6 +256,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                                  .OrderBy(m => m.ProviderName );
 
             return new PaymentOrderViewModel { Items = items };
+        }
+        
+        private bool CalculateIfInFirstCalendarMonthOfTraining(DateTime? startDate)
+        {
+            if (!startDate.HasValue)
+                return false;
+
+            return _currentDateTime.Now.Year == startDate.Value.Year && _currentDateTime.Now.Month == startDate.Value.Month;
         }
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
