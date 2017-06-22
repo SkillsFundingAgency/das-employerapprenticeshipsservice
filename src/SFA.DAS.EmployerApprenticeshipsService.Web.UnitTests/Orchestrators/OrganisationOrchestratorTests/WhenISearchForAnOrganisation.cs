@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
@@ -64,7 +65,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             var actual = await _orchestrator.SearchOrganisation(searchTerm, pageNumber);
 
             //Assert
-            Assert.IsAssignableFrom<OrchestratorResponse<PagedResponse<Organisation>>>(actual);
+            Assert.IsAssignableFrom<OrchestratorResponse<SearchOrganisationViewModel>>(actual);
         }
 
         [Test]
