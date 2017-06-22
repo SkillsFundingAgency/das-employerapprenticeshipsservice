@@ -43,13 +43,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         {
             //Arrange
             var searchTerm = "Test Org";
+            var pageNumber = 2;
 
             //Act
-            await _orchestrator.SearchOrganisation(searchTerm);
+            await _orchestrator.SearchOrganisation(searchTerm, pageNumber);
 
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetOrganisationsRequest>(c=>c.SearchTerm.Equals(searchTerm))), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber)), Times.Once);
         }
 
         [Test]
@@ -57,9 +58,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         {
             //Arrange
             var searchTerm = "Test Org";
+            var pageNumber = 1;
 
             //Act
-            var actual = await _orchestrator.SearchOrganisation(searchTerm);
+            var actual = await _orchestrator.SearchOrganisation(searchTerm, pageNumber);
 
             //Assert
             Assert.IsAssignableFrom<OrchestratorResponse<PagedResponse<Organisation>>>(actual);
@@ -73,7 +75,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string> {{"", ""}}));
 
             //Act
-            var actual = await _orchestrator.SearchOrganisation("Test");
+            var actual = await _orchestrator.SearchOrganisation("Test", 1);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest,actual.Status);

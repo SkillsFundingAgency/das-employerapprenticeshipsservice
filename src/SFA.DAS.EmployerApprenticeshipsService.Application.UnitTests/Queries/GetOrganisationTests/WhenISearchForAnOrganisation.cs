@@ -35,10 +35,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetOrganisationTests
             var expectedSearchTerm = "My Company";
 
             //Act
-            await RequestHandler.Handle(new GetOrganisationsRequest {SearchTerm = expectedSearchTerm });
+            await RequestHandler.Handle(new GetOrganisationsRequest {SearchTerm = expectedSearchTerm, PageNumber = 3 });
 
             //Assert
-            _referenceDataService.Verify(x=>x.SearchOrganisations(expectedSearchTerm,1,20), Times.Once);
+            _referenceDataService.Verify(x => x.SearchOrganisations(expectedSearchTerm, 3, 20), Times.Once);
         }
 
         [Test]
@@ -47,10 +47,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetOrganisationTests
             //Arrange
             var expectedResponse = new PagedResponse<Organisation> { Data = new List<Organisation> { new Organisation() } };
             var expectedSearchTerm = "My Company";
-            _referenceDataService.Setup(x => x.SearchOrganisations(expectedSearchTerm,1,20)).ReturnsAsync(expectedResponse);
+            _referenceDataService.Setup(x => x.SearchOrganisations(expectedSearchTerm, 2, 20)).ReturnsAsync(expectedResponse);
 
             //Act
-            var actual = await RequestHandler.Handle(new GetOrganisationsRequest { SearchTerm = expectedSearchTerm });
+            var actual = await RequestHandler.Handle(new GetOrganisationsRequest { SearchTerm = expectedSearchTerm, PageNumber = 2 });
 
             //Assert
             Assert.AreSame(expectedResponse, actual.Organisations);
