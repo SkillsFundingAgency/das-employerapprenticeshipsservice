@@ -3,11 +3,11 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
-using NLog;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -15,12 +15,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly IHashingService _hashingService;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         public CommitmentsBaseOrchestrator(
             IMediator mediator, 
             IHashingService hashingService,
-            ILogger logger)
+            ILog logger)
         {
             _mediator = mediator;
             _hashingService = hashingService;

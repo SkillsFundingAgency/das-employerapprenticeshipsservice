@@ -2,6 +2,7 @@
 using System.Linq;
 using MediatR;
 using Moq;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -25,6 +26,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private Mock<IEventsApi> _eventsApi;
+        private Mock<IEmployerCommitmentApi> _commitmentsApi;
 
         public UserSteps()
         {
@@ -32,8 +34,9 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
             _owinWrapper = new Mock<IOwinWrapper>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
+            _commitmentsApi = new Mock<IEmployerCommitmentApi>();
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi, _commitmentsApi);
         }
 
         public void UpsertUser(UserViewModel userView)

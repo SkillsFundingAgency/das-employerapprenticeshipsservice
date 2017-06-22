@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
-using Newtonsoft.Json;
-
-using NLog;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Commitment;
@@ -13,6 +10,8 @@ using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Notifications.Api.Types;
+using SFA.DAS.NLog.Logger;
+
 namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
 {
     public sealed class CreateCommitmentCommandHandler :
@@ -22,7 +21,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
         
         private readonly IMediator _mediator;
 
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
@@ -33,7 +32,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
         public CreateCommitmentCommandHandler(
             IEmployerCommitmentApi commitmentApi, 
             IMediator mediator,
-            ILogger logger,
+            ILog logger,
             EmployerApprenticeshipsServiceConfiguration configuration,
             IHashingService hashingService,
             IProviderEmailLookupService providerEmailLookupService)

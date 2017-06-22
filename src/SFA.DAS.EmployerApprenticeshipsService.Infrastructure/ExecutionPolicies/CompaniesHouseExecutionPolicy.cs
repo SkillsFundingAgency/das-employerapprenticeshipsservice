@@ -1,7 +1,7 @@
 ﻿using System;
-using NLog;
 using Polly;
 using SFA.DAS.EAS.Domain.Http;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
 {
@@ -10,11 +10,11 @@ namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
     {
         public const string Name = "Companies House Policy";
 
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private readonly Policy TooManyRequestsPolicy;
         private readonly Policy ServiceUnavailablePolicy;
 
-        public CompaniesHouseExecutionPolicy(ILogger logger)
+        public CompaniesHouseExecutionPolicy(ILog logger)
         {
             _logger = logger;
 
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
             //Ignore 404 not found errors
             if (httpException != null && httpException.StatusCode.Equals(404))
             {
-                _logger.Info(ex, $"Resource could not be found {ex.Message}");
+                _logger.Info($"Resource could not be found {ex.Message}");
                 return default(T);
             }
 
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
 
         private void OnRetryableFailure(Exception ex)
         {
-            _logger.Info(ex, $"Error calling companies house - {ex.Message} - Will retry");
+            _logger.Info($"Error calling companies house - {ex.Message} - Will retry");
         }
 
     }

@@ -5,12 +5,9 @@ AS
 	SELECT 
 		ea.Id,
 		le.Name AS Name,
-		case 
-			when ea.StatusId = 1 then 1 
-			else 0 end 
-		as CanBeRemoved,
-		acc.HashedId as HashedAccountId
-		
+		ea.StatusId as [Status],
+		acc.HashedId as HashedAccountId,
+		le.Code as LegalEntityCode
 	FROM [employer_account].[LegalEntity] le
 		JOIN [employer_account].[EmployerAgreement] ea
 			ON ea.LegalEntityId = le.Id

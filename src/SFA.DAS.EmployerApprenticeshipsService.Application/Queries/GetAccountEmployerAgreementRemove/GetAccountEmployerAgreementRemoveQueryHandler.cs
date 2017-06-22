@@ -49,7 +49,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementRemove
                 HashedAccountId = message.HashedAccountId,
                 HashedAgreementId = message.HashedAgreementId,
                 Id = agreement.Id,
-                Name = agreement.LegalEntityName
+                Name = agreement.LegalEntityName,
+                Status = agreement.Status
             };
 
             return new GetAccountEmployerAgreementRemoveResponse {Agreement = agreementView};

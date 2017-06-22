@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using NLog;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
 {
@@ -15,11 +14,11 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
     {
         private readonly IHmrcService _hmrcService;
         private readonly IEnglishFractionRepository _englishFractionRepository;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         public UpdateEnglishFractionsCommandHandler(IHmrcService hmrcService,
-            IEnglishFractionRepository englishFractionRepository, 
-            ILogger logger)
+            IEnglishFractionRepository englishFractionRepository,
+            ILog logger)
         {
             _hmrcService = hmrcService;
             _englishFractionRepository = englishFractionRepository;
@@ -57,7 +56,9 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
 
                 if (!DateTime.TryParse(calculations.CalculatedAt, out dateCalculated))
                 {
-                    _logger.Error($"Could not convert HMRC API calculatedAt value {calculations.CalculatedAt} to a datetime for english fraction update for EmpRef {message.EmployerReference}");
+                    var exception = new ArgumentException($"Could not convert HMRC API calculatedAt value { calculations.CalculatedAt } to a datetime for english fraction update for EmpRef { message.EmployerReference}", nameof(calculations.CalculatedAt));
+                    _logger.Error(exception, exception.Message);
+
                     return fractions;
                 }
 
@@ -77,7 +78,8 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
                     }
                     else
                     {
-                        _logger.Error($"Could not convert HMRC API fraction value {fraction.Value} to a decimal for english fraction update for EmpRef {message.EmployerReference}");
+                        var exception = new ArgumentException($"Could not convert HMRC API fraction value {fraction.Value} to a decimal for english fraction update for EmpRef {message.EmployerReference}", nameof(fraction.Value));
+                        _logger.Error(exception, exception.Message);
                     }
                 }
              

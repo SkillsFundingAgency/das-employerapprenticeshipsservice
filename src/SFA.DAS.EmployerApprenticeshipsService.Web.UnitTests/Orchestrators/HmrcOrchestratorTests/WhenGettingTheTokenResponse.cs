@@ -3,7 +3,6 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetGatewayToken;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -12,13 +11,14 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HmrcOrchestratorTests
 {
     public class WhenGettingTheTokenResponse 
     {
         private EmployerAccountOrchestrator _employerAccountOrchestrator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<IMediator> _mediator;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HmrcOrchestratorTests
         [SetUp]
         public void Arrange()
         {
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             _mediator = new Mock<IMediator>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _configuration = new EmployerApprenticeshipsServiceConfiguration

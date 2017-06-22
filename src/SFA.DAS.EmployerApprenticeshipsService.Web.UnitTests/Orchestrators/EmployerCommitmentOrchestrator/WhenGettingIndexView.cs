@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
+using SFA.DAS.NLog.Logger;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -23,10 +24,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILog>();
             var calculator = new Mock<ICommitmentStatusCalculator>();
             var hashingService = new Mock<IHashingService>();
-
+            
             hashingService.Setup(x => x.DecodeValue("ABC123")).Returns(123L);
     
             _orchestrator = new EmployerCommitmentsOrchestrator(

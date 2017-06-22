@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
@@ -11,6 +10,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsOrchestratorTests
 {
@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
         private Mock<IMediator> _mediator;
         private Mock<IHashingService> _hashingService;
         private Mock<IApprenticeshipMapper> _apprenticeshipMapper;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<ICookieStorageService<UpdateApprenticeshipViewModel>>  _cookieStorageService;
         private EmployerManageApprenticeshipsOrchestrator _orchestrator;
 
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _mediator = new Mock<IMediator>();
             _hashingService = new Mock<IHashingService>();
             _apprenticeshipMapper = new Mock<IApprenticeshipMapper>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             _cookieStorageService = new Mock<ICookieStorageService<UpdateApprenticeshipViewModel>>();
 
             _orchestrator = new EmployerManageApprenticeshipsOrchestrator(

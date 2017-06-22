@@ -13,6 +13,7 @@ using StructureMap;
 using StructureMap.Graph;
 using WebGrease.Css.Extensions;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
 {
@@ -41,6 +42,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
             RegisterMapper();
 
             AddMediatrRegistrations();
+
+            RegisterLogger();
         }
 
         private void RegisterExecutionPolicies()
@@ -83,6 +86,13 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
             For<IMapper>().Use(mapper).Singleton();
         }
 
+        private void RegisterLogger()
+        {
+            For<ILog>().Use(x => new NLogLogger(
+                x.ParentType,
+                null,
+                null)).AlwaysUnique();
+        }
     }
 
 }

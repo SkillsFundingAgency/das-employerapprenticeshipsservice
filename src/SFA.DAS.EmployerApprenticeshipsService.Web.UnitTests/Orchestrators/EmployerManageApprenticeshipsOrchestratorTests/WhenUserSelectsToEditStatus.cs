@@ -15,6 +15,7 @@ using System;
 using System.Threading.Tasks;
 
 using SFA.DAS.EAS.Web.Validators;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsOrchestratorTests
 {
@@ -58,7 +59,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                 _mockApprenticeshipMapper,
                 new ApprovedApprenticeshipViewModelValidator(),
                 new CurrentDateTime(),
-                Mock.Of<ILogger>(),
+                Mock.Of<ILog>(),
                 _cookieStorageService.Object,
                 Mock.Of<IApprenticeshipFiltersMapper>());
         }

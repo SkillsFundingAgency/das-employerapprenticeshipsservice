@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types.Events.Agreement;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
@@ -16,6 +15,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.Events.Api.Types;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
 {
@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
     {
         private RemoveLegalEntityCommandHandler _handler;
         private Mock<IValidator<RemoveLegalEntityCommand>> _validator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<IEmployerAgreementRepository> _repository;
         private RemoveLegalEntityCommand _command;
         private Mock<IMediator> _mediator;
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
             _validator = new Mock<IValidator<RemoveLegalEntityCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemoveLegalEntityCommand>())).ReturnsAsync(new ValidationResult());
 
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _mediator = new Mock<IMediator>();
 

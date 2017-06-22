@@ -17,6 +17,7 @@ using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
 using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsOrchestratorTests
 {
@@ -45,7 +46,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                 _apprenticeshipMapper, 
                 Mock.Of<ApprovedApprenticeshipViewModelValidator>(), 
                 new CurrentDateTime(), 
-                Mock.Of<ILogger>(),
+                Mock.Of<ILog>(),
                 _cookieStorageService.Object,
                 Mock.Of<IApprenticeshipFiltersMapper>());
         }

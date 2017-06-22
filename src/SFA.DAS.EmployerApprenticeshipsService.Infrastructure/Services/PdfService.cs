@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Aspose.Pdf;
 using Aspose.Pdf.Text;
-using NLog;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -13,9 +12,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     {
         
         public override string ConfigurationName => "legal-agreements";
-        public sealed override ILogger Logger { get; set; }
+        public sealed override ILog Logger { get; set; }
 
-        public PdfService(ILogger logger)
+        public PdfService(ILog logger)
         {
             Logger = logger;
         }

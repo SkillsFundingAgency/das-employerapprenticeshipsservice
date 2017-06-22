@@ -24,10 +24,9 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
                 {
                     currentTime = DateTime.Now;
                 }
-               
+
                 instance.Dependencies.AddForConstructorParameter(currentDateTime, new CurrentDateTime(currentTime));
             }
-
         }
     }
 }

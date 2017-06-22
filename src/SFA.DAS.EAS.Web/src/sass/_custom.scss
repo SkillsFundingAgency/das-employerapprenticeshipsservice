@@ -549,6 +549,7 @@ body {
         }
         }
 }
+Upda
 //end -- Apprentice Filter Styles
 
 #edit-apprentices-detail{
@@ -588,6 +589,20 @@ body {
         }
     }
 }
+//edit-started-apprentice
+#edit-started-apprentice{
+    .approve-alert{   
+        margin-top:30px;
+            .alert-blue{border-color:$link-hover-colour;}
+    }
+    .last-child{
+        margin-bottom:0px;
+    }
+    strong{
+        font-weight:bold;
+    }
+}
+
 
 
 

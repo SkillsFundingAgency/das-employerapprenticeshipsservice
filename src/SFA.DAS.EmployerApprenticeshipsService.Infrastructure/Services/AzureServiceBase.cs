@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Newtonsoft.Json;
-using NLog;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public abstract class AzureServiceBase<T>
     {
         public abstract string ConfigurationName { get; }
-        public abstract ILogger Logger { get; set; }
+        public abstract ILog Logger { get; set; }
         protected IConfigurationRepository GetDataFromAzure()
         {
             IConfigurationRepository configurationRepository;

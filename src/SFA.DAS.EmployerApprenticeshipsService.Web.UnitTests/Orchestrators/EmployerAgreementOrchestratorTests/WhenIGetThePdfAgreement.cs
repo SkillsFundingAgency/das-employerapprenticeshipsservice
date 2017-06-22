@@ -5,12 +5,12 @@ using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.NLog.Logger;
 using InvalidRequestException = SFA.DAS.EAS.Application.InvalidRequestException;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
     public class WhenIGetThePdfAgreement
     {
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private EmployerAgreementOrchestrator _orchestrator;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
 
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetSignedEmployerAgreementPdfRequest>()))
                 .ReturnsAsync(new GetSignedEmployerAgreementPdfResponse { FileStream = new MemoryStream() });
 
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
             _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, _configuration);

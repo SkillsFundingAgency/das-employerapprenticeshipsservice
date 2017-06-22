@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 CanEditStatus = !(new List<PaymentStatus> { PaymentStatus.Completed, PaymentStatus.Withdrawn }).Contains(apprenticeship.PaymentStatus)
             };
         }
-        
+
         public ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship)
         {
             var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
@@ -89,7 +89,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
                 NINumber = apprenticeship.NINumber,
-                DateOfBirth = new DateTimeViewModel(apprenticeship.DateOfBirth?.Day, apprenticeship.DateOfBirth?.Month, apprenticeship.DateOfBirth?.Year),
+                DateOfBirth =
+                    new DateTimeViewModel(apprenticeship.DateOfBirth?.Day, apprenticeship.DateOfBirth?.Month,
+                        apprenticeship.DateOfBirth?.Year),
                 ULN = apprenticeship.ULN,
                 TrainingType = apprenticeship.TrainingType,
                 TrainingCode = apprenticeship.TrainingCode,
@@ -101,7 +103,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 AgreementStatus = apprenticeship.AgreementStatus,
                 ProviderRef = apprenticeship.ProviderRef,
                 EmployerRef = apprenticeship.EmployerRef,
-                HasStarted = !isStartDateInFuture
+                HasStarted = !isStartDateInFuture,
+                IsInFirstCalendarMonthOfTraining = CalculateIfInFirstCalendarMonthOfTraining(apprenticeship.StartDate)
             };
         }
 
@@ -281,6 +284,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             }
 
             return l;
+        }
+
+		private bool CalculateIfInFirstCalendarMonthOfTraining(DateTime? startDate)
+        {
+            if (!startDate.HasValue)
+                return false;
+
+            return _currentDateTime.Now.Year == startDate.Value.Year && _currentDateTime.Now.Month == startDate.Value.Month;
         }
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)

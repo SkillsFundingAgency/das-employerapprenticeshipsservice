@@ -11,6 +11,8 @@ using SFA.DAS.EAS.Infrastructure.Caching;
 using StructureMap;
 using StructureMap.Graph;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
+using SFA.DAS.NLog.Logger;
+using System.Web;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution
 {
@@ -34,6 +36,8 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution
             RegisterMapper();
 
             AddMediatrRegistrations();
+
+            RegisterLogger();
         }
 
         private void RegisterExecutionPolicies()
@@ -70,6 +74,14 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution
 
             For<IConfigurationProvider>().Use(config).Singleton();
             For<IMapper>().Use(mapper).Singleton();
+        }
+
+        private void RegisterLogger()
+        {
+            For<ILog>().Use(x => new NLogLogger(
+                x.ParentType,
+                null,
+                null)).AlwaysUnique();
         }
     }
 }

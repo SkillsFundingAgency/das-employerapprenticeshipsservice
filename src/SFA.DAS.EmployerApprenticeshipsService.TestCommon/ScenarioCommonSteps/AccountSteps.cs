@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web;
 using MediatR;
 using Moq;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Validation;
@@ -29,6 +30,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         private string _externalUserId;
         private Mock<IValidator<GetAccountPayeSchemesQuery>> _validator;
         private Mock<IEventsApi> _eventsApi;
+        private Mock<IEmployerCommitmentApi> _employerCommitmentsApi;
 
         public AccountSteps()
         {
@@ -37,11 +39,12 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
             _validator = new Mock<IValidator<GetAccountPayeSchemesQuery>>();
+            _employerCommitmentsApi = new Mock<IEmployerCommitmentApi>();
 
             _validator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountPayeSchemesQuery>()))
                 .ReturnsAsync(new ValidationResult());
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi, _employerCommitmentsApi);
 
             _container.Inject(_validator.Object);
         }

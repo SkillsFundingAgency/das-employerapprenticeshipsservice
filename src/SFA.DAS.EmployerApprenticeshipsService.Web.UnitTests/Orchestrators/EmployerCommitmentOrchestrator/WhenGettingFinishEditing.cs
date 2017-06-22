@@ -5,7 +5,6 @@ using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using System.Threading.Tasks;
 using System.Linq;
 using MediatR;
-using NLog;
 
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
@@ -15,6 +14,7 @@ using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Orchestrators;
 ﻿using SFA.DAS.EAS.Web.Orchestrators.Mappers;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
 {
@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
     public class WhenGettingFinishEditing : OrchestratorTestBase
     {
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<IHashingService> _hashingService;
         private Mock<ICommitmentStatusCalculator> _calculator;
 
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             _calculator = new Mock<ICommitmentStatusCalculator>();
 
             _hashingService = new Mock<IHashingService>();

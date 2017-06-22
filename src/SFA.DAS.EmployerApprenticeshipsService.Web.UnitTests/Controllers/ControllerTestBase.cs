@@ -8,7 +8,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using MediatR;
 using Moq;
-using NLog;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers
 {
@@ -19,13 +19,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
         protected Mock<ControllerContext> _controllerContext;
         private Mock<HttpResponseBase> _httpResponse;
         protected RouteCollection _routes;
-        protected Mock<ILogger> Logger;
+        protected Mock<ILog> Logger;
         protected Mock<IMediator> Mediator;
 
         public virtual void Arrange(string redirectUrl = "http://localhost/testpost")
         {
 
-            Logger = new Mock<ILogger>();
+            Logger = new Mock<ILog>();
             Mediator = new Mock<IMediator>();
 
             _routes = new RouteCollection();

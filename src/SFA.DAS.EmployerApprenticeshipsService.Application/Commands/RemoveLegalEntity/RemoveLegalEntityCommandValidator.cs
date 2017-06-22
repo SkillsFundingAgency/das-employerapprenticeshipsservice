@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -14,12 +16,14 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
         private readonly IMembershipRepository _membershipRepository;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
         private readonly IHashingService _hashingService;
+        private readonly IEmployerCommitmentApi _employerCommitmentApi;
 
-        public RemoveLegalEntityCommandValidator(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService)
+        public RemoveLegalEntityCommandValidator(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService, IEmployerCommitmentApi employerCommitmentApi)
         {
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
             _hashingService = hashingService;
+            _employerCommitmentApi = employerCommitmentApi;
         }
 
         public ValidationResult Validate(RemoveLegalEntityCommand item)
@@ -71,8 +75,19 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
 
             if (agreement.Status == EmployerAgreementStatus.Signed)
             {
-                validationResult.AddError(nameof(item.HashedLegalAgreementId), "Agreement has already been signed");
-                return validationResult;
+                
+                var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
+                
+                var returnValue = commitments
+                                    .FirstOrDefault(c => 
+                                        !string.IsNullOrEmpty(c.LegalEntityIdentifier) 
+                                        && c.LegalEntityIdentifier.Equals(agreement.LegalEntityCode));
+                
+                if (returnValue != null && (returnValue.ActiveCount + returnValue.PausedCount + returnValue.PendingApprovalCount) != 0)
+                {
+                    validationResult.AddError(nameof(item.HashedLegalAgreementId), "Agreement has already been signed and has active commitments");
+                    return validationResult;
+                }
             }
             
             

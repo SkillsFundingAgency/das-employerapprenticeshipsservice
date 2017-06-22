@@ -40,6 +40,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         private static Mock<IEmployerCommitmentApi> _employerCommitmentApi;
         private static Mock<IApprenticeshipInfoServiceWrapper> _apprenticeshipInfoService;
         private static Mock<ICacheProvider> _cacheProvider;
+        private static Mock<IEmployerCommitmentApi> _commitmentsApi;
 
         [BeforeScenario]
         public static void Arrange()
@@ -52,8 +53,9 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             _employerCommitmentApi = new Mock<IEmployerCommitmentApi>();
             _apprenticeshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
             _cacheProvider = new Mock<ICacheProvider>();
+            _commitmentsApi = new Mock<IEmployerCommitmentApi>();
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi, _commitmentsApi);
             _container.Inject(typeof(IPaymentsEventsApiClient), _paymentEventsApi.Object);
             _container.Inject(typeof(IEmployerCommitmentApi), _employerCommitmentApi.Object);
             _container.Inject(typeof(IApprenticeshipInfoServiceWrapper), _apprenticeshipInfoService.Object);

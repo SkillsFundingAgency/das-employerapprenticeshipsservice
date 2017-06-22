@@ -1,16 +1,16 @@
 ﻿using System.Net;
 using System.Web.Mvc;
-using NLog;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [RoutePrefix("Error")]
     public class ErrorController : Controller
     {
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
-        public ErrorController(ILogger logger)
+        public ErrorController(ILog logger)
         {
             _logger = logger;
         }
@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 if (lastError != null)
                 {
-                    _logger.Error(lastError);
+                    _logger.Error(lastError, $"Unhandled Exception: {lastError.Message}");
                 }
             }
             catch

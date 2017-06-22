@@ -1,10 +1,10 @@
 ﻿using System.Data;
 using System.Threading.Tasks;
 using MediatR;
-using NLog;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation
 {
@@ -13,9 +13,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation
         private readonly IValidator<GetHmrcEmployerInformationQuery> _validator;
         private readonly IHmrcService _hmrcService;
         private readonly IMediator _mediator;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
-        public GetHmrcEmployerInformationHandler(IValidator<GetHmrcEmployerInformationQuery> validator, IHmrcService hmrcService, IMediator mediator, ILogger logger)
+        public GetHmrcEmployerInformationHandler(IValidator<GetHmrcEmployerInformationQuery> validator, IHmrcService hmrcService, IMediator mediator, ILog logger)
         {
             _validator = validator;
             _hmrcService = hmrcService;

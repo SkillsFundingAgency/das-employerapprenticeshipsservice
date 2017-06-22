@@ -5,16 +5,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.Sql.Client;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class EnglishFractionRepository : BaseRepository, IEnglishFractionRepository
     {
-        public EnglishFractionRepository(LevyDeclarationProviderConfiguration configuration)
-            : base(configuration)
+        public EnglishFractionRepository(LevyDeclarationProviderConfiguration configuration, ILog logger)
+            : base(configuration.DatabaseConnectionString, logger)
         {
         }
         

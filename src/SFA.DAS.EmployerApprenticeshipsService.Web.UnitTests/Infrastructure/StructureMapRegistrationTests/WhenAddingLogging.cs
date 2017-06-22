@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.NLog.Logger;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
@@ -15,7 +16,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
                 c =>
                     {
                         c.AddRegistry<TestRegistry>();
-                        c.Policies.Add<LoggingPolicy>();
                     }
                 );
         }
@@ -31,15 +31,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
             
         }
 
-        [Test]
-        public void ThenTheLoggerHasBeenNamedWithTheFullNameOfThatClass()
-        {
-            //Act
-            var actual = _container.GetInstance<TestClass>();
-            //Assert
-            Assert.AreEqual(typeof(TestClass).FullName, actual.Logger.Name);
-        }
-
         public interface ITestClass
         {
 
@@ -47,9 +38,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
 
         public class TestClass : ITestClass
         {
-            public readonly NLog.ILogger Logger;
+            public readonly ILog Logger;
 
-            public TestClass(NLog.ILogger logger)
+            public TestClass(ILog logger)
             {
                 Logger = logger;
             }
@@ -59,6 +50,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
             public TestRegistry()
             {
                 For<ITestClass>().Use<TestClass>();
+                For<ILog>().Use(() => new NLogLogger(null, null, null));
             }
         }
     }

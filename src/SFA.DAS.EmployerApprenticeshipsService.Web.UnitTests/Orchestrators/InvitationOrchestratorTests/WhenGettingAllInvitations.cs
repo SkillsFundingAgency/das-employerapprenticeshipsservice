@@ -4,23 +4,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
 {
     public class WhenGettingAllInvitations
     {
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private InvitationOrchestrator _invitationOrchestrator;
 
         [SetUp]
@@ -33,7 +32,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
                     Accounts = new Accounts<Account> { AccountList = new List<Account>()}
                 });
 
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
 
             _invitationOrchestrator = new InvitationOrchestrator(_mediator.Object, _logger.Object);
         }
@@ -84,7 +83,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
 
             //Assert
             Assert.IsNull(actual.Data);
-            _logger.Verify(x=>x.Info(It.IsAny<InvalidRequestException>()), Times.Once);
+            _logger.Verify(x => x.Info(It.IsAny<string>()), Times.Once);
         }
 
         [Test]

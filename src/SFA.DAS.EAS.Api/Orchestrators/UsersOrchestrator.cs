@@ -5,19 +5,19 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using NLog;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Api.Orchestrators
 {
     public class UsersOrchestrator
     {
         private readonly IMediator _mediator;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private readonly IMapper _mapper;
 
-        public UsersOrchestrator(IMediator mediator, ILogger logger, IMapper mapper)
+        public UsersOrchestrator(IMediator mediator, ILog logger, IMapper mapper)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));

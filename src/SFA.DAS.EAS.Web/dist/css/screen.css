@@ -5189,6 +5189,23 @@ h2 .float-right {
   margin-bottom: 0;
 }
 
+#edit-started-apprentice .approve-alert {
+  margin-top: 30px;
+}
+
+#edit-started-apprentice .approve-alert .alert-blue {
+  border-color: #2b8cc4;
+}
+
+#edit-started-apprentice .last-child {
+  margin-bottom: 0px;
+}
+
+#edit-started-apprentice strong {
+  font-weight: bold;
+}
+
+
 #review-datalock-changes h2.heading-small {
   margin-top: 40px;
 }
