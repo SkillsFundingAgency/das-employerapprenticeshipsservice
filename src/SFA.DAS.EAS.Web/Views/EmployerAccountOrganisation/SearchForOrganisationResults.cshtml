@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Domain.Models.ReferenceData.PagedResponse<SFA.DAS.EAS.Domain.Models.ReferenceData.Organisation>>
+@using SFA.DAS.EAS.Web.ViewModels.Organisation
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SearchOrganisationViewModel>
 
 @{ 
     ViewBag.PageID = "select-your-organisation";
@@ -16,14 +17,14 @@
                     <label for="searchTerm">
                         <span class="form-label-bold">Search results</span>
                     </label>
-                    <input type="text" id="searchTerm" name="searchTerm" value="" class="form-control" />
+                    <input type="text" id="searchTerm" name="searchTerm" value="@Model.Data.SearchTerm" class="form-control" />
                 </fieldset>
                 <fieldset class="search-submit">
                     <button type="submit" class="button">Search</button>
                 </fieldset>
             </div>
         </form>
-        <p>@(Model.Data?.Count ?? 0) results found</p>
+        <p>@(Model.Data?.Results.Data.Count ?? 0) results found</p>
     </div>
 </div>
 
@@ -61,7 +62,7 @@
             @if (Model.Data != null)
             {
                 <ol>
-                @foreach (var organisation in Model.Data.Data)
+                @foreach (var organisation in Model.Data.Results.Data)
                 {
                     <li>
                         <article>
@@ -106,21 +107,21 @@
         
         <nav>
             <ul class="previous-next-navigation">
-                @if (Model.Data.PageNumber > 1)
+                @if (Model.Data.Results.PageNumber > 1)
                 {
                     <li class="previous">
-                        <a href="#">
+                        <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber - 1 })">
                             Previous page
-                            <span class="detail">Page @(Model.Data.PageNumber - 1) of @Model.Data.TotalPages</span>
+                            <span class="detail">Page @(Model.Data.Results.PageNumber - 1) of @Model.Data.Results.TotalPages</span>
                         </a>
                     </li>
                 }
-                @if (Model.Data.PageNumber < Model.Data.TotalPages)
+                @if (Model.Data.Results.PageNumber < Model.Data.Results.TotalPages)
                 {
                     <li class="next">
-                        <a href="#">
+                        <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber + 1 })">
                             Next page
-                            <span class="detail">Page @(Model.Data.PageNumber + 1) of @Model.Data.TotalPages</span>
+                            <span class="detail">Page @(Model.Data.Results.PageNumber + 1) of @Model.Data.Results.TotalPages</span>
                         </a>
                     </li>
                 }
