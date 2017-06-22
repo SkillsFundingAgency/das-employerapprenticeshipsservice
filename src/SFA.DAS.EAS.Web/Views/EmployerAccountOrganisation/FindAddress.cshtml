@@ -8,7 +8,7 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Find organisation address</h1>
 
-        <form action="@Url.Action("SelectAddress")" method="POST" novalidate>
+        <form action="@Url.Action("SelectAddress", "EmployerAccountOrganisation")" method="POST" novalidate>
             @Html.AntiForgeryToken()
             <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "error" : "")">
                 <label for="Postcode">
@@ -34,7 +34,7 @@
             <input type="hidden" id="Sector" name="Sector" value="@Model.Data.Sector" />
             <div class="form-group">
                 <input class="button" type="submit" value="Find address" />
-                <a class="button-link" href="@Url.Action("AddOrganisationAddress", new
+                <a class="button-link" href="@Url.Action("AddOrganisationAddress", "EmployerAccountOrganisation", new
                              {
                                  Model.Data.OrganisationName,
                                  Model.Data.OrganisationReferenceNumber,

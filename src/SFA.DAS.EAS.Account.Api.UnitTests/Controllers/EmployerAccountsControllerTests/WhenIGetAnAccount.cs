@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Api.Orchestrators;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 
@@ -17,7 +18,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
     public class WhenIGetAnAccount : EmployerAccountsControllerTests
     {
         [Test]
-        public async Task ThenTheAccountIsReturned()
+        public async Task ThenTheAccountWithBalanceIsReturned()
         {
             var hashedAccountId = "ABC123";
             var accountResponse = new GetEmployerAccountByHashedIdResponse
@@ -33,7 +34,12 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                         PayeSchemes = new List<string> { "ZZZ/123", "XXX/123" }
                     }
             };
+            var accountBalanceResponse = new GetAccountBalancesResponse
+            {
+                Accounts = new List<AccountBalance> { new AccountBalance { AccountId = accountResponse.Account.AccountId, Balance = 123.45m } }
+            };
             Mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(accountResponse);
+            Mediator.Setup(x => x.SendAsync(It.Is<GetAccountBalancesRequest>(q => q.AccountIds.Single() == accountResponse.Account.AccountId))).ReturnsAsync(accountBalanceResponse);
 
             UrlHelper.Setup(x => x.Route("GetLegalEntity", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, legalEntityId = accountResponse.Account.LegalEntities[0].ToString() }.GetHashCode()))).Returns($"/api/accounts/{hashedAccountId}/legalentities/{accountResponse.Account.LegalEntities[0]}");
             UrlHelper.Setup(x => x.Route("GetLegalEntity", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, legalEntityId = accountResponse.Account.LegalEntities[1].ToString() }.GetHashCode()))).Returns($"/api/accounts/{hashedAccountId}/legalentities/{accountResponse.Account.LegalEntities[1]}");
@@ -64,6 +70,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                 var matchedScheme = model.Content.PayeSchemes.Single(x => x.Id == payeScheme);
                 matchedScheme.Href.Should().Be($"/api/accounts/{hashedAccountId}/payeschemes/{payeScheme.Replace(@"/", "%2f")}");
             }
+            model.Content.Balance.Should().Be(accountBalanceResponse.Accounts.Single().Balance);
         }
 
         [Test]

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -12,31 +11,27 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
-using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
+namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestratorTests
 {
     public class WhenISearchForAnOrganisation
     {
-        private OrganisationOrchestrator _orchestrator;
+        private SearchOrganisationOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
-        private Mock<IMapper> _mapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
+
+
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILog>();
-            _mapper = new Mock<IMapper>();
+            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationsRequest>()))
                 .ReturnsAsync(new GetOrganisationsResponse { Organisations = new PagedResponse<Organisation>()});
 
-            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
-
-            _orchestrator = new OrganisationOrchestrator(_mediator.Object, _logger.Object, _mapper.Object, _cookieService.Object);
+            _orchestrator = new SearchOrganisationOrchestrator(_mediator.Object, _cookieService.Object);
         }
 
         [Test]
