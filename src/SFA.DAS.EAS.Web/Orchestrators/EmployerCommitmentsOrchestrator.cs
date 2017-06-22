@@ -617,9 +617,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Data = new YourCohortsViewModel
                                {
-                                   WaitingToBeSentCount = commitmentStatuses.Count(m => m == RequestStatus.NewRequest),
-                                   ReadyForApprovalCount = commitmentStatuses.Count(m => m == RequestStatus.ReadyForApproval),
-                                   ReadyForReviewCount = commitmentStatuses.Count(m => m == RequestStatus.ReadyForReview),
+                                   DraftCount = commitmentStatuses.Count(m => 
+                                        m == RequestStatus.NewRequest),
+                                   ReadyForReviewCount = commitmentStatuses.Count(m => 
+                                           m == RequestStatus.ReadyForReview 
+                                        || m == RequestStatus.ReadyForApproval),
                                    WithProviderCount = commitmentStatuses.Count(m => 
                                         m == RequestStatus.WithProviderForApproval 
                                      || m == RequestStatus.SentToProvider
@@ -630,7 +632,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAllWaitingToBeSent(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAllDraft(string hashedAccountId, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             _logger.Info($"Getting your cohorts waiting to be sent for Account: {accountId}");
@@ -645,40 +647,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         {
                             AccountHashId = hashedAccountId,
                             Commitments = MapFrom(commitments, true),
-                            PageTitle = "Waiting to be sent",
-                            PageId = "waiting-to-be-sent",
-                            PageHeading = "Waiting to be sent",
-                            PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} waiting to be sent to the training provider for review or approval.",
+                            PageTitle = "Draft cohorts",
+                            PageId = "draft-cohorts",
+                            PageHeading = "Draft cohorts",
+                            PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} waiting to be sent to a training provider:",
                         }
                     };
 
                 }, hashedAccountId, externalUserId);
-        }
-
-        public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAllReadyForApproval(string hashedAccountId, string externalUserId)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            _logger.Info($"Getting your cohorts ready for approval for Account: {accountId}");
-
-            return await CheckUserAuthorization(async () =>
-            {
-                var commitments = (await GetAll(accountId, RequestStatus.ReadyForApproval)).ToList();
-
-                return new OrchestratorResponse<CommitmentListViewModel>
-                {
-                    Data = new CommitmentListViewModel
-                    {
-                        AccountHashId = hashedAccountId,
-                        Commitments = MapFrom(commitments, true),
-                        PageTitle = "Cohorts for approval",
-                        PageId = "ready-for-approval",
-                        PageHeading = "Cohorts for approval",
-                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} ready for your approval.",
-
-                    }
-                };
-
-            }, hashedAccountId, externalUserId);
         }
 
         public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAllReadyForReview(string hashedAccountId, string externalUserId)
@@ -688,7 +664,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return await CheckUserAuthorization(async () =>
             {
-                var commitments = (await GetAll(accountId, RequestStatus.ReadyForReview)).ToList();
+                var readyForReview = (await GetAll(accountId, RequestStatus.ReadyForReview)).ToList();
+                var readyForApproval = (await GetAll(accountId, RequestStatus.ReadyForApproval)).ToList();
+                var commitments = readyForReview
+                    .Concat(readyForApproval)
+                    .ToList();
 
                 return new OrchestratorResponse<CommitmentListViewModel>
                 {
@@ -699,7 +679,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         PageTitle = "Cohorts for review",
                         PageId = "ready-for-review",
                         PageHeading = "Cohorts for review",
-                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} ready for review.",
+                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} ready for review:",
 
                     }
                 };
@@ -729,10 +709,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         AccountHashId = hashedAccountId,
                         Commitments = MapFrom(commitments, false),
-                        PageTitle = "With training providers",
+                        PageTitle = "Cohorts with training providers",
                         PageId = "with-the-provider",
-                        PageHeading = "With training providers",
-                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} with training providers for them to add apprentices, or review and approve details."
+                        PageHeading = "Cohorts with training providers",
+                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} with training providers for them to add apprentices, or review and approve details:"
                     }
                 };
 
@@ -908,10 +888,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
 
-        public async Task<bool> AnyCohortsForCurrentStatus(string hashedAccountId, RequestStatus requestStatusFromSession)
+        public async Task<bool> AnyCohortsForCurrentStatus(string hashedAccountId, params RequestStatus[] requestStatusFromSession)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var data = (await GetAll(accountId, requestStatusFromSession)).ToList();
+            var data = new List<CommitmentListItem>();
+            foreach (var status in requestStatusFromSession)
+            {
+                var d = (await GetAll(accountId, status)).ToList();
+                data.AddRange(d);
+            }
             return data.Any();
         }
 
