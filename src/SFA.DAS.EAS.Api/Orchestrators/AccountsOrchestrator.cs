@@ -222,7 +222,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
                 AccountIds = new List<long> { accountId }
             });
 
-            var account = balanceResult.Accounts.SingleOrDefault();
+            var account = balanceResult?.Accounts?.SingleOrDefault();
             return account?.Balance ?? 0;
         }
     }
