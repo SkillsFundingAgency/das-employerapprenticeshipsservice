@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestratorTests
 {
@@ -28,7 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationsRequest>()))
-                .ReturnsAsync(new GetOrganisationsResponse { Organisations = new List<Organisation>()});
+                .ReturnsAsync(new GetOrganisationsResponse { Organisations = new PagedResponse<Organisation>()});
 
             _orchestrator = new SearchOrganisationOrchestrator(_mediator.Object, _cookieService.Object);
         }

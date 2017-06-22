@@ -40,9 +40,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [Route("results")]
-        public async Task<ActionResult> SearchForOrganisationResults(string searchTerm)
+        public async Task<ActionResult> SearchForOrganisationResults(string searchTerm, int pageNumber = 0)
         {
-            var model = await _orchestrator.SearchOrganisation(searchTerm);
+            var model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber);
 
             return View("SearchForOrganisationResults", model);
         }
