@@ -994,7 +994,6 @@
     <Content Include="Views\Organisation\AddOtherOrganisationDetails.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\AddOrganisation.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\AddOrganisationAddress.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
     <Content Include="StartUp\IIS.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

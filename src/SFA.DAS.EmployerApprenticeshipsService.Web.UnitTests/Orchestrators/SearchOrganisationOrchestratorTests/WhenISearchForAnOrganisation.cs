@@ -6,6 +6,8 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.GetOrganisations;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Web.Orchestrators;
 
@@ -15,17 +17,20 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
     {
         private SearchOrganisationOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        
+        private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
+
+
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
+            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationsRequest>()))
                 .ReturnsAsync(new GetOrganisationsResponse { Organisations = new List<Organisation>()});
 
-            _orchestrator = new SearchOrganisationOrchestrator(_mediator.Object);
+            _orchestrator = new SearchOrganisationOrchestrator(_mediator.Object, _cookieService.Object);
         }
 
         [Test]
