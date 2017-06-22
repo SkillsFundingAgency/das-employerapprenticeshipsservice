@@ -384,9 +384,11 @@
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Extensions\ValidationResultExtensions.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipFiltersMapper.cs" />
+    <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\IApprenticeshipFiltersMapper.cs" />
     <Compile Include="Validators\ChangeStatusViewModelValidator.cs" />
@@ -993,7 +995,6 @@
     <Content Include="Views\Organisation\AddOtherOrganisationDetails.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\AddOrganisation.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\AddOrganisationAddress.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
     <Content Include="StartUp\IIS.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1052,8 +1053,8 @@
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="Views\Settings\NotificationSettings.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\SearchForOrganisation.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\SearchForOrganisationResults.cshtml" />
+    <Content Include="Views\SearchOrganisation\SearchForOrganisation.cshtml" />
+    <Content Include="Views\SearchOrganisation\SearchForOrganisationResults.cshtml" />
     <Content Include="src\sass\_search.scss" />
   </ItemGroup>
   <ItemGroup>

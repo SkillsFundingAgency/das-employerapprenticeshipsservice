@@ -226,7 +226,7 @@
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingAllUsers.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingUserAccounts.cs" />
     <Compile Include="Orchestrators\InvitationOrchestratorTests\WhenGettingAllInvitations.cs" />
-    <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenISearchForAnOrganisation.cs" />
+    <Compile Include="Orchestrators\SearchOrganisationOrchestratorTests\WhenISearchForAnOrganisation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithEmployer.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithBoth.cs" />
