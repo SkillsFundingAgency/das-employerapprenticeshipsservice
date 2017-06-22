@@ -37,22 +37,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             _mapper = mapper;
             _logger = logger;
         }
-
-        [HttpGet]
-        [Route("search")]
-        public ActionResult SearchForOrganisation()
-        {
-            return View("SearchForOrganisation");
-        }
-
-        [HttpPost]
-        [Route("results")]
-        public async Task<ActionResult> SearchForOrganisationResults(string searchTerm)
-        {
-            var model = await _orchestrator.SearchOrganisation(searchTerm);
-
-            return View("SearchForOrganisationResults",model);
-        }
+        
 
         [HttpGet]
         [Route("add")]
