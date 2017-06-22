@@ -9,6 +9,7 @@ using NLog;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.Commitments.Api.Types.ProviderPayment;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority
 {
@@ -16,12 +17,12 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority
     {
         private readonly Validation.IValidator<UpdateProviderPaymentPriorityCommand> _validator;
         private readonly IEmployerCommitmentApi _commitmentApi;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         public UpdateProviderPaymentPriorityCommandHandler(
             Validation.IValidator<UpdateProviderPaymentPriorityCommand> validator,
             IEmployerCommitmentApi commitmentApi,
-            ILogger logger)
+            ILog logger)
         {
             _validator = validator;
             _commitmentApi = commitmentApi;
