@@ -70,7 +70,6 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 {
                     result = orgs.Select(x => _mapper.Map<Organisation>(x)).ToList();
                     _cacheProvider.Set(cacheKey, result,new TimeSpan(0,15,0));
-                    
                 }
             }
 
@@ -83,7 +82,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             {
                 Data = result.Skip((pageNumber-1)*pageSize).Take(pageSize).ToList(),
                 TotalPages = ((result.Count+9) / pageSize) + 1,
-                PageNumber = pageNumber
+                PageNumber = pageNumber,
+                TotalResults = result.Count
             };
         }
     }

@@ -35,26 +35,25 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetOrganisationTests
             var expectedSearchTerm = "My Company";
 
             //Act
-            await RequestHandler.Handle(new GetOrganisationsRequest {SearchTerm = expectedSearchTerm });
+            await RequestHandler.Handle(new GetOrganisationsRequest {SearchTerm = expectedSearchTerm, PageNumber = 3 });
 
             //Assert
-            _referenceDataService.Verify(x=>x.SearchOrganisations(expectedSearchTerm,1,20), Times.Once);
+            _referenceDataService.Verify(x => x.SearchOrganisations(expectedSearchTerm, 3, 20), Times.Once);
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Arrange
+            var expectedResponse = new PagedResponse<Organisation> { Data = new List<Organisation> { new Organisation() } };
             var expectedSearchTerm = "My Company";
-            _referenceDataService.Setup(x => x.SearchOrganisations(expectedSearchTerm,1,20))
-                .ReturnsAsync(new PagedResponse<Organisation>{ Data = new List<Organisation> {new Organisation()} });
+            _referenceDataService.Setup(x => x.SearchOrganisations(expectedSearchTerm, 2, 20)).ReturnsAsync(expectedResponse);
 
             //Act
-            var actual = await RequestHandler.Handle(new GetOrganisationsRequest { SearchTerm = expectedSearchTerm });
+            var actual = await RequestHandler.Handle(new GetOrganisationsRequest { SearchTerm = expectedSearchTerm, PageNumber = 2 });
 
             //Assert
-            Assert.IsNotNull(actual.Organisations);
-            Assert.AreEqual(1,actual.Organisations.Count);
+            Assert.AreSame(expectedResponse, actual.Organisations);
         }
     }
 }

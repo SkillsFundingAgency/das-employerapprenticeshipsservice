@@ -590,14 +590,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<List<Organisation>>>  SearchOrganisation(string searchTerm)
+        public async Task<OrchestratorResponse<SearchOrganisationViewModel>> SearchOrganisation(string searchTerm, int pageNumber)
         {
-            var response = new OrchestratorResponse<List<Organisation>>();
+            var response = new OrchestratorResponse<SearchOrganisationViewModel>();
 
             try
             {
-                var result = await Mediator.SendAsync(new GetOrganisationsRequest { SearchTerm = searchTerm });
-                response.Data = result.Organisations;
+                var result = await Mediator.SendAsync(new GetOrganisationsRequest { SearchTerm = searchTerm, PageNumber = pageNumber});
+                response.Data = new SearchOrganisationViewModel { Results = result.Organisations, SearchTerm = searchTerm };
             }
             catch (InvalidRequestException ex)
             {

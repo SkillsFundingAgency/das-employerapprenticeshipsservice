@@ -1,8 +1,6 @@
-﻿@using SFA.DAS.EAS.Domain
-@using SFA.DAS.EAS.Domain.Models.Organisation
-@using SFA.DAS.EAS.Web.Extensions
-
-@model SFA.DAS.EAS.Web.OrchestratorResponse<List<SFA.DAS.EAS.Domain.Models.ReferenceData.Organisation>>
+﻿@using SFA.DAS.EAS.Web.Extensions
+@using SFA.DAS.EAS.Web.ViewModels.Organisation
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SearchOrganisationViewModel>
 
 @{ 
     ViewBag.PageID = "select-your-organisation";
@@ -19,14 +17,14 @@
                     <label for="searchTerm">
                         <span class="form-label-bold">Search results</span>
                     </label>
-                    <input type="text" id="searchTerm" name="searchTerm" value="" class="form-control" />
+                    <input type="text" id="searchTerm" name="searchTerm" value="@Model.Data.SearchTerm" class="form-control" />
                 </fieldset>
                 <fieldset class="search-submit">
                     <button type="submit" class="button">Search</button>
                 </fieldset>
             </div>
         </form>
-        <p>@(Model.Data?.Count ?? 0) results found</p>
+        <p>@(Model.Data?.Results.TotalResults ?? 0) results found</p>
     </div>
 </div>
 
@@ -64,7 +62,7 @@
             @if (Model.Data != null)
             {
                 <ol>
-                @foreach (var organisation in Model.Data)
+                @foreach (var organisation in Model.Data.Results.Data)
                 {
                     <li>
                         <article>
@@ -88,8 +86,6 @@
             else
             {
                  <p>No results found</p>
-
-                   
             }
 
             
@@ -109,22 +105,28 @@
             </li>*@
             
         
-        @*<nav>
+        <nav>
             <ul class="previous-next-navigation">
-                <li class="previous">
-                    <a href="#">
-                        Previous page
-                        <span class="detail">Page 1 of 12</span>
-                    </a>
-                </li>
-                <li class="next">
-                    <a href="#">
-                        Next page
-                        <span class="detail">Page 3 of 12</span>
-                    </a>
-                </li>
+                @if (Model.Data.Results.PageNumber > 1)
+                {
+                    <li class="previous">
+                        <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber - 1 })">
+                            Previous page
+                            <span class="detail">Page @(Model.Data.Results.PageNumber - 1) of @Model.Data.Results.TotalPages</span>
+                        </a>
+                    </li>
+                }
+                @if (Model.Data.Results.PageNumber < Model.Data.Results.TotalPages)
+                {
+                    <li class="next">
+                        <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber + 1 })">
+                            Next page
+                            <span class="detail">Page @(Model.Data.Results.PageNumber + 1) of @Model.Data.Results.TotalPages</span>
+                        </a>
+                    </li>
+                }
             </ul>
-        </nav>*@
+        </nav>
     </section>
 
    

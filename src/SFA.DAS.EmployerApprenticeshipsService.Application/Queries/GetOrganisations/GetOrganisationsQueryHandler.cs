@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -26,14 +25,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetOrganisations
                 throw new InvalidRequestException(valdiationResult.ValidationDictionary);
             }
 
-            var organisations = await _referenceDataService.SearchOrganisations(message.SearchTerm);
+            var organisations = await _referenceDataService.SearchOrganisations(message.SearchTerm, message.PageNumber);
 
             if (organisations == null)
             {
                 return new GetOrganisationsResponse();
             }
 
-            return new GetOrganisationsResponse {Organisations = organisations.Data.ToList()};
+            return new GetOrganisationsResponse { Organisations = organisations };
         }
     }
 }
