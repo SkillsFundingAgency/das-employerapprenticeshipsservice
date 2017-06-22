@@ -39,24 +39,15 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
        
-        [HttpPost]
+       
         [Route("results")]
-        public async Task<ActionResult> SearchForOrganisationResults(string searchTerm)
-        {
-            var model = await _orchestrator.SearchOrganisation(searchTerm, 0);
-
-            return View("SearchForOrganisationResults", model);
-        }
-
-        [HttpGet]
-        [Route("results")]
-        public async Task<ActionResult> ViewOrganisationSearchResultsPage(string searchTerm, int pageNumber)
+        public async Task<ActionResult> SearchForOrganisationResults(string searchTerm, int pageNumber = 1)
         {
             var model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber);
 
             return View("SearchForOrganisationResults", model);
         }
-
+        
         [HttpPost]
         [Route("select")]
         public ActionResult SelectOrganisation(OrganisationDetailsViewModel viewModel)

@@ -117,7 +117,7 @@
                 @if (Model.Data.Results.PageNumber > 1)
                 {
                     <li class="previous">
-                        <a href="@Url.Action("ViewOrganisationSearchResultsPage", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber - 1 })">
+                        <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber - 1 })">
                             Previous page
                             <span class="detail">Page @(Model.Data.Results.PageNumber - 1) of @Model.Data.Results.TotalPages</span>
                         </a>
@@ -126,7 +126,7 @@
                 @if (Model.Data.Results.PageNumber < Model.Data.Results.TotalPages)
                 {
                     <li class="next">
-                        <a href="@Url.Action("ViewOrganisationSearchResultsPage", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber + 1 })">
+                        <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber + 1 })">
                             Next page
                             <span class="detail">Page @(Model.Data.Results.PageNumber + 1) of @Model.Data.Results.TotalPages</span>
                         </a>
