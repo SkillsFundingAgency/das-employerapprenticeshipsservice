@@ -65,12 +65,12 @@
                     <li>
                         <article>
                             <form action="@Url.Action("SelectOrganisation")" method="post">
-                                <input type="hidden" id="DateOfInception" name="DateOfInception" value="@organisation.RegistrationDate" />
-                                <input type="hidden" id="OrganisationCode" name="OrganisationCode" value="@organisation.Code" />
-                                <input type="hidden" id="Sector" name="Sector" value="@organisation.Sector" />
-                                <input type="hidden" id="Type" name="Type" value="@organisation.Type" />
-                                <input type="hidden" id="Name" name="Name" value="@organisation.Name" />
-                                <input type="hidden" id="Address" name="Address" value="@organisation.Address.GetAddress()" />
+                                <input type="hidden" name="DateOfInception" value="@organisation.RegistrationDate" />
+                                <input type="hidden" name="OrganisationCode" value="@organisation.Code" />
+                                <input type="hidden" name="Sector" value="@organisation.Sector" />
+                                <input type="hidden" name="Type" value="@organisation.Type" />
+                                <input type="hidden" name="Name" value="@organisation.Name" />
+                                <input type="hidden" name="Address" value="@organisation.Address.GetAddress()" />
                                 <button type="submit" class="heading-medium link-button">@organisation.Name</button>
                             </form>
                            
