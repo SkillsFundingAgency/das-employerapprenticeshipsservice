@@ -3738,7 +3738,7 @@ table.responsive tr th.tw-70 {
   border: 3px solid #bfc1c3;
 }
 
-.results-list ol li h1 {
+.results-list ol li h1, .results-list ol li button {
   margin: 5px 0;
 }
 
@@ -3785,6 +3785,11 @@ table.responsive tr th.tw-70 {
   line-height: 1.25;
   font-size: 19px;
   line-height: 1.3157894737;
+}
+
+.filter .form-group {
+  margin-top: 20px;
+  margin-bottom: 0;
 }
 
 .validation-summary-valid,
