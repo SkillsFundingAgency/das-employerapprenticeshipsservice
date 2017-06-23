@@ -60,7 +60,7 @@
     <section class="results-list">
         
 
-            @if (Model.Data != null)
+            @if (Model.Data.Results.Data != null)
             {
                 <ol>
                 @foreach (var organisation in Model.Data.Results.Data)
@@ -101,7 +101,15 @@
             }
             else
             {
-                 <p>No results found</p>
+                
+                 <ol>
+                     <li>No results found</li>
+                     <li class="other">
+                         <h2 class="heading-small">Can't find your organisation?</h2>
+                         <p>Check the spelling and <a href="#searchTerm">search again</a>.</p>
+                         <p>You can also <a href="">enter your details manually.</a></p>
+                     </li>
+                 </ol>
             }
 
             
