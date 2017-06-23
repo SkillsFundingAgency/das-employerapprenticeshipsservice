@@ -29,6 +29,16 @@
             @include core-16;
             padding: 10px 15px;
         }
+        &.other {
+            border-bottom: none;
+            h2 {
+                margin-top: 10px;
+            }
+            p {
+                border-top: none;
+                padding-top: 0;
+            }
+        }
     }
     dl {
         margin-bottom: 5px;
