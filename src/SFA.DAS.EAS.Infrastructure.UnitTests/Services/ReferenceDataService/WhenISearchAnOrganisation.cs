@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.ReferenceData.Api.Client;
 using FluentAssertions;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Infrastructure.Caching;
 
@@ -27,26 +28,6 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             _apiClient = new Mock<IReferenceDataApiClient>();
             _mapper = new Mock<IMapper>();
 
-
-            _mapper.Setup(x => x.Map<Organisation>(It.IsAny<ReferenceData.Api.Client.Dto.Organisation>()))
-               .Returns(new Organisation
-               {
-                   Name = "Company Name",
-                   Type = Domain.Models.Organisation.OrganisationType.CompaniesHouse,
-                   Address = new Domain.Models.Organisation.Address
-                   {
-                       Line1 = "test 1",
-                       Line2 = "test 2",
-                       Line3 = "test 3",
-                       Line4 = "test 4",
-                       Line5 = "test 5",
-                       Postcode = "Test code"
-                   },
-                   Code = "ABC123",
-                   RegistrationDate = new DateTime(2016, 10, 15),
-                   Sector = "sector",
-                   SubType = Domain.Models.Organisation.OrganisationSubType.Police
-               });
             var expectedSearchTerm = "Some Org";
             _expectedOrganisation = ArrangeOrganisation();
             _apiClient.Setup(x => x.SearchOrganisations(expectedSearchTerm, 500))
@@ -131,14 +112,38 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             Assert.AreEqual(2, actual.PageNumber);
             Assert.AreEqual(2, actual.TotalPages);
             Assert.AreEqual(25, actual.Data.Count);
+            Assert.AreEqual(51, actual.TotalResults);
         }
 
-        private static ReferenceData.Api.Client.Dto.Organisation ArrangeOrganisation()
+        [TestCase(null, 6)]
+        [TestCase(OrganisationType.Charities, 1)]
+        [TestCase(OrganisationType.CompaniesHouse, 2)]
+        [TestCase(OrganisationType.PublicBodies, 3)]
+        [TestCase(OrganisationType.Other, 3)]
+        public async Task AndAnOrganisationTypeIsProvidedThenOnlyOrganisationsOfThatTypeAreReturned(OrganisationType? organisationType, int expectedResults)
+        {
+            var expectedSearchTerm = "Some Org";
+            var organisations = new List<ReferenceData.Api.Client.Dto.Organisation>();
+            organisations.Add(ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType.Charity));
+            organisations.Add(ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType.Company));
+            organisations.Add(ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType.Company));
+            organisations.Add(ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType.PublicSector));
+            organisations.Add(ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType.PublicSector));
+            organisations.Add(ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType.EducationOrganisation));
+            _apiClient.Setup(x => x.SearchOrganisations(expectedSearchTerm, 500)).ReturnsAsync(organisations);
+
+            //Act
+            var actual = await _referenceDataService.SearchOrganisations(expectedSearchTerm, organisationType: organisationType);
+
+            Assert.AreEqual(expectedResults, actual.Data.Count);
+        }
+
+        private static ReferenceData.Api.Client.Dto.Organisation ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType organisationType = ReferenceData.Api.Client.Dto.OrganisationType.Company)
         {
             return new ReferenceData.Api.Client.Dto.Organisation
             {
                 Name = "Company Name",
-                Type = ReferenceData.Api.Client.Dto.OrganisationType.Company,
+                Type = organisationType,
                 Address = new ReferenceData.Api.Client.Dto.Address
                 {
                     Line1 = "test 1",

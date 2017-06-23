@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetOrganisations;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetOrganisationTests
@@ -35,10 +36,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetOrganisationTests
             var expectedSearchTerm = "My Company";
 
             //Act
-            await RequestHandler.Handle(new GetOrganisationsRequest {SearchTerm = expectedSearchTerm, PageNumber = 3 });
+            await RequestHandler.Handle(new GetOrganisationsRequest {SearchTerm = expectedSearchTerm, PageNumber = 3, OrganisationType = OrganisationType.Charities });
 
             //Assert
-            _referenceDataService.Verify(x => x.SearchOrganisations(expectedSearchTerm, 3, 20), Times.Once);
+            _referenceDataService.Verify(x => x.SearchOrganisations(expectedSearchTerm, 3, 20, OrganisationType.Charities), Times.Once);
         }
 
         [Test]
@@ -47,7 +48,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetOrganisationTests
             //Arrange
             var expectedResponse = new PagedResponse<Organisation> { Data = new List<Organisation> { new Organisation() } };
             var expectedSearchTerm = "My Company";
-            _referenceDataService.Setup(x => x.SearchOrganisations(expectedSearchTerm, 2, 20)).ReturnsAsync(expectedResponse);
+            _referenceDataService.Setup(x => x.SearchOrganisations(expectedSearchTerm, 2, 20, null)).ReturnsAsync(expectedResponse);
 
             //Act
             var actual = await RequestHandler.Handle(new GetOrganisationsRequest { SearchTerm = expectedSearchTerm, PageNumber = 2 });
