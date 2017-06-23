@@ -47,10 +47,11 @@
                 <label class="block-label selection-button-radio" for="all">
                     <input id="all" type="radio" name="organisationType" value="" @(Model.Data.OrganisationType == null ? "checked=\"checked\"" : "") /> Show all
                 </label>
+                <div class="form-group" id="apply-filter">
+                    <button type="submit" class="button">Apply filter</button>
+                </div>
             </div>
-            <fieldset class="search-submit">
-                <button type="submit" class="button">Filter</button>
-            </fieldset>
+         
         </form>
     </aside>
     <section class="results-list">
