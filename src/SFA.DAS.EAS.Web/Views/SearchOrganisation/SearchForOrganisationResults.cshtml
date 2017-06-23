@@ -136,9 +136,28 @@
             </ul>
         </nav>
     </section>
-
-   
 </div>
+
+@section pageSpecificJS {
+    <script>
+
+        $(function () {
+            var filter = $('.filter');
+            if (filter.length > 0) {
+                var radios = filter.find('input:radio'),
+                    submit = $('#apply-filter'),
+                    filterForm = filter.parent();
+
+                submit.hide();
+                radios.on('change', function () {
+                    filterForm.submit();
+                });
+            }
+        });
+
+    </script>
+}
+
 
 @section breadcrumb {
     <div class="breadcrumbs">
