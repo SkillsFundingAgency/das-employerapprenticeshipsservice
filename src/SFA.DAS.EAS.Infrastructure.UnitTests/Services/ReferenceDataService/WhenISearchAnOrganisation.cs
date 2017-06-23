@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             //Arrange
             var expectedSearchTerm = "Some Org";
             var organisations = new List<ReferenceData.Api.Client.Dto.Organisation>();
-            for (var i = 0; i <= 50; i++)
+            for (var i = 0; i < 50; i++)
             {
                 organisations.Add(ArrangeOrganisation());
             }
@@ -110,7 +110,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
 
             //Assert
             Assert.AreEqual(2, actual.PageNumber);
-            Assert.AreEqual(3, actual.TotalPages);
+            Assert.AreEqual(2, actual.TotalPages);
             Assert.AreEqual(25, actual.Data.Count);
             Assert.AreEqual(51, actual.TotalResults);
         }
