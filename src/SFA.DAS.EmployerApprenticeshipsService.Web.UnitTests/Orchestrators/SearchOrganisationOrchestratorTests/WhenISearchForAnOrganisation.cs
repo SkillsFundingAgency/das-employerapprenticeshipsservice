@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.GetOrganisations;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
@@ -34,19 +35,19 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             _orchestrator = new SearchOrganisationOrchestrator(_mediator.Object, _cookieService.Object);
         }
 
-        [Test]
-        public async Task ThenTheMediatorIsCalledToGetTheOrganisationResult()
+        [Test]public async Task ThenTheMediatorIsCalledToGetTheOrganisationResult()
         {
             //Arrange
             var searchTerm = "Test Org";
             var pageNumber = 2;
+            var organisationType = OrganisationType.Charities;
 
             //Act
-            await _orchestrator.SearchOrganisation(searchTerm, pageNumber);
+            await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType);
 
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber)), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber && c.OrganisationType == organisationType)), Times.Once);
         }
 
         [Test]
@@ -55,9 +56,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             //Arrange
             var searchTerm = "Test Org";
             var pageNumber = 1;
+            var organisationType = OrganisationType.CompaniesHouse;
 
             //Act
-            var actual = await _orchestrator.SearchOrganisation(searchTerm, pageNumber);
+            var actual = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType);
 
             //Assert
             Assert.IsAssignableFrom<OrchestratorResponse<SearchOrganisationViewModel>>(actual);
@@ -71,7 +73,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
                 .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string> {{"", ""}}));
 
             //Act
-            var actual = await _orchestrator.SearchOrganisation("Test", 1);
+            var actual = await _orchestrator.SearchOrganisation("Test", 1, OrganisationType.Charities);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest,actual.Status);

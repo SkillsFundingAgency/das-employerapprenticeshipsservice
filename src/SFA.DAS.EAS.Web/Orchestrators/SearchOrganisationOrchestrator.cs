@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.GetOrganisations;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
@@ -24,17 +25,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _cookieService = cookieService;
         }
 
-        public async Task<OrchestratorResponse<SearchOrganisationViewModel>> SearchOrganisation(string searchTerm, int pageNumber)
+        public async Task<OrchestratorResponse<SearchOrganisationViewModel>> SearchOrganisation(string searchTerm, int pageNumber, OrganisationType? organisationType)
         {
             var response = new OrchestratorResponse<SearchOrganisationViewModel>();
 
             try
             {
-                var result = await Mediator.SendAsync(new GetOrganisationsRequest { SearchTerm = searchTerm, PageNumber = pageNumber });
+                var result = await Mediator.SendAsync(new GetOrganisationsRequest { SearchTerm = searchTerm, PageNumber = pageNumber, OrganisationType = organisationType });
                 response.Data = new SearchOrganisationViewModel
                 {
                     Results = result.Organisations,
-                    SearchTerm = searchTerm
+                    SearchTerm = searchTerm,
+                    OrganisationType = organisationType
                 };
             }
             catch (InvalidRequestException ex)
