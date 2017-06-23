@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -41,9 +42,9 @@ namespace SFA.DAS.EAS.Web.Controllers
        
        
         [Route("results")]
-        public async Task<ActionResult> SearchForOrganisationResults(string searchTerm, int pageNumber = 1)
+        public async Task<ActionResult> SearchForOrganisationResults(string searchTerm, int pageNumber = 1, OrganisationType? organisationType = null)
         {
-            var model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber);
+            var model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType);
 
             return View("SearchForOrganisationResults", model);
         }
