@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.EAS.Web.Extensions
+﻿@using SFA.DAS.EAS.Domain.Models.Organisation
+@using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.ViewModels.Organisation
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SearchOrganisationViewModel>
 
@@ -31,21 +32,26 @@
 <div class="grid-row search-results">
     <aside>
         <h2 class="heading-medium">Filter results</h2>
-        <div class="filter">
-            <h3>Organisation type</h3>
-            <label class="block-label selection-button-radio" for="company">
-                <input id="company" type="radio" name="org-type" value="company" /> Company
-            </label>
-            <label class="block-label selection-button-radio" for="charity">
-                <input id="charity" type="radio" name="org-type" value="charity" /> Charity
-            </label>
-            <label class="block-label selection-button-radio" for="publicSector">
-                <input id="publicSector" type="radio" name="org-type" value="publicSector" /> Public sector & other
-            </label>
-            <label class="block-label selection-button-radio" for="all">
-                <input id="all" type="radio" name="org-type" value="" checked="checked" /> Show all 
-            </label>
-        </div>
+        <form action="@Url.Action("SearchForOrganisationResults")?searchTerm=@Model.Data.SearchTerm" method="POST">
+            <div class="filter">
+                <h3>Organisation type</h3>
+                <label class="block-label selection-button-radio" for="company">
+                    <input id="company" type="radio" name="organisationType" value="CompaniesHouse" @(Model.Data.OrganisationType == OrganisationType.CompaniesHouse ? "checked=\"checked\"" : "") /> Company
+                </label>
+                <label class="block-label selection-button-radio" for="charity">
+                    <input id="charity" type="radio" name="organisationType" value="Charities" @(Model.Data.OrganisationType == OrganisationType.Charities ? "checked=\"checked\"" : "") /> Charity
+                </label>
+                <label class="block-label selection-button-radio" for="publicSector">
+                    <input id="publicSector" type="radio" name="organisationType" value="PublicBodies" @(Model.Data.OrganisationType == OrganisationType.PublicBodies ? "checked=\"checked\"" : "") /> Public sector & other
+                </label>
+                <label class="block-label selection-button-radio" for="all">
+                    <input id="all" type="radio" name="organisationType" value="" @(Model.Data.OrganisationType == null ? "checked=\"checked\"" : "") /> Show all
+                </label>
+            </div>
+            <fieldset class="search-submit">
+                <button type="submit" class="button">Filter</button>
+            </fieldset>
+        </form>
     </aside>
     <section class="results-list">
         
@@ -108,7 +114,7 @@
                 @if (Model.Data.Results.PageNumber > 1)
                 {
                     <li class="previous">
-                        <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber - 1 })">
+                        <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber - 1, organisationType = Model.Data.OrganisationType })">
                             Previous page
                             <span class="detail">Page @(Model.Data.Results.PageNumber - 1) of @Model.Data.Results.TotalPages</span>
                         </a>
@@ -117,7 +123,7 @@
                 @if (Model.Data.Results.PageNumber < Model.Data.Results.TotalPages)
                 {
                     <li class="next">
-                        <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber + 1 })">
+                        <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber + 1, organisationType = Model.Data.OrganisationType })">
                             Next page
                             <span class="detail">Page @(Model.Data.Results.PageNumber + 1) of @Model.Data.Results.TotalPages</span>
                         </a>
