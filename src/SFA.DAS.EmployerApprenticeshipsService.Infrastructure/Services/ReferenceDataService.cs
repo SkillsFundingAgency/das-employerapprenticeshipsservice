@@ -81,7 +81,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return new PagedResponse<Organisation>
             {
                 Data = result.Skip((pageNumber-1)*pageSize).Take(pageSize).ToList(),
-                TotalPages = ((result.Count+9) / pageSize) + 1,
+                TotalPages = (int)Math.Ceiling(((decimal)(result.Count / pageSize))),
                 PageNumber = pageNumber,
                 TotalResults = result.Count
             };
