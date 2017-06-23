@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Settings;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests
 {
@@ -19,14 +20,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
     {
         private UserSettingsOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private Mock<ILog> _logger;
         private Mock<IHashingService> _hashingService;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILog>();
             _hashingService = new Mock<IHashingService>();
 
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(() => 123);
