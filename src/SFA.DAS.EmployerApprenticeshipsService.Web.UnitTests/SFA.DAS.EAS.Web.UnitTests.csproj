@@ -151,6 +151,7 @@
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenICreateAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIHaveSelectedAnEmployer.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenISearchForAnEmployer.cs" />
+    <Compile Include="Controllers\EmployerAccountControllerTests\WhenISelectTheNextStepAfterCreatingAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIStartTheProcess.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenISubmitMyDetails.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIAddAPayeScheme.cs" />

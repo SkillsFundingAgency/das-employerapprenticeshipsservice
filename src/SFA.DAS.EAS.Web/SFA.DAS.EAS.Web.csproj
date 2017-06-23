@@ -1056,6 +1056,7 @@
     <Content Include="Views\SearchOrganisation\SearchForOrganisation.cshtml" />
     <Content Include="Views\SearchOrganisation\SearchForOrganisationResults.cshtml" />
     <Content Include="src\sass\_search.scss" />
+    <Content Include="Views\EmployerAccount\AccountCreatedNextSteps.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Microsoft.Owin.Security.Provider;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
@@ -182,9 +183,36 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Severity = FlashMessageSeverityLevel.Success
             };
 
-            AddFlashMessageToCookie(flashmessage);
-            
-            return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
+            return View("AccountCreatedNextSteps", new OrchestratorResponse<string>
+            {
+                Data = response.Data.EmployerAgreement.HashedAccountId,
+                FlashMessage = flashmessage
+            });
+        }
+
+        [HttpPost]
+        [Route("nextStep")]
+        public ActionResult GoToNextStep(string nextStep, string hashedAccountId)
+        {
+            switch (nextStep)
+            {
+                case "agreement": return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
+
+                case "addOrganisation": return RedirectToAction("AddOrganisation", "Organisation", new { hashedAccountId });
+                    
+                case "dashboard": return RedirectToAction("Index", "EmployerTeam", new { hashedAccountId });
+
+                default: return View("AccountCreatedNextSteps", new OrchestratorResponse<string>
+                                    {
+                                        Data = hashedAccountId,
+                                        FlashMessage = new FlashMessageViewModel
+                                        {
+                                            Headline = "Invalid next step chosen",
+                                            SubMessage = "Please select one of the next steps below",
+                                            Severity = FlashMessageSeverityLevel.Error
+                                        }
+                                    });
+            }
         }
 
         [HttpGet]
@@ -237,5 +265,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
             return userIdClaim ?? "";
         }
+
+      
     }
 }
