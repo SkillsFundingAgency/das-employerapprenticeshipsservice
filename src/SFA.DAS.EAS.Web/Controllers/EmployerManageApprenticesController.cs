@@ -399,10 +399,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedApprenticeshipId}/datalock/restart", Name = "RequestRestart")]
         public async Task<ActionResult> RequestRestart(string hashedAccountId, string hashedApprenticeshipId)
         {
-            var model = await _orchestrator.GetDataLockStatus(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
-            // ToDo: Check status?
-            //if (model.Data.TriageStatus != TriageStatus.Restart)
-            //    throw new InvalidStateException($"Apprenticeship data lock not is correct state, Current: {model.Data.TriageStatus} expected {TriageStatus.Restart}");
+            var model = await _orchestrator.GetDataLockStatusForRestartRequest(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(model);
         }
@@ -412,10 +409,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> RequestChanges(string hashedAccountId, string hashedApprenticeshipId)
         {
             var model = await _orchestrator.GetDataLockChangeStatus(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
-
-            // ToDo: Check for status?
-            //if (model.Data.TriageStatus != TriageStatus.Change)
-            //    throw new InvalidStateException($"Apprenticeship data lock not is correct state, Current: {model.Data.TriageStatus}expecting {TriageStatus.Change}");
 
             return View(model);
         }

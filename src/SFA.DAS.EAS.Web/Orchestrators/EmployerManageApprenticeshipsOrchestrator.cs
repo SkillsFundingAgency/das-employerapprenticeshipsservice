@@ -27,13 +27,10 @@ using SFA.DAS.EAS.Application.Queries.ValidateStatusChangeDate;
 using SFA.DAS.EAS.Application.Commands.UpdateApprenticeshipStatus;
 using SFA.DAS.EAS.Application.Queries.ApprenticeshipSearch;
 using SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority;
-using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock;
 using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
 using System.Net;
 using SFA.DAS.NLog.Logger;
-using AutoMapper.Execution;
 
-using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.EAS.Application.Commands.ResolveRequestedChanges;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLockSummary;
 using SFA.DAS.EAS.Application.Queries.GetPriceHistoryQueryRequest;
@@ -48,7 +45,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly ILog _logger;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IApprenticeshipFiltersMapper _apprenticeshipFiltersMapper;
-
         private readonly ApprovedApprenticeshipViewModelValidator _apprenticeshipValidator;
 
         private readonly ICookieStorageService<UpdateApprenticeshipViewModel>
@@ -598,7 +594,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<DataLockStatusViewModel>> GetDataLockStatus(string hashedAccountId, string hashedApprenticeshipId, string userId)
+        public async Task<OrchestratorResponse<DataLockStatusViewModel>> GetDataLockStatusForRestartRequest(string hashedAccountId, string hashedApprenticeshipId, string userId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
@@ -613,7 +609,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         //var dataLock = dataLocks.DataLockStatus
                         //    .First(m => m.TriageStatus == TriageStatus.Restart);
                         var dataLock =  dataLockSummary.DataLockSummary
-                        .DataLockWithCourseMismatch.First(m => m.TriageStatus == TriageStatus.Restart);
+                        .DataLockWithCourseMismatch.FirstOrDefault(m => m.TriageStatus == TriageStatus.Restart);
+
+                        if (dataLock == null)
+                            throw new InvalidStateException($"No data locks exist that can be restarted for apprenticeship: {apprenticeshipId}");
 
                         var apprenticeship = await _mediator.SendAsync(
                             new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
@@ -649,6 +648,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     var dataLockSummary = await _mediator.SendAsync(
                             new GetDataLockSummaryQueryRequest { ApprenticeshipId = apprenticeshipId });
+
+                    if (dataLockSummary.DataLockSummary.DataLockWithOnlyPriceMismatch.Count() == 0)
+                            throw new InvalidStateException($"Apprenticeship does not contain any price data locks. Apprenticeship: {apprenticeshipId}");
 
                     var priceHistory = await _mediator.SendAsync(new GetPriceHistoryQueryRequest
                     {
