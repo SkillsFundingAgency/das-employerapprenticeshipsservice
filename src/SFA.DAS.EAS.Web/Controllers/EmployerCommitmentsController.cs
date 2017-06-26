@@ -446,6 +446,18 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View("EditApprenticeshipEntry", model);
         }
 
+        [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/apprenticeships/{hashedApprenticeshipId}/view")]
+        public async Task<ActionResult> ViewApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+                return View("AccessDenied");
+
+            var model = await _employerCommitmentsOrchestrator.GetApprenticeshipViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, hashedApprenticeshipId);
+            return View("ViewApprenticeshipEntry", model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedCommitmentId}/apprenticeships/{HashedApprenticeshipId}/edit")]
