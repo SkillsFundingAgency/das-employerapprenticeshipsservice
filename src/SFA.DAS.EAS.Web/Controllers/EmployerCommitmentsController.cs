@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
-        [Route("cohorts/new")]
+        [Route("cohorts/draft")]
         public async Task<ActionResult> Draft(string hashedAccountId)
         {
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
@@ -110,6 +110,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Inform")]
         public async Task<ActionResult> Inform(string hashedAccountId)
         {
+            Session[LastCohortPageSessionKey] = RequestStatus.None;
             var response = await _employerCommitmentsOrchestrator.GetInform(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(response);
