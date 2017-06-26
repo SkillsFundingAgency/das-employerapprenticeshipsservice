@@ -112,7 +112,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             Assert.AreEqual(2, actual.PageNumber);
             Assert.AreEqual(2, actual.TotalPages);
             Assert.AreEqual(25, actual.Data.Count);
-            Assert.AreEqual(51, actual.TotalResults);
+            Assert.AreEqual(50, actual.TotalResults);
         }
 
         [TestCase(null, 6)]
