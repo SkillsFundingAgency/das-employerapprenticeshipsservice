@@ -92,13 +92,13 @@
     }
 
     @if (!string.IsNullOrEmpty(Model.Cost))
-    {
+    { 
         <tr>
             <th scope="row">Cost</th>
-            @if (Model.IsDataLockOrigin && Model.OriginalApprenticeship.StartDate.HasValue)
+            @if (Model.IsDataLockOrigin)
             {
                 <td>
-                    @Model.OriginalApprenticeship.StartDate.Value.ToGdsFormat()
+                    @Model.IlrEffectiveFromDate.Value.ToGdsFormat()
                 </td>
             }
             <td>@Model.OriginalApprenticeship.Cost.FormatCost() </td>
