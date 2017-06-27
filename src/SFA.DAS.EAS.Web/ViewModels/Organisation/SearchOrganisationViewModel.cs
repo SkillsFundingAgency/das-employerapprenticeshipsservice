@@ -7,6 +7,6 @@ namespace SFA.DAS.EAS.Web.ViewModels.Organisation
     {
         public string SearchTerm { get; set; }
         public OrganisationType? OrganisationType { get; set; }
-        public PagedResponse<Domain.Models.ReferenceData.Organisation> Results { get; set; }
+        public PagedResponse<OrganisationDetailsViewModel> Results { get; set; }
     }
 }
