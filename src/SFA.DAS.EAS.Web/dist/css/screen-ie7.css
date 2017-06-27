@@ -4404,29 +4404,20 @@ h2 .float-right {
 
 .dynamic-cost-display .bold-xlarge {
   line-height: 82px;
+  font-size: 80px;
 }
 
 .dynamic-cost-display .short {
-  font-size: 48px;
+  font-size: 67px;
 }
 
 .dynamic-cost-display .long {
-  font-size: 26px;
+  font-size: 57px;
   line-height: 82px;
 }
 
 .dynamic-cost-display .longer {
   font-size: 19px;
-  line-height: 82px;
-}
-
-.dynamic-cost-display .long {
-  font-size: 45px;
-  line-height: 82px;
-}
-
-.dynamic-cost-display .longer {
-  font-size: 32px;
   line-height: 82px;
 }
 
