@@ -4986,11 +4986,11 @@ h2 .float-right {
     font-size: 67px;
   }
   .dynamic-cost-display .long {
-    font-size: 57px;
+    font-size: 48px;
     line-height: 82px;
   }
   .dynamic-cost-display .longer {
-    font-size: 19px;
+    font-size: 38px;
     line-height: 82px;
   }
 }
