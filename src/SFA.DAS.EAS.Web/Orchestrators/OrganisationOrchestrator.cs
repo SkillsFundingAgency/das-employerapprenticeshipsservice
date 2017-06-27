@@ -589,24 +589,5 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
             };
         }
-
-        public async Task<OrchestratorResponse<SearchOrganisationViewModel>> SearchOrganisation(string searchTerm, int pageNumber)
-        {
-            var response = new OrchestratorResponse<SearchOrganisationViewModel>();
-
-            try
-            {
-                var result = await Mediator.SendAsync(new GetOrganisationsRequest { SearchTerm = searchTerm, PageNumber = pageNumber});
-                response.Data = new SearchOrganisationViewModel { Results = result.Organisations, SearchTerm = searchTerm };
-            }
-            catch (InvalidRequestException ex)
-            {
-                response.Exception = ex;
-                response.FlashMessage = new FlashMessageViewModel().CreateErrorFlashMessageViewModel(ex.ErrorMessages);
-                response.Status = HttpStatusCode.BadRequest;
-            }
-            
-            return response;
-        }
     }
 }
