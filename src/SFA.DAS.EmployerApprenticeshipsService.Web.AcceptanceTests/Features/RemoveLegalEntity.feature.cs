@@ -109,18 +109,36 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Remove legal entity status")]
-        public virtual void RemoveLegalEntityStatus()
+        [NUnit.Framework.DescriptionAttribute("Remove legal entity status with active commitment")]
+        public virtual void RemoveLegalEntityStatusWithActiveCommitment()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove legal entity status", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove legal entity status with active commitment", ((string[])(null)));
 #line 22
 this.ScenarioSetup(scenarioInfo);
 #line 23
  testRunner.Given("I am an account \"Owner\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 24
- testRunner.When("I have more than one legal entity with a \"signed\" status", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I have more than one legal entity with a \"signed\" status and an active commitment" +
+                    "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 25
  testRunner.Then("I \"cannot\" remove a legal entity", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Remove legal entity status with no active commitment")]
+        public virtual void RemoveLegalEntityStatusWithNoActiveCommitment()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove legal entity status with no active commitment", ((string[])(null)));
+#line 27
+this.ScenarioSetup(scenarioInfo);
+#line 28
+testRunner.Given("I am an account \"Owner\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 29
+ testRunner.When("I have more than one legal entity with a \"signed\" status", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 30
+ testRunner.Then("I \"can\" remove a legal entity", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

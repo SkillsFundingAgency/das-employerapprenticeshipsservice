@@ -19,7 +19,12 @@ Scenario: Unable to remove only legal entity on account
 	When There is only one legal entity on the account
 	Then I "cannot" remove a legal entity
 
-Scenario: Remove legal entity status
+Scenario: Remove legal entity status with active commitment
 	Given I am an account "Owner"
-	When I have more than one legal entity with a "signed" status
+	When I have more than one legal entity with a "signed" status and an active commitment
 	Then I "cannot" remove a legal entity
+
+Scenario: Remove legal entity status with no active commitment
+Given I am an account "Owner"
+	When I have more than one legal entity with a "signed" status
+	Then I "can" remove a legal entity

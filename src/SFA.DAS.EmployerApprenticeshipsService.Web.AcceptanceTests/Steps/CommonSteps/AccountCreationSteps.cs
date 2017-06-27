@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web;
 using MediatR;
 using Moq;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Validation;
@@ -32,6 +33,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
         private string _externalUserId;
         private Mock<IValidator<GetAccountPayeSchemesQuery>> _validator;
         private Mock<IEventsApi> _eventsApi;
+        private Mock<IEmployerCommitmentApi> _commitmentsApi;
 
         public AccountCreationSteps()
         {
@@ -44,7 +46,9 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
             _validator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountPayeSchemesQuery>()))
                 .ReturnsAsync(new ValidationResult());
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
+            _commitmentsApi = new Mock<IEmployerCommitmentApi>();
+
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi, _commitmentsApi);
 
             _container.Inject(_validator.Object);
         }
@@ -67,6 +71,10 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
 
         public static void CreateDasAccount(UserViewModel userView, EmployerAccountOrchestrator orchestrator)
         {
+            var organisationReferenceNumber = "123456TGB" + Guid.NewGuid().ToString().Substring(0, 6);
+            ScenarioContext.Current["LegalEntityCode"] = organisationReferenceNumber;
+
+
             orchestrator.CreateAccount(new CreateAccountViewModel
             {
                 UserId = userView.UserId,
@@ -75,7 +83,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
                 OrganisationDateOfInception = new DateTime(2016, 01, 01),
                 PayeReference = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
                 OrganisationName = "Test Company",
-                OrganisationReferenceNumber = "123456TGB" + Guid.NewGuid().ToString().Substring(0, 6),
+                OrganisationReferenceNumber = organisationReferenceNumber,
                 OrganisationAddress = "Address Line 1",
                 OrganisationStatus = "active"
             }, new Mock<HttpContextBase>().Object).Wait();

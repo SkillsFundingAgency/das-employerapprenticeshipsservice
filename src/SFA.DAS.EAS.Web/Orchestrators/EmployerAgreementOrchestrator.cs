@@ -346,7 +346,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = result.Agreement.HashedAccountId,
                     HashedAgreementId = result.Agreement.HashedAgreementId,
                     Id = result.Agreement.Id,
-                    Name = result.Agreement.Name
+                    Name = result.Agreement.Name,
+                    AgreementStatus = result.Agreement.Status
                 };
             }
             catch (InvalidRequestException ex)

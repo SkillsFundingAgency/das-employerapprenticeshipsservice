@@ -1,3 +1,5 @@
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+
 namespace SFA.DAS.EAS.Web.ViewModels.Organisation
 {
     public class ConfirmLegalAgreementToRemoveViewModel : ViewModelBase
@@ -9,5 +11,6 @@ namespace SFA.DAS.EAS.Web.ViewModels.Organisation
         public int? RemoveOrganisation { get; set; }
 
         public string RemoveOrganisationError => GetErrorMessage(nameof(RemoveOrganisation));
+        public EmployerAgreementStatus AgreementStatus { get; set; }
     }
 }

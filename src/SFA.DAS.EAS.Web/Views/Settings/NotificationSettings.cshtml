@@ -1,0 +1,81 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.NotificationSettingsViewModel>
+@{ViewBag.Title = "Notification Settings"; }
+@{  ViewBag.PageId = "notification-settings"; }
+@{ViewBag.HideNav = "true"; }
+
+<form method="post">
+
+    <div class="grid-row">
+        <div class="column-two-thirds">
+
+            <h1 class="heading-xlarge">Notification Settings</h1>
+            <p>Choose which accounts you want to receive cohort and apprentice updates from</p>
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" value="@Model.Data.HashedId" name="HashedId" />
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Account name</th>
+                        <th scope="col">Emails</th>
+                        <th scope="col">No emails</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                    @for (var i = 0; i < Model.Data.NotificationSettings.Count; i++)
+                    {
+                        var setting = Model.Data.NotificationSettings[i];
+
+                        <tr>
+                            <td class="notification-row">
+                                    @setting.Name
+                                
+                                @Html.Hidden($"NotificationSettings[{i}].HashedAccountId", setting.HashedAccountId)
+                                @Html.Hidden($"NotificationSettings[{i}].Name", setting.Name)
+                                @Html.Hidden($"NotificationSettings[{i}].Id", setting.Id)
+                            </td>
+
+                            <td class="notification-row">
+
+                                @{  var trueId = $"NotificationSettings-true-{i}";
+                                    var falseId = $"NotificationSettings-false-{i}";
+
+                                    }
+
+                                <label for="@trueId" class="block-label selection-button-radio" aria-label="Send emails">
+                                    @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", true, setting.ReceiveNotifications, new { id = trueId } )
+                                    </label>
+                              
+                            </td>
+
+                            <td class="notification-row">
+                                <label for="@falseId" class="block-label selection-button-radio" aria-label="Stop emails">
+                                    @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", false, !setting.ReceiveNotifications, new { id = falseId })
+                                </label>
+
+                            </td>
+                           
+                        </tr>
+                    }
+
+                </tbody>
+            </table>        
+            <button type="submit" class="button">Update</button>
+          
+            
+            <a href="@Url.Action("Index", "Home")" class="button text-link">Cancel</a>
+
+        </div>
+    </div>
+
+</form>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Index", "Home")" aria-label="Back" class="back-link">Back</a>
+    </div>
+}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
@@ -6,12 +7,15 @@ using MediatR;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
+using SFA.DAS.EAS.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate;
+using SFA.DAS.EAS.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.Settings;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
@@ -28,7 +32,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         //Needed for tests
         protected EmployerAccountOrchestrator()
         {
-
         }
 
         public EmployerAccountOrchestrator(IMediator mediator, ILog logger, ICookieStorageService<EmployerAccountData> cookieService,

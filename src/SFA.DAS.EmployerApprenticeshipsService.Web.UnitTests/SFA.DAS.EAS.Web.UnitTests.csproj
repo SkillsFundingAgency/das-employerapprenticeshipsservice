@@ -78,8 +78,8 @@
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.60.0.31347, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.60.0.31347\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.65.0.33068, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.65.0.33068\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.EmployerUsers.WebClientComponents, Version=1.0.0.4388, Culture=neutral, processorArchitecture=MSIL">
@@ -146,6 +146,7 @@
     <Compile Include="Controllers\BaseControllerTests\WhenOnActionExecuting.cs" />
     <Compile Include="Controllers\BaseControllerTests\WhenStoringFlashMessages.cs" />
     <Compile Include="Controllers\ControllerTestBase.cs" />
+    <Compile Include="Controllers\EmployerAccountControllerTests\WhenIManageMyNotificationSettings.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIRenameAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenICreateAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIHaveSelectedAnEmployer.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Models\DateTimeViewModelTests.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenCreatingTheAccount.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenRenamingAnAccount.cs" />
+    <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenManagingUserSettings.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenSearchingForACompany.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenAddingAPayeScheme.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenGettingPayeSchemeDetails.cs" />
@@ -194,10 +196,13 @@
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\OrchestratorTestBase.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenCreatingApprenticeship.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenDeletingApprenticeship.cs" />
+    <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingIndexView.cs" />
+    <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenGettingProviderPriorityList.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingtLegalEntitySignedAgreement.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingDeleteApprenticeshipConfirmation.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingFinishEditing.cs" />
     <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenApprenticeshipsAreStoredInTheCookie.cs" />
+    <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenMappingProviderPaymentPriority.cs" />
     <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenGettingApprenticeships.cs" />
     <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenMappingApprenticeshipFilters.cs" />
     <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenMappingApprenticeshipSearchQuery.cs" />
@@ -221,6 +226,7 @@
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingAllUsers.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingUserAccounts.cs" />
     <Compile Include="Orchestrators\InvitationOrchestratorTests\WhenGettingAllInvitations.cs" />
+    <Compile Include="Orchestrators\SearchOrganisationOrchestratorTests\WhenISearchForAnOrganisation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithEmployer.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithBoth.cs" />

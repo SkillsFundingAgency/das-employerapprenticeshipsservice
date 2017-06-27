@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.Azure;
 using Moq;
 using SFA.DAS.Audit.Client;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -26,7 +27,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
     public class DefaultRegistry : Registry
     {
 
-        public DefaultRegistry(Mock<IOwinWrapper> owinWrapperMock, Mock<ICookieStorageService<EmployerAccountData>> cookieServiceMock, Mock<IEventsApi> eventApi)
+        public DefaultRegistry(Mock<IOwinWrapper> owinWrapperMock, Mock<ICookieStorageService<EmployerAccountData>> cookieServiceMock, Mock<IEventsApi> eventApi, Mock<IEmployerCommitmentApi> commitmentsApi)
         {
             Scan(scan =>
             {
@@ -47,6 +48,8 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
             For<IEventsApi>().Use(() => eventApi.Object);
 
             For<ILog>().Use(Mock.Of<ILog>());
+
+            For<IEmployerCommitmentApi>().Use(commitmentsApi.Object);
 
             AddMediatrRegistrations();
 

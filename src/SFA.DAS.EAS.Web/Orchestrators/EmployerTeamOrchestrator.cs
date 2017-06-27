@@ -248,7 +248,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Resend(
-            string email, string hashedId, string externalUserId)
+            string email, string hashedId, string externalUserId, string name)
         {
             var response = await GetTeamMembers(hashedId, externalUserId);
 
@@ -261,9 +261,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Email = email,
                     AccountId = hashedId,
+                    FirstName = name,
                     ExternalUserId = externalUserId
                 });
 
+                //Refresh team members view
+                response = await GetTeamMembers(hashedId, externalUserId);
                 response.Status = HttpStatusCode.OK;
                 response.FlashMessage = new FlashMessageViewModel
                 {
@@ -271,9 +274,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Headline = $"Invitation resent",
                     Message = $"You've resent an invitation to <strong>{email}</strong>"
                 };
-
-                //Refresh team members view
-                response = await GetTeamMembers(hashedId, externalUserId);
             }
             catch (InvalidRequestException e)
             {

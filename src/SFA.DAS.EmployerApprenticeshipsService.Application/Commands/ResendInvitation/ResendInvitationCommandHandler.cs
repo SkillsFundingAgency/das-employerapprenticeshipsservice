@@ -100,6 +100,8 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
                     SystemId = "x",
                     Tokens = new Dictionary<string, string> {
                         { "account_name", owner.AccountName },
+                        { "first_name", message.FirstName },
+                        { "inviter_name", $"{owner.FirstName} {owner.LastName}"},
                         { "base_url", _employerApprenticeshipsServiceConfiguration.DashboardUrl },
                         { "expiry_date", expiryDate.ToString("dd MMM yyy")}
                     }

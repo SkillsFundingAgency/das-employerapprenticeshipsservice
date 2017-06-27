@@ -1,5 +1,4 @@
 using FluentValidation;
-
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 
 namespace SFA.DAS.EAS.Web.Validators
