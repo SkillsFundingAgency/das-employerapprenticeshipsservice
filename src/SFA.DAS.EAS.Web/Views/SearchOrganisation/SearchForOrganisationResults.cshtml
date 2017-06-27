@@ -68,21 +68,18 @@
                     <li>
                         <article>
                             <form action="@Url.Action("SelectOrganisation")" method="post">
-                                <input type="hidden" name="DateOfInception" value="@organisation.RegistrationDate" />
-                                <input type="hidden" name="OrganisationCode" value="@organisation.Code" />
+                                <input type="hidden" name="DateOfInception" value="@organisation.DateOfInception" />
+                                <input type="hidden" name="OrganisationCode" value="@organisation.OrganisationCode" />
                                 <input type="hidden" name="Sector" value="@organisation.Sector" />
                                 <input type="hidden" name="Type" value="@organisation.Type" />
                                 <input type="hidden" name="Name" value="@organisation.Name" />
-                                <input type="hidden" name="Address" value="@organisation.Address.GetAddress()" />
+                                <input type="hidden" name="Address" value="@organisation.Address" />
                                 <button type="submit" class="heading-medium link-button">@organisation.Name</button>
                             </form>
                            
                             <dl class="inline">
                                 <dt>Address</dt>
-                                @{
-                                    var address = organisation.Address.GetAddress();
-                                }
-                                <dd>@(string.IsNullOrEmpty(address) ? "No address supplied" : address)</dd>
+                                <dd>@(string.IsNullOrEmpty(organisation.Address) ? "No address supplied" : organisation.Address)</dd>
                                 <dt>Type</dt>
                                 <dd>@organisation.Type.GetDescription()</dd>
                             </dl>

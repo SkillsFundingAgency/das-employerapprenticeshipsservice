@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
@@ -34,7 +35,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var result = await Mediator.SendAsync(new GetOrganisationsRequest { SearchTerm = searchTerm, PageNumber = pageNumber, OrganisationType = organisationType });
                 response.Data = new SearchOrganisationViewModel
                 {
-                    Results = result.Organisations,
+                    Results = ConvertToViewModel(result.Organisations),
                     SearchTerm = searchTerm,
                     OrganisationType = organisationType
                 };
@@ -57,6 +58,31 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual void CreateCookieData(HttpContextBase context, EmployerAccountData data)
         {
             _cookieService.Create(data, CookieName, 365);
+        }
+
+        private PagedResponse<OrganisationDetailsViewModel> ConvertToViewModel(PagedResponse<Organisation> organisations)
+        {
+            return new PagedResponse<OrganisationDetailsViewModel>
+            {
+                PageNumber = organisations.PageNumber,
+                TotalPages = organisations.TotalPages,
+                TotalResults = organisations.TotalResults,
+                Data = organisations.Data.Select<Organisation, OrganisationDetailsViewModel>(ConvertToViewModel).ToList()
+            };
+        }
+
+        private OrganisationDetailsViewModel ConvertToViewModel(Organisation organisation)
+        {
+            return new OrganisationDetailsViewModel
+            {
+                Address = organisation.Address.GetAddress(),
+                Name = organisation.Name,
+                Type = organisation.Type,
+                DateOfInception = organisation.RegistrationDate,
+                OrganisationCode = organisation.Code,
+                PublicSectorDataSource = (short?)organisation.SubType,
+                Sector = organisation.Sector
+            };
         }
     }
 }

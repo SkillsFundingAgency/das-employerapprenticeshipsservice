@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationsRequest>()))
-                .ReturnsAsync(new GetOrganisationsResponse { Organisations = new PagedResponse<Organisation>()});
+                .ReturnsAsync(new GetOrganisationsResponse { Organisations = new PagedResponse<Organisation> { Data = new List<Organisation>() } });
 
             _orchestrator = new SearchOrganisationOrchestrator(_mediator.Object, _cookieService.Object);
         }
