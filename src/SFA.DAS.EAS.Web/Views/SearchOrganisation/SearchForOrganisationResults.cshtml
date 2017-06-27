@@ -65,26 +65,45 @@
                 <ol>
                 @foreach (var organisation in Model.Data.Results.Data)
                 {
-                    <li>
-                        <article>
-                            <form action="@Url.Action("SelectOrganisation")" method="post">
-                                <input type="hidden" name="DateOfInception" value="@organisation.DateOfInception" />
-                                <input type="hidden" name="OrganisationCode" value="@organisation.OrganisationCode" />
-                                <input type="hidden" name="Sector" value="@organisation.Sector" />
-                                <input type="hidden" name="Type" value="@organisation.Type" />
-                                <input type="hidden" name="Name" value="@organisation.Name" />
-                                <input type="hidden" name="Address" value="@organisation.Address" />
-                                <button type="submit" class="heading-medium link-button">@organisation.Name</button>
-                            </form>
-                           
-                            <dl class="inline">
-                                <dt>Address</dt>
-                                <dd>@(string.IsNullOrEmpty(organisation.Address) ? "No address supplied" : organisation.Address)</dd>
-                                <dt>Type</dt>
-                                <dd>@organisation.Type.GetDescription()</dd>
-                            </dl>
-                        </article>
-                    </li>
+                    if (!organisation.AddedToAccount)
+                    {
+                        <li>
+                            <article>
+                                <form action="@Url.Action("SelectOrganisation")" method="post">
+                                    <input type="hidden" name="DateOfInception" value="@organisation.DateOfInception"/>
+                                    <input type="hidden" name="OrganisationCode" value="@organisation.OrganisationCode"/>
+                                    <input type="hidden" name="Sector" value="@organisation.Sector"/>
+                                    <input type="hidden" name="Type" value="@organisation.Type"/>
+                                    <input type="hidden" name="Name" value="@organisation.Name"/>
+                                    <input type="hidden" name="Address" value="@organisation.Address"/>
+                                    <button type="submit" class="heading-medium link-button">@organisation.Name</button>
+                                </form>
+
+                                <dl class="inline">
+                                    <dt>Address</dt>
+                                    <dd>@(string.IsNullOrEmpty(organisation.Address) ? "No address supplied" : organisation.Address)</dd>
+                                    <dt>Type</dt>
+                                    <dd>@organisation.Type.GetDescription()</dd>
+                                </dl>
+                            </article>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="added">
+                            <article>
+                                <h1 class="heading-medium">@organisation.Name</h1>
+                                <dl class="inline">
+                                    <dt>Address</dt>
+                                    <dd>@(string.IsNullOrEmpty(organisation.Address) ? "No address supplied" : organisation.Address)</dd>
+                                    <dt>Type</dt>
+                                    <dd>@organisation.Type.GetDescription()</dd>
+                                </dl>
+                                <p>Already added - <a href="@Url.Action("Index", "EmployerAgreement")">view my organisations</a>
+                                </p>
+                            </article>
+                        </li>
+                    }
                 }
                 </ol>
             }
@@ -92,24 +111,6 @@
             {
                  <p>No results found</p>
             }
-
-            
-
-            @*<li class="added">
-                <article>
-                    <h1 class="heading-medium">20-20 Housing Co-operative Limited</h1>
-                    <dl class="inline">
-                        <dt>Address</dt>
-                        <dd>123 Some Street, Tiny Town, AB1 2CD</dd>
-                        <dt>Type</dt>
-                        <dd>Private limited company</dd>
-                    </dl>
-                    <p>Already added - <a href="">view my organisations</a>
-                    </p>
-                </article>
-            </li>*@
-            
-        
         <nav>
             <ul class="previous-next-navigation">
                 @if (Model.Data.Results.PageNumber > 1)
