@@ -4281,6 +4281,19 @@ table.responsive tr.total {
   }
 }
 
+.results-list ol li.other {
+  border-bottom: none;
+}
+
+.results-list ol li.other h2 {
+  margin-top: 10px;
+}
+
+.results-list ol li.other p {
+  border-top: none;
+  padding-top: 0;
+}
+
 .results-list dl {
   margin-bottom: 5px;
 }

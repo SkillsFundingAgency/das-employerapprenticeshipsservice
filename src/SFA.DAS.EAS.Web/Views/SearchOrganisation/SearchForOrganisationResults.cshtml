@@ -60,7 +60,7 @@
     <section class="results-list">
         
 
-            @if (Model.Data != null)
+            @if (Model.Data.Results.Data != null)
             {
                 <ol>
                 @foreach (var organisation in Model.Data.Results.Data)
@@ -105,11 +105,27 @@
                         </li>
                     }
                 }
+                @if (Model.Data.Results.PageNumber == Model.Data.Results.TotalPages || Model.Data.Results.TotalPages == 0)
+                {
+                    <li class="other">
+                        <h2 class="heading-small">Can't find your organisation?</h2>
+                        <p>Check the spelling and <a href="#searchTerm">search again</a>.</p>
+                        <p>You can also <a href="@Url.Action("AddOtherOrganisationDetails", "EmployerAccountOrganisation")">enter your details manually.</a></p>
+                    </li>
+                } 
                 </ol>
             }
             else
             {
-                 <p>No results found</p>
+                
+                 <ol>
+                     <li>No results found</li>
+                     <li class="other">
+                         <h2 class="heading-small">Can't find your organisation?</h2>
+                         <p>Check the spelling and <a href="#searchTerm">search again</a>.</p>
+                         <p>You can also <a href="@Url.Action("AddOtherOrganisationDetails", "EmployerAccountOrganisation")">enter your details manually.</a></p>
+                     </li>
+                 </ol>
             }
         <nav>
             <ul class="previous-next-navigation">
