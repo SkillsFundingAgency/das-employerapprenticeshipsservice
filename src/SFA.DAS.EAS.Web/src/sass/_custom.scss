@@ -401,6 +401,10 @@ body {
 
 /*Email notification settings*/
 #notification-settings{
+    .alert-default {
+        background:none;
+        margin-bottom:40px;
+    }
     h1{
         margin-bottom:0;
     }

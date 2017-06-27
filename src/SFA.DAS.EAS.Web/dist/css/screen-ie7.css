@@ -4449,6 +4449,11 @@ h2 .float-right {
 }
 
 /*Email notification settings*/
+#notification-settings .alert-default {
+  background: none;
+  margin-bottom: 40px;
+}
+
 #notification-settings h1 {
   margin-bottom: 0;
 }
@@ -4611,28 +4616,12 @@ h2 .float-right {
   content: " ";
 }
 
-#edit-apprentices-detail hr {
+Upda #edit-apprentices-detail hr {
   margin-top: 0;
 }
 
-#edit-apprentices-detail .optional-ref {
+Upda #edit-apprentices-detail .optional-ref {
   margin-bottom: 0;
-}
-
-#edit-started-apprentice .approve-alert {
-  margin-top: 30px;
-}
-
-#edit-started-apprentice .approve-alert .alert-blue {
-  border-color: #2b8cc4;
-}
-
-#edit-started-apprentice .last-child {
-  margin-bottom: 0px;
-}
-
-#edit-started-apprentice strong {
-  font-weight: bold;
 }
 
 #review-datalock-changes h2.heading-small {
@@ -4661,6 +4650,22 @@ h2 .float-right {
   display: block;
   padding-left: 0;
   margin-top: 20px;
+}
+
+#edit-started-apprentice .approve-alert {
+  margin-top: 30px;
+}
+
+#edit-started-apprentice .approve-alert .alert-blue {
+  border-color: #2b8cc4;
+}
+
+#edit-started-apprentice .last-child {
+  margin-bottom: 0px;
+}
+
+#edit-started-apprentice strong {
+  font-weight: bold;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
