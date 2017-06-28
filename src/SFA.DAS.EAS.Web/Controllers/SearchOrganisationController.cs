@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -12,7 +13,7 @@ using SFA.DAS.EAS.Web.ViewModels.Organisation;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [RoutePrefix("accounts/organisations/search")]
+    [RoutePrefix("accounts")]
     public class SearchOrganisationController : BaseController
     {
         private readonly SearchOrganisationOrchestrator _orchestrator;
@@ -32,24 +33,25 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("{HashedAccountId}/organisations/search", Order = 0)]
+        [Route("organisations/search", Order = 1)]
         public ActionResult SearchForOrganisation()
         {
             return View("SearchForOrganisation");
         }
 
-       
-       
-        [Route("results")]
-        public async Task<ActionResult> SearchForOrganisationResults(string searchTerm, int pageNumber = 1)
+        [Route("{HashedAccountId}/organisations/search/results", Order = 0)]
+        [Route("organisations/search/results", Order = 1)]
+        public async Task<ActionResult> SearchForOrganisationResults(string hashedAccountId, string searchTerm, int pageNumber = 1, OrganisationType? organisationType = null)
         {
-            var model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber);
+            var model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View("SearchForOrganisationResults", model);
         }
         
         [HttpPost]
-        [Route("select")]
+        [Route("{HashedAccountId}/organisations/select", Order = 0)]
+        [Route("organisations/select", Order = 1)]
         public ActionResult SelectOrganisation(OrganisationDetailsViewModel viewModel)
         {
             if (string.IsNullOrWhiteSpace(viewModel.Address))

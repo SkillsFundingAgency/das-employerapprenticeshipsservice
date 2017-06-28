@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmEmployerManageA
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILog>();
             var hashingService = new Mock<IHashingService>();
             hashingService.Setup(x => x.DecodeValue("ABC123")).Returns(123L);
             var apprenticeshipMapper = new ApprenticeshipMapper(Mock.Of<IHashingService>(), new CurrentDateTime(), _mediator.Object);

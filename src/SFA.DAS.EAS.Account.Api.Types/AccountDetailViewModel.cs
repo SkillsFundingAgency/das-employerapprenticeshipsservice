@@ -12,7 +12,8 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public string OwnerEmail { get; set; }
         public ResourceList LegalEntities { get; set; }
         public ResourceList PayeSchemes { get; set; }
-        
+        public decimal Balance { get; set; }
+
         [Obsolete]
         public string DasAccountId => HashedAccountId;
     }

@@ -83,6 +83,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             }
 
             var viewModel = ConvertAccountDetailToViewModel(accountResult);
+            viewModel.Balance = await GetBalanceForAccount(accountResult.Account.AccountId);
             return new OrchestratorResponse<AccountDetailViewModel> { Data = viewModel };
         }
 
@@ -212,6 +213,17 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             };
 
             return accountDetailViewModel;
+        }
+
+        private async Task<decimal> GetBalanceForAccount(long accountId)
+        {
+            var balanceResult = await _mediator.SendAsync(new GetAccountBalancesRequest
+            {
+                AccountIds = new List<long> { accountId }
+            });
+
+            var account = balanceResult?.Accounts?.SingleOrDefault();
+            return account?.Balance ?? 0;
         }
     }
 }

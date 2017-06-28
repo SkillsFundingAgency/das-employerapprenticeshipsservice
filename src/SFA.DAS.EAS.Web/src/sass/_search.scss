@@ -20,7 +20,7 @@
             background: $grey-4;
             border: 3px solid $border-colour;
         } 
-        h1 {
+        h1, button {
             margin: 5px 0;
         }
         p {
@@ -28,6 +28,16 @@
             border-top: 1px solid $border-colour;
             @include core-16;
             padding: 10px 15px;
+        }
+        &.other {
+            border-bottom: none;
+            h2 {
+                margin-top: 10px;
+            }
+            p {
+                border-top: none;
+                padding-top: 0;
+            }
         }
     }
     dl {
@@ -53,5 +63,9 @@
         margin: -15px;
         margin-bottom: 15px;
         @include bold-19;
+    }
+    .form-group {
+        margin-top: 20px;
+        margin-bottom: 0;
     }
 }
