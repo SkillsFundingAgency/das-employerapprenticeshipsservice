@@ -132,7 +132,18 @@
             <div class="grid-row" id="empty-alert-top">
                 <div class="column-full">
                     <div class="panel panel-border-wide alert-default">
-                        <p>You haven’t added any apprentices yet - <a href="@Url.Action("CreateApprenticeshipEntry")"> add an apprentice </a></p>
+                        
+                        @if (Model.Data.IsReadOnly)
+                        {
+                            <p>Apprentices will appear here when the training provider adds them to your cohort.</p>
+                        }
+                        else
+                        {
+                            <p>
+                                You haven’t added any apprentices yet - <a href="@Url.Action("CreateApprenticeshipEntry")"> add an apprentice </a>
+                            </p>
+                        }
+                            
                     </div>
                 </div>
             </div>
