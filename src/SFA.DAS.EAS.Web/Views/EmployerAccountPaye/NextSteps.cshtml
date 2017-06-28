@@ -2,20 +2,38 @@
 @{ViewBag.PageID = "page-paye-scheme-next-steps";} 
 @{ViewBag.Title = "What's next";} 
 @{ViewBag.Section = "paye";} 
-
+@{
+    var errorMessage = Model?.GetType().GetProperty("ErrorMessage") != null ? Model.GetType().GetProperty("ErrorMessage").GetValue(Model, null) as string : "";
+}
 <div class="grid-row">
     <div class="column-two-thirds">
-            <h1 class="heading-xlarge">
-                What's next
-            </h1>
-            <form method="post">
-
-                @Html.AntiForgeryToken()
-          
-                <div class="form-group">
-                    <button type="submit" class="button" id="accept">Continue</button>
-                </div>
-            </form>
-
+        <h1 class="heading-xlarge">
+            What's next
+        </h1>
+        <form method="POST" action="@Url.Action("NextSteps")">
+            @Html.AntiForgeryToken()
+            <div class="form-group  @(!string.IsNullOrEmpty(errorMessage) ? "error" : "")">
+                <fieldset>
+                    <legend>
+                        <span class="visuallyhidden">What's next?</span>
+                        @if (!string.IsNullOrWhiteSpace(errorMessage))
+                        {
+                            <span class="error-message" id="select-option">@errorMessage</span>
+                        }
+                    </legend>
+                    <label for="choice1" class="block-label">
+                        <input id="choice1" type="radio" name="choice" value="1" />
+                        Choice 1
+                    </label>
+                    <label for="choice2" class="block-label">
+                        <input id="choice2" type="radio" name="choice" value="2" />
+                        Choice 2
+                    </label>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="button" id="accept">Continue</button>
+            </div>
+        </form>
     </div>
 </div>
