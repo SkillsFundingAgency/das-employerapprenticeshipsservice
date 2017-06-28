@@ -5255,6 +5255,9 @@ Upda #edit-apprentices-detail .optional-ref {
     color: #0b0c0c;
     cursor: pointer;
   }
+  #apprentice-details .finishEditingBtn {
+    margin-bottom: 20px;
+  }
   .bubble-arrow, .overlap-arrow {
     display: none;
   }
