@@ -1,0 +1,21 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AddNewPayeSchemeViewModel>
+@{ViewBag.PageID = "page-paye-scheme-next-steps";} 
+@{ViewBag.Title = "What's next";} 
+@{ViewBag.Section = "paye";} 
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+            <h1 class="heading-xlarge">
+                What's next
+            </h1>
+            <form method="post">
+
+                @Html.AntiForgeryToken()
+          
+                <div class="form-group">
+                    <button type="submit" class="button" id="accept">Continue</button>
+                </div>
+            </form>
+
+    </div>
+</div>

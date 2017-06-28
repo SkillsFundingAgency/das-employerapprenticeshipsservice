@@ -44,6 +44,13 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [Route("schemes/next")]
+        public ActionResult NextSteps()
+        {
+            return View();
+        }
+
+        [HttpGet]
         [Route("schemes/{empRef}/details")]
         public async Task<ActionResult> Details(string hashedAccountId, string empRef)
         {
