@@ -401,6 +401,10 @@ body {
 
 /*Email notification settings*/
 #notification-settings{
+    .alert-default {
+        background:none;
+        margin-bottom:40px;
+    }
     h1{
         margin-bottom:0;
     }
@@ -477,7 +481,6 @@ body {
     
     }
 }
-
 // pagination
 .previous-next-navigation {
   padding-left: 0;
@@ -564,6 +567,32 @@ Upda
     }
 }
 
+//datalock styles
+#review-datalock-changes{ 
+    h2.heading-small{margin-top:40px;}
+    .core-detail{
+        margin-bottom:30px;
+       
+           td.first-child{
+            border-top:1px solid $grey-2;
+        }
+    }
+    .changes{
+        .current{
+            font-size:16px;
+            vertical-align:middle;
+        }
+        .changed{font-weight:bold;}
+    }
+    #approve-changes{
+        a.break-line{
+            clear: both;
+            display: block;
+            padding-left: 0;
+            margin-top: 20px;
+        }
+    }
+}
 //edit-started-apprentice
 #edit-started-apprentice{
     .approve-alert{   

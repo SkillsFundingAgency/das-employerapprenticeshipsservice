@@ -70,28 +70,15 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
-        [Route("cohorts/new")]
-        public async Task<ActionResult> WaitingToBeSent(string hashedAccountId)
+        [Route("cohorts/draft")]
+        public async Task<ActionResult> Draft(string hashedAccountId)
         {
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
                 return View("AccessDenied");
 
-            var model = await _employerCommitmentsOrchestrator.GetAllWaitingToBeSent(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _employerCommitmentsOrchestrator.GetAllDraft(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
             SetFlashMessageOnModel(model);
             Session[LastCohortPageSessionKey] = RequestStatus.NewRequest;
-            return View("RequestList", model);
-        }
-
-        [HttpGet]
-        [Route("cohorts/approve")]
-        public async Task<ActionResult> ReadyForApproval(string hashedAccountId)
-        {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var model = await _employerCommitmentsOrchestrator.GetAllReadyForApproval(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-            SetFlashMessageOnModel(model);
-            Session[LastCohortPageSessionKey] = RequestStatus.ReadyForApproval;
             return View("RequestList", model);
         }
 
@@ -123,6 +110,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Inform")]
         public async Task<ActionResult> Inform(string hashedAccountId)
         {
+            Session[LastCohortPageSessionKey] = RequestStatus.None;
             var response = await _employerCommitmentsOrchestrator.GetInform(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(response);
@@ -547,7 +535,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var currentStatusCohortAny = await _employerCommitmentsOrchestrator
                 .AnyCohortsForCurrentStatus(hashedAccountId, RequestStatus.ReadyForApproval);
             model.Data.BackLink = currentStatusCohortAny
-                ? new LinkViewModel { Text = "Return to Approve cohorts", Url = Url.Action("ReadyForApproval", new { hashedAccountId }) }
+                ? new LinkViewModel { Text = "Return to view cohorts", Url = Url.Action("ReadyForReview", new { hashedAccountId }) }
                 : new LinkViewModel { Text = "Return to Your cohorts", Url = Url.Action("YourCohorts", new { hashedAccountId }) };
 
             return View(model);
@@ -645,9 +633,18 @@ namespace SFA.DAS.EAS.Web.Controllers
                 .GetAcknowledgementModelForExistingCommitment(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
 
             var status = GetSessionRequestStatus();
+            bool anyCohortsLeft;
+            if (status == RequestStatus.ReadyForReview)
+            {
+                anyCohortsLeft = await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(hashedAccountId, RequestStatus.ReadyForApproval, status);
+            }
+            else
+            {
+                anyCohortsLeft= await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(hashedAccountId, status);
+            }
             var returnToCohortsList = 
                    status != RequestStatus.None 
-                && await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(hashedAccountId, status);
+                && anyCohortsLeft;
 
             var returnUrl = GetReturnUrl(status, hashedAccountId);
             response.Data.BackLink = string.IsNullOrEmpty(returnUrl) || !returnToCohortsList
@@ -734,21 +731,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return status;
         }
 
-        private string GetReturnUrl(RequestStatus status, string hashedAccountId)
-        {
-            switch (status)
-            {
-                case RequestStatus.NewRequest:
-                    return Url.Action("WaitingToBeSent", new { hashedAccountId });
-                case RequestStatus.ReadyForReview:
-                    return Url.Action("ReadyForReview", new { hashedAccountId });
-                case RequestStatus.ReadyForApproval:
-                    return Url.Action("ReadyForApproval", new { hashedAccountId });
-                default:
-                    return string.Empty;
-            }
-        }
-
         private void AddErrorsToModelState(Dictionary<string, string> dict)
         {
             foreach (var error in dict)
@@ -795,6 +777,20 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View("EditApprenticeshipEntry", response);
         }
 
+        private string GetReturnUrl(RequestStatus status, string hashedAccountId)
+        {
+            switch (status)
+            {
+                case RequestStatus.NewRequest:
+                    return Url.Action("Draft", new { hashedAccountId });
+                case RequestStatus.ReadyForReview:
+                case RequestStatus.ReadyForApproval:
+                    return Url.Action("ReadyForReview", new { hashedAccountId });
+                default:
+                    return string.Empty;
+            }
+        }
+
         private string GetReturnToListUrl(string hashedAccountId)
         {
             switch (GetSessionRequestStatus())
@@ -803,11 +799,10 @@ namespace SFA.DAS.EAS.Web.Controllers
                 case RequestStatus.SentForReview:
                     return Url.Action("WithProvider", new { hashedAccountId });
                 case RequestStatus.NewRequest:
-                    return Url.Action("WaitingToBeSent", new { hashedAccountId });
+                    return Url.Action("Draft", new { hashedAccountId });
                 case RequestStatus.ReadyForReview:
-                    return Url.Action("ReadyForReview", new { hashedAccountId });
                 case RequestStatus.ReadyForApproval:
-                    return Url.Action("ReadyForApproval", new { hashedAccountId });
+                    return Url.Action("ReadyForReview", new { hashedAccountId });
                 default:
                     return Url.Action("YourCohorts", new { hashedAccountId });
             }

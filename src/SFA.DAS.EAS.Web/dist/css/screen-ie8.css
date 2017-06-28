@@ -4402,6 +4402,11 @@ h2 .float-right {
 }
 
 /*Email notification settings*/
+#notification-settings .alert-default {
+  background: none;
+  margin-bottom: 40px;
+}
+
 #notification-settings h1 {
   margin-bottom: 0;
 }
@@ -4564,12 +4569,40 @@ h2 .float-right {
   content: " ";
 }
 
-#edit-apprentices-detail hr {
+Upda #edit-apprentices-detail hr {
   margin-top: 0;
 }
 
-#edit-apprentices-detail .optional-ref {
+Upda #edit-apprentices-detail .optional-ref {
   margin-bottom: 0;
+}
+
+#review-datalock-changes h2.heading-small {
+  margin-top: 40px;
+}
+
+#review-datalock-changes .core-detail {
+  margin-bottom: 30px;
+}
+
+#review-datalock-changes .core-detail td.first-child {
+  border-top: 1px solid #bfc1c3;
+}
+
+#review-datalock-changes .changes .current {
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+#review-datalock-changes .changes .changed {
+  font-weight: bold;
+}
+
+#review-datalock-changes #approve-changes a.break-line {
+  clear: both;
+  display: block;
+  padding-left: 0;
+  margin-top: 20px;
 }
 
 #edit-started-apprentice .approve-alert {

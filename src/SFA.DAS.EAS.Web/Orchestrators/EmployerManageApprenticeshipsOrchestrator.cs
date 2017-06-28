@@ -27,10 +27,13 @@ using SFA.DAS.EAS.Application.Queries.ValidateStatusChangeDate;
 using SFA.DAS.EAS.Application.Commands.UpdateApprenticeshipStatus;
 using SFA.DAS.EAS.Application.Queries.ApprenticeshipSearch;
 using SFA.DAS.EAS.Application.Commands.UpdateProviderPaymentPriority;
-using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock;
 using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
 using System.Net;
 using SFA.DAS.NLog.Logger;
+
+using SFA.DAS.EAS.Application.Commands.ResolveRequestedChanges;
+using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLockSummary;
+using SFA.DAS.EAS.Application.Queries.GetPriceHistoryQueryRequest;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -42,7 +45,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly ILog _logger;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IApprenticeshipFiltersMapper _apprenticeshipFiltersMapper;
-
         private readonly ApprovedApprenticeshipViewModelValidator _apprenticeshipValidator;
 
         private readonly ICookieStorageService<UpdateApprenticeshipViewModel>
@@ -141,6 +143,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 var detailsViewModel =
                     _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(data.Apprenticeship);
+
+                detailsViewModel.PendingDataLockRestart = data.Apprenticeship.DataLockCourseTriaged;
+                detailsViewModel.PendingDataLockChange = data.Apprenticeship.DataLockPriceTriaged;
 
                 return new OrchestratorResponse<ApprenticeshipDetailsViewModel> {Data = detailsViewModel};
             }, hashedAccountId, externalUserId);
@@ -247,8 +252,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         viewModel.IsDataLockOrigin = true;
                         viewModel.IlrEffectiveFromDate = await GetIlrEffectiveFromDate(apprenticeshipId);
-
-                    }
+                   }
 
                     return new OrchestratorResponse<UpdateApprenticeshipViewModel>
                     {
@@ -604,7 +608,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<DataLockStatusViewModel>> GetDataLockStatus(string hashedAccountId, string hashedApprenticeshipId, string userId)
+        public async Task<OrchestratorResponse<DataLockStatusViewModel>> GetDataLockStatusForRestartRequest(string hashedAccountId, string hashedApprenticeshipId, string userId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
@@ -612,15 +616,24 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return await CheckUserAuthorization(
                 async () =>
                     {
-                        var dataLock = await _mediator.SendAsync(
-                                new GetApprenticeshipDataLockRequest { ApprenticeshipId = apprenticeshipId });
+
+                        var dataLockSummary = await _mediator.SendAsync(
+                            new GetDataLockSummaryQueryRequest { ApprenticeshipId = apprenticeshipId });
+
+                        //var dataLock = dataLocks.DataLockStatus
+                        //    .First(m => m.TriageStatus == TriageStatus.Restart);
+                        var dataLock =  dataLockSummary.DataLockSummary
+                        .DataLockWithCourseMismatch.FirstOrDefault(m => m.TriageStatus == TriageStatus.Restart);
+
+                        if (dataLock == null)
+                            throw new InvalidStateException($"No data locks exist that can be restarted for apprenticeship: {apprenticeshipId}");
 
                         var apprenticeship = await _mediator.SendAsync(
                             new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
-                        
+
                         var programms = await GetTrainingProgrammes();
                         var currentProgram = programms.Single(m => m.Id == apprenticeship.Apprenticeship.TrainingCode);
-                        var newProgram = programms.Single(m => m.Id == dataLock.DataLockStatus.IlrTrainingCourseCode);
+                        var newProgram = programms.Single(m => m.Id == dataLock.IlrTrainingCourseCode);
 
                         return new OrchestratorResponse<DataLockStatusViewModel>
                             {
@@ -632,10 +645,72 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                         IlrProgram = newProgram,
                                         PeriodStartData = dataLock.DataLockStatus.IlrEffectiveFromDate,
                                         ProviderName = apprenticeship.Apprenticeship.ProviderName,
-                                        TriageStatus = dataLock.DataLockStatus.TriageStatus
+                                        LearnerName = apprenticeship.Apprenticeship.ApprenticeshipName,
+                                        DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth
                                     }
                            };
             }, hashedAccountId, userId);
+        }
+
+        public async Task<OrchestratorResponse<DataLockStatusViewModel>> GetDataLockChangeStatus(string hashedAccountId, string hashedApprenticeshipId, string userId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            return await CheckUserAuthorization(
+                async () =>
+                {
+                    var dataLockSummary = await _mediator.SendAsync(
+                            new GetDataLockSummaryQueryRequest { ApprenticeshipId = apprenticeshipId });
+
+                    if (dataLockSummary.DataLockSummary.DataLockWithOnlyPriceMismatch.Count() == 0)
+                            throw new InvalidStateException($"Apprenticeship does not contain any price data locks. Apprenticeship: {apprenticeshipId}");
+
+                    var priceHistory = await _mediator.SendAsync(new GetPriceHistoryQueryRequest
+                    {
+                        ApprenticeshipId = apprenticeshipId
+                    });
+
+                    var apprenticeship = await _mediator.SendAsync(
+                        new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
+
+                    return new OrchestratorResponse<DataLockStatusViewModel>
+                    {
+                        Data = new DataLockStatusViewModel
+                        {
+                            HashedAccountId = hashedAccountId,
+                            HashedApprenticeshipId = hashedApprenticeshipId,
+                            PeriodStartData = new DateTime(2017, 08, 08),
+                            ProviderName = apprenticeship.Apprenticeship.ProviderName,
+                            LearnerName = apprenticeship.Apprenticeship.ApprenticeshipName,
+                            DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth,
+                            PriceChanges = _apprenticeshipMapper.MapPriceChanges(dataLockSummary.DataLockSummary.DataLockWithOnlyPriceMismatch, priceHistory.History)
+
+                        }
+                    };
+                }, hashedAccountId, userId);
+        }
+
+        public async Task ConfirmRequestChanges(string hashedAccountId,string hashedApprenticeshipId,string user,bool approved)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            await CheckUserAuthorization(
+                async () =>
+                    {
+                        await _mediator.SendAsync(
+                            new ResolveRequestedChangesCommand
+                            {
+                                ApprenticeshipId = apprenticeshipId,
+                                Approved = approved,
+                                TriageStatus = TriageStatus.Change,
+                                UserId = user
+                            });
+                        
+                    },
+                hashedAccountId,
+                user);
         }
 
         public async Task<OrchestratorResponse<PaymentOrderViewModel>> GetPaymentOrder(string hashedAccountId, string user)

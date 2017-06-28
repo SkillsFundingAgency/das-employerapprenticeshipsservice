@@ -5,6 +5,7 @@ using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using System.Threading.Tasks;
 
+using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.Commitments.Api.Types.ProviderPayment;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 
@@ -27,5 +28,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
         UpdateApprenticeshipViewModel MapFrom(ApprenticeshipUpdate apprenticeshipUpdate);
 
         PaymentOrderViewModel MapPayment(IList<ProviderPaymentPriorityItem> data);
+
+        IList<PriceChange> MapPriceChanges(IEnumerable<DataLockStatus> dataLockWithOnlyPriceMismatch, List<PriceHistory> history);
     }
 }
