@@ -77,6 +77,16 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("GatewayInform", "EmployerAccount");
         }
 
+        [HttpGet]
+        [Route("{HashedAccountId}/organisations/confirm", Order = 0)]
+        [Route("organisations/confirm", Order = 1)]
+        public ActionResult Confirm()
+        {
+            var organisation = _orchestrator.GetCookieData(HttpContext);
+            var viewModel = new ConfirmOrganisationViewModel { Name = organisation.OrganisationName, Address = organisation.OrganisationRegisteredAddress };
+            return View(viewModel);
+        }
+
         private void CreateOrganisationCookieData(OrchestratorResponse<OrganisationDetailsViewModel> response)
         {
             EmployerAccountData data;
