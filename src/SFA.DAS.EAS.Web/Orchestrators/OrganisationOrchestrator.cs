@@ -23,6 +23,7 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
@@ -169,18 +170,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             if (!string.IsNullOrEmpty(hashedAccountId))
             {
-                var accountEntities = await GetAccountLegalEntities(hashedAccountId, userIdClaim);
+                var accountLegalEntitiesHelper = new AccountLegalEntitiesHelper(Mediator);
+                var accountEntities = await accountLegalEntitiesHelper.GetAccountLegalEntities(hashedAccountId, userIdClaim);
 
                 foreach (var viewModel in organisations)
                 {
-                    viewModel.AddedToAccount = accountEntities.Entites.LegalEntityList.Any(
-                        e => e.Name.Equals(viewModel.Name, StringComparison.CurrentCultureIgnoreCase));
+                    viewModel.AddedToAccount = accountLegalEntitiesHelper.IsLegalEntityAlreadyAddedToAccount(accountEntities, viewModel.Name, null, OrganisationType.PublicBodies);
                 }
-
-
             }
-
-
+            
             var pagedResponse = new PagedResponse<OrganisationDetailsViewModel>
             {
                 Data = organisations,
@@ -294,17 +292,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Data = new AddLegalEntityViewModel {HashedAccountId = hashedAccountId},
                 Status = userRole.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized
             };
-        }
-
-        private async Task<GetAccountLegalEntitiesResponse> GetAccountLegalEntities(string hashedLegalEntityId,
-            string userIdClaim)
-        {
-            var accountEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
-            {
-                HashedLegalEntityId = hashedLegalEntityId,
-                UserId = userIdClaim
-            });
-            return accountEntities;
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
@@ -532,13 +519,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<OrchestratorResponse<OrganisationDetailsViewModel>> CheckLegalEntityIsNotAddedToAccount(string hashedLegalEntityId, string userIdClaim, string legalEntityCode, OrganisationType organisationType)
         {
-            var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
+            var accountLegalEntitiesHelper = new AccountLegalEntitiesHelper(_mediator);
+            var accountEntities = await accountLegalEntitiesHelper.GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
-            if (accountEntities.Entites.LegalEntityList.Any(
-                x =>
-                    (!string.IsNullOrWhiteSpace(x.Code.Trim()) &&
-                     x.Code.Equals(legalEntityCode.Trim(), StringComparison.CurrentCultureIgnoreCase))
-                    && x.Source == (short)organisationType))
+            if(accountLegalEntitiesHelper.IsLegalEntityAlreadyAddedToAccount(accountEntities, null, legalEntityCode, organisationType))
             {
                 var conflictResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
@@ -588,25 +572,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Sector = request.Sector
                 }
             };
-        }
-
-        public async Task<OrchestratorResponse<SearchOrganisationViewModel>> SearchOrganisation(string searchTerm, int pageNumber)
-        {
-            var response = new OrchestratorResponse<SearchOrganisationViewModel>();
-
-            try
-            {
-                var result = await Mediator.SendAsync(new GetOrganisationsRequest { SearchTerm = searchTerm, PageNumber = pageNumber});
-                response.Data = new SearchOrganisationViewModel { Results = result.Organisations, SearchTerm = searchTerm };
-            }
-            catch (InvalidRequestException ex)
-            {
-                response.Exception = ex;
-                response.FlashMessage = new FlashMessageViewModel().CreateErrorFlashMessageViewModel(ex.ErrorMessages);
-                response.Status = HttpStatusCode.BadRequest;
-            }
-            
-            return response;
         }
     }
 }

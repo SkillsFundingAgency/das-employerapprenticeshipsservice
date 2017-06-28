@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetOrganisations
                 throw new InvalidRequestException(valdiationResult.ValidationDictionary);
             }
 
-            var organisations = await _referenceDataService.SearchOrganisations(message.SearchTerm, message.PageNumber);
+            var organisations = await _referenceDataService.SearchOrganisations(message.SearchTerm, message.PageNumber, organisationType: message.OrganisationType);
 
             if (organisations == null)
             {

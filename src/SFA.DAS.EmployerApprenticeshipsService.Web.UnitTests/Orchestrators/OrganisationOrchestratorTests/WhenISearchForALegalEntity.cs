@@ -144,7 +144,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                         {
                             new LegalEntity
                             {
-                                Name = addedEntityName
+                                Name = addedEntityName,
+                                Source = (short)OrganisationType.PublicBodies
                             }
                         }
                     }
