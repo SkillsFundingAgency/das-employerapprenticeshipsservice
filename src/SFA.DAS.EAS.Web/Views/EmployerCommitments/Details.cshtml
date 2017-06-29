@@ -35,8 +35,17 @@
                     </ul>
                 </div>
             }
+            
+            @if (Model.Data.IsReadOnly)
+            {
+                <h1 class="heading-xlarge">View your cohort</h1>
+            }
+            else
+            {
+                <h1 class="heading-xlarge">Review your cohort</h1>
+            }
 
-            <h1 class="heading-xlarge">Review your cohort</h1>
+
         </div>
     </div>
 
@@ -82,13 +91,13 @@
 </div>
 
 <div class="grid-row">
-    <div class="column-one-half employer-details">
+    <div class="column-one-third employer-details">
         <p><span class="strong">Training provider:</span> @Model.Data.ProviderName</p>
         <p><span class="strong">Status:</span> @Model.Data.Status.GetDescription()</p>
     </div>
 
        
-    <div class="column-one-half employer-details">
+    <div class="column-two-thirds" employer-details">
             <p class="strong">Message:</p>
             <p>@(string.IsNullOrWhiteSpace(Model.Data.LatestMessage) ? "No message added" : Model.Data.LatestMessage)</p>
     </div>
@@ -99,17 +108,23 @@
         @{
             var finishEditingText = Model.Data.ShowApproveOnlyOption ? "Continue to approval" : "Save and continue";
         }
+        
+        @if (!Model.Data.IsReadOnly)
+        {
 
-        <div class="grid-row">
-            <div class="column-full">
-                <div class="emptyStateButton">
-                    <hr class="hr-top">
-                    <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="@finishEditingText">@finishEditingText</a>
-                    <a href="@Url.Action("CreateApprenticeshipEntry")" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
-                    <hr class="hr-bottom">
+            <div class="grid-row">
+                <div class="column-full">
+                    <div class="emptyStateButton">
+                        <hr class="hr-top">
+                        <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="@finishEditingText">@finishEditingText</a>
+                        <a href="@Url.Action("CreateApprenticeshipEntry")" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
+                    </div>
                 </div>
             </div>
-        </div>
+
+        }
+
+        <hr class="hr-bottom">
 
         @if (!Model.Data.HasApprenticeships)
         {
@@ -117,7 +132,18 @@
             <div class="grid-row" id="empty-alert-top">
                 <div class="column-full">
                     <div class="panel panel-border-wide alert-default">
-                        <p>You haven’t added any apprentices yet - <a href="@Url.Action("CreateApprenticeshipEntry")"> add an apprentice </a></p>
+                        
+                        @if (Model.Data.IsReadOnly)
+                        {
+                            <p>Apprentices will appear here when the training provider adds them to your cohort.</p>
+                        }
+                        else
+                        {
+                            <p>
+                                You haven’t added any apprentices yet - <a href="@Url.Action("CreateApprenticeshipEntry")"> add an apprentice </a>
+                            </p>
+                        }
+                            
                     </div>
                 </div>
             </div>
@@ -238,7 +264,14 @@
                                     }
                                                                                         
                                     <td>
-                                        <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>
+                                        @if (!Model.Data.IsReadOnly)
+                                        {
+                                            <a href="@Url.Action("EditApprenticeship", new {hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId})" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("ViewApprenticeship", new {hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId})" aria-label="Edit @apprenticeship.ApprenticeName">View</a>
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -256,7 +289,10 @@
 </div>
 </div>
 
-<a class="button delete-button" href="@Url.Action("DeleteCohort")" aria-label="Delete cohort">Delete cohort</a>
+@if (!Model.Data.IsReadOnly)
+{
+    <a class="button delete-button" href="@Url.Action("DeleteCohort")" aria-label="Delete cohort">Delete cohort</a>
+}
 
 @functions
 {
