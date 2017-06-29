@@ -47,8 +47,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("schemes/next")]
         public ActionResult NextSteps(string hashedAccountId)
         {
-         
-            return View();
+            var model = new OrchestratorResponse { FlashMessage = GetFlashMessageViewModelFromCookie() };
+            return View(model);
         }
 
         [HttpPost]
