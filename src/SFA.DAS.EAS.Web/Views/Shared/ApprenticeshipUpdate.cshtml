@@ -83,13 +83,6 @@
     { 
         <tr>
             <th scope="row">Cost</th>
-
-            @if (Model.IsDataLockOrigin)
-            {
-                <td>
-                    @Model.IlrEffectiveFromDate.Value.ToGdsFormat()
-                </td>
-            }
             <td>@Model.OriginalApprenticeship.Cost.FormatCost() </td>
             <td class="changed-item">@FormatCost(Model.Cost)</td>
             @Html.Hidden("Cost", Model.Cost)
