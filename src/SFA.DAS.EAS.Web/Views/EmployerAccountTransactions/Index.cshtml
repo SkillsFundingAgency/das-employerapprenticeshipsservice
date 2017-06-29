@@ -96,8 +96,8 @@
                 <tbody>
                     @foreach (var aggregationLine in Model.Data.Model.Data.TransactionLines)
                     {
-                        var fromDate = new DateTime(Model.Data.Year, Model.Data.Month, 1);
-                        var toDate = new DateTime(Model.Data.Year, Model.Data.Month, DateTime.DaysInMonth(Model.Data.Year, Model.Data.Month), 23, 59, 59);
+                        var fromDate = aggregationLine.DateCreated.Date;
+                        var toDate = new DateTime(aggregationLine.DateCreated.Year, aggregationLine.DateCreated.Month, aggregationLine.DateCreated.Day, 23, 59, 59);
 
                         <tr>
                             <td>
