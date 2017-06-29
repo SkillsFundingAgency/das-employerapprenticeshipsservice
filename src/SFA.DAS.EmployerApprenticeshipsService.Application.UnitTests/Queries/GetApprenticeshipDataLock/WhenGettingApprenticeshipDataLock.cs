@@ -6,6 +6,7 @@ using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock;
 using SFA.DAS.NLog.Logger;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDataLock
@@ -31,7 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDataLock
 
             var response = await handler.Handle(new GetApprenticeshipDataLockRequest { ApprenticeshipId = 123L });
 
-            response.DataLockStatus.DataLockEventId.Should().Be(3);
+            response.DataLockStatus.Count().Should().Be(3);
         }
     }
 }

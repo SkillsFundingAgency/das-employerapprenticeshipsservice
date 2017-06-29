@@ -32,6 +32,7 @@ using System.Net;
 using SFA.DAS.NLog.Logger;
 
 using SFA.DAS.EAS.Application.Commands.ResolveRequestedChanges;
+using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLockSummary;
 using SFA.DAS.EAS.Application.Queries.GetPriceHistoryQueryRequest;
 
@@ -248,12 +249,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     viewModel.HashedApprenticeshipId = hashedApprenticeshipId;
                     viewModel.ProviderName = apprenticeship.ProviderName;
 
-                    if (apprenticeship.DataLockTriageStatus == TriageStatus.Change)
-                    {
-                        viewModel.IsDataLockOrigin = true;
-                        viewModel.IlrEffectiveFromDate = await GetIlrEffectiveFromDate(apprenticeshipId);
-                   }
-
                     return new OrchestratorResponse<UpdateApprenticeshipViewModel>
                     {
                         Data = viewModel
@@ -366,14 +361,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
 
             }, hashedAccountId, externalUserId);
-        }
-
-        private async Task<DateTime?> GetIlrEffectiveFromDate(long apprenticeshipId)
-        {
-            var dataLock = await _mediator.SendAsync(
-                                new GetApprenticeshipDataLockRequest { ApprenticeshipId = apprenticeshipId });
-
-            return dataLock.DataLockStatus.IlrEffectiveFromDate;
         }
 
         private bool CanChangeDateStepBeSkipped(ChangeStatusType changeType, GetApprenticeshipQueryResponse data)
@@ -643,7 +630,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                         HashedApprenticeshipId = hashedApprenticeshipId,
                                         CurrentProgram = currentProgram,
                                         IlrProgram = newProgram,
-                                        PeriodStartData = dataLock.DataLockStatus.IlrEffectiveFromDate,
+                                        PeriodStartData = dataLock.IlrEffectiveFromDate,
                                         ProviderName = apprenticeship.Apprenticeship.ProviderName,
                                         LearnerName = apprenticeship.Apprenticeship.ApprenticeshipName,
                                         DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth
