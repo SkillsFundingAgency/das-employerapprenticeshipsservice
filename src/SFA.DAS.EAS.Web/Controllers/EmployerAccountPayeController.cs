@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.AccountPaye;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -47,7 +48,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("schemes/next")]
         public ActionResult NextSteps(string hashedAccountId)
         {
-            var model = new OrchestratorResponse { FlashMessage = GetFlashMessageViewModelFromCookie() };
+            var model = new OrchestratorResponse<PayeSchemeNextStepsViewModel> { FlashMessage = GetFlashMessageViewModelFromCookie(), Data = new PayeSchemeNextStepsViewModel() };
             return View(model);
         }
 
@@ -62,12 +63,11 @@ namespace SFA.DAS.EAS.Web.Controllers
                 case 2: return RedirectToAction("Index", "EmployerAccountTransactions");
                 case 3: return RedirectToAction("Index", "EmployerTeam");
                 default:
-
-                    var model = new
+                    var model = new OrchestratorResponse<PayeSchemeNextStepsViewModel>
                     {
-                        ErrorMessage = "You must select an option to continue."
+                        FlashMessage = GetFlashMessageViewModelFromCookie(),
+                        Data = new PayeSchemeNextStepsViewModel { ErrorMessage = "You must select an option to continue." }
                     };
-
                     return View(model); //No option entered
             }
         }
