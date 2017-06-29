@@ -4357,29 +4357,20 @@ h2 .float-right {
 
 .dynamic-cost-display .bold-xlarge {
   line-height: 82px;
+  font-size: 80px;
 }
 
 .dynamic-cost-display .short {
+  font-size: 67px;
+}
+
+.dynamic-cost-display .long {
   font-size: 48px;
-}
-
-.dynamic-cost-display .long {
-  font-size: 26px;
   line-height: 82px;
 }
 
 .dynamic-cost-display .longer {
-  font-size: 19px;
-  line-height: 82px;
-}
-
-.dynamic-cost-display .long {
-  font-size: 45px;
-  line-height: 82px;
-}
-
-.dynamic-cost-display .longer {
-  font-size: 32px;
+  font-size: 38px;
   line-height: 82px;
 }
 
@@ -4642,6 +4633,9 @@ Upda #edit-apprentices-detail .optional-ref {
     text-decoration: none;
     color: #0b0c0c;
     cursor: pointer;
+  }
+  #apprentice-details .finishEditingBtn {
+    margin-bottom: 20px;
   }
   .bubble-arrow, .overlap-arrow {
     display: none;
