@@ -108,7 +108,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             };
             AddFlashMessageToCookie(flashMessage);
 
-            return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
+            return RedirectToAction("OrganisationAddedNextSteps", "Organisation", new { hashedAccountId });
         }
 
         private ActionResult FindAddress(EmployerAccountData organisation)

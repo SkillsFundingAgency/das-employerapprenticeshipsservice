@@ -1,14 +1,16 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<string>
 
-@{ViewBag.PageID = "page-onboard-account-created-what-next"; }
-@{ViewBag.Title = "What Next"; }
+@{ViewBag.PageID = "page-onboard-organisation-added-what-next"; }
+@{
+    ViewBag.Title = "What Next";
+    ViewBag.Section = "organisations";
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1>What next?</h1>
+        <h1 class="heading-xlarge">What next?</h1>
         
         <form action="@Url.Action("GoToNextStep")" method="post">
-            <input type="hidden" name="hashedAccountId" value="@Model.Data" id ="hashedAccountId"/>
             <label for="acceptAgreement">
                 <span class="form-label-bold">Accept agreement in order to add apprentice</span>
             </label>
@@ -23,13 +25,7 @@
                 <span class="form-label-bold">Go back to your dashboard</span>
             </label>
             <input type="radio" aria-labelledby="NextStep" name="nextStep" value="dashboard" id="GoToDashboard"/>
-            <button type="submit">Continue</button>
+            <button type="submit" class="button">Continue</button>
         </form>
     </div>
 </div>
-
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("Summary", "EmployerAccount")" class="back-link">Back</a>
-    </div>
-}

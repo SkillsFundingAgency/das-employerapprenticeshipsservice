@@ -90,24 +90,22 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         public async Task ThenIShouldGoBackToTheEmployerTeamPage()
         {
             //Act
-            var result = await _employerAccountController.CreateAccount() as ViewResult;
+            var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
 
             //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("AccountCreatedNextSteps", result.ViewName);
+            Assert.AreEqual("Index", result.RouteValues["Action"]);
+            Assert.AreEqual("EmployerTeam", result.RouteValues["Controller"]);
         }
 
         [Test]
         public async Task ThenIShouldGetBackTheAccountId()
         {
             //Act
-            var result = await _employerAccountController.CreateAccount() as ViewResult;
-
-            var model = result?.Model as OrchestratorResponse<string>;
+            var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
 
             //Assert
-            Assert.IsNotNull(model);
-            Assert.AreEqual(HashedAccountId, model.Data);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(HashedAccountId, result.RouteValues["HashedAccountId"]);
         }
         
         [Test]
@@ -130,6 +128,29 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                     c.Sector.Equals(_accountData.Sector) &&
                     c.OrganisationReferenceNumber.Equals(_accountData.OrganisationReferenceNumber)
                 ), It.IsAny<HttpContextBase>()));
+        }
+
+        [Test]
+        public async Task ThenIfTheAccountIsSucessfullyCreatedThenTheFlashMessageIsAddedToCookieStorage()
+        {
+            //Act
+            await _employerAccountController.CreateAccount();
+
+            //Assert
+            _flashMessage.Verify(x => x.Create(It.Is<FlashMessageViewModel>(c => c.Headline.Equals("Account created") && c.Severity.Equals(FlashMessageSeverityLevel.Success)), "sfa-das-employerapprenticeshipsservice-flashmessage", 1), Times.Once);
+        }
+
+
+
+        [Test]
+        public async Task ThenIfTheAccountIsSucessfullyCreatedThenTheOrganisationTypeIsAddedToFlashMessageCookie()
+        {
+            //Act
+            await _employerAccountController.CreateAccount();
+
+            //Assert
+            _flashMessage.Verify(x => x.Create(It.Is<FlashMessageViewModel>(c => c.HiddenFlashMessageInformation.Equals("Charities")), "sfa-das-employerapprenticeshipsservice-flashmessage", 1), Times.Once);
+
         }
     }
 }

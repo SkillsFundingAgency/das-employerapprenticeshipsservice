@@ -183,36 +183,9 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Severity = FlashMessageSeverityLevel.Success
             };
 
-            return View("AccountCreatedNextSteps", new OrchestratorResponse<string>
-            {
-                Data = response.Data.EmployerAgreement.HashedAccountId,
-                FlashMessage = flashmessage
-            });
-        }
+            AddFlashMessageToCookie(flashmessage);
 
-        [HttpPost]
-        [Route("nextStep")]
-        public ActionResult GoToNextStep(string nextStep, string hashedAccountId)
-        {
-            switch (nextStep)
-            {
-                case "agreement": return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
-
-                case "addOrganisation": return RedirectToAction("AddOrganisation", "Organisation", new { hashedAccountId });
-                    
-                case "dashboard": return RedirectToAction("Index", "EmployerTeam", new { hashedAccountId });
-
-                default: return View("AccountCreatedNextSteps", new OrchestratorResponse<string>
-                                    {
-                                        Data = hashedAccountId,
-                                        FlashMessage = new FlashMessageViewModel
-                                        {
-                                            Headline = "Invalid next step chosen",
-                                            SubMessage = "Please select one of the next steps below",
-                                            Severity = FlashMessageSeverityLevel.Error
-                                        }
-                                    });
-            }
+            return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
         [HttpGet]
