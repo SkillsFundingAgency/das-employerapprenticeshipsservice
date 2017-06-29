@@ -45,9 +45,31 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("schemes/next")]
-        public ActionResult NextSteps()
+        public ActionResult NextSteps(string hashedAccountId)
         {
+         
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("schemes/next")]
+        public ActionResult NextSteps(int? choice)
+        {
+            switch (choice ?? 0)
+            {
+                case 1: return RedirectToAction("GatewayInform"); 
+                case 2: return RedirectToAction("Index", "EmployerAccountTransactions");
+                case 3: return RedirectToAction("Index", "EmployerTeam");
+                default:
+
+                    var model = new
+                    {
+                        ErrorMessage = "You must select an option to continue."
+                    };
+
+                    return View(model); //No option entered
+            }
         }
 
         [HttpGet]
@@ -124,7 +146,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             };
             AddFlashMessageToCookie(flashMessage);
 
-            return RedirectToAction("Index", "EmployerAccountPaye", new {model.HashedAccountId });
+            return RedirectToAction("NextSteps", "EmployerAccountPaye", new {model.HashedAccountId });
         }
 
         
