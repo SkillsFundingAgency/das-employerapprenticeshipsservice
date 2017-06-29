@@ -242,8 +242,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     viewModel.HashedAccountId = hashedAccountId;
                     viewModel.HashedApprenticeshipId = hashedApprenticeshipId;
                     viewModel.ProviderName = apprenticeship.ProviderName;
-                    viewModel.IsDataLockOrigin = 
-                        apprenticeship.DataLockTriageStatus == TriageStatus.Change;
+
+                    if (apprenticeship.DataLockTriageStatus == TriageStatus.Change)
+                    {
+                        viewModel.IsDataLockOrigin = true;
+                        viewModel.IlrEffectiveFromDate = await GetIlrEffectiveFromDate(apprenticeshipId);
+
+                    }
 
                     return new OrchestratorResponse<UpdateApprenticeshipViewModel>
                     {
@@ -357,6 +362,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
 
             }, hashedAccountId, externalUserId);
+        }
+
+        private async Task<DateTime?> GetIlrEffectiveFromDate(long apprenticeshipId)
+        {
+            var dataLock = await _mediator.SendAsync(
+                                new GetApprenticeshipDataLockRequest { ApprenticeshipId = apprenticeshipId });
+
+            return dataLock.DataLockStatus.IlrEffectiveFromDate;
         }
 
         private bool CanChangeDateStepBeSkipped(ChangeStatusType changeType, GetApprenticeshipQueryResponse data)
@@ -617,7 +630,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                         HashedApprenticeshipId = hashedApprenticeshipId,
                                         CurrentProgram = currentProgram,
                                         IlrProgram = newProgram,
-                                        PeriodStartData = new DateTime(2017, 08, 08),
+                                        PeriodStartData = dataLock.DataLockStatus.IlrEffectiveFromDate,
                                         ProviderName = apprenticeship.Apprenticeship.ProviderName,
                                         TriageStatus = dataLock.DataLockStatus.TriageStatus
                                     }
