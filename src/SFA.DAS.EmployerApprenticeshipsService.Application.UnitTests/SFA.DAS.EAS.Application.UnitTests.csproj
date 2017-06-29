@@ -221,6 +221,7 @@
     <Compile Include="Queries\GetAccountTransactionDetailTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIGetAccountTransactions.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLock\WhenGettingApprenticeshipDataLock.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLockSummary\WhenGettingApprenticeshipDataLockSummary.cs" />
     <Compile Include="Queries\GetApprenticeshipDetails\WhenIGetApprenticeshipDetails.cs" />
     <Compile Include="Queries\GetApprenticeshipDetails\WhenIValidateTheRequest.cs" />

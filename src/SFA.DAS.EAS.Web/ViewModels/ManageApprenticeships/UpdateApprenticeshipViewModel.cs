@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
 using FluentValidation.Attributes;
-
-using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.EAS.Web.Validators;
+using System;
 
 namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 {
@@ -40,5 +38,9 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public string ProviderName { get; set; }
 
         public string ChangesConfirmedError => GetErrorMessage(nameof(ChangesConfirmed));
+
+        public bool IsDataLockOrigin { get; set; }
+
+        public DateTime? IlrEffectiveFromDate { get; set; } // Applicable if it's from a datalock
     }
 }
