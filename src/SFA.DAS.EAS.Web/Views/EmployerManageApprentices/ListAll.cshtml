@@ -21,7 +21,7 @@
     </div>
 
     <div class="column-two-thirds">
-        @if (Model.Data.TotalApprenticeships == 0)
+        @if (Model.Data.TotalResults == 0)
         {
             <div class="panel panel-border-wide alert-default">
                 <p>Once you and your training provider have approved a cohort, the apprentices from that cohort will appear here.</p>
@@ -79,21 +79,10 @@
             }
         }
 
-        <ul class="previous-next-navigation">
-            <li class="previous">
-                <a href="#">
-                    Previous <span class="visuallyhidden">page</span>
-                    <span class="page-numbers">Apprentices 1 of 12</span>
-
-                </a>
-            </li>
-            <li class="next">
-                <a href="#">
-                    Next <span class="visuallyhidden">page</span>
-                    <span class="page-numbers">Apprentices 1 of 12</span>
-                </a>
-            </li>
-        </ul>
+        @if (Model.Data.Apprenticeships.Any())
+        {
+            Html.RenderPartial("Pagination", Model.Data);
+        }
     </div>
 </div>
 

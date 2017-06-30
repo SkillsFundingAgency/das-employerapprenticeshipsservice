@@ -394,6 +394,7 @@
     <Compile Include="ViewModels\CommitmentsIndexViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IPaginationViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ApprenticeshipFiltersViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusChoiceViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\DataLockStatusViewModel.cs" />
@@ -1054,6 +1055,7 @@
     <Content Include="Views\Settings\NotificationSettings.cshtml" />
     <Content Include="Views\EmployerCommitments\ViewApprenticeshipEntry.cshtml" />
     <Content Include="Views\EmployerManageApprentices\RequestChanges.cshtml" />
+    <Content Include="Views\Shared\Pagination.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

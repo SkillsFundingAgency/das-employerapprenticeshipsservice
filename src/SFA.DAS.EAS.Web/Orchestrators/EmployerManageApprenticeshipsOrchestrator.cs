@@ -117,7 +117,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     Apprenticeships = apprenticeships,
                     Filters = filterOptions,
-                    TotalApprenticeships = searchResponse.TotalApprenticeships,
+                    TotalResults = searchResponse.TotalApprenticeships,
                     PageNumber = searchResponse.PageNumber,
                     TotalPages = searchResponse.TotalPages,
                     PageSize = searchResponse.PageSize
