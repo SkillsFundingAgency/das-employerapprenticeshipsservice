@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Models.Organisation
+@model SFA.DAS.EAS.Web.OrchestratorResponse
 
 @{ 
     ViewBag.PageID = "search-for-organisation";
@@ -10,10 +11,10 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@ViewBag.Title</h1>
-        <form action="@Url.Action("SearchForOrganisationResults")" method="POST">
+        <form action="@Url.Action("SearchForOrganisation")" method="POST">
             <div class="form-group">
                 <label for="searchTerm">
-                    <span class="form-label-bold">Enter name</span>
+                    <span class="form-label-bold">Enter organisation name/number</span>
                 </label>
                 <input type="text" id="searchTerm" name="searchTerm" value="" class="form-control" />
             </div>
