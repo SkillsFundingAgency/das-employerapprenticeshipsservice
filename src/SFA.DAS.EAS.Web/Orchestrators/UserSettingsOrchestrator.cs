@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         
                         var accontSetting = settings.NotificationSettings.SingleOrDefault(m => m.AccountId == accountId);
                         if(accontSetting == null)
-                            throw new InvalidStateException($"cannot find account {accountId} for this user ({userRef})");
+                            throw new InvalidStateException($"Cannot find account {accountId} for this user {userRef}");
 
                         if (accontSetting.ReceiveNotifications)
                         {
