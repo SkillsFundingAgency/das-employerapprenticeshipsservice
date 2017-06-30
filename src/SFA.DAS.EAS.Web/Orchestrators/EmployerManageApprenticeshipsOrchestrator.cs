@@ -96,7 +96,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return await CheckUserAuthorization(async () =>
             {
-
                 var searchQuery = _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters);
 
                 var searchResponse = await _mediator.SendAsync(new ApprenticeshipSearchQueryRequest
@@ -118,7 +117,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     Apprenticeships = apprenticeships,
                     Filters = filterOptions,
-                    TotalApprenticeships = searchResponse.TotalApprenticeships
+                    TotalApprenticeships = searchResponse.TotalApprenticeships,
+                    PageNumber = searchResponse.PageNumber,
+                    TotalPages = searchResponse.TotalPages,
+                    PageSize = searchResponse.PageSize
                 };
 
                 return new OrchestratorResponse<ManageApprenticeshipsViewModel>
