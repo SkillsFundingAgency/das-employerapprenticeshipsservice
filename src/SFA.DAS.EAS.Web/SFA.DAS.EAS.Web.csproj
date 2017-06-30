@@ -557,6 +557,7 @@
     <Content Include="dist\css\images\option-select-toggle-sprite.png" />
     <Content Include="dist\css\images\pagination-arrow-sprite.png" />
     <Content Include="dist\javascripts\character-limit.js" />
+    <Content Include="dist\javascripts\length-limit.js" />
     <Content Include="dist\javascripts\payment-order.js" />
     <Content Include="Views\EmployerManageApprentices\EditStartedApprenticeship.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
