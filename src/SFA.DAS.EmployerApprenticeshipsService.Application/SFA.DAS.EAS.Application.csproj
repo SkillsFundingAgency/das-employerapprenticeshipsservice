@@ -151,6 +151,9 @@
     <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommand.cs" />
     <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommandHandler.cs" />
     <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommandValidator.cs" />
+    <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationCommand.cs" />
+    <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationHandler.cs" />
+    <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationValidator.cs" />
     <Compile Include="Commands\UpdatePayeInformation\UpdatePayeInformationCommand.cs" />
     <Compile Include="Commands\UpdatePayeInformation\UpdatePayeInformationCommandHandler.cs" />
     <Compile Include="Commands\UpdatePayeInformation\UpdatePayeInformationValidator.cs" />

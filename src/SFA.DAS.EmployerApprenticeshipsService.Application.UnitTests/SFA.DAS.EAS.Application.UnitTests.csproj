@@ -147,6 +147,8 @@
     <Compile Include="Commands\CreateApprenticeshipTests\WhenCreatingAnApprenticeship.cs" />
     <Compile Include="Commands\RemoveLegalEntityTests\WhenIRemoveALegalEntity.cs" />
     <Compile Include="Commands\RemoveLegalEntityTests\WhenIValidateTheCommand.cs" />
+    <Compile Include="Commands\UnsubscribeNotificationTest\WhenUnsubscribingFromNotification.cs" />
+    <Compile Include="Commands\UnsubscribeNotificationTest\WhenValidatingUnsubscribeCommand.cs" />
     <Compile Include="Commands\UpdateApprenticeshipStatusTests\WhenUpdatingApprenticeshipStatusToStopped.cs" />
     <Compile Include="Commands\UpdateApprenticeshipStatusTests\WhenValidatingTheUpdateApprenticeshipStatusCommand.cs" />
     <Compile Include="Commands\UpdateApprenticeshipStatusTests\WhenUpdatingApprenticeshipStatus.cs" />

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using NLog;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -60,5 +61,16 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("NotificationSettings");
         }
 
+        [HttpGet]
+        [Route("notifications/unsubscribe/{hashedAccountId}")]
+        public async Task<ActionResult> NotificationUnsubscribe(string hashedAccountId)
+        {
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            
+            var url = Url.Action("NotificationSettings");
+            var model = await _userSettingsOrchestrator.Unsubscribe(userIdClaim, hashedAccountId, url);
+
+            return View(model);
+        }
     }
 }
