@@ -17,6 +17,8 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class SearchOrganisationController : BaseController
     {
         private readonly SearchOrganisationOrchestrator _orchestrator;
+        //This is temporary until the existing add org function is replaced, at which point the method used can be moved to the org search orchestrator
+        private readonly OrganisationOrchestrator _organisationOrchestrator;
         private readonly IMapper _mapper;
 
 
@@ -25,11 +27,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             IFeatureToggle featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IMapper mapper)
+            IMapper mapper,
+            OrganisationOrchestrator organisationOrchestrator)
             : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             _orchestrator = orchestrator;
             _mapper = mapper;
+            _organisationOrchestrator = organisationOrchestrator;
         }
 
         [HttpGet]
@@ -48,50 +52,92 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View("SearchForOrganisationResults", model);
         }
-        
+
         [HttpPost]
-        [Route("{HashedAccountId}/organisations/select", Order = 0)]
-        [Route("organisations/select", Order = 1)]
-        public ActionResult SelectOrganisation(OrganisationDetailsViewModel viewModel)
+        [Route("{HashedAccountId}/organisations/search/confirm", Order = 0)]
+        [Route("organisations/search/confirm", Order = 1)]
+        public ActionResult Confirm(OrganisationDetailsViewModel viewModel)
         {
-            if (string.IsNullOrWhiteSpace(viewModel.Address))
-            {
-                var addressViewModel = _mapper.Map<FindOrganisationAddressViewModel>(viewModel);
-
-                var addressResponse = new OrchestratorResponse<FindOrganisationAddressViewModel>
-                {
-                    Data = addressViewModel
-                };
-                
-                return View("../EmployerAccountOrganisation/FindAddress", addressResponse);
-            }
-
-            var response = new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = viewModel,
-                Status = HttpStatusCode.OK
-            };
-
-            CreateOrganisationCookieData(response);
-
-            return RedirectToAction("GatewayInform", "EmployerAccount");
+            CreateOrganisationCookieData(viewModel);
+            return View(new ConfirmOrganisationViewModel { Name = viewModel.Name, Address = viewModel.Address });
         }
 
-        private void CreateOrganisationCookieData(OrchestratorResponse<OrganisationDetailsViewModel> response)
+        [HttpGet]
+        [Route("{HashedAccountId}/organisations/search/confirm", Order = 0)]
+        [Route("organisations/search/confirm", Order = 1)]
+        public async Task<ActionResult> Confirm(string hashedAccountId)
+        {
+            var organisation = _orchestrator.GetCookieData(HttpContext);
+
+            if (string.IsNullOrWhiteSpace(organisation.OrganisationRegisteredAddress))
+            {
+                return FindAddress(organisation);
+            }
+
+            if (string.IsNullOrEmpty(hashedAccountId))
+            {
+                return RedirectToAction("GatewayInform", "EmployerAccount");
+            }
+
+            return await CreateOrganisation(hashedAccountId, organisation);
+        }
+
+        private async Task<ActionResult> CreateOrganisation(string hashedAccountId, EmployerAccountData organisation)
+        {
+            var request = new CreateNewLegalEntityViewModel
+            {
+                HashedAccountId = hashedAccountId,
+                Name = organisation.OrganisationName,
+                Code = organisation.OrganisationReferenceNumber,
+                Address = organisation.OrganisationRegisteredAddress,
+                IncorporatedDate = organisation.OrganisationDateOfInception,
+                ExternalUserId = OwinWrapper.GetClaimValue(@"sub"),
+                LegalEntityStatus = null,
+                Source = (short)organisation.OrganisationType,
+                PublicSectorDataSource = organisation.PublicSectorDataSource,
+                Sector = organisation.Sector
+            };
+
+            var response = await _organisationOrchestrator.CreateLegalEntity(request);
+
+            var flashMessage = new FlashMessageViewModel
+            {
+                HiddenFlashMessageInformation = "page-organisations-added",
+                Headline = $"{response.Data.EmployerAgreement.LegalEntityName} has been added",
+                Severity = FlashMessageSeverityLevel.Success
+            };
+            AddFlashMessageToCookie(flashMessage);
+
+            return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
+        }
+
+        private ActionResult FindAddress(EmployerAccountData organisation)
+        {
+            var addressViewModel = _mapper.Map<FindOrganisationAddressViewModel>(organisation);
+
+            var addressResponse = new OrchestratorResponse<FindOrganisationAddressViewModel>
+            {
+                Data = addressViewModel
+            };
+
+            return View("../EmployerAccountOrganisation/FindAddress", addressResponse);
+        }
+
+        private void CreateOrganisationCookieData(OrganisationDetailsViewModel viewModel)
         {
             EmployerAccountData data;
-            if (response.Data?.Name != null)
+            if (viewModel?.Name != null)
             {
                 data = new EmployerAccountData
                 {
-                    OrganisationType = response.Data.Type,
-                    OrganisationReferenceNumber = response.Data.ReferenceNumber,
-                    OrganisationName = response.Data.Name,
-                    OrganisationDateOfInception = response.Data.DateOfInception,
-                    OrganisationRegisteredAddress = response.Data.Address,
-                    OrganisationStatus = response.Data.Status ?? string.Empty,
-                    PublicSectorDataSource = response.Data.PublicSectorDataSource,
-                    Sector = response.Data.Sector
+                    OrganisationType = viewModel.Type,
+                    OrganisationReferenceNumber = viewModel.OrganisationCode,
+                    OrganisationName = viewModel.Name,
+                    OrganisationDateOfInception = viewModel.DateOfInception,
+                    OrganisationRegisteredAddress = viewModel.Address,
+                    OrganisationStatus = viewModel.Status ?? string.Empty,
+                    PublicSectorDataSource = viewModel.PublicSectorDataSource,
+                    Sector = viewModel.Sector
                 };
             }
             else
