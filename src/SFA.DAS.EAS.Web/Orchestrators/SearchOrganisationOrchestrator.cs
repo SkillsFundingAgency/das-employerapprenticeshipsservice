@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             catch (InvalidRequestException ex)
             {
                 response.Exception = ex;
-                response.FlashMessage = new FlashMessageViewModel().CreateErrorFlashMessageViewModel(ex.ErrorMessages);
+                response.FlashMessage = FlashMessageViewModel.CreateErrorFlashMessageViewModel(ex.ErrorMessages);
                 response.Status = HttpStatusCode.BadRequest;
             }
 
