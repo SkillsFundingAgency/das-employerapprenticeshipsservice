@@ -56,7 +56,7 @@
             </li>
         }
 
-        @if (Model.PageNumber < Model.TotalPages)
+        @if (Model.TotalPages > 1 && Model.PageNumber < Model.TotalPages)
         {
             <li class="next">
                 <a href="@GetLinkForPage(Model.PageNumber + 1)">
