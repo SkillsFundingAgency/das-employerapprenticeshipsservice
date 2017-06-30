@@ -359,7 +359,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 default:
                     return View("OrganisationAddedNextSteps", new OrchestratorResponse<string>
                     {
-                        Data = hashedAccountId,
+                        Data = "Please select one of the next steps below",
                         FlashMessage = new FlashMessageViewModel
                         {
                             Headline = "Invalid next step chosen",

@@ -15,9 +15,9 @@
 
                 <legend>
                     <span class="vh">What's next?</span>
-                    @if (1 == 2)
+                    @if (!string.IsNullOrEmpty(Model.Data))
                     {
-                        <span class="error-message">You must select an option to continue.</span>
+                        <span class="error-message">@Model.Data</span>
                     }
                 </legend>
 

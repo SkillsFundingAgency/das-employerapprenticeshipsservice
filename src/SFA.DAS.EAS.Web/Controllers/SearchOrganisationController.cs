@@ -148,7 +148,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View("../EmployerAccountOrganisation/FindAddress", addressResponse);
         }
 
-<<<<<<< HEAD
         private OrchestratorResponse<T> CreateSearchTermValidationErrorModel<T>(T data)
         {
             var model = new OrchestratorResponse<T> { Data = data };
