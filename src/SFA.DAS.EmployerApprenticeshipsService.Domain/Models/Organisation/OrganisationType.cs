@@ -4,7 +4,7 @@ namespace SFA.DAS.EAS.Domain.Models.Organisation
 {
     public enum OrganisationType: short
     {
-        [Description("Companies House")]
+        [Description("Listed on Companies House")]
         CompaniesHouse = 1,
         [Description("Charities")]
         Charities = 2,
