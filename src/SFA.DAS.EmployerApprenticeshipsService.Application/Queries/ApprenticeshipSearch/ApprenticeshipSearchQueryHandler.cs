@@ -34,7 +34,10 @@ namespace SFA.DAS.EAS.Application.Queries.ApprenticeshipSearch
             {
                 Apprenticeships = data.Apprenticeships.ToList(),
                 Facets = data.Facets,
-                TotalApprenticeships = data.TotalApprenticeships
+                TotalApprenticeships = data.TotalApprenticeships,
+                PageNumber = data.PageNumber,
+                TotalPages = data.TotalPages,
+                PageSize = data.PageSize
             };
         }
     }
