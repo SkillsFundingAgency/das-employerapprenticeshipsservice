@@ -93,7 +93,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
 
             //Assert
-            Assert.IsNotNull(result);
             Assert.AreEqual("Index", result.RouteValues["Action"]);
             Assert.AreEqual("EmployerTeam", result.RouteValues["Controller"]);
         }
@@ -138,7 +137,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             await _employerAccountController.CreateAccount();
 
             //Assert
-            _flashMessage.Verify(x=>x.Create(It.Is<FlashMessageViewModel>(c=>c.Headline.Equals("Account created") && c.Severity.Equals(FlashMessageSeverityLevel.Success)),"sfa-das-employerapprenticeshipsservice-flashmessage",1),Times.Once);
+            _flashMessage.Verify(x => x.Create(It.Is<FlashMessageViewModel>(c => c.Headline.Equals("Account created") && c.Severity.Equals(FlashMessageSeverityLevel.Success)), "sfa-das-employerapprenticeshipsservice-flashmessage", 1), Times.Once);
         }
 
 

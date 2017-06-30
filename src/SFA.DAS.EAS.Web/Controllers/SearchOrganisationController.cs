@@ -133,7 +133,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             };
             AddFlashMessageToCookie(flashMessage);
 
-            return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
+            return RedirectToAction("OrganisationAddedNextSteps", "Organisation", new { hashedAccountId });
         }
 
         private ActionResult FindAddress(EmployerAccountData organisation)
@@ -148,7 +148,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View("../EmployerAccountOrganisation/FindAddress", addressResponse);
         }
 
-<<<<<<< HEAD
         private OrchestratorResponse<T> CreateSearchTermValidationErrorModel<T>(T data)
         {
             var model = new OrchestratorResponse<T> { Data = data };
