@@ -73,14 +73,6 @@
                 </tbody>
             </table>
 
-            if (!Model.Data.Apprenticeships.Any())
-            {
-                <div>There are currently no apprentices that match your search.</div>
-            }
-        }
-
-        @if (Model.Data.Apprenticeships.Any())
-        {
             Html.RenderPartial("Pagination", Model.Data);
         }
     </div>
