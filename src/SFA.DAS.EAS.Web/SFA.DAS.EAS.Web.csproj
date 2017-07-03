@@ -191,13 +191,11 @@
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.66.0.33236, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.66.0.33236\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.67.0.34274, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.67.0.34274\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.66.0.33236, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.66.0.33236\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.67.0.34274, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.67.0.34274\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.1.0.0.6634\lib\net45\SFA.DAS.Configuration.dll</HintPath>
@@ -235,11 +233,11 @@
       <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.2.0.0.6450\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.26805, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.26805\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.34273, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.34273\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Targets.Redis, Version=1.0.0.26805, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Targets.Redis.1.0.0.26805\lib\net45\SFA.DAS.NLog.Targets.Redis.dll</HintPath>
+    <Reference Include="SFA.DAS.NLog.Targets.Redis, Version=1.0.0.34273, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Targets.Redis.1.0.0.34273\lib\net45\SFA.DAS.NLog.Targets.Redis.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.1.0.12760, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -400,6 +398,7 @@
     <Compile Include="ViewModels\CommitmentsIndexViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IPaginationViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ApprenticeshipFiltersViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusChoiceViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\DataLockStatusViewModel.cs" />
@@ -562,6 +561,7 @@
     <Content Include="dist\css\images\option-select-toggle-sprite.png" />
     <Content Include="dist\css\images\pagination-arrow-sprite.png" />
     <Content Include="dist\javascripts\character-limit.js" />
+    <Content Include="dist\javascripts\length-limit.js" />
     <Content Include="dist\javascripts\payment-order.js" />
     <Content Include="Views\EmployerManageApprentices\EditStartedApprenticeship.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
@@ -1056,13 +1056,13 @@
     <Content Include="Views\EmployerAccountTransactions\CoursePaymentSummary.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipFilters.cshtml" />
     <Content Include="Views\EmployerManageApprentices\PaymentOrder.cshtml" />
-    <Content Include="Views\EmployerAccountTransactions\Index_ORG.cshtml" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="Views\Settings\NotificationSettings.cshtml" />
     <Content Include="Views\EmployerCommitments\ViewApprenticeshipEntry.cshtml" />
     <Content Include="Views\EmployerManageApprentices\RequestChanges.cshtml" />
     <Content Include="Views\Settings\NotificationUnsubscribe.cshtml" />
+    <Content Include="Views\Shared\Pagination.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
