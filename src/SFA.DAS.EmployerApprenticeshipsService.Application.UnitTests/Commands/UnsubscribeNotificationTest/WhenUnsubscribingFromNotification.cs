@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -122,7 +123,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UnsubscribeNotificationTest
         [Test]
         public async Task ShouldUnsubscribeFromOneAccount()
         {
+            List<UserNotificationSetting>  list = null;
+            _accountRepository.Setup(m => m.UpdateUserAccountSettings(It.IsAny<string>(), It.IsAny<List<UserNotificationSetting>>()))
+                .Returns(Task.FromResult(1L))
+               .Callback<string, List<UserNotificationSetting>>((m, l) => list = l );
+
             await _sut.Handle(_command);
+
+            list.Should().NotBeNull();
+            var setting = list.SingleOrDefault(m => m.AccountId == _command.AccountId);
+            setting.ReceiveNotifications.Should().BeFalse();
         }
 
         [Test]

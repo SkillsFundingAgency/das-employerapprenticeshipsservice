@@ -47,8 +47,7 @@ namespace SFA.DAS.EAS.Application.Commands.UnsubscribeNotification
             if(!setting.ReceiveNotifications)
                 throw new Exception($"Trying to unsubscribe from an already unsubscribed account, {command.AccountId}");
 
-            settings.ForEach(
-                m => { if (m.AccountId == command.AccountId) m.ReceiveNotifications = false; });
+            setting.ReceiveNotifications = false;
             await _accountRepository.UpdateUserAccountSettings(command.UserRef, settings);
 
             try
