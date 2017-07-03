@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Application.Commands.UnsubscribeNotification
             _validator.Validate(command);
             
             var settings = await _accountRepository.GetUserAccountSettings(command.UserRef);
-            var setting = settings.FirstOrDefault(m => m.AccountId == command.AccountId);
+            var setting = settings.SingleOrDefault(m => m.AccountId == command.AccountId);
             if (setting == null)
                 throw new Exception($"Missing settings for account {command.AccountId} and user with ref {command.UserRef}");
             if(!setting.ReceiveNotifications)
