@@ -60,11 +60,11 @@
                                         @{
                                             if (!p.MissingPriceHistory)
                                             {
-                                                <span>@p.CurrentCost.ToString("C")</span>
+                                                <span>@FormatCost(p.CurrentCost)</span>
                                             }
                                         }
                                     </td>
-                                    <td class="changed">@p.IlrCost.ToString("C")</td>
+                                    <td class="changed">@FormatCost(p.IlrCost)</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -112,4 +112,14 @@
     <div class="breadcrumbs">
         <a href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId} )" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
     </div>
+}
+
+@functions {
+    public string FormatCost(decimal? cost)
+    {
+        if (!cost.HasValue)
+            return string.Empty;
+
+        return $"£{cost.Value:n0}";
+    }
 }
