@@ -26,5 +26,6 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public List<string> RecordStatus { get; set; }
         public List<string> Provider { get; set; }
         public List<string> Course { get; set; }
+        public int PageNumber { get; set; }
     }
 }

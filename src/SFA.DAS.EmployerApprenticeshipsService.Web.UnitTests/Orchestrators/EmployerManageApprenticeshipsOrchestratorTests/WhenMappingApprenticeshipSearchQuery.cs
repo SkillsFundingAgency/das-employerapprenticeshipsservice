@@ -19,6 +19,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
 
             _filtersViewModel = new ApprenticeshipFiltersViewModel
             {
+                PageNumber = 18,
                 Status = new List<string>
                 {
                     ApprenticeshipStatus.Live.ToString(),
@@ -83,6 +84,16 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             //Assert
             Assert.AreEqual(4, result.TrainingCourses.Count);
             Assert.AreEqual("CourseId1", result.TrainingCourses[0]);
+        }
+
+        [Test]
+        public void ThenPageNumberIsMappedCorrectly()
+        {
+            //Act
+            var result = _mapper.MapToApprenticeshipSearchQuery(_filtersViewModel);
+
+            //Assert
+            Assert.AreEqual(18, result.PageNumber);
         }
     }
 }

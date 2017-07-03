@@ -24,6 +24,11 @@ namespace SFA.DAS.EAS.Web
             bundles.Add(new ScriptBundle("~/bundles/characterLimitation").Include(                
                     "~/dist/javascripts/character-limit.js"
                     ));
+
+            bundles.Add(new ScriptBundle("~/bundles/lengthLimitation").Include(
+                    "~/dist/javascripts/length-limit.js"
+                    ));
+
             bundles.Add(new ScriptBundle("~/bundles/paymentOrder").Include(
                   "~/dist/javascripts/payment-order.js"
                  ));
