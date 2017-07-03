@@ -38,7 +38,7 @@
                 Day
             </label>
 
-            @Html.TextBox("DateOfBirth.Day", Model.Apprenticeship.DateOfBirth.Day, new { @class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Day" })
+            @Html.TextBox("DateOfBirth.Day", Model.Apprenticeship.DateOfBirth.Day, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "31", aria_labelledby = "DateOfBirth.Day" })
 
         </div>
         <div class="form-group form-group-month">
@@ -46,7 +46,7 @@
                 Month
             </label>
 
-            @Html.TextBox("DateOfBirth.Month", Model.Apprenticeship.DateOfBirth.Month, new { @class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Month" })
+            @Html.TextBox("DateOfBirth.Month", Model.Apprenticeship.DateOfBirth.Month, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = "DateOfBirth.Month" })
 
         </div>
         <div class="form-group form-group-year">
@@ -54,7 +54,7 @@
                 Year
             </label>
 
-            @Html.TextBox("DateOfBirth.Year", Model.Apprenticeship.DateOfBirth.Year, new { @class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Year" })
+            @Html.TextBox("DateOfBirth.Year", Model.Apprenticeship.DateOfBirth.Year, new { @class = "form-control length-limit", type = "number", maxlength = "4", min = "1900", max = "9999", aria_labelledby = "DateOfBirth.Year" })
         </div>
     </div>
 </div>
@@ -101,14 +101,14 @@
                 Month
             </label>
 
-            @Html.TextBox("StartDate.Month", Model.Apprenticeship.StartDate.Month, new {@class = "form-control", type = "number", aria_labelledby = "StartDate.Month"})
+            @Html.TextBox("StartDate.Month", Model.Apprenticeship.StartDate.Month, new {@class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = "StartDate.Month"})
 
         </div>
         <div class="form-group form-group-month">
             <label for="StartDate.Year">
                 Year
             </label>
-            @Html.TextBox("StartDate.Year", Model.Apprenticeship.StartDate.Year, new {@class = "form-control", type = "number", aria_labelledby = "StartDate.Year"})
+            @Html.TextBox("StartDate.Year", Model.Apprenticeship.StartDate.Year, new {@class = "form-control length-limit", type = "number", maxlength = "4", min = "1900", max = "9999", aria_labelledby = "StartDate.Year"})
         </div>
     </div>
 
@@ -134,14 +134,14 @@
                 Month
             </label>
 
-            @Html.TextBox("EndDate.Month", Model.Apprenticeship.EndDate.Month, new {@class = "form-control", type = "number", aria_labelledby = "EndDate.Month"})
+            @Html.TextBox("EndDate.Month", Model.Apprenticeship.EndDate.Month, new {@class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = "EndDate.Month"})
 
         </div>
         <div class="form-group form-group-month">
             <label for="EndDate.Year">
                 Year
             </label>
-            @Html.TextBox("EndDate.Year", Model.Apprenticeship.EndDate.Year, new {@class = "form-control", type = "number", aria_labelledby = "EndDate.Year"})
+            @Html.TextBox("EndDate.Year", Model.Apprenticeship.EndDate.Year, new {@class = "form-control length-limit", type = "number", maxlength = "4", min = "1900", max = "9999", aria_labelledby = "EndDate.Year"})
         </div>
     </div>
 
