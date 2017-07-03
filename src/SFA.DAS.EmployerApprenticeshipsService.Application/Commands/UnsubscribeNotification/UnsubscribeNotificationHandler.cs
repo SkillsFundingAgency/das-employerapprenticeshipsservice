@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Application.Commands.UnsubscribeNotification
             return new Email
             {
                 RecipientsAddress = user.Email,
-                TemplateId = "UnsubscribeSuccessful",
+                TemplateId = "EmployerUnsubscribeAlertSummaryNotification",
                 ReplyToAddress = "noreply@sfa.gov.uk",
                 Subject = "UnsubscribeSuccessful",
                 SystemId = "x",
