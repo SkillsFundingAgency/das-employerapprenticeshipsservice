@@ -83,11 +83,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             UserRef = userRef
                         });
                         
-                        var accontSetting = settings.NotificationSettings.SingleOrDefault(m => m.AccountId == accountId);
-                        if(accontSetting == null)
-                            throw new InvalidStateException($"Cannot find account {accountId} for this user {userRef}");
+                        var userNotificationSettings = settings.NotificationSettings.SingleOrDefault(m => m.AccountId == accountId);
 
-                        if (accontSetting.ReceiveNotifications)
+                        if (userNotificationSettings == null)
+                            throw new InvalidStateException($"Cannot find user settings for user {userRef} in account {accountId}");
+
+                        if (userNotificationSettings.ReceiveNotifications)
                         {
                             await _mediator.SendAsync(
                                 new UnsubscribeNotificationCommand
@@ -96,14 +97,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                     AccountId = accountId,
                                     NotificationSettingUrl = settingUrl
                                 });
+
+                            _logger.Info("Unsubscribed from alerts for user {userRef} in account {accountId}");
+                        }
+                        else {
+
+                            _logger.Info("Already unsubscribed from alerts for user {userRef} in account {accountId}");
                         }
 
                         return new OrchestratorResponse<SummaryUnsubscribeViewModel>
                         {
                             Data = new SummaryUnsubscribeViewModel
                             {
-                                AlreadyUnsubscribed = !accontSetting.ReceiveNotifications,
-                                AccountName = accontSetting.Name
+                                AlreadyUnsubscribed = !userNotificationSettings.ReceiveNotifications,
+                                AccountName = userNotificationSettings.Name
                             }
                         };
                     }, hashedAccountId, userRef);

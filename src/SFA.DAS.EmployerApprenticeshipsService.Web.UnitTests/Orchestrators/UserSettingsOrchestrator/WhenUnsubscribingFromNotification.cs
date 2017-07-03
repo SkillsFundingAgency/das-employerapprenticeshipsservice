@@ -60,11 +60,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.UserSettingsOrchestrator
         }
 
         [Test]
-        public async Task CantFindSettingsForAccount()
+        public void CantFindSettingsForAccount()
         {
             Func<Task> act = async () => await _sut.Unsubscribe("REF", "ABBA777", "URL/to/Settings");
             act.ShouldThrow<Exception>()
-                .Where(m => m.Message == "Cannot find account 777 for this user REF");
+                .Where(m => m.Message == "Cannot find user settings for user REF in account 777");
         }
 
         [Test]
