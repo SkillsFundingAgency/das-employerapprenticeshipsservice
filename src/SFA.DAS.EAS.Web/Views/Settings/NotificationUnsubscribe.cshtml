@@ -1,0 +1,33 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.SummaryUnsubscribeViewModel>
+
+@{
+    ViewBag.Title = "Unsubscribe from notification";
+    ViewBag.PageId = "unsubscribe-notification";
+    ViewBag.HideNav = "true";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        @if (Model.Data.AlreadyUnsubscribed)
+        {
+            <h1 class="heading-xlarge">You've already unsubscribed</h1>
+
+            <p>You've already unsubscribed from notifications for @Model.Data.AccountName</p>
+
+            <p>You'll continue to receive important service email, such as password resets.</p>
+        }
+        else
+        {
+            <h1 class="heading-xlarge">Unsubscribe successful</h1>
+            <p>You've unsubscribed from any further email notification for @Model.Data.AccountName</p>
+
+            <p>You'll receive one final email to confirm that we've unsubscribed you.</p>
+
+            <p>You'll continue to receive important service email, such as password resets.</p>
+        }
+
+        @Html.ActionLink("View notification settings","NotificationSettings", null, new { @class = "button" })
+
+    </div>
+</div>
