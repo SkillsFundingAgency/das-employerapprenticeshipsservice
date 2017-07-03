@@ -12,9 +12,9 @@ SELECT
 	ld.PayrollYear as PayrollYear,
 	ld.PayrollMonth as PayrollMonth,
 	CASE 
-		x.submissionDate 
+		x.submissionid 
 	when 
-		ld.SubmissionDate then 1 
+		ld.submissionid then 1 
 	else 0 end as LastSubmission,
 	ld.CreatedDate,
 	ld.EndOfYearAdjustment,
@@ -28,6 +28,7 @@ FROM [employer_financial].[LevyDeclaration] ld
 left join
 (	
 	select 
+		max(submissionid) as submissionid,
 		max(submissionDate) as submissionDate, 
 		empRef ,
 		PayrollYear,
