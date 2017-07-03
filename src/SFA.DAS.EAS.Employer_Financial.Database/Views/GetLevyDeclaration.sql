@@ -26,15 +26,16 @@ SELECT
 	ld.HmrcSubmissionId AS HmrcSubmissionId
 FROM [employer_financial].[LevyDeclaration] ld
 left join
-(
+(	
 	select 
-		Max(submissionDate) submissionDate, 
+		max(submissionDate) as submissionDate, 
 		empRef ,
 		PayrollYear,
 		PayrollMonth
 	FROM 
 		[employer_financial].LevyDeclaration 
-	WHERE EndOfYearAdjustment = 0
+	WHERE EndOfYearAdjustment = 0 
+	and submissiondate < DATEADD(month,4, DATEFROMPARTS(DatePart(yyyy,GETDATE()),PayrollMonth,20))
 	group by empRef,PayrollYear,PayrollMonth
 )x on x.empRef = ld.empRef and x.PayrollMonth = ld.PayrollMonth and x.PayrollYear = ld.PayrollYear AND ld.EndOfYearAdjustment = 0
 
