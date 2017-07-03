@@ -4440,6 +4440,10 @@ h2 .float-right {
   overflow: auto;
 }
 
+.filter-option-select .options-container .item {
+  border-bottom: 1px solid #bfc1c3;
+}
+
 .filter-option-select .options-container label {
   font-size: 16px;
   line-height: 1.25;
@@ -4448,8 +4452,12 @@ h2 .float-right {
   font-weight: 400;
   text-transform: none;
   padding: 7px 0 7px 2px;
-  border-bottom: 1px solid #bfc1c3;
   cursor: pointer;
+  margin-left: 20px;
+}
+
+.filter-option-select .options-container input {
+  margin-left: -16px;
 }
 
 .filter-option-select .showHide {
