@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     svg_sprite: {
         svgsprites: {
             src: ['src/svg/*.svg'],
-            dest: 'dist',
+            dest: 'Views',
             options: {
                 shape: {
                     dimension: {
@@ -21,7 +21,8 @@ module.exports = function(grunt) {
                 },
                 mode: {
                     symbol: {
-                        dest: ''
+                        dest: 'Shared',
+                        sprite : '_SVGSprite.cshtml'
                     },
 
                 }
