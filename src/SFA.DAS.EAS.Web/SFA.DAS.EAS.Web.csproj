@@ -561,6 +561,12 @@
     <Content Include="dist\css\images\pagination-arrow-sprite.png" />
     <Content Include="dist\javascripts\character-limit.js" />
     <Content Include="dist\javascripts\payment-order.js" />
+    <Content Include="src\svg\arrows.svg" />
+    <Content Include="src\svg\chevron-left.svg" />
+    <Content Include="src\svg\chevron-right.svg" />
+    <Content Include="src\svg\cross.svg" />
+    <Content Include="src\svg\important.svg" />
+    <Content Include="src\svg\tick.svg" />
     <Content Include="Views\EmployerManageApprentices\EditStartedApprenticeship.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Compile Include="WebRole.cs" />
