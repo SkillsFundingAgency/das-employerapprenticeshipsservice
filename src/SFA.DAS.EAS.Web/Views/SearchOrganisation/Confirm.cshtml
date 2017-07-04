@@ -1,0 +1,32 @@
+@model SFA.DAS.EAS.Web.ViewModels.Organisation.ConfirmOrganisationViewModel
+@{ViewBag.PageID = "page-extra-confirm-organisation"; }
+@{
+    ViewBag.Title = "Confirm details";
+    ViewBag.Section = "organisations";
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            Check details
+        </h1>
+        <table>
+            <tr>
+                <th role="row">Organisation name</th>
+                <td class="responsive-td">@Model.Name</td>
+            </tr>
+            <tr>
+                <th role="row">Organisation address</th>
+                <td class="responsive-td">@Model.Address</td>
+            </tr>
+        </table>
+        
+        <form action="@Url.Action("Confirm")" method="GET">
+            <p class="heading-medium">Is this correct?</p>
+            <span>
+                <input class="button" type="submit" value="Yes, continue"/>
+                <a class="button button-link" href="@Url.Action("SearchForOrganisation")">No, search again</a>
+            </span>
+        </form>
+        
+    </div>
+</div>
