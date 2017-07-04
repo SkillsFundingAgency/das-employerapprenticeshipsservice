@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
                 _payeView
             });
 
-            _englishFractionsRepository.Setup(x => x.GetCurrentFractionForScheme(It.IsAny<string>()))
+            _englishFractionsRepository.Setup(x => x.GetCurrentFractionForScheme(It.IsAny<long>(), It.IsAny<string>()))
                                        .ReturnsAsync(_englishFraction);
 
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>()))
@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
 
             //Assert
             _accountRepository.Verify(x => x.GetPayeSchemesByAccountId(AccountId), Times.Once);
-            _englishFractionsRepository.Verify(x => x.GetCurrentFractionForScheme(_payeView.Ref), Times.Once);
+            _englishFractionsRepository.Verify(x => x.GetCurrentFractionForScheme(AccountId, _payeView.Ref), Times.Once);
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
 
             //Assert
             Assert.IsEmpty(result.PayeSchemes);
-            _englishFractionsRepository.Verify(x => x.GetCurrentFractionForScheme(It.IsAny<string>()), Times.Never);
+            _englishFractionsRepository.Verify(x => x.GetCurrentFractionForScheme(It.IsAny<long>(), It.IsAny<string>()), Times.Never);
         }
         
     }

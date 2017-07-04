@@ -7,7 +7,7 @@ AS
 select 
     tl.AccountId,
     tl.LevyDeclared as Amount,
-    isnull(t.Amount,1) as EnglishFraction,
+	coalesce(efo.Amount, t.Amount, 1) AS EnglishFraction,
     ldt.Amount as TopUp,
     tl.EmpRef,
 	null as CourseName,
@@ -37,6 +37,13 @@ OUTER APPLY
 		AND ef.[DateCalculated] <= tl.TransactionDate
 	ORDER BY [DateCalculated] DESC
 ) t
+outer apply
+(
+	SELECT top 1 Amount
+	FROM [employer_financial].[EnglishFractionOverride] o
+	WHERE o.AccountId = tl.AccountId and o.EmpRef = tl.empref AND o.DateFrom <= tl.TransactionDate
+	ORDER BY DateFrom DESC
+) efo
 where    tl.DateCreated >= @fromDate AND 
         tl.DateCreated <= @toDate AND 
         tl.AccountId = @accountId 

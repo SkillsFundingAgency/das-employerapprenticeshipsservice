@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Domain.Interfaces
 
         Task<ICollection<AccountBalance>> GetAllAccountBalances();
 
-        Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef);
+        Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef);
 
         Task<int> GetPreviousAccountTransaction(long AccountId, DateTime FromDate, string externalUserId);
     }
