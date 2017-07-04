@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (string.IsNullOrWhiteSpace(organisation.OrganisationRegisteredAddress))
             {
-                return FindAddress(organisation);
+                return FindAddress(CreateOrganisationDetailsViewModel(organisation));
             }
 
             if (string.IsNullOrEmpty(hashedAccountId))
@@ -136,7 +136,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("OrganisationAddedNextSteps", "Organisation", new { hashedAccountId });
         }
 
-        private ActionResult FindAddress(EmployerAccountData organisation)
+        private ActionResult FindAddress(OrganisationDetailsViewModel organisation)
         {
             var addressViewModel = _mapper.Map<FindOrganisationAddressViewModel>(organisation);
 
@@ -203,6 +203,21 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             _orchestrator.CreateCookieData(HttpContext, data);
+        }
+
+        private OrganisationDetailsViewModel CreateOrganisationDetailsViewModel(EmployerAccountData accountData)
+        {
+            return new OrganisationDetailsViewModel
+            {
+                Type = accountData.OrganisationType,
+                OrganisationCode = accountData.OrganisationReferenceNumber,
+                Name = accountData.OrganisationName,
+                DateOfInception = accountData.OrganisationDateOfInception,
+                Address = accountData.OrganisationRegisteredAddress,
+                Status = accountData.OrganisationStatus,
+                PublicSectorDataSource = accountData.PublicSectorDataSource,
+                Sector = accountData.Sector
+            };
         }
     }
 }
