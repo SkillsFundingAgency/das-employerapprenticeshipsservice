@@ -2,15 +2,12 @@
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using NLog;
+
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.EAS.Application.Queries.GetUserNotificationSettings;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Settings;
-using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests
@@ -18,7 +15,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
     [TestFixture]
     public class WhenManagingUserSettings
     {
-        private UserSettingsOrchestrator _orchestrator;
+        private Web.Orchestrators.UserSettingsOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
         private Mock<IHashingService> _hashingService;
@@ -32,7 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
 
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(() => 123);
 
-            _orchestrator = new UserSettingsOrchestrator(_mediator.Object, _hashingService.Object, _logger.Object);
+            _orchestrator = new Web.Orchestrators.UserSettingsOrchestrator(_mediator.Object, _hashingService.Object, _logger.Object);
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserNotificationSettingsQuery>()))
                 .ReturnsAsync(new GetUserNotificationSettingsQueryResponse
