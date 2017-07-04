@@ -57,4 +57,5 @@ outer apply
 	SELECT top 1 Amount
 	FROM [employer_financial].[EnglishFractionOverride] o
 	WHERE o.AccountId = ld.AccountId and o.EmpRef = ld.empref AND o.DateFrom <= ld.SubmissionDate
+	ORDER BY DateFrom DESC
 ) efo

@@ -13,12 +13,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory
         private readonly IValidator<GetEmployerEnglishFractionQuery> _validator;
         private readonly IDasLevyService _dasLevyService;
         private readonly IMediator _mediator;
+        private readonly IHashingService _hashingService;
 
-        public GetEmployerEnglishFractionHandler(IValidator<GetEmployerEnglishFractionQuery> validator, IDasLevyService dasLevyService, IMediator mediator)
+        public GetEmployerEnglishFractionHandler(IValidator<GetEmployerEnglishFractionQuery> validator, IDasLevyService dasLevyService, IMediator mediator, IHashingService hashingService)
         {
             _validator = validator;
             _dasLevyService = dasLevyService;
             _mediator = mediator;
+            _hashingService = hashingService;
         }
 
         public async Task<GetEmployerEnglishFractionResponse> Handle(GetEmployerEnglishFractionQuery message)
@@ -35,7 +37,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory
                 throw new UnauthorizedAccessException();
             }
 
-            var result = (await _dasLevyService.GetEnglishFractionHistory(message.EmpRef)).ToList();
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+            var result = (await _dasLevyService.GetEnglishFractionHistory(accountId, message.EmpRef)).ToList();
 
             var schemeInformation = await _mediator.SendAsync(new GetPayeSchemeInUseQuery {Empref = message.EmpRef});
 

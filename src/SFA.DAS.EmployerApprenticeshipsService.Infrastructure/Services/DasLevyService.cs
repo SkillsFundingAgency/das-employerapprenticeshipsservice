@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     public class DasLevyService : IDasLevyService
     {
         private readonly IMediator _mediator;
-        
+
         public DasLevyService(IMediator mediator)
         {
             _mediator = mediator;
@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         }
 
         public async Task<ICollection<T>> GetAccountCoursePaymentsByDateRange<T>(
-            long accountId, long ukprn, string courseName, int courseLevel, int? pathwayCode, DateTime fromDate, 
+            long accountId, long ukprn, string courseName, int courseLevel, int? pathwayCode, DateTime fromDate,
             DateTime toDate, string externalUserId) where T : TransactionLine
         {
             var result = await _mediator.SendAsync(new GetAccountCoursePaymentsQuery
@@ -94,12 +94,13 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return result.Accounts;
         }
 
-        public async Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef)
+        public async Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef)
         {
             var result = await _mediator.SendAsync(new GetEnglishFractionDetailByEmpRefQuery
-                    {
-                        EmpRef = empRef
-                    });
+            {
+                AccountId = accountId,
+                EmpRef = empRef
+            });
 
             return result.FractionDetail;
         }
