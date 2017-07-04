@@ -38,13 +38,13 @@
                     <legend class="vh">Filter by organisation type</legend>
                     <h3>Organisation type</h3>
                     <label class="block-label selection-button-radio" for="company">
-                        <input id="company" type="radio" name="organisationType" value="CompaniesHouse" @(Model.Data.OrganisationType == OrganisationType.CompaniesHouse ? "checked=\"checked\"" : "") /> Listed on Companies House
+                        <input id="company" type="radio" name="organisationType" value="CompaniesHouse" @(Model.Data.OrganisationType == OrganisationType.CompaniesHouse ? "checked=\"checked\"" : "") /> Company
                     </label>
                     <label class="block-label selection-button-radio" for="charity">
                         <input id="charity" type="radio" name="organisationType" value="Charities" @(Model.Data.OrganisationType == OrganisationType.Charities ? "checked=\"checked\"" : "") /> Charity
                     </label>
                     <label class="block-label selection-button-radio" for="publicSector">
-                        <input id="publicSector" type="radio" name="organisationType" value="PublicBodies" @(Model.Data.OrganisationType == OrganisationType.PublicBodies ? "checked=\"checked\"" : "") /> Public sector & other
+                        <input id="publicSector" type="radio" name="organisationType" value="PublicBodies" @(Model.Data.OrganisationType == OrganisationType.PublicBodies ? "checked=\"checked\"" : "") /> Public sector
                     </label>
                     <label class="block-label selection-button-radio" for="all">
                         <input id="all" type="radio" name="organisationType" value="" @(Model.Data.OrganisationType == null ? "checked=\"checked\"" : "") /> Show all
