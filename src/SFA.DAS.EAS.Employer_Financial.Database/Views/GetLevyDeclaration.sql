@@ -27,17 +27,17 @@ SELECT
 FROM [employer_financial].[LevyDeclaration] ld
 left join
 (	
-	select 
-		max(submissionid) as submissionid,
-		max(submissionDate) as submissionDate, 
-		empRef ,
-		PayrollYear,
-		PayrollMonth
-	FROM 
-		[employer_financial].LevyDeclaration 
-	WHERE EndOfYearAdjustment = 0 
+	select max(submissionid) submissionid,empRef,PayrollMonth,PayrollYear from
+	[employer_financial].LevyDeclaration xld
+	where submissiondate in 
+		(select max(submissiondate) from [employer_financial].LevyDeclaration WHERE EndOfYearAdjustment = 0 
+		and submissiondate < DATEADD(month,4, DATEFROMPARTS(DatePart(yyyy,GETDATE()),PayrollMonth,20))
+		and PayrollYear = xld.PayrollYear
+		and PayrollMonth = xld.PayrollMonth
+		and empRef = xld.empRef
+		group by empRef,PayrollYear,PayrollMonth)
 	and submissiondate < DATEADD(month,4, DATEFROMPARTS(DatePart(yyyy,GETDATE()),PayrollMonth,20))
-	group by empRef,PayrollYear,PayrollMonth
+		group by empRef,PayrollYear,PayrollMonth
 )x on x.empRef = ld.empRef and x.PayrollMonth = ld.PayrollMonth and x.PayrollYear = ld.PayrollYear AND ld.EndOfYearAdjustment = 0
 
 OUTER APPLY
@@ -54,3 +54,5 @@ outer apply
 	from [employer_financial].[TopUpPercentage] tp
 	WHERE tp.[DateFrom] <= ld.[SubmissionDate]
 ) w
+
+GO
