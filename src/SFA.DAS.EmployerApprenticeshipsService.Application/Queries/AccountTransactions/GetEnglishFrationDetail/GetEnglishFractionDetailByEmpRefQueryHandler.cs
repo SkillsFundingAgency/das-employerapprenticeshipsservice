@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetEnglishFrationD
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var fractionDetail = await _dasLevyRepository.GetEnglishFractionHistory(message.EmpRef);
+            var fractionDetail = await _dasLevyRepository.GetEnglishFractionHistory(message.AccountId, message.EmpRef);
 
             return new GetEnglishFractionDetailResposne {FractionDetail = fractionDetail};
         }

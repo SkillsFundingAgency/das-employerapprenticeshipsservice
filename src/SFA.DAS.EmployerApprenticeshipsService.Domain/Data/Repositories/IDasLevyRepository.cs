@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task CreatePaymentData(PaymentDetails paymentDetails);
         Task<Payment> GetPaymentData(Guid paymentId);
         Task ProcessPaymentData();
-        Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef);
+        Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef);
 
     }
 }

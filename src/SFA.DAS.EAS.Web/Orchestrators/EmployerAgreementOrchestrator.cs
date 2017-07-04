@@ -374,14 +374,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<bool>>  RemoveLegalAgreement(ConfirmLegalAgreementToRemoveViewModel model, string userId)
         {
             var response = new OrchestratorResponse<bool>();
-            var errorModel = new FlashMessageViewModel();
             try
             {
                 if (model.RemoveOrganisation == null)
                 {
                     response.Status = HttpStatusCode.BadRequest;
                     response.FlashMessage =
-                        errorModel.CreateErrorFlashMessageViewModel(new Dictionary<string, string>
+                        FlashMessageViewModel.CreateErrorFlashMessageViewModel(new Dictionary<string, string>
                         {
                             {"RemoveOrganisation", "Confirm you wish to remove the organisation"}
                         });
@@ -412,7 +411,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 
                 response.Status = HttpStatusCode.BadRequest;
-                response.FlashMessage = errorModel.CreateErrorFlashMessageViewModel(ex.ErrorMessages);
+                response.FlashMessage = FlashMessageViewModel.CreateErrorFlashMessageViewModel(ex.ErrorMessages);
                 response.Exception = ex;
             }
             catch (UnauthorizedAccessException ex)
