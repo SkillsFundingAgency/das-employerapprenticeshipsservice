@@ -103,6 +103,7 @@
     <Build Include="Tables\LevyOverride.sql" />
     <Build Include="Views\GetLevyDeclaration.sql" />
     <Build Include="StoredProcedures\GetPaymentDetail_ByAccountProviderCourseAndDateRange.sql" />
+    <Build Include="Tables\EnglishFractionOverride.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

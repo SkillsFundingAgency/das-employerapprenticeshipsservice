@@ -7,7 +7,7 @@ SELECT
 	ld.SubmissionDate AS SubmissionDate,
 	ld.SubmissionId AS SubmissionId,
 	ld.LevyDueYTD AS LevyDueYTD,
-	isnull(t.Amount,1) AS EnglishFraction,
+	coalesce(efo.Amount, t.Amount, 1) AS EnglishFraction,
 	w.amount as TopUpPercentage,
 	ld.PayrollYear as PayrollYear,
 	ld.PayrollMonth as PayrollMonth,
@@ -52,3 +52,9 @@ outer apply
 	from [employer_financial].[TopUpPercentage] tp
 	WHERE tp.[DateFrom] <= ld.[SubmissionDate]
 ) w
+outer apply
+(
+	SELECT top 1 Amount
+	FROM [employer_financial].[EnglishFractionOverride] o
+	WHERE o.AccountId = ld.AccountId and o.EmpRef = ld.empref AND o.DateFrom <= ld.SubmissionDate
+) efo
