@@ -42,34 +42,18 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task<DasEnglishFraction> GetEmployerFraction(DateTime dateCalculated, string employerReference)
+        public async Task<DasEnglishFraction> GetCurrentFractionForScheme(long accountId, string employerReference)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@dateCalculated", dateCalculated, DbType.DateTime);
+                parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@empRef", employerReference, DbType.String);
 
                 return await c.QueryAsync<DasEnglishFraction>(
-                    sql: "SELECT * FROM [employer_financial].[EnglishFraction] WHERE EmpRef = @empRef AND DateCalculated = @dateCalculated;",
+                    sql: "[employer_financial].[GetCurrentFractionForScheme]",
                     param: parameters,
-                    commandType: CommandType.Text);
-            });
-
-            return result.FirstOrDefault();
-        }
-
-        public async Task<DasEnglishFraction> GetCurrentFractionForScheme(string employerReference)
-        {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@empRef", employerReference, DbType.String);
-
-                return await c.QueryAsync<DasEnglishFraction>(
-                    sql: "SELECT top 1 * FROM [employer_financial].[EnglishFraction] WHERE EmpRef = @empRef Order by DateCalculated desc;",
-                    param: parameters,
-                    commandType: CommandType.Text);
+                    commandType: CommandType.StoredProcedure);
             });
 
             return result.FirstOrDefault();

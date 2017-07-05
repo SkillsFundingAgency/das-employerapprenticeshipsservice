@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Microsoft.Owin.Security.Provider;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
@@ -183,7 +184,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             };
 
             AddFlashMessageToCookie(flashmessage);
-            
+
             return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
@@ -237,5 +238,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
             return userIdClaim ?? "";
         }
+
+      
     }
 }

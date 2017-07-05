@@ -27,10 +27,10 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h2 class="heading-large">Accept this agreement</h2>
+        <h2 class="heading-large">Sign this agreement</h2>
         <table>
             <tr>
-                <th scope="row" class="no-wrap">Accepted by:</th>
+                <th scope="row" class="no-wrap">Signed by:</th>
                 <td>@Model.Data.EmployerAgreement.SignedByName</td>
             </tr>
             <tr>
@@ -42,16 +42,16 @@
                 <td>@Model.Data.EmployerAgreement.LegalEntityAddress</td>
             </tr>
             <tr>
-                <th scope="row" class="no-wrap">Accepted on:</th>
+                <th scope="row" class="no-wrap">Signed on:</th>
                 <td>@DateTime.Today.ToString("dd/MM/yyyy")</td>
             </tr>
 
         </table>
         <form method="post" action="@Url.Action("Sign","EmployerAgreement")">
             @Html.AntiForgeryToken()
-            <input class="button" type="submit" value="Accept now" />
+            <input class="button" type="submit" value="Sign now" />
         </form>
-        <p class="legal-warning"><span class="icon"></span>This agreement is legally binding. You must have authority from your organisation to accept it.</p>
+        <p class="legal-warning"><span class="icon"></span>This agreement is legally binding. You must have authority from your organisation to sign it.</p>
     </div>
 </div>
 

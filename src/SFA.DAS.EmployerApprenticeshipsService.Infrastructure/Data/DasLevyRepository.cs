@@ -266,11 +266,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 commandType: CommandType.StoredProcedure));
         }
 
-        public async Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef)
+        public async Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@empRef", empRef, DbType.String);
 
                 return await c.QueryAsync<DasEnglishFraction>(
