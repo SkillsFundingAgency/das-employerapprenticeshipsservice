@@ -13,7 +13,7 @@ module.exports = function(grunt) {
                         maxHeight: 40
                     },
                     id: {
-                        separator: '-'
+                        generator: function (name, file) { return "icon-" + file.stem; },
                     },
                     spacing: {
                         padding: 5
