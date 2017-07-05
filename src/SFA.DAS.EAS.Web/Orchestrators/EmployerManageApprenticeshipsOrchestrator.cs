@@ -657,6 +657,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                     var priceHistory = await _mediator.SendAsync(new GetPriceHistoryQueryRequest
                     {
+                        AccountId = accountId,
                         ApprenticeshipId = apprenticeshipId
                     });
 

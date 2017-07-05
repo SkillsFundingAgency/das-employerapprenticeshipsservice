@@ -13,17 +13,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipPriceHistor
     [TestFixture]
     public class WhenGettingApprenticeshipPriceHistory
     {
-        private Mock<IApprenticeshipApi> _apprenticeshipApi;
+        private Mock<IEmployerCommitmentApi> _commitmentApi;
         private GetPriceHistoryQueryHandler _handler;
 
         [SetUp]
         public void Arrange()
         {
-            _apprenticeshipApi = new Mock<IApprenticeshipApi>();
-            _apprenticeshipApi.Setup(x => x.GetPriceHistory(It.IsAny<long>()))
+            _commitmentApi = new Mock<IEmployerCommitmentApi>();
+            _commitmentApi.Setup(x => x.GetPriceHistory(It.IsAny<long>(), It.IsAny<long>()))
                 .ReturnsAsync(new List<PriceHistory>());
 
-            _handler = new GetPriceHistoryQueryHandler(_apprenticeshipApi.Object);
+            _handler = new GetPriceHistoryQueryHandler(_commitmentApi.Object);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipPriceHistor
             await _handler.Handle(query);
 
             //Assert
-            _apprenticeshipApi.Verify(x => x.GetPriceHistory(It.Is<long>(id => id == 1)), Times.Once);
+            _commitmentApi.Verify(x => x.GetPriceHistory(It.IsAny<long>(), 1), Times.Once);
         }
     }
 }
