@@ -36,7 +36,7 @@ left join
 		and PayrollMonth = xld.PayrollMonth
 		and empRef = xld.empRef
 		group by empRef,PayrollYear,PayrollMonth)
-	and submissiondate < DATEADD(month,4, DATEFROMPARTS(DatePart(yyyy,GETDATE()),PayrollMonth,20))
+	and submissiondate < [employer_financial].[CalculateSubmissionCutoffDate](PayrollMonth)
 		group by empRef,PayrollYear,PayrollMonth
 )x on x.empRef = ld.empRef and x.PayrollMonth = ld.PayrollMonth and x.PayrollYear = ld.PayrollYear AND ld.EndOfYearAdjustment = 0
 
@@ -45,19 +45,19 @@ OUTER APPLY
 	SELECT TOP 1 Amount
 	FROM [employer_financial].[EnglishFraction] ef
 	WHERE ef.EmpRef = ld.empRef 
-		AND ef.[DateCalculated] <= ld.[SubmissionDate]
+		AND ef.[DateCalculated] <= [employer_financial].[CalculateSubmissionCutoffDate](ld.PayrollMonth)
 	ORDER BY [DateCalculated] DESC
 ) t
 outer apply
 (
 	SELECT top 1 Amount
 	from [employer_financial].[TopUpPercentage] tp
-	WHERE tp.[DateFrom] <= ld.[SubmissionDate]
+	WHERE tp.[DateFrom] <= [employer_financial].[CalculateSubmissionCutoffDate](ld.PayrollMonth)
 ) w
 outer apply
 (
 	SELECT top 1 Amount
 	FROM [employer_financial].[EnglishFractionOverride] o
-	WHERE o.AccountId = ld.AccountId and o.EmpRef = ld.empref AND o.DateFrom <= ld.SubmissionDate
+	WHERE o.AccountId = ld.AccountId and o.EmpRef = ld.empref AND o.DateFrom <= [employer_financial].[CalculateSubmissionCutoffDate](ld.PayrollMonth)
 	ORDER BY DateFrom DESC
 ) efo
