@@ -8,5 +8,6 @@ namespace SFA.DAS.EAS.Domain.Models.UserView
         public string Action { get; set; }
         public bool SplitAccessAcrossUsers { get; set; }
         public List<ViewAccess> Views { get; set; }
+        public bool UserCache { get; set; }
     }
 }

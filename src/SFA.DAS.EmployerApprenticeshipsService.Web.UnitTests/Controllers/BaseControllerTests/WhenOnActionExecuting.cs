@@ -229,6 +229,50 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
             _multiVariantTestingService.Verify(x=>x.GetRandomViewNameToShow(It.IsAny<List<ViewAccess>>()), Times.Once);
         }
 
+        [Test]
+        public void WhenTheViewReturnedFromTheMultiVariantTestingServiceHasSplitAccessAcrossUsersToTrueAndTheUserCacheIsTrueThenTheViewIsRandomlyReturnedFirstAndTheSameReturnedInSubsequentCalls()
+        {
+            //Arrange
+            var routes = new RouteData();
+            routes.Values["action"] = "TestFeatureView";
+            routes.Values["controller"] = "Test";
+            _controllerContext.Setup(x => x.RouteData).Returns(routes);
+            _multiVariantTestingService.Setup(x => x.GetRandomViewNameToShow(It.IsAny<List<ViewAccess>>())).Returns("someview");
+            _multiVariantTestingService.Setup(x => x.GetMultiVariantViews()).Returns(new MultiVariantViewLookup
+            {
+                Data = new List<MultiVariantView>
+                {
+                    new MultiVariantView
+                    {
+                        Controller = "Test",
+                            Action = "TestFeatureView",
+                            SplitAccessAcrossUsers = true,
+                            UserCache = true,
+                            Views = new List<ViewAccess>
+                            {
+                               new ViewAccess
+                               {
+                                   ViewName = "TestView_2"
+                               }
+                            }
+                    }
+                }
+            });
+
+            //Act
+            Invoke(() => _controller.TestFeatureView());
+            Invoke(() => _controller.TestFeatureView());
+            var actual = Invoke(() => _controller.TestFeatureView());
+            var actual1 = Invoke(() => _controller.TestFeatureView());
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.IsNotNull(actual1);
+            Assert.IsInstanceOf<ViewResult>(actual);
+            Assert.IsInstanceOf<ViewResult>(actual1);
+            Assert.AreEqual(((ViewResult)actual1).ViewName, ((ViewResult)actual).ViewName);
+        }
+
         internal class TestController : BaseController
         {
             public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
