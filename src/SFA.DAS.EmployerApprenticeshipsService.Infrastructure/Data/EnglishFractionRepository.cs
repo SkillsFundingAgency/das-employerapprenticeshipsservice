@@ -42,21 +42,28 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task<DasEnglishFraction> GetCurrentFractionForScheme(long accountId, string employerReference)
+        public async Task<IEnumerable<DasEnglishFraction>> GetCurrentFractionForSchemes(long accountId, IEnumerable<string> employerReferences)
         {
-            var result = await WithConnection(async c =>
+            var currentFractions = new List<DasEnglishFraction>();
+            await WithConnection(async c =>
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int64);
-                parameters.Add("@empRef", employerReference, DbType.String);
+                foreach (var employerReference in employerReferences)
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@accountId", accountId, DbType.Int64);
+                    parameters.Add("@empRef", employerReference, DbType.String);
 
-                return await c.QueryAsync<DasEnglishFraction>(
-                    sql: "[employer_financial].[GetCurrentFractionForScheme]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
+                    var currentFraction = await c.QueryAsync<DasEnglishFraction>(
+                        sql: "[employer_financial].[GetCurrentFractionForScheme]",
+                        param: parameters,
+                        commandType: CommandType.StoredProcedure);
+
+                    currentFractions.Add(currentFraction.FirstOrDefault());
+                }
+                return 0;
             });
 
-            return result.FirstOrDefault();
+            return currentFractions;
         }
 
         public async Task<IEnumerable<DasEnglishFraction>> GetAllEmployerFractions(string employerReference)
