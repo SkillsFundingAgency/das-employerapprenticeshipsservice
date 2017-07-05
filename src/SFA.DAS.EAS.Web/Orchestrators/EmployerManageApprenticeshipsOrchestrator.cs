@@ -607,7 +607,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
 
                         var dataLockSummary = await _mediator.SendAsync(
-                            new GetDataLockSummaryQueryRequest { ApprenticeshipId = apprenticeshipId });
+                            new GetDataLockSummaryQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
 
                         //var dataLock = dataLocks.DataLockStatus
                         //    .First(m => m.TriageStatus == TriageStatus.Restart);
@@ -650,7 +650,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 async () =>
                 {
                     var dataLockSummary = await _mediator.SendAsync(
-                            new GetDataLockSummaryQueryRequest { ApprenticeshipId = apprenticeshipId });
+                            new GetDataLockSummaryQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
 
                     if (dataLockSummary.DataLockSummary.DataLockWithOnlyPriceMismatch.Count() == 0)
                             throw new InvalidStateException($"Apprenticeship does not contain any price data locks. Apprenticeship: {apprenticeshipId}");
@@ -691,12 +691,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         await _mediator.SendAsync(
                             new ResolveRequestedChangesCommand
                             {
+                                AccountId = accountId,
                                 ApprenticeshipId = apprenticeshipId,
                                 Approved = approved,
                                 TriageStatus = TriageStatus.Change,
                                 UserId = user
                             });
-                        
                     },
                 hashedAccountId,
                 user);

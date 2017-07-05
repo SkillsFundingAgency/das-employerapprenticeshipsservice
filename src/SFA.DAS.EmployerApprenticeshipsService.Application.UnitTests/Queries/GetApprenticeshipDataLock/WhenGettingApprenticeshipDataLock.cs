@@ -14,13 +14,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDataLock
     [TestFixture]
     public sealed class WhenGettingApprenticeshipDataLock
     {
-        private Mock<IDataLockApi> _mockDataLockApi;
+        private Mock<IEmployerCommitmentApi> _commitmentsApi;
 
         [Test]
         public async Task ShouldFilterForFailedDataLocks()
         {
-            _mockDataLockApi = new Mock<IDataLockApi>();
-            _mockDataLockApi.Setup(x => x.GetDataLocks(123L)).ReturnsAsync(new List<DataLockStatus>
+            _commitmentsApi = new Mock<IEmployerCommitmentApi>();
+            _commitmentsApi.Setup(x => x.GetDataLocks(666, 123L)).ReturnsAsync(new List<DataLockStatus>
             {
                 new DataLockStatus { DataLockEventId = 1, Status = Commitments.Api.Types.DataLock.Types.Status.Pass },
                 new DataLockStatus { DataLockEventId = 2, Status = Commitments.Api.Types.DataLock.Types.Status.Pass },
@@ -28,9 +28,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDataLock
                 new DataLockStatus { DataLockEventId = 4, Status = Commitments.Api.Types.DataLock.Types.Status.Pass },
             });
 
-            var handler = new GetApprenticeshipDataLockQueryHandler(_mockDataLockApi.Object, Mock.Of<ILog>());
+            var handler = new GetApprenticeshipDataLockQueryHandler(_commitmentsApi.Object, Mock.Of<ILog>());
 
-            var response = await handler.Handle(new GetApprenticeshipDataLockRequest { ApprenticeshipId = 123L });
+            var response = await handler.Handle(new GetApprenticeshipDataLockRequest { AccountId = 666, ApprenticeshipId = 123L });
 
             response.DataLockStatus.Count().Should().Be(1);
         }

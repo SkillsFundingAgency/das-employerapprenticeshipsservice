@@ -13,5 +13,7 @@ namespace SFA.DAS.EAS.Application.Commands.ResolveRequestedChanges
         public bool Approved { get; set; }
 
         public string UserId { get; set; }
+
+        public long AccountId { get; set; }
     }
 }
