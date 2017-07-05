@@ -2,6 +2,7 @@
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Application.Queries.GetLevyDeclaration
 {
@@ -9,11 +10,13 @@ namespace SFA.DAS.EAS.Application.Queries.GetLevyDeclaration
     {
         private readonly IDasLevyRepository _repository;
         private readonly IValidator<GetLevyDeclarationRequest> _validator;
-        
-        public GetLevyDeclarationQueryHandler(IDasLevyRepository repository, IValidator<GetLevyDeclarationRequest> validator)
+        private readonly IHashingService _hashingService;
+
+        public GetLevyDeclarationQueryHandler(IDasLevyRepository repository, IValidator<GetLevyDeclarationRequest> validator, IHashingService hashingService)
         {
             _repository = repository;
             _validator = validator;
+            _hashingService = hashingService;
         }
 
         public async Task<GetLevyDeclarationResponse> Handle(GetLevyDeclarationRequest message)
@@ -25,7 +28,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetLevyDeclaration
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var declarations = await _repository.GetAccountLevyDeclarations(message.AccountId);
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+
+            var declarations = await _repository.GetAccountLevyDeclarations(accountId);
 
             return new GetLevyDeclarationResponse { Declarations = declarations };
         }

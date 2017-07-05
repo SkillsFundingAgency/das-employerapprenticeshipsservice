@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 
@@ -13,6 +14,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationTests
     public class WhenIGetLevyDeclarations : QueryBaseTest<GetLevyDeclarationQueryHandler,GetLevyDeclarationRequest, GetLevyDeclarationResponse>
     {
         private Mock<IDasLevyRepository> _repository;
+        private Mock<IHashingService> _hashingService;
         public override GetLevyDeclarationRequest Query { get; set; }
         public override GetLevyDeclarationQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetLevyDeclarationRequest>> RequestValidator { get; set; }
@@ -24,13 +26,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationTests
         {
             SetUp();
 
-            Query = new GetLevyDeclarationRequest {AccountId = ExpectedAccountId};
+            Query = new GetLevyDeclarationRequest { HashedAccountId = "ABC123" };
+
+            _hashingService = new Mock<IHashingService>();
+            _hashingService.Setup(x => x.DecodeValue(Query.HashedAccountId)).Returns(ExpectedAccountId);
             
             _repository = new Mock<IDasLevyRepository>();
             _expectedLevyDeclarationViews = LevyDeclarationViewsObjectMother.Create(ExpectedAccountId);
             _repository.Setup(x => x.GetAccountLevyDeclarations(It.IsAny<long>())).ReturnsAsync(_expectedLevyDeclarationViews);
 
-           RequestHandler = new GetLevyDeclarationQueryHandler(_repository.Object, RequestValidator.Object);
+           RequestHandler = new GetLevyDeclarationQueryHandler(_repository.Object, RequestValidator.Object, _hashingService.Object);
         }
 
         [Test]
