@@ -91,7 +91,7 @@
   width: 100%;
 }
 
-.visually-hidden, .vh,
+.visually-hidden, .vh, #svg-defs,
 .visuallyhidden {
   position: absolute;
   overflow: hidden;
@@ -1947,6 +1947,10 @@ dl.inline.course-details {
 .data dd.longer {
   font-size: 42px;
   line-height: 50px;
+}
+
+svg {
+  fill: #cc0000;
 }
 
 main, .header-inner {

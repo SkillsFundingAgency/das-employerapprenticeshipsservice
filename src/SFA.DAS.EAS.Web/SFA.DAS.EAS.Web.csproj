@@ -1070,6 +1070,7 @@
     <Content Include="Views\SearchOrganisation\Confirm.cshtml" />
     <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
     <Content Include="Views\Shared\_SVGSprite.cshtml" />
+    <Content Include="src\sass\_icons.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
