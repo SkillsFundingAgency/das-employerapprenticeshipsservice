@@ -1903,7 +1903,36 @@ dl.inline.course-details {
 }
 
 svg {
-  fill: #cc0000;
+  fill: #000;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+a:link svg {
+  fill: #005ea5;
+}
+
+a:visited svg {
+  fill: #4c2c92;
+}
+
+a:hover svg {
+  fill: #2b8cc4;
+}
+
+a:active svg {
+  fill: #2b8cc4;
+}
+
+a.link-with-icon {
+  text-decoration: none;
+}
+
+a.link-with-icon .link-text {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 main, .header-inner {
@@ -3671,6 +3700,11 @@ table.responsive tr th.tw-70 {
 
 #welcome ol.todo-list > li:last-child {
   margin-bottom: 0;
+}
+
+a.close svg {
+  width: 1.2em;
+  height: 1.2em;
 }
 
 .search-results section {
