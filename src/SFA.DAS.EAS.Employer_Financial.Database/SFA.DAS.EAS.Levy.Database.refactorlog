@@ -21,4 +21,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="EmployerCoInvestmentAmount" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="3571c43f-f86d-44d3-a796-e13bb582ed69" ChangeDateTime="07/04/2017 08:12:52">
+    <Property Name="ElementName" Value="[employer_financial].[EnglishFractionOverride].[CreatedOn]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_financial].[EnglishFractionOverride]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DateFrom" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3405fe18-a1e2-4420-a3e6-c1fcc6a827a2" ChangeDateTime="07/04/2017 08:13:02">
+    <Property Name="ElementName" Value="[employer_financial].[EnglishFractionOverride].[DateFrom]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_financial].[EnglishFractionOverride]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CreatedOn" />
+  </Operation>
 </Operations>
