@@ -107,6 +107,19 @@ namespace SFA.DAS.EAS.Web.Controllers
             return await CreateOrganisation(hashedAccountId, organisation);
         }
 
+        [HttpGet]
+        [Route("{HashedAccountId}/organisations/search/manualAdd", Order = 0)]
+        [Route("organisations/search/manualAdd", Order = 1)]
+        public ActionResult AddOtherOrganisationDetails(string hashedAccountId)
+        {
+            if (string.IsNullOrEmpty(hashedAccountId))
+            {
+                return RedirectToAction("AddOtherOrganisationDetails", "EmployerAccountOrganisation");
+            }
+
+            return RedirectToAction("AddOtherOrganisationDetails", "Organisation");
+        }
+
         private async Task<ActionResult> CreateOrganisation(string hashedAccountId, EmployerAccountData organisation)
         {
             var request = new CreateNewLegalEntityViewModel
