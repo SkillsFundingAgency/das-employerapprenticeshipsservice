@@ -177,6 +177,8 @@ $('ul#global-nav-links').collapsableNav();
 var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], label input[type='checkbox'], section input[type='radio']");
 var selectionButtonsOrgType = new GOVUK.SelectionButtons("section input[type='radio']", { parentElem: 'section' });
 
+var showHideContent = new GOVUK.ShowHideContent();
+showHideContent.init();
 
 // stop apprentice - show/hide date block
 $(".js-enabled #stop-effective").hide();
