@@ -69,6 +69,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementByIdTest
         }
 
         [Test]
+        public async Task ThenIfTheMessageIsValidTheAgreementIdIsHashed()
+        {
+            //Act
+            var response = await RequestHandler.Handle(Query);
+
+            //Assert
+            Assert.AreEqual(Query.HashedAgreementId, response.EmployerAgreement.HashedAgreementId);
+        }
+
+        [Test]
         public void ThenShouldThrowExceptionIfNoAgreementFound()
         {
             //Arrange
