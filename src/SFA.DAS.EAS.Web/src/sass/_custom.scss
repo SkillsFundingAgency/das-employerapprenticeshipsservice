@@ -435,6 +435,7 @@ body {
             background-color: #fff;          
             height:200px; //container height
             overflow:auto;
+            .item{ border-bottom: 1px solid #bfc1c3; } //// wrap labels per item for borders
                 label{
                     font-size: 16px;
                     line-height: 1.25; 
@@ -442,10 +443,13 @@ body {
                     display:block;  
                     font-weight: 400;
                     text-transform: none;  
-                    padding: 7px 0 7px 2px;
-                    border-bottom: 1px solid #bfc1c3;  
-                    cursor: pointer;                
+                    padding: 7px 0 7px 2px;                   
+                    cursor: pointer;       
+                    margin-left:20px; // wrap labels         
                     }
+                  input{
+                    margin-left:-16px; // wrap labels
+                }
             }
           .showHide {
              background: url(/dist/css/images/option-select-toggle-sprite.png) no-repeat;
