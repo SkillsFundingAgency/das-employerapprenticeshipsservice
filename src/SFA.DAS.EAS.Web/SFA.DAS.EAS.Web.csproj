@@ -1072,6 +1072,7 @@
     <Content Include="Views\Shared\_SVGSprite.cshtml" />
     <Content Include="src\sass\_icons.scss" />
     <Content Include="Views\EmployerTeam\_WelcomeWizard.cshtml" />
+    <Content Include="src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
