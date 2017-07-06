@@ -165,7 +165,7 @@ if ($('#welcome')) {
     sfa.welcomeWizard.init();
 }
 
-
+// Removed disabled attribute from buttons when user leaves the page
 window.onunload = function () {
     sfa.forms.removeDisabledAttr();
 };

@@ -1,4 +1,4 @@
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, .filter:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, #welcome ol.todo-list > li .done:after, .filter:after {
   content: "";
   display: block;
   clear: both;
@@ -16,19 +16,19 @@
   margin: 0 -15px;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, .filter:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, #welcome ol.todo-list > li .done:after, .filter:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, .filter:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, #welcome ol.todo-list > li .done:after, .filter:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, .filter:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, #welcome ol.todo-list > li .done:after, .filter:after {
   content: "";
   display: block;
   clear: both;
@@ -46,13 +46,13 @@
   margin: 0 -15px;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, .filter:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, #welcome ol.todo-list > li .done:after, .filter:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, .filter:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, #welcome ol.todo-list > li .done:after, .filter:after {
   content: "";
   display: block;
   clear: both;
@@ -3687,24 +3687,97 @@ table.responsive tr th.tw-70 {
   padding: 15px;
 }
 
+#welcome h1 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  width: 80%;
+  width: 66%;
+}
+
+#welcome ol.todo-list h2 {
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 18px;
+  line-height: 1.2;
+  font-size: 24px;
+  line-height: 1.25;
+  margin-bottom: 5px;
+}
+
 #welcome ol.todo-list > li {
   margin-bottom: 15px;
   border: 1px solid #bfc1c3;
   padding: 15px;
 }
 
+#welcome ol.todo-list > li .todo {
+  display: block;
+}
+
+#welcome ol.todo-list > li .done {
+  display: none;
+}
+
+#welcome ol.todo-list > li .done p {
+  margin-bottom: 0;
+  float: left;
+}
+
+#welcome ol.todo-list > li .done .status {
+  color: white;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 16px;
+  line-height: 1.25;
+  font-size: 19px;
+  line-height: 1.3157894737;
+  float: right;
+  position: relative;
+  top: -15px;
+}
+
+#welcome ol.todo-list > li .done .status svg {
+  width: 30px;
+  height: 30px;
+}
+
 #welcome ol.todo-list > li.complete {
   background: #2e358b;
+  border-color: #2e358b;
   color: white;
+}
+
+#welcome ol.todo-list > li.complete svg {
+  fill: white;
+}
+
+#welcome ol.todo-list > li.complete .todo {
+  display: none;
+}
+
+#welcome ol.todo-list > li.complete .done {
+  display: block;
 }
 
 #welcome ol.todo-list > li:last-child {
   margin-bottom: 0;
 }
 
+a.close {
+  margin-bottom: 10px;
+  display: inline-block;
+  float: right;
+}
+
 a.close svg {
   width: 1.2em;
   height: 1.2em;
+}
+
+a.close svg {
+  float: right;
 }
 
 .search-results section {
