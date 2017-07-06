@@ -253,8 +253,8 @@
       <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.10.29-prerelease\lib\net45\SFA.DAS.Providers.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.26699, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.26699\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.33424, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.33424\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
@@ -384,14 +384,18 @@
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Extensions\ValidationResultExtensions.cs" />
+    <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipFiltersMapper.cs" />
+    <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\IApprenticeshipFiltersMapper.cs" />
     <Compile Include="Validators\ChangeStatusViewModelValidator.cs" />
     <Compile Include="Validators\DataLockStatusViewModelViewModelValidator.cs" />
     <Compile Include="Validators\ProviderPriorityReOrderListValidator.cs" />
+    <Compile Include="ViewModels\AccountPaye\PayeSchemeNextStepsViewModel.cs" />
     <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\CommitmentsIndexViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
@@ -461,8 +465,10 @@
     <Compile Include="ViewModels\ManageApprenticeships\WhenToMakeChangeOptions.cs" />
     <Compile Include="ViewModels\NotificationSettingsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\ConfirmLegalAgreementToRemoveViewModel.cs" />
+    <Compile Include="ViewModels\Organisation\ConfirmOrganisationViewModel.cs" />
     <Compile Include="ViewModels\Organisation\EmployerAgreementPdfViewModel.cs" />
     <Compile Include="ViewModels\Organisation\LegalAgreementsToRemoveViewModel.cs" />
+    <Compile Include="ViewModels\Organisation\SearchOrganisationViewModel.cs" />
     <Compile Include="ViewModels\ProviderPaymentsSummaryViewModel.cs" />
     <Compile Include="ViewModels\ProviderPriorityReOrderViewModel.cs" />
     <Compile Include="ViewModels\YourCohortsViewModel.cs" />
@@ -995,7 +1001,6 @@
     <Content Include="Views\Organisation\AddOtherOrganisationDetails.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\AddOrganisation.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\AddOrganisationAddress.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
     <Content Include="StartUp\IIS.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1055,6 +1060,12 @@
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="Views\Settings\NotificationSettings.cshtml" />
     <Content Include="Views\EmployerManageApprentices\RequestChanges.cshtml" />
+    <Content Include="Views\SearchOrganisation\SearchForOrganisation.cshtml" />
+    <Content Include="Views\SearchOrganisation\SearchForOrganisationResults.cshtml" />
+    <Content Include="src\sass\_search.scss" />
+    <Content Include="Views\EmployerAccountPaye\NextSteps.cshtml" />
+    <Content Include="Views\SearchOrganisation\Confirm.cshtml" />
+    <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

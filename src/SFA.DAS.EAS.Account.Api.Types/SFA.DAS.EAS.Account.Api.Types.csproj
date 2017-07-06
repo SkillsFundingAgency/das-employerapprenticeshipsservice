@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Events.Api.Types, Version=1.20.0.26497, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.20.0.26497\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
@@ -56,6 +60,7 @@
     <Compile Include="Events\Levy\LevyDeclarationUpdatedEvent.cs" />
     <Compile Include="Events\PayeScheme\PayeSchemeAddedEvent.cs" />
     <Compile Include="Events\PayeScheme\PayeSchemeRemovedEvent.cs" />
+    <Compile Include="InvitationStatus.cs" />
     <Compile Include="LevyDeclarationViewModel.cs" />
     <Compile Include="PayeSchemeViewModel.cs" />
     <Compile Include="AccountDetailViewModel.cs" />

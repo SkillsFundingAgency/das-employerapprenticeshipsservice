@@ -17,6 +17,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEnglishFrationDetail
     {
         private Mock<IDasLevyRepository> _dasLevyRepository;
 
+        public const long ExpectedAccountId = 345987;
         public const string ExpectedEmpRef = "123/ABC";
         public override GetEnglishFractionDetailByEmpRefQuery Query { get; set; }
         public override GetEnglishFractionDetailByEmpRefQueryHandler RequestHandler { get; set; }
@@ -28,7 +29,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEnglishFrationDetail
             SetUp();
 
             _dasLevyRepository = new Mock<IDasLevyRepository>();
-            _dasLevyRepository.Setup(x => x.GetEnglishFractionHistory(ExpectedEmpRef))
+            _dasLevyRepository.Setup(x => x.GetEnglishFractionHistory(ExpectedAccountId, ExpectedEmpRef))
                 .ReturnsAsync(new List<DasEnglishFraction>
                 {
                     new DasEnglishFraction
@@ -40,7 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEnglishFrationDetail
                     }
                 });
 
-            Query = new GetEnglishFractionDetailByEmpRefQuery {EmpRef = ExpectedEmpRef};
+            Query = new GetEnglishFractionDetailByEmpRefQuery { AccountId = ExpectedAccountId, EmpRef = ExpectedEmpRef};
             
             RequestHandler = new GetEnglishFractionDetailByEmpRefQueryHandler(RequestValidator.Object, _dasLevyRepository.Object);
         }
@@ -52,7 +53,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEnglishFrationDetail
             await RequestHandler.Handle(Query);
 
             //Assert
-            _dasLevyRepository.Verify(x=>x.GetEnglishFractionHistory(ExpectedEmpRef),Times.Once);
+            _dasLevyRepository.Verify(x=>x.GetEnglishFractionHistory(ExpectedAccountId, ExpectedEmpRef),Times.Once);
         }
 
         [Test]

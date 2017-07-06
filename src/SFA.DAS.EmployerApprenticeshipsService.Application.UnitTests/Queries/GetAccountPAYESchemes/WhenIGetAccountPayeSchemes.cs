@@ -6,8 +6,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
@@ -65,8 +63,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
                 _payeView
             });
 
-            _englishFractionsRepository.Setup(x => x.GetCurrentFractionForScheme(It.IsAny<string>()))
-                                       .ReturnsAsync(_englishFraction);
+            _englishFractionsRepository.Setup(x => x.GetCurrentFractionForSchemes(It.IsAny<long>(), It.IsAny<IEnumerable<string>>()))
+                                       .ReturnsAsync(new List<DasEnglishFraction> { _englishFraction });
 
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>()))
                 .Returns(AccountId);
@@ -86,7 +84,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
 
             //Assert
             _accountRepository.Verify(x => x.GetPayeSchemesByAccountId(AccountId), Times.Once);
-            _englishFractionsRepository.Verify(x => x.GetCurrentFractionForScheme(_payeView.Ref), Times.Once);
+            _englishFractionsRepository.Verify(x => x.GetCurrentFractionForSchemes(AccountId, It.Is<IEnumerable<string>>(y => y.Single() == _payeView.Ref)), Times.Once);
         }
 
         [Test]
@@ -129,7 +127,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
 
             //Assert
             Assert.IsEmpty(result.PayeSchemes);
-            _englishFractionsRepository.Verify(x => x.GetCurrentFractionForScheme(It.IsAny<string>()), Times.Never);
+            _englishFractionsRepository.Verify(x => x.GetCurrentFractionForSchemes(It.IsAny<long>(), It.IsAny<IEnumerable<string>>()), Times.Never);
         }
         
     }

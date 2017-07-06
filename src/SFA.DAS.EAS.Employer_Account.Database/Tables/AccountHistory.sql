@@ -7,3 +7,5 @@
 	[RemovedDate] DATETIME NULL,
 	CONSTRAINT [FK_AccountHistory_Account] FOREIGN KEY (AccountId) REFERENCES [employer_account].[Account]([Id])
 )
+GO
+CREATE INDEX [IDX_AccountHistory_Account] on [employer_account].[AccountHistory] (AccountId, PayeRef)

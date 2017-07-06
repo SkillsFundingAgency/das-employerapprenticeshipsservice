@@ -28,12 +28,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
         {
             //Arrange
             var empRef = "123FGV";
+            var accountId = 24593543;
 
             //Act
-            await _dasLevyService.GetEnglishFractionHistory(empRef);
+            await _dasLevyService.GetEnglishFractionHistory(accountId, empRef);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetEnglishFractionDetailByEmpRefQuery>(c=> c.EmpRef.Equals(empRef))), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.Is<GetEnglishFractionDetailByEmpRefQuery>(c=> c.AccountId == accountId && c.EmpRef.Equals(empRef))), Times.Once);
         }
 
         [Test]
@@ -41,9 +42,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
         {
             //Arrange
             var empRef = "123FGV";
+            var accountId = 25983435;
 
             //Act
-            var actual = await _dasLevyService.GetEnglishFractionHistory(empRef);
+            var actual = await _dasLevyService.GetEnglishFractionHistory(accountId, empRef);
 
             //Assert
             Assert.IsNotEmpty(actual);

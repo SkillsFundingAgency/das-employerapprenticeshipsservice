@@ -7,14 +7,14 @@ SELECT
 	ld.SubmissionDate AS SubmissionDate,
 	ld.SubmissionId AS SubmissionId,
 	ld.LevyDueYTD AS LevyDueYTD,
-	isnull(t.Amount,1) AS EnglishFraction,
+	coalesce(efo.Amount, t.Amount, 1) AS EnglishFraction,
 	w.amount as TopUpPercentage,
 	ld.PayrollYear as PayrollYear,
 	ld.PayrollMonth as PayrollMonth,
 	CASE 
-		x.submissionDate 
+		x.submissionid 
 	when 
-		ld.SubmissionDate then 1 
+		ld.submissionid then 1 
 	else 0 end as LastSubmission,
 	ld.CreatedDate,
 	ld.EndOfYearAdjustment,
@@ -26,16 +26,18 @@ SELECT
 	ld.HmrcSubmissionId AS HmrcSubmissionId
 FROM [employer_financial].[LevyDeclaration] ld
 left join
-(
-	select 
-		Max(submissionDate) submissionDate, 
-		empRef ,
-		PayrollYear,
-		PayrollMonth
-	FROM 
-		[employer_financial].LevyDeclaration 
-	WHERE EndOfYearAdjustment = 0
-	group by empRef,PayrollYear,PayrollMonth
+(	
+	select max(submissionid) submissionid,empRef,PayrollMonth,PayrollYear from
+	[employer_financial].LevyDeclaration xld
+	where submissiondate in 
+		(select max(submissiondate) from [employer_financial].LevyDeclaration WHERE EndOfYearAdjustment = 0 
+		and submissiondate < DATEADD(month,4, DATEFROMPARTS(DatePart(yyyy,GETDATE()),PayrollMonth,20))
+		and PayrollYear = xld.PayrollYear
+		and PayrollMonth = xld.PayrollMonth
+		and empRef = xld.empRef
+		group by empRef,PayrollYear,PayrollMonth)
+	and submissiondate < DATEADD(month,4, DATEFROMPARTS(DatePart(yyyy,GETDATE()),PayrollMonth,20))
+		group by empRef,PayrollYear,PayrollMonth
 )x on x.empRef = ld.empRef and x.PayrollMonth = ld.PayrollMonth and x.PayrollYear = ld.PayrollYear AND ld.EndOfYearAdjustment = 0
 
 OUTER APPLY
@@ -52,3 +54,10 @@ outer apply
 	from [employer_financial].[TopUpPercentage] tp
 	WHERE tp.[DateFrom] <= ld.[SubmissionDate]
 ) w
+outer apply
+(
+	SELECT top 1 Amount
+	FROM [employer_financial].[EnglishFractionOverride] o
+	WHERE o.AccountId = ld.AccountId and o.EmpRef = ld.empref AND o.DateFrom <= ld.SubmissionDate
+	ORDER BY DateFrom DESC
+) efo

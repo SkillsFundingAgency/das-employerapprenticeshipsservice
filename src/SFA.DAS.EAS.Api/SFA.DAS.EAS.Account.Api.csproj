@@ -301,6 +301,7 @@
     <Compile Include="Controllers\EmployerAgreementController.cs" />
     <Compile Include="Controllers\EmployerAccountsController.cs" />
     <Compile Include="Controllers\EmployerUserController.cs" />
+    <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
