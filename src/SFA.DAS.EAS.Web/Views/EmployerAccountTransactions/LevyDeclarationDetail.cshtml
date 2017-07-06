@@ -47,7 +47,7 @@
                             @(aggregationLineItem.Amount.ToString("C2", culture))
                         </td>
                         <td headers="th-ef" class="numeric">
-                            @($"{aggregationLineItem.EnglishFraction * 100:n2}")%
+                            @($"{aggregationLineItem.EnglishFraction:P3}")
                         </td>
                         <td headers="th-tu" class="numeric">
                             @(aggregationLineItem.TopUp.ToString("C2", culture))
