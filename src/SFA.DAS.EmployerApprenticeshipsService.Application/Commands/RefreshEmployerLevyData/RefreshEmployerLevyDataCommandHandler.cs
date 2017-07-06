@@ -7,7 +7,6 @@ using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Events.ProcessDeclaration;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
@@ -17,7 +16,6 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 {
     public class RefreshEmployerLevyDataCommandHandler : AsyncRequestHandler<RefreshEmployerLevyDataCommand>
     {
-
         private readonly IValidator<RefreshEmployerLevyDataCommand> _validator;
         private readonly IDasLevyRepository _dasLevyRepository;
         private readonly IMediator _mediator;
@@ -51,42 +49,50 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 
             foreach (var employerLevyData in message.EmployerLevyData)
             {
-                foreach (var dasDeclaration in employerLevyData.Declarations.Declarations.OrderBy(c => c.SubmissionDate))
+                var declarations = employerLevyData.Declarations.Declarations.OrderBy(c => c.SubmissionDate).ToList();
+
+                var existingDeclarationIds = await _dasLevyRepository.GetEmployerDeclarationIds(employerLevyData.EmpRef);
+                var existingIdsLookup = new HashSet<string>(existingDeclarationIds);
+
+                declarations = declarations.Where(x => !existingIdsLookup.Contains(x.Id)).ToList();
+
+                declarations = declarations.Where(x => !DoesSubmissionPreDateTheLevy(x)).ToList();
+
+                declarations = declarations.Where(x => !IsSubmissionForFuturePeriod(x)).ToList();
+
+                var noPaymentForPeriodDeclarations = declarations.Where(x => x.NoPaymentForPeriod).ToList();
+
+                foreach (var dasDeclaration in noPaymentForPeriodDeclarations)
                 {
-                    var declaration = await _dasLevyRepository.GetEmployerDeclaration(dasDeclaration.Id, employerLevyData.EmpRef);
-
-                    if (declaration == null)
-                    {
-
-                        if (DoesSubmissionPreDateTheLevy(dasDeclaration))
-                        {
-                            continue;
-                        }
-
-                        if (IsSubmissionForFuturePeriod(dasDeclaration))
-                        {
-                            continue;
-                        }
-
-                        if (dasDeclaration.NoPaymentForPeriod)
-                        {
-                            await GetLevyFromPreviousSubmission(employerLevyData, dasDeclaration);
-                        }
-
-                        if (IsEndOfYearAdjustment(dasDeclaration))
-                        {
-                            await UpdateEndOfYearAdjustment(employerLevyData, dasDeclaration);
-                        }
-                        
-                        await _dasLevyRepository.CreateEmployerDeclaration(dasDeclaration, employerLevyData.EmpRef, message.AccountId);
-                        savedDeclarations.Add(dasDeclaration);
-                    }
+                    await GetLevyFromPreviousSubmission(employerLevyData, dasDeclaration);
                 }
+
+                var endOfYearAdjustmentDeclarations = declarations.Where(IsEndOfYearAdjustment).ToList();
+
+                foreach (var dasDeclaration in endOfYearAdjustmentDeclarations)
+                {
+                    await UpdateEndOfYearAdjustment(employerLevyData, dasDeclaration);
+                }
+
+                if (!declarations.Any()) continue;
+
+                await _dasLevyRepository.CreateEmployerDeclarations(declarations, employerLevyData.EmpRef,
+                    message.AccountId);
+
+                savedDeclarations.AddRange(declarations);
             }
 
             if (savedDeclarations.Any())
             {
-                await _mediator.PublishAsync(new ProcessDeclarationsEvent());
+                foreach (var levyData in message.EmployerLevyData)
+                {
+                    await _mediator.PublishAsync(new ProcessDeclarationsEvent
+                    {
+                        AccountId = message.AccountId,
+                        EmpRef = levyData.EmpRef
+                    });
+                }
+               
                 await PublishDeclarationUpdatedEvents(message.AccountId, savedDeclarations);
             }
         }
@@ -94,7 +100,6 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
         private bool DoesSubmissionPreDateTheLevy(DasDeclaration dasDeclaration)
         {
             return _hmrcDateService.DoesSubmissionPreDateLevy(dasDeclaration.PayrollYear);
-
         }
 
         private bool IsSubmissionForFuturePeriod(DasDeclaration dasDeclaration)

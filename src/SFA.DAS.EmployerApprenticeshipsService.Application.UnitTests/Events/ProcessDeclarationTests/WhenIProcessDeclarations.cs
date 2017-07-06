@@ -25,11 +25,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Events.ProcessDeclarationTests
         [Test]
         public async Task ThenTheProcessDeclarationsRepositoryCallIsMade()
         {
+            //Arrange
+            const long accountId = 2L;
+            const string empRef = "123/ABC456";
+
             //Act
-            await _processDeclarationsEvent.Handle(new ProcessDeclarationsEvent());
+            await _processDeclarationsEvent.Handle(new ProcessDeclarationsEvent
+            {
+                AccountId = accountId,
+                EmpRef = empRef
+            });
 
             //Assert
-            _dasLevyRepository.Verify(x=>x.ProcessDeclarations(), Times.Once);
+            _dasLevyRepository.Verify(x => x.ProcessDeclarations(accountId, empRef), Times.Once);
         }
 
         [Test]
