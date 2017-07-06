@@ -25,6 +25,8 @@ namespace SFA.DAS.EAS.Account.Api.Client
 
         Task<ICollection<ResourceViewModel>> GetPayeSchemesConnectedToAccount(string accountId);
 
+        Task<ICollection<LevyDeclarationViewModel>> GetLevyDeclarations(string accountId);
+
         Task<EmployerAgreementView> GetEmployerAgreement(string accountId, string legalEntityId, string agreementId);
 
         Task<T> GetResource<T>(string uri) where T : IAccountResource;

@@ -79,12 +79,12 @@
 
                     @if (Model.Data.UserRole == Role.Owner)
                     {
-                        <p>You need to <a href="@Url.Action("Index", "EmployerAgreement")">accept an agreement</a> to enable your organisations to spend funds.</p>
+                        <p>You need to <a href="@Url.Action("Index", "EmployerAgreement")">sign an agreement</a> to enable your organisations to spend funds.</p>
                     }
 
                     @if (Model.Data.UserRole == Role.Transactor)
                     {
-                        <p>An agreement needs to be accepted to enable your organisations to spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View this agreement</a>.</p>
+                        <p>An agreement needs to be signed to enable your organisations to spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View this agreement</a>.</p>
                     }
               
                 </div>
