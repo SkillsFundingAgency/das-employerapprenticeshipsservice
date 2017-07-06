@@ -89,7 +89,8 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountLegalEntitiesControllerTests\AccountLegalEntitiesControllerTests.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\AccountLevyControllerTests.cs" />
-    <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetLevyForAnAccount.cs" />
+    <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetAllLevyForAnAccount.cs" />
+    <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetLevyForAnAccountAndPeriod.cs" />
     <Compile Include="Controllers\AccountPayeSchemesControllerTests\AccountPayeSchemesControllerTests.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\EmployerAccountsControllerTests.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAccounts.cs" />
