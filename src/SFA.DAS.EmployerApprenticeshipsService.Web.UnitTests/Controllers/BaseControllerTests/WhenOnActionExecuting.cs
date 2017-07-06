@@ -7,9 +7,12 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 using SFA.DAS.EAS.Domain.Models.UserView;
+using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
 {
@@ -238,6 +241,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
             routes.Values["controller"] = "Test";
             _controllerContext.Setup(x => x.RouteData).Returns(routes);
             _multiVariantTestingService.Setup(x => x.GetRandomViewNameToShow(It.IsAny<List<ViewAccess>>())).Returns("someview");
+            _multiVariantTestingService.Setup(x => x.GetCachedViewNameToShow(It.IsAny<List<ViewAccess>>(),UserEmail)).Returns("someview2");
             _multiVariantTestingService.Setup(x => x.GetMultiVariantViews()).Returns(new MultiVariantViewLookup
             {
                 Data = new List<MultiVariantView>
@@ -261,16 +265,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
 
             //Act
             Invoke(() => _controller.TestFeatureView());
-            Invoke(() => _controller.TestFeatureView());
-            var actual = Invoke(() => _controller.TestFeatureView());
-            var actual1 = Invoke(() => _controller.TestFeatureView());
-
+            
             //Assert
-            Assert.IsNotNull(actual);
-            Assert.IsNotNull(actual1);
-            Assert.IsInstanceOf<ViewResult>(actual);
-            Assert.IsInstanceOf<ViewResult>(actual1);
-            Assert.AreEqual(((ViewResult)actual1).ViewName, ((ViewResult)actual).ViewName);
+            _multiVariantTestingService.Verify(x=>x.GetCachedViewNameToShow(It.IsAny<List<ViewAccess>>(),UserEmail), Times.AtLeastOnce);
         }
 
         internal class TestController : BaseController
