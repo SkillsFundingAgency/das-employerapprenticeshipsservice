@@ -115,7 +115,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 }
                 else
                 {
-                    var randomViewName = string.Empty;
+                    string randomViewName;
                     if (userView.UserCache)
                     {
                         randomViewName = _multiVariantTestingService.GetCachedViewNameToShow(userView.Views,OwinWrapper.GetClaimValue("email"));
