@@ -24,10 +24,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserTest
             base.SetUp();
 
             _repository = new Mock<IUserRepository>();
-            _hashingService = new Mock<IHashingService>();
-
+          
             Query = new GetUserQuery { UserId = 2 };
-            RequestHandler = new GetUserQueryHandler(_repository.Object, _hashingService.Object, RequestValidator.Object);
+            RequestHandler = new GetUserQueryHandler(_repository.Object, RequestValidator.Object);
         }
 
         [Test]
@@ -69,37 +68,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserTest
             Assert.IsNotNull(result);
             Assert.AreEqual(user, result.User);
             _repository.Verify(x => x.GetUserById(Query.UserId), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenIShouldGetTheUserIdFromTheHashingServiceIfAHashedIdIsProvided()
-        {
-            //Assign
-            const int userId = 34;
-            Query.UserId = 0;
-            Query.HashedUserId = "ABC123";
-            _hashingService.Setup(x => x.DecodeValue(Query.HashedUserId)).Returns(userId);
-            _repository.Setup(x => x.GetUserById(It.IsAny<long>())).ReturnsAsync(new User());
-
-            //Act
-            await RequestHandler.Handle(Query);
-
-            //Assert
-            _hashingService.Verify(x => x.DecodeValue(Query.HashedUserId), Times.Once);
-            _repository.Verify(x => x.GetUserById(userId), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenIShouldNotCallTheHashingServiceIfTheUserIdIsProvided()
-        {
-            //Assign
-            _repository.Setup(x => x.GetUserById(It.IsAny<long>())).ReturnsAsync(new User());
-
-            //Act
-            await RequestHandler.Handle(Query);
-
-            //Assert
-            _hashingService.Verify(x => x.DecodeValue(It.IsAny<string>()), Times.Never);
         }
     }
 }

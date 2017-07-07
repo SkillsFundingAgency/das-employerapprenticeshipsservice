@@ -24,17 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserTest
         }
 
         [Test]
-        public void ThenIShouldPassIfIHaveAValudUserHashedId()
-        {
-            //Act
-            var result = _validator.Validate(new GetUserQuery { HashedUserId = "123ABC" });
-
-            //Assert
-            Assert.IsTrue(result.IsValid());
-        }
-
-        [Test]
-        public void ThenIShouldFailIfIDoNotHaveAValudUserIdOrHashedId()
+        public void ThenIShouldFailIfIDoNotHaveAValudUserId()
         {
             //Act
             var result = _validator.Validate(new GetUserQuery());

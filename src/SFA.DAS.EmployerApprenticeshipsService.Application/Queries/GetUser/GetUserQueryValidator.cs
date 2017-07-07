@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUser
         {
             var result = new ValidationResult();
 
-            if (item.UserId < 1 && string.IsNullOrEmpty(item.HashedUserId))
+            if (item.UserId < 1)
             {
                 result.AddError(nameof(item.UserId), "UserId has not been supplied");
             }
