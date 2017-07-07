@@ -7,9 +7,12 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 using SFA.DAS.EAS.Domain.Models.UserView;
+using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
 {
@@ -228,7 +231,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
             //Assert
             _multiVariantTestingService.Verify(x=>x.GetRandomViewNameToShow(It.IsAny<List<ViewAccess>>()), Times.Once);
         }
-
+        
         internal class TestController : BaseController
         {
             public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
