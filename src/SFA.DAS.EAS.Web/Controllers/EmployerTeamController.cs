@@ -44,7 +44,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var userPreferences = GetUserPreferenceCookie();
 
-            response.Data.HideWizard = userPreferences?.HideWizard ?? false;
+            if(response.Data != null)
+                response.Data.HideWizard = userPreferences?.HideWizard ?? false;
 
             return View(response);
         }
