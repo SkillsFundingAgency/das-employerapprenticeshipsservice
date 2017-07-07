@@ -293,6 +293,7 @@
     <Compile Include="Queries\GetUserNotificationSettings\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUsersTests\WhenIGetUsers.cs" />
     <Compile Include="Queries\GetUserTest\WhenIGetAUser.cs" />
+    <Compile Include="Queries\GetUserTest\WhenIValidatedTheQuery.cs" />
     <Compile Include="Queries\QueryBaseTest.cs" />
     <Compile Include="Queries\ValidateStatusChangeDateQuery\WhenValidatingChangeDate.cs" />
   </ItemGroup>
