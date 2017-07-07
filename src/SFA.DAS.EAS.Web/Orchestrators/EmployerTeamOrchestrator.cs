@@ -64,13 +64,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     showSigningNotice = agreementsResponse.EmployerAgreements.Count(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
                 }
                 
-
+                var userResponse = await _mediator.SendAsync(new GetUserQuery {HashedUserId = externalUserId});
 
                 var viewModel = new AccountDashboardViewModel
                 {
                     Account = accountResponse.Account,
                     RequiresAgreementSigning = showSigningNotice,
-                    UserRole = userRoleResponse.UserRole
+                    UserRole = userRoleResponse.UserRole,
+                    UserFirstName = userResponse.User.FirstName
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
