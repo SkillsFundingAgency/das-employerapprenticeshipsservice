@@ -1,5 +1,5 @@
 ﻿
-<section id="welcome" tabindex="-1">
+<section id="welcome">
     <a href="" class="close link-with-icon">
         <svg class="icon" focusable="false" aria-hidden="true">
             <use xlink:href="#icon-cross" />
@@ -9,7 +9,7 @@
     <h1 class="heading-xlarge">Hi {firstName}, welcome to your new digital account</h1>
     <p>Follow these steps to set up your account.</p>
     <ol class="todo-list">
-        <li>
+        <li data-step="1">
             <h2>Step 1 of 4</h2>
             <ul>
                 <li class="todo">
@@ -20,7 +20,7 @@
                             <input id="add-paye-1" type="radio" name="add-paye-group" value="1">
                             Yes
                         </label>
-                        <label class="block-label selection-button-radio selected" for="add-paye-2"  data-target="add-paye-schemes-guide">
+                        <label class="block-label selection-button-radio" for="add-paye-2"  data-target="add-paye-schemes-guide">
                             <input id="add-paye-2" type="radio" name="add-paye-group" value="2">
                             No
                         </label>
@@ -40,17 +40,98 @@
                 </li>
             </ul>
         </li>
-        <li>
+        <li class="js-hidden" aria-hidden="true" data-step="2">
             <h2>Step 2 of 4</h2>
-
+            <ul>
+                <li class="todo">
+                    <fieldset class="inline">
+                        <legend class="heading-small">Question? </legend>
+                        <p>Guide</p>
+                        <label class="block-label selection-button-radio" for="add-paye-1">
+                            <input id="add-paye-1" type="radio" name="" value="1">
+                            Yes
+                        </label>
+                        <label class="block-label selection-button-radio" for="add-paye-2" data-target="guide-wizard-step-2">
+                            <input id="add-paye-2" type="radio" name="" value="2">
+                            No
+                        </label>
+                        <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-2">
+                            Words
+                        </div>
+                    </fieldset>
+                </li>
+                <li class="done">
+                    <p>SOMETHING added</p>
+                    <div class="status">
+                        Done
+                        <svg class="icon" focusable="false" aria-hidden="true">
+                            <use xlink:href="#icon-tick" />
+                        </svg>
+                    </div>
+                </li>
+            </ul>
         </li>
-        <li>
+        <li class="js-hidden" aria-hidden="true" data-step="3">
             <h2>Step 3 of 4</h2>
-
+            <ul>
+                <li class="todo">
+                    <fieldset class="inline">
+                        <legend class="heading-small">Question? </legend>
+                        <p>Guide</p>
+                        <label class="block-label selection-button-radio" for="add-paye-1">
+                            <input id="add-paye-1" type="radio" name="" value="1">
+                            Yes
+                        </label>
+                        <label class="block-label selection-button-radio" for="add-paye-2" data-target="guide-wizard-step-2">
+                            <input id="add-paye-2" type="radio" name="" value="2">
+                            No
+                        </label>
+                        <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-2">
+                            Words
+                        </div>
+                    </fieldset>
+                </li>
+                <li class="done">
+                    <p>SOMETHING added</p>
+                    <div class="status">
+                        Done
+                        <svg class="icon" focusable="false" aria-hidden="true">
+                            <use xlink:href="#icon-tick" />
+                        </svg>
+                    </div>
+                </li>
+            </ul>
         </li>
-        <li>
+        <li class="js-hidden" aria-hidden="true" data-step="4">
             <h2>Step 4 of 4</h2>
-
+            <ul>
+                <li class="todo">
+                    <fieldset class="inline">
+                        <legend class="heading-small">Question? </legend>
+                        <p>Guide</p>
+                        <label class="block-label selection-button-radio" for="add-paye-1">
+                            <input id="add-paye-1" type="radio" name="" value="1">
+                            Yes
+                        </label>
+                        <label class="block-label selection-button-radio" for="add-paye-2" data-target="guide-wizard-step-2">
+                            <input id="add-paye-2" type="radio" name="" value="2">
+                            No
+                        </label>
+                        <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-2">
+                            Words
+                        </div>
+                    </fieldset>
+                </li>
+                <li class="done">
+                    <p>SOMETHING added</p>
+                    <div class="status">
+                        Done
+                        <svg class="icon" focusable="false" aria-hidden="true">
+                            <use xlink:href="#icon-tick" />
+                        </svg>
+                    </div>
+                </li>
+            </ul>
         </li>
     </ol>
 </section>

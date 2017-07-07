@@ -3858,6 +3858,7 @@ table.responsive tr th.tw-70 {
   margin-top: 15px;
   margin-bottom: 15px;
   padding: 15px;
+  padding-bottom: 1px;
 }
 
 #welcome:focus {
@@ -3936,10 +3937,6 @@ table.responsive tr th.tw-70 {
 
 #welcome ol.todo-list > li.complete .done {
   display: block;
-}
-
-#welcome ol.todo-list > li:last-child {
-  margin-bottom: 0;
 }
 
 a.close {

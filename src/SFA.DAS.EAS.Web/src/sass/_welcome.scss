@@ -3,6 +3,7 @@
     margin-top: 15px;
     margin-bottom: 15px;
     padding: 15px;
+    padding-bottom: 1px;
     &:focus {
         outline: 2px solid $focus-colour;
     }
@@ -65,9 +66,7 @@
                     display: block;
                 }
             }
-            &:last-child {
-                margin-bottom: 0;
-            }
+           
         }
     }
 }
