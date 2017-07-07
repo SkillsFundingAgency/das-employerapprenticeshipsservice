@@ -38,13 +38,27 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public string GetRandomViewNameToShow(List<ViewAccess> views)
         {
-            var randomNumber = new Random().Next(views.Count);
-
-            if (randomNumber == views.Count)
+            if (views.Count == 1)
             {
                 return null;
             }
-            return views[randomNumber].ViewName;
+
+            var maxValue = 11;
+            var randomNumber = new Random().Next(maxValue);
+
+            var viewName = string.Empty;
+            foreach (var view in views.OrderBy(c=>c.Weighting))
+            {
+                if (randomNumber >= (maxValue - view.Weighting) && randomNumber < maxValue)
+                {
+                    viewName = view.ViewName;
+                    continue;
+                }
+
+                maxValue = maxValue - view.Weighting;
+            }
+
+            return viewName;
         }
 
         public string GetCachedViewNameToShow(List<ViewAccess> views, string getClaimValue)
