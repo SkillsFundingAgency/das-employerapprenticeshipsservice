@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
@@ -19,8 +18,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
         public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator,
-            EmployerApprenticeshipsServiceConfiguration configuration, IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
+            EmployerApprenticeshipsServiceConfiguration configuration, IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, 
+            ICookieStorageService<FlashMessageViewModel> flashMessage, ICookieStorageService<UserPreferencesViewModel> userPreferences)
+            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage, userPreferences)
         {
             _homeOrchestrator = homeOrchestrator;
             _configuration = configuration;

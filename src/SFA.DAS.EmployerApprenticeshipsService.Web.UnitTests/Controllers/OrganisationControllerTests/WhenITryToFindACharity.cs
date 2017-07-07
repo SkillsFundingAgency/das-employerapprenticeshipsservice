@@ -60,7 +60,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
                 _userViewTestingService.Object,
                 _mapper.Object,
                 _logger.Object,
-                _flashMessage.Object);
+                _flashMessage.Object,
+                new Mock<ICookieStorageService<UserPreferencesViewModel>>().Object);
         }
 
         [Test]

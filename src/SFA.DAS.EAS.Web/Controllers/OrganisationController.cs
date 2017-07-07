@@ -29,8 +29,9 @@ namespace SFA.DAS.EAS.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             IMapper mapper,
             ILog logger,
-            ICookieStorageService<FlashMessageViewModel> flashMessage) 
-            :base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
+            ICookieStorageService<FlashMessageViewModel> flashMessage,
+            ICookieStorageService<UserPreferencesViewModel> userPreferences) 
+            :base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage, userPreferences)
         {
             _orchestrator = orchestrator;
             _mapper = mapper;

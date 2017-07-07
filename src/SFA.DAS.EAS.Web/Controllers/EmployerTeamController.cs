@@ -15,12 +15,15 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
+        private readonly ICookieStorageService<UserPreferencesViewModel> _userPreferences;
 
         public EmployerTeamController(IOwinWrapper owinWrapper, EmployerTeamOrchestrator employerTeamOrchestrator, 
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage) 
-            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage,
+            ICookieStorageService<UserPreferencesViewModel> userPreferences) 
+            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage, userPreferences)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
+            _userPreferences = userPreferences;
         }
 
         [HttpGet]
@@ -38,6 +41,10 @@ namespace SFA.DAS.EAS.Web.Controllers
                 response.FlashMessage = flashMessage;
                 response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
             }
+
+            var userPreferences = GetUserPreferenceCookie();
+
+            response.Data.HideWizard = userPreferences?.HideWizard ?? false;
 
             return View(response);
         }
@@ -212,6 +219,17 @@ namespace SFA.DAS.EAS.Web.Controllers
             var invitation = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(invitation);
+        }
+
+        [HttpGet]
+        [Route("hideWizard")]
+        public ActionResult HideWizard()
+        {
+            var userPreferences = GetUserPreferenceCookie() ?? new UserPreferencesViewModel();
+            userPreferences.HideWizard = true;
+            UpdateUserPreferenceCookie(userPreferences);
+
+            return RedirectToAction("Index");
         }
     }
 }

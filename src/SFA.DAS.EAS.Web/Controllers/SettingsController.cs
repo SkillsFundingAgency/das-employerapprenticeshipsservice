@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-using NLog;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -20,8 +18,9 @@ namespace SFA.DAS.EAS.Web.Controllers
             UserSettingsOrchestrator userSettingsOrchestrator,
             IFeatureToggle featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
+            ICookieStorageService<FlashMessageViewModel> flashMessage,
+            ICookieStorageService<UserPreferencesViewModel> userPreferences)
+            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage, userPreferences)
         {
             _userSettingsOrchestrator = userSettingsOrchestrator;
         }

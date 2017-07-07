@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.Owin.Security.Provider;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
@@ -22,8 +20,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly ILog _logger;
 
         public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator,
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ILog logger, ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, featureToggle,multiVariantTestingService,flashMessage)
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ILog logger, ICookieStorageService<FlashMessageViewModel> flashMessage,
+            ICookieStorageService<UserPreferencesViewModel> userPreferences)
+            : base(owinWrapper, featureToggle,multiVariantTestingService,flashMessage, userPreferences)
         {
             if (employerAccountOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerAccountOrchestrator));
