@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
                     dasDeclaration.EndOfYearAdjustmentAmount = Convert.ToDecimal(tableRow["EndOfYearAdjustmentAmount"]);
                 }
 
-                dasLevyRepository.CreateEmployerDeclaration(dasDeclaration, tableRow["Paye_scheme"], accountId).Wait();
+                dasLevyRepository.CreateEmployerDeclarations(new List<DasDeclaration>{ dasDeclaration }, tableRow["Paye_scheme"], accountId).Wait();
             }
 
             var englishFractionRepository = _container.GetInstance<IEnglishFractionRepository>();
@@ -99,9 +99,9 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
                     DateCalculated = new DateTime(2016, 01, 01),
                     EmpRef = empRef.Key
                 },empRef.Key).Wait();
-            }
 
-            dasLevyRepository.ProcessDeclarations().Wait();
+                dasLevyRepository.ProcessDeclarations(accountId, empRef.Key).Wait();
+            }
 
             lineCount = 1;
 
