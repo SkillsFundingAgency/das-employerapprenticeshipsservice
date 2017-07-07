@@ -14,10 +14,12 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class BaseController : Controller
     {
         private const string FlashMessageCookieName = "sfa-das-employerapprenticeshipsservice-flashmessage";
+        private const string UserPreferencesCookieName = "sfa-das-employerapprenticeshipsservice-userPreferences";
 
         private readonly IFeatureToggle _featureToggle;
         private readonly IMultiVariantTestingService _multiVariantTestingService;
         private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
+        private readonly ICookieStorageService<UserPreferencesViewModel> _userPreferences;
         protected IOwinWrapper OwinWrapper;
         
 
@@ -25,12 +27,14 @@ namespace SFA.DAS.EAS.Web.Controllers
             IOwinWrapper owinWrapper, 
             IFeatureToggle featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage )
+            ICookieStorageService<FlashMessageViewModel> flashMessage,
+            ICookieStorageService<UserPreferencesViewModel> userPreferences)
         {
             OwinWrapper = owinWrapper;
             _featureToggle = featureToggle;
             _multiVariantTestingService = multiVariantTestingService;
             _flashMessage = flashMessage;
+            _userPreferences = userPreferences;
         }
 
 
@@ -180,6 +184,25 @@ namespace SFA.DAS.EAS.Web.Controllers
         public void RemoveFlashMessageFromCookie()
         {
             _flashMessage.Delete(FlashMessageCookieName);
+        }
+
+        public UserPreferencesViewModel GetUserPreferenceCookie()
+        {
+            return _userPreferences.Get(UserPreferencesCookieName);
+        }
+
+        public void UpdateUserPreferenceCookie(UserPreferencesViewModel viewModel)
+        {
+            var existingPreferences = _userPreferences.Get(UserPreferencesCookieName);
+
+            if (existingPreferences == null)
+            {
+                _userPreferences.Create(viewModel, UserPreferencesCookieName, 36500); //Set cookike to be 10 years till expiry as it need to stay
+            }
+            else
+            {
+                _userPreferences.Update(UserPreferencesCookieName, viewModel);
+            }
         }
     }
 }

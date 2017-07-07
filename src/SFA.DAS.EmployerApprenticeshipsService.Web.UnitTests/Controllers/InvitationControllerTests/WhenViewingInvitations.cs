@@ -37,7 +37,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
             _controller = new InvitationController(
-                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userViewTestingService.Object, _configuration, _flashMessage.Object);
+                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userViewTestingService.Object, _configuration, _flashMessage.Object,
+                new Mock<ICookieStorageService<UserPreferencesViewModel>>().Object);
         }
 
         [Test]

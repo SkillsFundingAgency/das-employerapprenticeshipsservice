@@ -43,7 +43,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                     Data = new RenameEmployerAccountViewModel()
                 });
 
-            _employerAccountController = new EmployerAccountController(_owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, logger.Object, _flashMessage.Object)
+            _employerAccountController = new EmployerAccountController(_owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, 
+                logger.Object, _flashMessage.Object, new Mock<ICookieStorageService<UserPreferencesViewModel>>().Object)
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)

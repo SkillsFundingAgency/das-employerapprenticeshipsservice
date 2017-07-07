@@ -27,7 +27,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _controller = new EmployerAgreementController(
-                _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object,_flashMessage.Object);
+                _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object,_flashMessage.Object,
+                new Mock<ICookieStorageService<UserPreferencesViewModel>>().Object);
         }
     }
 }

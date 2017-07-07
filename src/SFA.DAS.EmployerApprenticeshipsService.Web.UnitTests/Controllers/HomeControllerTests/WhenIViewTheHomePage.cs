@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 
             _homeController = new HomeController(
                 _owinWrapper.Object, _homeOrchestrator.Object, _configuration, _featureToggle.Object,
-                _userTestingService.Object,_flashMessage.Object);
+                _userTestingService.Object,_flashMessage.Object, new Mock<ICookieStorageService<UserPreferencesViewModel>>().Object);
         }
 
         [Test]
