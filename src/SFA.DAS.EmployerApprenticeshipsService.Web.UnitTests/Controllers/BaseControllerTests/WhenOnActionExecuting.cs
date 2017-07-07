@@ -231,45 +231,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
             //Assert
             _multiVariantTestingService.Verify(x=>x.GetRandomViewNameToShow(It.IsAny<List<ViewAccess>>()), Times.Once);
         }
-
-        [Test]
-        public void WhenTheViewReturnedFromTheMultiVariantTestingServiceHasSplitAccessAcrossUsersToTrueAndTheUserCacheIsTrueThenTheViewIsRandomlyReturnedFirstAndTheSameReturnedInSubsequentCalls()
-        {
-            //Arrange
-            var routes = new RouteData();
-            routes.Values["action"] = "TestFeatureView";
-            routes.Values["controller"] = "Test";
-            _controllerContext.Setup(x => x.RouteData).Returns(routes);
-            _multiVariantTestingService.Setup(x => x.GetRandomViewNameToShow(It.IsAny<List<ViewAccess>>())).Returns("someview");
-            _multiVariantTestingService.Setup(x => x.GetCachedViewNameToShow(It.IsAny<List<ViewAccess>>(),UserEmail)).Returns("someview2");
-            _multiVariantTestingService.Setup(x => x.GetMultiVariantViews()).Returns(new MultiVariantViewLookup
-            {
-                Data = new List<MultiVariantView>
-                {
-                    new MultiVariantView
-                    {
-                        Controller = "Test",
-                            Action = "TestFeatureView",
-                            SplitAccessAcrossUsers = true,
-                            UserCache = true,
-                            Views = new List<ViewAccess>
-                            {
-                               new ViewAccess
-                               {
-                                   ViewName = "TestView_2"
-                               }
-                            }
-                    }
-                }
-            });
-
-            //Act
-            Invoke(() => _controller.TestFeatureView());
-            
-            //Assert
-            _multiVariantTestingService.Verify(x=>x.GetCachedViewNameToShow(It.IsAny<List<ViewAccess>>(),UserEmail), Times.AtLeastOnce);
-        }
-
+        
         internal class TestController : BaseController
         {
             public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)

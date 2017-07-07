@@ -60,10 +60,6 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
             return viewName;
         }
-
-        public string GetCachedViewNameToShow(List<ViewAccess> views, string getClaimValue)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
