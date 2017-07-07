@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                         {
                             Id = "1",
                             LevyDueYtd = 10,
-                            SubmissionDate = DateTime.UtcNow.AddMonths(-3)
+                            SubmissionDate = DateTime.UtcNow.AddMonths(-3),
                         },
                         new DasDeclaration
                         {

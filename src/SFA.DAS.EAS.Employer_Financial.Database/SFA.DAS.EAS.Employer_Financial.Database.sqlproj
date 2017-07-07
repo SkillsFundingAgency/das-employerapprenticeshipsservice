@@ -67,6 +67,7 @@
     <Folder Include="Schemas" />
     <Folder Include="SeedData" />
     <Folder Include="Types" />
+    <Folder Include="Functions" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\EnglishFraction.sql" />
@@ -105,6 +106,8 @@
     <Build Include="StoredProcedures\GetPaymentDetail_ByAccountProviderCourseAndDateRange.sql" />
     <Build Include="Tables\EnglishFractionOverride.sql" />
     <Build Include="StoredProcedures\GetCurrentFractionForScheme.sql" />
+    <Build Include="Functions\CalculateSubmissionCutoffDate.sql" />
+    <Build Include="StoredProcedures\GetEmployerDeclarationsByEmpRef.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -75,7 +76,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
         }
 
         [Test]
-        public async Task ThenDataIsTakenFromTheDataStoreForTheEmployerRefAndEachDeclarationRow()
+        public async Task ThenTheExistingDeclarationIdsAreCollected()
         {
             //Arrange
             var refreshEmployerLevyDataCommand = RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef);
@@ -84,21 +85,20 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             await _refreshEmployerLevyDataCommandHandler.Handle(refreshEmployerLevyDataCommand);
 
             //Assert
-            _levyRepository.Verify(x => x.GetEmployerDeclaration(It.Is<string>(c => c.Equals("1") || c.Equals("2") || c.Equals("4")), ExpectedEmpRef), Times.Exactly(refreshEmployerLevyDataCommand.EmployerLevyData[0].Declarations.Declarations.Count(c=>!c.NoPaymentForPeriod)));
+            _levyRepository.Verify(x => x.GetEmployerDeclarationIds(ExpectedEmpRef), Times.Once());
         }
-        
+
         [Test]
         public async Task ThenTheLevyRepositoryIsUpdatedIfTheDeclarationDoesNotExist()
         {
             //Arrange
-            _levyRepository.Setup(x => x.GetEmployerDeclaration("1", ExpectedEmpRef)).ReturnsAsync(null);
-            _levyRepository.Setup(x => x.GetEmployerDeclaration("2", ExpectedEmpRef)).ReturnsAsync(new DasDeclaration());
+            _levyRepository.Setup(x => x.GetEmployerDeclarationIds(ExpectedEmpRef)).ReturnsAsync(new List<string>{"2"});
 
             //Act
             await _refreshEmployerLevyDataCommandHandler.Handle(RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId));
 
             //Assert
-            _levyRepository.Verify(x => x.CreateEmployerDeclaration(It.IsAny<DasDeclaration>(), ExpectedEmpRef, ExpectedAccountId));
+            _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.IsAny<IEnumerable<DasDeclaration>>(), ExpectedEmpRef, ExpectedAccountId));
         }
         
 
@@ -123,7 +123,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             await _refreshEmployerLevyDataCommandHandler.Handle(data);
 
             //Assert
-            _levyRepository.Verify(x=>x.CreateEmployerDeclaration(It.Is<DasDeclaration>(c=>c.NoPaymentForPeriod && c.LevyDueYtd.Equals(1000) && c.LevyAllowanceForFullYear.Equals(1200m)),ExpectedEmpRef,ExpectedAccountId),Times.Once);
+            _levyRepository.Verify(x=>x.CreateEmployerDeclarations(It.Is<IEnumerable<DasDeclaration>>(c => 
+                    c.Any(d => d.NoPaymentForPeriod &&
+                           d.LevyDueYtd.Equals(1000) &&
+                d.LevyAllowanceForFullYear.Equals(1200m))),
+                ExpectedEmpRef,ExpectedAccountId),Times.Once);
         }
 
         [Test]
@@ -143,7 +147,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
         public async Task ThenIfThereAreNoNewDeclarationsThenTheProcessDeclarationEventIsNotPublished()
         {
             //Arrange
-            _levyRepository.Setup(x => x.GetEmployerDeclaration(It.IsAny<string>(), ExpectedEmpRef)).ReturnsAsync(new DasDeclaration());
+            _levyRepository.Setup(x => x.GetEmployerDeclarationIds(ExpectedEmpRef)).ReturnsAsync(new List<string>{"1","2","3","4"});
             var data = RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId);
 
             //Act
@@ -165,7 +169,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             await _refreshEmployerLevyDataCommandHandler.Handle(data);
 
             //Assert
-            _levyRepository.Verify(x => x.CreateEmployerDeclaration(It.Is<DasDeclaration>(c => c.EndOfYearAdjustment), ExpectedEmpRef, ExpectedAccountId), Times.Once);
+            _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.Is<IEnumerable<DasDeclaration>>(c => c.Any(d => d.EndOfYearAdjustment)), ExpectedEmpRef, ExpectedAccountId), Times.Once);
         }
 
         [Test]
@@ -180,7 +184,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             await _refreshEmployerLevyDataCommandHandler.Handle(data);
 
             //Assert
-            _levyRepository.Verify(x => x.CreateEmployerDeclaration(It.Is<DasDeclaration>(c => c.EndOfYearAdjustment && c.EndOfYearAdjustmentAmount.Equals(10m)), ExpectedEmpRef, ExpectedAccountId), Times.Once);
+            _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.Is<IEnumerable<DasDeclaration>>(c => c.First().EndOfYearAdjustment && c.First().EndOfYearAdjustmentAmount.Equals(10m)), ExpectedEmpRef, ExpectedAccountId), Times.Once);
         }
 
         [Test]
@@ -195,7 +199,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             await _refreshEmployerLevyDataCommandHandler.Handle(data);
 
             //Assert
-            _levyRepository.Verify(x => x.CreateEmployerDeclaration(It.IsAny<DasDeclaration>(),ExpectedEmpRef,ExpectedAccountId), Times.Exactly(4));
+            _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.Is<IEnumerable<DasDeclaration>>(c => c.Count() == 4),ExpectedEmpRef,ExpectedAccountId), Times.Once);
         }
 
         [Test]
@@ -241,7 +245,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             await _refreshEmployerLevyDataCommandHandler.Handle(data);
 
             //Assert
-            _levyRepository.Verify(x => x.CreateEmployerDeclaration(It.IsAny<DasDeclaration>(), It.IsAny<string>(), It.IsAny<long>()), Times.Never);
+            _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.IsAny<IEnumerable<DasDeclaration>>(), It.IsAny<string>(), It.IsAny<long>()), Times.Never);
         }
     }
 }

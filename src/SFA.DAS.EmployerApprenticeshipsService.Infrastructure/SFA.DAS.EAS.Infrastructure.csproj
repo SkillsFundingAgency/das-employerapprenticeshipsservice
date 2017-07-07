@@ -228,6 +228,7 @@
     <Compile Include="Data\FileSystemUserRepository.cs" />
     <Compile Include="Data\InvitationRepository.cs" />
     <Compile Include="Data\MembershipRepository.cs" />
+    <Compile Include="Data\UnitOfWork.cs" />
     <Compile Include="Data\UserAccountRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
     <Compile Include="DependencyResolution\ConfigurationHelper.cs" />

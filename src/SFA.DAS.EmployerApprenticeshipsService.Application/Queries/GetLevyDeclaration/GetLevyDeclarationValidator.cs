@@ -10,9 +10,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetLevyDeclaration
         {
             var result = new ValidationResult();
 
-            if (item.AccountId == 0)
+            if (string.IsNullOrEmpty(item.HashedAccountId))
             {
-                result.AddError(nameof(item.AccountId),"AccountId has not been supplied");
+                result.AddError(nameof(item.HashedAccountId),"HashedAccountId has not been supplied");
             }
 
             return result;

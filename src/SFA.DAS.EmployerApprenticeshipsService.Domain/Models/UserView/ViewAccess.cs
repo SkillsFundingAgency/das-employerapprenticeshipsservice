@@ -6,6 +6,8 @@ namespace SFA.DAS.EAS.Domain.Models.UserView
     {
         public string ViewName { get; set; }
 
+        public int Weighting { get; set; }
+
         public List<string> EmailAddresses { get; set; }
         
     }

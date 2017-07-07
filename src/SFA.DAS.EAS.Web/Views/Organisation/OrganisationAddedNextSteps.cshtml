@@ -21,7 +21,7 @@
                     }
                 </legend>
 
-                <div class="form-group @(1 == 2 ? "" : "error")">
+                <div class="form-group @(!string.IsNullOrEmpty(Model.Data) ? "error" : "")">
 
                     <label for="acceptAgreement" class="block-label">
                         <span class="form-label">Accept agreement in order to add apprentice</span>

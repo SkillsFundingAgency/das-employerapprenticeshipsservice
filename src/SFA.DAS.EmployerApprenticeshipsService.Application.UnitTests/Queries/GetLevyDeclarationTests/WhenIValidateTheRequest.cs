@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationTests
         public void ThenTrueIsReturnedWhenAllFieldsArePopulated()
         {
             //Act
-            var actual = _validator.Validate(new GetLevyDeclarationRequest {AccountId = 12587});
+            var actual = _validator.Validate(new GetLevyDeclarationRequest {HashedAccountId = "12587"});
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -28,11 +28,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationTests
         public void ThenFalseIsReturnedWhenTheFieldsArentPopulated()
         {
             //Act
-            var actual = _validator.Validate(new GetLevyDeclarationRequest { AccountId = 0 });
+            var actual = _validator.Validate(new GetLevyDeclarationRequest { HashedAccountId = "" });
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string,string>("AccountId", "AccountId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
         }
     }
 }

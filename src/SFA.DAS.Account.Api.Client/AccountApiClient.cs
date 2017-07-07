@@ -119,13 +119,22 @@ namespace SFA.DAS.EAS.Account.Api.Client
             var json = await _httpClient.GetAsync(url);
             return JsonConvert.DeserializeObject<EmployerAgreementView>(json);
         }
-       
+
 
         public async Task<T> GetResource<T>(string uri) where T : IAccountResource
         {
             var absoluteUri = new Uri(new Uri(GetBaseUrl()), uri);
             var json = await _httpClient.GetAsync(absoluteUri.ToString());
             return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        public async Task<ICollection<LevyDeclarationViewModel>> GetLevyDeclarations(string accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/levy";
+            
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<List<LevyDeclarationViewModel>>(json);
         }
 
         private string GetBaseUrl()
