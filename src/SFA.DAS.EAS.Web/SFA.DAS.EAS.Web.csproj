@@ -462,7 +462,6 @@
     <Compile Include="ViewModels\ManageApprenticeships\WhenToMakeChangeOptions.cs" />
     <Compile Include="ViewModels\NotificationSettingsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\ConfirmLegalAgreementToRemoveViewModel.cs" />
-    <Compile Include="ViewModels\Organisation\ConfirmOrganisationViewModel.cs" />
     <Compile Include="ViewModels\Organisation\EmployerAgreementPdfViewModel.cs" />
     <Compile Include="ViewModels\Organisation\LegalAgreementsToRemoveViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SearchOrganisationViewModel.cs" />
@@ -1074,6 +1073,9 @@
     <Content Include="src\sass\_icons.scss" />
     <Content Include="Views\EmployerTeam\_WelcomeWizard.cshtml" />
     <Content Include="src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
+    <Content Include="Views\EmployerAgreement\Index_OrgS.cshtml" />
+    <Content Include="Views\Shared\_SetupAccount_OrgS.cshtml" />
+    <Content Include="Views\Home\Index_OrgS.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

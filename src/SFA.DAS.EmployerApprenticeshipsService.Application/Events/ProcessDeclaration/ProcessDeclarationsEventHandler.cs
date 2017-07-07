@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Application.Events.ProcessDeclaration
 
         public async Task Handle(ProcessDeclarationsEvent notification)
         {
-            await _dasLevyRepository.ProcessDeclarations();
+            await _dasLevyRepository.ProcessDeclarations(notification.AccountId, notification.EmpRef);
 
             _logger.Info("Process Declarations Called");
         }

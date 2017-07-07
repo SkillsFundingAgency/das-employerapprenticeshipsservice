@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [employer_financial].[ProcessDeclarationsTransactions]
+@accountId BIGINT,
+@empRef NVARCHAR(50)
 AS
-
 
 --Add the topup from the declaration
 INSERT INTO [employer_financial].LevyDeclarationTopup
@@ -16,7 +17,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 	FROM 
 		[employer_financial].[GetLevyDeclarationAndTopUp] x
 	where
-		x.LevyDueYTD is not null AND x.LastSubmission = 1
+		x.LevyDueYTD is not null AND x.LastSubmission = 1 AND x.AccountId = @accountId AND x.EmpRef = @empRef
 	union all
 	select
 		x.AccountId,
@@ -27,7 +28,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 	FROM 
 		[employer_financial].[GetLevyDeclarationAndTopUp] x
 	where
-		x.LevyDueYTD is not null and x.EndOfYearAdjustment = 1
+		x.LevyDueYTD is not null and x.EndOfYearAdjustment = 1  AND x.AccountId = @accountId AND x.EmpRef = @empRef
 	) mainUpdate
 	inner join (
 		select submissionId from [employer_financial].LevyDeclaration
@@ -60,7 +61,7 @@ select mainUpdate.* from
 		FROM 
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		where
-			x.LevyDueYTD is not null AND x.LastSubmission = 1
+			x.LevyDueYTD is not null AND x.LastSubmission = 1  AND x.AccountId = @accountId AND x.EmpRef = @empRef
 	union all	
 		select 
 			x.AccountId,
@@ -79,7 +80,7 @@ select mainUpdate.* from
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		inner join
 			[employer_financial].[LevyDeclarationTopup] ldt on ldt.submissionId = x.submissionId
-		where x.EndOfYearAdjustment = 1
+		where x.EndOfYearAdjustment = 1  AND x.AccountId = @accountId AND x.EmpRef = @empRef
 	) mainUpdate
 	inner join (
 		select submissionId from [employer_financial].LevyDeclaration
