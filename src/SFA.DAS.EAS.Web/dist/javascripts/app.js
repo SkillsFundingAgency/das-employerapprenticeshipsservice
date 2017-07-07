@@ -144,15 +144,28 @@ sfa.welcomeWizard = {
     init: function () {
         var that = this;
         $('#welcome a.close').on('click', function (e) {
-            that.toggleStep($('#welcome ol > li:first-child'));
+            //that.toggleStep($('#welcome ol > li:first-child'));
             e.preventDefault();
         });
+        var radios = $('#welcome input:radio');
+
+        radios.on('change', function () {
+            listItem = $(this).parent('.todo-list--item');
+            that.radioChange($(this).val(), listItem);
+        });
+
     },
     toggleStep: function (step) {
         if (step.hasClass('complete')) {
             step.removeClass('complete');
         } else {
             step.addClass('complete');
+        }
+    },
+    radioChange: function (radioValue, listItem) {
+        var that = this;
+        if (radioValue == 1) {
+            that.toggleStep(listItem);
         }
     }
 }
