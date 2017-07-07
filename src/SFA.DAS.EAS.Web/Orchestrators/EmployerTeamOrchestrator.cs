@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetInvitation;
 using SFA.DAS.EAS.Application.Queries.GetMember;
+using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Application.Queries.GetUser;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain;
@@ -64,7 +65,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     showSigningNotice = agreementsResponse.EmployerAgreements.Count(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
                 }
                 
-                var userResponse = await _mediator.SendAsync(new GetUserQuery {HashedUserId = externalUserId});
+                var userResponse = await _mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = accountId, TeamMemberId = externalUserId });
 
                 var viewModel = new AccountDashboardViewModel
                 {
