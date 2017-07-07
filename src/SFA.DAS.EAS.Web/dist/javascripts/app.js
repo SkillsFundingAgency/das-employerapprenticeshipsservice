@@ -141,6 +141,9 @@ sfa.backLink = {
 }
 
 sfa.welcomeWizard = {
+    settings :  {
+        noSteps: $('#welcome').data('total-steps')
+    },  
     init: function () {
         var that = this;
         $('#welcome a.close').on('click', function (e) {
@@ -150,7 +153,7 @@ sfa.welcomeWizard = {
         var radios = $('#welcome input:radio');
 
         radios.on('change', function () {
-            listItem = $(this).parent('.todo-list--item');
+            listItem = $(this).closest('.todo-list--item');
             that.radioChange($(this).val(), listItem);
         });
 
@@ -162,10 +165,16 @@ sfa.welcomeWizard = {
             step.addClass('complete');
         }
     },
+    showStep: function (step) {
+        step.removeClass('js-hidden').attr('aria-hidden', false);
+    },
     radioChange: function (radioValue, listItem) {
         var that = this;
         if (radioValue == 1) {
             that.toggleStep(listItem);
+            if (listItem.data('step') < that.settings.noSteps) {
+                that.showStep(listItem.next());
+            }
         }
     }
 }
