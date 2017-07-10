@@ -4,8 +4,8 @@
     margin-bottom: 15px;
     padding: 15px;
     padding-bottom: 1px;
-    &:focus {
-        outline: 2px solid $focus-colour;
+    @include media(desktop) {
+        margin-top: 30px;
     }
     h1 {
         margin-top: 0;

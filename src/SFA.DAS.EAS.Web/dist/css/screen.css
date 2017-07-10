@@ -4401,8 +4401,10 @@ table.responsive tr.total {
   padding-bottom: 1px;
 }
 
-#welcome:focus {
-  outline: 2px solid #ffbf47;
+@media (min-width: 769px) {
+  #welcome {
+    margin-top: 30px;
+  }
 }
 
 #welcome h1 {

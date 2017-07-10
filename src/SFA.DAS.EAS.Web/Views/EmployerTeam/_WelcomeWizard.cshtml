@@ -14,18 +14,18 @@
             <ul>
                 <li class="todo">
                     <fieldset class="inline">
-                        <legend class="heading-small">Have you added all your PAYE schemes? </legend>
-                        <p>This allows levy to be paid into your account.</p>
-                        <label class="block-label selection-button-radio" for="add-paye-1">
+                        <legend class="heading-small">Add more PAYE schemes now? </legend>
+                        <p>This allows your schemes' levy funds to be paid into your account.</p>
+                        <label class="block-label selection-button-radio" for="add-paye-1"  data-target="add-paye-schemes-guide">
                             <input id="add-paye-1" type="radio" name="add-paye-group" value="1">
                             Yes
                         </label>
-                        <label class="block-label selection-button-radio" for="add-paye-2"  data-target="add-paye-schemes-guide">
+                        <label class="block-label selection-button-radio" for="add-paye-2">
                             <input id="add-paye-2" type="radio" name="add-paye-group" value="2">
                             No
                         </label>
                         <div class="panel panel-border-narrow js-hidden" id="add-paye-schemes-guide">
-                            <a href="@Url.Action("Index", "EmployerAccountPaye")">Add PAYE schemes now</a> - you'll need your Government Gateway login details.
+                            <a href="@Url.Action("GatewayInform", "EmployerAccountPaye")">Add PAYE schemes now</a> - you'll need your Government Gateway login details.
                         </div>
                     </fieldset>
                 </li>
@@ -45,23 +45,23 @@
             <ul>
                 <li class="todo">
                     <fieldset class="inline">
-                        <legend class="heading-small">organisations? </legend>
-                        <p>Guide</p>
-                        <label class="block-label selection-button-radio" for="add-organisations-1">
+                        <legend class="heading-small">Add more organisations now?</legend>
+                        <p>This allows organisations to spend funds on apprentices.</p>
+                        <label class="block-label selection-button-radio" for="add-organisations-1" data-target="guide-wizard-step-organisations">
                             <input id="add-organisations-1" type="radio" name="" value="1">
                             Yes
                         </label>
-                        <label class="block-label selection-button-radio" for="add-organisations-2" data-target="guide-wizard-step-organisations">
+                        <label class="block-label selection-button-radio" for="add-organisations-2">
                             <input id="add-organisations-2" type="radio" name="" value="2">
                             No
                         </label>
                         <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-organisations">
-                            Words
+                            <a href="@Url.Action("AddOrganisation", "Organisation")">Add organisations now</a>.
                         </div>
                     </fieldset>
                 </li>
                 <li class="done">
-                    <p>SOMETHING added</p>
+                    <p>Organisations added</p>
                     <div class="status">
                         Done
                         <svg class="icon" focusable="false" aria-hidden="true">
@@ -76,23 +76,23 @@
             <ul>
                 <li class="todo">
                     <fieldset class="inline">
-                        <legend class="heading-small">members? </legend>
-                        <p>Guide</p>
-                        <label class="block-label selection-button-radio" for="add-members-1">
+                        <legend class="heading-small">Add team members now? </legend>
+                        <p>This allows your colleagues to manage apprenticeships or finances.</p>
+                        <label class="block-label selection-button-radio" for="add-members-1" data-target="guide-wizard-step-members">
                             <input id="add-members-1" type="radio" name="" value="1">
-                            Yes
+                            Yes, add team members
                         </label>
-                        <label class="block-label selection-button-radio" for="add-members-2" data-target="guide-wizard-step-members">
+                        <label class="block-label selection-button-radio" for="add-members-2">
                             <input id="add-members-2" type="radio" name="" value="2">
-                            No
+                            No, not now
                         </label>
                         <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-members">
-                            Words
+                            <a href="@Url.Action("Invite", "EmployerTeam")">Invite colleagues from my organisation now</a>.
                         </div>
                     </fieldset>
                 </li>
                 <li class="done">
-                    <p>SOMETHING added</p>
+                    <p>Team members added</p>
                     <div class="status">
                         Done
                         <svg class="icon" focusable="false" aria-hidden="true">
@@ -107,23 +107,23 @@
             <ul>
                 <li class="todo">
                     <fieldset class="inline">
-                        <legend class="heading-small">Agreements? </legend>
-                        <p>Guide</p>
-                        <label class="block-label selection-button-radio" for="add-agreements-1">
+                        <legend class="heading-small">Are you going to sign the agreements?</legend>
+                        <p>This allows you to spend funds.</p>
+                        <label class="block-label selection-button-radio" for="add-agreements-1" data-target="guide-wizard-step-agreements">
                             <input id="add-agreements-1" type="radio" name="" value="1">
                             Yes
                         </label>
-                        <label class="block-label selection-button-radio" for="add-agreements-2" data-target="guide-wizard-step-agreements">
+                        <label class="block-label selection-button-radio" for="add-agreements-2">
                             <input id="add-agreements-2" type="radio" name="" value="2">
-                            No
+                            No, someone else will sign the agreements
                         </label>
                         <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-agreements">
-                            Words
+                            1 unsigned agreement. <a href="">View agreements now</a>.
                         </div>
                     </fieldset>
                 </li>
                 <li class="done">
-                    <p>SOMETHING added</p>
+                    <p>0 agreements signed</p>
                     <div class="status">
                         Done
                         <svg class="icon" focusable="false" aria-hidden="true">

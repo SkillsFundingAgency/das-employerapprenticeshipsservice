@@ -167,7 +167,7 @@ sfa.welcomeWizard = {
     },
     radioChange: function (radioValue, listItem) {
         var that = this;
-        if (radioValue == 1) {
+        if (radioValue == 2) {
             that.toggleStep(listItem);
             if (listItem.data('step') < that.settings.noSteps) {
                 that.showStep(listItem.next());

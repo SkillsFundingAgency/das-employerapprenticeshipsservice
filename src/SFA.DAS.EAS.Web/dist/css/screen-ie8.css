@@ -3812,10 +3812,7 @@ table.responsive tr th.tw-70 {
   margin-bottom: 15px;
   padding: 15px;
   padding-bottom: 1px;
-}
-
-#welcome:focus {
-  outline: 2px solid #ffbf47;
+  margin-top: 30px;
 }
 
 #welcome h1 {
