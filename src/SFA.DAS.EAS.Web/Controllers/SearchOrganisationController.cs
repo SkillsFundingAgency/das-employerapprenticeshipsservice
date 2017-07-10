@@ -40,8 +40,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("organisations/search", Order = 1)]
         public ActionResult SearchForOrganisation(string hashedAccountId)
         {
-            var model = new SearchForOrganisationViewModel { IsNewAccount = string.IsNullOrEmpty(hashedAccountId) };
-            return View("SearchForOrganisation", new OrchestratorResponse<SearchForOrganisationViewModel> { Data = model });
+            return View("SearchForOrganisation");
         }
 
         [HttpPost]
@@ -51,8 +50,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
-                var viewModel = new SearchForOrganisationViewModel { IsNewAccount = string.IsNullOrEmpty(hashedAccountId) };
-                var model = CreateSearchTermValidationErrorModel(viewModel);
+                var model = CreateSearchTermValidationErrorModel();
                 return View("SearchForOrganisation", model);
             }
 
@@ -128,6 +126,13 @@ namespace SFA.DAS.EAS.Web.Controllers
         private OrchestratorResponse<T> CreateSearchTermValidationErrorModel<T>(T data)
         {
             var model = new OrchestratorResponse<T> { Data = data };
+            SetSearchTermValidationModelProperties(model);
+            return model;
+        }
+
+        private OrchestratorResponse CreateSearchTermValidationErrorModel()
+        {
+            var model = new OrchestratorResponse();
             SetSearchTermValidationModelProperties(model);
             return model;
         }

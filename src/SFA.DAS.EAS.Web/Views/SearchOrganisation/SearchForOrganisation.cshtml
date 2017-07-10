@@ -1,6 +1,6 @@
 ﻿@using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Models.Organisation
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.SearchForOrganisationViewModel>
+@model SFA.DAS.EAS.Web.OrchestratorResponse
 
 @{ 
     ViewBag.PageID = "search-for-organisation";
@@ -24,10 +24,6 @@
 </div>
 
 @section breadcrumb {
-    @if (!Model.Data.IsNewAccount)
-    {
-        <div class="breadcrumbs">
-            <a href="@Url.Action("Index", "EmployerTeam")" class="link-back">Back</a>
-        </div>
-    }
+    <div class="breadcrumbs" id="js-breadcrumbs">
+    </div>
 }
