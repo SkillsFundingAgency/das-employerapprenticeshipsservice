@@ -312,6 +312,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
+        public async Task<IEnumerable<Guid>> GetAccountPaymentIds(long accountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+
+                return await c.QueryAsync<Guid>(
+                    sql: "[employer_financial].[GetAccountPaymentIds]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.ToArray();
+        }
+
         public async Task ProcessPaymentData()
         {
             await WithConnection(async c => await c.ExecuteAsync(

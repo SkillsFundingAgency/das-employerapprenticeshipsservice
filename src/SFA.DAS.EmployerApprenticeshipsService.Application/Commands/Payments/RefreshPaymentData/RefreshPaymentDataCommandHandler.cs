@@ -58,24 +58,15 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 
             if (payments == null || !payments.Any()) return;
 
-            var newPayments = new List<PaymentDetails>();
+            var existingPaymentIds = await _dasLevyRepository.GetAccountPaymentIds(message.AccountId);
 
-            foreach (var payment in payments)
-            {
-                var existingPayment = await _dasLevyRepository.GetPaymentData(Guid.Parse(payment.Id));
-
-                if (existingPayment == null)
-                    newPayments.Add(payment);
-            }
-
-            var sendPaymentDataChanged = newPayments.Any();
+            var newPayments = payments.Where(p => !existingPaymentIds.Any(x => x.ToString().Equals(p.Id))).ToArray();
+            
+            if(!newPayments.Any()) return;
 
             await _dasLevyRepository.CreatePaymentData(newPayments);
 
-            if (sendPaymentDataChanged)
-            {
-                await _mediator.PublishAsync(new ProcessPaymentEvent());
-            }
+            await _mediator.PublishAsync(new ProcessPaymentEvent());
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -25,6 +26,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
         private List<PaymentDetails> _paymentDetails;
+        private List<Guid> _existingPaymentIds;
 
         [SetUp]
         public void Arrange()
@@ -36,13 +38,21 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
                 PaymentUrl = "http://someurl"
             };
 
+            _existingPaymentIds = new List<Guid>
+            {
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                Guid.NewGuid()
+            };
+
             _validator = new Mock<IValidator<RefreshPaymentDataCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<RefreshPaymentDataCommand>()))
                       .Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> ()});
 
             _dasLevyRepository = new Mock<IDasLevyRepository>();
-            _dasLevyRepository.Setup(x => x.GetPaymentData(It.IsAny<Guid>()))
-                              .ReturnsAsync(null);
+
+            _dasLevyRepository.Setup(x => x.GetAccountPaymentIds(It.IsAny<long>()))
+                .ReturnsAsync(_existingPaymentIds);
 
             _paymentDetails = new List<PaymentDetails>{ new PaymentDetails
             {
@@ -132,15 +142,22 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         public async Task ThenTheRepositoryIsCalledToSeeIfTheDataHasAlreadyBeenSavedAndIfItHasThenTheDataWillNotBeRefreshed()
         {
             //Arrange
-            _dasLevyRepository.Setup(x => x.GetPaymentData(It.IsAny<Guid>()))
-                              .ReturnsAsync(new Payment());
+            _paymentDetails = new List<PaymentDetails>
+            {
+                new PaymentDetails { Id = _existingPaymentIds[0].ToString()},
+                new PaymentDetails { Id = _existingPaymentIds[1].ToString()}
+            };
+
+            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
+                .ReturnsAsync(_paymentDetails);
 
             //Act
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.GetPaymentData(It.IsAny<Guid>()), Times.Once);
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<IEnumerable<PaymentDetails>>()), Times.Never);
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Never);
+
         }
 
         [Test]
@@ -154,10 +171,47 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.GetPaymentData(It.IsAny<Guid>()), Times.Never);
+            _dasLevyRepository.Verify(x => x.GetAccountPaymentIds(_command.AccountId), Times.Never);
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Never);
             _logger.Verify(x => x.Error(It.IsAny<WebException>(),
                 $"Unable to get payment information for {_command.PeriodEnd} accountid {_command.AccountId}"));
         }
+
+        [Test]
+        public async Task ShouldGetExistingPaymentIdsFromDatabase()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _dasLevyRepository.Verify(x => x.GetAccountPaymentIds(_command.AccountId), Times.Once);
+        }
+
+        [Test]
+        public async Task ShouldOnlyAddPaymentsWhichAreNotAlreadyAdded()
+        {
+            //Arrange
+            var newPaymentGuid = Guid.NewGuid();
+            _paymentDetails = new List<PaymentDetails>
+            {
+                new PaymentDetails { Id = _existingPaymentIds[0].ToString()},
+                new PaymentDetails { Id = _existingPaymentIds[1].ToString()},
+                new PaymentDetails { Id = newPaymentGuid.ToString()}
+            };
+
+            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
+                           .ReturnsAsync(_paymentDetails);
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.Is<IEnumerable<PaymentDetails>>(s => 
+                s.Any(p => p.Id.Equals(newPaymentGuid.ToString())) &&
+                s.Count() == 1)));
+
+            _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Once);
+        }
+
     }
 }
