@@ -140,20 +140,62 @@ sfa.backLink = {
     }
 }
 
+if (localStorage.getItem("answers") === null) {
+    localStorage.setItem("answers", JSON.stringify([]));
+}
+
+var getAnswers = JSON.parse(localStorage.getItem("answers"));
+
 sfa.welcomeWizard = {
     settings :  {
-        noSteps: $('#welcome').data('total-steps')
+        noSteps: $('#welcome').data('total-steps'),
+        accountId: $('#welcome').data('account-id')
     },  
     init: function () {
         var that = this;
 
+        var getAnswers = JSON.parse(localStorage.getItem("answers"));
+		var indexAnswer = getIndexOf(this.settings.accountId, getAnswers);
+		var answers = {};
+		answers.accountId = this.settings.accountId;
+
+		if (indexAnswer > -1) {
+		    answers = getAnswers[indexAnswer];
+		} else {
+		    getAnswers.push(answers);
+		}
+
         var radios = $('#welcome input:radio');
 
         radios.on('change', function () {
+            answers[this.name] = this.value;
             listItem = $(this).closest('.todo-list--item');
             that.radioChange($(this).val(), listItem);
+            localStorage.setItem("answers", JSON.stringify(getAnswers));
         });
 
+        $.each(answers, function (i, val) {
+            if (i !== 'accountId') {
+                if (answers[i]) {
+                    $("input[name='" + i + "'][value=" + val + "]").click()
+                        .closest('.todo-list--item').removeClass('js-hidden').attr('aria-hidden', false);
+                }
+            }
+        });
+        this.editLinks();
+    },
+    editLinks: function () {
+        var h2s = $('#welcome').find('h2');
+        var that = this;
+        var editLink = $('<a>')
+                        .text('(review this step)')
+                        .attr('href', '#')
+                        .on('click', function (e) {
+                            that.toggleStep($(this).closest('.todo-list--item'));
+                            e.preventDefault();
+                        });
+
+        h2s.append(editLink);
     },
     toggleStep: function (step) {
         if (step.hasClass('complete')) {
@@ -174,6 +216,17 @@ sfa.welcomeWizard = {
             }
         }
     }
+}
+
+getIndexOf = function (accountId, items) {
+    var i = 0;
+    var len = items.length;
+    for (i = 0; i < len; i++) {
+        if (accountId === items[i].accountId) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 if ($('#js-breadcrumbs')) {
