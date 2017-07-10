@@ -8,17 +8,16 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLockSummary
 {
     public class GetDataLockSummaryQueryHandler : IAsyncRequestHandler<GetDataLockSummaryQueryRequest, GetDataLockSummaryQueryResponse>
     {
-        private readonly IDataLockApi _dataLockApi;
+        private readonly IEmployerCommitmentApi _commitmentApi;
 
-        public GetDataLockSummaryQueryHandler(IDataLockApi dataLockApi)
+        public GetDataLockSummaryQueryHandler(IEmployerCommitmentApi commitmentApi)
         {
-            _dataLockApi = dataLockApi;
+            _commitmentApi = commitmentApi;
         }
-
 
         public async Task<GetDataLockSummaryQueryResponse> Handle(GetDataLockSummaryQueryRequest command)
         {
-            var response = await _dataLockApi.GetDataLockSummary(command.ApprenticeshipId);
+            var response = await _commitmentApi.GetDataLockSummary(command.AccountId, command.ApprenticeshipId);
 
             return new GetDataLockSummaryQueryResponse
             {

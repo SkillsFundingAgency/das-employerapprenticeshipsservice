@@ -10,16 +10,16 @@ namespace SFA.DAS.EAS.Application.Queries.GetPriceHistoryQueryRequest
     public class GetPriceHistoryQueryHandler :
         IAsyncRequestHandler<GetPriceHistoryQueryRequest, GetPriceHistoryQueryResponse>
     {
-        private readonly IApprenticeshipApi _apprenticeshipApi;
+        private readonly IEmployerCommitmentApi _commitmentApi;
 
-        public GetPriceHistoryQueryHandler(IApprenticeshipApi apprenticeshipApi)
+        public GetPriceHistoryQueryHandler(IEmployerCommitmentApi commitmentApi)
         {
-            _apprenticeshipApi = apprenticeshipApi;
+            _commitmentApi = commitmentApi;
         }
 
         public async Task<GetPriceHistoryQueryResponse> Handle(GetPriceHistoryQueryRequest message)
         {
-            var response = await _apprenticeshipApi.GetPriceHistory(message.ApprenticeshipId);
+            var response = await _commitmentApi.GetPriceHistory(message.AccountId, message.ApprenticeshipId);
 
             return new GetPriceHistoryQueryResponse
             {
