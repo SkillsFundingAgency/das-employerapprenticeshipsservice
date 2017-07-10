@@ -20,7 +20,6 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly SearchOrganisationOrchestrator _orchestrator;
         //This is temporary until the existing add org function is replaced, at which point the method used can be moved to the org search orchestrator
-        private readonly OrganisationOrchestrator _organisationOrchestrator;
         private readonly IMapper _mapper;
 
 
@@ -29,21 +28,20 @@ namespace SFA.DAS.EAS.Web.Controllers
             IFeatureToggle featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IMapper mapper,
-            OrganisationOrchestrator organisationOrchestrator)
+            IMapper mapper)
             : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             _orchestrator = orchestrator;
             _mapper = mapper;
-            _organisationOrchestrator = organisationOrchestrator;
         }
 
         [HttpGet]
         [Route("{HashedAccountId}/organisations/search", Order = 0)]
         [Route("organisations/search", Order = 1)]
-        public ActionResult SearchForOrganisation()
+        public ActionResult SearchForOrganisation(string hashedAccountId)
         {
-            return View("SearchForOrganisation");
+            var model = new SearchForOrganisationViewModel { IsNewAccount = string.IsNullOrEmpty(hashedAccountId) };
+            return View("SearchForOrganisation", new OrchestratorResponse<SearchForOrganisationViewModel> { Data = model });
         }
 
         [HttpPost]
@@ -53,7 +51,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
-                var model = CreateSearchTermValidationErrorModel();
+                var viewModel = new SearchForOrganisationViewModel { IsNewAccount = string.IsNullOrEmpty(hashedAccountId) };
+                var model = CreateSearchTermValidationErrorModel(viewModel);
                 return View("SearchForOrganisation", model);
             }
 
@@ -129,13 +128,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         private OrchestratorResponse<T> CreateSearchTermValidationErrorModel<T>(T data)
         {
             var model = new OrchestratorResponse<T> { Data = data };
-            SetSearchTermValidationModelProperties(model);
-            return model;
-        }
-
-        private OrchestratorResponse CreateSearchTermValidationErrorModel()
-        {
-            var model = new OrchestratorResponse();
             SetSearchTermValidationModelProperties(model);
             return model;
         }
