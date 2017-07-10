@@ -146,10 +146,7 @@ sfa.welcomeWizard = {
     },  
     init: function () {
         var that = this;
-        $('#welcome a.close').on('click', function (e) {
-            //that.toggleStep($('#welcome ol > li:first-child'));
-            e.preventDefault();
-        });
+
         var radios = $('#welcome input:radio');
 
         radios.on('change', function () {
