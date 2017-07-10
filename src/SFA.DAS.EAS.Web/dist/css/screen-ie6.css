@@ -3888,6 +3888,10 @@ table.responsive tr th.tw-70 {
   margin-bottom: 5px;
 }
 
+#welcome ol.todo-list h2 a {
+  display: none;
+}
+
 #welcome ol.todo-list > li {
   margin-bottom: 15px;
   border: 1px solid #bfc1c3;
@@ -3942,6 +3946,14 @@ table.responsive tr th.tw-70 {
 
 #welcome ol.todo-list > li.complete .done {
   display: block;
+}
+
+#welcome ol.todo-list > li.complete h2 a {
+  display: inline-block;
+  font-weight: normal;
+  color: #fff;
+  margin-left: 10px;
+  font-size: 80%;
 }
 
 a.close {

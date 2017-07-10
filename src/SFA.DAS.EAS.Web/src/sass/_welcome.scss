@@ -21,6 +21,9 @@
         h2 {
             @include bold-24;
             margin-bottom: 5px;
+            a {
+                display: none;
+            }
         }
         > li {
             margin-bottom:15px;
@@ -64,6 +67,13 @@
                 }
                 .done {
                     display: block;
+                }
+                h2 a {
+                    display: inline-block;
+                    font-weight: normal;
+                    color: #fff;
+                    margin-left: 10px;
+                    font-size: 80%;
                 }
             }
            
