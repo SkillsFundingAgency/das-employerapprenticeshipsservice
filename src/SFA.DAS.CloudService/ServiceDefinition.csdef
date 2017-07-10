@@ -23,15 +23,15 @@
       <Setting name="InstrumentationKey" />
       <Setting name="LogLevel" />
       <Setting name="RedisConnection" />
-      <Setting name="LoggingRedisConnectionString" />
-      <Setting name="LoggingRedisKey" />
-      <Setting name="TokenCertificateThumbprint" />
+      <Setting name="LoggingRedisConnectionString"/>
+      <Setting name="LoggingRedisKey"/>
+      <Setting name="TokenCertificateThumbprint"/>
       <Setting name="ShowPayeHistory" />
       <Setting name="CurrentTime" />
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" />
-      <InputEndpoint name="HttpIn" protocol="http" port="80" />
+      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert"/>
+      <InputEndpoint name="HttpIn" protocol="http" port="80"/>
     </Endpoints>
     <Certificates>
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
@@ -51,8 +51,8 @@
       <Setting name="EnvironmentName" />
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
-      <Setting name="LoggingRedisConnectionString" />
-      <Setting name="LoggingRedisKey" />
+      <Setting name="LoggingRedisConnectionString"/>
+      <Setting name="LoggingRedisKey"/>
       <Setting name="DeclarationsEnabled" />
       <Setting name="TokenServiceCertificateThumbprint" />
     </ConfigurationSettings>
@@ -69,8 +69,8 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="LogLevel" />
       <Setting name="InstrumentationKey" />
-      <Setting name="LoggingRedisConnectionString" />
-      <Setting name="LoggingRedisKey" />
+      <Setting name="LoggingRedisConnectionString"/>
+      <Setting name="LoggingRedisKey"/>
       <Setting name="ProcessPayments" />
     </ConfigurationSettings>
   </WorkerRole>
