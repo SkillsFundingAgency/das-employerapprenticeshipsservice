@@ -52,7 +52,7 @@
                                             }
                                         }
                                     </td>
-                                    <td class="changed">@p.IlrStartDate.Date.ToGdsFormat()</td>
+                                    <td>@p.IlrStartDate.Date.ToGdsFormat()</td>
                                 </tr>
                                 <tr>
                                     <td>Total apprenticeship training price</td>
@@ -64,7 +64,7 @@
                                             }
                                         }
                                     </td>
-                                    <td class="changed">@FormatCost(p.IlrCost)</td>
+                                    <td>@FormatCost(p.IlrCost)</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -72,7 +72,6 @@
         <form method="POST" action="@Url.Action("ConfirmRequestChanges")" novalidate="novalidate" id="approve-changes">
             @Html.AntiForgeryToken()
             <h3 class="heading-medium">Are you happy to approve these changes?</h3>
-
             <div class="form-group @(!string.IsNullOrEmpty(Model.Data.ChangesConfirmedError) ? "error" : "")">
                 <fieldset>
                     <legend class="visually-hidden">Are you happy to approve these changes?</legend>
@@ -93,13 +92,10 @@
                     </label>
                 </fieldset>
             </div>
-
-            <button type="submit" class="button" aria-label="Continue">Continue</button>
-           
+            <button type="submit" class="button" aria-label="Continue">Continue</button>           
             <a class="button-link break-line" href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId })" aria-label="Back to apprentice details">
                 Cancel and return
-            </a>
-            
+            </a>          
             @Html.Hidden("HashedAccountId", Model.Data.HashedAccountId)
             @Html.Hidden("HashedApprenticeshipId", Model.Data.HashedApprenticeshipId)
         </form>
