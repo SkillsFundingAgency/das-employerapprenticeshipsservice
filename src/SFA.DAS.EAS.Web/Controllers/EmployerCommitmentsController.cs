@@ -28,10 +28,11 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly EmployerCommitmentsOrchestrator _employerCommitmentsOrchestrator;
 
-        private const string LastCohortPageSessionKey = "lastCohortPageSessionKey";
+        private const string LastCohortPageCookieKey = "sfa-das-employerapprenticeshipsservice-lastCohortPage";
+        private readonly ICookieStorageService<string> _lastCohortCookieStorageService;
 
         public EmployerCommitmentsController(EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, IOwinWrapper owinWrapper,
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage, ICookieStorageService<string> lastCohortCookieStorageService)
             : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             if (employerCommitmentsOrchestrator == null)
@@ -40,6 +41,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 throw new ArgumentNullException(nameof(owinWrapper));
 
             _employerCommitmentsOrchestrator = employerCommitmentsOrchestrator;
+            _lastCohortCookieStorageService = lastCohortCookieStorageService;
         }
 
         [HttpGet]
@@ -78,7 +80,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var model = await _employerCommitmentsOrchestrator.GetAllDraft(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
             SetFlashMessageOnModel(model);
-            Session[LastCohortPageSessionKey] = RequestStatus.NewRequest;
+            SaveRequestStatusInCookie(RequestStatus.NewRequest);
             return View("RequestList", model);
         }
 
@@ -91,7 +93,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var model = await _employerCommitmentsOrchestrator.GetAllReadyForReview(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
             SetFlashMessageOnModel(model);
-            Session[LastCohortPageSessionKey] = RequestStatus.ReadyForReview;
+            SaveRequestStatusInCookie(RequestStatus.ReadyForReview);
             return View("RequestList", model);
         }
 
@@ -102,6 +104,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
                 return View("AccessDenied");
 
+            SaveRequestStatusInCookie(RequestStatus.WithProviderForApproval);
+
             var model = await _employerCommitmentsOrchestrator.GetAllWithProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
             return View("RequestList", model);
         }
@@ -110,7 +114,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Inform")]
         public async Task<ActionResult> Inform(string hashedAccountId)
         {
-            Session[LastCohortPageSessionKey] = RequestStatus.None;
+            SaveRequestStatusInCookie(RequestStatus.None);
             var response = await _employerCommitmentsOrchestrator.GetInform(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(response);
@@ -357,7 +361,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             AddFlashMessageToCookie(flashmessage);
             
             var anyCohortWithCurrentStatus = 
-                await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(viewModel.HashedAccountId, GetSessionRequestStatus());
+                await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(viewModel.HashedAccountId, GetRequestStatusFromCookie());
 
             if(!anyCohortWithCurrentStatus)
                 return RedirectToAction("YourCohorts", new { viewModel.HashedAccountId });
@@ -644,7 +648,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var response = await _employerCommitmentsOrchestrator
                 .GetAcknowledgementModelForExistingCommitment(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
 
-            var status = GetSessionRequestStatus();
+            var status = GetRequestStatusFromCookie();
             bool anyCohortsLeft;
             if (status == RequestStatus.ReadyForReview)
             {
@@ -737,10 +741,22 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("EditApprenticeship", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.HashedApprenticeshipId });
         }
 
-        private RequestStatus GetSessionRequestStatus()
+        private RequestStatus GetRequestStatusFromCookie()
         {
-            var status = (RequestStatus?)Session[LastCohortPageSessionKey] ?? RequestStatus.None;
-            return status;
+            var status = _lastCohortCookieStorageService.Get(LastCohortPageCookieKey);
+
+            if (string.IsNullOrWhiteSpace(status))
+            {
+                return RequestStatus.None;
+            }
+
+            return (RequestStatus)Enum.Parse(typeof(RequestStatus), status);
+        }
+
+        private void SaveRequestStatusInCookie(RequestStatus status)
+        {
+            _lastCohortCookieStorageService.Delete(LastCohortPageCookieKey);
+            _lastCohortCookieStorageService.Create(status.ToString(), LastCohortPageCookieKey);
         }
 
         private void AddErrorsToModelState(Dictionary<string, string> dict)
@@ -805,7 +821,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private string GetReturnToListUrl(string hashedAccountId)
         {
-            switch (GetSessionRequestStatus())
+            switch (GetRequestStatusFromCookie())
             {
                 case RequestStatus.WithProviderForApproval:
                 case RequestStatus.SentForReview:
