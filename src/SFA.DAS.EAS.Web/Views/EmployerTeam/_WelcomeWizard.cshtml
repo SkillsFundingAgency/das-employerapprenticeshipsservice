@@ -1,5 +1,5 @@
 ﻿
-<section id="welcome" data-total-steps="4">
+<section id="welcome" data-total-steps="4" data-account-id="@Model.Data.Account.HashedId">
     <a href="@Url.Action("HideWizard", "EmployerTeam")" class="close link-with-icon">
         <svg class="icon" focusable="false" aria-hidden="true">
             <use xlink:href="#icon-cross" />
@@ -48,11 +48,11 @@
                         <legend class="heading-small">Add more organisations now?</legend>
                         <p>This allows organisations to spend funds on apprentices.</p>
                         <label class="block-label selection-button-radio" for="add-organisations-1" data-target="guide-wizard-step-organisations">
-                            <input id="add-organisations-1" type="radio" name="" value="1">
+                            <input id="add-organisations-1" type="radio" name="add-org-group" value="1">
                             Yes
                         </label>
                         <label class="block-label selection-button-radio" for="add-organisations-2">
-                            <input id="add-organisations-2" type="radio" name="" value="2">
+                            <input id="add-organisations-2" type="radio" name="add-org-group" value="2">
                             No
                         </label>
                         <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-organisations">
@@ -79,11 +79,11 @@
                         <legend class="heading-small">Add team members now? </legend>
                         <p>This allows your colleagues to manage apprenticeships or finances.</p>
                         <label class="block-label selection-button-radio" for="add-members-1" data-target="guide-wizard-step-members">
-                            <input id="add-members-1" type="radio" name="" value="1">
+                            <input id="add-members-1" type="radio" name="add-team-group" value="1">
                             Yes, add team members
                         </label>
                         <label class="block-label selection-button-radio" for="add-members-2">
-                            <input id="add-members-2" type="radio" name="" value="2">
+                            <input id="add-members-2" type="radio" name="add-team-group" value="2">
                             No, not now
                         </label>
                         <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-members">
@@ -110,11 +110,11 @@
                         <legend class="heading-small">Are you going to sign the agreements?</legend>
                         <p>This allows you to spend funds.</p>
                         <label class="block-label selection-button-radio" for="add-agreements-1" data-target="guide-wizard-step-agreements">
-                            <input id="add-agreements-1" type="radio" name="" value="1">
+                            <input id="add-agreements-1" type="radio" name="agreements-group" value="1">
                             Yes
                         </label>
                         <label class="block-label selection-button-radio" for="add-agreements-2">
-                            <input id="add-agreements-2" type="radio" name="" value="2">
+                            <input id="add-agreements-2" type="radio" name="agreements-group" value="2">
                             No, someone else will sign the agreements
                         </label>
                         <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-agreements">
