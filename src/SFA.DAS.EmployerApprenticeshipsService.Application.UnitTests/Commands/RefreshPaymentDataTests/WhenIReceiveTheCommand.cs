@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         private Mock<IDasLevyRepository> _dasLevyRepository;
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
-        private PaymentDetails _paymentDetails;
+        private List<PaymentDetails> _paymentDetails;
 
         [SetUp]
         public void Arrange()
@@ -44,14 +44,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             _dasLevyRepository.Setup(x => x.GetPaymentData(It.IsAny<Guid>()))
                               .ReturnsAsync(null);
 
-            _paymentDetails = new PaymentDetails
+            _paymentDetails = new List<PaymentDetails>{ new PaymentDetails
             {
                 Id = Guid.NewGuid().ToString()
-            };
+            }};
 
             _paymentService = new Mock<IPaymentService>();
             _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
-                           .ReturnsAsync(new List<PaymentDetails> {_paymentDetails});
+                           .ReturnsAsync(_paymentDetails);
 
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
@@ -105,7 +105,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<PaymentDetails>()), Times.Never);
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<IEnumerable<PaymentDetails>>()), Times.Never);
         }
 
         [Test]

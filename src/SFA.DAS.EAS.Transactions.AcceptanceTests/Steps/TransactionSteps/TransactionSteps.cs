@@ -162,9 +162,9 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
                 };
 
                 paymentsList.Add(payment);
-
-                dasLevyRepository.CreatePaymentData(payment).Wait();
             }
+
+            dasLevyRepository.CreatePaymentData(paymentsList).Wait();
 
             ScenarioContext.Current["payments"] = paymentsList;
 

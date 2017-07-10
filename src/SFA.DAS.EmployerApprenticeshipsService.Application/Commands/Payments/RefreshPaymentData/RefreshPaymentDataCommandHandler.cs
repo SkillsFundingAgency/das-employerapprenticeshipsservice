@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -43,7 +44,9 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             {
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
+
             ICollection<PaymentDetails> payments = null;
+
             try
             {
                 payments = await _paymentService.GetAccountPayments(message.PeriodEnd, message.AccountId);
@@ -53,26 +56,21 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
                 _logger.Error(ex,$"Unable to get payment information for {message.PeriodEnd} accountid {message.AccountId}");
             }
 
-            if (payments == null)
+            if (payments == null || !payments.Any()) return;
+
+            var newPayments = new List<PaymentDetails>();
+
+            foreach (var payment in payments)
             {
-                return;
+                var existingPayment = await _dasLevyRepository.GetPaymentData(Guid.Parse(payment.Id));
+
+                if (existingPayment == null)
+                    newPayments.Add(payment);
             }
-            
-            var sendPaymentDataChanged = false;
 
-            foreach (var paymentDetails in payments)
-            {
-                var existingPayment = await _dasLevyRepository.GetPaymentData(Guid.Parse(paymentDetails.Id));
+            var sendPaymentDataChanged = newPayments.Any();
 
-                if (existingPayment != null)
-                {
-                    continue;
-                }
-
-                await _dasLevyRepository.CreatePaymentData(paymentDetails);
-                
-                sendPaymentDataChanged = true;
-            }
+            await _dasLevyRepository.CreatePaymentData(newPayments);
 
             if (sendPaymentDataChanged)
             {
