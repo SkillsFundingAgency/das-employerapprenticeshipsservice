@@ -161,6 +161,7 @@
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
     <Compile Include="Interfaces\IMultiVariantTestingService.cs" />
     <Compile Include="Models\Account\AccountHistoryEntry.cs" />
+    <Compile Include="Models\Account\AccountStats.cs" />
     <Compile Include="Models\Account\CreateAccountResult.cs" />
     <Compile Include="Models\Apprenticeship\ApprenticeshipStatus.cs" />
     <Compile Include="Models\Apprenticeship\ChangeOption.cs" />

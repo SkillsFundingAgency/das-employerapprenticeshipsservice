@@ -123,6 +123,7 @@
     <Build Include="StoredProcedures\GetUserAccountSettings.sql" />
     <Build Include="UserDefinedTypes\UserNotificationSettingsTable.sql" />
     <Build Include="StoredProcedures\UpdateUserAccountSettings.sql" />
+    <Build Include="StoredProcedures\GetAccountStats.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />
