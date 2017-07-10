@@ -93,7 +93,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                 hashedAccountId, 
                 OwinWrapper.GetClaimValue("email"), 
                 Url.Action("Index", "EmployerAccountPaye", new { hashedAccountId }),
-                Url.Action("Index", "EmployerAccountPaye", new { hashedAccountId }),
                 Url.Action("GetGateway", "EmployerAccountPaye", new { hashedAccountId }));
             
             return View(response);

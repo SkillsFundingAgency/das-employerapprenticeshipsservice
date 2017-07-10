@@ -14,7 +14,7 @@
         <form action="@Url.Action("SearchForOrganisation")" method="POST">
             <div class="form-group">
                 <label for="searchTerm">
-                    <span class="form-label-bold">Enter organisation name/number</span>
+                    <span class="form-label-bold">Enter organisation name</span>
                 </label>
                 <input type="text" id="searchTerm" name="searchTerm" value="" class="form-control" />
             </div>
@@ -24,7 +24,6 @@
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("Index", "Home")" class="link-back">Back</a>
+    <div class="breadcrumbs" id="js-breadcrumbs">
     </div>
 }

@@ -50,7 +50,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Data = new GatewayInformViewModel
                 {
                     BreadcrumbDescription = "Back to Your User Profile",
-                    BreadcrumbUrl = Url.Action("SelectEmployer", "EmployerAccount"),
                     ConfirmUrl = Url.Action("Gateway", "EmployerAccount"),
                 },
              

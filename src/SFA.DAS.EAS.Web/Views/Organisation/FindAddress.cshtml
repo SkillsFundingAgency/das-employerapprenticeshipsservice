@@ -32,7 +32,7 @@
             <input type="hidden" id="Sector" name="Sector" value="@Model.Data.Sector" />
             <div class="form-group">
                 <input class="button" type="submit" value="Find address" />
-                <a class="button-link" href="@Url.Action("AddOrganisationAddress", new
+                <a class="button-link" href="@Url.Action("AddOrganisationAddress", "Organisation", new
                         {
                             Model.Data.OrganisationName,
                             Model.Data.OrganisationReferenceNumber,
@@ -47,9 +47,6 @@
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
-        </ol>
+    <div class="breadcrumbs" id="js-breadcrumbs">
     </div>
 }
