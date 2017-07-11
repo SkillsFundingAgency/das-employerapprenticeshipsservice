@@ -11,5 +11,9 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public Role UserRole { get; set; }
         public string EmployerAccountType { get; set; }
         public bool HideWizard { get; set; }
+
+        public int PayeSchemeCount { get; set; }
+        public int OrgainsationCount { get; set; }
+        public int TeamMemberCount { get; set; }
     }
 }

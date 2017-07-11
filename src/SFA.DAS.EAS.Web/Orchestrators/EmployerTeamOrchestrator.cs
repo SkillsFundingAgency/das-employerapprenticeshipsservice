@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Application.Commands.DeleteInvitation;
 using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
 using SFA.DAS.EAS.Application.Commands.ResendInvitation;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EAS.Application.Queries.GetAccountStats;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetInvitation;
@@ -50,7 +51,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = accountId,
                     UserId = externalUserId
                 });
-
                 
                 var showSigningNotice = 0;
                 
@@ -67,12 +67,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 
                 var userResponse = await _mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = accountId, TeamMemberId = externalUserId });
 
+                var accountStatsResponse =
+                    await _mediator.SendAsync(
+                        new GetAccountStatsQuery
+                        {
+                            HashedAccountId = accountId,
+                            ExternalUserId = externalUserId
+                        });
+
                 var viewModel = new AccountDashboardViewModel
                 {
                     Account = accountResponse.Account,
                     RequiresAgreementSigning = showSigningNotice,
                     UserRole = userRoleResponse.UserRole,
-                    UserFirstName = userResponse.User.FirstName
+                    UserFirstName = userResponse.User.FirstName,
+                    OrgainsationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
+                    PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
+                    TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
