@@ -96,9 +96,9 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
         private async Task<DasDeclaration[]> FilterActiveDeclarations(EmployerLevyData employerLevyData, IEnumerable<DasDeclaration> declarations)
         {
             var existingSubmissionIds = await _dasLevyRepository.GetEmployerDeclarationSubmissionIds(employerLevyData.EmpRef);
-            var existingSubmissionIdsLookup = new HashSet<long>(existingSubmissionIds);
+            var existingSubmissionIdsLookup = new HashSet<string>(existingSubmissionIds.Select( x => x.ToString()));
 
-            declarations = declarations.Where(x => !existingSubmissionIdsLookup.Contains(x.SubmissionId)).ToArray();
+            declarations = declarations.Where(x => !existingSubmissionIdsLookup.Contains(x.Id)).ToArray();
 
             declarations = declarations.Where(x => !DoesSubmissionPreDateTheLevy(x)).ToArray();
 
