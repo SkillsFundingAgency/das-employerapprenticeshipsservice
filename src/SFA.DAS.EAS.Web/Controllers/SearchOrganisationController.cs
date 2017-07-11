@@ -140,7 +140,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private static void SetSearchTermValidationModelProperties(OrchestratorResponse model)
         {
             model.Status = HttpStatusCode.BadRequest;
-            model.FlashMessage = FlashMessageViewModel.CreateErrorFlashMessageViewModel(new Dictionary<string, string> { { "searchTerm", "Enter organisation name/number" } });
+            model.FlashMessage = FlashMessageViewModel.CreateErrorFlashMessageViewModel(new Dictionary<string, string> { { "searchTerm", "Enter organisation name" } });
         }
 
         private void CreateOrganisationCookieData(OrganisationDetailsViewModel viewModel)
