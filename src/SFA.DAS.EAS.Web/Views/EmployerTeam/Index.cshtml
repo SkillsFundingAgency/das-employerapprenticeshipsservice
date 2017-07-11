@@ -14,10 +14,9 @@
     }
 }
 
-@if (!Model.Data.HideWizard)
+@if (Model.Data.UserRole == Role.Owner)
 {
     @Html.Partial("_WelcomeWizard")
-    
 }
 else
 {
