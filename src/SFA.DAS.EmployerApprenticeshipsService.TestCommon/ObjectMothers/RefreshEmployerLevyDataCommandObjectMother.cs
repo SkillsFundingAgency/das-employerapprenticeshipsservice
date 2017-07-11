@@ -27,24 +27,28 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                         {
                             Id = "1",
                             LevyDueYtd = 10,
+                            SubmissionId = 100,
                             SubmissionDate = DateTime.UtcNow.AddMonths(-3),
                         },
                         new DasDeclaration
                         {
                             Id = "2",
                             LevyDueYtd = 70,
+                            SubmissionId = 200,
                             SubmissionDate = DateTime.UtcNow.AddMonths(-2)
                         },
                         new DasDeclaration
                         {
                             Id = "3",
                             NoPaymentForPeriod = true,
+                            SubmissionId = 300,
                             SubmissionDate = DateTime.UtcNow.AddMonths(-1)
                         },
                         new DasDeclaration
                         {
                             Id = "4",
                             LevyDueYtd = 80,
+                            SubmissionId = 400,
                             SubmissionDate = DateTime.UtcNow
                         }
                     }

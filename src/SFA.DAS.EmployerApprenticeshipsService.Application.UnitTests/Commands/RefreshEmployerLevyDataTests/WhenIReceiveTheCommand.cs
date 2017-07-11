@@ -85,14 +85,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             await _refreshEmployerLevyDataCommandHandler.Handle(refreshEmployerLevyDataCommand);
 
             //Assert
-            _levyRepository.Verify(x => x.GetEmployerDeclarationIds(ExpectedEmpRef), Times.Once());
+            _levyRepository.Verify(x => x.GetEmployerDeclarationSubmissionIds(ExpectedEmpRef), Times.Once());
         }
 
         [Test]
         public async Task ThenTheLevyRepositoryIsUpdatedIfTheDeclarationDoesNotExist()
         {
             //Arrange
-            _levyRepository.Setup(x => x.GetEmployerDeclarationIds(ExpectedEmpRef)).ReturnsAsync(new List<string>{"2"});
+            _levyRepository.Setup(x => x.GetEmployerDeclarationSubmissionIds(ExpectedEmpRef)).ReturnsAsync(new List<long>{2});
 
             //Act
             await _refreshEmployerLevyDataCommandHandler.Handle(RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId));
@@ -147,7 +147,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
         public async Task ThenIfThereAreNoNewDeclarationsThenTheProcessDeclarationEventIsNotPublished()
         {
             //Arrange
-            _levyRepository.Setup(x => x.GetEmployerDeclarationIds(ExpectedEmpRef)).ReturnsAsync(new List<string>{"1","2","3","4"});
+            _levyRepository.Setup(x => x.GetEmployerDeclarationSubmissionIds(ExpectedEmpRef)).ReturnsAsync(new List<long>{100,200,300,400});
             var data = RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId);
 
             //Act

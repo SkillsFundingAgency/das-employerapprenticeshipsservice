@@ -45,13 +45,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<IEnumerable<string>> GetEmployerDeclarationIds(string empRef)
+        public async Task<IEnumerable<long>> GetEmployerDeclarationSubmissionIds(string empRef)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@empRef", empRef, DbType.String);
 
-            var result = await WithConnection(async c => await c.QueryAsync<string>(
-                sql: "[employer_financial].[GetEmployerDeclarationsByEmpRef]",
+            var result = await WithConnection(async c => await c.QueryAsync<long>(
+                sql: "[employer_financial].[GetLevyDeclarationSubmissionIdsByEmpRef]",
                 param: parameters,
                 commandType: CommandType.StoredProcedure));
 
