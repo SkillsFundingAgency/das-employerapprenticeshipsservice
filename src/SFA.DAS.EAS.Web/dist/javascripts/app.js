@@ -165,7 +165,18 @@ sfa.welcomeWizard = {
 		    getAnswers.push(answers);
 		}
 
-        var radios = $('#welcome input:radio');
+		var radios = $('#welcome input:radio');
+
+		var score = 0;
+        radios.filter(':checked').each(function () {
+		    score += parseInt($(this).val(), 10);
+		});
+
+		if (score == (that.settings.noSteps * 2)) {
+		    $('#confirmation').show();
+		} else {
+		    $('#confirmation').hide();
+		}
 
         radios.on('change', function () {
             answers[this.name] = this.value;
