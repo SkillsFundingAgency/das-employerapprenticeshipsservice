@@ -16,9 +16,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public EmployerAccountTransactionsController(IOwinWrapper owinWrapper, IFeatureToggle featureToggle, 
             EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage,
-            ICookieStorageService<UserPreferencesViewModel> userPreferences) 
-            : base(owinWrapper, featureToggle,multiVariantTestingService,flashMessage, userPreferences)
+            ICookieStorageService<FlashMessageViewModel> flashMessage) 
+            : base(owinWrapper, featureToggle,multiVariantTestingService,flashMessage)
         {
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }

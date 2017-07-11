@@ -62,8 +62,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             _invitationOrchestrator.Setup(x => x.AcceptInvitation(It.IsAny<long>(), It.IsAny<string>()))
                 .Returns(Task.FromResult<object>(null));
 
-            _controller = new InvitationController(_invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userViewTestingService.Object, _configuration,
-                _flashMessage.Object, new Mock<ICookieStorageService<UserPreferencesViewModel>>().Object);
+            _controller = new InvitationController(_invitationOrchestrator.Object, _owinWrapper.Object, 
+                _featureToggle.Object, _userViewTestingService.Object, _configuration, _flashMessage.Object);
 
             //Act
             await _controller.Accept(invitationId, invitation);

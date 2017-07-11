@@ -15,15 +15,13 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-        private readonly ICookieStorageService<UserPreferencesViewModel> _userPreferences;
 
         public EmployerTeamController(IOwinWrapper owinWrapper, EmployerTeamOrchestrator employerTeamOrchestrator, 
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage,
-            ICookieStorageService<UserPreferencesViewModel> userPreferences) 
-            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage, userPreferences)
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, 
+            ICookieStorageService<FlashMessageViewModel> flashMessage) 
+            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
-            _userPreferences = userPreferences;
         }
 
         [HttpGet]
@@ -42,10 +40,12 @@ namespace SFA.DAS.EAS.Web.Controllers
                 response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
             }
 
-            var userPreferences = GetUserPreferenceCookie();
 
-            if(response.Data != null)
-                response.Data.HideWizard = userPreferences?.HideWizard ?? false;
+            //TODO: Sort out Hide Wizard
+            //var userPreferences = GetUserPreferenceCookie();
+
+            //if(response.Data != null)
+            //    response.Data.HideWizard = userPreferences?.HideWizard ?? false;
 
             return View(response);
         }
@@ -226,9 +226,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("hideWizard")]
         public ActionResult HideWizard()
         {
-            var userPreferences = GetUserPreferenceCookie() ?? new UserPreferencesViewModel();
-            userPreferences.HideWizard = true;
-            UpdateUserPreferenceCookie(userPreferences);
+            //TODO: Sort out hide wizard
+
+            //var userPreferences = GetUserPreferenceCookie() ?? new UserPreferencesViewModel();
+            //userPreferences.HideWizard = true;
+            //UpdateUserPreferenceCookie(userPreferences);
 
             return RedirectToAction("Index");
         }

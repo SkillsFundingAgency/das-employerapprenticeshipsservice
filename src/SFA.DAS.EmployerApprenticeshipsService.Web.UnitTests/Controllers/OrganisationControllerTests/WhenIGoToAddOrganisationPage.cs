@@ -4,7 +4,6 @@ using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -47,8 +46,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
                 _userViewTestingService.Object,
                 _mapper.Object,
                 _logger.Object,
-                _flashMessage.Object,
-                new Mock<ICookieStorageService<UserPreferencesViewModel>>().Object);
+                _flashMessage.Object);
         }
 
         [Test]

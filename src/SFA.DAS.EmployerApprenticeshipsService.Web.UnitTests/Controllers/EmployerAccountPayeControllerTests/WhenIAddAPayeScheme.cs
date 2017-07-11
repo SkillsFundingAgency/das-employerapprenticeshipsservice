@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -36,8 +32,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _controller = new EmployerAccountPayeController(
-                _owinWrapper.Object, _employerAccountPayeOrchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, _flashMessage.Object,
-                new Mock<ICookieStorageService<UserPreferencesViewModel>>().Object);
+                _owinWrapper.Object, _employerAccountPayeOrchestrator.Object, _featureToggle.Object, 
+                _userViewTestingService.Object, _flashMessage.Object);
         }
 
         [Test]

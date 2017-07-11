@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Organisation;
@@ -60,8 +59,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
                 _userViewTestingService.Object,
                 _mapper.Object,
                 _logger.Object,
-                _flashMessage.Object,
-                new Mock<ICookieStorageService<UserPreferencesViewModel>>().Object);
+                _flashMessage.Object);
         }
 
         [Test]
