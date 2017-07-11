@@ -182,6 +182,7 @@ sfa.welcomeWizard = {
                 }
             }
         });
+
         this.editLinks();
     },
     editLinks: function () {
@@ -208,12 +209,23 @@ sfa.welcomeWizard = {
         step.removeClass('js-hidden').attr('aria-hidden', false);
     },
     radioChange: function (radioValue, listItem) {
-        var that = this;
+        var that = this; 
         if (radioValue == 2) {
             that.toggleStep(listItem);
             if (listItem.data('step') < that.settings.noSteps) {
                 that.showStep(listItem.next());
             }
+        }
+
+        var score = 0;
+        $('#welcome input:radio:checked').each(function () {
+            score += parseInt($(this).val(), 10);
+        });
+
+        if (score == (that.settings.noSteps * 2)) {
+            $('#confirmation').show();
+        } else {
+            $('#confirmation').hide();
         }
     }
 }

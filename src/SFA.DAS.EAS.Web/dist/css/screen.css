@@ -4454,6 +4454,11 @@ table.responsive tr.total {
   display: block;
 }
 
+#welcome ol.todo-list > li .todo .panel {
+  float: left;
+  padding: 10px 15px;
+}
+
 #welcome ol.todo-list > li .done {
   display: none;
 }
@@ -4521,6 +4526,81 @@ table.responsive tr.total {
   color: #fff;
   margin-left: 10px;
   font-size: 80%;
+}
+
+#welcome p.notice {
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 16px;
+  line-height: 1.25;
+  padding-left: 50px;
+  padding-top: 10px;
+  margin-left: 10px;
+  margin-bottom: 25px;
+}
+
+@media (min-width: 641px) {
+  #welcome p.notice {
+    font-size: 19px;
+    line-height: 1.3157894737;
+  }
+}
+
+#welcome p.notice svg {
+  width: 40px;
+  height: 40px;
+}
+
+#confirmation .steps-complete {
+  margin-bottom: 15px;
+  padding: 15px;
+  background: #28a197;
+  color: #fff;
+}
+
+#confirmation .steps-complete h3 {
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 18px;
+  line-height: 1.2;
+  margin-bottom: 5px;
+}
+
+@media (min-width: 641px) {
+  #confirmation .steps-complete h3 {
+    font-size: 24px;
+    line-height: 1.25;
+  }
+}
+
+#confirmation .steps-complete h3 svg {
+  fill: white;
+  position: relative;
+  top: -3px;
+  width: 30px;
+  height: 30px;
+}
+
+#confirmation .steps-complete p {
+  margin-bottom: 0;
+}
+
+#confirmation .steps-complete a {
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 16px;
+  line-height: 1.25;
+  color: #fff;
+}
+
+@media (min-width: 641px) {
+  #confirmation .steps-complete a {
+    font-size: 19px;
+    line-height: 1.3157894737;
+  }
 }
 
 a.close {

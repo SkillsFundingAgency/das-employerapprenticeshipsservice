@@ -31,6 +31,10 @@
             padding: 15px;
             .todo {
                 display: block;
+                .panel {
+                    float: left;
+                    padding: 10px 15px;
+                }
             }
             .done {
                 display: none;
@@ -79,6 +83,44 @@
            
         }
     }
+    p.notice {
+        @include bold-19;
+        padding-left: 50px;
+        padding-top: 10px;
+        margin-left: 10px;
+        margin-bottom: 25px;
+        svg {
+            width: 40px;
+            height: 40px;
+        }
+    }
+}
+
+#confirmation {
+    .steps-complete {
+        margin-bottom: 15px;
+        padding: 15px;
+        background: $turquoise;
+        color: #fff;
+        h3 {
+             @include bold-24;
+            margin-bottom: 5px;
+            svg {
+                fill: white;
+                position: relative;
+                top: -3px;
+                width: 30px;
+                height: 30px;
+            }
+        }
+        p {
+            margin-bottom: 0;
+        }
+        a {
+            @include bold-19;
+            color: #fff;
+        }
+    }   
 }
 
 a.close {
