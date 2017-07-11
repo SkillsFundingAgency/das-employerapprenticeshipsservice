@@ -30,7 +30,7 @@
                     </fieldset>
                 </li>
                 <li class="done">
-                    <p>PAYE schemes added</p>
+                    <p>@Model.Data.PayeSchemeCount PAYE scheme@(Model.Data.PayeSchemeCount == 1 ? "" : "s") added</p>
                     <div class="status">
                         Done
                         <svg class="icon" focusable="false" aria-hidden="true">
@@ -61,7 +61,9 @@
                     </fieldset>
                 </li>
                 <li class="done">
-                    <p>Organisations added</p>
+                    <p>
+                        @Model.Data.OrgainsationCount organisation@(Model.Data.OrgainsationCount == 1 ? "": "s") added
+                    </p>
                     <div class="status">
                         Done
                         <svg class="icon" focusable="false" aria-hidden="true">
@@ -92,7 +94,7 @@
                     </fieldset>
                 </li>
                 <li class="done">
-                    <p>Team members added</p>
+                    <p>@Model.Data.TeamMemberCount team member@(Model.Data.TeamMemberCount == 1 ? "" : "s") added</p>
                     <div class="status">
                         Done
                         <svg class="icon" focusable="false" aria-hidden="true">
@@ -144,11 +146,14 @@
             </h3>
             <p><a href="@Url.Action("HideWizard", "EmployerTeam")">I'm done - take me to my homepage</a></p>
         </div>
+        @if (Model.Data.RequiresAgreementSigning > 0)
+        {
         <p class="notice">
             <svg class="icon" focusable="false" aria-hidden="true">
                 <use xlink:href="#icon-important" />
             </svg>
             Your agreement needs to be signed before you can spend funds. <a href="#">View agreement now</a>.
         </p>
+        }
     </div>
 </section>
