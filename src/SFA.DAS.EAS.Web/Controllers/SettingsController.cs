@@ -18,9 +18,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             UserSettingsOrchestrator userSettingsOrchestrator,
             IFeatureToggle featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage,
-            ICookieStorageService<UserPreferencesViewModel> userPreferences)
-            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage, userPreferences)
+            ICookieStorageService<FlashMessageViewModel> flashMessage)
+            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             _userSettingsOrchestrator = userSettingsOrchestrator;
         }

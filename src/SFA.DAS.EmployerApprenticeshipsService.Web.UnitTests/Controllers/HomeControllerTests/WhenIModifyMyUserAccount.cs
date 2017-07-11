@@ -35,8 +35,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
-            _homeController = new HomeController(_owinWrapper.Object, _homeOrchestrator.Object, _configuration, _featureToggle.Object, _userViewTestingService.Object,_flashMessage.Object,
-                new Mock<ICookieStorageService<UserPreferencesViewModel>>().Object)
+            _homeController = new HomeController(_owinWrapper.Object, _homeOrchestrator.Object, _configuration, 
+                _featureToggle.Object, _userViewTestingService.Object,_flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object
             };

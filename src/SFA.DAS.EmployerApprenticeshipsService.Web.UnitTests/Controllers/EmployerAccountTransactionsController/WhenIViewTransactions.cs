@@ -44,8 +44,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                     }
                 });
 
-            _controller = new Web.Controllers.EmployerAccountTransactionsController(_owinWrapper.Object, _featureToggle.Object, _orchestrator.Object, 
-                _userViewTestingService.Object, _flashMessage.Object, new Mock<ICookieStorageService<UserPreferencesViewModel>>().Object);
+            _controller = new Web.Controllers.EmployerAccountTransactionsController(_owinWrapper.Object, _featureToggle.Object, 
+                _orchestrator.Object, _userViewTestingService.Object, _flashMessage.Object);
         }
 
         [Test]

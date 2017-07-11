@@ -28,9 +28,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             IFeatureToggle featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            ICookieStorageService<UserPreferencesViewModel> userPreferences,
             IMapper mapper)
-            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage, userPreferences)
+            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             _orchestrator = orchestrator;
             _mapper = mapper;

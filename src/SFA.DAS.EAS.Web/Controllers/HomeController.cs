@@ -18,9 +18,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
         public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator,
-            EmployerApprenticeshipsServiceConfiguration configuration, IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, 
-            ICookieStorageService<FlashMessageViewModel> flashMessage, ICookieStorageService<UserPreferencesViewModel> userPreferences)
-            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage, userPreferences)
+            EmployerApprenticeshipsServiceConfiguration configuration, IFeatureToggle featureToggle, 
+            IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
+            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             _homeOrchestrator = homeOrchestrator;
             _configuration = configuration;

@@ -30,9 +30,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             IOwinWrapper owinWrapper,
             IFeatureToggle featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage,
-            ICookieStorageService<UserPreferencesViewModel> userPreferences)
-                : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage, userPreferences)
+            ICookieStorageService<FlashMessageViewModel> flashMessage)
+                : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             if (orchestrator == null)
                 throw new ArgumentNullException(nameof(orchestrator));
