@@ -172,12 +172,8 @@ sfa.welcomeWizard = {
 		    score += parseInt($(this).val(), 10);
 		});
 
-		if (score == (that.settings.noSteps * 2)) {
-		    $('#confirmation').show();
-		} else {
-		    $('#confirmation').hide();
-		}
-
+		$('#confirmation').hide();
+		
         radios.on('change', function () {
             answers[this.name] = this.value;
             listItem = $(this).closest('.todo-list--item');
