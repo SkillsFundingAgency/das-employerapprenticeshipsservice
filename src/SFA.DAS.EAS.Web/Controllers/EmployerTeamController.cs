@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 };
                 AddFlashMessageToCookie(flashMessage);
 
-                return RedirectToAction("ViewTeam");
+                return RedirectToAction("NextSteps");
             }
                 
            
@@ -98,7 +98,35 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View(errorResponse);
         }
-        
+
+        [HttpGet]
+        [Route("invite/next")]
+        public ActionResult NextSteps(string hashedAccountId)
+        {
+            var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel> { FlashMessage = GetFlashMessageViewModelFromCookie(), Data = new InviteTeamMemberNextStepsViewModel() };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("invite/next")]
+        public ActionResult NextSteps(int? choice)
+        {
+            switch (choice ?? 0)
+            {
+                case 1: return RedirectToAction("Invite");
+                case 2: return RedirectToAction("ViewTeam");
+                case 3: return RedirectToAction("Index");
+                default:
+                    var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel>
+                    {
+                        FlashMessage = GetFlashMessageViewModelFromCookie(),
+                        Data = new InviteTeamMemberNextStepsViewModel { ErrorMessage = "You must select an option to continue." }
+                    };
+                    return View(model); //No option entered
+            }
+        }
+
         [HttpGet]
         [Route("{invitationId}/cancel")]
         public async Task<ActionResult> Cancel(string email, string invitationId, string hashedAccountId)
