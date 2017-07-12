@@ -98,6 +98,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
             var existingSubmissionIds = await _dasLevyRepository.GetEmployerDeclarationSubmissionIds(employerLevyData.EmpRef);
             var existingSubmissionIdsLookup = new HashSet<string>(existingSubmissionIds.Select( x => x.ToString()));
 
+            //NOTE: The submissionId in our database is the same as the declaration ID from HMRC (DasDeclaration)
             declarations = declarations.Where(x => !existingSubmissionIdsLookup.Contains(x.Id)).ToArray();
 
             declarations = declarations.Where(x => !DoesSubmissionPreDateTheLevy(x)).ToArray();
