@@ -352,6 +352,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 case "agreement": return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
 
+                case "teamMembers": return RedirectToAction("ViewTeam", "EmployerTeam", new { hashedAccountId });
+
                 case "addOrganisation": return RedirectToAction("SearchForOrganisation", "SearchOrganisation", new { hashedAccountId });
 
                 case "dashboard": return RedirectToAction("Index", "EmployerTeam", new { hashedAccountId });

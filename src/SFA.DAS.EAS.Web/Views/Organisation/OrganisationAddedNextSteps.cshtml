@@ -24,8 +24,13 @@
                 <div class="form-group @(!string.IsNullOrEmpty(Model.Data) ? "error" : "")">
 
                     <label for="acceptAgreement" class="block-label">
-                        <span class="form-label">Accept agreement in order to add apprentice</span>
+                        <span class="form-label">Sign an agreement to allow {ORG NAME} to spend funds</span>
                         <input type="radio" name="nextStep" value="agreement" id="acceptAgreement" />
+                    </label>
+
+                    <label for="teamMembers" class="block-label">
+                        <span class="form-label">Check which team members can sign the agreement</span>
+                        <input type="radio" name="nextStep" value="teamMembers" id="teamMembers" />
                     </label>
 
                     <label for="addAnotherOrganisation" class="block-label">
