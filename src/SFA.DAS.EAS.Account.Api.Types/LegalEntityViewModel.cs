@@ -18,5 +18,6 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public EmployerAgreementStatus AgreementStatus { get; set; }
         public string AgreementSignedByName { get; set; }
         public DateTime? AgreementSignedDate { get; set; }
+        public short SourceNumeric { get; set; }
     }
 }

@@ -20,7 +20,6 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly SearchOrganisationOrchestrator _orchestrator;
         //This is temporary until the existing add org function is replaced, at which point the method used can be moved to the org search orchestrator
-        private readonly OrganisationOrchestrator _organisationOrchestrator;
         private readonly IMapper _mapper;
 
 
@@ -29,19 +28,17 @@ namespace SFA.DAS.EAS.Web.Controllers
             IFeatureToggle featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IMapper mapper,
-            OrganisationOrchestrator organisationOrchestrator)
+            IMapper mapper)
             : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             _orchestrator = orchestrator;
             _mapper = mapper;
-            _organisationOrchestrator = organisationOrchestrator;
         }
 
         [HttpGet]
         [Route("{HashedAccountId}/organisations/search", Order = 0)]
         [Route("organisations/search", Order = 1)]
-        public ActionResult SearchForOrganisation()
+        public ActionResult SearchForOrganisation(string hashedAccountId)
         {
             return View("SearchForOrganisation");
         }
@@ -143,7 +140,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private static void SetSearchTermValidationModelProperties(OrchestratorResponse model)
         {
             model.Status = HttpStatusCode.BadRequest;
-            model.FlashMessage = FlashMessageViewModel.CreateErrorFlashMessageViewModel(new Dictionary<string, string> { { "searchTerm", "Enter organisation name/number" } });
+            model.FlashMessage = FlashMessageViewModel.CreateErrorFlashMessageViewModel(new Dictionary<string, string> { { "searchTerm", "Enter organisation name" } });
         }
 
         private void CreateOrganisationCookieData(OrganisationDetailsViewModel viewModel)

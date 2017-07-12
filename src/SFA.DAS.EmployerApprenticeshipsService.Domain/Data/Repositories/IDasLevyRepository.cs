@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
     public interface IDasLevyRepository
     {
         Task<DasDeclaration> GetEmployerDeclaration(string id, string empRef);
-        Task<IEnumerable<string>> GetEmployerDeclarationIds(string empRef);
+        Task<IEnumerable<long>> GetEmployerDeclarationSubmissionIds(string empRef);
         Task CreateEmployerDeclarations(IEnumerable<DasDeclaration> dasDeclaration, string empRef, long accountId);
         Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId);
         Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId, string payrollYear, short payrollMonth);

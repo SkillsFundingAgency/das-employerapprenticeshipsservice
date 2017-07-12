@@ -209,7 +209,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
                 Code = legalEntityResult.LegalEntity.Code,
                 Status = legalEntityResult.LegalEntity.Status,
                 Sector = legalEntityResult.LegalEntity.Sector,
-
+                SourceNumeric = legalEntityResult.LegalEntity.SourceNumeric,
                 AgreementStatus = (EmployerAgreementStatus)((int)legalEntityResult.LegalEntity.AgreementStatus),
                 AgreementSignedByName = legalEntityResult.LegalEntity.AgreementSignedByName,
                 AgreementSignedDate = legalEntityResult.LegalEntity.AgreementSignedDate

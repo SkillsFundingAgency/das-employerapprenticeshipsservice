@@ -45,13 +45,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<IEnumerable<string>> GetEmployerDeclarationIds(string empRef)
+        public async Task<IEnumerable<long>> GetEmployerDeclarationSubmissionIds(string empRef)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@empRef", empRef, DbType.String);
 
-            var result = await WithConnection(async c => await c.QueryAsync<string>(
-                sql: "[employer_financial].[GetEmployerDeclarationsByEmpRef]",
+            var result = await WithConnection(async c => await c.QueryAsync<long>(
+                sql: "[employer_financial].[GetLevyDeclarationSubmissionIdsByEmpRef]",
                 param: parameters,
                 commandType: CommandType.StoredProcedure));
 
@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                             parameters.Add("@PayrollYear", dasDeclaration.PayrollYear, DbType.String);
                             parameters.Add("@PayrollMonth", dasDeclaration.PayrollMonth, DbType.Int16);
                             parameters.Add("@SubmissionDate", dasDeclaration.SubmissionDate, DbType.DateTime);
-                            parameters.Add("@SubmissionId", dasDeclaration.Id, DbType.String);
+                            parameters.Add("@SubmissionId", dasDeclaration.Id, DbType.Int64);
                             parameters.Add("@HmrcSubmissionId", dasDeclaration.SubmissionId, DbType.Int64);
                             parameters.Add("@CreatedDate", DateTime.UtcNow, DbType.DateTime);
                             if (dasDeclaration.DateCeased.HasValue && dasDeclaration.DateCeased != DateTime.MinValue)
