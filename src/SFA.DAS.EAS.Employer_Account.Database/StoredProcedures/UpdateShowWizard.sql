@@ -1,8 +1,11 @@
 ﻿CREATE PROCEDURE [employer_account].[UpdateShowWizard]
-	@accountId BIGINT = 0,
-	@userId BIGINT = 0,
+	@hashedAccountId VARCHAR(20),
+	@externalUserId UNIQUEIDENTIFIER,
 	@showWizard BIT = 0
 AS
-	UPDATE [employer_account].[Membership] SET [ShowWizard] = @showWizard
-	WHERE AccountId = @accountId AND UserId = @userId
-
+	UPDATE mem
+	SET [ShowWizard] = @showWizard
+	FROM [employer_account].[Membership] mem
+	INNER JOIN [employer_account].[User] u ON mem.UserId = u.Id
+	INNER JOIN [employer_account].[Account] acc ON mem.AccountId = acc.Id
+	WHERE acc.HashedId = @hashedAccountId AND u.UserRef = @externalUserId

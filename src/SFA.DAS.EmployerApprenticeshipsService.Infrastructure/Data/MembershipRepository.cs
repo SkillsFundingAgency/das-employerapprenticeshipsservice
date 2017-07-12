@@ -138,9 +138,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
            await WithConnection(async c =>
            {
                var parameters = new DynamicParameters();
-               parameters.Add("@externalUserId", externalUserId, DbType.String);
+               parameters.Add("@externalUserId", Guid.Parse(externalUserId), DbType.Guid);
                parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
-               parameters.Add("@showWizard", showWizard, DbType.Binary);
+               parameters.Add("@showWizard", showWizard, DbType.Boolean);
 
                return await c.ExecuteAsync(
                    sql: "[employer_account].[UpdateShowWizard]",

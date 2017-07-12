@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [employer_account].[GetTeamMember]
-	@hashedAccountId  BIGINT = 0,
-	@externalUserId BIGINT = 0
+	@hashedAccountId  NVARCHAR(50),
+	@externalUserId NVARCHAR(50)
 AS
 	SELECT * FROM [employer_account].[MembershipView] m 
 	INNER JOIN [employer_account].account a ON a.id=m.accountid 
