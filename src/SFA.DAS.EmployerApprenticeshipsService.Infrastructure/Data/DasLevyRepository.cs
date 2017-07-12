@@ -328,11 +328,14 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToArray();
         }
 
-        public async Task ProcessPaymentData()
+        public async Task ProcessPaymentData(long accountId)
         {
+            var parameters = new DynamicParameters();
+            parameters.Add("@accountId", accountId, DbType.Int64);
+
             await WithConnection(async c => await c.ExecuteAsync(
                 sql: "[employer_financial].[ProcessPaymentDataTransactions]",
-                param: null,
+                param: parameters,
                 commandType: CommandType.StoredProcedure));
         }
 

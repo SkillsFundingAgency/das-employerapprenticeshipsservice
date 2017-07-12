@@ -179,7 +179,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
                 PaymentsForPeriod = string.Empty
             }).Wait();
 
-            dasLevyRepository.ProcessPaymentData().Wait();
+            dasLevyRepository.ProcessPaymentData(accountId).Wait();
         }
 
 

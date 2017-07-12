@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 
             await _dasLevyRepository.CreatePaymentData(newPayments);
 
-            await _mediator.PublishAsync(new ProcessPaymentEvent());
+            await _mediator.PublishAsync(new ProcessPaymentEvent { AccountId = message.AccountId});
         }
     }
 }
