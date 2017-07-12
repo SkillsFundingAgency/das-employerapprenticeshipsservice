@@ -1,8 +1,8 @@
-﻿CREATE PROCEDURE [employer_financial].[GetEmployerDeclarationsByEmpRef]
+﻿CREATE PROCEDURE [employer_financial].[GetLevyDeclarationSubmissionIdsByEmpRef]
 	@empRef NVARCHAR(50)
 AS
 	select 
-		x.Id
+		x.SubmissionId
 	FROM 
 		[employer_financial].[GetLevyDeclarationAndTopUp] x
 	where
