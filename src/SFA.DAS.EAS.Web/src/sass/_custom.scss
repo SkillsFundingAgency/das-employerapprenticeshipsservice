@@ -395,9 +395,11 @@ body {
 /*Email notification settings*/
 #notification-settings{
     .alert-default {
-        background:none;
+        background: $panel-colour;
         margin-bottom:40px;
+        p{font-weight:bold;}
     }
+
     h1{
         margin-bottom:0;
     }
