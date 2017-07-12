@@ -14,7 +14,7 @@
     }
 }
 
-@if (Model.Data.UserRole == Role.Owner)
+@if (Model.Data.ShowWizard)
 {
     @Html.Partial("_WelcomeWizard")
 }

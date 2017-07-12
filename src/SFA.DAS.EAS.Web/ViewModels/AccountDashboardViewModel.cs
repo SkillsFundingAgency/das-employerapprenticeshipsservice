@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public int RequiresAgreementSigning { get; set; }
         public Role UserRole { get; set; }
         public string EmployerAccountType { get; set; }
-        public bool HideWizard { get; set; }
+        public bool ShowWizard { get; set; }
 
         public int PayeSchemeCount { get; set; }
         public int OrgainsationCount { get; set; }

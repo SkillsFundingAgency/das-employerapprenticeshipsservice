@@ -108,9 +108,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@externalUserId", externalUserId, DbType.String);
 
                 return await c.QueryAsync<MembershipView>(
-                    sql: "SELECT * FROM [employer_account].[MembershipView] m inner join [employer_account].account a on a.id=m.accountid WHERE a.HashedId = @hashedAccountId AND UserRef = @externalUserId;",
+                    sql: "[employer_account].[GetTeamMember]",
                     param: parameters,
-                    commandType: CommandType.Text);
+                    commandType: CommandType.StoredProcedure);
             });
 
             return result.SingleOrDefault();
@@ -131,6 +131,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     param: parameters,
                     commandType: CommandType.Text);
             });
+        }
+
+        public async Task SetShowAccountWizard(string hashedAccountId, string externalUserId, bool showWizard)
+        {
+           await WithConnection(async c =>
+           {
+               var parameters = new DynamicParameters();
+               parameters.Add("@externalUserId", externalUserId, DbType.String);
+               parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
+               parameters.Add("@showWizard", showWizard, DbType.Binary);
+
+               return await c.ExecuteAsync(
+                   sql: "[employer_account].[UpdateShowWizard]",
+                   param: parameters,
+                   commandType: CommandType.StoredProcedure);
+           });
         }
     }
 }

@@ -194,6 +194,8 @@
     <Compile Include="Commands\UpdatePayeInformationTests\WhenUpdatingPayeInformation.cs" />
     <Compile Include="Commands\UpdatePayeInformationTests\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\UpdateProviderPaymentPriority\WhenValidationUpdateProviderPaymentPriority.cs" />
+    <Compile Include="Commands\UpdateShowAccountWizardTests\WhenIUpdateMyShowAccountWizardValue.cs" />
+    <Compile Include="Commands\UpdateShowAccountWizardTests\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\WhenUpdatingUserNotificationSettings.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUserTests\WhenUpsertingAUser.cs" />

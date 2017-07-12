@@ -40,13 +40,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                 response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
             }
 
-
-            //TODO: Sort out Hide Wizard
-            //var userPreferences = GetUserPreferenceCookie();
-
-            //if(response.Data != null)
-            //    response.Data.HideWizard = userPreferences?.HideWizard ?? false;
-
             return View(response);
         }
 
@@ -224,13 +217,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("hideWizard")]
-        public ActionResult HideWizard()
+        public async Task<ActionResult> HideWizard(string hashedAccountId)
         {
-            //TODO: Sort out hide wizard
+            var externalUserId = OwinWrapper.GetClaimValue(@"sub");
 
-            //var userPreferences = GetUserPreferenceCookie() ?? new UserPreferencesViewModel();
-            //userPreferences.HideWizard = true;
-            //UpdateUserPreferenceCookie(userPreferences);
+            await _employerTeamOrchestrator.HideWizard(hashedAccountId, externalUserId);
 
             return RedirectToAction("Index");
         }

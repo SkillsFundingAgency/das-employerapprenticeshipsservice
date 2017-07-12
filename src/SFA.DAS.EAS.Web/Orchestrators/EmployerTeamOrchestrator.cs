@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application.Commands.CreateInvitation;
 using SFA.DAS.EAS.Application.Commands.DeleteInvitation;
 using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
 using SFA.DAS.EAS.Application.Commands.ResendInvitation;
+using SFA.DAS.EAS.Application.Commands.UpdateShowWizard;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountStats;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
@@ -84,6 +85,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     OrgainsationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
                     PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
                     TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
+                    ShowWizard = userResponse.User.ShowWizard
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
@@ -420,7 +422,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 if (response.Status == HttpStatusCode.OK)
                 {
-                    response.FlashMessage = new FlashMessageViewModel()
+                    response.FlashMessage = new FlashMessageViewModel
                     {
                         Severity = FlashMessageSeverityLevel.Success,
                         Headline = "Team member updated",
@@ -481,6 +483,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Status = teamMember.Status,
                 ExpiryDate = teamMember.ExpiryDate
             };
+        }
+
+        public async Task HideWizard(string hashedAccountId, string externalUserId)
+        {
+            await _mediator.SendAsync(new UpdateShowAccountWizardCommand
+            {
+                HashedAccountId = hashedAccountId,
+                ExternalUserId = externalUserId,
+                ShowWizard = false
+            });
         }
     }
 }

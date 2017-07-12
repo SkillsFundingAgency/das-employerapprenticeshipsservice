@@ -155,6 +155,9 @@
     <Compile Include="Commands\UpdateProviderPaymentPriority\UpdateProviderPaymentPriorityValidator.cs" />
     <Compile Include="Commands\UpdateProviderPaymentPriority\UpdateProviderPaymentPriorityCommand.cs" />
     <Compile Include="Commands\UpdateProviderPaymentPriority\UpdateProviderPaymentPriorityCommandHandler.cs" />
+    <Compile Include="Commands\UpdateShowWizard\UpdateShowAccountWizardCommand.cs" />
+    <Compile Include="Commands\UpdateShowWizard\UpdateShowAccountWizardCommandHandler.cs" />
+    <Compile Include="Commands\UpdateShowWizard\UpdateShowAccountWizardCommandValidator.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommand.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommandHandler.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsValidator.cs" />

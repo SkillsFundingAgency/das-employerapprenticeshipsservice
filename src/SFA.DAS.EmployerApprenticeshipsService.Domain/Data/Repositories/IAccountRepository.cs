@@ -24,6 +24,5 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings);
 
         Task<AccountStats> GetAccountStats(long accountId);
-
     }
 }
