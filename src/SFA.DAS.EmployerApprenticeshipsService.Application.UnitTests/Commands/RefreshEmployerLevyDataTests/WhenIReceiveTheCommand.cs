@@ -147,7 +147,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
         public async Task ThenIfThereAreNoNewDeclarationsThenTheProcessDeclarationEventIsNotPublished()
         {
             //Arrange
-            _levyRepository.Setup(x => x.GetEmployerDeclarationSubmissionIds(ExpectedEmpRef)).ReturnsAsync(new List<long>{100,200,300,400});
+            _levyRepository.Setup(x => x.GetEmployerDeclarationSubmissionIds(ExpectedEmpRef)).ReturnsAsync(new List<long>{1,2,3,4});
             var data = RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId);
 
             //Act
