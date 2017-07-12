@@ -76,6 +76,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             ExternalUserId = externalUserId
                         });
 
+                //We only show account wizards to owners
+                var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
+
                 var viewModel = new AccountDashboardViewModel
                 {
                     Account = accountResponse.Account,
@@ -85,7 +88,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     OrgainsationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
                     PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
                     TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
-                    ShowWizard = userResponse.User.ShowWizard
+                    ShowWizard = showWizard
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
