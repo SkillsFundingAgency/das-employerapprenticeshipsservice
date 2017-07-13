@@ -399,6 +399,7 @@
     <Compile Include="ViewModels\CommitmentsIndexViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAgreementNextStepsViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberNextStepsViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ApprenticeshipFiltersViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusChoiceViewModel.cs" />
@@ -1076,6 +1077,7 @@
     <Content Include="Views\Shared\_SetupAccount_OrgS.cshtml" />
     <Content Include="Views\Home\Index_OrgS.cshtml" />
     <Content Include="Views\EmployerTeam\NextSteps.cshtml" />
+    <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
