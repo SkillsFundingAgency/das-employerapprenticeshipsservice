@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 
             //Assert
             _httpClientWrapper.Verify(x => x.Get<DateTime>(ExpectedAccessCode, expectedApiUrl), Times.Once);
-            _cacheProvider.Verify(x => x.Set("HmrcFractionLastCalculatedDate", It.IsAny<DateTime>(), It.Is<TimeSpan>(c => c.Days.Equals(1))));
+            _cacheProvider.Verify(x => x.Set("HmrcFractionLastCalculatedDate", It.IsAny<DateTime>(), It.Is<TimeSpan>(c => c.Minutes.Equals(30))));
         }
     }
 }
