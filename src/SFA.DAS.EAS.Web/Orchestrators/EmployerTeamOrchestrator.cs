@@ -9,11 +9,14 @@ using SFA.DAS.EAS.Application.Commands.CreateInvitation;
 using SFA.DAS.EAS.Application.Commands.DeleteInvitation;
 using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
 using SFA.DAS.EAS.Application.Commands.ResendInvitation;
+using SFA.DAS.EAS.Application.Commands.UpdateShowWizard;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EAS.Application.Queries.GetAccountStats;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetInvitation;
 using SFA.DAS.EAS.Application.Queries.GetMember;
+using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Application.Queries.GetUser;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain;
@@ -49,7 +52,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = accountId,
                     UserId = externalUserId
                 });
-
                 
                 var showSigningNotice = 0;
                 
@@ -64,13 +66,29 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     showSigningNotice = agreementsResponse.EmployerAgreements.Count(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
                 }
                 
+                var userResponse = await _mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = accountId, TeamMemberId = externalUserId });
 
+                var accountStatsResponse =
+                    await _mediator.SendAsync(
+                        new GetAccountStatsQuery
+                        {
+                            HashedAccountId = accountId,
+                            ExternalUserId = externalUserId
+                        });
+
+                //We only show account wizards to owners
+                var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
 
                 var viewModel = new AccountDashboardViewModel
                 {
                     Account = accountResponse.Account,
                     RequiresAgreementSigning = showSigningNotice,
-                    UserRole = userRoleResponse.UserRole
+                    UserRole = userRoleResponse.UserRole,
+                    UserFirstName = userResponse.User.FirstName,
+                    OrgainsationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
+                    PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
+                    TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
+                    ShowWizard = showWizard
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
@@ -407,7 +425,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 if (response.Status == HttpStatusCode.OK)
                 {
-                    response.FlashMessage = new FlashMessageViewModel()
+                    response.FlashMessage = new FlashMessageViewModel
                     {
                         Severity = FlashMessageSeverityLevel.Success,
                         Headline = "Team member updated",
@@ -468,6 +486,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Status = teamMember.Status,
                 ExpiryDate = teamMember.ExpiryDate
             };
+        }
+
+        public async Task HideWizard(string hashedAccountId, string externalUserId)
+        {
+            await _mediator.SendAsync(new UpdateShowAccountWizardCommand
+            {
+                HashedAccountId = hashedAccountId,
+                ExternalUserId = externalUserId,
+                ShowWizard = false
+            });
         }
     }
 }

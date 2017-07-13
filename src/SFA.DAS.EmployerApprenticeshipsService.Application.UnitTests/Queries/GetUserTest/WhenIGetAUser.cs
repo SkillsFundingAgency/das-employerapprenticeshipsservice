@@ -3,16 +3,16 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetUser;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserTest
 {
-    class WhenIGetAUser : QueryBaseTest<GetUserQueryHandler, GetUserQuery, GetUserResponse>
+    public class WhenIGetAUser : QueryBaseTest<GetUserQueryHandler, GetUserQuery, GetUserResponse>
     {
         private Mock<IUserRepository> _repository;
+        private Mock<IHashingService> _hashingService;
 
         public override GetUserQuery Query { get; set; }
         public override GetUserQueryHandler RequestHandler { get; set; }
@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserTest
             base.SetUp();
 
             _repository = new Mock<IUserRepository>();
-
+          
             Query = new GetUserQuery { UserId = 2 };
             RequestHandler = new GetUserQueryHandler(_repository.Object, RequestValidator.Object);
         }
@@ -43,7 +43,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserTest
             Assert.IsNull(result.User);
             _repository.Verify(x => x.GetUserById(Query.UserId), Times.Once);
         }
-       
+
+        [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
@@ -53,6 +54,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserTest
             _repository.Verify(x => x.GetUserById(Query.UserId), Times.Once);
         }
 
+        [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Assign

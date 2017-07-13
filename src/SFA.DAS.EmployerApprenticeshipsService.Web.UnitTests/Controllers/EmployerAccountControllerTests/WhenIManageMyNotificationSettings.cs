@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Settings;
@@ -53,7 +49,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 It.IsAny<List<UserNotificationSetting>>()))
                 .Returns(() => Task.FromResult(new Unit()));
 
-            _controller = new SettingsController(_owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, _flashMessage.Object)
+            _controller = new SettingsController(_owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, 
+                _userViewTestingService.Object, _flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)

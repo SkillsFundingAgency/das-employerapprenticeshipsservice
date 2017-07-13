@@ -18,6 +18,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly IFeatureToggle _featureToggle;
         private readonly IMultiVariantTestingService _multiVariantTestingService;
         private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
+      
         protected IOwinWrapper OwinWrapper;
         
 
@@ -25,7 +26,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             IOwinWrapper owinWrapper, 
             IFeatureToggle featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage )
+            ICookieStorageService<FlashMessageViewModel> flashMessage)
         {
             OwinWrapper = owinWrapper;
             _featureToggle = featureToggle;
@@ -162,7 +163,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return toggle.WhiteList.Any(pattern => Regex.IsMatch(userEmail, pattern, RegexOptions.IgnoreCase));
         }
 
-        
         public void AddFlashMessageToCookie(FlashMessageViewModel model)
         {
             _flashMessage.Delete(FlashMessageCookieName);

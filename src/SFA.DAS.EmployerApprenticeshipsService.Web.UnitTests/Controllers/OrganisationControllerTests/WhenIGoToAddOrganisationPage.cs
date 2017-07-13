@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _mapper = new Mock<IMapper>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-
+            
             _orchestrator.Setup(x => x.GetAddLegalEntityViewModel(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<AddLegalEntityViewModel>());
 

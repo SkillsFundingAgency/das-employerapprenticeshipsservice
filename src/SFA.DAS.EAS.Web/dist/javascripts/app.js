@@ -140,10 +140,123 @@ sfa.backLink = {
     }
 }
 
+if (localStorage.getItem("answers") === null) {
+    localStorage.setItem("answers", JSON.stringify([]));
+}
+
+var getAnswers = JSON.parse(localStorage.getItem("answers"));
+
+sfa.welcomeWizard = {
+    settings :  {
+        noSteps: $('#welcome').data('total-steps'),
+        accountId: $('#welcome').data('account-id')
+    },  
+    init: function () {
+        var that = this;
+
+        var getAnswers = JSON.parse(localStorage.getItem("answers"));
+		var indexAnswer = getIndexOf(this.settings.accountId, getAnswers);
+		var answers = {};
+		answers.accountId = this.settings.accountId;
+
+		if (indexAnswer > -1) {
+		    answers = getAnswers[indexAnswer];
+		} else {
+		    getAnswers.push(answers);
+		}
+
+		var radios = $('#welcome input:radio');
+
+		var score = 0;
+        radios.filter(':checked').each(function () {
+		    score += parseInt($(this).val(), 10);
+		});
+
+		$('#confirmation').hide();
+		
+        radios.on('change', function () {
+            answers[this.name] = this.value;
+            listItem = $(this).closest('.todo-list--item');
+            that.radioChange($(this).val(), listItem);
+            localStorage.setItem("answers", JSON.stringify(getAnswers));
+        });
+
+        $.each(answers, function (i, val) {
+            if (i !== 'accountId') {
+                if (answers[i]) {
+                    $("input[name='" + i + "'][value=" + val + "]").click()
+                        .closest('.todo-list--item').removeClass('js-hidden').attr('aria-hidden', false);
+                }
+            }
+        });
+
+        this.editLinks();
+    },
+    editLinks: function () {
+        var h2s = $('#welcome').find('h2');
+        var that = this;
+        var editLink = $('<a>')
+                        .text('(review this step)')
+                        .attr('href', '#')
+                        .on('click', function (e) {
+                            that.toggleStep($(this).closest('.todo-list--item'));
+                            e.preventDefault();
+                        });
+
+        h2s.append(editLink);
+    },
+    toggleStep: function (step) {
+        if (step.hasClass('complete')) {
+            step.removeClass('complete');
+        } else {
+            step.addClass('complete');
+        }
+    },
+    showStep: function (step) {
+        step.removeClass('js-hidden').attr('aria-hidden', false);
+    },
+    radioChange: function (radioValue, listItem) {
+        var that = this; 
+        if (radioValue == 2) {
+            that.toggleStep(listItem);
+            if (listItem.data('step') < that.settings.noSteps) {
+                that.showStep(listItem.next());
+            }
+        }
+
+        var score = 0;
+        $('#welcome input:radio:checked').each(function () {
+            score += parseInt($(this).val(), 10);
+        });
+
+        if (score == (that.settings.noSteps * 2)) {
+            $('#confirmation').show();
+        } else {
+            $('#confirmation').hide();
+        }
+    }
+}
+
+getIndexOf = function (accountId, items) {
+    var i = 0;
+    var len = items.length;
+    for (i = 0; i < len; i++) {
+        if (accountId === items[i].accountId) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 if ($('#js-breadcrumbs')) {
     sfa.backLink.init();
 }
 
+if ($('#welcome')) {
+    sfa.welcomeWizard.init();
+}
+
+// Removed disabled attribute from buttons when user leaves the page
 window.onunload = function () {
     sfa.forms.removeDisabledAttr();
 };
@@ -155,6 +268,8 @@ $('ul#global-nav-links').collapsableNav();
 var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], label input[type='checkbox'], section input[type='radio']");
 var selectionButtonsOrgType = new GOVUK.SelectionButtons("section input[type='radio']", { parentElem: 'section' });
 
+var showHideContent = new GOVUK.ShowHideContent();
+showHideContent.init();
 
 // stop apprentice - show/hide date block
 $(".js-enabled #stop-effective").hide();

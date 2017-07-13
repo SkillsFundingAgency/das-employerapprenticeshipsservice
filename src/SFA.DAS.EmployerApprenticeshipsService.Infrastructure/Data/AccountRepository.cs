@@ -226,6 +226,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
+        public async Task<AccountStats> GetAccountStats(long accountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+
+                return await c.QueryAsync<AccountStats>(
+                    sql: "[employer_account].[GetAccountStats]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.SingleOrDefault();
+        }
+
         private static DataTable GenerateSettingsDataTable(List<UserNotificationSetting> settings)
         {
             var result = new DataTable();
@@ -245,5 +261,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
 
         }
+        
     }
 }

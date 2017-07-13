@@ -1,7 +1,34 @@
 module.exports = function(grunt) {
 
   // Project configuration.
-  grunt.initConfig({
+    grunt.initConfig({
+    svg_sprite: {
+        svgsprites: {
+            src: ['src/svg/*.svg'],
+            dest: 'Views',
+            options: {
+                shape: {
+                    dimension: {
+                        maxWidth: 40,
+                        maxHeight: 40
+                    },
+                    id: {
+                        generator: function (name, file) { return "icon-" + file.stem; },
+                    },
+                    spacing: {
+                        padding: 5
+                    }
+                },
+                mode: {
+                    symbol: {
+                        dest: 'Shared',
+                        sprite : '_SVGSprite.cshtml'
+                    },
+
+                }
+            }
+        }
+    },
     sass: {
       dev: {
         files: {
@@ -33,12 +60,14 @@ module.exports = function(grunt) {
 
   ;[
 	'grunt-contrib-watch',
+    'grunt-svg-sprite',
     'grunt-sass'
   ].forEach(function (task) {
     grunt.loadNpmTasks(task)
   })
 
-  // Default task(s).
+    // Default task(s).
+  grunt.registerTask('svg', ['svg_sprite']);
   grunt.registerTask('default', ['sass', 'watch']);
 
 };

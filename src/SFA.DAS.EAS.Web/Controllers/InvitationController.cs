@@ -20,7 +20,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
         public InvitationController(InvitationOrchestrator invitationOrchestrator, IOwinWrapper owinWrapper, 
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, EmployerApprenticeshipsServiceConfiguration configuration, ICookieStorageService<FlashMessageViewModel> flashMessage) 
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, 
+            EmployerApprenticeshipsServiceConfiguration configuration, 
+            ICookieStorageService<FlashMessageViewModel> flashMessage) 
             : base(owinWrapper, featureToggle,multiVariantTestingService, flashMessage)
         {
             if (invitationOrchestrator == null)

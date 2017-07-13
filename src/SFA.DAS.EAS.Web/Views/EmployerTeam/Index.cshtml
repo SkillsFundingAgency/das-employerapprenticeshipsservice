@@ -14,84 +14,84 @@
     }
 }
 
+@if (Model.Data.ShowWizard)
+{
+    @Html.Partial("_WelcomeWizard")
+}
+else
+{
+    <h1 class="heading-xlarge heading-dashboard" id="company-Name">@Model.Data.Account.Name</h1>
+    <div class="grid-row page-dashboard">
+        <div class="column-two-thirds">
+            <div class="grid-row">
+                <div class="column-half">
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("ViewTeam")">Your team</a>
+                    </h2>
+                    <p>Control what your team can do and invite new team members.</p>
 
-<h1 class="heading-xlarge heading-dashboard" id="company-Name">@Model.Data.Account.Name</h1>
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a>
+                    </h2>
+                    <p>Add your organisations that will make contracts with training providers.</p>
 
-<div class="grid-row page-dashboard">
-    <div class="column-two-thirds">
-     
-        <div class="grid-row">
-            <div class="column-half">
-                <h2 class="heading-medium">
-                    <a href="@Url.Action("ViewTeam")">Your team</a>
-                </h2>
-                <p>Control what your team can do and invite new team members.</p>
-
-                <h2 class="heading-medium">
-                    <a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a>
-                </h2>
-                <p>Add your organisations that will make contracts with training providers.</p>
-
-                <h2 class="heading-medium">
-                    <a href="@Url.Action("Index", "EmployerCommitments")">Apprentices</a>
-                </h2>
-                <p>Add apprentices, update details of existing apprentices and authorise payments to training providers.</p>
-
-            </div>
-            <div class="column-half">
-                <h2 class="heading-medium">
-                    <a href="@Url.Action("Index", "EmployerAccountTransactions")">Finance</a>
-                </h2>
-                <p>View your financial transactions.</p>
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Index", "EmployerCommitments")">Apprentices</a>
+                    </h2>
+                    <p>Add apprentices, update details of existing apprentices and authorise payments to training providers.</p>
+                </div>
+                <div class="column-half">
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Index", "EmployerAccountTransactions")">Finance</a>
+                    </h2>
+                    <p>View your financial transactions.</p>
    
-                <h2 class="heading-medium">
-                    <a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a>
-                </h2>
-                <p>Add or remove <abbr title="Pay as your earn">PAYE</abbr> schemes.</p>
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a>
+                    </h2>
+                    <p>Add or remove <abbr title="Pay as your earn">PAYE</abbr> schemes.</p>
           
-                <h2 class="heading-medium">
-                    <a href="https://findapprenticeshiptraining.sfa.bis.gov.uk/" target="_blank" rel="external">Find apprenticeship training</a>
-                </h2>
-                <p>Search for apprenticeships and see details of approved providers who can deliver the training.</p>
-
+                    <h2 class="heading-medium">
+                        <a href="https://findapprenticeshiptraining.sfa.bis.gov.uk/" target="_blank" rel="external">Find apprenticeship training</a>
+                    </h2>
+                    <p>Search for apprenticeships and see details of approved providers who can deliver the training.</p>
+                </div>
             </div>
-
-        </div>
-   
-           
-        <div class="grid-row">
-            <div class="column-full">
-                <div class="panel panel-filled">
-                    <h3 class="heading-medium">Help us improve this service</h3>
-                    <p><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>
-                    <p><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank" class="button">Take the survey <span class="vh">so that we can improve the service</span></a></p>
+            <div class="grid-row">
+                <div class="column-full">
+                    <div class="panel panel-filled">
+                        <h3 class="heading-medium">Help us improve this service</h3>
+                        <p><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>
+                        <p><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank" class="button">Take the survey <span class="vh">so that we can improve the service</span></a></p>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
-    <div class="column-one-third">
+        <div class="column-one-third">
        
-        @if (Model.Data.RequiresAgreementSigning > 0)
-        {
-            <section>
-                <div class="panel alert-default">
-                    <h3 class="heading-small">Spending not enabled (@Model.Data.RequiresAgreementSigning)</h3>
+            @if (Model.Data.RequiresAgreementSigning > 0)
+            {
+                <section>
+                    <div class="panel alert-default">
+                        <h3 class="heading-small">Spending not enabled (@Model.Data.RequiresAgreementSigning)</h3>
 
-                    @if (Model.Data.UserRole == Role.Owner)
-                    {
-                        <p>You need to <a href="@Url.Action("Index", "EmployerAgreement")">sign an agreement</a> to enable your organisations to spend funds.</p>
-                    }
+                        @if (Model.Data.UserRole == Role.Owner)
+                        {
+                            <p>You need to <a href="@Url.Action("Index", "EmployerAgreement")">sign an agreement</a> to enable your organisations to spend funds.</p>
+                        }
 
-                    @if (Model.Data.UserRole == Role.Transactor)
-                    {
-                        <p>An agreement needs to be signed to enable your organisations to spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View this agreement</a>.</p>
-                    }
+                        @if (Model.Data.UserRole == Role.Transactor)
+                        {
+                            <p>An agreement needs to be signed to enable your organisations to spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View this agreement</a>.</p>
+                        }
               
-                </div>
-            </section>
-        }
+                    </div>
+                </section>
+            }
        
+        </div>
     </div>
-</div>
+
+}
 
 
