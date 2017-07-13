@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 };
                 AddFlashMessageToCookie(flashMessage);
 
-                return RedirectToAction("Index", new { hashedAccountId });
+                return RedirectToAction("NextSteps", new { hashedAccountId });
             }
 
             var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
