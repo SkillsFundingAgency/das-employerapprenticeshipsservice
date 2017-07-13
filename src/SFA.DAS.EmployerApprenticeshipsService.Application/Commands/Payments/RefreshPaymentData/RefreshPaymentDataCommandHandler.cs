@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -43,7 +44,9 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             {
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
+
             ICollection<PaymentDetails> payments = null;
+
             try
             {
                 payments = await _paymentService.GetAccountPayments(message.PeriodEnd, message.AccountId);
@@ -53,31 +56,17 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
                 _logger.Error(ex,$"Unable to get payment information for {message.PeriodEnd} accountid {message.AccountId}");
             }
 
-            if (payments == null)
-            {
-                return;
-            }
+            if (payments == null || !payments.Any()) return;
+
+            var existingPaymentIds = await _dasLevyRepository.GetAccountPaymentIds(message.AccountId);
+
+            var newPayments = payments.Where(p => !existingPaymentIds.Any(x => x.ToString().Equals(p.Id))).ToArray();
             
-            var sendPaymentDataChanged = false;
+            if(!newPayments.Any()) return;
 
-            foreach (var paymentDetails in payments)
-            {
-                var existingPayment = await _dasLevyRepository.GetPaymentData(Guid.Parse(paymentDetails.Id));
+            await _dasLevyRepository.CreatePaymentData(newPayments);
 
-                if (existingPayment != null)
-                {
-                    continue;
-                }
-
-                await _dasLevyRepository.CreatePaymentData(paymentDetails);
-                
-                sendPaymentDataChanged = true;
-            }
-
-            if (sendPaymentDataChanged)
-            {
-                await _mediator.PublishAsync(new ProcessPaymentEvent());
-            }
+            await _mediator.PublishAsync(new ProcessPaymentEvent { AccountId = message.AccountId});
         }
     }
 }
