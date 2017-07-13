@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -359,13 +360,15 @@ namespace SFA.DAS.EAS.Web.Controllers
                 case "dashboard": return RedirectToAction("Index", "EmployerTeam", new { hashedAccountId });
 
                 default:
+                    var errorMessage = "Please select one of the next steps below";
                     return View("OrganisationAddedNextSteps", new OrchestratorResponse<string>
                     {
-                        Data = "Please select one of the next steps below",
+                        Data = errorMessage,
                         FlashMessage = new FlashMessageViewModel
                         {
                             Headline = "Invalid next step chosen",
-                            SubMessage = "Please select one of the next steps below",
+                            Message = errorMessage,
+                            ErrorMessages = new Dictionary<string, string> { { "nextStep", errorMessage } },
                             Severity = FlashMessageSeverityLevel.Error
                         }
                     });
