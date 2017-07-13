@@ -334,20 +334,24 @@ namespace SFA.DAS.EAS.Web.Controllers
             };
             AddFlashMessageToCookie(flashMessage);
 
-            return RedirectToAction("OrganisationAddedNextSteps", new { hashedAccountId });
+            return RedirectToAction("OrganisationAddedNextSteps", new { hashedAccountId, organisationName = name });
         }
 
         [HttpGet]
         [Route("nextStep")]
-        public ActionResult OrganisationAddedNextSteps()
+        public ActionResult OrganisationAddedNextSteps(string organisationName)
         {
-            var viewModel = new OrchestratorResponse<string> { FlashMessage = GetFlashMessageViewModelFromCookie() };
+            var viewModel = new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
+            {
+                FlashMessage = GetFlashMessageViewModelFromCookie(),
+                Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName }
+            };
             return View(viewModel);
         }
 
         [HttpPost]
         [Route("nextStep")]
-        public ActionResult GoToNextStep(string nextStep, string hashedAccountId)
+        public ActionResult GoToNextStep(string nextStep, string hashedAccountId, string organisationName)
         {
             switch (nextStep)
             {
@@ -361,9 +365,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 default:
                     var errorMessage = "Please select one of the next steps below";
-                    return View("OrganisationAddedNextSteps", new OrchestratorResponse<string>
+                    return View("OrganisationAddedNextSteps", new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
                     {
-                        Data = errorMessage,
+                        Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName },
                         FlashMessage = new FlashMessageViewModel
                         {
                             Headline = "Invalid next step chosen",
