@@ -5,7 +5,7 @@ Scenario: Future submission
 	When I have the following submissions
 		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction | SubmissionDate | CreatedDate |
 		| 123/ABC     | 10000      | 17-18        | 1             | 1                | 2017-05-15     | 2017-05-23  |
-		| 123/ABC     | 20000      | 17-18        | 2             | 1                | 2017-05-16     | 2017-05-23  |
+		| 123/ABC     | 20000      | 17-18        | 2             | 1                | 2017-05-16     | 2017-06-23  |
 		| 123/ABC     | 30000      | 17-18        | 3             | 1                | 2017-07-15     | 2017-07-23  |				
 		| 123/ABC     | 40000      | 17-18        | 4             | 1                | 2017-08-17     | 2017-08-23  |		
 	Then the balance on 08/2017 should be 44000 on the screen
