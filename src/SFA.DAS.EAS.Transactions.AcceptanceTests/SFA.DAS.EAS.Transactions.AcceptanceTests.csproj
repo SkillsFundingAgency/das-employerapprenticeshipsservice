@@ -117,6 +117,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\HMRC Scenarios\ScenarioFourA.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ScenarioFourA.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\HMRC Scenarios\ScenarioOne.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -173,6 +178,10 @@
     <Content Include="app.release.config">
       <DependentUpon>app.config</DependentUpon>
     </Content>
+    <None Include="Features\HMRC Scenarios\ScenarioFourA.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ScenarioFourA.feature.cs</LastGenOutput>
+    </None>
     <None Include="Features\HMRC Scenarios\ScenarioOne.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ScenarioOne.feature.cs</LastGenOutput>
