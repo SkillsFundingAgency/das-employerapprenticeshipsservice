@@ -77,7 +77,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.LevyDeclarationSteps
             var userId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
 
             var actual = employerAccountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(hashedAccountId,
-                new DateTime(year, month, 1), new DateTime(year, month, 30), userId).Result;
+                new DateTime(year, month, 1), new DateTime(year, month, DateTime.DaysInMonth(year, month)), userId).Result;
 
             var monthTransaction = actual.Data.SubTransactions.First();
 
