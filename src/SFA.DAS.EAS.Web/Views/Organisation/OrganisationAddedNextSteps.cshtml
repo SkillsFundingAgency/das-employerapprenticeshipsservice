@@ -1,4 +1,4 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<string>
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.OrganisationAddedNextStepsViewModel>
 
 @{ViewBag.PageID = "page-onboard-organisation-added-what-next"; }
 @{
@@ -15,17 +15,22 @@
 
                 <legend>
                     <span class="vh">What's next?</span>
-                    @if (!string.IsNullOrEmpty(Model.Data))
+                    @if (!string.IsNullOrEmpty(Model.Data.ErrorMessage))
                     {
-                        <span class="error-message">@Model.Data</span>
+                        <span class="error-message">@Model.Data.ErrorMessage</span>
                     }
                 </legend>
 
-                <div class="form-group @(!string.IsNullOrEmpty(Model.Data) ? "error" : "")">
+                <div class="form-group @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "error" : "")">
 
                     <label for="acceptAgreement" class="block-label">
-                        <span class="form-label">Accept agreement in order to add apprentice</span>
+                        <span class="form-label">Sign an agreement to allow @Model.Data.OrganisationName to spend funds</span>
                         <input type="radio" name="nextStep" value="agreement" id="acceptAgreement" />
+                    </label>
+
+                    <label for="teamMembers" class="block-label">
+                        <span class="form-label">Check which team members can sign the agreement</span>
+                        <input type="radio" name="nextStep" value="teamMembers" id="teamMembers" />
                     </label>
 
                     <label for="addAnotherOrganisation" class="block-label">
@@ -39,6 +44,8 @@
                     </label>
 
                 </div>
+                
+                <input type="hidden" name="organisationName" value="@Model.Data.OrganisationName" />
 
                 <div class="form-group">
                     <button type="submit" class="button">Continue</button>

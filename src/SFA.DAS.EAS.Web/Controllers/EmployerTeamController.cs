@@ -17,7 +17,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
 
         public EmployerTeamController(IOwinWrapper owinWrapper, EmployerTeamOrchestrator employerTeamOrchestrator, 
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage) 
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, 
+            ICookieStorageService<FlashMessageViewModel> flashMessage) 
             : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
@@ -240,6 +241,17 @@ namespace SFA.DAS.EAS.Web.Controllers
             var invitation = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(invitation);
+        }
+
+        [HttpGet]
+        [Route("hideWizard")]
+        public async Task<ActionResult> HideWizard(string hashedAccountId)
+        {
+            var externalUserId = OwinWrapper.GetClaimValue(@"sub");
+
+            await _employerTeamOrchestrator.HideWizard(hashedAccountId, externalUserId);
+
+            return RedirectToAction("Index");
         }
     }
 }

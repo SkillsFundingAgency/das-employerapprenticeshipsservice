@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
@@ -41,7 +37,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
 
             _controller = new EmployerAgreementController(
-                _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, _flashMessage.Object);
+                _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, 
+                _flashMessage.Object);
         }
 
         [Test]

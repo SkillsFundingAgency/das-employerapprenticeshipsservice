@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [employer_financial].[ProcessPaymentDataTransactions]
-	
+	@accountId BIGINT
 AS
 
 --- Process Levy Payments ---
@@ -29,6 +29,7 @@ select mainUpdate.* from
 				on pco.PeriodEnd = pe.PeriodEndId and pco.PaymentId = x.PaymentId and pco.FundingSource = x.FundingSource and pco.FundingSource = 2 
         left join [employer_financial].[payment] pci 
 				on pci.PeriodEnd = pe.PeriodEndId and pci.PaymentId = x.PaymentId  and pci.FundingSource = x.FundingSource and pci.FundingSource = 3 
+		WHERE x.AccountId = @accountId
         Group by
             x.UkPrn,x.PeriodEnd,x.accountId
     ) mainUpdate

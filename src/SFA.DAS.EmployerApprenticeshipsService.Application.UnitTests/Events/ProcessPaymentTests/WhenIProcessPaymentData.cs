@@ -25,11 +25,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Events.ProcessPaymentTests
         [Test]
         public async Task ThenTheProcessDeclarationsRepositoryCallIsMade()
         {
+            //Arrange
+            const int accountId = 10;
+
             //Act
-            await _eventHandler.Handle(new ProcessPaymentEvent());
+            await _eventHandler.Handle(new ProcessPaymentEvent{AccountId = accountId });
 
             //Assert
-            _dasLevyRepository.Verify(x => x.ProcessPaymentData(), Times.Once);
+            _dasLevyRepository.Verify(x => x.ProcessPaymentData(accountId), Times.Once);
         }
 
         [Test]
