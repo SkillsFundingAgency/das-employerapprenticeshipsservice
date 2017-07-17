@@ -82,7 +82,7 @@ this.ScenarioSetup(scenarioInfo);
                         "SubmissionDate",
                         "CreatedDate"});
             table1.AddRow(new string[] {
-                        "1234/ABC",
+                        "123/ABC",
                         "10000",
                         "17-18",
                         "1",
@@ -90,7 +90,7 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-05-15",
                         "2017-05-23"});
             table1.AddRow(new string[] {
-                        "1234/ABC",
+                        "123/ABC",
                         "20000",
                         "17-18",
                         "2",
@@ -98,7 +98,7 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-06-15",
                         "2017-06-23"});
             table1.AddRow(new string[] {
-                        "1234/ABC",
+                        "123/ABC",
                         "30000",
                         "17-18",
                         "3",
@@ -106,7 +106,7 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-07-15",
                         "2017-07-23"});
             table1.AddRow(new string[] {
-                        "1234/ABC",
+                        "123/ABC",
                         "40000",
                         "17-18",
                         "4",
@@ -114,7 +114,7 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-08-15",
                         "2017-08-23"});
             table1.AddRow(new string[] {
-                        "1234/ABC",
+                        "123/ABC",
                         "47500",
                         "17-18",
                         "7",
@@ -122,7 +122,7 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-11-15",
                         "2017-11-23"});
             table1.AddRow(new string[] {
-                        "1234/ABC",
+                        "123/ABC",
                         "57500",
                         "18-19",
                         "8",
