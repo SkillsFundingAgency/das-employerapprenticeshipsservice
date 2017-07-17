@@ -4441,8 +4441,12 @@ h2 .float-right {
 
 /*Email notification settings*/
 #notification-settings .alert-default {
-  background: none;
+  background: #dee0e2;
   margin-bottom: 40px;
+}
+
+#notification-settings .alert-default p {
+  font-weight: bold;
 }
 
 #notification-settings h1 {
