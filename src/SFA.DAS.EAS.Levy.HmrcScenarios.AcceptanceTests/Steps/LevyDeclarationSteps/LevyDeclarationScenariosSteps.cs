@@ -13,7 +13,7 @@ using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
 
-namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.LevyDeclarationSteps
+namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.LevyDeclarationSteps
 {
     [Binding]
     public class LevyDeclarationScenariosSteps

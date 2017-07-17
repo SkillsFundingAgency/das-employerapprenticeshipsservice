@@ -92,6 +92,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AcceptanceTests", "AcceptanceTests", "{255E60DE-69C0-42A8-8D8B-997A368BE7CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests", "SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests\SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests.csproj", "{4F4834B9-83CD-4F67-B6D9-12B691F801D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -227,6 +229,10 @@ Global
 		{D6C8DD94-81A6-4AFD-827C-0140738E720A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6C8DD94-81A6-4AFD-827C-0140738E720A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6C8DD94-81A6-4AFD-827C-0140738E720A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F4834B9-83CD-4F67-B6D9-12B691F801D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F4834B9-83CD-4F67-B6D9-12B691F801D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F4834B9-83CD-4F67-B6D9-12B691F801D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F4834B9-83CD-4F67-B6D9-12B691F801D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -250,5 +256,6 @@ Global
 		{D6C8DD94-81A6-4AFD-827C-0140738E720A} = {ADBEB366-0CD1-42EB-AC83-0E3B8EBB6F3B}
 		{BEFF50E9-EED9-4DD2-A5F3-A707DCD99A17} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{255E60DE-69C0-42A8-8D8B-997A368BE7CA} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
+		{4F4834B9-83CD-4F67-B6D9-12B691F801D0} = {255E60DE-69C0-42A8-8D8B-997A368BE7CA}
 	EndGlobalSection
 EndGlobal
