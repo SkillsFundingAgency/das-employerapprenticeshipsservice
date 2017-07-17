@@ -15,7 +15,7 @@
       <Setting name="TokenCertificateThumbprint" value="6B7ACC520305BFDB4F7252DAEB2177CC091FAAE1" />
       <Setting name="ShowPayeHistory" value="true" />
       <Setting name="CurrentTime" value="" />
-      <Setting name="EmployerCommitmentsBaseUrl" value="https://at-empc.apprenticeships.sfa.bis.gov.uk/" />
+      <Setting name="EmployerCommitmentsBaseUrl" value="" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="CE71D8AD4A859BD1803DBE03989801B56E5B6875" thumbprintAlgorithm="sha1" />
