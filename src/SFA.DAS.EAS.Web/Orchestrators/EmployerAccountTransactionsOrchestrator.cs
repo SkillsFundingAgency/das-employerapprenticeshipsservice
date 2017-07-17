@@ -263,8 +263,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         CurrentBalanceCalcultedOn = currentBalanceCalcultedOn,
                         Data = data.Data
                     },
-                    Month = month,
-                    Year = year,
+                    Month = data.Month,
+                    Year = data.Year,
                     AccountHasPreviousTransactions = data.AccountHasPreviousTransactions
                 }
             };
