@@ -23,10 +23,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
         {
             var result = new ValidationResult();
 
-            if (item.AccountId == 0)
-            {
-                result.AddError(nameof(item.AccountId),"AccountId has not been supplied");
-            }
             if (string.IsNullOrEmpty(item.HashedAccountId))
             {
                 result.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
@@ -38,7 +34,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 
             if (result.IsValid())
             {
-                var caller = await _membershipRepository.GetCaller(item.AccountId, item.ExternalUserId);
+                var caller = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
                 if (caller == null)
                 {
                     result.IsUnauthorized = true;

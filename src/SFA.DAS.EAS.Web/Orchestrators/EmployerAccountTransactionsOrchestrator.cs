@@ -239,7 +239,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await
                     _mediator.SendAsync(new GetEmployerAccountTransactionsQuery
                     {
-                        AccountId = employerAccountResult.Account.Id,
                         ExternalUserId = externalUserId,
                         FromDate = fromDate,
                         ToDate = toDate,

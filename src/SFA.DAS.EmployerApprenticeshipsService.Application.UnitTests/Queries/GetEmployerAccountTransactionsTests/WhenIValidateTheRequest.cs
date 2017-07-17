@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenItIsValidIfAllFieldsArePopUlated()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { AccountId = 1, ExternalUserId = "123", HashedAccountId = "AD1" });
+            var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { ExternalUserId = "123", HashedAccountId = "AD1" });
 
             //Assert
             Assert.IsTrue(result.IsValid());
@@ -35,10 +35,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenTheResultIsMarkedAsUnauthorizedIfTheUserIsNotAMemberOfTheAccount()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(1, "123")).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller("AD1", "123")).ReturnsAsync(null);
 
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { AccountId = 1, ExternalUserId = "123", HashedAccountId = "AD1" });
+            var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { ExternalUserId = "123", HashedAccountId = "AD1" });
 
             //Assert
             Assert.IsTrue(result.IsUnauthorized);
@@ -52,7 +52,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 
             //Assert
             Assert.IsFalse(result.IsValid());
-            Assert.Contains(new KeyValuePair<string,string>("AccountId", "AccountId has not been supplied"),result.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "HashedAccountId has not been supplied"),result.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("ExternalUserId", "ExternalUserId has not been supplied"),result.ValidationDictionary);
         }

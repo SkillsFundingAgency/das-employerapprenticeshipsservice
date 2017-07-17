@@ -18,14 +18,16 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
         private readonly IDasLevyService _dasLevyService;
         private readonly IValidator<GetEmployerAccountTransactionsQuery> _validator;
         private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoServiceWrapper;
+        private readonly IHashingService _hashingService;
         private readonly ILog _logger;
 
-        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService, IValidator<GetEmployerAccountTransactionsQuery> validator, IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper, ILog logger)
+        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService, IValidator<GetEmployerAccountTransactionsQuery> validator, IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper, ILog logger, IHashingService hashingService)
         {
             _dasLevyService = dasLevyService;
             _validator = validator;
             _apprenticeshipInfoServiceWrapper = apprenticeshipInfoServiceWrapper;
             _logger = logger;
+            _hashingService = hashingService;
         }
 
         public async Task<GetEmployerAccountTransactionsResponse> Handle(GetEmployerAccountTransactionsQuery message)
@@ -37,13 +39,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
-            var transactions = await _dasLevyService.GetAccountTransactionsByDateRange(message.AccountId, message.FromDate, message.ToDate);
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+            var transactions = await _dasLevyService.GetAccountTransactionsByDateRange(accountId, message.FromDate, message.ToDate);
 
-            var hasPreviousTransactions = await _dasLevyService.GetPreviousAccountTransaction(message.AccountId, message.FromDate) > 0;
+            var hasPreviousTransactions = await _dasLevyService.GetPreviousAccountTransaction(accountId, message.FromDate) > 0;
             
             if (!transactions.Any())
             {
-                return GetResponse(message.HashedAccountId, message.AccountId, hasPreviousTransactions);
+                return GetResponse(message.HashedAccountId, accountId, hasPreviousTransactions);
             }
             
             foreach (var transaction in transactions)
@@ -51,7 +54,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 GenerateTransactionDescription(transaction);
             }
             
-            return GetResponse(message.HashedAccountId, message.AccountId, transactions, hasPreviousTransactions);
+            return GetResponse(message.HashedAccountId, accountId, transactions, hasPreviousTransactions);
         }
 
         private void GenerateTransactionDescription(TransactionLine transaction)

@@ -26,20 +26,23 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public override GetEmployerAccountTransactionsQuery Query { get; set; }
         public override GetEmployerAccountTransactionsHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetEmployerAccountTransactionsQuery>> RequestValidator { get; set; }
+        private Mock<IHashingService> _hashingService;
 
         [SetUp]
         public void Arrange()
         {
             SetUp();
-          
+
             _request = new GetEmployerAccountTransactionsQuery
             {
-                AccountId = 1,
                 HashedAccountId = "RTF34",
                 FromDate = DateTime.Now.AddDays(-10),
                 ToDate = DateTime.Now.AddDays(10),
                 ExternalUserId = "3EFR"
             };
+
+            _hashingService = new Mock<IHashingService>();
+            _hashingService.Setup(x => x.DecodeValue(_request.HashedAccountId)).Returns(1);
 
             _dasLevyService = new Mock<IDasLevyService>();
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
@@ -52,7 +55,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 
             _logger = new Mock<ILog>();
 
-            RequestHandler = new GetEmployerAccountTransactionsHandler(_dasLevyService.Object, RequestValidator.Object, _apprenticshipInfoService.Object, _logger.Object);
+            RequestHandler = new GetEmployerAccountTransactionsHandler(_dasLevyService.Object, RequestValidator.Object, _apprenticshipInfoService.Object, _logger.Object, _hashingService.Object);
             Query = new GetEmployerAccountTransactionsQuery();
         }
 
@@ -91,7 +94,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 
             //Assert
             Assert.AreEqual(_request.HashedAccountId, response.Data.HashedAccountId);
-            Assert.AreEqual(_request.AccountId, response.Data.AccountId);
+            Assert.AreEqual(1, response.Data.AccountId);
             Assert.AreEqual(1, response.Data.TransactionLines.Count);
         }
         
@@ -104,7 +107,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 
             //Assert
             Assert.AreEqual(_request.HashedAccountId, response.Data.HashedAccountId);
-            Assert.AreEqual(_request.AccountId, response.Data.AccountId);
+            Assert.AreEqual(1, response.Data.AccountId);
             Assert.IsEmpty(response.Data.TransactionLines);
         }
 
