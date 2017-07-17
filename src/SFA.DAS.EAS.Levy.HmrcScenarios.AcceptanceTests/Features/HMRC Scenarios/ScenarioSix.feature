@@ -9,7 +9,7 @@ Scenario: Inactivity period
 		| 123/ABC     | 30000      | 17-18        | 3             | 1                | 2017-07-15     | 2017-07-23  |
 		| 123/ABC     | 40000      | 17-18        | 4             | 1                | 2017-08-15     | 2017-08-23  |		
 		| 123/ABC     | 47500      | 17-18        | 7             | 1                | 2017-11-15     | 2017-11-23  |
-		| 123/ABC     | 57500      | 18-19        | 8             | 1                | 2017-12-15     | 2017-12-23  |		
+		| 123/ABC     | 57500      | 17-18        | 8             | 1                | 2017-12-15     | 2017-12-23  |		
 	Then the balance on 12/2017 should be 63250 on the screen		
 	And the total levy shown for month 11/2017 should be 8250
-	And For month 12/2017 the levy declared should be 7500 and the topup should be 750
+	And For month 11/2017 the levy declared should be 7500 and the topup should be 750

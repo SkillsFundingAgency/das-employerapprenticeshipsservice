@@ -124,7 +124,7 @@ this.ScenarioSetup(scenarioInfo);
             table1.AddRow(new string[] {
                         "123/ABC",
                         "57500",
-                        "18-19",
+                        "17-18",
                         "8",
                         "1",
                         "2017-12-15",
@@ -136,7 +136,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 14
  testRunner.And("the total levy shown for month 11/2017 should be 8250", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 15
- testRunner.And("For month 12/2017 the levy declared should be 7500 and the topup should be 750", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("For month 11/2017 the levy declared should be 7500 and the topup should be 750", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
