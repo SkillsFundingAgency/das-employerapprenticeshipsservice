@@ -36,8 +36,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _request = new GetEmployerAccountTransactionsQuery
             {
                 HashedAccountId = "RTF34",
-                FromDate = DateTime.Now.AddDays(-10),
-                ToDate = DateTime.Now.AddDays(10),
                 ExternalUserId = "3EFR"
             };
 
@@ -62,11 +60,39 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
+            //Arrange
+            _request.Year = 0;
+            _request.Month = 0;
+
+            var daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+
+            var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, daysInMonth);
+
             //Act
             await RequestHandler.Handle(_request);
 
             //Assert
-            _dasLevyService.Verify(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once);
+            _dasLevyService.Verify(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), fromDate, toDate), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfAMonthIsProvidedTheRepositoryIsCalledForThatMonthMonth()
+        {
+            //Arrange
+            _request.Year = 2017;
+            _request.Month = 3;
+
+            var daysInMonth = DateTime.DaysInMonth(_request.Year, _request.Month);
+
+            var fromDate = new DateTime(_request.Year, _request.Month, 1);
+            var toDate = new DateTime(_request.Year, _request.Month, daysInMonth);
+
+            //Act
+            await RequestHandler.Handle(_request);
+
+            //Assert
+            _dasLevyService.Verify(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), fromDate, toDate), Times.Once);
         }
 
         [Test]

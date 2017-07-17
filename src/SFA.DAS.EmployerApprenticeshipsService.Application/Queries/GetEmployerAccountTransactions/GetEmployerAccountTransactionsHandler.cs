@@ -39,10 +39,13 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
+            var toDate = CalculateToDate(message);
+            var fromDate = new DateTime(toDate.Year, toDate.Month, 1);
+            
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            var transactions = await _dasLevyService.GetAccountTransactionsByDateRange(accountId, message.FromDate, message.ToDate);
+            var transactions = await _dasLevyService.GetAccountTransactionsByDateRange(accountId, fromDate, toDate);
 
-            var hasPreviousTransactions = await _dasLevyService.GetPreviousAccountTransaction(accountId, message.FromDate) > 0;
+            var hasPreviousTransactions = await _dasLevyService.GetPreviousAccountTransaction(accountId, fromDate) > 0;
             
             if (!transactions.Any())
             {
@@ -55,6 +58,17 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             }
             
             return GetResponse(message.HashedAccountId, accountId, transactions, hasPreviousTransactions);
+        }
+
+        private static DateTime CalculateToDate(GetEmployerAccountTransactionsQuery message)
+        {
+            var year = message.Year == default(int) ? DateTime.Now.Year : message.Year;
+            var month = message.Month == default(int) ? DateTime.Now.Month : message.Month;
+
+            var daysInMonth = DateTime.DaysInMonth(year, month);
+
+            var toDate = new DateTime(year, month, daysInMonth);
+            return toDate;
         }
 
         private void GenerateTransactionDescription(TransactionLine transaction)
