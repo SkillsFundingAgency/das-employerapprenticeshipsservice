@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
                 PayrollDate = transactionLine.PayrollDate,
                 TransactionType = (TransactionItemType)transactionLine.TransactionType,
                 DateCreated = transactionLine.DateCreated,
-                SubTransactions = transactionLine.SubTransactions.Select(ConvertToTransactionViewModel).ToList(),
+                SubTransactions = transactionLine.SubTransactions?.Select(ConvertToTransactionViewModel).ToList(),
                 TransactionDate = transactionLine.TransactionDate
             };
         }

@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Api.Controllers
         [Route("{year?}/{month?}", Name = "GetTransactions")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
-        public async Task<IHttpActionResult> Index(string hashedAccountId, int year, int month)
+        public async Task<IHttpActionResult> Index(string hashedAccountId, int year = 0, int month = 0)
         {
             var result = await _orchestrator.GetAccountTransactions(hashedAccountId, year, month);
 
