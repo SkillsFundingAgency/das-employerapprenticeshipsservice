@@ -1,6 +1,6 @@
 ﻿Feature: Scenario Five - Adjustment to prior tax year
 
-Scenario: Month twelve submission
+Scenario: End of year adjustment
 	Given I have an account
 	When I have the following submissions
 		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction | SubmissionDate | CreatedDate |

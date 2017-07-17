@@ -64,10 +64,10 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Features.HMRCScenarios
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Month twelve submission")]
-        public virtual void MonthTwelveSubmission()
+        [NUnit.Framework.DescriptionAttribute("End of year adjustment")]
+        public virtual void EndOfYearAdjustment()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Month twelve submission", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("End of year adjustment", ((string[])(null)));
 #line 3
 this.ScenarioSetup(scenarioInfo);
 #line 4
