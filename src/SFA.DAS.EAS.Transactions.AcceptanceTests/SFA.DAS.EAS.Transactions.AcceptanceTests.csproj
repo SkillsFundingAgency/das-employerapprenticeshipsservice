@@ -137,6 +137,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ScenarioOne.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\HMRC Scenarios\ScenarioSeven.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ScenarioSeven.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\HMRC Scenarios\ScenarioSix.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -208,6 +213,10 @@
     <None Include="Features\HMRC Scenarios\ScenarioOne.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ScenarioOne.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\HMRC Scenarios\ScenarioSeven.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ScenarioSeven.feature.cs</LastGenOutput>
     </None>
     <None Include="Features\HMRC Scenarios\ScenarioSix.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
