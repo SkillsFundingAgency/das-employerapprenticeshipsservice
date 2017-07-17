@@ -26,7 +26,6 @@ namespace SFA.DAS.EAS.Api.Orchestrators
                 await
                     _mediator.SendAsync(new GetEmployerAccountTransactionsQuery
                     {
-                        ExternalUserId = "TODO",
                         Year = year,
                         Month = month,
                         HashedAccountId = hashedAccountId

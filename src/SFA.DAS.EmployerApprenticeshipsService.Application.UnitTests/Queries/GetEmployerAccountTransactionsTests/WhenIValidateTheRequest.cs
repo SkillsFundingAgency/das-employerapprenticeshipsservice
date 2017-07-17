@@ -45,6 +45,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         }
 
         [Test]
+        public async Task ThenTheResultIsMarkedAsAuthorizedIfNoUserHasBeenProvided()
+        {
+            //Act
+            var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { ExternalUserId = "", HashedAccountId = "AD1" });
+
+            //Assert
+            Assert.IsTrue(result.IsValid());
+            Assert.IsFalse(result.IsUnauthorized);
+        }
+
+        [Test]
         public async Task ThenIfTheFieldsArentPopulatedThenTheResultIsNotValidAndTheErrorDictionaryIsPopulated()
         {
             //Act
@@ -53,7 +64,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             Assert.IsFalse(result.IsValid());
             Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "HashedAccountId has not been supplied"),result.ValidationDictionary );
-            Assert.Contains(new KeyValuePair<string,string>("ExternalUserId", "ExternalUserId has not been supplied"),result.ValidationDictionary);
         }
     }
 }
