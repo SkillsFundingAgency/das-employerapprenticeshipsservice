@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 
             var transactions = await _dasLevyService.GetAccountTransactionsByDateRange(message.AccountId, message.FromDate, message.ToDate);
 
-            var hasPreviousTransactions = await _dasLevyService.GetPreviousAccountTransaction(message.AccountId, message.FromDate, message.ExternalUserId) > 0;
+            var hasPreviousTransactions = await _dasLevyService.GetPreviousAccountTransaction(message.AccountId, message.FromDate) > 0;
             
             if (!transactions.Any())
             {

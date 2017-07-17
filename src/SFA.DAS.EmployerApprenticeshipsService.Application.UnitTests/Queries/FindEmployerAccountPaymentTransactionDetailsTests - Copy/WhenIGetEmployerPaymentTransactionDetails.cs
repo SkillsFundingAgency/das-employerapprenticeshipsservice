@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
 
             _dasLevyService = new Mock<IDasLevyService>();
             _dasLevyService.Setup(x => x.GetAccountProviderPaymentsByDateRange<PaymentTransactionLine>
-                                            (It.IsAny<long>(), It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                                            (It.IsAny<long>(), It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                            .ReturnsAsync(new List<PaymentTransactionLine>
                 {
                     new PaymentTransactionLine { ProviderName = ProviderName }
@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
             //Assert
             _hashingService.Verify(x => x.DecodeValue(_hashedAccountId), Times.Once);
             _dasLevyService.Verify(x=>x.GetAccountProviderPaymentsByDateRange<PaymentTransactionLine>
-                                            (_accountId, _ukprn, _fromDate, _toDate, _externalUserId));
+                                            (_accountId, _ukprn, _fromDate, _toDate));
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
             //Arrange
             var transactionDate = DateTime.Now.AddDays(-2);
             _dasLevyService.Setup(x => x.GetAccountProviderPaymentsByDateRange<PaymentTransactionLine>
-                                           (It.IsAny<long>(), It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                                           (It.IsAny<long>(), It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                            .ReturnsAsync(new List<PaymentTransactionLine>
                {
                     new PaymentTransactionLine {TransactionDate = transactionDate}
@@ -145,7 +145,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
         {
             //Arrange
             _dasLevyService.Setup(x => x.GetAccountProviderPaymentsByDateRange<PaymentTransactionLine>
-                    (It.IsAny<long>(), It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                    (It.IsAny<long>(), It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(new List<PaymentTransactionLine>());
 
             //Act

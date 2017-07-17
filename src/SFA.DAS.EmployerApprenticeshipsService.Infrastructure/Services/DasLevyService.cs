@@ -39,30 +39,27 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return result.TransactionLines;
         }
 
-        public async Task<ICollection<T>> GetAccountLevyTransactionsByDateRange<T>(long accountId, DateTime fromDate, DateTime toDate,
-            string externalUserId) where T : TransactionLine
+        public async Task<ICollection<T>> GetAccountLevyTransactionsByDateRange<T>(long accountId, DateTime fromDate, DateTime toDate) where T : TransactionLine
         {
             var result = await _mediator.SendAsync(new GetAccountLevyTransactionsQuery
             {
                 AccountId = accountId,
                 FromDate = fromDate,
-                ToDate = toDate,
-                ExternalUserId = externalUserId
+                ToDate = toDate
             });
 
             return result?.Transactions?.OfType<T>().ToList() ?? new List<T>();
         }
 
         public async Task<ICollection<T>> GetAccountProviderPaymentsByDateRange<T>(
-            long accountId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId) where T : TransactionLine
+            long accountId, long ukprn, DateTime fromDate, DateTime toDate) where T : TransactionLine
         {
             var result = await _mediator.SendAsync(new GetAccountProviderPaymentsByDateRangeQuery
             {
                 AccountId = accountId,
                 UkPrn = ukprn,
                 FromDate = fromDate,
-                ToDate = toDate,
-                ExternalUserId = externalUserId
+                ToDate = toDate
             });
 
             return result?.Transactions?.OfType<T>().ToList() ?? new List<T>();
@@ -70,7 +67,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<ICollection<T>> GetAccountCoursePaymentsByDateRange<T>(
             long accountId, long ukprn, string courseName, int courseLevel, int? pathwayCode, DateTime fromDate,
-            DateTime toDate, string externalUserId) where T : TransactionLine
+            DateTime toDate) where T : TransactionLine
         {
             var result = await _mediator.SendAsync(new GetAccountCoursePaymentsQuery
             {
@@ -80,8 +77,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 CourseLevel = courseLevel,
                 PathwayCode = pathwayCode,
                 FromDate = fromDate,
-                ToDate = toDate,
-                ExternalUserId = externalUserId
+                ToDate = toDate
             });
 
             return result?.Transactions?.OfType<T>().ToList() ?? new List<T>();
@@ -105,13 +101,12 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return result.FractionDetail;
         }
 
-        public async Task<int> GetPreviousAccountTransaction(long accountId, DateTime fromDate, string externalUserId)
+        public async Task<int> GetPreviousAccountTransaction(long accountId, DateTime fromDate)
         {
             var result = await _mediator.SendAsync(new GetPreviousTransactionsCountRequest
             {
                 AccountId = accountId,
-                FromDate = fromDate,
-                ExternalUserId = externalUserId
+                FromDate = fromDate
             });
 
             return result.Count;
