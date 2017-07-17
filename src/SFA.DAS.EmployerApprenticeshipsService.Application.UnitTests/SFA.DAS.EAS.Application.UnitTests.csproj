@@ -144,21 +144,13 @@
   <ItemGroup>
     <Compile Include="Commands\AddPayeToAccountTests\WhenIAddPayeToAnAccount.cs" />
     <Compile Include="Commands\AddPayeToAccountTests\WhenIValidateTheCommand.cs" />
-    <Compile Include="Commands\CreateApprenticeshipTests\WhenCreatingAnApprenticeship.cs" />
     <Compile Include="Commands\RemoveLegalEntityTests\WhenIRemoveALegalEntity.cs" />
     <Compile Include="Commands\RemoveLegalEntityTests\WhenIValidateTheCommand.cs" />
-    <Compile Include="Commands\UpdateApprenticeshipStatusTests\WhenUpdatingApprenticeshipStatusToStopped.cs" />
-    <Compile Include="Commands\UpdateApprenticeshipStatusTests\WhenValidatingTheUpdateApprenticeshipStatusCommand.cs" />
-    <Compile Include="Commands\UpdateApprenticeshipStatusTests\WhenUpdatingApprenticeshipStatus.cs" />
     <Compile Include="Commands\AuditCommandTests\WhenIProcessTheCommand.cs" />
     <Compile Include="Commands\AuditCommandTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\ChangeTeamMemberRoleTests\WhenICallChangeTeamMemberRole.cs" />
     <Compile Include="Commands\CreateAccountCommandTests\WhenICallCreateAccount.cs" />
-    <Compile Include="Commands\CreateApprenticeshipTests\WhenValidatingCreateApprenticeshipCommand.cs" />
     <Compile Include="Commands\CreateAccountCommandTests\WhenIValidateTheCommand.cs" />
-    <Compile Include="Commands\CreateApprenticeshipUpdate\WhenCreatingApprenticeshipUpdate.cs" />
-    <Compile Include="Commands\CreateApprenticeshipUpdate\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\CreateCommitmentTests\WhenValidatingTheCreateCommitmentCommand.cs" />
     <Compile Include="Commands\CreateEmployerAgreementTemplateTests\WhenICreateAnEmployerAgreementTemplate.cs" />
     <Compile Include="Commands\CreateEnglishFractionCalculationDateCommandTests\WhenIHandleTheCommand.cs" />
     <Compile Include="Commands\CreateEnglishFractionCalculationDateCommandTests\WhenIValidateTheCommand.cs" />
@@ -169,8 +161,6 @@
     <Compile Include="Commands\CreateNewPeriodEndTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\CreateOrganisationAddressTests\WhenICreateAnAddress.cs" />
     <Compile Include="Commands\CreateOrganisationAddressTests\WhenIValidateTheRequest.cs" />
-    <Compile Include="Commands\DeleteApprenticeTests\WhenIDeleteAnApprentice.cs" />
-    <Compile Include="Commands\DeleteApprenticeTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\DeleteInvitationTests\WhenICallDeleteInvitation.cs" />
     <Compile Include="Commands\RefreshPaymentDataTests\WhenIReceiveTheCommand.cs" />
     <Compile Include="Commands\RefreshPaymentDataTests\WhenIValidateTheCommand.cs" />
@@ -181,19 +171,13 @@
     <Compile Include="Commands\RenameEmployerAccountCommandTests\WhenICallRenameAccount.cs" />
     <Compile Include="Commands\RenameEmployerAccountCommandTests\WhenIValidateTheRenameAccountCommand.cs" />
     <Compile Include="Commands\ResendInvitationTests\WhenIResendAnInvitation.cs" />
-    <Compile Include="Commands\ReviewApprenticeshipUpdate\WhenValidatingCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenSendingNotificationCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\SignEmployerAgreementTests\WhenISignAnEmployerAgreement.cs" />
     <Compile Include="Commands\SignEmployerAgreementTests\WhenIValidateTheRequest.cs" />
-    <Compile Include="Commands\SubmitCommitmentTests\WhenSubmittingCommitment.cs" />
-    <Compile Include="Commands\SubmitCommitmentTests\WhenValidatingTheSubmitCommitmentRequest.cs" />
-    <Compile Include="Commands\UndoApprenticeshipUpdate\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\UndoApprenticeshipUpdate\WhenUndoingApprenticeshipUpdate.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\WhenISendTheUpdateEnglishFractionsCommand.cs" />
     <Compile Include="Commands\UpdatePayeInformationTests\WhenUpdatingPayeInformation.cs" />
     <Compile Include="Commands\UpdatePayeInformationTests\WhenValidatingTheCommand.cs" />
-    <Compile Include="Commands\UpdateProviderPaymentPriority\WhenValidationUpdateProviderPaymentPriority.cs" />
     <Compile Include="Commands\UpdateShowAccountWizardTests\WhenIUpdateMyShowAccountWizardValue.cs" />
     <Compile Include="Commands\UpdateShowAccountWizardTests\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\WhenUpdatingUserNotificationSettings.cs" />
@@ -207,7 +191,6 @@
     <Compile Include="Commands\AcceptInvitationTests\WhenICallAcceptInvitation.cs" />
     <Compile Include="Commands\RefreshEmployerLevyDataTests\WhenIReceiveTheCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\ApprenticeshipSearch\WhenSubmittingApprenticeshipSearch.cs" />
     <Compile Include="Queries\GetAccountBalancesTests\WhenIGetAccountBalances.cs" />
     <Compile Include="Queries\GetAccountBalancesTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementRemove\WhenIGetAccountEmployerAgreementToRemove.cs" />
@@ -299,7 +282,6 @@
     <Compile Include="Queries\GetUserTest\WhenIGetAUser.cs" />
     <Compile Include="Queries\GetUserTest\WhenIValidatedTheQuery.cs" />
     <Compile Include="Queries\QueryBaseTest.cs" />
-    <Compile Include="Queries\ValidateStatusChangeDateQuery\WhenValidatingChangeDate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
