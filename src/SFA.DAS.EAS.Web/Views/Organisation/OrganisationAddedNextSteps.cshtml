@@ -1,0 +1,50 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<string>
+
+@{ViewBag.PageID = "page-onboard-organisation-added-what-next"; }
+@{
+    ViewBag.Title = "What Next";
+    ViewBag.Section = "organisations";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-large">What's next?</h1>
+        
+        <form action="@Url.Action("GoToNextStep")" method="post">
+            <fieldset>
+
+                <legend>
+                    <span class="vh">What's next?</span>
+                    @if (!string.IsNullOrEmpty(Model.Data))
+                    {
+                        <span class="error-message">@Model.Data</span>
+                    }
+                </legend>
+
+                <div class="form-group @(1 == 2 ? "" : "error")">
+
+                    <label for="acceptAgreement" class="block-label">
+                        <span class="form-label">Accept agreement in order to add apprentice</span>
+                        <input type="radio" name="nextStep" value="agreement" id="acceptAgreement" />
+                    </label>
+
+                    <label for="addAnotherOrganisation" class="block-label">
+                        <span class="form-label">Add another organisation</span>
+                        <input type="radio" name="nextStep" value="addOrganisation" id="addAnotherOrganisation" />
+                    </label>
+
+                    <label for="GoToDashboard" class="block-label">
+                        <span class="form-label">Go back to your dashboard</span>
+                        <input type="radio" name="nextStep" value="dashboard" id="GoToDashboard" />
+                    </label>
+
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="button">Continue</button>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+</div>

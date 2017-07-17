@@ -20,10 +20,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
     {
         private Mock<IDasLevyService> _dasLevyService;
         private Mock<IMediator> _mediator;
+        private Mock<IHashingService> _hashingService;
         public override GetEmployerEnglishFractionQuery Query { get; set; }
         public override GetEmployerEnglishFractionHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetEmployerEnglishFractionQuery>> RequestValidator { get; set; }
 
+        private const long ExpectedAccountId = 423958546;
         private const string ExpectedEmpRef = "123/ABC";
         private readonly DateTime _expectedAddedDate = new DateTime(2016,02,02);
         private const decimal ExpectedFraction = 0.94m;
@@ -34,14 +36,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
             SetUp();
 
             _dasLevyService = new Mock<IDasLevyService>();
-            _dasLevyService.Setup(x => x.GetEnglishFractionHistory(ExpectedEmpRef)).ReturnsAsync(new List<DasEnglishFraction> {new DasEnglishFraction {Amount=ExpectedFraction} });
+            _dasLevyService.Setup(x => x.GetEnglishFractionHistory(ExpectedAccountId, ExpectedEmpRef)).ReturnsAsync(new List<DasEnglishFraction> {new DasEnglishFraction {Amount=ExpectedFraction} });
 
-            Query = new GetEmployerEnglishFractionQuery {EmpRef = ExpectedEmpRef};
+            Query = new GetEmployerEnglishFractionQuery {EmpRef = ExpectedEmpRef, HashedAccountId = "ABC123" };
+
+            _hashingService = new Mock<IHashingService>();
+            _hashingService.Setup(x => x.DecodeValue(Query.HashedAccountId)).Returns(ExpectedAccountId);
 
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse {PayeScheme = new PayeScheme {AddedDate = _expectedAddedDate ,Ref = ExpectedEmpRef} });
 
-            RequestHandler = new GetEmployerEnglishFractionHandler(RequestValidator.Object, _dasLevyService.Object, _mediator.Object);
+            RequestHandler = new GetEmployerEnglishFractionHandler(RequestValidator.Object, _dasLevyService.Object, _mediator.Object, _hashingService.Object);
         }
 
         [Test]
@@ -54,7 +59,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
             await RequestHandler.Handle(Query);
 
             //Assert
-            _dasLevyService.Verify(x => x.GetEnglishFractionHistory(ExpectedEmpRef));
+            _dasLevyService.Verify(x => x.GetEnglishFractionHistory(ExpectedAccountId, ExpectedEmpRef));
         }
 
         [Test]

@@ -60,15 +60,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         }
 
         [Test]
-        public async Task ThenIAmRedirectedToEmployerAgreementViewIfSuccessful()
+        public async Task ThenIAmRedirectedToNextStepsViewIfSuccessful()
         {
             //Act
             var result = await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null) as RedirectToRouteResult;
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("EmployerAgreement", result.RouteValues["Controller"]);
-            Assert.AreEqual("Index", result.RouteValues["Action"]);
+            Assert.AreEqual("OrganisationAddedNextSteps", result.RouteValues["Action"]);
         }
     }
 }

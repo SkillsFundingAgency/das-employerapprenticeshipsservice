@@ -56,10 +56,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes
                     PayeSchemes = payeSchemes
                 };
             }
-            
+
+            var englishFractions = (await _englishFractionRepository.GetCurrentFractionForSchemes(accountId, payeSchemes.Select(x => x.Ref))).Where(x => x != null).ToList();
             foreach (var scheme in payeSchemes)
             {
-                scheme.EnglishFraction = await _englishFractionRepository.GetCurrentFractionForScheme(scheme.Ref);
+                scheme.EnglishFraction = englishFractions.FirstOrDefault(x => x.EmpRef == scheme.Ref);
             }
 
             return new GetAccountPayeSchemesResponse

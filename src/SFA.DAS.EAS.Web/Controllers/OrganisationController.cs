@@ -333,9 +333,43 @@ namespace SFA.DAS.EAS.Web.Controllers
             };
             AddFlashMessageToCookie(flashMessage);
 
-            return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
+            return RedirectToAction("OrganisationAddedNextSteps", new { hashedAccountId });
         }
-        
+
+        [HttpGet]
+        [Route("nextStep")]
+        public ActionResult OrganisationAddedNextSteps()
+        {
+            var viewModel = new OrchestratorResponse<string> { FlashMessage = GetFlashMessageViewModelFromCookie() };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("nextStep")]
+        public ActionResult GoToNextStep(string nextStep, string hashedAccountId)
+        {
+            switch (nextStep)
+            {
+                case "agreement": return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
+
+                case "addOrganisation": return RedirectToAction("SearchForOrganisation", "SearchOrganisation", new { hashedAccountId });
+
+                case "dashboard": return RedirectToAction("Index", "EmployerTeam", new { hashedAccountId });
+
+                default:
+                    return View("OrganisationAddedNextSteps", new OrchestratorResponse<string>
+                    {
+                        Data = "Please select one of the next steps below",
+                        FlashMessage = new FlashMessageViewModel
+                        {
+                            Headline = "Invalid next step chosen",
+                            SubMessage = "Please select one of the next steps below",
+                            Severity = FlashMessageSeverityLevel.Error
+                        }
+                    });
+            }
+        }
+
         private async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>> FindPublicSectorOrganisation(string publicSectorOrganisationName, string hashedAccountId, string userIdClaim)
         {
             var response = await _orchestrator.FindPublicSectorOrganisation(publicSectorOrganisationName, hashedAccountId, userIdClaim);
