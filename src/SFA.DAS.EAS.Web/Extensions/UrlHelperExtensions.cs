@@ -17,9 +17,9 @@ namespace SFA.DAS.EAS.Web.Extensions
 
         private static string GetBaseUrl()
         {
-            return CloudConfigurationManager.GetSetting("CommitmentsBaseUrl").EndsWith("/")
-                ? CloudConfigurationManager.GetSetting("CommitmentsBaseUrl")
-                : CloudConfigurationManager.GetSetting("CommitmentsBaseUrl") + "/";
+            return CloudConfigurationManager.GetSetting("EmployerCommitmentsBaseUrl").EndsWith("/")
+                ? CloudConfigurationManager.GetSetting("EmployerCommitmentsBaseUrl")
+                : CloudConfigurationManager.GetSetting("EmployerCommitmentsBaseUrl") + "/";
         }
     }
 }
