@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionSummary;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.NLog.Logger;
@@ -43,6 +44,28 @@ namespace SFA.DAS.EAS.Api.Orchestrators
 
             response.Data.AddRange(data.Data.TransactionLines.Select(ConvertToTransactionViewModel));
             return response;
+        }
+
+        public async Task<OrchestratorResponse<AccountResourceList<TransactionSummaryViewModel>>> GetAccountTransactionSummary(string hashedAccountId)
+        {
+            var data = await _mediator.SendAsync(new GetAccountTransactionSummaryRequest { HashedAccountId = hashedAccountId });
+
+            var response = new OrchestratorResponse<AccountResourceList<TransactionSummaryViewModel>>
+            {
+                Data = new AccountResourceList<TransactionSummaryViewModel>(data.Data.Select(ConvertToTransactionSummaryViewModel))
+            };
+            
+            return response;
+        }
+
+        private TransactionSummaryViewModel ConvertToTransactionSummaryViewModel(TransactionSummary transactionSummary)
+        {
+            return new TransactionSummaryViewModel
+            {
+                Amount = transactionSummary.Amount,
+                Year = transactionSummary.Year,
+                Month = transactionSummary.Month
+            };
         }
 
         private TransactionViewModel ConvertToTransactionViewModel(TransactionLine transactionLine)

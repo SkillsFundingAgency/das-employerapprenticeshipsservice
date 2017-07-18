@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Account.Api.Client
 
         Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month);
 
-        Task<TransactionsViewModel> GetTransactions(string accountId);
+        Task<ICollection<TransactionSummaryViewModel>> GetTransactionSummary(string accountId);
 
         Task<T> GetResource<T>(string uri) where T : IAccountResource;
     }

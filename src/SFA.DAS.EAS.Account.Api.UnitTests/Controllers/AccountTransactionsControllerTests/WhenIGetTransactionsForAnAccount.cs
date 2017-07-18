@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);
 
-            var response = await _controller.Index(hashedAccountId, year, month);
+            var response = await _controller.GetTransactions(hashedAccountId, year, month);
 
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<OkNegotiatedContentResult<TransactionsViewModel>>(response);
@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var expectedUri = "someuri";
             _urlHelper.Setup(x => x.Route("GetTransactions", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, year = year - 1, month = 12 }.GetHashCode()))).Returns(expectedUri);
 
-            var response = await _controller.Index(hashedAccountId, year, month);
+            var response = await _controller.GetTransactions(hashedAccountId, year, month);
             var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
 
             model?.Content.PreviousMonthUri.Should().Be(expectedUri);

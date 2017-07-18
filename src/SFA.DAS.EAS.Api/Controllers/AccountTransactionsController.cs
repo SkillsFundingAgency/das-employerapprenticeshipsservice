@@ -16,10 +16,26 @@ namespace SFA.DAS.EAS.Api.Controllers
             _orchestrator = orchestrator;
         }
 
-        [Route("{year?}/{month?}", Name = "GetTransactions")]
+        [Route("", Name = "GetTransactionSummary")]
+        [HttpGet]
+        public async Task<IHttpActionResult> Index(string hashedAccountId)
+        {
+            var result = await _orchestrator.GetAccountTransactionSummary(hashedAccountId);
+
+            if (result.Data == null)
+            {
+                return NotFound();
+            }
+
+            result.Data.ForEach(x => x.Href = Url.Route("GetTransactions", new { hashedAccountId, year = x.Year, month = x.Month }));
+
+            return Ok(result.Data);
+        }
+
+        [Route("{year}/{month}", Name = "GetTransactions")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
-        public async Task<IHttpActionResult> Index(string hashedAccountId, int year = 0, int month = 0)
+        public async Task<IHttpActionResult> GetTransactions(string hashedAccountId, int year, int month)
         {
             var result = await _orchestrator.GetAccountTransactions(hashedAccountId, year, month);
 

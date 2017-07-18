@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             _httpClient = new Mock<SecureHttpClient>();
             _httpClient.Setup(c => c.GetAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    JsonConvert.SerializeObject(new TransactionsViewModel())));
+                    JsonConvert.SerializeObject(new List<TransactionSummaryViewModel>())));
 
             _apiClient = new AccountApiClient(_configuration, _httpClient.Object);
         }
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var accountId = "ABC123";
 
             // Act
-            await _apiClient.GetTransactions(accountId);
+            await _apiClient.GetTransactionSummary(accountId);
 
             // Assert
             var expectedUrl = $"http://some-url/api/accounts/{accountId}/transactions";
@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var accountId = "ABC123";
 
             // Act
-            var actual = await _apiClient.GetTransactions(accountId);
+            var actual = await _apiClient.GetTransactionSummary(accountId);
 
             // Assert
             Assert.IsNotNull(actual);
@@ -62,10 +62,10 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var accountId = "ABC123";
 
             // Act
-            var actual = await _apiClient.GetTransactions(accountId);
+            var actual = await _apiClient.GetTransactionSummary(accountId);
 
             // Assert
-            Assert.IsAssignableFrom<TransactionsViewModel>(actual);
+            Assert.IsAssignableFrom<List<TransactionSummaryViewModel>>(actual);
         }
     }
 }
