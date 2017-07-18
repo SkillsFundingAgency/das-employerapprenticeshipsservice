@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Domain.Models.UserProfile
+@using SFA.DAS.EAS.Web.Extensions
 
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AccountDashboardViewModel>
 
@@ -36,7 +37,7 @@ else
                     <p>Add your organisations that will make contracts with training providers.</p>
 
                     <h2 class="heading-medium">
-                        <a href="@Url.Action("Index", "EmployerCommitments")">Apprentices</a>
+                        <a href="@Url.ExternalUrlAction("apprentices", "home")">Apprentices</a>
                     </h2>
                     <p>Add apprentices, update details of existing apprentices and authorise payments to training providers.</p>
                 </div>

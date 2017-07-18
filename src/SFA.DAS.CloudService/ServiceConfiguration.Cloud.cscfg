@@ -15,6 +15,7 @@
       <Setting name="TokenCertificateThumbprint" value="__TokenCertificateThumbprint__" />
       <Setting name="ShowPayeHistory" value="true" />
       <Setting name="CurrentTime" value="" />
+      <Setting name="EmployerCommitmentsBaseUrl" value="__EmployerCommitmentsBaseUrl__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="E280E23D933FE3A62AF335BE9768A2C9D65CCC9A" thumbprintAlgorithm="sha1" />
