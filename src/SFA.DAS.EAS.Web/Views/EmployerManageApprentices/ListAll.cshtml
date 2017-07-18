@@ -1,0 +1,84 @@
+﻿@using SFA.DAS.EAS.Web.Extensions
+@using SFA.DAS.EAS.Web
+
+@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.ManageApprenticeshipsViewModel>
+
+@{
+    ViewBag.PageID = "manage-all-apprentices";
+    ViewBag.Title = "Manage your apprentices";
+}
+
+    <h1 class="heading-xlarge">Manage your apprentices</h1>
+
+<div class="grid-row">
+
+    <div class="column-one-third">
+        <form method="GET" action="@Url.Action("ListAll")" novalidate="novalidate">
+            @Html.Partial("ApprenticeshipFilters", Model.Data.Filters)          
+            <button type="submit" class="button" value="Filter">Filter apprentices</button>
+            <p><a href="@Url.Action("ListAll")" title="Reset" class="button text-link reset-link">Reset</a></p>
+        </form>
+    </div>
+
+    <div class="column-two-thirds">
+        @if (Model.Data.TotalApprenticeships == 0)
+        {
+            <div class="panel panel-border-wide alert-default">
+                <p>Once you and your training provider have approved a cohort, the apprentices from that cohort will appear here.</p>
+            </div>
+        }
+        else
+        {
+            <table class="tableResponsive">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date of birth</th>
+                    <th>Status</th>
+                    <th>Alerts</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var apprenticeship in Model.Data.Apprenticeships)
+                {
+                    <tr>
+                        <td>
+                            @apprenticeship.FirstName @apprenticeship.LastName &nbsp;
+                        </td>
+                        <td>
+                            @if (apprenticeship.DateOfBirth != null)
+                            {
+                                @apprenticeship.DateOfBirth.Value.ToGdsFormat()
+                            } &nbsp;
+                        </td>
+                        <td>
+                            @apprenticeship.Status &nbsp;
+                        </td>
+                        <td>
+                            @apprenticeship.Alert &nbsp;
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Details", new { Model.Data.HashedAccountId, hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })"
+                               title="View  @apprenticeship.FirstName @apprenticeship.LastName"
+                               aria-label="View @apprenticeship.FirstName @apprenticeship.LastName">View</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            if (!Model.Data.Apprenticeships.Any())
+            {
+                <div>There are currently no apprentices that match your search.</div>
+            }
+        }
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to apprentices" class="back-link">Back to apprentices</a>
+    </div>
+}
