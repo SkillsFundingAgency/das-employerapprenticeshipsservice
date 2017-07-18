@@ -109,6 +109,7 @@
     <Build Include="Functions\CalculateSubmissionCutoffDate.sql" />
     <Build Include="StoredProcedures\GetAccountPaymentIds.sql" />
     <Build Include="StoredProcedures\GetLevyDeclarationSubmissionIdsByEmpRef.sql" />
+    <Build Include="StoredProcedures\GetTransactionSummary_ByAccountId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />
