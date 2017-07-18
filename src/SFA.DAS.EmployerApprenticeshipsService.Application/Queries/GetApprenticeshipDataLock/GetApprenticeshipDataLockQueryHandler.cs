@@ -34,13 +34,15 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock
             try
             {
                 var dataLockStatus = (await _dataLockApi.GetDataLocks(request.ApprenticeshipId))
-                    .FirstOrDefault(m => m.Status == Status.Fail && !m.IsResolved);
+                    .Where(m => m.Status == Status.Fail && !m.IsResolved);
+
 
                 return new GetApprenticeshipDataLockResponse()
                            {
                                DataLockStatus = dataLockStatus
                            };
             }
+
             catch (Exception ex)
             {
                 _logger.Warn(ex, $"Can't get apprenticeship data lock for apprenticeship {request.ApprenticeshipId}");

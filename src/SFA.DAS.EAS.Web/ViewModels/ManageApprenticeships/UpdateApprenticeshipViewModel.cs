@@ -38,9 +38,5 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public string ProviderName { get; set; }
 
         public string ChangesConfirmedError => GetErrorMessage(nameof(ChangesConfirmed));
-
-        public bool IsDataLockOrigin { get; set; }
-
-        public DateTime? IlrEffectiveFromDate { get; set; } // Applicable if it's from a datalock
     }
 }
