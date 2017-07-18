@@ -176,7 +176,7 @@ sfa.welcomeWizard = {
 		
         radios.on('change', function () {
             answers[this.name] = this.value;
-            listItem = $(this).closest('.todo-list--item');
+            var listItem = $(this).closest('.todo-list--item');
             that.radioChange($(this).val(), listItem);
             localStorage.setItem("answers", JSON.stringify(getAnswers));
         });
@@ -184,8 +184,13 @@ sfa.welcomeWizard = {
         $.each(answers, function (i, val) {
             if (i !== 'accountId') {
                 if (answers[i]) {
-                    $("input[name='" + i + "'][value=" + val + "]").click()
-                        .closest('.todo-list--item').removeClass('js-hidden').attr('aria-hidden', false);
+                    var radio = $("input[name='" + i + "'][value=" + val + "]")
+                    if (radio.prop('checked') && val == 2) {
+                        radio.closest('.todo-list--item').addClass('complete');
+                    } else {
+                        radio.click();
+                    }
+                    radio.closest('.todo-list--item').removeClass('js-hidden').attr('aria-hidden', false); // Show the entire row if its hidden
                 }
             }
         });
@@ -216,12 +221,16 @@ sfa.welcomeWizard = {
         step.removeClass('js-hidden').attr('aria-hidden', false);
     },
     radioChange: function (radioValue, listItem) {
-        var that = this; 
+        var that = this;
+
         if (radioValue == 2) {
-            that.toggleStep(listItem);
+            listItem.addClass('complete');
+
+            // If this step is not the last step, then show the next one 
             if (listItem.data('step') < that.settings.noSteps) {
                 that.showStep(listItem.next());
             }
+
         }
 
         var score = 0;
