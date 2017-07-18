@@ -305,6 +305,9 @@
     <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionSummary\GetAccountTransactionSummaryQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionSummary\GetAccountTransactionSummaryRequest.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionSummary\GetAccountTransactionSummaryResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsResponse.cs" />
