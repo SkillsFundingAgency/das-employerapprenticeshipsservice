@@ -374,15 +374,13 @@ namespace SFA.DAS.EAS.Web.Controllers
                 case "dashboard": return RedirectToAction("Index", "EmployerTeam", new { hashedAccountId });
 
                 default:
-                    var errorMessage = "Please select one of the next steps below";
-                    return View("OrganisationAddedNextSteps", new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
+                    return View("OrganisationAddedNextSteps", new OrchestratorResponse<string>
                     {
-                        Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName },
+                        Data = "Please select one of the next steps below",
                         FlashMessage = new FlashMessageViewModel
                         {
                             Headline = "Invalid next step chosen",
-                            Message = errorMessage,
-                            ErrorMessages = new Dictionary<string, string> { { "nextStep", errorMessage } },
+                            SubMessage = "Please select one of the next steps below",
                             Severity = FlashMessageSeverityLevel.Error
                         }
                     });
