@@ -111,6 +111,12 @@
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.TokenService.Api.Types, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Types.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap, Version=4.2.0.402, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\structuremap.4.2.0.402\lib\net40\StructureMap.dll</HintPath>
       <Private>True</Private>
@@ -146,7 +152,9 @@
     <Compile Include="DbCleanup\UpdateTransactionLine.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
+    <Compile Include="DependencyResolution\LevyWorkerDefaultRegistry.cs" />
     <Compile Include="Extensions\DateTimeExtention.cs" />
+    <Compile Include="MockModels\MockMessage.cs" />
     <Compile Include="MockPolicy\MockMessagePolicy.cs" />
     <Compile Include="ObjectMothers\AddPayeToNewLegalEntityCommandObjectMother.cs" />
     <Compile Include="ObjectMothers\ApprenticeshipObjectMother.cs" />
@@ -156,10 +164,12 @@
     <Compile Include="ObjectMothers\LevyDeclarationSourceDataObjectMother.cs" />
     <Compile Include="ObjectMothers\LevyDeclarationViewsObjectMother.cs" />
     <Compile Include="ObjectMothers\EnglishFractionObjectMother.cs" />
+    <Compile Include="ObjectMothers\MessageObjectMother.cs" />
     <Compile Include="ObjectMothers\RefreshEmployerLevyDataCommandObjectMother.cs" />
     <Compile Include="ObjectMothers\StandardObjectMother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScenarioCommonSteps\AccountSteps.cs" />
+    <Compile Include="ScenarioCommonSteps\LevyWorkerSteps.cs" />
     <Compile Include="ScenarioCommonSteps\UserSteps.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +188,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.EAS.LevyDeclarationProvider.Worker.csproj">
+      <Project>{386ADB6F-CE56-4AFD-B762-DE93E74AFD41}</Project>
+      <Name>SFA.DAS.EAS.LevyDeclarationProvider.Worker</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

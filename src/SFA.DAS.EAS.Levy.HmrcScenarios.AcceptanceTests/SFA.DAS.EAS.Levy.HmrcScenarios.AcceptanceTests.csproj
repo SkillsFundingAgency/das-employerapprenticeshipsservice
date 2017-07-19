@@ -155,6 +155,7 @@
     <Compile Include="Steps\CommonSteps\AccountCreationSteps.cs" />
     <Compile Include="Steps\CommonSteps\GlobalTestSteps.cs" />
     <Compile Include="Steps\LevyDeclarationSteps\LevyDeclarationScenariosSteps.cs" />
+    <Compile Include="Steps\LevyDeclarationWorkerSteps\LevyDeclarationWorkerSteps.cs" />
     <Compile Include="Steps\TransactionSteps\TransactionSteps.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -227,5 +228,6 @@
       <Name>SFA.DAS.EAS.TestCommon</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

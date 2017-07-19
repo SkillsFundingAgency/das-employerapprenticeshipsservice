@@ -62,6 +62,62 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Features.HMRCScenarios
         {
             testRunner.CollectScenarioErrors();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Balance should remain if no payment occurs")]
+        public virtual void BalanceShouldRemainIfNoPaymentOccurs()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Balance should remain if no payment occurs", ((string[])(null)));
+#line 7
+this.ScenarioSetup(scenarioInfo);
+#line 8
+ testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 9
+ testRunner.And("I add a PAYE Scheme 123/ABC with name Test Corp to the account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Id",
+                        "SubmissionId",
+                        "PAYEScheme",
+                        "LevyDueYTD",
+                        "PayrollPeriod",
+                        "PayrollMonth",
+                        "SubmissionTime",
+                        "CreatedDate",
+                        "LevyAllowanceForFullYear",
+                        "NoPaymentForPeriod",
+                        "DateCeased"});
+            table1.AddRow(new string[] {
+                        "1",
+                        "1",
+                        "123/ABC",
+                        "1000",
+                        "17-18",
+                        "1",
+                        "2017-04-15",
+                        "2017-04-23",
+                        "15000",
+                        "",
+                        ""});
+            table1.AddRow(new string[] {
+                        "2",
+                        "2",
+                        "123/ABC",
+                        "2000",
+                        "17-18",
+                        "2",
+                        "2017-05-15",
+                        "2017-05-23",
+                        "15000",
+                        "true",
+                        ""});
+#line 10
+ testRunner.When("I get the following declarations from HMRC", ((string)(null)), table1, "When ");
+#line 14
+ testRunner.Then("the balance on 06/2017 should be 2200 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

@@ -69,6 +69,29 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.CommonSteps
 
             CreateUserWithRole("Owner");
         }
+
+        [Given(@"I add a PAYE Scheme (.*) with name (.*) to the account")]
+        public void GivenIAddAPayeSchemeToTheAccount(string scheme, string schemeName)
+        {
+            var orchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
+
+            var hashedAccountId = (string) ScenarioContext.Current["HashedAccountId"];
+
+            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
+
+            var viewModel = new AddNewPayeSchemeViewModel
+            {
+                PayeScheme = scheme,
+                PayeName = schemeName,
+                HashedAccountId = hashedAccountId,
+                AccessToken = Guid.NewGuid().ToString(),
+                RefreshToken = Guid.NewGuid().ToString()
+            };
+
+            orchestrator.AddPayeSchemeToAccount(viewModel, accountOwnerId).Wait();
+        }
+
+
         public static void CreateDasAccount(UserViewModel userView, EmployerAccountOrchestrator orchestrator)
         {
             orchestrator.CreateAccount(new CreateAccountViewModel
