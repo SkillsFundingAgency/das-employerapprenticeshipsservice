@@ -335,26 +335,24 @@ namespace SFA.DAS.EAS.Web.Controllers
             AddFlashMessageToCookie(flashMessage);
             if (newSearch)
             {
-                return RedirectToAction("OrganisationAddedNextStepsSearch", new { hashedAccountId, organisationName = name });
+                return RedirectToAction("OrganisationAddedNextStepsSearch", new { hashedAccountId });
             }
-            return RedirectToAction("OrganisationAddedNextSteps", new { hashedAccountId, organisationName = name });
+            return RedirectToAction("OrganisationAddedNextSteps", new { hashedAccountId });
         }
 
         [HttpGet]
         [Route("nextStep")]
-        public ActionResult OrganisationAddedNextSteps(string organisationName)
+        public ActionResult OrganisationAddedNextSteps()
         {
-            var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName);
-            viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
+            var viewModel = new OrchestratorResponse<string> { FlashMessage = GetFlashMessageViewModelFromCookie() };
             return View(viewModel);
         }
 
         [HttpGet]
         [Route("nextStepSearch")]
-        public ActionResult OrganisationAddedNextStepsSearch(string organisationName)
+        public ActionResult OrganisationAddedNextStepsSearch()
         {
-            var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName);
-            viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
+            var viewModel = new OrchestratorResponse<string> { FlashMessage = GetFlashMessageViewModelFromCookie() };
             return View("OrganisationAddedNextSteps", viewModel);
         }
 
