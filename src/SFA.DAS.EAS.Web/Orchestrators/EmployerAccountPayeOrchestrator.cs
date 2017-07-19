@@ -256,11 +256,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public async Task<OrchestratorResponse<PayeSchemeNextStepsViewModel>> GetNextStepsViewModel(string userId, string accountId)
         {
             var response = new OrchestratorResponse<PayeSchemeNextStepsViewModel>();
-
+            
             var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = accountId, TeamMemberId = userId });
             var showWizard = userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
-
-            response.Data.ShowWizard = showWizard;
+            response.Data = new PayeSchemeNextStepsViewModel
+            {
+                ShowWizard = showWizard
+            };
 
             return response;
         }
