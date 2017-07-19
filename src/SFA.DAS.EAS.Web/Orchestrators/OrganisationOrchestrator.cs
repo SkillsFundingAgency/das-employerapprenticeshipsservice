@@ -573,5 +573,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
             };
         }
+
+        public OrchestratorResponse<OrganisationAddedNextStepsViewModel> GetOrganisationAddedNextStepViewModel(string organisationName)
+        {
+            return new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
+            {
+                Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName }
+            };
+        }
     }
 }

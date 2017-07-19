@@ -38,12 +38,21 @@
             <input type="hidden" id="legalEntityStatus" name="legalEntityStatus" value="@Model.Data.Status" />
             <input type="hidden" id="publicSectorDataSource" name="publicSectorDataSource" value="@Model.Data.PublicSectorDataSource" />
             <input type="hidden" id="organisationType" name="organisationType" value="@Model.Data.Type" />
-            <input type="hidden" id="sector" name="sector" value="@Model.Data.Sector" />
+            <input type="hidden" id="sector" name="sector" value="@Model.Data.Sector"/>
+            <input type="hidden" id="newSearch" name="newSearch" value="@Model.Data.NewSearch.ToString()"/>
             <p class="heading-medium">Is this correct?</p>
 
             <span>
                 <input class="button" type="submit" value="Yes, continue" />
-                <a class="button button-link" href="@Url.Action("AddOrganisation", new {AccountId = @Model.Data.HashedId})">No, search again</a>
+                @if (Model.Data.NewSearch)
+                {
+                    <a class="button button-link" href="@Url.Action("SearchForOrganisation", "SearchOrganisation", new {AccountId = @Model.Data.HashedId})">No, search again</a>
+                }
+                else
+                {
+                    <a class="button button-link" href="@Url.Action("AddOrganisation", new {AccountId = @Model.Data.HashedId})">No, search again</a>
+                }
+                
             </span>
         </form>
         

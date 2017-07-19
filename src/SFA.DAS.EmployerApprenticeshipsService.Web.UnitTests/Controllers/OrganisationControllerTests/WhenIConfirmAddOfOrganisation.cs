@@ -63,11 +63,22 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         public async Task ThenIAmRedirectedToNextStepsViewIfSuccessful()
         {
             //Act
-            var result = await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null) as RedirectToRouteResult;
+            var result = await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null, false) as RedirectToRouteResult;
 
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("OrganisationAddedNextSteps", result.RouteValues["Action"]);
+        }
+
+        [Test]
+        public async Task ThenIAmRedirectedToNextStepsNewSearchIfTheNewSearchFlagIsSet()
+        {
+            //Act
+            var result = await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null, true) as RedirectToRouteResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("OrganisationAddedNextStepsSearch", result.RouteValues["Action"]);
         }
     }
 }
