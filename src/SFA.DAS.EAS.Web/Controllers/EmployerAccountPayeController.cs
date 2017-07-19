@@ -47,9 +47,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("schemes/next")]
-        public ActionResult NextSteps(string hashedAccountId)
+        public async Task<ActionResult> NextSteps(string hashedAccountId)
         {
-            var model = new OrchestratorResponse<PayeSchemeNextStepsViewModel> { FlashMessage = GetFlashMessageViewModelFromCookie(), Data = new PayeSchemeNextStepsViewModel() };
+            var model = await _employerAccountPayeOrchestrator.GetNextStepsViewModel(OwinWrapper.GetClaimValue(@"sub"),hashedAccountId);
             return View(model);
         }
 
