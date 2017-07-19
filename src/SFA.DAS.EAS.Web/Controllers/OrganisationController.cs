@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -307,7 +308,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("confirm")]
         public async Task<ActionResult> Confirm(
             string hashedAccountId, string name, string code, string address, DateTime? incorporated,
-            string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, string sector)
+            string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, string sector, bool newSearch)
         {
             var request = new CreateNewLegalEntityViewModel
             {
@@ -332,17 +333,31 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Severity = FlashMessageSeverityLevel.Success
             };
             AddFlashMessageToCookie(flashMessage);
-
-            return RedirectToAction("OrganisationAddedNextSteps", new { hashedAccountId });
+            if (newSearch)
+            {
+                return RedirectToAction("OrganisationAddedNextStepsSearch", new { hashedAccountId, organisationName = name });
+            }
+            return RedirectToAction("OrganisationAddedNextSteps", new { hashedAccountId, organisationName = name });
         }
 
         [HttpGet]
         [Route("nextStep")]
-        public ActionResult OrganisationAddedNextSteps()
+        public ActionResult OrganisationAddedNextSteps(string organisationName)
         {
-            var viewModel = new OrchestratorResponse<string> { FlashMessage = GetFlashMessageViewModelFromCookie() };
+            var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName);
+            viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
             return View(viewModel);
         }
+
+        [HttpGet]
+        [Route("nextStepSearch")]
+        public ActionResult OrganisationAddedNextStepsSearch(string organisationName)
+        {
+            var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName);
+            viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
+            return View("OrganisationAddedNextSteps", viewModel);
+        }
+
 
         [HttpPost]
         [Route("nextStep")]
@@ -352,18 +367,22 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 case "agreement": return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
 
+                case "teamMembers": return RedirectToAction("ViewTeam", "EmployerTeam", new { hashedAccountId });
+
                 case "addOrganisation": return RedirectToAction("SearchForOrganisation", "SearchOrganisation", new { hashedAccountId });
 
                 case "dashboard": return RedirectToAction("Index", "EmployerTeam", new { hashedAccountId });
 
                 default:
-                    return View("OrganisationAddedNextSteps", new OrchestratorResponse<string>
+                    var errorMessage = "Please select one of the next steps below";
+                    return View("OrganisationAddedNextSteps", new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
                     {
-                        Data = "Please select one of the next steps below",
+                        Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName },
                         FlashMessage = new FlashMessageViewModel
                         {
                             Headline = "Invalid next step chosen",
-                            SubMessage = "Please select one of the next steps below",
+                            Message = errorMessage,
+                            ErrorMessages = new Dictionary<string, string> { { "nextStep", errorMessage } },
                             Severity = FlashMessageSeverityLevel.Error
                         }
                     });

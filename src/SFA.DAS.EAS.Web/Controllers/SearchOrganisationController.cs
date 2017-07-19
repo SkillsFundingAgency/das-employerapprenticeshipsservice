@@ -80,6 +80,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("organisations/search/confirm", Order = 1)]
         public ActionResult Confirm(string hashedAccountId, OrganisationDetailsViewModel viewModel)
         {
+            viewModel.NewSearch = true;
+
             if (string.IsNullOrWhiteSpace(viewModel.Address))
             {
                 return FindAddress(hashedAccountId, viewModel);
@@ -91,7 +93,9 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("GatewayInform", "EmployerAccount");
             }
 
+            
             var response = new OrchestratorResponse<OrganisationDetailsViewModel> { Data = viewModel };
+            
             return View("../Organisation/ConfirmOrganisationDetails", response);
         }
 
@@ -157,7 +161,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     OrganisationRegisteredAddress = viewModel.Address,
                     OrganisationStatus = viewModel.Status ?? string.Empty,
                     PublicSectorDataSource = viewModel.PublicSectorDataSource,
-                    Sector = viewModel.Sector
+                    Sector = viewModel.Sector,
+                    NewSearch = viewModel.NewSearch
                 };
             }
             else
@@ -173,7 +178,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     OrganisationRegisteredAddress = existingData.OrganisationRegisteredAddress,
                     OrganisationStatus = existingData.OrganisationStatus,
                     PublicSectorDataSource = existingData.PublicSectorDataSource,
-                    Sector = existingData.Sector
+                    Sector = existingData.Sector,
+                    NewSearch = existingData.NewSearch
                 };
             }
 
