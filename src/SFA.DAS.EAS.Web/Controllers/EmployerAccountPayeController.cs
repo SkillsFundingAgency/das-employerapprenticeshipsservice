@@ -50,6 +50,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> NextSteps(string hashedAccountId)
         {
             var model = await _employerAccountPayeOrchestrator.GetNextStepsViewModel(OwinWrapper.GetClaimValue(@"sub"),hashedAccountId);
+
+            model.FlashMessage = GetFlashMessageViewModelFromCookie();
+
             return View(model);
         }
 
