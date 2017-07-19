@@ -151,7 +151,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 data = new EmployerAccountData
                 {
                     OrganisationType = viewModel.Type,
-                    OrganisationReferenceNumber = viewModel.OrganisationCode,
+                    OrganisationReferenceNumber = viewModel.ReferenceNumber,
                     OrganisationName = viewModel.Name,
                     OrganisationDateOfInception = viewModel.DateOfInception,
                     OrganisationRegisteredAddress = viewModel.Address,
