@@ -137,6 +137,24 @@ namespace SFA.DAS.EAS.Account.Api.Client
             return JsonConvert.DeserializeObject<List<LevyDeclarationViewModel>>(json);
         }
 
+        public async Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/transactions/{year}/{month}";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<TransactionsViewModel>(json);
+        }
+
+        public async Task<ICollection<TransactionSummaryViewModel>> GetTransactionSummary(string accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/transactions";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<ICollection<TransactionSummaryViewModel>>(json);
+        }
+
         private string GetBaseUrl()
         {
             return _configuration.ApiBaseUrl.EndsWith("/")

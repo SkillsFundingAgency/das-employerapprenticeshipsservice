@@ -26,44 +26,83 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public override GetEmployerAccountTransactionsQuery Query { get; set; }
         public override GetEmployerAccountTransactionsHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetEmployerAccountTransactionsQuery>> RequestValidator { get; set; }
+        private Mock<IHashingService> _hashingService;
 
         [SetUp]
         public void Arrange()
         {
             SetUp();
-          
+
             _request = new GetEmployerAccountTransactionsQuery
             {
-                AccountId = 1,
                 HashedAccountId = "RTF34",
-                FromDate = DateTime.Now.AddDays(-10),
-                ToDate = DateTime.Now.AddDays(10),
                 ExternalUserId = "3EFR"
             };
+
+            _hashingService = new Mock<IHashingService>();
+            _hashingService.Setup(x => x.DecodeValue(_request.HashedAccountId)).Returns(1);
 
             _dasLevyService = new Mock<IDasLevyService>();
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                            .ReturnsAsync(new List<TransactionLine>());
 
-            _dasLevyService.Setup(x => x.GetPreviousAccountTransaction(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+            _dasLevyService.Setup(x => x.GetPreviousAccountTransaction(It.IsAny<long>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(2);
 
             _apprenticshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
 
             _logger = new Mock<ILog>();
 
-            RequestHandler = new GetEmployerAccountTransactionsHandler(_dasLevyService.Object, RequestValidator.Object, _apprenticshipInfoService.Object, _logger.Object);
+            RequestHandler = new GetEmployerAccountTransactionsHandler(_dasLevyService.Object, RequestValidator.Object, _apprenticshipInfoService.Object, _logger.Object, _hashingService.Object);
             Query = new GetEmployerAccountTransactionsQuery();
+        }
+
+        [Test]
+        public void ThenIfTheUserIsNotAuthorisedAnExceptionIsThrown()
+        {
+            //Arrange
+            RequestValidator.Setup(x => x.ValidateAsync(_request)).ReturnsAsync(new ValidationResult { IsUnauthorized = true });
+
+            //Act
+            Assert.ThrowsAsync<UnauthorizedAccessException>(() => RequestHandler.Handle(_request));
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
+            //Arrange
+            _request.Year = 0;
+            _request.Month = 0;
+
+            var daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+
+            var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, daysInMonth);
+
             //Act
             await RequestHandler.Handle(_request);
 
             //Assert
-            _dasLevyService.Verify(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once);
+            _dasLevyService.Verify(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), fromDate, toDate), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfAMonthIsProvidedTheRepositoryIsCalledForThatMonthMonth()
+        {
+            //Arrange
+            _request.Year = 2017;
+            _request.Month = 3;
+
+            var daysInMonth = DateTime.DaysInMonth(_request.Year, _request.Month);
+
+            var fromDate = new DateTime(_request.Year, _request.Month, 1);
+            var toDate = new DateTime(_request.Year, _request.Month, daysInMonth);
+
+            //Act
+            await RequestHandler.Handle(_request);
+
+            //Assert
+            _dasLevyService.Verify(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), fromDate, toDate), Times.Once);
         }
 
         [Test]
@@ -91,7 +130,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 
             //Assert
             Assert.AreEqual(_request.HashedAccountId, response.Data.HashedAccountId);
-            Assert.AreEqual(_request.AccountId, response.Data.AccountId);
+            Assert.AreEqual(1, response.Data.AccountId);
             Assert.AreEqual(1, response.Data.TransactionLines.Count);
         }
         
@@ -104,7 +143,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 
             //Assert
             Assert.AreEqual(_request.HashedAccountId, response.Data.HashedAccountId);
-            Assert.AreEqual(_request.AccountId, response.Data.AccountId);
+            Assert.AreEqual(1, response.Data.AccountId);
             Assert.IsEmpty(response.Data.TransactionLines);
         }
 
@@ -361,7 +400,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(transactions);
 
-            _dasLevyService.Setup(x => x.GetPreviousAccountTransaction(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+            _dasLevyService.Setup(x => x.GetPreviousAccountTransaction(It.IsAny<long>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(0);
 
             //Act

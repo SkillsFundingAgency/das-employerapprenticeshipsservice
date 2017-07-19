@@ -223,6 +223,7 @@
     <Compile Include="Queries\GetAccountTeamMembers\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTransactionDetailTests\WhenIGetAccountTransactionDetails.cs" />
     <Compile Include="Queries\GetAccountTransactionDetailTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetAccountTransactionSummaryTests\WhenIGetAccountTransactionSummary.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIGetAccountTransactions.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\WhenGettingApprenticeshipDataLock.cs" />

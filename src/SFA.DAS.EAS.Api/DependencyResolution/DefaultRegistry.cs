@@ -26,6 +26,8 @@ using WebGrease.Css.Extensions;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 
 namespace SFA.DAS.EAS.Api.DependencyResolution {
+    using Domain.Interfaces;
+    using Infrastructure.Caching;
     using SFA.DAS.EAS.Api.App_Start;
     using SFA.DAS.NLog.Logger;
     using StructureMap.Configuration.DSL;
@@ -48,8 +50,7 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
 
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
 
-            //For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
-            //For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
+            For<ICache>().Use<InMemoryCache>(); //RedisCache
             RegisterMapper();
             RegisterMediator();
             RegisterLogger();
