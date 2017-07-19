@@ -257,3 +257,4 @@ src/ReleaseTemplate.sql
 *.DS_Store
 src/SFA.DAS.EAS.Web/App_Data/audit/*.*
 src/Tools/PhantomJS/tools/phantomjs/ChangeLog
+*.stackdump

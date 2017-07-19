@@ -32,14 +32,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             var vm = await _userSettingsOrchestrator.GetNotificationSettingsViewModel(userIdClaim);
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
-            if (flashMessage == null)
-            {
-                flashMessage = new FlashMessageViewModel
-                {
-                    Severity = FlashMessageSeverityLevel.Info,
-                    Message = "Changes to these settings won't affect service emails, such as password resets"
-                };
-            }
 
             vm.FlashMessage = flashMessage;
 
@@ -58,7 +50,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var flashMessage = new FlashMessageViewModel
             {
                 Severity = FlashMessageSeverityLevel.Success,
-                Message = "Settings updated"
+                Message = "Settings updated."
             };
 
             AddFlashMessageToCookie(flashMessage);
