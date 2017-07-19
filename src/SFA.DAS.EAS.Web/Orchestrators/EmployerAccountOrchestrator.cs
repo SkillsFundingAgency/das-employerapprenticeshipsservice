@@ -108,7 +108,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 EmpRefNotFound = enteredData.EmpRefNotFound,
                 OrganisationStatus = enteredData.OrganisationStatus,
                 PublicSectorDataSource = enteredData.PublicSectorDataSource,
-                Sector = enteredData.Sector
+                Sector = enteredData.Sector,
+                NewSearch = enteredData.NewSearch
             };
 
             return new OrchestratorResponse<SummaryViewModel>

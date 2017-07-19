@@ -308,7 +308,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("confirm")]
         public async Task<ActionResult> Confirm(
             string hashedAccountId, string name, string code, string address, DateTime? incorporated,
-            string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, string sector)
+            string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, string sector, bool newSearch)
         {
             var request = new CreateNewLegalEntityViewModel
             {
@@ -333,7 +333,10 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Severity = FlashMessageSeverityLevel.Success
             };
             AddFlashMessageToCookie(flashMessage);
-
+            if (newSearch)
+            {
+                return RedirectToAction("OrganisationAddedNextStepsSearch", new { hashedAccountId, organisationName = name });
+            }
             return RedirectToAction("OrganisationAddedNextSteps", new { hashedAccountId, organisationName = name });
         }
 
@@ -341,13 +344,20 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("nextStep")]
         public ActionResult OrganisationAddedNextSteps(string organisationName)
         {
-            var viewModel = new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
-            {
-                FlashMessage = GetFlashMessageViewModelFromCookie(),
-                Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName }
-            };
+            var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName);
+            viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
             return View(viewModel);
         }
+
+        [HttpGet]
+        [Route("nextStepSearch")]
+        public ActionResult OrganisationAddedNextStepsSearch(string organisationName)
+        {
+            var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName);
+            viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
+            return View("OrganisationAddedNextSteps", viewModel);
+        }
+
 
         [HttpPost]
         [Route("nextStep")]

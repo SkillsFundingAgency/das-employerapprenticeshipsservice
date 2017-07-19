@@ -16,5 +16,6 @@ namespace SFA.DAS.EAS.Web.ViewModels.Organisation
         public string OrganisationStatus { get; set; }
         public string EmployerRefName { get; set; }
         public string Sector { get; set; }
+        public bool NewSearch { get; set; }
     }
 }
