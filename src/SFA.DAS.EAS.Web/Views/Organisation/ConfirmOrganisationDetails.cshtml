@@ -44,7 +44,15 @@
 
             <span>
                 <input class="button" type="submit" value="Yes, continue" />
-                <a class="button button-link" href="@Url.Action("AddOrganisation", new {AccountId = @Model.Data.HashedId})">No, search again</a>
+                @if (Model.Data.NewSearch)
+                {
+                    <a class="button button-link" href="@Url.Action("SearchForOrganisation", "SearchOrganisation", new {AccountId = @Model.Data.HashedId})">No, search again</a>
+                }
+                else
+                {
+                    <a class="button button-link" href="@Url.Action("AddOrganisation", new {AccountId = @Model.Data.HashedId})">No, search again</a>
+                }
+                
             </span>
         </form>
         
