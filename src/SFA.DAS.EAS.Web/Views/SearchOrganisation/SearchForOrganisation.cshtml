@@ -1,11 +1,12 @@
 ﻿@using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Models.Organisation
-@model SFA.DAS.EAS.Web.OrchestratorResponse
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.SearchOrganisationViewModel>
 
 @{ 
     ViewBag.PageID = "search-for-organisation";
     ViewBag.Title = "Search for your organisation";
-    ViewBag.HideNav = "true";
+    ViewBag.Section = "organisations";
+    ViewBag.HideNav = Model.Data.IsExistingAccount ? "" : "true";
 }
 
 <div class="grid-row">

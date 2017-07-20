@@ -27,14 +27,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _cookieService = cookieService;
         }
 
-        public async Task<OrchestratorResponse<SearchOrganisationViewModel>> SearchOrganisation(string searchTerm, int pageNumber, OrganisationType? organisationType, string hashedAccountId, string userId)
+        public async Task<OrchestratorResponse<SearchOrganisationResultsViewModel>> SearchOrganisation(string searchTerm, int pageNumber, OrganisationType? organisationType, string hashedAccountId, string userId)
         {
-            var response = new OrchestratorResponse<SearchOrganisationViewModel>();
+            var response = new OrchestratorResponse<SearchOrganisationResultsViewModel>();
 
             try
             {
                 var result = await Mediator.SendAsync(new GetOrganisationsRequest { SearchTerm = searchTerm, PageNumber = pageNumber, OrganisationType = organisationType });
-                response.Data = new SearchOrganisationViewModel
+                response.Data = new SearchOrganisationResultsViewModel
                 {
                     Results = CreateResult(result.Organisations),
                     SearchTerm = searchTerm,
