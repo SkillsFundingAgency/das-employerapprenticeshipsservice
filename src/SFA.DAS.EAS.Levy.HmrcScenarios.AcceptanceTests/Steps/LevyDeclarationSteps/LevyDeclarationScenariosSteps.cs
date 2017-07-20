@@ -79,9 +79,10 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.LevyDeclarationS
             var actual = employerAccountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(hashedAccountId,
                 new DateTime(year, month, 1), new DateTime(year, month, DateTime.DaysInMonth(year, month)), userId).Result;
 
-            var monthTransaction = actual.Data.SubTransactions.First();
+            var topUpTotal = actual.Data.SubTransactions.Sum(x => x.TopUp);
 
-            Assert.AreEqual(topup, monthTransaction.TopUp);
+            Assert.AreEqual(levyDeclared, actual.Data.Amount - topUpTotal);
+            Assert.AreEqual(topup, topUpTotal);
         }
     }
 }

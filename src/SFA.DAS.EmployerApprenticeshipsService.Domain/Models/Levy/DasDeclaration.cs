@@ -5,7 +5,7 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
     public class DasDeclaration
     {
         public string Id { get; set; }
-        public decimal LevyDueYtd { get; set; }
+        public decimal? LevyDueYtd { get; set; }
         public DateTime SubmissionDate { get; set; }
         public string SubmissionType { get; set; }
         public decimal LevyAllowanceForFullYear { get; set; }

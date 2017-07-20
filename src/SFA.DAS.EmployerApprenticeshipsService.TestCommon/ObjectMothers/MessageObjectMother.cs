@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
 
         public static Message<T> Create<T>(T payload, Action onCompleted, Action onAborted)
         {
-            return new MockMessage<T>(payload, null, null);
+            return new MockMessage<T>(payload, onCompleted, onAborted);
         }
     }
 }

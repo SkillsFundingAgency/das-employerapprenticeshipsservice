@@ -80,7 +80,9 @@ this.ScenarioSetup(scenarioInfo);
                         "Payroll_Month",
                         "English_Fraction",
                         "SubmissionDate",
-                        "CreatedDate"});
+                        "CreatedDate",
+                        "EndOfYearAdjustment",
+                        "EndOfYearAdjustmentAmount"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "11250",
@@ -88,7 +90,9 @@ this.ScenarioSetup(scenarioInfo);
                         "1",
                         "1",
                         "2017-05-15",
-                        "2017-05-23"});
+                        "2017-05-23",
+                        "0",
+                        "0"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "22500",
@@ -96,7 +100,9 @@ this.ScenarioSetup(scenarioInfo);
                         "2",
                         "1",
                         "2017-06-15",
-                        "2017-06-23"});
+                        "2017-06-23",
+                        "0",
+                        "0"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "33750",
@@ -104,7 +110,9 @@ this.ScenarioSetup(scenarioInfo);
                         "3",
                         "1",
                         "2017-07-15",
-                        "2017-07-23"});
+                        "2017-07-23",
+                        "0",
+                        "0"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "45000",
@@ -112,7 +120,9 @@ this.ScenarioSetup(scenarioInfo);
                         "4",
                         "1",
                         "2017-08-15",
-                        "2017-08-23"});
+                        "2017-08-23",
+                        "0",
+                        "0"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "56250",
@@ -120,7 +130,9 @@ this.ScenarioSetup(scenarioInfo);
                         "5",
                         "1",
                         "2017-09-15",
-                        "2017-09-23"});
+                        "2017-09-23",
+                        "0",
+                        "0"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "67500",
@@ -128,7 +140,9 @@ this.ScenarioSetup(scenarioInfo);
                         "6",
                         "1",
                         "2017-10-15",
-                        "2017-10-23"});
+                        "2017-10-23",
+                        "0",
+                        "0"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "78750",
@@ -136,7 +150,9 @@ this.ScenarioSetup(scenarioInfo);
                         "7",
                         "1",
                         "2017-11-15",
-                        "2017-11-23"});
+                        "2017-11-23",
+                        "0",
+                        "0"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "90000",
@@ -144,7 +160,9 @@ this.ScenarioSetup(scenarioInfo);
                         "8",
                         "1",
                         "2017-12-15",
-                        "2017-12-23"});
+                        "2017-12-23",
+                        "0",
+                        "0"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "101250",
@@ -152,7 +170,9 @@ this.ScenarioSetup(scenarioInfo);
                         "9",
                         "1",
                         "2018-01-15",
-                        "2018-01-23"});
+                        "2018-01-23",
+                        "0",
+                        "0"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "112500",
@@ -160,7 +180,9 @@ this.ScenarioSetup(scenarioInfo);
                         "10",
                         "1",
                         "2018-02-15",
-                        "2018-02-23"});
+                        "2018-02-23",
+                        "0",
+                        "0"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "123750",
@@ -168,7 +190,9 @@ this.ScenarioSetup(scenarioInfo);
                         "11",
                         "1",
                         "2018-03-15",
-                        "2018-03-23"});
+                        "2018-03-23",
+                        "0",
+                        "0"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "135000",
@@ -176,7 +200,9 @@ this.ScenarioSetup(scenarioInfo);
                         "12",
                         "1",
                         "2018-04-15",
-                        "2018-04-23"});
+                        "2018-04-23",
+                        "0",
+                        "0"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "10000",
@@ -184,7 +210,9 @@ this.ScenarioSetup(scenarioInfo);
                         "1",
                         "1",
                         "2018-05-15",
-                        "2018-05-23"});
+                        "2018-05-23",
+                        "0",
+                        "0"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "120000",
@@ -192,7 +220,9 @@ this.ScenarioSetup(scenarioInfo);
                         "12",
                         "1",
                         "2018-06-10",
-                        "2018-06-23"});
+                        "2018-06-23",
+                        "1",
+                        "15000"});
             table1.AddRow(new string[] {
                         "123/ABC",
                         "20000",
@@ -200,11 +230,13 @@ this.ScenarioSetup(scenarioInfo);
                         "2",
                         "1",
                         "2018-06-15",
-                        "2018-06-23"});
+                        "2018-06-23",
+                        "0",
+                        "0"});
 #line 5
  testRunner.When("I have the following submissions", ((string)(null)), table1, "When ");
 #line 22
- testRunner.Then("the balance on 06/2018 should be 154500 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the balance on 06/2018 should be 154000 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 23
  testRunner.And("the total levy shown for month 06/2018 should be -5500", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 24

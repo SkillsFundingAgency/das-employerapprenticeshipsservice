@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
                     PayeRef = scheme
                 };
 
-                var mockMessage = MessageObjectMother.Create(queueMessage, () => cancellationTokenSource.Cancel(), null);
+                var mockMessage = MessageObjectMother.Create(queueMessage, cancellationTokenSource.Cancel, null);
 
                 setupSequence = setupSequence.ReturnsAsync(mockMessage);
             }
