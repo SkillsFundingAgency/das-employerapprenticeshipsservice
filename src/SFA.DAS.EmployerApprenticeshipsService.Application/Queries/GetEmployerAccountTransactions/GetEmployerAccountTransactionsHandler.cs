@@ -18,14 +18,16 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
         private readonly IDasLevyService _dasLevyService;
         private readonly IValidator<GetEmployerAccountTransactionsQuery> _validator;
         private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoServiceWrapper;
+        private readonly IHashingService _hashingService;
         private readonly ILog _logger;
 
-        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService, IValidator<GetEmployerAccountTransactionsQuery> validator, IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper, ILog logger)
+        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService, IValidator<GetEmployerAccountTransactionsQuery> validator, IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper, ILog logger, IHashingService hashingService)
         {
             _dasLevyService = dasLevyService;
             _validator = validator;
             _apprenticeshipInfoServiceWrapper = apprenticeshipInfoServiceWrapper;
             _logger = logger;
+            _hashingService = hashingService;
         }
 
         public async Task<GetEmployerAccountTransactionsResponse> Handle(GetEmployerAccountTransactionsQuery message)
@@ -37,13 +39,22 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
-            var transactions = await _dasLevyService.GetAccountTransactionsByDateRange(message.AccountId, message.FromDate, message.ToDate);
+            if (result.IsUnauthorized)
+            {
+                throw new UnauthorizedAccessException();
+            }
 
-            var hasPreviousTransactions = await _dasLevyService.GetPreviousAccountTransaction(message.AccountId, message.FromDate, message.ExternalUserId) > 0;
+            var toDate = CalculateToDate(message);
+            var fromDate = new DateTime(toDate.Year, toDate.Month, 1);
+            
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+            var transactions = await _dasLevyService.GetAccountTransactionsByDateRange(accountId, fromDate, toDate);
+
+            var hasPreviousTransactions = await _dasLevyService.GetPreviousAccountTransaction(accountId, fromDate) > 0;
             
             if (!transactions.Any())
             {
-                return GetResponse(message.HashedAccountId, message.AccountId, hasPreviousTransactions);
+                return GetResponse(message.HashedAccountId, accountId, hasPreviousTransactions, toDate.Year, toDate.Month);
             }
             
             foreach (var transaction in transactions)
@@ -51,7 +62,18 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 GenerateTransactionDescription(transaction);
             }
             
-            return GetResponse(message.HashedAccountId, message.AccountId, transactions, hasPreviousTransactions);
+            return GetResponse(message.HashedAccountId, accountId, transactions, hasPreviousTransactions, toDate.Year, toDate.Month);
+        }
+
+        private static DateTime CalculateToDate(GetEmployerAccountTransactionsQuery message)
+        {
+            var year = message.Year == default(int) ? DateTime.Now.Year : message.Year;
+            var month = message.Month == default(int) ? DateTime.Now.Month : message.Month;
+
+            var daysInMonth = DateTime.DaysInMonth(year, month);
+
+            var toDate = new DateTime(year, month, daysInMonth);
+            return toDate;
         }
 
         private void GenerateTransactionDescription(TransactionLine transaction)
@@ -87,13 +109,13 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             return $"{transactionPrefix}Training provider - name not recognised";
         }
 
-        private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId, bool hasPreviousTransactions)
+        private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId, bool hasPreviousTransactions, int year, int month)
         {
-            return GetResponse(hashedAccountId, accountId, new List<TransactionLine>(), hasPreviousTransactions);
+            return GetResponse(hashedAccountId, accountId, new List<TransactionLine>(), hasPreviousTransactions, year, month);
         }
 
         private static GetEmployerAccountTransactionsResponse GetResponse(
-            string hashedAccountId, long accountId, ICollection<TransactionLine> transactions, bool hasPreviousTransactions)
+            string hashedAccountId, long accountId, ICollection<TransactionLine> transactions, bool hasPreviousTransactions, int year, int month)
         {
             return new GetEmployerAccountTransactionsResponse
             {
@@ -103,8 +125,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                     AccountId = accountId,
                     TransactionLines = transactions
                 },
-                AccountHasPreviousTransactions = hasPreviousTransactions
-                
+                AccountHasPreviousTransactions = hasPreviousTransactions,
+                Year = year,
+                Month = month
             };
         }
     }

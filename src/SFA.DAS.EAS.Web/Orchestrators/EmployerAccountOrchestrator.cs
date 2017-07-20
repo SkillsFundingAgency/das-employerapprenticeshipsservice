@@ -27,6 +27,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;
+        private readonly IHashingService _hashingService;
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
         //Needed for tests
@@ -35,11 +36,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public EmployerAccountOrchestrator(IMediator mediator, ILog logger, ICookieStorageService<EmployerAccountData> cookieService,
-            EmployerApprenticeshipsServiceConfiguration configuration)
+            EmployerApprenticeshipsServiceConfiguration configuration, IHashingService hashingService)
             : base(mediator, logger, cookieService, configuration)
         {
             _mediator = mediator;
             _logger = logger;
+            _hashingService = hashingService;
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateAccount(CreateAccountViewModel viewModel, HttpContextBase context)
@@ -108,7 +110,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 EmpRefNotFound = enteredData.EmpRefNotFound,
                 OrganisationStatus = enteredData.OrganisationStatus,
                 PublicSectorDataSource = enteredData.PublicSectorDataSource,
-                Sector = enteredData.Sector
+                Sector = enteredData.Sector,
+                NewSearch = enteredData.NewSearch
             };
 
             return new OrchestratorResponse<SummaryViewModel>

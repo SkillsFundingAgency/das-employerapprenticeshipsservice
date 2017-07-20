@@ -8,43 +8,10 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <div class="hgroup">
-            <h1 class="heading-xlarge">Your cohorts</h1>
+            <h1 class="heading-xlarge">Your cohort requests</h1>
         </div>
 
-        <div class="column-one-half bingo-background block-one @GetClickableClass(Model.Data.WaitingToBeSentCount)">
-            <h2 class="bold-xxlarge">
-                @if (Model.Data.WaitingToBeSentCount > 0)
-                {
-                    <a href="@Url.Action("WaitingToBeSent", new { redirectTo = "NewRequests" } )" title="@Model.Data.WaitingToBeSentCount waiting to be sent" aria-label="Waiting to be sent">
-                        @Model.Data.WaitingToBeSentCount
-                    </a>
-                }
-                else
-                {
-                    <span>0</span>
-                }
-            </h2>
-            <p class="heading-small">Waiting to be sent</p>
-        </div>
-
-        <div class="column-one-half bingo-background block-two @GetClickableClass(Model.Data.ReadyForApprovalCount)">
-            <h2 class="bold-xxlarge">
-                @if (Model.Data.ReadyForApprovalCount > 0)
-                {
-                    <a href="@Url.Action("ReadyForApproval")" title="@Model.Data.ReadyForApprovalCount need your approval" aria-label="View all new requests that are ready for approval">
-                        @Model.Data.ReadyForApprovalCount
-                    </a>
-                }
-                else
-                {
-                    <span>0</span>
-                }
-            </h2>
-            <p class="heading-small">Need your approval</p>
-        </div>
-
-
-        <div class="column-one-half bingo-background block-three @GetClickableClass(Model.Data.ReadyForReviewCount)">
+        <div class="column-one-half bingo-background block-one @GetClickableClass(Model.Data.ReadyForReviewCount)">
             <h2 class="bold-xxlarge">
                 @if (Model.Data.ReadyForReviewCount > 0)
                 {
@@ -60,7 +27,7 @@
             <p class="heading-small">Ready for review</p>
         </div>
 
-        <div class="column-one-half bingo-background block-four @GetClickableClass(Model.Data.WithProviderCount)">
+        <div class="column-one-half bingo-background block-two @GetClickableClass(Model.Data.WithProviderCount)">
             <h2 class="bold-xxlarge">
                 @if (Model.Data.WithProviderCount > 0)
                 {
@@ -74,6 +41,22 @@
                 }
             </h2>
             <p class="heading-small">With training providers</p>
+        </div>
+
+        <div class="column-one-half bingo-background block-three @GetClickableClass(Model.Data.DraftCount)">
+            <h2 class="bold-xxlarge">
+                @if (Model.Data.DraftCount > 0)
+                {
+                    <a href="@Url.Action("Draft", new { redirectTo = "NewRequests" })" title="@Model.Data.DraftCount waiting to be sent" aria-label="Waiting to be sent">
+                        @Model.Data.DraftCount
+                    </a>
+                }
+                else
+                {
+                    <span>0</span>
+                }
+            </h2>
+            <p class="heading-small">Draft</p>
         </div>
 
     </div> <!-- /column-two-thirds-->

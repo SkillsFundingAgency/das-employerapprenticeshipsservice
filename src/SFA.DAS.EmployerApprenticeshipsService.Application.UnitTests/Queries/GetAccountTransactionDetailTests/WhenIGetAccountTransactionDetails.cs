@@ -44,8 +44,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
             {
                 AccountId = _accountId,
                 FromDate= _fromDate,
-                ToDate = _toDate,
-                ExternalUserId = "ABC123"
+                ToDate = _toDate
             };
 
             SetUp();

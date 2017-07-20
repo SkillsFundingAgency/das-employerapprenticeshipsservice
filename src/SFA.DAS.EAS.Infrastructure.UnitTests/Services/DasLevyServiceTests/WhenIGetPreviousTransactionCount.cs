@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
         public async Task ThenTheMediatorMethodIsCalled()
         {
             //Act
-            await _dasLevyService.GetPreviousAccountTransaction(1, DateTime.Now, "ABC123");
+            await _dasLevyService.GetPreviousAccountTransaction(1, DateTime.Now);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetPreviousTransactionsCountRequest>()), Times.Once);
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
         public async Task ThenTheResponseFromTheQueryIsReturned()
         {
             //Act
-            var actual = await _dasLevyService.GetPreviousAccountTransaction(1, DateTime.Now, "ABC123");
+            var actual = await _dasLevyService.GetPreviousAccountTransaction(1, DateTime.Now);
 
             //Assert
             Assert.AreEqual(TransactionCount, actual);

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.Commitments.Api.Types.ProviderPayment;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
@@ -65,18 +66,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 Status = statusText,
                 ProviderName = apprenticeship.ProviderName,
                 PendingChanges = pendingChange,
-                Alert = MapRecordStatus(apprenticeship.PendingUpdateOriginator, apprenticeship.DataLockTriageStatus),
+                Alerts = MapRecordStatus(apprenticeship.PendingUpdateOriginator, 
+                    apprenticeship.DataLockCourseTriaged, 
+                    apprenticeship.DataLockPriceTriaged),
                 EmployerReference = apprenticeship.EmployerRef,
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 EnableEdit = pendingChange == PendingChanges.None
                             && new []{ PaymentStatus.Active, PaymentStatus.Paused,  }.Contains(apprenticeship.PaymentStatus),
-                CanEditStatus = !(new List<PaymentStatus> { PaymentStatus.Completed, PaymentStatus.Withdrawn }).Contains(apprenticeship.PaymentStatus),
-                HasDataLockError = apprenticeship.DataLockTriageStatus != null 
-                                && apprenticeship.DataLockTriageStatus == TriageStatus.Restart,
-                DataLockTriageStatus = apprenticeship.DataLockTriageStatus ?? TriageStatus.Unknown
+                CanEditStatus = !(new List<PaymentStatus> { PaymentStatus.Completed, PaymentStatus.Withdrawn }).Contains(apprenticeship.PaymentStatus)
             };
         }
-        
+
         public ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship)
         {
             var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
@@ -89,7 +89,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
                 NINumber = apprenticeship.NINumber,
-                DateOfBirth = new DateTimeViewModel(apprenticeship.DateOfBirth?.Day, apprenticeship.DateOfBirth?.Month, apprenticeship.DateOfBirth?.Year),
+                DateOfBirth =
+                    new DateTimeViewModel(apprenticeship.DateOfBirth?.Day, apprenticeship.DateOfBirth?.Month,
+                        apprenticeship.DateOfBirth?.Year),
                 ULN = apprenticeship.ULN,
                 TrainingType = apprenticeship.TrainingType,
                 TrainingCode = apprenticeship.TrainingCode,
@@ -257,8 +259,34 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 
             return new PaymentOrderViewModel { Items = items };
         }
-        
-        private bool CalculateIfInFirstCalendarMonthOfTraining(DateTime? startDate)
+
+        public IList<PriceChange> MapPriceChanges(IEnumerable<DataLockStatus> dataLocks, List<PriceHistory> history)
+        {
+            // Only price DLs
+            var l = new List<PriceChange>();
+            var i = 0;
+            foreach (var dl in dataLocks)
+            {
+                i++;
+                var h = history
+                    .OrderByDescending(m => m.FromDate)
+                    .FirstOrDefault(m => m.FromDate <= dl.IlrEffectiveFromDate);
+
+                l.Add(new PriceChange
+                {
+                    Title = $"Change {i}",
+                    CurrentStartDate = h?.FromDate ?? DateTime.MinValue,
+                    CurrentCost = h?.Cost ?? default(decimal),
+                    IlrStartDate = dl.IlrEffectiveFromDate ?? DateTime.MinValue,
+                    IlrCost = dl.IlrTotalCost ?? default(decimal),
+                    MissingPriceHistory = h == null
+                });
+            }
+
+            return l;
+        }
+
+		private bool CalculateIfInFirstCalendarMonthOfTraining(DateTime? startDate)
         {
             if (!startDate.HasValue)
                 return false;
@@ -303,29 +331,28 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             }
         }
 
-        private string MapRecordStatus(Originator? pendingUpdateOriginator, TriageStatus? dataLockTriageStatus)
+        private IEnumerable<string> MapRecordStatus(Originator? pendingUpdateOriginator, bool dataLockCourseTriaged, bool dataLockPriceTriaged)
         {
-            var changeText = string.Empty;
-            var dataLockText = string.Empty;
+            const string ChangesPending = "Changes pending";
+            const string ChangesForReview = "Changes for review";
+            const string ChangesRequested = "Changes requested";
+
+            var statuses = new List<string>();
 
             if (pendingUpdateOriginator != null)
             {
-                changeText = pendingUpdateOriginator == Originator.Employer
-                    ? "Changes pending" 
-                    : "Changes for review" ;    
+                var t = pendingUpdateOriginator == Originator.Employer 
+                    ? ChangesPending : ChangesForReview;
+                statuses.Add(t);
             }
 
-            if (dataLockTriageStatus != null)
-            {
-                switch (dataLockTriageStatus)
-                {
-                    case TriageStatus.Restart:
-                        dataLockText = "Changes requested";
-                        break;
-                }
-            }
+            if (dataLockCourseTriaged)
+                statuses.Add(ChangesRequested);
 
-            return !string.IsNullOrEmpty(dataLockText) ? dataLockText : changeText;
+            if (dataLockPriceTriaged)
+                statuses.Add(ChangesForReview);
+
+            return statuses.Distinct();
         }
     }
 }

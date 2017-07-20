@@ -5504,26 +5504,21 @@ h2 .float-right {
 }
 
 @media (min-width: 641px) {
-  .dynamic-cost-display .short {
-    font-size: 48px;
-  }
-  .dynamic-cost-display .long {
-    font-size: 26px;
-    line-height: 82px;
-  }
-  .dynamic-cost-display .longer {
-    font-size: 19px;
-    line-height: 82px;
+  .dynamic-cost-display .bold-xlarge {
+    font-size: 80px;
   }
 }
 
-@media (min-width: 960px) {
+@media (min-width: 641px) {
+  .dynamic-cost-display .short {
+    font-size: 67px;
+  }
   .dynamic-cost-display .long {
-    font-size: 45px;
+    font-size: 48px;
     line-height: 82px;
   }
   .dynamic-cost-display .longer {
-    font-size: 32px;
+    font-size: 38px;
     line-height: 82px;
   }
 }
@@ -5547,6 +5542,11 @@ h2 .float-right {
 }
 
 /*Email notification settings*/
+#notification-settings .alert-default {
+  background: none;
+  margin-bottom: 40px;
+}
+
 #notification-settings h1 {
   margin-bottom: 0;
 }
@@ -5635,6 +5635,34 @@ h2 .float-right {
   margin-bottom: 0;
 }
 
+#review-datalock-changes h2.heading-small {
+  margin-top: 40px;
+}
+
+#review-datalock-changes .core-detail {
+  margin-bottom: 30px;
+}
+
+#review-datalock-changes .core-detail td.first-child {
+  border-top: 1px solid #bfc1c3;
+}
+
+#review-datalock-changes .changes .current {
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+#review-datalock-changes .changes .changed {
+  font-weight: bold;
+}
+
+#review-datalock-changes #approve-changes a.break-line {
+  clear: both;
+  display: block;
+  padding-left: 0;
+  margin-top: 20px;
+}
+
 #edit-started-apprentice .approve-alert {
   margin-top: 30px;
 }
@@ -5672,6 +5700,9 @@ h2 .float-right {
     text-decoration: none;
     color: #0b0c0c;
     cursor: pointer;
+  }
+  #apprentice-details .finishEditingBtn {
+    margin-bottom: 20px;
   }
   .bubble-arrow, .overlap-arrow {
     display: none;

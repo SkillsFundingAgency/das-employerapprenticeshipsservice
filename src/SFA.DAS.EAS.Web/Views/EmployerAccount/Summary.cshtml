@@ -79,7 +79,16 @@
                 @Html.AntiForgeryToken()
                 <div class="form-group">
                     <button type="submit" class="button" id="continue">These details are correct</button>
-                    <a class="button-link" href="@Url.Action("SelectEmployer", "EmployerAccount")">Change details</a>
+
+                    @if (Model.Data.NewSearch)
+                    {
+                        <a class="button-link" href="@Url.Action("SearchForOrganisation", "SearchOrganisation")">Change details</a>
+                    }
+                    else
+                    {
+                        <a class="button-link" href="@Url.Action("SelectEmployer", "EmployerAccount")">Change details</a>
+                    }
+                    
                 </div>
             </form>
         }

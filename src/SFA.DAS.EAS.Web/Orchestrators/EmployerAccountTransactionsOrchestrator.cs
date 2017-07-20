@@ -227,22 +227,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 return new OrchestratorResponse<TransactionViewResultViewModel> {Data = new TransactionViewResultViewModel(_currentTime.Now) };
             }
 
-            year = year == default(int) ? _currentTime.Now.Year : year;
-            month = month == default(int) ? _currentTime.Now.Month : month;
-
-            var daysInMonth = DateTime.DaysInMonth(year, month);
-
-            var fromDate = new DateTime(year, month, 1);
-            var toDate = new DateTime(year, month, daysInMonth);
-
             var data =
                 await
                     _mediator.SendAsync(new GetEmployerAccountTransactionsQuery
                     {
-                        AccountId = employerAccountResult.Account.Id,
                         ExternalUserId = externalUserId,
-                        FromDate = fromDate,
-                        ToDate = toDate,
+                        Year = year,
+                        Month = month,
                         HashedAccountId = hashedId
                     });
             var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
@@ -272,8 +263,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         CurrentBalanceCalcultedOn = currentBalanceCalcultedOn,
                         Data = data.Data
                     },
-                    Month = month,
-                    Year = year,
+                    Month = data.Month,
+                    Year = data.Year,
                     AccountHasPreviousTransactions = data.AccountHasPreviousTransactions
                 }
             };
