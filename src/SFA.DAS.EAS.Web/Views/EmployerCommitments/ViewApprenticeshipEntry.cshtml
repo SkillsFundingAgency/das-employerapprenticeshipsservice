@@ -28,20 +28,6 @@
                 </tr>
 
                 <tr>
-                    <td>Unique learner number</td>
-                    <td>
-                        @if (!string.IsNullOrWhiteSpace(Model.Data.ULN))
-                        {
-                            <span>@Model.Data.ULN</span>
-                        }
-                        else
-                        {
-                            <span class="missing">&ndash;&ndash;</span>
-                        }
-                    </td>
-                </tr>
-
-                <tr>
                     <td>Date of birth</td>
                     <td>
                         @if (Model.Data.DateOfBirth.DateTime.HasValue)
