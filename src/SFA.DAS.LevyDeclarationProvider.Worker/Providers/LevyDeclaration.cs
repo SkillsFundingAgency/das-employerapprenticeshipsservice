@@ -68,7 +68,6 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                         {
                             await message.CompleteAsync();
                         }
-                        
                     }
                 }
                 catch (Exception ex)

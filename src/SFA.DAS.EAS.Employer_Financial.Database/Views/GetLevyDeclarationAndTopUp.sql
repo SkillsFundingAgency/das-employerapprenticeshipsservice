@@ -15,7 +15,7 @@ FROM
 		(
 			SELECT TOP 1 LevyDueYTD
 			FROM [employer_financial].[GetLevyDeclaration] y
-			WHERE y.EmpRef = ld.empRef AND y.PayrollYear = ld.PayrollYear AND y.LastSubmission = 1 AND y.PayrollMonth < ld.PayrollMonth
+			WHERE y.EmpRef = ld.empRef AND y.PayrollYear = ld.PayrollYear AND y.LastSubmission = 1 AND y.PayrollMonth < ld.PayrollMonth AND y.LevyDueYTD IS NOT NULL
 			ORDER BY y.PayrollMonth DESC
 		) y
 	) dec

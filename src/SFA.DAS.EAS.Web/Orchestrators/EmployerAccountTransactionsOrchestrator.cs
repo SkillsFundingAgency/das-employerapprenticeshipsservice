@@ -58,7 +58,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 transaction.PayeSchemeName = payeSchemeData?.PayeScheme?.Name ?? string.Empty;
             }
-            
 
             return new OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>
             {

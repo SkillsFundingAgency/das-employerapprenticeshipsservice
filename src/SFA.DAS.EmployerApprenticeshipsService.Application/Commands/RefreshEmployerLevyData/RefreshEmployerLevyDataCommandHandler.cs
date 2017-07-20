@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 
                 declarations = await FilterActiveDeclarations(employerLevyData, declarations);
 
-                await ProcessNoPaymentForPeriodDeclarations(declarations, employerLevyData);
+                ProcessNoPaymentForPeriodDeclarations(declarations, employerLevyData);
 
                 await ProcessEndOfYearAdjustmentDeclarations(declarations, employerLevyData);
 
@@ -83,13 +83,13 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
             }
         }
 
-        private async Task ProcessNoPaymentForPeriodDeclarations(IEnumerable<DasDeclaration> declarations, EmployerLevyData employerLevyData)
+        private static void ProcessNoPaymentForPeriodDeclarations(IEnumerable<DasDeclaration> declarations, EmployerLevyData employerLevyData)
         {
-            var noPaymentForPeriodDeclarations = declarations.Where(x => x.NoPaymentForPeriod).ToList();
+            var noPaymentForPeriodDeclarations = declarations.Where(x => x.NoPaymentForPeriod);
 
             foreach (var dasDeclaration in noPaymentForPeriodDeclarations)
             {
-                await GetLevyFromPreviousSubmission(employerLevyData, dasDeclaration);
+                dasDeclaration.LevyDueYtd = null;
             }
         }
 
@@ -140,12 +140,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
             dasDeclaration.EndOfYearAdjustmentAmount = adjustmentDeclaration?.LevyDueYtd - dasDeclaration.LevyDueYtd ?? 0;
         }
 
-        private async Task GetLevyFromPreviousSubmission(EmployerLevyData employerLevyData, DasDeclaration dasDeclaration)
-        {
-            var previousSubmission = await _dasLevyRepository.GetLastSubmissionForScheme(employerLevyData.EmpRef);
-            dasDeclaration.LevyDueYtd = previousSubmission?.LevyDueYtd ?? 0;
-            dasDeclaration.LevyAllowanceForFullYear = previousSubmission?.LevyAllowanceForFullYear ?? 0;
-        }
+     
 
         private async Task PublishDeclarationUpdatedEvents(long accountId, IEnumerable<DasDeclaration> savedDeclarations)
         {
