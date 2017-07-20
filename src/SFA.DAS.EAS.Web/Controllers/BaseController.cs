@@ -116,7 +116,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 else
                 {
                     var randomViewName = _multiVariantTestingService.GetRandomViewNameToShow(userView.Views);
-
+                    
                     if (string.IsNullOrEmpty(randomViewName))
                     {
                         return base.View(viewName, masterName, orchestratorResponse);

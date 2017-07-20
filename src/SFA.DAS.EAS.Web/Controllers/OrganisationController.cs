@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -307,7 +308,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("confirm")]
         public async Task<ActionResult> Confirm(
             string hashedAccountId, string name, string code, string address, DateTime? incorporated,
-            string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, string sector)
+            string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, string sector, bool newSearch)
         {
             var request = new CreateNewLegalEntityViewModel
             {
@@ -332,7 +333,10 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Severity = FlashMessageSeverityLevel.Success
             };
             AddFlashMessageToCookie(flashMessage);
-
+            if (newSearch)
+            {
+                return RedirectToAction("OrganisationAddedNextStepsSearch", new { hashedAccountId });
+            }
             return RedirectToAction("OrganisationAddedNextSteps", new { hashedAccountId });
         }
 
@@ -344,6 +348,15 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
+        [Route("nextStepSearch")]
+        public ActionResult OrganisationAddedNextStepsSearch()
+        {
+            var viewModel = new OrchestratorResponse<string> { FlashMessage = GetFlashMessageViewModelFromCookie() };
+            return View("OrganisationAddedNextSteps", viewModel);
+        }
+
+
         [HttpPost]
         [Route("nextStep")]
         public ActionResult GoToNextStep(string nextStep, string hashedAccountId)
@@ -351,6 +364,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             switch (nextStep)
             {
                 case "agreement": return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
+
+                case "teamMembers": return RedirectToAction("ViewTeam", "EmployerTeam", new { hashedAccountId });
 
                 case "addOrganisation": return RedirectToAction("SearchForOrganisation", "SearchOrganisation", new { hashedAccountId });
 

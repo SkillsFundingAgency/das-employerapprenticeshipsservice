@@ -5,7 +5,7 @@ AS
 		tm.*, s.ReceiveNotifications AS CanReceiveNotifications
 	FROM 
 		[employer_account].[GetTeamMembers] tm
-	INNER JOIN
+	LEFT JOIN
 		[employer_account].[UserAccountSettings] s
 	ON
 		tm.Id = s.UserId

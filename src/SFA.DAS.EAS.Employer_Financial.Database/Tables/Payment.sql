@@ -29,3 +29,7 @@ GO
 CREATE INDEX [IX_Payment_PaymentMetaDataId] ON [employer_financial].[Payment] ([PaymentMetaDataId])
 
 GO
+
+CREATE INDEX [IX_Payment_FundingComp] ON [employer_financial].[Payment] (AccountId, UkPrn, fundingsource, paymentmetadataid)
+
+GO

@@ -16,6 +16,21 @@ namespace SFA.DAS.EAS.Api.Controllers
             _orchestrator = orchestrator;
         }
 
+        [Route("", Name = "GetLevy")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet]
+        public async Task<IHttpActionResult> Index(string hashedAccountId)
+        {
+            var result = await _orchestrator.GetLevy(hashedAccountId);
+
+            if (result.Data == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result.Data);
+        }
+
         [Route("{payrollYear}/{payrollMonth}", Name = "GetLevyForPeriod")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]

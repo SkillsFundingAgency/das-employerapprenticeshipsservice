@@ -71,7 +71,7 @@
                             <article>
                                 <form action="@Url.Action("Confirm")" method="post">
                                     <input type="hidden" name="DateOfInception" value="@organisation.DateOfInception"/>
-                                    <input type="hidden" name="OrganisationCode" value="@organisation.OrganisationCode"/>
+                                    <input type="hidden" name="ReferenceNumber" value="@organisation.ReferenceNumber"/>
                                     <input type="hidden" name="Sector" value="@organisation.Sector"/>
                                     <input type="hidden" name="Type" value="@organisation.Type"/>
                                     <input type="hidden" name="Name" value="@organisation.Name"/>
@@ -174,7 +174,6 @@
 
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("Index", "Home")" class="link-back">Back</a>
+    <div class="breadcrumbs" id="js-breadcrumbs">
     </div>
 }

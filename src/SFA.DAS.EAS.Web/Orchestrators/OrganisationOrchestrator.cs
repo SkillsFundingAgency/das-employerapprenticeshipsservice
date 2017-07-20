@@ -164,7 +164,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             County = x.AddressLine5,
                             Postcode = x.PostCode
                         }).Address : "",
-                OrganisationCode = x.OrganisationCode
+                ReferenceNumber = x.OrganisationCode
                  
             }).ToList();
 
@@ -573,5 +573,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
             };
         }
+
+        
     }
 }

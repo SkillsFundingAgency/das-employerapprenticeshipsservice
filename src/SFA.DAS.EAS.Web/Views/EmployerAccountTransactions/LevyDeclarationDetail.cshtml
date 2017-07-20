@@ -27,7 +27,7 @@
                     <th id="th-ps" scope="col">PAYE scheme</th>
                     <th id="th-pd" scope="col">Payroll date</th>
                     <th id="th-ld" class="numeric" scope="col">Levy paid to HMRC</th>
-                    <th id="th-ef" class="numeric" scope="col">English %</th>
+                    <th id="th-ef" class="numeric" scope="col"><span class="nowrap">English %</span></th>
                     <th id="th-tu" class="numeric" scope="col">10% Top up</th>
                     <th id="th-pi" class="numeric" scope="col">Your funds</th>
                 </tr>
@@ -47,7 +47,7 @@
                             @(aggregationLineItem.Amount.ToString("C2", culture))
                         </td>
                         <td headers="th-ef" class="numeric">
-                            @($"{aggregationLineItem.EnglishFraction * 100:n2}")%
+                            <span class="nowrap">@($"{aggregationLineItem.EnglishFraction:P3}")</span>
                         </td>
                         <td headers="th-tu" class="numeric">
                             @(aggregationLineItem.TopUp.ToString("C2", culture))

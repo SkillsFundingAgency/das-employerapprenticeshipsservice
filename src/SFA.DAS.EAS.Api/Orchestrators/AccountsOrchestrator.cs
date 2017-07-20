@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityById;
+using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
 using SFA.DAS.EAS.Application.Queries.GetLevyDeclarationsByAccountAndPeriod;
 using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
@@ -140,7 +141,25 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             };
         }
 
+        public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId)
+        {
+            _logger.Info($"Requesting levy declaration for account {hashedAccountId}");
 
+            var levyDeclarations = await _mediator.SendAsync(new GetLevyDeclarationRequest { HashedAccountId = hashedAccountId });
+            if (levyDeclarations.Declarations == null)
+            {
+                return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>> { Data = null };
+            }
+
+            var levyViewModels = levyDeclarations.Declarations.Select(x => _mapper.Map<LevyDeclarationViewModel>(x)).ToList();
+            levyViewModels.ForEach(x => x.HashedAccountId = hashedAccountId);
+
+            return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
+            {
+                Data = new AccountResourceList<LevyDeclarationViewModel>(levyViewModels),
+                Status = HttpStatusCode.OK
+            };
+        }
 
         public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
         {

@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             foreach (var searchResult in searchResults.Data)
             {
-                searchResult.AddedToAccount = accountLegalEntitiesHelper.IsLegalEntityAlreadyAddedToAccount(accountLegalEntities, searchResult.Name, searchResult.OrganisationCode, searchResult.Type);
+                searchResult.AddedToAccount = accountLegalEntitiesHelper.IsLegalEntityAlreadyAddedToAccount(accountLegalEntities, searchResult.Name, searchResult.ReferenceNumber, searchResult.Type);
             }
         }
 
@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Name = organisation.Name,
                 Type = organisation.Type,
                 DateOfInception = organisation.RegistrationDate,
-                OrganisationCode = organisation.Code,
+                ReferenceNumber = organisation.Code,
                 PublicSectorDataSource = (short?)organisation.SubType,
                 Sector = organisation.Sector
             };
