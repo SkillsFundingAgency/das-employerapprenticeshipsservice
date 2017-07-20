@@ -40,7 +40,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("organisations/search", Order = 1)]
         public ActionResult SearchForOrganisation(string hashedAccountId)
         {
-            return View("SearchForOrganisation");
+            var model = new OrchestratorResponse<SearchOrganisationViewModel> { Data = new SearchOrganisationViewModel { IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId) } };
+            return View("SearchForOrganisation", model);
         }
 
         [HttpPost]
@@ -50,7 +51,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
-                var model = CreateSearchTermValidationErrorModel();
+                var model = CreateSearchTermValidationErrorModel(new SearchOrganisationViewModel { IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId)});
                 return View("SearchForOrganisation", model);
             }
 
@@ -61,16 +62,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("organisations/search/results", Order = 1)]
         public async Task<ActionResult> SearchForOrganisationResults(string hashedAccountId, string searchTerm, int pageNumber = 1, OrganisationType? organisationType = null)
         {
-            OrchestratorResponse<SearchOrganisationViewModel> model;
+            OrchestratorResponse<SearchOrganisationResultsViewModel> model;
             if (string.IsNullOrEmpty(searchTerm))
             {
-                var viewModel = new SearchOrganisationViewModel { Results = new PagedResponse<OrganisationDetailsViewModel>() };
+                var viewModel = new SearchOrganisationResultsViewModel { Results = new PagedResponse<OrganisationDetailsViewModel>() };
                 model = CreateSearchTermValidationErrorModel(viewModel);
             }
             else
             {
                 model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
             }
+            model.Data.IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId);
 
             return View("SearchForOrganisationResults", model);
         }

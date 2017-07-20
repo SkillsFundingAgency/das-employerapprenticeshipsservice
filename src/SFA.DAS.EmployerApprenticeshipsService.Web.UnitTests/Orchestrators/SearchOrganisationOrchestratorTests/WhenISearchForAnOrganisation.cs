@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             var actual = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, null, null);
 
             //Assert
-            Assert.IsAssignableFrom<OrchestratorResponse<SearchOrganisationViewModel>>(actual);
+            Assert.IsAssignableFrom<OrchestratorResponse<SearchOrganisationResultsViewModel>>(actual);
         }
 
         [Test]
