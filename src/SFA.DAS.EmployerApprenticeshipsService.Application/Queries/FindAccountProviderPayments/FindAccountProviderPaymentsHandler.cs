@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             var transactions = await _dasLevyService.GetAccountProviderPaymentsByDateRange<PaymentTransactionLine>
-                                    (accountId, message.UkPrn, message.FromDate, message.ToDate, message.ExternalUserId);
+                                    (accountId, message.UkPrn, message.FromDate, message.ToDate);
 
             if (!transactions.Any())
             {

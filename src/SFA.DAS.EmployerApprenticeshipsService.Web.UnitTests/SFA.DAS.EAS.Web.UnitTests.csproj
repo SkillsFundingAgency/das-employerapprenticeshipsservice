@@ -78,8 +78,8 @@
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.65.0.33068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.65.0.33068\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.66.0.33236, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.66.0.33236\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.EmployerUsers.WebClientComponents, Version=1.0.0.4388, Culture=neutral, processorArchitecture=MSIL">
@@ -183,6 +183,7 @@
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenSearchingForACompany.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenAddingAPayeScheme.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenGettingPayeSchemeDetails.cs" />
+    <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenGettingTheNextStepsDetails.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenIGetPayeEnglishFractionHistory.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenRemovingAPayeScheme.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionOrchestratorTests\WhenIGetAccountTransactions.cs" />
@@ -202,6 +203,8 @@
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingDeleteApprenticeshipConfirmation.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingFinishEditing.cs" />
     <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenApprenticeshipsAreStoredInTheCookie.cs" />
+    <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenMappingApprenticeshipAlertMessages.cs" />
+    <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenMappingDataLockWithPriceHistory.cs" />
     <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenMappingProviderPaymentPriority.cs" />
     <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenGettingApprenticeships.cs" />
     <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenMappingApprenticeshipFilters.cs" />

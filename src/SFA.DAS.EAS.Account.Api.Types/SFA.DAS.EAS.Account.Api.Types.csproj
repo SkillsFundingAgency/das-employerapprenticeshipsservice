@@ -72,6 +72,10 @@
     <Compile Include="ResourceList.cs" />
     <Compile Include="ResourceViewModel.cs" />
     <Compile Include="TeamMemberViewModel.cs" />
+    <Compile Include="TransactionItemType.cs" />
+    <Compile Include="TransactionSummaryViewModel.cs" />
+    <Compile Include="TransactionViewModel.cs" />
+    <Compile Include="TransactionsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

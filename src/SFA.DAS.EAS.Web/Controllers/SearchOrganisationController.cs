@@ -40,7 +40,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("organisations/search", Order = 1)]
         public ActionResult SearchForOrganisation(string hashedAccountId)
         {
-            return View("SearchForOrganisation");
+            var model = new OrchestratorResponse<SearchOrganisationViewModel> { Data = new SearchOrganisationViewModel { IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId) } };
+            return View("SearchForOrganisation", model);
         }
 
         [HttpPost]
@@ -50,7 +51,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
-                var model = CreateSearchTermValidationErrorModel();
+                var model = CreateSearchTermValidationErrorModel(new SearchOrganisationViewModel { IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId)});
                 return View("SearchForOrganisation", model);
             }
 
@@ -61,16 +62,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("organisations/search/results", Order = 1)]
         public async Task<ActionResult> SearchForOrganisationResults(string hashedAccountId, string searchTerm, int pageNumber = 1, OrganisationType? organisationType = null)
         {
-            OrchestratorResponse<SearchOrganisationViewModel> model;
+            OrchestratorResponse<SearchOrganisationResultsViewModel> model;
             if (string.IsNullOrEmpty(searchTerm))
             {
-                var viewModel = new SearchOrganisationViewModel { Results = new PagedResponse<OrganisationDetailsViewModel>() };
+                var viewModel = new SearchOrganisationResultsViewModel { Results = new PagedResponse<OrganisationDetailsViewModel>() };
                 model = CreateSearchTermValidationErrorModel(viewModel);
             }
             else
             {
                 model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
             }
+            model.Data.IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId);
 
             return View("SearchForOrganisationResults", model);
         }
@@ -80,6 +82,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("organisations/search/confirm", Order = 1)]
         public ActionResult Confirm(string hashedAccountId, OrganisationDetailsViewModel viewModel)
         {
+            viewModel.NewSearch = true;
+
             if (string.IsNullOrWhiteSpace(viewModel.Address))
             {
                 return FindAddress(hashedAccountId, viewModel);
@@ -91,7 +95,9 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("GatewayInform", "EmployerAccount");
             }
 
+            
             var response = new OrchestratorResponse<OrganisationDetailsViewModel> { Data = viewModel };
+            
             return View("../Organisation/ConfirmOrganisationDetails", response);
         }
 
@@ -151,13 +157,14 @@ namespace SFA.DAS.EAS.Web.Controllers
                 data = new EmployerAccountData
                 {
                     OrganisationType = viewModel.Type,
-                    OrganisationReferenceNumber = viewModel.OrganisationCode,
+                    OrganisationReferenceNumber = viewModel.ReferenceNumber,
                     OrganisationName = viewModel.Name,
                     OrganisationDateOfInception = viewModel.DateOfInception,
                     OrganisationRegisteredAddress = viewModel.Address,
                     OrganisationStatus = viewModel.Status ?? string.Empty,
                     PublicSectorDataSource = viewModel.PublicSectorDataSource,
-                    Sector = viewModel.Sector
+                    Sector = viewModel.Sector,
+                    NewSearch = viewModel.NewSearch
                 };
             }
             else
@@ -173,7 +180,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     OrganisationRegisteredAddress = existingData.OrganisationRegisteredAddress,
                     OrganisationStatus = existingData.OrganisationStatus,
                     PublicSectorDataSource = existingData.PublicSectorDataSource,
-                    Sector = existingData.Sector
+                    Sector = existingData.Sector,
+                    NewSearch = existingData.NewSearch
                 };
             }
 

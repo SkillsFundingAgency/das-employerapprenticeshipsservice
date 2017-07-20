@@ -22,13 +22,16 @@
                         <input id="choice1" type="radio" name="choice" value="1" />
                         Add another PAYE scheme 
                     </label>
+                    @if (!Model.Data.ShowWizard)
+                    {
                     <label for="choice2" class="block-label">
                         <input id="choice2" type="radio" name="choice" value="2" />
                         Check finances
                     </label>
+                    }
                     <label for="choice3" class="block-label">
                         <input id="choice3" type="radio" name="choice" value="3" />
-                        Return to homepage
+                        @(Model.Data.ShowWizard ? "Continue account setup" : "Return to homepage")
                     </label>
                 </fieldset>
             </div>

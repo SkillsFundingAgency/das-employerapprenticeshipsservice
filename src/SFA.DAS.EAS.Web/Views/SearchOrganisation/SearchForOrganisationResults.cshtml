@@ -1,12 +1,13 @@
 ﻿@using SFA.DAS.EAS.Domain.Models.Organisation
 @using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.ViewModels.Organisation
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SearchOrganisationViewModel>
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SearchOrganisationResultsViewModel>
 
 @{ 
     ViewBag.PageID = "select-your-organisation";
     ViewBag.Title = "Select your organisation";
-    ViewBag.HideNav = "true";
+    ViewBag.HideNav = Model.Data.IsExistingAccount ? "" : "true";
+    ViewBag.Section = "organisations";
 }
 
 <div class="grid-row">
@@ -71,7 +72,7 @@
                             <article>
                                 <form action="@Url.Action("Confirm")" method="post">
                                     <input type="hidden" name="DateOfInception" value="@organisation.DateOfInception"/>
-                                    <input type="hidden" name="OrganisationCode" value="@organisation.OrganisationCode"/>
+                                    <input type="hidden" name="ReferenceNumber" value="@organisation.ReferenceNumber"/>
                                     <input type="hidden" name="Sector" value="@organisation.Sector"/>
                                     <input type="hidden" name="Type" value="@organisation.Type"/>
                                     <input type="hidden" name="Name" value="@organisation.Name"/>

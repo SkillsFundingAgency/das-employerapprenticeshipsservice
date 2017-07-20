@@ -9,7 +9,7 @@
         <div class="column-two-thirds">
 
             <h1 class="heading-xlarge">Notification Settings</h1>
-            <p>Choose which accounts you want to receive cohort and apprentice updates from</p>
+            <p>Choose which accounts you want to receive cohort and apprentice updates from.</p>
 
             @Html.AntiForgeryToken()
 
@@ -62,7 +62,12 @@
                     }
 
                 </tbody>
-            </table>        
+            </table>   
+            
+            <div class="panel panel-border-wide alert-default">
+                <p>Changes to these settings won't affect service emails, such as password resets.</p>
+            </div>
+                 
             <button type="submit" class="button">Update</button>
           
             

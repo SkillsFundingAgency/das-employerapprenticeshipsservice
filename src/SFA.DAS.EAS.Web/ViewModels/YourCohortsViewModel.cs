@@ -2,9 +2,7 @@
 {
     public class YourCohortsViewModel
     {
-        public int WaitingToBeSentCount { get; set; }
-
-        public int ReadyForApprovalCount { get; set; }
+        public int DraftCount { get; set; }
 
         public int ReadyForReviewCount { get; set; }
 

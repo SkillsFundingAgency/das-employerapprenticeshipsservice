@@ -12,21 +12,21 @@ namespace SFA.DAS.EAS.Domain.Interfaces
         Task<ICollection<TransactionLine>> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
 
         Task<ICollection<T>> GetAccountLevyTransactionsByDateRange<T>(
-            long accountId, DateTime fromDate, DateTime toDate, string externalUserId)
+            long accountId, DateTime fromDate, DateTime toDate)
             where T : TransactionLine;
 
         Task<ICollection<T>> GetAccountProviderPaymentsByDateRange<T>(
-            long accountId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
+            long accountId, long ukprn, DateTime fromDate, DateTime toDate)
             where T : TransactionLine;
 
         Task<ICollection<T>> GetAccountCoursePaymentsByDateRange<T>(
-            long accountId, long ukprn, string courseName, int courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate, string externalUserId)
+            long accountId, long ukprn, string courseName, int courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
             where T : TransactionLine;
 
         Task<ICollection<AccountBalance>> GetAllAccountBalances();
 
         Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef);
 
-        Task<int> GetPreviousAccountTransaction(long AccountId, DateTime FromDate, string externalUserId);
+        Task<int> GetPreviousAccountTransaction(long AccountId, DateTime FromDate);
     }
 }

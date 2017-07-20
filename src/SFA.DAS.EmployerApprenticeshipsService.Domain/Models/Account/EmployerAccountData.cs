@@ -19,5 +19,6 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public string OrganisationStatus { get; set; }
         public string EmployerRefName { get; set; }
         public string Sector { get; set; }
+        public bool NewSearch { get; set; }
     }
 }
