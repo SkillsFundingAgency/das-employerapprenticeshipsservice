@@ -7,7 +7,5 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetPreviousTransac
     {
         public long AccountId { get; set; }
         public DateTime FromDate { get; set; }
-
-        public string ExternalUserId { get; set; }
     }
 }

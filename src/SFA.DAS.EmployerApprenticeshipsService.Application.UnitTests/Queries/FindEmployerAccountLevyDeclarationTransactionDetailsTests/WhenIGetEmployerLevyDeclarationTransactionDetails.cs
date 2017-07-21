@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.FindEmployerAccountLevyDecla
 
             _dasLevyService = new Mock<IDasLevyService>();
             _dasLevyService.Setup(x => x.GetAccountLevyTransactionsByDateRange<LevyDeclarationTransactionLine>
-                                            (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                                            (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                            .ReturnsAsync(new List<LevyDeclarationTransactionLine>()
                 {
                     new LevyDeclarationTransactionLine()
@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.FindEmployerAccountLevyDecla
             //Assert
             _hashingService.Verify(x => x.DecodeValue(_hashedAccountId), Times.Once);
             _dasLevyService.Verify(x=>x.GetAccountLevyTransactionsByDateRange<LevyDeclarationTransactionLine>
-                                            (_accountId, _fromDate, _toDate, _externalUserId));
+                                            (_accountId, _fromDate, _toDate));
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.FindEmployerAccountLevyDecla
         {
             //Arrange
             _dasLevyService.Setup(x => x.GetAccountLevyTransactionsByDateRange<LevyDeclarationTransactionLine>
-                                            (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                                            (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                            .ReturnsAsync(new List<LevyDeclarationTransactionLine>
             {
                 new LevyDeclarationTransactionLine {LineAmount=10,EnglishFraction = 0.5m,TransactionType = TransactionItemType.Declaration},

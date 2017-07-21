@@ -160,6 +160,9 @@
     <Compile Include="Commands\UpdateProviderPaymentPriority\UpdateProviderPaymentPriorityValidator.cs" />
     <Compile Include="Commands\UpdateProviderPaymentPriority\UpdateProviderPaymentPriorityCommand.cs" />
     <Compile Include="Commands\UpdateProviderPaymentPriority\UpdateProviderPaymentPriorityCommandHandler.cs" />
+    <Compile Include="Commands\UpdateShowWizard\UpdateShowAccountWizardCommand.cs" />
+    <Compile Include="Commands\UpdateShowWizard\UpdateShowAccountWizardCommandHandler.cs" />
+    <Compile Include="Commands\UpdateShowWizard\UpdateShowAccountWizardCommandValidator.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommand.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommandHandler.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsValidator.cs" />
@@ -307,6 +310,9 @@
     <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionSummary\GetAccountTransactionSummaryQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionSummary\GetAccountTransactionSummaryRequest.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionSummary\GetAccountTransactionSummaryResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsResponse.cs" />
@@ -354,6 +360,10 @@
     <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesQueryValidator.cs" />
     <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesQuery.cs" />
     <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesResponse.cs" />
+    <Compile Include="Queries\GetAccountStats\GetAccountStatsHandler.cs" />
+    <Compile Include="Queries\GetAccountStats\GetAccountStatsQuery.cs" />
+    <Compile Include="Queries\GetAccountStats\GetAccountStatsQueryValidator.cs" />
+    <Compile Include="Queries\GetAccountStats\GetAccountStatsResponse.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersHandler.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersQuery.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersResponse.cs" />
@@ -520,6 +530,9 @@
     <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfRequest.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfResponse.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfValidator.cs" />
+    <Compile Include="Queries\GetTeamUser\GetTeamUserHandler.cs" />
+    <Compile Include="Queries\GetTeamUser\GetTeamMemberQuery.cs" />
+    <Compile Include="Queries\GetTeamUser\GetTeamMemberResponse.cs" />
     <Compile Include="Queries\GetTrainingProgrammes\GetTrainingProgrammesQueryHandler.cs" />
     <Compile Include="Queries\GetTrainingProgrammes\GetTrainingProgrammesQueryRequest.cs" />
     <Compile Include="Queries\GetTrainingProgrammes\GetTrainingProgrammesQueryResponse.cs" />

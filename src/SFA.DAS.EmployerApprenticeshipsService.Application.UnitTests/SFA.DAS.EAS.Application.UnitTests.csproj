@@ -196,6 +196,8 @@
     <Compile Include="Commands\UpdatePayeInformationTests\WhenUpdatingPayeInformation.cs" />
     <Compile Include="Commands\UpdatePayeInformationTests\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\UpdateProviderPaymentPriority\WhenValidationUpdateProviderPaymentPriority.cs" />
+    <Compile Include="Commands\UpdateShowAccountWizardTests\WhenIUpdateMyShowAccountWizardValue.cs" />
+    <Compile Include="Commands\UpdateShowAccountWizardTests\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\WhenUpdatingUserNotificationSettings.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUserTests\WhenUpsertingAUser.cs" />
@@ -218,9 +220,12 @@
     <Compile Include="Queries\GetAccountEmployerAgreementTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountPAYESchemes\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountPAYESchemes\WhenIGetAccountPayeSchemes.cs" />
+    <Compile Include="Queries\GetAccountStatsTests\WhenIGetAccountStats.cs" />
+    <Compile Include="Queries\GetAccountStatsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTransactionDetailTests\WhenIGetAccountTransactionDetails.cs" />
     <Compile Include="Queries\GetAccountTransactionDetailTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetAccountTransactionSummaryTests\WhenIGetAccountTransactionSummary.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIGetAccountTransactions.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\WhenGettingApprenticeshipDataLock.cs" />
@@ -297,6 +302,7 @@
     <Compile Include="Queries\GetUserNotificationSettings\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUsersTests\WhenIGetUsers.cs" />
     <Compile Include="Queries\GetUserTest\WhenIGetAUser.cs" />
+    <Compile Include="Queries\GetUserTest\WhenIValidatedTheQuery.cs" />
     <Compile Include="Queries\QueryBaseTest.cs" />
     <Compile Include="Queries\ValidateStatusChangeDateQuery\WhenValidatingChangeDate.cs" />
   </ItemGroup>

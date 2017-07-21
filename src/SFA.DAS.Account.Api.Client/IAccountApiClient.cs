@@ -29,6 +29,10 @@ namespace SFA.DAS.EAS.Account.Api.Client
 
         Task<EmployerAgreementView> GetEmployerAgreement(string accountId, string legalEntityId, string agreementId);
 
+        Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month);
+
+        Task<ICollection<TransactionSummaryViewModel>> GetTransactionSummary(string accountId);
+
         Task<T> GetResource<T>(string uri) where T : IAccountResource;
     }
 }

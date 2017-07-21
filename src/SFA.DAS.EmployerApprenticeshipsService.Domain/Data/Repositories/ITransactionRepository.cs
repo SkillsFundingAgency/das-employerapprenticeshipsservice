@@ -16,5 +16,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<List<TransactionLine>> GetAccountCoursePaymentsByDateRange(long accountId, long ukprn, string courseName, int courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate);
 
         Task<int> GetPreviousTransactionsCount(long accountId, DateTime fromDate);
+
+        Task<List<TransactionSummary>> GetAccountTransactionSummary(long accountId);
     }
 }

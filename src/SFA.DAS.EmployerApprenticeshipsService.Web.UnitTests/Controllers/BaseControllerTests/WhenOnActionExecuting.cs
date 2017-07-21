@@ -47,7 +47,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
             routes.Values["controller"] = "Test";
             _controllerContext.Setup(x => x.RouteData).Returns(routes);
 
-            _controller = new TestController(_featureToggle.Object, _owinWrapper.Object, _multiVariantTestingService.Object, _flashMessage.Object)
+            _controller = new TestController(_featureToggle.Object, _owinWrapper.Object, 
+                _multiVariantTestingService.Object, _flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object
             };
@@ -234,7 +235,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
         
         internal class TestController : BaseController
         {
-            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
+            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IMultiVariantTestingService multiVariantTestingService, 
+                ICookieStorageService<FlashMessageViewModel> flashMessage)
                 : base(owinWrapper, featureToggle, multiVariantTestingService ,flashMessage)
             {
 

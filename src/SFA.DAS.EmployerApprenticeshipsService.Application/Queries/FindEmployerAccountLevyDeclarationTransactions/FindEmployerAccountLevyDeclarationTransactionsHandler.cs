@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTran
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             var transactions = await _dasLevyService.GetAccountLevyTransactionsByDateRange<LevyDeclarationTransactionLine>
-                                    (accountId, message.FromDate, message.ToDate, message.ExternalUserId);
+                                    (accountId, message.FromDate, message.ToDate);
             
             //var transactionDetailSummaries = data.Select(item => new LevyDeclarationTransactionLine
             //{

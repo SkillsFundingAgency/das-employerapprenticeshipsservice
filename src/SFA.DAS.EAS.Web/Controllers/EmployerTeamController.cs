@@ -17,7 +17,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
 
         public EmployerTeamController(IOwinWrapper owinWrapper, EmployerTeamOrchestrator employerTeamOrchestrator, 
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage) 
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, 
+            ICookieStorageService<FlashMessageViewModel> flashMessage) 
             : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
@@ -85,7 +86,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 };
                 AddFlashMessageToCookie(flashMessage);
 
-                return RedirectToAction("ViewTeam");
+                return RedirectToAction("NextSteps");
             }
                 
            
@@ -98,7 +99,35 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View(errorResponse);
         }
-        
+
+        [HttpGet]
+        [Route("invite/next")]
+        public ActionResult NextSteps(string hashedAccountId)
+        {
+            var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel> { FlashMessage = GetFlashMessageViewModelFromCookie(), Data = new InviteTeamMemberNextStepsViewModel() };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("invite/next")]
+        public ActionResult NextSteps(int? choice)
+        {
+            switch (choice ?? 0)
+            {
+                case 1: return RedirectToAction("Invite");
+                case 2: return RedirectToAction("ViewTeam");
+                case 3: return RedirectToAction("Index");
+                default:
+                    var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel>
+                    {
+                        FlashMessage = GetFlashMessageViewModelFromCookie(),
+                        Data = new InviteTeamMemberNextStepsViewModel { ErrorMessage = "You must select an option to continue." }
+                    };
+                    return View(model); //No option entered
+            }
+        }
+
         [HttpGet]
         [Route("{invitationId}/cancel")]
         public async Task<ActionResult> Cancel(string email, string invitationId, string hashedAccountId)
@@ -212,6 +241,17 @@ namespace SFA.DAS.EAS.Web.Controllers
             var invitation = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(invitation);
+        }
+
+        [HttpGet]
+        [Route("hideWizard")]
+        public async Task<ActionResult> HideWizard(string hashedAccountId)
+        {
+            var externalUserId = OwinWrapper.GetClaimValue(@"sub");
+
+            await _employerTeamOrchestrator.HideWizard(hashedAccountId, externalUserId);
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -335,31 +335,33 @@ namespace SFA.DAS.EAS.Web.Controllers
             AddFlashMessageToCookie(flashMessage);
             if (newSearch)
             {
-                return RedirectToAction("OrganisationAddedNextStepsSearch", new { hashedAccountId });
+                return RedirectToAction("OrganisationAddedNextStepsSearch", new { hashedAccountId, organisationName = name });
             }
-            return RedirectToAction("OrganisationAddedNextSteps", new { hashedAccountId });
+            return RedirectToAction("OrganisationAddedNextSteps", new { hashedAccountId, organisationName = name });
         }
 
         [HttpGet]
         [Route("nextStep")]
-        public ActionResult OrganisationAddedNextSteps()
+        public ActionResult OrganisationAddedNextSteps(string organisationName)
         {
-            var viewModel = new OrchestratorResponse<string> { FlashMessage = GetFlashMessageViewModelFromCookie() };
+            var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName);
+            viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
             return View(viewModel);
         }
 
         [HttpGet]
         [Route("nextStepSearch")]
-        public ActionResult OrganisationAddedNextStepsSearch()
+        public ActionResult OrganisationAddedNextStepsSearch(string organisationName)
         {
-            var viewModel = new OrchestratorResponse<string> { FlashMessage = GetFlashMessageViewModelFromCookie() };
+            var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName);
+            viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
             return View("OrganisationAddedNextSteps", viewModel);
         }
 
 
         [HttpPost]
         [Route("nextStep")]
-        public ActionResult GoToNextStep(string nextStep, string hashedAccountId)
+        public ActionResult GoToNextStep(string nextStep, string hashedAccountId, string organisationName)
         {
             switch (nextStep)
             {
@@ -372,13 +374,15 @@ namespace SFA.DAS.EAS.Web.Controllers
                 case "dashboard": return RedirectToAction("Index", "EmployerTeam", new { hashedAccountId });
 
                 default:
-                    return View("OrganisationAddedNextSteps", new OrchestratorResponse<string>
+                    var errorMessage = "Please select one of the next steps below";
+                    return View("OrganisationAddedNextSteps", new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
                     {
-                        Data = "Please select one of the next steps below",
+                        Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName },
                         FlashMessage = new FlashMessageViewModel
                         {
                             Headline = "Invalid next step chosen",
-                            SubMessage = "Please select one of the next steps below",
+                            Message = errorMessage,
+                            ErrorMessages = new Dictionary<string, string> { { "nextStep", errorMessage } },
                             Severity = FlashMessageSeverityLevel.Error
                         }
                     });

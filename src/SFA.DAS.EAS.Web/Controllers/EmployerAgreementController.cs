@@ -17,7 +17,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAgreementOrchestrator _orchestrator;
 
         public EmployerAgreementController(IOwinWrapper owinWrapper, EmployerAgreementOrchestrator orchestrator, 
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage) 
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, 
+            ICookieStorageService<FlashMessageViewModel> flashMessage) 
             : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             if (owinWrapper == null)
@@ -96,7 +97,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 };
                 AddFlashMessageToCookie(flashMessage);
 
-                return RedirectToAction("Index", new { hashedAccountId });
+                return RedirectToAction("NextSteps", new { hashedAccountId });
             }
 
             var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -104,6 +105,35 @@ namespace SFA.DAS.EAS.Web.Controllers
             agreement.Status = response.Status;
 
             return View("SignAgreement", agreement);
+        }
+
+        [HttpGet]
+        [Route("agreements/{agreementId}/next")]
+        public ActionResult NextSteps(string hashedAccountId)
+        {
+            var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel> { FlashMessage = GetFlashMessageViewModelFromCookie(), Data = new EmployerAgreementNextStepsViewModel() };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("agreements/{agreementId}/next")]
+        public ActionResult NextSteps(int? choice)
+        {
+            switch (choice ?? 0)
+            {
+                case 1: return RedirectToAction("Index",    "EmployerAgreement");
+                case 2: return RedirectToAction("Index",    "EmployerAccountTransactions");
+                case 3: return RedirectToAction("Inform",   "EmployerCommitments");
+                case 4: return RedirectToAction("Index",    "EmployerTeam");
+                default:
+                    var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel>
+                    {
+                        FlashMessage = GetFlashMessageViewModelFromCookie(),
+                        Data = new EmployerAgreementNextStepsViewModel { ErrorMessage = "You must select an option to continue." }
+                    };
+                    return View(model); //No option entered
+            }
         }
 
         [HttpGet]

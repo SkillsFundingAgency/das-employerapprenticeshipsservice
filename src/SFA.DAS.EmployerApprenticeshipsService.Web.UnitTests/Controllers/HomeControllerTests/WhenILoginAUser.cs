@@ -31,7 +31,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _homeController = new HomeController(
-                _owinWrapper.Object, _homeOrchestrator.Object, _configuration.Object, _featureToggle.Object, _userViewTestingService.Object,_flashMessage.Object);
+                _owinWrapper.Object, _homeOrchestrator.Object, _configuration.Object, _featureToggle.Object, 
+                _userViewTestingService.Object,_flashMessage.Object);
         }
 
         [Test]

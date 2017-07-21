@@ -390,6 +390,7 @@
     <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Extensions\ValidationResultExtensions.cs" />
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipFiltersMapper.cs" />
@@ -405,6 +406,8 @@
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IPaginationViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAgreementNextStepsViewModel.cs" />
+    <Compile Include="ViewModels\InviteTeamMemberNextStepsViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ApprenticeshipFiltersViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusChoiceViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\DataLockStatusViewModel.cs" />
@@ -472,6 +475,8 @@
     <Compile Include="ViewModels\Organisation\ConfirmLegalAgreementToRemoveViewModel.cs" />
     <Compile Include="ViewModels\Organisation\EmployerAgreementPdfViewModel.cs" />
     <Compile Include="ViewModels\Organisation\LegalAgreementsToRemoveViewModel.cs" />
+    <Compile Include="ViewModels\Organisation\OrganisationAddedNextStepsViewModel.cs" />
+    <Compile Include="ViewModels\Organisation\SearchOrganisationResultsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SearchOrganisationViewModel.cs" />
     <Compile Include="ViewModels\ProviderPaymentsSummaryViewModel.cs" />
     <Compile Include="ViewModels\ProviderPriorityReOrderViewModel.cs" />
@@ -570,6 +575,12 @@
     <Content Include="dist\javascripts\character-limit.js" />
     <Content Include="dist\javascripts\length-limit.js" />
     <Content Include="dist\javascripts\payment-order.js" />
+    <Content Include="src\svg\arrows.svg" />
+    <Content Include="src\svg\chevron-left.svg" />
+    <Content Include="src\svg\chevron-right.svg" />
+    <Content Include="src\svg\cross.svg" />
+    <Content Include="src\svg\important.svg" />
+    <Content Include="src\svg\tick.svg" />
     <Content Include="Views\EmployerManageApprentices\EditStartedApprenticeship.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Compile Include="WebRole.cs" />
@@ -1064,8 +1075,10 @@
     <Content Include="Views\EmployerManageApprentices\PaymentOrder.cshtml" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
+    <Content Include="src\sass\_welcome.scss" />
     <Content Include="Views\Settings\NotificationSettings.cshtml" />
     <Content Include="Views\EmployerCommitments\ViewApprenticeshipEntry.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\RequestChanges.cshtml" />
     <Content Include="Views\EmployerManageApprentices\RequestChanges.cshtml" />
     <Content Include="Views\Settings\NotificationUnsubscribe.cshtml" />
     <Content Include="Views\Shared\Pagination.cshtml" />
@@ -1074,9 +1087,15 @@
     <Content Include="src\sass\_search.scss" />
     <Content Include="Views\EmployerAccountPaye\NextSteps.cshtml" />
     <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
+    <Content Include="Views\Shared\_SVGSprite.cshtml" />
+    <Content Include="src\sass\_icons.scss" />
+    <Content Include="Views\EmployerTeam\_WelcomeWizard.cshtml" />
+    <Content Include="src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
     <Content Include="Views\EmployerAgreement\Index_OrgS.cshtml" />
     <Content Include="Views\Shared\_SetupAccount_OrgS.cshtml" />
     <Content Include="Views\Home\Index_OrgS.cshtml" />
+    <Content Include="Views\EmployerTeam\NextSteps.cshtml" />
+    <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

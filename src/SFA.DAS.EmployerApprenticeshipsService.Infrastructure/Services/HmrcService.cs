@@ -163,7 +163,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                     if (hmrcLatestUpdateDate != null)
                     {
-                        _cacheProvider.Set("HmrcFractionLastCalculatedDate", hmrcLatestUpdateDate.Value,new TimeSpan(1,0,0,0));
+                        _cacheProvider.Set("HmrcFractionLastCalculatedDate", hmrcLatestUpdateDate.Value,new TimeSpan(0,0,30,0));
                     }
 
                     return hmrcLatestUpdateDate.Value;

@@ -100,35 +100,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             //Assert
             _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.IsAny<IEnumerable<DasDeclaration>>(), ExpectedEmpRef, ExpectedAccountId));
         }
-        
-
-        [Test]
-        public async Task ThenIfTheDeclarationHasNoSubmissionForPeriodThenTheLAstSubmissionIsReadFromTheRepository()
-        {
-            //Arrange
-            var data = RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId);
-
-            //Act
-            await _refreshEmployerLevyDataCommandHandler.Handle(data);
-
-            //Assert
-            _levyRepository.Verify(x=>x.GetLastSubmissionForScheme(ExpectedEmpRef),Times.Exactly(data.EmployerLevyData[0].Declarations.Declarations.Count(c=>c.NoPaymentForPeriod)));
-        }
-
-        [Test]
-        public async Task ThenIfTheDeclarationHasNoSubmissionThenTheLevyDueYtdIsTakenFromThePreviousSubmission()
-        {
-            //Act
-            var data = RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId);
-            await _refreshEmployerLevyDataCommandHandler.Handle(data);
-
-            //Assert
-            _levyRepository.Verify(x=>x.CreateEmployerDeclarations(It.Is<IEnumerable<DasDeclaration>>(c => 
-                    c.Any(d => d.NoPaymentForPeriod &&
-                           d.LevyDueYtd.Equals(1000) &&
-                d.LevyAllowanceForFullYear.Equals(1200m))),
-                ExpectedEmpRef,ExpectedAccountId),Times.Once);
-        }
 
         [Test]
         public async Task ThenIfThereAreDeclarationsToProcessTheProcessDeclarationsEventIsPublished()

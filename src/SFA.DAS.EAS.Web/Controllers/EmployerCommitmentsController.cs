@@ -32,7 +32,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly ICookieStorageService<string> _lastCohortCookieStorageService;
 
         public EmployerCommitmentsController(EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, IOwinWrapper owinWrapper,
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage, ICookieStorageService<string> lastCohortCookieStorageService)
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, 
+            ICookieStorageService<FlashMessageViewModel> flashMessage, ICookieStorageService<string> lastCohortCookieStorageService)
             : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             if (employerCommitmentsOrchestrator == null)
@@ -746,7 +747,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var status = _lastCohortCookieStorageService.Get(LastCohortPageCookieKey);
 
             if (string.IsNullOrWhiteSpace(status))
-            {
+            { 
                 return RequestStatus.None;
             }
 

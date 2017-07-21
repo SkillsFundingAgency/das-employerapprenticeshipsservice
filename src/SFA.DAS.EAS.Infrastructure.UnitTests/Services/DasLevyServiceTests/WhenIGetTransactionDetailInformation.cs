@@ -47,15 +47,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
         {
             //Act
             await _dasLevyService.GetAccountLevyTransactionsByDateRange< LevyDeclarationTransactionLine>
-                        (_accountId, _fromDate, _toDate, _externalUserId);
+                        (_accountId, _fromDate, _toDate);
 
             //Assert
             _mediator.Verify(x => 
                 x.SendAsync(It.Is<GetAccountLevyTransactionsQuery>(c => 
                     c.AccountId.Equals(_accountId) &&
                     c.FromDate.Equals(_fromDate) && 
-                    c.ToDate.Equals(_toDate) &&
-                    c.ExternalUserId.Equals(_externalUserId))), Times.Once);
+                    c.ToDate.Equals(_toDate))), Times.Once);
         }
 
         [Test]
@@ -63,7 +62,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
         {
             //Act
             var actual = await _dasLevyService.GetAccountLevyTransactionsByDateRange<LevyDeclarationTransactionLine>
-                                    (_accountId, _fromDate, _toDate, _externalUserId);
+                                    (_accountId, _fromDate, _toDate);
 
             //Assert
             Assert.IsNotEmpty(actual);
@@ -81,7 +80,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
 
             //Act
             var actual = await _dasLevyService.GetAccountLevyTransactionsByDateRange<LevyDeclarationTransactionLine>
-                                    (_accountId, _fromDate, _toDate, _externalUserId);
+                                    (_accountId, _fromDate, _toDate);
 
             //Assert
             Assert.IsEmpty(actual);

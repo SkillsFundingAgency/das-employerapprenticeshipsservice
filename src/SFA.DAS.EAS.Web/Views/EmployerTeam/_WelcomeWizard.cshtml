@@ -1,0 +1,159 @@
+﻿
+<section id="welcome" data-total-steps="4" data-account-id="@Model.Data.Account.HashedId">
+    <a href="@Url.Action("HideWizard", "EmployerTeam")" class="close link-with-icon">
+        <svg class="icon" focusable="false" aria-hidden="true">
+            <use xlink:href="#icon-cross" />
+        </svg>
+        <span class="link-text">Close <i class="vh">this welcome message</i></span>
+    </a>
+    <h1 class="heading-xlarge">Hi @Model.Data.UserFirstName, welcome to your new digital account</h1>
+    <p>Follow these steps to set up your account.</p>
+    <ol class="todo-list">
+        <li data-step="1" class="todo-list--item">
+            <h2>Step 1 of 4</h2>
+            <ul>
+                <li class="todo">
+                    <fieldset class="inline">
+                        <legend class="heading-small">Add more PAYE schemes now? </legend>
+                        <p>This allows your schemes' levy funds to be paid into your account.</p>
+                        <label class="block-label selection-button-radio" for="add-paye-1"  data-target="add-paye-schemes-guide">
+                            <input id="add-paye-1" type="radio" name="add-paye-group" value="1">
+                            Yes
+                        </label>
+                        <label class="block-label selection-button-radio" for="add-paye-2">
+                            <input id="add-paye-2" type="radio" name="add-paye-group" value="2">
+                            No
+                        </label>
+                        <div class="panel panel-border-narrow js-hidden" id="add-paye-schemes-guide">
+                            <a href="@Url.Action("GatewayInform", "EmployerAccountPaye")">Add PAYE schemes now</a> - you'll need your Government Gateway login details.
+                        </div>
+                    </fieldset>
+                </li>
+                <li class="done">
+                    <p>@Model.Data.PayeSchemeCount PAYE scheme@(Model.Data.PayeSchemeCount == 1 ? "" : "s") added</p>
+                    <div class="status">
+                        Done
+                        <svg class="icon" focusable="false" aria-hidden="true">
+                            <use xlink:href="#icon-tick" />
+                        </svg>
+                    </div>
+                </li>
+            </ul>
+        </li>
+        <li class="js-hidden todo-list--item" aria-hidden="true" data-step="2">
+            <h2>Step 2 of 4</h2>
+            <ul>
+                <li class="todo">
+                    <fieldset class="inline">
+                        <legend class="heading-small">Add more organisations now?</legend>
+                        <p>This allows organisations to spend funds on apprentices.</p>
+                        <label class="block-label selection-button-radio" for="add-organisations-1" data-target="guide-wizard-step-organisations">
+                            <input id="add-organisations-1" type="radio" name="add-org-group" value="1">
+                            Yes
+                        </label>
+                        <label class="block-label selection-button-radio" for="add-organisations-2">
+                            <input id="add-organisations-2" type="radio" name="add-org-group" value="2">
+                            No
+                        </label>
+                        <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-organisations">
+                            <a href="@Url.Action("AddOrganisation", "Organisation")">Add organisations now</a>.
+                        </div>
+                    </fieldset>
+                </li>
+                <li class="done">
+                    <p>
+                        @Model.Data.OrgainsationCount organisation@(Model.Data.OrgainsationCount == 1 ? "": "s") added
+                    </p>
+                    <div class="status">
+                        Done
+                        <svg class="icon" focusable="false" aria-hidden="true">
+                            <use xlink:href="#icon-tick" />
+                        </svg>
+                    </div>
+                </li>
+            </ul>
+        </li>
+        <li class="js-hidden todo-list--item" aria-hidden="true" data-step="3">
+            <h2>Step 3 of 4</h2>
+            <ul>
+                <li class="todo">
+                    <fieldset class="inline">
+                        <legend class="heading-small">Add team members now? </legend>
+                        <p>This allows your colleagues to manage apprenticeships or finances.</p>
+                        <label class="block-label selection-button-radio" for="add-members-1" data-target="guide-wizard-step-members">
+                            <input id="add-members-1" type="radio" name="add-team-group" value="1">
+                            Yes, add team members
+                        </label>
+                        <label class="block-label selection-button-radio" for="add-members-2">
+                            <input id="add-members-2" type="radio" name="add-team-group" value="2">
+                            No, not now
+                        </label>
+                        <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-members">
+                            <a href="@Url.Action("Invite", "EmployerTeam")">Invite colleagues from my organisation now</a>.
+                        </div>
+                    </fieldset>
+                </li>
+                <li class="done">
+                    <p>@Model.Data.TeamMemberCount team member@(Model.Data.TeamMemberCount == 1 ? "" : "s") added</p>
+                    <div class="status">
+                        Done
+                        <svg class="icon" focusable="false" aria-hidden="true">
+                            <use xlink:href="#icon-tick" />
+                        </svg>
+                    </div>
+                </li>
+            </ul>
+        </li>
+        <li class="js-hidden todo-list--item" aria-hidden="true" data-step="4">
+            <h2>Step 4 of 4</h2>
+            <ul>
+                <li class="todo">
+                    <fieldset class="inline">
+                        <legend class="heading-small">Are you going to sign the agreements?</legend>
+                        <p>This allows you to spend funds.</p>
+                        <label class="block-label selection-button-radio" for="add-agreements-1" data-target="guide-wizard-step-agreements">
+                            <input id="add-agreements-1" type="radio" name="agreements-group" value="1">
+                            Yes
+                        </label>
+                        <label class="block-label selection-button-radio" for="add-agreements-2">
+                            <input id="add-agreements-2" type="radio" name="agreements-group" value="2">
+                            No, someone else will sign the agreements
+                        </label>
+                        <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-agreements">
+                            @Model.Data.RequiresAgreementSigning unsigned agreement(s). <a href="@Url.Action("Index", "EmployerAgreement")">View agreements now</a>.
+                        </div>
+                    </fieldset>
+                </li>
+                <li class="done">
+                    <p>Agreements signed</p>
+                    <div class="status">
+                        Done
+                        <svg class="icon" focusable="false" aria-hidden="true">
+                            <use xlink:href="#icon-tick" />
+                        </svg>
+                    </div>
+                </li>
+            </ul>
+        </li>
+    </ol>
+    <div id="confirmation">
+        <div class="steps-complete">
+            <h3>
+                Tasks completed 
+                <svg class="icon" focusable="false" aria-hidden="true">
+                    <use xlink:href="#icon-tick" />
+                </svg>
+            </h3>
+            <p><a href="@Url.Action("HideWizard", "EmployerTeam")">I'm done - take me to my homepage</a></p>
+        </div>
+        @if (Model.Data.RequiresAgreementSigning > 0)
+        {
+        <p class="notice">
+            <svg class="icon" focusable="false" aria-hidden="true">
+                <use xlink:href="#icon-important" />
+            </svg>
+            Your agreement needs to be signed before you can spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View agreements now</a>.
+        </p>
+        }
+    </div>
+</section>

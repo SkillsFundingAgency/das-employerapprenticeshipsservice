@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Application.Events.ProcessPayment
 
         public async Task Handle(ProcessPaymentEvent notification)
         {
-            await _dasLevyRepository.ProcessPaymentData();
+            await _dasLevyRepository.ProcessPaymentData(notification.AccountId);
 
             _logger.Info("Process Payments Called");
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Dapper;
@@ -121,6 +122,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
 
             return result;
+        }
+
+        public async Task<List<TransactionSummary>> GetAccountTransactionSummary(long accountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@AccountId", accountId, DbType.Int64);
+                
+                return await c.QueryAsync<TransactionSummary>(
+                    sql: "[employer_financial].[GetTransactionSummary_ByAccountId]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+            return result.ToList();
         }
 
         private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)

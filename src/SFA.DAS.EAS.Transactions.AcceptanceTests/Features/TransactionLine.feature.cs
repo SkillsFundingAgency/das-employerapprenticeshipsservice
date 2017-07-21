@@ -92,6 +92,14 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-03-23"});
             table1.AddRow(new string[] {
                         "223/ABC",
+                        "800",
+                        "16-17",
+                        "11",
+                        "1",
+                        "2017-03-20",
+                        "2017-03-23"});
+            table1.AddRow(new string[] {
+                        "223/ABC",
                         "1100",
                         "16-17",
                         "12",
@@ -100,7 +108,7 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-04-23"});
 #line 8
  testRunner.When("I have the following submissions", ((string)(null)), table1, "When ");
-#line 12
+#line 13
  testRunner.Then("the balance should be 1210 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -111,9 +119,9 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void TransactionHistoryLevyDeclarationsWithMultipleSchemes()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Transaction History levy declarations with multiple schemes", ((string[])(null)));
-#line 14
-this.ScenarioSetup(scenarioInfo);
 #line 15
+this.ScenarioSetup(scenarioInfo);
+#line 16
  testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
@@ -148,9 +156,9 @@ this.ScenarioSetup(scenarioInfo);
                         "1",
                         "2017-04-18",
                         "2017-04-23"});
-#line 16
+#line 17
  testRunner.When("I have the following submissions", ((string)(null)), table2, "When ");
-#line 21
+#line 22
  testRunner.Then("the balance should be 2310 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -161,9 +169,9 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void TransactionHistoryLevyDeclarationsOverPayroll_Year()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Transaction History levy declarations over Payroll_year", ((string[])(null)));
-#line 23
-this.ScenarioSetup(scenarioInfo);
 #line 24
+this.ScenarioSetup(scenarioInfo);
+#line 25
  testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
@@ -187,9 +195,9 @@ this.ScenarioSetup(scenarioInfo);
                         "01",
                         "1",
                         "2017-05-18"});
-#line 25
+#line 26
  testRunner.When("I have the following submissions", ((string)(null)), table3, "When ");
-#line 29
+#line 30
  testRunner.Then("the balance should be 1210 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -200,9 +208,9 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void EndOfYearAdjustmentToAccountIsAppliedToLevyCreditForAdjustment()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("End of Year Adjustment to account is applied to levy credit for adjustment", ((string[])(null)));
-#line 31
-this.ScenarioSetup(scenarioInfo);
 #line 32
+this.ScenarioSetup(scenarioInfo);
+#line 33
  testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
@@ -250,9 +258,9 @@ this.ScenarioSetup(scenarioInfo);
                         "2018-05-18",
                         "1",
                         "50"});
-#line 33
+#line 34
  testRunner.When("I have the following submissions", ((string)(null)), table4, "When ");
-#line 39
+#line 40
  testRunner.Then("the balance should be 1265 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -265,9 +273,9 @@ this.ScenarioSetup(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("End of Year Adjustment to account is applied to levy credit for positive adjustme" +
                     "nt", ((string[])(null)));
-#line 41
-this.ScenarioSetup(scenarioInfo);
 #line 42
+this.ScenarioSetup(scenarioInfo);
+#line 43
  testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
@@ -315,9 +323,9 @@ this.ScenarioSetup(scenarioInfo);
                         "2018-05-18",
                         "1",
                         "-50"});
-#line 43
+#line 44
  testRunner.When("I have the following submissions", ((string)(null)), table5, "When ");
-#line 49
+#line 50
  testRunner.Then("the balance should be 1375 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -328,9 +336,9 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void TransactionHistoryLevyDeclarationsAndPayments()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Transaction History levy declarations and Payments", ((string[])(null)));
-#line 51
-this.ScenarioSetup(scenarioInfo);
 #line 52
+this.ScenarioSetup(scenarioInfo);
+#line 53
  testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
@@ -354,7 +362,7 @@ this.ScenarioSetup(scenarioInfo);
                         "02",
                         "1",
                         "2017-04-18"});
-#line 53
+#line 54
  testRunner.When("I have the following submissions", ((string)(null)), table6, "When ");
 #line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
@@ -366,9 +374,9 @@ this.ScenarioSetup(scenarioInfo);
             table7.AddRow(new string[] {
                         "200",
                         "cofund"});
-#line 57
+#line 58
  testRunner.And("I have the following payments", ((string)(null)), table7, "And ");
-#line 61
+#line 62
  testRunner.Then("the balance should be 1110 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -381,9 +389,9 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void TransactionHistoryLevyDeclarationsLateAccountRegistrationInPayrollYear(string month, string balance, string[] exampleTags)
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Transaction History levy declarations late account registration in payroll year", exampleTags);
-#line 63
-this.ScenarioSetup(scenarioInfo);
 #line 64
+this.ScenarioSetup(scenarioInfo);
+#line 65
  testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
@@ -421,11 +429,11 @@ this.ScenarioSetup(scenarioInfo);
                         "02",
                         "1",
                         "2016-06-18"});
-#line 65
+#line 66
  testRunner.When("I have the following submissions", ((string)(null)), table8, "When ");
-#line 71
- testRunner.And(string.Format("I register on month \"{0}\"", month), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 72
+ testRunner.And(string.Format("I register on month \"{0}\"", month), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 73
  testRunner.Then(string.Format("the balance should be {0} on the screen", balance), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -436,9 +444,9 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void TransactionHistoryLevyDeclarationsNextYearRegistration()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Transaction History levy declarations next year registration", ((string[])(null)));
-#line 78
-this.ScenarioSetup(scenarioInfo);
 #line 79
+this.ScenarioSetup(scenarioInfo);
+#line 80
  testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
@@ -462,11 +470,11 @@ this.ScenarioSetup(scenarioInfo);
                         "01",
                         "1",
                         "2016-05-18"});
-#line 80
+#line 81
  testRunner.When("I have the following submissions", ((string)(null)), table9, "When ");
-#line 84
- testRunner.And("I register on DAS in year 16-17 month 12", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 85
+ testRunner.And("I register on DAS in year 16-17 month 12", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 86
  testRunner.Then("the balance should be 1210 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -479,9 +487,9 @@ this.ScenarioSetup(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Transaction History levy declarations next year registration multiple PAYE scheme" +
                     "s", ((string[])(null)));
-#line 87
-this.ScenarioSetup(scenarioInfo);
 #line 88
+this.ScenarioSetup(scenarioInfo);
+#line 89
  testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
@@ -519,11 +527,11 @@ this.ScenarioSetup(scenarioInfo);
                         "01",
                         "1",
                         "2016-06-18"});
-#line 89
+#line 90
  testRunner.When("I have the following submissions", ((string)(null)), table10, "When ");
-#line 95
- testRunner.And("I register on DAS in year 16-17 month 01", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 96
+ testRunner.And("I register on DAS in year 16-17 month 01", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 97
  testRunner.Then("the balance should be 2420 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -534,9 +542,9 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SinglePAYESchemeRemoved()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Single PAYE scheme removed", ((string[])(null)));
-#line 98
-this.ScenarioSetup(scenarioInfo);
 #line 99
+this.ScenarioSetup(scenarioInfo);
+#line 100
  testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
@@ -567,13 +575,13 @@ this.ScenarioSetup(scenarioInfo);
                         "03",
                         "1",
                         "2016-06-18"});
-#line 100
+#line 101
  testRunner.When("I have the following submissions", ((string)(null)), table11, "When ");
-#line 105
- testRunner.And("I register on DAS in year 16-17 month 01", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 106
- testRunner.And("I remove the PAYE scheme in month 04", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I register on DAS in year 16-17 month 01", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 107
+ testRunner.And("I remove the PAYE scheme in month 04", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 108
  testRunner.Then("the balance should be 1320 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

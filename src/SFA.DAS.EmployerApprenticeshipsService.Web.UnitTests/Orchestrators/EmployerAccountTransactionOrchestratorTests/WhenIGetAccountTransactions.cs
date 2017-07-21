@@ -43,18 +43,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
                 .ReturnsAsync(_response);
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountTransactionsQuery>()))
-                .ReturnsAsync(new GetEmployerAccountTransactionsResponse
-                {
-                    Data = new AggregationData
-                    {
-                        TransactionLines = new List<TransactionLine>
-                        {
-                            new LevyDeclarationTransactionLine()
-                        }
-                    },
-                    AccountHasPreviousTransactions = true
-                });
+            SetupGetTransactionsResponse();
 
             _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object);
         }
@@ -66,34 +55,23 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         [TestCase(12, 2020)]
         public async Task ThenARequestShouldBeMadeForTransactions(int month, int year)
         {
-            //Arrange
-            var daysInMonth = DateTime.DaysInMonth(year, month);
-
             //Act
            await _orchestrator.GetAccountTransactions(HashedAccountId, year, month, ExternalUser);
 
             //Assert
             _mediator.Verify(x=> x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(
-                q => q.FromDate.Equals(new DateTime(year, month, 1)) &&
-                q.ToDate.Equals(new DateTime(year, month, daysInMonth)))), Times.Once);
+                q => q.Year == year && q.Month == month)), Times.Once);
         }
 
         [Test]
         public async Task ThenARequestShouldBeMadeForTransactionsForCurrentMonthIfNoYearOrMonthHasBeenGiven()
         {
-            //Arrange
-            var year = DateTime.Now.Year;
-            var month = DateTime.Now.Month;
-            var daysInMonth = DateTime.DaysInMonth(year, month);
-            _currentTime.Setup(x => x.Now).Returns(new DateTime(year, month, 1));
-
             //Act
             await _orchestrator.GetAccountTransactions(HashedAccountId, default(int), default(int), ExternalUser);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(
-                q => q.FromDate.Equals(new DateTime(year, month, 1)) &&
-                     q.ToDate.Equals(new DateTime(year, month, daysInMonth)))), Times.Once);
+                q => q.Year == 0 && q.Month == 0)), Times.Once);
         }
 
         [Test]
@@ -102,6 +80,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             //Arrange
             const int year = 2016;
             const int month = 2;
+            SetupGetTransactionsResponse(year, month);
 
             //Act
             var result = await _orchestrator.GetAccountTransactions(HashedAccountId, year, month, ExternalUser);
@@ -116,9 +95,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         {
             //Arrange
             _currentTime.Setup(x => x.Now).Returns(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1));
-
+            SetupGetTransactionsResponse(DateTime.Now.Year, DateTime.Now.Month);
+            
             //Act
             var resultLatestMonth = await _orchestrator.GetAccountTransactions(HashedAccountId, DateTime.Now.Year, DateTime.Now.Month, ExternalUser);
+            SetupGetTransactionsResponse(2016, 1);
             var resultHistoricalMonth = await _orchestrator.GetAccountTransactions(HashedAccountId, 2016, 1, ExternalUser);
 
             //Assert
@@ -134,6 +115,24 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
             //Assert
             Assert.IsTrue(result.Data.AccountHasPreviousTransactions);
+        }
+
+        private void SetupGetTransactionsResponse(int year = 0, int month = 0)
+        {
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountTransactionsQuery>()))
+                .ReturnsAsync(new GetEmployerAccountTransactionsResponse
+                {
+                    Data = new AggregationData
+                    {
+                        TransactionLines = new List<TransactionLine>
+                        {
+                            new LevyDeclarationTransactionLine()
+                        }
+                    },
+                    Year = year,
+                    Month = month,
+                    AccountHasPreviousTransactions = true
+                });
         }
     }
 }

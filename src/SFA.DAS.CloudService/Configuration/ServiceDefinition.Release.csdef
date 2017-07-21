@@ -27,6 +27,7 @@
       <Setting name="TokenCertificateThumbprint"/>
       <Setting name="ShowPayeHistory" />
       <Setting name="CurrentTime" />
+      <Setting name="EmployerCommitmentsBaseUrl" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-eas-ilb"/>

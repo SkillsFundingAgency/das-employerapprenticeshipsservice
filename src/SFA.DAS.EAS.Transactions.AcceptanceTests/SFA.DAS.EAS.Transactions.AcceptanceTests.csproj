@@ -117,10 +117,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Features\PaymentDetails.feature.cs">
+    <Compile Include="Features\LevyDetailsSelection.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>PaymentDetails.feature</DependentUpon>
+      <DependentUpon>LevyDetailsSelection.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\LevyDetailsValues.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LevyDetailsValues.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\PaymentDetailsSelection.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PaymentDetailsSelection.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\PaymentDetailsValues.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PaymentDetailsValues.feature</DependentUpon>
     </Compile>
     <Compile Include="Features\TransactionLine.feature.cs">
       <AutoGen>True</AutoGen>
@@ -142,9 +157,21 @@
     <Content Include="app.release.config">
       <DependentUpon>app.config</DependentUpon>
     </Content>
-    <None Include="Features\PaymentDetails.feature">
+    <None Include="Features\LevyDetailsSelection.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>PaymentDetails.feature.cs</LastGenOutput>
+      <LastGenOutput>LevyDetailsSelection.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\LevyDetailsValues.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>LevyDetailsValues.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\PaymentDetailsSelection.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PaymentDetailsSelection.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\PaymentDetailsValues.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PaymentDetailsValues.feature.cs</LastGenOutput>
     </None>
     <None Include="Features\TransactionLine.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -177,6 +204,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

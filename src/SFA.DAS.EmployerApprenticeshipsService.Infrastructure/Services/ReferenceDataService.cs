@@ -144,7 +144,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 case ReferenceData.Api.Client.Dto.OrganisationType.Company:
                     return OrganisationType.CompaniesHouse;
                 case ReferenceData.Api.Client.Dto.OrganisationType.EducationOrganisation:
-                    return OrganisationType.Other;
+                    return OrganisationType.PublicBodies;
                 case ReferenceData.Api.Client.Dto.OrganisationType.PublicSector:
                     return OrganisationType.PublicBodies;
                 default:

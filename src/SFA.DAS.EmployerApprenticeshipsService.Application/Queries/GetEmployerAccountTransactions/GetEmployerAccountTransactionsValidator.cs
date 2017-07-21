@@ -23,22 +23,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
         {
             var result = new ValidationResult();
 
-            if (item.AccountId == 0)
-            {
-                result.AddError(nameof(item.AccountId),"AccountId has not been supplied");
-            }
             if (string.IsNullOrEmpty(item.HashedAccountId))
             {
                 result.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
             }
-            if (string.IsNullOrEmpty(item.ExternalUserId))
-            {
-                result.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
-            }
 
-            if (result.IsValid())
+            if (result.IsValid() && !string.IsNullOrEmpty(item.ExternalUserId))
             {
-                var caller = await _membershipRepository.GetCaller(item.AccountId, item.ExternalUserId);
+                var caller = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
                 if (caller == null)
                 {
                     result.IsUnauthorized = true;

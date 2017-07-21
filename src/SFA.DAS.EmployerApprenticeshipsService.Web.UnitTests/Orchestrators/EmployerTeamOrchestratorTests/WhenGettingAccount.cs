@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EAS.Application.Queries.GetAccountStats;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
+using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
@@ -20,10 +23,19 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
+        private AccountStats _accountStats;
 
         [SetUp]
         public void Arrange()
         {
+            _accountStats = new AccountStats()
+            {
+                AccountId = 10,
+                OrganisationCount = 3,
+                PayeSchemeCount = 4,
+                TeamMemberCount = 8
+            };
+
             _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(It.Is<GetEmployerAccountHashedQuery>(q => q.HashedAccountId == AccountId)))
                 .ReturnsAsync(new GetEmployerAccountResponse
@@ -35,19 +47,30 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                         Name = "Account 1"
                     }
                 });
+
             _mediator.Setup(m => m.SendAsync(It.Is<GetUserAccountRoleQuery>(q => q.ExternalUserId == UserId)))
-                .ReturnsAsync(new GetUserAccountRoleResponse
-                {
-                    UserRole = Domain.Models.UserProfile.Role.Owner
-                });
+                     .ReturnsAsync(new GetUserAccountRoleResponse
+                     {
+                         UserRole = Domain.Models.UserProfile.Role.Owner
+                     });
+
             _mediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == AccountId)))
-                .ReturnsAsync(new GetAccountEmployerAgreementsResponse
-                {
-                    EmployerAgreements = new List<Domain.Models.EmployerAgreement.EmployerAgreementView>
-                    {
-                        new Domain.Models.EmployerAgreement.EmployerAgreementView {Status = Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending}
-                    }
-                });
+                     .ReturnsAsync(new GetAccountEmployerAgreementsResponse
+                     {
+                         EmployerAgreements = new List<Domain.Models.EmployerAgreement.EmployerAgreementView>
+                         {
+                             new Domain.Models.EmployerAgreement.EmployerAgreementView
+                             {
+                                 Status = Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending
+                             }
+                         }
+                     });
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTeamMemberQuery>()))
+                     .ReturnsAsync(new GetTeamMemberResponse{User = new MembershipView{FirstName = "Bob"}});
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountStatsQuery>()))
+                     .ReturnsAsync(new GetAccountStatsResponse {Stats = _accountStats});
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration ();
 
@@ -91,6 +114,18 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             // Assert
             Assert.IsNotNull(actual);
             Assert.Zero(actual.Data.RequiresAgreementSigning);
+        }
+
+        [Test]
+        public async Task ThenShouldGetAccountStats()
+        {
+            // Act
+            var actual = await _orchestrator.GetAccount(AccountId, UserId);
+
+            //Assert
+            Assert.AreEqual(_accountStats.OrganisationCount, actual.Data.OrgainsationCount);
+            Assert.AreEqual(_accountStats.PayeSchemeCount, actual.Data.PayeSchemeCount);
+            Assert.AreEqual(_accountStats.TeamMemberCount, actual.Data.TeamMemberCount);
         }
     }
 }
