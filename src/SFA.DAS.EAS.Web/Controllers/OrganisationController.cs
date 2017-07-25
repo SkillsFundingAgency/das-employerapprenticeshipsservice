@@ -342,27 +342,39 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("nextStep")]
-        public ActionResult OrganisationAddedNextSteps(string organisationName)
+        public async Task<ActionResult> OrganisationAddedNextSteps(string organisationName, string hashedAccountId)
         {
-            var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName);
+            var userId = OwinWrapper.GetClaimValue(@"sub");
+
+            var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId);
+
             viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
+
             return View(viewModel);
         }
 
         [HttpGet]
         [Route("nextStepSearch")]
-        public ActionResult OrganisationAddedNextStepsSearch(string organisationName)
+        public async Task<ActionResult> OrganisationAddedNextStepsSearch(string organisationName, string hashedAccountId)
         {
-            var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName);
+            var userId = OwinWrapper.GetClaimValue(@"sub");
+
+            var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId);
+
             viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
+
             return View("OrganisationAddedNextSteps", viewModel);
         }
 
 
         [HttpPost]
         [Route("nextStep")]
-        public ActionResult GoToNextStep(string nextStep, string hashedAccountId, string organisationName)
+        public async Task<ActionResult> GoToNextStep(string nextStep, string hashedAccountId, string organisationName)
         {
+            var userId = OwinWrapper.GetClaimValue(@"sub");
+
+            var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
+
             switch (nextStep)
             {
                 case "agreement": return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
@@ -377,7 +389,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     var errorMessage = "Please select one of the next steps below";
                     return View("OrganisationAddedNextSteps", new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
                     {
-                        Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName },
+                        Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName, ShowWizard = userShownWizard },
                         FlashMessage = new FlashMessageViewModel
                         {
                             Headline = "Invalid next step chosen",
