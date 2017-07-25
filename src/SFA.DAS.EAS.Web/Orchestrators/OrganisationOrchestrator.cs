@@ -581,7 +581,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
             {
-                Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName }
+                Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName, ShowWizard = showWizard}
             };
         }
 
