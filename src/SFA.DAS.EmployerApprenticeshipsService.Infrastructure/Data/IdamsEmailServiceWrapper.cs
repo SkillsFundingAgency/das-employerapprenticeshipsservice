@@ -55,6 +55,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         private List<string> ParseIdamsResult(string jsonResult, long ukprn)
         {
+            if (string.IsNullOrWhiteSpace(jsonResult))
+            {
+                _logger.Debug($"Not possible to parse empty string to {typeof(UserResponse)} for provider: {ukprn}");
+                return new List<string>();
+            }
+
             try
             {
                 var result = JObject.Parse(jsonResult).SelectToken("result");
