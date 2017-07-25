@@ -22,7 +22,8 @@
                 </legend>
 
                 <div class="form-group @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "error" : "")">
-
+                    @if (!Model.Data.ShowWizard)
+                    {
                     <label for="acceptAgreement" class="block-label">
                         <span class="form-label">Sign an agreement to allow @Model.Data.OrganisationName to spend funds</span>
                         <input type="radio" name="nextStep" value="agreement" id="acceptAgreement" />
@@ -32,14 +33,14 @@
                         <span class="form-label">Check which team members can sign the agreement</span>
                         <input type="radio" name="nextStep" value="teamMembers" id="teamMembers" />
                     </label>
-
+                    }
                     <label for="addAnotherOrganisation" class="block-label">
                         <span class="form-label">Add another organisation</span>
                         <input type="radio" name="nextStep" value="addOrganisation" id="addAnotherOrganisation" />
                     </label>
 
                     <label for="GoToDashboard" class="block-label">
-                        <span class="form-label">Go back to your dashboard</span>
+                        <span class="form-label">@(Model.Data.ShowWizard ? "Continue account setup" : "Return to homepage")</span>
                         <input type="radio" name="nextStep" value="dashboard" id="GoToDashboard" />
                     </label>
 
