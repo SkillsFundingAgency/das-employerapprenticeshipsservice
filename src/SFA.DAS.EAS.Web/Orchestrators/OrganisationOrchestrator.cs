@@ -17,6 +17,7 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetOrganisations;
 using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
 using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
+using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -574,14 +575,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public OrchestratorResponse<OrganisationAddedNextStepsViewModel> GetOrganisationAddedNextStepViewModel(string organisationName)
+        public async Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(string organisationName, string userId, string hashedAccountId)
         {
+            var showWizard = await UserShownWizard(userId, hashedAccountId);
+
             return new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
             {
                 Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName }
             };
         }
 
-        
+        public async Task<bool> UserShownWizard(string userId, string hashedAccountId)
+        {
+            var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
+            return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
+        }
     }
 }
