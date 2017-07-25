@@ -14,16 +14,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDataLockSum
     public class WhenGettingApprenticeshipDataLockSummary
     {
         private GetDataLockSummaryQueryHandler _handler;
-        private Mock<IDataLockApi> _dataLockApi;
+        private Mock<IEmployerCommitmentApi> _commitmentApi;
 
         [SetUp]
         public void Arrange()
         {
-            _dataLockApi = new Mock<IDataLockApi>();
-            _dataLockApi.Setup(x => x.GetDataLockSummary(It.IsAny<long>()))
+            _commitmentApi = new Mock<IEmployerCommitmentApi>();
+            _commitmentApi.Setup(x => x.GetDataLockSummary(It.IsAny<long>(), It.IsAny<long>()))
                 .ReturnsAsync(new DataLockSummary());
 
-            _handler = new GetDataLockSummaryQueryHandler(_dataLockApi.Object);
+            _handler = new GetDataLockSummaryQueryHandler(_commitmentApi.Object);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDataLockSum
             await _handler.Handle(request);
 
             //Assert
-            _dataLockApi.Verify(x => x.GetDataLockSummary(It.IsAny<long>()), Times.Once);
+            _commitmentApi.Verify(x => x.GetDataLockSummary(It.IsAny<long>(), It.IsAny<long>()), Times.Once);
         }
     }
 }

@@ -21,7 +21,7 @@
     </div>
 
     <div class="column-two-thirds">
-        @if (Model.Data.TotalApprenticeships == 0)
+        @if (Model.Data.TotalResults == 0)
         {
             <div class="panel panel-border-wide alert-default">
                 <p>Once you and your training provider have approved a cohort, the apprentices from that cohort will appear here.</p>
@@ -73,10 +73,7 @@
                 </tbody>
             </table>
 
-            if (!Model.Data.Apprenticeships.Any())
-            {
-                <div>There are currently no apprentices that match your search.</div>
-            }
+            Html.RenderPartial("Pagination", Model.Data);
         }
     </div>
 </div>

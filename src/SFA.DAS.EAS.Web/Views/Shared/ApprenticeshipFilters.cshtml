@@ -50,11 +50,12 @@
         foreach (var option in options)
         {
             var checkedAtt = selected != null && selected.Contains(option.Key) ? "checked=\"checked\"" : "";
-            result.Append($"<label for= \"{groupName}-{option.Key}\">");
-
-            result.Append($"<input name=\"{groupName}\" value =\"{option.Key}\" class=\"js-option-select\" id =\"{groupName}-{option.Key}\" type = \"checkbox\" {checkedAtt} aria-controls=\"js-search-results-info\">");
-            result.Append($"<span>{option.Value}</span>");
-            result.Append("</label>");
+            result.Append("<div class=\"item\">");
+                result.Append($"<label for= \"{groupName}-{option.Key}\">");
+                result.Append($"<input name=\"{groupName}\" value =\"{option.Key}\" class=\"js-option-select\" id =\"{groupName}-{option.Key}\" type = \"checkbox\" {checkedAtt} aria-controls=\"js-search-results-info\">");
+                result.Append($"<span>{option.Value}</span>");
+                result.Append("</label>");
+            result.Append("</div>");
         }
 
         return new HtmlString(result.ToString());

@@ -11,6 +11,5 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public string HashedId { get; set; }
 
         public List<UserNotificationSetting> NotificationSettings { get; set; }
-
     }
 }

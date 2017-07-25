@@ -45,6 +45,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 
             var result = new ApprenticeshipSearchQuery
             {
+                PageNumber = filters.PageNumber,
                 TrainingProviderIds = selectedProviders,
                 ApprenticeshipStatuses = selectedStatuses,
                 RecordStatuses = recordStatuses,

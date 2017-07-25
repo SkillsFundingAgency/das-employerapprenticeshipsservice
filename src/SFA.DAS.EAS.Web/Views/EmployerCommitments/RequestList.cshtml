@@ -14,8 +14,8 @@
         <table class="tableResponsive to-be-sent-list">
             <thead>
             <tr>
-                <th>Provider</th>
-                <th>Cohort reference</th>
+                <th>Training provider</th>
+                <th>Reference</th>
                 <th>Last message</th>
                 <th></th>
 
@@ -35,10 +35,7 @@
                         @commitment.LatestMessage &nbsp;
                     </td>
                     <td>
-                        @if (commitment.ShowViewLink)
-                        {
-                            <a href="@Url.Action("Details", new { commitment.HashedCommitmentId })" title="View cohort" aria-label="View cohort">View</a>
-                        }
+                        <a href="@Url.Action("Details", new {commitment.HashedCommitmentId})" title="View cohort" aria-label="View cohort">Details</a>
                     </td>
                 </tr>
             }

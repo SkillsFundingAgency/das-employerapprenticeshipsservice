@@ -10,11 +10,11 @@ namespace SFA.DAS.EAS.Application.Commands.ResolveRequestedChanges
 {
     public class ResolveRequestedChangesHandler : AsyncRequestHandler<ResolveRequestedChangesCommand>
     {
-        private readonly IDataLockApi _dataLockApi;
+        private readonly IEmployerCommitmentApi _commitmentApi;
 
-        public ResolveRequestedChangesHandler(IDataLockApi dataLockApi)
+        public ResolveRequestedChangesHandler(IEmployerCommitmentApi commitmentApi)
         {
-            _dataLockApi = dataLockApi;
+            _commitmentApi = commitmentApi;
         }
 
         protected override async Task HandleCore(ResolveRequestedChangesCommand command)
@@ -23,7 +23,8 @@ namespace SFA.DAS.EAS.Application.Commands.ResolveRequestedChanges
                 ? DataLockUpdateType.ApproveChanges 
                 : DataLockUpdateType.RejectChanges;
 
-            await _dataLockApi.PatchDataLocks(
+            await _commitmentApi.PatchDataLocks(
+                command.AccountId,
                 command.ApprenticeshipId,
                 new DataLocksTriageResolutionSubmission
                     {

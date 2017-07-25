@@ -12,20 +12,21 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock
 {
     public class GetApprenticeshipDataLockQueryHandler : IAsyncRequestHandler<GetApprenticeshipDataLockRequest, GetApprenticeshipDataLockResponse>
     {
-        private readonly IDataLockApi _dataLockApi;
+
+        private readonly IEmployerCommitmentApi _commitmentApi;
 
         private readonly ILog _logger;
 
         public GetApprenticeshipDataLockQueryHandler(
-            IDataLockApi dataLockApi,
+            IEmployerCommitmentApi commitmentApi,
             ILog logger)
         {
-            if (dataLockApi == null)
-                throw new ArgumentNullException(nameof(dataLockApi));
+            if (commitmentApi == null)
+                throw new ArgumentNullException(nameof(commitmentApi));
             if (logger== null)
                 throw new ArgumentNullException(nameof(logger));
 
-            _dataLockApi = dataLockApi;
+            _commitmentApi = commitmentApi;
             _logger = logger;
         }
 
@@ -33,7 +34,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock
         {
             try
             {
-                var dataLockStatus = (await _dataLockApi.GetDataLocks(request.ApprenticeshipId))
+                var dataLockStatus = (await _commitmentApi.GetDataLocks(request.AccountId, request.ApprenticeshipId))
                     .Where(m => m.Status == Status.Fail && !m.IsResolved);
 
 

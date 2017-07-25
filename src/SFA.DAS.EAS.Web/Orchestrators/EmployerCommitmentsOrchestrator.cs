@@ -383,6 +383,33 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
+
+        public async Task<OrchestratorResponse<ApprenticeshipViewModel>> GetApprenticeshipViewModel(string hashedAccountId, string externalUserId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            _logger.Info($"Getting Apprenticeship, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
+
+            return await CheckUserAuthorization(async () =>
+            {
+               var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+                {
+                    AccountId = accountId,
+                    ApprenticeshipId = apprenticeshipId
+                });
+
+                var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipViewModel(data.Apprenticeship);
+
+                apprenticeship.HashedAccountId = hashedAccountId;
+
+                return new OrchestratorResponse<ApprenticeshipViewModel>
+                {
+                    Data = apprenticeship
+                };
+            }, hashedAccountId, externalUserId);
+        }
+
         public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeship, string externalUserId, string userName, string userEmail)
         {
             var accountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId);
@@ -746,7 +773,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     CommitmentId = commitmentId
                 });
 
-                AssertCommitmentStatus(data.Commitment, EditStatus.EmployerOnly);
                 AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
                 var overlappingApprenticeships = await _mediator.SendAsync(
@@ -788,7 +814,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     LatestMessage = GetLatestMessage(data.Commitment.Messages, true)?.Message,
                     ApprenticeshipGroups = apprenticeshipGroups,
                     HasOverlappingErrors = apprenticeshipGroups.Any(m => m.ShowOverlapError),
-                    FundingCapWarnings = warnings
+                    FundingCapWarnings = warnings,
+                    IsReadOnly = data.Commitment.EditStatus != EditStatus.EmployerOnly
                 };
 
                 return new OrchestratorResponse<CommitmentDetailsViewModel>
@@ -1017,7 +1044,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
                 Status = _statusCalculator.GetStatus(commitment.EditStatus, commitment.ApprenticeshipCount, commitment.LastAction, commitment.AgreementStatus),
-                ShowViewLink = commitment.EditStatus == EditStatus.EmployerOnly,
                 LatestMessage = latestMessage
             };
         }
