@@ -130,28 +130,5 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                     c.OrganisationReferenceNumber.Equals(_accountData.OrganisationReferenceNumber)
                 ), It.IsAny<HttpContextBase>()));
         }
-
-        [Test]
-        public async Task ThenIfTheAccountIsSucessfullyCreatedThenTheFlashMessageIsAddedToCookieStorage()
-        {
-            //Act
-            await _employerAccountController.CreateAccount();
-
-            //Assert
-            _flashMessage.Verify(x => x.Create(It.Is<FlashMessageViewModel>(c => c.Headline.Equals("Account created") && c.Severity.Equals(FlashMessageSeverityLevel.Success)), "sfa-das-employerapprenticeshipsservice-flashmessage", 1), Times.Once);
-        }
-
-
-
-        [Test]
-        public async Task ThenIfTheAccountIsSucessfullyCreatedThenTheOrganisationTypeIsAddedToFlashMessageCookie()
-        {
-            //Act
-            await _employerAccountController.CreateAccount();
-
-            //Assert
-            _flashMessage.Verify(x => x.Create(It.Is<FlashMessageViewModel>(c => c.HiddenFlashMessageInformation.Equals("Charities")), "sfa-das-employerapprenticeshipsservice-flashmessage", 1), Times.Once);
-
-        }
     }
 }
