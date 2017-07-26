@@ -174,15 +174,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("summary");
             }
 
-            var flashmessage = new FlashMessageViewModel
-            {
-                Headline = "Account created",
-                HiddenFlashMessageInformation = enteredData.OrganisationType.ToString(),
-                Severity = FlashMessageSeverityLevel.Success
-            };
-
-            AddFlashMessageToCookie(flashmessage);
-
             return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
