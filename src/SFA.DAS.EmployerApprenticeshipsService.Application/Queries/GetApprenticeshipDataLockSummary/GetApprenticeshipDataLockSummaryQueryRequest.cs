@@ -6,5 +6,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLockSummary
         IAsyncRequest<GetDataLockSummaryQueryResponse>
     {
         public long ApprenticeshipId { get; set; }
+
+        public long AccountId { get; set; }
     }
 }

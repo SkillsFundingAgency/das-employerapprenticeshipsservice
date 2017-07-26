@@ -54,5 +54,9 @@ namespace SFA.DAS.EAS.Web.Extensions
             return date.ToString("MMMM yyyy");
         }
 
-    }
+        public static string ToGdsFormatLongMonthNameWithoutDay(this DateTime date)
+        {
+            return date.ToString("MMMM yyyy");
+        }
+}
 }

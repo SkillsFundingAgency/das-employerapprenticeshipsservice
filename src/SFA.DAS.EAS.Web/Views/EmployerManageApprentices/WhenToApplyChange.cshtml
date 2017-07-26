@@ -8,6 +8,14 @@
     ViewBag.PageId = "change-apprentice-status";
 }
 
+
+@section pageSpecificJS {
+    @Scripts.Render("~/bundles/lengthLimitation")
+}
+
+
+
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="post" action="@Url.RouteUrl("PostWhenToApplyChange")" novalidate>
@@ -43,20 +51,20 @@
                             <label for="DateOfChange.Day">
                                 Day
                             </label>
-                            @Html.TextBox("DateOfChange.Day", Model.Data.ChangeStatusViewModel.DateOfChange.Day, new { @class = "form-control", type = "number", aria_labelledby = "DateOfChange.Day" })
+                            @Html.TextBox("DateOfChange.Day", Model.Data.ChangeStatusViewModel.DateOfChange.Day, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "31", aria_labelledby = "DateOfChange.Day" })
                         </div>
                         <div class="form-group form-group-month">
                             <label for="DateOfChange.Month">
                                 Month
                             </label>
-                            @Html.TextBox("DateOfChange.Month", Model.Data.ChangeStatusViewModel.DateOfChange.Month, new { @class = "form-control", type = "number", aria_labelledby = "DateOfChange.Month" })
+                            @Html.TextBox("DateOfChange.Month", Model.Data.ChangeStatusViewModel.DateOfChange.Month, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = "DateOfChange.Month" })
 
                         </div>
                         <div class="form-group form-group-year">
                             <label for="DateOfChange.Year">
                                 Year
                             </label>
-                            @Html.TextBox("DateOfChange.Year", Model.Data.ChangeStatusViewModel.DateOfChange.Year, new { @class = "form-control", type = "number", aria_labelledby = "DateOfChange.Year" })
+                            @Html.TextBox("DateOfChange.Year", Model.Data.ChangeStatusViewModel.DateOfChange.Year, new { @class = "form-control length-limit", type = "number", maxlength = "4", min = "1900", max = "9999", aria_labelledby = "DateOfChange.Year" })
                         </div>
                     </div>
                 </div>

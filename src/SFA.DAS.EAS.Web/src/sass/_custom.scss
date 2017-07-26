@@ -395,9 +395,11 @@ body {
 /*Email notification settings*/
 #notification-settings{
     .alert-default {
-        background:none;
+        background: $panel-colour;
         margin-bottom:40px;
+        p{font-weight:bold;}
     }
+
     h1{
         margin-bottom:0;
     }
@@ -435,6 +437,7 @@ body {
             background-color: #fff;          
             height:200px; //container height
             overflow:auto;
+            .item{ border-bottom: 1px solid #bfc1c3; } //// wrap labels per item for borders
                 label{
                     font-size: 16px;
                     line-height: 1.25; 
@@ -442,10 +445,13 @@ body {
                     display:block;  
                     font-weight: 400;
                     text-transform: none;  
-                    padding: 7px 0 7px 2px;
-                    border-bottom: 1px solid #bfc1c3;  
-                    cursor: pointer;                
+                    padding: 7px 0 7px 2px;                   
+                    cursor: pointer;       
+                    margin-left:20px; // wrap labels         
                     }
+                  input{
+                    margin-left:-16px; // wrap labels
+                }
             }
           .showHide {
              background: url(/dist/css/images/option-select-toggle-sprite.png) no-repeat;
@@ -475,7 +481,6 @@ body {
     }
 }
 
-//end -- Apprentice Filter Styles
 
 #edit-apprentices-detail{
       hr{margin-top:0;}
@@ -529,6 +534,84 @@ body {
 }
 
 
+
+// pagination 
+#manage-all-apprentices{
+.previous-next-navigation {
+  padding-left: 0;
+  position: relative;
+  overflow: hidden;
+  margin: 60px 0 0;
+  width: 100%; 
+    li 
+    {
+      font-family: "nta", Arial, sans-serif;
+      font-size: 20px;
+      line-height: 1.11111;
+      font-weight: 400;
+      text-transform: none;
+      font-size-adjust: 0.5;
+      display: block;
+      padding: 0;
+      margin: 0;
+      width: 50%;
+      float: left; 
+      a 
+      {
+      display: block;
+      text-decoration: none; 
+      font-size: 24px;
+      line-height: 0.9em;
+          span {
+          display: block;
+          font-family: "nta", Arial, sans-serif;
+          font-size: 12px;
+          line-height: 1.25;
+          font-weight: 400;
+          text-transform: none;
+          font-size-adjust: 0.5; 
+          }
+          &:hover {
+               background:$highlight-colour;
+              .page-numbers {text-decoration: underline;}
+          }
+          &:focus{
+               .page-numbers {text-decoration: underline;}
+          }
+      }
+      
+   }
+    li.next 
+    {
+      float: right;
+      text-align: right; 
+          a {padding: 15px 35px 15px 0;}
+          a:before {
+          background: transparent url("/dist/css/images/pagination-arrow-sprite.png") no-repeat -102px -11px;
+          margin: -4px -32px 0 0;
+          display: block;
+          float: right;
+          width: 30px;
+          height: 38px;
+          content: " "; }
+      }
+    li.previous
+        { 
+        a{padding: 15px 0 15px 35px; }
+        a:before 
+        {
+          background: transparent url("/dist/css/images/pagination-arrow-sprite.png") no-repeat -20px -11px;
+          margin: -4px 0 0 -32px;
+          display: block;
+          float: left;
+          width: 30px;
+          height: 38px;
+          content: " "; 
+        }
+        }
+    }
+}
+// END -pagination styles
 
 
 //all mobile media query breakpoints

@@ -96,7 +96,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return await CheckUserAuthorization(async () =>
             {
-
                 var searchQuery = _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters);
 
                 var searchResponse = await _mediator.SendAsync(new ApprenticeshipSearchQueryRequest
@@ -118,7 +117,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     Apprenticeships = apprenticeships,
                     Filters = filterOptions,
-                    TotalApprenticeships = searchResponse.TotalApprenticeships
+                    TotalResults = searchResponse.TotalApprenticeships,
+                    PageNumber = searchResponse.PageNumber,
+                    TotalPages = searchResponse.TotalPages,
+                    PageSize = searchResponse.PageSize
                 };
 
                 return new OrchestratorResponse<ManageApprenticeshipsViewModel>
@@ -605,7 +607,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
 
                         var dataLockSummary = await _mediator.SendAsync(
-                            new GetDataLockSummaryQueryRequest { ApprenticeshipId = apprenticeshipId });
+                            new GetDataLockSummaryQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
 
                         //var dataLock = dataLocks.DataLockStatus
                         //    .First(m => m.TriageStatus == TriageStatus.Restart);
@@ -648,13 +650,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 async () =>
                 {
                     var dataLockSummary = await _mediator.SendAsync(
-                            new GetDataLockSummaryQueryRequest { ApprenticeshipId = apprenticeshipId });
+                            new GetDataLockSummaryQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
 
                     if (dataLockSummary.DataLockSummary.DataLockWithOnlyPriceMismatch.Count() == 0)
                             throw new InvalidStateException($"Apprenticeship does not contain any price data locks. Apprenticeship: {apprenticeshipId}");
 
                     var priceHistory = await _mediator.SendAsync(new GetPriceHistoryQueryRequest
                     {
+                        AccountId = accountId,
                         ApprenticeshipId = apprenticeshipId
                     });
 
@@ -689,12 +692,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         await _mediator.SendAsync(
                             new ResolveRequestedChangesCommand
                             {
+                                AccountId = accountId,
                                 ApprenticeshipId = apprenticeshipId,
                                 Approved = approved,
                                 TriageStatus = TriageStatus.Change,
                                 UserId = user
                             });
-                        
                     },
                 hashedAccountId,
                 user);
