@@ -1096,6 +1096,7 @@
     <Content Include="Views\Home\Index_OrgS.cshtml" />
     <Content Include="Views\EmployerTeam\NextSteps.cshtml" />
     <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
+    <Content Include="Views\EmployerTeam\_TasksActivities.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
