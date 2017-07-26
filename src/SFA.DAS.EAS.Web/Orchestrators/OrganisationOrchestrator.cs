@@ -575,17 +575,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(string organisationName, string userId, string hashedAccountId)
+        public virtual async Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(string organisationName, string userId, string hashedAccountId)
         {
             var showWizard = await UserShownWizard(userId, hashedAccountId);
 
             return new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
             {
-                Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName }
+                Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName, ShowWizard = showWizard}
             };
         }
 
-        public async Task<bool> UserShownWizard(string userId, string hashedAccountId)
+        public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
         {
             var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
             return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;

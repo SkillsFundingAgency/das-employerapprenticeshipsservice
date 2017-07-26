@@ -109,17 +109,29 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements/{agreementId}/next")]
-        public ActionResult NextSteps(string hashedAccountId)
+        public async Task<ActionResult> NextSteps(string hashedAccountId)
         {
-            var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel> { FlashMessage = GetFlashMessageViewModelFromCookie(), Data = new EmployerAgreementNextStepsViewModel() };
+            var userId = OwinWrapper.GetClaimValue(@"sub");
+
+            var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
+
+            var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel>
+            {
+                FlashMessage = GetFlashMessageViewModelFromCookie(), Data = new EmployerAgreementNextStepsViewModel { UserShownWizard = userShownWizard}
+            };
+
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("agreements/{agreementId}/next")]
-        public ActionResult NextSteps(int? choice)
+        public async Task<ActionResult> NextSteps(int? choice, string hashedAccountId)
         {
+            var userId = OwinWrapper.GetClaimValue(@"sub");
+
+            var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
+
             switch (choice ?? 0)
             {
                 case 1: return RedirectToAction("Index",    "EmployerAgreement");
@@ -130,7 +142,11 @@ namespace SFA.DAS.EAS.Web.Controllers
                     var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel>
                     {
                         FlashMessage = GetFlashMessageViewModelFromCookie(),
-                        Data = new EmployerAgreementNextStepsViewModel { ErrorMessage = "You must select an option to continue." }
+                        Data = new EmployerAgreementNextStepsViewModel
+                        {
+                            ErrorMessage = "You must select an option to continue.",
+                            UserShownWizard = userShownWizard
+                        }
                     };
                     return View(model); //No option entered
             }

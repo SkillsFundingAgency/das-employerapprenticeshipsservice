@@ -102,17 +102,33 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("invite/next")]
-        public ActionResult NextSteps(string hashedAccountId)
+        public async Task<ActionResult> NextSteps(string hashedAccountId)
         {
-            var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel> { FlashMessage = GetFlashMessageViewModelFromCookie(), Data = new InviteTeamMemberNextStepsViewModel() };
+            var userId = OwinWrapper.GetClaimValue(@"sub");
+
+            var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
+
+            var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel>
+            {
+                FlashMessage = GetFlashMessageViewModelFromCookie(),
+                Data = new InviteTeamMemberNextStepsViewModel
+                {
+                    UserShownWizard = userShownWizard
+                }
+            };
+
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("invite/next")]
-        public ActionResult NextSteps(int? choice)
+        public async Task<ActionResult> NextSteps(int? choice, string hashedAccountId)
         {
+            var userId = OwinWrapper.GetClaimValue(@"sub");
+
+            var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
+
             switch (choice ?? 0)
             {
                 case 1: return RedirectToAction("Invite");
@@ -122,7 +138,11 @@ namespace SFA.DAS.EAS.Web.Controllers
                     var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel>
                     {
                         FlashMessage = GetFlashMessageViewModelFromCookie(),
-                        Data = new InviteTeamMemberNextStepsViewModel { ErrorMessage = "You must select an option to continue." }
+                        Data = new InviteTeamMemberNextStepsViewModel
+                        {
+                            ErrorMessage = "You must select an option to continue.",
+                            UserShownWizard = userShownWizard
+                        }
                     };
                     return View(model); //No option entered
             }
