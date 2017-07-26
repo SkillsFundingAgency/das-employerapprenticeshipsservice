@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf;
+using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -421,6 +422,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
 
             return response;
+        }
+
+        public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
+        {
+            var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
+            return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
         }
     }
 }

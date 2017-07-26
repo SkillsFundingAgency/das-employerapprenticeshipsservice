@@ -160,6 +160,7 @@
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController\WhenIViewTransactions.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIRemoveALegalEntityFromAnAccount.cs" />
+    <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIViewNextSteps.cs" />
     <Compile Include="Controllers\EmployerTeamControllerTests\WhenIViewNextSteps.cs" />
     <Compile Include="Controllers\InvitationControllerTests\WhenIAcceptAnInvitation.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIAddAnOrganisation.cs" />
