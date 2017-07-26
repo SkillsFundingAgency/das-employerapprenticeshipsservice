@@ -1,7 +1,7 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementNextStepsViewModel>
-@{ViewBag.PageID = "page-paye-scheme-next-steps";}
+@{ViewBag.PageID = "page-sign-agreement-next-steps";}
 @{ViewBag.Title = "What's next";}
-@{ViewBag.Section = "paye";}
+@{ViewBag.Section = "organisations";}
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-large">
@@ -22,6 +22,8 @@
                         <input id="choice1" type="radio" name="choice" value="1" />
                         View all organisations
                     </label>
+                    @if (!Model.Data.UserShownWizard)
+                    {
                     <label for="choice2" class="block-label">
                         <input id="choice2" type="radio" name="choice" value="2" />
                         Check finances
@@ -30,9 +32,10 @@
                         <input id="choice3" type="radio" name="choice" value="3" />
                         Add apprentices
                     </label>
+                    }
                     <label for="choice4" class="block-label">
                         <input id="choice4" type="radio" name="choice" value="4" />
-                        Return to homepage
+                        @(Model.Data.UserShownWizard ? "Continue account setup" : "Return to homepage")
                     </label>
                 </fieldset>
             </div>
