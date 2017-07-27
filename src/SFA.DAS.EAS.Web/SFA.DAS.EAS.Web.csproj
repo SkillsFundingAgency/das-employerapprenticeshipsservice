@@ -575,6 +575,7 @@
     <Content Include="dist\javascripts\character-limit.js" />
     <Content Include="dist\javascripts\length-limit.js" />
     <Content Include="dist\javascripts\payment-order.js" />
+    <None Include="src\sass\_tabs.scss" />
     <Content Include="src\svg\arrows.svg" />
     <Content Include="src\svg\chevron-left.svg" />
     <Content Include="src\svg\chevron-right.svg" />
@@ -1097,6 +1098,7 @@
     <Content Include="Views\EmployerTeam\NextSteps.cshtml" />
     <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
     <Content Include="Views\EmployerTeam\_TasksActivities.cshtml" />
+    <Content Include="src\sass\_tasks.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
