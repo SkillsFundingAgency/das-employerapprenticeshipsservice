@@ -37,5 +37,6 @@ SELECT
   p.Ukprn = @ukprn AND
   meta.ApprenticeshipCourseName = @courseName AND
   meta.ApprenticeshipCourseLevel = @courseLevel AND
-  ISNULL(meta.PathwayCode, -1) = ISNULL(@pathwayCode, -1)
+  ISNULL(meta.PathwayCode, -1) = ISNULL(@pathwayCode, -1) AND
+  p.FundingSource IN (1,2,3)  
   group by p.AccountId, p.Ukprn, meta.ApprenticeshipCourseName, meta.ApprenticeshipCourseLevel, meta.PathwayName, meta.ApprenticeName
