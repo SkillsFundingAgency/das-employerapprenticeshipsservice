@@ -157,35 +157,25 @@ sfa.tabs = {
 };
 
 sfa.tabs = {
-
     elems: {
         tabs: $('ul.js-tabs li a'),
         panels: $('.js-tab-pane')
     },
-
     init: function () {
-
         if (this.elems.tabs) {
             this.setUpEvents(this.elems.tabs);
             this.hidePanels(this.elems.panels);
         }
-
         this.elems.tabs.eq(0).click();
-
     },
-
     hidePanels: function (panels) {
-        panels.hide();
+        panels.hide().attr('aria-hidden', 'true');
     },
-
     showPanel: function (panel) {
-        panel.show();
+        panel.show().attr('aria-hidden', 'false');
     },
-
     setUpEvents: function (tabs) {
-
         var that = this;
-
         tabs.on('click touchstart', function (e) {
 
             tabs.removeClass('selected');
@@ -198,7 +188,6 @@ sfa.tabs = {
 
             e.preventDefault();
         });
-
     }
 };
 
