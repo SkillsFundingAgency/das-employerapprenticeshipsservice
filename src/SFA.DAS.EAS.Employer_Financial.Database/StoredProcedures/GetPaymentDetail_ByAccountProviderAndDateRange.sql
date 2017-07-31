@@ -33,4 +33,4 @@ SELECT
   where 
   p.AccountId = @accountid AND
   p.Ukprn = @ukprn 
-  group by p.AccountId, p.Ukprn, meta.ApprenticeshipCourseName, meta.ApprenticeshipCourseLevel,meta.PathwayName, p.TransactionType
+  group by p.AccountId, p.Ukprn, meta.ApprenticeshipCourseName, meta.ApprenticeshipCourseLevel,meta.PathwayName
