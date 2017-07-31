@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Web;
 using AutoMapper;
@@ -48,8 +49,11 @@ using StructureMap;
 using StructureMap.Graph;
 using StructureMap.TypeRules;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
+using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.EAS.Web.App_Start;
+using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Notifications.Api.Client.Configuration;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -92,6 +96,8 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 .Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi)
                 .SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
 
+            ConfigureNotificationsApi(config);
+
             RegisterMapper();
 
             RegisterMediator();
@@ -103,6 +109,28 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             RegisterExecutionPolicies();
 
             RegisterLogger();
+        }
+
+        private void ConfigureNotificationsApi(EmployerApprenticeshipsServiceConfiguration config)
+        {
+            HttpClient httpClient;
+
+            if (string.IsNullOrWhiteSpace(config.CommitmentNotification.NotificationApi.ClientId))
+            {
+                httpClient = new Http.HttpClientBuilder()
+                .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.CommitmentNotification.NotificationApi))
+                .Build();
+            }
+            else
+            {
+                httpClient = new Http.HttpClientBuilder()
+                .WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config.CommitmentNotification.NotificationApi))
+                .Build();
+            }
+
+            For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
+
+            For<INotificationsApiClientConfiguration>().Use(config.CommitmentNotification.NotificationApi);
         }
 
         private void RegisterExecutionPolicies()
