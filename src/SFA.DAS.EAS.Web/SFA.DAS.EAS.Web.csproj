@@ -1091,9 +1091,6 @@
     <Content Include="src\sass\_icons.scss" />
     <Content Include="Views\EmployerTeam\_WelcomeWizard.cshtml" />
     <Content Include="src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
-    <Content Include="Views\EmployerAgreement\Index_OrgS.cshtml" />
-    <Content Include="Views\Shared\_SetupAccount_OrgS.cshtml" />
-    <Content Include="Views\Home\Index_OrgS.cshtml" />
     <Content Include="Views\EmployerTeam\NextSteps.cshtml" />
     <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
   </ItemGroup>
