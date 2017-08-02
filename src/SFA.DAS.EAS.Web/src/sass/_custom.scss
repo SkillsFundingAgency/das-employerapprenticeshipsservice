@@ -614,6 +614,17 @@ body {
 // END -pagination styles
 
 
+#stop-effective{
+    .panel{
+        margin-top: 20px;
+        float: left;
+      }
+}
+
+
+
+
+
 //all mobile media query breakpoints
 //==================================
 @media only screen and (max-device-width: 640px),
