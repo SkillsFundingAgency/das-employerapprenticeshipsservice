@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Azure;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.Notifications.Api.Client.Configuration;
 
 namespace SFA.DAS.EAS.Domain.Configuration
 {
@@ -40,6 +41,7 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string SuperUserRoleId { get; set; }
 
         public string ClientToken { get; set; }
+        public NotificationsApiClientConfiguration NotificationApi { get; set; }
     }
 
     public class ApprenticeshipInfoServiceConfiguration : IApprenticeshipInfoServiceConfiguration
