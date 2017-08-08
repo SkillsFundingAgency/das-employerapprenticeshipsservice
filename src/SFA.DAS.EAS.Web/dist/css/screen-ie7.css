@@ -1,8 +1,8 @@
-.grid-row, #content, .notice, .panel, fieldset, .form-section, .form-group, .form-block, .breadcrumbs ol, .data-wrap, .account-information, .header-organisation ul, #welcome ol.todo-list > li .done, .filter {
+.grid-row, #content, .notice, .panel, fieldset, .form-section, .form-group, .form-block, .breadcrumbs ol, .data-wrap, .account-information, .header-organisation ul, .js-enabled ul.js-tabs, #welcome ol.todo-list > li .done, .filter {
   zoom: 1;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, #welcome ol.todo-list > li .done:after, .filter:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, .js-enabled ul.js-tabs:after, #welcome ol.todo-list > li .done:after, .filter:after {
   content: "";
   display: block;
   clear: both;
@@ -20,31 +20,31 @@
   margin: 0 -15px;
 }
 
-.grid-row, #content, .notice, .panel, fieldset, .form-section, .form-group, .form-block, .breadcrumbs ol, .data-wrap, .account-information, .header-organisation ul, #welcome ol.todo-list > li .done, .filter {
+.grid-row, #content, .notice, .panel, fieldset, .form-section, .form-group, .form-block, .breadcrumbs ol, .data-wrap, .account-information, .header-organisation ul, .js-enabled ul.js-tabs, #welcome ol.todo-list > li .done, .filter {
   zoom: 1;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, #welcome ol.todo-list > li .done:after, .filter:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, .js-enabled ul.js-tabs:after, #welcome ol.todo-list > li .done:after, .filter:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row, #content, .notice, .panel, fieldset, .form-section, .form-group, .form-block, .breadcrumbs ol, .data-wrap, .account-information, .header-organisation ul, #welcome ol.todo-list > li .done, .filter {
+.grid-row, #content, .notice, .panel, fieldset, .form-section, .form-group, .form-block, .breadcrumbs ol, .data-wrap, .account-information, .header-organisation ul, .js-enabled ul.js-tabs, #welcome ol.todo-list > li .done, .filter {
   zoom: 1;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, #welcome ol.todo-list > li .done:after, .filter:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, .js-enabled ul.js-tabs:after, #welcome ol.todo-list > li .done:after, .filter:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row, #content, .notice, .panel, fieldset, .form-section, .form-group, .form-block, .breadcrumbs ol, .data-wrap, .account-information, .header-organisation ul, #welcome ol.todo-list > li .done, .filter {
+.grid-row, #content, .notice, .panel, fieldset, .form-section, .form-group, .form-block, .breadcrumbs ol, .data-wrap, .account-information, .header-organisation ul, .js-enabled ul.js-tabs, #welcome ol.todo-list > li .done, .filter {
   zoom: 1;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, #welcome ol.todo-list > li .done:after, .filter:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, .js-enabled ul.js-tabs:after, #welcome ol.todo-list > li .done:after, .filter:after {
   content: "";
   display: block;
   clear: both;
@@ -62,21 +62,21 @@
   margin: 0 -15px;
 }
 
-.grid-row, #content, .notice, .panel, fieldset, .form-section, .form-group, .form-block, .breadcrumbs ol, .data-wrap, .account-information, .header-organisation ul, #welcome ol.todo-list > li .done, .filter {
+.grid-row, #content, .notice, .panel, fieldset, .form-section, .form-group, .form-block, .breadcrumbs ol, .data-wrap, .account-information, .header-organisation ul, .js-enabled ul.js-tabs, #welcome ol.todo-list > li .done, .filter {
   zoom: 1;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, #welcome ol.todo-list > li .done:after, .filter:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, .js-enabled ul.js-tabs:after, #welcome ol.todo-list > li .done:after, .filter:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row, #content, .notice, .panel, fieldset, .form-section, .form-group, .form-block, .breadcrumbs ol, .data-wrap, .account-information, .header-organisation ul, #welcome ol.todo-list > li .done, .filter {
+.grid-row, #content, .notice, .panel, fieldset, .form-section, .form-group, .form-block, .breadcrumbs ol, .data-wrap, .account-information, .header-organisation ul, .js-enabled ul.js-tabs, #welcome ol.todo-list > li .done, .filter {
   zoom: 1;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, #welcome ol.todo-list > li .done:after, .filter:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .data-wrap:after, .account-information:after, .header-organisation ul:after, .js-enabled ul.js-tabs:after, #welcome ol.todo-list > li .done:after, .filter:after {
   content: "";
   display: block;
   clear: both;
@@ -3401,6 +3401,47 @@ table.responsive tr th.tw-65 {
 
 table.responsive tr th.tw-70 {
   width: 70%;
+}
+
+.js-enabled ul.js-tabs {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  border-bottom: 1px solid #bfc1c3;
+  padding: 0 10px;
+}
+
+.js-enabled ul.js-tabs li {
+  margin-bottom: -1px;
+  float: left;
+  margin-bottom: 0;
+  margin-right: 5px;
+}
+
+.js-enabled ul.js-tabs a {
+  display: block;
+  padding: 10px 20px;
+  border: 1px solid #bfc1c3;
+  position: relative;
+  margin-bottom: -1px;
+  background: #f8f8f8;
+}
+
+.js-enabled ul.js-tabs a.selected {
+  background: white;
+  border-bottom: 1px solid white;
+  text-decoration: none;
+  color: #0b0c0c;
+  font-weight: bold;
+}
+
+.panes {
+  border: 1px solid #bfc1c3;
+  border-top: none;
+}
+
+.js-tab-pane {
+  padding: 15px;
 }
 
 .panel p, .panel li {
