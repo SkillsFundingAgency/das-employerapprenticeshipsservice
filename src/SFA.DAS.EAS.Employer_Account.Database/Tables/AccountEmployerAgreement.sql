@@ -6,3 +6,5 @@
     CONSTRAINT [FK_AccountEmployerAgreement_Account] FOREIGN KEY ([AccountId]) REFERENCES [employer_account].[Account]([Id]), 
     CONSTRAINT [FK_AccountEmployerAgreement_EmployerAgreement] FOREIGN KEY ([EmployerAgreementId]) REFERENCES [employer_account].[EmployerAgreement]([Id]) 
 )
+GO
+CREATE INDEX [IX_AccountEmployerAgreement] ON [employer_account].[AccountEmployerAgreement] ([AccountId])
