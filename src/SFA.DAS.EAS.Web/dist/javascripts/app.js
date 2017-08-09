@@ -225,8 +225,6 @@ if (localStorage.getItem("answers") === null) {
     localStorage.setItem("answers", JSON.stringify([]));
 }
 
-var getAnswers = JSON.parse(localStorage.getItem("answers"));
-
 sfa.welcomeWizard = {
     settings :  {
         noSteps: $('#welcome').data('total-steps'),
