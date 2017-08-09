@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Web;
 using AutoMapper;
@@ -48,8 +49,12 @@ using StructureMap;
 using StructureMap.Graph;
 using StructureMap.TypeRules;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
+using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.EAS.Web.App_Start;
+using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Notifications.Api.Client.Configuration;
+using NotificationsApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.NotificationsApiClientConfiguration;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -92,6 +97,11 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 .Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi)
                 .SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
 
+            var notificationsApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration
+                <NotificationsApiClientConfiguration>($"{ServiceName}.Notifications");
+
+            ConfigureNotificationsApi(notificationsApiConfig);
+
             RegisterMapper();
 
             RegisterMediator();
@@ -103,6 +113,28 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             RegisterExecutionPolicies();
 
             RegisterLogger();
+        }
+
+        private void ConfigureNotificationsApi(NotificationsApiClientConfiguration config)
+        {
+            HttpClient httpClient;
+
+            if (string.IsNullOrWhiteSpace(config.ClientId))
+            {
+                httpClient = new Http.HttpClientBuilder()
+                .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config))
+                .Build();
+            }
+            else
+            {
+                httpClient = new Http.HttpClientBuilder()
+                .WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config))
+                .Build();
+            }
+
+            For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
+
+            For<INotificationsApiClientConfiguration>().Use(config);
         }
 
         private void RegisterExecutionPolicies()

@@ -21,19 +21,25 @@
         <form method="post" action="@Url.RouteUrl("PostWhenToApplyChange")" novalidate>
             @Html.AntiForgeryToken()
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-            
-            <h1 class="heading-xlarge">Date of status change</h1>
-            
+
+            <h1 class="heading-xlarge">Select stop date</h1>
+
             <fieldset>
-                <p class="form-label-bold">When did this apprentice stop?</p>
+                <p class="form-label-bold">Select stop date</p>
                 <div class="form-group">
                     <legend class="visually-hidden">Date of status change</legend>
-                   
+
                     @Html.ValidationMessage("WhenToMakeChange", "Please choose an option", new { id = "error-message-WhenToMakeChange" })
                     <label for=@($"WhenToMakeChange-{WhenToMakeChangeOptions.Immediately}") class="block-label selection-button-radio">
                         @Html.RadioButton("WhenToMakeChange", WhenToMakeChangeOptions.Immediately, new { id = $"WhenToMakeChange-{WhenToMakeChangeOptions.Immediately}" })
                         Today
                     </label>
+
+                    <div class="panel panel-border-wide" id="stop-today">
+                        <p class="strong">
+                            If you want to stop and restart this apprenticeship, select 'before today' and enter the original start date.
+                        </p>
+                    </div>
 
                     <label for=@($"WhenToMakeChange-{WhenToMakeChangeOptions.SpecificDate}") class="block-label selection-button-radio">
                         @Html.RadioButton("WhenToMakeChange", WhenToMakeChangeOptions.SpecificDate, new { id = $"WhenToMakeChange-{WhenToMakeChangeOptions.SpecificDate}" })
@@ -42,7 +48,7 @@
                 </div>
 
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError("DateOfChange", "error")" id="stop-effective">
-                    <span class="form-label-bold">Date the change took effect</span>
+                    <span class="form-label-bold">When did it stop?</span>
                     <span class="form-hint">The earliest date you can enter is @Model.Data.StartDate.ToFullDateEntryFormat()</span>
 
                     <div class="form-date">
@@ -66,6 +72,12 @@
                             </label>
                             @Html.TextBox("DateOfChange.Year", Model.Data.ChangeStatusViewModel.DateOfChange.Year, new { @class = "form-control length-limit", type = "number", maxlength = "4", min = "1900", max = "9999", aria_labelledby = "DateOfChange.Year" })
                         </div>
+                    </div>
+
+                    <div class="panel panel-border-wide">
+                        <p class="strong">
+                            If you want to stop and restart this apprenticeship, enter the original start <br />date: @Model.Data.StartDate.ToFullDateEntryFormat().
+                        </p>
                     </div>
                 </div>
 

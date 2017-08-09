@@ -27,10 +27,10 @@
             {
                 <h1 class="heading-xlarge" id="Levy-accounts">Your accounts</h1>
                 <p>Select an account or add a new one.</p>
-                <table>
+                <table class="responsive">
                     <thead>
                         <tr>
-                            <th scope="col">Account name</th>
+                            <th scope="col" class="tw-30">Account name</th>
                             <th scope="col">What you can do</th>
                             <th scope="col"><span class="vh">Select account</span></th>
                         </tr>
@@ -39,18 +39,18 @@
                         @foreach (var account in Model.Data.Accounts.AccountList)
                         {
                             <tr>
-                                <td class="responsive-td">
+                                <td data-label="Account name">
                                     <span class="force-word-wrap">
-                                        @account.Name 
-                                        <span class="account-id">
-                                            Account ID: @account.HashedId
-                                        </span>
+                                        @account.Name
+                                    </span>
+                                    <span class="account-id">
+                                        Account ID: @account.HashedId
                                     </span>
                                 </td>
-                                <td class="responsive-td">
+                                <td data-label="What you can do">
                                     @RoleStrings.GetRoleDescription(account.RoleName)
                                 </td>
-                                <td class="responsive-td link-right">
+                                <td class="link-right">
                                     <a aria-label="View account homepage for @account.Name"
                                        title="View account homepage for @account.Name"
                                        href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = account.HashedId})">
@@ -62,7 +62,7 @@
                     </tbody>
                 </table>
                 <p>
-                    <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account" aria-label="Add new account">Add new account</a>
+                    <a href="@Url.Action("SearchForOrganisation", "SearchOrganisation")" class="button" id="add_new_account" aria-label="Add new account">Add new account</a>
                 </p>
                 }
 

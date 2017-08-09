@@ -364,19 +364,24 @@ var showHideContent = new GOVUK.ShowHideContent();
 showHideContent.init();
 
 // stop apprentice - show/hide date block
-$(".js-enabled #stop-effective").hide();
+$(".js-enabled #stop-effective").hide().attr("aria-hidden", "true");
+$(".js-enabled #stop-today").hide().attr("aria-hidden", "true");
+
 
 $(".js-enabled #WhenToMakeChange-Immediately").on('click touchstart', (function () {
-    $("#stop-effective").hide();
+    $("#stop-today").show().attr("aria-hidden", "false");
+}));
+$(".js-enabled #WhenToMakeChange-SpecificDate").on('click touchstart', (function () {
+    $("#stop-today").hide().attr("aria-hidden", "true");
+}));
+
+$(".js-enabled #WhenToMakeChange-Immediately").on('click touchstart', (function () {
+    $("#stop-effective").hide().attr("aria-hidden", "true");
 }));
 
 $(".js-enabled #WhenToMakeChange-SpecificDate").on('click touchstart', (function () {
-    $("#stop-effective").show();
+    $("#stop-effective").show().attr("aria-hidden", "false");
 }));
-
-if ($("#WhenToMakeChange-SpecificDate").is(':checked')) {
-    $("#stop-effective").show();
-}
 
 
 // cohorts bingo balls - clickable block
