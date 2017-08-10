@@ -7,8 +7,8 @@
     <ProjectGuid>{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFA.DAS.EAS.Events</RootNamespace>
-    <AssemblyName>SFA.DAS.EAS.Events</AssemblyName>
+    <RootNamespace>SFA.DAS.EmployerAccounts.Events</RootNamespace>
+    <AssemblyName>SFA.DAS.EmployerAccounts.Events</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,7 +44,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SFA.DAS.EAS.Events.nuspec" />
+    <None Include="SFA.DAS.EmployerAccounts.Events.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

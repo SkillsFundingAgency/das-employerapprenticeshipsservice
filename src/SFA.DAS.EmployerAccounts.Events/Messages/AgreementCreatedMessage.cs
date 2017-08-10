@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.Events.Messages
+﻿namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     public class AgreementCreatedMessage
     {

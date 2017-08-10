@@ -94,7 +94,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AcceptanceTests", "Acceptan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests", "SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests\SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests.csproj", "{4F4834B9-83CD-4F67-B6D9-12B691F801D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Events", "SFA.DAS.EAS.Events\SFA.DAS.EAS.Events.csproj", "{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Events", "SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj", "{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
