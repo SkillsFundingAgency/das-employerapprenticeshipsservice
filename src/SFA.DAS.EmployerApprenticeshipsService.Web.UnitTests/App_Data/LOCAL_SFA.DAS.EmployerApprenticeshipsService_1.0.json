@@ -4,5 +4,11 @@
   },
   "DatabaseConnectionString": "Server=.;Database=SFA.DAS.EmployerApprenticeshipsService.Database;Integrated Security=True;Trusted_Connection=True;Connection Timeout=30;",
   "CompaniesHouse": { "ApiKey": "Test_ApiKey" },
-  "ServiceBusConnectionString": "Test_ServiceBusConnectionString"
-}
+  "ServiceBusConnectionString": "Test_ServiceBusConnectionString",
+  "ServiceBusConnectionStrings": 
+    {
+      "employer_levy": "Test_ServiceBusConnectionString2",
+      "employer_payment": "Test_ServiceBusConnectionString1"
+    }
+  
+} 
