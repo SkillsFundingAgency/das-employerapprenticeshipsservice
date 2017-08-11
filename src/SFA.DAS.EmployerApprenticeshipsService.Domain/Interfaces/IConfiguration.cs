@@ -5,5 +5,6 @@
         string DatabaseConnectionString { get; set; }
 
         string ServiceBusConnectionString { get; set; }
+        string[] ServiceBusConnectionStrings { get; }
     }
 }
