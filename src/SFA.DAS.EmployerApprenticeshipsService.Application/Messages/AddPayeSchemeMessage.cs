@@ -2,6 +2,6 @@
 {
     public class AddPayeSchemeMessage
     {
-        public string PayeRef { get; set; }
+        public string EmpRef { get; set; }
     }
 }

@@ -106,7 +106,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             await _messagePublisher.PublishAsync(
                 new AddPayeSchemeMessage
                 {
-                   PayeRef = payeRef
+                   EmpRef = payeRef
                 });
         }
 
