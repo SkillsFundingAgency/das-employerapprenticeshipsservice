@@ -293,6 +293,7 @@
     <Compile Include="Factories\PayeSchemeEventFactory.cs" />
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Messages\AddPayeSchemeMessage.cs" />
+    <Compile Include="Messages\DeletePayeSchemeMessage.cs" />
     <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
     <Compile Include="Messages\PaymentProcessorQueueMessage.cs" />

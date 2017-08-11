@@ -6,10 +6,13 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
+using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 
@@ -17,20 +20,18 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 {
     public class RemovePayeFromAccountCommandHandler : AsyncRequestHandler<RemovePayeFromAccountCommand>
     {
+        [QueueName("employer_levy")]
+        public string delete_paye_scheme { get; set; }
+
         private readonly IMediator _mediator;
         private readonly IValidator<RemovePayeFromAccountCommand> _validator;
         private readonly IAccountRepository _accountRepository;
         private readonly IHashingService _hashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public RemovePayeFromAccountCommandHandler(
-            IMediator mediator, 
-            IValidator<RemovePayeFromAccountCommand> validator, 
-            IAccountRepository accountRepository, 
-            IHashingService hashingService, 
-            IGenericEventFactory genericEventFactory,
-            IPayeSchemeEventFactory payeSchemeEventFactory)
+        public RemovePayeFromAccountCommandHandler(IMediator mediator, IValidator<RemovePayeFromAccountCommand> validator, IAccountRepository accountRepository, IHashingService hashingService, IGenericEventFactory genericEventFactory, IPayeSchemeEventFactory payeSchemeEventFactory, IMessagePublisher messagePublisher)
         {
             _mediator = mediator;
             _validator = validator;
@@ -38,6 +39,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             _hashingService = hashingService;
             _genericEventFactory = genericEventFactory;
             _payeSchemeEventFactory = payeSchemeEventFactory;
+            _messagePublisher = messagePublisher;
         }
 
         protected override async Task HandleCore(RemovePayeFromAccountCommand message)
@@ -49,6 +51,8 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             await AddAuditEntry(message.UserId, message.PayeRef, accountId.ToString());
 
             await _accountRepository.RemovePayeFromAccount(accountId, message.PayeRef);
+
+            await QueuePayeRemovedMessage(message.PayeRef);
 
             await NotifyPayeSchemeRemoved(message.HashedAccountId, message.PayeRef);
         }
@@ -75,6 +79,11 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             var genericEvent = _genericEventFactory.Create(payeEvent);
 
             await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+        }
+
+        private async Task QueuePayeRemovedMessage(string payeRef)
+        {
+            await _messagePublisher.PublishAsync(new DeletePayeSchemeMessage {EmpRef = payeRef});
         }
 
         private async Task AddAuditEntry(string userId, string payeRef, string accountId)
