@@ -34,16 +34,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IHashingService _hashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IAccountEventFactory _accountEventFactory;
+        private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
 
-        public CreateAccountCommandHandler(
-            IAccountRepository accountRepository, 
-            IUserRepository userRepository, 
-            IMessagePublisher messagePublisher, 
-            IMediator mediator, 
-            IValidator<CreateAccountCommand> validator, 
-            IHashingService hashingService, 
-            IGenericEventFactory genericEventFactory,
-            IAccountEventFactory accountEventFactory)
+        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator, IHashingService hashingService, IGenericEventFactory genericEventFactory, IAccountEventFactory accountEventFactory, IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _accountRepository = accountRepository;
             _userRepository = userRepository;
@@ -53,6 +46,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _hashingService = hashingService;
             _genericEventFactory = genericEventFactory;
             _accountEventFactory = accountEventFactory;
+            _refreshEmployerLevyService = refreshEmployerLevyService;
         }
 
         public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
@@ -77,6 +71,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             await RefreshLevy(returnValue, emprefs);
 
+            await QueueAddPayeSchemeMessage(emprefs);
+
             await NotifyAccountCreated(hashedAccountId);
 
             await CreateAuditEntries(message, returnValue, hashedAccountId, user);
@@ -86,6 +82,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                 HashedAccountId = hashedAccountId
             };
         }
+
+        
 
         private async Task NotifyAccountCreated(string hashedAccountId)
         {
@@ -111,10 +109,17 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         {
             foreach (var empref in emprefs)
             {
-                await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage
+                await _refreshEmployerLevyService.QueueRefreshLevyMessage(returnValue.AccountId, empref);
+            }
+        }
+
+        private async Task QueueAddPayeSchemeMessage(string[] emprefs)
+        {
+            foreach (var empref in emprefs)
+            {
+                await _messagePublisher.PublishAsync(new AddPayeSchemeMessage()
                 {
-                    AccountId = returnValue.AccountId,
-                    PayeRef = empref
+                    EmpRef= empref
                 });
             }
         }
