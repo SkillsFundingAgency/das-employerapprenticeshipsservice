@@ -23,8 +23,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
     //TODO this needs changing to be a facade and calling individual commands for each component
     public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>
     {
-        [QueueName]
-        public string get_employer_levy { get; set; }
+        [QueueName("employer_levy")]
+        public string add_paye_scheme { get; set; }
 
         private readonly IAccountRepository _accountRepository;
         private readonly IUserRepository _userRepository;
