@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types.Events;
 using SFA.DAS.EAS.Account.Api.Types.Events.PayeScheme;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
 using SFA.DAS.EAS.Application.Factories;
+using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 
@@ -28,6 +29,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         private Mock<IMediator> _mediator;
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
+        private Mock<IMessagePublisher> _messagePublisher;
 
         [SetUp]
         public void Arrange()
@@ -43,13 +45,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _payeSchemeEventFactory = new Mock<IPayeSchemeEventFactory>();
 
+            _messagePublisher = new Mock<IMessagePublisher>();
+
             _handler = new RemovePayeFromAccountCommandHandler(
                 _mediator.Object, 
                 _validator.Object,
                 _accountRepository.Object, 
                 _hashingService.Object,
                 _genericEventFactory.Object,
-                _payeSchemeEventFactory.Object);
+                _payeSchemeEventFactory.Object,
+                _messagePublisher.Object);
         }
 
         [Test]
@@ -159,6 +164,25 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
                     c.EasAuditMessage.AffectedEntity.Id.Equals(command.PayeRef) &&
                     c.EasAuditMessage.AffectedEntity.Type.Equals("Paye"))));
+        }
+
+        [Test]
+        public async Task ThenAMessageIsQueuedForPayeSchemeRemoved()
+        {
+            //Arrange
+            var command = new RemovePayeFromAccountCommand
+            {
+                UserId = "54256",
+                HashedAccountId = "ABC123",
+                PayeRef = "3674826874623",
+                RemoveScheme = true
+            };
+
+            //Act
+            await _handler.Handle(command);
+
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<DeletePayeSchemeMessage>(c => c.EmpRef.Equals(command.PayeRef))), Times.Once);
         }
     }
 }

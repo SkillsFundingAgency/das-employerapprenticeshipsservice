@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types.Events;
 using SFA.DAS.EAS.Account.Api.Types.Events.PayeScheme;
 using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
@@ -31,6 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         private Mock<IMediator> _mediator;
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
+        private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
         private const long ExpectedAccountId = 54564;
         private const string ExpectedPayeName = "Paye Scheme 1";
 
@@ -51,6 +51,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _payeSchemeEventFactory = new Mock<IPayeSchemeEventFactory>();
 
+            _refreshEmployerLevyService = new Mock<IRefreshEmployerLevyService>();
+
             _addPayeToAccountCommandHandler = new AddPayeToAccountCommandHandler(
                 _validator.Object,
                 _accountRepository.Object, 
@@ -58,7 +60,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
                 _hashingService.Object, 
                 _mediator.Object, 
                 _genericEventFactory.Object,
-                _payeSchemeEventFactory.Object);
+                _payeSchemeEventFactory.Object,
+                _refreshEmployerLevyService.Object);
         }
 
         [Test]
@@ -91,7 +94,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         }
 
         [Test]
-        public async Task ThenAMessageIsAddedToTheQueueToRefreshTheLevyData()
+        public async Task ThenAMessageIsQueuedForTheRefreshEmployerLevyService()
         {
             //Arrange
             var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
@@ -100,7 +103,21 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             await _addPayeToAccountCommandHandler.Handle(command);
 
             //Assert
-            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c=>c.AccountId.Equals(ExpectedAccountId) && c.PayeRef.Equals(command.Empref))));
+            _refreshEmployerLevyService.Verify(x=>x.QueueRefreshLevyMessage(ExpectedAccountId, command.Empref));
+            //_messagePublisher.Verify(x=>x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c=>c.AccountId.Equals(ExpectedAccountId) && c.PayeRef.Equals(command.Empref))));
+        }
+
+        [Test]
+        public async Task ThenAMessageIsQueuedForTheAddPayeSchemeQueue()
+        {
+            //Arrange
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+
+            //Act
+            await _addPayeToAccountCommandHandler.Handle(command);
+
+            //Assert
+            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<AddPayeSchemeMessage>(c=> c.EmpRef.Equals(command.Empref))));
         }
 
         [Test]

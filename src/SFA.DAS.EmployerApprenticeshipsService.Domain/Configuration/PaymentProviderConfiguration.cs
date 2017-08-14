@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Domain.Interfaces;
+﻿using System.Collections.Generic;
+using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Domain.Configuration
 {
@@ -6,5 +7,6 @@ namespace SFA.DAS.EAS.Domain.Configuration
     {
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
+        public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
     }
 }

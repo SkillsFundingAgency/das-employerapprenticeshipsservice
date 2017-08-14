@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
-using SFA.DAS.EAS.Account.Api.Types.Events;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Attributes;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
@@ -23,8 +20,8 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 {
     public class AddPayeToAccountCommandHandler : AsyncRequestHandler<AddPayeToAccountCommand>
     {
-        [QueueName]
-        public string get_employer_levy { get; set; }
+        [QueueName("employer_levy")]
+        public string add_paye_scheme { get; set; }
 
         private readonly IValidator<AddPayeToAccountCommand> _validator;
         private readonly IAccountRepository _accountRepository;
@@ -33,15 +30,9 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private readonly IMediator _mediator;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
+        private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
 
-        public AddPayeToAccountCommandHandler(
-            IValidator<AddPayeToAccountCommand> validator, 
-            IAccountRepository accountRepository, 
-            IMessagePublisher messagePublisher, 
-            IHashingService hashingService, 
-            IMediator mediator, 
-            IGenericEventFactory genericEventFactory,
-            IPayeSchemeEventFactory payeSchemeEventFactory)
+        public AddPayeToAccountCommandHandler(IValidator<AddPayeToAccountCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService, IMediator mediator, IGenericEventFactory genericEventFactory, IPayeSchemeEventFactory payeSchemeEventFactory, IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _validator = validator;
             _accountRepository = accountRepository;
@@ -50,6 +41,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             _mediator = mediator;
             _genericEventFactory = genericEventFactory;
             _payeSchemeEventFactory = payeSchemeEventFactory;
+            _refreshEmployerLevyService = refreshEmployerLevyService;
         }
 
         protected override async Task HandleCore(AddPayeToAccountCommand message)
@@ -72,6 +64,8 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             await AddAuditEntry(message, accountId);
 
             await RefreshLevy(accountId, message.Empref);
+
+            await AddPayeScheme(message.Empref);
 
             await NotifyPayeSchemeAdded(message.HashedAccountId, message.Empref);
         }
@@ -102,11 +96,17 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
         private async Task RefreshLevy(long accountId, string payeRef)
         {
+
+            await _refreshEmployerLevyService.QueueRefreshLevyMessage(accountId, payeRef);
+            
+        }
+
+        private async Task AddPayeScheme(string payeRef)
+        {
             await _messagePublisher.PublishAsync(
-                new EmployerRefreshLevyQueueMessage
+                new AddPayeSchemeMessage
                 {
-                    AccountId = accountId,
-                    PayeRef = payeRef
+                   EmpRef = payeRef
                 });
         }
 

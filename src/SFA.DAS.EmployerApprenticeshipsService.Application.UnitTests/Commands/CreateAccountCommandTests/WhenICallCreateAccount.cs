@@ -10,8 +10,6 @@ using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -34,6 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IHashingService> _hashingService;
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IAccountEventFactory> _accountEventFactory;
+        private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
         private const string ExpectedHashString = "123ADF23";
@@ -59,6 +58,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _accountEventFactory = new Mock<IAccountEventFactory>();
 
+            _refreshEmployerLevyService = new Mock<IRefreshEmployerLevyService>();
+
             _handler = new CreateAccountCommandHandler(
                 _accountRepository.Object, 
                 _userRepository.Object, 
@@ -67,7 +68,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 _validator.Object, 
                 _hashingService.Object, 
                 _genericEventFactory.Object,
-                _accountEventFactory.Object);
+                _accountEventFactory.Object,
+                _refreshEmployerLevyService.Object);
         }
 
         [Test]
@@ -171,7 +173,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(cmd);
 
             _accountRepository.Verify(x => x.CreateAccount(user.Id, cmd.OrganisationReferenceNumber, cmd.OrganisationName, cmd.OrganisationAddress, cmd.OrganisationDateOfInception, cmd.PayeReference, cmd.AccessToken, cmd.RefreshToken, cmd.OrganisationStatus, cmd.EmployerRefName, (short)cmd.OrganisationType, cmd.PublicSectorDataSource, cmd.Sector));
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c => c.AccountId.Equals(accountId) && c.PayeRef.Equals(cmd.PayeReference))), Times.Once());
+            _refreshEmployerLevyService.Verify(x=>x.QueueRefreshLevyMessage(accountId,cmd.PayeReference));
+            
         }
 
         [Test]
@@ -220,5 +223,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _accountRepository.Verify(x => x.CreateAccount(It.IsAny<long>(), It.Is<string>(cd => !string.IsNullOrEmpty(cd)), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<short?>(), It.IsAny<string>()), Times.Once);
         }
 
+        [Test]
+        public async Task ThenTheMessageIsAddedToTheAddPayeSchemeQueue()
+        {
+            //Arrange
+            var  epxectedPayeRef = "123/abc";
+            var createAccountCommand = new CreateAccountCommand { PayeReference = epxectedPayeRef, AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active" };
+
+            //Act
+            await _handler.Handle(createAccountCommand);
+
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AddPayeSchemeMessage>(c => c.EmpRef.Equals(epxectedPayeRef))), Times.Once());
+        }
     }
 }
