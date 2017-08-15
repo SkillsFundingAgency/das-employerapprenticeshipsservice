@@ -33,7 +33,7 @@
 <div class="grid-row search-results">
     <aside>
         <h2 class="heading-medium">Filter results</h2>
-        <form action="@Url.Action("SearchForOrganisationResults")?searchTerm=@Model.Data.SearchTerm" method="POST">
+        <form action="@Url.Action("SearchForOrganisationResults")?searchTerm=@(HttpUtility.UrlEncode(Model.Data.SearchTerm))" method="POST">
             <div class="filter">
                 <fieldset>
                     <legend class="vh">Filter by organisation type</legend>
