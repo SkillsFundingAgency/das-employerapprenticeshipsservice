@@ -1,876 +1,207 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using Newtonsoft.Json;
-
-using SFA.DAS.EAS.Application;
+﻿using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Enums;
-using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.Exceptions;
-using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EmployerUsers.WebClientComponents;
-using SFA.DAS.EAS.Web.Validators;
-using FluentValidation.Mvc;
-using FluentValidation;
+using Microsoft.Azure;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-
     [Authorize]
     [RoutePrefix("accounts/{hashedaccountId}/apprentices")]
     public class EmployerCommitmentsController : BaseController
     {
-        private readonly EmployerCommitmentsOrchestrator _employerCommitmentsOrchestrator;
-
-        private const string LastCohortPageCookieKey = "sfa-das-employerapprenticeshipsservice-lastCohortPage";
-        private readonly ICookieStorageService<string> _lastCohortCookieStorageService;
-
-        public EmployerCommitmentsController(EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, IOwinWrapper owinWrapper,
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, 
-            ICookieStorageService<FlashMessageViewModel> flashMessage, ICookieStorageService<string> lastCohortCookieStorageService)
+        public EmployerCommitmentsController(IOwinWrapper owinWrapper,
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService,
+            ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
-            if (employerCommitmentsOrchestrator == null)
-                throw new ArgumentNullException(nameof(employerCommitmentsOrchestrator));
-            if (owinWrapper == null)
-                throw new ArgumentNullException(nameof(owinWrapper));
-
-            _employerCommitmentsOrchestrator = employerCommitmentsOrchestrator;
-            _lastCohortCookieStorageService = lastCohortCookieStorageService;
         }
 
         [HttpGet]
         [Route("home", Name = "CommitmentsHome")]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        public ActionResult Index(string hashedAccountId)
         {
-            ViewBag.HashedAccountId = hashedAccountId;
-
-            var response = await _employerCommitmentsOrchestrator.GetIndexViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-            SetFlashMessageOnModel(response);
-
-            return View(response);
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("cohorts")]
-        public async Task<ActionResult> YourCohorts(string hashedAccountId)
+        public ActionResult YourCohorts(string hashedAccountId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var model = await _employerCommitmentsOrchestrator.GetYourCohorts(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-
-            SetFlashMessageOnModel(model);
-            return View(model);
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("cohorts/draft")]
-        public async Task<ActionResult> Draft(string hashedAccountId)
+        public ActionResult Draft(string hashedAccountId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var model = await _employerCommitmentsOrchestrator.GetAllDraft(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-            SetFlashMessageOnModel(model);
-            SaveRequestStatusInCookie(RequestStatus.NewRequest);
-            return View("RequestList", model);
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [Route("cohorts/review")]
-        public async Task<ActionResult> ReadyForReview(string hashedAccountId)
+        public ActionResult ReadyForReview(string hashedAccountId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor ))
-                return View("AccessDenied");
-
-            var model = await _employerCommitmentsOrchestrator.GetAllReadyForReview(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-            SetFlashMessageOnModel(model);
-            SaveRequestStatusInCookie(RequestStatus.ReadyForReview);
-            return View("RequestList", model);
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [Route("cohorts/provider")]
-        public async Task<ActionResult> WithProvider(string hashedAccountId)
+        public ActionResult WithProvider(string hashedAccountId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            SaveRequestStatusInCookie(RequestStatus.WithProviderForApproval);
-
-            var model = await _employerCommitmentsOrchestrator.GetAllWithProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-            return View("RequestList", model);
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [Route("Inform")]
-        public async Task<ActionResult> Inform(string hashedAccountId)
+        public ActionResult Inform(string hashedAccountId)
         {
-            SaveRequestStatusInCookie(RequestStatus.None);
-            var response = await _employerCommitmentsOrchestrator.GetInform(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-
-            return View(response);
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [Route("legalEntity/create")]
-        public async Task<ActionResult> SelectLegalEntity(string hashedAccountId, string cohortRef = "")
+        public ActionResult SelectLegalEntity(string hashedAccountId, string cohortRef = "")
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var response = await _employerCommitmentsOrchestrator
-                .GetLegalEntities(hashedAccountId, cohortRef, OwinWrapper.GetClaimValue(@"sub"));
-
-            return View(response);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("legalEntity/create")]
-        public async Task<ActionResult> SetLegalEntity(string hashedAccountId, SelectLegalEntityViewModel selectedLegalEntity)
-        {
-            if (!ModelState.IsValid)
-            {
-                var response = await _employerCommitmentsOrchestrator.GetLegalEntities(hashedAccountId, selectedLegalEntity.CohortRef, OwinWrapper.GetClaimValue(@"sub"));
-
-                return View("SelectLegalEntity", response);
-            }
-
-            var agreement = await _employerCommitmentsOrchestrator.GetLegalEntitySignedAgreementViewModel(hashedAccountId,
-                selectedLegalEntity.LegalEntityCode, selectedLegalEntity.CohortRef);
-
-            if (agreement.Data.HasSignedAgreement)
-            {
-                return RedirectToAction("SearchProvider", selectedLegalEntity);
-            }
-            else
-            {
-                return RedirectToAction("AgreementNotSigned", agreement.Data);
-            }
-            
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [Route("provider/create")]
-        public async Task<ActionResult> SearchProvider(string hashedAccountId, string legalEntityCode, string cohortRef)
+        public ActionResult SearchProvider(string hashedAccountId, string legalEntityCode, string cohortRef)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            if (string.IsNullOrWhiteSpace(legalEntityCode) || string.IsNullOrWhiteSpace(cohortRef))
-            {
-                return RedirectToAction("Inform", new {hashedAccountId});
-            }
-
-            var response = await _employerCommitmentsOrchestrator.GetProviderSearch(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, cohortRef);
-
-            return View(response);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("provider/create")]
-        public async Task<ActionResult> SelectProvider(string hashedAccountId, [System.Web.Http.FromUri] [CustomizeValidator(RuleSet = "Request")] SelectProviderViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                var defaultViewModel = await _employerCommitmentsOrchestrator.GetProviderSearch(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.LegalEntityCode, viewModel.CohortRef);
-                
-                return View("SearchProvider", defaultViewModel);
-            }
-
-            var response = await _employerCommitmentsOrchestrator.GetProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel);
-
-            if (response.Data.Provider == null)
-            {
-                var defaultViewModel = await _employerCommitmentsOrchestrator.GetProviderSearch(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.LegalEntityCode, viewModel.CohortRef);
-                defaultViewModel.Data.NotFound = true;
-
-                RevalidateModel(defaultViewModel);
-
-                return View("SearchProvider", defaultViewModel);
-            }
-
-            return View(response);
-        }
-
-        private void RevalidateModel(OrchestratorResponse<SelectProviderViewModel> defaultViewModel)
-        {
-            var validator = new SelectProviderViewModelValidator();
-            var results = validator.Validate(defaultViewModel.Data, ruleSet: "SearchResult");
-            
-            results.AddToModelState(ModelState, null);
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [Route("confirmProvider/create")]
-        public async Task<ActionResult> ConfirmProvider(string hashedAccountId)
+        public ActionResult ConfirmProvider(string hashedAccountId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            return RedirectToAction("Inform", new { hashedAccountId });
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("confirmProvider/create")]
-        public async Task<ActionResult> ConfirmProvider(string hashedAccountId, [System.Web.Http.FromUri]ConfirmProviderViewModel viewModelModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                if (viewModelModel.Confirmation == null)
-                {
-                    var response = await _employerCommitmentsOrchestrator.GetProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModelModel);
-
-                    return View("SelectProvider", response);
-                }
-            }
-
-            if (!viewModelModel.Confirmation.Value)
-            {
-                return RedirectToAction("SearchProvider", new SelectProviderViewModel { LegalEntityCode = viewModelModel.LegalEntityCode, CohortRef = viewModelModel.CohortRef });
-            }
-
-            return RedirectToAction("ChoosePath", new { hashedAccountId = hashedAccountId, legalEntityCode = viewModelModel.LegalEntityCode, providerId = viewModelModel.ProviderId, cohortRef = viewModelModel.CohortRef });
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [Route("choosePath/create")]
-        public async Task<ActionResult> ChoosePath(string hashedAccountId, string legalEntityCode, string providerId, string cohortRef)
+        public ActionResult ChoosePath(string hashedAccountId, string legalEntityCode, string providerId, string cohortRef)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            if (string.IsNullOrWhiteSpace(legalEntityCode)
-                || string.IsNullOrWhiteSpace(providerId)
-                || string.IsNullOrWhiteSpace(cohortRef))
-            {
-                return RedirectToAction("Inform", new { hashedAccountId });
-            }
-
-            var model = await _employerCommitmentsOrchestrator.CreateSummary(hashedAccountId, legalEntityCode, providerId, cohortRef, OwinWrapper.GetClaimValue(@"sub"));
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("choosePath/create")]
-        public async Task<ActionResult> CreateCommitment(CreateCommitmentViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                var model = await _employerCommitmentsOrchestrator.CreateSummary(viewModel.HashedAccountId, viewModel.LegalEntityCode, viewModel.ProviderId.ToString(), viewModel.CohortRef,  OwinWrapper.GetClaimValue(@"sub"));
-
-                return View("ChoosePath", model);
-            }
-
-            if (viewModel.SelectedRoute == "employer")
-            {
-                var userDisplayName = OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName);
-                var userEmail = OwinWrapper.GetClaimValue(DasClaimTypes.Email);
-                var userId = OwinWrapper.GetClaimValue(@"sub");
-
-                var response = await _employerCommitmentsOrchestrator.CreateEmployerAssignedCommitment(viewModel, userId, userDisplayName, userEmail);
-
-                return RedirectToAction("Details", new { hashedCommitmentId = response.Data });
-            }
-
-            return RedirectToAction("SubmitNewCommitment",
-                new { hashedAccountId = viewModel.HashedAccountId, legalEntityCode = viewModel.LegalEntityCode, legalEntityName = viewModel.LegalEntityName, legalEntityAddress = viewModel.LegalEntityAddress, legalEntitySource = viewModel.LegalEntitySource, providerId = viewModel.ProviderId, providerName = viewModel.ProviderName, cohortRef = viewModel.CohortRef, saveStatus = SaveStatus.Save });
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/details")]
-        public async Task<ActionResult> Details(string hashedAccountId, string hashedCommitmentId)
+        public ActionResult Details(string hashedAccountId, string hashedCommitmentId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var model = await _employerCommitmentsOrchestrator.GetCommitmentDetails(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
-
-            var groupes = model.Data.ApprenticeshipGroups.Where(m => m.ShowOverlapError);
-            foreach (var groupe in groupes)
-            {
-                var errorMessage = groupe.TrainingProgramme?.Title != null
-                    ? $"{groupe.TrainingProgramme?.Title ?? ""} apprentices training dates"
-                    : "Apprentices training dates";
-
-                ModelState.AddModelError($"{groupe.GroupId}", errorMessage);
-            }
-
-            model.Data.BackLinkUrl = GetReturnToListUrl(hashedAccountId);
-            SetFlashMessageOnModel(model);
-
-            ViewBag.HashedAccountId = hashedAccountId;
-
-            return View(model);
+            return RedirectPermanentCommitmentsUrl();
         }
+
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/details/delete")]
-        public async Task<ActionResult> DeleteCohort(string hashedAccountId, string hashedCommitmentId)
+        public ActionResult DeleteCohort(string hashedAccountId, string hashedCommitmentId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var model = await _employerCommitmentsOrchestrator.GetDeleteCommitmentModel(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
-
-            return View(model);
+            return RedirectPermanentCommitmentsUrl();
         }
 
-        [HttpPost]
-        [OutputCache(CacheProfile = "NoCache")]
-        [Route("{hashedCommitmentId}/details/delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteCohort(DeleteCommitmentViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                var model = await _employerCommitmentsOrchestrator
-                    .GetDeleteCommitmentModel(viewModel.HashedAccountId, viewModel.HashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
-
-                return View(model);
-            }
-
-            if (viewModel.DeleteConfirmed == null || !viewModel.DeleteConfirmed.Value)
-            {
-                return RedirectToAction("Details", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId } );
-            }
-
-            await _employerCommitmentsOrchestrator
-                .DeleteCommitment(viewModel.HashedAccountId, viewModel.HashedCommitmentId, OwinWrapper.GetClaimValue("sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName), OwinWrapper.GetClaimValue(DasClaimTypes.Email));
-
-            var flashmessage = new FlashMessageViewModel
-            {
-                Message = "Cohort deleted",
-                Severity = FlashMessageSeverityLevel.Okay
-            };
-
-            AddFlashMessageToCookie(flashmessage);
-            
-            var anyCohortWithCurrentStatus = 
-                await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(viewModel.HashedAccountId, GetRequestStatusFromCookie());
-
-            if(!anyCohortWithCurrentStatus)
-                return RedirectToAction("YourCohorts", new { viewModel.HashedAccountId });
-
-            return Redirect(GetReturnToListUrl(viewModel.HashedAccountId));
-
-        }
 
         [HttpGet]
         [Route("{legalEntityCode}/AgreementNotSigned")]
         public ActionResult AgreementNotSigned(LegalEntitySignedAgreementViewModel viewModel)
         {
-            return View(viewModel);
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/apprenticeships/create")]
-        public async Task<ActionResult> CreateApprenticeshipEntry(string hashedAccountId, string hashedCommitmentId)
+        public ActionResult CreateApprenticeshipEntry(string hashedAccountId, string hashedCommitmentId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var response = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId);
-
-            return View(response);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("{hashedCommitmentId}/apprenticeships/create")]
-        public async Task<ActionResult> CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
-        {
-            if (!ModelState.IsValid)
-            {
-                apprenticeship.AddErrorsFromModelState(ModelState);
-            }
-
-            var validatorResult = await _employerCommitmentsOrchestrator.ValidateApprenticeship(apprenticeship);
-            if (validatorResult.Any())
-            {
-                apprenticeship.AddErrorsFromDictionary(validatorResult);
-            }
-
-            if (apprenticeship.ErrorDictionary.Any())
-            {
-                return await RedisplayCreateApprenticeshipView(apprenticeship);
-            }
-
-            try
-            {
-                await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName),
-                    OwinWrapper.GetClaimValue(DasClaimTypes.Email));
-            }
-            catch (InvalidRequestException ex)
-            {
-                apprenticeship.AddErrorsFromDictionary(ex.ErrorMessages);
-                return await RedisplayCreateApprenticeshipView(apprenticeship);
-            }
-
-            return RedirectToAction("Details", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/apprenticeships/{hashedApprenticeshipId}/edit")]
-        public async Task<ActionResult> EditApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+        public ActionResult EditApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var model = await _employerCommitmentsOrchestrator.GetApprenticeship(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, hashedApprenticeshipId);
-            AddErrorsToModelState(model.Data.ValidationErrors);
-            return View("EditApprenticeshipEntry", model);
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/apprenticeships/{hashedApprenticeshipId}/view")]
-        public async Task<ActionResult> ViewApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+        public ActionResult ViewApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var model = await _employerCommitmentsOrchestrator.GetApprenticeshipViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, hashedApprenticeshipId);
-            return View("ViewApprenticeshipEntry", model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("{hashedCommitmentId}/apprenticeships/{HashedApprenticeshipId}/edit")]
-        public async Task<ActionResult> EditApprenticeship(ApprenticeshipViewModel apprenticeship)
-        {
-            if (!ModelState.IsValid)
-            {
-                apprenticeship.AddErrorsFromModelState(ModelState);
-            }
-
-            var validatorResult = await _employerCommitmentsOrchestrator.ValidateApprenticeship(apprenticeship);
-            if (validatorResult.Any())
-            {
-                apprenticeship.AddErrorsFromDictionary(validatorResult);
-            }
-
-            if (apprenticeship.ErrorDictionary.Any())
-            {
-                return await RedisplayEditApprenticeshipView(apprenticeship);
-            }
-
-            try
-            {
-                await _employerCommitmentsOrchestrator.UpdateApprenticeship(apprenticeship, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName), OwinWrapper.GetClaimValue(DasClaimTypes.Email));
-            }
-            catch (InvalidRequestException ex)
-            {
-                apprenticeship.AddErrorsFromDictionary(ex.ErrorMessages);
-                return await RedisplayEditApprenticeshipView(apprenticeship);
-            }
-
-            return RedirectToAction("Details", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/finished")]
-        public async Task<ActionResult> FinishedEditing(string hashedAccountId, string hashedCommitmentId)
+        public ActionResult FinishedEditing(string hashedAccountId, string hashedCommitmentId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var response = await _employerCommitmentsOrchestrator.GetFinishEditingViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId);
-
-            return View(response);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("{hashedCommitmentId}/finished")]
-        public async Task<ActionResult> FinishedEditing(FinishEditingViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                var response = await _employerCommitmentsOrchestrator.GetFinishEditingViewModel(viewModel.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId);
-                return View(response);
-            }
-
-            if(viewModel.SaveStatus.IsSend())
-            {
-                return RedirectToAction("SubmitExistingCommitment", 
-                    new { viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.SaveStatus });
-            }
-
-            if (viewModel.SaveStatus.IsFinalApproval())
-            {
-                var userDisplayName = OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName);
-                var userEmail = OwinWrapper.GetClaimValue(DasClaimTypes.Email);
-                var userId = OwinWrapper.GetClaimValue(@"sub");
-                await _employerCommitmentsOrchestrator.ApproveCommitment(viewModel.HashedAccountId, userId, userDisplayName, userEmail, viewModel.HashedCommitmentId, viewModel.SaveStatus);
-
-                return RedirectToAction("Approved",
-                    new { viewModel.HashedAccountId, viewModel.HashedCommitmentId });
-            }
-
-            var flashmessage = new FlashMessageViewModel
-            {
-                Headline = "Details saved but not sent",
-                Severity = FlashMessageSeverityLevel.Info
-            };
-
-            AddFlashMessageToCookie(flashmessage);
-
-            return RedirectToAction("YourCohorts", new { hashedAccountId = viewModel.HashedAccountId });
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/CohortApproved")]
-        public async Task<ActionResult> Approved(string hashedAccountId, string hashedCommitmentId)
+        public ActionResult Approved(string hashedAccountId, string hashedCommitmentId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var model = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForExistingCommitment(
-                hashedAccountId,
-                hashedCommitmentId,
-                OwinWrapper.GetClaimValue(@"sub"));
-
-            var currentStatusCohortAny = await _employerCommitmentsOrchestrator
-                .AnyCohortsForCurrentStatus(hashedAccountId, RequestStatus.ReadyForApproval);
-            model.Data.BackLink = currentStatusCohortAny
-                ? new LinkViewModel { Text = "Return to view cohorts", Url = Url.Action("ReadyForReview", new { hashedAccountId }) }
-                : new LinkViewModel { Text = "Return to Your cohorts", Url = Url.Action("YourCohorts", new { hashedAccountId }) };
-
-            return View(model);
+            return RedirectPermanentCommitmentsUrl();
         }
 
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/submit")]
-        public async Task<ActionResult> SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
+        public ActionResult SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var response = await _employerCommitmentsOrchestrator.GetSubmitCommitmentModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, saveStatus);
-            return View("SubmitCommitmentEntry", response);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("{hashedCommitmentId}/submit")]
-        public async Task<ActionResult> SubmitExistingCommitmentEntry(SubmitCommitmenViewModel model)
-        {
-            var userDisplayName = OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName);
-            var userEmail = OwinWrapper.GetClaimValue(DasClaimTypes.Email);
-            var userId = OwinWrapper.GetClaimValue(@"sub");
-
-            await _employerCommitmentsOrchestrator.SubmitCommitment(model, userId, userDisplayName, userEmail);
-
-            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId, model.SaveStatus });
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("Submit")]
-        public async Task<ActionResult> SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string legalEntityAddress, short legalEntitySource, string providerId, string providerName, string cohortRef, SaveStatus? saveStatus)
+        public ActionResult SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string legalEntityAddress, short legalEntitySource, string providerId, string providerName, string cohortRef, SaveStatus? saveStatus)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            if (string.IsNullOrWhiteSpace(legalEntityCode)
-                || string.IsNullOrWhiteSpace(legalEntityName)
-                || string.IsNullOrWhiteSpace(providerId)
-                || string.IsNullOrWhiteSpace(providerName)
-                || string.IsNullOrWhiteSpace(cohortRef)
-                || string.IsNullOrWhiteSpace(legalEntityAddress)
-                || !saveStatus.HasValue)
-            {
-                return RedirectToAction("Inform", new { hashedAccountId });
-            }
-
-            var response = await _employerCommitmentsOrchestrator.GetSubmitNewCommitmentModel
-                (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, legalEntityName, legalEntityAddress, legalEntitySource, providerId, providerName, cohortRef, saveStatus.Value);
-
-            return View("SubmitCommitmentEntry", response);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("submit")]
-        public async Task<ActionResult> SubmitNewCommitmentEntry(SubmitCommitmenViewModel model)
-        {
-            var userDisplayName = OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName);
-            var userEmail = OwinWrapper.GetClaimValue(DasClaimTypes.Email);
-            var userId = OwinWrapper.GetClaimValue(@"sub");
-
-            var response = await _employerCommitmentsOrchestrator.CreateProviderAssignedCommitment(model, userId, userDisplayName, userEmail);
-
-            return RedirectToAction("AcknowledgementNew", new { hashedAccountId = model.HashedAccountId, hashedCommitmentId = response.Data });
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/NewCohortAcknowledgement")]
-        public async Task<ActionResult> AcknowledgementNew(string hashedAccountId, string hashedCommitmentId)
+        public ActionResult AcknowledgementNew(string hashedAccountId, string hashedCommitmentId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var response = await _employerCommitmentsOrchestrator
-                .GetAcknowledgementModelForExistingCommitment(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
-
-            response.Data.Content = GetAcknowledgementContent(SaveStatus.Save);
-
-            return View("Acknowledgement", response);
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Acknowledgement")]
-        public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
+        public ActionResult AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-                return View("AccessDenied");
-
-            var response = await _employerCommitmentsOrchestrator
-                .GetAcknowledgementModelForExistingCommitment(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
-
-            var status = GetRequestStatusFromCookie();
-            bool anyCohortsLeft;
-            if (status == RequestStatus.ReadyForReview)
-            {
-                anyCohortsLeft = await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(hashedAccountId, RequestStatus.ReadyForApproval, status);
-            }
-            else
-            {
-                anyCohortsLeft= await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(hashedAccountId, status);
-            }
-            var returnToCohortsList = 
-                   status != RequestStatus.None 
-                && anyCohortsLeft;
-
-            var returnUrl = GetReturnUrl(status, hashedAccountId);
-            response.Data.BackLink = string.IsNullOrEmpty(returnUrl) || !returnToCohortsList
-                ? new LinkViewModel { Url = Url.Action("YourCohorts", new { hashedAccountId }), Text = "Return to Your cohorts" }
-                : new LinkViewModel { Url = returnUrl, Text = "Go back to view cohorts" };
-
-            response.Data.Content = GetAcknowledgementContent(saveStatus);
-            
-            
-
-            return View("Acknowledgement", response);
-        }
-
-        private AcknowledgementContent GetAcknowledgementContent(SaveStatus saveStatus)
-        {
-            switch (saveStatus)
-            {
-                case SaveStatus.AmendAndSend:
-                    return new AcknowledgementContent
-                               {
-                                   Title = "Cohort sent for review",
-                                   Text = "Your training provider will review your cohort and contact you as soon as possible."
-                               };
-                case SaveStatus.ApproveAndSend:
-                    return new AcknowledgementContent
-                               {
-                                   Title = "Cohort approved and sent to training provider",
-                                   Text = "Your training provider will review your cohort and either confirm the information is correct or contact you to suggest changes."
-                               };
-                case SaveStatus.Save:
-                    return new AcknowledgementContent
-                               {
-                                   Title = "Message sent",
-                                   Text =
-                                   "Your training provider will review your request and contact you as soon as possible - either with questions or to ask you to review the apprentice details they've added."
-                               };
-            }
-            return new AcknowledgementContent();
+            return RedirectPermanentCommitmentsUrl();
         }
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Delete")]
-        public async Task<ActionResult> DeleteApprenticeshipConfirmation(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+        public ActionResult DeleteApprenticeshipConfirmation(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
-            {
-                return View("AccessDenied");
-            }
-
-            var response = await _employerCommitmentsOrchestrator.GetDeleteApprenticeshipViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, hashedApprenticeshipId);
-
-            return View(response);
+            return RedirectPermanentCommitmentsUrl();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Delete")]
-        public async Task<ActionResult> DeleteApprenticeshipConfirmation(DeleteApprenticeshipConfirmationViewModel viewModel)
+        private RedirectResult RedirectPermanentCommitmentsUrl()
         {
-            if (!ModelState.IsValid)
-            {
-                var errorResponse = await _employerCommitmentsOrchestrator.GetDeleteApprenticeshipViewModel(viewModel.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId, viewModel.HashedApprenticeshipId);
+            var baseUrl = CloudConfigurationManager.GetSetting("EmployerCommitmentsBaseUrl").EndsWith("/")
+                ? CloudConfigurationManager.GetSetting("EmployerCommitmentsBaseUrl")
+                : CloudConfigurationManager.GetSetting("EmployerCommitmentsBaseUrl") + "/";
 
-                return View(errorResponse);
-            }
+            var path = Request.Url.AbsolutePath;
 
-            if (viewModel.DeleteConfirmed.HasValue && viewModel.DeleteConfirmed.Value)
-            {
-                await _employerCommitmentsOrchestrator.DeleteApprenticeship(viewModel, OwinWrapper.GetClaimValue(@"sub"), OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName), OwinWrapper.GetClaimValue(DasClaimTypes.Email));
+            return RedirectPermanent($"{baseUrl}{path}");
 
-                var flashMessage = new FlashMessageViewModel { Severity = FlashMessageSeverityLevel.Okay, Message = string.Format($"Apprentice record for {viewModel.ApprenticeshipName} deleted") };
-                AddFlashMessageToCookie(flashMessage);
-                
-                return RedirectToAction("Details", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId });
-            }
-
-            return RedirectToAction("EditApprenticeship", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.HashedApprenticeshipId });
-        }
-
-        private RequestStatus GetRequestStatusFromCookie()
-        {
-            var status = _lastCohortCookieStorageService.Get(LastCohortPageCookieKey);
-
-            if (string.IsNullOrWhiteSpace(status))
-            { 
-                return RequestStatus.None;
-            }
-
-            return (RequestStatus)Enum.Parse(typeof(RequestStatus), status);
-        }
-
-        private void SaveRequestStatusInCookie(RequestStatus status)
-        {
-            _lastCohortCookieStorageService.Delete(LastCohortPageCookieKey);
-            _lastCohortCookieStorageService.Create(status.ToString(), LastCohortPageCookieKey);
-        }
-
-        private void AddErrorsToModelState(Dictionary<string, string> dict)
-        {
-            foreach (var error in dict)
-            {
-                ModelState.AddModelError(error.Key, error.Value);
-            }
-        }
-
-        private async Task<ActionResult> RedisplayCreateApprenticeshipView(ApprenticeshipViewModel apprenticeship)
-        {
-            var response = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship.HashedCommitmentId);
-            response.Data.Apprenticeship = apprenticeship;
-
-            if (response.Data.Apprenticeship.ErrorDictionary.Any())
-            {
-                response.FlashMessage = new FlashMessageViewModel
-                {
-                    Headline = "Errors to fix",
-                    Message = "Check the following details:",
-                    ErrorMessages = apprenticeship.ErrorDictionary,
-                    Severity = FlashMessageSeverityLevel.Error
-                };
-            }
-
-            return View("CreateApprenticeshipEntry", response);
-        }
-
-        private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship)
-        {
-            var response = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship.HashedCommitmentId);
-            response.Data.Apprenticeship = apprenticeship;
-
-            if (response.Data.Apprenticeship.ErrorDictionary.Any())
-            {
-                response.FlashMessage = new FlashMessageViewModel
-                {
-                    Headline = "Errors to fix",
-                    Message = "Check the following details:",
-                    ErrorMessages = apprenticeship.ErrorDictionary,
-                    Severity = FlashMessageSeverityLevel.Error
-                };
-            }
-
-            return View("EditApprenticeshipEntry", response);
-        }
-
-        private string GetReturnUrl(RequestStatus status, string hashedAccountId)
-        {
-            switch (status)
-            {
-                case RequestStatus.NewRequest:
-                    return Url.Action("Draft", new { hashedAccountId });
-                case RequestStatus.ReadyForReview:
-                case RequestStatus.ReadyForApproval:
-                    return Url.Action("ReadyForReview", new { hashedAccountId });
-                default:
-                    return string.Empty;
-            }
-        }
-
-        private string GetReturnToListUrl(string hashedAccountId)
-        {
-            switch (GetRequestStatusFromCookie())
-            {
-                case RequestStatus.WithProviderForApproval:
-                case RequestStatus.SentForReview:
-                    return Url.Action("WithProvider", new { hashedAccountId });
-                case RequestStatus.NewRequest:
-                    return Url.Action("Draft", new { hashedAccountId });
-                case RequestStatus.ReadyForReview:
-                case RequestStatus.ReadyForApproval:
-                    return Url.Action("ReadyForReview", new { hashedAccountId });
-                default:
-                    return Url.Action("YourCohorts", new { hashedAccountId });
-            }
-        }
-
-        protected override void OnException(ExceptionContext filterContext)
-        {
-            if (filterContext.Exception is InvalidStateException)
-            {
-                var hashedAccountId = filterContext.RouteData.Values["hashedAccountId"];
-
-                filterContext.ExceptionHandled = true;
-                filterContext.Result = RedirectToAction("InvalidState", "Error", new { hashedAccountId });
-            }
-        }
-
-        private void SetFlashMessageOnModel<T>(OrchestratorResponse<T> model)
-        {
-            var flashMessage = GetFlashMessageViewModelFromCookie();
-            if (flashMessage!=null)
-            {
-                model.FlashMessage = flashMessage;
-            }
-        }
-
-        private async Task<bool> IsUserRoleAuthorized(string hashedAccountId, params Role[] roles)
-        {
-            return await _employerCommitmentsOrchestrator.AuthorizeRole(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), roles);
-        }
-
-        private void SetErrorMessage(OrchestratorResponse orchestratorResponse, Dictionary<string, string> errorDictionary)
-        {
-            orchestratorResponse.FlashMessage = new FlashMessageViewModel
-            {
-                Headline = "Errors to fix",
-                Message = "Check the following details:",
-                ErrorMessages = errorDictionary,
-                Severity = FlashMessageSeverityLevel.Error
-            };
         }
     }
 }
