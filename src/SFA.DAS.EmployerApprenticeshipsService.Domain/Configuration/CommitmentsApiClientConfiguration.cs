@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 
@@ -9,5 +10,6 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string ClientToken { get; set; }
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
+        public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
     }
 }

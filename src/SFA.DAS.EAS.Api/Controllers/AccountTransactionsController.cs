@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Http;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Api.Attributes;
 using SFA.DAS.EAS.Api.Orchestrators;
 
@@ -32,12 +33,12 @@ namespace SFA.DAS.EAS.Api.Controllers
             return Ok(result.Data);
         }
 
-        [Route("{year}/{month}", Name = "GetTransactions")]
+        [Route("{year?}/{month?}", Name = "GetTransactions")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetTransactions(string hashedAccountId, int year, int month)
+        public async Task<IHttpActionResult> GetTransactions(string hashedAccountId, int year = 0, int month = 0)
         {
-            var result = await _orchestrator.GetAccountTransactions(hashedAccountId, year, month);
+            var result = await GetAccountTransactions(hashedAccountId, year, month);
 
             if (result.Data == null)
             {
@@ -51,6 +52,22 @@ namespace SFA.DAS.EAS.Api.Controllers
             }
 
             return Ok(result.Data);
+        }
+
+        private async Task<OrchestratorResponse<TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month)
+        {
+            if (year == 0)
+            {
+                year = DateTime.Now.Year;
+            }
+
+            if (month == 0)
+            {
+                month = DateTime.Now.Month;
+            }
+
+            var result = await _orchestrator.GetAccountTransactions(hashedAccountId, year, month);
+            return result;
         }
     }
 }

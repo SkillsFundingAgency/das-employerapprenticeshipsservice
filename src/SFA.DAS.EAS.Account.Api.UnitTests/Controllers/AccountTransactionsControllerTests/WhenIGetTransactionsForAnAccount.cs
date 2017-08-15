@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
 using System.Web.Http.Routing;
@@ -82,6 +83,53 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
 
             model?.Content.PreviousMonthUri.Should().Be(expectedUri);
+        }
+
+        [Test]
+        public async Task AndNoMonthIsProvidedThenTheCurrentMonthIsUsed()
+        {
+            var hashedAccountId = "ABC123";
+            var year = 2017;
+            var transactionsResponse = new GetEmployerAccountTransactionsResponse
+            {
+                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() } },
+                AccountHasPreviousTransactions = false
+            };
+            _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == DateTime.Now.Month))).ReturnsAsync(transactionsResponse);
+
+            var response = await _controller.GetTransactions(hashedAccountId, year);
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<TransactionsViewModel>>(response);
+            var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
+
+            model?.Content.Should().NotBeNull();
+            model?.Content.ShouldAllBeEquivalentTo(transactionsResponse.Data.TransactionLines);
+            model?.Content.PreviousMonthUri.Should().BeNullOrEmpty();
+            _urlHelper.Verify(x => x.Route(It.IsAny<string>(), It.IsAny<object>()), Times.Never);
+        }
+
+        [Test]
+        public async Task AndNoYearIsProvidedThenTheCurrentYearIsUsed()
+        {
+            var hashedAccountId = "ABC123";
+            var transactionsResponse = new GetEmployerAccountTransactionsResponse
+            {
+                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() } },
+                AccountHasPreviousTransactions = false
+            };
+            _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == DateTime.Now.Year && q.Month == DateTime.Now.Month))).ReturnsAsync(transactionsResponse);
+
+            var response = await _controller.GetTransactions(hashedAccountId);
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<TransactionsViewModel>>(response);
+            var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
+
+            model?.Content.Should().NotBeNull();
+            model?.Content.ShouldAllBeEquivalentTo(transactionsResponse.Data.TransactionLines);
+            model?.Content.PreviousMonthUri.Should().BeNullOrEmpty();
+            _urlHelper.Verify(x => x.Route(It.IsAny<string>(), It.IsAny<object>()), Times.Never);
         }
     }
 }

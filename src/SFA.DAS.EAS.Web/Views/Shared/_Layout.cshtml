@@ -12,6 +12,10 @@
 <head>
     <meta charset="utf-8" />
     <title>@ViewBag.Title - Manage apprentices</title>
+    @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDesc))
+    {
+        <meta name="description" content="@ViewBag.MetaDesc">
+    }
     <!--[if gt IE 8]><!-->
     <link href="~/dist/css/govuk-template.css" media="screen" rel="stylesheet" /><!--<![endif]-->
     <!--[if IE 6]><link href="/dist/css/govuk-template-ie6.css" media="screen" rel="stylesheet" /><![endif]-->
@@ -29,6 +33,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/dist/images/apple-touch-icon-76x76.png">
     <link rel="apple-touch-icon-precomposed" href="/dist/images/apple-touch-icon-60x60.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <meta property="og:image" content="/dist/images/opengraph-image.png">
     <meta name="msapplication-config" content="none" />
     <link href="~/dist/css/select2.min.css" media="all" rel="stylesheet" />

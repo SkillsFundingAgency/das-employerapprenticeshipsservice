@@ -146,6 +146,15 @@ namespace SFA.DAS.EAS.Account.Api.Client
             return JsonConvert.DeserializeObject<TransactionsViewModel>(json);
         }
 
+        public async Task<TransactionsViewModel> GetTransactions(string accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/transactions";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<TransactionsViewModel>(json);
+        }
+
         public async Task<ICollection<TransactionSummaryViewModel>> GetTransactionSummary(string accountId)
         {
             var baseUrl = GetBaseUrl();

@@ -54,7 +54,16 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
                     }
                     else
                     {
-                        instance.Dependencies.AddForConstructorParameter(messagePublisher, new AzureServiceBusMessageService(config.ServiceBusConnectionString, queueName.Name));
+                        var serviceBusConnectionString = config.ServiceBusConnectionString;
+
+                        if (queueName.CustomAttributes?.FirstOrDefault()?.ConstructorArguments.FirstOrDefault().Value != null)
+                        {
+                            var connectionKey = queueName.CustomAttributes?.FirstOrDefault()?.ConstructorArguments.FirstOrDefault().Value.ToString();
+                            
+                            serviceBusConnectionString = string.IsNullOrWhiteSpace(connectionKey)? serviceBusConnectionString : config.ServiceBusConnectionStrings[connectionKey];
+                        }
+                        
+                        instance.Dependencies.AddForConstructorParameter(messagePublisher, new AzureServiceBusMessageService(serviceBusConnectionString, queueName.Name));
                     }   
                 }
             }

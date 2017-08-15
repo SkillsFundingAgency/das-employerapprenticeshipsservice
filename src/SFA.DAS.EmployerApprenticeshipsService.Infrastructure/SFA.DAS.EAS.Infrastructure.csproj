@@ -275,6 +275,7 @@
     <Compile Include="Services\PdfService.cs" />
     <Compile Include="Services\ProviderEmailLookupService.cs" />
     <Compile Include="Services\ReferenceDataService.cs" />
+    <Compile Include="Services\RefreshEmployerLevyService.cs" />
     <Compile Include="Services\RestService.cs" />
     <Compile Include="Services\MultiVariantTestingService.cs" />
     <Compile Include="Services\PaymentService.cs" />
