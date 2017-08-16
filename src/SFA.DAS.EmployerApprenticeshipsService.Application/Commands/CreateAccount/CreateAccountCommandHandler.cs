@@ -15,6 +15,7 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
@@ -117,7 +118,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         {
             foreach (var empref in emprefs)
             {
-                await _messagePublisher.PublishAsync(new AddPayeSchemeMessage()
+                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage
                 {
                     EmpRef= empref
                 });

@@ -17,6 +17,7 @@ using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Notifications.Api.Client;
 using StructureMap;
 using StructureMap.Graph;
 using WebGrease.Css.Extensions;
@@ -51,6 +52,8 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 
             For<IEmployerCommitmentApi>().Use(commitmentsApi.Object);
 
+            For<INotificationsApi>().Use(() => Mock.Of<INotificationsApi>());
+            
             AddMediatrRegistrations();
 
             RegisterMapper();
