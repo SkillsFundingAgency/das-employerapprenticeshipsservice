@@ -4077,6 +4077,99 @@ a.close svg {
   float: right;
 }
 
+.timeline {
+  position: relative;
+}
+
+.timeline:before {
+  content: "";
+  background: #bfc1c3;
+  width: 1px;
+  position: absolute;
+  top: 40px;
+  bottom: 0;
+  display: block;
+}
+
+.timeline li {
+  position: relative;
+}
+
+.timeline li:last-child {
+  padding-left: 15px;
+  border-left: 1px solid white;
+}
+
+.timeline li:last-child:before {
+  position: absolute;
+  top: 5px;
+  left: -4px;
+  background: #bfc1c3;
+  width: 9px;
+  height: 9px;
+  content: "";
+  display: block;
+  border-radius: 50%;
+  left: -5px;
+}
+
+.timeline li:last-child:after {
+  content: "";
+  background: #bfc1c3;
+  width: 1px;
+  height: 10px;
+  position: absolute;
+  top: 0;
+  left: -1px;
+  display: block;
+}
+
+.timeline h4 {
+  padding-left: 15px;
+  color: #6f777b;
+  position: absolute;
+  display: none;
+  top: 3px;
+}
+
+.timeline li.first {
+  padding-top: 30px;
+}
+
+.timeline li.first h4 {
+  display: block;
+}
+
+.timeline p {
+  margin: 0;
+  padding-left: 15px;
+}
+
+.timeline p.activity {
+  position: relative;
+}
+
+.timeline p.activity:before {
+  position: absolute;
+  top: 5px;
+  left: -4px;
+  background: #bfc1c3;
+  width: 9px;
+  height: 9px;
+  content: "";
+  display: block;
+  border-radius: 50%;
+}
+
+.timeline .meta {
+  color: #6f777b;
+  padding-bottom: 15px;
+}
+
+.timeline .meta a {
+  display: block;
+}
+
 .search-results section {
   float: left;
   width: 66.6666666667%;
