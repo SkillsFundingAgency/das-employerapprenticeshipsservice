@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
@@ -83,7 +84,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 
         private async Task QueuePayeRemovedMessage(string payeRef)
         {
-            await _messagePublisher.PublishAsync(new DeletePayeSchemeMessage {EmpRef = payeRef});
+            await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage { EmpRef = payeRef});
         }
 
         private async Task AddAuditEntry(string userId, string payeRef, string accountId)

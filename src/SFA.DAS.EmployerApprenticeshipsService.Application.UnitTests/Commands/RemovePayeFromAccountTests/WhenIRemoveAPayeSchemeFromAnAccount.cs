@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
@@ -182,7 +183,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             await _handler.Handle(command);
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<DeletePayeSchemeMessage>(c => c.EmpRef.Equals(command.PayeRef))), Times.Once);
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeDeletedMessage>(c => c.EmpRef.Equals(command.PayeRef))), Times.Once);
         }
     }
 }

@@ -15,6 +15,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
@@ -117,7 +118,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             await _addPayeToAccountCommandHandler.Handle(command);
 
             //Assert
-            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<AddPayeSchemeMessage>(c=> c.EmpRef.Equals(command.Empref))));
+            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<PayeSchemeCreatedMessage>(c=> c.EmpRef.Equals(command.Empref))));
         }
 
         [Test]

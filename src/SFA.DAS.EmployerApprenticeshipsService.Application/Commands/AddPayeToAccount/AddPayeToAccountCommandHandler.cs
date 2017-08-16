@@ -13,6 +13,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.PAYE;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
@@ -104,7 +105,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private async Task AddPayeScheme(string payeRef)
         {
             await _messagePublisher.PublishAsync(
-                new AddPayeSchemeMessage
+                new PayeSchemeCreatedMessage
                 {
                    EmpRef = payeRef
                 });
