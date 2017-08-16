@@ -41,7 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\AccountCreatedMessage.cs" />
+    <Compile Include="Messages\PayeSchemeCreatedMessage.cs" />
     <Compile Include="Messages\AgreementCreatedMessage.cs" />
+    <Compile Include="Messages\PayeSchemeDeletedMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
