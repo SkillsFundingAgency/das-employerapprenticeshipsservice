@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using MediatR;
-using Microsoft.Azure;
 using Moq;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -87,23 +86,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 		
 		private void RegisterAuditService()
         {
-            var environment = Environment.GetEnvironmentVariable("DASENV");
-            if (string.IsNullOrEmpty(environment))
-            {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
-            }
-
-            For<IAuditMessageFactory>().Use<AuditMessageFactory>().Singleton();
-
-            if (environment.Equals("LOCAL"))
-            {
-                For<IAuditApiClient>().Use<StubAuditApiClient>();
-            }
-            else
-            {
-                For<IAuditApiClient>().Use<AuditApiClient>();
-            }
-
+            For<IAuditApiClient>().Use<StubAuditApiClient>();
         }
 
     }
