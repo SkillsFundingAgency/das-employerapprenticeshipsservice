@@ -6,6 +6,7 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
+using SFA.DAS.EAS.Application.Notifications.CreateAgreementSignedMessage;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -81,6 +82,18 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             var genericEvent = _genericEventFactory.Create(agreementEvent);
 
             await _mediator.SendAsync(new PublishGenericEventCommand {Event = genericEvent});
+
+            await CreateAgreementSignedNotificationMessage(accountId, agreement.LegalEntityId, agreementId);
+        }
+
+        private async Task CreateAgreementSignedNotificationMessage(long accountId, long legalEntityId, long agreementId)
+        {
+            await _mediator.PublishAsync(new CreateAgreementSignedMessageCommand
+            {
+                AccountId = accountId,
+                LegalEntityId = legalEntityId,
+                AgreementId = agreementId
+            });
         }
 
         private async Task AddAuditEntry(SignEmployerAgreementCommand message, long accountId, long agreementId)
