@@ -125,20 +125,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
             else
             {
-                return View("../Organisation/FindAddress", response);
+                return View("FindAddress", response);
             }
         }
 
         private OrchestratorResponse<T> CreateSearchTermValidationErrorModel<T>(T data)
         {
             var model = new OrchestratorResponse<T> { Data = data };
-            SetSearchTermValidationModelProperties(model);
-            return model;
-        }
-
-        private OrchestratorResponse CreateSearchTermValidationErrorModel()
-        {
-            var model = new OrchestratorResponse();
             SetSearchTermValidationModelProperties(model);
             return model;
         }
