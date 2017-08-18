@@ -11,6 +11,8 @@ using SFA.DAS.EAS.Domain.Extensions;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 {
@@ -21,6 +23,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         private readonly IMediator _mediator;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly ILegalEntityEventFactory _legalEntityEventFactory;
+        private readonly IMessagePublisher _messagePublisher;
 
 
         public CreateLegalEntityCommandHandler(
@@ -28,13 +31,15 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             IMembershipRepository membershipRepository, 
             IMediator mediator, 
             IGenericEventFactory genericEventFactory,
-            ILegalEntityEventFactory legalEntityEventFactory)
+            ILegalEntityEventFactory legalEntityEventFactory,
+            IMessagePublisher messagePublisher)
         {
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
             _mediator = mediator;
             _genericEventFactory = genericEventFactory;
             _legalEntityEventFactory = legalEntityEventFactory;
+            _messagePublisher = messagePublisher;
         }
 
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
@@ -54,10 +59,23 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
             await NotifyLegalEntityCreated(message.HashedAccountId, agreementView.LegalEntityId);
 
+            await CreateAgreementCreatedNotificationMessage(owner.AccountId, agreementView.LegalEntityId,
+                agreementView.Id);
+
             return new CreateLegalEntityCommandResponse
             {
                 AgreementView = agreementView
             };
+        }
+
+        private async Task CreateAgreementCreatedNotificationMessage(long accountId, long legalEntityId, long agreementId)
+        {
+            await _messagePublisher.PublishAsync(new AgreementCreatedMessage
+            {
+                AccountId = accountId,
+                LegalEntityId = legalEntityId,
+                AgreementId = agreementId
+            });
         }
 
         private async Task NotifyLegalEntityCreated(string hashedAccountId, long legalEntityId)

@@ -15,6 +15,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.Events.Api.Types;
+using SFA.DAS.Messaging;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
@@ -60,7 +61,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
             _genericEventHandler.Setup(x => x.Create(It.Is<AgreementRemovedEvent>(c => c.HashedAgreementId.Equals(ExpectedHashedEmployerAgreementId)))).Returns(new GenericEvent {Payload = ExpectedHashedEmployerAgreementId});
 
             _command = new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = ExpectedUserId,HashedLegalAgreementId = ExpectedHashedEmployerAgreementId };
-            _handler = new RemoveLegalEntityCommandHandler(_validator.Object, _logger.Object, _repository.Object, _mediator.Object, _hashingService.Object, _genericEventHandler.Object, _employerAgreementEventFactory.Object);
+            _handler = new RemoveLegalEntityCommandHandler(_validator.Object, _logger.Object, _repository.Object, _mediator.Object, _hashingService.Object, _genericEventHandler.Object, _employerAgreementEventFactory.Object, Mock.Of<IMessagePublisher>());
         }
 
         [Test]
