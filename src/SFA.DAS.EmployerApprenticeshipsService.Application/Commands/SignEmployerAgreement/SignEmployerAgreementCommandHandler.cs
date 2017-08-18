@@ -12,6 +12,8 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
@@ -25,6 +27,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
         private readonly IEmployerAgreementEventFactory _agreementEventFactory;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IMediator _mediator;
+        private readonly IMessagePublisher _messagePublisher;
 
         public SignEmployerAgreementCommandHandler(
             IMembershipRepository membershipRepository,
@@ -33,7 +36,8 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             IValidator<SignEmployerAgreementCommand> validator,
             IEmployerAgreementEventFactory agreementEventFactory,
             IGenericEventFactory genericEventFactory,
-            IMediator mediator)
+            IMediator mediator,
+            IMessagePublisher messagePublisher)
         {
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
@@ -42,6 +46,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             _agreementEventFactory = agreementEventFactory;
             _genericEventFactory = genericEventFactory;
             _mediator = mediator;
+            _messagePublisher = messagePublisher;
         }
 
         protected override async Task HandleCore(SignEmployerAgreementCommand message)
@@ -88,7 +93,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
         private async Task CreateAgreementSignedNotificationMessage(long accountId, long legalEntityId, long agreementId)
         {
-            await _mediator.PublishAsync(new CreateAgreementSignedMessageCommand
+            await _messagePublisher.PublishAsync(new AgreementSignedMessage
             {
                 AccountId = accountId,
                 LegalEntityId = legalEntityId,
