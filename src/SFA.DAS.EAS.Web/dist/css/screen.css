@@ -3595,6 +3595,19 @@ legend {
   display: inline-block;
 }
 
+.form-group-filter {
+  clear: both;
+  background: red;
+}
+
+.form-group-filter .form-group {
+  margin-top: 0;
+}
+
+.form-group-filter .form-control {
+  width: 100%;
+}
+
 .search-field {
   position: relative;
   margin-bottom: 15px;
@@ -4771,6 +4784,30 @@ a.close svg {
   display: block;
 }
 
+@media (min-width: 641px) {
+  .timeline--complete {
+    margin-left: 200px;
+  }
+  .timeline--complete h4 {
+    width: 180px;
+    margin-left: -200px;
+    top: auto;
+    text-align: right;
+    padding-left: 0;
+    padding-right: 20px;
+  }
+  .timeline--complete .meta a {
+    display: inline-block;
+    padding-left: 10px;
+    position: relative;
+  }
+  .timeline--complete .meta a:before {
+    content: "-";
+    position: absolute;
+    left: 0;
+  }
+}
+
 .search-results section {
   padding: 0 15px;
   -webkit-box-sizing: border-box;
@@ -4865,14 +4902,14 @@ a.close svg {
 .filter {
   margin-bottom: 20px;
   border: 1px solid #bfc1c3;
-  padding: 15px;
+  padding: 20px;
 }
 
 .filter h3 {
   background: #dee0e2;
   padding: 5px 10px;
-  margin: -15px;
-  margin-bottom: 15px;
+  margin: -20px;
+  margin-bottom: 20px;
   font-family: "nta", Arial, sans-serif;
   font-weight: 700;
   text-transform: none;
@@ -4890,6 +4927,10 @@ a.close svg {
 .filter .form-group {
   margin-top: 20px;
   margin-bottom: 0;
+}
+
+.filter .form-control {
+  width: 100%;
 }
 
 .validation-summary-valid,

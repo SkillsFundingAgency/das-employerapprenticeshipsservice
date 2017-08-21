@@ -73,3 +73,29 @@
         }
     }
 }
+
+.timeline--complete {
+    @include media(tablet) {
+        margin-left: 200px;
+        h4 {
+            width: 180px;
+            margin-left: -200px;
+            top: auto;
+            text-align: right;
+            padding-left: 0;
+            padding-right: 20px;
+        }
+        .meta {
+            a {
+                display: inline-block;
+                padding-left: 10px;
+                position: relative;
+                &:before {
+                    content: "-";
+                    position: absolute;
+                    left: 0;
+                }
+            }
+        }
+    }
+}
