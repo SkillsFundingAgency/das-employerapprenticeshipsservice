@@ -125,6 +125,9 @@
       <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.33424\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Tasks.Api.Types, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Types.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
       <Private>True</Private>
@@ -171,6 +174,7 @@
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
     <Compile Include="Interfaces\IMultiVariantTestingService.cs" />
     <Compile Include="Interfaces\IRefreshEmployerLevyService.cs" />
+    <Compile Include="Interfaces\ITaskService.cs" />
     <Compile Include="Models\Account\AccountHistoryEntry.cs" />
     <Compile Include="Models\Account\AccountStats.cs" />
     <Compile Include="Models\Account\CreateAccountResult.cs" />
@@ -314,6 +318,7 @@
     <Compile Include="Models\ApprenticeshipCourse\Standard.cs" />
     <Compile Include="Models\ApprenticeshipCourse\StandardsView.cs" />
     <Compile Include="Models\AccountTeam\TeamMember.cs" />
+    <Compile Include="TaskDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
