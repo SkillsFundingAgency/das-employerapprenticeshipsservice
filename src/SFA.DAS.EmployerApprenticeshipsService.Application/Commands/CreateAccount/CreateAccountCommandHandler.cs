@@ -6,9 +6,7 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -24,9 +22,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
     //TODO this needs changing to be a facade and calling individual commands for each component
     public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>
     {
-        [QueueName("employer_levy")]
-        public string add_paye_scheme { get; set; }
-
         private readonly IAccountRepository _accountRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMessagePublisher _messagePublisher;
@@ -78,13 +73,24 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             await CreateAuditEntries(message, returnValue, hashedAccountId, user);
 
+            await CreateAgreementCreatedNotificationMessage(returnValue.AccountId, returnValue.LegalEntityId,
+                returnValue.EmployerAgreementId);
+
             return new CreateAccountCommandResponse
             {
                 HashedAccountId = hashedAccountId
             };
         }
 
-        
+        private async Task CreateAgreementCreatedNotificationMessage(long accountId, long legalEntityId, long employerAgreementId)
+        {
+            await _messagePublisher.PublishAsync(new AgreementCreatedMessage
+            {
+                AccountId = accountId,
+                LegalEntityId = legalEntityId,
+                AgreementId = employerAgreementId
+            });
+        }
 
         private async Task NotifyAccountCreated(string hashedAccountId)
         {

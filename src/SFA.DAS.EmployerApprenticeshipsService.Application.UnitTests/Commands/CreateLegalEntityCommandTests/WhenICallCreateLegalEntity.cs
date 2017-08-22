@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.Messaging;
 
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTests
@@ -78,7 +79,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 _membershipRepository.Object, 
                 _mediator.Object, 
                 _genericEventFactory.Object,
-                _legalEntityEventFactory.Object);
+                _legalEntityEventFactory.Object,
+                Mock.Of<IMessagePublisher>());
         }
 
         [Test]

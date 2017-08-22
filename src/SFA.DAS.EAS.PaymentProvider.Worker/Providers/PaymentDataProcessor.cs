@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
             }
         }
 
-        private async Task ProcessMessage(Message<PaymentProcessorQueueMessage> message)
+        private async Task ProcessMessage(IMessage<PaymentProcessorQueueMessage> message)
         {
             if (message?.Content?.AccountId == null)
             {

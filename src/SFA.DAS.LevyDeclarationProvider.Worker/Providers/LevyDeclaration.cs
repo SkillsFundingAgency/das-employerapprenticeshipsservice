@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
             }
         }
 
-        private async Task ProcessMessage(Message<EmployerRefreshLevyQueueMessage> message)
+        private async Task ProcessMessage(IMessage<EmployerRefreshLevyQueueMessage> message)
         {
             if (message?.Content == null)
             {
