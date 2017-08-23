@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SFA.DAS.EAS.Application</RootNamespace>
     <AssemblyName>SFA.DAS.EAS.Application</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -370,6 +371,10 @@
     <Compile Include="Queries\GetAccountStats\GetAccountStatsQuery.cs" />
     <Compile Include="Queries\GetAccountStats\GetAccountStatsQueryValidator.cs" />
     <Compile Include="Queries\GetAccountStats\GetAccountStatsResponse.cs" />
+    <Compile Include="Queries\GetAccountTasks\GetAccountTasksQuery.cs" />
+    <Compile Include="Queries\GetAccountTasks\GetAccountTasksQueryHandler.cs" />
+    <Compile Include="Queries\GetAccountTasks\GetAccountTasksQueryValidator.cs" />
+    <Compile Include="Queries\GetAccountTasks\GetAccountTasksResponse.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersHandler.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersQuery.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersResponse.cs" />
