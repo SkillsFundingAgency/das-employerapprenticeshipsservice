@@ -162,11 +162,11 @@
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Tasks.API.Client, Version=1.7.0.39052, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.7.0.39052\lib\net45\SFA.DAS.Tasks.API.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Tasks.Api.Types, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.7.0.39052, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.7.0.39052\lib\net45\SFA.DAS.Tasks.API.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
@@ -280,6 +280,7 @@
     <Compile Include="Services\RestService.cs" />
     <Compile Include="Services\MultiVariantTestingService.cs" />
     <Compile Include="Services\PaymentService.cs" />
+    <Compile Include="Services\TaskService.cs" />
     <Compile Include="Services\UserWhiteListService.cs" />
   </ItemGroup>
   <ItemGroup>

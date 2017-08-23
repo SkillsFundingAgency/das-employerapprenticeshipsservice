@@ -113,7 +113,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             RegisterExecutionPolicies();
 
             RegisterLogger();
-        }
+        }  
 
         private void ConfigureNotificationsApi(NotificationsApiClientConfiguration config)
         {
