@@ -236,5 +236,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             //Assert
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeCreatedMessage>(c => c.EmpRef.Equals(epxectedPayeRef))), Times.Once());
         }
+
+        [Test]
+        public async Task ThenTheMessageIsAddedToTheAccountCreatedQueue()
+        {
+            //Arrange
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active" };
+
+            //Act
+            await _handler.Handle(createAccountCommand);
+
+            //Assert
+            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<AccountCreatedMessage>(c=>c.AccountId.Equals(ExpectedAccountId))),Times.Once);
+        }
     }
 }

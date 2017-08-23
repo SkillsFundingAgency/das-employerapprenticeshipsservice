@@ -69,6 +69,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             await QueueAddPayeSchemeMessage(emprefs);
 
+            await QueueAccountCreatedMessage(returnValue.AccountId);
+
             await NotifyAccountCreated(hashedAccountId);
 
             await CreateAuditEntries(message, returnValue, hashedAccountId, user);
@@ -129,6 +131,14 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                     EmpRef= empref
                 });
             }
+        }
+
+        private async Task QueueAccountCreatedMessage(long accountId)
+        {
+            await _messagePublisher.PublishAsync(new AccountCreatedMessage()
+            {
+                AccountId = accountId
+            });
         }
 
         private async Task<User> GetUser(CreateAccountCommand message)
