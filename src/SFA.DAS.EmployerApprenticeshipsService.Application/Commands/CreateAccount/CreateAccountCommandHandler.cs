@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -24,6 +25,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IUserRepository _userRepository;
+        
         private readonly IMessagePublisher _messagePublisher;
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAccountCommand> _validator;
@@ -32,6 +34,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
 
+        [ServiceBusConnectionKey("employer_shared")]
         public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator, IHashingService hashingService, IGenericEventFactory genericEventFactory, IAccountEventFactory accountEventFactory, IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _accountRepository = accountRepository;
@@ -135,7 +138,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private async Task QueueAccountCreatedMessage(long accountId)
         {
-            await _messagePublisher.PublishAsync(new AccountCreatedMessage()
+            await _messagePublisher.PublishAsync(new AccountCreatedMessage
             {
                 AccountId = accountId
             });
