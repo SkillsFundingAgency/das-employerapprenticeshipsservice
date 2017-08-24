@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountTasks
 {
-    public class GetAccountTasksQuery //: IAsyncResult<GetAccountTasksResponse>
+    public class GetAccountTasksQuery : IAsyncRequest<GetAccountTasksResponse>
     {
+        public long AccountId { get; set; }
     }
 }

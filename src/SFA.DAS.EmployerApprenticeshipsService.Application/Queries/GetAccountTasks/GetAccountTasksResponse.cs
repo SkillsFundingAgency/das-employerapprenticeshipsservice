@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountTasks
 {
-    class GetAccountTasksResponse
+    public class GetAccountTasksResponse
     {
+        public ICollection<AccountTask> Tasks { get; set; } 
     }
 }

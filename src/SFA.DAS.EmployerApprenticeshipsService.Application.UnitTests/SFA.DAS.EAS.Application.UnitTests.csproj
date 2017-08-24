@@ -128,6 +128,7 @@
       <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.27426\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.7.0.39052, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="SFA.DAS.TimeProvider, Version=1.0.0.3956, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SFA.DAS.TimeProvider.1.0.0.3956\lib\net45\SFA.DAS.TimeProvider.dll</HintPath>
@@ -225,6 +226,8 @@
     <Compile Include="Queries\GetAccountPAYESchemes\WhenIGetAccountPayeSchemes.cs" />
     <Compile Include="Queries\GetAccountStatsTests\WhenIGetAccountStats.cs" />
     <Compile Include="Queries\GetAccountStatsTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetAccountTasksTests\WhenIGetAnAccountsTasks.cs" />
+    <Compile Include="Queries\GetAccountTasksTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTransactionDetailTests\WhenIGetAccountTransactionDetails.cs" />
     <Compile Include="Queries\GetAccountTransactionDetailTests\WhenIValidateTheRequest.cs" />
