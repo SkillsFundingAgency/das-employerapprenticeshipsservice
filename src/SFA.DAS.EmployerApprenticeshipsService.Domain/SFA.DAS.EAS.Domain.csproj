@@ -198,7 +198,6 @@
     <Compile Include="Models\Transaction\AggregationData.cs" />
     <Compile Include="Models\Transaction\AggregationLine.cs" />
     <Compile Include="Models\Transaction\AggregationLineItem.cs" />
-    <Compile Include="Attributes\QueueNameAttribute.cs" />
     <Compile Include="Configuration\AuditApiClientConfiguration.cs" />
     <Compile Include="Configuration\ClaimIdentifierConfiguration.cs" />
     <Compile Include="Configuration\CommitmentsApiClientConfiguration.cs" />

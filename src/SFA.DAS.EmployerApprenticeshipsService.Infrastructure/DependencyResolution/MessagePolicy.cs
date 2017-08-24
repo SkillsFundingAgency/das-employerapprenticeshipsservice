@@ -13,6 +13,7 @@ using SFA.DAS.Messaging.FileSystem;
 using StructureMap;
 using StructureMap.Pipeline;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
+using QueueNameAttribute = SFA.DAS.Messaging.Attributes.QueueNameAttribute;
 
 namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 {

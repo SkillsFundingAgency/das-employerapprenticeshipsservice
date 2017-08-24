@@ -197,8 +197,6 @@
     <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandResponse.cs" />
     <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandValidator.cs" />
     <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandHandler.cs" />
-    <Compile Include="Commands\CreateEmployerAccountCreatedNotification\CreateEmployerAccountCreatedNotificationCommand.cs" />
-    <Compile Include="Commands\CreateEmployerAccountCreatedNotification\CreateEmployerAccountCreatedNotificationCommandHandler.cs" />
     <Compile Include="Commands\CreateAccount\CreateAccountCommand.cs" />
     <Compile Include="Commands\CreateAccount\CreateAccountCommandHandler.cs" />
     <Compile Include="Commands\CreateAccount\CreateAccountCommandValidator.cs" />

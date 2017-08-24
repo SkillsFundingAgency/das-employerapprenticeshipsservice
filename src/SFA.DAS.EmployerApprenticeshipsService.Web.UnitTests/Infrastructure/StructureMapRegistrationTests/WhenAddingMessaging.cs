@@ -178,7 +178,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
 
         public class TestClass : ITestClass
         {
-            [QueueName()]
+            [Messaging.Attributes.QueueName()]
             public string das_queue_name { get; set; }
 
             public readonly IMessagePublisher MessagePublisher;
@@ -191,7 +191,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
 
         public class TestClass2 : ITestClass2
         {
-            [QueueName("employer_levy")]
+            [Messaging.Attributes.QueueName("employer_levy")]
             public string das_queue_name { get; set; }
 
             public readonly IMessagePublisher MessagePublisher;
@@ -216,7 +216,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
 
         public class TestClassPolling : ITestClass
         {
-            [QueueName]
+            [Messaging.Attributes.QueueName]
             public string das_polling_queue_name { get; set; }
 
             public readonly IPollingMessageReceiver PollingMessageReceiver;
@@ -229,7 +229,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
 
         public class TestClassPolling2 : ITestClass2
         {
-            [QueueName]
+            [Messaging.Attributes.QueueName]
             public string das_polling_queue_name { get; set; }
 
             public readonly IPollingMessageReceiver PollingMessageReceiver;
