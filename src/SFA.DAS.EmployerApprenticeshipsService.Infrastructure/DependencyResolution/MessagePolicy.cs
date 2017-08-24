@@ -53,12 +53,20 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
                 else
                 {
                     var serviceBusConnectionString = config.ServiceBusConnectionString;
-
+                    
                     if (queueName?.CustomAttributes?.FirstOrDefault()?.ConstructorArguments.FirstOrDefault().Value != null)
                     {
                         var connectionKey = queueName.CustomAttributes?.FirstOrDefault()?.ConstructorArguments.FirstOrDefault().Value.ToString();
                             
                         serviceBusConnectionString = string.IsNullOrWhiteSpace(connectionKey)? serviceBusConnectionString : config.ServiceBusConnectionStrings[connectionKey];
+                    }
+                    else if (instance.Constructor?.CustomAttributes?.FirstOrDefault(x => x.AttributeType.Name == nameof(ServiceBusConnectionKeyAttribute))?.ConstructorArguments.FirstOrDefault().Value != null)
+                    {
+                        var connectionKey = instance.Constructor.CustomAttributes.FirstOrDefault(x => x.AttributeType.Name == nameof(ServiceBusConnectionKeyAttribute))
+                                .ConstructorArguments.FirstOrDefault()
+                                .Value.ToString();
+
+                        serviceBusConnectionString = string.IsNullOrWhiteSpace(connectionKey) ? serviceBusConnectionString : config.ServiceBusConnectionStrings[connectionKey];
                     }
                         
                     instance.Dependencies.AddForConstructorParameter(messagePublisher, new AzureServiceBusMessageService(serviceBusConnectionString, queueName?.Name ?? string.Empty));
