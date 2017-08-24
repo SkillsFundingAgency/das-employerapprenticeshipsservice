@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Domain.Attributes;
+﻿using SFA.DAS.Messaging.Attributes;
 
 namespace SFA.DAS.EmployerAccounts.Events
 {
