@@ -153,6 +153,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ServiceBusConnectionKeyAttribute.cs" />
     <Compile Include="Configuration\EmployerApprenticeshipApiConfiguration.cs" />
     <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
     <Compile Include="Data\IUnitOfWork.cs" />
