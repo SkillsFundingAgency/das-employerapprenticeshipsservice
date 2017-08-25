@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Messages;
-using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Attributes;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {

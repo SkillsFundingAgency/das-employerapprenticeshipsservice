@@ -9,10 +9,8 @@ namespace SFA.DAS.EAS.Application.Notifications.CreateAgreementCreatedMessage
     public class CreateAgreementCreatedMessageCommandHandler : IAsyncNotificationHandler<CreateAgreementCreatedMessageCommand>
     {
         private readonly IMessagePublisher _messagePublisher;
-
-        [QueueName]
-        public string agreement_created_notifications { get; set; }
-
+        
+        [ServiceBusConnectionKey("employer_shared")]
         public CreateAgreementCreatedMessageCommandHandler(IMessagePublisher messagePublisher)
         {
             _messagePublisher = messagePublisher;

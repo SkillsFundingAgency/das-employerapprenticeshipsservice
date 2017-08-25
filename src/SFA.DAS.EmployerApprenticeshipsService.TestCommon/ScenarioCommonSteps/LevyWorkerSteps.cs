@@ -6,12 +6,12 @@ using System.Web.Configuration;
 using Moq;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration;
-using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Attributes;
 using StructureMap;
 using TechTalk.SpecFlow;
 
