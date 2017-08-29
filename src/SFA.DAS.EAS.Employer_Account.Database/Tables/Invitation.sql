@@ -15,3 +15,6 @@
 
 GO
 CREATE INDEX [IX_Invitation] ON [employer_account].[Invitation] ([Email], [Status], [ExpiryDate]) INCLUDE ([AccountId], [Name], [RoleId])
+
+GO
+CREATE INDEX [IX_Invitation_AccountId_Status] ON [employer_account].[Invitation]([AccountId], [Status]) INCLUDE ([Email], [ExpiryDate],	[Name],	[RoleId])
