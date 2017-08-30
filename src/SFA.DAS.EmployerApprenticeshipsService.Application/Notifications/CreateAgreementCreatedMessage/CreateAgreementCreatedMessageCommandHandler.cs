@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Application.Notifications.CreateAgreementCreatedMessage
     {
         private readonly IMessagePublisher _messagePublisher;
         
-        [ServiceBusConnectionKey("employer_shared")]
+        [ServiceBusConnectionKey("tasks_api")]
         public CreateAgreementCreatedMessageCommandHandler(IMessagePublisher messagePublisher)
         {
             _messagePublisher = messagePublisher;
