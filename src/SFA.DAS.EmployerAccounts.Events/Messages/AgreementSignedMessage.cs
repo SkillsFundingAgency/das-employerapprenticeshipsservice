@@ -1,5 +1,8 @@
-﻿namespace SFA.DAS.EmployerAccounts.Events.Messages
+﻿using SFA.DAS.Messaging.Attributes;
+
+namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
+    [QueueName("agreement_signed_notifications")]
     public class AgreementSignedMessage
     {
         public long AccountId { get; set; }

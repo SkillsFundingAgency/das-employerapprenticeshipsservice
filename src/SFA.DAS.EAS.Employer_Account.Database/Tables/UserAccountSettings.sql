@@ -7,3 +7,5 @@
 	CONSTRAINT [FK_UserAccountSettings_UserId] FOREIGN KEY(UserId) REFERENCES [employer_account].[User] ([Id]),
 	CONSTRAINT [FK_UserAccountSettings_AccountId] FOREIGN KEY(AccountId) REFERENCES [employer_account].[Account] ([Id])
 )
+GO
+CREATE INDEX [IX_UserAccountSettings] ON [employer_account].[UserAccountSettings] ([UserId], [AccountId]) INCLUDE ([ReceiveNotifications])
