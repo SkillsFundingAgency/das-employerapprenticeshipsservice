@@ -70,7 +70,7 @@ else
         </div>
         <div class="column-one-third">
        
-            @if (Model.Data.RequiresAgreementSigning > 0)
+            @*@if (Model.Data.RequiresAgreementSigning > 0)
             {
                 <section>
                     <div class="panel alert-default">
@@ -88,8 +88,19 @@ else
               
                     </div>
                 </section>
-            }
+            }*@
        
+            <section>
+                
+                @foreach (var task in Model.Data.Tasks)
+                {
+                    <div class="panel alert-default">
+                        <h3 class="heading-small">@task.Type</h3>
+                        <p>You have @task.ItemsDueCount items</p>
+                    </div>
+                }
+            </section>
+
         </div>
     </div>
 

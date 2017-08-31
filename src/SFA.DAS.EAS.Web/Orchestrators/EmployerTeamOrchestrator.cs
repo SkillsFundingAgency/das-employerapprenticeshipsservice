@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Application.Commands.ResendInvitation;
 using SFA.DAS.EAS.Application.Commands.UpdateShowWizard;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountStats;
+using SFA.DAS.EAS.Application.Queries.GetAccountTasks;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetInvitation;
@@ -53,18 +54,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     UserId = externalUserId
                 });
                 
-                var showSigningNotice = 0;
+                //var showSigningNotice = 0;
                 
                 var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
-                if (userRoleResponse.UserRole == Role.Owner || userRoleResponse.UserRole == Role.Transactor)
-                {
-                    var agreementsResponse = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
-                    {
-                        HashedAccountId = accountId,
-                        ExternalUserId = externalUserId
-                    });
-                    showSigningNotice = agreementsResponse.EmployerAgreements.Count(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
-                }
+                //if (userRoleResponse.UserRole == Role.Owner || userRoleResponse.UserRole == Role.Transactor)
+                //{
+                //    var agreementsResponse = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
+                //    {
+                //        HashedAccountId = accountId,
+                //        ExternalUserId = externalUserId
+                //    });
+                //    showSigningNotice = agreementsResponse.EmployerAgreements.Count(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
+                //}
+
+                var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery {AccountId = accountResponse.Account.Id});
                 
                 var userResponse = await _mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = accountId, TeamMemberId = externalUserId });
 
@@ -82,13 +85,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var viewModel = new AccountDashboardViewModel
                 {
                     Account = accountResponse.Account,
-                    RequiresAgreementSigning = showSigningNotice,
                     UserRole = userRoleResponse.UserRole,
                     UserFirstName = userResponse.User.FirstName,
                     OrgainsationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
                     PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
                     TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
-                    ShowWizard = showWizard
+                    ShowWizard = showWizard,
+                    Tasks = tasksResponse.Tasks
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>

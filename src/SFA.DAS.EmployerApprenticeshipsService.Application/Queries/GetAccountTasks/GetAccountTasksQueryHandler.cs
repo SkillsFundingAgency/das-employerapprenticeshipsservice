@@ -20,13 +20,18 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountTasks
 
         public async Task<GetAccountTasksResponse> Handle(GetAccountTasksQuery message)
         {
-            var validationResults = _validator.Validate(message);
+            ValidateMessage(message);
 
-            if (!validationResults.IsValid())
+            var accountTasks = await GetTasks(message);
+
+            return new GetAccountTasksResponse
             {
-                throw new InvalidRequestException(validationResults.ValidationDictionary);
-            }
+                Tasks = accountTasks
+            };
+        }
 
+        private async Task<AccountTask[]> GetTasks(GetAccountTasksQuery message)
+        {
             var tasks = await _taskService.GetAccountTasks(message.AccountId.ToString());
 
             var accountTasks = tasks.Select(x => new AccountTask
@@ -35,10 +40,17 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountTasks
                 ItemsDueCount = x.ItemsDueCount
             }).ToArray();
 
-            return new GetAccountTasksResponse
+            return accountTasks;
+        }
+
+        private void ValidateMessage(GetAccountTasksQuery message)
+        {
+            var validationResults = _validator.Validate(message);
+
+            if (!validationResults.IsValid())
             {
-                Tasks = accountTasks
-            };
+                throw new InvalidRequestException(validationResults.ValidationDictionary);
+            }
         }
     }
 }

@@ -78,45 +78,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         }
         
         [Test]
-        public async Task ThenAnAgreementShouldNotNeedSigningIfTheUserIsAnOwnerOrTransactorButThereAreNoAgreementsThatNeedSigning()
-        {
-            // Arrange
-            _mediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == AccountId)))
-                .ReturnsAsync(new GetAccountEmployerAgreementsResponse
-                {
-                    EmployerAgreements = new List<Domain.Models.EmployerAgreement.EmployerAgreementView>
-                    {
-                        new Domain.Models.EmployerAgreement.EmployerAgreementView {Status = Domain.Models.EmployerAgreement.EmployerAgreementStatus.Signed}
-                    }
-                });
-
-            // Act
-            var actual = await _orchestrator.GetAccount(AccountId, UserId);
-
-            // Assert
-            Assert.IsNotNull(actual);
-            Assert.Zero(actual.Data.RequiresAgreementSigning);
-        }
-
-        [Test]
-        public async Task ThenAnAgreementShouldNotNeedSigningIfTheUserIsAViewer()
-        {
-            // Arrange
-            _mediator.Setup(m => m.SendAsync(It.Is<GetUserAccountRoleQuery>(q => q.ExternalUserId == UserId)))
-                .ReturnsAsync(new GetUserAccountRoleResponse
-                {
-                    UserRole = Domain.Models.UserProfile.Role.Viewer
-                });
-
-            // Act
-            var actual = await _orchestrator.GetAccount(AccountId, UserId);
-
-            // Assert
-            Assert.IsNotNull(actual);
-            Assert.Zero(actual.Data.RequiresAgreementSigning);
-        }
-
-        [Test]
         public async Task ThenShouldGetAccountStats()
         {
             // Act
