@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using MediatR;
-using Microsoft.Azure;
 using Moq;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -17,6 +16,7 @@ using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Notifications.Api.Client;
 using StructureMap;
 using StructureMap.Graph;
 using WebGrease.Css.Extensions;
@@ -51,6 +51,8 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 
             For<IEmployerCommitmentApi>().Use(commitmentsApi.Object);
 
+            For<INotificationsApi>().Use(() => Mock.Of<INotificationsApi>());
+            
             AddMediatrRegistrations();
 
             RegisterMapper();
@@ -84,23 +86,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 		
 		private void RegisterAuditService()
         {
-            var environment = Environment.GetEnvironmentVariable("DASENV");
-            if (string.IsNullOrEmpty(environment))
-            {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
-            }
-
-            For<IAuditMessageFactory>().Use<AuditMessageFactory>().Singleton();
-
-            if (environment.Equals("LOCAL"))
-            {
-                For<IAuditApiClient>().Use<StubAuditApiClient>();
-            }
-            else
-            {
-                For<IAuditApiClient>().Use<AuditApiClient>();
-            }
-
+            For<IAuditApiClient>().Use<StubAuditApiClient>();
         }
 
     }

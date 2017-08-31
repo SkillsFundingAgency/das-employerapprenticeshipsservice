@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
 using SFA.DAS.EAS.Application.Messages;
-using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Attributes;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
             }
         }
 
-        private async Task ProcessMessage(Message<PaymentProcessorQueueMessage> message)
+        private async Task ProcessMessage(IMessage<PaymentProcessorQueueMessage> message)
         {
             if (message?.Content?.AccountId == null)
             {

@@ -6,7 +6,6 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -15,6 +14,7 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
@@ -23,11 +23,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
     //TODO this needs changing to be a facade and calling individual commands for each component
     public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>
     {
-        [QueueName("employer_levy")]
-        public string add_paye_scheme { get; set; }
-
         private readonly IAccountRepository _accountRepository;
         private readonly IUserRepository _userRepository;
+        
         private readonly IMessagePublisher _messagePublisher;
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAccountCommand> _validator;
@@ -36,6 +34,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
 
+        [ServiceBusConnectionKey("employer_shared")]
         public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator, IHashingService hashingService, IGenericEventFactory genericEventFactory, IAccountEventFactory accountEventFactory, IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _accountRepository = accountRepository;
@@ -73,9 +72,14 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             await QueueAddPayeSchemeMessage(emprefs);
 
+            await QueueAccountCreatedMessage(returnValue.AccountId);
+
             await NotifyAccountCreated(hashedAccountId);
 
             await CreateAuditEntries(message, returnValue, hashedAccountId, user);
+
+            await CreateAgreementCreatedNotificationMessage(returnValue.AccountId, returnValue.LegalEntityId,
+                returnValue.EmployerAgreementId);
 
             return new CreateAccountCommandResponse
             {
@@ -83,7 +87,15 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             };
         }
 
-        
+        private async Task CreateAgreementCreatedNotificationMessage(long accountId, long legalEntityId, long employerAgreementId)
+        {
+            await _messagePublisher.PublishAsync(new AgreementCreatedMessage
+            {
+                AccountId = accountId,
+                LegalEntityId = legalEntityId,
+                AgreementId = employerAgreementId
+            });
+        }
 
         private async Task NotifyAccountCreated(string hashedAccountId)
         {
@@ -117,11 +129,19 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         {
             foreach (var empref in emprefs)
             {
-                await _messagePublisher.PublishAsync(new AddPayeSchemeMessage()
+                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage
                 {
                     EmpRef= empref
                 });
             }
+        }
+
+        private async Task QueueAccountCreatedMessage(long accountId)
+        {
+            await _messagePublisher.PublishAsync(new AccountCreatedMessage
+            {
+                AccountId = accountId
+            });
         }
 
         private async Task<User> GetUser(CreateAccountCommand message)

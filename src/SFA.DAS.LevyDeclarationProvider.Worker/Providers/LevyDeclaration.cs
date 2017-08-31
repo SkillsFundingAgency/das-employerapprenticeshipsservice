@@ -11,11 +11,11 @@ using SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired;
 using SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration;
-using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Attributes;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
             }
         }
 
-        private async Task ProcessMessage(Message<EmployerRefreshLevyQueueMessage> message)
+        private async Task ProcessMessage(IMessage<EmployerRefreshLevyQueueMessage> message)
         {
             if (message?.Content == null)
             {

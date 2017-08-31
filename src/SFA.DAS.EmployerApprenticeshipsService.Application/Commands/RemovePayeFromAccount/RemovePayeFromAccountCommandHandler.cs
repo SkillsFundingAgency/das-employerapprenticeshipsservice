@@ -6,12 +6,12 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
@@ -20,9 +20,6 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 {
     public class RemovePayeFromAccountCommandHandler : AsyncRequestHandler<RemovePayeFromAccountCommand>
     {
-        [QueueName("employer_levy")]
-        public string delete_paye_scheme { get; set; }
-
         private readonly IMediator _mediator;
         private readonly IValidator<RemovePayeFromAccountCommand> _validator;
         private readonly IAccountRepository _accountRepository;
@@ -31,6 +28,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
         private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
         private readonly IMessagePublisher _messagePublisher;
 
+        [ServiceBusConnectionKey("employer_shared")]
         public RemovePayeFromAccountCommandHandler(IMediator mediator, IValidator<RemovePayeFromAccountCommand> validator, IAccountRepository accountRepository, IHashingService hashingService, IGenericEventFactory genericEventFactory, IPayeSchemeEventFactory payeSchemeEventFactory, IMessagePublisher messagePublisher)
         {
             _mediator = mediator;
@@ -83,7 +81,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 
         private async Task QueuePayeRemovedMessage(string payeRef)
         {
-            await _messagePublisher.PublishAsync(new DeletePayeSchemeMessage {EmpRef = payeRef});
+            await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage { EmpRef = payeRef});
         }
 
         private async Task AddAuditEntry(string userId, string payeRef, string accountId)

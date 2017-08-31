@@ -8,7 +8,6 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Factories;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -16,6 +15,7 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
@@ -234,7 +234,20 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AddPayeSchemeMessage>(c => c.EmpRef.Equals(epxectedPayeRef))), Times.Once());
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeCreatedMessage>(c => c.EmpRef.Equals(epxectedPayeRef))), Times.Once());
+        }
+
+        [Test]
+        public async Task ThenTheMessageIsAddedToTheAccountCreatedQueue()
+        {
+            //Arrange
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active" };
+
+            //Act
+            await _handler.Handle(createAccountCommand);
+
+            //Assert
+            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<AccountCreatedMessage>(c=>c.AccountId.Equals(ExpectedAccountId))),Times.Once);
         }
     }
 }

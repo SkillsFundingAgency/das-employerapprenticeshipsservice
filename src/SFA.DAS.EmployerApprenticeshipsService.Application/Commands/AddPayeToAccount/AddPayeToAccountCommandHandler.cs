@@ -6,13 +6,13 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.PAYE;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
@@ -20,8 +20,6 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 {
     public class AddPayeToAccountCommandHandler : AsyncRequestHandler<AddPayeToAccountCommand>
     {
-        [QueueName("employer_levy")]
-        public string add_paye_scheme { get; set; }
 
         private readonly IValidator<AddPayeToAccountCommand> _validator;
         private readonly IAccountRepository _accountRepository;
@@ -32,6 +30,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
 
+        [ServiceBusConnectionKey("employer_shared")]
         public AddPayeToAccountCommandHandler(IValidator<AddPayeToAccountCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService, IMediator mediator, IGenericEventFactory genericEventFactory, IPayeSchemeEventFactory payeSchemeEventFactory, IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _validator = validator;
@@ -104,7 +103,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private async Task AddPayeScheme(string payeRef)
         {
             await _messagePublisher.PublishAsync(
-                new AddPayeSchemeMessage
+                new PayeSchemeCreatedMessage
                 {
                    EmpRef = payeRef
                 });

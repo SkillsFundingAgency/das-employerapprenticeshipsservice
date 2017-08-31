@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Messages;
-using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Attributes;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater

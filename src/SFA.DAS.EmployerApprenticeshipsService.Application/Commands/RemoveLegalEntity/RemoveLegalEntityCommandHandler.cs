@@ -11,6 +11,8 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.Messaging;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
@@ -24,8 +26,17 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
         private readonly IHashingService _hashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public RemoveLegalEntityCommandHandler(IValidator<RemoveLegalEntityCommand> validator, ILog logger, IEmployerAgreementRepository employerAgreementRepository, IMediator mediator, IHashingService hashingService, IGenericEventFactory genericEventFactory, IEmployerAgreementEventFactory employerAgreementEventFactory)
+        public RemoveLegalEntityCommandHandler(
+            IValidator<RemoveLegalEntityCommand> validator, 
+            ILog logger, 
+            IEmployerAgreementRepository employerAgreementRepository, 
+            IMediator mediator, 
+            IHashingService hashingService, 
+            IGenericEventFactory genericEventFactory, 
+            IEmployerAgreementEventFactory employerAgreementEventFactory,
+            IMessagePublisher messagePublisher)
         {
             _validator = validator;
             _logger = logger;
@@ -34,6 +45,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             _hashingService = hashingService;
             _genericEventFactory = genericEventFactory;
             _employerAgreementEventFactory = employerAgreementEventFactory;
+            _messagePublisher = messagePublisher;
         }
 
         protected override async Task HandleCore(RemoveLegalEntityCommand message)
@@ -54,11 +66,31 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             var legalAgreementId = _hashingService.DecodeValue(message.HashedLegalAgreementId);
 
+            var agreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreementId);
+
             await _employerAgreementRepository.RemoveLegalEntityFromAccount(legalAgreementId);
 
             await AddAuditEntry(accountId, message.HashedLegalAgreementId);
             
             await CreateEvent(message.HashedLegalAgreementId);
+
+            if (agreement != null)
+            {
+                await CreateLegalEntityRemovedNotificationMessage(accountId, agreement.LegalEntityId, legalAgreementId,
+                    agreement.Status);
+            }
+        }
+
+        private async Task CreateLegalEntityRemovedNotificationMessage(long accountId, long legalEntityId, 
+            long agreementId, EmployerAgreementStatus status)
+        {
+            await _messagePublisher.PublishAsync(new LegalEntityRemovedMessage
+            {
+                AccountId = accountId,
+                LegalEntityId = legalEntityId,
+                AgreementId = agreementId,
+                AgreementSigned = status == EmployerAgreementStatus.Signed
+            });
         }
 
         private async Task AddAuditEntry(long accountId,  string employerAgreementId)

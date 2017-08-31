@@ -143,18 +143,42 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
             Assert.AreEqual("Test_ServiceBusConnectionString2", connectionString.GetValue(actualMessageService));
         }
 
-        public interface ITestClass
+        [Test]
+        public void ThenThePollingRecieverWillUseTheConstructorAttributeIfPresentToDetermineTheConnection()
         {
+            //Arrange
+            _container = new Container(
+                c =>
+                {
+                    c.AddRegistry<TestRegistryPolling>();
+                    c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
+                }
+                );
 
-        }
-        public interface ITestClass2
-        {
+            //Act
+            var actual = _container.GetInstance<TestClass3>();
 
+            //Assert
+            Assert.IsAssignableFrom<AzureServiceBusMessageService>(actual.MessagePublisher);
+            var actualMessageService = actual.MessagePublisher as AzureServiceBusMessageService;
+
+            Assert.IsNotNull(actualMessageService);
+            var connectionString = actualMessageService
+                                    .GetType()
+                                    .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .ToList()
+                                    .FirstOrDefault(c => c.Name == "_connectionString");
+            Assert.IsNotNull(connectionString);
+            Assert.AreEqual("Test_ServiceBusConnectionString1", connectionString.GetValue(actualMessageService));
         }
+
+        public interface ITestClass{}
+        public interface ITestClass2{}
+        public interface ITestClass3{}
 
         public class TestClass : ITestClass
         {
-            [QueueName()]
+            [Messaging.Attributes.QueueName()]
             public string das_queue_name { get; set; }
 
             public readonly IMessagePublisher MessagePublisher;
@@ -167,12 +191,24 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
 
         public class TestClass2 : ITestClass2
         {
-            [QueueName("employer_levy")]
+            [Messaging.Attributes.QueueName("employer_levy")]
             public string das_queue_name { get; set; }
 
             public readonly IMessagePublisher MessagePublisher;
 
+            [ServiceBusConnectionKey("employer_payment")]
             public TestClass2(IMessagePublisher messagePublisher)
+            {
+                MessagePublisher = messagePublisher;
+            }
+        }
+
+        public class TestClass3 : ITestClass3
+        {
+            public readonly IMessagePublisher MessagePublisher;
+
+            [ServiceBusConnectionKey("employer_payment")]
+            public TestClass3(IMessagePublisher messagePublisher)
             {
                 MessagePublisher = messagePublisher;
             }
@@ -180,7 +216,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
 
         public class TestClassPolling : ITestClass
         {
-            [QueueName]
+            [Messaging.Attributes.QueueName]
             public string das_polling_queue_name { get; set; }
 
             public readonly IPollingMessageReceiver PollingMessageReceiver;
@@ -193,7 +229,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
 
         public class TestClassPolling2 : ITestClass2
         {
-            [QueueName]
+            [Messaging.Attributes.QueueName]
             public string das_polling_queue_name { get; set; }
 
             public readonly IPollingMessageReceiver PollingMessageReceiver;
@@ -210,6 +246,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
             {
                 For<ITestClass>().Use<TestClass>();
                 For<ITestClass2>().Use<TestClass2>();
+                For<ITestClass3>().Use<TestClass3>();
             }
         }
 

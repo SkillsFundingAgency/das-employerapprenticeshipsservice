@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Moq;
-using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Attributes;
 using StructureMap;
 using StructureMap.Pipeline;
 
@@ -27,11 +27,8 @@ namespace SFA.DAS.EAS.TestCommon.MockPolicy
                 var queueName = instance
                     .SettableProperties().FirstOrDefault(c => c.CustomAttributes.FirstOrDefault(x => x.AttributeType.Name == nameof(QueueNameAttribute)) != null);
 
-
-                if (queueName != null)
-                {
-                    instance.Dependencies.AddForConstructorParameter(messagePublisher, _messagePublisher.Object);
-                }
+                instance.Dependencies.AddForConstructorParameter(messagePublisher, _messagePublisher.Object);
+                
             }
         }
     }
