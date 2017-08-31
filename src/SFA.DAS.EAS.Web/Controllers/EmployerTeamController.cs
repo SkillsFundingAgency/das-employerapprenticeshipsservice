@@ -44,6 +44,13 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [Route("activity")]
+        public ActionResult Activity()
+        {
+            return View();
+        }
+
+        [HttpGet]
         [Route("view")]
         public async Task<ActionResult> ViewTeam(string hashedAccountId)
         {
