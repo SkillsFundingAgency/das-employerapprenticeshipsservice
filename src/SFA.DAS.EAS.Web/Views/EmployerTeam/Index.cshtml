@@ -95,4 +95,16 @@ else
 
 }
 
-
+@section gaDataLayer {
+    <script>
+    window.dataLayer = window.dataLayer || []; dataLayer.push({
+        'event': 'dataLoaded',
+        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
+        'userID': '',
+        'vpv': '', 
+        'PRN': '', 
+        'org': '@Model.Data.Account.HashedId', 
+        'subOrg':''
+    });
+    </script>
+}
