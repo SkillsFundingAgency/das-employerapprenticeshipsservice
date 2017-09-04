@@ -10,9 +10,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntityById
         {
             var validationResult = new ValidationResult();
 
-            if (item.AccountId == 0)
+            if (string.IsNullOrEmpty(item.HashedAccountId))
             {
-                validationResult.AddError(nameof(item.AccountId), "AccountId has not been supplied");
+                validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
             }
 
             if (item.Id == 0)

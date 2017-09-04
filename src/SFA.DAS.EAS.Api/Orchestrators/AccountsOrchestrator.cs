@@ -91,8 +91,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
         public async Task<OrchestratorResponse<LegalEntityViewModel>> GetLegalEntity(string hashedAccountId, long legalEntityId)
         {
             _logger.Info($"Getting legal entity {legalEntityId} for account {hashedAccountId}");
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var legalEntityResult = await _mediator.SendAsync(new GetLegalEntityByIdQuery { AccountId = accountId, Id = legalEntityId });
+            var legalEntityResult = await _mediator.SendAsync(new GetLegalEntityByIdQuery { HashedAccountId = hashedAccountId, Id = legalEntityId });
             if (legalEntityResult.LegalEntity == null)
             {
                 return new OrchestratorResponse<LegalEntityViewModel> { Data = null };
