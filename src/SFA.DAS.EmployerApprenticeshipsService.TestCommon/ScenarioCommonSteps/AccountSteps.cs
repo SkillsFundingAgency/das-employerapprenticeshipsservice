@@ -48,6 +48,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
 
             _container.Inject(_validator.Object);
         }
+
         public static void SetAccountIdForUser(IMediator mediator, ScenarioContext scenarioContext)
         {
             var accountOwnerId = scenarioContext["AccountOwnerUserId"].ToString();

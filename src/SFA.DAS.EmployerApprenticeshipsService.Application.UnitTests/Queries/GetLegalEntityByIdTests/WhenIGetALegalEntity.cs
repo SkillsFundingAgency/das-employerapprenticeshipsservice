@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityByIdTests
 
             Query = new GetLegalEntityByIdQuery
             {
-                Id = 123
+                LegalEntityId = 123
             };
 
             RequestHandler = new GetLegalEntityByIdHandler(RequestValidator.Object,_legalEntityRepository.Object, _hashingService.Object);

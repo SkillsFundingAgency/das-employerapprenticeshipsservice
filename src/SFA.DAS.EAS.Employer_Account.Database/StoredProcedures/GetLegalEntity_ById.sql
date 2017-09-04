@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE employer_account.GetLegalEntity_ById
-	@AccountId BIGINT,
-	@Id BIGINT
-AS
+	@LegalEntityId BIGINT,
+	@AccountId BIGINT
+AS 
 Select 
 	le.Id, 
 	le.Name, 
@@ -21,8 +21,8 @@ OUTER APPLY
 (
 	SELECT TOP 1 *
 	FROM employer_account.EmployerAgreement ea
-	WHERE ea.LegalEntityId = le.Id
-	AND ea.AccountId = @AccountId
+	WHERE ea.LegalEntityId = le.Id AND
+	ea.AccountId = @AccountId
 	ORDER BY Id DESC
 ) lea
-WHERE le.Id = @Id
+WHERE le.Id = @LegalEntityId

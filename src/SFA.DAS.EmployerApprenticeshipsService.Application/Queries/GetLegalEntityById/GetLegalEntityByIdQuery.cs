@@ -4,8 +4,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntityById
 {
     public class GetLegalEntityByIdQuery : IAsyncRequest<GetLegalEntityByIdResponse>
     {
-        public string HashedAccountId { get; set; }
+        public long LegalEntityId { get; set; }
 
-        public long Id { get; set; }
+        public long AccountId { get; set; }
     }
 }
