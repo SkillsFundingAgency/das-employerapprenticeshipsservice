@@ -2,6 +2,7 @@
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Application.Queries.GetLegalEntityById
 {
@@ -9,11 +10,16 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntityById
     {
         private readonly IValidator<GetLegalEntityByIdQuery> _validator;
         private readonly ILegalEntityRepository _legalEntityRepository;
+        private readonly IHashingService _hashingService;
 
-        public GetLegalEntityByIdHandler(IValidator<GetLegalEntityByIdQuery> validator, ILegalEntityRepository legalEntityRepository)
+        public GetLegalEntityByIdHandler(
+            IValidator<GetLegalEntityByIdQuery> validator, 
+            ILegalEntityRepository legalEntityRepository,
+            IHashingService hashingService)
         {
             _validator = validator;
             _legalEntityRepository = legalEntityRepository;
+            _hashingService = hashingService;
         }
 
         public async Task<GetLegalEntityByIdResponse> Handle(GetLegalEntityByIdQuery message)
@@ -25,7 +31,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntityById
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var legalEntity = await _legalEntityRepository.GetLegalEntityById(message.LegalEntityId);
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+            var legalEntity = await _legalEntityRepository.GetLegalEntityById(accountId, message.Id);
 
             return new GetLegalEntityByIdResponse { LegalEntity = legalEntity};
         }

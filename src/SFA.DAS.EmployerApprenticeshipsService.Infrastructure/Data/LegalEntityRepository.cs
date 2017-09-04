@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<LegalEntityView> GetLegalEntityById(long id)
+        public async Task<LegalEntityView> GetLegalEntityById(long accontId, long id)
         {
             var result = await WithConnection(async c =>
             {
