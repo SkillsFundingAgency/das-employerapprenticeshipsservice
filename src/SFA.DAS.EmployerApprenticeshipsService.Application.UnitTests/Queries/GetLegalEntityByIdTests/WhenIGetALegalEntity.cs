@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityByIdTests
             _expectedLegalEntity = new LegalEntityView();
 
             _legalEntityRepository = new Mock<ILegalEntityRepository>();
-            _legalEntityRepository.Setup(x => x.GetLegalEntityById(It.IsAny<long>())).ReturnsAsync(_expectedLegalEntity);
+            _legalEntityRepository.Setup(x => x.GetLegalEntityById(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(_expectedLegalEntity);
 
             Query = new GetLegalEntityByIdQuery
             {
@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityByIdTests
             await RequestHandler.Handle(Query);
 
             //Assert
-            _legalEntityRepository.Verify(x => x.GetLegalEntityById(Query.Id), Times.Once);
+            _legalEntityRepository.Verify(x => x.GetLegalEntityById(Query.AccountId, Query.Id), Times.Once);
         }
 
         [Test]

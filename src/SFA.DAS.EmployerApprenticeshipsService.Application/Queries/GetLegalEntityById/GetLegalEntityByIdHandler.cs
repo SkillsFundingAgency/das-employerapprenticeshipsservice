@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntityById
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var legalEntity = await _legalEntityRepository.GetLegalEntityById(message.Id);
+            var legalEntity = await _legalEntityRepository.GetLegalEntityById(message.AccountId, message.Id);
 
             return new GetLegalEntityByIdResponse { LegalEntity = legalEntity};
         }

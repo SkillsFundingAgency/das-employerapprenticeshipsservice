@@ -10,10 +10,16 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntityById
         {
             var validationResult = new ValidationResult();
 
+            if (item.AccountId == 0)
+            {
+                validationResult.AddError(nameof(item.AccountId), "AccountId has not been supplied");
+            }
+
             if (item.Id == 0)
             {
                 validationResult.AddError(nameof(item.Id), "LegalEntityId has not been supplied");
             }
+
             return validationResult;
         }
 

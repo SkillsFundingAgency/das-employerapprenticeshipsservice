@@ -16,11 +16,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<LegalEntityView> GetLegalEntityById(long id)
+        public async Task<LegalEntityView> GetLegalEntityById(long accontId, long id)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
+                parameters.Add("@AccountId", accontId, DbType.Int64);
                 parameters.Add("@Id", id, DbType.Int64);
 
                 return await c.QueryAsync<LegalEntityView>(
