@@ -50,7 +50,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
 
             return result.SingleOrDefault();
-
         }
     }
 }

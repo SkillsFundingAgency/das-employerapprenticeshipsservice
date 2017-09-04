@@ -92,7 +92,14 @@ namespace SFA.DAS.EAS.Api.Orchestrators
         {
             _logger.Info($"Getting legal entity {legalEntityId} for account {hashedAccountId}");
 
-            var legalEntityResult = await _mediator.SendAsync(new GetLegalEntityByIdQuery { Id = legalEntityId });
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+
+            var legalEntityResult = await _mediator.SendAsync(new GetLegalEntityByIdQuery
+            {
+                LegalEntityId = legalEntityId,
+                AccountId = accountId
+            });
+
             if (legalEntityResult.LegalEntity == null)
             {
                 return new OrchestratorResponse<LegalEntityViewModel> { Data = null };

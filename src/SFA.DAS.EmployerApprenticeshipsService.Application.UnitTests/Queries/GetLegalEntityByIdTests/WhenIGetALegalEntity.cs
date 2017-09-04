@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityByIdTests
 
             Query = new GetLegalEntityByIdQuery
             {
-                Id = 123
+                LegalEntityId = 123
             };
 
             RequestHandler = new GetLegalEntityByIdHandler(RequestValidator.Object,_legalEntityRepository.Object);
@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityByIdTests
             await RequestHandler.Handle(Query);
 
             //Assert
-            _legalEntityRepository.Verify(x => x.GetLegalEntityById(Query.Id), Times.Once);
+            _legalEntityRepository.Verify(x => x.GetLegalEntityById(Query.LegalEntityId), Times.Once);
         }
 
         [Test]

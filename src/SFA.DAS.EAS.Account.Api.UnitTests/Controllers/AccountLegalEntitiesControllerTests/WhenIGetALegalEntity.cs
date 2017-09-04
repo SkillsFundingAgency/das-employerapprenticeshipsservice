@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLegalEntitiesCont
                         Source = "Companies House"
                     }
             };
-            Mediator.Setup(x => x.SendAsync(It.Is<GetLegalEntityByIdQuery>(q => q.Id == legalEntityId))).ReturnsAsync(legalEntityResponse);
+            Mediator.Setup(x => x.SendAsync(It.Is<GetLegalEntityByIdQuery>(q => q.LegalEntityId == legalEntityId))).ReturnsAsync(legalEntityResponse);
 
             var response = await Controller.GetLegalEntity(hashedAccountId, legalEntityId);
 
@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLegalEntitiesCont
             var legalEntityId = 123;
             var legalEntityResponse = new GetLegalEntityByIdResponse { LegalEntity = null };
 
-            Mediator.Setup(x => x.SendAsync(It.Is<GetLegalEntityByIdQuery>(q => q.Id == legalEntityId))).ReturnsAsync(legalEntityResponse);
+            Mediator.Setup(x => x.SendAsync(It.Is<GetLegalEntityByIdQuery>(q => q.LegalEntityId == legalEntityId))).ReturnsAsync(legalEntityResponse);
 
             var response = await Controller.GetLegalEntity(hashedAccountId, legalEntityId);
 

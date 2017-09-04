@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
     [Binding]
     public class AccountCreationSteps
     {
-        private IContainer _container;
+        private readonly IContainer _container;
         private Mock<IMessagePublisher> _messagePublisher;
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;

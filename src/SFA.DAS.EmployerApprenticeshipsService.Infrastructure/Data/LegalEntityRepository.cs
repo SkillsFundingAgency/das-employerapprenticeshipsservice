@@ -21,7 +21,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@Id", id, DbType.Int64);
+                parameters.Add("@LegalEntityId", id, DbType.Int64);
+                parameters.Add("@AccountId", id, DbType.Int64);
 
                 return await c.QueryAsync<LegalEntityView>(
                     sql: "[employer_account].[GetLegalEntity_ById]",

@@ -23,7 +23,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityByIdTests
             //Assert
             Assert.IsNotNull(actual);
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("Id", "LegalEntityId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("AccountId", "AccountId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("LegalEntityId", "LegalEntityId has not been supplied"), actual.ValidationDictionary);
         }
 
         [Test]
@@ -32,7 +33,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityByIdTests
             //Act
             var actual = _validator.Validate(new GetLegalEntityByIdQuery
             {
-                Id = 123
+                AccountId = 1,
+                LegalEntityId = 123
             });
 
             //Assert
