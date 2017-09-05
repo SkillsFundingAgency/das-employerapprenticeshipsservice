@@ -5,6 +5,6 @@ namespace SFA.DAS.EAS.Domain.Data
 {
     public interface ILegalEntityRepository
     {
-        Task<LegalEntityView> GetLegalEntityById(long id);
+        Task<LegalEntityView> GetLegalEntityById(long accountId, long id);
     }
 }
