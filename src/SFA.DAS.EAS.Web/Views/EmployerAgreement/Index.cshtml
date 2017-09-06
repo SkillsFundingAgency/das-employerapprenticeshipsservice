@@ -81,6 +81,7 @@
         <p class="font-xsmall"><a href="@Url.Action("GetOrganisationsToRemove", "EmployerAgreement", new { Model.Data.HashedAccountId})">Remove an organisation from your account</a></p>
     </div>
 </div>
+
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
@@ -88,4 +89,18 @@
             <li>Your organisations and agreements</li>
         </ol>
     </div>
+}
+
+@section gaDataLayer {
+    <script>
+    window.dataLayer = window.dataLayer || []; dataLayer.push({
+        'event': 'dataLoaded',
+        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
+        'userID': '',
+        'vpv': '/accounts/agreements/organisations-agreements-home',
+        'PRN': '',
+        'org': '',
+        'subOrg':''
+    });
+    </script>
 }
