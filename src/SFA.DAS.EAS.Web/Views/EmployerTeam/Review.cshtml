@@ -69,3 +69,17 @@
         <a href="@Url.Action("ViewTeam", "EmployerTeam")" class="back-link">Back to your team</a>
     </div>
 }
+
+@section gaDataLayer {
+    <script>
+    window.dataLayer = window.dataLayer || []; dataLayer.push({
+        'event': 'dataLoaded',
+        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
+        'userID': '',
+        'vpv': '/accounts/teams/review/page-review-team-member',
+        'PRN': '',
+        'org': '',
+        'subOrg':''
+    });
+    </script>
+}
