@@ -22,3 +22,14 @@
         <p>Find out more about <a href="https://www.gov.uk/take-on-an-apprentice/overview" target="_blank" rel="external">employing an apprentice</a>.</p>
     </div>
 </div>
+
+@section gaDataLayer {
+    <script>
+    window.dataLayer = window.dataLayer || []; dataLayer.push({
+        'event': 'dataLoaded',
+        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
+        'userID': '',
+        'vpv': '/page-service-start'
+    });
+    </script>
+}

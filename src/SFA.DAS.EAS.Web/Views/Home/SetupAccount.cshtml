@@ -11,3 +11,15 @@
         @Html.Partial("_SetupAccount")
     </div>
 </div>
+
+
+@section gaDataLayer {
+    <script>
+    window.dataLayer = window.dataLayer || []; dataLayer.push({
+        'event': 'dataLoaded',
+        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
+        'userID': '',
+        'vpv': '/page-auth-setupaccount'
+    });
+    </script>
+}
