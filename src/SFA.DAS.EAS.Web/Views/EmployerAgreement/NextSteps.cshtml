@@ -45,3 +45,15 @@
         </form>
     </div>
 </div>
+
+@section gaDataLayer {
+    <script>
+    window.dataLayer = window.dataLayer || []; dataLayer.push({
+        'event': 'dataLoaded',
+        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
+        'userID': '',
+        'vpv': '/accounts/agreements/next/page-sign-agreement-next-steps ',
+        'org': ''
+    });
+    </script>
+}

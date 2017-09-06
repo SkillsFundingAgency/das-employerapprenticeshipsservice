@@ -35,3 +35,15 @@
         </ol>
     </div>
 }
+
+@section gaDataLayer {
+    <script>
+    window.dataLayer = window.dataLayer || []; dataLayer.push({
+        'event': 'dataLoaded',
+        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
+        'userID': '',
+        'vpv': '/accounts/agreements/about-your-agreement/agreement-about',
+        'org': ''
+    });
+    </script>
+}
