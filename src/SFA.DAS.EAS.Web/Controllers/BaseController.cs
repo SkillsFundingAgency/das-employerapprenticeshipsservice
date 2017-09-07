@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly IMultiVariantTestingService _multiVariantTestingService;
         private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
       
-        protected IOwinWrapper OwinWrapper;
+        public IOwinWrapper OwinWrapper;
         
 
         public BaseController(

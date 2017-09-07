@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 
 using SFA.DAS.EAS.Web.Exceptions;
+using SFA.DAS.EAS.Web.Filters;
 using SFA.DAS.EAS.Web.Plumbing.Mvc;
 
 namespace SFA.DAS.EAS.Web
@@ -11,6 +12,7 @@ namespace SFA.DAS.EAS.Web
         {
             filters.Add(new LogAndHandleErrorAttribute());
             filters.Add(new InvalidStateExceptionFilter());
+            filters.Add(new GoogleAnalFilterAttribute());
         }
     }
 }

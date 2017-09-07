@@ -32,6 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityByIdTests
             //Act
             var actual = _validator.Validate(new GetLegalEntityByIdQuery
             {
+                HashedAccountId = "ABBA12",
                 Id = 123
             });
 

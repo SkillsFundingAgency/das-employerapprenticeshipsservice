@@ -44,6 +44,9 @@
     <link href="@Styles.Url("~/bundles/screen")" media="all" rel="stylesheet" />
     <!--<![endif]-->
 
+    @Html.Partial("GoogleAnalInfo")
+    
+    <!-- This is from individual pages -->
     @RenderSection("gaDataLayer", required: false)
 
     <!-- Google Tag Manager -->

@@ -15,17 +15,19 @@ from
 left join
 (
     SELECT 
-       [AccountId]
-      ,TransactionType
-	  ,MAX(TransactionDate) as TransactionDate
-      ,Sum(Amount) as Amount
-      ,UkPrn
-      ,DateCreated
-	  ,SfaCoInvestmentAmount
-	  ,EmployerCoInvestmentAmount
-  FROM [employer_financial].[TransactionLine]
-  WHERE AccountId = @accountId AND DateCreated >= @fromDate AND DateCreated <= @toDate
-  GROUP BY DateCreated, AccountId, UKPRN, SfaCoInvestmentAmount, EmployerCoInvestmentAmount, TransactionType
-  
+       tl.[AccountId]
+      ,tl.TransactionType
+	  ,MAX(tl.TransactionDate) as TransactionDate
+      ,Sum(tl.Amount) as Amount
+      ,tl.UkPrn
+      ,tl.DateCreated
+	  ,tl.SfaCoInvestmentAmount
+	  ,tl.EmployerCoInvestmentAmount
+	  ,ld.PayrollYear
+	  ,ld.PayrollMonth
+  FROM [employer_financial].[TransactionLine] tl
+  LEFT JOIN [employer_financial].LevyDeclaration ld on ld.submissionid = tl.submissionid
+  WHERE tl.AccountId = @accountId AND tl.DateCreated >= @fromDate AND DateCreated <= @toDate
+  GROUP BY tl.DateCreated, tl.AccountId, tl.UKPRN, tl.SfaCoInvestmentAmount, tl.EmployerCoInvestmentAmount, tl.TransactionType, ld.PayrollMonth, ld.PayrollYear
 ) as main on main.AccountId = bal.AccountId
 order by DateCreated desc, TransactionType desc, ukprn desc
