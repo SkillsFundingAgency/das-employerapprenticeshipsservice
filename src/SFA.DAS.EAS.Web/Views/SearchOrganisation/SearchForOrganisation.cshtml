@@ -28,3 +28,15 @@
     <div class="breadcrumbs" id="js-breadcrumbs">
     </div>
 }
+
+@section gaDataLayer {
+    <script>
+    window.dataLayer = window.dataLayer || []; dataLayer.push({
+        'event': 'dataLoaded',
+        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
+        'userID': '',
+        'vpv': '@(Model.Data.IsExistingAccount ? "/accounts/organisations/search/search-for-organisation" : "/onboarding/search/search-for-organisation")',
+        'org': ''
+    });
+    </script>
+}

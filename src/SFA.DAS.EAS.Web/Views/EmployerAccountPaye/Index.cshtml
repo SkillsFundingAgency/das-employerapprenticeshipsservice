@@ -96,3 +96,15 @@
         </ol>
     </div>
 }
+
+@section gaDataLayer {
+    <script>
+    window.dataLayer = window.dataLayer || []; dataLayer.push({
+        'event': 'dataLoaded',
+        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
+        'userID': '',
+        'vpv': '/accounts/schemes/page-paye-schemes-index',
+        'org': ''
+    });
+    </script>
+}
