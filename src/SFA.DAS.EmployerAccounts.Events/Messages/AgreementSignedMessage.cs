@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
-    [QueueName("agreement_signed_notifications")]
+    [QueueName("agreement_signed")]
     public class AgreementSignedMessage
     {
         public long AccountId { get; set; }

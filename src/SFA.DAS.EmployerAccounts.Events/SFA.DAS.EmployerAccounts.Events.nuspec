@@ -13,7 +13,7 @@
     <releaseNotes />
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="SFA.DAS.Messaging" version="3.0.0.39185"/>
+        <dependency id="SFA.DAS.Messaging" version="3.0.0.39271"/>
       </group>
     </dependencies>
   </metadata>
