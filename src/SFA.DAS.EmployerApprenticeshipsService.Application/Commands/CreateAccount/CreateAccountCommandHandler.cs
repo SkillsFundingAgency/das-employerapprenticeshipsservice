@@ -6,6 +6,7 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
+using SFA.DAS.EAS.Application.Notifications.CreateAgreementCreatedMessage;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -89,7 +90,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private async Task CreateAgreementCreatedNotificationMessage(long accountId, long legalEntityId, long employerAgreementId)
         {
-            await _messagePublisher.PublishAsync(new AgreementCreatedMessage
+            await _mediator.PublishAsync(new CreateAgreementCreatedMessageCommand
             {
                 AccountId = accountId,
                 LegalEntityId = legalEntityId,
