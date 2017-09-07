@@ -45,6 +45,9 @@
     <!--<![endif]-->
 
     @Html.Partial("GoogleAnalInfo")
+    
+    <!-- This is from individual pages -->
+    @RenderSection("gaDataLayer", required: false)
 
     <!-- Google Tag Manager -->
     <script>

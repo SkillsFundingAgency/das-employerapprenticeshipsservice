@@ -3,22 +3,29 @@
     window.dataLayer = window.dataLayer || [];
     dataLayer.push({
         'event': '@ViewBag.GaData.DataLoaded',
-
         'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-
         'userID': '@ViewBag.GaData.UserId',
-
         'vpv': '@ViewBag.GaData.Vpv',
-
         'org': '@ViewBag.GaData.Org',
-
         'subOrg': ''
-
-
-        @foreach (var extra in ViewBag.GaData.Extras)
+        @if (ViewBag.GaData.Extras.Count>0)
         {
-            @Html.Raw(",'" + extra.Key + "' : '" + extra.Value + "',");
+            @Html.Raw(",");
         }
+
+        @{
+            int cnt = 0;
+            foreach (var extra in ViewBag.GaData.Extras)
+            {
+                cnt++;
+                @Html.Raw("'" + extra.Key + "' : '" + extra.Value + "'");
+                if (cnt < ViewBag.GaData.Extras.Count)
+                {
+                    @Html.Raw("," + Environment.NewLine);
+                }
+            }
+        }
+
 
     });
 
