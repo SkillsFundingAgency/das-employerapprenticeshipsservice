@@ -1,0 +1,25 @@
+﻿<script>
+
+    window.dataLayer = window.dataLayer || [];
+    dataLayer.push({
+        'event': '@ViewBag.GaData.DataLoaded',
+
+        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
+
+        'userID': '@ViewBag.GaData.UserId',
+
+        'vpv': '@ViewBag.GaData.Vpv',
+
+        'org': '@ViewBag.GaData.Org',
+
+        'subOrg': ''
+
+
+        @foreach (var extra in ViewBag.GaData.Extras)
+        {
+            @Html.Raw(",'" + extra.Key + "' : '" + extra.Value + "',");
+        }
+
+    });
+
+</script>
