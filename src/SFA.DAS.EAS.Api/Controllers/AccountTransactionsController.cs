@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Api.Controllers
                 month = DateTime.Now.Month;
             }
 
-            var result = await _orchestrator.GetAccountTransactions(hashedAccountId, year, month);
+            var result = await _orchestrator.GetAccountTransactions(hashedAccountId, year, month, Url);
             return result;
         }
     }

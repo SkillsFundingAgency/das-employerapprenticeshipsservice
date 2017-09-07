@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
@@ -28,6 +29,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
         private readonly IMessagePublisher _messagePublisher;
 
+        [ServiceBusConnectionKey("tasks")]
         public RemoveLegalEntityCommandHandler(
             IValidator<RemoveLegalEntityCommand> validator, 
             ILog logger, 

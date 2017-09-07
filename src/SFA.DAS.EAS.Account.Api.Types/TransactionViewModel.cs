@@ -12,8 +12,6 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public decimal Amount { get; set; }
         public decimal Balance { get; set; }
         public List<TransactionViewModel> SubTransactions { get; set; }
-        public DateTime PayrollDate { get; set; }
-        public string PayrollYear { get; set; }
-        public int PayrollMonth { get; set; }
+        public string ResourceUri { get; set; }
     }
 }
