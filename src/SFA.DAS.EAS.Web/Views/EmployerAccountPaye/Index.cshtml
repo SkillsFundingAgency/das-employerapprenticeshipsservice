@@ -87,6 +87,19 @@
     </div>
 </div>
 
+@section pageSpecificJS {
+    <script>
+        var seenEPInform = false;
+        $('#inform-english-percentage').on('toggle', function (e) {
+            if (!seenEPInform) {
+                dataLayer.push(
+                    { 'event': 'englishPercentageDropdown' }
+                );
+            }
+        });
+
+    </script>
+}
 
 @section breadcrumb {
     <div class="breadcrumbs">
