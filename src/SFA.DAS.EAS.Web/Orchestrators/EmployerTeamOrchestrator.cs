@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -91,7 +93,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
                     TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
                     ShowWizard = showWizard,
-                    Tasks = tasksResponse.Tasks
+                    Tasks = tasksResponse?.Tasks ?? new List<AccountTask>()
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
