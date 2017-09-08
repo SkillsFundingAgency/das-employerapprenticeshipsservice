@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
         private readonly IMessagePublisher _messagePublisher;
 
-        [ServiceBusConnectionKey("tasks_api")]
+        [ServiceBusConnectionKey("tasks")]
         public RemoveLegalEntityCommandHandler(
             IValidator<RemoveLegalEntityCommand> validator, 
             ILog logger, 
