@@ -16,6 +16,10 @@
     var nextMonthDate = displayingMonthDate.AddMonths(1);
 }
 
+@{
+    ViewBag.GaData.Vpv = "/accounts/balance/" + Model.Data.Year + "/" + Model.Data.Month + "/page-transactions";
+}
+
 <div class="grid-row">
     <div class="column-full">
         <h1 class="heading-xlarge">
@@ -185,16 +189,4 @@
             <li>@ViewBag.Title</li>
         </ol>
     </div>
-}
-
-@section gaDataLayer {
-    <script>
-    window.dataLayer = window.dataLayer || []; dataLayer.push({
-        'event': 'dataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '',
-        'vpv': '/accounts/balance/@Model.Data.Year/@Model.Data.Month/page-transactions',
-        'org': ''
-    });
-    </script>
 }

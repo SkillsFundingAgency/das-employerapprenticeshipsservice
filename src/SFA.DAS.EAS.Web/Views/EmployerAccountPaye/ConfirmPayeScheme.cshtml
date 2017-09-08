@@ -9,8 +9,8 @@
     ViewBag.Title = "PAYE scheme already in use";
 }
 
-@{ 
-    var vpv = "/accounts/schemes/confirm";
+@{
+    ViewBag.GaData.Vpv = "/accounts/schemes/confirm";
 }
 
 <div class="grid-row">
@@ -47,8 +47,8 @@
         }
         else
         {
-            vpv = "/accounts/schemes/page-paye-scheme-in-use-error";
-            
+            ViewBag.GaData.Vpv = "/accounts/schemes/page-paye-scheme-in-use-error";
+
             <h1 class="heading-xlarge">PAYE scheme already in use</h1>
             <p>The PAYE scheme for the Government Gateway details you entered is already added to an account. </p>
             <p><a class="button" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {confirmPayeVisibility = true})">Use different details</a></p>
@@ -61,16 +61,4 @@
     <div class="breadcrumbs">
        <a href="@Url.Action("Index", "EmployerAccountPaye", new { HashedAccountId = Model.Data.HashedAccountId })" class="back-link">Back to PAYE schemes</a>
     </div>
-}
-
-@section gaDataLayer {
-    <script>
-    window.dataLayer = window.dataLayer || []; dataLayer.push({
-        'event': 'dataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '',
-        'vpv': '@vpv',
-        'org': '@Model.Data.HashedAccountId'
-    });
-    </script>
 }

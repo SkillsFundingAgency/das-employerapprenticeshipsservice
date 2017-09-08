@@ -13,6 +13,11 @@
     }
 }
 
+@{
+    ViewBag.GaData.Vpv = "/accounts/agreements/organisations-agreements-home";
+}
+
+
 <div class="grid-row header-index">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Your organisations and agreements</h1>
@@ -89,16 +94,4 @@
             <li>Your organisations and agreements</li>
         </ol>
     </div>
-}
-
-@section gaDataLayer {
-    <script>
-    window.dataLayer = window.dataLayer || []; dataLayer.push({
-        'event': 'dataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '',
-        'vpv': '/accounts/agreements/organisations-agreements-home',
-        'org': ''
-    });
-    </script>
 }

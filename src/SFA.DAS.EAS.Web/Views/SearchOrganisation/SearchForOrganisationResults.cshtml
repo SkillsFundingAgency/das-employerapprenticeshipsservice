@@ -10,6 +10,11 @@
     ViewBag.Section = "organisations";
 }
 
+@{
+    ViewBag.GaData.Vpv = Model.Data.IsExistingAccount ? "/accounts/organisations/search/results/select-your-organisation" : "/onboarding/search/results/select-your-organisation";
+}
+
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@ViewBag.Title</h1>
@@ -180,22 +185,4 @@
             <li><a href="@Url.Action("SearchForOrganisation")" class="back-link">Back</a></li>
         </ol>
     </div>
-}
-
-@section gaDataLayer {
-    <script>
-    window.dataLayer = window.dataLayer || []; dataLayer.push({
-        'event': 'dataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '',
-        'vpv': '@(Model.Data.IsExistingAccount ? "/accounts/organisations/search/results/select-your-organisation" : "/onboarding/search/results/select-your-organisation")',
-        'org': ''
-    });
-    </script>
-
-    @if (Model.Data.Results.PageNumber == Model.Data.Results.TotalPages || Model.Data.Results.TotalPages == 0)
-    {
-        <script>  dataLayer.push({ 'zeroSearch': '@Model.Data.SearchTerm' });  </script>
-    }
-
 }

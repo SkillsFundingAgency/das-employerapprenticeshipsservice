@@ -5,6 +5,9 @@
 @{ViewBag.Title = "Setup your account"; }
 @{ViewBag.HideNav = "true"; }
 
+@{
+    ViewBag.GaData.Vpv = "/page-auth-setupaccount";
+}
 
 <div class="grid-row">
     <div class="column-full">
@@ -12,14 +15,3 @@
     </div>
 </div>
 
-
-@section gaDataLayer {
-    <script>
-    window.dataLayer = window.dataLayer || []; dataLayer.push({
-        'event': 'dataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '',
-        'vpv': '/page-auth-setupaccount'
-    });
-    </script>
-}

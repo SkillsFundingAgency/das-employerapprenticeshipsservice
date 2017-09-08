@@ -9,6 +9,9 @@
     ViewBag.Section = "finance";
 
 }
+@{
+    ViewBag.GaData.Vpv = "/accounts/balance/levyDeclaration/page-transaction-details";
+}
 <div class="grid-row">
     <div class="column-two-thirds">
         <div class="hgroup">
@@ -113,16 +116,4 @@
             <li>Debit details</li>
         </ol>
     </div>
-}
-
-@section gaDataLayer {
-    <script>
-    window.dataLayer = window.dataLayer || []; dataLayer.push({
-        'event': 'dataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '',
-        'vpv': '/accounts/balance/levyDeclaration/page-transaction-details',
-        'org': ''
-    });
-    </script>
 }

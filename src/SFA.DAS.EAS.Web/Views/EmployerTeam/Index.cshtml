@@ -9,14 +9,14 @@
     ViewBag.Section = "home";
     ViewBag.PageID = "page-company-homepage";
 
-    ViewBag.GaData.Vpv = "specific vpv";
-    ViewBag.GaData.Extras.Add("PRN", "");
+    ViewBag.GaData.Vpv = "/accounts/agreements/page-company-homepage";
 
     if (!string.IsNullOrEmpty(Model.Data.EmployerAccountType))
     {
         ViewBag.PageID = $"page-employer-account-created-{Model.Data.EmployerAccountType}";
     }
 }
+
 
 @if (Model.Data.ShowWizard)
 {

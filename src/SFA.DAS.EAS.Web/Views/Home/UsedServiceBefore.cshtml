@@ -1,7 +1,9 @@
 ﻿@{ViewBag.PageID = "page-used-service-before"; }
 @{ViewBag.Title = "Have you used this service before?"; }
 @{ViewBag.HideNav = "true"; }
-
+@{
+    ViewBag.GaData.Vpv = "/service/usedServiceBefore/page-used-service-before";
+}
 @{
     var errorMessage = Model?.GetType().GetProperty("ErrorMessage") != null ? Model.GetType().GetProperty("ErrorMessage").GetValue(Model,null) as string : "";
 }
@@ -62,15 +64,4 @@
     <div class="breadcrumbs">
         <a href="/" class="link-back">Back</a>
     </div>
-}
-
-@section gaDataLayer {
-    <script>
-    window.dataLayer = window.dataLayer || []; dataLayer.push({
-        'event': 'dataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '',
-        'vpv': '/service/usedServiceBefore/page-used-service-before'
-    });
-    </script>
 }

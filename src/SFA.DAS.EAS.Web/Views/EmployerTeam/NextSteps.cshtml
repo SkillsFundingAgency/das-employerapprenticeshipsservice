@@ -2,6 +2,9 @@
 @{ViewBag.PageID = "page-invite-team-member-next-steps";}
 @{ViewBag.Title = "What's next";}
 @{ViewBag.Section = "team";}
+@{
+    ViewBag.GaData.Vpv = "/accounts/teams/invite/next/page-invite-team-member-next-steps";
+}
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-large">
@@ -41,17 +44,3 @@
         </form>
     </div>
 </div>
-
-@section gaDataLayer {
-    <script>
-    window.dataLayer = window.dataLayer || []; dataLayer.push({
-        'event': 'dataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '',
-        'vpv': '/accounts/teams/invite/next/page-invite-team-member-next-steps',
-        'PRN': '',
-        'org': '',
-        'subOrg':''
-    });
-    </script>
-}

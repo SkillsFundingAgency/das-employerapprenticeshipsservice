@@ -2,6 +2,10 @@
 @{ViewBag.PageID = "page-paye-scheme-next-steps";} 
 @{ViewBag.Title = "What's next";} 
 @{ViewBag.Section = "paye";} 
+@{
+    ViewBag.GaData.Vpv = "/accounts/schemes/page-paye-scheme-next-steps";
+}
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-large">
@@ -41,16 +45,3 @@
         </form>
     </div>
 </div>
-
-
-@section gaDataLayer {
-    <script>
-    window.dataLayer = window.dataLayer || []; dataLayer.push({
-        'event': 'dataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '',
-        'vpv': '/accounts/schemes/page-paye-scheme-next-steps',
-        'org': ''
-    });
-    </script>
-}

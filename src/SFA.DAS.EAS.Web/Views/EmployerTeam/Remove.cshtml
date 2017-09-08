@@ -6,6 +6,10 @@
     ViewBag.Title = "Remove team member";
     ViewBag.Section = "team";
 }
+
+@{
+    ViewBag.GaData.Vpv = "/accounts/teams/remove/page-remove-team-member";
+}
    
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -41,18 +45,4 @@
     <div class="breadcrumbs">
         <a href="@Url.Action("ViewTeam", "EmployerTeam")" class="back-link">Back to your team</a>
     </div>
-}
-
-@section gaDataLayer {
-    <script>
-    window.dataLayer = window.dataLayer || []; dataLayer.push({
-        'event': 'dataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '',
-        'vpv': '/accounts/teams/remove/page-remove-team-member',
-        'PRN': '',
-        'org': '',
-        'subOrg':''
-    });
-    </script>
 }

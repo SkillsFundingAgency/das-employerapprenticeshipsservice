@@ -4,8 +4,8 @@
 @{ViewBag.HideNav = "true"; }
 @{
     ViewBag.GaData.Vpv = "/page-service-start";
-    ViewBag.GaData.Extras.Add("animal", "dog");
-    ViewBag.GaData.Extras.Add("weather", "cloudy");
+   // ViewBag.GaData.Extras.Add("animal", "dog");
+   // ViewBag.GaData.Extras.Add("weather", "cloudy");
 }
 
 <div class="grid-row">
@@ -28,13 +28,4 @@
     </div>
 </div>
 
-@section gaDataLayer {
-    <script>
-    window.dataLayer = window.dataLayer || []; dataLayer.push({
-        'event': 'dataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '',
-        'vpv': '/page-service-start'
-    });
-    </script>
-}
+

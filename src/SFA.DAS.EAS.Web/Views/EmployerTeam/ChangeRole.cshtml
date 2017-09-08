@@ -13,6 +13,10 @@
 
 }
 
+@{
+    ViewBag.GaData.Vpv = "/accounts/teams/role/change/page-team-member-change-role";
+}
+
 @if (!ViewContext.ViewData.ModelState.IsValid)
 {
     foreach (var state in ViewContext.ViewData.ModelState.Values)
@@ -77,16 +81,3 @@
     </div>
 }
 
-@section gaDataLayer {
-    <script>
-    window.dataLayer = window.dataLayer || []; dataLayer.push({
-        'event': 'dataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '',
-        'vpv': '/accounts/teams/role/change/page-team-member-change-role',
-        'PRN': '',
-        'org': '',
-        'subOrg':''
-    });
-    </script>
-}

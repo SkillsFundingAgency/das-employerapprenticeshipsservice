@@ -17,6 +17,11 @@
     
 }
 
+@{
+    ViewBag.GaData.Vpv = "/accounts/teams/view/page-manage-team";
+}
+
+
 <div class="grid-row header-index">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Your team</h1>
@@ -81,16 +86,4 @@
             <li>Your team</li>
         </ol>
     </div>
-}
-
-@section gaDataLayer {
-    <script>
-    window.dataLayer = window.dataLayer || []; dataLayer.push({
-        'event': 'dataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '',
-        'vpv': '/accounts/teams/view/page-manage-team',
-        'org': ''
-    });
-    </script>
 }
