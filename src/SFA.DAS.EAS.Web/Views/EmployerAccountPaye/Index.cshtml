@@ -12,6 +12,10 @@
     }
 }
 
+@{
+    ViewBag.GaData.Vpv = "/accounts/schemes/page-paye-schemes-index";
+}
+
 <div class="grid-row header-index">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">PAYE schemes</h1>
@@ -87,6 +91,19 @@
     </div>
 </div>
 
+@section pageSpecificJS {
+    <script>
+        var seenEPInform = false;
+        $('#inform-english-percentage').on('toggle', function (e) {
+            if (!seenEPInform) {
+                dataLayer.push(
+                    { 'event': 'englishPercentageDropdown' }
+                );
+            }
+        });
+
+    </script>
+}
 
 @section breadcrumb {
     <div class="breadcrumbs">

@@ -13,6 +13,11 @@
     }
 }
 
+@{
+    ViewBag.GaData.Vpv = "/accounts/agreements/organisations-agreements-home";
+}
+
+
 <div class="grid-row header-index">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Your organisations and agreements</h1>
@@ -81,6 +86,7 @@
         <p class="font-xsmall"><a href="@Url.Action("GetOrganisationsToRemove", "EmployerAgreement", new { Model.Data.HashedAccountId})">Remove an organisation from your account</a></p>
     </div>
 </div>
+
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">

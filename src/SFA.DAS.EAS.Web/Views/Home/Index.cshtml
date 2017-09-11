@@ -6,6 +6,10 @@
 @{ViewBag.Title = "Your accounts"; }
 @{ViewBag.HideNav = "true"; }
 
+@{
+    ViewBag.GaData.Vpv = "/page-auth-homepage";
+}
+
 @if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
 {
     <div class="grid-row">

@@ -9,6 +9,10 @@
     ViewBag.HideNav = Model.Data.IsExistingAccount ? "" : "true";
 }
 
+@{
+    ViewBag.GaData.Vpv = Model.Data.IsExistingAccount ? "/accounts/organisations/search/search-for-organisation" : "/onboarding/search/search-for-organisation";
+}
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@ViewBag.Title</h1>
