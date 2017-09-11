@@ -31,15 +31,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly IMediator _mediator;
-        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+       
 
-        public EmployerTeamOrchestrator(IMediator mediator, EmployerApprenticeshipsServiceConfiguration configuration)
+        public EmployerTeamOrchestrator(IMediator mediator)
             : base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
+
             _mediator = mediator;
-            _configuration = configuration;
         }
 
         public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(
@@ -52,9 +52,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = accountId,
                     UserId = externalUserId
                 });
-                
+
                 var showSigningNotice = 0;
-                
+
                 var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
                 if (userRoleResponse.UserRole == Role.Owner || userRoleResponse.UserRole == Role.Transactor)
                 {
@@ -65,8 +65,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     });
                     showSigningNotice = agreementsResponse.EmployerAgreements.Count(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
                 }
-                
-                var userResponse = await _mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = accountId, TeamMemberId = externalUserId });
+
+                var userResponse = await _mediator.SendAsync(
+                    new GetTeamMemberQuery
+                    {
+                        HashedAccountId = accountId,
+                        TeamMemberId = externalUserId
+                    });
 
                 var accountStatsResponse =
                     await _mediator.SendAsync(
@@ -128,7 +133,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         HashedAccountId = hashedId,
                         TeamMembers = response.TeamMembers
                     }
-                
                 };
             }
             catch (InvalidRequestException ex)
@@ -186,8 +190,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Exception = ex
                 };
             }
-
-
 
             return new OrchestratorResponse<EmployerTeamMembersViewModel>();
         }
@@ -249,7 +251,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Message = $"You've cancelled the invitation sent to <strong>{email}</strong>",
                     Severity = FlashMessageSeverityLevel.Success
                 };
-
             }
             catch (InvalidRequestException e)
             {
@@ -457,7 +458,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public async Task<OrchestratorResponse<InviteTeamMemberViewModel>> GetNewInvitation(
             string hashedAccountId, string externalUserId)
         {
-
             var response = await GetUserAccountRole(hashedAccountId, externalUserId);
 
             return new OrchestratorResponse<InviteTeamMemberViewModel>
@@ -469,8 +469,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 },
                 Status = response.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized
             };
-
-
         }
 
         private static InvitationViewModel MapFrom(TeamMember teamMember)
