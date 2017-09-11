@@ -5,8 +5,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetMember;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -22,23 +20,21 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
         private GetMemberResponse _teamMemberResponse;
-        private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
         public void Arrange()
         {
             _teamMemberResponse = new GetMemberResponse
             {
-                TeamMember = new TeamMember()
+                TeamMember = new TeamMember
                 {
                     Email = "test@test.com"
                 }
             };
 
             _mediator = new Mock<IMediator>();
-            _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object,_configuration);
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object);
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetMemberRequest>()))
                 .ReturnsAsync(_teamMemberResponse);
@@ -91,7 +87,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                 .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = userRole });
 
             //Act
-            var result = await _orchestrator.GetTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
+            await _orchestrator.GetTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetMemberRequest>()), Times.Never);

@@ -8,8 +8,6 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Orchestrators;
 
@@ -19,14 +17,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
     {
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
-        private EmployerApprenticeshipsServiceConfiguration _configuration;
+        
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _configuration = new EmployerApprenticeshipsServiceConfiguration();
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _configuration);
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object);
         }
 
         [Test]

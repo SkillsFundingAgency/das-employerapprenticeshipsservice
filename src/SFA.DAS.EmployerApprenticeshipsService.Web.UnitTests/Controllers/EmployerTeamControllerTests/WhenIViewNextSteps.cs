@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerTeamControllerTests
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
-            _orchestrator = new Mock<EmployerTeamOrchestrator>(new Mock<IMediator>().Object, new EmployerApprenticeshipsServiceConfiguration());
+            _orchestrator = new Mock<EmployerTeamOrchestrator>(new Mock<IMediator>().Object);
 
             _controller = new EmployerTeamController(
                 _owinWrapper.Object,
