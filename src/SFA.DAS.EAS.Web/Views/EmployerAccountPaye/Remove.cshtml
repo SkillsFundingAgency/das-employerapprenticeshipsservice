@@ -3,6 +3,10 @@
 @{ViewBag.Title = "Remove PAYE scheme";}
 @{ViewBag.Section = "paye";} 
 
+@{
+    ViewBag.GaData.Vpv = "/accounts/schemes/page-paye-scheme-remove";
+}
+
 @if (!Model.Data.Valid)
 {
     <div class="grid-row notification-wrapper">

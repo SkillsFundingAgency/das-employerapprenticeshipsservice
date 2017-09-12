@@ -16,13 +16,17 @@
     var nextMonthDate = displayingMonthDate.AddMonths(1);
 }
 
+@{
+    ViewBag.GaData.Vpv = "/accounts/balance/" + Model.Data.Year + "/" + Model.Data.Month + "/page-transactions";
+}
+
 <div class="grid-row">
     <div class="column-full">
         <h1 class="heading-xlarge">
             Your transactions
             <span class="heading-secondary">@displayingMonthDate.ToGdsFormatWithoutDay()</span>
         </h1>
-
+         
         @if (Model.Data.IsLatestMonth)
         {
             <div class="data-wrap">
@@ -47,7 +51,7 @@
                     </dl>
                 </div>
             </div>
-                            }
+        }
     </div>
 </div>
 <div class="grid-row">

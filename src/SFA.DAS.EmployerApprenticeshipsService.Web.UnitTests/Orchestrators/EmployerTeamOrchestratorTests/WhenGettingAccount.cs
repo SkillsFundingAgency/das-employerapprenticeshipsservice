@@ -24,7 +24,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
-        private EmployerApprenticeshipsServiceConfiguration _configuration;
         private AccountStats _accountStats;
         private List<AccountTask> _tasks;
 
@@ -86,9 +85,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountStatsQuery>()))
                      .ReturnsAsync(new GetAccountStatsResponse {Stats = _accountStats});
 
-            _configuration = new EmployerApprenticeshipsServiceConfiguration ();
-
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _configuration);
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object);
         }
         
         [Test]

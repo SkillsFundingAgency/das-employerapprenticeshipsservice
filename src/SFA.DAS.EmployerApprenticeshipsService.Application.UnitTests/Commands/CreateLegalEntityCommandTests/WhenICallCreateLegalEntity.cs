@@ -79,8 +79,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 _membershipRepository.Object, 
                 _mediator.Object, 
                 _genericEventFactory.Object,
-                _legalEntityEventFactory.Object,
-                Mock.Of<IMessagePublisher>());
+                _legalEntityEventFactory.Object);
         }
 
         [Test]

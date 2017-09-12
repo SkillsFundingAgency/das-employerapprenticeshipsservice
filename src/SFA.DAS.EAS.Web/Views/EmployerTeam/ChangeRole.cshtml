@@ -13,6 +13,10 @@
 
 }
 
+@{
+    ViewBag.GaData.Vpv = "/accounts/teams/role/change/page-team-member-change-role";
+}
+
 @if (!ViewContext.ViewData.ModelState.IsValid)
 {
     foreach (var state in ViewContext.ViewData.ModelState.Values)
@@ -76,3 +80,4 @@
         <a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to your team</a>
     </div>
 }
+

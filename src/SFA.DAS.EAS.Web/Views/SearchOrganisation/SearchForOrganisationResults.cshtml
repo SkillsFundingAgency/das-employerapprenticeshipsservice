@@ -10,6 +10,11 @@
     ViewBag.Section = "organisations";
 }
 
+@{
+    ViewBag.GaData.Vpv = Model.Data.IsExistingAccount ? "/accounts/organisations/search/results/select-your-organisation" : "/onboarding/search/results/select-your-organisation";
+}
+
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@ViewBag.Title</h1>

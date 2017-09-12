@@ -17,6 +17,11 @@
     
 }
 
+@{
+    ViewBag.GaData.Vpv = "/accounts/teams/view/page-manage-team";
+}
+
+
 <div class="grid-row header-index">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Your team</h1>
@@ -74,11 +79,11 @@
     </div>
 }
 
-        @section breadcrumb {
-            <div class="breadcrumbs">
-                <ol role="navigation">
-                    <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
-                    <li>Your team</li>
-                </ol>
-            </div>
-        }
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li>Your team</li>
+        </ol>
+    </div>
+}

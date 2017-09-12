@@ -5,9 +5,13 @@
 @{ViewBag.Title = "Setup your account"; }
 @{ViewBag.HideNav = "true"; }
 
+@{
+    ViewBag.GaData.Vpv = "/page-auth-setupaccount";
+}
 
 <div class="grid-row">
     <div class="column-full">
         @Html.Partial("_SetupAccount")
     </div>
 </div>
+
