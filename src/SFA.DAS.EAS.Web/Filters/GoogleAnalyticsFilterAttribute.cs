@@ -5,7 +5,7 @@ using SFA.DAS.EAS.Web.Controllers;
 
 namespace SFA.DAS.EAS.Web.Filters
 {
-    public class GoogleAnalFilterAttribute : ActionFilterAttribute
+    public class GoogleAnalyticsFilterAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Filters
                 hashedAccountId = filterContext.ActionParameters["hashedAccountId"] as string;
             }
 
-            filterContext.Controller.ViewBag.GaData = new GaData()
+            filterContext.Controller.ViewBag.GaData = new GaData
             {           
                     UserId = userId,
                     Org = hashedAccountId

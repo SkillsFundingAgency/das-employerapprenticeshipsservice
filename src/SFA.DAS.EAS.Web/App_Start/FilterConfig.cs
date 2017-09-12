@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Web
         {
             filters.Add(new LogAndHandleErrorAttribute());
             filters.Add(new InvalidStateExceptionFilter());
-            filters.Add(new GoogleAnalFilterAttribute());
+            filters.Add(new GoogleAnalyticsFilterAttribute());
         }
     }
 }

@@ -8,25 +8,26 @@
         'vpv': '@ViewBag.GaData.Vpv',
         'org': '@ViewBag.GaData.Org',
         'subOrg': ''
+
         @if (ViewBag.GaData.Extras.Count>0)
         {
             @Html.Raw(",");
         }
 
         @{
-            int cnt = 0;
+            var count = 0;
             foreach (var extra in ViewBag.GaData.Extras)
             {
-                cnt++;
-                @Html.Raw("'" + extra.Key + "' : '" + extra.Value + "'");
-                if (cnt < ViewBag.GaData.Extras.Count)
+                count++;
+                
+                @Html.Raw($"'{extra.Key}' : '{extra.Value}'");
+
+                if (count < ViewBag.GaData.Extras.Count)
                 {
                     @Html.Raw("," + Environment.NewLine);
                 }
             }
         }
-
-
     });
 
 </script>

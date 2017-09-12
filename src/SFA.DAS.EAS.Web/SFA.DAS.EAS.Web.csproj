@@ -398,7 +398,7 @@
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Extensions\ValidationResultExtensions.cs" />
-    <Compile Include="Filters\GoogleAnalFilterAttribute.cs" />
+    <Compile Include="Filters\GoogleAnalyticsFilterAttribute.cs" />
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipFiltersMapper.cs" />
     <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
@@ -1102,7 +1102,7 @@
     <Content Include="src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
     <Content Include="Views\EmployerTeam\NextSteps.cshtml" />
     <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
-    <Content Include="Views\Shared\GoogleAnalInfo.cshtml" />
+    <Content Include="Views\Shared\GoogleAnalyticsInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
