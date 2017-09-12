@@ -18,12 +18,12 @@ namespace SFA.DAS.EAS.Application.Notifications.CreateAgreementSignedMessage
         
         public async Task Handle(CreateAgreementSignedMessageCommand notification)
         {
-            await _messagePublisher.PublishAsync(new AgreementSignedMessage
-            {
-                AccountId = notification.AccountId,
-                LegalEntityId = notification.LegalEntityId,
-                AgreementId = notification.AgreementId
-            });
+            //await _messagePublisher.PublishAsync(new AgreementSignedMessage
+            //{
+            //    AccountId = notification.AccountId,
+            //    LegalEntityId = notification.LegalEntityId,
+            //    AgreementId = notification.AgreementId
+            //});
         }
     }
 }

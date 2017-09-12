@@ -6,12 +6,12 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
+using SFA.DAS.EAS.Application.Notifications.CreateAgreementCreatedMessage;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Extensions;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
@@ -23,7 +23,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         private readonly IMediator _mediator;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly ILegalEntityEventFactory _legalEntityEventFactory;
-        private readonly IMessagePublisher _messagePublisher;
 
 
         public CreateLegalEntityCommandHandler(
@@ -31,15 +30,13 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             IMembershipRepository membershipRepository, 
             IMediator mediator, 
             IGenericEventFactory genericEventFactory,
-            ILegalEntityEventFactory legalEntityEventFactory,
-            IMessagePublisher messagePublisher)
+            ILegalEntityEventFactory legalEntityEventFactory)
         {
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
             _mediator = mediator;
             _genericEventFactory = genericEventFactory;
             _legalEntityEventFactory = legalEntityEventFactory;
-            _messagePublisher = messagePublisher;
         }
 
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
@@ -70,7 +67,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
         private async Task CreateAgreementCreatedNotificationMessage(long accountId, long legalEntityId, long agreementId)
         {
-            await _messagePublisher.PublishAsync(new AgreementCreatedMessage
+            await _mediator.PublishAsync(new CreateAgreementCreatedMessageCommand
             {
                 AccountId = accountId,
                 LegalEntityId = legalEntityId,

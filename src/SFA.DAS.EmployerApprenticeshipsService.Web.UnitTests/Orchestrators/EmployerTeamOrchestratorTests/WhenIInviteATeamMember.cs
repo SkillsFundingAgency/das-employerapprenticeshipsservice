@@ -9,10 +9,7 @@ using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateInvitation;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 
@@ -22,15 +19,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
     {
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
-        private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _configuration = new EmployerApprenticeshipsServiceConfiguration();
-
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object,_configuration);
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object);
         }
 
         [Test]
@@ -100,7 +94,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()), Times.Never);
         }
         
-        
         [TestCase(Role.Viewer, HttpStatusCode.Unauthorized)]
         [TestCase(Role.Transactor, HttpStatusCode.Unauthorized)]
         [TestCase(Role.Owner, HttpStatusCode.OK)]
@@ -122,6 +115,5 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             //Assert
             Assert.AreEqual(status, result.Status);
         }
-        
     }
 }

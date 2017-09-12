@@ -79,8 +79,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
                 _validator.Object,
                 _agreementEventFactory.Object, 
                 _genericEventFactory.Object,
-                _mediator.Object,
-                Mock.Of<IMessagePublisher>());
+                _mediator.Object);
 
             _command = new SignEmployerAgreementCommand
             {
