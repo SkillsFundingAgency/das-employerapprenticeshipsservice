@@ -224,8 +224,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
             var result = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
 
-            PopulateGoogleEnvironmentDetails(result);
-
             return result;
         }
 
@@ -254,12 +252,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
         {
             SystemDetailsViewModel.EnvironmentName = envName;
             SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        }
-
-        private void PopulateGoogleEnvironmentDetails(EmployerApprenticeshipsServiceConfiguration environmentConfig)
-        {
-            GoogleAnalyticsInfoViewModel.HeadUrl = environmentConfig.GoogleAnalyticsSnippets.GoogleHeaderUrl;
-            GoogleAnalyticsInfoViewModel.BodyUrl = environmentConfig.GoogleAnalyticsSnippets.GoogleBodyUrl;
         }
 
         private void RegisterLogger()

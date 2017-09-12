@@ -26,14 +26,10 @@ namespace SFA.DAS.EAS.Domain.Configuration
 
         public CommitmentNotificationConfiguration CommitmentNotification { get; set; }
 
-        public GoogleAnalyticsDetails GoogleAnalyticsSnippets { get; set; }
+        
     }
 
-    public class GoogleAnalyticsDetails
-    {
-        public string GoogleHeaderUrl { get; set; }
-        public string GoogleBodyUrl { get; set; }
-    }
+
 
     public class CommitmentNotificationConfiguration
     {

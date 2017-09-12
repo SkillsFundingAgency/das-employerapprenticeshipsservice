@@ -400,6 +400,7 @@
     <Compile Include="Extensions\ValidationResultExtensions.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilterAttribute.cs" />
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
+    <Compile Include="Models\GoogleAnalyticsModel.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipFiltersMapper.cs" />
     <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
@@ -413,7 +414,6 @@
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\EnvironmentDetailsViewModel.cs" />
-    <Compile Include="ViewModels\GoogleAnalyticsInfoViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IPaginationViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementNextStepsViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberNextStepsViewModel.cs" />
