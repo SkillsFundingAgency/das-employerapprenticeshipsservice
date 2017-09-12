@@ -69,16 +69,5 @@ namespace SFA.DAS.EAS.Web.Models
             }
             return configurationRepository;
         }
-
-        //public class GoogleAnalyticsConfiguration
-        //{
-        //    public Domain.Configuration.GoogleAnalytics.GoogleAnalyticsDetails GoogleAnalyticsSnippets { get; set; }
-
-        //    public class GoogleAnalyticsDetails
-        //    {
-        //        public string GoogleHeaderUrl { get; set; }
-        //        public string GoogleBodyUrl { get; set; }
-        //    }
-        //}
     }
 }
