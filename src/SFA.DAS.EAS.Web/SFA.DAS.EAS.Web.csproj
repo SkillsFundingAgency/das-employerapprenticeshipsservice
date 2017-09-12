@@ -412,6 +412,8 @@
     <Compile Include="ViewModels\CommitmentsIndexViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\EnvironmentDetailsViewModel.cs" />
+    <Compile Include="ViewModels\GoogleAnalyticsInfoViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IPaginationViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementNextStepsViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberNextStepsViewModel.cs" />
