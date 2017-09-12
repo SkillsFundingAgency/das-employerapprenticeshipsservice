@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Tasks.API.Client;
 using SFA.DAS.Tasks.API.Types.DTOs;
 
@@ -9,15 +11,26 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     public class TaskService : ITaskService
     {
         private readonly ITaskApiClient _apiClient;
+        private readonly ILog _logger;
 
-        public TaskService(ITaskApiClient apiClient)
+        public TaskService(ITaskApiClient apiClient, ILog logger)
         {
             _apiClient = apiClient;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<TaskDto>> GetAccountTasks(string accountId)
         {
-            return await _apiClient.GetTasks(accountId);
+            try
+            {
+                return await _apiClient.GetTasks(accountId);
+            }
+            catch (Exception ex)
+            {
+               _logger.Error(ex, "Could not retrieve account tasks successfully");
+            }
+            
+            return new TaskDto[0];
         }
     }
 }

@@ -55,23 +55,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = accountId,
                     UserId = externalUserId
                 });
-                
-                //var showSigningNotice = 0;
-                
-                var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
-                //if (userRoleResponse.UserRole == Role.Owner || userRoleResponse.UserRole == Role.Transactor)
-                //{
-                //    var agreementsResponse = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
-                //    {
-                //        HashedAccountId = accountId,
-                //        ExternalUserId = externalUserId
-                //    });
-                //    showSigningNotice = agreementsResponse.EmployerAgreements.Count(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
-                //}
 
-                var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery {AccountId = accountResponse.Account.Id});
-                
-                var userResponse = await _mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = accountId, TeamMemberId = externalUserId });
+                var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
+
+                var tasksResponse =
+                    await _mediator.SendAsync(new GetAccountTasksQuery {AccountId = accountResponse.Account.Id});
+
+                var userResponse =
+                    await _mediator.SendAsync(
+                        new GetTeamMemberQuery {HashedAccountId = accountId, TeamMemberId = externalUserId});
 
                 var accountStatsResponse =
                     await _mediator.SendAsync(
@@ -102,11 +94,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = viewModel
                 };
             }
-            catch (Exception ex)
+            catch (UnauthorizedAccessException ex)
             {
                 return new OrchestratorResponse<AccountDashboardViewModel>
                 {
                     Status = HttpStatusCode.Unauthorized,
+                    Exception = ex
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OrchestratorResponse<AccountDashboardViewModel>
+                {
+                    Status = HttpStatusCode.InternalServerError,
                     Exception = ex
                 };
             }
