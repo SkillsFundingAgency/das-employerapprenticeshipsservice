@@ -6,13 +6,13 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
-using SFA.DAS.EAS.Application.Notifications.CreateAgreementSignedMessage;
+//using SFA.DAS.EAS.Application.Notifications.CreateAgreementSignedMessage;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.Messaging;
+//using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
@@ -85,18 +85,18 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
             await _mediator.SendAsync(new PublishGenericEventCommand {Event = genericEvent});
 
-            await CreateAgreementSignedNotificationMessage(accountId, agreement.LegalEntityId, agreementId);
+            //await CreateAgreementSignedNotificationMessage(accountId, agreement.LegalEntityId, agreementId);
         }
 
-        private async Task CreateAgreementSignedNotificationMessage(long accountId, long legalEntityId, long agreementId)
-        {
-            await _mediator.PublishAsync(new CreateAgreementSignedMessageCommand
-            {
-                AccountId = accountId,
-                LegalEntityId = legalEntityId,
-                AgreementId = agreementId
-            });
-        }
+        //private async Task CreateAgreementSignedNotificationMessage(long accountId, long legalEntityId, long agreementId)
+        //{
+        //    await _mediator.PublishAsync(new CreateAgreementSignedMessageCommand
+        //    {
+        //        AccountId = accountId,
+        //        LegalEntityId = legalEntityId,
+        //        AgreementId = agreementId
+        //    });
+        //}
 
         private async Task AddAuditEntry(SignEmployerAgreementCommand message, long accountId, long agreementId)
         {
