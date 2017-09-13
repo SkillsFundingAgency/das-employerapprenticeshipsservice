@@ -25,7 +25,11 @@ namespace SFA.DAS.EAS.Domain.Configuration
 		public PostcodeAnywhereConfiguration PostcodeAnywhere { get; set; }
 
         public CommitmentNotificationConfiguration CommitmentNotification { get; set; }
+
+        
     }
+
+
 
     public class CommitmentNotificationConfiguration
     {
