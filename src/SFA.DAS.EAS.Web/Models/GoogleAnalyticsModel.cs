@@ -10,8 +10,7 @@ namespace SFA.DAS.EAS.Web.Models
 {
     public class GoogleAnalyticsModel
     {
-        private const string ServiceName = "SFA.DAS.GoogleAnalytics";
-        private const string ServiceNamespace = "SFA.DAS";
+        private const string ServiceName = "SFA.DAS.GoogleAnalyticsValues";
 
         private static GoogleAnalyticsModel _instance;
 
