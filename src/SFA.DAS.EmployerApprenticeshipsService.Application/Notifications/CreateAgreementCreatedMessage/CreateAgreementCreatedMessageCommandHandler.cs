@@ -1,29 +1,29 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EAS.Domain.Attributes;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging;
+﻿//using System.Threading.Tasks;
+//using MediatR;
+//using SFA.DAS.EAS.Domain.Attributes;
+//using SFA.DAS.EmployerAccounts.Events.Messages;
+//using SFA.DAS.Messaging;
 
-namespace SFA.DAS.EAS.Application.Notifications.CreateAgreementCreatedMessage
-{
-    public class CreateAgreementCreatedMessageCommandHandler : IAsyncNotificationHandler<CreateAgreementCreatedMessageCommand>
-    {
-        private readonly IMessagePublisher _messagePublisher;
+//namespace SFA.DAS.EAS.Application.Notifications.CreateAgreementCreatedMessage
+//{
+//    public class CreateAgreementCreatedMessageCommandHandler : IAsyncNotificationHandler<CreateAgreementCreatedMessageCommand>
+//    {
+//        private readonly IMessagePublisher _messagePublisher;
         
-        [ServiceBusConnectionKey("tasks")]
-        public CreateAgreementCreatedMessageCommandHandler(IMessagePublisher messagePublisher)
-        {
-            _messagePublisher = messagePublisher;
-        }
+//        [ServiceBusConnectionKey("tasks")]
+//        public CreateAgreementCreatedMessageCommandHandler(IMessagePublisher messagePublisher)
+//        {
+//            _messagePublisher = messagePublisher;
+//        }
      
-        public async Task Handle(CreateAgreementCreatedMessageCommand notification)
-        {
-            //await _messagePublisher.PublishAsync(new AgreementCreatedMessage
-            //{
-            //    AccountId = notification.AccountId,
-            //    LegalEntityId = notification.LegalEntityId,
-            //    AgreementId = notification.AgreementId
-            //});
-        }
-    }
-}
+//        public async Task Handle(CreateAgreementCreatedMessageCommand notification)
+//        {
+//            //await _messagePublisher.PublishAsync(new AgreementCreatedMessage
+//            //{
+//            //    AccountId = notification.AccountId,
+//            //    LegalEntityId = notification.LegalEntityId,
+//            //    AgreementId = notification.AgreementId
+//            //});
+//        }
+//    }
+//}

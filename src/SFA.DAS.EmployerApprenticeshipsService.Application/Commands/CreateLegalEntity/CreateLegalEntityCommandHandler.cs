@@ -6,13 +6,13 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
-using SFA.DAS.EAS.Application.Notifications.CreateAgreementCreatedMessage;
+//using SFA.DAS.EAS.Application.Notifications.CreateAgreementCreatedMessage;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Extensions;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.Messaging;
+//using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 {
@@ -56,8 +56,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
             await NotifyLegalEntityCreated(message.HashedAccountId, agreementView.LegalEntityId);
 
-            await CreateAgreementCreatedNotificationMessage(owner.AccountId, agreementView.LegalEntityId,
-                agreementView.Id);
+            //await CreateAgreementCreatedNotificationMessage(owner.AccountId, agreementView.LegalEntityId,
+            //    agreementView.Id);
 
             return new CreateLegalEntityCommandResponse
             {
@@ -65,15 +65,15 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             };
         }
 
-        private async Task CreateAgreementCreatedNotificationMessage(long accountId, long legalEntityId, long agreementId)
-        {
-            await _mediator.PublishAsync(new CreateAgreementCreatedMessageCommand
-            {
-                AccountId = accountId,
-                LegalEntityId = legalEntityId,
-                AgreementId = agreementId
-            });
-        }
+        //private async Task CreateAgreementCreatedNotificationMessage(long accountId, long legalEntityId, long agreementId)
+        //{
+        //    await _mediator.PublishAsync(new CreateAgreementCreatedMessageCommand
+        //    {
+        //        AccountId = accountId,
+        //        LegalEntityId = legalEntityId,
+        //        AgreementId = agreementId
+        //    });
+        //}
 
         private async Task NotifyLegalEntityCreated(string hashedAccountId, long legalEntityId)
         {

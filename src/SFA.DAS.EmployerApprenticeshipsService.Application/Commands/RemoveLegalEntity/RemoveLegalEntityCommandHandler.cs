@@ -29,14 +29,14 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
         private readonly IMessagePublisher _messagePublisher;
 
-        [ServiceBusConnectionKey("tasks")]
+        //[ServiceBusConnectionKey("tasks")]
         public RemoveLegalEntityCommandHandler(
-            IValidator<RemoveLegalEntityCommand> validator, 
-            ILog logger, 
-            IEmployerAgreementRepository employerAgreementRepository, 
-            IMediator mediator, 
-            IHashingService hashingService, 
-            IGenericEventFactory genericEventFactory, 
+            IValidator<RemoveLegalEntityCommand> validator,
+            ILog logger,
+            IEmployerAgreementRepository employerAgreementRepository,
+            IMediator mediator,
+            IHashingService hashingService,
+            IGenericEventFactory genericEventFactory,
             IEmployerAgreementEventFactory employerAgreementEventFactory,
             IMessagePublisher messagePublisher)
         {
@@ -73,7 +73,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             await _employerAgreementRepository.RemoveLegalEntityFromAccount(legalAgreementId);
 
             await AddAuditEntry(accountId, message.HashedLegalAgreementId);
-            
+
             await CreateEvent(message.HashedLegalAgreementId);
 
             //TODO: Add this back in when messaging works correctly
@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
         //    });
         //}
 
-        private async Task AddAuditEntry(long accountId,  string employerAgreementId)
+        private async Task AddAuditEntry(long accountId, string employerAgreementId)
         {
             await _mediator.SendAsync(new CreateAuditCommand
             {
@@ -118,7 +118,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
         {
             var agreementEvent = _employerAgreementEventFactory.RemoveAgreementEvent(hashedAgreementId);
 
-            var genericEvent =  _genericEventFactory.Create(agreementEvent);
+            var genericEvent = _genericEventFactory.Create(agreementEvent);
 
             await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
