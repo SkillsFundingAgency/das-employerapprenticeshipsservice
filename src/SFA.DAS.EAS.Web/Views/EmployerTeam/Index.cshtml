@@ -1,4 +1,4 @@
-﻿@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Domain.Models.UserProfile
 @using SFA.DAS.EAS.Web.Extensions
 
@@ -71,9 +71,11 @@ else
                 </div>
             </div>
         </div>
-        <div class="column-one-third">
+    <div class="column-one-third" ></div>
+        </div>
+ }
        
-            @if (Model.Data.RequiresAgreementSigning > 0)
+            @*@if (Model.Data.RequiresAgreementSigning > 0)
             {
                 <section>
                     <div class="panel alert-default">
@@ -91,10 +93,21 @@ else
               
                     </div>
                 </section>
-            }
-       
-        </div>
-    </div>
 
-}
+            }
+
+       
+            <section>
+                
+                @foreach (var task in Model.Data.Tasks)
+                {
+                    <div class="panel alert-default">
+                        <h3 class="heading-small">@task.Type</h3>
+                        <p>You have @task.ItemsDueCount items</p>
+                    </div>
+                }
+            </section>
+
+        </div>
+    </div>*@
 

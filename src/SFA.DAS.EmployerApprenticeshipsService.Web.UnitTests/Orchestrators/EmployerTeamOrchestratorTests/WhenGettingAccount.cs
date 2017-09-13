@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountStats;
+using SFA.DAS.EAS.Application.Queries.GetAccountTasks;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
@@ -17,17 +18,19 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 {
     public class WhenGettingAccount
     {
-        private const string AccountId = "ABC123";
+        private const string HashedAccountId = "ABC123";
+        private const long AccountId = 123;
         private const string UserId = "USER1";
 
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
         private AccountStats _accountStats;
+        private List<AccountTask> _tasks;
 
         [SetUp]
         public void Arrange()
         {
-            _accountStats = new AccountStats()
+            _accountStats = new AccountStats
             {
                 AccountId = 10,
                 OrganisationCount = 3,
@@ -35,16 +38,27 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                 TeamMemberCount = 8
             };
 
+            _tasks = new List<AccountTask>
+            {
+                new AccountTask()
+            };
+
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(m => m.SendAsync(It.Is<GetEmployerAccountHashedQuery>(q => q.HashedAccountId == AccountId)))
+            _mediator.Setup(m => m.SendAsync(It.Is<GetEmployerAccountHashedQuery>(q => q.HashedAccountId == HashedAccountId)))
                 .ReturnsAsync(new GetEmployerAccountResponse
                 {
                     Account = new Domain.Data.Entities.Account.Account
                     {
-                        HashedId = AccountId,
-                        Id = 123,
+                        HashedId = HashedAccountId,
+                        Id = AccountId,
                         Name = "Account 1"
                     }
+                });
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTasksQuery>()))
+                .ReturnsAsync(new GetAccountTasksResponse
+                {
+                    Tasks = _tasks
                 });
 
             _mediator.Setup(m => m.SendAsync(It.Is<GetUserAccountRoleQuery>(q => q.ExternalUserId == UserId)))
@@ -53,7 +67,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                          UserRole = Domain.Models.UserProfile.Role.Owner
                      });
 
-            _mediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == AccountId)))
+            _mediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == HashedAccountId)))
                      .ReturnsAsync(new GetAccountEmployerAgreementsResponse
                      {
                          EmployerAgreements = new List<Domain.Models.EmployerAgreement.EmployerAgreementView>
@@ -75,54 +89,28 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         }
         
         [Test]
-        public async Task ThenAnAgreementShouldNotNeedSigningIfTheUserIsAnOwnerOrTransactorButThereAreNoAgreementsThatNeedSigning()
-        {
-            // Arrange
-            _mediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == AccountId)))
-                .ReturnsAsync(new GetAccountEmployerAgreementsResponse
-                {
-                    EmployerAgreements = new List<Domain.Models.EmployerAgreement.EmployerAgreementView>
-                    {
-                        new Domain.Models.EmployerAgreement.EmployerAgreementView {Status = Domain.Models.EmployerAgreement.EmployerAgreementStatus.Signed}
-                    }
-                });
-
-            // Act
-            var actual = await _orchestrator.GetAccount(AccountId, UserId);
-
-            // Assert
-            Assert.IsNotNull(actual);
-            Assert.Zero(actual.Data.RequiresAgreementSigning);
-        }
-
-        [Test]
-        public async Task ThenAnAgreementShouldNotNeedSigningIfTheUserIsAViewer()
-        {
-            // Arrange
-            _mediator.Setup(m => m.SendAsync(It.Is<GetUserAccountRoleQuery>(q => q.ExternalUserId == UserId)))
-                .ReturnsAsync(new GetUserAccountRoleResponse
-                {
-                    UserRole = Domain.Models.UserProfile.Role.Viewer
-                });
-
-            // Act
-            var actual = await _orchestrator.GetAccount(AccountId, UserId);
-
-            // Assert
-            Assert.IsNotNull(actual);
-            Assert.Zero(actual.Data.RequiresAgreementSigning);
-        }
-
-        [Test]
         public async Task ThenShouldGetAccountStats()
         {
             // Act
-            var actual = await _orchestrator.GetAccount(AccountId, UserId);
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
 
             //Assert
+            Assert.IsNotNull(actual.Data);
             Assert.AreEqual(_accountStats.OrganisationCount, actual.Data.OrgainsationCount);
             Assert.AreEqual(_accountStats.PayeSchemeCount, actual.Data.PayeSchemeCount);
             Assert.AreEqual(_accountStats.TeamMemberCount, actual.Data.TeamMemberCount);
+        }
+
+
+        [Test]
+        public async Task ThenShouldReturnAccountsTasks()
+        {
+            //Act
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            Assert.AreEqual(_tasks, actual.Data.Tasks);
+            _mediator.Verify(x => x.SendAsync(It.Is<GetAccountTasksQuery>(r => r.AccountId.Equals(AccountId))),Times.Once);
         }
     }
 }

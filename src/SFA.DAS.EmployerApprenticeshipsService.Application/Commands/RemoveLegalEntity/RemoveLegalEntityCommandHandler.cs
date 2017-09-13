@@ -18,6 +18,7 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
 {
+  
     public class RemoveLegalEntityCommandHandler : AsyncRequestHandler<RemoveLegalEntityCommand>
     {
         private readonly IValidator<RemoveLegalEntityCommand> _validator;
