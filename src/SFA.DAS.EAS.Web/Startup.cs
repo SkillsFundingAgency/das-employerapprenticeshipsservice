@@ -18,8 +18,10 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
 using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.EnvironmentInfo;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
@@ -33,13 +35,14 @@ namespace SFA.DAS.EAS.Web
     {
       
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
-
+        private IConfugurationInfo<EmployerApprenticeshipsServiceConfiguration> _configInfo;
 
         public void Configuration(IAppBuilder app)
         {
-            var config = GetConfigurationObject();
+            _configInfo=new ConfigurationInfo<EmployerApprenticeshipsServiceConfiguration>();
 
-            
+            var config = _configInfo.GetConfiguration(ServiceName, null);
+       
             var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestraor>();
             var logger = LogManager.GetLogger("Startup");
             
@@ -140,43 +143,6 @@ namespace SFA.DAS.EAS.Web
             //HttpContext.Current.Response.Redirect(HttpContext.Current.Request.Path, true);
 
         }
-
-        private static EmployerApprenticeshipsServiceConfiguration GetConfigurationObject()
-        {
-            var environment = Environment.GetEnvironmentVariable("DASENV");
-            if (string.IsNullOrEmpty(environment))
-            {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
-            }
-
-            var configurationRepository = GetConfigurationRepository();
-            var configurationService = new ConfigurationService(
-               configurationRepository,
-               new ConfigurationOptions(ServiceName, environment, "1.0"));
-
-            var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
-
-            return config;
-        }
-
-
-        private static IConfigurationRepository GetConfigurationRepository()
-        {
-            IConfigurationRepository configurationRepository;
-            if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
-            {
-                configurationRepository = new FileStorageConfigurationRepository();
-            }
-            else
-            {
-                configurationRepository =
-                    new AzureTableStorageConfigurationRepository(
-                        CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
-            }
-            return configurationRepository;
-        }
-    }
-
 
     public class Constants
     {

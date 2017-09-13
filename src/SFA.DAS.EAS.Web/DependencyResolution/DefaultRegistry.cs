@@ -39,6 +39,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
 using SFA.DAS.EAS.Infrastructure.Factories;
 using SFA.DAS.EAS.Infrastructure.Interfaces.REST;
 using SFA.DAS.EAS.Infrastructure.Services;
@@ -55,6 +56,7 @@ using SFA.DAS.EAS.Web.App_Start;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using NotificationsApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.NotificationsApiClientConfiguration;
+using SFA.DAS.EAS.Web.EnvironmentInfo;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -64,9 +66,11 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
         private string _test;
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
         private const string ServiceNamespace = "SFA.DAS";
+        private readonly IConfugurationInfo<EmployerApprenticeshipsServiceConfiguration> _configInfo;
 
         public DefaultRegistry()
         {
+            _configInfo = new ConfigurationInfo<EmployerApprenticeshipsServiceConfiguration>();
 
             Scan(
                 scan =>
@@ -82,7 +86,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
 
-            var config = this.GetConfiguration();
+            var config = _configInfo.GetConfiguration(ServiceName, PopulateSystemDetails);
 
             For<IUserRepository>().Use<UserRepository>();
 
@@ -115,7 +119,16 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             RegisterLogger();
         }
 
-        private void ConfigureNotificationsApi(NotificationsApiClientConfiguration config)
+        private void PopulateSystemDetails(string environmentName)
+        {
+            if (environmentName=="LOCAL" || environmentName == "AT"|| environmentName == "TEST")
+            {
+                SystemDetailsViewModel.EnvironmentName = environmentName;
+                SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+        }
+
+    private void ConfigureNotificationsApi(NotificationsApiClientConfiguration config)
         {
             HttpClient httpClient;
 
@@ -206,52 +219,48 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<IMapper>().Use(mapper).Singleton();
         }
 
-        private EmployerApprenticeshipsServiceConfiguration GetConfiguration()
-        {
-            var environment = Environment.GetEnvironmentVariable("DASENV");
-            if (string.IsNullOrEmpty(environment))
-            {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
-            }
-            if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
-            {
-                PopulateSystemDetails(environment);
-            }
+        //private void 
 
-            var configurationRepository = GetConfigurationRepository();
-            var configurationService = new ConfigurationService(configurationRepository,
-                new ConfigurationOptions(ServiceName, environment, "1.0"));
+        //private EmployerApprenticeshipsServiceConfiguration GetConfiguration(Action<string> action)
+        //{
+        //    var environment = Environment.GetEnvironmentVariable("DASENV");
+        //    if (string.IsNullOrEmpty(environment))
+        //    {
+        //        environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+        //    }
+        //    if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
+        //    {
+        //        PopulateSystemDetails(environment);
+        //    }
 
-            var result = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
+        //    var configurationRepository = GetConfigurationRepository();
+        //    var configurationService = new ConfigurationService(configurationRepository,
+        //        new ConfigurationOptions(ServiceName, environment, "1.0"));
 
-            return result;
-        }
+        //    var result = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
 
-        private static IConfigurationRepository GetConfigurationRepository()
-        {
-            IConfigurationRepository configurationRepository;
-            if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
-            {
-                configurationRepository = new FileStorageConfigurationRepository();
-            }
-            else
-            {
-                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
-            }
-            return configurationRepository;
-        }
+        //    return result;
+        //}
+
+        //private static IConfigurationRepository GetConfigurationRepository()
+        //{
+        //    IConfigurationRepository configurationRepository;
+        //    if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
+        //    {
+        //        configurationRepository = new FileStorageConfigurationRepository();
+        //    }
+        //    else
+        //    {
+        //        configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+        //    }
+        //    return configurationRepository;
+        //}
 
         private void RegisterMediator()
         {
             For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
             For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
             For<IMediator>().Use<Mediator>();
-        }
-
-        private void PopulateSystemDetails(string envName)
-        {
-            SystemDetailsViewModel.EnvironmentName = envName;
-            SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         private void RegisterLogger()
