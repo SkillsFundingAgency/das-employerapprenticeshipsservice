@@ -314,5 +314,16 @@ $('.container-head').on('click touchstart', (function () {
 
 }));
 
+// Push confirmation messages to the Google dateLayer array
+
+var successMessage = $('.success-summary h1');
+
+if (successMessage.length > 0) {
+    dataLayer.push({ 
+        'success': successMessage.text()
+    }); 
+}
+
+
 
 
