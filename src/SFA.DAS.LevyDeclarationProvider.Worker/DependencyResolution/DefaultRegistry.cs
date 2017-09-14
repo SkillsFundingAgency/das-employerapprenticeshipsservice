@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Events.Api.Client.Configuration;
 using StructureMap;
@@ -19,8 +20,11 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
 {
     public class DefaultRegistry : Registry
     {
+        private readonly IConfigurationInfo<EmployerApprenticeshipsServiceConfiguration> _configInfo;
+
         public DefaultRegistry()
         {
+            _configInfo=new ConfigurationInfo<EmployerApprenticeshipsServiceConfiguration>();
 
             Scan(scan =>
             {
@@ -32,7 +36,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
 
             For<IConfiguration>().Use<LevyDeclarationProviderConfiguration>();
 
-            var config = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService");
+            var config = _configInfo.GetConfiguration("SFA.DAS.EmployerApprenticeshipsService");
             For<IEventsApi>().Use<EventsApi>()
                .Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi)
                .SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;

@@ -2,14 +2,18 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 using SFA.DAS.EAS.Domain.Models.WhileList;
 using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class UserWhiteListService : AzureServiceBase<UserWhiteListLookUp>, IUserWhiteList
     {
+        private readonly IConfigurationInfo<UserWhiteListLookUp> _configInfo;
+
         private readonly ICacheProvider _cacheProvider;
         public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.WhiteList";
         public sealed override ILog Logger { get; set; }
@@ -18,6 +22,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             _cacheProvider = cacheProvider;
             Logger = logger;
+            _configInfo=new ConfigurationInfo<UserWhiteListLookUp>();
         }
         
         public bool IsEmailOnWhiteList(string email)
@@ -37,7 +42,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             if (whiteListLookUp != null)
                 return whiteListLookUp;
 
-            whiteListLookUp = GetDataFromStorage();
+            whiteListLookUp = _configInfo.GetConfiguration(ConfigurationName);
 
             if (whiteListLookUp?.EmailPatterns == null || !whiteListLookUp.EmailPatterns.Any())
                 return null;

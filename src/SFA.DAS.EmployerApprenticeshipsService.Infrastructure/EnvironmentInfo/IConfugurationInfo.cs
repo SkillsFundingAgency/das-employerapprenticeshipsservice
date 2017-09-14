@@ -2,8 +2,9 @@
 
 namespace SFA.DAS.EAS.Infrastructure.EnvironmentInfo
 {
-    public interface IConfugurationInfo<T>
+    public interface IConfigurationInfo<T>
     {
+        T GetConfiguration(string serviceName);
         T GetConfiguration(string serviceName, Action<string> action);
     }
 }

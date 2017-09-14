@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
+using static SFA.DAS.EAS.Web.Startup;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {

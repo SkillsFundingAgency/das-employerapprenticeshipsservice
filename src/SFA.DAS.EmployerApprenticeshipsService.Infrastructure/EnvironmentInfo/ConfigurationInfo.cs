@@ -4,12 +4,16 @@ using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
-using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
 
-namespace SFA.DAS.EAS.Web.EnvironmentInfo
+namespace SFA.DAS.EAS.Infrastructure.EnvironmentInfo
 {
-    public class ConfigurationInfo<T> : IConfugurationInfo<T>
+    public class ConfigurationInfo<T> : IConfigurationInfo<T>
     {
+        public T GetConfiguration(string serviceName)
+        {
+            return GetConfiguration(serviceName, null);
+        }
+
         public T GetConfiguration(string serviceName, Action<string> action)
         {
             var environment = Environment.GetEnvironmentVariable("DASENV");

@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
-using SFA.DAS.EAS.Web.EnvironmentInfo;
 
 namespace SFA.DAS.EAS.Web.Models
 {
@@ -10,7 +9,7 @@ namespace SFA.DAS.EAS.Web.Models
 
         private static GoogleAnalyticsModel _instance;
 
-        private readonly IConfugurationInfo<GoogleAnalyticsSnippets> _configInfo;
+        private readonly IConfigurationInfo<GoogleAnalyticsSnippets> _configInfo;
 
         private GoogleAnalyticsModel()
         {

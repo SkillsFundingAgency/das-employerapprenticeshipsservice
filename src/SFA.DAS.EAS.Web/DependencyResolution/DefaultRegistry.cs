@@ -56,7 +56,6 @@ using SFA.DAS.EAS.Web.App_Start;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using NotificationsApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.NotificationsApiClientConfiguration;
-using SFA.DAS.EAS.Web.EnvironmentInfo;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -66,11 +65,13 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
         private string _test;
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
         private const string ServiceNamespace = "SFA.DAS";
-        private readonly IConfugurationInfo<EmployerApprenticeshipsServiceConfiguration> _configInfo;
+        private readonly IConfigurationInfo<EmployerApprenticeshipsServiceConfiguration> _aesConfigInfo;
+        private readonly IConfigurationInfo<NotificationsApiClientConfiguration> _notificationConfigInfo;
 
         public DefaultRegistry()
         {
-            _configInfo = new ConfigurationInfo<EmployerApprenticeshipsServiceConfiguration>();
+            _aesConfigInfo = new ConfigurationInfo<EmployerApprenticeshipsServiceConfiguration>();
+            _notificationConfigInfo=new ConfigurationInfo<NotificationsApiClientConfiguration>();
 
             Scan(
                 scan =>
@@ -86,7 +87,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
 
-            var config = _configInfo.GetConfiguration(ServiceName, PopulateSystemDetails);
+            var config = _aesConfigInfo.GetConfiguration(ServiceName, PopulateSystemDetails);
 
             For<IUserRepository>().Use<UserRepository>();
 
@@ -101,8 +102,9 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 .Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi)
                 .SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
 
-            var notificationsApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration
-                <NotificationsApiClientConfiguration>($"{ServiceName}.Notifications");
+            For(typeof(IConfigurationInfo<>)).Use(typeof(ConfigurationInfo<>));
+
+            var notificationsApiConfig = _notificationConfigInfo.GetConfiguration($"{ServiceName}.Notifications");
 
             ConfigureNotificationsApi(notificationsApiConfig);
 
