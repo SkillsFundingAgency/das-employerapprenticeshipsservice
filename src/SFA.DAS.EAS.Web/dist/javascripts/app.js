@@ -324,6 +324,17 @@ if (successMessage.length > 0) {
     }); 
 }
 
+// Push error messages to the Google dateLayer array
+
+var errorMessage = $('.error-summary');
+
+if (errorMessage.length > 0) {
+    var errorContent = errorMessage.find('ul li a').eq(0).text();
+    dataLayer.push({
+        'success': errorContent
+    });
+}
+
 
 
 

@@ -9,3 +9,14 @@
         <p>Sorry, there seems to be an error with this page. Please refresh your browser or <a href="@Url.Action("Index","Home")">go back to the homepage</a>.</p>
     </div>
 </div>
+
+@section gaDataLayer {
+<script>
+    window.dataLayer = window.dataLayer || [];
+    dataLayer.push(
+        {
+            'success': 'Theres been an error'
+        }
+    );
+</script>
+}
