@@ -18,11 +18,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.WhiteList";
         public sealed override ILog Logger { get; set; }
 
-        public UserWhiteListService(ICacheProvider cacheProvider, ILog logger)
+        public UserWhiteListService(ICacheProvider cacheProvider, ILog logger, IConfigurationInfo<UserWhiteListLookUp> configInfo)
         {
             _cacheProvider = cacheProvider;
             Logger = logger;
-            _configInfo=new ConfigurationInfo<UserWhiteListLookUp>();
+            _configInfo= configInfo;
         }
         
         public bool IsEmailOnWhiteList(string email)

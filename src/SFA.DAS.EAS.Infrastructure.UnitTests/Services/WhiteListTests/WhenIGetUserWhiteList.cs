@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 using SFA.DAS.EAS.Domain.Models.WhileList;
 using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.NLog.Logger;
 
@@ -15,13 +17,15 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.WhiteListTests
         private UserWhiteListService _userWhiteList;
         private UserWhiteListLookUp _lookup;
         private Mock<ILog> _logger;
+        private Mock<IConfigurationInfo<UserWhiteListLookUp>> _configInfo;
 
         [SetUp]
         public void Arrange()
         {
+            _configInfo=new Mock<IConfigurationInfo<UserWhiteListLookUp>>();
             _cacheProvider = new Mock<ICacheProvider>();
             _logger = new Mock<ILog>();
-            _mockUserWhiteList = new Mock<UserWhiteListService>(_cacheProvider.Object,_logger.Object);
+            _mockUserWhiteList = new Mock<UserWhiteListService>(_cacheProvider.Object,_logger.Object, _configInfo.Object);
             _userWhiteList = _mockUserWhiteList.Object;
 
             _lookup = new UserWhiteListLookUp
@@ -90,7 +94,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.WhiteListTests
             //Assign
             _cacheProvider.Setup(x => x.Get<UserWhiteListLookUp>(It.IsAny<string>())).Returns(_lookup);
             _mockUserWhiteList.Setup(x => x.GetList()).CallBase();
-            _mockUserWhiteList.Setup(x => x.GetDataFromStorage()).Returns(new UserWhiteListLookUp());
+            _configInfo.Setup(x=>x.GetConfiguration(It.IsAny<string>())).Returns(new UserWhiteListLookUp());
 
             //Act
             var result = _userWhiteList.IsEmailOnWhiteList("test@test.com");
@@ -98,7 +102,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.WhiteListTests
             //Assert
             Assert.IsTrue(result);
             _cacheProvider.Verify(x => x.Get<UserWhiteListLookUp>(nameof(UserWhiteListLookUp)), Times.Once);
-            _mockUserWhiteList.Verify(x => x.GetDataFromStorage(), Times.Never);
+            _configInfo.Verify(x => x.GetConfiguration(It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -106,14 +110,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.WhiteListTests
         {
             //Assign
             _cacheProvider.Setup(x => x.Get<UserWhiteListLookUp>(It.IsAny<string>()));
-            _mockUserWhiteList.Setup(x => x.GetDataFromStorage()).Returns(new UserWhiteListLookUp());
+            _configInfo.Setup(x => x.GetConfiguration(It.IsAny<string>())).Returns(new UserWhiteListLookUp());
 
             //Act
             _userWhiteList.IsEmailOnWhiteList(string.Empty);
 
             //Assert
             _cacheProvider.Verify(x => x.Get<UserWhiteListLookUp>(It.IsAny<string>()), Times.Never);
-            _mockUserWhiteList.Verify(x => x.GetDataFromStorage(), Times.Never);
+            _configInfo.Verify(x => x.GetConfiguration(It.IsAny<string>()), Times.Never);
         }
 
         [Test]

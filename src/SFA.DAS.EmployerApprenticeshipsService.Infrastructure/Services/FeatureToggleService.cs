@@ -15,11 +15,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly ICacheProvider _cacheProvider;
         public sealed override ILog Logger { get; set; }
         public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.Features";
-        public FeatureToggleService(ICacheProvider cacheProvider, ILog logger)
+        public FeatureToggleService(ICacheProvider cacheProvider, ILog logger, IConfigurationInfo<FeatureToggleLookup> configInfo)
         {
             _cacheProvider = cacheProvider;
             Logger = logger;
-            _configInfo=new ConfigurationInfo<FeatureToggleLookup>();
+            _configInfo= configInfo;
         }
 
         public virtual FeatureToggleLookup GetFeatures()
