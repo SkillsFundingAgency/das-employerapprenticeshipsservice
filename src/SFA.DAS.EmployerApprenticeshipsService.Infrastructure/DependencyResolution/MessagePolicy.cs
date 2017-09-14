@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
                 var config = configurationService.Get<T>();
                 if (string.IsNullOrEmpty(config.ServiceBusConnectionString))
                 {
-                    var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/EAS_Queues/";
                     instance.Dependencies.AddForConstructorParameter(messagePublisher, new FileSystemMessageService(Path.Combine(queueFolder, queueName?.Name ?? string.Empty)));
                 }
                 else
