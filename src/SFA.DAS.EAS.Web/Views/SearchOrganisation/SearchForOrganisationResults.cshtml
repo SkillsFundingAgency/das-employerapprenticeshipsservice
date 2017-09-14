@@ -170,6 +170,10 @@
 
                 submit.hide();
                 radios.on('change', function () {
+                    var radioLabel = radios.filter(':checked').parent().text();
+                    dataLayer.push({ 
+                        'cd1': radioLabel
+                    }); 
                     filterForm.submit();
                 });
             }
