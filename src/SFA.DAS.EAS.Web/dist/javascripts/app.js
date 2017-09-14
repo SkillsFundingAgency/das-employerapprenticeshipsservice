@@ -314,5 +314,27 @@ $('.container-head').on('click touchstart', (function () {
 
 }));
 
+// Push confirmation messages to the Google dateLayer array
+
+var successMessage = $('.success-summary h1');
+
+if (successMessage.length > 0) {
+    dataLayer.push({ 
+        'success': successMessage.text()
+    }); 
+}
+
+// Push error messages to the Google dateLayer array
+
+var errorMessage = $('.error-summary');
+
+if (errorMessage.length > 0) {
+    var errorContent = errorMessage.find('ul li a').eq(0).text();
+    dataLayer.push({
+        'success': errorContent
+    });
+}
+
+
 
 
