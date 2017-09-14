@@ -182,6 +182,13 @@
     </script>
 }
 
+@section gaDataLayer {
+    @if (Model.Data.Results.PageNumber == Model.Data.Results.TotalPages || Model.Data.Results.TotalPages == 0)
+    {
+        <script>  dataLayer.push({ 'zeroSearch': '@Model.Data.SearchTerm' });  </script>
+    }   
+}
+
 
 @section breadcrumb {
     <div class="breadcrumbs">
