@@ -1,7 +1,9 @@
-﻿using NUnit.Framework;
+﻿using Moq;
+using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
@@ -17,7 +19,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
                 c =>
                     {
                         c.AddRegistry<TestRegistry>();
-                        c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                     }
                 );
         }
@@ -30,6 +31,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
 
             //Assert
             Assert.IsNotNull(item.Configuration);
+            Assert.IsInstanceOf<EmployerApprenticeshipsServiceConfiguration>(item.Configuration);
         }
 
         [Test]
@@ -40,6 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
 
             //Assert
             Assert.IsNotNull(item);
+            Assert.IsInstanceOf<TestController>(item);
         }
 
         

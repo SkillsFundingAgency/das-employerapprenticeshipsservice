@@ -4,6 +4,7 @@ using System.Threading;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
 using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution;
 using SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers;
@@ -40,9 +41,9 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
 
             _container = new Container(c =>
             {
-                c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
-                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
-                c.Policies.Add(new ConfigurationPolicy<TokenServiceApiClientConfiguration>("SFA.DAS.TokenServiceApiClient"));
+                c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider", new ConfigurationInfo<LevyDeclarationProviderConfiguration>()));
+                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService", new ConfigurationInfo<EmployerApprenticeshipsServiceConfiguration>()));
+                c.Policies.Add(new ConfigurationPolicy<TokenServiceApiClientConfiguration>("SFA.DAS.TokenServiceApiClient", new ConfigurationInfo<TokenServiceApiClientConfiguration>()));
                 c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add(new ExecutionPolicyPolicy());
                 c.AddRegistry<DefaultRegistry>();

@@ -14,10 +14,10 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
         private readonly string _serviceName;
         private readonly IConfigurationInfo<T> _configInfo;
 
-        public ConfigurationPolicy(string serviceName)
+        public ConfigurationPolicy(string serviceName, IConfigurationInfo<T> configInfo)
         {
             _serviceName = serviceName;
-            _configInfo=new ConfigurationInfo<T>();
+            _configInfo= configInfo;
         }
         
         protected override void apply(Type pluginType, IConfiguredInstance instance)
