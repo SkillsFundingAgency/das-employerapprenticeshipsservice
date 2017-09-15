@@ -234,7 +234,7 @@
     <Compile Include="DependencyResolution\CurrentDatePolicy.cs" />
     <Compile Include="DependencyResolution\ExecutionPolicyPolicy.cs" />
     <Compile Include="EnvironmentInfo\ConfigurationInfo.cs" />
-    <Compile Include="EnvironmentInfo\IConfugurationInfo.cs" />
+    <Compile Include="EnvironmentInfo\IConfigurationInfo.cs" />
     <Compile Include="ExecutionPolicies\CompaniesHouseExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\ExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\HmrcExecutionPolicy.cs" />
