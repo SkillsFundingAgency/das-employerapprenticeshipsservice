@@ -1,38 +1,15 @@
-using System;
-using System.Configuration;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
-using Newtonsoft.Json;
-using SFA.DAS.Configuration;
-using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.Configuration.FileStorage;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
-    public abstract class AzureServiceBase<T>
+    public abstract class AzureServiceBase
     {
         public abstract string ConfigurationName { get; }
-        public abstract ILog Logger { get; set; }
-        
-        public async Task<T> GetModelFromBlobStorage(string containerName, string blobName)
-        {
-            using (var blobData = await GetBlobDataFromAzure(containerName, blobName))
-            {
-                using (var reader = new StreamReader(blobData))
-                {
-                    var jsonContent = reader.ReadToEnd();
-
-                    return string.IsNullOrEmpty(jsonContent)
-                        ? default(T)
-                        : JsonConvert.DeserializeObject<T>(jsonContent);
-                }
-            }
-        }
+        public ILog Logger { get; set; }
         
         public async Task<MemoryStream> GetBlobDataFromAzure(string blobContainer, string blobName)
         {

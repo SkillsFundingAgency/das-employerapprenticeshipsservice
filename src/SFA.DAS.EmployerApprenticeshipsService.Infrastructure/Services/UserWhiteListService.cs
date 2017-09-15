@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 using SFA.DAS.EAS.Domain.Models.WhileList;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
@@ -10,13 +9,12 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
-    public class UserWhiteListService : AzureServiceBase<UserWhiteListLookUp>, IUserWhiteList
+    public class UserWhiteListService : AzureServiceBase, IUserWhiteList
     {
         private readonly IConfigurationInfo<UserWhiteListLookUp> _configInfo;
 
         private readonly ICacheProvider _cacheProvider;
         public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.WhiteList";
-        public sealed override ILog Logger { get; set; }
 
         public UserWhiteListService(ICacheProvider cacheProvider, ILog logger, IConfigurationInfo<UserWhiteListLookUp> configInfo)
         {

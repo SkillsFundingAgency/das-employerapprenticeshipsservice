@@ -8,12 +8,11 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
-    public class FeatureToggleService : AzureServiceBase<FeatureToggleLookup>, IFeatureToggle
+    public class FeatureToggleService : AzureServiceBase, IFeatureToggle
     {
         private readonly IConfigurationInfo<FeatureToggleLookup> _configInfo;
 
         private readonly ICacheProvider _cacheProvider;
-        public sealed override ILog Logger { get; set; }
         public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.Features";
         public FeatureToggleService(ICacheProvider cacheProvider, ILog logger, IConfigurationInfo<FeatureToggleLookup> configInfo)
         {

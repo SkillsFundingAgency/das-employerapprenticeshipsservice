@@ -8,11 +8,10 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
-    public class PdfService : AzureServiceBase<string>, IPdfService
+    public class PdfService : AzureServiceBase, IPdfService
     {
         
         public override string ConfigurationName => "legal-agreements";
-        public sealed override ILog Logger { get; set; }
 
         public PdfService(ILog logger)
         {
