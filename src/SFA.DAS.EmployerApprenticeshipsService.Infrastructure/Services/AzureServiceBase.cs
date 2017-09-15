@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         public abstract string ConfigurationName { get; }
         public abstract ILog Logger { get; set; }
         
-        public async Task<T> GetModelFromBlobStorage<T>(string containerName, string blobName)
+        public async Task<T> GetModelFromBlobStorage(string containerName, string blobName)
         {
             using (var blobData = await GetBlobDataFromAzure(containerName, blobName))
             {

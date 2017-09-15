@@ -32,9 +32,9 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
         {
             return new Container(c =>
             {
-                c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider", new Mock<ConfigurationInfo<LevyDeclarationProviderConfiguration>>().Object));
-                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService", new Mock<ConfigurationInfo<EmployerApprenticeshipsServiceConfiguration>>().Object));
-                c.Policies.Add(new ConfigurationPolicy<TokenServiceApiClientConfiguration>("SFA.DAS.TokenServiceApiClient", new Mock<ConfigurationInfo<TokenServiceApiClientConfiguration>>().Object));
+                c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider", new ConfigurationInfo<LevyDeclarationProviderConfiguration>()));
+                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService", new ConfigurationInfo<EmployerApprenticeshipsServiceConfiguration>()));
+                c.Policies.Add(new ConfigurationPolicy<TokenServiceApiClientConfiguration>("SFA.DAS.TokenServiceApiClient", new ConfigurationInfo<TokenServiceApiClientConfiguration>()));
                 c.Policies.Add(new ExecutionPolicyPolicy());
                 c.AddRegistry(new LevyWorkerDefaultRegistry(messagePublisher, messageReceiver, hmrcService, eventsApi));
             });
