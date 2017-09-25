@@ -9,3 +9,7 @@
 GO
 
 CREATE NONCLUSTERED INDEX [IX_User_UserRef] ON [employer_account].[User] ([UserRef]) WITH (ONLINE = ON)
+GO
+
+CREATE NONCLUSTERED INDEX [IX_User_Email] ON [employer_account].[User] ([Email]) INCLUDE ([UserRef]) WITH (ONLINE = ON)
+GO
