@@ -21,8 +21,10 @@
 GO
 
 CREATE INDEX [IX_LevyDeclaration_submissionid] ON [employer_financial].[LevyDeclaration] (submissionId)
-
 GO
 
 CREATE INDEX [IX_LevyDeclaration_Empref] ON [employer_financial].[LevyDeclaration] (empref,payrollyear,payrollmonth,EndofYearAdjustment) 
+GO
+
+CREATE INDEX [IX_LevyDeclaration_Account_Payroll] ON [employer_financial].[LevyDeclaration] (AccountId,PayrollMonth,PayrollYear)
 GO
