@@ -1,5 +1,9 @@
-﻿<script>
-
+﻿@using SFA.DAS.EAS.Web.Filters
+<script>
+    @if (ViewBag.GaData == null)
+    {
+        ViewBag.GaData = new GoogleAnalyticsFilterAttribute.GaData();
+    }
     window.dataLayer = window.dataLayer || [];
     dataLayer.push({
         'event': '@ViewBag.GaData.DataLoaded',

@@ -151,6 +151,7 @@
   <ItemGroup>
     <Compile Include="Attributes\ServiceBusConnectionKeyAttribute.cs" />
     <Compile Include="Configuration\EmployerApprenticeshipApiConfiguration.cs" />
+    <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
     <Compile Include="Data\IUnitOfWork.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
