@@ -153,6 +153,7 @@
 
 .agreement-parties {
     address.party {
+        font-style:normal;
         @include media(tablet) {
             margin-top: 45px;
             margin-bottom: 45px;
