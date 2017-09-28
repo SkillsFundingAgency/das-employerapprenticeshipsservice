@@ -4214,6 +4214,10 @@ table.responsive tr.total {
   }
 }
 
+.agreement-parties address.party {
+  font-style: normal;
+}
+
 @media (min-width: 641px) {
   .agreement-parties address.party {
     margin-top: 45px;

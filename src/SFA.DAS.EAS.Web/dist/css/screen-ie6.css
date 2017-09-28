@@ -3685,6 +3685,7 @@ table.responsive tr th.tw-70 {
 }
 
 .agreement-parties address.party {
+  font-style: normal;
   margin-top: 45px;
   margin-bottom: 45px;
 }
