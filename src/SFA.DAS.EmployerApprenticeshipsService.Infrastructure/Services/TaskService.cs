@@ -30,49 +30,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                _logger.Error(ex, "Could not retrieve account tasks successfully");
             }
 
-            //TODO: Remove this mock code once the UI changes have been completed
-            // We are adding it as a temporary workaround to get the UI changes done in time
-
-            return new []
-            {
-                new TaskDto
-                {
-                    OwnerId = accountId,
-                    ItemsDueCount = 2,
-                    Type = "LevyDeclarationDue"
-                },
-                new TaskDto
-                {
-                    OwnerId = accountId,
-                    ItemsDueCount = 2,
-                    Type = "AgreementToSign"
-                },
-                new TaskDto
-                {
-                    OwnerId = accountId,
-                    ItemsDueCount = 2,
-                    Type = "AddApprentices"
-                },
-                new TaskDto
-                {
-                    OwnerId = accountId,
-                    ItemsDueCount = 2,
-                    Type = "ApprenticeChangesToReview"
-                },
-                new TaskDto
-                {
-                    OwnerId = accountId,
-                    ItemsDueCount = 2,
-                    Type = "CohortRequestReadyForApproval"
-                },
-                new TaskDto
-                {
-                    OwnerId = accountId,
-                    ItemsDueCount = 2,
-                    Type = "IncompleteApprenticeshipDetails"
-                }
-            };
-
+            return new TaskDto[0];
         }
     }
 }
