@@ -82,7 +82,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
                                     .ToList()
                                     .FirstOrDefault(c => c.Name == "_storageDirectory");
             Assert.IsNotNull(storageDirectoryField);
-            var expectedDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(TestClass.das_queue_name));
+            var expectedDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/EAS_Queues/", nameof(TestClass.das_queue_name));
             Assert.AreEqual(expectedDirectory, storageDirectoryField.GetValue(actualMessageService));
         }
 
