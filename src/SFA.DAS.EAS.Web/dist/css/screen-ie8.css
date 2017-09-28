@@ -4154,6 +4154,28 @@ a.close svg {
   left: 0;
 }
 
+.task-list li {
+  border-bottom: 1px solid #bfc1c3;
+  padding: 10px 0;
+}
+
+.task-list li:first-child {
+  padding-top: 0;
+}
+
+.task-list li:last-child {
+  border: none;
+  padding-bottom: 0;
+}
+
+.task-list li p {
+  margin: 0;
+}
+
+.task-list li a {
+  display: block;
+}
+
 .search-results section {
   float: left;
   width: 66.6666666667%;

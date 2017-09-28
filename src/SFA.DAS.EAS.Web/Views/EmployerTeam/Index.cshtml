@@ -71,34 +71,85 @@ else
                 </div>
             </div>
         </div>
-    <div class="column-one-third" ></div>
+        <div class="column-one-third">
+            <section>
+                <nav>
+                    <ul class="js-tabs" role="tablist">
+                        <li role="tab" id="tab-tasks" aria-controls="pane-tasks"><a href="#pane-tasks">Tasks</a></li>
+                        <li role="tab" id="tab-activity" aria-controls="pane-activity"><a href="#pane-activity">Activity</a></li>
+                    </ul>
+                </nav>
+                <div class="panes">
+                    <div class="js-tab-pane" id="pane-tasks" role="tabpanel">
+                        @if (Model.Data.Tasks.Count > 0)
+                        {
+                            <ul class="task-list">
+                                @foreach (var task in Model.Data.Tasks)
+                                {
+                                    <li>
+                                        @switch (task.Type)
+                                        {
+                                            case "LevyDeclarationDue":
+                                                <p>@task.ItemsDueCount levy declaration@(task.ItemsDueCount > 1 ? "s" : "") due <a href="">View levy declarations</a></p>
+                                                break;
+                                            case "AgreementToSign":
+                                                <p>@task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") needs to be signed <a href="">View agreements</a></p>
+                                                break;
+                                            case "AddApprentices":
+                                                <p><a href="">Start adding apprentices now</a></p>
+                                                break;
+                                            case "ApprenticeChangesToReview":
+                                                <p>@task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="">View changes</a></p>
+                                                break;
+                                            case "CohortRequestReadyForApproval":
+                                                <p>@task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="">View cohorts</a></p>
+                                                break;
+                                            case "IncompleteApprenticeshipDetails":
+                                                <p>@task.ItemsDueCount incomplete apprentice details <a href="">View cohorts</a></p>
+                                                break;
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p>You do not have any tasks</p>
+                        }
+                    </div>
+                    <div class="js-tab-pane" id="pane-activity" role="tabpanel">
+                        
+                    </div>
+                </div>
+            </section>
         </div>
+    </div>
  }
        
             @*@if (Model.Data.RequiresAgreementSigning > 0)
-            {
-                <section>
-                    <div class="panel alert-default">
-                        <h3 class="heading-small">Spending not enabled (@Model.Data.RequiresAgreementSigning)</h3>
+    {
+        <section>
+            <div class="panel alert-default">
+                <h3 class="heading-small">Spending not enabled (@Model.Data.RequiresAgreementSigning)</h3>
 
-                        @if (Model.Data.UserRole == Role.Owner)
-                        {
-                            <p>You need to <a href="@Url.Action("Index", "EmployerAgreement")">sign an agreement</a> to enable your organisations to spend funds.</p>
-                        }
+                @if (Model.Data.UserRole == Role.Owner)
+                {
+                    <p>You need to <a href="@Url.Action("Index", "EmployerAgreement")">sign an agreement</a> to enable your organisations to spend funds.</p>
+                }
 
-                        @if (Model.Data.UserRole == Role.Transactor)
-                        {
-                            <p>An agreement needs to be signed to enable your organisations to spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View this agreement</a>.</p>
-                        }
-              
-                    </div>
-                </section>
+                @if (Model.Data.UserRole == Role.Transactor)
+                {
+                    <p>An agreement needs to be signed to enable your organisations to spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View this agreement</a>.</p>
+                }
 
-            }
+            </div>
+        </section>
 
-       
+    }
+
+
             <section>
-                
+
                 @foreach (var task in Model.Data.Tasks)
                 {
                     <div class="panel alert-default">
@@ -109,5 +160,6 @@ else
             </section>
 
         </div>
-    </div>*@
+    </div>
 
+            *@
