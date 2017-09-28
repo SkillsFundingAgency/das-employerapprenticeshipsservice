@@ -4808,6 +4808,28 @@ a.close svg {
   }
 }
 
+.task-list li {
+  border-bottom: 1px solid #bfc1c3;
+  padding: 10px 0;
+}
+
+.task-list li:first-child {
+  padding-top: 0;
+}
+
+.task-list li:last-child {
+  border: none;
+  padding-bottom: 0;
+}
+
+.task-list li p {
+  margin: 0;
+}
+
+.task-list li a {
+  display: block;
+}
+
 .search-results section {
   padding: 0 15px;
   -webkit-box-sizing: border-box;

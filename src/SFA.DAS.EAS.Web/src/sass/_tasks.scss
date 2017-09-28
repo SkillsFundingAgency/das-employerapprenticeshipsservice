@@ -99,3 +99,23 @@
         }
     }
 }
+
+.task-list {
+    li {
+        border-bottom: 1px solid $border-colour;
+        padding: 10px 0;
+        &:first-child {
+            padding-top: 0;
+        }
+        &:last-child {
+            border: none;
+            padding-bottom: 0;
+        }
+        p {
+            margin: 0;
+        }
+        a {
+            display: block;
+        }
+    }
+}
