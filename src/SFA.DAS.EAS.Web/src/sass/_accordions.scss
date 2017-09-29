@@ -22,3 +22,19 @@
     }
 
 }
+
+details.feedback {
+    background: $govuk-blue;
+    margin-bottom: 15px;
+    summary {
+        color: #fff;
+        display: block;
+        padding: 5px;
+        span {
+            
+        }
+    }
+    .survey {
+        padding: 0 10px 3px;
+    }
+}
