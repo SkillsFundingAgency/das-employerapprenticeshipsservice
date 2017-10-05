@@ -10,8 +10,8 @@
         'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
         'userID': '@ViewBag.GaData.UserId',
         'vpv': '@ViewBag.GaData.Vpv',
-        'org': '@ViewBag.GaData.Org',
-        'subOrg': ''
+        'acc': '@ViewBag.GaData.Acc',
+        'org': ''
 
         @if (ViewBag.GaData.Extras.Count>0)
         {

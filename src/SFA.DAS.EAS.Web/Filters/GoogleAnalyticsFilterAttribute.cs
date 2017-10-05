@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Web.Filters
             filterContext.Controller.ViewBag.GaData = new GaData
             {           
                     UserId = userId,
-                    Org = hashedAccountId
+                    Acc = hashedAccountId
             };
 
             base.OnActionExecuting(filterContext);
@@ -36,10 +36,9 @@ namespace SFA.DAS.EAS.Web.Filters
         {
             public string DataLoaded { get; set; } = "dataLoaded";
             public string UserId { get; set; }
-            public string HashedAccountId { get; set; }
 
             public string Vpv { get; set; }
-            public string Org { get; set; }
+            public string Acc { get; set; }
 
             public IDictionary<string, string> Extras { get; set; } = new Dictionary<string, string>();
         }
