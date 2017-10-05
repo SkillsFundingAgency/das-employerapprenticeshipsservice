@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
@@ -31,7 +32,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Index")]
         public async Task<ActionResult> Index()
         {
-            var userId = OwinWrapper.GetClaimValue("sub");
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
             if (!string.IsNullOrWhiteSpace(userId))
             {
 
@@ -47,7 +48,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 if (accounts.Data.Accounts.AccountList.Count == 1)
                 {
                     var account = accounts.Data.Accounts.AccountList.FirstOrDefault();
-                    return RedirectToAction("Index", "EmployerTeam", new { HashedAccountId = account.HashedId });
+                    return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = account.HashedId });
                 }
 
                 var flashMessage = GetFlashMessageViewModelFromCookie();
@@ -62,7 +63,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     return View(accounts);
                 }
                 
-                return View("SetupAccount", accounts);
+                return View(ControllerConstants.SetupAccountViewName, accounts);
 
             }
 
@@ -72,7 +73,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             };
 
-            return View("ServiceStartPage", model);
+            return View(ControllerConstants.ServiceStartPageViewName, model);
         }
 
         [AuthoriseActiveUser]
@@ -83,7 +84,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue("sub"));
 
-            return View("Index",accounts);
+            return View(ControllerConstants.IndexActionName, accounts);
         }
 
         [HttpGet]
@@ -104,8 +105,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             switch (choice ?? 0)
             {
-                case 1: return RedirectToAction("WhatYoullNeed"); //No I have not used the service before
-                case 2: return RedirectToAction("SignIn"); // Yes I have used the service
+                case 1: return RedirectToAction(ControllerConstants.WhatYoullNeedActionName); //No I have not used the service before
+                case 2: return RedirectToAction(ControllerConstants.SignInActionName); // Yes I have used the service
                 default:
                     
                     var model = new
@@ -134,7 +135,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("whatYoullNeed")]
         public ActionResult WhatYoullNeed(int? choice)
         {
-            return RedirectToAction("RegisterUser");
+            return RedirectToAction(ControllerConstants.RegisterUserActionName);
         }
 
         [HttpGet]
@@ -152,7 +153,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("register/new")]
         public ActionResult HandleNewRegistration()
         {
-            return RedirectToAction("Index");
+            return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
         [Authorize]
@@ -170,7 +171,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 AddFlashMessageToCookie(flashMessage);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
         [Authorize]
@@ -189,21 +190,21 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 await OwinWrapper.UpdateClaims();
 
-                var userRef = OwinWrapper.GetClaimValue("sub");
-                var email = OwinWrapper.GetClaimValue("email");
+                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+                var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
                 var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
                 var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
 
                 await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
         [Authorize]
         [Route("signIn")]
         public ActionResult SignIn()
         {
-            return RedirectToAction("Index");
+            return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
         [Route("signOut")]
@@ -240,7 +241,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("catchAll")]
         public ActionResult CatchAll(string path = null)
         {
-            return RedirectToAction("NotFound", "Error", new { path });
+            return RedirectToAction(ControllerConstants.NotFoundViewName, ControllerConstants.ErrorControllerName, new { path });
         }
 
 
@@ -248,7 +249,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("CreateLegalAgreement/{showSubFields}")]
         public ActionResult ShowLegalAgreement(bool showSubFields)
         {
-            return View("LegalAgreement", showSubFields);
+            return View(ControllerConstants.LegalAgreementViewName, showSubFields);
         }
 #endif
     }

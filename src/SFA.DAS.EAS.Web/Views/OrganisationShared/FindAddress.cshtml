@@ -1,8 +1,12 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.FindOrganisationAddressViewModel>
+﻿@using SFA.DAS.EAS.Web.Helpers
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.FindOrganisationAddressViewModel>
 @{
     ViewBag.Title = "Find address";
+    ViewBag.Section = "organisations";
     ViewBag.PageID = "find-organisation-address";
-    ViewBag.HideNav = "true";
+
+    var hasHashedOrganisationId = this.ViewContext.RouteData.Values[ControllerConstants.HashedAccountIdKeyName] != null;
+    ViewBag.HideNav = hasHashedOrganisationId == false;
 }
 
 @{
@@ -13,7 +17,7 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Find organisation address</h1>
 
-        <form action="@Url.Action("SelectAddress", "EmployerAccountOrganisation")" method="POST" novalidate>
+        <form action="@Url.Action("SelectAddress")" method="POST" novalidate>
             @Html.AntiForgeryToken()
             <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "error" : "")">
                 <label for="Postcode">
@@ -23,12 +27,12 @@
                         <span class="error-message" id="error-message-postcode">@Model.Data.PostcodeError</span>
                     }
                 </label>
-                
+
                 <span>
                     <input type="text" id="Postcode" name="postcode" value="@Model.Data.Postcode" class="form-control" required="required" aria-required="true"
                            @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "aria-invalid=true aria-describedby=error-message-postcode" : "" ) />
-            
-                    
+
+
                 </span>
             </div>
             <input type="hidden" id="organisationName" name="organisationName" value="@Model.Data.OrganisationName" />
@@ -39,7 +43,7 @@
             <input type="hidden" id="Sector" name="Sector" value="@Model.Data.Sector" />
             <div class="form-group">
                 <input class="button" type="submit" value="Find address" />
-                <a class="button-link" href="@Url.Action("AddOrganisationAddress", "EmployerAccountOrganisation", new
+                <a class="button-link" href="@Url.Action("AddOrganisationAddress", new
                              {
                                  Model.Data.OrganisationName,
                                  Model.Data.OrganisationReferenceNumber,
@@ -49,7 +53,7 @@
                                  Model.Data.Sector
                              })">Enter address manually</a>
             </div>
-        </form> 
+        </form>
         <p></p>
     </div>
 </div>
