@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountApiClientTests\ApiClientTestBase.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAccountDetailsByInternalId.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAccountUsers.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAccountUsersByInternalId.cs" />

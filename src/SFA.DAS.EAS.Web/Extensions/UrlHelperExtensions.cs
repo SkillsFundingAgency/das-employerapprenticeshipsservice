@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Microsoft.Azure;
+using SFA.DAS.EAS.Web.Helpers;
 
 namespace SFA.DAS.EAS.Web.Extensions
 {
@@ -10,16 +11,16 @@ namespace SFA.DAS.EAS.Web.Extensions
 
             var baseUrl = GetBaseUrl();
 
-            var accountId = helper.RequestContext.RouteData.Values["hashedAccountId"];
+            var accountId = helper.RequestContext.RouteData.Values[ControllerConstants.HashedAccountIdKeyName];
 
             return $"{baseUrl}accounts/{accountId}/{controllerName}/{actionName}";
         }
 
         private static string GetBaseUrl()
         {
-            return CloudConfigurationManager.GetSetting("EmployerCommitmentsBaseUrl").EndsWith("/")
-                ? CloudConfigurationManager.GetSetting("EmployerCommitmentsBaseUrl")
-                : CloudConfigurationManager.GetSetting("EmployerCommitmentsBaseUrl") + "/";
+            return CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName).EndsWith("/")
+                ? CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName)
+                : CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName) + "/";
         }
     }
 }

@@ -8,6 +8,7 @@ using AutoMapper;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
@@ -39,127 +40,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
-        [Route("address/find")]
-        public ActionResult FindAddress(FindOrganisationAddressViewModel request)
-        {
-            var response = new OrchestratorResponse<FindOrganisationAddressViewModel>
-            {
-                Data = request,
-                Status = HttpStatusCode.OK
-            };
-
-
-            return View(response);
-        }
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("address/select")]
-        public async Task<ActionResult> SelectAddress(FindOrganisationAddressViewModel request)
-        {
-            var response = await _orchestrator.GetAddressesFromPostcode(request);
-            
-            if (response?.Data?.Addresses != null && response.Data.Addresses.Count == 1)
-            {
-                var viewModel = _mapper.Map<AddOrganisationAddressViewModel>(request);
-
-                viewModel.Address = response.Data.Addresses.Single();
-
-                var addressResponse = new OrchestratorResponse<AddOrganisationAddressViewModel>
-                {
-                    Data = viewModel,
-                    Status = HttpStatusCode.OK
-                };
-
-                return View("AddOrganisationAddress", addressResponse);
-            }
-
-            return View(response);
-        }
-
-        [HttpGet]
-        [Route("address/update")]
-        public ActionResult AddOrganisationAddress(AddOrganisationAddressViewModel request)
-        {
-
-            if (!string.IsNullOrEmpty(request.OrganisationAddress))
-            {
-                var organisationDetailsViewModel = _orchestrator.StartConfirmOrganisationDetails(request);
-                return View("ConfirmOrganisationDetails", organisationDetailsViewModel);
-            }
-
-
-            if (request.Address == null)
-            {
-                request.Address = new AddressViewModel();
-            }
-
-            var response = new OrchestratorResponse<AddOrganisationAddressViewModel>
-            {
-                Data = request,
-                Status = HttpStatusCode.OK
-            };
-
-            return View("AddOrganisationAddress", response);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("address/update")]
-        public ActionResult UpdateOrganisationAddress(AddOrganisationAddressViewModel request)
-        {
-            var response = _orchestrator.AddOrganisationAddress(request);
-
-            if (response.Status == HttpStatusCode.BadRequest)
-            {
-                request.Address = request.Address ?? new AddressViewModel();
-                request.Address.ErrorDictionary = response.Data.ErrorDictionary;
-
-                var errorResponse = new OrchestratorResponse<AddOrganisationAddressViewModel>
-                {
-                    Data = request,
-                    Status = HttpStatusCode.BadRequest,
-                    Exception = response.Exception,
-                    FlashMessage = response.FlashMessage
-                };
-
-                return View("AddOrganisationAddress", errorResponse);
-            }
-
-            return View("ConfirmOrganisationDetails", response);
-        }
-
-        [HttpGet]
-        [Route("custom/add")]
-        public ActionResult AddOtherOrganisationDetails(string hashedAccountId)
-        {
-            var response = _orchestrator.GetAddOtherOrganisationViewModel(hashedAccountId);
-            return View(response);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("custom/add")]
-        public async Task<ActionResult> AddOtherOrganisationDetails(OrganisationDetailsViewModel model)
-        {
-            var response = await _orchestrator.ValidateLegalEntityName(model);
-
-            if (response.Status == HttpStatusCode.BadRequest)
-            {
-                return View("AddOtherOrganisationDetails", response);
-            }
-
-            model.Type = OrganisationType.Other;
-
-            var addressModel = new OrchestratorResponse<FindOrganisationAddressViewModel>
-            {
-                Data = _mapper.Map<FindOrganisationAddressViewModel>(response.Data)
-            };
-            
-            return View("FindAddress", addressModel);
-        }
-
-        [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("legalAgreement")]
         public ActionResult OrganisationLegalAgreement(string hashedAccountId, OrganisationDetailsViewModel model)
@@ -187,7 +67,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Code = code,
                 Address = address,
                 IncorporatedDate = incorporated,
-                ExternalUserId = OwinWrapper.GetClaimValue(@"sub"),
+                ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName),
                 LegalEntityStatus = string.IsNullOrWhiteSpace(legalEntityStatus) ? null : legalEntityStatus,
                 Source = (short)organisationType,
                 PublicSectorDataSource = publicSectorDataSource,
@@ -205,16 +85,16 @@ namespace SFA.DAS.EAS.Web.Controllers
             AddFlashMessageToCookie(flashMessage);
             if (newSearch)
             {
-                return RedirectToAction("OrganisationAddedNextStepsSearch", new { hashedAccountId, organisationName = name });
+                return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsSearchActionName, new { hashedAccountId, organisationName = name });
             }
-            return RedirectToAction("OrganisationAddedNextSteps", new { hashedAccountId, organisationName = name });
+            return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsActionName, new { hashedAccountId, organisationName = name });
         }
 
         [HttpGet]
         [Route("nextStep")]
         public async Task<ActionResult> OrganisationAddedNextSteps(string organisationName, string hashedAccountId)
         {
-            var userId = OwinWrapper.GetClaimValue(@"sub");
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
 
             var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId);
 
@@ -227,13 +107,13 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("nextStepSearch")]
         public async Task<ActionResult> OrganisationAddedNextStepsSearch(string organisationName, string hashedAccountId)
         {
-            var userId = OwinWrapper.GetClaimValue(@"sub");
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
 
             var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId);
 
             viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
 
-            return View("OrganisationAddedNextSteps", viewModel);
+            return View(ControllerConstants.OrganisationAddedNextStepsViewName, viewModel);
         }
 
 
@@ -241,23 +121,23 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("nextStep")]
         public async Task<ActionResult> GoToNextStep(string nextStep, string hashedAccountId, string organisationName)
         {
-            var userId = OwinWrapper.GetClaimValue(@"sub");
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
 
             var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
 
             switch (nextStep)
             {
-                case "agreement": return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
+                case "agreement": return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId });
 
-                case "teamMembers": return RedirectToAction("ViewTeam", "EmployerTeam", new { hashedAccountId });
+                case "teamMembers": return RedirectToAction(ControllerConstants.ViewTeamActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId });
 
-                case "addOrganisation": return RedirectToAction("SearchForOrganisation", "SearchOrganisation", new { hashedAccountId });
+                case "addOrganisation": return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName, new { hashedAccountId });
 
-                case "dashboard": return RedirectToAction("Index", "EmployerTeam", new { hashedAccountId });
+                case "dashboard": return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId });
 
                 default:
                     var errorMessage = "Please select one of the next steps below";
-                    return View("OrganisationAddedNextSteps", new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
+                    return View(ControllerConstants.OrganisationAddedNextStepsViewName, new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
                     {
                         Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName, ShowWizard = userShownWizard },
                         FlashMessage = new FlashMessageViewModel
@@ -269,24 +149,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                         }
                     });
             }
-        }
-
-        private async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>> FindPublicSectorOrganisation(string publicSectorOrganisationName, string hashedAccountId, string userIdClaim)
-        {
-            var response = await _orchestrator.FindPublicSectorOrganisation(publicSectorOrganisationName, hashedAccountId, userIdClaim);
-            return response;
-        }
-
-        private async Task<OrchestratorResponse<OrganisationDetailsViewModel>> FindCompany(string companiesHouseNumber, string hashedAccountId, string userIdClaim)
-        {
-            var response = await _orchestrator.GetLimitedCompanyByRegistrationNumber(companiesHouseNumber, hashedAccountId, userIdClaim);
-            return response;
-        }
-
-        private async Task<OrchestratorResponse<OrganisationDetailsViewModel>> FindCharity(string charityRegNo, string hashedAccountId, string userIdClaim)
-        {
-            var response = await _orchestrator.GetCharityByRegistrationNumber(charityRegNo, hashedAccountId, userIdClaim);
-            return response;
         }
     }
 }

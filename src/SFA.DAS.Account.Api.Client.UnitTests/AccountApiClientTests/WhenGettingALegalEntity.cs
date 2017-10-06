@@ -8,24 +8,15 @@ using SFA.DAS.EAS.Account.Api.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
-    public class WhenGettingALegalEntity
+    public class WhenGettingALegalEntity : ApiClientTestBase
     {
-        private AccountApiConfiguration _configuration;
-        private Mock<SecureHttpClient> _httpClient;
-        private AccountApiClient _apiClient;
         private LegalEntityViewModel _expectedLegalEntity;
         private string _uri;
 
-        [SetUp]
-        public void Arrange()
+        public override void HttpClientSetup()
         {
-            _configuration = new AccountApiConfiguration
-            {
-                ApiBaseUrl = "http://some-url/"
-            };
-
-            _uri = "/api/accounts/ABC123/legalentities/123";
-            var absoluteUri = _configuration.ApiBaseUrl.TrimEnd('/') + _uri;
+            _uri = $"/api/accounts/{TextualAccountId}/legalentities/123";
+            var absoluteUri = Configuration.ApiBaseUrl.TrimEnd('/') + _uri;
 
             _expectedLegalEntity = new LegalEntityViewModel
             {
@@ -38,17 +29,14 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
                 Status = "Status"
             };
 
-            _httpClient = new Mock<SecureHttpClient>();
-            _httpClient.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedLegalEntity)));
-
-            _apiClient = new AccountApiClient(_configuration, _httpClient.Object);
+            HttpClient.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedLegalEntity)));
         }
 
         [Test]
         public async Task ThenTheLegalEntityIsReturned()
         {
             // Act
-            var response = await _apiClient.GetLegalEntity("ABC123",123);
+            var response = await ApiClient.GetLegalEntity(TextualAccountId,123);
 
             // Assert
             Assert.IsNotNull(response);
