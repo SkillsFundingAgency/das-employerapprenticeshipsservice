@@ -7,53 +7,34 @@ using SFA.DAS.EAS.Account.Api.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
-    public class WhenGettingLevyDeclarations
+    public class WhenGettingLevyDeclarations : ApiClientTestBase
     {
-        private AccountApiConfiguration _configuration;
-        private Mock<SecureHttpClient> _httpClient;
-        private AccountApiClient _apiClient;
-
-        [SetUp]
-        public void Arrange()
+        public override void HttpClientSetup()
         {
-            _configuration = new AccountApiConfiguration
-            {
-                ApiBaseUrl = "http://some-url/"
-            };
-
-            _httpClient = new Mock<SecureHttpClient>();
-            _httpClient.Setup(c => c.GetAsync(It.IsAny<string>()))
+            HttpClient.Setup(c => c.GetAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(
                     JsonConvert.SerializeObject(new List<LevyDeclarationViewModel>
                         {
                             new LevyDeclarationViewModel()
                         }
                     )));
-
-            _apiClient = new AccountApiClient(_configuration, _httpClient.Object);
         }
 
         public async Task ThenItShouldCallTheApiWithTheCorrectUrl()
         {
-            // Arrange
-            var accountId = "ABC123";
-
             // Act
-            await _apiClient.GetLevyDeclarations(accountId);
+            await ApiClient.GetLevyDeclarations(TextualAccountId);
 
             // Assert
-            var expectedUrl = $"http://some-url/api/accounts/{accountId}/levy";
-            _httpClient.Verify(c => c.GetAsync(expectedUrl), Times.Once);
+            var expectedUrl = $"http://some-url/api/accounts/{TextualAccountId}/levy";
+            HttpClient.Verify(c => c.GetAsync(expectedUrl), Times.Once);
         }
 
         [Test]
         public async Task ThenItShouldReturnLevyDeclarations()
         {
-            // Arrange
-            var accountId = "ABC123";
-
             // Act
-            var actual = await _apiClient.GetLevyDeclarations(accountId);
+            var actual = await ApiClient.GetLevyDeclarations(TextualAccountId);
 
             // Assert
             Assert.IsNotNull(actual);
@@ -62,11 +43,8 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         [Test]
         public async Task ThenItShouldDeserializeTheResponseCorrectly()
         {
-            // Arrange
-            var accountId = "ABC123";
-
             // Act
-            var actual = await _apiClient.GetLevyDeclarations(accountId);
+            var actual = await ApiClient.GetLevyDeclarations(TextualAccountId);
 
             // Assert
             Assert.IsAssignableFrom<List<LevyDeclarationViewModel>>(actual);

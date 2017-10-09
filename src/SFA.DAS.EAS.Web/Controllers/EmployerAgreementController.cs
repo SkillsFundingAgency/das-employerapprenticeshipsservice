@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
@@ -33,7 +34,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements")]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
-            var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
             if (flashMessage!=null)
@@ -48,7 +49,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/{agreementId}/details")]
         public async Task<ActionResult> Details(string agreementId, string hashedAccountId, FlashMessageViewModel flashMessage)
         {
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
             return View(agreement);
         }
@@ -57,7 +58,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 		[Route("agreements/{agreementId}/view")]
         public async Task<ActionResult> View(string agreementId, string hashedAccountId, FlashMessageViewModel flashMessage)
         {
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
             
             return View(agreement);
         }
@@ -66,7 +67,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/{agreementId}/about-your-agreement")]
         public async Task<ActionResult> AboutYourAgreement(string agreementid, string hashedAccountId)
         {
-            var agreement = await _orchestrator.GetById(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var agreement = await _orchestrator.GetById(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
             return View(agreement);
         }
@@ -75,7 +76,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/{agreementId}/sign-your-agreement")]
         public async Task<ActionResult> SignAgreement(string agreementId, string hashedAccountId)
         {
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
             return View(agreement);
         }
@@ -86,7 +87,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> Sign(string agreementId, string hashedAccountId)
         {
             
-            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), DateTime.UtcNow);
+            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName), DateTime.UtcNow);
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -97,21 +98,21 @@ namespace SFA.DAS.EAS.Web.Controllers
                 };
                 AddFlashMessageToCookie(flashMessage);
 
-                return RedirectToAction("NextSteps", new { hashedAccountId });
+                return RedirectToAction(ControllerConstants.NextStepsActionName, new { hashedAccountId });
             }
 
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
             agreement.Exception = response.Exception;
             agreement.Status = response.Status;
 
-            return View("SignAgreement", agreement);
+            return View(ControllerConstants.SignAgreementViewName, agreement);
         }
 
         [HttpGet]
         [Route("agreements/{agreementId}/next")]
         public async Task<ActionResult> NextSteps(string hashedAccountId)
         {
-            var userId = OwinWrapper.GetClaimValue(@"sub");
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
 
             var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
 
@@ -128,16 +129,16 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/{agreementId}/next")]
         public async Task<ActionResult> NextSteps(int? choice, string hashedAccountId)
         {
-            var userId = OwinWrapper.GetClaimValue(@"sub");
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
 
             var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
 
             switch (choice ?? 0)
             {
-                case 1: return RedirectToAction("Index",    "EmployerAgreement");
-                case 2: return RedirectToAction("Index",    "EmployerAccountTransactions");
-                case 3: return RedirectToAction("Inform",   "EmployerCommitments");
-                case 4: return RedirectToAction("Index",    "EmployerTeam");
+                case 1: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName);
+                case 2: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAccountTransactionsControllerName);
+                case 3: return RedirectToAction(ControllerConstants.InformActionName, ControllerConstants.EmployerCommitmentsControllerName);
+                case 4: return RedirectToAction(ControllerConstants.IndexActionName,   ControllerConstants.EmployerTeamControllerName);
                 default:
                     var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel>
                     {
@@ -157,7 +158,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
         {
 
-            var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId,agreementId, OwinWrapper.GetClaimValue("sub"));
+            var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId,agreementId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
             if (stream.Data.PdfStream == null)
             {
@@ -165,7 +166,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View(stream);
             }
 
-            return new FileStreamResult(stream.Data.PdfStream,"application/pdf");
+            return new FileStreamResult(stream.Data.PdfStream, ControllerConstants.PdfContentTypeName);
         }
 
         [HttpGet]
@@ -173,7 +174,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
         {
 
-            var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId,agreementId,OwinWrapper.GetClaimValue("sub"));
+            var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId,agreementId,OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
             if (stream.Data.PdfStream == null)
             {
@@ -181,14 +182,14 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View(stream);
             }
 
-            return new FileStreamResult(stream.Data.PdfStream, "application/pdf");
+            return new FileStreamResult(stream.Data.PdfStream, ControllerConstants.PdfContentTypeName);
         }
 
         [HttpGet]
         [Route("agreements/remove")]
         public async Task<ActionResult> GetOrganisationsToRemove(string hashedAccountId)
         {
-            var model = await _orchestrator.GetLegalAgreementsToRemove(hashedAccountId, OwinWrapper.GetClaimValue("sub"));
+            var model = await _orchestrator.GetLegalAgreementsToRemove(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
             return View(model);
         }
@@ -197,7 +198,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/remove/{agreementId}")]
         public async Task<ActionResult> ConfirmRemoveOrganisation(string agreementId, string hashedAccountId)
         {
-            var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(agreementId, hashedAccountId, OwinWrapper.GetClaimValue("sub"));
+            var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
             if (flashMessage != null)
@@ -214,21 +215,21 @@ namespace SFA.DAS.EAS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveOrganisation(string hashedAccountId, string agreementId, ConfirmLegalAgreementToRemoveViewModel model)
         {
-            var response = await _orchestrator.RemoveLegalAgreement(model, OwinWrapper.GetClaimValue("sub"));
+            var response = await _orchestrator.RemoveLegalAgreement(model, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
             if (response.Status == HttpStatusCode.OK)
             {
                 AddFlashMessageToCookie(response.FlashMessage);
 
-                return RedirectToAction("Index", new { hashedAccountId });
+                return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
             }
             if (response.Status == HttpStatusCode.BadRequest)
             {
                 AddFlashMessageToCookie(response.FlashMessage);
-                return RedirectToAction("ConfirmRemoveOrganisation", new {hashedAccountId, agreementId});
+                return RedirectToAction(ControllerConstants.ConfirmRemoveOrganisationActionName, new {hashedAccountId, agreementId});
             }
 
-            return RedirectToAction("Index", new { hashedAccountId });
+            return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
         }
 
     }

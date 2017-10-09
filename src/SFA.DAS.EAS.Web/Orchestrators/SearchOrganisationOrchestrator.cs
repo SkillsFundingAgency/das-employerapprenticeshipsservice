@@ -16,7 +16,7 @@ using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
-    public class SearchOrganisationOrchestrator : UserVerificationOrchestratorBase
+    public class SearchOrganisationOrchestrator : UserVerificationOrchestratorBase, IOrchestratorCookie 
     {
         private readonly ICookieStorageService<EmployerAccountData> _cookieService;
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";

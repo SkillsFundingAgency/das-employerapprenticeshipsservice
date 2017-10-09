@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
@@ -35,12 +36,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("invite")]
         public ActionResult Invite()
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue("sub")))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName)))
             {
                 return View();
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
         
         [HttpGet]
@@ -48,9 +49,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route]
         public async Task<ActionResult> All()
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue("sub")))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName)))
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }
 
             var model = await _invitationOrchestrator.GetAllInvitationsForUser(OwinWrapper.GetClaimValue("sub"));
@@ -63,9 +64,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("view")]
         public async Task<ActionResult> View(string invitationId)
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue("sub")))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName)))
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }
 
             var invitation = await _invitationOrchestrator.GetInvitation(invitationId);
@@ -79,19 +80,19 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("accept")]
         public async Task<ActionResult> Accept(long invitation, UserInvitationsViewModel model)
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue("sub")))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName)))
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }
 
             var invitationItem = model.Invitations.SingleOrDefault(c => c.Id == invitation);
 
             if (invitationItem == null)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }
 
-            await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, OwinWrapper.GetClaimValue("sub"));
+            await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
             
             var flashMessage = new FlashMessageViewModel
             {
@@ -102,7 +103,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             AddFlashMessageToCookie(flashMessage);
 
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
         [HttpPost]
@@ -111,14 +112,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("create")]
         public async Task<ActionResult> Create(InviteTeamMemberViewModel model)
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue("sub")))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName)))
             {
-                return RedirectToAction("Index", "Home");     
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);     
             }
 
-            await _invitationOrchestrator.CreateInvitation(model, OwinWrapper.GetClaimValue("sub"));
+            await _invitationOrchestrator.CreateInvitation(model, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
         [HttpGet]
