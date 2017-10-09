@@ -49,7 +49,7 @@ select mainUpdate.* from
 			x.SubmissionId as SubmissionId,
 			x.SubmissionDate as TransactionDate,
 			1 as TransactionType,
-			
+			x.EnglishFraction,
 			x.LevyDeclaredInMonth as LevyDeclared,
 			x.TotalAmount as Amount,
 			
