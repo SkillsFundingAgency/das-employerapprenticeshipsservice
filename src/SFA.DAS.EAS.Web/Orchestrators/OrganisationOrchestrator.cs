@@ -32,7 +32,7 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
-    public class OrganisationOrchestrator : UserVerificationOrchestratorBase
+    public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrchestratorCookie
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;

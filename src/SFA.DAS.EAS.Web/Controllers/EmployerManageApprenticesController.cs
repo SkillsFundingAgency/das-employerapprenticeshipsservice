@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using Microsoft.Azure;
+using SFA.DAS.EAS.Web.Helpers;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -34,19 +35,13 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedApprenticeshipId}/details", Name = "OnProgrammeApprenticeshipDetails")]
+        [Route("{hashedApprenticeshipId}/details/statuschange", Name = "ChangeStatusSelectOption")]
+        [Route("{hashedApprenticeshipId}/edit", Name = "EditApprenticeship")]
         public ActionResult Details(string hashedAccountId, string hashedApprenticeshipId)
         {
             return RedirectPermanentCommitmentsUrl();
         }
-
-        [HttpGet]
-        [Route("{hashedApprenticeshipId}/details/statuschange", Name = "ChangeStatusSelectOption")]
-        [OutputCache(CacheProfile = "NoCache")]
-        public ActionResult ChangeStatus(string hashedAccountId, string hashedApprenticeshipId)
-        {
-            return RedirectPermanentCommitmentsUrl();
-        }
-
+        
         [HttpGet]
         [Route("{hashedApprenticeshipId}/details/statuschange/{changeType}/whentoapply", Name = "WhenToApplyChange")]
         [OutputCache(CacheProfile = "NoCache")]
@@ -64,48 +59,16 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [OutputCache(CacheProfile = "NoCache")]
-        [Route("{hashedApprenticeshipId}/edit", Name = "EditApprenticeship")]
-        public ActionResult Edit(string hashedAccountId, string hashedApprenticeshipId)
-        {
-            return RedirectPermanentCommitmentsUrl();
-        }
-
-        [HttpGet]
         [Route("{hashedApprenticeshipId}/changes/confirm")]
+        [Route("{hashedApprenticeshipId}/changes/view", Name = "ViewChanges")]
+        [Route("{hashedApprenticeshipId}/changes/review", Name = "ReviewChanges")]
+        [Route("{hashedApprenticeshipId}/datalock/restart", Name = "RequestRestart")]
+        [Route("{hashedApprenticeshipId}/datalock/changes", Name = "RequestChanges")]
         public ActionResult ConfirmChanges(string hashedAccountId, string hashedApprenticeshipId)
         {
             return RedirectPermanentCommitmentsUrl();
         }
-
-        [HttpGet]
-        [Route("{hashedApprenticeshipId}/changes/view", Name = "ViewChanges")]
-        public ActionResult ViewChanges(string hashedAccountId, string hashedApprenticeshipId)
-        {
-            return RedirectPermanentCommitmentsUrl();
-        }
-
-        [HttpGet]
-        [Route("{hashedApprenticeshipId}/changes/review", Name = "ReviewChanges")]
-        public ActionResult ReviewChanges(string hashedAccountId, string hashedApprenticeshipId)
-        {
-             return RedirectPermanentCommitmentsUrl();
-        }
-
-        [HttpGet]
-        [Route("{hashedApprenticeshipId}/datalock/restart", Name = "RequestRestart")]
-        public ActionResult RequestRestart(string hashedAccountId, string hashedApprenticeshipId)
-        {
-            return RedirectPermanentCommitmentsUrl();
-        }
-
-        [HttpGet]
-        [Route("{hashedApprenticeshipId}/datalock/changes", Name = "RequestChanges")]
-        public ActionResult RequestChanges(string hashedAccountId, string hashedApprenticeshipId)
-        {
-            return RedirectPermanentCommitmentsUrl();
-        }
-
+        
         [HttpGet]
         [Route("paymentorder", Name = "PaymentOrder")]
         public ActionResult PaymentOrder(string hashedAccountId)
@@ -115,9 +78,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private RedirectResult RedirectPermanentCommitmentsUrl()
         {
-            var baseUrl = CloudConfigurationManager.GetSetting("EmployerCommitmentsBaseUrl").EndsWith("/")
-                ? CloudConfigurationManager.GetSetting("EmployerCommitmentsBaseUrl")
-                : CloudConfigurationManager.GetSetting("EmployerCommitmentsBaseUrl") + "/";
+            var baseUrl = CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName).EndsWith("/")
+                ? CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName)
+                : CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName) + "/";
 
             var path = Request.Url.AbsolutePath;
 

@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
@@ -39,7 +40,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (!CanAccessFeature())
             {
-                filterContext.Result = base.View("FeatureNotEnabled", null, null);
+                filterContext.Result = base.View(ControllerConstants.FeatureNotEnabledViewName, null, null);
             }
         }
 
@@ -68,21 +69,21 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (orchestratorResponse.Status == HttpStatusCode.Unauthorized)
             {
                 //Get the account id
-                var accountId = Request.Params["HashedAccountId"];
+                var accountId = Request.Params[ControllerConstants.HashedAccountIdKeyName];
                 if (accountId != null)
                 {
                     ViewBag.AccountId = accountId;
                 }
 
-                return base.View(@"AccessDenied", masterName, orchestratorResponse);
+                return base.View(ControllerConstants.AccessDeniedViewName, masterName, orchestratorResponse);
             }
 
             if (orchestratorResponse.Status == HttpStatusCode.NotFound)
             {
-                return base.View("NotFound");
+                return base.View(ControllerConstants.NotFoundViewName);
             }
 
-            return base.View(@"GenericError", masterName, orchestratorResponse);
+            return base.View(ControllerConstants.GenericErrorViewName, masterName, orchestratorResponse);
         }
 
         private ViewResult ReturnViewResult(string viewName, string masterName, OrchestratorResponse orchestratorResponse)
@@ -95,8 +96,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return base.View(viewName, masterName, orchestratorResponse);
             }
 
-            var controllerName = ControllerContext.RouteData.Values["Controller"].ToString();
-            var actionName = ControllerContext.RouteData.Values["Action"].ToString();
+            var controllerName = ControllerContext.RouteData.Values[ControllerConstants.ControllerKeyName].ToString();
+            var actionName = ControllerContext.RouteData.Values[ControllerConstants.ActionKeyName].ToString();
             var userView = userViews.Data.SingleOrDefault(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase)
                             && c.Action.Equals(actionName, StringComparison.CurrentCultureIgnoreCase));
 
@@ -104,7 +105,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 if (!userView.SplitAccessAcrossUsers)
                 {
-                    var userEmail = OwinWrapper.GetClaimValue("email");
+                    var userEmail = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
 
                     foreach (var view in userView.Views)
                     {
@@ -139,14 +140,14 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return true;
             }
 
-            var controllerName = ControllerContext.RouteData.Values["Controller"].ToString();
+            var controllerName = ControllerContext.RouteData.Values[ControllerConstants.ControllerKeyName].ToString();
             var controllerToggles = features.Data.Where(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase)).ToArray();
             if (!controllerToggles.Any())
             {
                 return true;
             }
 
-            var actionName = ControllerContext.RouteData.Values["Action"].ToString();
+            var actionName = ControllerContext.RouteData.Values[ControllerConstants.ActionKeyName].ToString();
             var actionToggle = controllerToggles.Where(t => t.Action.Equals(actionName, StringComparison.CurrentCultureIgnoreCase) || t.Action == "*")
                                                  .OrderByDescending(t => t.Action) // Should put action = * last as specific action toggle should win
                                                  .FirstOrDefault();
@@ -159,7 +160,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return false;
             }
 
-            var userEmail = OwinWrapper.GetClaimValue("email");
+            var userEmail = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
             return toggle.WhiteList.Any(pattern => Regex.IsMatch(userEmail, pattern, RegexOptions.IgnoreCase));
         }
 

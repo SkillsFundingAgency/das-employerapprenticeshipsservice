@@ -110,12 +110,18 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
@@ -163,9 +169,11 @@
     <Compile Include="Controllers\EmployerTeamControllerTests\WhenIViewNextSteps.cs" />
     <Compile Include="Controllers\InvitationControllerTests\WhenIAcceptAnInvitation.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIConfirmAddOfOrganisation.cs" />
-    <Compile Include="Controllers\OrganisationControllerTests\WhenIEnterAPostcodeForAnAddress.cs" />
-    <Compile Include="Controllers\OrganisationControllerTests\WhenIGoToAddAnOrganisationOfTypeOther.cs" />
-    <Compile Include="Controllers\OrganisationControllerTests\WhenIAddAnOrganisationOfTypeOther.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\OrganisationSharedControllerTestBase.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenIAddAnOrganisationAddress.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenIEnterAPostcodeForAnAddress.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenIGoToAddAnOrganisationOfTypeOther.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenIAddAnOrganisationOfTypeOther.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIAddAnLegalEntityToAnAccount.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenILoginAUser.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenILogout.cs" />
@@ -173,6 +181,9 @@
     <Compile Include="Controllers\HomeControllerTests\WhenIViewTheHomePage.cs" />
     <Compile Include="Controllers\InvitationControllerTests\WhenViewingInvitations.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIViewNextSteps.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenISearchForAnAddress.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenISelectAnAddress.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenIUpdateAnOrganisationsAddress.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingLogging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingMessaging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingValidators.cs" />

@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
@@ -29,7 +30,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("notifications")]
         public async Task<ActionResult> NotificationSettings()
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
             var vm = await _userSettingsOrchestrator.GetNotificationSettingsViewModel(userIdClaim);
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
@@ -43,7 +44,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("notifications")]
         public async Task<ActionResult> NotificationSettings(NotificationSettingsViewModel vm)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
 
             await _userSettingsOrchestrator.UpdateNotificationSettings(userIdClaim,
                 vm.NotificationSettings);
@@ -56,16 +57,16 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             AddFlashMessageToCookie(flashMessage);
 
-            return RedirectToAction("NotificationSettings");
+            return RedirectToAction(ControllerConstants.NotificationSettingsActionName);
         }
 
         [HttpGet]
         [Route("notifications/unsubscribe/{hashedAccountId}")]
         public async Task<ActionResult> NotificationUnsubscribe(string hashedAccountId)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
             
-            var url = Url.Action("NotificationSettings");
+            var url = Url.Action(ControllerConstants.NotificationSettingsActionName);
             var model = await _userSettingsOrchestrator.Unsubscribe(userIdClaim, hashedAccountId, url);
 
             return View(model);
