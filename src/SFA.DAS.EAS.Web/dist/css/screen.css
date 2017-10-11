@@ -4399,6 +4399,7 @@ table.responsive tr.total {
 
 details.feedback {
   background: #005ea5;
+  margin-bottom: 15px;
 }
 
 details.feedback summary {

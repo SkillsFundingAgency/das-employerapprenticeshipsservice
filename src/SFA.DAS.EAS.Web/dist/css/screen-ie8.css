@@ -3809,6 +3809,7 @@ table.responsive tr th.tw-70 {
 
 details.feedback {
   background: #005ea5;
+  margin-bottom: 15px;
 }
 
 details.feedback summary {
