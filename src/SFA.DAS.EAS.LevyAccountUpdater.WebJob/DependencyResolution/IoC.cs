@@ -18,6 +18,7 @@
 
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
 using StructureMap;
 
 namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.DependencyResolution {
@@ -29,7 +30,7 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.DependencyResolution {
         {
             return new Container(c =>
             {
-                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
+                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName, new ConfigurationInfo<EmployerApprenticeshipsServiceConfiguration>()));
                 c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
                 c.AddRegistry<DefaultRegistry>();
             });

@@ -5,23 +5,31 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 
-namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
+namespace SFA.DAS.EAS.Infrastructure.EnvironmentInfo
 {
-    public static class ConfigurationHelper
+    public class ConfigurationInfo<T> : IConfigurationInfo<T>
     {
-        public static T GetConfiguration<T>(string serviceName)
+        public T GetConfiguration(string serviceName)
+        {
+            return GetConfiguration(serviceName, null);
+        }
+
+        public T GetConfiguration(string serviceName, Action<string> action)
         {
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
                 environment = CloudConfigurationManager.GetSetting("EnvironmentName");
             }
+            action?.Invoke(environment);
 
             var configurationRepository = GetConfigurationRepository();
             var configurationService = new ConfigurationService(configurationRepository,
                 new ConfigurationOptions(serviceName, environment, "1.0"));
 
-            return configurationService.Get<T>();
+            var result = configurationService.Get<T>();
+
+            return result;
         }
 
         private static IConfigurationRepository GetConfigurationRepository()

@@ -18,6 +18,7 @@
 
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
@@ -30,13 +31,13 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
         {
             return new Container(c =>
             {
-                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
-                c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
-                c.Policies.Add(new ConfigurationPolicy<ReferenceDataApiClientConfiguration>("SFA.DAS.ReferenceDataApiClient"));
-                c.Policies.Add(new ConfigurationPolicy<AuditApiClientConfiguration>("SFA.DAS.AuditApiClient"));
-                c.Policies.Add(new ConfigurationPolicy<TokenServiceApiClientConfiguration>("SFA.DAS.TokenServiceApiClient"));
-				c.Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
-                c.Policies.Add(new ConfigurationPolicy<NotificationsApiClientConfiguration>($"{ServiceName}.Notifications"));
+                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName, new ConfigurationInfo<EmployerApprenticeshipsServiceConfiguration>()));
+                c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider", new ConfigurationInfo<LevyDeclarationProviderConfiguration>()));
+                c.Policies.Add(new ConfigurationPolicy<ReferenceDataApiClientConfiguration>("SFA.DAS.ReferenceDataApiClient", new ConfigurationInfo<ReferenceDataApiClientConfiguration>()));
+                c.Policies.Add(new ConfigurationPolicy<AuditApiClientConfiguration>("SFA.DAS.AuditApiClient", new ConfigurationInfo<AuditApiClientConfiguration>()));
+                c.Policies.Add(new ConfigurationPolicy<TokenServiceApiClientConfiguration>("SFA.DAS.TokenServiceApiClient", new ConfigurationInfo<TokenServiceApiClientConfiguration>()));
+				c.Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI", new ConfigurationInfo<CommitmentsApiClientConfiguration>()));
+                c.Policies.Add(new ConfigurationPolicy<NotificationsApiClientConfiguration>($"{ServiceName}.Notifications", new ConfigurationInfo<NotificationsApiClientConfiguration>()));
                 c.Policies.Add<CurrentDatePolicy>();
                 c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
                 c.Policies.Add(new ExecutionPolicyPolicy());

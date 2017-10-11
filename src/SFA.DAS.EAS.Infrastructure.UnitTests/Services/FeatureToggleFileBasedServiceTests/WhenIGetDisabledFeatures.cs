@@ -3,6 +3,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.EAS.Infrastructure.EnvironmentInfo;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.NLog.Logger;
 
@@ -12,8 +13,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleFileBasedSe
     {
         private Mock<ICacheProvider> _cacheProvider;
         private FeatureToggleService _featureToggleService;
-        private Mock<FeatureToggleService> _mockFeatureToggleFileBasedService;
         private Mock<ILog> _logger;
+        private Mock<IConfigurationInfo<FeatureToggleLookup>> _configInfo;
 
         [SetUp]
         public void Arrange()
@@ -25,10 +26,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleFileBasedSe
 
             _logger = new Mock<ILog>();
 
-            _mockFeatureToggleFileBasedService = new Mock<FeatureToggleService>(_cacheProvider.Object, _logger.Object);
-            _mockFeatureToggleFileBasedService.Setup(x => x.GetDataFromStorage()).Returns(new FeatureToggleLookup());
-            _mockFeatureToggleFileBasedService.Setup(x => x.GetFeatures()).CallBase();
-            _featureToggleService = _mockFeatureToggleFileBasedService.Object;
+            _configInfo=new Mock<IConfigurationInfo<FeatureToggleLookup>>();
+            _configInfo.Setup(x => x.GetConfiguration(It.IsAny<string>())).Returns(new FeatureToggleLookup());
+            _featureToggleService = new FeatureToggleService(_cacheProvider.Object, _logger.Object, _configInfo.Object);
         }
 
         [Test]
@@ -39,16 +39,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleFileBasedSe
             _featureToggleService.GetFeatures();
 
             //Assert
-            _mockFeatureToggleFileBasedService.Verify(x=>x.GetDataFromStorage(), Times.Once());
+            _configInfo.Verify(x=>x.GetConfiguration(It.IsAny<string>()), Times.Once());
             _cacheProvider.Verify(x=>x.Get<FeatureToggleLookup>(nameof(FeatureToggleLookup)), Times.Exactly(2));
         }
 
         [Test]
         public void ThenTheValueIsNotAddedToTheCacheIfNullOrEmpty()
         {
-            //Arrange
-            _mockFeatureToggleFileBasedService.Setup(x => x.GetDataFromStorage()).Returns(new FeatureToggleLookup());
-
             //Act
             _featureToggleService.GetFeatures();
 

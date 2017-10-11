@@ -11,6 +11,7 @@ using IdentityServer3.Core.Models;
 using Microsoft.Owin;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EmployerUsers.WebClientComponents;
+using static SFA.DAS.EAS.Web.Startup;
 
 namespace SFA.DAS.EAS.Web.Authentication
 {
