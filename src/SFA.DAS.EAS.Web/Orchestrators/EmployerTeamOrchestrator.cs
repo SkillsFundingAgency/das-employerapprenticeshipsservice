@@ -22,6 +22,7 @@ using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -31,15 +32,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly IMediator _mediator;
-       
+        private readonly ICurrentDateTime _currentDateTime;
 
-        public EmployerTeamOrchestrator(IMediator mediator)
+        public EmployerTeamOrchestrator(IMediator mediator, ICurrentDateTime currentDateTime)
             : base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
 
+            if (currentDateTime == null)
+                throw new ArgumentNullException(nameof(currentDateTime));
+
             _mediator = mediator;
+            _currentDateTime = currentDateTime;
         }
 
         public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(
@@ -82,7 +87,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         });
 
                 //We only show account wizards to owners
-                var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
+                var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;              
 
                 var viewModel = new AccountDashboardViewModel
                 {
@@ -93,7 +98,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     OrgainsationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
                     PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
                     TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
-                    ShowWizard = showWizard
+                    ShowWizard = showWizard,
+                    ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20)
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>

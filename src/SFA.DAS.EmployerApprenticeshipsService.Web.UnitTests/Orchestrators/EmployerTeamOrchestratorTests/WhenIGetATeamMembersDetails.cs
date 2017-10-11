@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetMember;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -34,7 +35,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 
             _mediator = new Mock<IMediator>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object);
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>());
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetMemberRequest>()))
                 .ReturnsAsync(_teamMemberResponse);

@@ -15,5 +15,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public int PayeSchemeCount { get; set; }
         public int OrgainsationCount { get; set; }
         public int TeamMemberCount { get; set; }
+
+        public bool ShowAcademicYearBanner { get; set; }
     }
 }

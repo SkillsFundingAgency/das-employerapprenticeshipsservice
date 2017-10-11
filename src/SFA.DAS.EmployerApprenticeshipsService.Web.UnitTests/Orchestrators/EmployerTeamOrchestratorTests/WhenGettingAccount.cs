@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -9,6 +10,7 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -23,6 +25,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
         private AccountStats _accountStats;
+        private Mock<ICurrentDateTime> _currentDateTime;
 
         [SetUp]
         public void Arrange()
@@ -71,7 +74,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountStatsQuery>()))
                      .ReturnsAsync(new GetAccountStatsResponse {Stats = _accountStats});
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object);
+            _currentDateTime = new Mock<ICurrentDateTime>();
+
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object);
         }
         
         [Test]
@@ -123,6 +128,22 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             Assert.AreEqual(_accountStats.OrganisationCount, actual.Data.OrgainsationCount);
             Assert.AreEqual(_accountStats.PayeSchemeCount, actual.Data.PayeSchemeCount);
             Assert.AreEqual(_accountStats.TeamMemberCount, actual.Data.TeamMemberCount);
+        }
+
+
+        [TestCase("2017-10-19", true, Description = "Banner visible")]
+        [TestCase("2017-10-19 11:59:59", true, Description = "Banner visible until midnight")]
+        [TestCase("2017-10-20 00:00:00", false, Description = "Banner hidden after midnight")]
+        public async Task ThenDisplayOfAcademicYearBannerIsDetermined(DateTime now, bool expectShowBanner)
+        {
+            //Arrange
+            _currentDateTime.Setup(x => x.Now).Returns(now);
+
+            //Act
+            var model = await _orchestrator.GetAccount(AccountId, UserId);
+
+            //Assert
+            Assert.AreEqual(expectShowBanner, model.Data.ShowAcademicYearBanner);
         }
     }
 }
