@@ -79,16 +79,16 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             await RefreshLevy(returnValue, emprefs);
 
-            await QueueAddPayeSchemeMessage(emprefs);
+            await PublishAddPayeSchemeMessage(emprefs);
 
-            await QueueAccountCreatedMessage(returnValue.AccountId);
+            await PublishAccountCreatedMessage(returnValue.AccountId);
 
             await NotifyAccountCreated(hashedAccountId);
 
             await CreateAuditEntries(message, returnValue, hashedAccountId, user);
 
-            //await CreateAgreementCreatedNotificationMessage(returnValue.AccountId, returnValue.LegalEntityId,
-            //    returnValue.EmployerAgreementId);
+            await PublishAgreementCreatedMessage(returnValue.AccountId, returnValue.LegalEntityId,
+                returnValue.EmployerAgreementId);
 
             return new CreateAccountCommandResponse
             {
@@ -96,16 +96,16 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             };
         }
 
-        //TODO: Work out if this code needs to stay or go (Messaging)
-        //private async Task CreateAgreementCreatedNotificationMessage(long accountId, long legalEntityId, long employerAgreementId)
-        //{
-        //    await _mediator.PublishAsync(new CreateAgreementCreatedMessageCommand
-        //    {
-        //        AccountId = accountId,
-        //        LegalEntityId = legalEntityId,
-        //        AgreementId = employerAgreementId
-        //    });
-        //}
+
+        private async Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId)
+        {
+            await _messagePublisher.PublishAsync(new AgreementCreatedMessage
+            {
+                AccountId = accountId,
+                LegalEntityId = legalEntityId,
+                AgreementId = employerAgreementId
+            });
+        }
 
         private async Task NotifyAccountCreated(string hashedAccountId)
         {
@@ -135,7 +135,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             }
         }
 
-        private async Task QueueAddPayeSchemeMessage(string[] emprefs)
+        private async Task PublishAddPayeSchemeMessage(IEnumerable<string> emprefs)
         {
             foreach (var empref in emprefs)
             {
@@ -146,7 +146,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             }
         }
 
-        private async Task QueueAccountCreatedMessage(long accountId)
+        private async Task PublishAccountCreatedMessage(long accountId)
         {
             await _messagePublisher.PublishAsync(new AccountCreatedMessage
             {

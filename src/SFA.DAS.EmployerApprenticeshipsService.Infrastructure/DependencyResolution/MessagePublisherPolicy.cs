@@ -27,13 +27,9 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 
         protected override void apply(Type pluginType, IConfiguredInstance instance)
         {
-            var messagePublisher = GetMessagePublisherParameter(instance); 
+            var messagePublisher = GetMessagePublisherParameter(instance);
 
             if (messagePublisher == null) return;
-
-            var messageType = messagePublisher.ParameterType.GetGenericArguments().FirstOrDefault();
-
-            if (messageType == null) return;
 
             var environment = GetEnvironmentName();
             

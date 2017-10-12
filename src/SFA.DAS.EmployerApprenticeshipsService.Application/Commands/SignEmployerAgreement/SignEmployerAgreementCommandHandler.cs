@@ -6,13 +6,14 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
-//using SFA.DAS.EAS.Application.Notifications.CreateAgreementSignedMessage;
+
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-//using SFA.DAS.Messaging;
+using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.Messaging.Interfaces;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
@@ -26,7 +27,8 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
         private readonly IEmployerAgreementEventFactory _agreementEventFactory;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IMediator _mediator;
-       
+        private readonly IMessagePublisher _messagePublisher;
+
 
         public SignEmployerAgreementCommandHandler(
             IMembershipRepository membershipRepository,
@@ -35,7 +37,8 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             IValidator<SignEmployerAgreementCommand> validator,
             IEmployerAgreementEventFactory agreementEventFactory,
             IGenericEventFactory genericEventFactory,
-            IMediator mediator)
+            IMediator mediator, 
+            IMessagePublisher messagePublisher)
         {
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
@@ -44,6 +47,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             _agreementEventFactory = agreementEventFactory;
             _genericEventFactory = genericEventFactory;
             _mediator = mediator;
+            _messagePublisher = messagePublisher;
         }
 
         protected override async Task HandleCore(SignEmployerAgreementCommand message)
@@ -85,18 +89,18 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
             await _mediator.SendAsync(new PublishGenericEventCommand {Event = genericEvent});
 
-            //await CreateAgreementSignedNotificationMessage(accountId, agreement.LegalEntityId, agreementId);
+            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreementId);
         }
 
-        //private async Task CreateAgreementSignedNotificationMessage(long accountId, long legalEntityId, long agreementId)
-        //{
-        //    await _mediator.PublishAsync(new CreateAgreementSignedMessageCommand
-        //    {
-        //        AccountId = accountId,
-        //        LegalEntityId = legalEntityId,
-        //        AgreementId = agreementId
-        //    });
-        //}
+        private async Task PublishAgreementSignedMessage(long accountId, long legalEntityId, long agreementId)
+        {
+            await _messagePublisher.PublishAsync(new AgreementSignedMessage
+            {
+                AccountId = accountId,
+                LegalEntityId = legalEntityId,
+                AgreementId = agreementId
+            });
+        }
 
         private async Task AddAuditEntry(SignEmployerAgreementCommand message, long accountId, long agreementId)
         {

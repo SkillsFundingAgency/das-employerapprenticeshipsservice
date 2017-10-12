@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 
@@ -74,25 +75,24 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
 
             await CreateEvent(message.HashedLegalAgreementId);
 
-            //TODO: Add this back in when messaging works correctly
-            //if (agreement != null)
-            //{
-            //    await CreateLegalEntityRemovedNotificationMessage(accountId, agreement.LegalEntityId, legalAgreementId,
-            //        agreement.Status);
-            //}
+            if (agreement != null)
+            {
+                await PublishLegalEntityRemovedMessage(accountId, agreement.LegalEntityId, legalAgreementId,
+                    agreement.Status);
+            }
         }
 
-        //private async Task CreateLegalEntityRemovedNotificationMessage(long accountId, long legalEntityId, 
-        //    long agreementId, EmployerAgreementStatus status)
-        //{
-        //    await _messagePublisher.PublishAsync(new LegalEntityRemovedMessage
-        //    {
-        //        AccountId = accountId,
-        //        LegalEntityId = legalEntityId,
-        //        AgreementId = agreementId,
-        //        AgreementSigned = status == EmployerAgreementStatus.Signed
-        //    });
-        //}
+        private async Task PublishLegalEntityRemovedMessage(long accountId, long legalEntityId,
+            long agreementId, EmployerAgreementStatus status)
+        {
+            await _messagePublisher.PublishAsync(new LegalEntityRemovedMessage
+            {
+                AccountId = accountId,
+                LegalEntityId = legalEntityId,
+                AgreementId = agreementId,
+                AgreementSigned = status == EmployerAgreementStatus.Signed
+            });
+        }
 
         private async Task AddAuditEntry(long accountId, string employerAgreementId)
         {
