@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types.ProviderPayment;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
+using SFA.DAS.HashingService;
 using System.Collections.Generic;
 using System.Linq;
 
