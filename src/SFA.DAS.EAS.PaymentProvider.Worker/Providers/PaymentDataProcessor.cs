@@ -5,23 +5,19 @@ using MediatR;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.Messaging;
-using SFA.DAS.Messaging.Attributes;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
 {
     public class PaymentDataProcessor : IPaymentDataProcessor
     {
-        [QueueName]
-        public string refresh_payments { get; set; }
-
-        private readonly IPollingMessageReceiver _pollingMessageReceiver;
+        private readonly IMessageSubscriber<PaymentProcessorQueueMessage> _subscriber;
         private readonly IMediator _mediator;
         private readonly ILog _logger;
 
-        public PaymentDataProcessor(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator, ILog logger)
+        public PaymentDataProcessor(IMessageSubscriber<PaymentProcessorQueueMessage> subscriber, IMediator mediator, ILog logger)
         {
-            _pollingMessageReceiver = pollingMessageReceiver;
+            _subscriber = subscriber;
             _mediator = mediator;
             _logger = logger;
         }
@@ -30,7 +26,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                var message = await _pollingMessageReceiver.ReceiveAsAsync<PaymentProcessorQueueMessage>();
+                var message = await _subscriber.ReceiveAsAsync();
 
                 try
                 {

@@ -8,7 +8,6 @@ using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
 //using SFA.DAS.EAS.Application.Notifications.CreateAgreementCreatedMessage;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -16,7 +15,7 @@ using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Interfaces;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateAccount
@@ -34,13 +33,22 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
-
-        [ServiceBusConnectionKey("employer_shared")]
-        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator, IHashingService hashingService, IGenericEventFactory genericEventFactory, IAccountEventFactory accountEventFactory, IRefreshEmployerLevyService refreshEmployerLevyService)
+        
+        public CreateAccountCommandHandler(
+            IAccountRepository accountRepository, 
+            IUserRepository userRepository, 
+            IMessagePublisher messagePublisher, 
+            IMediator mediator, 
+            IValidator<CreateAccountCommand> validator, 
+            IHashingService hashingService, 
+            IGenericEventFactory genericEventFactory, 
+            IAccountEventFactory accountEventFactory, 
+            IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _accountRepository = accountRepository;
             _userRepository = userRepository;
             _messagePublisher = messagePublisher;
+
             _mediator = mediator;
             _validator = validator;
             _hashingService = hashingService;
@@ -88,6 +96,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             };
         }
 
+        //TODO: Work out if this code needs to stay or go (Messaging)
         //private async Task CreateAgreementCreatedNotificationMessage(long accountId, long legalEntityId, long employerAgreementId)
         //{
         //    await _mediator.PublishAsync(new CreateAgreementCreatedMessageCommand

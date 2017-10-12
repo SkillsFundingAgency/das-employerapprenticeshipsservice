@@ -15,17 +15,13 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.Messaging;
-using SFA.DAS.Messaging.Attributes;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 {
     public class LevyDeclaration : ILevyDeclaration
     {
-        [QueueName]
-        public string get_employer_levy { get; set; }
-
-        private readonly IPollingMessageReceiver _pollingMessageReceiver;
+        private readonly IMessageSubscriber<EmployerRefreshLevyQueueMessage> _messageSubscriber;
         private readonly IMediator _mediator;
         private readonly ILog _logger;
         private readonly IDasAccountService _dasAccountService;
@@ -39,10 +35,10 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
         private static bool FractionProcessingOnly => CloudConfigurationManager.GetSetting("DeclarationsEnabled")
             .Equals("fractions", StringComparison.CurrentCultureIgnoreCase);
 
-        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator,
+        public LevyDeclaration(IMessageSubscriber<EmployerRefreshLevyQueueMessage> messageSubscriber, IMediator mediator,
             ILog logger, IDasAccountService dasAccountService)
         {
-            _pollingMessageReceiver = pollingMessageReceiver;
+            _messageSubscriber = messageSubscriber;
             _mediator = mediator;
             _logger = logger;
             _dasAccountService = dasAccountService;
@@ -52,7 +48,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
+                var message = await _messageSubscriber.ReceiveAsAsync();
 
                 try
                 {

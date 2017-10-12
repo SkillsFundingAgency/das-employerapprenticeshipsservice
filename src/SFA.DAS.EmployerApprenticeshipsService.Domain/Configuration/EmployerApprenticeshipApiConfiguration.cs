@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Notifications.Api.Client.Configuration;
-
-namespace SFA.DAS.EAS.Domain.Configuration
+﻿namespace SFA.DAS.EAS.Domain.Configuration
 {
     public class EmployerApprenticeshipApiConfiguration
     {

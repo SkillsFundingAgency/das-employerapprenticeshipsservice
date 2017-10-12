@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
         private const int ExpectedAccountId = 123456;
         private const string ExpectedPayeRef = "YHG/123LJH";
         private LevyDeclaration _levyDeclaration;
-        private Mock<IPollingMessageReceiver> _pollingMessageReceiver;
+        private Mock<IMessageSubscriber<EmployerRefreshLevyQueueMessage>> _pollingMessageReceiver;
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
         private Mock<IDasAccountService> _dasAccountService;
@@ -41,8 +41,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
 
             ConfigurationManager.AppSettings["DeclarationsEnabled"] = "both";
 
-            _pollingMessageReceiver = new Mock<IPollingMessageReceiver>();
-            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>()).
+            _pollingMessageReceiver = new Mock<IMessageSubscriber<EmployerRefreshLevyQueueMessage>>();
+            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync()).
                 ReturnsAsync(new FileSystemMessage<EmployerRefreshLevyQueueMessage>(stubDataFile, stubDataFile,
                 new EmployerRefreshLevyQueueMessage { AccountId = ExpectedAccountId, PayeRef = ExpectedPayeRef})).Callback(() => { _cancellationTokenSource.Cancel(); });
 
@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             await _levyDeclaration.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
-            _pollingMessageReceiver.Verify(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>(), Times.Once);
+            _pollingMessageReceiver.Verify(x => x.ReceiveAsAsync(), Times.Once);
         }
 
         
@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
         {
             //Arrange
             var mockFileMessage = new Mock<Message<EmployerRefreshLevyQueueMessage>>();
-            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>())
+            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync())
                                    .ReturnsAsync(mockFileMessage.Object)
                                    .Callback(() => { _cancellationTokenSource.Cancel(); });
 
@@ -97,7 +97,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             ConfigurationManager.AppSettings["DeclarationsEnabled"] = "none";
             var mockFileMessage = new Mock<Message<EmployerRefreshLevyQueueMessage>> {DefaultValue = DefaultValue.Empty};
 
-            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>())
+            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync())
                                    .ReturnsAsync(mockFileMessage.Object)
                                    .Callback(() => { _cancellationTokenSource.Cancel(); });
 
