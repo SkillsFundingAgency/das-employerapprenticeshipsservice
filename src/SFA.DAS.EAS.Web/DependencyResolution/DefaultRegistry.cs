@@ -55,6 +55,7 @@ using SFA.DAS.EAS.Web.App_Start;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using NotificationsApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.NotificationsApiClientConfiguration;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -84,6 +85,8 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
             var config = this.GetConfiguration();
 
+            ConfigureHashingService(config);
+
             For<IUserRepository>().Use<UserRepository>();
 
             For<ICache>().Use<InMemoryCache>(); //RedisCache
@@ -99,7 +102,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
             var notificationsApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration
                 <NotificationsApiClientConfiguration>($"{ServiceName}.Notifications");
-
+                     
             ConfigureNotificationsApi(notificationsApiConfig);
 
             RegisterMapper();
@@ -262,5 +265,11 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 x.GetInstance<IRequestContext>(),
                 null)).AlwaysUnique();
         }
+
+        private void ConfigureHashingService(EmployerApprenticeshipsServiceConfiguration config)
+        {
+            For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
+        }
+
     }
 }

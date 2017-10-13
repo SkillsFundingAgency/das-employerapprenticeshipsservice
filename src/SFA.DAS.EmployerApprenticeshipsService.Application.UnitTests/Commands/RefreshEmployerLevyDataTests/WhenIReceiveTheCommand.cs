@@ -17,6 +17,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.Events.Api.Types;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTests
 {

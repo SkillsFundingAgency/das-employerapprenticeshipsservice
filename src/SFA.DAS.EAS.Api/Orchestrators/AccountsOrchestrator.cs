@@ -16,6 +16,7 @@ using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EAS.Application.Queries.GetTeamMembers;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Api.Orchestrators
 {

@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
 {

@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserInvitations
 {

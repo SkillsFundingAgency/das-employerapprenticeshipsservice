@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.Queries.ApprenticeshipSearch
 {
