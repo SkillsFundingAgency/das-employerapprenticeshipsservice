@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 //using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 {
