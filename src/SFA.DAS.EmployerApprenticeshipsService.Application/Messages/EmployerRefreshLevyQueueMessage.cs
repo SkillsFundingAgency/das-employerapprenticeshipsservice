@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Application.Messages
 {
-    [MessageGroup("get_employer_levy")]
+    [MessageGroup("get_employer_levy2")]
     public class EmployerRefreshLevyQueueMessage 
     {
         public long AccountId { get; set; }

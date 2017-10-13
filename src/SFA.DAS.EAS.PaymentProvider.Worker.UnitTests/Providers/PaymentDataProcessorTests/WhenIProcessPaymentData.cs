@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.PaymentProvider.Worker.Providers;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.FileSystem;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProcessorTests
@@ -20,7 +21,8 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
         private const string ExpectedPeriodEndId = "R16-17";
 
         private PaymentDataProcessor _paymentDataProcessor;
-        private Mock<IMessageSubscriber<PaymentProcessorQueueMessage>> _messageReceiver;
+        private Mock<IMessageSubscriberFactory> _messageSubscriberFactory;
+        private Mock<IMessageSubscriber<PaymentProcessorQueueMessage>> _messageSubscriber;
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
         private  CancellationTokenSource _cancellationTokenSource;
@@ -31,10 +33,14 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
             var stubDataFile = new FileInfo(@"C:\SomeFile.txt");
             _cancellationTokenSource = new CancellationTokenSource();
 
-            _messageReceiver = new Mock<IMessageSubscriber<PaymentProcessorQueueMessage>>();
+            _messageSubscriberFactory = new Mock<IMessageSubscriberFactory>();
+            _messageSubscriber = new Mock<IMessageSubscriber<PaymentProcessorQueueMessage>>();
             _mediator = new Mock<IMediator>();
 
-            _messageReceiver.Setup(x => x.ReceiveAsAsync())
+            _messageSubscriberFactory.Setup(x => x.GetSubscriber<PaymentProcessorQueueMessage>())
+                .Returns(_messageSubscriber.Object);
+
+            _messageSubscriber.Setup(x => x.ReceiveAsAsync())
                 .ReturnsAsync(new FileSystemMessage<PaymentProcessorQueueMessage>(stubDataFile, stubDataFile,
                     new PaymentProcessorQueueMessage
                     {
@@ -45,7 +51,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
 
             _logger = new Mock<ILog>();
 
-            _paymentDataProcessor = new PaymentDataProcessor(_messageReceiver.Object, _mediator.Object, _logger.Object);
+            _paymentDataProcessor = new PaymentDataProcessor(_messageSubscriberFactory.Object, _mediator.Object, _logger.Object);
         }
 
         [Test]
@@ -55,7 +61,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
             await _paymentDataProcessor.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
-            _messageReceiver.Verify(x=>x.ReceiveAsAsync(), Times.Once);
+            _messageSubscriber.Verify(x=>x.ReceiveAsAsync(), Times.Once);
         }
 
         [Test]
@@ -63,7 +69,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
         {
             //Arrange
             var fileSystemMessage = new Mock<Message<PaymentProcessorQueueMessage>>();
-            _messageReceiver.Setup(x => x.ReceiveAsAsync())
+            _messageSubscriber.Setup(x => x.ReceiveAsAsync())
                             .ReturnsAsync(fileSystemMessage.Object)
                             .Callback(() => { _cancellationTokenSource.Cancel(); });
 
@@ -92,7 +98,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
         {
             //Arrange
             var fileSystemMessage = new Mock<Message<PaymentProcessorQueueMessage>>();
-            _messageReceiver.Setup(x => x.ReceiveAsAsync())
+            _messageSubscriber.Setup(x => x.ReceiveAsAsync())
                 .ReturnsAsync(fileSystemMessage.Object)
                 .Callback(() => {_cancellationTokenSource.Cancel();});
 

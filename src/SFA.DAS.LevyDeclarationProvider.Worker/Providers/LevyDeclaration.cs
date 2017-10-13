@@ -14,14 +14,16 @@ using SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.Levy;
-using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.AzureServiceBus.Attributes;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 {
+    [TopicSubscription("MA_LevyDeclaration")]
     public class LevyDeclaration : ILevyDeclaration
     {
-        private readonly IMessageSubscriber<EmployerRefreshLevyQueueMessage> _messageSubscriber;
+        private readonly IMessageSubscriberFactory _messageSubscriberFactory;
         private readonly IMediator _mediator;
         private readonly ILog _logger;
         private readonly IDasAccountService _dasAccountService;
@@ -35,10 +37,10 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
         private static bool FractionProcessingOnly => CloudConfigurationManager.GetSetting("DeclarationsEnabled")
             .Equals("fractions", StringComparison.CurrentCultureIgnoreCase);
 
-        public LevyDeclaration(IMessageSubscriber<EmployerRefreshLevyQueueMessage> messageSubscriber, IMediator mediator,
+        public LevyDeclaration(IMessageSubscriberFactory messageSubscriberFactory, IMediator mediator,
             ILog logger, IDasAccountService dasAccountService)
         {
-            _messageSubscriber = messageSubscriber;
+            _messageSubscriberFactory = messageSubscriberFactory;
             _mediator = mediator;
             _logger = logger;
             _dasAccountService = dasAccountService;
@@ -46,30 +48,34 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
         public async Task RunAsync(CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            using (var subscriber = _messageSubscriberFactory.GetSubscriber<EmployerRefreshLevyQueueMessage>())
             {
-                var message = await _messageSubscriber.ReceiveAsAsync();
-
-                try
+                while (!cancellationToken.IsCancellationRequested)
                 {
-                    if (HmrcProcessingEnabled || DeclarationProcessingOnly || FractionProcessingOnly)
+                    var message = await subscriber.ReceiveAsAsync();
+
+                    try
                     {
-                        await ProcessMessage(message);
-                    }
-                    else
-                    {
-                        //Ignore the message as we are not processing declarations
-                        
-                        if (message?.Content != null)
+                        if (HmrcProcessingEnabled || DeclarationProcessingOnly || FractionProcessingOnly)
                         {
-                            await message.CompleteAsync();
+                            await ProcessMessage(message);
+                        }
+                        else
+                        {
+                            //Ignore the message as we are not processing declarations
+
+                            if (message?.Content != null)
+                            {
+                                await message.CompleteAsync();
+                            }
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    _logger.Fatal(ex, $"Levy declaration processing failed for account with ID [{message?.Content?.AccountId}]");
-                    break; //Stop processing anymore messages as this failure needs to be investigated
+                    catch (Exception ex)
+                    {
+                        _logger.Fatal(ex,
+                            $"Levy declaration processing failed for account with ID [{message?.Content?.AccountId}]");
+                        break; //Stop processing anymore messages as this failure needs to be investigated
+                    }
                 }
             }
         }
