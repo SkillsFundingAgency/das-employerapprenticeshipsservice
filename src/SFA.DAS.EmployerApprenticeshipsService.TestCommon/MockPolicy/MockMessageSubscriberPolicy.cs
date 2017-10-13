@@ -21,6 +21,8 @@ namespace SFA.DAS.EAS.TestCommon.MockPolicy
         {
             var subscriberFactory = GetMessageSubscriberFactoryParameter(instance);
 
+            if (subscriberFactory == null) return;
+
             instance.Dependencies.AddForConstructorParameter(subscriberFactory, _subscriberFactory.Object);
         }
 

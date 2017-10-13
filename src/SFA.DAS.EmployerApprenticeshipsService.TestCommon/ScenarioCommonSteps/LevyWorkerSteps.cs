@@ -31,7 +31,12 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
             _messageSubscriber = new Mock<IMessageSubscriber<EmployerRefreshLevyQueueMessage>>();
             _hmrcService = new Mock<IHmrcService>();
 
-            _container = IoC.CreateLevyWorkerContainer(new Mock<IMessagePublisher>().Object, _messageSubscriber.Object, _hmrcService.Object);
+            var messageSubscriberFactory = new Mock<IMessageSubscriberFactory>();
+
+            messageSubscriberFactory.Setup(x => x.GetSubscriber<EmployerRefreshLevyQueueMessage>())
+                .Returns(_messageSubscriber.Object);
+
+            _container = IoC.CreateLevyWorkerContainer(new Mock<IMessagePublisher>(), messageSubscriberFactory, _hmrcService.Object);
         }
 
         public void RunWorker(IEnumerable<GetHMRCLevyDeclarationResponse> hmrcLevyResponses)
