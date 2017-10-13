@@ -394,6 +394,8 @@
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\EmployerCommitmentsController.cs" />
+    <Compile Include="Controllers\EmployerManageApprenticesController.cs" />
     <Compile Include="Controllers\OrganisationSharedController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -1038,7 +1040,9 @@
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -1053,7 +1057,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>57196</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
