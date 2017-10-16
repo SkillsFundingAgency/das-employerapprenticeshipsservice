@@ -54,6 +54,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                 {
                     var message = await subscriber.ReceiveAsAsync();
 
+                    if(message == null) continue;
+
                     try
                     {
                         if (HmrcProcessingEnabled || DeclarationProcessingOnly || FractionProcessingOnly)

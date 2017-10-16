@@ -7,6 +7,7 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.Messaging.AzureServiceBus;
+using SFA.DAS.Messaging.AzureServiceBus.Attributes;
 using SFA.DAS.Messaging.AzureServiceBus.Helpers;
 using SFA.DAS.Messaging.FileSystem;
 using SFA.DAS.Messaging.Interfaces;
@@ -45,7 +46,8 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
             }
             else
             {
-                var subscriptionName = TopicSubscriptionHelper.GetMessageGroupName(instance);
+                var subscriptionName = TopicSubscriptionHelper.GetMessageGroupName(instance.Constructor.DeclaringType);
+
                 var factory = new TopicSubscriberFactory(messageQueueConnectionString, subscriptionName);
 
                 instance.Dependencies.AddForConstructorParameter(subscriberFactory, factory);
