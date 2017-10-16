@@ -16,7 +16,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Find organisation address</h1>
-        <form action="@Url.Action("SelectAddress")" method="POST" novalidate>
+        <form action="@Url.Action("SelectAddress", "OrganisationShared")" method="POST" novalidate>
             @Html.AntiForgeryToken()
             <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "error" : "")">
                 <label for="Postcode">

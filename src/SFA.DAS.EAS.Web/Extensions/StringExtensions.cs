@@ -23,5 +23,25 @@
 
             return result;
         }
+
+        public static bool ParseHideNavFromViewBag(dynamic viewBag)
+        {
+            if (viewBag.HideNav == null)
+            {
+                return false;
+            }
+
+            if (viewBag.HideNav is string)
+            {
+                return !string.IsNullOrWhiteSpace(viewBag.HideNav);
+            }
+
+            if (viewBag.HideNav is bool)
+            {
+                return viewBag.HideNav;
+            }
+
+            return false;
+        }
     }
 }

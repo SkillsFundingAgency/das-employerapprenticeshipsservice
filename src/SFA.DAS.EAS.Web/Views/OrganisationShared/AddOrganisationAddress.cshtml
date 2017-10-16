@@ -17,7 +17,7 @@
             Enter your organisation's address
         </h1>
         <p class="lede">Use your organisation's main address, such as your head office.</p>
-        <form action="@Url.Action("UpdateOrganisationAddress")" method="POST" novalidate>
+        <form action="@Url.Action("UpdateOrganisationAddress", "OrganisationShared")" method="POST" novalidate>
             @Html.AntiForgeryToken()
             <div class="form-group @(!string.IsNullOrEmpty(Model.Data.Address.AddressFirstLineError) ? "error" : "")">
                 <label for="AddressFirstLine">
