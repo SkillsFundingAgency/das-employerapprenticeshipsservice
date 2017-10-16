@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Api.Controllers;
 using SFA.DAS.EAS.Api.Orchestrators;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTests
 {

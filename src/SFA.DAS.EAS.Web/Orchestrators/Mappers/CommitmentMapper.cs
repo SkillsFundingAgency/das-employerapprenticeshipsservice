@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 {

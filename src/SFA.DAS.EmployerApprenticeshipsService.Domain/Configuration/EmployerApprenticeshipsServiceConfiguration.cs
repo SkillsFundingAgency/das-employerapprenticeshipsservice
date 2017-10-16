@@ -19,6 +19,7 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public EmployerApprenticeshipApiConfiguration EmployerApprenticeshipApi { get; set; }
 
         public string Hashstring { get; set; }
+        public string AllowedHashstringCharacters { get; set; }
         public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
 		public PostcodeAnywhereConfiguration PostcodeAnywhere { get; set; }
 

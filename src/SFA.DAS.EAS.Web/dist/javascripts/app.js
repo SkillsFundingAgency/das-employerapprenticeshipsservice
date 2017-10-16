@@ -211,6 +211,34 @@ sfa.forms = {
     }
 }
 
+// Helper for gta events
+sfa.tagHelper = {
+    dataLayer: {},
+    init: function () {
+        window.dataLayer = window.dataLayer || [];
+    },
+    radioButtonClick: function (eventAction, optionName) {
+        dataLayer.push({
+            'event': 'dataLayerEvent',
+            'eventCat': 'Form Option',
+            'eventAct': eventAction,
+            'eventLab': optionName
+        });
+    },
+    submitRadioForm: function (eventAction) {
+
+        var optionName = $("input[type='radio']:checked").attr('dataOptionName');
+
+        dataLayer.push({
+            'event': 'dataLayerEvent',
+            'eventCat': 'Form Submit',
+            'eventAct': eventAction,
+            'eventLab': optionName
+        });
+    }
+};
+
+
 sfa.backLink = {
     init: function () {
         var backLink = $('<a>')

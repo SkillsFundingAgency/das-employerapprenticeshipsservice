@@ -35,6 +35,7 @@ using SFA.DAS.EAS.Application.Commands.ResolveRequestedChanges;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLockSummary;
 using SFA.DAS.EAS.Application.Queries.GetPriceHistoryQueryRequest;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
