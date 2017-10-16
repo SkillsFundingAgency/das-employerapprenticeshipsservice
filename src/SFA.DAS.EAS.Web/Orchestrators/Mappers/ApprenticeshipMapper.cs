@@ -17,6 +17,7 @@ using SFA.DAS.Commitments.Api.Types.ProviderPayment;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 {

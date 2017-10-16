@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Domain.Models.Settings;
 using SFA.DAS.EAS.Web.Exceptions;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
