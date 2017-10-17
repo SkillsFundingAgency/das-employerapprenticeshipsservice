@@ -4399,6 +4399,7 @@ table.responsive tr.total {
 
 details.feedback {
   background: #005ea5;
+  margin-bottom: 15px;
 }
 
 details.feedback summary {
@@ -5796,6 +5797,10 @@ h2 .float-right {
 #stop-effective .panel {
   margin-top: 20px;
   float: left;
+}
+
+.js-hidden {
+  display: none;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

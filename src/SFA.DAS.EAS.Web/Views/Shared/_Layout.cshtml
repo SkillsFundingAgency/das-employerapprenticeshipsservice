@@ -137,7 +137,7 @@
                             
                             <li class="has-sub-menu">
                                 <a href="/" role="menuitem">Settings</a>
-                                <ul role="menu">
+                                <ul role="menu" class="js-hidden">
                                     <li><a href="@Url.Action("ViewAccounts", "Home")" role="menuitem">Your accounts</a></li>
                                     @if (SFA.DAS.EAS.Web.Extensions.StringExtensions.ParseHideNavFromViewBag(ViewBag))
                                     {     
