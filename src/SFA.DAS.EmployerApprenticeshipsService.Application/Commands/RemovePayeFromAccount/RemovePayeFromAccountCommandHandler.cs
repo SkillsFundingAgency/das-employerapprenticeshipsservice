@@ -12,7 +12,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Interfaces;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 using SFA.DAS.HashingService;
 
@@ -29,7 +29,14 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
         private readonly IMessagePublisher _messagePublisher;
 
         [ServiceBusConnectionKey("employer_shared")]
-        public RemovePayeFromAccountCommandHandler(IMediator mediator, IValidator<RemovePayeFromAccountCommand> validator, IAccountRepository accountRepository, IHashingService hashingService, IGenericEventFactory genericEventFactory, IPayeSchemeEventFactory payeSchemeEventFactory, IMessagePublisher messagePublisher)
+        public RemovePayeFromAccountCommandHandler(
+            IMediator mediator, 
+            IValidator<RemovePayeFromAccountCommand> validator, 
+            IAccountRepository accountRepository, 
+            IHashingService hashingService, 
+            IGenericEventFactory genericEventFactory, 
+            IPayeSchemeEventFactory payeSchemeEventFactory, 
+            IMessagePublisher messagePublisher)
         {
             _mediator = mediator;
             _validator = validator;

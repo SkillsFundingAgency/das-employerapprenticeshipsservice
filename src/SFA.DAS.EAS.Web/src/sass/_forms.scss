@@ -83,6 +83,17 @@ legend {
     }
 }
 
+.form-group-filter {
+    clear: both;
+    background: red;
+    .form-group {
+        margin-top: 0;
+    }
+    .form-control {
+        width: 100%;
+    }
+}
+
 .search-field {
     position: relative;
     margin-bottom: 15px;

@@ -120,7 +120,7 @@
                             No, someone else will sign the agreement
                         </label>
                         <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-agreements">
-                            @Model.Data.RequiresAgreementSigning unsigned agreement(s). <a href="@Url.Action("Index", "EmployerAgreement")">View agreements now</a>.
+                          @*  @Model.Data.RequiresAgreementSigning unsigned agreement(s). <a href="@Url.Action("Index", "EmployerAgreement")">View agreements now</a>.*@
                         </div>
                     </fieldset>
                 </li>
@@ -146,14 +146,14 @@
             </h3>
             <p><a href="@Url.Action("HideWizard", "EmployerTeam")">I'm done - take me to my homepage</a></p>
         </div>
-        @if (Model.Data.RequiresAgreementSigning > 0)
+        @*@if (Model.Data.RequiresAgreementSigning > 0)
         {
         <p class="notice">
             <svg class="icon" focusable="false" aria-hidden="true">
                 <use xlink:href="#icon-important" />
             </svg>
             Your agreement needs to be signed before you can spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View agreements now</a>.
-        </p>
+        </p>*@
         }
     </div>
 </section>

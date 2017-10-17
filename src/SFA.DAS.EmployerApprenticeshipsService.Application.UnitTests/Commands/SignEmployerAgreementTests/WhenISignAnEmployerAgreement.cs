@@ -16,6 +16,7 @@ using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.Messaging;
 using SFA.DAS.HashingService;
+using SFA.DAS.Messaging.Interfaces;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
 {
@@ -80,7 +81,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
                 _validator.Object,
                 _agreementEventFactory.Object, 
                 _genericEventFactory.Object,
-                _mediator.Object);
+                _mediator.Object,
+                Mock.Of<IMessagePublisher>());
 
             _command = new SignEmployerAgreementCommand
             {
