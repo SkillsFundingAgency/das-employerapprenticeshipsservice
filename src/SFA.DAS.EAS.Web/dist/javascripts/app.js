@@ -32,6 +32,7 @@ sfa.homePage = {
                 } else {
                     var target = $(this).parent().data("target");
                     $("#" + target).addClass("js-hidden").attr("aria-hidden", "true");
+
                 }
             });
 
@@ -446,7 +447,5 @@ if (errorMessage.length > 0) {
         dataLayer[0] = dataLoadedObj;
     }
 }
-
-
 
 
