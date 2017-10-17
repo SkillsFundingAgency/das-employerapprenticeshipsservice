@@ -19,7 +19,7 @@
         <h1 class="heading-xlarge">
             Enter your organisation name
         </h1>
-        <form action="@Url.Action("AddOtherOrganisationDetails")" method="post">
+        <form action="@Url.Action("AddOtherOrganisationDetails", "OrganisationShared")" method="post">
             @Html.AntiForgeryToken()
             @if (hasHashedOrganisationId)
             {

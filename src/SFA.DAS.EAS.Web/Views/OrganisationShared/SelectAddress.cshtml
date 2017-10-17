@@ -67,7 +67,7 @@
                 <h2 class="heading-medium">Search again</h2>
             }
         }
-        <form action="@Url.Action("SelectAddress")" method="POST" novalidate>
+        <form action="@Url.Action("SelectAddress", "OrganisationShared")" method="POST" novalidate>
             @Html.AntiForgeryToken()
             <div class="form-group  @((!string.IsNullOrEmpty(Model.Data.PostcodeError) || !string.IsNullOrEmpty(noAddressesFound)) ? "error" : "")">
                 <label for="Postcode">

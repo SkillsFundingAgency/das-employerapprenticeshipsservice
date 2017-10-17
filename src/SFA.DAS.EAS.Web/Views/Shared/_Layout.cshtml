@@ -135,7 +135,6 @@
                             <li><a href="@Url.Action("Help", "Home")">Help</a></li>
                             @if (HttpContext.Current.User.Identity.IsAuthenticated)
                             {
-
                                 <li class="has-sub-menu">
                                     <a href="/" role="menuitem">Settings</a>
                                     <ul role="menu" id="settings-menu">
@@ -154,9 +153,9 @@
 
                             }
                             else
+            if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null) {
                             {
-                                if (Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
-                                {
+                            
                                     <li><a href="@Url.Action("SignIn", "Home")" role="menuitem">Sign in / Register</a></li>
                                 }
                             }
@@ -172,7 +171,7 @@
     @if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
                     var controllerString = ViewContext.RouteData.Values["Controller"].ToString();
-                    if (string.IsNullOrWhiteSpace(ViewBag.HideNav))
+                    if (SFA.DAS.EAS.Web.Extensions.StringExtensions.ParseHideNavFromViewBag(ViewBag))
                     {
         <div class="header-organisation" role="navigation">
             <nav class="header-inner">
