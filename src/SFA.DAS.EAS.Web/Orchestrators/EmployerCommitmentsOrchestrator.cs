@@ -37,6 +37,7 @@ using System.Threading.Tasks;
 using WebGrease.Css.Extensions;
 using SFA.DAS.EAS.Application.Queries.GetProviderPaymentPriority;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

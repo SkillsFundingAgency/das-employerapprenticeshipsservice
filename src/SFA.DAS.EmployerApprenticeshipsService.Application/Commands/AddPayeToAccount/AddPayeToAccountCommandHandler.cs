@@ -15,6 +15,7 @@ using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 {

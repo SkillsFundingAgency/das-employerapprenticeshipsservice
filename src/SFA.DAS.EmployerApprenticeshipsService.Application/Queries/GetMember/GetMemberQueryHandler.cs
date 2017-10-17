@@ -4,6 +4,7 @@ using MediatR;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.Queries.GetMember
 {

@@ -14,6 +14,7 @@ using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.Attributes;
 using StructureMap;
 using TechTalk.SpecFlow;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
 {

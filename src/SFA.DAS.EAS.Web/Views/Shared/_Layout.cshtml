@@ -139,7 +139,7 @@
                                 <a href="/" role="menuitem">Settings</a>
                                 <ul role="menu">
                                     <li><a href="@Url.Action("ViewAccounts", "Home")" role="menuitem">Your accounts</a></li>
-                                    @if (string.IsNullOrWhiteSpace(ViewBag.HideNav))
+                                    @if (SFA.DAS.EAS.Web.Extensions.StringExtensions.ParseHideNavFromViewBag(ViewBag))
                                     {     
                                     <li><a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem">Rename account</a></li>
                                     }
@@ -168,7 +168,7 @@
     @if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
                     var controllerString = ViewContext.RouteData.Values["Controller"].ToString();
-                    if (string.IsNullOrWhiteSpace(ViewBag.HideNav))
+                    if (SFA.DAS.EAS.Web.Extensions.StringExtensions.ParseHideNavFromViewBag(ViewBag))
                     {
         <div class="header-organisation" role="navigation">
             <nav class="header-inner">
