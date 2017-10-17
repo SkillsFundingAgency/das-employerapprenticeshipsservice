@@ -3,7 +3,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Infrastructure.Services;
-using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Interfaces;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.RefreshEmployerLevyServiceTests
 {

@@ -13,6 +13,7 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string Tenant { get; set; }
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
-        public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
+        public string MessageServiceBusConnectionString { get; set; }
+
     }
 }

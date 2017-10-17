@@ -1,16 +1,12 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.Messaging;
-using SFA.DAS.Messaging.Attributes;
+using SFA.DAS.Messaging.Interfaces;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class RefreshEmployerLevyService : IRefreshEmployerLevyService
     {
-        [QueueName]
-        public string get_employer_levy { get; set; }
-
         private readonly IMessagePublisher _messagePublisher;
 
         public RefreshEmployerLevyService(IMessagePublisher messagePublisher)

@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.LevyAccountUpdater.UnitTests

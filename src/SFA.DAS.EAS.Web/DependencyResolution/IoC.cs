@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 				c.Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
                 c.Policies.Add(new ConfigurationPolicy<NotificationsApiClientConfiguration>($"{ServiceName}.Notifications"));
                 c.Policies.Add<CurrentDatePolicy>();
-                c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
+                c.Policies.Add(new MessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
                 c.Policies.Add(new ExecutionPolicyPolicy());
                 c.AddRegistry<DefaultRegistry>();
             });

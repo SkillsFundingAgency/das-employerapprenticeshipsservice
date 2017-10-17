@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.PaymentUpdater.WebJob.Updater;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
 using SFA.DAS.NLog.Logger;
