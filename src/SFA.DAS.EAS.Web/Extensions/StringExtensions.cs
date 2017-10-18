@@ -31,9 +31,18 @@
                 return false;
             }
 
-            if (viewBag.HideNav is string)
+            var hideNavString = viewBag.HideNav as string;
+
+            if (hideNavString != null)
             {
-                return !string.IsNullOrWhiteSpace(viewBag.HideNav);
+                bool hideNavFlag;
+
+                if (bool.TryParse(hideNavString, out hideNavFlag))
+                {
+                    return hideNavFlag;
+                }
+
+                return !string.IsNullOrWhiteSpace(hideNavString);
             }
 
             if (viewBag.HideNav is bool)
