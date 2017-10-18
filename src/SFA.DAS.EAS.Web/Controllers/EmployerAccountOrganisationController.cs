@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("address/update")]
+        //[Route("address/update")]
         public ActionResult UpdateOrganisationAddress(AddOrganisationAddressViewModel request)
         {
             var response = _orchestrator.AddOrganisationAddress(request);
