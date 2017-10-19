@@ -20,12 +20,14 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     public class DasLevyRepository : BaseRepository, IDasLevyRepository
     {
         private readonly LevyDeclarationProviderConfiguration _configuration;
+        private readonly ILog _logger;
 
 
         public DasLevyRepository(LevyDeclarationProviderConfiguration configuration, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task<DasDeclaration> GetEmployerDeclaration(string id, string empRef)
@@ -287,8 +289,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
                         unitOfWork.CommitChanges();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        _logger.Error(ex, "CreatePaymentData failed: " + ex.Message);
                         unitOfWork.RollbackChanges();
                         throw;
                     }

@@ -1,4 +1,4 @@
-@using SFA.DAS.EAS.Web
+﻿@using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Domain.Models.UserProfile
 @using SFA.DAS.EAS.Web.Extensions
 
@@ -126,6 +126,16 @@ else
     </div>
  }
        
+            @if (Model.Data.ShowAcademicYearBanner)
+            {
+                <section>
+                    <div class="panel alert-default">
+                        <h4 class="heading-small">Apprentice records in 2016/17</h4>
+                        <p>It's critical that you complete and approve any apprentice records for the academic year ending 31 July 2017 before <strong>18:00 on 19 October 2017</strong>.  After this date you will not be able to update apprentice details from 2016/17 or make payments for training in this period.</p>
+                    </div>
+                </section>
+            }
+
             @*@if (Model.Data.RequiresAgreementSigning > 0)
     {
         <section>
@@ -147,6 +157,8 @@ else
 
     }
 
+ 
+         
 
             <section>
 
