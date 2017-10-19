@@ -21,6 +21,7 @@ using StructureMap;
 using StructureMap.Graph;
 using WebGrease.Css.Extensions;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 {
@@ -35,7 +36,9 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
                 scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
             });
-            
+
+            For<IHashingService>().Use(new HashingService.HashingService("12345QWERTYUIOPNDGHAK", "TEST: Dummy hash code London is a city in UK"));
+
             For<IUserRepository>().Use<UserRepository>();
 
             For<IOwinWrapper>().Use(() => owinWrapperMock.Object);

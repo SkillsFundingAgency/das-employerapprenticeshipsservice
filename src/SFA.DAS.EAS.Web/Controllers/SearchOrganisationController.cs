@@ -8,6 +8,8 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
@@ -41,7 +43,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public ActionResult SearchForOrganisation(string hashedAccountId)
         {
             var model = new OrchestratorResponse<SearchOrganisationViewModel> { Data = new SearchOrganisationViewModel { IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId) } };
-            return View("SearchForOrganisation", model);
+            return View(ControllerConstants.SearchForOrganisationViewName, model);
         }
 
         [HttpPost]
@@ -52,10 +54,10 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (string.IsNullOrEmpty(searchTerm))
             {
                 var model = CreateSearchTermValidationErrorModel(new SearchOrganisationViewModel { IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId)});
-                return View("SearchForOrganisation", model);
+                return View(ControllerConstants.SearchForOrganisationViewName, model);
             }
 
-            return RedirectToAction("SearchForOrganisationResults", new { hashedAccountId, searchTerm });
+            return RedirectToAction(ControllerConstants.SearchForOrganisationResultsActionName, new { hashedAccountId, searchTerm });
         }
 
         [Route("{HashedAccountId}/organisations/search/results", Order = 0)]
@@ -74,7 +76,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
             model.Data.IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId);
 
-            return View("SearchForOrganisationResults", model);
+            return View(ControllerConstants.SearchForOrganisationResultsViewName, model);
         }
 
         [HttpPost]
@@ -88,17 +90,17 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 return FindAddress(hashedAccountId, viewModel);
             }
-            CreateOrganisationCookieData(viewModel);
+            viewModel.CreateOrganisationCookie(_orchestrator, HttpContext);
 
             if (string.IsNullOrEmpty(hashedAccountId))
             {
-                return RedirectToAction("GatewayInform", "EmployerAccount");
+                return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName);
             }
 
             
             var response = new OrchestratorResponse<OrganisationDetailsViewModel> { Data = viewModel };
             
-            return View("../Organisation/ConfirmOrganisationDetails", response);
+            return View(ControllerConstants.ConfirmOrganisationDetailsViewName, response);
         }
 
         [HttpGet]
@@ -106,39 +108,19 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("organisations/search/manualAdd", Order = 1)]
         public ActionResult AddOtherOrganisationDetails(string hashedAccountId)
         {
-            if (string.IsNullOrEmpty(hashedAccountId))
-            {
-                return RedirectToAction("AddOtherOrganisationDetails", "EmployerAccountOrganisation");
-            }
-
-            return RedirectToAction("AddOtherOrganisationDetails", "Organisation");
+            return RedirectToAction(ControllerConstants.AddOtherOrganisationDetailsViewName, ControllerConstants.OrganisationSharedControllerName);
         }
 
         private ActionResult FindAddress(string hashedAccountId, OrganisationDetailsViewModel organisation)
         {
             var addressViewModel = _mapper.Map<FindOrganisationAddressViewModel>(organisation);
             var response = new OrchestratorResponse<FindOrganisationAddressViewModel> { Data = addressViewModel };
-
-            if (string.IsNullOrEmpty(hashedAccountId))
-            {
-                return View("../EmployerAccountOrganisation/FindAddress", response);
-            }
-            else
-            {
-                return View("../Organisation/FindAddress", response);
-            }
+            return View(ControllerConstants.FindAddressViewName, response);
         }
 
         private OrchestratorResponse<T> CreateSearchTermValidationErrorModel<T>(T data)
         {
             var model = new OrchestratorResponse<T> { Data = data };
-            SetSearchTermValidationModelProperties(model);
-            return model;
-        }
-
-        private OrchestratorResponse CreateSearchTermValidationErrorModel()
-        {
-            var model = new OrchestratorResponse();
             SetSearchTermValidationModelProperties(model);
             return model;
         }
@@ -149,43 +131,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             model.FlashMessage = FlashMessageViewModel.CreateErrorFlashMessageViewModel(new Dictionary<string, string> { { "searchTerm", "Enter organisation name" } });
         }
 
-        private void CreateOrganisationCookieData(OrganisationDetailsViewModel viewModel)
-        {
-            EmployerAccountData data;
-            if (viewModel?.Name != null)
-            {
-                data = new EmployerAccountData
-                {
-                    OrganisationType = viewModel.Type,
-                    OrganisationReferenceNumber = viewModel.ReferenceNumber,
-                    OrganisationName = viewModel.Name,
-                    OrganisationDateOfInception = viewModel.DateOfInception,
-                    OrganisationRegisteredAddress = viewModel.Address,
-                    OrganisationStatus = viewModel.Status ?? string.Empty,
-                    PublicSectorDataSource = viewModel.PublicSectorDataSource,
-                    Sector = viewModel.Sector,
-                    NewSearch = viewModel.NewSearch
-                };
-            }
-            else
-            {
-                var existingData = _orchestrator.GetCookieData(HttpContext);
-
-                data = new EmployerAccountData
-                {
-                    OrganisationType = existingData.OrganisationType,
-                    OrganisationReferenceNumber = existingData.OrganisationReferenceNumber,
-                    OrganisationName = existingData.OrganisationName,
-                    OrganisationDateOfInception = existingData.OrganisationDateOfInception,
-                    OrganisationRegisteredAddress = existingData.OrganisationRegisteredAddress,
-                    OrganisationStatus = existingData.OrganisationStatus,
-                    PublicSectorDataSource = existingData.PublicSectorDataSource,
-                    Sector = existingData.Sector,
-                    NewSearch = existingData.NewSearch
-                };
-            }
-
-            _orchestrator.CreateCookieData(HttpContext, data);
-        }
+       
     }
 }

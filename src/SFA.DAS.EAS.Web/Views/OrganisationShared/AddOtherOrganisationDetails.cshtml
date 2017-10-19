@@ -1,9 +1,13 @@
+﻿@using SFA.DAS.EAS.Web.Helpers
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.OrganisationDetailsViewModel>
 @{ViewBag.PageID = "enter-organisation-type"; }
 @{
     ViewBag.Title = "Enter your organisation name";
     ViewBag.Section = "organisations";
-    ViewBag.HideNav = "true";
+
+    var hasHashedOrganisationId = this.ViewContext.RouteData.Values[ControllerConstants.HashedAccountIdKeyName] != null;
+    
+    ViewBag.HideNav = hasHashedOrganisationId == false;
 }
 
 @{
@@ -15,8 +19,12 @@
         <h1 class="heading-xlarge">
             Enter your organisation name
         </h1>
-        <form action="@Url.Action("AddOtherOrganisationDetails")" method="post">
+        <form action="@Url.Action("AddOtherOrganisationDetails", "OrganisationShared")" method="post">
             @Html.AntiForgeryToken()
+            @if (hasHashedOrganisationId)
+            {
+                <input type="hidden" value="@Model.Data.HashedId" name="HashedId"/>
+            }
 
             <div class="form-group @(!string.IsNullOrEmpty(Model.Data.NameError) ? "error" : "")">
                 <label id="NewName-label" for="Name" class="form-label-bold">

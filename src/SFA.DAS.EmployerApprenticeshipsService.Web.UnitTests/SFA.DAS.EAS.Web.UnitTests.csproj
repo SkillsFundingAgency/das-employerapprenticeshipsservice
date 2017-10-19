@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SFA.DAS.EAS.Web.UnitTests</RootNamespace>
     <AssemblyName>SFA.DAS.EAS.Web.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,6 +50,9 @@
     <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Hashids.net, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hashids.net.1.2.2\lib\net45\Hashids.net.dll</HintPath>
     </Reference>
     <Reference Include="MediatR, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
@@ -89,11 +93,14 @@
       <HintPath>..\packages\SFA.DAS.EmployerUsers.WebClientComponents.1.0.0.4388\lib\net45\SFA.DAS.EmployerUsers.WebClientComponents.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.39271, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.39271\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    <Reference Include="SFA.DAS.HashingService, Version=1.0.0.42526, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.HashingService.1.0.0.42526\lib\net45\SFA.DAS.HashingService.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.0.0.39271, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.0.0.39271\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.43076, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.43076\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.0.0.43076, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.0.0.43076\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.34273, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.34273\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
@@ -109,12 +116,18 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
@@ -162,9 +175,11 @@
     <Compile Include="Controllers\EmployerTeamControllerTests\WhenIViewNextSteps.cs" />
     <Compile Include="Controllers\InvitationControllerTests\WhenIAcceptAnInvitation.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIConfirmAddOfOrganisation.cs" />
-    <Compile Include="Controllers\OrganisationControllerTests\WhenIEnterAPostcodeForAnAddress.cs" />
-    <Compile Include="Controllers\OrganisationControllerTests\WhenIGoToAddAnOrganisationOfTypeOther.cs" />
-    <Compile Include="Controllers\OrganisationControllerTests\WhenIAddAnOrganisationOfTypeOther.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\OrganisationSharedControllerTestBase.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenIAddAnOrganisationAddress.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenIEnterAPostcodeForAnAddress.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenIGoToAddAnOrganisationOfTypeOther.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenIAddAnOrganisationOfTypeOther.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIAddAnLegalEntityToAnAccount.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenILoginAUser.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenILogout.cs" />
@@ -172,6 +187,9 @@
     <Compile Include="Controllers\HomeControllerTests\WhenIViewTheHomePage.cs" />
     <Compile Include="Controllers\InvitationControllerTests\WhenViewingInvitations.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIViewNextSteps.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenISearchForAnAddress.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenISelectAnAddress.cs" />
+    <Compile Include="Controllers\OrganisationSharedTests\WhenIUpdateAnOrganisationsAddress.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingLogging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingMessaging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingValidators.cs" />

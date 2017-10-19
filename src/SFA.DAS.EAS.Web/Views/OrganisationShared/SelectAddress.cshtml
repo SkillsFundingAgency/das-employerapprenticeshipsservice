@@ -1,8 +1,21 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.SelectOrganisationAddressViewModel>
+﻿@using SFA.DAS.EAS.Web.Helpers
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.SelectOrganisationAddressViewModel>
 @{
+    var hasHashedOrganisationId = this.ViewContext.RouteData.Values[ControllerConstants.HashedAccountIdKeyName] != null;
     ViewBag.Title = "Select address";
     ViewBag.PageID = "select-organisation-address";
-    ViewBag.HideNav = "true";
+
+
+    if (hasHashedOrganisationId)
+    {
+        ViewBag.Section = "";
+    }
+    else
+    {
+        ViewBag.Section = "organisations";
+        ViewBag.HideNav = "true";
+    }
+
     var noAddressesFound = string.Empty;
 }
 @{
@@ -11,7 +24,6 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Find organisation address</h1>
-
         @if (Model.Status == HttpStatusCode.OK)
         {
 
@@ -27,7 +39,7 @@
                 <ol class="search-results">
                     @foreach (var address in Model.Data.Addresses)
                     {
-                        var url = Url.Action("UpdateOrganisationAddress", "EmployerAccountOrganisation", new
+                        var url = Url.Action("UpdateOrganisationAddress", new
                         {
                             Model.Data.OrganisationName,
                             Model.Data.OrganisationReferenceNumber,
@@ -55,9 +67,7 @@
                 <h2 class="heading-medium">Search again</h2>
             }
         }
-
-
-        <form action="@Url.Action("SelectAddress")" method="POST" novalidate>
+        <form action="@Url.Action("SelectAddress", ControllerConstants.OrganisationSharedControllerName)" method="POST" novalidate>
             @Html.AntiForgeryToken()
             <div class="form-group  @((!string.IsNullOrEmpty(Model.Data.PostcodeError) || !string.IsNullOrEmpty(noAddressesFound)) ? "error" : "")">
                 <label for="Postcode">
@@ -67,12 +77,11 @@
                         <span class="error-message" id="error-message-postcode">@Model.Data.PostcodeError @noAddressesFound</span>
                     }
                 </label>
-
                 <span>
                     <input type="text" id="Postcode" name="postcode" value="@Model.Data.Postcode" class="form-control" required="required" aria-required="true"
                            @((!string.IsNullOrEmpty(Model.Data.PostcodeError) || !string.IsNullOrEmpty(noAddressesFound)) ? "aria-invalid=true aria-describedby=error-message-postcode" : "" ) />
-                    
-                    
+
+
                 </span>
             </div>
             <input type="hidden" id="organisationName" name="organisationName" value="@Model.Data.OrganisationName" />
@@ -83,7 +92,7 @@
             <input type="hidden" id="Sector" name="Sector" value="@Model.Data.Sector" />
             <div class="form-group">
                 <input class="button" type="submit" value="Find address" />
-                <a class="button-link" href="@Url.Action("AddOrganisationAddress", new
+                <a class="button-link" href="@Url.Action(ControllerConstants.AddOrganisationAddressActionName, ControllerConstants.OrganisationSharedControllerName, new
                          {
                              Model.Data.OrganisationName,
                              Model.Data.OrganisationReferenceNumber,
@@ -95,7 +104,6 @@
             </div>
         </form>
 
-        
     </div>
 </div>
 

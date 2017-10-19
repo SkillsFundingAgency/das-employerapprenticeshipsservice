@@ -8,22 +8,11 @@ using SFA.DAS.EAS.Account.Api.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
-    public class WhenGettingAPageOfAccounts
+    public class WhenGettingAPageOfAccounts : ApiClientTestBase
     {
-        private AccountApiConfiguration _configuration;
-        private Mock<SecureHttpClient> _httpClient;
-        private AccountApiClient _apiClient;
-
-        [SetUp]
-        public void Arrange()
+        public override void HttpClientSetup()
         {
-            _configuration = new AccountApiConfiguration
-            {
-                ApiBaseUrl = "http://some-url/"
-            };
-
-            _httpClient = new Mock<SecureHttpClient>();
-            _httpClient.Setup(c => c.GetAsync(It.IsAny<string>()))
+            HttpClient.Setup(c => c.GetAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(
                     JsonConvert.SerializeObject(new PagedApiResponseViewModel<AccountWithBalanceViewModel>
                     {
@@ -41,8 +30,6 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
                             }
                         }
                     })));
-
-            _apiClient = new AccountApiClient(_configuration, _httpClient.Object);
         }
 
         [TestCase(1, 1000, "20161001")]
@@ -55,18 +42,18 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var toDay = int.Parse(toDateString.Substring(6, 2));
 
             // Act
-            await _apiClient.GetPageOfAccounts(pageNumber, pageSize, new DateTime(toYear, toMonth, toDay));
+            await ApiClient.GetPageOfAccounts(pageNumber, pageSize, new DateTime(toYear, toMonth, toDay));
 
             // Assert
             var expectedUrl = $"http://some-url/api/accounts?pageNumber={pageNumber}&pageSize={pageSize}&toDate={toDateString}";
-            _httpClient.Verify(c => c.GetAsync(expectedUrl), Times.Once);
+            HttpClient.Verify(c => c.GetAsync(expectedUrl), Times.Once);
         }
 
         [Test]
         public async Task ThenItShouldReturnAPageOfAccounts()
         {
             // Act
-            var actual = await _apiClient.GetPageOfAccounts();
+            var actual = await ApiClient.GetPageOfAccounts();
 
             // Assert
             Assert.IsNotNull(actual);
@@ -76,7 +63,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public async Task ThenItShouldDeserializeTheResponseCorrectly()
         {
             // Act
-            var actual = await _apiClient.GetPageOfAccounts();
+            var actual = await ApiClient.GetPageOfAccounts();
 
             // Assert
             Assert.IsAssignableFrom<PagedApiResponseViewModel<AccountWithBalanceViewModel>>(actual);

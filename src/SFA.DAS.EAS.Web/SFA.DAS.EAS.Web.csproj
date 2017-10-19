@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SFA.DAS.EAS.Web</RootNamespace>
     <AssemblyName>SFA.DAS.EAS.Web</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressAnonymousAuthentication />
@@ -25,6 +25,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <IISExpressSSLPort>443</IISExpressSSLPort>
+    <TargetFrameworkProfile />
     <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -49,9 +50,8 @@
       <HintPath>..\packages\AutoMapper.5.1.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Dapper, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dapper.1.50.0\lib\net45\Dapper.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
@@ -60,6 +60,9 @@
     <Reference Include="FluentValidation.Mvc, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.MVC5.6.2.1.0\lib\Net45\FluentValidation.Mvc.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Hashids.net, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hashids.net.1.2.2\lib\net45\Hashids.net.dll</HintPath>
     </Reference>
     <Reference Include="IdentityModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\IdentityModel.1.11.0\lib\net45\IdentityModel.dll</HintPath>
@@ -118,13 +121,11 @@
       <HintPath>..\packages\Microsoft.Data.Services.Client.5.7.0\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.13.8.999, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.16.0.14, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.16.0\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.Platform, Version=3.13.8.999, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.Platform, Version=3.16.0.14, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.16.0\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -224,19 +225,21 @@
       <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.20.0.26497\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.20.0.26497, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.20.0.26497\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.Events.Api.Types, Version=2.0.0.36524, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Types.2.0.0.36524\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.HashingService, Version=1.0.0.42526, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.HashingService.1.0.0.42526\lib\net45\SFA.DAS.HashingService.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Http, Version=1.0.0.35742, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Http.1.0.0.35742\lib\net45\SFA.DAS.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.39271, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.39271\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.43076, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.43076\lib\net45\SFA.DAS.Messaging.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.0.0.39271, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.0.0.39271\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.0.0.43076, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.0.0.43076\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.34273, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.34273\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
@@ -267,6 +270,9 @@
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Tasks.API.Client, Version=1.7.0.39323, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.7.0.39323\lib\net45\SFA.DAS.Tasks.API.Client.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
       <Private>True</Private>
@@ -293,6 +299,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net45\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
@@ -317,8 +324,7 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
       <Private>True</Private>
@@ -327,9 +333,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
@@ -371,6 +375,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <HintPath>..\packages\WebActivatorEx.2.0.5\lib\net40\WebActivatorEx.dll</HintPath>
       <Private>True</Private>
@@ -394,12 +399,16 @@
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\OrganisationSharedController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Extensions\OrchestratorExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Extensions\ValidationResultExtensions.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilterAttribute.cs" />
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
+    <Compile Include="Helpers\ControllerConstants.cs" />
+    <Compile Include="Orchestrators\IOrchestratorCookie.cs" />
     <Compile Include="Models\GoogleAnalyticsModel.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipFiltersMapper.cs" />
     <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
@@ -585,6 +594,7 @@
     <Content Include="dist\javascripts\length-limit.js" />
     <Content Include="dist\javascripts\lodash.js" />
     <Content Include="dist\javascripts\payment-order.js" />
+    <None Include="src\sass\_tabs.scss" />
     <Content Include="src\svg\arrows.svg" />
     <Content Include="src\svg\chevron-left.svg" />
     <Content Include="src\svg\chevron-right.svg" />
@@ -595,6 +605,9 @@
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Compile Include="WebRole.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelValidator.cs" />
+    <Content Include="Views\EmployerTeam\Activity.cshtml" />
+    <Content Include="Views\EmployerTeam\Index.cshtml" />
+    <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />
@@ -907,7 +920,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\LevyDeclarationDetail.cshtml" />
-    <Content Include="Views\EmployerTeam\Index.cshtml" />
     <Content Include="Views\Invitation\View.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
     <Content Include="Views\EmployerTeam\Invite.cshtml" />
@@ -1020,14 +1032,8 @@
     <Content Include="src\sass\_custom.scss" />
     <Content Include="Views\Home\WhatYoullNeed.cshtml" />
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
-    <Content Include="Views\Organisation\AddOrganisation.cshtml" />
-    <Content Include="Views\Organisation\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\Organisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
-    <Content Include="Views\Organisation\AddOrganisationAddress.cshtml" />
     <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
-    <Content Include="Views\Organisation\AddOtherOrganisationDetails.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\AddOrganisation.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\AddOrganisationAddress.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
     <Content Include="StartUp\IIS.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1038,7 +1044,6 @@
     <Content Include="StartUp\Powershell.msi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\EmployerAccountOrganisation\AddOtherOrganisationDetails.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
     <Content Include="Views\Home\ServiceStartPage.cshtml" />
@@ -1047,10 +1052,6 @@
     <Content Include="Views\Organisation\OrganisationLegalAgreement.cshtml" />
     <Content Include="Views\EmployerManageApprentices\ListAll.cshtml" />
     <Content Include="Views\EmployerManageApprentices\Details.cshtml" />
-    <Content Include="Views\Organisation\FindAddress.cshtml" />
-    <Content Include="Views\Organisation\SelectAddress.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\FindAddress.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\SelectAddress.cshtml" />
     <Content Include="Views\EmployerCommitments\YourCohorts.cshtml" />
     <Content Include="Views\EmployerCommitments\DeleteApprenticeshipConfirmation.cshtml" />
     <Content Include="Views\EmployerCommitments\RequestList.cshtml" />
@@ -1096,13 +1097,20 @@
     <Content Include="Views\SearchOrganisation\SearchForOrganisationResults.cshtml" />
     <Content Include="src\sass\_search.scss" />
     <Content Include="Views\EmployerAccountPaye\NextSteps.cshtml" />
-    <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
     <Content Include="Views\Shared\_SVGSprite.cshtml" />
     <Content Include="src\sass\_icons.scss" />
     <Content Include="Views\EmployerTeam\_WelcomeWizard.cshtml" />
     <Content Include="src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
     <Content Include="Views\EmployerTeam\NextSteps.cshtml" />
     <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
+    <Content Include="Views\OrganisationShared\AddOrganisationAddress.cshtml" />
+    <Content Include="Views\OrganisationShared\SelectAddress.cshtml" />
+    <Content Include="Views\OrganisationShared\ConfirmOrganisationDetails.cshtml" />
+    <Content Include="Views\OrganisationShared\FindAddress.cshtml" />
+    <Content Include="Views\OrganisationShared\AddOtherOrganisationDetails.cshtml" />
+    <Content Include="Views\EmployerAccountOrganisation\AddOrganisation.cshtml" />
+    <Content Include="Views\EmployerTeam\_TasksActivities.cshtml" />
+    <Content Include="src\sass\_tasks.scss" />
     <Content Include="Views\Shared\GoogleAnalyticsInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>

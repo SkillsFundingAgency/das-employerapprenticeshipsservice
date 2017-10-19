@@ -1,5 +1,8 @@
-﻿namespace SFA.DAS.EAS.Application.Messages
+﻿using SFA.DAS.Messaging.Attributes;
+
+namespace SFA.DAS.EAS.Application.Messages
 {
+    [MessageGroup("refresh_payments2")]
     public class PaymentProcessorQueueMessage
     {
         public string AccountPaymentUrl { get; set; }

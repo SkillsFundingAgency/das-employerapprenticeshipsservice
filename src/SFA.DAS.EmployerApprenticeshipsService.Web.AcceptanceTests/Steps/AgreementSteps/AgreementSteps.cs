@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Interfaces;
 using StructureMap;
 using TechTalk.SpecFlow;
 

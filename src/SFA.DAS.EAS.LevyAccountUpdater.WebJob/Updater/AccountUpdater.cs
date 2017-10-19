@@ -4,8 +4,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.Messaging;
-using SFA.DAS.Messaging.Attributes;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater
@@ -17,9 +16,6 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater
         private readonly IMessagePublisher _messagePublisher;
         private readonly ILog _logger;
         private readonly IEmployerSchemesRepository _employerSchemesRepository;
-
-        [QueueName]
-        public string get_employer_levy { get; set; }
 
         public AccountUpdater(IEmployerAccountRepository accountRepository, IMessagePublisher messagePublisher, ILog logger, IEmployerSchemesRepository employerSchemesRepository)
         {

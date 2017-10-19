@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
+using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System.Collections.Generic;
 using System.Linq;

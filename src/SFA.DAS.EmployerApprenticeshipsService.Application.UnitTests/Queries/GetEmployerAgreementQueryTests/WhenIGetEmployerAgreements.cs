@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTests
 {

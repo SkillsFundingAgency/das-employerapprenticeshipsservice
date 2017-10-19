@@ -44,13 +44,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             var logger = new Mock<ILog>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
-            _employerAccountController = new EmployerAccountController(
-               _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, 
-               logger.Object, _flashMessage.Object)
-            {
-                ControllerContext = _controllerContext.Object,
-                Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
-            };
 
             _accountData = new EmployerAccountData
             {
@@ -85,6 +78,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountViewModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
+
+            _employerAccountController = new EmployerAccountController(
+                _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, 
+                logger.Object, _flashMessage.Object)
+            {
+                ControllerContext = _controllerContext.Object,
+                Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
+            };
         }
 
         [Test]

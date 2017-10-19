@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 
@@ -32,11 +33,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance/{year}/{month}")]
         public async Task<ActionResult> Index(string hashedAccountId, int year, int month)
         {
-            var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, year, month, OwinWrapper.GetClaimValue(@"sub"));
+            var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, year, month, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
             if (transactionViewResult.Data.Account == null)
             {
-                return RedirectToAction("Index", "AccessDenied");
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.AccessDeniedControllerName);
             }
 
             transactionViewResult.Data.Model.Data.HashedAccountId = hashedAccountId;
@@ -46,17 +47,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance/levyDeclaration/details")]
         public async Task<ActionResult> LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
         {
-            var viewModel = await _accountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
+            var viewModel = await _accountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
-            return View("LevyDeclarationDetail", viewModel);
+            return View(ControllerConstants.LevyDeclarationDetailViewName, viewModel);
         }
 
         [Route("balance/provider/summary")]
         public async Task<ActionResult> ProviderPaymentSummary(string hashedAccountId, long ukprn, DateTime fromDate, DateTime toDate)
         {
-            var viewModel = await _accountTransactionsOrchestrator.GetProviderPaymentSummary(hashedAccountId, ukprn, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
+            var viewModel = await _accountTransactionsOrchestrator.GetProviderPaymentSummary(hashedAccountId, ukprn, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
-            return View("ProviderPaymentSummary", viewModel);
+            return View(ControllerConstants.ProviderPaymentSummaryViewName, viewModel);
         }
 
         [Route("balance/course/standard/summary")]
@@ -72,9 +73,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var viewModel = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(
                                                                         hashedAccountId, ukprn, courseName, courseLevel, pathwayCode,
-                                                                        fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
+                                                                        fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
 
-            return View("CoursePaymentSummary", viewModel);
+            return View(ControllerConstants.CoursePaymentSummaryViewName, viewModel);
         }
     }
 }

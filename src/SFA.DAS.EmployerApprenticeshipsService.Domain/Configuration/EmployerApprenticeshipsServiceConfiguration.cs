@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Azure;
+﻿using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.Notifications.Api.Client.Configuration;
 
 namespace SFA.DAS.EAS.Domain.Configuration
 {
@@ -10,6 +7,7 @@ namespace SFA.DAS.EAS.Domain.Configuration
     {
         public CompaniesHouseConfiguration CompaniesHouse { get; set; }
         public string ServiceBusConnectionString { get; set; }
+        public string MessageServiceBusConnectionString { get; set; }
         public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
         public IdentityServerConfiguration Identity { get; set; }
         public string DashboardUrl { get; set; }
@@ -21,6 +19,7 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public EmployerApprenticeshipApiConfiguration EmployerApprenticeshipApi { get; set; }
 
         public string Hashstring { get; set; }
+        public string AllowedHashstringCharacters { get; set; }
         public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
 		public PostcodeAnywhereConfiguration PostcodeAnywhere { get; set; }
 

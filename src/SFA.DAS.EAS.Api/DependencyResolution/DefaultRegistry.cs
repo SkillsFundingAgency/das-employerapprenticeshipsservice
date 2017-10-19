@@ -21,16 +21,18 @@ using System.Reflection;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.HashingService;
+
 using StructureMap;
 using WebGrease.Css.Extensions;
-using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 
 namespace SFA.DAS.EAS.Api.DependencyResolution {
     using Domain.Interfaces;
     using Infrastructure.Caching;
     using SFA.DAS.EAS.Api.App_Start;
     using SFA.DAS.NLog.Logger;
-    using StructureMap.Configuration.DSL;
+
     using StructureMap.Graph;
     using System.Web;
 
@@ -51,11 +53,13 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
 
             For<ICache>().Use<InMemoryCache>(); //RedisCache
+            var config = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(ServiceName);
+
+            ConfigureHashingService(config);
             RegisterMapper();
             RegisterMediator();
             RegisterLogger();
         }
-        
 
         private void RegisterMediator()
         {
@@ -93,6 +97,11 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
                 x.ParentType,
                 x.GetInstance<IRequestContext>(),
                 null)).AlwaysUnique();
+        }
+
+        private void ConfigureHashingService(EmployerApprenticeshipsServiceConfiguration config)
+        {
+            For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
         }
     }
 }
