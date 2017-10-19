@@ -128,7 +128,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _currentDateTime.Setup(x => x.Now).Returns(now);
 
             //Act
-            var model = await _orchestrator.GetAccount(AccountId, UserId);
+            var model = await _orchestrator.GetAccount(HashedAccountId, UserId);
 
             //Assert
             Assert.AreEqual(expectShowBanner, model.Data.ShowAcademicYearBanner);
