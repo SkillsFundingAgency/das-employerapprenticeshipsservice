@@ -437,7 +437,6 @@
     <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusNavigationLocation.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusType.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusViewModel.cs" />
-    <Compile Include="Controllers\EmployerAccountOrganisationController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployerCommitmentsController.cs" />
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
@@ -1034,7 +1033,6 @@
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
     <Content Include="Views\Organisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
     <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
     <Content Include="StartUp\IIS.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1108,7 +1106,6 @@
     <Content Include="Views\OrganisationShared\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\OrganisationShared\FindAddress.cshtml" />
     <Content Include="Views\OrganisationShared\AddOtherOrganisationDetails.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\AddOrganisation.cshtml" />
     <Content Include="Views\EmployerTeam\_TasksActivities.cshtml" />
     <Content Include="src\sass\_tasks.scss" />
     <Content Include="Views\Shared\GoogleAnalyticsInfo.cshtml" />
