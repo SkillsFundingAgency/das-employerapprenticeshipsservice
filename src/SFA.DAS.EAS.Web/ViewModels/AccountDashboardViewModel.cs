@@ -18,6 +18,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public int OrgainsationCount { get; set; }
         public int TeamMemberCount { get; set; }
 
-        public ICollection<AccountTask> Tasks { get; set; }
+        public bool ShowAcademicYearBanner { get; set; }
+		public ICollection<AccountTask> Tasks { get; set; }
     }
 }
