@@ -99,7 +99,7 @@ else
                                                 <p><a href="">Start adding apprentices now</a></p>
                                                 break;
                                             case "ApprenticeChangesToReview":
-                                                <p>@task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="">View changes</a></p>
+                                                <p>@task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.Action("Index", "EmployerAgreement")">View changes</a></p>
                                                 break;
                                             case "CohortRequestReadyForApproval":
                                                 <p>@task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="">View cohorts</a></p>
