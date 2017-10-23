@@ -56,11 +56,11 @@ namespace SFA.DAS.EAS.Web
             });
         }
 
-        protected void Application_BeginRequest(object sender, EventArgs e)
-        {
-            var application = sender as HttpApplication;
-            application?.Context?.Response.Headers.Remove("Server");
-        }
+        //protected void Application_BeginRequest(object sender, EventArgs e)
+        //{
+        //    var application = sender as HttpApplication;
+        //    application?.Context?.Response.Headers.Remove("Server");
+        //}
 
         protected void Application_Error(object sender, EventArgs e)
         {
@@ -70,6 +70,20 @@ namespace SFA.DAS.EAS.Web
 
             var tc = new TelemetryClient();
             tc.TrackTrace($"{exception.Message} - {exception.InnerException}");
+        }
+
+        protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
+        {
+            var headersToRemove = new string[] {
+                "X-Powered-By",
+                "X-AspNet-Version",
+                "X-AspNetMvc-Version",
+                "Server"
+            };
+            foreach (var s in headersToRemove)
+            {
+                HttpContext.Current.Response.Headers.Remove(s);
+            }
         }
     }
 }
