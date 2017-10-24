@@ -106,6 +106,17 @@
         <div class="panel panel-top-margin">
             <p>It's up to you and your training provider to decide when your contribution is paid.</p>
         </div>
+        
+        <div class="panel panel-top-margin">
+            @if (Model.Data.PaymentDate.Equals(new DateTime(2017, 09, 14)))
+            {
+                <h3 class="heading-small">Why are there two payments to individual providers this month?</h3>
+                <p>
+                    The second payment is the result of final adjustments made by the training providers
+                    for the academic year ending 31st July 2017. These payments only occur in September and October.
+                </p>
+            }
+        </div>
     </div>
 </div>
 @section breadcrumb {
