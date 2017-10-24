@@ -93,7 +93,7 @@ else
                                                 <p>@task.ItemsDueCount levy declaration@(task.ItemsDueCount > 1 ? "s" : "") due <a href="">View levy declarations</a></p>
                                                 break;
                                             case "AgreementToSign":
-                                                <p>@task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") needs to be signed <a href="">View agreements</a></p>
+                                                <p>@task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") needs to be signed <a href="@Url.Action("Index", "EmployerAgreement")">View agreements</a></p>
                                                 break;
                                             case "AddApprentices":
                                                 <p><a href="">Start adding apprentices now</a></p>

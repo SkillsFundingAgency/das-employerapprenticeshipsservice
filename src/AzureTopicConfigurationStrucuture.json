@@ -1,0 +1,38 @@
+[
+    {
+        "topicName": "add_account",
+        "subscription": []
+    },
+    {
+        "topicName": "add_paye_scheme",
+        "subscription": []
+    },
+    {
+        "topicName": "agreement_created",
+        "subscription": [
+            "Task_CreatedEmployerAgreementProcessor"
+        ]
+    },
+    {
+        "topicName": "agreement_signed",
+        "subscription": [
+            "Task_SignedEmployerAgreementProcessor"
+        ]
+    },
+    {
+        "topicName": "delete_paye_scheme",
+        "subscription": []
+    },
+    {
+        "topicName": "get_employer_levy2",
+        "subscription": []
+    },
+    {
+        "topicName": "legal_entity_removed",
+        "subscription": []
+    },
+    {
+        "topicName": "refresh_payments2",
+        "subscription": []
+    }
+]
