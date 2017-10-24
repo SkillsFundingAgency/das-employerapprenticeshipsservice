@@ -29,7 +29,7 @@
     },
     {
         "topicName": "legal_entity_removed",
-        "subscription": []
+      "subscription": [ "Task_LegalEntityRemovedProcessor" ]
     },
     {
         "topicName": "refresh_payments2",
