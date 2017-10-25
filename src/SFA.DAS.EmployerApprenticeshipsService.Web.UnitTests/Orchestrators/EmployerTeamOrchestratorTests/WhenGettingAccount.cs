@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -29,6 +31,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         private AccountStats _accountStats;
         private Mock<ICurrentDateTime> _currentDateTime;
  		private List<AccountTask> _tasks;
+        private AccountTask _testTask;
 
         [SetUp]
         public void Arrange()
@@ -41,9 +44,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                 TeamMemberCount = 8
             };
 
+            _testTask = new AccountTask
+            {
+                Type = "Test",
+                ItemsDueCount = 2
+            };
+
             _tasks = new List<AccountTask>
             {
-                new AccountTask()
+                _testTask
             };
 
             _mediator = new Mock<IMediator>();
@@ -106,6 +115,45 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             Assert.AreEqual(_accountStats.TeamMemberCount, actual.Data.TeamMemberCount);
         }
 
+        [Test]
+        public async Task ThenShouldReturnTasks()
+        {
+            // Act
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            Assert.IsNotNull(actual.Data);
+            Assert.Contains(_testTask, actual.Data.Tasks.ToArray());
+        }
+        
+        [Test]
+        public async Task ThenIShouldNotReturnTasksWithZeroItems()
+        {
+            //Arrange
+            _testTask.ItemsDueCount = 0;
+
+            // Act
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            Assert.IsNotNull(actual.Data);
+            Assert.IsEmpty(actual.Data.Tasks);
+        }
+
+        [Test]
+        public async Task ThenShouldReturnNoTasksIfANullIsReturnedFromTaskQuery()
+        {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTasksQuery>()))
+                .ReturnsAsync(null);
+
+            // Act
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            Assert.IsNotNull(actual.Data);
+            Assert.IsEmpty(actual.Data.Tasks);
+        }
 
         [Test]
         public async Task ThenShouldReturnAccountsTasks()
