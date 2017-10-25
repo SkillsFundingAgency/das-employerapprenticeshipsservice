@@ -49,15 +49,14 @@ select mainUpdate.* from
 			x.SubmissionId as SubmissionId,
 			x.SubmissionDate as TransactionDate,
 			1 as TransactionType,
-			x.EnglishFraction,
 			x.LevyDeclaredInMonth as LevyDeclared,
-			x.TotalAmount as Amount,
-			
+			x.TotalAmount as Amount,		
 			x.EmpRef as EmpRef,
 			null as PeriodEnd,
 			null as UkPrn,
 			0 as SfaCoInvestmentAmount,
-			0 as EmployerCoInvestmentAmount
+			0 as EmployerCoInvestmentAmount,
+			x.EnglishFraction
 		FROM 
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		where
@@ -69,14 +68,14 @@ select mainUpdate.* from
 			x.SubmissionId as SubmissionId,
 			x.SubmissionDate as TransactionDate,
 			1 as TransactionType,
-			NULL AS EnglishFraction,
 			x.LevyDueYTD as LevyDeclared,
 			((x.endofyearadjustmentamount * ISNULL(x.EnglishFraction,0)) - ldt.amount) * -1 as Amount,
 			x.EmpRef as EmpRef,
 			null as PeriodEnd,
 			null as UkPrn,
 			0 as SfaCoInvestmentAmount,
-			0 as EmployerCoInvestmentAmount
+			0 as EmployerCoInvestmentAmount,
+			NULL AS EnglishFraction
 		FROM 
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		inner join
