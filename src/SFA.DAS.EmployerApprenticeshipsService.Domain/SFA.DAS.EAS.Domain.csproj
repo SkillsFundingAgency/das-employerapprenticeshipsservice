@@ -150,7 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ServiceBusConnectionKeyAttribute.cs" />
-    <Compile Include="Configuration\EmployerApprenticeshipApiConfiguration.cs" />
+    <Compile Include="Configuration\CommitmentsApiClientConfiguration.cs" />
     <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
     <Compile Include="Data\IUnitOfWork.cs" />
@@ -158,7 +158,8 @@
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Http\InternalServerErrorException.cs" />
     <Compile Include="Http\RequestTimeOutException.cs" />
-    <Compile Include="Interfaces\IAcademicYear.cs" />
+    <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
+    <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\IAzureAdAuthenticationService.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
     <Compile Include="Interfaces\ICurrentDateTime.cs" />
@@ -168,7 +169,6 @@
     <Compile Include="Http\TooManyRequestsException.cs" />
     <Compile Include="Interfaces\IHmrcDateService.cs" />
     <Compile Include="Interfaces\IPdfService.cs" />
-    <Compile Include="Interfaces\IProviderEmailLookupService.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
     <Compile Include="Interfaces\IMultiVariantTestingService.cs" />
     <Compile Include="Interfaces\IRefreshEmployerLevyService.cs" />
@@ -177,11 +177,15 @@
     <Compile Include="Models\Account\AccountStats.cs" />
     <Compile Include="Models\Account\AccountTask.cs" />
     <Compile Include="Models\Account\CreateAccountResult.cs" />
-    <Compile Include="Models\Apprenticeship\ApprenticeshipStatus.cs" />
-    <Compile Include="Models\Apprenticeship\ChangeOption.cs" />
-    <Compile Include="Models\Apprenticeship\ChangeStatusType.cs" />
     <Compile Include="Models\Account\EmployerAccountData.cs" />
-    <Compile Include="Models\Apprenticeship\RecordStatus.cs" />
+    <Compile Include="Models\ApprenticeshipCourse\Framework.cs" />
+    <Compile Include="Models\ApprenticeshipCourse\FrameworksView.cs" />
+    <Compile Include="Models\ApprenticeshipCourse\ITrainingProgramme.cs" />
+    <Compile Include="Models\ApprenticeshipCourse\Standard.cs" />
+    <Compile Include="Models\ApprenticeshipCourse\StandardsView.cs" />
+    <Compile Include="Models\ApprenticeshipProvider\Provider.cs" />
+    <Compile Include="Models\ApprenticeshipProvider\Providers.cs" />
+    <Compile Include="Models\ApprenticeshipProvider\ProvidersView.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementStatus.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementTemplate.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementView.cs" />
@@ -198,7 +202,6 @@
     <Compile Include="Models\Transaction\AggregationLineItem.cs" />
     <Compile Include="Configuration\AuditApiClientConfiguration.cs" />
     <Compile Include="Configuration\ClaimIdentifierConfiguration.cs" />
-    <Compile Include="Configuration\CommitmentsApiClientConfiguration.cs" />
     <Compile Include="Configuration\CompaniesHouseConfiguration.cs" />
     <Compile Include="Configuration\EmployerApprenticeshipsServiceConfiguration.cs" />
     <Compile Include="Configuration\HmrcConfiguration.cs" />
@@ -218,8 +221,6 @@
     <Compile Include="Data\Repositories\IEmployerSchemesRepository.cs" />
     <Compile Include="Data\Repositories\IInvitationRepository.cs" />
     <Compile Include="Data\Repositories\IMembershipRepository.cs" />
-    <Compile Include="Data\Repositories\IProviderRepository.cs" />
-    <Compile Include="Data\Repositories\IStandardsRepository.cs" />
     <Compile Include="Data\Repositories\IUserAccountRepository.cs" />
     <Compile Include="Data\Repositories\IUserRepository.cs" />
     <Compile Include="Models\Employer\EmployerInformation.cs" />
@@ -235,11 +236,7 @@
     <Compile Include="Data\Entities\Account\PayeSchemeView.cs" />
     <Compile Include="Extensions\EmploymentStatusAgreementExtension.cs" />
     <Compile Include="Extensions\NullableDateTimeExtension.cs" />
-    <Compile Include="Models\ApprenticeshipCourse\Framework.cs" />
-    <Compile Include="Models\ApprenticeshipCourse\FrameworksView.cs" />
     <Compile Include="Interfaces\IAddressLookupService.cs" />
-    <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
-    <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\IAuditService.cs" />
     <Compile Include="Interfaces\ICache.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
@@ -256,7 +253,6 @@
     <Compile Include="Models\AccountTeam\Invitation.cs" />
     <Compile Include="Models\AccountTeam\InvitationStatus.cs" />
     <Compile Include="Models\AccountTeam\InvitationView.cs" />
-    <Compile Include="Models\ApprenticeshipCourse\ITrainingProgramme.cs" />
     <Compile Include="Models\Levy\LevyDeclarationView.cs" />
     <Compile Include="Models\Audit\EasAuditMessage.cs" />
     <Compile Include="Models\Levy\LevyDeclarationTransactionLine.cs" />
@@ -307,13 +303,8 @@
     <Compile Include="Models\PAYE\Paye.cs" />
     <Compile Include="Models\PAYE\PayeView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\ApprenticeshipProvider\Provider.cs" />
-    <Compile Include="Models\ApprenticeshipProvider\Providers.cs" />
-    <Compile Include="Models\ApprenticeshipProvider\ProvidersView.cs" />
     <Compile Include="Models\PAYE\PayeScheme.cs" />
     <Compile Include="Models\PAYE\PayeSchemes.cs" />
-    <Compile Include="Models\ApprenticeshipCourse\Standard.cs" />
-    <Compile Include="Models\ApprenticeshipCourse\StandardsView.cs" />
     <Compile Include="Models\AccountTeam\TeamMember.cs" />
   </ItemGroup>
   <ItemGroup>
