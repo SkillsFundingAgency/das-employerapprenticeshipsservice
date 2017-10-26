@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Domain.Models.Organisation;
+﻿using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 
 namespace SFA.DAS.EAS.Web.ViewModels.Organisation

@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using MediatR;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.GetOrganisations;
 using SFA.DAS.EAS.Domain.Interfaces;

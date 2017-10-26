@@ -29,6 +29,7 @@ using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
