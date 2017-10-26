@@ -15,6 +15,7 @@ using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Infrastructure.Logging;
+using SFA.DAS.EAS.Web.DependencyResolution;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.EAS.Web.Plumbing.Mvc;
 
@@ -74,16 +75,11 @@ namespace SFA.DAS.EAS.Web
 
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
         {
-            var headersToRemove = new string[] {
-                "X-Powered-By",
-                "X-AspNet-Version",
-                "X-AspNetMvc-Version",
-                "Server"
-            };
-            foreach (var s in headersToRemove)
-            {
-                HttpContext.Current.Response.Headers.Remove(s);
-            }
+            //TODO: Add to defaultRegistry
+            //DependencyResolver.Current.GetService<HttpContextPolicyProvider>()
+            //var httpContextPolicyProvider = new HttpContextPolicyProvider();
+            //httpContextPolicyProvider.Apply(
+            //    new System.Web.HttpContextWrapper(HttpContext.Current), PolicyConcerns.HttpResponse);
         }
     }
 }
