@@ -56,6 +56,7 @@ using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using NotificationsApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.NotificationsApiClientConfiguration;
 using SFA.DAS.HashingService;
+using SFA.DAS.Tasks.API.Client;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -111,12 +112,19 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
             RegisterAuditService();
 
+            var taskApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration
+                <TaskApiConfiguration>($"SFA.DAS.Tasks.Api");
+
+            For<ITaskApiConfiguration>().Use(taskApiConfig);
+
+            For<ITaskService>().Use<TaskService>();
+
             RegisterPostCodeAnywhereService();
 
             RegisterExecutionPolicies();
 
             RegisterLogger();
-        }
+        }  
 
         private void ConfigureNotificationsApi(NotificationsApiClientConfiguration config)
         {

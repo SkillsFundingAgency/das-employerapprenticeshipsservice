@@ -13,6 +13,8 @@ using StructureMap.Graph;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 using SFA.DAS.NLog.Logger;
 using System.Web;
+using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution
 {
@@ -30,6 +32,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution
             For<IConfiguration>().Use<PaymentProviderConfiguration>();
             For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>();
             For<ICache>().Use<InMemoryCache>();
+            
 
             RegisterExecutionPolicies();
 

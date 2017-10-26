@@ -118,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\PostDeploymentRules.sql" />
+    <None Include="SeedData\EnglishFraction.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Script.PreDeployment1.sql" />

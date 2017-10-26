@@ -11,6 +11,7 @@ namespace SFA.DAS.EAS.Web.Helpers
         public const string AccessDeniedControllerName = "AccessDenied";
         public const string ActionKeyName = "Action";
         public const string AddOrganisationAddressViewName = "../OrganisationShared/AddOrganisationAddress";
+        public const string AddOrganisationAddressActionName = "AddOrganisationAddress";
         public const string AddOrganisationViewName = "AddOrganisation";
         public const string AddOtherOrganisationDetailsViewName = "AddOtherOrganisationDetails";
         public const string CodeKeyName = "code";

@@ -55,17 +55,20 @@
 .filter {
     margin-bottom: 20px;
     border: 1px solid $border-colour;
-    padding: 15px;
+    padding: 20px;
     @extend %contain-floats;
     h3 {
         background: $grey-3;
         padding: 5px 10px;
-        margin: -15px;
-        margin-bottom: 15px;
+        margin: -20px;
+        margin-bottom: 20px;
         @include bold-19;
     }
     .form-group {
         margin-top: 20px;
         margin-bottom: 0;
+    }
+    .form-control {
+        width: 100%;
     }
 }

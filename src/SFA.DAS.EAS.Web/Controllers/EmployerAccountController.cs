@@ -35,13 +35,15 @@ namespace SFA.DAS.EAS.Web.Controllers
             _logger = logger;
         }
         
+        // Not sure if this is used anymore, leaving here for now to see if it breaks when the automated tests are run
+        // the redirect won't go anywhere so if it is called from somewhere we should expect a 404
         [HttpGet]
         [Route("selectEmployer")]
         public ActionResult SelectEmployer()
         {
             _employerAccountOrchestrator.DeleteCookieData(HttpContext);
 
-            return RedirectToAction(ControllerConstants.AddOrganisationViewName, ControllerConstants.EmployerAccountOrganisationControllerName);
+            return RedirectToAction(ControllerConstants.AddOrganisationViewName, ControllerConstants.OrganisationSharedControllerName);
 
         }
 

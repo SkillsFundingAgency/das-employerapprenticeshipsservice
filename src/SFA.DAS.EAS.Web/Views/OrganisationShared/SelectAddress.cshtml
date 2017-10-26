@@ -67,7 +67,7 @@
                 <h2 class="heading-medium">Search again</h2>
             }
         }
-        <form action="@Url.Action("SelectAddress")" method="POST" novalidate>
+        <form action="@Url.Action("SelectAddress", ControllerConstants.OrganisationSharedControllerName)" method="POST" novalidate>
             @Html.AntiForgeryToken()
             <div class="form-group  @((!string.IsNullOrEmpty(Model.Data.PostcodeError) || !string.IsNullOrEmpty(noAddressesFound)) ? "error" : "")">
                 <label for="Postcode">
@@ -92,7 +92,7 @@
             <input type="hidden" id="Sector" name="Sector" value="@Model.Data.Sector" />
             <div class="form-group">
                 <input class="button" type="submit" value="Find address" />
-                <a class="button-link" href="@Url.Action("AddOrganisationAddress", new
+                <a class="button-link" href="@Url.Action(ControllerConstants.AddOrganisationAddressActionName, ControllerConstants.OrganisationSharedControllerName, new
                          {
                              Model.Data.OrganisationName,
                              Model.Data.OrganisationReferenceNumber,

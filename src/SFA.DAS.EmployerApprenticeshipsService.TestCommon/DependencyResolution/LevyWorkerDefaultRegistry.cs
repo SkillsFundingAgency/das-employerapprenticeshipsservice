@@ -10,7 +10,6 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.Events.Api.Client;
-using SFA.DAS.Messaging;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
 using StructureMap.Graph;
@@ -22,7 +21,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 {
     public class LevyWorkerDefaultRegistry : Registry
     {
-        public LevyWorkerDefaultRegistry(IMessagePublisher messagePublisher, IPollingMessageReceiver messageReceiver, IHmrcService hmrcService,  IEventsApi eventApi = null)
+        public LevyWorkerDefaultRegistry(IHmrcService hmrcService,  IEventsApi eventApi = null)
         {
             Scan(scan =>
             {
@@ -34,8 +33,6 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
             For<IConfiguration>().Use<LevyDeclarationProviderConfiguration>();
             For<IEventsApi>().Use(eventApi ?? Mock.Of<IEventsApi>()); 
             For<ILog>().Use(Mock.Of<ILog>());
-            For<IMessagePublisher>().Use(messagePublisher);
-            For<IPollingMessageReceiver>().Use(messageReceiver);
             For<IHmrcService>().Use(hmrcService);
             For<IHmrcDateService>().Use<HmrcDateService>();
             For<IHashingService>().Use(new HashingService.HashingService("12345QWERTYUIOPNDGHAK", "TEST: Dummy hash code London is a city in UK"));

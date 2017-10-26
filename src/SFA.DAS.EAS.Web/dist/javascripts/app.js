@@ -32,6 +32,7 @@ sfa.homePage = {
                 } else {
                     var target = $(this).parent().data("target");
                     $("#" + target).addClass("js-hidden").attr("aria-hidden", "true");
+
                 }
             });
 
@@ -110,6 +111,87 @@ sfa.navigation = {
     }
 }
 
+sfa.tabs = {
+
+    elems: {
+        tabs: $('ul.js-tabs li a'),
+        panels: $('.js-tab-pane')
+    },
+
+    init: function () {
+
+        if (this.elems.tabs) {
+            this.setUpEvents(this.elems.tabs);
+            this.hidePanels(this.elems.panels);
+        }
+
+        this.elems.tabs.eq(0).click();
+
+    },
+
+    hidePanels: function (panels) {
+        panels.hide();
+    },
+
+    showPanel: function (panel) {
+        panel.show();
+    },
+
+    setUpEvents: function (tabs) {
+
+        var that = this;
+
+        tabs.on('click touchstart', function (e) {
+
+            tabs.removeClass('selected');
+            $(this).addClass('selected');
+
+            var target = $(this).attr('href');
+
+            that.hidePanels(that.elems.panels);
+            that.showPanel($(target));
+
+            e.preventDefault();
+        });
+
+    }
+};
+
+sfa.tabs = {
+    elems: {
+        tabs: $('ul.js-tabs li a'),
+        panels: $('.js-tab-pane')
+    },
+    init: function () {
+        if (this.elems.tabs) {
+            this.setUpEvents(this.elems.tabs);
+            this.hidePanels(this.elems.panels);
+        }
+        this.elems.tabs.eq(0).click();
+    },
+    hidePanels: function (panels) {
+        panels.hide().attr('aria-hidden', 'true');
+    },
+    showPanel: function (panel) {
+        panel.show().attr('aria-hidden', 'false');
+    },
+    setUpEvents: function (tabs) {
+        var that = this;
+        tabs.on('click touchstart', function (e) {
+
+            tabs.removeClass('selected');
+            $(this).addClass('selected');
+
+            var target = $(this).attr('href');
+
+            that.hidePanels(that.elems.panels);
+            that.showPanel($(target));
+
+            e.preventDefault();
+        });
+    }
+};
+
 sfa.forms = {
     init: function () {
         this.preventDoubleSubmit();
@@ -130,6 +212,34 @@ sfa.forms = {
     }
 }
 
+// Helper for gta events
+sfa.tagHelper = {
+    dataLayer: {},
+    init: function () {
+        window.dataLayer = window.dataLayer || [];
+    },
+    radioButtonClick: function (eventAction, optionName) {
+        dataLayer.push({
+            'event': 'dataLayerEvent',
+            'eventCat': 'Form Option',
+            'eventAct': eventAction,
+            'eventLab': optionName
+        });
+    },
+    submitRadioForm: function (eventAction) {
+
+        var optionName = $("input[type='radio']:checked").attr('dataOptionName');
+
+        dataLayer.push({
+            'event': 'dataLayerEvent',
+            'eventCat': 'Form Submit',
+            'eventAct': eventAction,
+            'eventLab': optionName
+        });
+    }
+};
+
+
 sfa.backLink = {
     init: function () {
         var backLink = $('<a>')
@@ -143,8 +253,6 @@ sfa.backLink = {
 if (localStorage.getItem("answers") === null) {
     localStorage.setItem("answers", JSON.stringify([]));
 }
-
-var getAnswers = JSON.parse(localStorage.getItem("answers"));
 
 sfa.welcomeWizard = {
     settings :  {
@@ -272,6 +380,8 @@ window.onunload = function () {
 
 sfa.forms.init();
 sfa.navigation.init();
+sfa.tabs.init();
+
 $('ul#global-nav-links').collapsableNav();
 
 var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], label input[type='checkbox'], section input[type='radio']");
@@ -337,7 +447,5 @@ if (errorMessage.length > 0) {
         dataLayer[0] = dataLoadedObj;
     }
 }
-
-
 
 

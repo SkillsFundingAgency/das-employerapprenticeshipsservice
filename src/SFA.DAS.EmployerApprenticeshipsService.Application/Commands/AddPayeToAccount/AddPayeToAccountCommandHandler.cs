@@ -7,13 +7,12 @@ using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Interfaces;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 using SFA.DAS.HashingService;
 
@@ -30,8 +29,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
-
-        [ServiceBusConnectionKey("employer_shared")]
+        
         public AddPayeToAccountCommandHandler(IValidator<AddPayeToAccountCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService, IMediator mediator, IGenericEventFactory genericEventFactory, IPayeSchemeEventFactory payeSchemeEventFactory, IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _validator = validator;

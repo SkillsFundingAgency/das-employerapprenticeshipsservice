@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
-    [QueueName("legal_entity_removed")]
+    [MessageGroup("legal_entity_removed")]
     public class LegalEntityRemovedMessage
     {
         public long AccountId { get; set; }

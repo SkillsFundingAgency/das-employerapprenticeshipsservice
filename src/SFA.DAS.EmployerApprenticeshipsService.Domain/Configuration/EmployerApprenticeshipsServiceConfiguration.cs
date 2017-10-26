@@ -7,6 +7,7 @@ namespace SFA.DAS.EAS.Domain.Configuration
     {
         public CompaniesHouseConfiguration CompaniesHouse { get; set; }
         public string ServiceBusConnectionString { get; set; }
+        public string MessageServiceBusConnectionString { get; set; }
         public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
         public IdentityServerConfiguration Identity { get; set; }
         public string DashboardUrl { get; set; }
