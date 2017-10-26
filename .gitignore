@@ -260,3 +260,4 @@ src/Tools/PhantomJS/tools/phantomjs/ChangeLog
 *.stackdump
 *.ncrunchsolution
 *.ncrunchproject
+/src/SFA.DAS.EAS.Web/SFA.DAS.EAS.Web.csproj.DotSettings

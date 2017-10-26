@@ -10,14 +10,18 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%')
-	BEGIN
-	   RAISERROR('Server %s is in development - seeding test data.',10,1,@@servername) WITH NOWAIT
-	   :r .\SeedData.sql
-	   :r .\EnglishFraction.sql
-	END
-ELSE
-	BEGIN
-		RAISERROR('Server %s is managed - seeding referential data only.',10,1,@@servername) WITH NOWAIT
-		:r .\SeedProdData.sql
-	END
+--This script should update all the EF values only if the column has just been added, which is when the EF value is null
+--it will never be null normally because processing levey declarations fills it in
+
+
+	UPDATE
+	tl
+	SET
+	tl.EnglishFraction = td.EnglishFraction
+	FROM
+	employer_financial.TransactionLine AS tl
+	INNER JOIN employer_financial.GetLevyDeclarationAndTopUp AS td
+	ON tl.EmpRef = td.EmpRef
+	AND tl.AccountId = td.AccountId
+	AND tl.SubmissionId = td.SubmissionId
+	AND tl.EnglishFraction Is Null

@@ -1,7 +1,6 @@
 ﻿using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Enums;
 using SFA.DAS.EAS.Web.ViewModels;
 using Microsoft.Azure;
 using SFA.DAS.EAS.Web.Helpers;
@@ -71,14 +70,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return RedirectPermanentCommitmentsUrl();
         }
-        
+
         [HttpGet]
         [Route("{legalEntityCode}/AgreementNotSigned")]
         public ActionResult AgreementNotSigned(LegalEntitySignedAgreementViewModel viewModel)
         {
             return RedirectPermanentCommitmentsUrl();
         }
-        
+
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/apprenticeships/{hashedApprenticeshipId}/edit")]
@@ -92,7 +91,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/submit")]
-        public ActionResult SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
+        public ActionResult SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId)
         {
             return RedirectPermanentCommitmentsUrl();
         }
@@ -100,7 +99,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("Submit")]
-        public ActionResult SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string legalEntityAddress, short legalEntitySource, string providerId, string providerName, string cohortRef, SaveStatus? saveStatus)
+        public ActionResult SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string legalEntityAddress, short legalEntitySource, string providerId, string providerName, string cohortRef)
         {
             return RedirectPermanentCommitmentsUrl();
         }
@@ -114,7 +113,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Acknowledgement")]
-        public ActionResult AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
+        public ActionResult AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId)
         {
             return RedirectPermanentCommitmentsUrl();
         }

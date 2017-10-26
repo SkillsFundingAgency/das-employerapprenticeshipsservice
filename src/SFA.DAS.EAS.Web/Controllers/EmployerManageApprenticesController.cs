@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using Microsoft.Azure;
 using SFA.DAS.EAS.Web.Helpers;
 
@@ -27,7 +26,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         [Route("all")]
         [OutputCache(CacheProfile = "NoCache")]
-        public ActionResult ListAll(string hashedAccountId, ApprenticeshipFiltersViewModel filtersViewModel)
+        public ActionResult ListAll(string hashedAccountId)
         {
             return RedirectPermanentCommitmentsUrl();
         }
@@ -41,11 +40,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return RedirectPermanentCommitmentsUrl();
         }
-        
+
         [HttpGet]
         [Route("{hashedApprenticeshipId}/details/statuschange/{changeType}/whentoapply", Name = "WhenToApplyChange")]
         [OutputCache(CacheProfile = "NoCache")]
-        public ActionResult WhenToApplyChange(string hashedAccountId, string hashedApprenticeshipId, ChangeStatusType changeType)
+        public ActionResult WhenToApplyChange(string hashedAccountId, string hashedApprenticeshipId)
         {
             return RedirectPermanentCommitmentsUrl();
         }
@@ -53,7 +52,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         [Route("{hashedApprenticeshipId}/details/statuschange/{changeType}/confirm", Name = "StatusChangeConfirmation")]
         [OutputCache(CacheProfile = "NoCache")]
-        public ActionResult StatusChangeConfirmation(string hashedAccountId, string hashedApprenticeshipId, ChangeStatusType changeType, WhenToMakeChangeOptions whenToMakeChange, DateTime? dateOfChange)
+        public ActionResult StatusChangeConfirmation(string hashedAccountId, string hashedApprenticeshipId)
         {
             return RedirectPermanentCommitmentsUrl();
         }
@@ -68,7 +67,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return RedirectPermanentCommitmentsUrl();
         }
-        
+
         [HttpGet]
         [Route("paymentorder", Name = "PaymentOrder")]
         public ActionResult PaymentOrder(string hashedAccountId)

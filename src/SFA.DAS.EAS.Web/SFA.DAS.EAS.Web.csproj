@@ -270,8 +270,8 @@
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Tasks.API.Client, Version=1.7.0.39323, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.7.0.39323\lib\net45\SFA.DAS.Tasks.API.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Tasks.API.Client, Version=1.7.0.43584, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.7.0.43584\lib\net45\SFA.DAS.Tasks.API.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
@@ -399,6 +399,8 @@
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\EmployerCommitmentsController.cs" />
+    <Compile Include="Controllers\EmployerManageApprenticesController.cs" />
     <Compile Include="Controllers\OrganisationSharedController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -410,41 +412,21 @@
     <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="Orchestrators\IOrchestratorCookie.cs" />
     <Compile Include="Models\GoogleAnalyticsModel.cs" />
-    <Compile Include="Orchestrators\Mappers\ApprenticeshipFiltersMapper.cs" />
     <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
-    <Compile Include="Orchestrators\Mappers\IApprenticeshipFiltersMapper.cs" />
-    <Compile Include="Validators\ChangeStatusViewModelValidator.cs" />
-    <Compile Include="Validators\DataLockStatusViewModelViewModelValidator.cs" />
-    <Compile Include="Validators\ProviderPriorityReOrderListValidator.cs" />
     <Compile Include="ViewModels\AccountPaye\PayeSchemeNextStepsViewModel.cs" />
     <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
-    <Compile Include="ViewModels\CommitmentsIndexViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\EnvironmentDetailsViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IPaginationViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementNextStepsViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberNextStepsViewModel.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\ApprenticeshipFiltersViewModel.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusChoiceViewModel.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\DataLockStatusViewModel.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\PaymentOrderViewModel.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\PriceChange.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\PriceHistoryViewModel.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\ValidateWhenToApplyChangeResult.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\WhenToMakeChangeViewModel.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusNavigationLocation.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusType.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusViewModel.cs" />
-    <Compile Include="Controllers\EmployerAccountOrganisationController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\EmployerCommitmentsController.cs" />
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerAgreementController.cs" />
-    <Compile Include="Controllers\EmployerManageApprenticesController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -461,34 +443,16 @@
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
-    <Compile Include="Enums\SaveStatus.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Mapping\OrganisationMapping.cs" />
-    <Compile Include="Orchestrators\CommitmentsBaseOrchestrator.cs" />
-    <Compile Include="Orchestrators\Mappers\ApprenticeshipMapper.cs" />
-    <Compile Include="Orchestrators\Mappers\CommitmentMapper.cs" />
-    <Compile Include="Orchestrators\Mappers\IApprenticeshipMapper.cs" />
-    <Compile Include="Orchestrators\Mappers\ICommitmentMapper.cs" />
     <Compile Include="Plumbing\Mvc\TrimStringModelBinder.cs" />
-    <Compile Include="Validators\ApprenticeshipCoreValidator.cs" />
-    <Compile Include="Validators\ApprovedApprenticeshipViewModelValidator.cs" />
-    <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
-    <Compile Include="Validators\Messages\IApprenticeshipValidationErrorText.cs" />
     <Compile Include="Validators\Messages\ValidationMessage.cs" />
-    <Compile Include="Validators\Messages\WebApprenticeshipValidationText.cs" />
-    <Compile Include="Validators\UpdateApprenticeshipViewModelValidator.cs" />
     <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
     <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
-    <Compile Include="ViewModels\ApprenticeshipListItemGroupViewModel.cs" />
-    <Compile Include="ViewModels\CommitmentListViewModel.cs" />
-    <Compile Include="ViewModels\DeleteCommitmentViewModel.cs" />
     <Compile Include="ViewModels\InvalidStateViewModel.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\UpdateApprenticeshipViewModel.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\ConfirmationStateChangeViewModel.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\WhenToMakeChangeOptions.cs" />
     <Compile Include="ViewModels\NotificationSettingsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\ConfirmLegalAgreementToRemoveViewModel.cs" />
     <Compile Include="ViewModels\Organisation\EmployerAgreementPdfViewModel.cs" />
@@ -497,31 +461,19 @@
     <Compile Include="ViewModels\Organisation\SearchOrganisationResultsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SearchOrganisationViewModel.cs" />
     <Compile Include="ViewModels\ProviderPaymentsSummaryViewModel.cs" />
-    <Compile Include="ViewModels\ProviderPriorityReOrderViewModel.cs" />
     <Compile Include="ViewModels\SummaryUnsubscribeViewModel.cs" />
-    <Compile Include="ViewModels\YourCohortsViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
     <Compile Include="ViewModels\Organisation\AddLegalEntityViewModel.cs" />
     <Compile Include="ViewModels\Organisation\AddOrganisationAddressViewModel.cs" />
-    <Compile Include="ViewModels\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipPaymentGroup.cs" />
-    <Compile Include="ViewModels\ApprenticeshipViewModel.cs" />
     <Compile Include="ViewModels\BeginNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\AddNewPayeSchemeViewModel.cs" />
-    <Compile Include="ViewModels\CommitmentInformViewModel.cs" />
-    <Compile Include="ViewModels\CommitmentListItemViewModel.cs" />
-    <Compile Include="ViewModels\CommitmentViewModel.cs" />
     <Compile Include="ViewModels\ConfirmNewPayeSchemeViewModel.cs" />
-    <Compile Include="ViewModels\ConfirmProviderViewModel.cs" />
-    <Compile Include="ViewModels\DeleteApprenticeshipConfirmationViewModel.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\ApprenticeshipDetailsViewModel.cs" />
-    <Compile Include="ViewModels\ManageApprenticeships\ManageApprenticeshipsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\AddressViewModel.cs" />
     <Compile Include="ViewModels\Organisation\FindOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrgainsationViewModelBase.cs" />
     <Compile Include="ViewModels\Organisation\PublicSectorOrganisationSearchResultsViewModel.cs" />
     <Compile Include="ViewModels\EmployerAccountViewModel.cs" />
-    <Compile Include="ViewModels\FinishEditingViewModel.cs" />
     <Compile Include="ViewModels\GatewayInformViewModel.cs" />
     <Compile Include="ViewModels\NavigationViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SelectOrganisationAddressViewModel.cs" />
@@ -529,49 +481,37 @@
     <Compile Include="ViewModels\PaymentTransactionViewModel.cs" />
     <Compile Include="ViewModels\PrivacyViewModel.cs" />
     <Compile Include="ViewModels\CreateAccountViewModel.cs" />
-    <Compile Include="ViewModels\CreateCommitmentViewModel.cs" />
     <Compile Include="ViewModels\Organisation\CreateNewLegalEntityViewModel.cs" />
     <Compile Include="ViewModels\EmployerAccountPayeListViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementListViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\EmployerTeamMembersViewModel.cs" />
-    <Compile Include="ViewModels\ExtendedApprenticeshipViewModel.cs" />
     <Compile Include="ViewModels\GatewayViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberViewModel.cs" />
     <Compile Include="ViewModels\InvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
-    <Compile Include="Enums\RequestStatus.cs" />
     <Compile Include="ViewModels\Organisation\SelectEmployerViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\SignInUserViewModel.cs" />
     <Compile Include="ViewModels\FlashMessageViewModel.cs" />
-    <Compile Include="ViewModels\ApproveApprenticeshipModel.cs" />
-    <Compile Include="ViewModels\ApproveApprenticeshipViewModel.cs" />
-    <Compile Include="ViewModels\SubmitCommitmentViewModel.cs" />
-    <Compile Include="ViewModels\SubmitCommitmenViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SummaryViewModel.cs" />
     <Compile Include="ViewModels\DateTimeViewModel.cs" />
-    <Compile Include="Extensions\SaveStatusExtension.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestraor.cs" />
-    <Compile Include="Orchestrators\CommitmentStatusCalculator.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
-    <Compile Include="Orchestrators\EmployerCommitmentsOrchestrator.cs" />
-    <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
-    <Compile Include="Orchestrators\ICommitmentStatusCalculator.cs" />
     <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestrator.cs" />
     <Compile Include="ViewModels\UserAccountsViewModel.cs" />
@@ -583,10 +523,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validators\AddLegalEntityViewModelValidator.cs" />
-    <Compile Include="Validators\DeleteApprenticeshipConfirmationViewModelValidator.cs" />
-    <Compile Include="Validators\FinishEditingViewModelValidator.cs" />
     <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />
-    <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
     <Content Include="dist\images\arrow-sprite.png" />
     <Content Include="dist\css\images\option-select-toggle-sprite.png" />
     <Content Include="dist\css\images\pagination-arrow-sprite.png" />
@@ -601,12 +538,7 @@
     <Content Include="src\svg\cross.svg" />
     <Content Include="src\svg\important.svg" />
     <Content Include="src\svg\tick.svg" />
-    <Content Include="Views\EmployerManageApprentices\EditStartedApprenticeship.cshtml" />
-    <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Compile Include="WebRole.cs" />
-    <Compile Include="Validators\ApprenticeshipViewModelValidator.cs" />
-    <Content Include="Views\EmployerTeam\Activity.cshtml" />
-    <Content Include="Views\EmployerTeam\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />
@@ -938,25 +870,13 @@
     <Content Include="Views\EmployerAgreement\View.cshtml" />
     <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\EmployerCommitments\SelectLegalEntity.cshtml" />
-    <Content Include="Views\EmployerCommitments\Details.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
-    <Content Include="Views\EmployerCommitments\SubmitCommitmentEntry.cshtml" />
-    <Content Include="Views\EmployerCommitments\Inform.cshtml" />
-    <Content Include="Views\EmployerCommitments\CreateApprenticeshipEntry.cshtml" />
-    <Content Include="Views\EmployerCommitments\SearchProvider.cshtml" />
-    <Content Include="Views\EmployerCommitments\ChoosePath.cshtml" />
     <Content Include="Views\Home\Privacy.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\Shared\ValidationSummary.cshtml" />
-    <Content Include="Views\EmployerCommitments\SelectProvider.cshtml" />
-    <Content Include="Views\EmployerCommitments\Index.cshtml" />
-    <Content Include="Views\EmployerCommitments\FinishedEditing.cshtml" />
-    <Content Include="Views\EmployerCommitments\Acknowledgement.cshtml" />
-    <Content Include="Views\EmployerCommitments\EditApprenticeshipEntry.cshtml" />
     <Content Include="src\govuk_elements\sass\elements-page-ie6.scss" />
     <Content Include="src\govuk_elements\sass\elements-page-ie7.scss" />
     <Content Include="src\govuk_elements\sass\elements-page-ie8.scss" />
@@ -1033,7 +953,6 @@
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
     <Content Include="Views\Organisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
     <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
     <Content Include="StartUp\IIS.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1049,47 +968,25 @@
     <Content Include="Views\EmployerAccount\LegalAgreement.cshtml" />
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\Organisation\OrganisationLegalAgreement.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\ListAll.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\Details.cshtml" />
-    <Content Include="Views\EmployerCommitments\YourCohorts.cshtml" />
-    <Content Include="Views\EmployerCommitments\DeleteApprenticeshipConfirmation.cshtml" />
-    <Content Include="Views\EmployerCommitments\RequestList.cshtml" />
-    <Content Include="Views\EmployerCommitments\Approved.cshtml" />
-    <Content Include="Views\EmployerCommitments\DeleteCohort.cshtml" />
     <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
     <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
     <Content Include="src\sass\_agreement.scss" />
     <Content Include="Views\Error\InvalidState.cshtml" />
-    <Content Include="Views\EmployerCommitments\AgreementNotSigned.cshtml" />
     <Content Include="Views\Shared\_SetupAccount.cshtml" />
     <Content Include="Views\Home\SetupAccount.cshtml" />
     <Content Include="Views\Home\LegalAgreement.cshtml" />
     <Content Include="Views\Shared\_Agreement_v1.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\Edit.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\ViewChanges.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\ConfirmChanges.cshtml" />
-    <Content Include="Views\Shared\EditApprenticeship.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\ReviewChanges.cshtml" />
     <Content Include="src\sass\_accordions.scss" />
-    <Content Include="Views\EmployerManageApprentices\ChangeStatus.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\StatusChangeConfirmation.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\WhenToApplyChange.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\RequestRestart.cshtml" />
     <Content Include="src\sass\_notifications.scss" />
     <Content Include="src\sass\_navigation.scss" />
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\ProviderPaymentSummary.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\CoursePaymentSummary.cshtml" />
-    <Content Include="Views\Shared\ApprenticeshipFilters.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\PaymentOrder.cshtml" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="src\sass\_welcome.scss" />
     <Content Include="Views\Settings\NotificationSettings.cshtml" />
-    <Content Include="Views\EmployerCommitments\ViewApprenticeshipEntry.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\RequestChanges.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\RequestChanges.cshtml" />
     <Content Include="Views\Settings\NotificationUnsubscribe.cshtml" />
     <Content Include="Views\Shared\Pagination.cshtml" />
     <Content Include="Views\SearchOrganisation\SearchForOrganisation.cshtml" />
@@ -1107,7 +1004,6 @@
     <Content Include="Views\OrganisationShared\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\OrganisationShared\FindAddress.cshtml" />
     <Content Include="Views\OrganisationShared\AddOtherOrganisationDetails.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\AddOrganisation.cshtml" />
     <Content Include="Views\EmployerTeam\_TasksActivities.cshtml" />
     <Content Include="src\sass\_tasks.scss" />
     <Content Include="Views\Shared\GoogleAnalyticsInfo.cshtml" />
@@ -1127,11 +1023,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -1146,7 +1046,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>57196</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

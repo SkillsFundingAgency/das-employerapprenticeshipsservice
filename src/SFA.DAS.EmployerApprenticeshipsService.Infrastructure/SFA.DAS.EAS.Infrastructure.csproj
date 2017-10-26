@@ -158,11 +158,11 @@
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Tasks.API.Client, Version=1.7.0.39323, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.7.0.39323\lib\net45\SFA.DAS.Tasks.API.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Tasks.API.Client, Version=1.7.0.43584, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.7.0.43584\lib\net45\SFA.DAS.Tasks.API.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.7.0.39323, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.7.0.39323\lib\net45\SFA.DAS.Tasks.API.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.7.0.43584, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.7.0.43584\lib\net45\SFA.DAS.Tasks.API.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
@@ -208,7 +208,6 @@
     <Compile Include="Caching\RedisCache.cs" />
     <Compile Include="Caching\TaskSynchronizationScope.cs" />
     <Compile Include="Data\AccountIdUserTableParam.cs" />
-    <Compile Include="Data\IdamsEmailServiceWrapper.cs" />
     <Compile Include="Data\PayeRepository.cs" />
     <Compile Include="Data\LegalEntityRepository.cs" />
     <Compile Include="Data\AccountRepository.cs" />
@@ -218,9 +217,7 @@
     <Compile Include="Data\EmployerAgreementRepository.cs" />
     <Compile Include="Data\EmployerSchemesRepository.cs" />
     <Compile Include="Data\EmployerAccountRepository.cs" />
-    <Compile Include="Data\FileSystemProviderRepository.cs" />
     <Compile Include="Data\FileSystemRepository.cs" />
-    <Compile Include="Data\FileSystemStandardsRepository.cs" />
     <Compile Include="Data\FileSystemUserRepository.cs" />
     <Compile Include="Data\InvitationRepository.cs" />
     <Compile Include="Data\MembershipRepository.cs" />
@@ -255,7 +252,6 @@
     <Compile Include="Models\PostcodeAnywhere\PcaServiceFindResult.cs" />
     <Compile Include="Data\TransactionRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AcademicYear.cs" />
     <Compile Include="Services\AddressLookupService.cs" />
     <Compile Include="Services\AuditService.cs" />
     <Compile Include="Services\AzureAdAuthenticationService.cs" />
@@ -270,7 +266,6 @@
     <Compile Include="Services\HmrcService.cs" />
     <Compile Include="Services\HttpClientWrapper.cs" />
     <Compile Include="Services\PdfService.cs" />
-    <Compile Include="Services\ProviderEmailLookupService.cs" />
     <Compile Include="Services\ReferenceDataService.cs" />
     <Compile Include="Services\RefreshEmployerLevyService.cs" />
     <Compile Include="Services\RestService.cs" />
@@ -280,7 +275,6 @@
     <Compile Include="Services\UserWhiteListService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Configuration\" />
     <Folder Include="Interfaces\PostcodeAnywhere\" />
   </ItemGroup>
   <ItemGroup>

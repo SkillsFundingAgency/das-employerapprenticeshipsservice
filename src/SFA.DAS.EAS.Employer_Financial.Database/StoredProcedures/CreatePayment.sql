@@ -29,71 +29,73 @@
 	@ApprenticeshipCourseStartDate as DATETIME
 as
 
-INSERT INTO [employer_financial].[PaymentMetaData]
-			(ProviderName
-			,StandardCode
-			,FrameworkCode			
-			,ProgrammeType
-			,PathwayCode
-			,PathwayName
-			,ApprenticeshipCourseName
-			,ApprenticeName
-			,ApprenticeNINumber
-			,ApprenticeshipCourseLevel
-			,ApprenticeshipCourseStartDate)
-		VALUES
-			(@ProviderName
-			,@StandardCode
-			,@FrameworkCode			
-			,@ProgrammeType
-			,@PathwayCode
-			,@PathwayName
-			,@CourseName
-			,@ApprenticeName
-			,@ApprenticeNINumber
-			,@ApprenticeshipCourseLevel
-			,@ApprenticeshipCourseStartDate)
+IF NOT EXISTS(SELECT TOP 1 1 FROM [employer_financial].[Payment] p WHERE p.PaymentId = @PaymentId)
+BEGIN
 
-DECLARE @PaymentMetaDataId AS BIGINT = SCOPE_IDENTITY()
+	INSERT INTO [employer_financial].[PaymentMetaData]
+				(ProviderName
+				,StandardCode
+				,FrameworkCode			
+				,ProgrammeType
+				,PathwayCode
+				,PathwayName
+				,ApprenticeshipCourseName
+				,ApprenticeName
+				,ApprenticeNINumber
+				,ApprenticeshipCourseLevel
+				,ApprenticeshipCourseStartDate)
+			VALUES
+				(@ProviderName
+				,@StandardCode
+				,@FrameworkCode			
+				,@ProgrammeType
+				,@PathwayCode
+				,@PathwayName
+				,@CourseName
+				,@ApprenticeName
+				,@ApprenticeNINumber
+				,@ApprenticeshipCourseLevel
+				,@ApprenticeshipCourseStartDate)
 
-INSERT INTO [employer_financial].[Payment]
-           ([PaymentId]
-           ,[Ukprn]		   
-           ,[Uln]
-           ,[AccountId]
-           ,[ApprenticeshipId]
-           ,[DeliveryPeriodMonth]
-           ,[DeliveryPeriodYear]
-           ,[CollectionPeriodId]
-           ,[CollectionPeriodMonth]
-           ,[CollectionPeriodYear]
-           ,[EvidenceSubmittedOn]
-           ,[EmployerAccountVersion]
-           ,[ApprenticeshipVersion]
-           ,[FundingSource]
-           ,[TransactionType]
-           ,[Amount]
-		   ,[PeriodEnd]
-		   ,[PaymentMetaDataId])
-     VALUES
-           (@PaymentId
-           ,@Ukprn		   
-           ,@Uln
-           ,@AccountId
-           ,@ApprenticeshipId
-           ,@DeliveryPeriodMonth
-           ,@DeliveryPeriodYear
-           ,@CollectionPeriodId
-           ,@CollectionPeriodMonth
-           ,@CollectionPeriodYear
-           ,@EvidenceSubmittedOn
-           ,@EmployerAccountVersion
-           ,@ApprenticeshipVersion
-           ,@FundingSource
-           ,@TransactionType
-           ,@Amount
-		   ,@PeriodEnd
-		   ,@PaymentMetaDataId)
+	DECLARE @PaymentMetaDataId AS BIGINT = SCOPE_IDENTITY()
+
+	INSERT INTO [employer_financial].[Payment]
+			   ([PaymentId]
+			   ,[Ukprn]		   
+			   ,[Uln]
+			   ,[AccountId]
+			   ,[ApprenticeshipId]
+			   ,[DeliveryPeriodMonth]
+			   ,[DeliveryPeriodYear]
+			   ,[CollectionPeriodId]
+			   ,[CollectionPeriodMonth]
+			   ,[CollectionPeriodYear]
+			   ,[EvidenceSubmittedOn]
+			   ,[EmployerAccountVersion]
+			   ,[ApprenticeshipVersion]
+			   ,[FundingSource]
+			   ,[TransactionType]
+			   ,[Amount]
+			   ,[PeriodEnd]
+			   ,[PaymentMetaDataId])
+		 VALUES
+			   (@PaymentId
+			   ,@Ukprn		   
+			   ,@Uln
+			   ,@AccountId
+			   ,@ApprenticeshipId
+			   ,@DeliveryPeriodMonth
+			   ,@DeliveryPeriodYear
+			   ,@CollectionPeriodId
+			   ,@CollectionPeriodMonth
+			   ,@CollectionPeriodYear
+			   ,@EvidenceSubmittedOn
+			   ,@EmployerAccountVersion
+			   ,@ApprenticeshipVersion
+			   ,@FundingSource
+			   ,@TransactionType
+			   ,@Amount
+			   ,@PeriodEnd
+			   ,@PaymentMetaDataId)
+END
 GO
-
-
