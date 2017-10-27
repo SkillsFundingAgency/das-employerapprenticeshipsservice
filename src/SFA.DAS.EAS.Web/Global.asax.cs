@@ -56,13 +56,7 @@ namespace SFA.DAS.EAS.Web
                 };
             });
         }
-
-        //protected void Application_BeginRequest(object sender, EventArgs e)
-        //{
-        //    var application = sender as HttpApplication;
-        //    application?.Context?.Response.Headers.Remove("Server");
-        //}
-
+        
         protected void Application_Error(object sender, EventArgs e)
         {
             var exception = Server.GetLastError();
@@ -75,9 +69,12 @@ namespace SFA.DAS.EAS.Web
 
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
         {
-            //TODO: Add to defaultRegistry
-            //DependencyResolver.Current.GetService<HttpContextPolicyProvider>()
-            //var httpContextPolicyProvider = new HttpContextPolicyProvider();
+            //TODO: Add to defaultRegistry adnd resolve, or, instantiate locally
+            //var  httpContextPolicyProvider = DependencyResolver.Current.GetService<HttpContextPolicyProvider>()
+            //var httpContextPolicyProvider = new HttpContextPolicyProvider(new List<IHttpContextPolicy>()
+            //{
+            //    new ResponseHeaderRestrictionPolicy()
+            //});
             //httpContextPolicyProvider.Apply(
             //    new System.Web.HttpContextWrapper(HttpContext.Current), PolicyConcerns.HttpResponse);
         }
