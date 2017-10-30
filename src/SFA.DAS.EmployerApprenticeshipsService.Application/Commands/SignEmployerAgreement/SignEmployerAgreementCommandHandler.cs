@@ -90,12 +90,12 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
             await _mediator.SendAsync(new PublishGenericEventCommand {Event = genericEvent});
 
-            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreementId, message.CompanyName);
+            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreementId, message.CompanyName, owner.FullName());
         }
 
-        private async Task PublishAgreementSignedMessage(long accountId, long legalEntityId, long agreementId, string companyName)
+        private async Task PublishAgreementSignedMessage(long accountId, long legalEntityId, long agreementId, string companyName, string signedByName)
         {
-            await _messagePublisher.PublishAsync(new AgreementSignedMessage(accountId, legalEntityId, agreementId, companyName));
+            await _messagePublisher.PublishAsync(new AgreementSignedMessage(accountId, legalEntityId, agreementId, companyName, signedByName));
         }
 
         private async Task AddAuditEntry(SignEmployerAgreementCommand message, long accountId, long agreementId)

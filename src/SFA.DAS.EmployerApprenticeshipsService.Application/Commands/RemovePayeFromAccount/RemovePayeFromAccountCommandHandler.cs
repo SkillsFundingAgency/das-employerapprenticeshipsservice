@@ -86,6 +86,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
+
         private async Task QueuePayeRemovedMessage(string payeRef, long accountId, string companyName)
         {
             await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage(payeRef, accountId, companyName));

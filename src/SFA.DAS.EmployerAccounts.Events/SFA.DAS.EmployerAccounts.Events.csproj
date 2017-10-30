@@ -63,6 +63,7 @@
     <Compile Include="Messages\AgreementCreatedMessage.cs" />
     <Compile Include="Messages\PayeSchemeDeletedMessage.cs" />
     <Compile Include="Messages\LegalEntityRemovedMessage.cs" />
+    <Compile Include="Messages\PersonMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

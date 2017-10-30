@@ -3,14 +3,14 @@
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     [MessageGroup("agreement_signed")]
-    public class AgreementSignedMessage : Message
+    public class AgreementSignedMessage : PersonMessage
     {
-        public AgreementSignedMessage()
+        public AgreementSignedMessage() :base(string.Empty)
         {
 
         }
 
-        public AgreementSignedMessage(long accountId, long legalEntityId, long aggreementId, string providerName)
+        public AgreementSignedMessage(long accountId, long legalEntityId, long aggreementId, string providerName, string signedByName) :base(signedByName)
         {
             LegalEntityId = legalEntityId;
             AgreementId = aggreementId;
