@@ -89,7 +89,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             await CreateAuditEntries(message, returnValue, hashedAccountId, user);
 
             await PublishAgreementCreatedMessage(returnValue.AccountId, returnValue.LegalEntityId,
-                returnValue.EmployerAgreementId);
+                returnValue.EmployerAgreementId, message.OrganisationName);
 
             return new CreateAccountCommandResponse
             {
@@ -98,14 +98,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         }
 
 
-        private async Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId)
+        private async Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName)
         {
-            await _messagePublisher.PublishAsync(new AgreementCreatedMessage
-            {
-                AccountId = accountId,
-                LegalEntityId = legalEntityId,
-                AgreementId = employerAgreementId
-            });
+            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, legalEntityId, employerAgreementId, organisationName));
         }
 
         private async Task NotifyAccountCreated(string hashedAccountId)
@@ -140,19 +135,13 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         {
             foreach (var empref in emprefs)
             {
-                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage
-                {
-                    EmpRef= empref
-                });
+                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage(empref));
             }
         }
 
         private async Task PublishAccountCreatedMessage(long accountId)
         {
-            await _messagePublisher.PublishAsync(new AccountCreatedMessage
-            {
-                AccountId = accountId
-            });
+            await _messagePublisher.PublishAsync(new AccountCreatedMessage(accountId));
         }
 
         private async Task<User> GetUser(CreateAccountCommand message)

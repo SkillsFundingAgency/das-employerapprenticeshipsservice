@@ -3,8 +3,18 @@
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     [MessageGroup("add_paye_scheme")]
-    public class PayeSchemeCreatedMessage
+    public class PayeSchemeCreatedMessage : Message
     {
-        public string EmpRef { get; set; }
+        public PayeSchemeCreatedMessage()
+        {
+
+        }
+
+        public PayeSchemeCreatedMessage(string empRef)
+        {
+            EmpRef = empRef;
+        }
+
+        public string EmpRef { get; }
     }
 }

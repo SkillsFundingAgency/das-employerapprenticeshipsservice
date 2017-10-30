@@ -86,13 +86,8 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
         private async Task PublishLegalEntityRemovedMessage(long accountId, long legalEntityId,
             long agreementId, EmployerAgreementStatus status)
         {
-            await _messagePublisher.PublishAsync(new LegalEntityRemovedMessage
-            {
-                AccountId = accountId,
-                LegalEntityId = legalEntityId,
-                AgreementId = agreementId,
-                AgreementSigned = status == EmployerAgreementStatus.Signed
-            });
+            await _messagePublisher.PublishAsync(new LegalEntityRemovedMessage(accountId, legalEntityId, agreementId,
+                status == EmployerAgreementStatus.Signed));
         }
 
         private async Task AddAuditEntry(long accountId, string employerAgreementId)

@@ -195,13 +195,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 model.PayeSchemeName = result.PayeScheme.Name;
 
-                await Mediator.SendAsync(new RemovePayeFromAccountCommand
-                {
-                    HashedAccountId = model.HashedAccountId,
-                    UserId = model.UserId,
-                    PayeRef = model.PayeRef,
-                    RemoveScheme = model.RemoveScheme == 2
-                });
+                await Mediator.SendAsync(new RemovePayeFromAccountCommand(model.HashedAccountId, model.UserId,
+                    model.PayeRef, model.RemoveScheme == 2,model.PayeSchemeName));
+
 
                 response.Data = model;
             }

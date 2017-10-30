@@ -3,8 +3,19 @@
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     [MessageGroup("delete_paye_scheme")]
-    public class PayeSchemeDeletedMessage
+    public class PayeSchemeDeletedMessage : Message
     {
-        public string EmpRef { get; set; }
+        public PayeSchemeDeletedMessage()
+        {
+
+        }
+
+        public PayeSchemeDeletedMessage(string empRef)
+        {
+            EmpRef = empRef;
+        }
+
+
+        public string EmpRef { get; }
     }
 }

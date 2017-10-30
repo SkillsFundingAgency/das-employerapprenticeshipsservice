@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 
             await _accountRepository.RemovePayeFromAccount(accountId, message.PayeRef);
 
-            await QueuePayeRemovedMessage(message.PayeRef);
+            await QueuePayeRemovedMessage(message.PayeRef, message.CompanyName);
 
             await NotifyPayeSchemeRemoved(message.HashedAccountId, message.PayeRef);
         }
@@ -86,9 +86,9 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
-        private async Task QueuePayeRemovedMessage(string payeRef)
+        private async Task QueuePayeRemovedMessage(string payeRef, string companyName)
         {
-            await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage { EmpRef = payeRef});
+            await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage(payeRef, companyName));
         }
 
         private async Task AddAuditEntry(string userId, string payeRef, string accountId)
