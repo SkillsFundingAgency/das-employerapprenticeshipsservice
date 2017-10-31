@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution;
 using SFA.DAS.EAS.PaymentProvider.Worker.Providers;
+using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 using StructureMap;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker
@@ -52,7 +53,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
                 c.Policies.Add(new ConfigurationPolicy<PaymentProviderConfiguration>("SFA.DAS.PaymentProvider"));
                 c.Policies.Add(new ConfigurationPolicy<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI"));
                 c.Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
-                c.Policies.Add(new MessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
+                c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add(new MessageSubscriberPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add(new ExecutionPolicyPolicy());
                 c.AddRegistry<DefaultRegistry>();
