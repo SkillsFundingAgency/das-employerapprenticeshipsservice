@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Web;
 using FluentValidation;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Models.Organisation;
-using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.Validators
