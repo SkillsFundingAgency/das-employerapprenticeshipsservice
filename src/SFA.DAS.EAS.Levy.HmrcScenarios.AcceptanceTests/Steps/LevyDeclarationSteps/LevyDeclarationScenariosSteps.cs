@@ -52,10 +52,10 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.LevyDeclarationS
             var userId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
 
             var actual = employerAccountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, year, month, userId).Result;
+            
+            var monthTransactionAmount = actual.Data.Model.Data.TransactionLines.Sum(t => t.Amount);
 
-            var monthTransaction = actual.Data.Model.Data.TransactionLines.Single();
-
-            Assert.AreEqual(levyAmount, monthTransaction.Amount);
+            Assert.AreEqual(levyAmount, monthTransactionAmount);
         }
 
         [Then(@"the balance on (.*)/(.*) should be (.*) on the screen")]
