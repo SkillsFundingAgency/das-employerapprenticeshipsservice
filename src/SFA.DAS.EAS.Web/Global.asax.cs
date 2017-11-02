@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Helpers;
@@ -17,6 +18,7 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.EAS.Web.Plumbing.Mvc;
+using SFA.DAS.Web.Policy;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -56,12 +58,7 @@ namespace SFA.DAS.EAS.Web
             });
         }
 
-        protected void Application_BeginRequest(object sender, EventArgs e)
-        {
-            var application = sender as HttpApplication;
-            application?.Context?.Response.Headers.Remove("Server");
-        }
-
+       
         protected void Application_Error(object sender, EventArgs e)
         {
             var exception = Server.GetLastError();
@@ -70,6 +67,15 @@ namespace SFA.DAS.EAS.Web
 
             var tc = new TelemetryClient();
             tc.TrackTrace($"{exception.Message} - {exception.InnerException}");
+        }
+        protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
+        {
+            new HttpContextPolicyProvider(
+                new List<IHttpContextPolicy>()
+                {
+                    new ResponseHeaderRestrictionPolicy()
+                }
+            ).Apply(new HttpContextWrapper(HttpContext.Current), PolicyConcern.HttpResponse);
         }
     }
 }
