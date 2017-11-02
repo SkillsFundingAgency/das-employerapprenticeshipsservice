@@ -21,4 +21,5 @@ OUTER APPLY
 	where m.RoleId = 1 and m.AccountId = acc.Id
 	ORDER BY m.CreatedDate desc
 ) t
-WHERE acc.HashedId = @HashedId
+WHERE acc.HashedId = @HashedId AND
+ea.StatusId in (1,2,3)

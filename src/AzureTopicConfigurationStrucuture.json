@@ -25,7 +25,7 @@
     },
     {
         "topicName": "get_employer_levy2",
-        "subscription": []
+      "subscription": [ "MA_LevyDeclaration" ]
     },
     {
         "topicName": "legal_entity_removed",
@@ -33,6 +33,6 @@
     },
     {
         "topicName": "refresh_payments2",
-        "subscription": []
+      "subscription": [ "MA_PaymentDataProcessor"]
     }
 ]
