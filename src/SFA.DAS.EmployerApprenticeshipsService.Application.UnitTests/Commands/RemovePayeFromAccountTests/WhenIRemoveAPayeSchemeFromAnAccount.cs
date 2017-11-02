@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         public async Task ThenTheValidatorIsCalled()
         {
             //Act
-            await _handler.Handle(new RemovePayeFromAccountCommand());
+            await _handler.Handle(new RemovePayeFromAccountCommand(null, null,null,false,null));
 
             //Assert
             _validator.Verify(x=>x.ValidateAsync(It.IsAny<RemovePayeFromAccountCommand>()), Times.Once);
@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemovePayeFromAccountCommand>())).ReturnsAsync(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
 
             //Act
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new RemovePayeFromAccountCommand()));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new RemovePayeFromAccountCommand(null, null, null, false, null)));
 
             //Assert
             _accountRepository.Verify(x => x.RemovePayeFromAccount(It.IsAny<long>(), It.IsAny<string>()), Times.Never);
@@ -89,7 +89,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemovePayeFromAccountCommand>())).ReturnsAsync(new ValidationResult {IsUnauthorized = true});
 
             //Act
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(new RemovePayeFromAccountCommand()));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(new RemovePayeFromAccountCommand(null, null, null, false, null)));
 
             //Assert
             _accountRepository.Verify(x => x.RemovePayeFromAccount(It.IsAny<long>(), It.IsAny<string>()), Times.Never);
@@ -106,7 +106,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _hashingService.Setup(x => x.DecodeValue(hashedId)).Returns(accountId);
 
             //Act
-            await _handler.Handle(new RemovePayeFromAccountCommand { HashedAccountId = hashedId, PayeRef = payeRef, UserId = userId});
+            await _handler.Handle(new RemovePayeFromAccountCommand(hashedId, payeRef, userId,false,"companyName"));
 
             //Assert
             _accountRepository.Verify(x=>x.RemovePayeFromAccount(accountId,payeRef), Times.Once);
@@ -116,13 +116,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         public async Task ThenAnEventIsPublishedToNofifyThePayeSchemeHasBeenRemoved()
         {
             //Arrange
-            var command = new RemovePayeFromAccountCommand
-            {
-                UserId = "54256",
-                HashedAccountId = "ABC123",
-                PayeRef = "3674826874623",
-                RemoveScheme = true
-            };
+            var command = new RemovePayeFromAccountCommand("ABC123", "3674826874623", "54256", true, "companyName");
 
             //Act
             await _handler.Handle(command);
@@ -138,13 +132,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         {
             //Arrange
             var accountId = 123456;
-            var command = new RemovePayeFromAccountCommand
-            {
-                UserId = "54256",
-                HashedAccountId = "ABC123",
-                PayeRef = "3674826874623",
-                RemoveScheme = true
-            };
+            var command = new RemovePayeFromAccountCommand("ABC123", "3674826874623", "ABC123", true, "companyName");
+
 
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(accountId);
 
@@ -172,13 +161,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         public async Task ThenAMessageIsQueuedForPayeSchemeRemoved()
         {
             //Arrange
-            var command = new RemovePayeFromAccountCommand
-            {
-                UserId = "54256",
-                HashedAccountId = "ABC123",
-                PayeRef = "3674826874623",
-                RemoveScheme = true
-            };
+            var command = new RemovePayeFromAccountCommand("ABC123", "3674826874623", "54256", true,"companyName");
 
             //Act
             await _handler.Handle(command);

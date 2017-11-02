@@ -9,10 +9,6 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
             PostedDatedTime = DateTime.Now;
         }
 
-        public string OwnerId { get; set; }
-
-        public string HashedAccountId { get; set; }
-
-        public DateTime PostedDatedTime { get; set; }
+        public DateTime PostedDatedTime { get;  }
     }
 }

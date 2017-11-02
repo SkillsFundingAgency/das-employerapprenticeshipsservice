@@ -11,6 +11,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             ExternalUserId = externalUserId;
             SignedDate = signedDate;
             HashedAgreementId = hashedAgreementId;
+            CompanyName = companyName;
         }
 
         public string HashedAccountId { get;  }
@@ -18,6 +19,6 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
         public DateTime SignedDate { get;  }
         public string HashedAgreementId { get;  }
 
-        public string CompanyName { get; } = "todo";
+        public string CompanyName { get; }
     }
 }

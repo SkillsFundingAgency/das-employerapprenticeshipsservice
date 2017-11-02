@@ -86,8 +86,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Sign(string agreementId, string hashedAccountId)
         {
-            
-            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName), DateTime.UtcNow);
+            var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, userInfo);
+            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow, agreement.Data.EmployerAgreement.LegalEntityName);
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -101,7 +102,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction(ControllerConstants.NextStepsActionName, new { hashedAccountId });
             }
 
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
+            
             agreement.Exception = response.Exception;
             agreement.Status = response.Status;
 

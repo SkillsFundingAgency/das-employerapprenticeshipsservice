@@ -10,17 +10,19 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 
         }
 
-        public AgreementSignedMessage(long accountId, long legalEntityId, long aggreementId)
+        public AgreementSignedMessage(long accountId, long legalEntityId, long aggreementId, string providerName)
         {
-            AccountId = accountId;
             LegalEntityId = legalEntityId;
             AgreementId = aggreementId;
+            ProviderName = providerName;
+            AccountId = accountId;
         }
 
-        public string ProviderName { get; } = "todo";
+        public string ProviderName { get; }
 
-        public long AccountId { get; }
         public long LegalEntityId { get; }
         public long AgreementId { get; }
+    
+        public long AccountId { get; }
     }
 }

@@ -84,13 +84,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
                 _mediator.Object,
                 Mock.Of<IMessagePublisher>());
 
-            _command = new SignEmployerAgreementCommand
-            {
-                HashedAccountId = "1AVCFD",
-                HashedAgreementId = "2EQWE34",
-                ExternalUserId = Guid.NewGuid().ToString(),
-                SignedDate = DateTime.Now
-            };
+            _command = new SignEmployerAgreementCommand("1AVCFD", Guid.NewGuid().ToString(), DateTime.Now, "2EQWE34",
+                "companyName");
 
             _owner = new MembershipView
             {
