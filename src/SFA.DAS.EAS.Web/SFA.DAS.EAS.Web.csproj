@@ -541,6 +541,7 @@
     <Content Include="dist\javascripts\lodash.js" />
     <Content Include="dist\javascripts\payment-order.js" />
     <None Include="src\sass\_tabs.scss" />
+    <Content Include="dist\javascripts\sfa-modernizr.js" />
     <Content Include="src\svg\arrows.svg" />
     <Content Include="src\svg\chevron-left.svg" />
     <Content Include="src\svg\chevron-right.svg" />

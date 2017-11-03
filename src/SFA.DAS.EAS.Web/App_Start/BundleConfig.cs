@@ -36,6 +36,9 @@ namespace SFA.DAS.EAS.Web
             bundles.Add(new ScriptBundle("~/bundles/jqueryvalcustom").Include(
                       "~/Scripts/jquery.validate.js", "~/Scripts/jquery.validate.unobtrusive.custom.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
+                "~/dist/javascripts/sfa-modernizr.js"));
+
             // This is a temporary fix while the asset references in the EmployerCommitments site are sorted out. 05/10/2017
             bundles.Add(new ScriptBundle("~/bundles/lodash").Include(
                         "~/dist/javascripts/lodash.js"));
