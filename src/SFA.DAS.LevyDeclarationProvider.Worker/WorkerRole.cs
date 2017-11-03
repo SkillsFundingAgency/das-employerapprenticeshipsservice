@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution;
 using SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers;
+using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 using StructureMap;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
@@ -43,7 +44,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
                 c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add(new ConfigurationPolicy<TokenServiceApiClientConfiguration>("SFA.DAS.TokenServiceApiClient"));
-                c.Policies.Add(new MessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
+                c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add(new MessageSubscriberPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add(new ExecutionPolicyPolicy());
                 c.AddRegistry<DefaultRegistry>();
