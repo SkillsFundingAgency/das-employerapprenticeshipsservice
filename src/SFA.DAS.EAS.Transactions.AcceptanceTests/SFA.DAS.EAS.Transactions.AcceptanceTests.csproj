@@ -102,14 +102,17 @@
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.68.0.34798\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Configuration, Version=1.0.0.38117, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Configuration.1.0.0.38117\lib\net45\SFA.DAS.Configuration.dll</HintPath>
+    <Reference Include="SFA.DAS.Configuration, Version=1.0.0.43116, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Configuration.1.0.0.43116\lib\net45\SFA.DAS.Configuration.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Configuration.AzureTableStorage, Version=1.0.0.38117, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Configuration.AzureTableStorage.1.0.0.38117\lib\net45\SFA.DAS.Configuration.AzureTableStorage.dll</HintPath>
+    <Reference Include="SFA.DAS.Configuration.AzureTableStorage, Version=1.0.0.43116, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Configuration.AzureTableStorage.1.0.0.43116\lib\net45\SFA.DAS.Configuration.AzureTableStorage.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Configuration.FileStorage, Version=1.0.0.38117, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Configuration.FileStorage.1.0.0.38117\lib\net45\SFA.DAS.Configuration.FileStorage.dll</HintPath>
+    <Reference Include="SFA.DAS.Configuration.FileStorage, Version=1.0.0.43116, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Configuration.FileStorage.1.0.0.43116\lib\net45\SFA.DAS.Configuration.FileStorage.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Events.Api.Client, Version=1.20.0.26497, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.20.0.26497\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
@@ -118,8 +121,9 @@
     <Reference Include="SFA.DAS.Events.Api.Types, Version=2.0.0.36524, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Events.Api.Types.2.0.0.36524\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.43076, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.43076\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.44498, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.44498\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.17615, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.17615\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
