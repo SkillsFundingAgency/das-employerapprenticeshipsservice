@@ -6078,3 +6078,11 @@ h2 .float-right {
     word-wrap: break-word;
   }
 }
+
+span.arrowCollapsed:before {
+    content: "\25BA";
+}
+
+span.arrowExpanded:before {
+    content: "\25BC";
+}
