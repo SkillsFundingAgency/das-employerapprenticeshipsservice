@@ -34,7 +34,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
-        private readonly IMembershipRepository _membershipRepository;
 
         public CreateAccountCommandHandler(
             IAccountRepository accountRepository, 
@@ -45,8 +44,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IHashingService hashingService, 
             IGenericEventFactory genericEventFactory, 
             IAccountEventFactory accountEventFactory, 
-            IRefreshEmployerLevyService refreshEmployerLevyService,
-            IMembershipRepository membershipRepository)
+            IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _accountRepository = accountRepository;
             _userRepository = userRepository;
@@ -58,7 +56,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _genericEventFactory = genericEventFactory;
             _accountEventFactory = accountEventFactory;
             _refreshEmployerLevyService = refreshEmployerLevyService;
-            _membershipRepository = membershipRepository;
         }
 
         public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
@@ -135,11 +132,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             }
         }
 
-        private async Task PublishAddPayeSchemeMessage(IEnumerable<string> emprefs, string signedInName)
+        private async Task PublishAddPayeSchemeMessage(IEnumerable<string> emprefs)
         {
             foreach (var empref in emprefs)
             {
-                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage(empref, signedInName));
+                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage(empref));
             }
         }
 

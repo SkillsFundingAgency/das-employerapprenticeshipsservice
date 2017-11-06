@@ -47,24 +47,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         public async Task ThenIfTheFieldsAreNotPopulatedThenFalseIsReturnedAndTheErrorDictionaryIsPopulated()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand("GHT432", "123asd",
-                new DateTime(2016, 01, 01), "123ASD", "compName"));
+            var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand(null, null,
+                new DateTime(2016, 01, 01), null, null));
             
             //Assert
             Assert.IsFalse(actual.IsValid());
             Assert.AreEqual(4,actual.ValidationDictionary.Count);
         }
 
-        [Test]
-        public async Task ThenIfTheAgreementDoesNotExistThenTheRequestIsNotValid()
-        {
-            //Act
-            var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand("GHT432", "123asd",
-                new DateTime(2016, 01, 01), "12345", "companyName"));
-
-            //Assert
-            Assert.IsFalse(actual.IsValid());
-        }
 
         [TestCase(EmployerAgreementStatus.Signed)]
         [TestCase(EmployerAgreementStatus.Expired)]

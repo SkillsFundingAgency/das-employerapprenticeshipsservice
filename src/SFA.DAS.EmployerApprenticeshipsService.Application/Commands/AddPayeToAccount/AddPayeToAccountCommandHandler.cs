@@ -29,10 +29,9 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
-        private readonly IMembershipRepository _membershipRepository;
 
         public AddPayeToAccountCommandHandler(IValidator<AddPayeToAccountCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService, 
-            IMediator mediator, IGenericEventFactory genericEventFactory, IPayeSchemeEventFactory payeSchemeEventFactory, IRefreshEmployerLevyService refreshEmployerLevyService, IMembershipRepository membershipRepository)
+            IMediator mediator, IGenericEventFactory genericEventFactory, IPayeSchemeEventFactory payeSchemeEventFactory, IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _validator = validator;
             _accountRepository = accountRepository;
@@ -42,14 +41,11 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             _genericEventFactory = genericEventFactory;
             _payeSchemeEventFactory = payeSchemeEventFactory;
             _refreshEmployerLevyService = refreshEmployerLevyService;
-            _membershipRepository = membershipRepository;
         }
 
         protected override async Task HandleCore(AddPayeToAccountCommand message)
         {
             await ValidateMessage(message);
-
-            var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
@@ -68,7 +64,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
             await RefreshLevy(accountId, message.Empref);
 
-            await AddPayeScheme(message.Empref, owner.FullName());
+            await AddPayeScheme(message.Empref);
 
             await NotifyPayeSchemeAdded(message.HashedAccountId, message.Empref);
         }
@@ -104,10 +100,10 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             
         }
 
-        private async Task AddPayeScheme(string payeRef, string signedByName)
+        private async Task AddPayeScheme(string payeRef)
         {
             await _messagePublisher.PublishAsync(
-                new PayeSchemeCreatedMessage(payeRef, signedByName)
+                new PayeSchemeCreatedMessage(payeRef)
             );
         }
 

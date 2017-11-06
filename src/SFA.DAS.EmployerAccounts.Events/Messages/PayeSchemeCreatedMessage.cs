@@ -3,14 +3,14 @@
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     [MessageGroup("add_paye_scheme")]
-    public class PayeSchemeCreatedMessage : PersonMessage
+    public class PayeSchemeCreatedMessage : Message
     {
-        public PayeSchemeCreatedMessage():base(string.Empty)
+        public PayeSchemeCreatedMessage()
         {
 
         }
 
-        public PayeSchemeCreatedMessage(string empRef, string signedInName) :base(signedInName)
+        public PayeSchemeCreatedMessage(string empRef)
         {
             EmpRef = empRef;
         }

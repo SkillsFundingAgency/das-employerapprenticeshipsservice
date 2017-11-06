@@ -10,9 +10,9 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 
         public PersonMessage(string signedByName)
         {
-            signedByName = signedByName;
+            SignedByName = signedByName;
         }
 
-        public string signedByName { get; }
+        public string SignedByName { get; }
     }
 }

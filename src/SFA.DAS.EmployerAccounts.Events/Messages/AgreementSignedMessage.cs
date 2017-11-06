@@ -19,10 +19,8 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         }
 
         public string ProviderName { get; }
-
         public long LegalEntityId { get; }
-        public long AgreementId { get; }
-    
+        public long AgreementId { get; }  
         public long AccountId { get; }
     }
 }
