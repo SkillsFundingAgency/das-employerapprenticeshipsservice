@@ -58,12 +58,11 @@
   <ItemGroup>
     <Compile Include="Messages\AccountCreatedMessage.cs" />
     <Compile Include="Messages\AgreementSignedMessage.cs" />
-    <Compile Include="Messages\Message.cs" />
     <Compile Include="Messages\PayeSchemeCreatedMessage.cs" />
     <Compile Include="Messages\AgreementCreatedMessage.cs" />
     <Compile Include="Messages\PayeSchemeDeletedMessage.cs" />
     <Compile Include="Messages\LegalEntityRemovedMessage.cs" />
-    <Compile Include="Messages\PersonMessage.cs" />
+    <Compile Include="Messages\Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

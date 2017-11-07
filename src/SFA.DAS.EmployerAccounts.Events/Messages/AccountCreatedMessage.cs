@@ -3,17 +3,17 @@
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     [MessageGroup("add_account")]
-    public class AccountCreatedMessage : PersonMessage
+    public class AccountCreatedMessage : Message
     {
-        public AccountCreatedMessage() : base(string.Empty)
+        public AccountCreatedMessage() : base(string.Empty, string.Empty)
         {
 
         }
 
-        public AccountCreatedMessage(long accountId, string signedByName) : base(signedByName)
+        public AccountCreatedMessage(string hashedAccountId, string signedByName) : base(signedByName, hashedAccountId)
         {
-            AccountId = accountId;
+
         }
-        public long AccountId { get; }
+
     }
 }
