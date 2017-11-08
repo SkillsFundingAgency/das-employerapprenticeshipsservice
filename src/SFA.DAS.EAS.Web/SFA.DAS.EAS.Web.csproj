@@ -417,7 +417,6 @@
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
-    <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\EmployerCommitmentsController.cs" />
     <Compile Include="Controllers\EmployerManageApprenticesController.cs" />
     <Compile Include="Controllers\OrganisationSharedController.cs" />
@@ -566,7 +565,6 @@
     <Content Include="Views\EmployerTeam\Index.cshtml" />
     <Content Include="Views\Organisation\AddOrganisation.cshtml" />
     <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
-    <Content Include="Views\Activities\Index.cshtml" />
     <Content Include="Views\SearchOrganisation\FindAddress.cshtml" />
     <Content Include="Views\EmployerTeam\Activity.cshtml" />
   </ItemGroup>
