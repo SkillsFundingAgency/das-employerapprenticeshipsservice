@@ -87,7 +87,7 @@ else
                         {
                             <ul class="task-list">
                                 
-                                @{ var priorityOrderTaskList = Model.Data.Tasks.OrderByDescending(AccountTaskHelper.GetTaskPriority).ToArray();}
+                                @{ var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();}
 
                                 @foreach (var task in priorityOrderTaskList)
                                 {
