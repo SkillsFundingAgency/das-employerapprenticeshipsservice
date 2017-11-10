@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Web
             var config = GetConfigurationObject();
 
             
-            var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestraor>();
+            var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
             var logger = LogManager.GetLogger("Startup");
             
 
@@ -117,7 +117,7 @@ namespace SFA.DAS.EAS.Web
             };
         }
 
-        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestraor authenticationOrchestrator, ILogger logger, Constants constants)
+        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestrator authenticationOrchestrator, ILogger logger, Constants constants)
         {
             logger.Info("PostAuthenticationAction called");
             var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;

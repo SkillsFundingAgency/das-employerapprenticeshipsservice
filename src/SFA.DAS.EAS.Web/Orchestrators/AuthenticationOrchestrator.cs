@@ -6,12 +6,12 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
-    public class AuthenticationOrchestraor
+    public class AuthenticationOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;
 
-        public AuthenticationOrchestraor(IMediator mediator, ILog logger)
+        public AuthenticationOrchestrator(IMediator mediator, ILog logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));

@@ -11,6 +11,8 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.TimeProvider;
 
@@ -24,8 +26,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
         private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
         private readonly IValidator<CreateInvitationCommand> _validator;
         private readonly IUserRepository _userRepository;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration, IValidator<CreateInvitationCommand> validator, IUserRepository userRepository)
+        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, 
+            EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration, IValidator<CreateInvitationCommand> validator,
+            IUserRepository userRepository, IMessagePublisher messagePublisher)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
@@ -37,6 +42,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
             _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
             _validator = validator;
             _userRepository = userRepository;
+            _messagePublisher = messagePublisher;
         }
 
         protected override async Task HandleCore(CreateInvitationCommand message)
@@ -127,7 +133,12 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 }
             });
 
+            await PublishAccountCreatedMessage(caller.AccountId, caller.FullName());
+        }
 
+        private async Task PublishAccountCreatedMessage(long accountId, string signedByName)
+        {
+            await _messagePublisher.PublishAsync(new UserInvitedMessage(accountId, signedByName));
         }
     }
 }

@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
@@ -20,19 +21,26 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IUserAccountRepository> _userAccountRepository;
         private Mock<IAuditService> _auditService;
+        private Mock<IMessagePublisher> _messagePublisher;
 
         [SetUp]
         public void Setup()
         {
             _invitationRepository = new Mock<IInvitationRepository>();
             _membershipRepository = new Mock<IMembershipRepository>();
+            _membershipRepository.Setup(a => a.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(new MembershipView(){FirstName = "f", LastName = "l"}));
+
             _userAccountRepository = new Mock<IUserAccountRepository>();
             _auditService = new Mock<IAuditService>();
+            _messagePublisher=new Mock<IMessagePublisher>();
+
             _handler = new AcceptInvitationCommandHandler(
                 _invitationRepository.Object, 
                 _membershipRepository.Object, 
                 _userAccountRepository.Object,
-                _auditService.Object);
+                _auditService.Object,
+                _messagePublisher.Object);
             _invitation = new Invitation
             {
                 Id = 1,

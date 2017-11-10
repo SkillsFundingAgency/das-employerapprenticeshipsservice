@@ -7,6 +7,8 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
@@ -18,11 +20,13 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
         private readonly IUserAccountRepository _userAccountRepository;
         private readonly IAuditService _auditService;
         private readonly AcceptInvitationCommandValidator _validator;
+        private readonly IMessagePublisher _messagePublisher;
 
         public AcceptInvitationCommandHandler(IInvitationRepository invitationRepository, 
             IMembershipRepository membershipRepository, 
             IUserAccountRepository userAccountRepository,
-            IAuditService auditService)
+            IAuditService auditService,
+            IMessagePublisher messagePublisher)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
@@ -34,6 +38,7 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
             _membershipRepository = membershipRepository;
             _userAccountRepository = userAccountRepository;
             _auditService = auditService;
+            _messagePublisher = messagePublisher;
             _validator = new AcceptInvitationCommandValidator();
         }
 
@@ -77,6 +82,13 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
                 RelatedEntities = new List<Entity> { new Entity { Id =$"Account Id [{existing.AccountId}], User Id [{user.Id}]", Type = "Membership" } },
                 AffectedEntity = new Entity { Type = "Invitation", Id = message.Id.ToString() }
             });
+
+            await PublishUserJoinedMessage(existing.AccountId, $"{user.FirstName} {user.LastName}");
+        }
+
+        private async Task PublishUserJoinedMessage(long accountId, string signedByName)
+        {
+            await _messagePublisher.PublishAsync(new UserJoinedMessage(accountId, signedByName));
         }
     }
 }

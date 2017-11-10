@@ -13,6 +13,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
@@ -28,6 +29,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IValidator<CreateInvitationCommand>> _validator;
         private Mock<IUserRepository> _userRepository;
+        private Mock<IMessagePublisher> _messagePublisher;
         private const long ExpectedAccountId = 545641561;
         private const long ExpectedUserId = 521465;
         private const long ExpectedInvitationId = 1231234;
@@ -49,6 +51,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             _userRepository = new Mock<IUserRepository>();
             _userRepository.Setup(x => x.GetByEmailAddress(ExpectedExistingUserEmail)).ReturnsAsync(new User {Email = ExpectedExistingUserEmail, UserRef = Guid.NewGuid().ToString()});
 
+            _messagePublisher=new Mock<IMessagePublisher>();
+
             _mediator = new Mock<IMediator>();
             
             _validator = new Mock<IValidator<CreateInvitationCommand>>();
@@ -56,7 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
-            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration, _validator.Object, _userRepository.Object);
+            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration, _validator.Object, _userRepository.Object, _messagePublisher.Object);
             _command = new CreateInvitationCommand
             {
                 HashedAccountId = ExpectedHashedId,
