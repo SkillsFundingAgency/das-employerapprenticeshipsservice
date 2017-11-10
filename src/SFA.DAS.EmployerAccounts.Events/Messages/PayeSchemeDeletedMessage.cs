@@ -18,8 +18,6 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 
         public string EmpRef { get; }
 
-        public long AccountId { get; }
-
         public string CompanyName { get; }
     }
 }

@@ -34,6 +34,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
         private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
+        private Mock<IMembershipRepository> _mockMembershipRepository;
         private const long ExpectedAccountId = 54564;
         private const string ExpectedPayeName = "Paye Scheme 1";
 
@@ -55,6 +56,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             _payeSchemeEventFactory = new Mock<IPayeSchemeEventFactory>();
 
             _refreshEmployerLevyService = new Mock<IRefreshEmployerLevyService>();
+            _mockMembershipRepository=new Mock<IMembershipRepository>();
 
             _addPayeToAccountCommandHandler = new AddPayeToAccountCommandHandler(
                 _validator.Object,
@@ -64,7 +66,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
                 _mediator.Object, 
                 _genericEventFactory.Object,
                 _payeSchemeEventFactory.Object,
-                _refreshEmployerLevyService.Object);
+                _refreshEmployerLevyService.Object,
+                _mockMembershipRepository.Object);
         }
 
         [Test]

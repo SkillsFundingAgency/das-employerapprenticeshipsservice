@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -35,9 +36,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IAccountEventFactory> _accountEventFactory;
         private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
+        private Mock<IMembershipRepository> _mockMembershipRepository;
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
         private const string ExpectedHashString = "123ADF23";
+        private const string CallerName = "Caller Full Name";
 
         [SetUp]
         public void Arrange()
@@ -61,6 +64,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _accountEventFactory = new Mock<IAccountEventFactory>();
 
             _refreshEmployerLevyService = new Mock<IRefreshEmployerLevyService>();
+            _mockMembershipRepository=new Mock<IMembershipRepository>();
+            _mockMembershipRepository.Setup(r => r.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(new MembershipView() { FirstName = "Caller", LastName = "Full Name" }));
 
             _handler = new CreateAccountCommandHandler(
                 _accountRepository.Object, 
@@ -71,7 +77,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 _hashingService.Object, 
                 _genericEventFactory.Object,
                 _accountEventFactory.Object,
-                _refreshEmployerLevyService.Object);
+                _refreshEmployerLevyService.Object,
+                _mockMembershipRepository.Object);
         }
 
         [Test]
@@ -249,7 +256,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<AccountCreatedMessage>(c=>c.AccountId.Equals(ExpectedAccountId))),Times.Once);
+            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<AccountCreatedMessage>(c=>c.HashedAccountId.Equals(ExpectedHashString))),Times.Once);
         }
     }
 }

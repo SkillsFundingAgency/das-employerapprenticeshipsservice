@@ -32,6 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
         private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<IMembershipRepository> _mockMembershipRepository;
 
         [SetUp]
         public void Arrange()
@@ -48,6 +49,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _payeSchemeEventFactory = new Mock<IPayeSchemeEventFactory>();
 
             _messagePublisher = new Mock<IMessagePublisher>();
+            _mockMembershipRepository=new Mock<IMembershipRepository>();
 
             _handler = new RemovePayeFromAccountCommandHandler(
                 _mediator.Object, 
@@ -56,7 +58,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
                 _hashingService.Object,
                 _genericEventFactory.Object,
                 _payeSchemeEventFactory.Object,
-                _messagePublisher.Object);
+                _messagePublisher.Object,
+                _mockMembershipRepository.Object);
         }
 
         [Test]

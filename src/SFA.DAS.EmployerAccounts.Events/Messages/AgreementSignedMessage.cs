@@ -11,15 +11,13 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 
         }
 
-        public AgreementSignedMessage(string hashedAccountId, long legalEntityId, long aggreementId, string providerName, string signedByName) :base(signedByName, hashedAccountId)
+        public AgreementSignedMessage(string hashedAccountId, long aggreementId, string providerName, string signedByName) :base(signedByName, hashedAccountId)
         {
-            LegalEntityId = legalEntityId;
             AgreementId = aggreementId;
             ProviderName = providerName;
         }
 
         public string ProviderName { get; }
-        public long LegalEntityId { get; }
         public long AgreementId { get; }  
     }
 }

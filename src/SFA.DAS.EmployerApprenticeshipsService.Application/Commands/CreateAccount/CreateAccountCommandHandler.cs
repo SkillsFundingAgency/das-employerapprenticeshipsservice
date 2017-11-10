@@ -6,7 +6,6 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
-//using SFA.DAS.EAS.Application.Notifications.CreateAgreementCreatedMessage;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -84,9 +83,13 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             await RefreshLevy(returnValue, emprefs);
 
-            await PublishAddPayeSchemeMessage(emprefs);
+            var caller = await _membershipRepository.GetCaller(returnValue.AccountId, message.ExternalUserId);
 
-            await PublishAccountCreatedMessage(returnValue.AccountId, message.ExternalUserId);
+            var signedByName = caller.FullName();
+
+            await PublishAddPayeSchemeMessage(emprefs, hashedAccountId, signedByName);
+
+            await PublishAccountCreatedMessage(hashedAccountId, message.ExternalUserId);
 
             await NotifyAccountCreated(hashedAccountId);
 
@@ -104,7 +107,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private async Task PublishAgreementCreatedMessage(string hashedAccountId, long legalEntityId, long employerAgreementId, string organisationName, string signedByName)
         {
-            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(hashedAccountId, legalEntityId, employerAgreementId, organisationName, signedByName));
+            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(hashedAccountId, employerAgreementId, organisationName, signedByName));
         }
 
         private async Task NotifyAccountCreated(string hashedAccountId)
@@ -135,11 +138,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             }
         }
 
-        private async Task PublishAddPayeSchemeMessage(IEnumerable<string> emprefs)
+        private async Task PublishAddPayeSchemeMessage(IEnumerable<string> emprefs, string hashedAccountId, string signedByName)
         {
             foreach (var empref in emprefs)
             {
-                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage(empref));
+                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage(empref, hashedAccountId, signedByName));
             }
         }
 

@@ -10,15 +10,13 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 
         }
 
-        public LegalEntityRemovedMessage(string hashedAccountId, long legalEntityId, long aggreementId, bool agreementSigned, string signedByName) : base(signedByName, hashedAccountId)
+        public LegalEntityRemovedMessage(string hashedAccountId,  long aggreementId, bool agreementSigned, string signedByName) : base(signedByName, hashedAccountId)
         {
-            LegalEntityId = legalEntityId;
             AgreementId = aggreementId;
             AgreementSigned = agreementSigned;
         }
 
         public string CompanyName { get; set; }
-        public long LegalEntityId { get; }
         public long AgreementId { get; }
         public bool AgreementSigned { get; }
     }

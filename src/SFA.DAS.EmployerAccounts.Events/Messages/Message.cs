@@ -2,9 +2,9 @@
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
-    public class Message
+    public abstract class Message
     {
-        public Message(string signedByName, string hashedAccountId)
+        protected Message(string signedByName, string hashedAccountId)
         {
             SignedByName = signedByName;
             HashedAccountId = hashedAccountId;
