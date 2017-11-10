@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.PAYE;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 {
