@@ -5,19 +5,21 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     [MessageGroup("legal_entity_removed")]
     public class LegalEntityRemovedMessage : Message
     {
-        public LegalEntityRemovedMessage():base(string.Empty, string.Empty)
+        public LegalEntityRemovedMessage()
         {
 
         }
 
-        public LegalEntityRemovedMessage(string hashedAccountId,  long aggreementId, bool agreementSigned, string signedByName) : base(signedByName, hashedAccountId)
+        public LegalEntityRemovedMessage(long accountId,  long aggreementId, bool agreementSigned, string signedByName, long legalEntityId) : base(signedByName, accountId)
         {
             AgreementId = aggreementId;
             AgreementSigned = agreementSigned;
+            LegalEntityId = legalEntityId;
         }
 
-        public string CompanyName { get; set; }
+        public string CompanyName { get;  }
         public long AgreementId { get; }
         public bool AgreementSigned { get; }
+        public long LegalEntityId { get;  }
     }
 }

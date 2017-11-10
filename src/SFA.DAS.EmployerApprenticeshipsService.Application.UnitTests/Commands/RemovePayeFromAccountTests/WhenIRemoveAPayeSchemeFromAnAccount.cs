@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.Interfaces;
@@ -50,6 +51,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
 
             _messagePublisher = new Mock<IMessagePublisher>();
             _mockMembershipRepository=new Mock<IMembershipRepository>();
+
+            _mockMembershipRepository.Setup(a => a.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(new MembershipView { FirstName = "fn", LastName = "ln" }));
 
             _handler = new RemovePayeFromAccountCommandHandler(
                 _mediator.Object, 

@@ -4,10 +4,10 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     public abstract class Message
     {
-        protected Message(string signedByName, string hashedAccountId)
+        protected Message(string signedByName=null, long accountId=0)
         {
             SignedByName = signedByName;
-            HashedAccountId = hashedAccountId;
+            AccountId = accountId;
             PostedDatedTime = DateTime.Now;
         }
 
@@ -15,6 +15,6 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 
         public DateTime PostedDatedTime { get; }
 
-        public string HashedAccountId { get; set; }
+        public long AccountId { get; set; }
     }
 }

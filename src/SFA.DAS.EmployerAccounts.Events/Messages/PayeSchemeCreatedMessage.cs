@@ -10,16 +10,16 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 
         }
 
-        public PayeSchemeCreatedMessage(string empRef, string hashedAccountId, string signedByName)
+        public PayeSchemeCreatedMessage(string empRef, long accountId, string signedByName)
         {
             EmpRef = empRef;
-            HashedAccountId = hashedAccountId;
+            AccountId = accountId;
             SignedByName = signedByName;
         }
 
         public string EmpRef { get; }
 
-        public string HashedAccountId { get; }
+        public long AccountId { get; }
 
         public string SignedByName { get; set; }
     }

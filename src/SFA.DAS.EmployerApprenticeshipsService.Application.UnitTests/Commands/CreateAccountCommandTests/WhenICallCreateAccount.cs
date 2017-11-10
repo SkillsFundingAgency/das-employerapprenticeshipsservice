@@ -39,8 +39,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IMembershipRepository> _mockMembershipRepository;
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
-        private const string ExpectedHashString = "123ADF23";
-        private const string CallerName = "Caller Full Name";
+        private const string ExpectedHashString = "1234hash";
 
         [SetUp]
         public void Arrange()
@@ -65,7 +64,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 
             _refreshEmployerLevyService = new Mock<IRefreshEmployerLevyService>();
             _mockMembershipRepository=new Mock<IMembershipRepository>();
-            _mockMembershipRepository.Setup(r => r.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
+            _mockMembershipRepository.Setup(r => r.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(new MembershipView() { FirstName = "Caller", LastName = "Full Name" }));
 
             _handler = new CreateAccountCommandHandler(
@@ -79,20 +78,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 _accountEventFactory.Object,
                 _refreshEmployerLevyService.Object,
                 _mockMembershipRepository.Object);
-        }
-
-        [Test]
-        public async Task ThenIfThereAreMoreThanOneEmprefPassedThenTheyAreAddedToTheAccount()
-        {
-            //Arrange
-            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active" };
-
-            //Act
-            await _handler.Handle(createAccountCommand);
-
-            //Assert
-            _accountRepository.Verify(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), "123/abc", "123rd", "45YT", "active", It.IsAny<string>(), It.IsAny<short>(), It.IsAny<short?>(), It.IsAny<string>()), Times.Once);
-            _accountRepository.Verify(x => x.AddPayeToAccount(It.Is<Paye>(c => c.AccountId.Equals(ExpectedAccountId) && c.EmpRef.Equals("456/123") && c.AccessToken.Equals("123rd") && c.RefreshToken.Equals("45YT"))), Times.Once);
         }
 
         [Test]
@@ -256,7 +241,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<AccountCreatedMessage>(c=>c.HashedAccountId.Equals(ExpectedHashString))),Times.Once);
+            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<AccountCreatedMessage>(c=>c.AccountId.Equals(ExpectedAccountId))),Times.Once);
         }
     }
 }

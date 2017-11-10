@@ -5,12 +5,12 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     [MessageGroup("user_invited")]
     public class UserInvitedMessage : Message
     {
-        public UserInvitedMessage() : base(string.Empty, string.Empty)
+        public UserInvitedMessage()
         {
 
         }
 
-        public UserInvitedMessage(string hashedAccountId, string signedByName) : base(signedByName, hashedAccountId)
+        public UserInvitedMessage(long accountId, string signedByName) : base(signedByName, accountId)
         {
 
         }

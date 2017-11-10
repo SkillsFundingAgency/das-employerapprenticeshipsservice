@@ -13,6 +13,7 @@ using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.EmployerAccounts.Events.Messages;
@@ -57,6 +58,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
 
             _refreshEmployerLevyService = new Mock<IRefreshEmployerLevyService>();
             _mockMembershipRepository=new Mock<IMembershipRepository>();
+            _mockMembershipRepository.Setup(a => a.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(new MembershipView()));
 
             _addPayeToAccountCommandHandler = new AddPayeToAccountCommandHandler(
                 _validator.Object,
