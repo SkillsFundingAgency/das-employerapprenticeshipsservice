@@ -10,10 +10,10 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
---This script should update all the EF values only if the column has just been added, which is when all the values are null 
+--This script should update all the EF values only if the column has just been added, which is when the EF value is null
+--it will never be null normally because processing levey declarations fills it in
 
-if 0 = (select count(*) from employer_financial.TransactionLine
-where EnglishFraction is NULL)
+
 	UPDATE
 	tl
 	SET
@@ -24,3 +24,4 @@ where EnglishFraction is NULL)
 	ON tl.EmpRef = td.EmpRef
 	AND tl.AccountId = td.AccountId
 	AND tl.SubmissionId = td.SubmissionId
+	AND tl.EnglishFraction Is Null

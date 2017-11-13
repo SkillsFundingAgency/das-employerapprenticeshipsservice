@@ -1,7 +1,6 @@
 ﻿using System;
 using MediatR;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Models.Organisation;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 {

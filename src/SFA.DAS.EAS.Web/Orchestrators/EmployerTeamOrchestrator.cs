@@ -30,6 +30,7 @@ using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
 
+
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
@@ -66,6 +67,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var tasksResponse =
                     await _mediator.SendAsync(new GetAccountTasksQuery {AccountId = accountResponse.Account.Id});
 
+                var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0).ToList() ?? new List<AccountTask>();
+
                 var userResponse =
                     await _mediator.SendAsync(
                         new GetTeamMemberQuery {HashedAccountId = accountId, TeamMemberId = externalUserId});
@@ -91,7 +94,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
                     ShowWizard = showWizard,
                     ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
-					Tasks = tasksResponse?.Tasks ?? new List<AccountTask>()
+					Tasks = tasks
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
