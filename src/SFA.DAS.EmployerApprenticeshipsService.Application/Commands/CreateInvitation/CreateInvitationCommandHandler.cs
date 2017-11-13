@@ -133,12 +133,12 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 }
             });
 
-            await PublishAccountCreatedMessage(caller.AccountId, caller.FullName());
+            await PublishAccountCreatedMessage(caller.AccountId, caller.FullName(), message.Name);
         }
 
-        private async Task PublishAccountCreatedMessage(long accountId, string signedByName)
+        private async Task PublishAccountCreatedMessage(long accountId, string signedByName, string personInvited)
         {
-            await _messagePublisher.PublishAsync(new UserInvitedMessage(accountId, signedByName));
+            await _messagePublisher.PublishAsync(new UserInvitedMessage(personInvited, accountId, signedByName));
         }
     }
 }

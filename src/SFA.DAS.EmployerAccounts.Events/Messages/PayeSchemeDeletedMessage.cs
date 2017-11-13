@@ -12,11 +12,11 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 
         public PayeSchemeDeletedMessage(string empRef, string companyName, long accountId, string signedByName) : base(signedByName, accountId)
         {
-            PayeSchemeRef = empRef;
+            EmpRef = empRef;
             CompanyName = companyName;
         }
 
-        public string PayeSchemeRef { get; }
+        public string EmpRef { get; }
 
         public string CompanyName { get; }
     }

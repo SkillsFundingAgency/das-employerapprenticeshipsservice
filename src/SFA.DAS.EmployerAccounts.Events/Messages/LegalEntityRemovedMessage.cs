@@ -17,7 +17,6 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
             LegalEntityId = legalEntityId;
         }
 
-        public string CompanyName { get;  }
         public long AgreementId { get; }
         public bool AgreementSigned { get; }
         public long LegalEntityId { get;  }
