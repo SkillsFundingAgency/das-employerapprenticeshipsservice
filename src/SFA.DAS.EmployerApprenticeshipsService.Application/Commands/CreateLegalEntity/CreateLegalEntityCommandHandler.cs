@@ -65,7 +65,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
             await NotifyLegalEntityCreated(message.HashedAccountId, agreementView.LegalEntityId);
 
-            await PublishAgreementCreatedMessage(_hashingService.DecodeValue(message.HashedAccountId),
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+
+            await PublishAgreementCreatedMessage(accountId,
                 agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId);
 
             return new CreateLegalEntityCommandResponse
