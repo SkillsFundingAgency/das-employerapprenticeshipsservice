@@ -9,6 +9,8 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     {
         public string PersonInvited { get; }
         public string InvitedByName { get; }
+        public UserInvitedMessage()
+        { }
 
         public UserInvitedMessage(string personInvited, long accountId, string invitedByName) : base(accountId)
         {

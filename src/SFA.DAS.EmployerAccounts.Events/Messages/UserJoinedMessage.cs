@@ -9,6 +9,8 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     {
         public string WhoJoinedName { get; }
 
+        public UserJoinedMessage()
+        { }
 
         public UserJoinedMessage(long accountId, string whoJoinedName) : base(accountId)
         {

@@ -10,6 +10,9 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     {
         public string CreatedByName { get; }
 
+        public AccountCreatedMessage()
+        {}
+
         public AccountCreatedMessage(long accountId, string createdByName) : base(accountId)
         {
             CreatedByName = createdByName;

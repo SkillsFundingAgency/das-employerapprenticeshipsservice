@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(model);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<RemovePayeFromAccountCommand>(c=>c.HashedAccountId.Equals(hashedId) && c.PayeRef.Equals(payeRef) && c.UserId.Equals(userRef) && c.CompanyName== SchemeName)), Times.Once);
+            _mediator.Verify(x=>x.SendAsync(It.Is<RemovePayeFromAccountCommand>(c=>c.HashedAccountId.Equals(hashedId) && c.PayeRef.Equals(payeRef) && c.UserId.Equals(userRef) && c.CompanyName.Equals(SchemeName))), Times.Once);
             
         }
 

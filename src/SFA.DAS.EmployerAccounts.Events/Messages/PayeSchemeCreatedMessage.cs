@@ -10,6 +10,9 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public string EmpRef { get; }
         public string CreatedByName { get; }
 
+        public PayeSchemeCreatedMessage()
+        { }
+
         public PayeSchemeCreatedMessage(string payeSchemeRef, long accountId, string createdByName) : base(accountId)
         {
             EmpRef = payeSchemeRef;

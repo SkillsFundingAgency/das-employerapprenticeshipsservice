@@ -10,6 +10,8 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public string EmpRef { get; }
         public string OrganisationName { get; }
         public string DeletedByName { get; }
+        public PayeSchemeDeletedMessage()
+        { }
 
         public PayeSchemeDeletedMessage(string empRef, string organisationName, long accountId, string deletedByName) : base(accountId)
         {
