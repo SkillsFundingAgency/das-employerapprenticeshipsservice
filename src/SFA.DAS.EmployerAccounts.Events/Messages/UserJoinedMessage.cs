@@ -5,14 +5,12 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     [MessageGroup("user_joined")]
     public class UserJoinedMessage : Message
     {
-        public UserJoinedMessage()
+        public string NameOfUserWhoJoined { get; }
+
+
+        public UserJoinedMessage(long accountId, string nameOfUserWhoJoined) : base(accountId)
         {
-
-        }
-
-        public UserJoinedMessage(long accountId, string signedByName) : base(signedByName, accountId)
-        {
-
+            NameOfUserWhoJoined = nameOfUserWhoJoined;
         }
 
     }
