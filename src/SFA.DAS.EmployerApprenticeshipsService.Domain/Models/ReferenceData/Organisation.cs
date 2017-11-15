@@ -4,7 +4,7 @@ using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Domain.Models.ReferenceData
 {
-    public class Organisation
+    public class OrganisationName
     {
         public string Name { get; set; }
         public OrganisationType Type { get; set; }

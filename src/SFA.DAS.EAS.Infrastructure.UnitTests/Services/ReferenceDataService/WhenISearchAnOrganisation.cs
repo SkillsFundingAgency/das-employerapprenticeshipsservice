@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
 
             //Assert
             actual.Data.FirstOrDefault().ShouldBeEquivalentTo(_expectedOrganisation);
-            Assert.IsAssignableFrom<PagedResponse<Organisation>>(actual);
+            Assert.IsAssignableFrom<PagedResponse<OrganisationName>>(actual);
         }
 
         [Test]
@@ -76,9 +76,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             //Arrange
             var expectedSearchTerm = "Some Org";
             var searchKey = $"SearchKey_{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(expectedSearchTerm))}";
-            _cacheProvider.SetupSequence(c => c.Get<List<Organisation>>(searchKey))
+            _cacheProvider.SetupSequence(c => c.Get<List<OrganisationName>>(searchKey))
                 .Returns(null)
-                .Returns(new List<Organisation> { new Organisation() });
+                .Returns(new List<OrganisationName> { new OrganisationName() });
 
             //Act
             await _referenceDataService.SearchOrganisations(expectedSearchTerm);
@@ -86,8 +86,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
 
             //Assert
             _apiClient.Verify(x => x.SearchOrganisations(expectedSearchTerm, 500), Times.Once);
-            _cacheProvider.Verify(x => x.Get<List<Organisation>>(searchKey), Times.Exactly(2));
-            _cacheProvider.Verify(x => x.Set(searchKey, It.Is<List<Organisation>>(c => c != null), It.Is<TimeSpan>(c => c.Minutes.Equals(15))), Times.Once);
+            _cacheProvider.Verify(x => x.Get<List<OrganisationName>>(searchKey), Times.Exactly(2));
+            _cacheProvider.Verify(x => x.Set(searchKey, It.Is<List<OrganisationName>>(c => c != null), It.Is<TimeSpan>(c => c.Minutes.Equals(15))), Times.Once);
         }
 
         [Test]

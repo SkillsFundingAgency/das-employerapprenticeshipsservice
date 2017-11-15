@@ -37,8 +37,8 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))
                 validationResult.AddError(nameof(item.ExternalUserId));
 
-            if (string.IsNullOrWhiteSpace(item.CompanyName))
-                validationResult.AddError(nameof(item.CompanyName));
+            if (string.IsNullOrWhiteSpace(item.OrganisationName))
+                validationResult.AddError(nameof(item.OrganisationName));
 
             if (item.SignedDate == default(DateTime))
                 validationResult.AddError(nameof(item.SignedDate));

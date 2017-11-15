@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IMembershipRepository> _mockMembershipRepository;
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
-        private const string ExpectedHashString = "1234hash";
+        private const string ExpectedHashString = "123ADF23";
 
         [SetUp]
         public void Arrange()

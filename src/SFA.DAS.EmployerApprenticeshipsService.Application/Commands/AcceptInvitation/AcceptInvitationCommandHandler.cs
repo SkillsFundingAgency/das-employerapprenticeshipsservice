@@ -83,7 +83,7 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
                 AffectedEntity = new Entity { Type = "Invitation", Id = message.Id.ToString() }
             });
 
-            await PublishUserJoinedMessage(existing.AccountId, $"{user.FirstName} {user.LastName}");
+            await PublishUserJoinedMessage(existing.AccountId, user.FullName());
         }
 
         private async Task PublishUserJoinedMessage(long accountId, string signedByName)

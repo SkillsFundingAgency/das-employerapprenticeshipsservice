@@ -7,15 +7,15 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     [MessageGroup("agreement_created")]
     public class AgreementCreatedMessage : Message
     {
-        public string CompanyName { get; }
+        public string OrganisationName { get; }
         public long AgreementId { get; }
         public long LegalEntityId { get; }
         public string CreatedByName { get; }
 
-        public AgreementCreatedMessage(long accountId, long aggreementId, string companyName, string createdByName, long legalEntityId) : base(accountId)
+        public AgreementCreatedMessage(long accountId, long aggreementId, string organisationName, string createdByName, long legalEntityId) : base(accountId)
         {
             AgreementId = aggreementId;
-            CompanyName = companyName;
+            OrganisationName = organisationName;
             LegalEntityId = legalEntityId;
             CreatedByName = createdByName;
         }
