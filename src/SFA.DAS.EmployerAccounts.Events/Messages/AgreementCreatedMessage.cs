@@ -3,6 +3,7 @@ using SFA.DAS.Messaging.Attributes;
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
+    [Serializable]
     [MessageGroup("agreement_created")]
     public class AgreementCreatedMessage : Message
     {

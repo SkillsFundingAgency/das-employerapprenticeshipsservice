@@ -1,7 +1,9 @@
-﻿using SFA.DAS.Messaging.Attributes;
+﻿using System;
+using SFA.DAS.Messaging.Attributes;
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
+    [Serializable]
     [MessageGroup("user_invited")]
     public class UserInvitedMessage : Message
     {

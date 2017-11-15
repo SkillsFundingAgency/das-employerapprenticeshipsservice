@@ -1,7 +1,9 @@
-﻿using SFA.DAS.Messaging.Attributes;
+﻿using System;
+using SFA.DAS.Messaging.Attributes;
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
+    [Serializable]
     [MessageGroup("legal_entity_removed")]
     public class LegalEntityRemovedMessage : Message
     {

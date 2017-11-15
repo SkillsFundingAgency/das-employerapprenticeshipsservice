@@ -2,6 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
+    [Serializable]
     public abstract class Message
     {
 

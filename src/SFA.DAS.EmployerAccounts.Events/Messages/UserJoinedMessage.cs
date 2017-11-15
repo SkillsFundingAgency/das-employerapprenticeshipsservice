@@ -1,16 +1,18 @@
-﻿using SFA.DAS.Messaging.Attributes;
+﻿using System;
+using SFA.DAS.Messaging.Attributes;
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
+    [Serializable]
     [MessageGroup("user_joined")]
     public class UserJoinedMessage : Message
     {
-        public string NameOfUserWhoJoined { get; }
+        public string WhoJoinedName { get; }
 
 
-        public UserJoinedMessage(long accountId, string nameOfUserWhoJoined) : base(accountId)
+        public UserJoinedMessage(long accountId, string whoJoinedName) : base(accountId)
         {
-            NameOfUserWhoJoined = nameOfUserWhoJoined;
+            WhoJoinedName = whoJoinedName;
         }
 
     }
