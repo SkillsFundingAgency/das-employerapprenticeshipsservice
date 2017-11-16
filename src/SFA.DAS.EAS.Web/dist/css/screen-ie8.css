@@ -5284,6 +5284,36 @@ h2 .float-right {
   display: none;
 }
 
+#item-list {
+  position: relative;
+  padding-left: 1px;
+  border-left: 1px solid #bfc1c3;
+  margin-left: 10px;
+}
+
+#item-list .item {
+  position: relative;
+  text-align: left;
+  display: block;
+  padding: 0 18px;
+}
+
+#item-list .item .item-label {
+  position: relative;
+  color: #6f777b;
+}
+
+#item-list .item .item-label:before {
+  content: '';
+  position: absolute;
+  top: 0px;
+  left: -26px;
+  width: 13px;
+  height: 13px;
+  border-radius: 100%;
+  background: #bfc1c3;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;

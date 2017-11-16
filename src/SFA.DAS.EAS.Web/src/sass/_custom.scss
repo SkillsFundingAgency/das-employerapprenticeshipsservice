@@ -625,6 +625,39 @@ body {
     display:none;
 }
 
+//Horizontal line with bulleted list
+
+#item-list {
+  position: relative;
+  padding-left: 1px;
+  border-left: 1px solid $border-colour;
+  margin-left:10px;
+      .item {
+          position: relative;    
+          text-align: left;
+          display: block;
+          padding: 0 18px;  
+            .item-label {
+              position: relative;      
+              color: $secondary-text-colour;
+            }  
+      .item-label:before {
+              content: ''; 
+              position: absolute;
+              top: 0px;
+              left: -26px;
+              width: 13px;
+              height: 13px;
+              border-radius: 100%;
+              background: $border-colour;
+            }
+        }
+}
+
+
+
+
+
 
 
 //all mobile media query breakpoints
