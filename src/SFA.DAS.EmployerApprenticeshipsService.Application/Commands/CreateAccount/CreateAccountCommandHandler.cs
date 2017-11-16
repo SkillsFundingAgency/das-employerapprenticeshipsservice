@@ -83,11 +83,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
 
-            var signedByName = caller.FullName();
+            var createdByName = caller.FullName();
 
-            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, signedByName);
+            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName);
 
-            await PublishAccountCreatedMessage(createAccountResult.AccountId, message.ExternalUserId);
+            await PublishAccountCreatedMessage(createAccountResult.AccountId, createdByName);
 
             await NotifyAccountCreated(hashedAccountId);
 
@@ -103,9 +103,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         }
 
 
-        private async Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string signedByName)
+        private async Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string createdByName)
         {
-            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, employerAgreementId, organisationName, signedByName, legalEntityId));
+            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, employerAgreementId, organisationName, createdByName, legalEntityId));
         }
 
         private async Task NotifyAccountCreated(string hashedAccountId)
@@ -127,14 +127,14 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             await _refreshEmployerLevyService.QueueRefreshLevyMessage(returnValue.AccountId, empref);
         }
 
-        private async Task PublishAddPayeSchemeMessage(string empref, long accountId, string signedByName)
+        private async Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName)
         {
-                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage(empref, accountId, signedByName));
+                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage(empref, accountId, createdByName));
         }
 
-        private async Task PublishAccountCreatedMessage(long accountId, string signedByName)
+        private async Task PublishAccountCreatedMessage(long accountId, string createdByName)
         {
-            await _messagePublisher.PublishAsync(new AccountCreatedMessage(accountId, signedByName));
+            await _messagePublisher.PublishAsync(new AccountCreatedMessage(accountId, createdByName));
         }
 
         private async Task<User> GetUser(CreateAccountCommand message)

@@ -92,9 +92,9 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
         }
 
 
-        private async Task QueuePayeRemovedMessage(string payeRef, long accountId, string companyName, string signedByName)
+        private async Task QueuePayeRemovedMessage(string payeRef, long accountId, string companyName, string deletedByName)
         {
-            await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage(payeRef, companyName, accountId, signedByName));
+            await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage(payeRef, companyName, accountId, deletedByName));
         }
 
         private async Task AddAuditEntry(string userId, string payeRef, string accountId)
