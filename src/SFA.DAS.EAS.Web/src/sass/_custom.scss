@@ -632,15 +632,22 @@ body {
   padding-left: 1px;
   border-left: 1px solid $border-colour;
   margin-left:10px;
+  margin-top:10px;
       .item {
           position: relative;    
           text-align: left;
           display: block;
           padding: 0 18px;  
+          margin-bottom:40px;
             .item-label {
               position: relative;      
               color: $secondary-text-colour;
             }  
+            .item-description{
+                .grey-text{color:$secondary-text-colour;}
+                p{margin-bottom:5px;}
+             
+            }
       .item-label:before {
               content: ''; 
               position: absolute;
@@ -652,6 +659,21 @@ body {
               background: $border-colour;
             }
         }
+      .all-activity{
+          margin-bottom:10px;
+          .item-label{
+             a{
+               padding-top:10px;
+               display:block;
+             }
+          }
+                .item-label:before {
+                    top: 15px;
+                    width: 20px;
+                    height: 20px;
+                    left: -29px;
+                }
+      }
 }
 
 
