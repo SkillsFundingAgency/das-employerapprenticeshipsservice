@@ -14,6 +14,7 @@ IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%')
 	BEGIN
 	   RAISERROR('Server %s is in development - seeding test data.',10,1,@@servername) WITH NOWAIT
 	   :r .\SeedData.sql
+	   :r .\EnglishFraction.sql
 	END
 ELSE
 	BEGIN

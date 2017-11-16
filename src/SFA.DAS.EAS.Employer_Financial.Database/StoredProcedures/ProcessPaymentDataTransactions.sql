@@ -11,14 +11,15 @@ select mainUpdate.* from
             DATEFROMPARTS(DatePart(yyyy,GETDATE()),DatePart(MM,GETDATE()),DATEPART(dd,GETDATE())) as DateAdded,
             null as submissionId,
             Max(pe.CompletionDateTime) as TransactionDate,
-            3 as TransactionType,
+            3 as TransactionType,			
             null as LevyDeclared,
             Sum(ISNULL(p.Amount, 0)) * -1 Amount,
             null as empref,
             x.PeriodEnd,
             x.UkPrn,
             Sum(ISNULL(pco.Amount, 0)) * -1 as SfaCoInvestmentAmount,
-            Sum(ISNULL(pci.Amount, 0)) * -1 as EmployerCoInvestmentAmount
+            Sum(ISNULL(pci.Amount, 0)) * -1 as EmployerCoInvestmentAmount,
+			0 as EnglishFraction
         FROM 
             employer_financial.[Payment] x
 		inner join [employer_financial].[PeriodEnd] pe 

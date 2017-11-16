@@ -20,8 +20,9 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 
 namespace SFA.DAS.EAS.Api.DependencyResolution {
+    using Messaging.AzureServiceBus.StructureMap;
     using StructureMap;
-	
+
     public static class IoC {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
         public static IContainer Initialize() {
@@ -29,7 +30,7 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
             {
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
                 c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
-                c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
+                c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
                 c.AddRegistry<DefaultRegistry>();
             });
         }

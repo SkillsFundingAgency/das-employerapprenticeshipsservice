@@ -190,25 +190,41 @@
     </div>
 }
 
-@*@section pageSpecificJS{
-    <script id="ss-embed-396029">
-        (function (d, w) {
-            var ss = d.createElement('script'), parent = d.getElementsByClassName("survey");
-            ss.type = 'text/javascript';
-            ss.async = true;
-            ss.src = ('https:' === d.location.protocol ? 'https://' : 'http://') + 'www.smartsurvey.co.uk/s/r/embed.aspx?i=350750&c=396029';
+@section pageSpecificJS{
+    <script language="javascript" type="text/javascript" src="~/bundles/modernizr"></script>
+    
+    <script language="javascript" type="text/javascript">
+        (function() {
+            if (!Modernizr.details) {
+                //the details element is not supported in the browser (typically IE and edge) so we add some event hooks to give similar behaviour
+                $("details").each(function (index, element) {
+                    $("summary", element).on('click',
+                        function () {
+                            var headingElement = $(this);
+                            $(this).siblings("div").toggle("fast", function() {
+                                    var arrowElement = $('span.arrow', headingElement);
+                                    if ($('span.arrow', headingElement).length === 0) {
+                                        arrowElement = $("<span />").addClass('arrow arrowExpanded');
+                                        headingElement.prepend(arrowElement);
+                                    } else {
+                                        if (arrowElement.hasClass('arrowCollapsed')) {
+                                            arrowElement.removeClass('arrowCollapsed').addClass('arrowExpanded');
+                                        } else {
+                                            arrowElement.removeClass('arrowExpanded').addClass('arrowCollapsed');
+                                        }
+                                    }
+                            });
+                        });
 
-            ss.addEventListener('load', function(e) {
-                var iframe = d.getElementsByTagName('iframe');
-                parent[0].appendChild(iframe[0]);
-                setTimeout(function() {
-                        $('html,body').scrollTop(0);
-                    },
-                    840);
-            });
-            
-            d.body.appendChild(ss);
-            //s.parentNode.insertBefore(ss, s);
-        })(document, window);
-    </script>              
-}*@
+                    $("summary", element).each(function(index, element) {
+                        var headingElement = $(this);
+                        $(this).siblings("div").hide("fast", function() {
+                            var arrowElement = $("<span />").addClass('arrow arrowCollapsed');
+                           headingElement.prepend(arrowElement);
+                        });
+                    });
+                });
+            }
+        })();
+    </script>
+}

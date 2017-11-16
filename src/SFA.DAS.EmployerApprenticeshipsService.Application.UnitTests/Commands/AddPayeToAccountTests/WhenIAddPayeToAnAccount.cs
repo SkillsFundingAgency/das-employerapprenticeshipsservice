@@ -17,7 +17,9 @@ using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.Interfaces;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
 {

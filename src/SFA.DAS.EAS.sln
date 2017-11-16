@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Web", "SFA.DAS.EAS.Web\SFA.DAS.EAS.Web.csproj", "{65DB60B1-80F0-432C-926E-7A6DD02A5645}"
 EndProject
@@ -95,6 +95,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests", "SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests\SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests.csproj", "{4F4834B9-83CD-4F67-B6D9-12B691F801D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Events", "SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj", "{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureConfiguration", "AzureConfiguration", "{68328FF1-53F2-4737-A983-7E2B67179E17}"
+	ProjectSection(SolutionItems) = preProject
+		AzureTopicConfigurationStrucuture.json = AzureTopicConfigurationStrucuture.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -263,5 +268,8 @@ Global
 		{BEFF50E9-EED9-4DD2-A5F3-A707DCD99A17} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{255E60DE-69C0-42A8-8D8B-997A368BE7CA} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{4F4834B9-83CD-4F67-B6D9-12B691F801D0} = {255E60DE-69C0-42A8-8D8B-997A368BE7CA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7BB69664-F8C0-4231-9940-51CE90904197}
 	EndGlobalSection
 EndGlobal

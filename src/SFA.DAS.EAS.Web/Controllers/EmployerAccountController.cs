@@ -9,6 +9,8 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Web.Helpers;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -25,19 +27,23 @@ namespace SFA.DAS.EAS.Web.Controllers
             : base(owinWrapper, featureToggle,multiVariantTestingService,flashMessage)
         {
             if (employerAccountOrchestrator == null)
+            {
                 throw new ArgumentNullException(nameof(employerAccountOrchestrator));
+            }
 
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
         }
         
+        // Not sure if this is used anymore, leaving here for now to see if it breaks when the automated tests are run
+        // the redirect won't go anywhere so if it is called from somewhere we should expect a 404
         [HttpGet]
         [Route("selectEmployer")]
         public ActionResult SelectEmployer()
         {
             _employerAccountOrchestrator.DeleteCookieData(HttpContext);
 
-            return RedirectToAction("AddOrganisation", "EmployerAccountOrganisation");
+            return RedirectToAction(ControllerConstants.AddOrganisationViewName, ControllerConstants.OrganisationSharedControllerName);
 
         }
 
@@ -50,7 +56,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Data = new GatewayInformViewModel
                 {
                     BreadcrumbDescription = "Back to Your User Profile",
-                    ConfirmUrl = Url.Action("Gateway", "EmployerAccount"),
+                    ConfirmUrl = Url.Action(ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName),
                 },
              
             };
@@ -69,7 +75,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("gateway")]
         public async Task<ActionResult> Gateway()
         {
-            return Redirect(await _employerAccountOrchestrator.GetGatewayUrl(Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme)));
+            return Redirect(await _employerAccountOrchestrator.GateWayUrlHelper(ControllerConstants.GateWayResponseActionName, ControllerConstants.EmployerAccountControllerName, HttpContext.Request.Url.Scheme, Url));
         }
 
         [Route("gatewayResponse")]
@@ -79,7 +85,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 _logger.Info("Starting processing gateway response");
 
-                var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme), System.Web.HttpContext.Current?.Request.QueryString);
+                var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params[ControllerConstants.CodeKeyName], Url.Action(ControllerConstants.GateWayResponseActionName, ControllerConstants.EmployerAccountControllerName, null, Request.Url.Scheme), System.Web.HttpContext.Current?.Request.QueryString);
                 if (response.Status != HttpStatusCode.OK)
                 {
                     _logger.Warn($"Gateway response does not indicate success. Status = {response.Status}.");
@@ -87,10 +93,10 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                     AddFlashMessageToCookie(response.FlashMessage);
                     
-                    return RedirectToAction("GatewayInform");
+                    return RedirectToAction(ControllerConstants.GatewayInformActionName);
                 }
 
-                var email = OwinWrapper.GetClaimValue("email");
+                var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
                 _logger.Info($"Gateway response is for user {email}");
 
                 var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
@@ -106,7 +112,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 _employerAccountOrchestrator.UpdateCookieData(HttpContext, enteredData);
 
                 _logger.Info("Finished processing gateway response");
-                return RedirectToAction("Summary");
+                return RedirectToAction(ControllerConstants.SummaryActionName);
             }
             catch (Exception ex)
             {
@@ -135,7 +141,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("create")]
         public ActionResult Create()
         {
-            return RedirectToAction("Summary");
+            return RedirectToAction(ControllerConstants.SummaryActionName);
         }
 
         [HttpPost]
@@ -146,7 +152,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
             if (enteredData == null)
-                return RedirectToAction("SelectEmployer", "EmployerAccount");
+                return RedirectToAction(ControllerConstants.SelectEmployerActionName, ControllerConstants.EmployerAccountControllerName);
 
             var request = new CreateAccountViewModel
             {
@@ -171,17 +177,17 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 response.Status = HttpStatusCode.OK;
                 response.FlashMessage = new FlashMessageViewModel { Headline = "There was a problem creating your account" };
-                return RedirectToAction("summary");
+                return RedirectToAction(ControllerConstants.SummaryActionName);
             }
 
-            return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
         [HttpGet]
         [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(string hashedAccountId)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
             var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
             return View(vm);
         }
@@ -191,7 +197,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
             var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, userIdClaim);
 
             if (response.Status == HttpStatusCode.OK)
@@ -205,7 +211,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 AddFlashMessageToCookie(flashmessage);
                 
-                return RedirectToAction("Index", "EmployerTeam");
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName);
             }
 
             var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>();
@@ -224,7 +230,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private string GetUserId()
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
             return userIdClaim ?? "";
         }
 

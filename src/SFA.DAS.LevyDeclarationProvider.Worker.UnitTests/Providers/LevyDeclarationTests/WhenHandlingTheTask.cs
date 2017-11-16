@@ -17,6 +17,7 @@ using SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.FileSystem;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclarationTests
@@ -26,7 +27,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
         private const int ExpectedAccountId = 123456;
         private const string ExpectedPayeRef = "YHG/123LJH";
         private LevyDeclaration _levyDeclaration;
-        private Mock<IPollingMessageReceiver> _pollingMessageReceiver;
+        private Mock<IMessageSubscriberFactory> _messageSubscriberFactory;
+        private Mock<IMessageSubscriber<EmployerRefreshLevyQueueMessage>> _messageSubscriber;
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
         private Mock<IDasAccountService> _dasAccountService;
@@ -41,8 +43,13 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
 
             ConfigurationManager.AppSettings["DeclarationsEnabled"] = "both";
 
-            _pollingMessageReceiver = new Mock<IPollingMessageReceiver>();
-            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>()).
+            _messageSubscriberFactory = new Mock<IMessageSubscriberFactory>();
+            _messageSubscriber = new Mock<IMessageSubscriber<EmployerRefreshLevyQueueMessage>>();
+
+            _messageSubscriberFactory.Setup(x => x.GetSubscriber<EmployerRefreshLevyQueueMessage>())
+                .Returns(_messageSubscriber.Object);
+
+            _messageSubscriber.Setup(x => x.ReceiveAsAsync()).
                 ReturnsAsync(new FileSystemMessage<EmployerRefreshLevyQueueMessage>(stubDataFile, stubDataFile,
                 new EmployerRefreshLevyQueueMessage { AccountId = ExpectedAccountId, PayeRef = ExpectedPayeRef})).Callback(() => { _cancellationTokenSource.Cancel(); });
 
@@ -59,7 +66,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
 
             _logger = new Mock<ILog>();
 
-            _levyDeclaration = new LevyDeclaration(_pollingMessageReceiver.Object, _mediator.Object, _logger.Object, _dasAccountService.Object);
+            _levyDeclaration = new LevyDeclaration(_messageSubscriberFactory.Object, _mediator.Object, _logger.Object, _dasAccountService.Object);
         }
 
         [Test]
@@ -69,7 +76,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             await _levyDeclaration.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
-            _pollingMessageReceiver.Verify(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>(), Times.Once);
+            _messageSubscriber.Verify(x => x.ReceiveAsAsync(), Times.Once);
         }
 
         
@@ -78,7 +85,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
         {
             //Arrange
             var mockFileMessage = new Mock<Message<EmployerRefreshLevyQueueMessage>>();
-            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>())
+            _messageSubscriber.Setup(x => x.ReceiveAsAsync())
                                    .ReturnsAsync(mockFileMessage.Object)
                                    .Callback(() => { _cancellationTokenSource.Cancel(); });
 
@@ -97,7 +104,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             ConfigurationManager.AppSettings["DeclarationsEnabled"] = "none";
             var mockFileMessage = new Mock<Message<EmployerRefreshLevyQueueMessage>> {DefaultValue = DefaultValue.Empty};
 
-            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>())
+            _messageSubscriber.Setup(x => x.ReceiveAsAsync())
                                    .ReturnsAsync(mockFileMessage.Object)
                                    .Callback(() => { _cancellationTokenSource.Cancel(); });
 

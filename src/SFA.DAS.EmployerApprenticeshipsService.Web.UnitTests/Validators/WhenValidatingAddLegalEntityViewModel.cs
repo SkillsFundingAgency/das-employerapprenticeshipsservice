@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Validators;
-using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Validators
 {

@@ -4,43 +4,44 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
 using SFA.DAS.EAS.Application.Messages;
-using SFA.DAS.Messaging;
-using SFA.DAS.Messaging.Attributes;
+using SFA.DAS.Messaging.AzureServiceBus.Attributes;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
 {
+    [TopicSubscription("MA_PaymentDataProcessor")]
     public class PaymentDataProcessor : IPaymentDataProcessor
     {
-        [QueueName]
-        public string refresh_payments { get; set; }
-
-        private readonly IPollingMessageReceiver _pollingMessageReceiver;
+        private readonly IMessageSubscriberFactory _subscriberFactory;
         private readonly IMediator _mediator;
         private readonly ILog _logger;
 
-        public PaymentDataProcessor(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator, ILog logger)
+        public PaymentDataProcessor(IMessageSubscriberFactory subscriberFactory, IMediator mediator, ILog logger)
         {
-            _pollingMessageReceiver = pollingMessageReceiver;
+            _subscriberFactory = subscriberFactory;
             _mediator = mediator;
             _logger = logger;
         }
 
         public async Task RunAsync(CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            using (var subscriber = _subscriberFactory.GetSubscriber<PaymentProcessorQueueMessage>())
             {
-                var message = await _pollingMessageReceiver.ReceiveAsAsync<PaymentProcessorQueueMessage>();
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    var message = await subscriber.ReceiveAsAsync();
 
-                try
-                {
-                    await ProcessMessage(message);
-                }
-                catch (Exception ex)
-                {
-                    _logger.Fatal(ex,
-                        $"Refresh payment message processing failed for account with ID [{message?.Content?.AccountId}]");
-                    break; //Stop processing anymore messages as this failure needs to be investigated
+                    try
+                    {
+                        await ProcessMessage(message);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Fatal(ex,
+                            $"Refresh payment message processing failed for account with ID [{message?.Content?.AccountId}]");
+                        break; //Stop processing anymore messages as this failure needs to be investigated
+                    }
                 }
             }
         }
