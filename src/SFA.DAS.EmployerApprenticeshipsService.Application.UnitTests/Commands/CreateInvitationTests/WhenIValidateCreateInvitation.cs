@@ -52,10 +52,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 
             //Assert
             Assert.IsFalse(result.IsValid());
-            Assert.Contains(new KeyValuePair<string,string>("Email", "Enter email address"),result.ValidationDictionary );
+            Assert.Contains(new KeyValuePair<string,string>("EmailOfPersonBeingInvited", "Enter email address"),result.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "No HashedAccountId supplied"),result.ValidationDictionary );
-            Assert.Contains(new KeyValuePair<string,string>("Name", "Enter name"),result.ValidationDictionary );
-            Assert.Contains(new KeyValuePair<string,string>("RoleId", "Select team member role"),result.ValidationDictionary );
+            Assert.Contains(new KeyValuePair<string,string>("NameOfPersonBeingInvited", "Enter name"),result.ValidationDictionary );
+            Assert.Contains(new KeyValuePair<string,string>("RoleIdOfPersonBeingInvited", "Select team member role"),result.ValidationDictionary );
         }
 
         [TestCase("notvalid")]
@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 
             //Assert
             Assert.IsFalse(result.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("Email", "Enter a valid email address"), result.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("EmailOfPersonBeingInvited", "Enter a valid email address"), result.ValidationDictionary);
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 
             //Assert
             Assert.IsFalse(result.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("Email", $"{_createInvitationCommand.EmailOfPersonBeingInvited} is already invited"), result.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("EmailOfPersonBeingInvited", $"{_createInvitationCommand.EmailOfPersonBeingInvited} is already invited"), result.ValidationDictionary);
         }
         
     }
