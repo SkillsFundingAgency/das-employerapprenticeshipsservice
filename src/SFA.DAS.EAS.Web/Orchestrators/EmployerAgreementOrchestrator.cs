@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(string hashedId,
+        public virtual async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(string hashedId,
             string externalUserId)
         {
             try
