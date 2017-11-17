@@ -15,7 +15,13 @@ namespace SFA.DAS.EAS.Web
                 {
                     var mainSite = serverManager.Sites[RoleEnvironment.CurrentRoleInstance.Id + "_Web"];
                     if (mainSite == null)
-                        throw new NullReferenceException("WebRole not found on IIS");
+                    {
+                        mainSite = serverManager.Sites[0];
+                        if (mainSite == null)
+                        {
+                            throw new NullReferenceException("WebRole not found on IIS");
+                        }
+                    }
                     var mainApplication = mainSite.Applications["/"];
                     mainApplication["preloadEnabled"] = true;
 

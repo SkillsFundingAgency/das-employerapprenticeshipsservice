@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Models.Organisation;
+﻿using System.Threading.Tasks;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 
 namespace SFA.DAS.EAS.Domain.Interfaces
