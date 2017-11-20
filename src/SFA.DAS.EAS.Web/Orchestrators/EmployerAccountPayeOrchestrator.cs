@@ -182,6 +182,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return new OrchestratorResponse<RemovePayeSchemeViewModel> { Data = model };
         }
 
+        //TODO: The message gets mutated by the method. Message needs to be made immutable
         public virtual async Task<OrchestratorResponse<RemovePayeSchemeViewModel>> RemoveSchemeFromAccount(RemovePayeSchemeViewModel model)
         {
             var response = new OrchestratorResponse<RemovePayeSchemeViewModel> { Data = model };
@@ -195,13 +196,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 model.PayeSchemeName = result.PayeScheme.Name;
 
-                await Mediator.SendAsync(new RemovePayeFromAccountCommand
-                {
-                    HashedAccountId = model.HashedAccountId,
-                    UserId = model.UserId,
-                    PayeRef = model.PayeRef,
-                    RemoveScheme = model.RemoveScheme == 2
-                });
+                await Mediator.SendAsync(new RemovePayeFromAccountCommand(model.HashedAccountId,
+                    model.PayeRef, model.UserId, model.RemoveScheme == 2,model.PayeSchemeName));
+
 
                 response.Data = model;
             }

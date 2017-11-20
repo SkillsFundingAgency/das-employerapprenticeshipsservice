@@ -27,6 +27,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
         private readonly IMessagePublisher _messagePublisher;
+        private readonly IMembershipRepository _membershipRepository;
 
         [ServiceBusConnectionKey("employer_shared")]
         public RemovePayeFromAccountCommandHandler(
@@ -36,7 +37,8 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             IHashingService hashingService, 
             IGenericEventFactory genericEventFactory, 
             IPayeSchemeEventFactory payeSchemeEventFactory, 
-            IMessagePublisher messagePublisher)
+            IMessagePublisher messagePublisher,
+            IMembershipRepository membershipRepository)
         {
             _mediator = mediator;
             _validator = validator;
@@ -45,6 +47,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             _genericEventFactory = genericEventFactory;
             _payeSchemeEventFactory = payeSchemeEventFactory;
             _messagePublisher = messagePublisher;
+            _membershipRepository = membershipRepository;
         }
 
         protected override async Task HandleCore(RemovePayeFromAccountCommand message)
@@ -57,7 +60,9 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 
             await _accountRepository.RemovePayeFromAccount(accountId, message.PayeRef);
 
-            await QueuePayeRemovedMessage(message.PayeRef);
+            var loggedInPerson = await _membershipRepository.GetCaller(accountId, message.UserId);
+
+            await QueuePayeRemovedMessage(message.PayeRef, accountId, message.CompanyName, loggedInPerson.FullName());
 
             await NotifyPayeSchemeRemoved(message.HashedAccountId, message.PayeRef);
         }
@@ -86,9 +91,10 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
-        private async Task QueuePayeRemovedMessage(string payeRef)
+
+        private async Task QueuePayeRemovedMessage(string payeRef, long accountId, string companyName, string deletedByName)
         {
-            await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage { EmpRef = payeRef});
+            await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage(payeRef, companyName, accountId, deletedByName));
         }
 
         private async Task AddAuditEntry(string userId, string payeRef, string accountId)

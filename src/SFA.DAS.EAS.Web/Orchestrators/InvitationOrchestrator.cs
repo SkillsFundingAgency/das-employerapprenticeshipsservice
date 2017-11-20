@@ -64,9 +64,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     HashedAccountId = model.HashedAccountId,
                     ExternalUserId = externalUserId,
-                    Name = model.Name,
-                    Email = model.Email,
-                    RoleId = model.Role
+                    NameOfPersonBeingInvited = model.Name,
+                    EmailOfPersonBeingInvited = model.Email,
+                    RoleIdOfPersonBeingInvited = model.Role
                 });
             }
             catch (InvalidRequestException ex)

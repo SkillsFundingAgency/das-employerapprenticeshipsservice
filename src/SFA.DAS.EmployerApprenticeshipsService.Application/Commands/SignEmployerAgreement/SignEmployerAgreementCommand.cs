@@ -5,9 +5,20 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 {
     public class SignEmployerAgreementCommand : IAsyncRequest
     {
-        public string HashedAccountId { get; set; }
-        public string ExternalUserId { get; set; }
-        public DateTime SignedDate { get; set; }
-        public string HashedAgreementId { get; set; }
+        public SignEmployerAgreementCommand(string hashedAccountId, string externalUserId, DateTime signedDate, string hashedAgreementId, string organisationName)
+        {
+            HashedAccountId = hashedAccountId;
+            ExternalUserId = externalUserId;
+            SignedDate = signedDate;
+            HashedAgreementId = hashedAgreementId;
+            OrganisationName = organisationName;
+        }
+
+        public string HashedAccountId { get;  }
+        public string ExternalUserId { get;  }
+        public DateTime SignedDate { get;  }
+        public string HashedAgreementId { get;  }
+
+        public string OrganisationName { get; }
     }
 }

@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetOrganisationTests
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Arrange
-            var expectedResponse = new PagedResponse<Organisation> { Data = new List<Organisation> { new Organisation() } };
+            var expectedResponse = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName() } };
             var expectedSearchTerm = "My Company";
             _referenceDataService.Setup(x => x.SearchOrganisations(expectedSearchTerm, 2, 20, null)).ReturnsAsync(expectedResponse);
 

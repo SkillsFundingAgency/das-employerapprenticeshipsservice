@@ -20,6 +20,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
            int pageSize);
 
 
-        Task<PagedResponse<Organisation>> SearchOrganisations(string searchTerm, int pageNumber = 1, int pageSize = 20, OrganisationType? organisationType = null);
+        Task<PagedResponse<OrganisationName>> SearchOrganisations(string searchTerm, int pageNumber = 1, int pageSize = 20, OrganisationType? organisationType = null);
     }
 }

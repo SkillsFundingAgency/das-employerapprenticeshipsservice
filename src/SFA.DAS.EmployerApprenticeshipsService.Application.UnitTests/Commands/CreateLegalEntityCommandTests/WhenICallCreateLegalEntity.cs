@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.HashingService;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.Interfaces;
 
@@ -28,6 +29,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
         private MembershipView _owner;
         private EmployerAgreementView _agreementView;
         private Mock<ILegalEntityEventFactory> _legalEntityEventFactory;
+        private Mock<IHashingService> _hashingService;
 
         [SetUp]
         public void Arrange()
@@ -74,6 +76,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
 
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _legalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
+            _hashingService=new Mock<IHashingService>();
 
             _commandHandler = new CreateLegalEntityCommandHandler(
                 _accountRepository.Object, 
@@ -81,7 +84,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 _mediator.Object, 
                 _genericEventFactory.Object,
                 _legalEntityEventFactory.Object, 
-                Mock.Of<IMessagePublisher>());
+                Mock.Of<IMessagePublisher>(),
+                _hashingService.Object);
         }
 
         [Test]

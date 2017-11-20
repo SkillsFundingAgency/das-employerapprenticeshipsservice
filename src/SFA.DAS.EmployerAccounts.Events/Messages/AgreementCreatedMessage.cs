@@ -1,12 +1,26 @@
-﻿using SFA.DAS.Messaging.Attributes;
+﻿using System;
+using SFA.DAS.Messaging.Attributes;
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
+    [Serializable]
     [MessageGroup("agreement_created")]
-    public class AgreementCreatedMessage
+    public class AgreementCreatedMessage : Message
     {
-        public long AccountId { get; set; }
-        public long LegalEntityId { get; set; }
-        public long AgreementId { get; set; }
+        public string OrganisationName { get; }
+        public long AgreementId { get; }
+        public long LegalEntityId { get; }
+        public string CreatedByName { get; }
+
+        public AgreementCreatedMessage()
+        { }
+
+        public AgreementCreatedMessage(long accountId, long aggreementId, string organisationName, string createdByName, long legalEntityId) : base(accountId)
+        {
+            AgreementId = aggreementId;
+            OrganisationName = organisationName;
+            LegalEntityId = legalEntityId;
+            CreatedByName = createdByName;
+        }
     }
 }

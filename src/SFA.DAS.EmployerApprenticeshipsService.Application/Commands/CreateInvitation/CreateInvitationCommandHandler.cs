@@ -11,6 +11,8 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.TimeProvider;
 
@@ -24,8 +26,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
         private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
         private readonly IValidator<CreateInvitationCommand> _validator;
         private readonly IUserRepository _userRepository;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration, IValidator<CreateInvitationCommand> validator, IUserRepository userRepository)
+        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, 
+            EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration, IValidator<CreateInvitationCommand> validator,
+            IUserRepository userRepository, IMessagePublisher messagePublisher)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
@@ -37,6 +42,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
             _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
             _validator = validator;
             _userRepository = userRepository;
+            _messagePublisher = messagePublisher;
         }
 
         protected override async Task HandleCore(CreateInvitationCommand message)
@@ -52,10 +58,10 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
             var caller = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
             ////Verify the email is not used by an existing invitation for the account
-            var existingInvitation = await _invitationRepository.Get(caller.AccountId, message.Email);
+            var existingInvitation = await _invitationRepository.Get(caller.AccountId, message.EmailOfPersonBeingInvited);
 
             if (existingInvitation != null && existingInvitation.Status != InvitationStatus.Deleted && existingInvitation.Status != InvitationStatus.Accepted)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "ExistingMember", $"{message.Email} is already invited" } });
+                throw new InvalidRequestException(new Dictionary<string, string> { { "ExistingMember", $"{message.EmailOfPersonBeingInvited} is already invited" } });
 
             var expiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8);
 
@@ -66,17 +72,17 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 invitationId = await _invitationRepository.Create(new Invitation
                 {
                     AccountId = caller.AccountId,
-                    Email = message.Email,
-                    Name = message.Name,
-                    RoleId = message.RoleId,
+                    Email = message.EmailOfPersonBeingInvited,
+                    Name = message.NameOfPersonBeingInvited,
+                    RoleId = message.RoleIdOfPersonBeingInvited,
                     Status = InvitationStatus.Pending,
                     ExpiryDate = expiryDate
                 });
             }
             else
             {
-                existingInvitation.Name = message.Name;
-                existingInvitation.RoleId = message.RoleId;
+                existingInvitation.Name = message.NameOfPersonBeingInvited;
+                existingInvitation.RoleId = message.RoleIdOfPersonBeingInvited;
                 existingInvitation.Status = InvitationStatus.Pending;
                 existingInvitation.ExpiryDate = expiryDate;
 
@@ -85,21 +91,21 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 invitationId = existingInvitation.Id;
             }
 
-            var existingUser = await _userRepository.GetByEmailAddress(message.Email);
+            var existingUser = await _userRepository.GetByEmailAddress(message.EmailOfPersonBeingInvited);
 
             await _mediator.SendAsync(new CreateAuditCommand
             {
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "CREATED",
-                    Description = $"Member {message.Email} added to account {caller.AccountId} as {message.RoleId}",
+                    Description = $"Member {message.EmailOfPersonBeingInvited} added to account {caller.AccountId} as {message.RoleIdOfPersonBeingInvited}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
                         
                         PropertyUpdate.FromString("AccountId",caller.AccountId.ToString()),
-                        PropertyUpdate.FromString("Email",message.Email),
-                        PropertyUpdate.FromString("Name",message.Name),
-                        PropertyUpdate.FromString("RoleId",message.RoleId.ToString()),
+                        PropertyUpdate.FromString("Email",message.EmailOfPersonBeingInvited),
+                        PropertyUpdate.FromString("Name",message.NameOfPersonBeingInvited),
+                        PropertyUpdate.FromString("RoleId",message.RoleIdOfPersonBeingInvited.ToString()),
                         PropertyUpdate.FromString("Status",InvitationStatus.Pending.ToString()),
                         PropertyUpdate.FromDateTime("ExpiryDate",expiryDate)
                     },
@@ -112,14 +118,14 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
             {
                 Email = new Email
                 {
-                    RecipientsAddress = message.Email,
+                    RecipientsAddress = message.EmailOfPersonBeingInvited,
                     TemplateId = existingUser?.UserRef != null ? "InvitationExistingUser" : "InvitationNewUser",
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",
                     Tokens = new Dictionary<string, string> {
                         { "account_name", caller.AccountName },
-                        { "first_name", message.Name },
+                        { "first_name", message.NameOfPersonBeingInvited },
                         { "inviter_name", $"{caller.FirstName} {caller.LastName}"},
                         { "base_url", _employerApprenticeshipsServiceConfiguration.DashboardUrl },
                         { "expiry_date", expiryDate.ToString("dd MMM yyy")}
@@ -127,7 +133,12 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 }
             });
 
+            await PublishAccountCreatedMessage(caller.AccountId, caller.FullName(), message.NameOfPersonBeingInvited);
+        }
 
+        private async Task PublishAccountCreatedMessage(long accountId, string signedByName, string personInvited)
+        {
+            await _messagePublisher.PublishAsync(new UserInvitedMessage(personInvited, accountId, signedByName));
         }
     }
 }

@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationsRequest>()))
-                .ReturnsAsync(new GetOrganisationsResponse { Organisations = new PagedResponse<Organisation> { Data = new List<Organisation>() } });
+                .ReturnsAsync(new GetOrganisationsResponse { Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName>() } });
 
             _orchestrator = new SearchOrganisationOrchestrator(_mediator.Object, _cookieService.Object);
         }
@@ -99,7 +99,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
-                Organisations = new PagedResponse<Organisation> { Data = new List<Organisation> { new Organisation { Type = OrganisationType.CompaniesHouse, Code = "123456789", Address = new Address() } } }
+                Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.CompaniesHouse, Code = "123456789", Address = new Address() } } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber))).ReturnsAsync(expectedSearchResults);
 
@@ -126,7 +126,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
-                Organisations = new PagedResponse<Organisation> { Data = new List<Organisation> { new Organisation { Type = OrganisationType.CompaniesHouse, Code = companyCode, Address = new Address() } } }
+                Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.CompaniesHouse, Code = companyCode, Address = new Address() } } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber))).ReturnsAsync(expectedSearchResults);
 
@@ -153,7 +153,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
-                Organisations = new PagedResponse<Organisation> { Data = new List<Organisation> { new Organisation { Type = OrganisationType.Charities, Code = charityCode, Address = new Address() } } }
+                Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.Charities, Code = charityCode, Address = new Address() } } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber))).ReturnsAsync(expectedSearchResults);
 
@@ -180,7 +180,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
-                Organisations = new PagedResponse<Organisation> { Data = new List<Organisation> { new Organisation { Type = OrganisationType.PublicBodies, Name = organisationName, Address = new Address() } } }
+                Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.PublicBodies, Name = organisationName, Address = new Address() } } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber))).ReturnsAsync(expectedSearchResults);
 
@@ -207,7 +207,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
-                Organisations = new PagedResponse<Organisation> { Data = new List<Organisation> { new Organisation { Type = OrganisationType.Other, Name = organisationName, Address = new Address() } } }
+                Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.Other, Name = organisationName, Address = new Address() } } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber))).ReturnsAsync(expectedSearchResults);
 

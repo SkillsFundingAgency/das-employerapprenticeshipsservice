@@ -64,13 +64,19 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             var hashedId = "ABV465";
             var userRef = "abv345";
             var payeRef = "123/abc";
-            var model = new RemovePayeSchemeViewModel { HashedAccountId = hashedId,PayeRef = payeRef,UserId = userRef};
+
+            var model = new RemovePayeSchemeViewModel
+            {
+                HashedAccountId = hashedId,
+                PayeRef = payeRef,
+                UserId = userRef
+            };
 
             //Act
             await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(model);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<RemovePayeFromAccountCommand>(c=>c.HashedAccountId.Equals(hashedId) && c.PayeRef.Equals(payeRef) && c.UserId.Equals(userRef))), Times.Once);
+            _mediator.Verify(x=>x.SendAsync(It.Is<RemovePayeFromAccountCommand>(c=>c.HashedAccountId.Equals(hashedId) && c.PayeRef.Equals(payeRef) && c.UserId.Equals(userRef) && c.CompanyName.Equals(SchemeName))), Times.Once);
             
         }
 

@@ -99,7 +99,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.RemoveLegalEntity
                 foreach (var agreement in agreementsToRemove.Data.Agreements)
                 {
                     employerAgreementOrchestrator.SignAgreement(agreement.HashedAgreementId, agreement.HashedAccountId,
-                        userId, DateTime.UtcNow).Wait();
+                        userId, DateTime.UtcNow, "company name").Wait();
                 }
                 ScenarioContext.Current["ExpectBadRequestResult"] = "true";
             }

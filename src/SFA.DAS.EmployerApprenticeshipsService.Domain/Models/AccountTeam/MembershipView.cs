@@ -15,5 +15,7 @@ namespace SFA.DAS.EAS.Domain.Models.AccountTeam
         public int RoleId { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool ShowWizard { get; set; }
+
+        public string FullName() => $"{FirstName} {LastName}";
     }
 }

@@ -30,13 +30,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         public async Task ThenItIsValidIfAllFieldsArePopulated()
         {
             //Act
-            var result = await _validator.ValidateAsync(new RemovePayeFromAccountCommand
-                {
-                    HashedAccountId = "12345",
-                    PayeRef = "123RFD",
-                    UserId = "123edds",
-                    RemoveScheme = true
-            });
+            var result =
+                await _validator.ValidateAsync(new RemovePayeFromAccountCommand("12345", "123RFD", "123edds", true,
+                    "companyName"));
+
 
             //Assert
             Assert.IsTrue(result.IsValid());
@@ -46,7 +43,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         public async Task ThenTheValidationDictionaryIsPopulatedWhenThereAreErrors()
         {
             //Act
-            var result = await _validator.ValidateAsync(new RemovePayeFromAccountCommand());
+            var result = await _validator.ValidateAsync(new RemovePayeFromAccountCommand(null, null, null, false, null));
 
             //Assert
             Assert.IsFalse(result.IsValid());
@@ -64,13 +61,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {AccountId = 12345, RoleId = (short)Role.Transactor});
 
             //Act
-            var result = await _validator.ValidateAsync(new RemovePayeFromAccountCommand
-            {
-                HashedAccountId = "12345",
-                PayeRef = "123RFD",
-                UserId = "123edds",
-                RemoveScheme = true
-            });
+            var result =
+                await _validator.ValidateAsync(new RemovePayeFromAccountCommand("12345", "123RFD", "123edds", true,"companyName"));
+
 
             //Assert
             Assert.IsTrue(result.IsUnauthorized);
@@ -83,13 +76,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(null);
 
             //Act
-            var result = await _validator.ValidateAsync(new RemovePayeFromAccountCommand
-            {
-                HashedAccountId = "12345",
-                PayeRef = "123RFD",
-                UserId = "123edds",
-                RemoveScheme = true
-            });
+            var result = await _validator.ValidateAsync(new RemovePayeFromAccountCommand("12345", "123RFD", "123edds", true, "companyName"));
+
 
             //Assert
             Assert.IsTrue(result.IsUnauthorized);

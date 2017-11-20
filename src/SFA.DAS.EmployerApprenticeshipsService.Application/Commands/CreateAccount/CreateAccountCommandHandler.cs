@@ -6,7 +6,6 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
-//using SFA.DAS.EAS.Application.Notifications.CreateAgreementCreatedMessage;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -34,7 +33,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
-        
+        private readonly IMembershipRepository _membershipRepository;
+
         public CreateAccountCommandHandler(
             IAccountRepository accountRepository, 
             IUserRepository userRepository, 
@@ -44,7 +44,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IHashingService hashingService, 
             IGenericEventFactory genericEventFactory, 
             IAccountEventFactory accountEventFactory, 
-            IRefreshEmployerLevyService refreshEmployerLevyService)
+            IRefreshEmployerLevyService refreshEmployerLevyService,
+            IMembershipRepository membershipRepository)
         {
             _accountRepository = accountRepository;
             _userRepository = userRepository;
@@ -56,6 +57,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _genericEventFactory = genericEventFactory;
             _accountEventFactory = accountEventFactory;
             _refreshEmployerLevyService = refreshEmployerLevyService;
+            _membershipRepository = membershipRepository;
         }
 
         public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
@@ -64,32 +66,35 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             var user = await GetUser(message);
 
-            var emprefs = message.PayeReference.Split(',');
 
             if (string.IsNullOrEmpty(message.OrganisationReferenceNumber))
             {
                 message.OrganisationReferenceNumber = Guid.NewGuid().ToString();
             }
 
-            var returnValue = await _accountRepository.CreateAccount(user.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, emprefs[0], message.AccessToken, message.RefreshToken, message.OrganisationStatus, message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource, message.Sector);
+            var createAccountResult = await _accountRepository.CreateAccount(user.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, message.PayeReference, message.AccessToken, message.RefreshToken, message.OrganisationStatus, message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource, message.Sector);
 
-            var hashedAccountId = _hashingService.HashValue(returnValue.AccountId);
-            await _accountRepository.SetHashedId(hashedAccountId, returnValue.AccountId);
+            var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
+            await _accountRepository.SetHashedId(hashedAccountId, createAccountResult.AccountId);
 
-            await AddPayeSchemes(message, emprefs, returnValue);
+            await AddPayeSchemes(message, message.PayeReference, createAccountResult);
 
-            await RefreshLevy(returnValue, emprefs);
+            await RefreshLevy(createAccountResult, message.PayeReference);
 
-            await PublishAddPayeSchemeMessage(emprefs);
+            var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
 
-            await PublishAccountCreatedMessage(returnValue.AccountId);
+            var createdByName = caller.FullName();
+
+            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName);
+
+            await PublishAccountCreatedMessage(createAccountResult.AccountId, createdByName);
 
             await NotifyAccountCreated(hashedAccountId);
 
-            await CreateAuditEntries(message, returnValue, hashedAccountId, user);
+            await CreateAuditEntries(message, createAccountResult, hashedAccountId, user);
 
-            await PublishAgreementCreatedMessage(returnValue.AccountId, returnValue.LegalEntityId,
-                returnValue.EmployerAgreementId);
+            await PublishAgreementCreatedMessage(createAccountResult.AccountId, createAccountResult.LegalEntityId,
+                createAccountResult.EmployerAgreementId, message.OrganisationName, message.ExternalUserId);
 
             return new CreateAccountCommandResponse
             {
@@ -98,14 +103,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         }
 
 
-        private async Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId)
+        private async Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string createdByName)
         {
-            await _messagePublisher.PublishAsync(new AgreementCreatedMessage
-            {
-                AccountId = accountId,
-                LegalEntityId = legalEntityId,
-                AgreementId = employerAgreementId
-            });
+            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, employerAgreementId, organisationName, createdByName, legalEntityId));
         }
 
         private async Task NotifyAccountCreated(string hashedAccountId)
@@ -117,42 +117,24 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
-        private async Task AddPayeSchemes(CreateAccountCommand message, string[] emprefs, CreateAccountResult returnValue)
+        private async Task AddPayeSchemes(CreateAccountCommand message, string empref, CreateAccountResult returnValue)
         {
-            if (emprefs.Length > 1)
-            {
-                for (var i = 1; i < emprefs.Length; i++)
-                {
-                    await _accountRepository.AddPayeToAccount(new Paye { AccountId = returnValue.AccountId, EmpRef = emprefs[i], AccessToken = message.AccessToken, RefreshToken = message.RefreshToken });
-                }
-            }
+            await _accountRepository.AddPayeToAccount(new Paye { AccountId = returnValue.AccountId, EmpRef = empref, AccessToken = message.AccessToken, RefreshToken = message.RefreshToken });
         }
 
-        private async Task RefreshLevy(CreateAccountResult returnValue, string[] emprefs)
+        private async Task RefreshLevy(CreateAccountResult returnValue, string empref)
         {
-            foreach (var empref in emprefs)
-            {
-                await _refreshEmployerLevyService.QueueRefreshLevyMessage(returnValue.AccountId, empref);
-            }
+            await _refreshEmployerLevyService.QueueRefreshLevyMessage(returnValue.AccountId, empref);
         }
 
-        private async Task PublishAddPayeSchemeMessage(IEnumerable<string> emprefs)
+        private async Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName)
         {
-            foreach (var empref in emprefs)
-            {
-                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage
-                {
-                    EmpRef= empref
-                });
-            }
+                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage(empref, accountId, createdByName));
         }
 
-        private async Task PublishAccountCreatedMessage(long accountId)
+        private async Task PublishAccountCreatedMessage(long accountId, string createdByName)
         {
-            await _messagePublisher.PublishAsync(new AccountCreatedMessage
-            {
-                AccountId = accountId
-            });
+            await _messagePublisher.PublishAsync(new AccountCreatedMessage(accountId, createdByName));
         }
 
         private async Task<User> GetUser(CreateAccountCommand message)
