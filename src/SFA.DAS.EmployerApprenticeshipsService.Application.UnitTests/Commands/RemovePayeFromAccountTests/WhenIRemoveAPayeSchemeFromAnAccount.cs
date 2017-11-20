@@ -174,7 +174,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             await _handler.Handle(command);
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeDeletedMessage>(c => c.EmpRef.Equals(command.PayeRef))), Times.Once);
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeDeletedMessage>(c => c.PayeScheme.Equals(command.PayeRef))), Times.Once);
         }
     }
 }

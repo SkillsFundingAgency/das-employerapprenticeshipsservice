@@ -5,18 +5,17 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     [Serializable]
     [MessageGroup("add_paye_scheme")]
-    public class PayeSchemeCreatedMessage : Message
+    public class PayeSchemeCreatedMessage : AccountMessageBase
     {
-        public string EmpRef { get; }
-        public string CreatedByName { get; }
+        public string PayeScheme { get; }
 
         public PayeSchemeCreatedMessage()
         { }
 
-        public PayeSchemeCreatedMessage(string payeSchemeRef, long accountId, string createdByName) : base(accountId)
+        public PayeSchemeCreatedMessage(string payeScheme, long accountId, string createdBy) 
+            : base(accountId, createdBy)
         {
-            EmpRef = payeSchemeRef;
-            CreatedByName = createdByName;
+            PayeScheme = payeScheme;
         }
     }
 }

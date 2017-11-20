@@ -5,17 +5,17 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     [Serializable]
     [MessageGroup("user_invited")]
-    public class UserInvitedMessage : Message
+    public class UserInvitedMessage : AccountMessageBase
     {
         public string PersonInvited { get; }
-        public string InvitedByName { get; }
+        
         public UserInvitedMessage()
         { }
 
-        public UserInvitedMessage(string personInvited, long accountId, string invitedByName) : base(accountId)
+        public UserInvitedMessage(string personInvited, long accountId, string createdBy) 
+            : base(accountId, createdBy)
         {
             PersonInvited = personInvited;
-            InvitedByName = invitedByName;
         }
     }
 }

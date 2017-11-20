@@ -126,7 +126,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             await _addPayeToAccountCommandHandler.Handle(command);
 
             //Assert
-            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<PayeSchemeCreatedMessage>(c=> c.EmpRef.Equals(command.Empref))));
+            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<PayeSchemeCreatedMessage>(c=> c.PayeScheme.Equals(command.Empref))));
         }
 
         [Test]

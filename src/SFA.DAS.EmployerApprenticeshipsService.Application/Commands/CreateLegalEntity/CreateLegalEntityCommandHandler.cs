@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
         private async Task PublishAgreementCreatedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId)
         {
-            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, agreementId, organisationName, createdByName, legalEntityId));
+            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, agreementId, organisationName, legalEntityId, createdByName));
         }
 
         private async Task NotifyLegalEntityCreated(string hashedAccountId, long legalEntityId)

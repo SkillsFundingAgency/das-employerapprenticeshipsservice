@@ -77,8 +77,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
             await _accountRepository.SetHashedId(hashedAccountId, createAccountResult.AccountId);
 
-            await AddPayeSchemes(message, message.PayeReference, createAccountResult);
-
             await RefreshLevy(createAccountResult, message.PayeReference);
 
             var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
@@ -105,7 +103,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private async Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string createdByName)
         {
-            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, employerAgreementId, organisationName, createdByName, legalEntityId));
+            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, employerAgreementId, organisationName,  legalEntityId, createdByName));
         }
 
         private async Task NotifyAccountCreated(string hashedAccountId)
@@ -115,11 +113,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             var genericEvent = _genericEventFactory.Create(accountEvent);
 
             await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
-        }
-
-        private async Task AddPayeSchemes(CreateAccountCommand message, string empref, CreateAccountResult returnValue)
-        {
-            await _accountRepository.AddPayeToAccount(new Paye { AccountId = returnValue.AccountId, EmpRef = empref, AccessToken = message.AccessToken, RefreshToken = message.RefreshToken });
         }
 
         private async Task RefreshLevy(CreateAccountResult returnValue, string empref)

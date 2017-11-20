@@ -93,9 +93,9 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             await PublishAgreementSignedMessage(accountId, agreementId, message.OrganisationName, owner.FullName(), agreement.LegalEntityId);
         }
 
-        private async Task PublishAgreementSignedMessage(long accountId, long agreementId, string organisationName, string signedByName, long legalEntityId)
+        private async Task PublishAgreementSignedMessage(long accountId, long agreementId, string organisationName, string createdBy, long legalEntityId)
         {
-            await _messagePublisher.PublishAsync(new AgreementSignedMessage(accountId, agreementId, organisationName, signedByName, legalEntityId));
+            await _messagePublisher.PublishAsync(new AgreementSignedMessage(accountId, agreementId, organisationName, legalEntityId, createdBy));
         }
 
         private async Task AddAuditEntry(SignEmployerAgreementCommand message, long accountId, long agreementId)

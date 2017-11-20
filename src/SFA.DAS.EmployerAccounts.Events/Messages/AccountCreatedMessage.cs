@@ -1,22 +1,18 @@
-﻿using Newtonsoft.Json.Serialization;
-using SFA.DAS.Messaging.Attributes;
+﻿using SFA.DAS.Messaging.Attributes;
 using System;
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     [Serializable]
     [MessageGroup("add_account")]
-    public class AccountCreatedMessage : Message
+    public class AccountCreatedMessage : AccountMessageBase
     {
-        public string CreatedByName { get; }
-
-        public AccountCreatedMessage()
+        public AccountCreatedMessage() : base(0, string.Empty)
         {}
 
-        public AccountCreatedMessage(long accountId, string createdByName) : base(accountId)
-        {
-            CreatedByName = createdByName;
-        }
+        public AccountCreatedMessage(long accountId, string createdBy) : base(accountId, createdBy)
+        { 
 
+        }
     }
 }
