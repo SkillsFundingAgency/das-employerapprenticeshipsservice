@@ -83,11 +83,11 @@ else
                 </nav>
                 <div class="panes">
                     <div class="js-tab-pane" id="pane-tasks" role="tabpanel">
-                        @if (Model.Data.Tasks.Count > 0)
+                        @*@if (Model.Data.Tasks.Count > 0)
                         {
                             <ul class="task-list">
                                 
-                                @{ var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();}
+                                { var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();}
 
                                 @foreach (var task in priorityOrderTaskList)
                                 {
@@ -122,16 +122,26 @@ else
                                     </li>
                                 }
                             </ul>
-                        }
-                        else
-                        {
-                            <p>You currently have no tasks</p>
+                        }*@
+                        @{
+                            var task = Model.Data.Tasks?.SingleOrDefault(t => t.Type.Equals("AgreementToSign"));
+
+                            if (task != null)
+                            {
+                                <ul>
+                                    <li>
+                                        <p>@task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("Index", "EmployerAgreement")">View agreements</a>
+                                        </p>
+                                    </li>
+                                </ul>
+                            }
+                            else
+                            {
+                                <p>You do not have any tasks</p>
+                            }
                         }
                     </div>
                     <!-- Add this back in when Activities is implemented-->
-                    @*<div class="js-tab-pane" id="pane-activity" role="tabpanel">
-                        
-                    </div>*@
                 </div>
             </section>
         </div>
