@@ -99,26 +99,16 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
             _logger.Trace($"Processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}");
             
-            var employerDataList = new List<EmployerLevyData>();
-
             var englishFractionUpdateResponse = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
-
             
-            await ProcessScheme(payeRef, englishFractionUpdateResponse, employerDataList);
-            
+            var payeSchemeDeclarations = await ProcessScheme(payeRef, englishFractionUpdateResponse);
 
-            if (englishFractionUpdateResponse.UpdateRequired)
-            {
-                await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
-                {
-                    DateCalculated = englishFractionUpdateResponse.DateCalculated
-                });
-            }
+         
             
             await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
             {
                 AccountId = employerAccountId,
-                EmployerLevyData = employerDataList
+                EmployerLevyData = payeSchemeDeclarations
             });
             
             await message.CompleteAsync();
@@ -127,7 +117,60 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
             _logger.Trace($"Finished processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}. Completed in {timer.Elapsed:g} (hh:mm:ss:ms)");
         }
 
-        private async Task ProcessScheme(string payeRef, GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse, ICollection<EmployerLevyData> employerDataList)
+        private async Task<ICollection<EmployerLevyData>> ProcessScheme(string payeRef, GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse)
+        {
+            var payeSchemeDeclarations = new List<EmployerLevyData>();
+
+            await UpdateEnglishFraction(payeRef, englishFractionUpdateResponse);
+
+            var levyDeclarationQueryResult = HmrcProcessingEnabled || DeclarationProcessingOnly ?
+                await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery {EmpRef = payeRef }) : null;
+
+            if (levyDeclarationQueryResult?.LevyDeclarations?.Declarations != null)
+            {
+                var declarations = CreateDasDeclarations(levyDeclarationQueryResult);
+
+                var employerData = new EmployerLevyData
+                {
+                    EmpRef = payeRef,
+                    Declarations = {Declarations = declarations}
+                };
+
+                payeSchemeDeclarations.Add(employerData);
+            }
+
+            return payeSchemeDeclarations;
+        }
+
+        private static List<DasDeclaration> CreateDasDeclarations(GetHMRCLevyDeclarationResponse levyDeclarationQueryResult)
+        {
+            var declarations = new List<DasDeclaration>();
+
+            foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
+            {
+                var dasDeclaration = new DasDeclaration
+                {
+                    SubmissionDate = DateTime.Parse(declaration.SubmissionTime),
+                    Id = declaration.Id,
+                    PayrollMonth = declaration.PayrollPeriod?.Month,
+                    PayrollYear = declaration.PayrollPeriod?.Year,
+                    LevyAllowanceForFullYear = declaration.LevyAllowanceForFullYear,
+                    LevyDueYtd = declaration.LevyDueYearToDate,
+                    NoPaymentForPeriod = declaration.NoPaymentForPeriod,
+                    DateCeased = declaration.DateCeased,
+                    InactiveFrom = declaration.InactiveFrom,
+                    InactiveTo = declaration.InactiveTo,
+                    SubmissionId = declaration.SubmissionId
+                };
+
+                declarations.Add(dasDeclaration);
+            }
+
+            return declarations;
+        }
+
+        private async Task UpdateEnglishFraction(string payeRef,
+            GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse)
         {
             if (HmrcProcessingEnabled || FractionProcessingOnly)
             {
@@ -140,35 +183,12 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                 await _dasAccountService.UpdatePayeScheme(payeRef);
             }
 
-            var levyDeclarationQueryResult = HmrcProcessingEnabled || DeclarationProcessingOnly ?
-                await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery {EmpRef = payeRef }) : null;
-
-            var employerData = new EmployerLevyData();
-
-            if (levyDeclarationQueryResult?.LevyDeclarations?.Declarations != null)
+            if (englishFractionUpdateResponse.UpdateRequired)
             {
-                foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
+                await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
                 {
-                    var dasDeclaration = new DasDeclaration
-                    {
-                        SubmissionDate = DateTime.Parse(declaration.SubmissionTime),
-                        Id = declaration.Id,
-                        PayrollMonth = declaration.PayrollPeriod?.Month,
-                        PayrollYear = declaration.PayrollPeriod?.Year,
-                        LevyAllowanceForFullYear = declaration.LevyAllowanceForFullYear,
-                        LevyDueYtd = declaration.LevyDueYearToDate,
-                        NoPaymentForPeriod = declaration.NoPaymentForPeriod,
-                        DateCeased = declaration.DateCeased,
-                        InactiveFrom = declaration.InactiveFrom,
-                        InactiveTo = declaration.InactiveTo,
-                        SubmissionId = declaration.SubmissionId
-                    };
-
-                    employerData.EmpRef = payeRef;
-                    employerData.Declarations.Declarations.Add(dasDeclaration);
-                }
-
-                employerDataList.Add(employerData);
+                    DateCalculated = englishFractionUpdateResponse.DateCalculated
+                });
             }
         }
     }

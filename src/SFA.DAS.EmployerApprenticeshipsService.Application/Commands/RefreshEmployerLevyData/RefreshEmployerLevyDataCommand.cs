@@ -7,6 +7,6 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
     public class RefreshEmployerLevyDataCommand : IAsyncRequest
     {
         public long AccountId { get; set; }
-        public List<EmployerLevyData> EmployerLevyData { get; set; }
+        public ICollection<EmployerLevyData> EmployerLevyData { get; set; }
     }
 }
