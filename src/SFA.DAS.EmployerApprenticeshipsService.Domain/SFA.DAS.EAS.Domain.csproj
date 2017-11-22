@@ -200,7 +200,6 @@
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Http\InternalServerErrorException.cs" />
     <Compile Include="Http\RequestTimeOutException.cs" />
-    <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\IAzureAdAuthenticationService.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
