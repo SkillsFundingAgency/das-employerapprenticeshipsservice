@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Events.Api.Client.Configuration;
+using SFA.DAS.HashingService;
 using StructureMap;
 using StructureMap.Graph;
 using WebGrease.Css.Extensions;
@@ -36,6 +37,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
             For<IEventsApi>().Use<EventsApi>()
                .Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi)
                .SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
+
+            ConfigureHashingService(config);
 
             RegisterExecutionPolicies();
 
@@ -92,6 +95,11 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
                 x.ParentType,
                 null,
                 null)).AlwaysUnique();
+        }
+
+        private void ConfigureHashingService(EmployerApprenticeshipsServiceConfiguration config)
+        {
+            For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
         }
     }
 
