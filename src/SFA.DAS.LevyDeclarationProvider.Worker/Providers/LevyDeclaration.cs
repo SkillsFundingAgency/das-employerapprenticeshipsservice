@@ -92,24 +92,31 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                 }
                 return;
             }
-            var timer = Stopwatch.StartNew();
 
             var employerAccountId = message.Content.AccountId;
             var payeRef = message.Content.PayeRef;
 
-            _logger.Trace($"Processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}");
-            
+            _logger.Debug($"Processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}");
+
+            var timer = Stopwatch.StartNew();
+
+            _logger.Debug($"Getting english fraction updates for employer account {employerAccountId}");
+
             var englishFractionUpdateResponse = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
-            
+
+            _logger.Debug($"Getting levy declarations for PAYE scheme {payeRef} for employer account {employerAccountId}");
+
             var payeSchemeDeclarations = await ProcessScheme(payeRef, englishFractionUpdateResponse);
-            
+
+            _logger.Debug($"Adding Levy Declarations of PAYE scheme {payeRef} to employer account {employerAccountId}");
+
             await RefreshEmployerAccountLevyDeclarations(employerAccountId, payeSchemeDeclarations);
             
             await message.CompleteAsync();
 
             timer.Stop();
 
-            _logger.Trace($"Finished processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}. Completed in {timer.Elapsed:g} (hh:mm:ss:ms)");
+            _logger.Debug($"Finished processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}. Completed in {timer.Elapsed:g} (hh:mm:ss:ms)");
         }
 
         private async Task RefreshEmployerAccountLevyDeclarations(long employerAccountId, ICollection<EmployerLevyData> payeSchemeDeclarations)
@@ -127,8 +134,12 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
             await UpdateEnglishFraction(payeRef, englishFractionUpdateResponse);
 
+            _logger.Debug($"Getting levy declarations from HMRC for PAYE scheme {payeRef}");
+
             var levyDeclarationQueryResult = HmrcProcessingEnabled || DeclarationProcessingOnly ?
                 await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery {EmpRef = payeRef }) : null;
+
+            _logger.Debug($"Processing levy declarations retrieved from HMRC for PAYE scheme {payeRef}");
 
             if (levyDeclarationQueryResult?.LevyDeclarations?.Declarations != null)
             {
@@ -146,12 +157,15 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
             return payeSchemeDeclarations;
         }
 
-        private static List<DasDeclaration> CreateDasDeclarations(GetHMRCLevyDeclarationResponse levyDeclarationQueryResult)
+        private List<DasDeclaration> CreateDasDeclarations(GetHMRCLevyDeclarationResponse levyDeclarationQueryResult)
         {
             var declarations = new List<DasDeclaration>();
 
+            
             foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
             {
+                _logger.Trace($"Creating Levy Declaration with submission Id {declaration.SubmissionId} from HMRC query results");
+
                 var dasDeclaration = new DasDeclaration
                 {
                     SubmissionDate = DateTime.Parse(declaration.SubmissionTime),
@@ -178,17 +192,22 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
         {
             if (HmrcProcessingEnabled || FractionProcessingOnly)
             {
+                _logger.Trace($"Getting update for english fraction for PAYE scheme {payeRef}");
                 await _mediator.SendAsync(new UpdateEnglishFractionsCommand
                 {
                     EmployerReference = payeRef,
                     EnglishFractionUpdateResponse = englishFractionUpdateResponse
                 });
 
+                _logger.Trace($"Updating english fraction for PAYE scheme {payeRef}");
                 await _dasAccountService.UpdatePayeScheme(payeRef);
             }
 
             if (englishFractionUpdateResponse.UpdateRequired)
             {
+                _logger.Trace($"Updating english fraction calculation date to " +
+                              $"{englishFractionUpdateResponse.DateCalculated.ToShortDateString()} for PAYE scheme {payeRef}");
+
                 await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
                 {
                     DateCalculated = englishFractionUpdateResponse.DateCalculated
