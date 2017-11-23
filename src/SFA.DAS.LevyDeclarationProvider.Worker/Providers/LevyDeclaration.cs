@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                         {
                             //Ignore the message as we are not processing declarations
 
-                            if (message?.Content != null)
+                            if (message.Content != null)
                             {
                                 await message.CompleteAsync();
                             }
@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                     catch (Exception ex)
                     {
                         _logger.Fatal(ex,
-                            $"Levy declaration processing failed for account with ID [{message?.Content?.AccountId}]");
+                            $"Levy declaration processing failed for account with ID [{message.Content?.AccountId}]");
                         break; //Stop processing anymore messages as this failure needs to be investigated
                     }
                 }
