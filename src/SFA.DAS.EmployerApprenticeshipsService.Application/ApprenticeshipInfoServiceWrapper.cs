@@ -20,23 +20,19 @@ namespace SFA.DAS.EAS.Application
         private const string FrameworksKey = "Frameworks";
 
         private readonly ICache _cache;
-        private readonly IApprenticeshipInfoServiceConfiguration _configuration;
 
-        public ApprenticeshipInfoServiceWrapper(ICache cache, IApprenticeshipInfoServiceConfiguration configuration)
+        public ApprenticeshipInfoServiceWrapper(ICache cache)
         {
             if (cache == null)
                 throw new ArgumentNullException(nameof(cache));
-            if (configuration == null)
-                throw new ArgumentNullException(nameof(configuration));
             _cache = cache;
-            _configuration = configuration;
         }
 
         public async Task<StandardsView> GetStandardsAsync(bool refreshCache = false)
         {
             if (!await _cache.ExistsAsync(StandardsKey) || refreshCache)
             {
-                var api = new StandardApiClient(_configuration.BaseUrl);
+                var api = new StandardApiClient();
 
                 var standards = api.FindAll().OrderBy(x => x.Title).ToList();
 
@@ -50,7 +46,7 @@ namespace SFA.DAS.EAS.Application
         {
             if (!await _cache.ExistsAsync(FrameworksKey) || refreshCache)
             {
-                var api = new FrameworkApiClient(_configuration.BaseUrl);
+                var api = new FrameworkApiClient();
 
                 var frameworks = api.FindAll().OrderBy(x => x.Title).ToList();
 
@@ -64,7 +60,7 @@ namespace SFA.DAS.EAS.Application
         {
             try
             {
-                var api = new Providers.Api.Client.ProviderApiClient(_configuration.BaseUrl);
+                var api = new Providers.Api.Client.ProviderApiClient();
                 var provider = api.Get(ukPrn);
                 return MapFrom(provider);
             }
