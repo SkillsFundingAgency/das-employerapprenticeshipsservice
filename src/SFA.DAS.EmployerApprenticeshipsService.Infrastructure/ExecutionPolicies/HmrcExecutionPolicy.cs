@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
             {
                 _logger.Error(ex, $"Exceeded retry limit - {ex.Message}");
             }
-            return default(T);
+            throw ex;
         }
 
         private void OnRetryableFailure(Exception ex)
