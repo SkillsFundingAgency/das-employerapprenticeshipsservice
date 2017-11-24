@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                         {
                             //Ignore the message as we are not processing declarations
 
-                            if (message?.Content != null)
+                            if (message.Content != null)
                             {
                                 await message.CompleteAsync();
                             }
@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                     catch (Exception ex)
                     {
                         _logger.Fatal(ex,
-                            $"Levy declaration processing failed for account with ID [{message?.Content?.AccountId}]");
+                            $"Levy declaration processing failed for account with ID [{message.Content?.AccountId}]");
                         break; //Stop processing anymore messages as this failure needs to be investigated
                     }
                 }
@@ -92,83 +92,126 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                 }
                 return;
             }
-            var timer = Stopwatch.StartNew();
 
             var employerAccountId = message.Content.AccountId;
             var payeRef = message.Content.PayeRef;
 
-            _logger.Trace($"Processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}");
-            
-            var employerDataList = new List<EmployerLevyData>();
+            _logger.Debug($"Processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}");
+
+            var timer = Stopwatch.StartNew();
+
+            _logger.Debug($"Getting english fraction updates for employer account {employerAccountId}");
 
             var englishFractionUpdateResponse = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
 
-            
-            await ProcessScheme(payeRef, englishFractionUpdateResponse, employerDataList);
-            
+            _logger.Debug($"Getting levy declarations for PAYE scheme {payeRef} for employer account {employerAccountId}");
 
-            if (englishFractionUpdateResponse.UpdateRequired)
-            {
-                await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
-                {
-                    DateCalculated = englishFractionUpdateResponse.DateCalculated
-                });
-            }
-            
-            await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
-            {
-                AccountId = employerAccountId,
-                EmployerLevyData = employerDataList
-            });
+            var payeSchemeDeclarations = await ProcessScheme(payeRef, englishFractionUpdateResponse);
+
+            _logger.Debug($"Adding Levy Declarations of PAYE scheme {payeRef} to employer account {employerAccountId}");
+
+            await RefreshEmployerAccountLevyDeclarations(employerAccountId, payeSchemeDeclarations);
             
             await message.CompleteAsync();
 
             timer.Stop();
-            _logger.Trace($"Finished processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}. Completed in {timer.Elapsed:g} (hh:mm:ss:ms)");
+
+            _logger.Debug($"Finished processing LevyDeclaration for {employerAccountId} paye scheme {payeRef}. Completed in {timer.Elapsed:g} (hh:mm:ss:ms)");
         }
 
-        private async Task ProcessScheme(string payeRef, GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse, ICollection<EmployerLevyData> employerDataList)
+        private async Task RefreshEmployerAccountLevyDeclarations(long employerAccountId, ICollection<EmployerLevyData> payeSchemeDeclarations)
+        {
+            await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
+            {
+                AccountId = employerAccountId,
+                EmployerLevyData = payeSchemeDeclarations
+            });
+        }
+
+        private async Task<ICollection<EmployerLevyData>> ProcessScheme(string payeRef, GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse)
+        {
+            var payeSchemeDeclarations = new List<EmployerLevyData>();
+
+            await UpdateEnglishFraction(payeRef, englishFractionUpdateResponse);
+
+            _logger.Debug($"Getting levy declarations from HMRC for PAYE scheme {payeRef}");
+
+            var levyDeclarationQueryResult = HmrcProcessingEnabled || DeclarationProcessingOnly ?
+                await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery {EmpRef = payeRef }) : null;
+
+            _logger.Debug($"Processing levy declarations retrieved from HMRC for PAYE scheme {payeRef}");
+
+            if (levyDeclarationQueryResult?.LevyDeclarations?.Declarations != null)
+            {
+                var declarations = CreateDasDeclarations(levyDeclarationQueryResult);
+
+                var employerData = new EmployerLevyData
+                {
+                    EmpRef = payeRef,
+                    Declarations = {Declarations = declarations}
+                };
+
+                payeSchemeDeclarations.Add(employerData);
+            }
+
+            return payeSchemeDeclarations;
+        }
+
+        private List<DasDeclaration> CreateDasDeclarations(GetHMRCLevyDeclarationResponse levyDeclarationQueryResult)
+        {
+            var declarations = new List<DasDeclaration>();
+
+            
+            foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
+            {
+                _logger.Trace($"Creating Levy Declaration with submission Id {declaration.SubmissionId} from HMRC query results");
+
+                var dasDeclaration = new DasDeclaration
+                {
+                    SubmissionDate = DateTime.Parse(declaration.SubmissionTime),
+                    Id = declaration.Id,
+                    PayrollMonth = declaration.PayrollPeriod?.Month,
+                    PayrollYear = declaration.PayrollPeriod?.Year,
+                    LevyAllowanceForFullYear = declaration.LevyAllowanceForFullYear,
+                    LevyDueYtd = declaration.LevyDueYearToDate,
+                    NoPaymentForPeriod = declaration.NoPaymentForPeriod,
+                    DateCeased = declaration.DateCeased,
+                    InactiveFrom = declaration.InactiveFrom,
+                    InactiveTo = declaration.InactiveTo,
+                    SubmissionId = declaration.SubmissionId
+                };
+
+                declarations.Add(dasDeclaration);
+            }
+
+            return declarations;
+        }
+
+        private async Task UpdateEnglishFraction(string payeRef,
+            GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse)
         {
             if (HmrcProcessingEnabled || FractionProcessingOnly)
             {
+                _logger.Trace($"Getting update for english fraction for PAYE scheme {payeRef}");
                 await _mediator.SendAsync(new UpdateEnglishFractionsCommand
                 {
                     EmployerReference = payeRef,
                     EnglishFractionUpdateResponse = englishFractionUpdateResponse
                 });
 
+                _logger.Trace($"Updating english fraction for PAYE scheme {payeRef}");
                 await _dasAccountService.UpdatePayeScheme(payeRef);
             }
 
-            var levyDeclarationQueryResult = HmrcProcessingEnabled || DeclarationProcessingOnly ?
-                await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery {EmpRef = payeRef }) : null;
-
-            var employerData = new EmployerLevyData();
-
-            if (levyDeclarationQueryResult?.LevyDeclarations?.Declarations != null)
+            if (englishFractionUpdateResponse.UpdateRequired)
             {
-                foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
+                _logger.Trace($"Updating english fraction calculation date to " +
+                              $"{englishFractionUpdateResponse.DateCalculated.ToShortDateString()} for PAYE scheme {payeRef}");
+
+                await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
                 {
-                    var dasDeclaration = new DasDeclaration
-                    {
-                        SubmissionDate = DateTime.Parse(declaration.SubmissionTime),
-                        Id = declaration.Id,
-                        PayrollMonth = declaration.PayrollPeriod?.Month,
-                        PayrollYear = declaration.PayrollPeriod?.Year,
-                        LevyAllowanceForFullYear = declaration.LevyAllowanceForFullYear,
-                        LevyDueYtd = declaration.LevyDueYearToDate,
-                        NoPaymentForPeriod = declaration.NoPaymentForPeriod,
-                        DateCeased = declaration.DateCeased,
-                        InactiveFrom = declaration.InactiveFrom,
-                        InactiveTo = declaration.InactiveTo,
-                        SubmissionId = declaration.SubmissionId
-                    };
-
-                    employerData.EmpRef = payeRef;
-                    employerData.Declarations.Declarations.Add(dasDeclaration);
-                }
-
-                employerDataList.Add(employerData);
+                    DateCalculated = englishFractionUpdateResponse.DateCalculated
+                });
             }
         }
     }
