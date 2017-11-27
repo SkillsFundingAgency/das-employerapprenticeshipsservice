@@ -2853,6 +2853,88 @@ a#link-settings:focus {
   background-position: -86px -2px;
 }
 
+/*floating menu style - EMPLOYER */
+#floating-menu-holder {
+  background: #6f72af;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+#floating-menu-holder .fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  max-width: 100%;
+}
+
+#floating-menu-holder .width-adjust {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.floating-menu {
+  clear: both;
+  max-width: 960px;
+  width: 100%;
+  background: #6f72af;
+  color: #fff;
+  z-index: 1;
+  margin: 0 auto;
+}
+
+.floating-menu nav#user-nav {
+  clear: both;
+  float: left;
+  margin: 0 0 0 20px;
+  margin: 0;
+  clear: none;
+  float: right;
+}
+
+.floating-menu nav#user-nav li a {
+  border: 0;
+  color: #fff;
+}
+
+.floating-menu nav#user-nav li .has-sub-menu a.menu-main {
+  border: 0;
+  color: #fff;
+}
+
+.floating-menu nav#user-nav li .open a.menu-main {
+  color: #4c2c92;
+}
+
+.floating-menu p.floating-head-text {
+  float: left;
+  margin: 10px 0 0 10px;
+  font-weight: bold;
+  font-size: 19px;
+  margin: 10px 0 0 0px;
+}
+
+/* - END floating menu style */
+.js-enabled #user-nav li.has-sub-menu > a:before {
+  border-left-color: #fff;
+}
+
+.js-enabled #user-nav li.has-sub-menu.open > a {
+  color: #4c2c92;
+}
+
+.floating-menu nav#user-nav #settings-menu a.sub-menu-item {
+  color: #4c2c92;
+}
+
+.header-organisation ul li.menu-link > a {
+  top: auto;
+}
+
+.floating-menu nav#user-nav #settings-menu a.sub-menu-item {
+  color: #fff;
+  color: #4c2c92 !important;
+}
+
 .govuk-box-highlight {
   padding: 1.8em 15px 1.5em;
   margin-bottom: 0;

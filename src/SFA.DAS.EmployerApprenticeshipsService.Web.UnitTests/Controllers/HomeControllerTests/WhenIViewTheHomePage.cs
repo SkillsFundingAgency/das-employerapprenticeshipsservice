@@ -85,10 +85,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             ConfigurationFactory.Current = new IdentityServerConfigurationFactory(
                 new EmployerApprenticeshipsServiceConfiguration
                 {
-                    ApprenticeshipInfoService = new ApprenticeshipInfoServiceConfiguration
-                    {
-                        BaseUrl="http://test.local"
-                    },
                     Identity = new IdentityServerConfiguration { BaseAddress = "http://test.local/identity" ,AccountActivationUrl = "/confirm"}
                 });
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);

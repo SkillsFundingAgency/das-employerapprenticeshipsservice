@@ -123,48 +123,48 @@
             </div>
         </div>
     </header>
-
-    <div class="header-user">
-        <div class="header-inner">
-
-            @if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null) {
-            <div class="account-information" role="navigation">
-                <nav id="user-nav">
-                    <ul role="menubar">
-                        <li><a href="@Url.Action("Help", "Home")">Help</a></li>
-                        @if (HttpContext.Current.User.Identity.IsAuthenticated)
-                        {
-                            
-                            <li class="has-sub-menu">
-                                <a href="/" role="menuitem">Settings</a>
-                                <ul role="menu" class="js-hidden">
-                                    @if (!SFA.DAS.EAS.Web.Extensions.StringExtensions.ParseHideNavFromViewBag(ViewBag))
-                                    {   
-                                        <li><a href="@Url.Action("ViewAccounts", "Home")" role="menuitem">Your accounts</a></li>
-                                        <li><a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem">Rename account</a></li>
-                                    }
-                                    <li><a href="@UserLinksViewModel.ChangePasswordLink">Change your password</a></li>
-                                    <li><a href="@UserLinksViewModel.ChangeEmailLink">Change your email address</a></li>
-                                    <li><a href="@Url.Action("NotificationSettings", "Settings")">Notification settings</a></li>
-
-                                </ul>
-                            </li>
-                            <li><a href="@Url.Action("SignOut", "Home")" role="menuitem">Sign out</a></li>
-                            
-                        }
-                        else
-                        {
-                            if (Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+    @if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+    {
+        <div id="floating-menu-holder">
+            <div class="account-information floating-menu" role="navigation">
+                <div class="js-float">
+                    <p class="floating-head-text">Your employer account </p>
+                    <nav id="user-nav">
+                        <ul role="menubar">
+                            <li><a href="@Url.Action("Help", "Home")">Help</a></li>
+                            @if (HttpContext.Current.User.Identity.IsAuthenticated)
                             {
-                                <li><a href="@Url.Action("SignIn", "Home")" role="menuitem">Sign in / Register</a></li>
+                                <li class="has-sub-menu">
+                                    <a href="/" role="menuitem">Settings</a>
+                                    <ul role="menu" class="js-hidden" id="settings-menu">
+                                        <li><a href="@Url.Action("ViewAccounts", "Home")" role="menuitem" class="sub-menu-item">Your accounts</a></li>
+                                        @if (string.IsNullOrWhiteSpace(ViewBag.HideNav))
+                                        {
+                                            <li><a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem" class="sub-menu-item">Rename account</a></li>
+                                        }
+                                        <li><a href="@UserLinksViewModel.ChangePasswordLink" class="sub-menu-item">Change your password</a></li>
+                                        <li><a href="@UserLinksViewModel.ChangeEmailLink" class="sub-menu-item">Change your email address</a></li>
+                                        <li><a href="@Url.Action("NotificationSettings", "Settings")" class="sub-menu-item">Notification settings</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="@Url.Action("SignOut", "Home")" role="menuitem">Sign out</a></li>
                             }
-                        }
-                    </ul>
-                </nav>
+                            else
+            if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+
+                            {
+                                {
+
+                                    <li><a href="@Url.Action("SignIn", "Home")" role="menuitem">Sign in / Register</a></li>
+                                }
+                            }
+                        </ul>
+                    </nav>
+                </div>
             </div>
-            }
-        </div>
-    </div>
+        </div> <!--/floating-menu-holder-->
+    }
+  
     @if (HttpContext.Current.User.Identity.IsAuthenticated)
     {
         var controllerString = ViewContext.RouteData.Values["Controller"].ToString();

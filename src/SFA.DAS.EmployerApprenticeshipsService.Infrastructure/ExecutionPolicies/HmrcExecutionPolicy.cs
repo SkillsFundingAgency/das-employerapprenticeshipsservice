@@ -29,8 +29,15 @@ namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
 
         protected override T OnException<T>(Exception ex)
         {
-            _logger.Error(ex, $"Exceeded retry limit - {ex.Message}");
-            return default(T);
+            if (ex is ResourceNotFoundException)
+            {
+                _logger.Info($"Resource not found - {ex.Message}");
+            }
+            else
+            {
+                _logger.Error(ex, $"Exceeded retry limit - {ex.Message}");
+            }
+            throw ex;
         }
 
         private void OnRetryableFailure(Exception ex)
