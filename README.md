@@ -62,16 +62,16 @@ Steps
 * click on publish menu item
 * click the edit button
 
-![click on the edit button](docs/img/db1.png)
+![click on the edit button](/docs/img/db1.png)
 
 * select Local ProjectsV13
 
-![select Local ProjectsV13](docs/img/db2.png)
+![select Local ProjectsV13](/docs/img/db2.png)
 
 * Add the project name in again as the Database name (ie: SFA.DAS.EAS.Employer_Account.Database)
 * click publish
 
-![select Local ProjectsV13](docs/img/db3.png)
+![select Local ProjectsV13](/docs/img/db3.png)
 
 **TODO replace the publish with a post deploy step on building**
 
@@ -83,7 +83,7 @@ The configuration is loaded from azure table storage (or file system but it's no
 * Right click Tables under Storage Accounts > Tables
 * Select Create Table from the menu
 
-![right click on Development Tables](docs/img/config1.png)
+![right click on Development Tables](/docs/img/config1.png)
 
 * Create a table called Configuration
 * Click Import from the top buttons
