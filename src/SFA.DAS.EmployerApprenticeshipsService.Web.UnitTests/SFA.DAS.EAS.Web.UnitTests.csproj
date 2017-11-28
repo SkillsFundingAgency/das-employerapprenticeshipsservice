@@ -109,6 +109,9 @@
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.34273, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.34273\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.7.0.43584, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.7.0.43584\lib\net45\SFA.DAS.Tasks.API.Types.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap, Version=4.2.0.402, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\structuremap.4.2.0.402\lib\net40\StructureMap.dll</HintPath>
       <Private>True</Private>
@@ -229,6 +232,7 @@
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingAllUsers.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingUserAccounts.cs" />
     <Compile Include="Orchestrators\InvitationOrchestratorTests\WhenGettingAllInvitations.cs" />
+    <Compile Include="Orchestrators\TaskOrchestratorTests\WhenIDismissAMonthlyTaskReminder.cs" />
     <Compile Include="Orchestrators\UserSettingsOrchestrator\WhenUnsubscribingFromNotification.cs" />
     <Compile Include="Orchestrators\SearchOrganisationOrchestratorTests\WhenISearchForAnOrganisation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
