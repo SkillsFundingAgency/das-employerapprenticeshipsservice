@@ -24,12 +24,13 @@ The Employer Apprenticeships Service provides a REST Api and client for accessin
 ### Developer Setup
 
 #### Requirements
-- Install [Visual Studio 2017 Enterprise](https://www.visualstudio.com/downloads/)
+- Install [Visual Studio 2017 Enterprise](https://www.visualstudio.com/downloads/) with these workloads:
+    - .NET desktop development
+    - ASP.NET and web development
+    - Azure development
 - Install [SQL Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms)
 - Install [Azure Storage Explorer](http://storageexplorer.com/)
 - Administator Access
-
-Probably already install Azure SDK 2.9
 
 
 #### Setup
