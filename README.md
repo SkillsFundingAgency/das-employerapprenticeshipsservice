@@ -1,7 +1,7 @@
 # Digital Apprenticeships Service
+
 ## Employer Apprenticeship Service
 
-|               |               |
 | ------------- | ------------- |
 |![crest](https://assets.publishing.service.gov.uk/government/assets/crests/org_crest_27px-916806dcf065e7273830577de490d5c7c42f36ddec83e907efe62086785f24fb.png)|Employer Apprenticeship Service|
 | Build | ![Build Status](https://sfa-gov-uk.visualstudio.com/_apis/public/build/definitions/c39e0c0b-7aff-4606-b160-3566f3bbce23/101/badge) |
@@ -9,7 +9,6 @@
 
 ## Account Api
 
-|               |               |
 | ------------- | ------------- |
 |![crest](https://assets.publishing.service.gov.uk/government/assets/crests/org_crest_27px-916806dcf065e7273830577de490d5c7c42f36ddec83e907efe62086785f24fb.png)| Account API |
 | Client  | [![NuGet Badge](https://buildstats.info/nuget/SFA.DAS.Account.Api.Client)](https://www.nuget.org/packages/SFA.DAS.Account.Api.Client)  |
@@ -20,10 +19,10 @@ The Employer Apprenticeships Service provides a REST Api and client for accessin
 * The API can be found in [src/SFA.DAS.EAS.Api](src/SFA.DAS.EAS.Api)
 * The client can be found in [src/SFA.DAS.Account.Api.Client](src/SFA.DAS.Account.Api.Client)
 
-
 ### Developer Setup
 
 #### Requirements
+
 - Install [Visual Studio 2017 Enterprise](https://www.visualstudio.com/downloads/) with these workloads:
     - .NET desktop development
     - ASP.NET and web development
@@ -31,7 +30,6 @@ The Employer Apprenticeships Service provides a REST Api and client for accessin
 - Install [SQL Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms)
 - Install [Azure Storage Explorer](http://storageexplorer.com/)
 - Administator Access
-
 
 #### Setup
 
@@ -45,30 +43,31 @@ The Employer Apprenticeships Service provides a REST Api and client for accessin
 - Open Visual studio as an administrator
 - Open the solution
 - Set SFA.DAS.CloudService as the startup project
-- Running the solution will launch the site and the API in your browser.
+- Running the solution will launch the site in your browser.
 
 ##### Publish the databases
-repeat these steps for
+
+Repeat these steps for:
 
 1. SFA.DAS.EAS.Employer_Account.Database
 2. SFA.DAS.EAS.Employer_Financial.Database
 
-Steps
+Steps:
 
-* right click on the db project in the solution explorer
-* click on publish menu item
-* click the edit button
+* Right click on the db project in the solution explorer
+* Click on publish menu item
+* Click the edit button
 
-![click on the edit button](/docs/img/db1.PNG)
+![Click the edit button](/docs/img/db1.PNG)
 
-* select Local ProjectsV13
+* Select Local > ProjectsV13
 
-![select Local ProjectsV13](/docs/img/db2.PNG)
+![Select Local > ProjectsV13](/docs/img/db2.PNG)
 
-* Add the project name in again as the Database name (ie: SFA.DAS.EAS.Employer_Account.Database)
-* click publish
+* Add the project name in again as the Database name (ie: SFA.DAS.EAS.Employer_Account)
+* Click publish
 
-![select Local ProjectsV13](/docs/img/db3.PNG)
+![Select Local > ProjectsV13](/docs/img/db3.PNG)
 
 **TODO replace the publish with a post deploy step on building**
 
@@ -88,12 +87,9 @@ The configuration is loaded from azure table storage (or file system but it's no
 
 **TODO add an internal for the CSV**
 
-
-
 **Troubleshooting**
 
-- If you can't connect to the table storage emulator
-	- you may have a bit torrent client running
+- If you can't connect to the table storage emulator you may have a bit torrent client running
 
 ### Feature Toggle
 
