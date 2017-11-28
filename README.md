@@ -35,12 +35,10 @@ The Employer Apprenticeships Service provides a REST Api and client for accessin
 
 #### Setup
 
-##### Add certs for https on IIS express (?)
+##### Add certs for https on IIS express
 
 - Open PowerShell as an administrator
-- Run src\DevInstall.ps1 
-
-**TODO is this needed?**
+- Run src\DevInstall.ps1
 
 ##### Open the solution
 
