@@ -5,6 +5,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Tasks.API.Client;
 using SFA.DAS.Tasks.API.Types.DTOs;
+using SFA.DAS.Tasks.API.Types.Enums;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -31,6 +32,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             }
 
             return new TaskDto[0];
+        }
+
+        public Task DismissMonthlyTaskReminder(string hashedAccountId, string hashedUserId, TaskType taskType)
+        {
+            throw new NotImplementedException();
         }
     }
 }
