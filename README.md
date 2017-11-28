@@ -47,8 +47,6 @@ The Employer Apprenticeships Service provides a REST Api and client for accessin
 - Set SFA.DAS.CloudService as the startup project
 - Running the solution will launch the site and the API in your browser.
 
-**TODO is administrator acces for HTTPS? and is that needed locally?**
-
 ##### Publish the databases
 repeat these steps for
 
