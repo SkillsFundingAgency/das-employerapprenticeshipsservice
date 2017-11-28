@@ -2,6 +2,7 @@
 
 ## Employer Apprenticeship Service
 
+|               |               |
 | ------------- | ------------- |
 |![crest](https://assets.publishing.service.gov.uk/government/assets/crests/org_crest_27px-916806dcf065e7273830577de490d5c7c42f36ddec83e907efe62086785f24fb.png)|Employer Apprenticeship Service|
 | Build | ![Build Status](https://sfa-gov-uk.visualstudio.com/_apis/public/build/definitions/c39e0c0b-7aff-4606-b160-3566f3bbce23/101/badge) |
@@ -9,6 +10,7 @@
 
 ## Account Api
 
+|               |               |
 | ------------- | ------------- |
 |![crest](https://assets.publishing.service.gov.uk/government/assets/crests/org_crest_27px-916806dcf065e7273830577de490d5c7c42f36ddec83e907efe62086785f24fb.png)| Account API |
 | Client  | [![NuGet Badge](https://buildstats.info/nuget/SFA.DAS.Account.Api.Client)](https://www.nuget.org/packages/SFA.DAS.Account.Api.Client)  |
@@ -64,7 +66,7 @@ Steps:
 
 ![Select Local > ProjectsV13](/docs/img/db2.PNG)
 
-* Add the project name in again as the Database name (ie: SFA.DAS.EAS.Employer_Account)
+* Add the project name in again as the Database name (i.e. SFA.DAS.EAS.Employer_Account)
 * Click publish
 
 ![Select Local > ProjectsV13](/docs/img/db3.PNG)
@@ -76,14 +78,20 @@ Steps:
 The configuration is loaded from azure table storage (or file system but it's not supported)
 
 * Open Azure Storage Explorer
-* Right click Tables under Storage Accounts > Tables
+* Right click Tables under Storage Accounts > (Development) > Tables
 * Select Create Table from the menu
 
-![right click on Development Tables](/docs/img/config1.PNG)
+![Right click on Development Tables](/docs/img/config1.PNG)
 
 * Create a table called Configuration
 * Click Import from the top buttons
 * Select the configuration CSV (ask us for it, it's got secrets so it can't be shared publicly)
+* Update the data for these rows with the correct connection string data source (i.e: (localdb)\\ProjectsV13).
+    * SFA.DAS.EmployerApprenticeshipsService_1.0
+    * SFA.DAS.EmployerAccountAPI_1.0
+    * SFA.DAS.LevyAggregationProvider_1.0
+    * SFA.DAS.PaymentProvider_1.0
+    * SFA.DAS.Tasks_1.0
 
 **TODO add an internal for the CSV**
 
@@ -98,4 +106,5 @@ You can limit areas of the site by adding them to a list, in the controller acti
 ```
 {   "Data": [     {       "Controller": "EmployerTeam",       "Action": "Invite"     }   ] }
 ```
-This is added to the configuration table of your local azure storage, with the PartiionKey being **LOCAL** and the RowKey being **SFA.DAS.EmployerApprenticeshipsService.Features_1.0**
+
+This is added to the configuration table of your local azure storage, with the PartitonKey being **LOCAL** and the RowKey being **SFA.DAS.EmployerApprenticeshipsService.Features_1.0**
