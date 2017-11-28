@@ -158,6 +158,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
+    <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommand.cs" />
+    <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommandHandler.cs" />
+    <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommandValidator.cs" />
     <Compile Include="Commands\ResolveRequestedChanges\ResolveRequestedChangesCommand.cs" />
     <Compile Include="Commands\ResolveRequestedChanges\ResolveRequestedChangesHandler.cs" />
     <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommand.cs" />
