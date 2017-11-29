@@ -35,15 +35,17 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.TaskOrchestratorTests
             const string hashedUserId = "DEF456";
             const TaskType taskType = TaskType.LevyDeclarationDue;
 
+            var taskTypeString = Enum.GetName(typeof(TaskType), taskType);
+
             //Act
-            var result = await _orchestrator.DismissMonthlyReminderTask(hashedAccountId, hashedUserId, taskType);
+            var result = await _orchestrator.DismissMonthlyReminderTask(hashedAccountId, hashedUserId, taskTypeString);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, result.Status);
             _mediator.Verify(x => x.SendAsync(It.Is<DismissMonthlyTaskReminderCommand>( command =>
             command.HashedAccountId.Equals(hashedAccountId) &&
             command.HashedUserId.Equals(hashedUserId) && 
-            command.TaskType == taskType)));
+            command.TaskType == taskType)), Times.Once);
         }
 
         [Test]
@@ -57,7 +59,24 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.TaskOrchestratorTests
                 }));
 
             //Act
-            var result = await _orchestrator.DismissMonthlyReminderTask("ABC123", "DEF123", TaskType.LevyDeclarationDue);
+            var result = await _orchestrator.DismissMonthlyReminderTask("ABC123", "DEF123", "LevyDeclarationDue");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
+        }
+
+        [Test]
+        public async Task ThenIfTheTaskIsInvalidIShouldBeTold()
+        {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<DismissMonthlyTaskReminderCommand>()))
+                .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>
+                {
+                    {nameof(DismissMonthlyTaskReminderCommand.HashedAccountId),"test error" }
+                }));
+
+            //Act
+            var result = await _orchestrator.DismissMonthlyReminderTask("ABC123", "DEF123", "this is not a task");
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
@@ -71,7 +90,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.TaskOrchestratorTests
                 .ThrowsAsync(new Exception());
 
             //Act
-            var result = await _orchestrator.DismissMonthlyReminderTask("ABC123", "DEF123", TaskType.LevyDeclarationDue);
+            var result = await _orchestrator.DismissMonthlyReminderTask("ABC123", "DEF123", "LevyDeclarationDue");
 
             //Assert
             Assert.AreEqual(HttpStatusCode.InternalServerError, result.Status);

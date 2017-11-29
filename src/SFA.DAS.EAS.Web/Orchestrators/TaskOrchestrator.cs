@@ -20,12 +20,21 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task<OrchestratorResponse> DismissMonthlyReminderTask(string hashedAccountId, string hashedUserId, TaskType taskType)
+        public async Task<OrchestratorResponse> DismissMonthlyReminderTask(string hashedAccountId, string hashedUserId, string taskTypeName)
         {
-            _logger.Debug($"Dismissing task reminder {Enum.GetName(typeof(TaskType), taskType)} for account id {hashedAccountId} and user id {hashedUserId}");
-
             try
             {
+                TaskType taskType;
+
+                _logger.Debug($"Dismissing task reminder {taskTypeName} for account id {hashedAccountId} and user id {hashedUserId}");
+
+                if (!Enum.TryParse(taskTypeName, out taskType))
+                {
+                    _logger.Warn(
+                        $"Invalid task name for account (account id: {hashedAccountId}, user id: {hashedUserId}, Task type: {taskTypeName}");
+                    return new OrchestratorResponse { Status = HttpStatusCode.BadRequest };
+                }
+
                 await _mediator.SendAsync(new DismissMonthlyTaskReminderCommand
                 {
                     HashedAccountId = hashedAccountId,
@@ -35,12 +44,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (InvalidRequestException ire)
             {
-                _logger.Warn(ire, $"Invalid request for account (account id: {hashedAccountId}, user id: {hashedUserId}, Task type: {taskType}");
+                _logger.Warn(ire, $"Invalid request for account (account id: {hashedAccountId}, user id: {hashedUserId}, Task type: {taskTypeName}");
                 return new OrchestratorResponse { Status = HttpStatusCode.BadRequest};
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Error occured when dismissing a task reminder (account id: {hashedAccountId}, user id: {hashedUserId}, Task type: {Enum.GetName(typeof(TaskType), taskType)}");
+                _logger.Error(ex, $"Error occured when dismissing a task reminder (account id: {hashedAccountId}, user id: {hashedUserId}, Task type: {taskTypeName}");
                 return new OrchestratorResponse { Status = HttpStatusCode.InternalServerError, Exception = ex};
             }
 
