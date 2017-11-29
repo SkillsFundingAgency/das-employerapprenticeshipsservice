@@ -45,7 +45,7 @@ The Employer Apprenticeships Service provides a REST Api and client for accessin
 - Open Visual studio as an administrator
 - Open the solution
 - Set SFA.DAS.CloudService as the startup project
-- Running the solution will launch the site in your browser.
+- Running the solution will launch the site in your browser
 
 ##### Publish the databases
 
@@ -66,38 +66,21 @@ Steps:
 
 ![Select Local > ProjectsV13](/docs/img/db2.PNG)
 
-* Add the project name in again as the Database name (i.e. SFA.DAS.EAS.Employer_Account)
+* Add the project name in again as the Database name (i.e. SFA.DAS.EAS.Employer_Account.Database)
 * Click publish
 
 ![Select Local > ProjectsV13](/docs/img/db3.PNG)
 
 **TODO replace the publish with a post deploy step on building**
 
-##### Add configuration to Storage Emulator
+##### Add configuration to Azure Storage Emulator
 
-The configuration is loaded from azure table storage (or file system but it's not supported)
+The configuration is loaded from azure table storage.
 
-* Open Azure Storage Explorer
-* Right click Tables under Storage Accounts > (Development) > Tables
-* Select Create Table from the menu
-
-![Right click on Development Tables](/docs/img/config1.PNG)
-
-* Create a table called Configuration
-* Click Import from the top buttons
-* Select the configuration CSV (ask us for it, it's got secrets so it can't be shared publicly)
-* Update the data for these rows with the correct connection string data source (i.e: (localdb)\\ProjectsV13).
-    * SFA.DAS.EmployerApprenticeshipsService_1.0
-    * SFA.DAS.EmployerAccountAPI_1.0
-    * SFA.DAS.LevyAggregationProvider_1.0
-    * SFA.DAS.PaymentProvider_1.0
-    * SFA.DAS.Tasks_1.0
-
-**TODO add an internal for the CSV**
-
-**Troubleshooting**
-
-- If you can't connect to the table storage emulator you may have a bit torrent client running
+* Run the Azure Storage Emulator
+* Clone the [das-employer-config](https://github.com/SkillsFundingAgency/das-employer-config) repository
+* Clone the [das-employer-config-updater](https://github.com/SkillsFundingAgency/das-employer-config-updater) repository
+* Run the das-employer-config-updater console application and follow the instructions to import the config from the das-employer-config directory
 
 ### Feature Toggle
 
