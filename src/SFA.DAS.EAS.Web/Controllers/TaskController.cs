@@ -10,7 +10,7 @@ using SFA.DAS.NLog.Logger;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [RoutePrefix("tasks/{HashedAccountId}")]
+    [RoutePrefix("tasks/{hashedAccountId}")]
     public class TaskController : BaseController
     {
         private readonly TaskOrchestrator _orchestrator;
@@ -28,8 +28,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
-        [Route("user/{userId}/task/{taskType}/dismiss")]
+        [HttpGet]
+        [Route("user/{hashedUserId}/task/{taskType}/dismiss", Name = "DismissTask")]
         public async Task<ActionResult> DismissTask(string hashedAccountId, string hashedUserId, string taskType)
         {
             _logger.Debug($"Task dismiss requested for account id {hashedAccountId}, user id {hashedUserId} and task {taskType}");

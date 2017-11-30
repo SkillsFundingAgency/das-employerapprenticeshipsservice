@@ -11,6 +11,8 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public Account Account { get; set; }
        
         public Role UserRole { get; set; }
+        public string HashedUserId { get; set; }
+
         public string EmployerAccountType { get; set; }
         public bool ShowWizard { get; set; }
 

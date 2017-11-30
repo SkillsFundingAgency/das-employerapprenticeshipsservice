@@ -1,7 +1,7 @@
 ﻿@using SFA.DAS.EAS.Web
-@using SFA.DAS.EAS.Domain.Models.UserProfile
 @using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.Helpers
+@using SFA.DAS.Tasks.API.Types.Enums
 
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AccountDashboardViewModel>
 
@@ -95,8 +95,20 @@ else
                                         @switch (task.Type)
                                         {
                                             case "LevyDeclarationDue":
-                                                <p>@task.ItemsDueCount levy declaration@(task.ItemsDueCount > 1 ? "s" : "") due <a href="">View levy declarations</a>
-                                                </p>
+                                                <div>
+                                                    <p>
+                                                        Levy declarations due 19 October<a href="https://www.gov.uk/guidance/pay-apprenticeship-levy">Submit declaration</a>
+                                                    </p>
+                                                </div>
+                                                <!-- Commentted out the below code until the task service has been hooked up-->
+                                                @*<div>
+                                                    <a  href="@Url.Action("DismissTask","Task", new
+                                                              {
+                                                                  hashedAccountId = Model.Data.Account.HashedId,
+                                                                  hashedUserId = Model.Data.HashedUserId,
+                                                                  taskType = Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)
+                                                              })">Dismiss this task</a>
+                                                </div>*@
                                                 break;
                                             case "AgreementToSign":
                                                 <p>@task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("Index", "EmployerAgreement")">View agreements</a>
