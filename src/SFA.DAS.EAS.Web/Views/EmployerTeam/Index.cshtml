@@ -95,20 +95,17 @@ else
                                         @switch (task.Type)
                                         {
                                             case "LevyDeclarationDue":
-                                                <div>
+                                                
                                                     <p>
-                                                        Levy declarations due 19 October<a href="https://www.gov.uk/guidance/pay-apprenticeship-levy">Submit declaration</a>
+                                                        Levy declarations due 19 October
                                                     </p>
-                                                </div>
-                                                <!-- Commentted out the below code until the task service has been hooked up-->
-                                                @*<div>
-                                                    <a  href="@Url.Action("DismissTask","Task", new
-                                                              {
-                                                                  hashedAccountId = Model.Data.Account.HashedId,
-                                                                  hashedUserId = Model.Data.HashedUserId,
-                                                                  taskType = Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)
-                                                              })">Dismiss this task</a>
-                                                </div>*@
+                                                    <form action="@Url.Action("DismissTask", "Task")" method="POST">
+                                                        <input type="hidden" name="hashedUserId" value="@Model.Data.HashedUserId" />
+                                                        <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
+
+                                                        <button class="button-link" type="submit">Dismiss this task</button>
+                                                    </form>
+                                                
                                                 break;
                                             case "AgreementToSign":
                                                 <p>@task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("Index", "EmployerAgreement")">View agreements</a>

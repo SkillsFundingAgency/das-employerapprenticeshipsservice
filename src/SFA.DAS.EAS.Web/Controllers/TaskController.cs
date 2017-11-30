@@ -28,8 +28,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        [Route("user/{hashedUserId}/task/{taskType}/dismiss", Name = "DismissTask")]
+        [HttpPost]
+        [Route("dismissTask", Name = "DismissTask")]
         public async Task<ActionResult> DismissTask(string hashedAccountId, string hashedUserId, string taskType)
         {
             _logger.Debug($"Task dismiss requested for account id {hashedAccountId}, user id {hashedUserId} and task {taskType}");
