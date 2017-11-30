@@ -38,6 +38,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         public ActionResult NotFound()
         {
             Response.StatusCode = (int)HttpStatusCode.NotFound;
+            Response.TrySkipIisCustomErrors = true;
+
             return View();
         }
 

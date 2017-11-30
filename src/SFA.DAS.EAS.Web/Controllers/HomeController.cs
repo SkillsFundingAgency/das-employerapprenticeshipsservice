@@ -238,13 +238,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(model);
         }
 
-        [Route("catchAll")]
-        public ActionResult CatchAll(string path = null)
-        {
-            return RedirectToAction(ControllerConstants.NotFoundViewName, ControllerConstants.ErrorControllerName, new { path });
-        }
-
-
 #if DEBUG
         [Route("CreateLegalAgreement/{showSubFields}")]
         public ActionResult ShowLegalAgreement(bool showSubFields)
