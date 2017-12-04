@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web
             routes.MapRoute(
                 name: "CatchAll",
                 url: "{*path}",
-                defaults: new { controller = "Home", action = "CatchAll", path = UrlParameter.Optional }
+                defaults: new { controller = "Error", action = "NotFound" }
             );
         }
     }

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Routing;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -61,6 +64,23 @@ namespace SFA.DAS.EAS.Web.Controllers
             var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
             
             return View(agreement);
+        }
+
+        [HttpGet]
+        [Route("agreements/unsigned/view")]
+        public async Task<ActionResult> ViewUnsignedAgreements(string hashedAccountId)
+        {
+            var agreements = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
+
+            var unsignedAgreements = agreements?.Data?.EmployerAgreements
+                .Where(x => x.Status == EmployerAgreementStatus.Pending).ToArray();
+
+            if (unsignedAgreements?.Length != 1)
+                return RedirectToAction("Index");
+
+            var hashedAgreementId = unsignedAgreements.Single().HashedAgreementId;
+
+            return RedirectToAction("AboutYourAgreement", new { agreementId = hashedAgreementId });
         }
 
         [HttpGet]

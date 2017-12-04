@@ -32,11 +32,10 @@ namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
             if (ex is ResourceNotFoundException)
             {
                 _logger.Info($"Resource not found - {ex.Message}");
+                return default(T);
             }
-            else
-            {
-                _logger.Error(ex, $"Exceeded retry limit - {ex.Message}");
-            }
+
+            _logger.Error(ex, $"Exceeded retry limit - {ex.Message}");
             throw ex;
         }
 
