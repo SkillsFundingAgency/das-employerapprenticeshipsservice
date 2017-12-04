@@ -94,7 +94,7 @@ else
                                     <li>
                                         @switch (task.Type)
                                         {
-                                            case "LevyDeclarationDue":
+                                            case "LevyDeclarationD ue":
                                                 <p>@task.ItemsDueCount levy declaration@(task.ItemsDueCount > 1 ? "s" : "") due <a href="">View levy declarations</a>
                                                 </p>
                                                 break;
@@ -107,7 +107,7 @@ else
                                                 </p>
                                                 break;
                                             case "ApprenticeChangesToReview":
-                                                <p>@task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.ExternalUrlAction("apprentices", "manage/all")">View changes</a>
+                                                <p>@task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.ExternalUrlAction("apprentices", "manage/all?RecordStatus=ChangesForReview")">View changes</a>
                                                 </p>
                                                 break;
                                             case "CohortRequestReadyForApproval":
