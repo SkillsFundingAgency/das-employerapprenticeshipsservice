@@ -77,24 +77,24 @@ else
                 <nav>
                     <ul class="js-tabs" role="tablist">
                         <li role="tab" id="tab-tasks" aria-controls="pane-tasks"><a href="#pane-tasks">Tasks</a></li>
-                        <!-- Add this back in when Activities is implemented-->                    
+                        <!-- Add this back in when Activities is implemented-->
                         @* <li role="tab" id="tab-activity" aria-controls="pane-activity"><a href="#pane-activity">Activity</a></li>*@
                     </ul>
                 </nav>
                 <div class="panes">
                     <div class="js-tab-pane" id="pane-tasks" role="tabpanel">
-                        @if (Model.Data.Tasks.Count > 0)
-                        {
-                            <ul class="task-list">
-                                
-                                @{ var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();}
+                        @*@if (Model.Data.Tasks.Count > 0)
+                    {
+                        <ul class="task-list">
 
-                                @foreach (var task in priorityOrderTaskList)
-                                {
-                                    <li>
-                                        @switch (task.Type)
-                                        {
-                                            case "LevyDeclarationD ue":
+                            { var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();}
+
+                            @foreach (var task in priorityOrderTaskList)
+                            {
+                                <li>
+                                    @switch (task.Type)
+                                    {
+                                        case "LevyDeclarationDue":
                                                 <p>@task.ItemsDueCount levy declaration@(task.ItemsDueCount > 1 ? "s" : "") due <a href="">View levy declarations</a>
                                                 </p>
                                                 break;

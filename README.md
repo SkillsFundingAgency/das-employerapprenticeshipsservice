@@ -1,4 +1,5 @@
 # Digital Apprenticeships Service
+
 ## Employer Apprenticeship Service
 
 |               |               |
@@ -20,83 +21,66 @@ The Employer Apprenticeships Service provides a REST Api and client for accessin
 * The API can be found in [src/SFA.DAS.EAS.Api](src/SFA.DAS.EAS.Api)
 * The client can be found in [src/SFA.DAS.Account.Api.Client](src/SFA.DAS.Account.Api.Client)
 
-
 ### Developer Setup
 
 #### Requirements
-- Install [Visual Studio 2017 Enterprise](https://www.visualstudio.com/downloads/)
+
+- Install [Visual Studio 2017 Enterprise](https://www.visualstudio.com/downloads/) with these workloads:
+    - .NET desktop development
+    - ASP.NET and web development
+    - Azure development
 - Install [SQL Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms)
 - Install [Azure Storage Explorer](http://storageexplorer.com/)
 - Administator Access
 
-Probably already install Azure SDK 2.9
-
-
 #### Setup
 
-##### Add certs for https on IIS express (?)
+##### Add certs for https on IIS express
 
 - Open PowerShell as an administrator
-- Run src\DevInstall.ps1 
-
-**TODO is this needed?**
+- Run src\DevInstall.ps1
 
 ##### Open the solution
 
 - Open Visual studio as an administrator
 - Open the solution
 - Set SFA.DAS.CloudService as the startup project
-- Running the solution will launch the site and the API in your browser.
-
-**TODO is administrator acces for HTTPS? and is that needed locally?**
+- Running the solution will launch the site in your browser
 
 ##### Publish the databases
-repeat these steps for
+
+Repeat these steps for:
 
 1. SFA.DAS.EAS.Employer_Account.Database
 2. SFA.DAS.EAS.Employer_Financial.Database
 
-Steps
+Steps:
 
-* right click on the db project in the solution explorer
-* click on publish menu item
-* click the edit button
+* Right click on the db project in the solution explorer
+* Click on publish menu item
+* Click the edit button
 
-![click on the edit button](/docs/img/db1.PNG)
+![Click the edit button](/docs/img/db1.PNG)
 
-* select Local ProjectsV13
+* Select Local > ProjectsV13
 
-![select Local ProjectsV13](/docs/img/db2.PNG)
+![Select Local > ProjectsV13](/docs/img/db2.PNG)
 
-* Add the project name in again as the Database name (ie: SFA.DAS.EAS.Employer_Account.Database)
-* click publish
+* Add the project name in again as the Database name (i.e. SFA.DAS.EAS.Employer_Account.Database)
+* Click publish
 
-![select Local ProjectsV13](/docs/img/db3.PNG)
+![Select Local > ProjectsV13](/docs/img/db3.PNG)
 
 **TODO replace the publish with a post deploy step on building**
 
-##### Add configuration to Storage Emulator
+##### Add configuration to Azure Storage Emulator
 
-The configuration is loaded from azure table storage (or file system but it's not supported)
+The configuration is loaded from azure table storage.
 
-* Open Azure Storage Explorer
-* Right click Tables under Storage Accounts > Tables
-* Select Create Table from the menu
-
-![right click on Development Tables](/docs/img/config1.PNG)
-
-* Create a table called Configuration
-* Click Import from the top buttons
-* Select the configuration CSV (ask us for it, it's got secrets so it can't be shared publicly)
-
-**TODO add an internal for the CSV**
-
-
-
-**Troubleshooting**
-
-- If you can't connect to the table storage emulator
-	- you may have a bit torrent client running
+* Run the Azure Storage Emulator
+* Clone the [das-employer-config](https://github.com/SkillsFundingAgency/das-employer-config) repository
+* Clone the [das-employer-config-updater](https://github.com/SkillsFundingAgency/das-employer-config-updater) repository
+* Run the das-employer-config-updater console application and follow the instructions to import the config from the das-employer-config directory
 
 ### Feature Toggle
 
@@ -105,4 +89,5 @@ You can limit areas of the site by adding them to a list, in the controller acti
 ```
 {   "Data": [     {       "Controller": "EmployerTeam",       "Action": "Invite"     }   ] }
 ```
-This is added to the configuration table of your local azure storage, with the PartiionKey being **LOCAL** and the RowKey being **SFA.DAS.EmployerApprenticeshipsService.Features_1.0**
+
+This is added to the configuration table of your local azure storage, with the PartitonKey being **LOCAL** and the RowKey being **SFA.DAS.EmployerApprenticeshipsService.Features_1.0**
