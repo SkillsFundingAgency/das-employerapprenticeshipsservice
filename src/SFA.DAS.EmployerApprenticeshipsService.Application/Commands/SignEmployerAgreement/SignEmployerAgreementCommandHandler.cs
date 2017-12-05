@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
@@ -29,6 +30,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IMediator _mediator;
         private readonly IMessagePublisher _messagePublisher;
+        private readonly ICommitmentService _commitmentService;
 
 
         public SignEmployerAgreementCommandHandler(
@@ -39,7 +41,8 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             IEmployerAgreementEventFactory agreementEventFactory,
             IGenericEventFactory genericEventFactory,
             IMediator mediator, 
-            IMessagePublisher messagePublisher)
+            IMessagePublisher messagePublisher,
+            ICommitmentService commitmentService)
         {
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
@@ -49,6 +52,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             _genericEventFactory = genericEventFactory;
             _mediator = mediator;
             _messagePublisher = messagePublisher;
+            _commitmentService = commitmentService;
         }
 
         protected override async Task HandleCore(SignEmployerAgreementCommand message)
@@ -90,16 +94,19 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
             await _mediator.SendAsync(new PublishGenericEventCommand {Event = genericEvent});
 
-            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreementId);
+            var commitments = await _commitmentService.GetEmployerCommitments(accountId);
+
+            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreementId, commitments.Any());
         }
 
-        private async Task PublishAgreementSignedMessage(long accountId, long legalEntityId, long agreementId)
+        private async Task PublishAgreementSignedMessage(long accountId, long legalEntityId, long agreementId, bool cohortCreated)
         {
             await _messagePublisher.PublishAsync(new AgreementSignedMessage
             {
                 AccountId = accountId,
                 LegalEntityId = legalEntityId,
-                AgreementId = agreementId
+                AgreementId = agreementId,
+                CohortCreated = cohortCreated
             });
         }
 
