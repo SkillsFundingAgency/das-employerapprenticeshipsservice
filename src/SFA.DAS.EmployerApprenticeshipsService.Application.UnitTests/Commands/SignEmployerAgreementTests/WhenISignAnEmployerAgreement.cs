@@ -92,7 +92,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             _commintmentService = new Mock<ICommitmentService>();
 
             _commintmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>()))
-                .ReturnsAsync(new List<Commitment>());
+                .ReturnsAsync(new List<Cohort>());
 
             _messagePublisher = new Mock<IMessagePublisher>();
             
@@ -193,7 +193,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         {
             //Arrange
             _commintmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>()))
-                .ReturnsAsync(new List<Commitment>{new Commitment()});
+                .ReturnsAsync(new List<Cohort>{new Cohort()});
 
             //Act
             await _handler.Handle(_command);
