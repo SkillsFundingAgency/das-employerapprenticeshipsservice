@@ -157,6 +157,7 @@
     <Compile Include="NoopExecutionPolicy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AuditServiceTests\WhenISendAnAuditMessage.cs" />
+    <Compile Include="Services\CommitmentsServiceTests\WhenIRequestAccountCommitments.cs" />
     <Compile Include="Services\CompaniesHouseEmployerVerificationServiceTests\WhenIGetCompanyInformation.cs" />
     <Compile Include="Services\CookieStorageTests\WhenIUseTheCookieStorageService.cs" />
     <Compile Include="Services\DasAccountServiceTests\WhenIGetEmployerInformation.cs" />
