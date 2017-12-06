@@ -33,8 +33,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
             return View("Error");
         }
-
-        [Route("NotFound")]
+        
         public ActionResult NotFound()
         {
             Response.StatusCode = (int)HttpStatusCode.NotFound;
