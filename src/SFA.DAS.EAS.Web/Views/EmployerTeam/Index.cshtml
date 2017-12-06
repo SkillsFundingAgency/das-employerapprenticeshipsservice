@@ -97,13 +97,13 @@ else
                                             case "LevyDeclarationDue":
                                                 
                                                     <p>
-                                                        Levy declarations due 19 October
+                                                        Levy declarations due by 19 October
                                                     </p>
                                                     <form action="@Url.Action("DismissTask", "Task")" method="POST">
                                                         <input type="hidden" name="hashedUserId" value="@Model.Data.HashedUserId" />
                                                         <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
 
-                                                        <button class="button-link" type="submit">Dismiss this task</button>
+                                                        <button class="button-link" type="submit">Dismiss this message</button>
                                                     </form>
                                                 
                                                 break;
