@@ -21,6 +21,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             var commitmentItems = await _commitmentApi.GetEmployerCommitments(employerAccountId);
 
+            if (commitmentItems == null || !commitmentItems.Any())
+            {
+                return new List<Cohort>();
+            }
+
             return commitmentItems.Where(x => x.CommitmentStatus != CommitmentStatus.Deleted)
                                   .Select(x => new Cohort {Id = x.Id}).ToList();
         }
