@@ -96,7 +96,9 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
             var commitments = await _commitmentService.GetEmployerCommitments(accountId);
 
-            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreementId, commitments.Any());
+            var accountHasCommitments = commitments?.Any() ?? false;
+
+            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreementId, accountHasCommitments);
         }
 
         private async Task PublishAgreementSignedMessage(long accountId, long legalEntityId, long agreementId, bool cohortCreated)

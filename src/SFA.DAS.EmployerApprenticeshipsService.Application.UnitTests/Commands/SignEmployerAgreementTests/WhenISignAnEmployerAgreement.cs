@@ -202,5 +202,20 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<AgreementSignedMessage>(
                 m => m.CohortCreated && m.AccountId == AccountId && m.AgreementId == AgreementId && m.LegalEntityId == LegalEntityId)));
         }
+
+        [Test]
+        public async Task ThenIfICannotGetCommitmentsForTheAccountIStillNotifyTheService()
+        { 
+            //Arrange
+            _commintmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>()))
+                .ReturnsAsync(null);
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AgreementSignedMessage>(
+                m => !m.CohortCreated && m.AccountId == AccountId && m.AgreementId == AgreementId && m.LegalEntityId == LegalEntityId)));
+        }
     }
 }
