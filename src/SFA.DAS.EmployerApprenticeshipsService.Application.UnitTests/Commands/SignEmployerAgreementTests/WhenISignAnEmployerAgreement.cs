@@ -12,8 +12,10 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.Commitment;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 using SFA.DAS.HashingService;
 using SFA.DAS.Messaging.Interfaces;
@@ -35,17 +37,30 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         private Mock<IMediator> _mediator;
         private EmployerAgreementView _agreement;
         private AgreementSignedEvent _agreementEvent;
+        private Mock<ICommitmentService> _commintmentService;
+        private Mock<IMessagePublisher> _messagePublisher;
 
+        private const long AccountId = 223344;
         private const long AgreementId = 123433;
+        private const long LegalEntityId = 111333;
         private const string HashedLegalEntityId = "2635JHG";
 
         [SetUp]
         public void Setup()
         {
+            _command = new SignEmployerAgreementCommand
+            {
+                HashedAccountId = "1AVCFD",
+                HashedAgreementId = "2EQWE34",
+                ExternalUserId = Guid.NewGuid().ToString(),
+                SignedDate = DateTime.Now
+            };
+
             _membershipRepository = new Mock<IMembershipRepository>();
             
             _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(AgreementId);
+            _hashingService.Setup(x => x.DecodeValue(_command.HashedAccountId)).Returns(AccountId);
+            _hashingService.Setup(x => x.DecodeValue(_command.HashedAgreementId)).Returns(AgreementId);
             _hashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns(HashedLegalEntityId);
 
             _validator = new Mock<IValidator<SignEmployerAgreementCommand>>();
@@ -55,7 +70,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             _agreement = new EmployerAgreementView
             {
                 HashedAgreementId = "124GHJG",
-                LegalEntityId = 56465
+                LegalEntityId = LegalEntityId
             };
 
             _agreementRepository = new Mock<IEmployerAgreementRepository>();
@@ -73,6 +88,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
 
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _mediator = new Mock<IMediator>();
+
+            _commintmentService = new Mock<ICommitmentService>();
+
+            _commintmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>()))
+                .ReturnsAsync(new List<Cohort>());
+
+            _messagePublisher = new Mock<IMessagePublisher>();
             
             _handler = new SignEmployerAgreementCommandHandler(
                 _membershipRepository.Object, 
@@ -82,10 +104,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
                 _agreementEventFactory.Object, 
                 _genericEventFactory.Object,
                 _mediator.Object,
-                Mock.Of<IMessagePublisher>());
-
-            _command = new SignEmployerAgreementCommand("1AVCFD", Guid.NewGuid().ToString(), DateTime.Now, "2EQWE34",
-                "companyName");
+                _messagePublisher.Object,
+                _commintmentService.Object);
 
             _owner = new MembershipView
             {
@@ -164,6 +184,36 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             _genericEventFactory.Verify(x => x.Create(_agreementEvent), Times.Once);
             _mediator.Verify(x => x.SendAsync(It.IsAny<PublishGenericEventCommand>()), Times.Once);
             
+        }
+
+        [Test]
+        public async Task ThenTheServiceShouldBeNotified()
+        {
+            //Arrange
+            _commintmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>()))
+                .ReturnsAsync(new List<Cohort>{new Cohort()});
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AgreementSignedMessage>(
+                m => m.CohortCreated && m.AccountId == AccountId && m.AgreementId == AgreementId && m.LegalEntityId == LegalEntityId)));
+        }
+
+        [Test]
+        public async Task ThenIfICannotGetCommitmentsForTheAccountIStillNotifyTheService()
+        { 
+            //Arrange
+            _commintmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>()))
+                .ReturnsAsync(null);
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AgreementSignedMessage>(
+                m => !m.CohortCreated && m.AccountId == AccountId && m.AgreementId == AgreementId && m.LegalEntityId == LegalEntityId)));
         }
     }
 }
