@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -35,8 +36,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(employerAgreementId)).ReturnsAsync(new EmployerAgreementView { Status = EmployerAgreementStatus.Pending });
 
             //Act
-            var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand("GHT432", "123asd",
-                new DateTime(2016, 01, 01), "123ASD", "compName"));
+            var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand
+            {
+                HashedAccountId = "GHT432",
+                ExternalUserId = "123asd",
+                SignedDate = new DateTime(2016, 01, 01),
+                HashedAgreementId = "123ASD",
+                OrganisationName = "compName"
+            });
 
 
             //Assert
@@ -47,8 +54,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         public async Task ThenIfTheFieldsAreNotPopulatedThenFalseIsReturnedAndTheErrorDictionaryIsPopulated()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand(null, null,
-                new DateTime(2016, 01, 01), null, null));
+            var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand
+            {
+                SignedDate = new DateTime(2016, 01, 01)
+            });
             
             //Assert
             Assert.IsFalse(actual.IsValid());
@@ -68,8 +77,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(employerAgreementId)).ReturnsAsync(new EmployerAgreementView {Status = employerAgreementStatus});
 
             //Act
-            var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand("GHT432", "123asd",
-                new DateTime(2016, 01, 01), hashedAgreementId, "compName"));
+            var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand
+            {
+                HashedAccountId = "GHT432",
+                ExternalUserId = "123asd",
+                SignedDate = new DateTime(2016, 01, 01),
+                HashedAgreementId = hashedAgreementId,
+                OrganisationName = "compName"
+            });
 
 
             //Assert

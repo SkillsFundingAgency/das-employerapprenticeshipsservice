@@ -175,8 +175,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             try
             {
-                await _mediator.SendAsync(new SignEmployerAgreementCommand(hashedId, externalUserId, signedDate,
-                    agreementid, companyName));
+                await _mediator.SendAsync(new SignEmployerAgreementCommand
+                {
+                    HashedAccountId = hashedId,
+                    ExternalUserId = externalUserId,
+                    SignedDate = signedDate,
+                    HashedAgreementId = agreementid,
+                    OrganisationName = companyName
+                });
 
                 return new OrchestratorResponse
                 {
