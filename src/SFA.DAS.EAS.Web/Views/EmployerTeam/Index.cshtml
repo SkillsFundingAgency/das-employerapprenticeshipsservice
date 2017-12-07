@@ -95,9 +95,9 @@ else
                                         @switch (task.Type)
                                         {
                                             case "LevyDeclarationDue":
-                                                
+
                                                     <p>
-                                                        Levy declarations due by 19 October
+                                                        Levy declarations due by 19 @DateTime.Now.ToString("MMMM")
                                                     </p>
                                                     <form action="@Url.Action("DismissTask", "Task")" method="POST">
                                                         <input type="hidden" name="hashedUserId" value="@Model.Data.HashedUserId" />
