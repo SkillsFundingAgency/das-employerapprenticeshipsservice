@@ -25,6 +25,7 @@ using System.Web;
 using AutoMapper;
 using MediatR;
 using Microsoft.Azure;
+using SFA.DAS.Activities;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
@@ -35,95 +36,73 @@ using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
+using NotificationsApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.NotificationsApiClientConfiguration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Factories;
 using SFA.DAS.EAS.Infrastructure.Interfaces.REST;
 using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.EAS.Web.App_Start;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Events.Api.Client.Configuration;
-using StructureMap;
-using StructureMap.Graph;
-using StructureMap.TypeRules;
-using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
+using SFA.DAS.HashingService;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.EAS.Web.App_Start;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
-using NotificationsApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.NotificationsApiClientConfiguration;
-using SFA.DAS.HashingService;
 using SFA.DAS.Tasks.API.Client;
+using StructureMap;
+using StructureMap.TypeRules;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
 
     public class DefaultRegistry : Registry
     {
-        private string _test;
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
         private const string ServiceNamespace = "SFA.DAS";
 
         public DefaultRegistry()
         {
+            var config = GetConfiguration();
+            var activitiesElasticConfiguration = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration<ActivitiesElasticConfiguration>($"SFA.DAS.Activities.Client");
+            var notificationsApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration<NotificationsApiClientConfiguration>($"{ServiceName}.Notifications");
+            var taskApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration<TaskApiConfiguration>($"SFA.DAS.Tasks.Api");
 
-            Scan(
-                scan =>
-                {
-                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
-                    scan.RegisterConcreteTypesAgainstTheFirstInterface();
-                    scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
-                });
+            Scan(scan =>
+            {
+                scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
+                scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
+            });
 
+            For<ActivitiesElasticConfiguration>().Use(activitiesElasticConfiguration);
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
+            For<IApprenticeshipApi>().Use<ApprenticeshipApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
+            For<ICache>().Use<InMemoryCache>(); //RedisCache
+            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
-
-            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
-
-            var config = this.GetConfiguration();
-
-            ConfigureHashingService(config);
-
-            For<IUserRepository>().Use<UserRepository>();
-
-            For<ICache>().Use<InMemoryCache>(); //RedisCache
-
+            For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi).SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
             For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
-            For<IApprenticeshipApi>().Use<ApprenticeshipApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
-            For<IValidationApi>().Use<ValidationApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
-
-            For<IEventsApi>().Use<EventsApi>()
-                .Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi)
-                .SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
-
-            var notificationsApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration
-                <NotificationsApiClientConfiguration>($"{ServiceName}.Notifications");
-                     
-            ConfigureNotificationsApi(notificationsApiConfig);
-
-            RegisterMapper();
-
-            RegisterMediator();
-
-            RegisterAuditService();
-
-            var taskApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration
-                <TaskApiConfiguration>($"SFA.DAS.Tasks.Api");
-
+            For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
             For<ITaskApiConfiguration>().Use(taskApiConfig);
-
             For<ITaskService>().Use<TaskService>();
-
+            For<IUserRepository>().Use<UserRepository>();
+            For<IValidationApi>().Use<ValidationApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
+            
+            ConfigureNotificationsApi(notificationsApiConfig);
+            RegisterMapper();
+            RegisterMediator();
+            RegisterAuditService();            
             RegisterPostCodeAnywhereService();
-
             RegisterExecutionPolicies();
-
             RegisterLogger();
-        }  
+        }
 
         private void ConfigureNotificationsApi(NotificationsApiClientConfiguration config)
         {
@@ -131,47 +110,63 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
             if (string.IsNullOrWhiteSpace(config.ClientId))
             {
-                httpClient = new Http.HttpClientBuilder()
-                .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config))
-                .Build();
+                httpClient = new Http.HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config)).Build();
             }
             else
             {
-                httpClient = new Http.HttpClientBuilder()
-                .WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config))
-                .Build();
+                httpClient = new Http.HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config)).Build();
             }
 
             For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
-
             For<INotificationsApiClientConfiguration>().Use(config);
         }
 
-        private void RegisterExecutionPolicies()
+        private EmployerApprenticeshipsServiceConfiguration GetConfiguration()
         {
-            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
-                .Use<Infrastructure.ExecutionPolicies.CompaniesHouseExecutionPolicy>()
-                .Named(Infrastructure.ExecutionPolicies.CompaniesHouseExecutionPolicy.Name);
+            var environment = Environment.GetEnvironmentVariable("DASENV");
 
-            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
-                .Use<Infrastructure.ExecutionPolicies.HmrcExecutionPolicy>()
-                .Named(Infrastructure.ExecutionPolicies.HmrcExecutionPolicy.Name);
+            if (string.IsNullOrEmpty(environment))
+            {
+                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+            }
+            if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
+            {
+                PopulateSystemDetails(environment);
+            }
 
-            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
-                .Use<Infrastructure.ExecutionPolicies.IdamsExecutionPolicy>()
-                .Named(Infrastructure.ExecutionPolicies.IdamsExecutionPolicy.Name);
+            var configurationRepository = GetConfigurationRepository();
+            var configurationService = new ConfigurationService(configurationRepository, new ConfigurationOptions(ServiceName, environment, "1.0"));
+            var result = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
+
+            return result;
         }
 
-        private void RegisterPostCodeAnywhereService()
+        private static IConfigurationRepository GetConfigurationRepository()
         {
-            For<IAddressLookupService>().Use<AddressLookupService>();
-            For<IRestClientFactory>().Use<RestClientFactory>();
-            For<IRestServiceFactory>().Use<RestServiceFactory>();
+            IConfigurationRepository configurationRepository;
+
+            if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
+            {
+                configurationRepository = new FileStorageConfigurationRepository();
+            }
+            else
+            {
+                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+            }
+
+            return configurationRepository;
+        }
+
+        private void PopulateSystemDetails(string envName)
+        {
+            SystemDetailsViewModel.EnvironmentName = envName;
+            SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         private void RegisterAuditService()
         {
             var environment = Environment.GetEnvironmentVariable("DASENV");
+
             if (string.IsNullOrEmpty(environment))
             {
                 environment = CloudConfigurationManager.GetSetting("EnvironmentName");
@@ -189,18 +184,38 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             }
         }
 
+        private void RegisterExecutionPolicies()
+        {
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.CompaniesHouseExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.CompaniesHouseExecutionPolicy.Name);
+
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.HmrcExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.HmrcExecutionPolicy.Name);
+
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.IdamsExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.IdamsExecutionPolicy.Name);
+        }
+
+        private void RegisterLogger()
+        {
+            For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
+            For<ILog>().Use(x => new NLogLogger(x.ParentType, x.GetInstance<IRequestContext>(), null)).AlwaysUnique();
+        }
+
         private void RegisterMapper()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("SFA.DAS.EAS"));
-
             var mappingProfiles = new List<Profile>();
 
             foreach (var assembly in assemblies)
             {
                 var profiles = Assembly.Load(assembly.FullName).GetTypes()
-                                       .Where(t => typeof(Profile).IsAssignableFrom(t))
-                                       .Where(t => t.IsConcrete() && t.HasConstructors())
-                                       .Select(t => (Profile)Activator.CreateInstance(t));
+                    .Where(t => typeof(Profile).IsAssignableFrom(t))
+                    .Where(t => t.IsConcrete() && t.HasConstructors())
+                    .Select(t => (Profile)Activator.CreateInstance(t));
 
                 mappingProfiles.AddRange(profiles);
             }
@@ -216,41 +231,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<IMapper>().Use(mapper).Singleton();
         }
 
-        private EmployerApprenticeshipsServiceConfiguration GetConfiguration()
-        {
-            var environment = Environment.GetEnvironmentVariable("DASENV");
-            if (string.IsNullOrEmpty(environment))
-            {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
-            }
-            if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
-            {
-                PopulateSystemDetails(environment);
-            }
-
-            var configurationRepository = GetConfigurationRepository();
-            var configurationService = new ConfigurationService(configurationRepository,
-                new ConfigurationOptions(ServiceName, environment, "1.0"));
-
-            var result = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
-
-            return result;
-        }
-
-        private static IConfigurationRepository GetConfigurationRepository()
-        {
-            IConfigurationRepository configurationRepository;
-            if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
-            {
-                configurationRepository = new FileStorageConfigurationRepository();
-            }
-            else
-            {
-                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
-            }
-            return configurationRepository;
-        }
-
         private void RegisterMediator()
         {
             For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
@@ -258,25 +238,11 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<IMediator>().Use<Mediator>();
         }
 
-        private void PopulateSystemDetails(string envName)
+        private void RegisterPostCodeAnywhereService()
         {
-            SystemDetailsViewModel.EnvironmentName = envName;
-            SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            For<IAddressLookupService>().Use<AddressLookupService>();
+            For<IRestClientFactory>().Use<RestClientFactory>();
+            For<IRestServiceFactory>().Use<RestServiceFactory>();
         }
-
-        private void RegisterLogger()
-        {
-            For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
-            For<ILog>().Use(x => new NLogLogger(
-                x.ParentType,
-                x.GetInstance<IRequestContext>(),
-                null)).AlwaysUnique();
-        }
-
-        private void ConfigureHashingService(EmployerApprenticeshipsServiceConfiguration config)
-        {
-            For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
-        }
-
     }
 }
