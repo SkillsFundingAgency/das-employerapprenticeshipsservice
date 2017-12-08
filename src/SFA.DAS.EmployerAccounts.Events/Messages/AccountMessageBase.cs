@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
@@ -6,7 +9,7 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     public abstract class AccountMessageBase
     {
         public long AccountId { get; }
-        public DateTime Created { get; }
+        public DateTime CreatedAt { get; }
         public string CreatedBy { get; }
 
         protected AccountMessageBase()
@@ -15,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         protected AccountMessageBase(long accountId, string createdBy)
         {
             AccountId = accountId;
-            Created = DateTime.Now;
+            CreatedAt = DateTime.Now;
             CreatedBy = createdBy;
         }
     }
