@@ -230,14 +230,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         public async Task ThenTheMessageIsAddedToTheAddPayeSchemeQueue()
         {
             //Arrange
-            var  epxectedPayeRef = "123/abc";
-            var createAccountCommand = new CreateAccountCommand { PayeReference = epxectedPayeRef, AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active" };
+            var  expectedPayeRef = "123/abc";
+            var expectedExternalUserId = "ABC123";
+            var createAccountCommand = new CreateAccountCommand { PayeReference = expectedPayeRef, AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = expectedExternalUserId };
 
             //Act
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeCreatedMessage>(c => c.EmpRef.Equals(epxectedPayeRef))), Times.Once());
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeCreatedMessage>(
+                c => c.EmpRef.Equals(expectedPayeRef) &&
+                c.AccountId.Equals(ExpectedAccountId) &&
+                c.CreatedByUserId.Equals(expectedExternalUserId)
+                )), Times.Once());
         }
 
         [Test]

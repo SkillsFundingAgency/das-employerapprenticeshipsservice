@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             await RefreshLevy(returnValue, emprefs);
 
-            await PublishAddPayeSchemeMessage(emprefs);
+            await PublishAddPayeSchemeMessage(returnValue.AccountId, message.ExternalUserId, emprefs);
 
             await PublishAccountCreatedMessage(returnValue.AccountId);
 
@@ -136,13 +136,15 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             }
         }
 
-        private async Task PublishAddPayeSchemeMessage(IEnumerable<string> emprefs)
+        private async Task PublishAddPayeSchemeMessage(long accountId, string externalUserId, IEnumerable<string> emprefs)
         {
             foreach (var empref in emprefs)
             {
                 await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage
                 {
-                    EmpRef= empref
+                    AccountId = accountId,
+                    CreatedByUserId = externalUserId,
+                    EmpRef = empref
                 });
             }
         }
