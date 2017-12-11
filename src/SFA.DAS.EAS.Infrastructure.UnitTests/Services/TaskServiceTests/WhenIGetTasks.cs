@@ -39,12 +39,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.TaskServiceTests
         {
             //Act
             const long accountId = 2;
-            const long userId = 4;
-            var tasks = await _service.GetAccountTasks(accountId, userId);
+            const string externalUserId = "ABC123";
+            var tasks = await _service.GetAccountTasks(accountId, externalUserId);
 
             //Assert
             Assert.AreEqual(1, tasks.Count());
-            _apiClient.Verify(x => x.GetTasks(accountId.ToString(), userId.ToString()), Times.Once);
+            _apiClient.Verify(x => x.GetTasks(accountId.ToString(), externalUserId.ToString()), Times.Once);
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.TaskServiceTests
             _apiClient.Setup(x => x.GetTasks(It.IsAny<string>(), It.IsAny<string>())).Throws<Exception>();
 
             //Act
-            var tasks = await _service.GetAccountTasks(2, 3);
+            var tasks = await _service.GetAccountTasks(2, "ABC123");
 
             //Assert
             Assert.IsEmpty(tasks);

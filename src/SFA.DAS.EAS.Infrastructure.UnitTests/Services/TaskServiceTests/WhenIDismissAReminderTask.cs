@@ -33,15 +33,15 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.TaskServiceTests
         {
             //Arrange
             const long accountId = 2;
-            const long userId = 4;
+            const string externalUserId = "ABC123";
             const TaskType type = TaskType.LevyDeclarationDue;
 
             //Act
-            await _service.DismissMonthlyTaskReminder(accountId, userId, type);
+            await _service.DismissMonthlyTaskReminder(accountId, externalUserId, type);
 
             //Arrange
             var taskName = Enum.GetName(typeof(TaskType), type);
-            _apiClient.Verify(x => x.AddUserReminderSupression(accountId.ToString(),userId.ToString(), taskName), Times.Once);
+            _apiClient.Verify(x => x.AddUserReminderSupression(accountId.ToString(), externalUserId, taskName), Times.Once);
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.TaskServiceTests
                 x.AddUserReminderSupression(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Throws<Exception>();
 
             //Act
-            await _service.DismissMonthlyTaskReminder(2, 4, TaskType.LevyDeclarationDue);
+            await _service.DismissMonthlyTaskReminder(2, "ABC123", TaskType.LevyDeclarationDue);
 
             //Assert
             _logger.Verify(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.TaskServiceTests
         public async Task ThenIfNoTaskIsDismissedTheApiShouldNotBeCalled()
         { 
             //Act
-            await _service.DismissMonthlyTaskReminder(2, 4, TaskType.None);
+            await _service.DismissMonthlyTaskReminder(2, "ABC123", TaskType.None);
 
             //Assert
             _apiClient.Verify(x =>

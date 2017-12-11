@@ -36,9 +36,8 @@ namespace SFA.DAS.EAS.Application.Commands.DismissMonthlyTaskReminder
             }
 
             var accountId = _hashingService.DecodeValue(command.HashedAccountId);
-            var userId = _hashingService.DecodeValue(command.HashedUserId);
-
-            await _taskService.DismissMonthlyTaskReminder(accountId, userId, command.TaskType);
+          
+            await _taskService.DismissMonthlyTaskReminder(accountId, command.ExternalUserId, command.TaskType);
         }
     }
 }

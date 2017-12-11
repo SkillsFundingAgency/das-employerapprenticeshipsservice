@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.TaskOrchestratorTests
             Assert.AreEqual(HttpStatusCode.OK, result.Status);
             _mediator.Verify(x => x.SendAsync(It.Is<DismissMonthlyTaskReminderCommand>( command =>
             command.HashedAccountId.Equals(hashedAccountId) &&
-            command.HashedUserId.Equals(hashedUserId) && 
+            command.ExternalUserId.Equals(hashedUserId) && 
             command.TaskType == taskType)), Times.Once);
         }
 

@@ -8,8 +8,8 @@ namespace SFA.DAS.EAS.Domain.Interfaces
 {
     public interface ITaskService
     {
-        Task<IEnumerable<TaskDto>> GetAccountTasks(long accountId, long userId);
+        Task<IEnumerable<TaskDto>> GetAccountTasks(long accountId, string externalUserId);
 
-        Task DismissMonthlyTaskReminder(long accountId, long userId, TaskType taskType);
+        Task DismissMonthlyTaskReminder(long accountId, string externalUserId, TaskType taskType);
     }
 }

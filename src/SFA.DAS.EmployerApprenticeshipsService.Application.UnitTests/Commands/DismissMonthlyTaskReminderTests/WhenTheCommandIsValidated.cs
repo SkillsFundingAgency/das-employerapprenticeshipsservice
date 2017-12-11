@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DismissMonthlyTaskReminderT
             var command = new DismissMonthlyTaskReminderCommand
             {
                 HashedAccountId = "ABC123",
-                HashedUserId = "DEF456",
+                ExternalUserId = "DEF456",
                 TaskType = TaskType.LevyDeclarationDue
             };
             
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DismissMonthlyTaskReminderT
             //Assert
             Assert.IsFalse(result.IsValid());
             Assert.IsTrue(result.ValidationDictionary.ContainsKey(nameof(command.HashedAccountId)));
-            Assert.IsTrue(result.ValidationDictionary.ContainsKey(nameof(command.HashedUserId)));
+            Assert.IsTrue(result.ValidationDictionary.ContainsKey(nameof(command.ExternalUserId)));
             Assert.IsTrue(result.ValidationDictionary.ContainsKey(nameof(command.TaskType)));
         }
     }
