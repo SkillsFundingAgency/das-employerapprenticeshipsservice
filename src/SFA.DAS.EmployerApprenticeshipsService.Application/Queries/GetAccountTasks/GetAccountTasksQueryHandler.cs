@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountTasks
 
         private async Task<AccountTask[]> GetTasks(GetAccountTasksQuery message)
         {
-            var tasks = await _taskService.GetAccountTasks(message.AccountId.ToString());
+            var tasks = await _taskService.GetAccountTasks(message.AccountId, message.UserId);
 
             var accountTasks = tasks.Select(x => new AccountTask
             {

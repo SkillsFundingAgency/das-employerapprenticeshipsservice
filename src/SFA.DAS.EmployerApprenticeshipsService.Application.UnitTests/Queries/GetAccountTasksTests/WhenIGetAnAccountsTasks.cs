@@ -27,7 +27,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTasksTests
 
             Query = new GetAccountTasksQuery
             {
-                AccountId = 2
+                AccountId = 2,
+                UserId = 4
+                
             };
 
             RequestHandler = new GetAccountTasksQueryHandler(_taskService.Object, RequestValidator.Object);
@@ -40,7 +42,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTasksTests
             await RequestHandler.Handle(Query);
 
             //Assert
-            _taskService.Verify(x => x.GetAccountTasks(Query.AccountId.ToString()), Times.Once);
+            _taskService.Verify(x => x.GetAccountTasks(Query.AccountId, Query.UserId), Times.Once);
         }
 
         [Test]
@@ -49,9 +51,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTasksTests
             //Arrange
             var tasks = new List<TaskDto>
             {
-                new TaskDto {OwnerId = Query.AccountId.ToString(), Type = "test", ItemsDueCount = 2}
+                new TaskDto {EmployerAccountId = Query.AccountId.ToString(), Type = "test", ItemsDueCount = 2}
             };
-            _taskService.Setup(x => x.GetAccountTasks(It.IsAny<string>())).ReturnsAsync(tasks);
+            _taskService.Setup(x => x.GetAccountTasks(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(tasks);
 
             //Act
             var response = await RequestHandler.Handle(Query);
