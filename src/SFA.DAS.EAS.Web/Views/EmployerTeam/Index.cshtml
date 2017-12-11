@@ -1,7 +1,7 @@
 ﻿@using SFA.DAS.EAS.Web
-@using SFA.DAS.EAS.Domain.Models.UserProfile
 @using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.Helpers
+@using SFA.DAS.Tasks.API.Types.Enums
 
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AccountDashboardViewModel>
 
@@ -84,25 +84,32 @@ else
                 <div class="panes">
                     <div class="js-tab-pane" id="pane-tasks" role="tabpanel">
                         @if (Model.Data.Tasks.Count > 0)
-                    {
-                        <ul class="task-list">
-
+                        {
+                            <ul class="task-list">
+                                
                             @{ var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();}
 
-                            @foreach (var task in priorityOrderTaskList)
-                            {
-                                <li>
-                                    @switch (task.Type)
-                                    {
-                                        case "LevyDeclarationDue":
-                                            <div>
-                                                <p>Levy declaration due by 19 October </p>
-                                                <br />
-                                                <a href="">Dismiss this message</a>
-                                            </div>
-                                            break;
-                                        case "AgreementToSign":
-                                                <p>@task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("Index", "EmployerAgreement")">View agreements</a>
+                                @foreach (var task in priorityOrderTaskList)
+                                {
+                                    <li>
+                                        @switch (task.Type)
+                                        {
+                                            case "LevyDeclarationDue":
+
+                                                    <p>
+                                                        Levy declarations due by 19 @DateTime.Now.ToString("MMMM")
+                                                    </p>
+                                                    <form action="@Url.Action("DismissTask", "Task")" method="POST">
+                                                        <input type="hidden" name="hashedUserId" value="@Model.Data.HashedUserId" />
+                                                        <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
+
+                                                        <button class="button-link" type="submit">Dismiss this message</button>
+                                                    </form>
+
+                                                break;
+                                            case "AgreementToSign":
+                                                <p>
+                                                    @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")">View agreements</a>
                                                 </p>
                                                 break;
                                             case "AddApprentices":

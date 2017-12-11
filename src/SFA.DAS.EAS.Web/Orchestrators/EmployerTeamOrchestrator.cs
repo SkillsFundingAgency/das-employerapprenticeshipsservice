@@ -88,6 +88,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Account = accountResponse.Account,
                     UserRole = userRoleResponse.UserRole,
+                    HashedUserId = externalUserId,
                     UserFirstName = userResponse.User.FirstName,
                     OrgainsationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
                     PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
