@@ -65,7 +65,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
 
                 var tasksResponse =
-                    await _mediator.SendAsync(new GetAccountTasksQuery {AccountId = accountResponse.Account.Id});
+                    await _mediator.SendAsync(new GetAccountTasksQuery
+                    {
+                        AccountId = accountResponse.Account.Id,
+                        ExternalUserId = externalUserId
+                    });
 
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0).ToList() ?? new List<AccountTask>();
 

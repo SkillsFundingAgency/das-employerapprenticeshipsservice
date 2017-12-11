@@ -3,7 +3,6 @@
     public class DismissTaskViewModel
     {
         public string HashedAccountId { get; set; }
-        public string HashedUserId { get; set; }
         public string TaskType { get; set; }
     }
 }

@@ -20,11 +20,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<TaskDto>> GetAccountTasks(long accountId, long userId)
+        public async Task<IEnumerable<TaskDto>> GetAccountTasks(long accountId, string externalUserId)
         {
             try
             {
-                return await _apiClient.GetTasks(accountId.ToString(), userId.ToString());
+                return await _apiClient.GetTasks(accountId.ToString(), externalUserId);
             }
             catch (Exception ex)
             {
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return new TaskDto[0];
         }
 
-        public async Task DismissMonthlyTaskReminder(long accountId, long userId, TaskType taskType)
+        public async Task DismissMonthlyTaskReminder(long accountId, string externalUserId, TaskType taskType)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                 var taskName = Enum.GetName(typeof(TaskType), taskType);
 
-                await _apiClient.AddUserReminderSupression(accountId.ToString(), userId.ToString(), taskName);
+                await _apiClient.AddUserReminderSupression(accountId.ToString(), externalUserId, taskName);
             }
             catch (Exception ex)
             {

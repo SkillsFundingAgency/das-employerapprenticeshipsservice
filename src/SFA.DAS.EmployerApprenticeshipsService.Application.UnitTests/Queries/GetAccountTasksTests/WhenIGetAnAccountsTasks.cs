@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTasksTests
             Query = new GetAccountTasksQuery
             {
                 AccountId = 2,
-                UserId = 4
+                ExternalUserId = "ABC123"
                 
             };
 
@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTasksTests
             await RequestHandler.Handle(Query);
 
             //Assert
-            _taskService.Verify(x => x.GetAccountTasks(Query.AccountId, Query.UserId), Times.Once);
+            _taskService.Verify(x => x.GetAccountTasks(Query.AccountId, Query.ExternalUserId), Times.Once);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTasksTests
             {
                 new TaskDto {EmployerAccountId = Query.AccountId.ToString(), Type = "test", ItemsDueCount = 2}
             };
-            _taskService.Setup(x => x.GetAccountTasks(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(tasks);
+            _taskService.Setup(x => x.GetAccountTasks(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(tasks);
 
             //Act
             var response = await RequestHandler.Handle(Query);
