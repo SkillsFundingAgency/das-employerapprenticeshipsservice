@@ -30,16 +30,17 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [Route("dismissTask", Name = "DismissTask")]
-        public async Task<ActionResult> DismissTask(string hashedAccountId, string hashedUserId, string taskType)
+        public async Task<ActionResult> DismissTask(DismissTaskViewModel viewModel)
         {
-            _logger.Debug($"Task dismiss requested for account id {hashedAccountId}, user id {hashedUserId} and task {taskType}");
-            var result = await _orchestrator.DismissMonthlyReminderTask(hashedAccountId, hashedUserId, taskType);
+            _logger.Debug($"Task dismiss requested for account id '{viewModel.HashedAccountId}', user id '{viewModel.HashedUserId}' and task '{viewModel.TaskType}'");
+
+            var result = await _orchestrator.DismissMonthlyReminderTask(viewModel.HashedAccountId, viewModel.HashedUserId, viewModel.TaskType);
             
             if (result.Status != HttpStatusCode.OK)
             {
                 //Curently we are not telling the user of the error and are instead just logging the issue
                 //The error log will be done at a lower level
-                _logger.Debug($"Task dismiss requested failed for account id {hashedAccountId}, user id {hashedUserId} and task {taskType}");
+                _logger.Debug($"Task dismiss requested failed for account id '{viewModel.HashedAccountId}', user id '{viewModel.HashedUserId}' and task '{viewModel.TaskType}'");
             }
 
             return RedirectToAction("Index", "EmployerTeam");
