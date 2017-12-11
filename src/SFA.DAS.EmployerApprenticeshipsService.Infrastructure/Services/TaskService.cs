@@ -20,11 +20,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<TaskDto>> GetAccountTasks(string accountId)
+        public async Task<IEnumerable<TaskDto>> GetAccountTasks(long accountId, long userId)
         {
             try
             {
-                return await _apiClient.GetTasks(accountId);
+                return await _apiClient.GetTasks(accountId.ToString(), userId.ToString());
             }
             catch (Exception ex)
             {
@@ -34,9 +34,20 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return new TaskDto[0];
         }
 
-        public Task DismissMonthlyTaskReminder(string hashedAccountId, string hashedUserId, TaskType taskType)
+        public async Task DismissMonthlyTaskReminder(long accountId, long userId, TaskType taskType)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (taskType == TaskType.None) return;
+
+                var taskName = Enum.GetName(typeof(TaskType), taskType);
+
+                await _apiClient.AddUserReminderSupression(accountId.ToString(), userId.ToString(), taskName);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Could not retrieve account tasks successfully");
+            }
         }
     }
 }

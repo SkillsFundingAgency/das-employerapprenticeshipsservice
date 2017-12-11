@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.DismissMonthlyTaskReminder;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Tasks.API.Types.Enums;
 
@@ -17,6 +18,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DismissMonthlyTaskReminderT
         private DismissMonthlyTaskReminderCommand _command;
         private Mock<ILog> _logger;
         private Mock<IValidator<DismissMonthlyTaskReminderCommand>> _validator;
+        private Mock<IHashingService> _hashingService;
+        private const long AccountId = 3;
+        private const long UserId = 4;
 
         [SetUp]
         public void Arrange()
@@ -28,11 +32,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DismissMonthlyTaskReminderT
             _command = new DismissMonthlyTaskReminderCommand
             {
                 HashedAccountId = "ABC123",
-                HashedUserId = " DEF4567",
+                HashedUserId = " DEF456",
                 TaskType = TaskType.LevyDeclarationDue
             };
 
-            _handler = new DismissMonthlyTaskReminderCommandHandler(_taskService.Object, _validator.Object, _logger.Object);
+            _hashingService = new Mock<IHashingService>();
+            _hashingService.Setup(x => x.DecodeValue(_command.HashedAccountId)).Returns(AccountId);
+            _hashingService.Setup(x => x.DecodeValue(_command.HashedUserId)).Returns(UserId);
+
+            _handler = new DismissMonthlyTaskReminderCommandHandler(_taskService.Object, _validator.Object, _logger.Object, _hashingService.Object);
 
             _validator.Setup(x => x.Validate(It.IsAny<DismissMonthlyTaskReminderCommand>()))
                 .Returns(new ValidationResult());
@@ -46,7 +54,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DismissMonthlyTaskReminderT
 
             //Assert
             _taskService.Verify(
-                x => x.DismissMonthlyTaskReminder(_command.HashedAccountId, _command.HashedUserId, _command.TaskType), Times.Once);
+                x => x.DismissMonthlyTaskReminder(AccountId, UserId, _command.TaskType), Times.Once);
         }
 
         [Test]
@@ -67,7 +75,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DismissMonthlyTaskReminderT
 
             //Assert
             _taskService.Verify(
-                x => x.DismissMonthlyTaskReminder(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<TaskType>()), Times.Never);
+                x => x.DismissMonthlyTaskReminder(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<TaskType>()), Times.Never);
         }
     }
 }

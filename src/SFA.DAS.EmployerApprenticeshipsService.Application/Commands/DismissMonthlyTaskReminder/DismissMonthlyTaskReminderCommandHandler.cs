@@ -2,6 +2,7 @@
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Commands.DismissMonthlyTaskReminder
@@ -11,15 +12,18 @@ namespace SFA.DAS.EAS.Application.Commands.DismissMonthlyTaskReminder
         private readonly ITaskService _taskService;
         private readonly IValidator<DismissMonthlyTaskReminderCommand> _validator;
         private readonly ILog _logger;
+        private readonly IHashingService _hashingService;
 
         public DismissMonthlyTaskReminderCommandHandler(
             ITaskService taskService, 
             IValidator<DismissMonthlyTaskReminderCommand> validator, 
-            ILog logger)
+            ILog logger, 
+            IHashingService hashingService)
         {
             _taskService = taskService;
             _validator = validator;
             _logger = logger;
+            _hashingService = hashingService;
         }
 
         protected override async Task HandleCore(DismissMonthlyTaskReminderCommand command)
@@ -31,7 +35,10 @@ namespace SFA.DAS.EAS.Application.Commands.DismissMonthlyTaskReminder
                 throw new InvalidRequestException(validationResults.ValidationDictionary);
             }
 
-            await _taskService.DismissMonthlyTaskReminder(command.HashedAccountId, command.HashedUserId, command.TaskType);
+            var accountId = _hashingService.DecodeValue(command.HashedAccountId);
+            var userId = _hashingService.DecodeValue(command.HashedUserId);
+
+            await _taskService.DismissMonthlyTaskReminder(accountId, userId, command.TaskType);
         }
     }
 }
