@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.TimeProvider;
@@ -83,12 +84,12 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
                 AffectedEntity = new Entity { Type = "Invitation", Id = message.Id.ToString() }
             });
 
-            await PublishUserJoinedMessage(existing.AccountId, user.FullName());
+            await PublishUserJoinedMessage(existing.AccountId, user);
         }
 
-        private async Task PublishUserJoinedMessage(long accountId, string createdBy)
+        private async Task PublishUserJoinedMessage(long accountId, User user)
         {
-            await _messagePublisher.PublishAsync(new UserJoinedMessage(accountId, createdBy));
+             await _messagePublisher.PublishAsync(new UserJoinedMessage(accountId, user.FullName(), user.UserRef));
         }
     }
 }

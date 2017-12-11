@@ -5,7 +5,7 @@
     },
     {
         "topicName": "add_paye_scheme",
-        "subscription": [ "Activity_PayeSchemeCreatedMessageProcessor" ]
+        "subscription": [ "Activity_PayeSchemeAddedMessageProcessor" ]
     },
     {
         "topicName": "agreement_created",

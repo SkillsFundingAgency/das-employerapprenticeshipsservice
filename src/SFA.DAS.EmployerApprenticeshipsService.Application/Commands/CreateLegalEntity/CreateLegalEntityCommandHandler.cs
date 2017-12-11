@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
             await PublishAgreementCreatedMessage(accountId,
-                agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId);
+                agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
 
             return new CreateLegalEntityCommandResponse
             {
@@ -76,9 +76,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             };
         }
 
-        private async Task PublishAgreementCreatedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId)
+        private async Task PublishAgreementCreatedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, string userRef)
         {
-            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, agreementId, organisationName, legalEntityId, createdByName));
+            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, agreementId, organisationName, legalEntityId, createdByName, userRef));
         }
 
         private async Task NotifyLegalEntityCreated(string hashedAccountId, long legalEntityId)

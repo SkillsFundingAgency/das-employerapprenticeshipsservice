@@ -229,7 +229,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeCreatedMessage>(c => c.PayeScheme.Equals(expectedPayeRef))), Times.Once());
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeAddedMessage>(c => c.PayeScheme.Equals(expectedPayeRef))), Times.Once());
         }
 
         [Test]

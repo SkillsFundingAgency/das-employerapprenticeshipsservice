@@ -10,16 +10,19 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     {
         public long AccountId { get; }
         public DateTime CreatedAt { get; }
-        public string CreatedBy { get; }
+        public string CreatorName { get; }
+        public string CreatorUserRef { get; }
+
 
         protected AccountMessageBase()
         { }
 
-        protected AccountMessageBase(long accountId, string createdBy)
+        protected AccountMessageBase(long accountId, string creatorName, string creatorUserRef)
         {
             AccountId = accountId;
             CreatedAt = DateTime.Now;
-            CreatedBy = createdBy;
+            CreatorName = creatorName;
+            CreatorUserRef = creatorUserRef;
         }
     }
 }

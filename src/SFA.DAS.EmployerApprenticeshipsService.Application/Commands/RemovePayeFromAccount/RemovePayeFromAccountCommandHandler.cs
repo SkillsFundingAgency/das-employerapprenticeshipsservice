@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 
             var loggedInPerson = await _membershipRepository.GetCaller(accountId, message.UserId);
 
-            await QueuePayeRemovedMessage(message.PayeRef, accountId, message.CompanyName, loggedInPerson.FullName());
+            await QueuePayeRemovedMessage(message.PayeRef, accountId, message.CompanyName, loggedInPerson.FullName(), message.UserId);
 
             await NotifyPayeSchemeRemoved(message.HashedAccountId, message.PayeRef);
         }
@@ -92,9 +92,9 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
         }
 
 
-        private async Task QueuePayeRemovedMessage(string payeRef, long accountId, string companyName, string deletedByName)
+        private async Task QueuePayeRemovedMessage(string payeRef, long accountId, string companyName, string deletedByName, string userRef)
         {
-            await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage(payeRef, companyName, accountId, deletedByName));
+            await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage(payeRef, companyName, accountId, deletedByName, userRef));
         }
 
         private async Task AddAuditEntry(string userId, string payeRef, string accountId)

@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
             await RefreshLevy(accountId, message.Empref);
 
-            await AddPayeScheme(message.Empref, accountId, _membershipRepository.GetCaller(accountId,message.ExternalUserId).Result.FullName());
+            await AddPayeScheme(message.Empref, accountId, _membershipRepository.GetCaller(accountId,message.ExternalUserId).Result.FullName(), message.ExternalUserId);
 
             await NotifyPayeSchemeAdded(message.HashedAccountId, message.Empref);
         }
@@ -102,10 +102,10 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             
         }
 
-        private async Task AddPayeScheme(string payeRef, long accountId, string createdByName)
+        private async Task AddPayeScheme(string payeRef, long accountId, string createdByName, string userRef)
         {
             await _messagePublisher.PublishAsync(
-                new PayeSchemeCreatedMessage(payeRef, accountId, createdByName)
+                new PayeSchemeCreatedMessage(payeRef, accountId, createdByName, userRef)
             );
         }
 

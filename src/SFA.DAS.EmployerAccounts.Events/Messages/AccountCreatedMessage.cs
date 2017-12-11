@@ -7,10 +7,10 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     [MessageGroup("add_account")]
     public class AccountCreatedMessage : AccountMessageBase
     {
-        public AccountCreatedMessage() : base(0, string.Empty)
+        public AccountCreatedMessage() : base(0, string.Empty, string.Empty)
         {}
 
-        public AccountCreatedMessage(long accountId, string createdBy) : base(accountId, createdBy)
+        public AccountCreatedMessage(long accountId, string creatorName, string creatorUserRef) : base(accountId, creatorName, creatorUserRef)
         { 
 
         }

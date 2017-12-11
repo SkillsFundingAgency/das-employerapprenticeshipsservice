@@ -13,12 +13,11 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public PayeSchemeDeletedMessage()
         { }
 
-        public PayeSchemeDeletedMessage(string payeScheme, string organisationName, long accountId, string createdBy) 
-            : base(accountId, createdBy)
+        public PayeSchemeDeletedMessage(string payeScheme, string organisationName, long accountId, string creatorName, string creatorUserRef) 
+            : base(accountId, creatorName, creatorUserRef)
         {
             PayeScheme = payeScheme;
             OrganisationName = organisationName;
-            
         }
     }
 }
