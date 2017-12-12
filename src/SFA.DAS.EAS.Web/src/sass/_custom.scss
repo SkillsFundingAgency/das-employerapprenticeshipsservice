@@ -625,7 +625,16 @@ body {
     display:none;
 }
 
-
+#page-company-homepage{
+    #pane-tasks{
+        .button-link{
+          text-align:left;
+          padding:0;
+          margin-top:10px;
+          
+        }
+    }
+}
 
 //all mobile media query breakpoints
 //==================================
