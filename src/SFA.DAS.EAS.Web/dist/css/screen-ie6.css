@@ -5423,6 +5423,63 @@ h2 .float-right {
   display: none;
 }
 
+#item-list {
+  position: relative;
+  padding-left: 1px;
+  line-height: 18px;
+  border-left: 1px solid #bfc1c3;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+#item-list .item {
+  position: relative;
+  text-align: left;
+  display: block;
+  padding: 0 18px;
+  margin-bottom: 40px;
+}
+
+#item-list .item .item-label {
+  position: relative;
+  color: #6f777b;
+}
+
+#item-list .item .item-description .grey-text {
+  color: #6f777b;
+}
+
+#item-list .item .item-description p {
+  margin-bottom: 5px;
+}
+
+#item-list .item .item-label:before {
+  content: '';
+  position: absolute;
+  top: 0px;
+  left: -28px;
+  width: 17px;
+  height: 17px;
+  border-radius: 100%;
+  background: #bfc1c3;
+}
+
+#item-list .all-activity {
+  margin-bottom: 10px;
+}
+
+#item-list .all-activity .item-label a {
+  padding-top: 16px;
+  display: block;
+}
+
+#item-list .all-activity .item-label:before {
+  top: 15px;
+  width: 22px;
+  height: 22px;
+  left: -30px;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
