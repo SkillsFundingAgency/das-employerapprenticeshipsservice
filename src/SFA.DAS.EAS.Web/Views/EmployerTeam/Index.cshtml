@@ -97,7 +97,7 @@ else
                                             case "LevyDeclarationDue":
 
                                                     <p>
-                                                        Levy declarations due by 19 @DateTime.Now.ToString("MMMM")
+                                                        Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
                                                     </p>
                                                     <form action="@Url.Action("DismissTask", "Task")" method="POST">
                                                         <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
