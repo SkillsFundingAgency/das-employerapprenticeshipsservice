@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return users.UserList.SingleOrDefault(x => x.Id.Equals(id));
         }
 
-        public async Task<User> GetByUserRef(string id)
+        public async Task<User> GetUserByRef(string id)
         {
             var users = await ReadFileById<Users>(UserDataFileName);
 

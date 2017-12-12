@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<User> GetByUserRef(string id)
+        public async Task<User> GetUserByRef(string id)
         {
             var result = await WithConnection(async c =>
             {
