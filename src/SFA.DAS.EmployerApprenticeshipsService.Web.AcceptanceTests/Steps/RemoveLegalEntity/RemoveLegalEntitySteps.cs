@@ -8,6 +8,7 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.Commitment;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -44,7 +45,12 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.RemoveLegalEntity
                 {
                     new ApprenticeshipStatusSummary {}
                 });
+
             _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi, _commitmentsApi);
+
+            var commitmentService = new Mock<ICommitmentService>();
+            commitmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>())).ReturnsAsync(new List<Cohort>());
+            _container.Inject(commitmentService.Object);
         }
 
         [When(@"I have more than one legal entity with a ""(.*)"" status and an active commitment")]
@@ -64,6 +70,11 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.RemoveLegalEntity
                     }
                 });
             _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi, _commitmentsApi);
+
+            var commitmentService = new Mock<ICommitmentService>();
+            commitmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>())).ReturnsAsync(new List<Cohort>());
+            _container.Inject(commitmentService.Object);
+
             CreateLegalEntityWithStatus(agreementStatus,"test");
         }
         

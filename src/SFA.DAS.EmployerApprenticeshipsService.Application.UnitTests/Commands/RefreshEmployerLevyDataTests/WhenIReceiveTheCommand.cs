@@ -188,13 +188,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
 
             _levyEventFactory.Setup(
                 x =>
-                    x.CreateDeclarationUpdatedEvent(hashedAccountId, data.EmployerLevyData[0].Declarations.Declarations[0].PayrollYear,
-                        data.EmployerLevyData[0].Declarations.Declarations[0].PayrollMonth)).Returns(expectedLevyEvents[0]);
+                    x.CreateDeclarationUpdatedEvent(hashedAccountId, data.EmployerLevyData.First().Declarations.Declarations[0].PayrollYear,
+                        data.EmployerLevyData.First().Declarations.Declarations[0].PayrollMonth)).Returns(expectedLevyEvents[0]);
             _genericEventFactory.Setup(x => x.Create(expectedLevyEvents[0])).Returns(expectedGenericEvents[0]);
             _levyEventFactory.Setup(
                 x =>
-                    x.CreateDeclarationUpdatedEvent(hashedAccountId, data.EmployerLevyData[1].Declarations.Declarations[0].PayrollYear,
-                        data.EmployerLevyData[1].Declarations.Declarations[0].PayrollMonth)).Returns(expectedLevyEvents[1]);
+                    x.CreateDeclarationUpdatedEvent(hashedAccountId, data.EmployerLevyData.ElementAt(1).Declarations.Declarations[0].PayrollYear,
+                        data.EmployerLevyData.ElementAt(1).Declarations.Declarations[0].PayrollMonth)).Returns(expectedLevyEvents[1]);
             _genericEventFactory.Setup(x => x.Create(expectedLevyEvents[1])).Returns(expectedGenericEvents[1]);
 
             //Act

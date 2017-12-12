@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Helpers;
@@ -24,8 +25,8 @@ namespace SFA.DAS.EAS.Web
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private static RedisTarget _redisTarget; // Required to ensure assembly is copied to output.
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly RedisTarget RedisTarget; // Required to ensure assembly is copied to output.
 
         protected void Application_Start()
         {
@@ -61,10 +62,15 @@ namespace SFA.DAS.EAS.Web
         protected void Application_Error(object sender, EventArgs e)
         {
             var exception = Server.GetLastError();
-
-            _logger.Error(exception);
-
+            var httpException = exception as HttpException;
             var tc = new TelemetryClient();
+
+            if (httpException != null && httpException.GetHttpCode() == (int)HttpStatusCode.NotFound)
+            {
+                return;
+            }
+
+            Logger.Error(exception, "Unhandled exception - " + exception.Message);
             tc.TrackTrace($"{exception.Message} - {exception.InnerException}");
         }
 

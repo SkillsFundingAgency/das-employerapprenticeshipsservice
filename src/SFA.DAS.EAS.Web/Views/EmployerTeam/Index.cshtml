@@ -2,6 +2,7 @@
 @using SFA.DAS.EAS.Domain.Models.UserProfile
 @using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.Helpers
+@using SFA.DAS.Tasks.API.Types.Enums
 
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AccountDashboardViewModel>
 
@@ -83,11 +84,11 @@ else
                 </nav>
                 <div class="panes">
                     <div class="js-tab-pane" id="pane-tasks" role="tabpanel">
-                        @*@if (Model.Data.Tasks.Count > 0)
+                        @if (Model.Data.Tasks.Count > 0)
                         {
                             <ul class="task-list">
                                 
-                                { var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();}
+                            @{ var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();}
 
                                 @foreach (var task in priorityOrderTaskList)
                                 {
@@ -95,51 +96,43 @@ else
                                         @switch (task.Type)
                                         {
                                             case "LevyDeclarationDue":
-                                                <p>@task.ItemsDueCount levy declaration@(task.ItemsDueCount > 1 ? "s" : "") due <a href="">View levy declarations</a>
-                                                </p>
+
+                                                    <p>
+                                                        Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
+                                                    </p>
+                                                    <form action="@Url.Action("DismissTask", "Task")" method="POST">
+                                                        <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
+                                                        <button class="button-link" type="submit">Dismiss this message</button>
+                                                    </form>
+
                                                 break;
                                             case "AgreementToSign":
-                                                <p>@task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("Index", "EmployerAgreement")">View agreements</a>
+                                                <p>
+                                                    @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")">View agreements</a>
                                                 </p>
                                                 break;
                                             case "AddApprentices":
-                                                <p><a href="">Start adding apprentices now</a>
+                                                <p><a href="@Url.ExternalUrlAction("apprentices", "Inform")">Start adding apprentices now</a>
                                                 </p>
                                                 break;
                                             case "ApprenticeChangesToReview":
-                                                <p>@task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="">View changes</a>
+                                                <p>@task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.ExternalUrlAction("apprentices", "manage/all?RecordStatus=ChangesForReview")">View changes</a>
                                                 </p>
                                                 break;
                                             case "CohortRequestReadyForApproval":
-                                                <p>@task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="">View cohorts</a>
-                                                </p>
-                                                break;
-                                            case "IncompleteApprenticeshipDetails":
-                                                <p>@task.ItemsDueCount incomplete apprentice details <a href="">View cohorts</a>
+                                                <p>@task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="@Url.ExternalUrlAction("apprentices", "cohorts/review")">View cohorts</a>
                                                 </p>
                                                 break;
                                         }
                                     </li>
                                 }
                             </ul>
-                        }*@
-                        @{
-                            var task = Model.Data.Tasks?.SingleOrDefault(t => t.Type.Equals("AgreementToSign"));
-
-                            if (task != null)
-                            {
-                                <ul>
-                                    <li>
-                                        <p>@task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("Index", "EmployerAgreement")">View agreements</a>
-                                        </p>
-                                    </li>
-                                </ul>
-                            }
-                            else
-                            {
-                                <p>You do not have any tasks</p>
-                            }
                         }
+                        else
+                        {
+                            <p>You do not have any tasks</p>
+                        }
+
                     </div>
                     <!-- Add this back in when Activities is implemented-->
                     <div class="js-tab-pane" id="pane-activity" role="tabpanel">
