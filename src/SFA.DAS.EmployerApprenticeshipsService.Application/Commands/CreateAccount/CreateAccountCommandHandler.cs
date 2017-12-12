@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             await RefreshLevy(returnValue, emprefs);
 
-            await PublishAddPayeSchemeMessage(returnValue.AccountId, message.ExternalUserId, emprefs);
+            await PublishAddPayeSchemeMessage(returnValue.AccountId, user.FullName, user.UserRef, emprefs);
 
             await PublishAccountCreatedMessage(returnValue.AccountId);
 
@@ -136,16 +136,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             }
         }
 
-        private async Task PublishAddPayeSchemeMessage(long accountId, string externalUserId, IEnumerable<string> emprefs)
+        private async Task PublishAddPayeSchemeMessage(long accountId, string userName, string userRef, IEnumerable<string> emprefs)
         {
             foreach (var empref in emprefs)
             {
-                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage
-                {
-                    AccountId = accountId,
-                    CreatedByUserId = externalUserId,
-                    EmpRef = empref
-                });
+                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage(empref, accountId, userName, userRef));
             }
         }
 
@@ -159,7 +154,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private async Task<User> GetUser(CreateAccountCommand message)
         {
-            var user = await _userRepository.GetByUserRef(message.ExternalUserId);
+            var user = await _userRepository.GetUserByRef(message.ExternalUserId);
 
             if (user == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "User", "User does not exist" } });

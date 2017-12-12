@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Application.Commands.UnsubscribeNotification
 
             try
             {
-                var user = _userRepository.GetByUserRef(command.UserRef);
+                var user = _userRepository.GetUserByRef(command.UserRef);
                 await Task.WhenAll(user);
                _logger.Info($"Sending email to unsubscriber: {user.Result.Id}");
                 var email = CreateEmail(user.Result, setting.Name, command.NotificationSettingUrl);

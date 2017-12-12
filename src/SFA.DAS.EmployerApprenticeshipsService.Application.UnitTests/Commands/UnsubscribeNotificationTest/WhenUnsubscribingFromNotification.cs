@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UnsubscribeNotificationTest
             _userRepo = new Mock<IUserRepository>();
             _accountRepository = new Mock<IAccountRepository>();
 
-            _userRepo.Setup(m => m.GetByUserRef(_command.UserRef))
+            _userRepo.Setup(m => m.GetUserByRef(_command.UserRef))
                 .ReturnsAsync(new User
                                   {
                                       FirstName = "First name",

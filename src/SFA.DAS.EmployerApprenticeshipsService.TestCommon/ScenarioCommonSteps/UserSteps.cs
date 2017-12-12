@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         {
             var userRepository = _container.GetInstance<IUserRepository>();
             var membershipRepository = _container.GetInstance<IMembershipRepository>();
-            var userRecord = userRepository.GetByUserRef(user.UserRef).Result;
+            var userRecord = userRepository.GetUserByRef(user.UserRef).Result;
 
             membershipRepository.Create(userRecord.Id, accountId, (short)role).Wait();
 
