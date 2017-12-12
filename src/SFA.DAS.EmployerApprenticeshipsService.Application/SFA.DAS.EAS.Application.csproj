@@ -479,6 +479,10 @@
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />
+    <Compile Include="Queries\GetUserByRef\GetUserByRefQuery.cs" />
+    <Compile Include="Queries\GetUserByRef\GetUserByRefQueryHandler.cs" />
+    <Compile Include="Queries\GetUserByRef\GetUserByRefResponse.cs" />
+    <Compile Include="Queries\GetUserByRef\GetUserByRefValidator.cs" />
     <Compile Include="Queries\GetUserInvitations\GetNumberOfUserInvitationsHandler.cs" />
     <Compile Include="Queries\GetUserInvitations\GetNumberOfUserInvitationsQuery.cs" />
     <Compile Include="Queries\GetUserInvitations\GetNumberOfUserInvitationsResponse.cs" />
