@@ -32,6 +32,12 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserByRef
 
             var user = await _repository.GetUserByRef(message.UserRef);
 
+            if (user == null)
+            {
+                validationResult.AddError(nameof(message.UserRef), "User does not exist");
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
+            }
+
             return new GetUserByRefResponse{ User = user};
         }
     }

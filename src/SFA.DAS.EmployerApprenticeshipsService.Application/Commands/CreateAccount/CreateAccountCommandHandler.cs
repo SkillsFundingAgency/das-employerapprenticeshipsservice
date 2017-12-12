@@ -6,6 +6,7 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
+using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 //using SFA.DAS.EAS.Application.Notifications.CreateAgreementCreatedMessage;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -25,7 +26,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
     public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>
     {
         private readonly IAccountRepository _accountRepository;
-        private readonly IUserRepository _userRepository;
         
         private readonly IMessagePublisher _messagePublisher;
         private readonly IMediator _mediator;
@@ -37,7 +37,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         
         public CreateAccountCommandHandler(
             IAccountRepository accountRepository, 
-            IUserRepository userRepository, 
             IMessagePublisher messagePublisher, 
             IMediator mediator, 
             IValidator<CreateAccountCommand> validator, 
@@ -47,7 +46,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _accountRepository = accountRepository;
-            _userRepository = userRepository;
             _messagePublisher = messagePublisher;
 
             _mediator = mediator;
@@ -62,7 +60,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         {
             await ValidateMessage(message);
 
-            var user = await GetUser(message);
+            var userResponse = await _mediator.SendAsync(new GetUserByRefQuery{UserRef = message.ExternalUserId});
 
             var emprefs = message.PayeReference.Split(',');
 
@@ -71,7 +69,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                 message.OrganisationReferenceNumber = Guid.NewGuid().ToString();
             }
 
-            var returnValue = await _accountRepository.CreateAccount(user.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, emprefs[0], message.AccessToken, message.RefreshToken, message.OrganisationStatus, message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource, message.Sector);
+            var returnValue = await _accountRepository.CreateAccount(userResponse.User.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, emprefs[0], message.AccessToken, message.RefreshToken, message.OrganisationStatus, message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource, message.Sector);
 
             var hashedAccountId = _hashingService.HashValue(returnValue.AccountId);
             await _accountRepository.SetHashedId(hashedAccountId, returnValue.AccountId);
@@ -80,13 +78,13 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             await RefreshLevy(returnValue, emprefs);
 
-            await PublishAddPayeSchemeMessage(returnValue.AccountId, user.FullName, user.UserRef, emprefs);
+            await PublishAddPayeSchemeMessage(returnValue.AccountId, userResponse.User.FullName, userResponse.User.UserRef, emprefs);
 
             await PublishAccountCreatedMessage(returnValue.AccountId);
 
             await NotifyAccountCreated(hashedAccountId);
 
-            await CreateAuditEntries(message, returnValue, hashedAccountId, user);
+            await CreateAuditEntries(message, returnValue, hashedAccountId, userResponse.User);
 
             await PublishAgreementCreatedMessage(returnValue.AccountId, returnValue.LegalEntityId,
                 returnValue.EmployerAgreementId);
@@ -150,15 +148,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             {
                 AccountId = accountId
             });
-        }
-
-        private async Task<User> GetUser(CreateAccountCommand message)
-        {
-            var user = await _userRepository.GetUserByRef(message.ExternalUserId);
-
-            if (user == null)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "User", "User does not exist" } });
-            return user;
         }
 
         private async Task ValidateMessage(CreateAccountCommand message)
