@@ -6117,6 +6117,12 @@ h2 .float-right {
   display: none;
 }
 
+#page-company-homepage #pane-tasks .button-link {
+  text-align: left;
+  padding: 0;
+  margin-top: 10px;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
@@ -6179,12 +6185,4 @@ h2 .float-right {
     margin-top: 5px;
     word-wrap: break-word;
   }
-}
-
-span.arrowCollapsed:before {
-    content: "\25BA";
-}
-
-span.arrowExpanded:before {
-    content: "\25BC";
 }
