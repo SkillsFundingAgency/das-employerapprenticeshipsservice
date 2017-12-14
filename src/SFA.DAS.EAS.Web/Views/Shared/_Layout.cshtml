@@ -4,6 +4,7 @@
 @using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.Models
 @using SFA.DAS.EAS.Web.ViewModels
+@using StringExtensions = SFA.DAS.EAS.Web.Extensions.StringExtensions
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -138,7 +139,7 @@
                                     <a href="/" role="menuitem">Settings</a>
                                     <ul role="menu" class="js-hidden" id="settings-menu">
                                         <li><a href="@Url.Action("ViewAccounts", "Home")" role="menuitem" class="sub-menu-item">Your accounts</a></li>
-                                        @if (string.IsNullOrWhiteSpace(ViewBag.HideNav))
+                                        @if (ViewBag.ParseHideNavFromViewBag())
                                         {
                                             <li><a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem" class="sub-menu-item">Rename account</a></li>
                                         }
@@ -168,7 +169,7 @@
     @if (HttpContext.Current.User.Identity.IsAuthenticated)
     {
         var controllerString = ViewContext.RouteData.Values["Controller"].ToString();
-        if (!SFA.DAS.EAS.Web.Extensions.StringExtensions.ParseHideNavFromViewBag(ViewBag))
+        if (!SFA.DAS.EAS.Web.Extensions.DynamicExtentions.ParseHideNavFromViewBag(ViewBag))
         {
             <div class="header-organisation" role="navigation">
                 <nav class="header-inner">
