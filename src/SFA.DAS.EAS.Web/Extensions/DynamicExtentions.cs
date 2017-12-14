@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Web.Extensions
                     return hideNavFlag;
                 }
 
-                return !string.IsNullOrWhiteSpace(hideNavString);
+                return false;
             }
 
             if (viewBag.HideNav is bool)
