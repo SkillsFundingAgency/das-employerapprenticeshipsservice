@@ -122,7 +122,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private async Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, string userRef)
         {
-                await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage(empref, accountId, createdByName, userRef));
+                await _messagePublisher.PublishAsync(new PayeSchemeAddedMessage(empref, accountId, createdByName, userRef));
         }
 
         private async Task PublishAccountCreatedMessage(long accountId, string createdByName, string userRef)

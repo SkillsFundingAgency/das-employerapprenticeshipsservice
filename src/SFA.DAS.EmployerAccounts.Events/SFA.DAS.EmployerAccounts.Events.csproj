@@ -60,7 +60,7 @@
     <Compile Include="Messages\UserJoinedMessage.cs" />
     <Compile Include="Messages\AccountCreatedMessage.cs" />
     <Compile Include="Messages\AgreementSignedMessage.cs" />
-    <Compile Include="Messages\PayeSchemeCreatedMessage.cs" />
+    <Compile Include="Messages\PayeSchemeAddedMessage.cs" />
     <Compile Include="Messages\AgreementCreatedMessage.cs" />
     <Compile Include="Messages\PayeSchemeDeletedMessage.cs" />
     <Compile Include="Messages\LegalEntityRemovedMessage.cs" />

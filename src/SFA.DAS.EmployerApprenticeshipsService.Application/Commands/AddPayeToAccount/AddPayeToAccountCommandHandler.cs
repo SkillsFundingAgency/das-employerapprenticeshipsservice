@@ -105,7 +105,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private async Task AddPayeScheme(string payeRef, long accountId, string createdByName, string userRef)
         {
             await _messagePublisher.PublishAsync(
-                new PayeSchemeCreatedMessage(payeRef, accountId, createdByName, userRef)
+                new PayeSchemeAddedMessage(payeRef, accountId, createdByName, userRef)
             );
         }
 
