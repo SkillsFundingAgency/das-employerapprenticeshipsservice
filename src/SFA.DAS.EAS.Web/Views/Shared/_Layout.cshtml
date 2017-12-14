@@ -139,7 +139,7 @@
                                     <a href="/" role="menuitem">Settings</a>
                                     <ul role="menu" class="js-hidden" id="settings-menu">
                                         <li><a href="@Url.Action("ViewAccounts", "Home")" role="menuitem" class="sub-menu-item">Your accounts</a></li>
-                                        @if (ViewBag.ParseHideNavFromViewBag())
+                                        @if (DynamicExtentions.ParseHideNavFromViewBag(ViewBag))
                                         {
                                             <li><a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem" class="sub-menu-item">Rename account</a></li>
                                         }
