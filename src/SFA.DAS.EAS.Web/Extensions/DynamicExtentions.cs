@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Web.Extensions
 {
-    public static class DynamicExtentions
+    public static class DynamicExtensions
     {
         public static bool ParseHideNavFromViewBag(dynamic viewBag)
         {

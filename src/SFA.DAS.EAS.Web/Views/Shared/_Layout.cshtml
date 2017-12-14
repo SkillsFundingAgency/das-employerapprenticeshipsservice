@@ -169,7 +169,7 @@
     @if (HttpContext.Current.User.Identity.IsAuthenticated)
     {
         var controllerString = ViewContext.RouteData.Values["Controller"].ToString();
-        if (!SFA.DAS.EAS.Web.Extensions.DynamicExtentions.ParseHideNavFromViewBag(ViewBag))
+        if (!SFA.DAS.EAS.Web.Extensions.DynamicExtensions.ParseHideNavFromViewBag(ViewBag))
         {
             <div class="header-organisation" role="navigation">
                 <nav class="header-inner">
