@@ -31,7 +31,14 @@
     },
     {
         "topicName": "legal_entity_removed",
-		"subscription": [ "Task_LegalEntityRemovedProcessor" ]
+		"subscription": [ 
+			"Task_LegalEntityRemovedProcessor", 
+			"Activity_LegalEntityAddedProcessor" 
+		]
+    },
+	{
+        "topicName": "legal_entity_added",
+		"subscription": [ "Activity_LegalEntityAddedProcessor" ]
     },
     {
         "topicName": "refresh_payments2",

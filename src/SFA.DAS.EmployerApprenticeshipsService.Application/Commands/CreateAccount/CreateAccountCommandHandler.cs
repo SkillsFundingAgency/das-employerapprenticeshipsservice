@@ -103,7 +103,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private async Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, string userRef)
         {
-            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, employerAgreementId, organisationName,  legalEntityId, userName, userRef));
+            await _messagePublisher.PublishAsync(new LegalEntityAddedMessage(accountId, employerAgreementId, organisationName,  legalEntityId, userName, userRef));
         }
 
         private async Task NotifyAccountCreated(string hashedAccountId)
