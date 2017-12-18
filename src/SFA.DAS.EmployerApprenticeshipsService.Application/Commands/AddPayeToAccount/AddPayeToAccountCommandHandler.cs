@@ -6,6 +6,8 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
+using SFA.DAS.EAS.Application.Queries.GetUser;
+using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -31,8 +33,15 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
         private readonly IMembershipRepository _membershipRepository;
 
-        public AddPayeToAccountCommandHandler(IValidator<AddPayeToAccountCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService, 
-            IMediator mediator, IGenericEventFactory genericEventFactory, IPayeSchemeEventFactory payeSchemeEventFactory, IRefreshEmployerLevyService refreshEmployerLevyService, IMembershipRepository membershipRepository)
+        public AddPayeToAccountCommandHandler(IValidator<AddPayeToAccountCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService, IMediator mediator, IGenericEventFactory genericEventFactory, IPayeSchemeEventFactory payeSchemeEventFactory, IRefreshEmployerLevyService refreshEmployerLevyService)
+            IValidator<AddPayeToAccountCommand> validator, 
+            IAccountRepository accountRepository, 
+            IMessagePublisher messagePublisher, 
+            IHashingService hashingService, 
+            IMediator mediator, 
+            IGenericEventFactory genericEventFactory, 
+            IPayeSchemeEventFactory payeSchemeEventFactory, 
+            IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _validator = validator;
             _accountRepository = accountRepository;
@@ -62,11 +71,13 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                     }
                 );
 
+            var userResponse = await _mediator.SendAsync(new GetUserByRefQuery{UserRef = message.ExternalUserId});
+
             await AddAuditEntry(message, accountId);
 
             await RefreshLevy(accountId, message.Empref);
 
-            await AddPayeScheme(message.Empref, accountId, _membershipRepository.GetCaller(accountId,message.ExternalUserId).Result.FullName(), message.ExternalUserId);
+            await AddPayeScheme(message.Empref, accountId, userResponse.User.FullName, userResponse.User.UserRef);
 
             await NotifyPayeSchemeAdded(message.HashedAccountId, message.Empref);
         }
@@ -97,16 +108,12 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
         private async Task RefreshLevy(long accountId, string payeRef)
         {
-
             await _refreshEmployerLevyService.QueueRefreshLevyMessage(accountId, payeRef);
-            
         }
 
-        private async Task AddPayeScheme(string payeRef, long accountId, string createdByName, string userRef)
+        private async Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef)
         {
-            await _messagePublisher.PublishAsync(
-                new PayeSchemeAddedMessage(payeRef, accountId, createdByName, userRef)
-            );
+            await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage(payeRef, accountId, userName, userRef));
         }
 
         private async Task AddAuditEntry(AddPayeToAccountCommand message, long accountId)

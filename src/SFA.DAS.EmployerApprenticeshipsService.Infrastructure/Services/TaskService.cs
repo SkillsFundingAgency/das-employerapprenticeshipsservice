@@ -5,6 +5,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Tasks.API.Client;
 using SFA.DAS.Tasks.API.Types.DTOs;
+using SFA.DAS.Tasks.API.Types.Enums;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -19,11 +20,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<TaskDto>> GetAccountTasks(string accountId)
+        public async Task<IEnumerable<TaskDto>> GetAccountTasks(long accountId, string externalUserId)
         {
             try
             {
-                return await _apiClient.GetTasks(accountId);
+                return await _apiClient.GetTasks(accountId.ToString(), externalUserId);
             }
             catch (Exception ex)
             {
@@ -31,6 +32,22 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             }
 
             return new TaskDto[0];
+        }
+
+        public async Task DismissMonthlyTaskReminder(long accountId, string externalUserId, TaskType taskType)
+        {
+            try
+            {
+                if (taskType == TaskType.None) return;
+
+                var taskName = Enum.GetName(typeof(TaskType), taskType);
+
+                await _apiClient.AddUserReminderSupression(accountId.ToString(), externalUserId, taskName);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Could not retrieve account tasks successfully");
+            }
         }
     }
 }

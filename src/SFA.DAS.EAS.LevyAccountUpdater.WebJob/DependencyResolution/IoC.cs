@@ -18,7 +18,9 @@
 
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
+using SFA.DAS.NLog.Logger;
 using StructureMap;
 
 namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.DependencyResolution {
@@ -31,7 +33,7 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.DependencyResolution {
             return new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
-                c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
+                c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName, new NLogLogger(typeof(TopicMessagePublisher))));
                 c.AddRegistry<DefaultRegistry>();
             });
         }

@@ -10,14 +10,16 @@ using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Application.Queries.GetUser;
+using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.PAYE;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.Interfaces;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 using SFA.DAS.HashingService;
@@ -38,6 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         private Mock<IMembershipRepository> _mockMembershipRepository;
         private const long ExpectedAccountId = 54564;
         private const string ExpectedPayeName = "Paye Scheme 1";
+        private User _user;
 
         [SetUp]
         public void Arrange()
@@ -71,6 +74,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
                 _payeSchemeEventFactory.Object,
                 _refreshEmployerLevyService.Object,
                 _mockMembershipRepository.Object);
+            _user = new User
+            {
+                FirstName = "Bob",
+                LastName = "Green",
+                UserRef = "123"
+            };
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserByRefQuery>()))
+                .ReturnsAsync(new GetUserByRefResponse {User = _user});
         }
 
         [Test]
@@ -113,7 +125,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
 
             //Assert
             _refreshEmployerLevyService.Verify(x=>x.QueueRefreshLevyMessage(ExpectedAccountId, command.Empref));
-            //_messagePublisher.Verify(x=>x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c=>c.AccountId.Equals(ExpectedAccountId) && c.PayeRef.Equals(command.Empref))));
         }
 
         [Test]
@@ -126,7 +137,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             await _addPayeToAccountCommandHandler.Handle(command);
 
             //Assert
-            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<PayeSchemeAddedMessage>(c=> c.PayeScheme.Equals(command.Empref))));
+            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<PayeSchemeCreatedMessage>(c=> 
+                        c.EmpRef.Equals(command.Empref) &&
+                        c.AccountId.Equals(ExpectedAccountId) &&
+                        c.CreatorName.Equals(_user.FullName) &&
+                        c.CreatorUserRef.Equals(_user.UserRef))));
         }
 
         [Test]

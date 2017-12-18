@@ -13,7 +13,6 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public string CreatorName { get; }
         public string CreatorUserRef { get; }
 
-
         protected AccountMessageBase()
         { }
 
