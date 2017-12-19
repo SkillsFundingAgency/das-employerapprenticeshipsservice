@@ -6,7 +6,6 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
-using SFA.DAS.EAS.Application.Queries.GetUser;
 using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -31,9 +30,8 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
-        private readonly IMembershipRepository _membershipRepository;
 
-        public AddPayeToAccountCommandHandler(IValidator<AddPayeToAccountCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService, IMediator mediator, IGenericEventFactory genericEventFactory, IPayeSchemeEventFactory payeSchemeEventFactory, IRefreshEmployerLevyService refreshEmployerLevyService)
+        public AddPayeToAccountCommandHandler(
             IValidator<AddPayeToAccountCommand> validator, 
             IAccountRepository accountRepository, 
             IMessagePublisher messagePublisher, 
@@ -51,7 +49,6 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             _genericEventFactory = genericEventFactory;
             _payeSchemeEventFactory = payeSchemeEventFactory;
             _refreshEmployerLevyService = refreshEmployerLevyService;
-            _membershipRepository = membershipRepository;
         }
 
         protected override async Task HandleCore(AddPayeToAccountCommand message)
@@ -113,7 +110,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
         private async Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef)
         {
-            await _messagePublisher.PublishAsync(new PayeSchemeCreatedMessage(payeRef, accountId, userName, userRef));
+            await _messagePublisher.PublishAsync(new PayeSchemeAddedMessage(payeRef, accountId, userName, userRef));
         }
 
         private async Task AddAuditEntry(AddPayeToAccountCommand message, long accountId)

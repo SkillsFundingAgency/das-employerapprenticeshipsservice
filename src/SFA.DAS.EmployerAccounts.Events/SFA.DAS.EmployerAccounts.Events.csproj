@@ -59,7 +59,6 @@
     <Compile Include="Messages\UserInvitedMessage.cs" />
     <Compile Include="Messages\UserJoinedMessage.cs" />
     <Compile Include="Messages\AccountCreatedMessage.cs" />
-    <Compile Include="Messages\AccountMessageBase.cs" />
     <Compile Include="Messages\AgreementSignedMessage.cs" />
     <Compile Include="Messages\PayeSchemeAddedMessage.cs" />
     <Compile Include="Messages\LegalEntityAddedMessage.cs" />

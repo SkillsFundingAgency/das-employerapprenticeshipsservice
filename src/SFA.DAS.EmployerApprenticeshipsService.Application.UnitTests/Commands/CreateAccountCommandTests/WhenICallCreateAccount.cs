@@ -38,6 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IAccountEventFactory> _accountEventFactory;
         private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
         private Mock<IMembershipRepository> _mockMembershipRepository;
+        
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
         private const string ExpectedHashString = "123ADF23";
@@ -227,10 +228,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeCreatedMessage>(
-                c => c.EmpRef.Equals(expectedPayeRef) &&
-                c.AccountId.Equals(ExpectedAccountId) //&&
-                //c.CreatorUserRef.Equals()
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeAddedMessage>(
+                c => c.PayeScheme.Equals(expectedPayeRef) &&
+                c.AccountId.Equals(ExpectedAccountId) &&
+                c.CreatorUserRef.Equals(_user.UserRef)
                 )), Times.Once());
         }
 

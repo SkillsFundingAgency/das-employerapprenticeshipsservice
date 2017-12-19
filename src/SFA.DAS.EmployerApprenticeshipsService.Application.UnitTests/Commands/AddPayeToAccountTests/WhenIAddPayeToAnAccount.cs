@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
         private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
-        private Mock<IMembershipRepository> _mockMembershipRepository;
+       
         private const long ExpectedAccountId = 54564;
         private const string ExpectedPayeName = "Paye Scheme 1";
         private User _user;
@@ -60,20 +60,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             _payeSchemeEventFactory = new Mock<IPayeSchemeEventFactory>();
 
             _refreshEmployerLevyService = new Mock<IRefreshEmployerLevyService>();
-            _mockMembershipRepository=new Mock<IMembershipRepository>();
-            _mockMembershipRepository.Setup(a => a.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(new MembershipView()));
 
             _addPayeToAccountCommandHandler = new AddPayeToAccountCommandHandler(
                 _validator.Object,
-                _accountRepository.Object, 
+                _accountRepository.Object,
                 _messagePublisher.Object,
-                _hashingService.Object, 
-                _mediator.Object, 
+                _hashingService.Object,
+                _mediator.Object,
                 _genericEventFactory.Object,
                 _payeSchemeEventFactory.Object,
-                _refreshEmployerLevyService.Object,
-                _mockMembershipRepository.Object);
+                _refreshEmployerLevyService.Object);
+
             _user = new User
             {
                 FirstName = "Bob",
@@ -137,8 +134,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             await _addPayeToAccountCommandHandler.Handle(command);
 
             //Assert
-            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<PayeSchemeCreatedMessage>(c=> 
-                        c.EmpRef.Equals(command.Empref) &&
+            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<PayeSchemeAddedMessage>(c=> 
+                        c.PayeScheme.Equals(command.Empref) &&
                         c.AccountId.Equals(ExpectedAccountId) &&
                         c.CreatorName.Equals(_user.FullName) &&
                         c.CreatorUserRef.Equals(_user.UserRef))));

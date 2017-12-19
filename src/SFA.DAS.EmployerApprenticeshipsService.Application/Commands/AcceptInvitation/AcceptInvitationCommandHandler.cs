@@ -89,7 +89,7 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
 
         private async Task PublishUserJoinedMessage(long accountId, User user)
         {
-             await _messagePublisher.PublishAsync(new UserJoinedMessage(accountId, user.FullName(), user.UserRef));
+             await _messagePublisher.PublishAsync(new UserJoinedMessage(accountId, user.FullName, user.UserRef));
         }
     }
 }

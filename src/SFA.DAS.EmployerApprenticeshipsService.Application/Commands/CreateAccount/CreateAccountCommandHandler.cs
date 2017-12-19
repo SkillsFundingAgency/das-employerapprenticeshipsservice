@@ -25,8 +25,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
     public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>
     {
         private readonly IAccountRepository _accountRepository;
-        private readonly IUserRepository _userRepository;
-        
         private readonly IMessagePublisher _messagePublisher;
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAccountCommand> _validator;
@@ -38,7 +36,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         public CreateAccountCommandHandler(
             IAccountRepository accountRepository, 
-            IUserRepository userRepository, 
+           
             IMessagePublisher messagePublisher, 
             IMediator mediator, 
             IValidator<CreateAccountCommand> validator, 
@@ -49,7 +47,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IMembershipRepository membershipRepository)
         {
             _accountRepository = accountRepository;
-            _userRepository = userRepository;
             _messagePublisher = messagePublisher;
 
             _mediator = mediator;
@@ -65,15 +62,14 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         {
             await ValidateMessage(message);
 
-            var user = await GetUser(message);
-
+            var userResponse = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = message.ExternalUserId });
 
             if (string.IsNullOrEmpty(message.OrganisationReferenceNumber))
             {
                 message.OrganisationReferenceNumber = Guid.NewGuid().ToString();
             }
 
-            var createAccountResult = await _accountRepository.CreateAccount(user.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, message.PayeReference, message.AccessToken, message.RefreshToken, message.OrganisationStatus, message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource, message.Sector);
+            var createAccountResult = await _accountRepository.CreateAccount(userResponse.User.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, message.PayeReference, message.AccessToken, message.RefreshToken, message.OrganisationStatus, message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource, message.Sector);
 
             var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
             await _accountRepository.SetHashedId(hashedAccountId, createAccountResult.AccountId);
@@ -83,14 +79,13 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
 
             var createdByName = caller.FullName();
-            await PublishAddPayeSchemeMessage(emprefs);
-            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, message.ExternalUserId);
+            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.UserRef);
 
             await PublishAccountCreatedMessage(createAccountResult.AccountId, createdByName, message.ExternalUserId);
 
             await NotifyAccountCreated(hashedAccountId);
 
-            await CreateAuditEntries(message, createAccountResult, hashedAccountId, user);
+            await CreateAuditEntries(message, createAccountResult, hashedAccountId, userResponse.User);
 
             await PublishAgreementCreatedMessage(createAccountResult.AccountId, createAccountResult.LegalEntityId,
                 createAccountResult.EmployerAgreementId, message.OrganisationName, createdByName, message.ExternalUserId);
@@ -129,15 +124,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private async Task PublishAccountCreatedMessage(long accountId, string createdByName, string userRef)
         {
             await _messagePublisher.PublishAsync(new AccountCreatedMessage(accountId, createdByName, userRef));
-        }
-
-        private async Task<User> GetUser(CreateAccountCommand message)
-        {
-            var user = await _userRepository.GetByUserRef(message.ExternalUserId);
-
-            if (user == null)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "User", "User does not exist" } });
-            return user;
         }
 
         private async Task ValidateMessage(CreateAccountCommand message)
