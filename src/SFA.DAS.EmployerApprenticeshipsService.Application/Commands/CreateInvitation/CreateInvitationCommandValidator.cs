@@ -31,21 +31,21 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
             if (string.IsNullOrEmpty(item.HashedAccountId))
                 validationResult.AddError(nameof(item.HashedAccountId), "No HashedAccountId supplied");
 
-            if (string.IsNullOrWhiteSpace(item.Email))
-                validationResult.AddError(nameof(item.Email), "Enter email address");
+            if (string.IsNullOrWhiteSpace(item.EmailOfPersonBeingInvited))
+                validationResult.AddError(nameof(item.EmailOfPersonBeingInvited), "Enter email address");
             else
             {
-                if (!IsValidEmailFormat(item.Email))
+                if (!IsValidEmailFormat(item.EmailOfPersonBeingInvited))
                 {
-                    validationResult.AddError(nameof(item.Email), "Enter a valid email address");
+                    validationResult.AddError(nameof(item.EmailOfPersonBeingInvited), "Enter a valid email address");
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(item.Name))
-                validationResult.AddError(nameof(item.Name), "Enter name");
+            if (string.IsNullOrWhiteSpace(item.NameOfPersonBeingInvited))
+                validationResult.AddError(nameof(item.NameOfPersonBeingInvited), "Enter name");
 
-            if (item.RoleId == 0)
-                validationResult.AddError(nameof(item.RoleId), "Select team member role");
+            if (item.RoleIdOfPersonBeingInvited == 0)
+                validationResult.AddError(nameof(item.RoleIdOfPersonBeingInvited), "Select team member role");
 
 
             if (validationResult.IsValid())
@@ -65,10 +65,10 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
 
                 if (validationResult.IsValid() && caller != null)
                 {
-                    var existingTeamMember = await _membershipRepository.Get(caller.AccountId, item.Email);
+                    var existingTeamMember = await _membershipRepository.Get(caller.AccountId, item.EmailOfPersonBeingInvited);
 
                     if (existingTeamMember != null && existingTeamMember.IsUser)
-                        validationResult.AddError(nameof(item.Email), $"{item.Email} is already invited");
+                        validationResult.AddError(nameof(item.EmailOfPersonBeingInvited), $"{item.EmailOfPersonBeingInvited} is already invited");
                 }
            }
 

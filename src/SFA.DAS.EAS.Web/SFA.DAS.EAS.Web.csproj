@@ -519,7 +519,7 @@
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
-    <Compile Include="Orchestrators\AuthenticationOrchestraor.cs" />
+    <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />

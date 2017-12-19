@@ -107,8 +107,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
                 _messagePublisher.Object,
                 _commintmentService.Object);
 
-           
-
             _owner = new MembershipView
             {
                 UserId = 1,

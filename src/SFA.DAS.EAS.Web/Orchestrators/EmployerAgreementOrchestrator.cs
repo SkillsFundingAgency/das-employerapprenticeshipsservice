@@ -171,16 +171,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse> SignAgreement(string agreementid, string hashedId, string externalUserId,
-            DateTime signedDate)
+            DateTime signedDate, string companyName)
         {
             try
             {
                 await _mediator.SendAsync(new SignEmployerAgreementCommand
                 {
-                    HashedAgreementId = agreementid,
                     HashedAccountId = hashedId,
                     ExternalUserId = externalUserId,
-                    SignedDate = signedDate
+                    SignedDate = signedDate,
+                    HashedAgreementId = agreementid,
+                    OrganisationName = companyName
                 });
 
                 return new OrchestratorResponse

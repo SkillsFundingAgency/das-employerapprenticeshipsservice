@@ -1,38 +1,55 @@
 [
     {
         "topicName": "add_account",
-        "subscription": []
+        "subscription": [ "Activity_AccountCreatedMessageProcessor" ]
     },
     {
         "topicName": "add_paye_scheme",
-        "subscription": []
+        "subscription": [ "Activity_PayeSchemeAddedMessageProcessor" ]
     },
     {
         "topicName": "agreement_created",
         "subscription": [
-            "Task_CreatedEmployerAgreementProcessor"
+            "Task_CreatedEmployerAgreementProcessor",
+			"Activity_AgreementCreatedMessageProcessor"
         ]
     },
     {
         "topicName": "agreement_signed",
         "subscription": [
-            "Task_SignedEmployerAgreementProcessor"
+            "Task_SignedEmployerAgreementProcessor",
+			"Activity_AgreementSignedMessageProcessor"
         ]
     },
     {
         "topicName": "delete_paye_scheme",
-        "subscription": []
+        "subscription": [ "Activity_PayeSchemeDeletedMessageProcessor" ]
     },
     {
         "topicName": "get_employer_levy2",
-      "subscription": [ "MA_LevyDeclaration" ]
+		"subscription": [ "MA_LevyDeclaration" ]
     },
     {
         "topicName": "legal_entity_removed",
-      "subscription": [ "Task_LegalEntityRemovedProcessor" ]
+		"subscription": [ 
+			"Task_LegalEntityRemovedProcessor", 
+			"Activity_LegalEntityAddedProcessor" 
+		]
+    },
+	{
+        "topicName": "legal_entity_added",
+		"subscription": [ "Activity_LegalEntityAddedProcessor" ]
     },
     {
         "topicName": "refresh_payments2",
-      "subscription": [ "MA_PaymentDataProcessor"]
+		"subscription": [ "MA_PaymentDataProcessor" ]
+    },
+	{
+        "topicName": "user_invited",
+		"subscription": [ "Activity_UserInvitedMessageProcessor" ]
+    },
+	{
+        "topicName": "user_joined",
+		"subscription": [ "Activity_UserJoinedMessageProcessor" ]
     }
 ]

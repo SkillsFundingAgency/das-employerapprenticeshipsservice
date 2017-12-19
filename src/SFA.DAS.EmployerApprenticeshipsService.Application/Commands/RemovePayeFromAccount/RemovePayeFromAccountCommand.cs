@@ -4,9 +4,20 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 {
     public class RemovePayeFromAccountCommand : IAsyncRequest
     {
-        public string HashedAccountId { get; set; }
-        public string PayeRef { get; set; }
-        public string UserId { get; set; }
-        public bool RemoveScheme { get; set; }
+        public RemovePayeFromAccountCommand(string hashedAccountId, string payeRef, string userId, bool removeScheme,string companyName)
+        {
+            HashedAccountId = hashedAccountId;
+            PayeRef = payeRef;
+            UserId = userId;
+            RemoveScheme = removeScheme;
+            CompanyName = companyName;
+        }
+
+        public string HashedAccountId { get;  }
+        public string PayeRef { get;  }
+        public string UserId { get;  }
+        public bool RemoveScheme { get; }
+
+        public string CompanyName { get;  }
     }
 }

@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.Interfaces;
@@ -32,6 +33,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
         private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<IMembershipRepository> _mockMembershipRepository;
 
         [SetUp]
         public void Arrange()
@@ -48,6 +50,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _payeSchemeEventFactory = new Mock<IPayeSchemeEventFactory>();
 
             _messagePublisher = new Mock<IMessagePublisher>();
+            _mockMembershipRepository=new Mock<IMembershipRepository>();
+
+            _mockMembershipRepository.Setup(a => a.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(new MembershipView { FirstName = "fn", LastName = "ln" }));
 
             _handler = new RemovePayeFromAccountCommandHandler(
                 _mediator.Object, 
@@ -56,14 +62,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
                 _hashingService.Object,
                 _genericEventFactory.Object,
                 _payeSchemeEventFactory.Object,
-                _messagePublisher.Object);
+                _messagePublisher.Object,
+                _mockMembershipRepository.Object);
         }
 
         [Test]
         public async Task ThenTheValidatorIsCalled()
         {
             //Act
-            await _handler.Handle(new RemovePayeFromAccountCommand());
+            await _handler.Handle(new RemovePayeFromAccountCommand(null, null,null,false,null));
 
             //Assert
             _validator.Verify(x=>x.ValidateAsync(It.IsAny<RemovePayeFromAccountCommand>()), Times.Once);
@@ -76,7 +83,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemovePayeFromAccountCommand>())).ReturnsAsync(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
 
             //Act
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new RemovePayeFromAccountCommand()));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new RemovePayeFromAccountCommand(null, null, null, false, null)));
 
             //Assert
             _accountRepository.Verify(x => x.RemovePayeFromAccount(It.IsAny<long>(), It.IsAny<string>()), Times.Never);
@@ -89,7 +96,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemovePayeFromAccountCommand>())).ReturnsAsync(new ValidationResult {IsUnauthorized = true});
 
             //Act
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(new RemovePayeFromAccountCommand()));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(new RemovePayeFromAccountCommand(null, null, null, false, null)));
 
             //Assert
             _accountRepository.Verify(x => x.RemovePayeFromAccount(It.IsAny<long>(), It.IsAny<string>()), Times.Never);
@@ -106,7 +113,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _hashingService.Setup(x => x.DecodeValue(hashedId)).Returns(accountId);
 
             //Act
-            await _handler.Handle(new RemovePayeFromAccountCommand { HashedAccountId = hashedId, PayeRef = payeRef, UserId = userId});
+            await _handler.Handle(new RemovePayeFromAccountCommand(hashedId, payeRef, userId,false,"companyName"));
 
             //Assert
             _accountRepository.Verify(x=>x.RemovePayeFromAccount(accountId,payeRef), Times.Once);
@@ -116,13 +123,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         public async Task ThenAnEventIsPublishedToNofifyThePayeSchemeHasBeenRemoved()
         {
             //Arrange
-            var command = new RemovePayeFromAccountCommand
-            {
-                UserId = "54256",
-                HashedAccountId = "ABC123",
-                PayeRef = "3674826874623",
-                RemoveScheme = true
-            };
+            var command = new RemovePayeFromAccountCommand("ABC123", "3674826874623", "54256", true, "companyName");
 
             //Act
             await _handler.Handle(command);
@@ -138,13 +139,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         {
             //Arrange
             var accountId = 123456;
-            var command = new RemovePayeFromAccountCommand
-            {
-                UserId = "54256",
-                HashedAccountId = "ABC123",
-                PayeRef = "3674826874623",
-                RemoveScheme = true
-            };
+            var command = new RemovePayeFromAccountCommand("ABC123", "3674826874623", "ABC123", true, "companyName");
+
 
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(accountId);
 
@@ -172,19 +168,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         public async Task ThenAMessageIsQueuedForPayeSchemeRemoved()
         {
             //Arrange
-            var command = new RemovePayeFromAccountCommand
-            {
-                UserId = "54256",
-                HashedAccountId = "ABC123",
-                PayeRef = "3674826874623",
-                RemoveScheme = true
-            };
+            var command = new RemovePayeFromAccountCommand("ABC123", "3674826874623", "54256", true,"companyName");
 
             //Act
             await _handler.Handle(command);
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeDeletedMessage>(c => c.EmpRef.Equals(command.PayeRef))), Times.Once);
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeDeletedMessage>(c => c.PayeScheme.Equals(command.PayeRef))), Times.Once);
         }
     }
 }
