@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _messagePublisher = new Mock<IMessagePublisher>();
             _mediator = new Mock<IMediator>();
 
-            _user = new User { Id = 33};
+            _user = new User { Id = 33, UserRef = "ABC123"};
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserByRefQuery>()))
                 .ReturnsAsync(new GetUserByRefResponse {User = _user});
@@ -221,8 +221,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         {
             //Arrange
             var  expectedPayeRef = "123/abc";
-            var expectedExternalUserId = "ABC123";
-            var createAccountCommand = new CreateAccountCommand { PayeReference = expectedPayeRef, AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = expectedExternalUserId };
+           
+            var createAccountCommand = new CreateAccountCommand { PayeReference = expectedPayeRef, AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.UserRef };
 
             //Act
             await _handler.Handle(createAccountCommand);
