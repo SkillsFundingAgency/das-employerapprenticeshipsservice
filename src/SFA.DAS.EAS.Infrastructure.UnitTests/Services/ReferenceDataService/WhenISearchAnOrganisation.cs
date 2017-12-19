@@ -115,6 +115,81 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             Assert.AreEqual(50, actual.TotalResults);
         }
 
+
+        [Test]
+        public async Task ThenTheResultsHave1PageWhenCountIsOneLessThanPageSize()
+        {
+            const int organisationCount = 24;
+            const int pageNumberToView = 1;
+            const int expectedPageCount = 1;
+            const int pageSize = 25;
+
+            //Arrange
+            var actual = await ArrangePagedResponse(organisationCount, pageNumberToView, pageSize);
+
+            //Assert
+            Assert.AreEqual(pageNumberToView, actual.PageNumber);
+            Assert.AreEqual(expectedPageCount, actual.TotalPages);
+            Assert.AreEqual(organisationCount, actual.Data.Count);
+            Assert.AreEqual(organisationCount, actual.TotalResults);
+        }
+
+        [Test]
+        public async Task ThenTheResultsHave2PageWhenCountIsPageSize()
+        {
+            const int organisationCount = 25;
+            const int pageNumberToView = 1;
+            const int expectedPageCount = 1;
+            const int pageSize = 25;
+
+            //Arrange
+            var actual = await ArrangePagedResponse(organisationCount, pageNumberToView, pageSize);
+
+            //Assert
+            Assert.AreEqual(pageNumberToView, actual.PageNumber);
+            Assert.AreEqual(expectedPageCount, actual.TotalPages);
+            Assert.AreEqual(pageSize, actual.Data.Count);
+            Assert.AreEqual(organisationCount, actual.TotalResults);
+        }
+
+
+        [Test]
+        public async Task ThenTheResultsHave2PageWhenCountIsOneMoreThanPageSize()
+        {
+            const int organisationCount = 26;
+            const int pageNumberToView = 1;
+            const int expectedPageCount = 2;
+            const int pageSize = 25;
+
+            //Arrange
+            var actual = await ArrangePagedResponse(organisationCount, pageNumberToView, pageSize);
+
+            //Assert
+            Assert.AreEqual(pageNumberToView, actual.PageNumber);
+            Assert.AreEqual(expectedPageCount, actual.TotalPages);
+            Assert.AreEqual(pageSize, actual.Data.Count);
+            Assert.AreEqual(organisationCount, actual.TotalResults);
+        }
+
+
+        private async Task<PagedResponse<Organisation>> ArrangePagedResponse(int OrganisationCount, int PageNumberToView, int PageSize)
+        {
+            var expectedSearchTerm = "Some Org";
+            var organisations = new List<ReferenceData.Api.Client.Dto.Organisation>();
+            for (var i = 0; i < OrganisationCount; i++)
+            {
+                organisations.Add(ArrangeOrganisation());
+            }
+            _apiClient.Setup(x => x.SearchOrganisations(expectedSearchTerm, 500))
+                .ReturnsAsync(
+                    organisations
+                );
+
+            //Act
+            var actual = await _referenceDataService.SearchOrganisations(expectedSearchTerm, PageNumberToView, PageSize);
+            return actual;
+        }
+
         [TestCase(null, 6)]
         [TestCase(OrganisationType.Charities, 1)]
         [TestCase(OrganisationType.CompaniesHouse, 2)]

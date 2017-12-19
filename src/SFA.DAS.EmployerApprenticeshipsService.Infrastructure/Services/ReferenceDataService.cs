@@ -93,7 +93,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             if (result == null)
             {
                 var orgs = await _client.SearchOrganisations(searchTerm);
-
+                
                 if (orgs != null)
                 {
                     result = orgs.Select(ConvertToOrganisation).ToList();
@@ -108,7 +108,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return new PagedResponse<Organisation>
             {
                 Data = result.Skip((pageNumber-1)*pageSize).Take(pageSize).ToList(),
-                TotalPages = (int)Math.Ceiling(((decimal)(result.Count / pageSize))),
+                TotalPages = (int)Math.Ceiling(((decimal) result.Count / pageSize)),
                 PageNumber = pageNumber,
                 TotalResults = result.Count
             };
