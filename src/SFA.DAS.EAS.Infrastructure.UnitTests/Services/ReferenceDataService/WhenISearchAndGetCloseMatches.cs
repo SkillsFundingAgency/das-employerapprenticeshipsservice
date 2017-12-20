@@ -44,21 +44,41 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
 
             var searchResults = await _referenceDataService.SearchOrganisations(searchTerm);
 
-            // ASSERT
-            Assert.AreEqual("BOB", searchResults.Data.ToList()[0].Name);
-            Assert.AreEqual("BOB CARTER MEMORIAL YOUTH AND LEISURE CENTRE TRUST", searchResults.Data.ToList()[1].Name);
-            Assert.AreEqual("Bobbing Village School", searchResults.Data.ToList()[2].Name);
-            Assert.AreEqual("Bobbing Village School", searchResults.Data.ToList()[3].Name);
-            Assert.AreEqual("Bobby Moore Academy", searchResults.Data.ToList()[4].Name);
-            Assert.AreEqual("Bobby Moore School", searchResults.Data.ToList()[5].Name);
+            // ASSERT ORDER
+            var i = 0;
+            Assert.AreEqual("BOB", searchResults.Data.ToList()[i].Name);
+            i++;
+            Assert.AreEqual("BOB LIMITED", searchResults.Data.ToList()[i].Name);
+            i++;
+            Assert.AreEqual("BOB LTD", searchResults.Data.ToList()[i].Name);
+            i++;
+            Assert.AreEqual("BOB LTD.", searchResults.Data.ToList()[i].Name);
+            i++;
+            Assert.AreEqual("BOB PLC", searchResults.Data.ToList()[i].Name);
+            i++;
+            Assert.AreEqual("BOB PLC.", searchResults.Data.ToList()[i].Name);
+            i++;
+            Assert.AreEqual("BOB CARTER MEMORIAL YOUTH AND LEISURE CENTRE TRUST", searchResults.Data.ToList()[i].Name);
+            i++;
+            Assert.AreEqual("Bobbing Village School", searchResults.Data.ToList()[i].Name);
+            i++;
+            Assert.AreEqual("Bobbing Village School", searchResults.Data.ToList()[i].Name);
+            i++;
+            Assert.AreEqual("Bobby Moore Academy", searchResults.Data.ToList()[i].Name);
+            i++;
+            Assert.AreEqual("Bobby Moore School", searchResults.Data.ToList()[i].Name);
 
-            Assert.AreEqual("Ling Bob Junior, Infant and Nursery School", searchResults.Data.ToList()[6].Name);
-            Assert.AreEqual("Ling Bob Nursery School", searchResults.Data.ToList()[7].Name);
-            Assert.AreEqual("Bnos Zion of Bobov", searchResults.Data.ToList()[8].Name);
-            Assert.AreEqual("Talmud Torah Bobov Primary School", searchResults.Data.ToList()[9].Name);
+            i++;
+            Assert.AreEqual("Ling Bob Junior, Infant and Nursery School", searchResults.Data.ToList()[i].Name);
+            i++;
+            Assert.AreEqual("Ling Bob Nursery School", searchResults.Data.ToList()[i].Name);
+            i++;
+            Assert.AreEqual("Bnos Zion of Bobov", searchResults.Data.ToList()[i].Name);
+            i++;
+            Assert.AreEqual("Talmud Torah Bobov Primary School", searchResults.Data.ToList()[i].Name);
 
-            Assert.IsFalse(searchResults.Data.ToList().Any(i => i.Name == "DO NOT DISPLAY"));
-            
+            i++;
+            Assert.AreEqual("SHOULD BE AT END", searchResults.Data.ToList()[i].Name);
         }
 
         private static ReferenceData.Api.Client.Dto.Address ConstructStandardAddressDto()
@@ -178,18 +198,68 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
                     Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
                 },
-                //THIS MIMICS AN INCORRECT ENTRY BEING RETURNED FROM SERVICE AND WE STRIP IT OUT
+                //THIS MIMICS AN INCORRECT ENTRY BEING RETURNED FROM SERVICE
                 new Organisation
                 {
                     Address = ConstructStandardAddressDto(),
                     Code = null,
-                    Name = "DO NOT DISPLAY",
+                    Name = "SHOULD BE AT END",
                     RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
                     Sector = "Free schools",
                     SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
                     Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
                 },
-               
+                new Organisation
+                {
+                    Address = ConstructStandardAddressDto(),
+                    Code = null,
+                    Name = "BOB LIMITED",
+                    RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
+                    Sector = "Free schools",
+                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
+                    Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
+                },
+                new Organisation
+                {
+                    Address = ConstructStandardAddressDto(),
+                    Code = null,
+                    Name = "BOB LTD",
+                    RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
+                    Sector = "Free schools",
+                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
+                    Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
+                },
+                new Organisation
+                {
+                    Address = ConstructStandardAddressDto(),
+                    Code = null,
+                    Name = "BOB LTD.",
+                    RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
+                    Sector = "Free schools",
+                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
+                    Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
+                },
+                new Organisation
+                {
+                    Address = ConstructStandardAddressDto(),
+                    Code = null,
+                    Name = "BOB PLC.",
+                    RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
+                    Sector = "Free schools",
+                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
+                    Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
+                },
+                new Organisation
+                {
+                    Address = ConstructStandardAddressDto(),
+                    Code = null,
+                    Name = "BOB PLC",
+                    RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
+                    Sector = "Free schools",
+                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
+                    Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
+                }
+
             };
         }
     }
