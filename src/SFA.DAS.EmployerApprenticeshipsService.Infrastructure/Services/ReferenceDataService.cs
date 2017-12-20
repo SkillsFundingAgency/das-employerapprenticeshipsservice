@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using SFA.DAS.Common.Domain.Types;
@@ -67,6 +68,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             {
                 return new PagedResponse<Organisation>();
             }
+            
+            result = SortOrganisations(result, searchTerm);
 
             if (organisationType != null)
             {
@@ -74,6 +77,109 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             }
             
             return CreatePagedOrganisationResponse(pageNumber, pageSize, result);
+        }
+
+        private List<Organisation> SortOrganisations(List<Organisation> result, string searchTerm)
+        {
+            var sortedList = new List<Organisation>();
+
+            //1. Bob - (exact match - start of the word)
+            var priority1RegEx = $"^({searchTerm})$";
+            AddResultsMatchingRegEx(result, priority1RegEx, sortedList);
+
+            //2. Bob Ltd(full word match at the start of the name)
+            var priority2RegEx = $"^({searchTerm}\\W)";
+            AddResultsMatchingRegEx(result, priority2RegEx, sortedList);
+
+            //3. Bobbing Village School(Matching partial word at the start of a result - alphabetic order)
+            //4. Bobby Moore Academy(Matching partial word at the start of a result - alphabetic order)
+            //5. Bobby Moore School(Matching partial word at the start of a result - alphabetic order)
+            var priority3RegEx = $"^({searchTerm})";
+            AddResultsMatchingRegEx(result, priority3RegEx, sortedList);
+
+            //6. Ling Bob Nursery School(Matching partial word 6 characters in of a result - alphabetic order)
+            //7. Bnos Zion of Bobov(Matching partial word 14 characters in of a result - alphabetic order)
+            //8. Talmud Torah Bobov Primary(Matching partial word 14 characters in of a result - alphabetic order)
+            AddOrganisationsLooselyMatchingSearchByPosition(result, searchTerm, sortedList);
+
+            return sortedList;
+        }
+
+        /// <summary>
+        /// Adds any loosely matching organisations, base on the search terms location within the organisation name
+        /// </summary>
+        /// <param name="rawOrganisations">The list of matching organisations</param>
+        /// <param name="searchTerm">The search term used</param>
+        /// <param name="outputList">The output list</param>
+        private void AddOrganisationsLooselyMatchingSearchByPosition(List<Organisation> rawOrganisations, string searchTerm, List<Organisation> outputList)
+        {
+            var priorityRegEx = $"({searchTerm})";
+
+            var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase);
+
+            var locationAwareMatches = FindLocationAwareMatches(rawOrganisations, rgx);
+
+            AgregateLocationAwareMatchesToOutList(outputList, locationAwareMatches);
+        }
+
+        /// <summary>
+        /// For each location aware match, make sure it is added to the output list alphabetically
+        /// </summary>
+        /// <param name="outputList">The output list</param>
+        /// <param name="locationAwareMatches">The location aware mathes to add</param>
+        private static void AgregateLocationAwareMatchesToOutList(ICollection<Organisation> outputList, IReadOnlyCollection<KeyValuePair<int, Organisation>> locationAwareMatches)
+        {
+            var maxLocation = locationAwareMatches.Max(m => m.Key);
+            var i = 0;
+            while (i <= maxLocation)
+            {
+                if (locationAwareMatches.Any(m => m.Key == i))
+                {
+                    var alphabeticOrganisationsAtIndex =
+                        locationAwareMatches.Where(m => m.Key == i).ToList().OrderBy(m => m.Value.Name);
+
+                    foreach (var item in alphabeticOrganisationsAtIndex)
+                    {
+                        if (outputList.Contains(item.Value))
+                            continue;
+
+                        outputList.Add(item.Value);
+                    }
+                }
+
+                i++;
+            }
+        }
+
+        private static List<KeyValuePair<int, Organisation>> FindLocationAwareMatches(List<Organisation> result, Regex rgx)
+        {
+            var locationAwareMatches = new List<KeyValuePair<int, Organisation>>();
+
+            foreach (var item in result)
+            {
+                var matches = rgx.Matches(item.Name);
+                if (matches.Count <= 0)
+                    continue;
+
+                locationAwareMatches.Add(new KeyValuePair<int, Organisation>(matches[0].Index, item));
+            }
+            return locationAwareMatches;
+        }
+
+        private static void AddResultsMatchingRegEx(List<Organisation> result, string priorityRegEx, List<Organisation> sortedList)
+        {
+            var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase);
+
+            var priorityItems = result.Where(o => rgx.Matches(o.Name).Count > 0);
+            var outList = priorityItems.OrderBy(o => o.Name).ToList();
+
+            foreach (var item in outList)
+            {
+                if (sortedList.Contains(item))
+                    continue;
+
+                sortedList.Add(item);
+            }
         }
 
         private List<Organisation> FilterOrganisationsByType(IEnumerable<Organisation> result, OrganisationType organisationType)
