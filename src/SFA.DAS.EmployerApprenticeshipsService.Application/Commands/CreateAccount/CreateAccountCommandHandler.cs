@@ -87,6 +87,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             await CreateAuditEntries(message, createAccountResult, hashedAccountId, userResponse.User);
 
+            await PublishLegalEntityAddedMessage(createAccountResult.AccountId, createAccountResult.LegalEntityId,
+                createAccountResult.EmployerAgreementId, message.OrganisationName, createdByName, message.ExternalUserId);
+
             await PublishAgreementCreatedMessage(createAccountResult.AccountId, createAccountResult.LegalEntityId,
                 createAccountResult.EmployerAgreementId, message.OrganisationName, createdByName, message.ExternalUserId);
 
@@ -96,10 +99,14 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             };
         }
 
-
         private async Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, string userRef)
         {
-            await _messagePublisher.PublishAsync(new LegalEntityAddedMessage(accountId, employerAgreementId, organisationName,  legalEntityId, userName, userRef));
+            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, employerAgreementId, organisationName, legalEntityId, userName, userRef));
+        }
+
+        private async Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, string userRef)
+        {
+            await _messagePublisher.PublishAsync(new LegalEntityAddedMessage(accountId, employerAgreementId, organisationName, legalEntityId, userName, userRef));
         }
 
         private async Task NotifyAccountCreated(string hashedAccountId)
