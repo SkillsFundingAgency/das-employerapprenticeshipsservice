@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
     /// WHEN I enter a name including a suffix of "Limited" or "PLC" (Limited", "LIMITED", "Ltd", "LTD", "PLC" or "Plc")
     /// THEN the search ignores them AND returns names based on the name they have entered without reference to the suffix.
     /// </summary>
-    public class WhenIEnterACompanyNameWithAPrefix
+    public class WhenIEnterACompanyNameWithASuffix
     {
         private Mock<IReferenceDataApiClient> _apiClient;
         private Infrastructure.Services.ReferenceDataService _referenceDataService;
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
          }
 
          [Test]
-         public async Task ThenTheServiceIsCalledWithoutThePrefixLimited()
+         public async Task ThenTheServiceIsCalledWithoutTheSuffixLimited()
          {
              const string searchTerm = "Accomplish IT Limited";
              const string wsSearchTerm = "Accomplish IT";
@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
          }
 
          [Test]
-         public async Task ThenTheServiceIsCalledWithoutThePrefixUcaseLimited()
+         public async Task ThenTheServiceIsCalledWithoutTheSuffixUcaseLimited()
          {
              const string searchTerm = "Accomplish IT LIMITED";
              const string wsSearchTerm = "Accomplish IT";
@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
          }
 
          [Test]
-         public async Task ThenTheServiceIsCalledWithoutThePrefixLcaseLimited()
+         public async Task ThenTheServiceIsCalledWithoutTheSuffixLcaseLimited()
          {
              const string searchTerm = "Accomplish IT limited";
              const string wsSearchTerm = "Accomplish IT";
@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
          }
 
          [Test]
-         public async Task ThenTheServiceIsCalledWithoutThePrefixLtd()
+         public async Task ThenTheServiceIsCalledWithoutTheSuffixLtd()
          {
              const string searchTerm = "Accomplish IT Ltd";
              const string wsSearchTerm = "Accomplish IT";
@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
          }
 
          [Test]
-         public async Task ThenTheServiceIsCalledWithoutThePrefixUcaseLtd()
+         public async Task ThenTheServiceIsCalledWithoutTheSuffixUcaseLtd()
          {
              const string searchTerm = "Accomplish IT LTD";
              const string wsSearchTerm = "Accomplish IT";
@@ -112,7 +112,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
          }
 
          [Test]
-         public async Task ThenTheServiceIsCalledWithoutThePrefixLcaseLtd()
+         public async Task ThenTheServiceIsCalledWithoutTheSuffixLcaseLtd()
          {
              const string searchTerm = "Accomplish IT ltd";
              const string wsSearchTerm = "Accomplish IT";
@@ -128,7 +128,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
          }
 
          [Test]
-         public async Task ThenTheServiceIsCalledWithoutThePrefixPlc()
+         public async Task ThenTheServiceIsCalledWithoutTheSuffixPlc()
          {
              const string searchTerm = "Accomplish IT Plc";
              const string wsSearchTerm = "Accomplish IT";
@@ -144,7 +144,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
          }
 
          [Test]
-         public async Task ThenTheServiceIsCalledWithoutThePrefixUcasePlc()
+         public async Task ThenTheServiceIsCalledWithoutTheSuffixUcasePlc()
          {
              const string searchTerm = "Accomplish IT PLC";
              const string wsSearchTerm = "Accomplish IT";
@@ -160,7 +160,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
          }
 
          [Test]
-         public async Task ThenTheServiceIsCalledWithoutThePrefixLcasePlc()
+         public async Task ThenTheServiceIsCalledWithoutTheSuffixLcasePlc()
          {
              const string searchTerm = "Accomplish IT plc";
              const string wsSearchTerm = "Accomplish IT";
