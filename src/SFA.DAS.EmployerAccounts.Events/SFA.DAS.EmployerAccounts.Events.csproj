@@ -39,9 +39,8 @@
       <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.44498, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.44498\lib\net45\SFA.DAS.Messaging.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.49552, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.49552\lib\net45\SFA.DAS.Messaging.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.17615, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.17615\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
@@ -57,19 +56,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\UserInvitedMessage.cs" />
+    <Compile Include="Messages\UserJoinedMessage.cs" />
     <Compile Include="Messages\AccountCreatedMessage.cs" />
-    <Compile Include="Messages\AccountMessageBase.cs" />
     <Compile Include="Messages\AgreementSignedMessage.cs" />
-    <Compile Include="Messages\PayeSchemeCreatedMessage.cs" />
-    <Compile Include="Messages\AgreementCreatedMessage.cs" />
+    <Compile Include="Messages\PayeSchemeAddedMessage.cs" />
+    <Compile Include="Messages\LegalEntityAddedMessage.cs" />
     <Compile Include="Messages\PayeSchemeDeletedMessage.cs" />
     <Compile Include="Messages\LegalEntityRemovedMessage.cs" />
+    <Compile Include="Messages\AccountMessageBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="SFA.DAS.EmployerAccounts.Events.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
+      <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
+      <Name>SFA.DAS.EAS.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

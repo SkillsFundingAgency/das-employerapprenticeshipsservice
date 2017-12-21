@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -37,11 +38,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             //Act
             var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand
             {
+                HashedAccountId = "GHT432",
                 ExternalUserId = "123asd",
-                SignedDate = new DateTime(2016,01,01),
+                SignedDate = new DateTime(2016, 01, 01),
                 HashedAgreementId = "123ASD",
-                HashedAccountId = "GHT432"
+                OrganisationName = "compName"
             });
+
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -51,28 +54,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         public async Task ThenIfTheFieldsAreNotPopulatedThenFalseIsReturnedAndTheErrorDictionaryIsPopulated()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand());
+            var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand
+            {
+                SignedDate = new DateTime(2016, 01, 01)
+            });
             
             //Assert
             Assert.IsFalse(actual.IsValid());
             Assert.AreEqual(4,actual.ValidationDictionary.Count);
         }
 
-        [Test]
-        public async Task ThenIfTheAgreementDoesNotExistThenTheRequestIsNotValid()
-        {
-            //Act
-            var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand
-            {
-                ExternalUserId = "123asd",
-                SignedDate = new DateTime(2016, 01, 01),
-                HashedAgreementId = "12345",
-                HashedAccountId = "GHT432"
-            });
-
-            //Assert
-            Assert.IsFalse(actual.IsValid());
-        }
 
         [TestCase(EmployerAgreementStatus.Signed)]
         [TestCase(EmployerAgreementStatus.Expired)]
@@ -88,11 +79,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             //Act
             var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand
             {
+                HashedAccountId = "GHT432",
                 ExternalUserId = "123asd",
                 SignedDate = new DateTime(2016, 01, 01),
                 HashedAgreementId = hashedAgreementId,
-                HashedAccountId = "GHT432"
+                OrganisationName = "compName"
             });
+
 
             //Assert
             Assert.IsFalse(actual.IsValid());

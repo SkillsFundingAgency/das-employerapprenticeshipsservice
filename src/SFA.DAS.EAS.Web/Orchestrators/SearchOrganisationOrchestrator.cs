@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _cookieService.Create(data, CookieName, 365);
         }
 
-        private PagedResponse<OrganisationDetailsViewModel> CreateResult(PagedResponse<Organisation> organisations)
+        private PagedResponse<OrganisationDetailsViewModel> CreateResult(PagedResponse<OrganisationName> organisations)
         {
             return new PagedResponse<OrganisationDetailsViewModel>
             {
@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        private OrganisationDetailsViewModel ConvertToViewModel(Organisation organisation)
+        private OrganisationDetailsViewModel ConvertToViewModel(OrganisationName organisation)
         {
             return new OrganisationDetailsViewModel
             {

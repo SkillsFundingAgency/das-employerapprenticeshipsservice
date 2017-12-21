@@ -15,6 +15,7 @@ using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
@@ -36,6 +37,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
         private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
+       
         private const long ExpectedAccountId = 54564;
         private const string ExpectedPayeName = "Paye Scheme 1";
         private User _user;
@@ -61,10 +63,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
 
             _addPayeToAccountCommandHandler = new AddPayeToAccountCommandHandler(
                 _validator.Object,
-                _accountRepository.Object, 
+                _accountRepository.Object,
                 _messagePublisher.Object,
-                _hashingService.Object, 
-                _mediator.Object, 
+                _hashingService.Object,
+                _mediator.Object,
                 _genericEventFactory.Object,
                 _payeSchemeEventFactory.Object,
                 _refreshEmployerLevyService.Object);
@@ -132,8 +134,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             await _addPayeToAccountCommandHandler.Handle(command);
 
             //Assert
-            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<PayeSchemeCreatedMessage>(c=> 
-                        c.EmpRef.Equals(command.Empref) &&
+            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<PayeSchemeAddedMessage>(c=> 
+                        c.PayeScheme.Equals(command.Empref) &&
                         c.AccountId.Equals(ExpectedAccountId) &&
                         c.CreatorName.Equals(_user.FullName) &&
                         c.CreatorUserRef.Equals(_user.UserRef))));

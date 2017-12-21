@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Infrastructure.Mapping.Profiles
         {
             CreateMap<Charity, Domain.Models.ReferenceData.Charity>();
             CreateMap<PublicSectorOrganisation, Domain.Models.ReferenceData.PublicSectorOrganisation>();
-            CreateMap<Organisation, Domain.Models.ReferenceData.Organisation>();
+            CreateMap<Organisation, Domain.Models.ReferenceData.OrganisationName>();
             CreateMap<Address, Domain.Models.Organisation.Address>();
         }
     }

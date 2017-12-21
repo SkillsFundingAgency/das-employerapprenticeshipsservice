@@ -5,6 +5,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetOrganisations
 {
     public class GetOrganisationsResponse
     {
-        public PagedResponse<Organisation> Organisations { get; set; }
+        public PagedResponse<OrganisationName> Organisations { get; set; }
     }
 }

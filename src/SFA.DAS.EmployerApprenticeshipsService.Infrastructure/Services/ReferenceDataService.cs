@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             };
         }
 
-        public async Task<PagedResponse<Organisation>> SearchOrganisations(string searchTerm, int pageNumber = 1, int pageSize = 25, OrganisationType? organisationType = null)
+        public async Task<PagedResponse<OrganisationName>> SearchOrganisations(string searchTerm, int pageNumber = 1, int pageSize = 25, OrganisationType? organisationType = null)
         {
             var result = await SearchOrganisations(searchTerm);
 
@@ -201,7 +201,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             }
         }
 
-        private List<Organisation> FilterOrganisationsByType(IEnumerable<Organisation> result, OrganisationType organisationType)
+        private List<OrganisationName> FilterOrganisationsByType(IEnumerable<OrganisationName> result, OrganisationType organisationType)
         {
             if (organisationType == OrganisationType.Other || organisationType == OrganisationType.PublicBodies)
             {
@@ -210,11 +210,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return result.Where(x => x.Type == organisationType).ToList();
         }
 
-        private async Task<List<Organisation>> SearchOrganisations(string searchTerm)
+        private async Task<List<OrganisationName>> SearchOrganisations(string searchTerm)
         {
             var cacheKey = $"SearchKey_{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(searchTerm))}";
 
-            var result = _cacheProvider.Get<List<Organisation>>(cacheKey);
+            var result = _cacheProvider.Get<List<OrganisationName>>(cacheKey);
             if (result == null)
             {
                 //var orgs = await _client.SearchOrganisations(searchTerm);
@@ -251,9 +251,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return searchTerm;
         }
 
-        private static PagedResponse<Organisation> CreatePagedOrganisationResponse(int pageNumber, int pageSize, List<Organisation> result)
+        private static PagedResponse<OrganisationName> CreatePagedOrganisationResponse(int pageNumber, int pageSize, List<OrganisationName> result)
         {
-            return new PagedResponse<Organisation>
+            return new PagedResponse<OrganisationName>
             {
                 Data = result.Skip((pageNumber-1)*pageSize).Take(pageSize).ToList(),
                 TotalPages = (int)Math.Ceiling(((decimal) result.Count / pageSize)),
@@ -262,9 +262,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             };
         }
 
-        private Organisation ConvertToOrganisation(ReferenceData.Api.Client.Dto.Organisation source)
+        private OrganisationName ConvertToOrganisation(ReferenceData.Api.Client.Dto.Organisation source)
         {
-            return new Organisation
+            return new OrganisationName
             {
                 Address = new Address
                 {

@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AgreementSteps
 
             var agreement = employerAgreementOrchestrator.Get(hashedId, userId).Result.Data.EmployerAgreements.FirstOrDefault();
 
-            employerAgreementOrchestrator.SignAgreement(agreement.HashedAgreementId, hashedId, userId, DateTime.Today).Wait();
+            employerAgreementOrchestrator.SignAgreement(agreement.HashedAgreementId, hashedId, userId, DateTime.Today,"company name").Wait();
 
         }
 

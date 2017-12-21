@@ -18,9 +18,11 @@
 
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.Messaging.AzureServiceBus;
 
 namespace SFA.DAS.EAS.Api.DependencyResolution {
     using Messaging.AzureServiceBus.StructureMap;
+    using SFA.DAS.NLog.Logger;
     using StructureMap;
 
     public static class IoC {
@@ -30,7 +32,7 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
             {
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
                 c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
-                c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
+                c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName, new NLogLogger(typeof(TopicMessagePublisher))));
                 c.AddRegistry<DefaultRegistry>();
             });
         }

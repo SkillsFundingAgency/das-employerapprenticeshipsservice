@@ -34,11 +34,12 @@ namespace SFA.DAS.EAS.Web
 
         public void Configuration(IAppBuilder app)
         {
-            var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestraor>();
+            var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
             var config = GetConfigurationObject();
             var constants = new Constants(config.Identity);
             var logger = LogManager.GetLogger("Startup");
             var urlHelper = new UrlHelper();
+            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
@@ -108,6 +109,8 @@ namespace SFA.DAS.EAS.Web
             };
         }
 
+      
+
         private static EmployerApprenticeshipsServiceConfiguration GetConfigurationObject()
         {
             var environment = Environment.GetEnvironmentVariable("DASENV");
@@ -144,7 +147,7 @@ namespace SFA.DAS.EAS.Web
             return configurationRepository;
         }
 
-        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestraor authenticationOrchestrator, ILogger logger, Constants constants)
+        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestrator authenticationOrchestrator, ILogger logger, Constants constants)
         {
             logger.Info("PostAuthenticationAction called");
 

@@ -13,6 +13,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
@@ -28,6 +29,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IValidator<CreateInvitationCommand>> _validator;
         private Mock<IUserRepository> _userRepository;
+        private Mock<IMessagePublisher> _messagePublisher;
         private const long ExpectedAccountId = 545641561;
         private const long ExpectedUserId = 521465;
         private const long ExpectedInvitationId = 1231234;
@@ -49,6 +51,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             _userRepository = new Mock<IUserRepository>();
             _userRepository.Setup(x => x.GetByEmailAddress(ExpectedExistingUserEmail)).ReturnsAsync(new User {Email = ExpectedExistingUserEmail, UserRef = Guid.NewGuid().ToString()});
 
+            _messagePublisher=new Mock<IMessagePublisher>();
+
             _mediator = new Mock<IMediator>();
             
             _validator = new Mock<IValidator<CreateInvitationCommand>>();
@@ -56,13 +60,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
-            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration, _validator.Object, _userRepository.Object);
+            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration, _validator.Object, _userRepository.Object, _messagePublisher.Object);
             _command = new CreateInvitationCommand
             {
                 HashedAccountId = ExpectedHashedId,
-                Email = ExpectedCallerEmail,
-                Name = "Test User",
-                RoleId = Role.Owner,
+                EmailOfPersonBeingInvited = ExpectedCallerEmail,
+                NameOfPersonBeingInvited = "Test User",
+                RoleIdOfPersonBeingInvited = Role.Owner,
                 ExternalUserId = ExpectedExternalUserId
             };
             DateTimeProvider.Current = new FakeTimeProvider(DateTime.UtcNow);
@@ -81,17 +85,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             await _handler.Handle(_command);
 
             //Assert
-            _invitationRepository.Verify(x => x.Create(It.Is<Invitation>(m => m.AccountId == ExpectedAccountId && m.Email == _command.Email && m.Name == _command.Name && m.Status == InvitationStatus.Pending && m.RoleId == _command.RoleId && m.ExpiryDate == DateTimeProvider.Current.UtcNow.Date.AddDays(8))), Times.Once);
+            _invitationRepository.Verify(x => x.Create(It.Is<Invitation>(m => m.AccountId == ExpectedAccountId && m.Email == _command.EmailOfPersonBeingInvited && m.Name == _command.NameOfPersonBeingInvited && m.Status == InvitationStatus.Pending && m.RoleId == _command.RoleIdOfPersonBeingInvited && m.ExpiryDate == DateTimeProvider.Current.UtcNow.Date.AddDays(8))), Times.Once);
         }
 
         [Test]
         public void ValidCommandButExistingDoesNotCreateInvitation()
         {
-            _invitationRepository.Setup(x => x.Get(ExpectedAccountId, _command.Email)).ReturnsAsync(new Invitation
+            _invitationRepository.Setup(x => x.Get(ExpectedAccountId, _command.EmailOfPersonBeingInvited)).ReturnsAsync(new Invitation
             {
                 Id = 1,
                 AccountId = ExpectedAccountId,
-                Email = _command.Email
+                Email = _command.EmailOfPersonBeingInvited
             });
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
@@ -136,7 +140,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
         public async Task ThenADifferentEmailIsSentIfTheEmailIsAlreadyRegisteredInTheSystem()
         {
             //Arrange
-            _command.Email = ExpectedExistingUserEmail;
+            _command.EmailOfPersonBeingInvited = ExpectedExistingUserEmail;
 
             //Act
             await _handler.Handle(_command);
@@ -169,13 +173,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(ExpectedAccountId.ToString())) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Email") && y.NewValue.Equals(ExpectedCallerEmail)) != null &&
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Name") && y.NewValue.Equals(_command.Name.ToString())) != null &&
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("RoleId") && y.NewValue.Equals(_command.RoleId.ToString())) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Name") && y.NewValue.Equals(_command.NameOfPersonBeingInvited.ToString())) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("RoleId") && y.NewValue.Equals(_command.RoleIdOfPersonBeingInvited.ToString())) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Status") && y.NewValue.Equals(InvitationStatus.Pending.ToString())) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("ExpiryDate") && y.NewValue.Equals(DateTimeProvider.Current.UtcNow.Date.AddDays(8).ToString("yyyy-MM-dd HH:mm:ss.fffff"))) != null
                     )));
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.Description.Equals($"Member {ExpectedCallerEmail} added to account {ExpectedAccountId} as {_command.RoleId.ToString()}"))));
+                      c.EasAuditMessage.Description.Equals($"Member {ExpectedCallerEmail} added to account {ExpectedAccountId} as {_command.RoleIdOfPersonBeingInvited.ToString()}"))));
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(ExpectedAccountId.ToString()) && y.Type.Equals("Account")) != null
                     )));

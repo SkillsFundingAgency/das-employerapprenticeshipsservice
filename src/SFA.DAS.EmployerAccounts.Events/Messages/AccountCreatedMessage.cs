@@ -1,10 +1,18 @@
 ﻿using SFA.DAS.Messaging.Attributes;
+using System;
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
+    [Serializable]
     [MessageGroup("add_account")]
-    public class AccountCreatedMessage
+    public class AccountCreatedMessage : AccountMessageBase
     {
-        public long AccountId { get; set; }
+        public AccountCreatedMessage() : base(0, string.Empty, string.Empty)
+        {}
+
+        public AccountCreatedMessage(long accountId, string creatorName, string creatorUserRef) : base(accountId, creatorName, creatorUserRef)
+        { 
+
+        }
     }
 }
