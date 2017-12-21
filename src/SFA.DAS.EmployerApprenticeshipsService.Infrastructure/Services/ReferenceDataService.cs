@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
             if (result == null)
             {
-                return new PagedResponse<Organisation>();
+                return new PagedResponse<OrganisationName>();
             }
             
             if (organisationType != null)
@@ -79,9 +79,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return CreatePagedOrganisationResponse(pageNumber, pageSize, result);
         }
 
-        private List<Organisation> SortOrganisations(List<Organisation> result, string searchTerm)
+        private List<OrganisationName> SortOrganisations(List<OrganisationName> result, string searchTerm)
         {
-            var outputList = new List<Organisation>();
+            var outputList = new List<OrganisationName>();
 
             //1. Bob - (exact match - start of the word)
             var priority1RegEx = $"^({searchTerm})$";
@@ -127,7 +127,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         /// <param name="rawOrganisations">The list of matching organisations</param>
         /// <param name="searchTerm">The search term used</param>
         /// <param name="outputList">The output list</param>
-        private void AddOrganisationsLooselyMatchingSearchByPosition(List<Organisation> rawOrganisations, string searchTerm, List<Organisation> outputList)
+        private void AddOrganisationsLooselyMatchingSearchByPosition(List<OrganisationName> rawOrganisations, string searchTerm, List<OrganisationName> outputList)
         {
             var priorityRegEx = $"({searchTerm})";
 
@@ -143,7 +143,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         /// </summary>
         /// <param name="outputList">The output list</param>
         /// <param name="locationAwareMatches">The location aware mathes to add</param>
-        private static void AgregateLocationAwareMatchesToOutList(ICollection<Organisation> outputList, IReadOnlyCollection<KeyValuePair<int, Organisation>> locationAwareMatches)
+        private static void AgregateLocationAwareMatchesToOutList(ICollection<OrganisationName> outputList, IReadOnlyCollection<KeyValuePair<int, OrganisationName>> locationAwareMatches)
         {
             if (locationAwareMatches == null || !locationAwareMatches.Any())
                 return;
@@ -170,9 +170,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             }
         }
 
-        private static List<KeyValuePair<int, Organisation>> FindLocationAwareMatches(List<Organisation> result, Regex rgx)
+        private static List<KeyValuePair<int, OrganisationName>> FindLocationAwareMatches(List<OrganisationName> result, Regex rgx)
         {
-            var locationAwareMatches = new List<KeyValuePair<int, Organisation>>();
+            var locationAwareMatches = new List<KeyValuePair<int, OrganisationName>>();
 
             foreach (var item in result)
             {
@@ -180,12 +180,12 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 if (matches.Count <= 0)
                     continue;
 
-                locationAwareMatches.Add(new KeyValuePair<int, Organisation>(matches[0].Index, item));
+                locationAwareMatches.Add(new KeyValuePair<int, OrganisationName>(matches[0].Index, item));
             }
             return locationAwareMatches;
         }
 
-        private static void AddResultsMatchingRegEx(List<Organisation> result, string priorityRegEx, List<Organisation> sortedList)
+        private static void AddResultsMatchingRegEx(List<OrganisationName> result, string priorityRegEx, List<OrganisationName> sortedList)
         {
             var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase);
 

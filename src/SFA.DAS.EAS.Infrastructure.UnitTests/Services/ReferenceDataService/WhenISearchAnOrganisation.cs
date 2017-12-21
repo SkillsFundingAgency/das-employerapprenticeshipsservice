@@ -9,7 +9,8 @@ using SFA.DAS.ReferenceData.Api.Client;
 using FluentAssertions;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Infrastructure.Caching;
-using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.ReferenceData.Api.Client.Dto;
+using OrganisationType = SFA.DAS.Common.Domain.Types.OrganisationType;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
 {
@@ -172,7 +173,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
         }
 
 
-        private async Task<PagedResponse<Organisation>> ArrangePagedResponse(int OrganisationCount, int PageNumberToView, int PageSize)
+        private async Task<PagedResponse<OrganisationName>> ArrangePagedResponse(int OrganisationCount, int PageNumberToView, int PageSize)
         {
             var expectedSearchTerm = "Some Org";
             var organisations = new List<ReferenceData.Api.Client.Dto.Organisation>();
