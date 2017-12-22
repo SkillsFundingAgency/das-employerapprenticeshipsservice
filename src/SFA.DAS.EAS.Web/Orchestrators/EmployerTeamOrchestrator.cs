@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Activities;
+using SFA.DAS.Activities.Client;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EAS.Application.Commands.CreateInvitation;
@@ -26,6 +28,7 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -33,12 +36,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
+        private readonly ILog _logger;
 
-        public EmployerTeamOrchestrator(IMediator mediator, ICurrentDateTime currentDateTime)
+        public EmployerTeamOrchestrator(IMediator mediator, ICurrentDateTime currentDateTime, ILog logger)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
+            _logger = logger;
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedAccountId, string externalUserId)
@@ -149,10 +154,28 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0).ToList() ?? new List<AccountTask>();
 
-                var latestActivitiesResponse = await _mediator.SendAsync(new GetAccountLatestActivitiesQuery
+                GetAccountLatestActivitiesResponse latestActivitiesResponse;
+
+                try
                 {
-                    AccountId = accountResponse.Account.Id
-                });
+                    latestActivitiesResponse = await _mediator.SendAsync(new GetAccountLatestActivitiesQuery
+                    {
+                        AccountId = accountResponse.Account.Id
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Could not retrieve account latest activities successfully.");
+
+                    latestActivitiesResponse = new GetAccountLatestActivitiesResponse
+                    {
+                        Result = new AggregatedActivitiesResult
+                        {
+                            Aggregates = new AggregatedActivityResult[0],
+                            Total = 0
+                        }
+                    };
+                }
 
                 var userResponse = await _mediator.SendAsync(new GetTeamMemberQuery
                 {
@@ -218,11 +241,29 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     UserId = externalUserId
                 });
 
-                var activitiesResponse = await _mediator.SendAsync(new GetAccountActivitiesQuery
+                GetAccountActivitiesResponse activitiesResponse;
+
+                try
                 {
-                    AccountId = accountResponse.Account.Id,
-                    Take = take
-                });
+                    activitiesResponse = await _mediator.SendAsync(new GetAccountActivitiesQuery
+                    {
+                        AccountId = accountResponse.Account.Id,
+                        Take = take
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Could not retrieve account activities successfully.");
+
+                    activitiesResponse = new GetAccountActivitiesResponse
+                    {
+                        Result = new ActivitiesResult
+                        {
+                            Activities = new Activity[0],
+                            Total = 0
+                        }
+                    };
+                }
 
                 return new OrchestratorResponse<AccountActivitiesViewModel>
                 {

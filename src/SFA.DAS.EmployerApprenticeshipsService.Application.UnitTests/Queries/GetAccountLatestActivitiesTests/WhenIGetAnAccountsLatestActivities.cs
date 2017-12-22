@@ -12,7 +12,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLatestActivitiesTe
     public class WhenIGetAnAccountsLatestActivities : QueryBaseTest<GetAccountLatestActivitiesQueryHandler, GetAccountLatestActivitiesQuery, GetAccountLatestActivitiesResponse>
     {
         private Mock<IActivitiesClient> _activitiesClient;
-        private Mock<ILog> _logger;
         public override GetAccountLatestActivitiesQuery Query { get; set; }
         public override GetAccountLatestActivitiesQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountLatestActivitiesQuery>> RequestValidator { get; set; }
@@ -23,14 +22,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLatestActivitiesTe
             base.SetUp();
 
             _activitiesClient = new Mock<IActivitiesClient>();
-            _logger = new Mock<ILog>();
 
             Query = new GetAccountLatestActivitiesQuery
             {
                 AccountId = 2
             };
 
-            RequestHandler = new GetAccountLatestActivitiesQueryHandler(_activitiesClient.Object, _logger.Object, RequestValidator.Object);
+            RequestHandler = new GetAccountLatestActivitiesQueryHandler(_activitiesClient.Object, RequestValidator.Object);
         }
 
         [Test]
@@ -57,22 +55,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLatestActivitiesTe
             //Assert
             Assert.IsNotNull(response?.Result);
             Assert.AreEqual(latestActivitiesResult, response.Result);
-        }
-
-        [Test]
-        public async Task ThenIfTheMessageIsValidShouldReturnNoActivitiesFromClientAndLogErrorWhenClientCausesException()
-        {
-            //Arrange
-            _activitiesClient.Setup(x => x.GetLatestActivities(It.IsAny<long>())).Throws<Exception>();
-
-            //Act
-            var response = await RequestHandler.Handle(Query);
-
-            //Assert
-            Assert.IsNotNull(response?.Result);
-            Assert.IsEmpty(response.Result.Aggregates);
-            Assert.AreEqual(response.Result.Total, 0);
-            _logger.Verify(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
         }
     }
 }
