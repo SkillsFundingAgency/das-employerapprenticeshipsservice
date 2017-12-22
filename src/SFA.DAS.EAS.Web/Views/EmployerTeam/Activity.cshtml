@@ -1,8 +1,8 @@
 ﻿@using SFA.DAS.EAS.Web
-@using SFA.DAS.EAS.Domain.Models.UserProfile
 @using SFA.DAS.EAS.Web.Extensions
+@using SFA.DAS.EAS.Web.ViewModels
 
-@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AccountDashboardViewModel>
+@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AccountActivitiesViewModel>
 
 @{
     ViewBag.Title = "Activity";
@@ -10,98 +10,58 @@
     ViewBag.PageID = "page-activity";
 }
 
-    <div class="grid-row">
-        <div class="column-two-thirds">
-            <h1 class="heading-xlarge">Activity</h1>
-            <p class="lede">A timeline of all the activity on your account.</p>
-        </div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Activity</h1>
+        <p class="lede">A timeline of all the activity on your account.</p>
     </div>
-    <div class="grid-row">
-        <div class="column-one-third">
-            <h2 class="heading-medium">Filters</h2>
-            <div class="filter">
-                <fieldset>
-                    <legend class="vh">Filter by date range</legend>
-                    <h3>Date range</h3>
-
-                    <div class="multiple-choice">
-                        <input id="this-month" type="radio" name="radio-date-range" value="Yes">
-                        <label for="this-month">this month</label>
-                    </div>
-
-                    <div class="multiple-choice">
-                        <input id="last-three-months" type="radio" name="radio-date-range" value="No">
-                        <label for="last-three-months">last 3 months</label>
-                    </div>
-
-                    <div class="multiple-choice" data-target="custom-date-range-fields">
-                        <input id="custom-date-range" type="radio" name="radio-date-range" value="No">
-                        <label for="custom-date-range">Custom date range</label>
-                    </div>
-
-                    <div class="js-hidden form-group-filter" id="custom-date-range-fields">
-                        <div class="form-group">
-                            <label class="form-label" for="date-from">From</label>
-                            <input class="form-control" name="date-from" type="text" id="date-from">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="date-to">To</label>
-                            <input class="form-control" name="date-to" type="text" id="date-to">
-                        </div>
-                    </div>
-
-                </fieldset>
-               
-            </div>
-
-            <div class="filter">
-                <fieldset>
-                    <legend class="vh">Filter by keyword search</legend>
-                    <h3>Keyword search</h3>
-                    <div>
-                        <label class="form-label vh" for="date-to">Keyword search</label>
-                        <input class="form-control" name="date-to" type="text" id="date-to">
+</div>
+<div class="grid-row">
+    @*<div class="column-one-third">
+        <h2 class="heading-medium">Filters</h2>
+        <div class="filter">
+            <fieldset>
+                <legend class="vh">Filter by date range</legend>
+                <h3>Date range</h3>
+                <div class="multiple-choice">
+                    <input id="this-month" type="radio" name="radio-date-range" value="Yes">
+                    <label for="this-month">this month</label>
+                </div>
+                <div class="multiple-choice">
+                    <input id="last-three-months" type="radio" name="radio-date-range" value="No">
+                    <label for="last-three-months">last 3 months</label>
+                </div>
+                <div class="multiple-choice" data-target="custom-date-range-fields">
+                    <input id="custom-date-range" type="radio" name="radio-date-range" value="No">
+                    <label for="custom-date-range">Custom date range</label>
+                </div>
+                <div class="js-hidden form-group-filter" id="custom-date-range-fields">
+                    <div class="form-group">
+                        <label class="form-label" for="date-from">From</label>
+                        <input class="form-control" name="date-from" type="text" id="date-from">
                     </div>
                     <div class="form-group">
-                        <input class="button" type="submit">
+                        <label class="form-label" for="date-to">To</label>
+                        <input class="form-control" name="date-to" type="text" id="date-to">
                     </div>
-                </fieldset>
-            </div>
-
+                </div>
+            </fieldset>
         </div>
-        <div class="column-two-thirds">
-            <ol class="timeline timeline--complete">
-                <li class="first">
-                    <h4 class="when" title="10th August 2017 at 1:25pm">Today</h4>
-                    <p class="activity">1 levy transfer pending</p>
-                    <p class="meta">At <time>1:25pm</time> <a href="index.html">See details</a></p>
-                </li>
-                <li>
-                    <h4 class="when" title="10th August 2017 at 12:15pm">Today</h4>
-                    <p class="activity">2 apprentice changes approved</p>
-                    <p class="meta">At <time>12:15pm</time> <a href="index.html">See details</a></p>
-                </li>
-                <li class="first">
-                    <h4 class="when" title="9th August 2017 at 9:57am">Yesterday</h4>
-                    <p class="activity">1 levy transfer pending</p>
-                    <p class="meta">At <time>9:57am</time> <a href="index.html">See details</a></p>
-                </li>
-                <li class="first">
-                    <h4 class="when" title="27 June 2017 at 9:57am">27 June 2017</h4>
-                    <p class="activity">Start date change requested for Anne Smith</p>
-                    <p class="meta">At <time>9:57am</time> by <span class="author">Acme Training Ltd</span> <a href="index.html">See details</a></p>
-                </li>
-                <li>
-                    <h4 class="when" title="27 June 2017 at 9:57am">27 June 2017</h4>
-                    <p class="activity">Cohort approved: Acme Training ltd</p>
-                    <p class="meta">At <time>9:57am</time> by <span class="author">Over Enout</span> <a href="index.html">See details</a></p>
-                </li>
-                <li>
-                    <a href="#">See all activity</a>
-                </li>
-            </ol>
+        <div class="filter">
+            <fieldset>
+                <legend class="vh">Filter by keyword search</legend>
+                <h3>Keyword search</h3>
+                <div>
+                    <label class="form-label vh" for="date-to">Keyword search</label>
+                    <input class="form-control" name="date-to" type="text" id="date-to">
+                </div>
+                <div class="form-group">
+                    <input class="button" type="submit">
+                </div>
+            </fieldset>
         </div>
+    </div>*@
+    <div class="column-two-thirds">
+        @Html.Partial("_Activities", Model.Data.ActivitiesResult)
     </div>
-
-
-
+</div>

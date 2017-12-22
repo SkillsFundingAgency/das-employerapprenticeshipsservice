@@ -77,6 +77,9 @@
       <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Activities.Client">
+      <HintPath>..\..\..\das-activities\src\SFA.DAS.Activities.Client\bin\Debug\SFA.DAS.Activities.Client.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Audit.Client, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Client.dll</HintPath>
       <Private>True</Private>

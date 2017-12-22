@@ -30,9 +30,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
-
             var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, userIdClaim);
-
             var flashMessage = GetFlashMessageViewModelFromCookie();
 
             if (flashMessage!=null)
@@ -46,9 +44,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("activity")]
-        public ActionResult Activity()
+        public async Task<ActionResult> Activity(string hashedAccountId, int? take = null)
         {
-            return View();
+            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            var response = await _employerTeamOrchestrator.GetAccountActivities(hashedAccountId, externalUserId, take);
+
+            return View(response);
         }
 
         [HttpGet]
