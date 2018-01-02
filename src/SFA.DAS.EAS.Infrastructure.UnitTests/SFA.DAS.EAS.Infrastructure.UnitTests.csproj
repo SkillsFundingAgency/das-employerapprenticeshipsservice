@@ -181,6 +181,8 @@
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEnglishFractions.cs" />
     <Compile Include="Services\ReferenceDataService\WhenIGetACharity.cs" />
     <Compile Include="Services\PaymentServiceTests\WhenIGetAccountPayments.cs" />
+    <Compile Include="Services\ReferenceDataService\WhenIEnterACompanyNameWithASuffix.cs" />
+    <Compile Include="Services\ReferenceDataService\WhenISearchAndGetCloseMatches.cs" />
     <Compile Include="Services\ReferenceDataService\WhenISearchAnOrganisation.cs" />
     <Compile Include="Services\RefreshEmployerLevyServiceTests\WhenQueuingAMessage.cs" />
     <Compile Include="Services\TaskServiceTests\WhenIGetTasks.cs" />

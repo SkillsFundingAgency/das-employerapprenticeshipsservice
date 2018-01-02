@@ -261,3 +261,5 @@ src/Tools/PhantomJS/tools/phantomjs/ChangeLog
 *.ncrunchsolution
 *.ncrunchproject
 /src/SFA.DAS.EAS.Web/SFA.DAS.EAS.Web.csproj.DotSettings
+/src/SFA.DAS.EmployerApprenticeshipsService.Infrastructure/Services/ReferenceDataService.cs.LOCAL
+/src/SFA.DAS.EmployerApprenticeshipsService.Domain/Interfaces/IReferenceDataService.cs.REMOTE

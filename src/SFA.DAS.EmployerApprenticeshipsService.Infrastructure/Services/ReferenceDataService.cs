@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using SFA.DAS.Common.Domain.Types;
@@ -20,6 +21,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly IReferenceDataApiClient _client;
         private readonly IMapper _mapper;
         private readonly ICacheProvider _cacheProvider;
+
+        private readonly List<string> _termsToRemove = new List<string> { "ltd", "ltd.", "limited", "plc", "plc." };
 
         public ReferenceDataService(IReferenceDataApiClient client, IMapper mapper, ICacheProvider cacheProvider)
         {
@@ -67,13 +70,122 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             {
                 return new PagedResponse<OrganisationName>();
             }
-
+            
             if (organisationType != null)
             {
                 result = FilterOrganisationsByType(result, organisationType.Value);
             }
             
             return CreatePagedOrganisationResponse(pageNumber, pageSize, result);
+        }
+
+        private List<OrganisationName> SortOrganisations(List<OrganisationName> result, string searchTerm)
+        {
+            var outputList = new List<OrganisationName>();
+
+            //1. Bob - (exact match - start of the word)
+            var priority1RegEx = $"^({searchTerm})$";
+            AddResultsMatchingRegEx(result, priority1RegEx, outputList);
+
+            //2. Bob Ltd etc (full word match at the start of the name has company suffix)
+            
+            var priority1ARegEx = $"^({searchTerm}\\W)({string.Join("|", _termsToRemove)})";
+            AddResultsMatchingRegEx(result, priority1ARegEx, outputList);
+
+            //2. Bob Hope (full word match at the start of the name)
+            var priority2RegEx = $"^({searchTerm}\\W)";
+            AddResultsMatchingRegEx(result, priority2RegEx, outputList);
+
+            //3. Bobbing Village School(Matching partial word at the start of a result - alphabetic order)
+            //4. Bobby Moore Academy(Matching partial word at the start of a result - alphabetic order)
+            //5. Bobby Moore School(Matching partial word at the start of a result - alphabetic order)
+            var priority3RegEx = $"^({searchTerm})";
+            AddResultsMatchingRegEx(result, priority3RegEx, outputList);
+
+            //6. Ling Bob Nursery School(Matching partial word 6 characters in of a result - alphabetic order)
+            //7. Bnos Zion of Bobov(Matching partial word 14 characters in of a result - alphabetic order)
+            //8. Talmud Torah Bobov Primary(Matching partial word 14 characters in of a result - alphabetic order)
+            AddOrganisationsLooselyMatchingSearchByPosition(result, searchTerm, outputList);
+
+            // Add all the other results back in
+            foreach (var item in result)
+            {
+                if (outputList.Contains(item))
+                    continue;
+
+                outputList.Add(item);
+            }
+
+
+
+            return outputList;
+        }
+
+        /// <summary>
+        /// Adds any loosely matching organisations, base on the search terms location within the organisation name
+        /// </summary>
+        /// <param name="rawOrganisations">The list of matching organisations</param>
+        /// <param name="searchTerm">The search term used</param>
+        /// <param name="outputList">The output list</param>
+        private void AddOrganisationsLooselyMatchingSearchByPosition(List<OrganisationName> rawOrganisations, string searchTerm, List<OrganisationName> outputList)
+        {
+            var priorityRegEx = $"({searchTerm})";
+
+            var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase);
+
+            var locationAwareMatches = FindLocationAwareMatches(rawOrganisations, rgx);
+
+            AgregateLocationAwareMatchesToOutList(outputList, locationAwareMatches);
+        }
+
+        /// <summary>
+        /// For each location aware match, make sure it is added to the output list alphabetically
+        /// </summary>
+        /// <param name="outputList">The output list</param>
+        /// <param name="locationAwareMatches">The location aware mathes to add</param>
+        private static void AgregateLocationAwareMatchesToOutList(ICollection<OrganisationName> outputList, IReadOnlyCollection<KeyValuePair<int, OrganisationName>> locationAwareMatches)
+        {
+            if (locationAwareMatches == null || !locationAwareMatches.Any())
+                return;
+
+            foreach (var match in locationAwareMatches.OrderBy(m => m.Key).ThenBy(m => m.Value.Name))
+            {
+                if (outputList.Contains(match.Value))
+                    continue;
+
+                outputList.Add(match.Value);
+            }
+        }
+
+        private static List<KeyValuePair<int, OrganisationName>> FindLocationAwareMatches(List<OrganisationName> result, Regex rgx)
+        {
+            var locationAwareMatches = new List<KeyValuePair<int, OrganisationName>>();
+
+            foreach (var item in result)
+            {
+                var matches = rgx.Matches(item.Name);
+                if (matches.Count <= 0)
+                    continue;
+
+                locationAwareMatches.Add(new KeyValuePair<int, OrganisationName>(matches[0].Index, item));
+            }
+            return locationAwareMatches;
+        }
+
+        private static void AddResultsMatchingRegEx(List<OrganisationName> result, string priorityRegEx, List<OrganisationName> sortedList)
+        {
+            var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase);
+
+            var priorityItems = result.Where(o => rgx.Matches(o.Name).Count > 0);
+            var outList = priorityItems.OrderBy(o => o.Name).ToList();
+
+            foreach (var item in outList)
+            {
+                if (sortedList.Contains(item))
+                    continue;
+
+                sortedList.Add(item);
+            }
         }
 
         private List<OrganisationName> FilterOrganisationsByType(IEnumerable<OrganisationName> result, OrganisationType organisationType)
@@ -90,17 +202,37 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             var cacheKey = $"SearchKey_{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(searchTerm))}";
 
             var result = _cacheProvider.Get<List<OrganisationName>>(cacheKey);
-            if (result == null)
-            {
-                var orgs = await _client.SearchOrganisations(searchTerm);
+            if (result != null) return result;
 
-                if (orgs != null)
-                {
-                    result = orgs.Select(ConvertToOrganisation).ToList();
-                    _cacheProvider.Set(cacheKey, result, new TimeSpan(0, 15, 0));
-                }
-            }
+            var processedSearchTerm = CleanSearchTerm(searchTerm);
+            var orgs = await _client.SearchOrganisations(processedSearchTerm);
+
+            if (orgs == null) return new List<OrganisationName>();
+
+            var convertedOrgs = orgs.Select(ConvertToOrganisation).ToList();
+
+            result = SortOrganisations(convertedOrgs, processedSearchTerm);
+
+            _cacheProvider.Set(cacheKey, result, new TimeSpan(0, 15, 0));
             return result;
+        }
+
+        private string CleanSearchTerm(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+                return searchTerm;
+
+            foreach (var termToRemove in _termsToRemove)
+            {
+                if (!searchTerm.EndsWith(termToRemove, StringComparison.CurrentCultureIgnoreCase))
+                    continue;
+
+                var index = searchTerm.LastIndexOf(termToRemove, StringComparison.CurrentCultureIgnoreCase);
+
+                searchTerm = searchTerm.Substring(0, index).TrimEnd();
+            }
+
+            return searchTerm;
         }
 
         private static PagedResponse<OrganisationName> CreatePagedOrganisationResponse(int pageNumber, int pageSize, List<OrganisationName> result)
@@ -108,7 +240,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return new PagedResponse<OrganisationName>
             {
                 Data = result.Skip((pageNumber-1)*pageSize).Take(pageSize).ToList(),
-                TotalPages = (int)Math.Ceiling(((decimal)(result.Count / pageSize))),
+                TotalPages = (int)Math.Ceiling(((decimal) result.Count / pageSize)),
                 PageNumber = pageNumber,
                 TotalResults = result.Count
             };
