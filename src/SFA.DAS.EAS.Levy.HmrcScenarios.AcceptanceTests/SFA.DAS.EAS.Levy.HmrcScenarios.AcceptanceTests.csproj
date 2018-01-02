@@ -242,10 +242,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Transactions.AcceptanceTests\SFA.DAS.EAS.Transactions.AcceptanceTests.csproj">
-      <Project>{DCDFFDB0-8F7F-4CC7-AC40-0B78D52CD16B}</Project>
-      <Name>SFA.DAS.EAS.Transactions.AcceptanceTests</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EAS.Web\SFA.DAS.EAS.Web.csproj">
       <Project>{65DB60B1-80F0-432C-926E-7A6DD02A5645}</Project>
       <Name>SFA.DAS.EAS.Web</Name>
