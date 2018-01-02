@@ -132,7 +132,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
          {
              const string searchTerm = "Accomplish IT Plc";
              const string wsSearchTerm = "Accomplish IT";
-             const string wsResultName = "ACCOMPLISH IT LIMITED";
+             const string wsResultName = "ACCOMPLISH IT PLC";
 
              //Arrange
              SetupWsSearchOrganistations(wsSearchTerm, wsResultName);
@@ -148,7 +148,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
          {
              const string searchTerm = "Accomplish IT PLC";
              const string wsSearchTerm = "Accomplish IT";
-             const string wsResultName = "ACCOMPLISH IT LIMITED";
+             const string wsResultName = "ACCOMPLISH IT PLC";
 
              //Arrange
              SetupWsSearchOrganistations(wsSearchTerm, wsResultName);
@@ -164,7 +164,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
          {
              const string searchTerm = "Accomplish IT plc";
              const string wsSearchTerm = "Accomplish IT";
-             const string wsResultName = "ACCOMPLISH IT LIMITED";
+             const string wsResultName = "ACCOMPLISH IT PLC";
 
              //Arrange
              SetupWsSearchOrganistations(wsSearchTerm, wsResultName);
@@ -175,7 +175,23 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
              _apiClient.Verify(x => x.SearchOrganisations(wsSearchTerm, 500), Times.Once);
          }
 
-         private void SetupWsSearchOrganistations(string wsSearchTerm, string wsResultName)
+        [Test]
+        public async Task ThenTheSortOrderIsUnAffectedByTheSuffix()
+        {
+            const string searchTerm = "Accomplish IT plc";
+            const string wsSearchTerm = "Accomplish IT";
+            const string wsResultName = "ACCOMPLISH IT PLC";
+
+            //Arrange
+            SetupWsSearchOrganistations(wsSearchTerm, wsResultName);
+
+            await _referenceDataService.SearchOrganisations(searchTerm);
+
+            // ASSERT
+            _apiClient.Verify(x => x.SearchOrganisations(wsSearchTerm, 500), Times.Once);
+        }
+
+        private void SetupWsSearchOrganistations(string wsSearchTerm, string wsResultName)
          {
              _apiClient.Setup(x => x.SearchOrganisations(wsSearchTerm, 500))
                  .ReturnsAsync(

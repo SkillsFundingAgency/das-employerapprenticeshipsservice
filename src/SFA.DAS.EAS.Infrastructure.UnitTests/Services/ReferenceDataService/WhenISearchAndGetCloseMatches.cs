@@ -6,10 +6,7 @@ using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.ReferenceData.Api.Client;
-using FluentAssertions;
-using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Infrastructure.Caching;
-using SFA.DAS.Common.Domain.Types;
 using Organisation = SFA.DAS.ReferenceData.Api.Client.Dto.Organisation;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
@@ -17,6 +14,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
 
     public class WhenISearchAndGetCloseMatches
     {
+        private const string SearchTerm = "Bob";
+        private const string SearchTermWithPrefix = "Bob Ltd";
+
         private Mock<IReferenceDataApiClient> _apiClient;
         private Infrastructure.Services.ReferenceDataService _referenceDataService;
         private Mock<IMapper> _mapper;
@@ -35,12 +35,27 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
         [Test]
         public async Task ThenCheckSortPriorityIsApplied()
         {
-            const string searchTerm = "Bob";
-
             //Arrange
-            _apiClient.Setup(x => x.SearchOrganisations(searchTerm, 500))
+            _apiClient.Setup(x => x.SearchOrganisations(SearchTerm, 500))
                 .ReturnsAsync(
                     ConstructOrganisationSearchResults());
+
+            await ArrangeAndAssertSortOrder(SearchTerm);
+        }
+
+        [Test]
+        public async Task ThenCheckSortPriorityIsAppliedCorrectlyWhenWeHaveAKnownSuffix()
+        {
+            //Arrange - The search Term WITHOUT the suffix as it is stripped before the external call
+            _apiClient.Setup(x => x.SearchOrganisations(SearchTerm, 500))
+                .ReturnsAsync(
+                    ConstructOrganisationSearchResults());
+
+            await ArrangeAndAssertSortOrder(SearchTermWithPrefix);
+        }
+
+        private async Task ArrangeAndAssertSortOrder(string searchTerm)
+        {
 
             var searchResults = await _referenceDataService.SearchOrganisations(searchTerm);
 

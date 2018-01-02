@@ -148,25 +148,12 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             if (locationAwareMatches == null || !locationAwareMatches.Any())
                 return;
 
-            var maxLocation = locationAwareMatches.Max(m => m.Key);
-            var i = 0;
-            while (i <= maxLocation)
+            foreach (var match in locationAwareMatches.OrderBy(m => m.Key).ThenBy(m => m.Value.Name))
             {
-                if (locationAwareMatches.Any(m => m.Key == i))
-                {
-                    var alphabeticOrganisationsAtIndex =
-                        locationAwareMatches.Where(m => m.Key == i).ToList().OrderBy(m => m.Value.Name);
+                if (outputList.Contains(match.Value))
+                    continue;
 
-                    foreach (var item in alphabeticOrganisationsAtIndex)
-                    {
-                        if (outputList.Contains(item.Value))
-                            continue;
-
-                        outputList.Add(item.Value);
-                    }
-                }
-
-                i++;
+                outputList.Add(match.Value);
             }
         }
 
@@ -215,21 +202,18 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             var cacheKey = $"SearchKey_{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(searchTerm))}";
 
             var result = _cacheProvider.Get<List<OrganisationName>>(cacheKey);
-            if (result == null)
-            {
-                //var orgs = await _client.SearchOrganisations(searchTerm);
-                var processedSearchTerm = CleanSearchTerm(searchTerm);
-                var orgs = await _client.SearchOrganisations(processedSearchTerm);
+            if (result != null) return result;
 
-                if (orgs != null)
-                {
-                    var convertedOrgs = orgs.Select(ConvertToOrganisation).ToList();
+            var processedSearchTerm = CleanSearchTerm(searchTerm);
+            var orgs = await _client.SearchOrganisations(processedSearchTerm);
 
-                    result = SortOrganisations(convertedOrgs, searchTerm);
+            if (orgs == null) return new List<OrganisationName>();
 
-                    _cacheProvider.Set(cacheKey, result, new TimeSpan(0, 15, 0));
-                }
-            }
+            var convertedOrgs = orgs.Select(ConvertToOrganisation).ToList();
+
+            result = SortOrganisations(convertedOrgs, processedSearchTerm);
+
+            _cacheProvider.Set(cacheKey, result, new TimeSpan(0, 15, 0));
             return result;
         }
 
@@ -240,10 +224,10 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
             foreach (var termToRemove in _termsToRemove)
             {
-                if (!searchTerm.ToLower().EndsWith(termToRemove.ToLower()))
+                if (!searchTerm.EndsWith(termToRemove, StringComparison.CurrentCultureIgnoreCase))
                     continue;
 
-                var index = searchTerm.ToLower().LastIndexOf(termToRemove.ToLower(), StringComparison.Ordinal);
+                var index = searchTerm.LastIndexOf(termToRemove, StringComparison.CurrentCultureIgnoreCase);
 
                 searchTerm = searchTerm.Substring(0, index).TrimEnd();
             }
