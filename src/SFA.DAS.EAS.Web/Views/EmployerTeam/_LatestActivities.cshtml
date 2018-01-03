@@ -10,14 +10,18 @@
         @foreach (var aggregate in Model.Aggregates)
         {
             var activity = aggregate.TopHit;
-            var at = activity.At.ToGMTStandardTime();
 
-            <li class="item">
-                <div class="item-label">@at.ToRelativeFormat(now)</div>
-                <div class="item-description">
-                    @Html.Partial("Activities/_" + activity.Type, new ActivityViewModel { Activity = activity, Count = aggregate.Count })
-                </div>
-            </li>
+            if (Html.ActivityViewExists(activity.Type))
+            {
+                var at = activity.At.ToGMTStandardTime();
+
+                <li class="item">
+                    <div class="item-label">@at.ToRelativeFormat(now)</div>
+                    <div class="item-description">
+                        @Html.Activity(activity.Type, new ActivityViewModel { Activity = activity, Count = aggregate.Count })
+                    </div>
+                </li>
+            }
         }
         <li class="item all-activity">
             <div class="item-label">

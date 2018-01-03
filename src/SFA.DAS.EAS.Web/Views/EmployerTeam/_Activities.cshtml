@@ -10,14 +10,17 @@
     <ol class="timeline timeline--complete">
         @foreach (var activity in Model.Activities)
         {
-            var at = activity.At.ToGMTStandardTime();
-                    
-            <li class="@(at.Date != date ? "first" : "")">
-                <h4 title="@at.ToString("U")">@at.ToRelativeFormat(now)</h4>
-                @Html.Partial("Activities/_" + activity.Type, new ActivityViewModel { Activity = activity, MetaIsVisible = true })
-            </li>
+            if (Html.ActivityViewExists(activity.Type))
+            {
+                var at = activity.At.ToGMTStandardTime();
 
-            date = at.Date;
+                <li class="@(at.Date != date ? "first" : "")">
+                    <h4 title="@at.ToString("U")">@at.ToRelativeFormat(now)</h4>
+                    @Html.Activity(activity.Type, new ActivityViewModel { Activity = activity, MetaIsVisible = true })
+                </li>
+
+                date = at.Date;
+            }
         }
                 
         @if (Model.Activities.Count() != Model.Total)
