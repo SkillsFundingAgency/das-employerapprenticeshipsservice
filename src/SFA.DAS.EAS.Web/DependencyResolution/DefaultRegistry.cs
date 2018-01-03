@@ -69,7 +69,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
         public DefaultRegistry()
         {
             var config = GetConfiguration();
-            var activitiesElasticConfiguration = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration<ActivitiesElasticConfiguration>($"SFA.DAS.Activities.Client");
             var notificationsApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration<NotificationsApiClientConfiguration>($"{ServiceName}.Notifications");
             var taskApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration<TaskApiConfiguration>($"SFA.DAS.Tasks.Api");
 
@@ -79,8 +78,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
             });
-
-            For<ActivitiesElasticConfiguration>().Use(activitiesElasticConfiguration);
+            
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For<IApprenticeshipApi>().Use<ApprenticeshipApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<ICache>().Use<InMemoryCache>(); //RedisCache
