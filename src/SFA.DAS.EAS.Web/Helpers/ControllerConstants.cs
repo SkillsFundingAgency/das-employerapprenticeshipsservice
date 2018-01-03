@@ -38,7 +38,6 @@ namespace SFA.DAS.EAS.Web.Helpers
         public const string GatewayInformViewName = "GatewayInform";
         public const string GatewayViewName = "Gateway";
         public const string GateWayResponseActionName = "GateWayResponse";
-        public const string GenericErrorViewName = "GenericError";
         public const string GetGatewayActionName = "GetGateway";
         public const string HashedAccountIdKeyName = "HashedAccountId";
         public const string HomeControllerName = "Home";

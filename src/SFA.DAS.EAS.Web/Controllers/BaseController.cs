@@ -61,21 +61,13 @@ namespace SFA.DAS.EAS.Web.Controllers
                 {
                     ModelState.AddModelError(errorMessageItem.Key, errorMessageItem.Value);
                 }
+
+                return ReturnViewResult(viewName, masterName, orchestratorResponse);
             }
 
-            if (orchestratorResponse.Status == HttpStatusCode.OK || orchestratorResponse.Status == HttpStatusCode.BadRequest)
-                return ReturnViewResult(viewName, masterName, orchestratorResponse);
-
-            if (orchestratorResponse.Status == HttpStatusCode.Unauthorized)
+            if (orchestratorResponse.Status == HttpStatusCode.BadRequest)
             {
-                //Get the account id
-                var accountId = Request.Params[ControllerConstants.HashedAccountIdKeyName];
-                if (accountId != null)
-                {
-                    ViewBag.AccountId = accountId;
-                }
-
-                return base.View(ControllerConstants.AccessDeniedViewName, masterName, orchestratorResponse);
+                return ReturnViewResult(viewName, masterName, orchestratorResponse);
             }
 
             if (orchestratorResponse.Status == HttpStatusCode.NotFound)
@@ -83,7 +75,29 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return base.View(ControllerConstants.NotFoundViewName);
             }
 
-            return base.View(ControllerConstants.GenericErrorViewName, masterName, orchestratorResponse);
+            if (orchestratorResponse.Status == HttpStatusCode.OK)
+            {
+                return ReturnViewResult(viewName, masterName, orchestratorResponse);
+            }
+
+            if (orchestratorResponse.Status == HttpStatusCode.Unauthorized)
+            {
+                var accountId = Request.Params[ControllerConstants.HashedAccountIdKeyName];
+
+                if (accountId != null)
+                {
+                    ViewBag.AccountId = accountId;
+                }
+
+                return base.View(ControllerConstants.AccessDeniedViewName, masterName, orchestratorResponse);
+            }
+            
+            if (orchestratorResponse.Exception != null)
+            {
+                throw orchestratorResponse.Exception;
+            }
+
+            throw new Exception($"Orchestrator response of type '{model.GetType()}' could not be handled.");
         }
 
         private ViewResult ReturnViewResult(string viewName, string masterName, OrchestratorResponse orchestratorResponse)
