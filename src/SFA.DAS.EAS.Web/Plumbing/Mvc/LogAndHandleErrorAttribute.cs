@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Web.Plumbing.Mvc
             var exception = filterContext.Exception;
             var tc = new TelemetryClient();
 
-            Logger.Error(exception, "Unhandled exception - " + exception.Message);
+            Logger.Error(exception);
             tc.TrackException(exception);
 
             base.OnException(filterContext);

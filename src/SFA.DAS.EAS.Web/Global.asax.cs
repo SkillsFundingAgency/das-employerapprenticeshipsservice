@@ -70,8 +70,8 @@ namespace SFA.DAS.EAS.Web
                 return;
             }
 
-            Logger.Error(exception, "Unhandled exception - " + exception.Message);
-            tc.TrackTrace($"{exception.Message} - {exception.InnerException}");
+            Logger.Error(exception);
+            tc.TrackException(exception);
         }
 
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
