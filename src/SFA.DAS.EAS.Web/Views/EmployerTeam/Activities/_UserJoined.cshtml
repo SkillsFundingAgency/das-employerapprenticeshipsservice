@@ -1,0 +1,19 @@
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.ViewModels.ActivityViewModel
+
+@if (Model.Count > 1)
+{
+    <p class="activity">@Model.Count users joined</p>
+}
+else
+{
+    <p class="activity">@Model.Activity.Data["CreatorName"] joined</p>
+    
+    if (Model.MetaIsVisible)
+    {
+        <p class="meta">
+            At <time>@Model.Activity.At.ToGMTStandardTime().ToString("h:mm tt")</time>
+            <a href="@Url.Action("Index", "EmployerTeam")">See details</a>
+        </p>
+    }
+}
