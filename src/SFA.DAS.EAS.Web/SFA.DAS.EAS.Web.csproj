@@ -573,6 +573,7 @@
     <Content Include="Views\EmployerTeam\Activities\_PayeSchemeAdded.cshtml" />
     <Content Include="Views\EmployerTeam\_LatestActivities.cshtml" />
     <Content Include="Views\EmployerTeam\_Activities.cshtml" />
+    <Content Include="Views\EmployerTeam\Activities\_AccountCreated.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />
