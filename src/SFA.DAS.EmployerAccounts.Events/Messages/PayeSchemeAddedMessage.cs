@@ -7,7 +7,8 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     [MessageGroup("add_paye_scheme")]
     public class PayeSchemeAddedMessage : AccountMessageBase
     {
-        public string PayeScheme { get; }
+        //We have protected setters to support json serialsation due to the empty constructor
+        public string PayeScheme { get; protected set; }
 
         public PayeSchemeAddedMessage()
         { }

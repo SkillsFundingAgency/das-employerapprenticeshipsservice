@@ -7,9 +7,10 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     [MessageGroup("agreement_signed")]
     public class AgreementSignedMessage : AccountMessageBase
     {
-        public long LegalEntityId { get; }
-        public long AgreementId { get; }
-        public bool CohortCreated { get; }
+        //We have protected setters to support json serialsation due to the empty constructor
+        public long LegalEntityId { get; protected set; }
+        public long AgreementId { get; protected set; }
+        public bool CohortCreated { get; protected set; }
 
         public AgreementSignedMessage()
         {   }
