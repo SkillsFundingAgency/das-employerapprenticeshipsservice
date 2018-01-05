@@ -576,6 +576,7 @@
     <Content Include="Views\EmployerTeam\Activities\_AccountCreated.cshtml" />
     <Content Include="Views\EmployerTeam\Activities\_LegalEntityRemoved.cshtml" />
     <Content Include="Views\EmployerTeam\Activities\_UserJoined.cshtml" />
+    <Content Include="Views\EmployerTeam\Activities\_LegalEntityAdded.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />
