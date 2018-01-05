@@ -10,16 +10,19 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public long AgreementId { get; }
         public bool AgreementSigned { get; }
         public long LegalEntityId { get; }
+
+        public string OrganisationName { get; set; }
        
         public LegalEntityRemovedMessage()
         { }
 
-        public LegalEntityRemovedMessage(long accountId,  long aggreementId, bool agreementSigned, long legalEntityId, string creatorName, string creatorUserRef) 
+        public LegalEntityRemovedMessage(long accountId,  long aggreementId, bool agreementSigned, long legalEntityId, string organisationName, string creatorName, string creatorUserRef) 
             : base(accountId, creatorName, creatorUserRef)
         {
             AgreementId = aggreementId;
             AgreementSigned = agreementSigned;
             LegalEntityId = legalEntityId;
+            OrganisationName = organisationName;
         }
     }
 }

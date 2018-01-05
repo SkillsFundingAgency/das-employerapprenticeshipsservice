@@ -31,10 +31,10 @@
     },
     {
         "topicName": "legal_entity_removed",
-		"subscription": [ 
-			"Task_LegalEntityRemovedProcessor", 
-			"Activity_LegalEntityAddedProcessor" 
-		]
+      "subscription": [
+        "Task_LegalEntityRemovedProcessor",
+        "Activity_LegalEntityRemovedMessageProcessor"
+      ]
     },
 	{
         "topicName": "legal_entity_added",
