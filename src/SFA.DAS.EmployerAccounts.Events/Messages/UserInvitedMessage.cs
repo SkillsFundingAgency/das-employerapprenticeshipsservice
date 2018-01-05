@@ -7,7 +7,8 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     [MessageGroup("user_invited")]
     public class UserInvitedMessage : AccountMessageBase
     {
-        public string PersonInvited { get; }
+        //We have protected setters to support json serialsation due to the empty constructor
+        public string PersonInvited { get; protected set; }
         
         public UserInvitedMessage()
         { }

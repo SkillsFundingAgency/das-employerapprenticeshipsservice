@@ -7,8 +7,9 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     [MessageGroup("delete_paye_scheme")]
     public class PayeSchemeDeletedMessage : AccountMessageBase
     {
-        public string PayeScheme { get; }
-        public string OrganisationName { get; }
+        //We have protected setters to support json serialsation due to the empty constructor
+        public string PayeScheme { get; protected set; }
+        public string OrganisationName { get; protected set; }
        
         public PayeSchemeDeletedMessage()
         { }
