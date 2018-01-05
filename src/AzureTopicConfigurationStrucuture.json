@@ -38,7 +38,7 @@
     },
 	{
         "topicName": "legal_entity_added",
-		"subscription": [ "Activity_LegalEntityAddedProcessor" ]
+		"subscription": [ "Activity_LegalEntityAddedMessageProcessor" ]
     },
     {
         "topicName": "refresh_payments2",
