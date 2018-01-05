@@ -36,7 +36,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         public CreateAccountCommandHandler(
             IAccountRepository accountRepository, 
-           
             IMessagePublisher messagePublisher, 
             IMediator mediator, 
             IValidator<CreateAccountCommand> validator, 

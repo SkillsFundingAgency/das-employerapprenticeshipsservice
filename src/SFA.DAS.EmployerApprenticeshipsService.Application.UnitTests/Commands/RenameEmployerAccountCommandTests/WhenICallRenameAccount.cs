@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -12,8 +13,10 @@ using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 using SFA.DAS.HashingService;
+using SFA.DAS.Messaging.Interfaces;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountCommandTests
 {
@@ -26,11 +29,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IGenericEventFactory> _genericEventFactory;
         private const long AccountId = 12343322;
+        private const string AccountName = "TestAccount";
         private const string HashedAccountId = "123ADF23";
         private RenameEmployerAccountCommandHandler _commandHandler;
         private RenameEmployerAccountCommand _command;
         private MembershipView _owner;
         private Mock<IAccountEventFactory> _accountEventFactory;
+        private Mock<IMessagePublisher> _messagePublisher;
 
         [SetUp]
         public void Arrange()
@@ -59,6 +64,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
                 .Returns(AccountId);
 
             _repository = new Mock<IEmployerAccountRepository>();
+            _repository.Setup(x => x.GetAccountById(It.IsAny<long>()))
+                .ReturnsAsync(new Domain.Data.Entities.Account.Account
+                {
+                    Id = AccountId,
+                    HashedId = HashedAccountId,
+                    Name = AccountName
+                });
+
             _validator = new Mock<IValidator<RenameEmployerAccountCommand>>();
 
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RenameEmployerAccountCommand>()))
@@ -67,8 +80,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
             _mediator = new Mock<IMediator>();
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _accountEventFactory = new Mock<IAccountEventFactory>();
+            _messagePublisher = new Mock<IMessagePublisher>();
 
             _commandHandler = new RenameEmployerAccountCommandHandler(
+                _messagePublisher.Object,
                 _repository.Object, 
                 _membershipRepository.Object, 
                 _validator.Object, 
@@ -108,6 +123,32 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
                     c.EasAuditMessage.AffectedEntity.Id.Equals(AccountId.ToString()) &&
                     c.EasAuditMessage.AffectedEntity.Type.Equals("Account"))));
+        }
+
+        [Test]
+        public async Task ThenAnAccountRenamedMessageIsCreated()
+        {
+            //Act
+            await _commandHandler.Handle(_command);
+
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountNameChangedMessage>(
+                m => m.PreviousName.Equals(AccountName) &&
+                     m.CurrentName.Equals(_command.NewName)
+                )), Times.Once);
+        }
+
+        [Test]
+        public void ThenAnAccountRenamedMessageIsNotCreatedIfRenamingFails()
+        {
+            //Arrange
+            _repository.Setup(x => x.RenameAccount(It.IsAny<long>(), It.IsAny<string>())).Throws<Exception>();
+
+            //Act
+            Assert.ThrowsAsync<Exception>(() => _commandHandler.Handle(_command));
+
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<AccountNameChangedMessage>()), Times.Never);
         }
     }
 }
