@@ -54,7 +54,7 @@
       <HintPath>..\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="Elasticsearch.Net, Version=5.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
-      <HintPath>..\packages\Elasticsearch.Net.5.5.0\lib\net46\Elasticsearch.Net.dll</HintPath>
+      <HintPath>..\packages\Elasticsearch.Net.5.6.0\lib\net46\Elasticsearch.Net.dll</HintPath>
     </Reference>
     <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
@@ -169,7 +169,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Nest, Version=5.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
-      <HintPath>..\packages\NEST.5.5.0\lib\net46\Nest.dll</HintPath>
+      <HintPath>..\packages\NEST.5.6.0\lib\net46\Nest.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -186,11 +186,11 @@
     <Reference Include="Polly, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.1.0\lib\net45\Polly.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Activities, Version=0.1.80.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.0.1.80\lib\net45\SFA.DAS.Activities.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities, Version=0.1.92.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.0.1.92\lib\net45\SFA.DAS.Activities.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Activities.Client, Version=0.1.80.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.0.1.80\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities.Client, Version=0.1.92.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.0.1.92\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.10.29\lib\net45\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
