@@ -1,55 +1,60 @@
 [
-    {
-        "topicName": "add_account",
-        "subscription": [ "Activity_AccountCreatedMessageProcessor" ]
-    },
-    {
-        "topicName": "add_paye_scheme",
-        "subscription": [ "Activity_PayeSchemeAddedMessageProcessor" ]
-    },
-    {
-        "topicName": "agreement_created",
-        "subscription": [
-            "Task_CreatedEmployerAgreementProcessor",
-			"Activity_AgreementCreatedMessageProcessor"
-        ]
-    },
-    {
-        "topicName": "agreement_signed",
-        "subscription": [
-            "Task_SignedEmployerAgreementProcessor",
-			"Activity_AgreementSignedMessageProcessor"
-        ]
-    },
-    {
-        "topicName": "delete_paye_scheme",
-        "subscription": [ "Activity_PayeSchemeDeletedMessageProcessor" ]
-    },
-    {
-        "topicName": "get_employer_levy2",
-		"subscription": [ "MA_LevyDeclaration" ]
-    },
-    {
-        "topicName": "legal_entity_removed",
-      "subscription": [
-        "Task_LegalEntityRemovedProcessor",
-        "Activity_LegalEntityRemovedMessageProcessor"
-      ]
-    },
-	{
-        "topicName": "legal_entity_added",
-		"subscription": [ "Activity_LegalEntityAddedMessageProcessor" ]
-    },
-    {
-        "topicName": "refresh_payments2",
-		"subscription": [ "MA_PaymentDataProcessor" ]
-    },
-	{
-        "topicName": "user_invited",
-		"subscription": [ "Activity_UserInvitedMessageProcessor" ]
-    },
-	{
-        "topicName": "user_joined",
-		"subscription": [ "Activity_UserJoinedMessageProcessor" ]
-    }
+  {
+    "topicName": "add_account",
+    "subscription": [ "Activity_AccountCreatedMessageProcessor" ]
+  },
+  {
+    "topicName": "account_name_changed",
+    "subscription": [ "Activity_AccountNameChangedMessageProcessor" ]
+  },
+
+  {
+    "topicName": "add_paye_scheme",
+    "subscription": [ "Activity_PayeSchemeAddedMessageProcessor" ]
+  },
+  {
+    "topicName": "agreement_created",
+    "subscription": [
+      "Task_CreatedEmployerAgreementProcessor",
+      "Activity_AgreementCreatedMessageProcessor"
+    ]
+  },
+  {
+    "topicName": "agreement_signed",
+    "subscription": [
+      "Task_SignedEmployerAgreementProcessor",
+      "Activity_AgreementSignedMessageProcessor"
+    ]
+  },
+  {
+    "topicName": "delete_paye_scheme",
+    "subscription": [ "Activity_PayeSchemeDeletedMessageProcessor" ]
+  },
+  {
+    "topicName": "get_employer_levy2",
+    "subscription": [ "MA_LevyDeclaration" ]
+  },
+  {
+    "topicName": "legal_entity_removed",
+    "subscription": [
+      "Task_LegalEntityRemovedProcessor",
+      "Activity_LegalEntityRemovedMessageProcessor"
+    ]
+  },
+  {
+    "topicName": "legal_entity_added",
+    "subscription": [ "Activity_LegalEntityAddedMessageProcessor" ]
+  },
+  {
+    "topicName": "refresh_payments2",
+    "subscription": [ "MA_PaymentDataProcessor" ]
+  },
+  {
+    "topicName": "user_invited",
+    "subscription": [ "Activity_UserInvitedMessageProcessor" ]
+  },
+  {
+    "topicName": "user_joined",
+    "subscription": [ "Activity_UserJoinedMessageProcessor" ]
+  }
 ]
