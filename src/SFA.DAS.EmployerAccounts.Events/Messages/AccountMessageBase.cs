@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         protected AccountMessageBase(long accountId, string creatorName, string creatorUserRef)
         {
             AccountId = accountId;
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.UtcNow;
             CreatorName = creatorName;
             CreatorUserRef = creatorUserRef;
         }
