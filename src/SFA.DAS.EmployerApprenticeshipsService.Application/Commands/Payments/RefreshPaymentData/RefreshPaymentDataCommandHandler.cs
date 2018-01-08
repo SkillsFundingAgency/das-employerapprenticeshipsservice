@@ -9,12 +9,15 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 {
     public class RefreshPaymentDataCommandHandler : AsyncRequestHandler<RefreshPaymentDataCommand>
     {
+        private readonly IMessagePublisher _messagePublisher;
         private readonly IValidator<RefreshPaymentDataCommand> _validator;
         private readonly IPaymentService _paymentService;
         private readonly IDasLevyRepository _dasLevyRepository;
@@ -23,12 +26,14 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
        
 
         public RefreshPaymentDataCommandHandler(
+            IMessagePublisher messagePublisher,
             IValidator<RefreshPaymentDataCommand> validator, 
             IPaymentService paymentService, 
             IDasLevyRepository dasLevyRepository, 
             IMediator mediator,
             ILog logger)
         {
+            _messagePublisher = messagePublisher;
             _validator = validator;
             _paymentService = paymentService;
             _dasLevyRepository = dasLevyRepository;
@@ -67,6 +72,12 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             await _dasLevyRepository.CreatePaymentData(newPayments);
 
             await _mediator.PublishAsync(new ProcessPaymentEvent { AccountId = message.AccountId});
+
+            foreach (var payment in newPayments)
+            {
+                await _messagePublisher.PublishAsync(new PaymentCreatedMessage(
+                    payment.ProviderName, payment.Amount, payment.EmployerAccountId, string.Empty, string.Empty));
+            }
         }
     }
 }
