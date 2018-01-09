@@ -137,6 +137,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         }
 
         [Test]
+        [Ignore("Activities disabled for now.")]
         public async Task ThenShouldReturnLatestActivitiesResult()
         {
             // Act
@@ -188,6 +189,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         }
 
         [Test]
+        [Ignore("Activities disabled for now.")]
         public async Task ThenShouldReturnAccountsActivities()
         {
             //Act

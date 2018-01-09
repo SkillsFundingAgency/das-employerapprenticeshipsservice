@@ -154,9 +154,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0).ToList() ?? new List<AccountTask>();
 
-                GetAccountLatestActivitiesResponse latestActivitiesResponse;
+                GetAccountLatestActivitiesResponse latestActivitiesResponse = null;
 
-                try
+                /*try
                 {
                     latestActivitiesResponse = await _mediator.SendAsync(new GetAccountLatestActivitiesQuery
                     {
@@ -166,16 +166,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 catch (Exception ex)
                 {
                     _logger.Error(ex, "Could not retrieve account latest activities successfully.");
-
-                    latestActivitiesResponse = new GetAccountLatestActivitiesResponse
-                    {
-                        Result = new AggregatedActivitiesResult
-                        {
-                            Aggregates = new AggregatedActivityResult[0],
-                            Total = 0
-                        }
-                    };
-                }
+                }*/
 
                 var userResponse = await _mediator.SendAsync(new GetTeamMemberQuery
                 {
@@ -194,7 +185,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 var viewModel = new AccountDashboardViewModel
                 {
-                    LatestActivitiesResult = latestActivitiesResponse.Result,
                     Account = accountResponse.Account,
                     UserRole = userRoleResponse.UserRole,
                     HashedUserId = externalUserId,
@@ -204,7 +194,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
                     ShowWizard = showWizard,
                     ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
-                    Tasks = tasks
+                    Tasks = tasks,
+                    LatestActivitiesResult = latestActivitiesResponse?.Result
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>

@@ -74,7 +74,11 @@ else
                 <nav>
                     <ul class="js-tabs" role="tablist">
                         <li role="tab" id="tab-tasks" aria-controls="pane-tasks"><a href="#pane-tasks">Tasks</a></li>
-                        <li role="tab" id="tab-activity" aria-controls="pane-activity"><a href="#pane-activity">Activity</a></li>
+                        
+                        @if (Model.Data.LatestActivitiesResult != null)
+                        {
+                            <li role="tab" id="tab-activity" aria-controls="pane-activity"><a href="#pane-activity">Activity</a></li>
+                        }
                     </ul>
                 </nav>
                 <div class="panes">
@@ -93,13 +97,13 @@ else
                                         {
                                             case "LevyDeclarationDue":
 
-                                                    <p>
-                                                        Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
-                                                    </p>
-                                                    <form action="@Url.Action("DismissTask", "Task")" method="POST">
-                                                        <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
-                                                        <button class="button-link" type="submit">Dismiss this message</button>
-                                                    </form>
+                                                <p>
+                                                    Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
+                                                </p>
+                                                <form action="@Url.Action("DismissTask", "Task")" method="POST">
+                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
+                                                    <button class="button-link" type="submit">Dismiss this message</button>
+                                                </form>
 
                                                 break;
                                             case "AgreementToSign":
@@ -132,9 +136,13 @@ else
                             <p>You do not have any tasks</p>
                         }
                     </div>
-                    <div class="js-tab-pane" id="pane-activity" role="tabpanel">
-                        @Html.LatestActivities(Model.Data.LatestActivitiesResult)
-                    </div>
+
+                    @if (Model.Data.LatestActivitiesResult != null)
+                    {
+                        <div class="js-tab-pane" id="pane-activity" role="tabpanel">
+                            @Html.LatestActivities(Model.Data.LatestActivitiesResult)
+                        </div>
+                    }
                 </div>
             </section>
         </div>
