@@ -57,6 +57,9 @@
     <Reference Include="Hashids.net, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Hashids.net.1.2.2\lib\net45\Hashids.net.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlTags, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlTags.6.0.0\lib\net45\HtmlTags.dll</HintPath>
+    </Reference>
     <Reference Include="MediatR, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
       <Private>True</Private>
@@ -107,11 +110,11 @@
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Activities, Version=0.1.92.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.0.1.92\lib\net45\SFA.DAS.Activities.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities, Version=0.1.98.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.0.1.98\lib\net45\SFA.DAS.Activities.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Activities.Client, Version=0.1.92.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.0.1.92\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities.Client, Version=0.1.98.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.0.1.98\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.0.0.44695, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.0.0.44695\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
@@ -160,6 +163,9 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Spatial, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Spatial.5.6.2\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.4.0.0\lib\netstandard1.0\System.Text.Encodings.Web.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

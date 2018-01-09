@@ -2,7 +2,6 @@
 @using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.Helpers
-@using SFA.DAS.EAS.Web.ViewModels
 @using SFA.DAS.Tasks.API.Types.Enums
 
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AccountDashboardViewModel>
@@ -134,7 +133,7 @@ else
                         }
                     </div>
                     <div class="js-tab-pane" id="pane-activity" role="tabpanel">
-                        @Html.Partial("_LatestActivities", Model.Data.LatestActivitiesResult)
+                        @Html.LatestActivities(Model.Data.LatestActivitiesResult)
                     </div>
                 </div>
             </section>

@@ -2,25 +2,11 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
-using System.Web.Mvc.Html;
-using SFA.DAS.Activities;
-using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Extensions
 {
     public static class HtmlHelperExtensions
     {
-        public static MvcHtmlString Activity(this HtmlHelper htmlHelper, ActivityType type, ActivityViewModel model)
-        {
-            return htmlHelper.Partial("Activities/_" + type, model);
-        }
-
-        public static bool ActivityViewExists(this HtmlHelper htmlHelper, ActivityType type)
-        {
-            var result = ViewEngines.Engines.FindView(htmlHelper.ViewContext, "Activities/_" + type, null);
-            return result.View != null;
-        }
-
         public static MvcHtmlString AddClassIfPropertyInError<TModel>(
             this HtmlHelper<TModel> htmlHelper,
             string propertyName,
