@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTransactions;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments;
 using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
@@ -162,8 +165,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ToDate = toDate,
                     ExternalUserId = externalUserId
                 });
-                
-                var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.CourseStartDate});
+
+                var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.CourseStartDate });
 
                 var coursePaymentGroups = courseGroups.Select(x => new ApprenticeshipPaymentGroup
                 {
@@ -172,7 +175,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     CourseStartDate = x.Key.CourseStartDate,
                     Payments = x.ToList()
                 }).ToList();
-              
+
 
                 return new OrchestratorResponse<PaymentTransactionViewModel>
                 {
@@ -213,6 +216,48 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
+        public virtual async Task<OrchestratorResponse<FinanceDashboardViewModel>> GetFinanceDashboardViewModel(
+            string hashedId, int year, int month, string externalUserId)
+        {
+            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+            {
+                HashedAccountId = hashedId,
+                UserId = externalUserId
+            });
+
+            if (employerAccountResult.Account == null)
+            {
+                return new OrchestratorResponse<FinanceDashboardViewModel>
+                {
+                    Data = new FinanceDashboardViewModel()
+                };
+            }
+            employerAccountResult.Account.HashedId = hashedId;
+
+            var data =
+                await
+                    _mediator.SendAsync(new GetEmployerAccountTransactionsQuery
+                    {
+                        ExternalUserId = externalUserId,
+                        Year = year,
+                        Month = month,
+                        HashedAccountId = hashedId
+                    });
+            var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
+
+            decimal currentBalance;
+            currentBalance = latestLineItem != null ? latestLineItem.Balance : 0;
+
+            return new OrchestratorResponse<FinanceDashboardViewModel>
+            {
+                Data = new FinanceDashboardViewModel()
+                {
+                    Account = employerAccountResult.Account,
+                    CurrentLevyFunds = currentBalance
+                }
+            };
+        }
+
         public virtual async Task<OrchestratorResponse<TransactionViewResultViewModel>> GetAccountTransactions(string hashedId, int year, int month, string externalUserId)
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
@@ -223,7 +268,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             if (employerAccountResult.Account == null)
             {
-                return new OrchestratorResponse<TransactionViewResultViewModel> {Data = new TransactionViewResultViewModel(_currentTime.Now) };
+                return new OrchestratorResponse<TransactionViewResultViewModel> { Data = new TransactionViewResultViewModel(_currentTime.Now) };
             }
 
             var data =
@@ -250,7 +295,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 currentBalanceCalcultedOn = DateTime.Today;
             }
 
-            
+
             return new OrchestratorResponse<TransactionViewResultViewModel>
             {
                 Data = new TransactionViewResultViewModel(_currentTime.Now)
@@ -268,7 +313,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
             };
         }
-        
+
         public virtual async Task<OrchestratorResponse<CoursePaymentDetailsViewModel>> GetCoursePaymentSummary(
             string hashedAccountId, long ukprn, string courseName, int courseLevel, int? pathwayCode,
             DateTime fromDate, DateTime toDate, string externalUserId)

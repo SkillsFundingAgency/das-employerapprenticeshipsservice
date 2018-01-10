@@ -5,14 +5,13 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsController
 {
-    public class WhenIViewTransactions
+    public class WhenIViewFinanceDashboard
     {
         private Web.Controllers.EmployerAccountTransactionsController _controller;
         private Mock<EmployerAccountTransactionsOrchestrator> _orchestrator;
@@ -20,6 +19,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+
+        private const decimal CurrentLevyFunds = 12345;
+        private const string HashedAccountId = "Test";
 
         [SetUp]
         public void Arrange()
@@ -30,21 +32,17 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
-            _orchestrator.Setup(x => x.GetAccountTransactions(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()))
-                .ReturnsAsync(new OrchestratorResponse<TransactionViewResultViewModel>
+            _orchestrator.Setup(x => x.GetFinanceDashboardViewModel(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()))
+                .ReturnsAsync(new OrchestratorResponse<FinanceDashboardViewModel>
                 {
-                    Data = new TransactionViewResultViewModel(DateTime.Now)
+                    Data = new FinanceDashboardViewModel()
                     {
                         Account = new Account(),
-                        Model = new TransactionViewModel
-                        {
-                            Data = new AggregationData()
-                        },
-                        AccountHasPreviousTransactions = true
+                        CurrentLevyFunds = CurrentLevyFunds,
                     }
                 });
 
-            _controller = new Web.Controllers.EmployerAccountTransactionsController(_owinWrapper.Object, _featureToggle.Object, 
+            _controller = new Web.Controllers.EmployerAccountTransactionsController(_owinWrapper.Object, _featureToggle.Object,
                 _orchestrator.Object, _userViewTestingService.Object, _flashMessage.Object);
         }
 
@@ -52,25 +50,30 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         public async Task ThenTransactionsAreRetrievedForTheAccount()
         {
             //Act
-            var result = await _controller.TransactionsView("TEST", 2017, 1);
+            var result = await _controller.Index("HashedAccountId");
 
             //Assert
-            _orchestrator.Verify(x=> x.GetAccountTransactions(It.Is<string>(s => s=="TEST"), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Once);
-            Assert.IsNotNull(result as ViewResult);
+            _orchestrator.Verify(
+                x => x.GetFinanceDashboardViewModel(It.Is<string>(s => s == "HashedAccountId"), It.Is<int>(m => m == 0),
+                    It.Is<int>(m => m == 0), It.IsAny<string>()), Times.Once);
+
+            Assert.IsNotNull(result as ViewResultBase);
         }
 
         [Test]
-        public async Task ThenPreivousTransactionsStatusIsShown()
+        public async Task ThenTheViewModelHasTheCorrectLevyBalance()
         {
             //Act
-            var result = await _controller.TransactionsView("TEST", 2017, 1);
-
-            var viewResult = result as ViewResult;
-            var viewModel = viewResult?.Model as OrchestratorResponse<TransactionViewResultViewModel>;
+            var result = await _controller.Index("HashedAccountId");
 
             //Assert
-            Assert.IsNotNull(viewModel);
-            Assert.IsTrue(viewModel.Data.AccountHasPreviousTransactions);
+            var viewResult = result as ViewResultBase;
+            Assert.IsNotNull(viewResult);
+
+            var model = viewResult.Model as OrchestratorResponse<FinanceDashboardViewModel>;
+            Assert.IsNotNull(model);
+            Assert.IsNotNull(model.Data);
+            Assert.AreEqual(CurrentLevyFunds, model.Data.CurrentLevyFunds);
         }
     }
 }
