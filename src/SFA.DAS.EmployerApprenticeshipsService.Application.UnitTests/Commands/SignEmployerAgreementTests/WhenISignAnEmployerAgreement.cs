@@ -43,6 +43,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         private const long AccountId = 223344;
         private const long AgreementId = 123433;
         private const long LegalEntityId = 111333;
+        private const string OrganisationName = "Foo";
         private const string HashedLegalEntityId = "2635JHG";
 
         [SetUp]
@@ -70,7 +71,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             _agreement = new EmployerAgreementView
             {
                 HashedAgreementId = "124GHJG",
-                LegalEntityId = LegalEntityId
+                LegalEntityId = LegalEntityId,
+                LegalEntityName = OrganisationName
             };
 
             _agreementRepository = new Mock<IEmployerAgreementRepository>();
@@ -198,7 +200,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
 
             //Assert
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<AgreementSignedMessage>(
-                m => m.CohortCreated && m.AccountId == AccountId && m.AgreementId == AgreementId && m.LegalEntityId == LegalEntityId)));
+                m => m.CohortCreated && m.AccountId == AccountId && m.AgreementId == AgreementId && m.OrganisationName == OrganisationName && m.LegalEntityId == LegalEntityId)));
         }
 
         [Test]
@@ -213,7 +215,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
 
             //Assert
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<AgreementSignedMessage>(
-                m => !m.CohortCreated && m.AccountId == AccountId && m.AgreementId == AgreementId && m.LegalEntityId == LegalEntityId)));
+                m => !m.CohortCreated && m.AccountId == AccountId && m.AgreementId == AgreementId && m.OrganisationName == OrganisationName && m.LegalEntityId == LegalEntityId)));
         }
     }
 }
