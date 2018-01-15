@@ -9,16 +9,18 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     {
         //We have protected setters to support json serialsation due to the empty constructor
         public long LegalEntityId { get; protected set; }
+        public string LegalEntityName { get; protected set; }
         public long AgreementId { get; protected set; }
         public bool CohortCreated { get; protected set; }
 
         public AgreementSignedMessage()
         {   }
 
-        public AgreementSignedMessage(long accountId, long agreementId, long legalEntityId, bool cohortCreated, string creatorName, string creatorUserRef) : base(accountId, creatorName, creatorUserRef)
+        public AgreementSignedMessage(long accountId, long agreementId, long legalEntityId, string legalEntityName, bool cohortCreated, string creatorName, string creatorUserRef) : base(accountId, creatorName, creatorUserRef)
         {
             AgreementId = agreementId;
             LegalEntityId = legalEntityId;
+            LegalEntityName = legalEntityName;
             CohortCreated = cohortCreated;
         }
     }

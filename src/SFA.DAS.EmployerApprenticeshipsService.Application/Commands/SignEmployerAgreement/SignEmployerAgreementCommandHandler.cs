@@ -98,14 +98,14 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
             var accountHasCommitments = commitments?.Any() ?? false;
 
-            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreementId, accountHasCommitments, owner.FullName(), owner.UserRef);
+            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId, accountHasCommitments, owner.FullName(), owner.UserRef);
         }
 
-        private async Task PublishAgreementSignedMessage(long accountId, long legalEntityId, long agreementId,
+        private async Task PublishAgreementSignedMessage(long accountId, long legalEntityId, string legalEntityName, long agreementId,
             bool cohortCreated, string currentUserName, string currentUserRef)
         {
             await _messagePublisher.PublishAsync(new AgreementSignedMessage(accountId, agreementId, legalEntityId,
-                cohortCreated,currentUserName, currentUserRef));
+                legalEntityName, cohortCreated, currentUserName, currentUserRef));
         }
 
         private async Task AddAuditEntry(SignEmployerAgreementCommand message, long accountId, long agreementId)
