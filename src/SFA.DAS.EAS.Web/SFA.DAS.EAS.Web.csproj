@@ -526,6 +526,7 @@
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SelectEmployerViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationDetailsViewModel.cs" />
+    <Compile Include="ViewModels\TransactionsDownloadResultViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\SignInUserViewModel.cs" />
     <Compile Include="ViewModels\FlashMessageViewModel.cs" />
@@ -579,6 +580,7 @@
     <Content Include="Views\SearchOrganisation\FindAddress.cshtml" />
     <Content Include="Views\EmployerTeam\Activity.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\TransactionsDownload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />

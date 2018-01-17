@@ -36,6 +36,15 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(transactionViewResult);
         }
 
+        [Route("finance/downloadtransactions")]
+        public ActionResult TransactionsDownload(string hashedAccountId)
+        {
+            return View(new OrchestratorResponse<TransactionsDownloadResultViewModel>
+            {
+                Data = new TransactionsDownloadResultViewModel { HashedAccountId = hashedAccountId }
+            });
+        }
+
         [Route("finance/{year}/{month}")]
         public async Task<ActionResult> TransactionsView(string hashedAccountId, int year, int month)
         {
@@ -74,7 +83,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [Route("finance/course/framework/summary")]
-        public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName,
+        public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName, 
             int courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
             var viewModel = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(
