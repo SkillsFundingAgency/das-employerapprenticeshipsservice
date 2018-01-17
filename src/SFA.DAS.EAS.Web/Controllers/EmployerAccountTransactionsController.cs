@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(transactionViewResult);
         }
 
-        [Route("balance/levyDeclaration/details")]
+        [Route("finance/levyDeclaration/details")]
         public async Task<ActionResult> LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
         {
             var viewModel = await _accountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(ControllerConstants.LevyDeclarationDetailViewName, viewModel);
         }
 
-        [Route("balance/provider/summary")]
+        [Route("finance/provider/summary")]
         public async Task<ActionResult> ProviderPaymentSummary(string hashedAccountId, long ukprn, DateTime fromDate, DateTime toDate)
         {
             var viewModel = await _accountTransactionsOrchestrator.GetProviderPaymentSummary(hashedAccountId, ukprn, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
@@ -75,14 +75,14 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(ControllerConstants.ProviderPaymentSummaryViewName, viewModel);
         }
 
-        [Route("balance/course/standard/summary")]
+        [Route("finance/course/standard/summary")]
         public async Task<ActionResult> CourseStandardPaymentSummary(string hashedAccountId, long ukprn, string courseName,
             int courseLevel, DateTime fromDate, DateTime toDate)
         {
             return await CourseFrameworkPaymentSummary(hashedAccountId, ukprn, courseName, courseLevel, null, fromDate, toDate);
         }
 
-        [Route("balance/course/framework/summary")]
+        [Route("finance/course/framework/summary")]
         public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName, 
             int courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
