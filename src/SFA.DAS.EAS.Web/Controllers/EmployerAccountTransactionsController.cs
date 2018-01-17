@@ -33,17 +33,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.AccessDeniedControllerName);
             }
 
-            //transactionViewResult.Data.HashedAccountId = hashedAccountId;
             return View(transactionViewResult);
         }
-
-        //[Route("finance/downloadtransactions")]
-        //public async Task<ActionResult> TransactionsDownload(string hashedAccountId)
-        //{
-        //    await Task.Delay(11);
-
-        //    return View();
-        //}
 
         [Route("finance/{year}/{month}")]
         public async Task<ActionResult> TransactionsView(string hashedAccountId, int year, int month)
