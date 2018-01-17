@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.Policies.Add<CurrentDatePolicy>();
                 c.Policies.Add(new ExecutionPolicyPolicy());
                 c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName, new NLogLogger(typeof(TopicMessagePublisher))));
-                //c.AddRegistry<ActivitiesClientRegistry>();
+                c.AddRegistry<ActivitiesClientRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

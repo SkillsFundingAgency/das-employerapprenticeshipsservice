@@ -156,7 +156,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 GetAccountLatestActivitiesResponse latestActivitiesResponse = null;
 
-                /*try
+                try
                 {
                     latestActivitiesResponse = await _mediator.SendAsync(new GetAccountLatestActivitiesQuery
                     {
@@ -166,7 +166,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 catch (Exception ex)
                 {
                     _logger.Error(ex, "Could not retrieve account latest activities successfully.");
-                }*/
+                }
 
                 var userResponse = await _mediator.SendAsync(new GetTeamMemberQuery
                 {
