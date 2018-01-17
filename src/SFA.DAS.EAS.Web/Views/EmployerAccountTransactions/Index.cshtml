@@ -1,14 +1,18 @@
 ﻿@using System.Globalization
+@using SFA.DAS.EAS.Web.Extensions
+
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.FinanceDashboardViewModel>
-@{
-    var culture = new CultureInfo("en-GB");
-}
-@{ViewBag.PageID = "page-transactions"; }
-@{ViewBag.Section = "finance"; }
-@{ViewBag.Title = "Finance";}
 
 @{
+    ViewBag.PageID = "page-transactions";
+    ViewBag.Section = "finance";
+    ViewBag.Title = "Finance";
     ViewBag.GaData.Vpv = "/accounts/finance";
+}
+
+@{
+    var culture = new CultureInfo("en-GB");
+    var now = DateTime.UtcNow.ToGmtStandardTime();
 }
 
 <div class="grid-row">
@@ -49,7 +53,7 @@
 <div class="grid-row">
     <div class="column-half">
         <h2 class="heading-medium">
-            <a title="View transactions" href="@Url.Action("TransactionsView", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Account.HashedId, month = 0, year = 0})">
+            <a title="View transactions" href="@Url.Action("TransactionsView", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.Account.HashedId, year = now.Year, month = now.Month })">
                 View transactions
             </a>
         </h2>
@@ -58,7 +62,7 @@
 
     <div class="column-half">
         <h2 class="heading-medium">
-            <a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions", new { HashedAccountId = Model.Data.Account.HashedId })">
+            <a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.Account.HashedId })">
                 Download transactions
             </a>
         </h2>
@@ -83,6 +87,7 @@
         </ol>
     </div>
 }
-@section pageSpecificJS{
+
+@section pageSpecificJS {
     <script language="javascript" type="text/javascript" src="~/bundles/modernizr"></script>
 }
