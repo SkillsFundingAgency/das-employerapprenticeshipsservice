@@ -109,11 +109,11 @@
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Activities, Version=0.1.139.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.0.1.139\lib\net45\SFA.DAS.Activities.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities, Version=1.0.0.52777, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.52777\lib\net45\SFA.DAS.Activities.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Activities.Client, Version=0.1.139.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.0.1.139\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities.Client, Version=1.0.0.52777, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.52777\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.0.0.44695, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.0.0.44695\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
@@ -130,8 +130,8 @@
     <Reference Include="SFA.DAS.CookieService, Version=1.0.0.27423, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.CookieService.1.0.0.27423\lib\net45\SFA.DAS.CookieService.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Elastic, Version=1.0.0.52365, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Elastic.1.0.0.52365\lib\net45\SFA.DAS.Elastic.dll</HintPath>
+    <Reference Include="SFA.DAS.Elastic, Version=1.0.0.52762, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Elastic.1.0.0.52762\lib\net45\SFA.DAS.Elastic.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.EmployerUsers.WebClientComponents, Version=1.0.0.4388, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.EmployerUsers.WebClientComponents.1.0.0.4388\lib\net45\SFA.DAS.EmployerUsers.WebClientComponents.dll</HintPath>
@@ -152,8 +152,8 @@
     <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.7.0.49084, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.7.0.49084\lib\net45\SFA.DAS.Tasks.API.Types.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap, Version=4.5.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StructureMap.4.5.3\lib\net45\StructureMap.dll</HintPath>
+    <Reference Include="StructureMap, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StructureMap.4.6.0\lib\net45\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
