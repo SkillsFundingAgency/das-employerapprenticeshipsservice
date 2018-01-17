@@ -34,10 +34,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerTeamControllerTests
 
             _controller = new EmployerTeamController(
                 _owinWrapper.Object,
-                _orchestrator.Object,
                 _featureToggle.Object,
                 _userViewTestingService.Object,
-                _flashMessage.Object);
+                _flashMessage.Object,
+                _orchestrator.Object);
         }
 
         [Test]
