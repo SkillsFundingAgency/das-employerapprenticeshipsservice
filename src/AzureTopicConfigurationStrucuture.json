@@ -56,5 +56,9 @@
   {
     "topicName": "user_joined",
     "subscription": [ "Activity_UserJoinedMessageProcessor" ]
+  },
+  {
+    "topicName": "payment_created",
+    "subscription": [ "Activity_PaymentCreatedMessageProcessor" ]
   }
 ]
