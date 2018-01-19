@@ -134,13 +134,8 @@
     <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.0.0.34401, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.34401\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap, Version=4.2.0.402, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\structuremap.4.2.0.402\lib\net40\StructureMap.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="StructureMap.Net4, Version=4.2.0.402, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\structuremap.4.2.0.402\lib\net40\StructureMap.Net4.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="StructureMap, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StructureMap.4.6.0\lib\net45\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
