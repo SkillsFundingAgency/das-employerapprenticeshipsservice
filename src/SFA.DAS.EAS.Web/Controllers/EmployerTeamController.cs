@@ -17,9 +17,12 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
 
-        public EmployerTeamController(IOwinWrapper owinWrapper, EmployerTeamOrchestrator employerTeamOrchestrator, 
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, 
-            ICookieStorageService<FlashMessageViewModel> flashMessage) 
+        public EmployerTeamController(
+            IOwinWrapper owinWrapper,
+            IFeatureToggle featureToggle,
+            IMultiVariantTestingService multiVariantTestingService,
+            ICookieStorageService<FlashMessageViewModel> flashMessage,
+            EmployerTeamOrchestrator employerTeamOrchestrator)
             : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
@@ -29,11 +32,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
-            var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, userIdClaim);
+            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
             var flashMessage = GetFlashMessageViewModelFromCookie();
 
-            if (flashMessage!=null)
+            if (flashMessage != null)
             {
                 response.FlashMessage = flashMessage;
                 response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
