@@ -5490,6 +5490,10 @@ h2 .float-right {
   padding-left: 0;
 }
 
+.js-enabled ul.js-tabs a.selected {
+  outline: none;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;

@@ -699,9 +699,11 @@ body {
                padding-left:0;
            }
         }
-    }
+    }   
 }
 
+//remove yellow outline around selected tabs
+.js-enabled ul.js-tabs a.selected{outline:none;}
 
 
 //all mobile media query breakpoints
