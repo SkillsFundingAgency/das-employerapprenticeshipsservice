@@ -5486,6 +5486,27 @@ h2 .float-right {
   left: -30px;
 }
 
+/*Finance dashboard UI new*/
+#page-transactions .column-half .data {
+  width: 100%;
+  background: #2e358b;
+}
+
+#page-transactions .column-half .data dl {
+  position: relative;
+  height: 120px;
+  background: transparent;
+}
+
+#page-transactions .column-half .data dl dt {
+  position: absolute;
+  bottom: 10px;
+}
+
+#page-transactions .column-half .data dl dt a {
+  color: #fff;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
