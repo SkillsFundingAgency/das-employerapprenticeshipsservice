@@ -686,7 +686,21 @@ body {
       }
 }
 
-
+#page-activity{
+    .timeline--complete{
+        li.last{
+           p.activity{
+               padding-left:0;
+               &:before{
+                background:none;
+               }
+           }
+           p.meta{
+               padding-left:0;
+           }
+        }
+    }
+}
 
 
 

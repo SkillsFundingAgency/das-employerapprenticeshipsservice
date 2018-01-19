@@ -5486,6 +5486,18 @@ h2 .float-right {
   left: -30px;
 }
 
+#page-activity .timeline--complete li.last p.activity {
+  padding-left: 0;
+}
+
+#page-activity .timeline--complete li.last p.activity:before {
+  background: none;
+}
+
+#page-activity .timeline--complete li.last p.meta {
+  padding-left: 0;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
