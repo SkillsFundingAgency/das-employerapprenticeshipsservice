@@ -234,6 +234,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
+    <Compile Include="CommandException.cs" />
+    <Compile Include="Commands\CreateTransferConnection\CreateTransferConnectionCommand.cs" />
+    <Compile Include="Commands\CreateTransferConnection\CreateTransferConnectionCommandHandler.cs" />
+    <Compile Include="Commands\SendTransferConnection\SendTransferConnectionCommand.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommand.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommandHandler.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommandValidator.cs" />
@@ -242,6 +246,7 @@
     <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommand.cs" />
     <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommandHandler.cs" />
     <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommandValidator.cs" />
+    <Compile Include="Commands\SendTransferConnection\SendTransferConnectionCommandHandler.cs" />
     <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationCommand.cs" />
     <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationHandler.cs" />
     <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationValidator.cs" />
@@ -345,6 +350,7 @@
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
     <Compile Include="Messages\PaymentProcessorQueueMessage.cs" />
     <Compile Include="Messages\QueueMessage.cs" />
+    <Compile Include="Messages\ViewModel.cs" />
     <Compile Include="NotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesQueryHandler.cs" />
@@ -441,6 +447,7 @@
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsHandler.cs" />
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsQueryValidator.cs" />
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsResponse.cs" />
+    <Compile Include="Queries\GetCreatedTransferConnection\CreatedTransferConnectionViewModel.cs" />
     <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfQueryHandler.cs" />
     <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfResponse.cs" />
@@ -545,6 +552,7 @@
     <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationQuery.cs" />
     <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationResponse.cs" />
     <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrgainsationValidator.cs" />
+    <Compile Include="Queries\GetSentTransferConnectionQuery\SentTransferConnectionViewModel.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfQueryHandler.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfRequest.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfResponse.cs" />
@@ -556,6 +564,9 @@
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequestHandler.cs" />
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequestValidator.cs" />
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersResponse.cs" />
+    <Compile Include="Queries\GetCreatedTransferConnection\GetCreatedTransferConnectionQueryHandler.cs" />
+    <Compile Include="Queries\GetSentTransferConnectionQuery\GetSentTransferConnectionQuery.cs" />
+    <Compile Include="Queries\GetSentTransferConnectionQuery\GetSentTransferConnectionQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleHandler.cs" />
     <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleQuery.cs" />
     <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleResponse.cs" />
@@ -588,6 +599,7 @@
     <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndQueryHandler.cs" />
     <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndRequest.cs" />
     <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndResponse.cs" />
+    <Compile Include="Queries\GetCreatedTransferConnection\GetCreatedTransferConnectionQuery.cs" />
     <Compile Include="Validation\IValidator.cs" />
     <Compile Include="Validation\ValidationResult.cs" />
   </ItemGroup>

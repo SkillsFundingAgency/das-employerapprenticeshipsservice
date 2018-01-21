@@ -17,8 +17,8 @@ using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Infrastructure.Logging;
+using SFA.DAS.EAS.Web.Binders;
 using SFA.DAS.EmployerUsers.WebClientComponents;
-using SFA.DAS.EAS.Web.Plumbing.Mvc;
 using SFA.DAS.Web.Policy;
 
 namespace SFA.DAS.EAS.Web
@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Web
         {
             var exception = Server.GetLastError();
             var httpException = exception as HttpException;
-            var tc = new TelemetryClient();
+            var telemetryClient = new TelemetryClient();
 
             if (httpException != null && httpException.GetHttpCode() == (int)HttpStatusCode.NotFound)
             {
@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.Web
             }
 
             Logger.Error(exception);
-            tc.TrackException(exception);
+            telemetryClient.TrackException(exception);
         }
 
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)

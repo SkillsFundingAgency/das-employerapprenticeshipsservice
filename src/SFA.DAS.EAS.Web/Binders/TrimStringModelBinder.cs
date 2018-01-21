@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace SFA.DAS.EAS.Web.Plumbing.Mvc
+namespace SFA.DAS.EAS.Web.Binders
 {
     public sealed class TrimStringModelBinder : IModelBinder
     {

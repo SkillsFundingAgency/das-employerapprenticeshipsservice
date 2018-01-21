@@ -25,7 +25,6 @@ using System.Web;
 using AutoMapper;
 using MediatR;
 using Microsoft.Azure;
-using SFA.DAS.Activities;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
@@ -40,16 +39,19 @@ using NotificationsApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.Not
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Factories;
 using SFA.DAS.EAS.Infrastructure.Interfaces.REST;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Web.App_Start;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Events.Api.Client.Configuration;
 using SFA.DAS.HashingService;
+using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
@@ -60,7 +62,6 @@ using StructureMap.TypeRules;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
-
     public class DefaultRegistry : Registry
     {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
@@ -76,7 +77,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             {
                 scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                 scan.RegisterConcreteTypesAgainstTheFirstInterface();
-                scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
+                scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(c => c.Singleton());
             });
             
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
@@ -85,6 +86,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
+            For<ICurrentUserService>().Use<CurrentUserService>();
             For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi).SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
             For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
@@ -92,6 +94,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<ITaskService>().Use<TaskService>();
             For<IUserRepository>().Use<UserRepository>();
             For<IValidationApi>().Use<ValidationApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
+            For<CurrentUser>().Use(c => c.GetInstance<ICurrentUserService>().GetCurrentUser());
             
             ConfigureNotificationsApi(notificationsApiConfig);
             RegisterMapper();
@@ -108,11 +111,11 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
             if (string.IsNullOrWhiteSpace(config.ClientId))
             {
-                httpClient = new Http.HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config)).Build();
+                httpClient = new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config)).Build();
             }
             else
             {
-                httpClient = new Http.HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config)).Build();
+                httpClient = new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config)).Build();
             }
 
             For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
@@ -127,6 +130,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             {
                 environment = CloudConfigurationManager.GetSetting("EnvironmentName");
             }
+
             if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
             {
                 PopulateSystemDetails(environment);
@@ -134,12 +138,12 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
             var configurationRepository = GetConfigurationRepository();
             var configurationService = new ConfigurationService(configurationRepository, new ConfigurationOptions(ServiceName, environment, "1.0"));
-            var result = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
+            var configuration = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
 
-            return result;
+            return configuration;
         }
 
-        private static IConfigurationRepository GetConfigurationRepository()
+        private IConfigurationRepository GetConfigurationRepository()
         {
             IConfigurationRepository configurationRepository;
 
@@ -199,8 +203,8 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
         private void RegisterLogger()
         {
-            For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
-            For<ILog>().Use(x => new NLogLogger(x.ParentType, x.GetInstance<IRequestContext>(), null)).AlwaysUnique();
+            For<IRequestContext>().Use(c => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
+            For<ILog>().Use(c => new NLogLogger(c.ParentType, c.GetInstance<IRequestContext>(), null)).AlwaysUnique();
         }
 
         private void RegisterMapper()

@@ -1,8 +1,5 @@
 ﻿using System.Web.Mvc;
-
-using SFA.DAS.EAS.Web.Exceptions;
 using SFA.DAS.EAS.Web.Filters;
-using SFA.DAS.EAS.Web.Plumbing.Mvc;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -10,9 +7,10 @@ namespace SFA.DAS.EAS.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new LogAndHandleErrorAttribute());
-            filters.Add(new InvalidStateExceptionFilter());
-            filters.Add(new GoogleAnalyticsFilterAttribute());
+            filters.Add(new GoogleAnalyticsFilter());
+            filters.Add(new ViewModelFilter());
+            filters.Add(new HandleErrorFilter());
+            filters.Add(new HandleInvalidStateErrorFilter());
         }
     }
 }

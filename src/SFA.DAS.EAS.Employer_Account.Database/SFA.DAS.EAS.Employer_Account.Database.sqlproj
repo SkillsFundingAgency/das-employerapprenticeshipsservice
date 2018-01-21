@@ -126,6 +126,8 @@
     <Build Include="StoredProcedures\GetAccountStats.sql" />
     <Build Include="StoredProcedures\UpdateShowWizard.sql" />
     <Build Include="StoredProcedures\GetTeamMember.sql" />
+    <Build Include="Tables\TransferConnection.sql" />
+    <Build Include="StoredProcedures\CreateTransferConnection.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />

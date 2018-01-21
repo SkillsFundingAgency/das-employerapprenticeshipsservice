@@ -1,10 +1,10 @@
 ﻿using System.Web.Mvc;
-
 using NLog;
+using SFA.DAS.EAS.Web.Exceptions;
 
-namespace SFA.DAS.EAS.Web.Exceptions
+namespace SFA.DAS.EAS.Web.Filters
 {
-    public class InvalidStateExceptionFilter : FilterAttribute, IExceptionFilter
+    public class HandleInvalidStateErrorFilter : FilterAttribute, IExceptionFilter
     {
         public void OnException(ExceptionContext filterContext)
         {

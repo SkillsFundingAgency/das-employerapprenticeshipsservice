@@ -2,10 +2,9 @@
 using System.Web.Mvc;
 using SFA.DAS.EAS.Web.Controllers;
 
-
 namespace SFA.DAS.EAS.Web.Filters
 {
-    public class GoogleAnalyticsFilterAttribute : ActionFilterAttribute
+    public class GoogleAnalyticsFilter : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {

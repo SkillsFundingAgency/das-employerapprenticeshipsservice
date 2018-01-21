@@ -421,6 +421,10 @@
     <Compile Include="App_Start\RequestContext.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Attributes\HttpNotFoundForNullModelAttribute.cs" />
+    <Compile Include="Attributes\ValidateModelStateAttribute.cs" />
+    <Compile Include="Authentication\CurrentUserService.cs" />
+    <Compile Include="Authentication\ICurrentUserService.cs" />
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
@@ -431,12 +435,14 @@
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
-    <Compile Include="Controllers\TransfersController.cs" />
+    <Compile Include="Controllers\TransferConnectionController.cs" />
+    <Compile Include="Controllers\TransferController.cs" />
     <Compile Include="Extensions\DynamicExtentions.cs" />
     <Compile Include="Extensions\OrchestratorExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Extensions\ValidationResultExtensions.cs" />
-    <Compile Include="Filters\GoogleAnalyticsFilterAttribute.cs" />
+    <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
+    <Compile Include="Filters\ViewModelFilter.cs" />
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
     <Compile Include="Helpers\AccountTaskHelper.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />
@@ -450,6 +456,7 @@
     <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\CreateTransferConnectionViewModel.cs" />
     <Compile Include="ViewModels\DismissTaskViewModel.cs" />
     <Compile Include="ViewModels\EnvironmentDetailsViewModel.cs" />
     <Compile Include="ViewModels\FinanceDashboardViewModel.cs" />
@@ -471,7 +478,7 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
-    <Compile Include="Exceptions\InvalidStateExceptionFilter.cs" />
+    <Compile Include="Filters\HandleInvalidStateErrorFilter.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\DecimalExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
@@ -482,7 +489,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Mapping\OrganisationMapping.cs" />
-    <Compile Include="Plumbing\Mvc\TrimStringModelBinder.cs" />
+    <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="Validators\Messages\ValidationMessage.cs" />
     <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
     <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
@@ -554,7 +561,7 @@
     <Compile Include="ViewModels\TransactionViewResultViewModel.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
-    <Compile Include="Plumbing\Mvc\LogAndHandleErrorAttribute.cs" />
+    <Compile Include="Filters\HandleErrorFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validators\AddLegalEntityViewModelValidator.cs" />
@@ -582,7 +589,12 @@
     <Content Include="Views\EmployerTeam\Activity.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\TransactionsDownload.cshtml" />
-    <Content Include="Views\Transfers\Index.cshtml" />
+    <Content Include="Views\Transfer\Index.cshtml" />
+    <Content Include="Views\TransferConnection\Index.cshtml" />
+    <Content Include="Views\TransferConnection\Create.cshtml" />
+    <Content Include="Views\TransferConnection\Send.cshtml" />
+    <Content Include="Views\TransferConnection\Sent.cshtml" />
+    <Content Include="Views\Shared\_ValidationSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />

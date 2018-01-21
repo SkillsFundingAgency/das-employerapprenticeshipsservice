@@ -156,6 +156,7 @@
       <HintPath>..\packages\StructureMap.4.6.0\lib\net45\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -241,6 +242,14 @@
     <Compile Include="Controllers\OrganisationSharedTests\WhenISearchForAnAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenISelectAnAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenIUpdateAnOrganisationsAddress.cs" />
+    <Compile Include="Controllers\TransferConnectionControllerTests\WhenISubmitTheSentTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransferConnectionControllerTests\WhenISubmitTheSendTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransferConnectionControllerTests\WhenISubmitTheCreateTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransferConnectionControllerTests\WhenIViewTheTransferConnectionsPage.cs" />
+    <Compile Include="Controllers\TransferConnectionControllerTests\WhenIViewTheSentTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransferConnectionControllerTests\WhenIViewTheSendTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransferConnectionControllerTests\WhenIViewTheCreateTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransfersController\WhenIViewTheTransfersPage.cs" />
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenCreatingTheAccount.cs" />
