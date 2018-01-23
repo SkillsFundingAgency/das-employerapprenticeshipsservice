@@ -251,6 +251,7 @@
     <Compile Include="Controllers\TransferConnectionControllerTests\WhenIViewTheCreateTransferConnectionPage.cs" />
     <Compile Include="Controllers\TransfersController\WhenIViewTheTransfersPage.cs" />
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
+    <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenCreatingTheAccount.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenRenamingAnAccount.cs" />

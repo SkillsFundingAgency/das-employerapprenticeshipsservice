@@ -234,12 +234,12 @@
   <ItemGroup>
     <Compile Include="Commands\AddPayeToAccountTests\WhenIAddPayeToAnAccount.cs" />
     <Compile Include="Commands\AddPayeToAccountTests\WhenIValidateTheCommand.cs" />
-    <Compile Include="Commands\CreateTransferConnection\WhenICreateATransferConnection.cs" />
+    <Compile Include="Commands\CreateTransferConnectionInvitation\WhenICreateATransferConnectionInvitation.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminderTests\WhenIDismissATaskReminder.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminderTests\WhenTheCommandIsValidated.cs" />
     <Compile Include="Commands\RemoveLegalEntityTests\WhenIRemoveALegalEntity.cs" />
     <Compile Include="Commands\RemoveLegalEntityTests\WhenIValidateTheCommand.cs" />
-    <Compile Include="Commands\SendTransferConnection\WhenISendATransferConnection.cs" />
+    <Compile Include="Commands\SendTransferConnectionInvitation\WhenISendATransferConnectionInvitation.cs" />
     <Compile Include="Commands\UnsubscribeNotificationTest\WhenUnsubscribingFromNotification.cs" />
     <Compile Include="Commands\UnsubscribeNotificationTest\WhenValidatingUnsubscribeCommand.cs" />
     <Compile Include="Commands\AuditCommandTests\WhenIProcessTheCommand.cs" />
@@ -313,7 +313,7 @@
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetCharity\WhenIGetCharity.cs" />
     <Compile Include="Queries\GetCharity\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetCreatedTransferConnectionTests\WhenIGetCreatedTransferConnections.cs" />
+    <Compile Include="Queries\GetCreatedTransferConnectionInvitationTests\WhenIGetCreatedTransferConnectionInvitations.cs" />
     <Compile Include="Queries\GetEmployerAgreementPdfTests\WhenIGetTheEmployerAgreement.cs" />
     <Compile Include="Queries\GetEmployerAgreementPdfTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementByIdTests\WhenIGetAnAgreement.cs" />
@@ -367,7 +367,7 @@
     <Compile Include="Queries\GetPreviousTransactionsCountTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIGetPublicSectorOrganisations.cs" />
     <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIValidateTheQuery.cs" />
-    <Compile Include="Queries\GetSentTransferConnectionTests\WhenIGetSentTransferConnections.cs" />
+    <Compile Include="Queries\GetSentTransferConnectionInvitationTests\WhenIGetSentTransferConnectionInvitations.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdfTests\WhenIGetTheSignedEmployerAgreement.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdfTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetTeamMembers\WhenIGetTeamMembers.cs" />

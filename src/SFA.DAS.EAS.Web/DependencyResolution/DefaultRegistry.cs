@@ -33,6 +33,7 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.CookieService;
+using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using NotificationsApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.NotificationsApiClientConfiguration;
@@ -45,8 +46,8 @@ using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Factories;
 using SFA.DAS.EAS.Infrastructure.Interfaces.REST;
 using SFA.DAS.EAS.Infrastructure.Services;
-using SFA.DAS.EAS.Web.App_Start;
 using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Logging;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Events.Api.Client.Configuration;
@@ -59,6 +60,7 @@ using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Tasks.API.Client;
 using StructureMap;
 using StructureMap.TypeRules;
+using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -73,13 +75,14 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             var notificationsApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration<NotificationsApiClientConfiguration>($"{ServiceName}.Notifications");
             var taskApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration<TaskApiConfiguration>($"SFA.DAS.Tasks.Api");
 
-            Scan(scan =>
+            Scan(s =>
             {
-                scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
-                scan.RegisterConcreteTypesAgainstTheFirstInterface();
-                scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(c => c.Singleton());
+                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
+                s.RegisterConcreteTypesAgainstTheFirstInterface();
+                s.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(c => c.Singleton());
             });
-            
+
+            For<CurrentUser>().Use(c => c.GetInstance<ICurrentUserService>().GetCurrentUser());
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For<IApprenticeshipApi>().Use<ApprenticeshipApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<ICache>().Use<InMemoryCache>(); //RedisCache
@@ -94,32 +97,14 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<ITaskService>().Use<TaskService>();
             For<IUserRepository>().Use<UserRepository>();
             For<IValidationApi>().Use<ValidationApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
-            For<CurrentUser>().Use(c => c.GetInstance<ICurrentUserService>().GetCurrentUser());
-            
-            ConfigureNotificationsApi(notificationsApiConfig);
+
             RegisterMapper();
             RegisterMediator();
+            ReisterNotificationsApi(notificationsApiConfig);
             RegisterAuditService();            
             RegisterPostCodeAnywhereService();
             RegisterExecutionPolicies();
             RegisterLogger();
-        }
-
-        private void ConfigureNotificationsApi(NotificationsApiClientConfiguration config)
-        {
-            HttpClient httpClient;
-
-            if (string.IsNullOrWhiteSpace(config.ClientId))
-            {
-                httpClient = new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config)).Build();
-            }
-            else
-            {
-                httpClient = new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config)).Build();
-            }
-
-            For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
-            For<INotificationsApiClientConfiguration>().Use(config);
         }
 
         private EmployerApprenticeshipsServiceConfiguration GetConfiguration()
@@ -209,22 +194,19 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
         private void RegisterMapper()
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("SFA.DAS.EAS"));
-            var mappingProfiles = new List<Profile>();
+            var profiles = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .Where(a => a.FullName.StartsWith("SFA.DAS.EAS"))
+                .SelectMany(a => a.GetTypes())
+                .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
+                .Select(t => (Profile)Activator.CreateInstance(t));
 
-            foreach (var assembly in assemblies)
+            var config = new MapperConfiguration(c =>
             {
-                var profiles = Assembly.Load(assembly.FullName).GetTypes()
-                    .Where(t => typeof(Profile).IsAssignableFrom(t))
-                    .Where(t => t.IsConcrete() && t.HasConstructors())
-                    .Select(t => (Profile)Activator.CreateInstance(t));
-
-                mappingProfiles.AddRange(profiles);
-            }
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                mappingProfiles.ForEach(cfg.AddProfile);
+                foreach (var profile in profiles)
+                {
+                    c.AddProfile(profile);
+                }
             });
 
             var mapper = config.CreateMapper();
@@ -235,9 +217,26 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
         private void RegisterMediator()
         {
+            For<IMediator>().Use<Mediator>();
             For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
             For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
-            For<IMediator>().Use<Mediator>();
+        }
+
+        private void ReisterNotificationsApi(NotificationsApiClientConfiguration config)
+        {
+            HttpClient httpClient;
+
+            if (string.IsNullOrWhiteSpace(config.ClientId))
+            {
+                httpClient = new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config)).Build();
+            }
+            else
+            {
+                httpClient = new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config)).Build();
+            }
+
+            For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
+            For<INotificationsApiClientConfiguration>().Use(config);
         }
 
         private void RegisterPostCodeAnywhereService()

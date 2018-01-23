@@ -1,28 +1,30 @@
 ﻿using System.Web.Mvc;
+using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionQuery;
 using SFA.DAS.EAS.Web.Controllers;
+using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitation;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionControllerTests
 {
     public class WhenISubmitTheSentTransferConnectionPage
     {
-        private TransferConnectionController _controller;
-        private readonly SentTransferConnectionViewModel _viewModel = new SentTransferConnectionViewModel();
+        private TransferConnectionInvitationController _controller;
+        private readonly SentTransferConnectionInvitationViewModel _viewModel = new SentTransferConnectionInvitationViewModel();
         private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
+        private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 
         [SetUp]
         public void Arrange()
         {
-            _controller = new TransferConnectionController(_mediator.Object);
+            _controller = new TransferConnectionInvitationController(_mapper.Object, _mediator.Object);
         }
 
         [Test]
         public void ThenIShouldBeRedirectedToTheTransfersPageIfIChoseOption1()
         {
-            _viewModel.Choice = 1;
+            _viewModel.Choice = "GoToTransfersPage";
 
             var result = _controller.Sent(_viewModel) as RedirectToRouteResult;
 
@@ -36,7 +38,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionControllerTest
         [Test]
         public void ThenIShouldBeRedirectedToTheHomepageIfIChoseOption2()
         {
-            _viewModel.Choice = 2;
+            _viewModel.Choice = "GoToHomepage";
 
             var result = _controller.Sent(_viewModel) as RedirectToRouteResult;
 

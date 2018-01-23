@@ -6,18 +6,21 @@ namespace SFA.DAS.EAS.Web.Binders
     {
         public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
-            ValueProviderResult valueResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
+            var valueProviderResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
 
-            if (valueResult == null || valueResult.AttemptedValue == null)
+            bindingContext.ModelState.SetModelValue(bindingContext.ModelName, valueProviderResult);
+
+            if (valueProviderResult?.AttemptedValue == null)
             {
                 return null;
             }
-            else if (valueResult.AttemptedValue == string.Empty)
+
+            if (valueProviderResult.AttemptedValue == string.Empty)
             {
                 return string.Empty;
             }
 
-            return valueResult.AttemptedValue.Trim();
+            return valueProviderResult.AttemptedValue.Trim();
         }
     }
 }

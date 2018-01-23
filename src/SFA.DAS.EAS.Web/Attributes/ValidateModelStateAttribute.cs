@@ -1,55 +1,37 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Domain;
 
 namespace SFA.DAS.EAS.Web.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class ValidateModelStateAttribute : ActionFilterAttribute
+    public class ValidateModelStateAttribute : ModelStateTempDataAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var model = filterContext.ActionParameters.Values.OfType<ViewModel>().Single();
-            var tempData = filterContext.Controller.TempData;
-            var viewData = filterContext.Controller.ViewData;
-
-            viewData.Model = model;
-
             if (!filterContext.Controller.ViewData.ModelState.IsValid)
             {
-                filterContext.Result = new ViewResult
-                {
-                    ViewData = viewData,
-                    TempData = tempData
-                };
+                ExportModelStateToTempData(filterContext);
+                
+                filterContext.Result = new RedirectToRouteResult(filterContext.RouteData.Values);
             }
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            var commandException = filterContext.Exception as CommandException;
+            var exception = filterContext.Exception as DomainException;
 
-            if (commandException != null)
+            if (exception != null)
             {
-                var partialFieldName = ExpressionHelper.GetExpressionText(commandException.Expression);
+                var partialFieldName = ExpressionHelper.GetExpressionText(exception.Expression);
                 var fullHtmlFieldName = $"{nameof(ViewModel<object>.Message)}.{partialFieldName}";
 
-                filterContext.Controller.ViewData.ModelState.AddModelError(fullHtmlFieldName, commandException.Message);
+                filterContext.Controller.ViewData.ModelState.AddModelError(fullHtmlFieldName, exception.Message);
 
-                var model = filterContext.Controller.ViewData.Model;
-                var tempData = filterContext.Controller.TempData;
-                var viewData = filterContext.Controller.ViewData;
+                ExportModelStateToTempData(filterContext);
 
-                viewData.Model = model;
-                
-                filterContext.Result = new ViewResult
-                {
-                    ViewData = viewData,
-                    TempData = tempData
-                };
-
+                filterContext.Result = new RedirectToRouteResult(filterContext.RouteData.Values);
                 filterContext.ExceptionHandled = true;
             }
         }

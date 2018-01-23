@@ -17,40 +17,34 @@ using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Infrastructure.Logging;
-using SFA.DAS.EAS.Web.Binders;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.Web.Policy;
 
 namespace SFA.DAS.EAS.Web
 {
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : HttpApplication
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly RedisTarget RedisTarget; // Required to ensure assembly is copied to output.
 
         protected void Application_Start()
         {
-            LoggingConfig.ConfigureLogging();
-
-            TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
-            
-            AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            ModelBinders.Binders.Add(typeof(string), new TrimStringModelBinder());
-
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
+            AreaRegistration.RegisterAllAreas();
+            BinderConfig.RegisterBinders(ModelBinders.Binders);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             FluentValidationModelValidatorProvider.Configure();
-
+            LoggingConfig.ConfigureLogging();
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
             WebMessageBuilders.Register();
             WebMessageBuilders.UserIdClaim = DasClaimTypes.Id;
             WebMessageBuilders.UserEmailClaim = DasClaimTypes.Email;
 
-            AuditMessageFactory.RegisterBuilder(message =>
+            AuditMessageFactory.RegisterBuilder(m =>
             {
-                message.Source = new Source
+                m.Source = new Source
                 {
                     Component = "EAS-Web",
                     System = "EAS",
@@ -58,7 +52,13 @@ namespace SFA.DAS.EAS.Web
                 };
             });
         }
-        
+
+        protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
+        {
+            new HttpContextPolicyProvider(new List<IHttpContextPolicy> { new ResponseHeaderRestrictionPolicy() })
+                .Apply(new HttpContextWrapper(HttpContext.Current), PolicyConcern.HttpResponse);
+        }
+
         protected void Application_Error(object sender, EventArgs e)
         {
             var exception = Server.GetLastError();
@@ -72,16 +72,6 @@ namespace SFA.DAS.EAS.Web
 
             Logger.Error(exception);
             telemetryClient.TrackException(exception);
-        }
-
-        protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
-        {
-            new HttpContextPolicyProvider(
-                new List<IHttpContextPolicy>()
-                {
-                    new ResponseHeaderRestrictionPolicy()
-                }
-            ).Apply(new HttpContextWrapper(HttpContext.Current), PolicyConcern.HttpResponse);
         }
     }
 }

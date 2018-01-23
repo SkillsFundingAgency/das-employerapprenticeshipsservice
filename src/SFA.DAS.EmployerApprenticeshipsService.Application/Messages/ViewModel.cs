@@ -1,25 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 
 namespace SFA.DAS.EAS.Application.Messages
 {
     public abstract class ViewModel<T> : ViewModel where T : class
     {
+        [IgnoreMap]
         [Required]
         public T Message { get; set; }
 
-        protected abstract T Map();
-
-        public override void OnActionExecuted()
+        public override void Map(IMapper mapper)
         {
-            if (Message == null)
-            {
-                Message = Map();
-            }
+            Message = mapper.Map<T>(this);
         }
     }
 
     public abstract class ViewModel
     {
-        public abstract void OnActionExecuted();
+        public abstract void Map(IMapper mapper);
     }
 }

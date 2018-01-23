@@ -1,0 +1,38 @@
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.ViewModels.CreateTransferConnectionInvitationViewModel
+
+@{
+    ViewBag.Title = "Create transfer connection invitation";
+    ViewBag.Section = "finance";
+    ViewBag.PageID = "page-transfer-connection-invitations-create";
+    ViewBag.GaData.Vpv = "/accounts/transfers/connections/invitations/create";
+}
+
+@Html.Partial("_ValidationSummary", ViewData.ModelState)
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Which employer are you connecting with?</h1>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Message.SenderHashedAccountId)
+            <div class="form-group @(Html.IsValid(m => m.Message.ReceiverHashedAccountId) ? "" : "error")">
+                <label for="@Html.IdFor(m => m.Message.ReceiverHashedAccountId)">
+                    <span class="form-label-bold">Enter the employer's apprenticeship account ID</span>
+                    <span class="form-hint">You need to request this directly from the employer. Account IDs can be found under the account name on the apprenticeship service homepage.</span>
+                    @Html.ValidationMessageFor(m => m.Message.ReceiverHashedAccountId)
+                </label>
+                @Html.TextBoxFor(m => m.Message.ReceiverHashedAccountId, new { aria_required = true, @class = "form-control form-control-3-4" })
+            </div>
+            <button class="button" type="submit">Continue</button>
+        }
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs" id="js-breadcrumbs">
+        <ol role="navigation">
+            <li><a class="link-back" href="@Url.Action("Index", "TransferConnectionInvitation")">Back</a></li>
+        </ol>
+    </div>
+}

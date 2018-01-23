@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using AutoMapper;
 using SFA.DAS.EAS.Web.Filters;
 
 namespace SFA.DAS.EAS.Web
@@ -7,8 +8,10 @@ namespace SFA.DAS.EAS.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            var dependencyResolver = DependencyResolver.Current;
+
             filters.Add(new GoogleAnalyticsFilter());
-            filters.Add(new ViewModelFilter());
+            filters.Add(new MapViewModelToMessageFilter(dependencyResolver.GetService<IMapper>()));
             filters.Add(new HandleErrorFilter());
             filters.Add(new HandleInvalidStateErrorFilter());
         }
