@@ -4,6 +4,8 @@ using MediatR;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.TransferConnection;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.Messaging.Interfaces;
 
 namespace SFA.DAS.EAS.Application.Commands.SendTransferConnection
 {
@@ -12,15 +14,18 @@ namespace SFA.DAS.EAS.Application.Commands.SendTransferConnection
         private readonly CurrentUser _currentUser;
         private readonly IMembershipRepository _membershipRepository;
         private readonly ITransferConnectionRepository _transferConnectionRepository;
+        private readonly IMessagePublisher _messagePublisher;
 
         public SendTransferConnectionCommandHandler(
             CurrentUser currentUser,
             IMembershipRepository membershipRepository,
-            ITransferConnectionRepository transferConnectionRepository)
+            ITransferConnectionRepository transferConnectionRepository,
+            IMessagePublisher messagePublisher)
         {
             _currentUser = currentUser;
             _membershipRepository = membershipRepository;
             _transferConnectionRepository = transferConnectionRepository;
+            _messagePublisher = messagePublisher;
         }
 
         protected override async Task HandleCore(SendTransferConnectionCommand message)
@@ -36,6 +41,14 @@ namespace SFA.DAS.EAS.Application.Commands.SendTransferConnection
             transferConnection.Status = TransferConnectionStatus.Sent;
 
             await _transferConnectionRepository.Send(transferConnection);
+
+            await _messagePublisher.PublishAsync(new TransferConnectionInvitationSentMessage(
+                transferConnection.Id,
+                transferConnection.SenderAccountId,
+                transferConnection.ReceiverAccountId,
+                user.FullName(),
+                user.UserRef
+            ));
         }
     }
 }
