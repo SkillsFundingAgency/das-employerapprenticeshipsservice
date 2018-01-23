@@ -5418,6 +5418,27 @@ h2 .float-right {
   left: -30px;
 }
 
+/*Finance dashboard UI new*/
+#page-transactions .column-half .data {
+  width: 100%;
+  background: #2e358b;
+}
+
+#page-transactions .column-half .data dl {
+  position: relative;
+  height: 170px;
+  background: transparent;
+}
+
+#page-transactions .column-half .data dl dt {
+  position: absolute;
+  bottom: 10px;
+}
+
+#page-transactions .column-half .data dl dt a {
+  color: #fff;
+}
+
 /*#page-activity{
     .timeline--complete{
         li.last{

@@ -24,7 +24,7 @@
             <div class="data">
                 <dl>
                     <dt>
-                        Current levy funds
+                       Your available levy funds
                     </dt>
                     @{
                         var balance = Model.Data.CurrentLevyFunds.ToString("C0", culture);
@@ -53,15 +53,28 @@
                 View transactions
             </a>
         </h2>
+            <p>View payments made into and out of your apprenticeship service account. </p>  
     </div>
+
     <div class="column-half">
         <h2 class="heading-medium">
             <a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions", new { HashedAccountId = Model.Data.Account.HashedId })">
                 Download transactions
             </a>
         </h2>
+        <p>Download your financial transactions within a specific date range. </p>
     </div>
-</div>
+
+    <div class="column-half">
+        <h2 class="heading-medium">
+            <a title="Manage transfers" href="#">
+                Manage transfers
+            </a>
+        </h2>
+        <p>Connect with other employers and send or receive transfer funds. </p>
+    </div>
+
+    </div>
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
