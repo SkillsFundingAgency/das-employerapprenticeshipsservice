@@ -82,6 +82,9 @@ The configuration is loaded from azure table storage.
 * Clone the [das-employer-config-updater](https://github.com/SkillsFundingAgency/das-employer-config-updater) repository
 * Run the das-employer-config-updater console application and follow the instructions to import the config from the das-employer-config directory
 
+> The two repos above are private. If the links appear to be dead make sure you are logged into github with an account that has access to these (i.e. that you are part of the Skills Funding Agency Team organization).
+
+  
 ### Feature Toggle
 
 You can limit areas of the site by adding them to a list, in the controller action format, or having a * to denote all actions within that controller. Below is an example of the config required:
