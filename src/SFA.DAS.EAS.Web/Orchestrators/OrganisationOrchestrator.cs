@@ -573,13 +573,25 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public virtual async Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(string organisationName, string userId, string hashedAccountId)
+        public virtual Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
+                string organisationName,
+                string userId,
+                string hashedAccountId)
+        {
+            return this.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, string.Empty);
+        }
+
+        public virtual async Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
+            string organisationName, 
+            string userId, 
+            string hashedAccountId, 
+            string hashedAgreementId)
         {
             var showWizard = await UserShownWizard(userId, hashedAccountId);
 
             return new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
             {
-                Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName, ShowWizard = showWizard}
+                Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName, ShowWizard = showWizard, HashedAgreementId = hashedAgreementId}
             };
         }
 

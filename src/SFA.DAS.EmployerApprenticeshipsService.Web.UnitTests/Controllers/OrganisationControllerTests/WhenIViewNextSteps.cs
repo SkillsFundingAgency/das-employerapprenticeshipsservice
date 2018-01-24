@@ -75,22 +75,23 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             //Arrange
             const string userId = "123";
             const string hashedAccountId = "ABC123";
+            const string hashedAgreementId = "DEF456";
 
             _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId);
-            _orchestrator.Setup(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            _orchestrator.Setup(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
                 {
                     Data = new OrganisationAddedNextStepsViewModel { ShowWizard = true }
                 });
 
             //Act
-            var result = _controller.OrganisationAddedNextStepsSearch("test", hashedAccountId).Result as ViewResult;
+            var result = _controller.OrganisationAddedNextStepsSearch("test", hashedAccountId, hashedAgreementId).Result as ViewResult;
             var model = result?.Model as OrchestratorResponse<OrganisationAddedNextStepsViewModel>;
 
             //Assert
             Assert.IsNotNull(model);
             Assert.IsTrue(model.Data.ShowWizard);
-            _orchestrator.Verify(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), userId, hashedAccountId), Times.Once);
+            _orchestrator.Verify(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), userId, hashedAccountId, hashedAgreementId), Times.Once);
         }
 
         [Test]
@@ -99,13 +100,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             //Arrange
             const string userId = "123";
             const string hashedAccountId = "ABC123";
+            const string hashedAgreementId = "DEF456";
 
             _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId);
             _orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
                          .ReturnsAsync(true);
 
             //Act
-            var result = _controller.GoToNextStep("Not A Step", hashedAccountId, "test").Result as ViewResult;
+            var result = _controller.GoToNextStep("Not A Step", hashedAccountId, hashedAgreementId, "test").Result as ViewResult;
             var model = result?.Model as OrchestratorResponse<OrganisationAddedNextStepsViewModel>;
 
             //Assert
