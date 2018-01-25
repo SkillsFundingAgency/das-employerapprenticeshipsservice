@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             AddFlashMessageToCookie(flashMessage);
             if (newSearch)
             {
-                return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsSearchActionName, new { hashedAccountId, organisationName = name, hashedAGreementId = response.Data.EmployerAgreement.HashedAgreementId });
+                return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsSearchActionName, new { hashedAccountId, organisationName = name, hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId });
             }
             return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsActionName, new { hashedAccountId, organisationName = name });
         }
