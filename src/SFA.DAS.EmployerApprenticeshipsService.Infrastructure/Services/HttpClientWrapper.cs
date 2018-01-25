@@ -21,11 +21,15 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         private readonly IHttpResponseLogger _httpResponseLogger;
 
-        public HttpClientWrapper(ILog logger, IHttpResponseLogger httpResponseLogger)
+        public HttpClientWrapper(ILog logger)
         {
             _logger = logger;
-            _httpResponseLogger = httpResponseLogger;
             MediaTypeWithQualityHeaderValueList = new List<MediaTypeWithQualityHeaderValue>();
+        }
+
+        public HttpClientWrapper(ILog logger, IHttpResponseLogger httpResponseLogger) : this(logger)
+        {
+            _httpResponseLogger = httpResponseLogger;
         }
 
         public async Task<string> SendMessage<T>(T content, string url)
