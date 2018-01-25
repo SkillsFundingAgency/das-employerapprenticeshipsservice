@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
                 owner.AccountId,
                 message.LegalEntity);
 
-            
+            agreementView.HashedAgreementId = _hashingService.HashValue(agreementView.Id);
 
             await CreateAuditEntries(owner, agreementView);
 

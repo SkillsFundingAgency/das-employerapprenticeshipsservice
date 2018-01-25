@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             AddFlashMessageToCookie(flashMessage);
             if (newSearch)
             {
-                return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsSearchActionName, new { hashedAccountId, organisationName = name });
+                return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsSearchActionName, new { hashedAccountId, organisationName = name, hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId });
             }
             return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsActionName, new { hashedAccountId, organisationName = name });
         }
@@ -104,11 +104,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("nextStepSearch")]
-        public async Task<ActionResult> OrganisationAddedNextStepsSearch(string organisationName, string hashedAccountId)
+        public async Task<ActionResult> OrganisationAddedNextStepsSearch(string organisationName, string hashedAccountId, string hashedAgreementId)
         {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
 
-            var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId);
+            var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, hashedAgreementId);
 
             viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
 
@@ -118,7 +118,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [Route("nextStep")]
-        public async Task<ActionResult> GoToNextStep(string nextStep, string hashedAccountId, string organisationName)
+        public async Task<ActionResult> GoToNextStep(string nextStep, string hashedAccountId, string organisationName, string hashedAgreementId)
         {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
 
@@ -126,7 +126,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             switch (nextStep)
             {
-                case "agreement": return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId });
+                case "agreement": return RedirectToAction(ControllerConstants.AboutYourAgreement, ControllerConstants.EmployerAgreementControllerName, new { agreementid = hashedAgreementId });
 
                 case "teamMembers": return RedirectToAction(ControllerConstants.ViewTeamActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId });
 
@@ -138,7 +138,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     var errorMessage = "Please select one of the next steps below";
                     return View(ControllerConstants.OrganisationAddedNextStepsViewName, new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
                     {
-                        Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName, ShowWizard = userShownWizard },
+                        Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName, ShowWizard = userShownWizard, HashedAgreementId = hashedAgreementId},
                         FlashMessage = new FlashMessageViewModel
                         {
                             Headline = "Invalid next step chosen",

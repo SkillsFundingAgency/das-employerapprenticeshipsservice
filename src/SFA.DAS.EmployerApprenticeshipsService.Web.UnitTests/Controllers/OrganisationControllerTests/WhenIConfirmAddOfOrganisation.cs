@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
@@ -27,6 +28,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         private Mock<ILog> _logger;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
+        private const string testHashedAgreementId = "DEF456";
+
         [SetUp]
         public void Arrange()
         {
@@ -43,7 +46,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
                     Status = HttpStatusCode.OK,
                     Data = new EmployerAgreementViewModel
                     {
-                        EmployerAgreement = new EmployerAgreementView()
+                        EmployerAgreement = new EmployerAgreementView
+                        {
+                            HashedAgreementId = testHashedAgreementId
+                        }
                     }
                 });
 
@@ -79,6 +85,17 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("OrganisationAddedNextStepsSearch", result.RouteValues["Action"]);
+        }
+
+        [Test]
+        public async Task ThenIAmSuppliedTheHashedAgreementIdForANewSearch()
+        {
+            //Act
+            var result = await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null, true) as RedirectToRouteResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(testHashedAgreementId, result.RouteValues["HashedAgreementId"]);
         }
     }
 }

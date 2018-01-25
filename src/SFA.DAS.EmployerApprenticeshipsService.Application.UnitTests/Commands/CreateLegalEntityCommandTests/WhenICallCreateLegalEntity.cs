@@ -49,6 +49,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
 
             _agreementView = new EmployerAgreementView
             {
+                Id = 123,
                 AccountId = _owner.AccountId,
                 SignedDate = DateTime.Now,
                 SignedByName = $"{_owner.FirstName} {_owner.LastName}",
@@ -78,6 +79,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _legalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
             _hashingService=new Mock<IHashingService>();
 
+            _hashingService.Setup(hs => hs.HashValue(It.IsAny<long>())).Returns<long>(value => $"*{value}*");
             _commandHandler = new CreateLegalEntityCommandHandler(
                 _accountRepository.Object, 
                 _membershipRepository.Object, 
@@ -148,13 +150,24 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
         }
 
         [Test]
-        public async Task ThenThenAnOrganisationCodeIsGeneratedIfOneIsNotSupplied()
+        public async Task ThenAnOrganisationCodeIsGeneratedIfOneIsNotSupplied()
         {
             //Act
             await _commandHandler.Handle(_command);
 
             //Assert
             _accountRepository.Verify(r => r.CreateLegalEntity(It.IsAny<long>(), It.Is<LegalEntity>(le => !string.IsNullOrEmpty(le.Code))), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenAHashedAgreementIdIsSupplied()
+        {
+            //Act
+            var employerAgreementView = await _commandHandler.Handle(_command);
+
+            //Assert
+            var expectedHashedAgreementId = $"*{employerAgreementView.AgreementView.Id}*";
+            Assert.AreEqual(expectedHashedAgreementId, employerAgreementView.AgreementView.HashedAgreementId);
         }
     }
 }

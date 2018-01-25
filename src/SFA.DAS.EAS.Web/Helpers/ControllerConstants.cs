@@ -7,6 +7,7 @@ namespace SFA.DAS.EAS.Web.Helpers
 {
     public static class ControllerConstants
     {
+        public const string AboutYourAgreement = "AboutYourAgreement";
         public const string AccessDeniedViewName = "AccessDenied";
         public const string AccessDeniedControllerName = "AccessDenied";
         public const string ActionKeyName = "Action";
