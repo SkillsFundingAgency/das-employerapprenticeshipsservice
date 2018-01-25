@@ -202,6 +202,7 @@
     <Compile Include="Http\ServiceUnavailableException.cs" />
     <Compile Include="Http\TooManyRequestsException.cs" />
     <Compile Include="Interfaces\IHmrcDateService.cs" />
+    <Compile Include="Interfaces\IHttpResponseLogger.cs" />
     <Compile Include="Interfaces\IPdfService.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
     <Compile Include="Interfaces\IMultiVariantTestingService.cs" />
