@@ -5488,21 +5488,18 @@ h2 .float-right {
   color: #fff;
 }
 
-/*#page-activity{
-    .timeline--complete{
-        li.last{
-           p.activity{
-               padding-left:0;
-               &:before{
-                background:none;
-               }
-           }
-           p.meta{
-               padding-left:0;
-           }
-        }
-    }   
-}*/
+/*See all activity*/
+.timeline .all-activity p.activity:before {
+  width: 20px;
+  height: 20px;
+  left: -9px;
+}
+
+.timeline .all-activity p.activity a {
+  margin-top: 15px;
+  display: block;
+}
+
 .js-enabled ul.js-tabs a.selected {
   outline: none;
 }

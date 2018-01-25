@@ -707,101 +707,110 @@ body {
         }
 }
 
-
-/*#page-activity{
-    .timeline--complete{
-        li.last{
-           p.activity{
-               padding-left:0;
-               &:before{
-                background:none;
-               }
-           }
-           p.meta{
-               padding-left:0;
-           }
-        }
-    }   
-}*/
-
-//remove yellow outline around selected tabs
-.js-enabled ul.js-tabs a.selected{outline:none;}
-
-
-
-//all mobile media query breakpoints
-//==================================
-@media only screen and (max-device-width: 640px),
-only screen and (max-device-width: 667px),
-only screen and (max-width: 480px) {
-
-#apprentice-details {
-    .tableResponsive{
-        margin-top:30px;
-        .funding-cap-alert-td
-            {
-                border-left:10px solid $govuk-blue;
-                background:#fff;
-                  a{
-                    text-decoration:none;
-                    color:$text-colour;
-                     cursor:pointer;
-                }          
+/*See all activity*/
+.timeline {
+    .all-activity {
+        p.activity {
+            &:before {
+                width: 20px;
+                height: 20px;
+                left: -9px;
             }
-        .overlap-alert
-             {
-                border-left:10px solid $error-colour;
-                background:#fff;
-                  a{
-                    text-decoration:none;
-                    color:$text-colour;
-                    cursor:pointer;
-                }          
-              }
-    }
-    .finishEditingBtn{margin-bottom:20px;}
-}  
 
-.bubble-arrow,.overlap-arrow {display:none;} 
-      
-.manage-all-apprentices{
-  td:nth-of-type(1):before {
-        content: "Name";
-        font-weight: normal;
-        margin-top: 5px;
-        min-height: 30px;
+            a {
+                margin-top: 15px;
+                display: block;
+            }
         }
-        td:nth-of-type(2):before {
-        content: "Date of birth";
-        font-weight: normal;
-        margin-top: 5px;
-        }
-        td:nth-of-type(3):before {
-        content: "Satus";
-        font-weight: normal;
-        margin-top: 5px;
-        word-wrap:break-word;
-        } 
-    }
-
-.to-be-sent-list{
-     td:nth-of-type(1):before {
-        content: "Employer";
-        font-weight: normal;
-        margin-top: 5px;
-        min-height: 30px;
-        }
-        td:nth-of-type(2):before {
-        content: "Cohort reference";
-        font-weight: normal;
-        margin-top: 5px;
-        }
-        td:nth-of-type(3):before {
-        content: "Last message";
-        font-weight: normal;
-        margin-top: 5px;
-        word-wrap:break-word;
-        } 
     }
 }
+
+//remove yellow outline around selected tabs
+.js-enabled ul.js-tabs a.selected {
+        outline: none;
+    }
+    //all mobile media query breakpoints
+    //==================================
+    @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
+
+        #apprentice-details {
+            .tableResponsive {
+                margin-top: 30px;
+
+                .funding-cap-alert-td {
+                    border-left: 10px solid $govuk-blue;
+                    background: #fff;
+
+                    a {
+                        text-decoration: none;
+                        color: $text-colour;
+                        cursor: pointer;
+                    }
+                }
+
+                .overlap-alert {
+                    border-left: 10px solid $error-colour;
+                    background: #fff;
+
+                    a {
+                        text-decoration: none;
+                        color: $text-colour;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .finishEditingBtn {
+                margin-bottom: 20px;
+            }
+        }
+
+        .bubble-arrow, .overlap-arrow {
+            display: none;
+        }
+
+        .manage-all-apprentices {
+            td:nth-of-type(1):before {
+                content: "Name";
+                font-weight: normal;
+                margin-top: 5px;
+                min-height: 30px;
+            }
+
+            td:nth-of-type(2):before {
+                content: "Date of birth";
+                font-weight: normal;
+                margin-top: 5px;
+            }
+
+            td:nth-of-type(3):before {
+                content: "Satus";
+                font-weight: normal;
+                margin-top: 5px;
+                word-wrap: break-word;
+            }
+        }
+
+        .to-be-sent-list {
+            td:nth-of-type(1):before {
+                content: "Employer";
+                font-weight: normal;
+                margin-top: 5px;
+                min-height: 30px;
+            }
+
+            td:nth-of-type(2):before {
+                content: "Cohort reference";
+                font-weight: normal;
+                margin-top: 5px;
+            }
+
+            td:nth-of-type(3):before {
+                content: "Last message";
+                font-weight: normal;
+                margin-top: 5px;
+                word-wrap: break-word;
+            }
+        }
+    }
 
