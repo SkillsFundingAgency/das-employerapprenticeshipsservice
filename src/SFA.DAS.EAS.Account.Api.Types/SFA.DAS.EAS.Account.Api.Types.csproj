@@ -75,6 +75,7 @@
     <Compile Include="TransactionSummaryViewModel.cs" />
     <Compile Include="TransactionViewModel.cs" />
     <Compile Include="TransactionsViewModel.cs" />
+    <Compile Include="TransferConnectionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
