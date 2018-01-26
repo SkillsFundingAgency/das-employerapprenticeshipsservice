@@ -21,14 +21,10 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         private readonly IHttpResponseLogger _httpResponseLogger;
 
-        public HttpClientWrapper(ILog logger)
+        public HttpClientWrapper(ILog logger, IHttpResponseLogger httpResponseLogger) 
         {
             _logger = logger;
             MediaTypeWithQualityHeaderValueList = new List<MediaTypeWithQualityHeaderValue>();
-        }
-
-        public HttpClientWrapper(ILog logger, IHttpResponseLogger httpResponseLogger) : this(logger)
-        {
             _httpResponseLogger = httpResponseLogger;
         }
 
