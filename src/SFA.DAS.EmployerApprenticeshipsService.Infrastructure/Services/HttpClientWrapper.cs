@@ -7,10 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain.Http;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
-{
+{ 
     public class HttpClientWrapper : IHttpClientWrapper
     {
         public string AuthScheme { get; set; }
@@ -18,10 +19,13 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         public List<MediaTypeWithQualityHeaderValue> MediaTypeWithQualityHeaderValueList { get; set; }
         private readonly ILog _logger;
 
-        public HttpClientWrapper(ILog logger)
+        private readonly IHttpResponseLogger _httpResponseLogger;
+
+        public HttpClientWrapper(ILog logger, IHttpResponseLogger httpResponseLogger) 
         {
             _logger = logger;
             MediaTypeWithQualityHeaderValueList = new List<MediaTypeWithQualityHeaderValue>();
+            _httpResponseLogger = httpResponseLogger;
         }
 
         public async Task<string> SendMessage<T>(T content, string url)
@@ -33,7 +37,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 {
                     Content = new StringContent(serializeObject, Encoding.UTF8, "application/json")
                 });
-                EnsureSuccessfulResponse(response);
+                await EnsureSuccessfulResponse(response);
 
                 return await response.Content.ReadAsStringAsync();
             }
@@ -46,7 +50,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AuthScheme, authToken);
 
                 var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, url));
-                EnsureSuccessfulResponse(response);
+                await EnsureSuccessfulResponse(response);
 
                 return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
             }
@@ -64,7 +68,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 }
 
                 var response = await client.GetAsync(url);
-                EnsureSuccessfulResponse(response);
+                await EnsureSuccessfulResponse(response);
 
                 return response.Content.ReadAsStringAsync().Result;
             }
@@ -94,7 +98,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return httpClient;
         }
 
-        private void EnsureSuccessfulResponse(HttpResponseMessage response)
+        private async Task EnsureSuccessfulResponse(HttpResponseMessage response)
         {
             if (response.IsSuccessStatusCode)
             {
@@ -113,6 +117,10 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 case 503:
                     throw new ServiceUnavailableException();
                 default:
+                    if ((int) response.StatusCode == 400)
+                    {
+                        await _httpResponseLogger.LogResponseAsync(_logger, response);
+                    }
                     throw new HttpException((int)response.StatusCode, $"Unexpected HTTP exception - ({(int)response.StatusCode}): {response.ReasonPhrase}");
             }
         }
