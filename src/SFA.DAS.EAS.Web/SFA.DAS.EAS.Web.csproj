@@ -425,6 +425,7 @@
     <Compile Include="Attributes\ExportModelStateToTempDataAttribute.cs" />
     <Compile Include="Attributes\ImportModelStateFromTempDataAttribute.cs" />
     <Compile Include="Attributes\ModelStateTempDataAttribute.cs" />
+    <Compile Include="Filters\EnsureFeatureIsEnabledFilter.cs" />
     <Compile Include="Mappings\ViewModelMaps.cs" />
     <Compile Include="Logging\RequestContext.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />

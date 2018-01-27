@@ -287,7 +287,7 @@
     <Compile Include="Interfaces\IDasAccountService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
-    <Compile Include="Interfaces\IFeatureToggle.cs" />
+    <Compile Include="Interfaces\IFeatureToggleService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Http\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
@@ -308,8 +308,8 @@
     <Compile Include="Models\Payments\PaymentEntry.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentDetails.cs" />
-    <Compile Include="Models\FeatureToggle\FeatureToggleItem.cs" />
-    <Compile Include="Models\FeatureToggle\FeatureToggleLookup.cs" />
+    <Compile Include="Models\FeatureToggles\FeatureToggle.cs" />
+    <Compile Include="Models\FeatureToggles\FeatureToggleConfiguration.cs" />
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
     <Compile Include="Models\HmrcLevy\EmployerLevyData.cs" />
     <Compile Include="Models\HmrcLevy\LevyDeclarations.cs" />

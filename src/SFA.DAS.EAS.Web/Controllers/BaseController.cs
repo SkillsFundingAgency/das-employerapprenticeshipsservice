@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -14,34 +13,18 @@ namespace SFA.DAS.EAS.Web.Controllers
 {
     public class BaseController : Controller
     {
+        public IOwinWrapper OwinWrapper;
+
         private const string FlashMessageCookieName = "sfa-das-employerapprenticeshipsservice-flashmessage";
 
-        private readonly IFeatureToggle _featureToggle;
         private readonly IMultiVariantTestingService _multiVariantTestingService;
         private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
-      
-        public IOwinWrapper OwinWrapper;
-        
 
-        public BaseController(
-            IOwinWrapper owinWrapper, 
-            IFeatureToggle featureToggle,
-            IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
+        public BaseController(IOwinWrapper owinWrapper, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
         {
             OwinWrapper = owinWrapper;
-            _featureToggle = featureToggle;
             _multiVariantTestingService = multiVariantTestingService;
             _flashMessage = flashMessage;
-        }
-
-
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            if (!CanAccessFeature())
-            {
-                filterContext.Result = base.View(ControllerConstants.FeatureNotEnabledViewName, null, null);
-            }
         }
 
         protected override ViewResult View(string viewName, string masterName, object model)
@@ -143,39 +126,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             return base.View(viewName, masterName, orchestratorResponse);
-        }
-
-
-        private bool CanAccessFeature()
-        {
-            var features = _featureToggle.GetFeatures();
-            if (features?.Data == null)
-            {
-                return true;
-            }
-
-            var controllerName = ControllerContext.RouteData.Values[ControllerConstants.ControllerKeyName].ToString();
-            var controllerToggles = features.Data.Where(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase)).ToArray();
-            if (!controllerToggles.Any())
-            {
-                return true;
-            }
-
-            var actionName = ControllerContext.RouteData.Values[ControllerConstants.ActionKeyName].ToString();
-            var actionToggle = controllerToggles.Where(t => t.Action.Equals(actionName, StringComparison.CurrentCultureIgnoreCase) || t.Action == "*")
-                                                 .OrderByDescending(t => t.Action) // Should put action = * last as specific action toggle should win
-                                                 .FirstOrDefault();
-            return actionToggle == null || IsUserInToggleWhiteList(actionToggle);
-        }
-        private bool IsUserInToggleWhiteList(FeatureToggleItem toggle)
-        {
-            if (toggle.WhiteList == null || toggle.WhiteList.Length == 0)
-            {
-                return false;
-            }
-
-            var userEmail = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
-            return toggle.WhiteList.Any(pattern => Regex.IsMatch(userEmail, pattern, RegexOptions.IgnoreCase));
         }
 
         public void AddFlashMessageToCookie(FlashMessageViewModel model)

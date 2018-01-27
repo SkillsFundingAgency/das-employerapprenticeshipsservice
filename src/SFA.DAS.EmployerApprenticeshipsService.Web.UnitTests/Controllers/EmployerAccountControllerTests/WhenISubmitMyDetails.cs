@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         private EmployerAccountController _employerAccountController;
         private Mock<EmployerAccountOrchestrator> _orchestrator;
         private Mock<IOwinWrapper> _owinWrapper;
-        private Mock<IFeatureToggle> _featureToggle;
+        private Mock<IFeatureToggleService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
         private EmployerAccountData _accountData;
@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
             _owinWrapper = new Mock<IOwinWrapper>();
-            _featureToggle = new Mock<IFeatureToggle>();
+            _featureToggle = new Mock<IFeatureToggleService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             var logger = new Mock<ILog>();

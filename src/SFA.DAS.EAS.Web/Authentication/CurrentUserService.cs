@@ -14,11 +14,21 @@ namespace SFA.DAS.EAS.Web.Authentication
 
         public CurrentUser GetCurrentUser()
         {
-            var externalUserId = _owinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            var isAuthenticated = _owinWrapper.IsUserAuthenticated();
 
-            return externalUserId != null
-                ? new CurrentUser { ExternalUserId = externalUserId }
-                : null;
+            if (!isAuthenticated)
+            {
+                return null;
+            }
+
+            var externalUserId = _owinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            var email = _owinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
+
+            return new CurrentUser
+            {
+                ExternalUserId = externalUserId,
+                Email = email
+            };
         }
     }
 }

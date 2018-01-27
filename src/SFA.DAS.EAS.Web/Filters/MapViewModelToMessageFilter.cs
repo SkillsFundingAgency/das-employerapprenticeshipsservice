@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using AutoMapper;
 using SFA.DAS.EAS.Application.Messages;
 
@@ -6,11 +7,11 @@ namespace SFA.DAS.EAS.Web.Filters
 {
     public class MapViewModelToMessageFilter : ActionFilterAttribute
     {
-        private readonly IMapper _mapper;
+        private readonly Func<IMapper> _mapperFactory;
 
-        public MapViewModelToMessageFilter(IMapper mapper)
+        public MapViewModelToMessageFilter(Func<IMapper> mapperFactory)
         {
-            _mapper = mapper;
+            _mapperFactory = mapperFactory;
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
@@ -19,7 +20,7 @@ namespace SFA.DAS.EAS.Web.Filters
 
             if (viewModel != null)
             {
-                viewModel.Map(_mapper);
+                viewModel.Map(_mapperFactory());
             }
         }
     }

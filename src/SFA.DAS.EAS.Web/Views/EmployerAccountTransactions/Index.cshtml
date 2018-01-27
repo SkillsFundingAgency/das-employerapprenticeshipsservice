@@ -57,9 +57,8 @@
                 View transactions
             </a>
         </h2>
-            <p>View payments made into and out of your apprenticeship service account. </p>  
+        <p>View payments made into and out of your apprenticeship service account. </p>  
     </div>
-
     <div class="column-half">
         <h2 class="heading-medium">
             <a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.Account.HashedId })">
@@ -68,17 +67,19 @@
         </h2>
         <p>Download your financial transactions within a specific date range. </p>
     </div>
+    @if (Html.IsFeatureEnabled("Transfer", "Index"))
+    {
+        <div class="column-half">
+            <h2 class="heading-medium">
+                <a title="Manage transfers" href="@Url.Action("Index", "Transfer")">
+                    Manage transfers
+                </a>
+            </h2>
+            <p>Connect with other employers and send or receive transfer funds. </p>
+        </div>
+    }
+</div>
 
-    <div class="column-half">
-        <h2 class="heading-medium">
-            <a title="Manage transfers" href="@Url.Action("Index", "Transfer")">
-                Manage transfers
-            </a>
-        </h2>
-        <p>Connect with other employers and send or receive transfer funds. </p>
-    </div>
-
-    </div>
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">

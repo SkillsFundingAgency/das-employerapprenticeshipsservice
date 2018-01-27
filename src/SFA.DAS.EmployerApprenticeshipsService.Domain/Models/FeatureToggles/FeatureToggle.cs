@@ -1,6 +1,6 @@
-﻿namespace SFA.DAS.EAS.Domain.Models.FeatureToggle
+﻿namespace SFA.DAS.EAS.Domain.Models.FeatureToggles
 {
-    public class FeatureToggleItem
+    public class FeatureToggle
     {
         public string Controller { get; set; }
         public string Action { get; set; }
