@@ -2,53 +2,77 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.TransferConnection;
+using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.HashingService;
 using SFA.DAS.Messaging.Interfaces;
 
 namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
 {
-    public class SendTransferConnectionInvitationCommandHandler : AsyncRequestHandler<SendTransferConnectionInvitationCommand>
+    public class SendTransferConnectionInvitationCommandHandler : IAsyncRequestHandler<SendTransferConnectionInvitationCommand, long>
     {
         private readonly CurrentUser _currentUser;
+        private readonly IEmployerAccountRepository _employerAccountRepository;
+        private readonly IHashingService _hashingService;
         private readonly IMembershipRepository _membershipRepository;
         private readonly ITransferConnectionInvitationRepository _transferConnectionInvitationRepository;
         private readonly IMessagePublisher _messagePublisher;
 
         public SendTransferConnectionInvitationCommandHandler(
             CurrentUser currentUser,
+            IEmployerAccountRepository employerAccountRepository,
+            IHashingService hashingService,
             IMembershipRepository membershipRepository,
             ITransferConnectionInvitationRepository transferConnectionInvitationRepository,
             IMessagePublisher messagePublisher)
         {
             _currentUser = currentUser;
+            _employerAccountRepository = employerAccountRepository;
+            _hashingService = hashingService;
             _membershipRepository = membershipRepository;
             _transferConnectionInvitationRepository = transferConnectionInvitationRepository;
             _messagePublisher = messagePublisher;
         }
 
-        protected override async Task HandleCore(SendTransferConnectionInvitationCommand message)
+        public async Task<long> Handle(SendTransferConnectionInvitationCommand message)
         {
-            var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetCreatedTransferConnectionInvitation(message.TransferConnectionInvitationId.Value);
-            var user = await _membershipRepository.GetCaller(transferConnectionInvitation.SenderAccountId, _currentUser.ExternalUserId);
+            var membership = await _membershipRepository.GetCaller(message.SenderAccountHashedId, _currentUser.ExternalUserId);
 
-            if (user == null)
+            if (membership == null)
             {
                 throw new UnauthorizedAccessException();
             }
 
-            transferConnectionInvitation.Status = TransferConnectionInvitationStatus.Sent;
+            var receiverAccountId = _hashingService.DecodeValue(message.ReceiverAccountHashedId);
+            var senderAccountId = _hashingService.DecodeValue(message.SenderAccountHashedId);
+            var senderAccountTask = _employerAccountRepository.GetAccountById(senderAccountId);
+            var receiverAccountTask = _employerAccountRepository.GetAccountById(receiverAccountId);
+            var senderAccount = await senderAccountTask;
+            var receiverAccount = await receiverAccountTask;
 
-            await _transferConnectionInvitationRepository.Send(transferConnectionInvitation);
+            var transferConnectionInvitation = new TransferConnectionInvitation
+            {
+                SenderUserId = membership.UserId,
+                SenderAccountId = senderAccount.Id,
+                ReceiverAccountId = receiverAccount.Id,
+                Status = TransferConnectionInvitationStatus.Sent,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            var transferConnectionInvitationId = await _transferConnectionInvitationRepository.Add(transferConnectionInvitation);
 
             await _messagePublisher.PublishAsync(new TransferConnectionInvitationSentMessage(
-                transferConnectionInvitation.Id,
+                transferConnectionInvitationId,
                 transferConnectionInvitation.SenderAccountId,
+                senderAccount.Name,
                 transferConnectionInvitation.ReceiverAccountId,
-                user.FullName(),
-                user.UserRef
+                receiverAccount.Name,
+                membership.FullName(),
+                membership.UserRef
             ));
+
+            return transferConnectionInvitationId;
         }
     }
 }

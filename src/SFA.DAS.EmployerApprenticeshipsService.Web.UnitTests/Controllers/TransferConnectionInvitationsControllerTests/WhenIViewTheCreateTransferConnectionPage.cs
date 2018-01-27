@@ -4,11 +4,14 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Web.Controllers;
+using SFA.DAS.EAS.Web.ViewModels;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersController
+namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsControllerTests
 {
-    public class WhenIViewTheTransfersPage
+    public class WhenIRequestTheStartTransferConnectionPage
     {
+        private const string HashedAccountId = "FOOBAR";
+
         private TransferConnectionInvitationsController _controller;
         private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
         private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
@@ -20,14 +23,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersController
         }
 
         [Test]
-        public void ThenIShouldBeShownTheTransferConnectionsPage()
+        public void ThenIShouldBeShownTheStartTransferConnectionPage()
         {
-            var result = _controller.Index() as ViewResult;
-            var model = result?.Model;
+            var result = _controller.Start(HashedAccountId) as ViewResult;
+            var model = result?.Model as StartTransferConnectionInvitationViewModel;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.ViewName, Is.EqualTo(""));
-            Assert.That(model, Is.Null);
+            Assert.That(model, Is.Not.Null);
+            Assert.That(model.SenderAccountHashedId, Is.EqualTo(HashedAccountId));
         }
     }
 }

@@ -425,6 +425,7 @@
     <Compile Include="Attributes\ExportModelStateToTempDataAttribute.cs" />
     <Compile Include="Attributes\ImportModelStateFromTempDataAttribute.cs" />
     <Compile Include="Attributes\ModelStateTempDataAttribute.cs" />
+    <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Filters\EnsureFeatureIsEnabledFilter.cs" />
     <Compile Include="Mappings\ViewModelMaps.cs" />
     <Compile Include="Logging\RequestContext.cs" />
@@ -444,12 +445,11 @@
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
-    <Compile Include="Controllers\TransferConnectionInvitationController.cs" />
-    <Compile Include="Controllers\TransferController.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsController.cs" />
+    <Compile Include="Controllers\TransfersController.cs" />
     <Compile Include="Extensions\DynamicExtentions.cs" />
     <Compile Include="Extensions\OrchestratorExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
-    <Compile Include="Extensions\ValidationResultExtensions.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
     <Compile Include="Filters\MapViewModelToMessageFilter.cs" />
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
@@ -466,7 +466,7 @@
     <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
-    <Compile Include="ViewModels\CreateTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\DismissTaskViewModel.cs" />
     <Compile Include="ViewModels\EnvironmentDetailsViewModel.cs" />
     <Compile Include="ViewModels\FinanceDashboardViewModel.cs" />
@@ -545,8 +545,8 @@
     <Compile Include="ViewModels\Organisation\SelectEmployerViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\TransactionsDownloadResultViewModel.cs" />
-    <Compile Include="ViewModels\TransferConnectionInvitation\CreatedTransferConnectionInvitationViewModel.cs" />
-    <Compile Include="ViewModels\TransferConnectionInvitation\SentTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitations\SendTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitations\SentTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\SignInUserViewModel.cs" />
     <Compile Include="ViewModels\FlashMessageViewModel.cs" />
@@ -601,11 +601,11 @@
     <Content Include="Views\EmployerTeam\Activity.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\TransactionsDownload.cshtml" />
-    <Content Include="Views\Transfer\Index.cshtml" />
-    <Content Include="Views\TransferConnectionInvitation\Index.cshtml" />
-    <Content Include="Views\TransferConnectionInvitation\Create.cshtml" />
-    <Content Include="Views\TransferConnectionInvitation\Send.cshtml" />
-    <Content Include="Views\TransferConnectionInvitation\Sent.cshtml" />
+    <Content Include="Views\Transfers\Index.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Index.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Start.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Send.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Sent.cshtml" />
     <Content Include="Views\Shared\_ValidationSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using SFA.DAS.EAS.Application.Queries.GetCreatedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitationQuery;
-using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitation;
+using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
+using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 
 namespace SFA.DAS.EAS.Web.Mappings
 {
@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Web.Mappings
     {
         public TransferConnectionMaps()
         {
-            CreateMap<GetCreatedTransferConnectionInvitationResponse, CreatedTransferConnectionInvitationViewModel>()
+            CreateMap<GetTransferConnectionInvitationAccountResponse, SendTransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore());
 
             CreateMap<GetSentTransferConnectionInvitationResponse, SentTransferConnectionInvitationViewModel>()

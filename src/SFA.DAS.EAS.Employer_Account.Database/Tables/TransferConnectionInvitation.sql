@@ -11,3 +11,9 @@
 	CONSTRAINT [FK_employer_account.TransferConnectionInvitation_employer_account.Account_Id] FOREIGN KEY ([SenderAccountId]) REFERENCES [employer_account].[Account] ([Id]),
 	CONSTRAINT [FK_employer_account.TransferConnectionInvitation_employer_account.AccountId] FOREIGN KEY ([ReceiverAccountId]) REFERENCES [employer_account].[Account] ([Id])
 )
+GO
+
+CREATE UNIQUE INDEX [IX_SenderAccountId_ReceiverAccountId]
+ON [employer_account].[TransferConnectionInvitation]([SenderAccountId] ASC, [ReceiverAccountId] ASC)
+WHERE [Status] = 1
+GO

@@ -5,9 +5,9 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Web.Controllers;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersController
+namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsControllerTests
 {
-    public class WhenIViewTheTransfersPage
+    public class WhenIViewTheTransferConnectionsPage
     {
         private TransferConnectionInvitationsController _controller;
         private readonly Mock<IMediator> _mediator = new Mock<IMediator>();

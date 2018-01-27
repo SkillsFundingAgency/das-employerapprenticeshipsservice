@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Application.Messages;
-using SFA.DAS.EAS.Domain;
 
 namespace SFA.DAS.EAS.Web.Attributes
 {
@@ -13,26 +11,24 @@ namespace SFA.DAS.EAS.Web.Attributes
             if (!filterContext.Controller.ViewData.ModelState.IsValid)
             {
                 ExportModelStateToTempData(filterContext);
-                
+
+                foreach (string key in filterContext.HttpContext.Request.QueryString.Keys)
+                {
+                    if (!filterContext.RouteData.Values.ContainsKey(key))
+                    {
+                        filterContext.RouteData.Values.Add(key, filterContext.HttpContext.Request.QueryString[key]);
+                    }
+                }
+
                 filterContext.Result = new RedirectToRouteResult(filterContext.RouteData.Values);
             }
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            var exception = filterContext.Exception as DomainException;
-
-            if (exception != null)
+            if (!filterContext.Controller.ViewData.ModelState.IsValid && (filterContext.Result is RedirectResult || filterContext.Result is RedirectToRouteResult))
             {
-                var partialFieldName = ExpressionHelper.GetExpressionText(exception.Expression);
-                var fullHtmlFieldName = $"{nameof(ViewModel<object>.Message)}.{partialFieldName}";
-
-                filterContext.Controller.ViewData.ModelState.AddModelError(fullHtmlFieldName, exception.Message);
-
                 ExportModelStateToTempData(filterContext);
-
-                filterContext.Result = new RedirectToRouteResult(filterContext.RouteData.Values);
-                filterContext.ExceptionHandled = true;
             }
         }
     }

@@ -189,7 +189,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ServiceBusConnectionKeyAttribute.cs" />
-    <Compile Include="DomainException.cs" />
     <Compile Include="Configuration\CommitmentsApiClientConfiguration.cs" />
     <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
@@ -334,8 +333,8 @@
     <Compile Include="Models\Notification\EmailMessage.cs" />
     <Compile Include="Models\Notification\MessageFormat.cs" />
     <Compile Include="Models\Notification\NotificationMessage.cs" />
-    <Compile Include="Models\TransferConnection\TransferConnectionInvitation.cs" />
-    <Compile Include="Models\TransferConnection\TransferConnectionInvitationStatus.cs" />
+    <Compile Include="Models\TransferConnections\TransferConnectionInvitation.cs" />
+    <Compile Include="Models\TransferConnections\TransferConnectionInvitationStatus.cs" />
     <Compile Include="Models\UserProfile\CurrentUser.cs" />
     <Compile Include="Models\UserProfile\Role.cs" />
     <Compile Include="Models\UserProfile\User.cs" />

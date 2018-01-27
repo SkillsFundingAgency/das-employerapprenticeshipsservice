@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Transfers";
+    ViewBag.Section = "finance";
+    ViewBag.PageID = "page-transfers";
+    ViewBag.GaData.Vpv = "/accounts/transfers";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Transfers</h1>
+        <p>You can transfer up to 10% of your previous year's apprenticeship levy to other employers with an apprenticeship service account.</p>
+        <p>To set up a transfer, you first need to connect with a receiving employer through the apprenticeship service. They will then be able to request transfer funds from you.</p>
+        <a class="button" href="@Url.Action("Index", "TransferConnectionInvitations")">Connect with employer</a>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAccountTransactions")">Finance</a></li>
+            <li>@ViewBag.Title</li>
+        </ol>
+    </div>
+}

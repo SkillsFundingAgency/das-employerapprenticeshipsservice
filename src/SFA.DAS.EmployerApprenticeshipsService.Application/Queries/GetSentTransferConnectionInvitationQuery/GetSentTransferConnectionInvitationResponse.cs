@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Domain.Models.TransferConnection;
+﻿using SFA.DAS.EAS.Domain.Models.TransferConnections;
 
 namespace SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitationQuery
 {

@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using MediatR;
 
-namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
+namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
 {
-    public class SendTransferConnectionInvitationCommand : IAsyncRequest<long>
+    public class GetTransferConnectionInvitationAccountQuery : IAsyncRequest<GetTransferConnectionInvitationAccountResponse>
     {
         [Required(ErrorMessage = "Account ID is required.")]
         [RegularExpression(@"^[A-Za-z\d]{6,6}$", ErrorMessage = "Account ID must be 6 alphanumeric characters.")]
@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
         {
             if (ReceiverAccountHashedId == SenderAccountHashedId)
             {
-                yield return new ValidationResult("Account ID cannot be the current account's ID.", new [] { nameof(ReceiverAccountHashedId) });
+                yield return new ValidationResult("Account ID cannot be the current account's ID.", new[] { nameof(ReceiverAccountHashedId) });
             }
         }
     }
