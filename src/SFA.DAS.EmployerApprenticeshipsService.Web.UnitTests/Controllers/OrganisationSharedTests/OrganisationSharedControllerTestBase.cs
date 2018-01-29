@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationSharedTests
     public abstract class OrganisationSharedControllerTestBase
     {
         private Mock<IOwinWrapper> _owinWrapper;
-        private Mock<IFeatureToggle> _featureToggle;
+        private Mock<IFeatureToggleService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ILog> _logger;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationSharedTests
         {
             Orchestrator = new Mock<OrganisationOrchestrator>();
             _owinWrapper = new Mock<IOwinWrapper>();
-            _featureToggle = new Mock<IFeatureToggle>();
+            _featureToggle = new Mock<IFeatureToggleService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             Mapper = new Mock<IMapper>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();

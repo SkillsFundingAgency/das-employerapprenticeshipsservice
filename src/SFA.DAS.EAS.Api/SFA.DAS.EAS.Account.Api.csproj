@@ -312,7 +312,7 @@
   <ItemGroup>
     <Compile Include="App_Start\CustomExceptionHandler.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\RequestContext.cs" />
+    <Compile Include="Logging\RequestContext.cs" />
     <Compile Include="App_Start\Startup.auth.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\StructuremapWebApi.cs" />

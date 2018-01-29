@@ -23,12 +23,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public OrganisationSharedController(IOwinWrapper owinWrapper,
             OrganisationOrchestrator orchestrator,
-            IFeatureToggle featureToggle,
+            IFeatureToggleService featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
             IMapper mapper,
             ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
+            : base(owinWrapper, multiVariantTestingService, flashMessage)
 
         {
             _orchestrator = orchestrator;

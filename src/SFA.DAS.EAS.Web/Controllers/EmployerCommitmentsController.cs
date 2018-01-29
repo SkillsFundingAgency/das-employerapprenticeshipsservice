@@ -12,9 +12,9 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class EmployerCommitmentsController : BaseController
     {
         public EmployerCommitmentsController(IOwinWrapper owinWrapper,
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService,
+            IFeatureToggleService featureToggle, IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
+            : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
         }
 

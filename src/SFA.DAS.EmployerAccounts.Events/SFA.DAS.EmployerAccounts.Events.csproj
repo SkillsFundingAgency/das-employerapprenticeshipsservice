@@ -64,6 +64,7 @@
     <Compile Include="Messages\PaymentCreatedMessage.cs" />
     <Compile Include="Messages\AccountNameChangedMessage.cs" />
     <Compile Include="Messages\AgreementCreatedMessage.cs" />
+    <Compile Include="Messages\TransferConnectionInvitationSentMessage.cs" />
     <Compile Include="Messages\UserInvitedMessage.cs" />
     <Compile Include="Messages\UserJoinedMessage.cs" />
     <Compile Include="Messages\AccountCreatedMessage.cs" />

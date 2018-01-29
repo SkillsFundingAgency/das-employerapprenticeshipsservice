@@ -26,11 +26,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public SearchOrganisationController(IOwinWrapper owinWrapper,
             SearchOrganisationOrchestrator orchestrator,
-            IFeatureToggle featureToggle,
+            IFeatureToggleService featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IMapper mapper)
-            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
+            : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _orchestrator = orchestrator;
             _mapper = mapper;

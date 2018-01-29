@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -15,8 +13,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
     {
         private const string UserEmail = "user.one@unit.tests";
         private const string FlashMessageCookieName = "sfa-das-employerapprenticeshipsservice-flashmessage";
-
-        private Mock<IFeatureToggle> _featureToggle;
+        
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IMultiVariantTestingService> _multiVariantTestingService;
         private TestController _controller;
@@ -30,10 +27,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
             _owinWrapper.Setup(x => x.GetClaimValue("email"))
                 .Returns(UserEmail);
 
-            _featureToggle = new Mock<IFeatureToggle>();
-            _featureToggle.Setup(x => x.GetFeatures())
-                .Returns(new FeatureToggleLookup { Data = new List<FeatureToggleItem>() });
-
             _multiVariantTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
@@ -42,7 +35,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
             routes.Values["controller"] = "Test";
             _controllerContext.Setup(x => x.RouteData).Returns(routes);
 
-            _controller = new TestController(_featureToggle.Object, _owinWrapper.Object, 
+            _controller = new TestController(_owinWrapper.Object, 
                 _multiVariantTestingService.Object, _flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object
@@ -79,9 +72,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
 
         internal class TestController : BaseController
         {
-            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, 
+            public TestController(IOwinWrapper owinWrapper, 
                 IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
-                : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
+                : base(owinWrapper, multiVariantTestingService, flashMessage)
             {
 
             }
