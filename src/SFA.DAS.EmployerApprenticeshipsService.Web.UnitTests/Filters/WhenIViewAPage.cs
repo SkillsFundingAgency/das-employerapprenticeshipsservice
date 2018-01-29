@@ -29,7 +29,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters
         {
             _currentUserService = new Mock<ICurrentUserService>();
             _featureToggleService = new Mock<IFeatureToggleService>();
-            _currentUser = new CurrentUser { Email = CurrentUserEmail };
             _routeData = new RouteData();
 
             _routeData.Values.Add(ControllerConstants.ControllerKeyName, ControllerName);
@@ -40,25 +39,27 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters
                 RouteData = _routeData,
                 Controller = _controller
             };
-
-            _currentUserService.Setup(c => c.GetCurrentUser()).Returns(_currentUser);
-            _featureToggleService.Setup(f => f.IsFeatureEnabled(ControllerName, ActionName, CurrentUserEmail)).Returns(true);
-
+            
             _filter = new EnsureFeatureIsEnabledFilter(() => _currentUserService.Object, () => _featureToggleService.Object);
         }
 
         [Test]
-        public void ThenIShouldBeShownThePageIfTheFeatureIsEnabled()
+        public void ThenIShouldBeShownThePageIfTheFeatureIsEnabledAndIAmLoggedIn()
         {
+            _currentUser = new CurrentUser { Email = CurrentUserEmail };
+            _featureToggleService.Setup(f => f.IsFeatureEnabled(ControllerName, ActionName, CurrentUserEmail)).Returns(true);
+            _currentUserService.Setup(c => c.GetCurrentUser()).Returns(_currentUser);
+
             _filter.OnActionExecuting(_filterContext);
 
             Assert.That(_filterContext.Result, Is.Null);
         }
 
         [Test]
-        public void ThenIShouldNotBeShownThePageIfTheFeatureIsNotEnabled()
+        public void ThenIShouldNotBeShownThePageIfTheFeatureIsNotEnabledAndIAmLoggedIn()
         {
             _featureToggleService.Setup(f => f.IsFeatureEnabled(ControllerName, ActionName, CurrentUserEmail)).Returns(false);
+            _currentUserService.Setup(c => c.GetCurrentUser()).Returns(_currentUser);
 
             _filter.OnActionExecuting(_filterContext);
 
@@ -73,6 +74,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters
         {
             _currentUser = null;
 
+            _featureToggleService.Setup(f => f.IsFeatureEnabled(ControllerName, ActionName, null)).Returns(true);
+            _currentUserService.Setup(c => c.GetCurrentUser()).Returns(_currentUser);
+
             _filter.OnActionExecuting(_filterContext);
 
             Assert.That(_filterContext.Result, Is.Null);
@@ -82,8 +86,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters
         public void ThenIShouldNotBeShownThePageIfTheFeatureIsNotEnabledAndIAmNotLoggedIn()
         {
             _currentUser = null;
-
-            _featureToggleService.Setup(f => f.IsFeatureEnabled(ControllerName, ActionName, CurrentUserEmail)).Returns(false);
+            
+            _featureToggleService.Setup(f => f.IsFeatureEnabled(ControllerName, ActionName, null)).Returns(false);
+            _currentUserService.Setup(c => c.GetCurrentUser()).Returns(_currentUser);
 
             _filter.OnActionExecuting(_filterContext);
 
