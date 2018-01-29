@@ -7,17 +7,21 @@ using MediatR;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTransactions;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments;
 using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -25,18 +29,24 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly ICurrentDateTime _currentTime;
         private readonly IMediator _mediator;
+        private readonly IHashingService _hashingService;
 
         protected EmployerAccountTransactionsOrchestrator()
         {
 
         }
 
-        public EmployerAccountTransactionsOrchestrator(IMediator mediator, ICurrentDateTime currentTime)
+        public EmployerAccountTransactionsOrchestrator(IMediator mediator, ICurrentDateTime currentTime, IHashingService hashingService)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
+
+            if (hashingService == null)
+                throw new ArgumentNullException(nameof(hashingService));
+            
             _mediator = mediator;
             _currentTime = currentTime;
+            _hashingService = hashingService;
         }
 
         public async Task<OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>>
@@ -391,5 +401,40 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
         }
+
+        //public virtual async Task<OrchestratorResponse<TransactionsDownloadResultViewModel>> GetTransactionsDownloadResultViewModel(
+        //    string hashedId, string externalUserId, DateTime fromDate,
+        //    DateTime toDate)
+        //{
+        //    var accountId = _hashingService.DecodeValue(hashedId);
+
+        //    var employerAccountPaymentsResult = await _mediator.SendAsync(new GetTransactionsDownloadResultViewModel
+        //    {
+        //        AccountId = accountId,
+        //        ExternalUserId = externalUserId,
+        //        FromDate = fromDate,
+        //        ToDate = toDate
+        //    });
+
+        //    return new OrchestratorResponse<TransactionsDownloadResultViewModel>
+        //    {
+        //        Data = new TransactionsDownloadResultViewModel
+        //        {
+        //            Account = new Account {HashedId = hashedId },
+        //            StartDate = new TransactionsDownloadResultViewModel.TransactionsDownloadDateTimeViewModel
+        //            {
+        //                Month = fromDate.Month,
+        //                Year = fromDate.Year,
+        //            },
+        //            EndDate = new TransactionsDownloadResultViewModel.TransactionsDownloadDateTimeViewModel
+        //            {
+        //                Month = toDate.Month,
+        //                Year = toDate.Year,
+        //            },
+        //            Transactions = employerAccountPaymentsResult.Transactions
+        //        }
+        //    };
+            
+        //}
     }
 }

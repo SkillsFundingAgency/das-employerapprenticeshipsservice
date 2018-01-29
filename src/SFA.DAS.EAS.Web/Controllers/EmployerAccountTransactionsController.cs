@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MediatR;
+using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -14,12 +18,18 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class EmployerAccountTransactionsController : BaseController
     {
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
+        private readonly IMediator _mediator;
+        private readonly IHashingService _hashingService;
 
         public EmployerAccountTransactionsController(IOwinWrapper owinWrapper, IFeatureToggleService featureToggle,
+            IHashingService hashingService,
+            IMediator mediator,
             EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
+            ICookieStorageService<FlashMessageViewModel> flashMessage, ITransactionFormatterFactory transactionsFormatterFactory)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
+            _mediator = mediator;
+            _hashingService = hashingService;
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }
 
@@ -41,10 +51,49 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance/downloadtransactions")]
         public ActionResult TransactionsDownload(string hashedAccountId)
         {
-            return View(new OrchestratorResponse<TransactionsDownloadResultViewModel>
+            return View(new GetTransactionsDownloadRequestAndResponse
             {
-                Data = new TransactionsDownloadResultViewModel { HashedAccountId = hashedAccountId }
+                HashedId = hashedAccountId
             });
+        }
+
+        [Route("finance/downloadtransactionsdata")]
+        public async Task<ActionResult> TransactionDownloadByDate(string hashedAccountId,
+            GetTransactionsDownloadRequestAndResponse viewModel)
+        {
+            const string viewName = @"TransactionsDownload";
+
+            if (!viewModel.Valid)
+            {
+                return View(viewName, viewModel);
+            }
+
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+
+            viewModel.AccountId = accountId;
+            viewModel.ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+
+            var task = _mediator.SendAsync(viewModel);
+
+            var transactionsDownloadResultViewModel = await task;
+
+            if (transactionsDownloadResultViewModel.IsUnauthorized)
+            {
+                return RedirectToAction(ControllerConstants.IndexActionName,
+                    ControllerConstants.AccessDeniedControllerName);
+            }
+
+            if ((task.Exception != null && task.Exception.InnerExceptions.Any()) ||
+                !transactionsDownloadResultViewModel.Valid ||
+                transactionsDownloadResultViewModel.Transactions == null ||
+                !transactionsDownloadResultViewModel.Transactions.Any())
+            {
+                return View(viewName, transactionsDownloadResultViewModel);
+            }
+
+            return File(transactionsDownloadResultViewModel.FileDate,
+                transactionsDownloadResultViewModel.MimeType,
+                $"esfaTransactions_{DateTime.Now:yyyyMMddHHmmss}.{transactionsDownloadResultViewModel.FileExtension}");
         }
 
         [Route("finance/{year}/{month}")]

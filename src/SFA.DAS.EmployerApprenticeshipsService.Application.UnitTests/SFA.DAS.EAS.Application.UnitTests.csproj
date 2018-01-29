@@ -285,6 +285,10 @@
     <Compile Include="FakeTimeProvider.cs" />
     <Compile Include="Commands\AcceptInvitationTests\WhenICallAcceptInvitation.cs" />
     <Compile Include="Commands\RefreshEmployerLevyDataTests\WhenIReceiveTheCommand.cs" />
+    <Compile Include="Formatters\Transactions\BaseFormatterTest.cs" />
+    <Compile Include="Formatters\Transactions\CsvTransactionFormatterTests.cs" />
+    <Compile Include="Formatters\Transactions\ExcelTransactionFormatterTests\WhenICreateAExcelFile.cs" />
+    <Compile Include="Factories\TransactionFormatterFactory\WhenIUseTheTransactionFormatterFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetActivitiesTests\WhenIGetActivities.cs" />
     <Compile Include="Queries\GetLatestActivitiesTests\WhenIGetLatestActivities.cs" />
@@ -310,6 +314,8 @@
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetCharity\WhenIGetCharity.cs" />
     <Compile Include="Queries\GetCharity\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetTransactionsDownloadRequestAndResponse\GetTransactionsDownloadRequestAndResponseTests.cs" />
+    <Compile Include="Queries\GetTransactionsDownloadRequestAndResponse\WhenIGetTransactionsDownloadRequestAndResponse.cs" />
     <Compile Include="Queries\GetEmployerAgreementPdfTests\WhenIGetTheEmployerAgreement.cs" />
     <Compile Include="Queries\GetEmployerAgreementPdfTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementByIdTests\WhenIGetAnAgreement.cs" />

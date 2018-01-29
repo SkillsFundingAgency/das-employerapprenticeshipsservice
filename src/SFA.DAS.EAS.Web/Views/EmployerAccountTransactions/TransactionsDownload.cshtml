@@ -1,28 +1,165 @@
-﻿@using System.Globalization
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.TransactionsDownloadResultViewModel>
-@{
-    var culture = new CultureInfo("en-GB");
-}
-@{ViewBag.PageID = "page-transactions"; }
+﻿@using SFA.DAS.EAS.Application.Formatters.TransactionDowloads
+@using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel
+@model GetTransactionsDownloadRequestAndResponse
+@{ViewBag.PageID = "download-transactions"; }
 @{ViewBag.Section = "finance"; }
 @{ViewBag.Title = "Download transactions";}
-
 @{
     ViewBag.GaData.Vpv = "/accounts/finance/downloadtransactions";
 }
-
 <div class="grid-row">
     <div class="column-full">
+        <div class="notification-wrapper">
+        @{
+            if (Model.HasSummaryErrors)
+            {
+                <div class="error-summary" tabindex="-1">
+                    <h1 class="bold-medium">There are errors on this page that need your attention</h1>
+                    <p>Check the following details:</p>
+                    <ul class="error-summary-list">
+                        @{
+                            if (Model.EitherDateInFuture)
+                            {
+                                <li>
+                                    <a class="danger" href="#StartDate">You can't enter a future date</a>
+                                </li>
+                            }
+                            else if (Model.FoundNoTransactions)
+                            {
+                                <li>
+                                    <a class="danger" href="#StartDate">There are no transactions in the date range</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+        }
+        </div>
+
         <h1 class="heading-xlarge">
             Download transactions
         </h1>
+
+        <div class="column-one-third">
+            <p>Enter a start and end date to download transactions within a specific date range.</p>
+            <form action="@Url.Action("TransactionDownloadByDate")" method="GET">
+
+                <div class="form-error-group form-group error">
+                    <span class="form-label-bold">Start date</span>
+                    <span class="form-hint">For example, 5 2017</span>
+                    <div id="StartDate" class="form-date">
+                        @{
+                            if (!Model.StartDate.Valid)
+                            {
+                                <span class="error-message" id="error-message-StartDate">Enter a different start date</span>
+
+                            }
+                            else if (Model.StartDate.DateInFuture)
+                            {
+                                <span class="error-message" id="error-message-StartDate">The latest date you can enter is @Model.StartDate.MaximumDate.ToString("MM yyyy")</span>
+                            }
+                        }
+                        <div class="form-group form-group-month">
+                            <label for="StartDate.Month">
+                                Month
+                            </label>
+                            @Html.TextBox("StartDate.Month", Model.StartDate.Month, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = "StartDate.Month" })
+                            @*<input aria-labelledby="StartDate.Month" class="form-control length-limit" id="StartDate_Month" max="12" maxlength="2" min="1" name="StartDate.Month" type="number" value="34">*@
+                        </div>
+
+
+                        <div class="form-group form-group-month">
+                            <label for="StartDate.Year">
+                                Year
+                            </label>
+                            @Html.TextBox("StartDate.Year", Model.StartDate.Year, new { @class = "form-control length-limit", type = "number", maxlength = "4", min = "1900", max = "9999", aria_labelledby = "StartDate.Year" })
+                            @*<input aria-labelledby="StartDate.Year" class="form-control length-limit" id="StartDate_Year" max="9999" maxlength="4" min="1900" name="StartDate.Year" type="number" value="18">*@
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-error-group form-group error">
+                    <span class="form-label-bold">End date</span>
+                    <span class="form-hint">For example, 10 2017</span>
+                    <div id="EndDate" class="form-date">
+                        @{
+                            if (!Model.EndDate.Valid)
+                            {
+                                <span class="error-message" id="error-message-EndDate">Enter a different end date</span>
+
+                            }
+                            else if (Model.EndDate.DateInFuture)
+                            {
+                                <span class="error-message" id="error-message-EndDate">The latest date you can enter is @Model.EndDate.MaximumDate.ToString("MM yyyy")</span>
+                            }
+                        }
+                        <div class="form-group form-group-month">
+                            <label for="EndDate.Month">
+                                Month
+                            </label>
+                            @Html.TextBox("EndDate.Month", Model.EndDate.Month, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = "EndDate.Month" })
+                            @*<input aria-labelledby="EndDate.Month" class="form-control length-limit" id="EndDate_Month" max="12" maxlength="2" min="1" name="EndDate.Month" type="number" value="34">*@
+                        </div>
+                        <div class="form-group form-group-month">
+                            <label for="StartDate.Year">
+                                Year
+                            </label>
+                            @Html.TextBox("EndDate.Year", Model.EndDate.Year, new { @class = "form-control length-limit", type = "number", maxlength = "4", min = "1900", max = "9999", aria_labelledby = "EndDate.Year" })
+                            @*<input aria-labelledby="EndDate.Year" class="form-control length-limit" id="EndDate_Year" max="9999" maxlength="4" min="1900" name="EndDate.Year" type="number" value="18">*@
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="form-group">
+                    <label class="form-label" for="DownloadFormat">Select format</label>
+                    @Html.DropDownList("DownloadFormat",
+                        EnumHelper.GetSelectList(typeof(DownloadFormatType)),
+                        new
+                        {
+                            @class = "form-control",
+                        })
+                </div>
+
+                <button type="submit" class="button" aria-label="Download" id="submit-download">Download</button>
+            </form>
+        </div>
+
+        @*
+            Please retain for future release - approved styling
+
+            <div class="column-one-quarter">
+            <p class="grey-rounded"><span class="rounded-text">OR</span></p>
+        </div>
+
+        <div class="column-one-third">
+            <p>Download all transactions to date.</p>
+            <div class="form-group">
+                <label class="form-label" for="select-format-all">Select format</label>
+                <select class="form-control" id="select-format-all" name="select-format-all">
+                    @Html.DropDownList("select-format-all",
+                        EnumHelper.GetSelectList(typeof(SFA.DAS.EAS.Web.ViewModels.DownloadFormatType)),
+                        new
+                        {
+                            @class = "form-control",
+                        })
+                    @*<option>CSV</option>
+                    <option>PDF</option>
+                    <option>Excel</option>
+                </select>
+            </div>
+            <button type="submit" class="button" aria-label="Download" id="submit-download-all">Download all transactions</button>
+        </div>*@
+
     </div>
 </div>
+
+
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = Model.Data.HashedAccountId})">Home</a></li>
-            <li><a href="@Url.Action("Index", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.HashedAccountId})">Finance</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = Model.HashedId})">Home</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAccountTransactions", new {HashedAccountId = Model.HashedId})">Finance</a></li>
             <li>@ViewBag.Title</li>
         </ol>
     </div>

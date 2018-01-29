@@ -139,6 +139,24 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToList();
         }
 
+        public async Task<List<TransactionDownloadLine>> GetAllTransactionDetailsForAccountByDate(long accountId, DateTime fromDate, DateTime toDate)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@AccountId", accountId, DbType.Int64);
+                parameters.Add("@fromDate", fromDate, DbType.DateTime);
+                parameters.Add("@toDate", toDate, DbType.DateTime);
+
+                return await c.QueryAsync<TransactionDownloadLine>(
+                    sql: "[employer_financial].[GetAllTransactionDetailsForAccountByDate]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.ToList();
+        }
+
         private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)
         {
             var transactions = new List<TransactionLine>();

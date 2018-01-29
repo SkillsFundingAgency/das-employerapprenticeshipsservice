@@ -548,7 +548,6 @@
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SelectEmployerViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationDetailsViewModel.cs" />
-    <Compile Include="ViewModels\TransactionsDownloadResultViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\SendTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\SentTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
