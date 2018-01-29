@@ -21,10 +21,10 @@ namespace SFA.DAS.EAS.Web.Controllers
         public TaskController(
             IOwinWrapper owinWrapper, 
             TaskOrchestrator taskOrchestrator,
-            IFeatureToggle featureToggle, 
+            IFeatureToggleService featureToggle, 
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage, 
-            ILog logger) : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
+            ILog logger) : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _orchestrator = taskOrchestrator;
             _logger = logger;

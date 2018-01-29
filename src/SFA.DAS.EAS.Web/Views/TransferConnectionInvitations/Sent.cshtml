@@ -1,0 +1,49 @@
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations.SentTransferConnectionInvitationViewModel
+
+@{
+    ViewBag.Title = "Sent transfer connection invitation";
+    ViewBag.Section = "finance";
+    ViewBag.PageID = "page-transfer-connection-invitations-sent";
+    ViewBag.GaData.Vpv = "/accounts/transfers/connection/invitations/sent";
+}
+
+@Html.Partial("_ValidationSummary", ViewData.ModelState)
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <div class="success-summary">
+            <h1 class="bold-large">Request sent</h1>
+            <p><i class="icon-green-tick"></i> A request to connect has been sent to @Model.ReceiverAccount.Name with account ID @Model.ReceiverAccount.HashedId</p>
+        </div>
+        <h1 class="heading-xlarge">What next?</h1>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group @(Html.IsValid(m => m.Choice) ? "" : "error")">
+                <fieldset>
+                    <legend>
+                        <span class="visuallyhidden">What next?</span>
+                        @Html.ValidationMessageFor(m => m.Choice)
+                    </legend>
+                    <label class="block-label selection-button-radio">
+                        @Html.RadioButtonFor(m => m.Choice, "GoToTransfersPage")
+                        Go to the transfers dashboard
+                    </label>
+                    <label class="block-label selection-button-radio">
+                        @Html.RadioButtonFor(m => m.Choice, "GoToHomepage")
+                        Go to the homepage
+                    </label>
+                </fieldset>
+            </div>
+            <button class="button" type="submit">Continue</button>
+        }
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a class="link-back" href="@Url.Action("Index", "TransferConnectionInvitations")">Back</a></li>
+        </ol>
+    </div>
+}

@@ -312,13 +312,14 @@
   <ItemGroup>
     <Compile Include="App_Start\CustomExceptionHandler.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\RequestContext.cs" />
+    <Compile Include="Logging\RequestContext.cs" />
     <Compile Include="App_Start\Startup.auth.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\StructuremapWebApi.cs" />
     <Compile Include="App_Start\ValidationErrorResult.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\ApiAuthorizeAttribute.cs" />
+    <Compile Include="Controllers\AccountTransferConnectionsController.cs" />
     <Compile Include="Controllers\AccountTransactionsController.cs" />
     <Compile Include="Controllers\AccountLevyController.cs" />
     <Compile Include="Controllers\AccountLegalEntitiesController.cs" />

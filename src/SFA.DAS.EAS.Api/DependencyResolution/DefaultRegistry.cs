@@ -20,6 +20,7 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using MediatR;
+using SFA.DAS.EAS.Api.Logging;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.HashingService;
@@ -30,7 +31,6 @@ using WebGrease.Css.Extensions;
 namespace SFA.DAS.EAS.Api.DependencyResolution {
     using Domain.Interfaces;
     using Infrastructure.Caching;
-    using SFA.DAS.EAS.Api.App_Start;
     using SFA.DAS.NLog.Logger;
 
     using StructureMap.Graph;
@@ -42,46 +42,52 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
 
         public DefaultRegistry()
         {
-
-            Scan(
-                scan =>
-                {
-                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
-                    scan.RegisterConcreteTypesAgainstTheFirstInterface();
-                });
-
-            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
-
-            For<ICache>().Use<InMemoryCache>(); //RedisCache
             var config = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(ServiceName);
 
-            ConfigureHashingService(config);
+            Scan(s =>
+            {
+                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
+                s.RegisterConcreteTypesAgainstTheFirstInterface();
+            });
+
+            For<ICache>().Use<InMemoryCache>();
+            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
+
+            RegisterHashingService(config);
             RegisterMapper();
             RegisterMediator();
             RegisterLogger();
         }
 
-        private void RegisterMediator()
+        private void RegisterHashingService(EmployerApprenticeshipsServiceConfiguration config)
         {
-            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
-            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
-            For<IMediator>().Use<Mediator>();
+            For<IHashingService>().Use(c => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
+        }
+
+        private void RegisterLogger()
+        {
+            For<ILog>().Use(c => new NLogLogger(c.ParentType, c.GetInstance<IRequestContext>(), null)).AlwaysUnique();
+            For<IRequestContext>().Use(c => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
         }
 
         private void RegisterMapper()
         {
-            var infrastructureProfiles = Assembly.Load($"{ServiceNamespace}.EAS.Infrastructure").GetTypes()
-                            .Where(t => typeof(Profile).IsAssignableFrom(t))
-                            .Select(t => (Profile)Activator.CreateInstance(t));
+            var apiProfiles = Assembly
+                .Load($"{ServiceNamespace}.EAS.Api")
+                .GetTypes()
+                .Where(t => typeof(Profile).IsAssignableFrom(t))
+                .Select(t => (Profile)Activator.CreateInstance(t));
 
-            var apiProfiles = Assembly.Load($"{ServiceNamespace}.EAS.Api").GetTypes()
-                            .Where(t => typeof(Profile).IsAssignableFrom(t))
-                            .Select(t => (Profile)Activator.CreateInstance(t));
+            var infrastructureProfiles = Assembly
+                .Load($"{ServiceNamespace}.EAS.Infrastructure")
+                .GetTypes()
+                .Where(t => typeof(Profile).IsAssignableFrom(t))
+                .Select(t => (Profile)Activator.CreateInstance(t));
 
             var config = new MapperConfiguration(cfg =>
             {
-                infrastructureProfiles.ForEach(cfg.AddProfile);
                 apiProfiles.ForEach(cfg.AddProfile);
+                infrastructureProfiles.ForEach(cfg.AddProfile);
             });
 
             var mapper = config.CreateMapper();
@@ -90,18 +96,11 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
             For<IMapper>().Use(mapper).Singleton();
         }
 
-        private void RegisterLogger()
+        private void RegisterMediator()
         {
-            For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
-            For<ILog>().Use(x => new NLogLogger(
-                x.ParentType,
-                x.GetInstance<IRequestContext>(),
-                null)).AlwaysUnique();
-        }
-
-        private void ConfigureHashingService(EmployerApprenticeshipsServiceConfiguration config)
-        {
-            For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
+            For<IMediator>().Use<Mediator>();
+            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(c => t => c.GetAllInstances(t));
+            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(c => t => c.GetInstance(t));
         }
     }
 }

@@ -689,22 +689,25 @@ body {
 /*Finance dashboard UI new*/
 #page-transactions {
     .column-half {
-        .data{
-            width:100%;
-            background:$purple;
-            dl{
-                  position:relative;
-                  height:170px;
-                  background:transparent;
-                dt{
-                    position:absolute; 
-                    bottom:10px;
-                    a{color:#fff;}
+        .data {
+            width: 100%;
 
+            dl {
+                position: relative;
+                height: 170px;
+                background: $purple;
+
+                dt {
+                    position: absolute;
+                    bottom: 10px;
+
+                    a {
+                        color: #fff;
                     }
                 }
             }
         }
+    }
 }
 
 /*See all activity*/

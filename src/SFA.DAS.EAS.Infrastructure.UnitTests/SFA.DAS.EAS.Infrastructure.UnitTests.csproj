@@ -156,6 +156,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExecutionPoliciesTests\Hmrc\WhenIMakeABadRequest.cs" />
     <Compile Include="ExecutionPoliciesTests\CompanyHouse\WhenILookUpACompanyThatDoesNotExist.cs" />
     <Compile Include="Factories\WhenICreateARestClient.cs" />
     <Compile Include="Mapping\PaymentMappingTests\WhenIMapAPaymentToPaymentDetails.cs" />
@@ -176,7 +177,7 @@
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTheLastDeclarationForAPayeRef.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTransactionDetailInformation.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTransactionInformation.cs" />
-    <Compile Include="Services\FeatureToggleFileBasedServiceTests\WhenIGetDisabledFeatures.cs" />
+    <Compile Include="Services\FeatureToggleServiceTests\WhenICheckIfFeatureIsEnabled.cs" />
     <Compile Include="Services\HmrcDateServiceTests\WhenICompareTheSubmissionDateToPayrolDate.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallHmrcServiceForLastEnglishFractionUpdateDate.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForAuthentication.cs" />

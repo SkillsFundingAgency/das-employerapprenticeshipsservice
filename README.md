@@ -85,12 +85,15 @@ The configuration is loaded from azure table storage.
 > The two repos above are private. If the links appear to be dead make sure you are logged into github with an account that has access to these (i.e. that you are part of the Skills Funding Agency Team organization).
 
   
-### Feature Toggle
+### Feature Toggles
 
-You can limit areas of the site by adding them to a list, in the controller action format, or having a * to denote all actions within that controller. Below is an example of the config required:
+You can enable or disable controller actions by using feature toggles e.g. To disable the `EmployerTeamController.Invite` action, find the `SFA.DAS.EmployerApprenticeshipsService.Features_1.0` key in Azure table storage and update it's value to:
 
+```JavaScript
+{
+    "Data": [{
+        "Controller": "EmployerTeam",
+        "Action": "Invite" // Using "*" here instead would disable all actions on the controller
+    }]
+}
 ```
-{   "Data": [     {       "Controller": "EmployerTeam",       "Action": "Invite"     }   ] }
-```
-
-This is added to the configuration table of your local azure storage, with the PartitonKey being **LOCAL** and the RowKey being **SFA.DAS.EmployerApprenticeshipsService.Features_1.0**
