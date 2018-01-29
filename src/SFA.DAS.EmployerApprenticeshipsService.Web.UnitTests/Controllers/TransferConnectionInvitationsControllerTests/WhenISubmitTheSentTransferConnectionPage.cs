@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
             Assert.That(result.RouteValues.TryGetValue("action", out var actionName), Is.True);
             Assert.That(actionName, Is.EqualTo("Index"));
             Assert.That(result.RouteValues.TryGetValue("controller", out var controllerName), Is.True);
-            Assert.That(controllerName, Is.EqualTo("Transfer"));
+            Assert.That(controllerName, Is.EqualTo("Transfers"));
         }
 
         [Test]

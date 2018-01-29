@@ -126,7 +126,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
             Assert.That(_response.ValidationResult, Is.Not.Null);
             Assert.That(_response.ValidationResult.ValidationDictionary.TryGetValue(nameof(_query.ReceiverAccountHashedId), out var errorMessage), Is.True);
             Assert.That(errorMessage, Is.Not.Null);
-            Assert.That(errorMessage, Is.EqualTo("Account ID cannot be found."));
+            Assert.That(errorMessage, Is.EqualTo("You must enter a valid account ID"));
         }
 
         [Test]
@@ -147,7 +147,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
             Assert.That(_response.ValidationResult, Is.Not.Null);
             Assert.That(_response.ValidationResult.ValidationDictionary.TryGetValue(nameof(_query.ReceiverAccountHashedId), out var errorMessage), Is.True);
             Assert.That(errorMessage, Is.Not.Null);
-            Assert.That(errorMessage, Is.EqualTo("You've already sent a connection request to this employer."));
+            Assert.That(errorMessage, Is.EqualTo("You've already sent a connection request to this employer"));
         }
     }
 }

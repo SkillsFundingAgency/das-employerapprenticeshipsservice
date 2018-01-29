@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
 
                 if (transferConnectionInvitations.Any(t => t.Status == TransferConnectionInvitationStatus.Sent))
                 {
-                    validationResult.AddError(nameof(message.ReceiverAccountHashedId), "You’ve already sent a connection request to this employer");
+                    validationResult.AddError(nameof(message.ReceiverAccountHashedId), "You've already sent a connection request to this employer");
                 }
             }
 
