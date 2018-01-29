@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
 
         internal class TestController : BaseController
         {
-            public TestController() : base(null, null, null, null)
+            public TestController() : base(null, null, null)
             {
             }
 

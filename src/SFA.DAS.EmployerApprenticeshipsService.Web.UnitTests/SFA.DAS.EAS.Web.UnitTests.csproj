@@ -156,6 +156,7 @@
       <HintPath>..\packages\StructureMap.4.6.0\lib\net45\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -241,7 +242,16 @@
     <Compile Include="Controllers\OrganisationSharedTests\WhenISearchForAnAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenISelectAnAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenIUpdateAnOrganisationsAddress.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheSentTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheSendTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheStartTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheTransferConnectionsPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheSentTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheSendTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheCreateTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransfersController\WhenIViewTheTransfersPage.cs" />
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
+    <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenCreatingTheAccount.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenRenamingAnAccount.cs" />

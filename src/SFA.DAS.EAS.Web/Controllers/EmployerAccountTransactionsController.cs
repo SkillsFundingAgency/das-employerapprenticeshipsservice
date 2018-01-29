@@ -15,10 +15,10 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
 
-        public EmployerAccountTransactionsController(IOwinWrapper owinWrapper, IFeatureToggle featureToggle,
+        public EmployerAccountTransactionsController(IOwinWrapper owinWrapper, IFeatureToggleService featureToggle,
             EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
+            : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }

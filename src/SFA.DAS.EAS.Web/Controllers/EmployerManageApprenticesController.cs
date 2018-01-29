@@ -16,10 +16,10 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public EmployerManageApprenticesController(
             IOwinWrapper owinWrapper,
-            IFeatureToggle featureToggle,
+            IFeatureToggleService featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
-                : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
+                : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
         }
 

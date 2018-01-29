@@ -5478,13 +5478,12 @@ h2 .float-right {
 /*Finance dashboard UI new*/
 #page-transactions .column-half .data {
   width: 100%;
-  background: #2e358b;
 }
 
 #page-transactions .column-half .data dl {
   position: relative;
   height: 170px;
-  background: transparent;
+  background: #2e358b;
 }
 
 #page-transactions .column-half .data dl dt {

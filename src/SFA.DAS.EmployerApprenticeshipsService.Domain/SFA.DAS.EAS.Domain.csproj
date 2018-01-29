@@ -194,6 +194,7 @@
     <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
     <Compile Include="Data\IUnitOfWork.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
+    <Compile Include="Data\Repositories\ITransferConnectionInvitationRepository.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Http\InternalServerErrorException.cs" />
     <Compile Include="Http\RequestTimeOutException.cs" />
@@ -285,7 +286,7 @@
     <Compile Include="Interfaces\IDasAccountService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
-    <Compile Include="Interfaces\IFeatureToggle.cs" />
+    <Compile Include="Interfaces\IFeatureToggleService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Http\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
@@ -306,8 +307,8 @@
     <Compile Include="Models\Payments\PaymentEntry.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentDetails.cs" />
-    <Compile Include="Models\FeatureToggle\FeatureToggleItem.cs" />
-    <Compile Include="Models\FeatureToggle\FeatureToggleLookup.cs" />
+    <Compile Include="Models\FeatureToggles\FeatureToggle.cs" />
+    <Compile Include="Models\FeatureToggles\FeatureToggleConfiguration.cs" />
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
     <Compile Include="Models\HmrcLevy\EmployerLevyData.cs" />
     <Compile Include="Models\HmrcLevy\LevyDeclarations.cs" />
@@ -332,6 +333,9 @@
     <Compile Include="Models\Notification\EmailMessage.cs" />
     <Compile Include="Models\Notification\MessageFormat.cs" />
     <Compile Include="Models\Notification\NotificationMessage.cs" />
+    <Compile Include="Models\TransferConnections\TransferConnectionInvitation.cs" />
+    <Compile Include="Models\TransferConnections\TransferConnectionInvitationStatus.cs" />
+    <Compile Include="Models\UserProfile\CurrentUser.cs" />
     <Compile Include="Models\UserProfile\Role.cs" />
     <Compile Include="Models\UserProfile\User.cs" />
     <Compile Include="Models\UserProfile\Users.cs" />

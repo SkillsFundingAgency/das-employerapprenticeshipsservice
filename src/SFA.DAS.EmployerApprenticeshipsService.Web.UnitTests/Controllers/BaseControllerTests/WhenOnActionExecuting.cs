@@ -5,22 +5,17 @@ using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 using SFA.DAS.EAS.Domain.Models.UserView;
-using SFA.DAS.EAS.Infrastructure.Caching;
-using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
 {
     public class WhenOnActionExecuting : ControllerTestBase
     {
         private const string UserEmail = "user.one@unit.tests";
-
-        private Mock<IFeatureToggle> _featureToggle;
+        
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IMultiVariantTestingService> _multiVariantTestingService;
         private TestController _controller;
@@ -35,10 +30,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
             _owinWrapper.Setup(x => x.GetClaimValue("email"))
                 .Returns(UserEmail);
 
-            _featureToggle = new Mock<IFeatureToggle>();
-            _featureToggle.Setup(x => x.GetFeatures())
-                .Returns(new FeatureToggleLookup { Data = new List<FeatureToggleItem>() });
-
             _multiVariantTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
@@ -47,7 +38,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
             routes.Values["controller"] = "Test";
             _controllerContext.Setup(x => x.RouteData).Returns(routes);
 
-            _controller = new TestController(_featureToggle.Object, _owinWrapper.Object, 
+            _controller = new TestController(_owinWrapper.Object, 
                 _multiVariantTestingService.Object, _flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object
@@ -63,87 +54,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
             // Assert
             Assert.IsNotNull(actual);
             Assert.IsInstanceOf<ContentResult>(actual);
-        }
-
-        [TestCase("user\\.one@unit\\.tests")]
-        [TestCase("USER\\.ONE@UNIT\\.TESTS")]
-        [TestCase(".*@unit\\.tests")]
-        public void ThenItShouldExecuteActionIfToggleEnabledAndUserInWhiteList(string whitelistPattern)
-        {
-            // Arrange
-            _featureToggle.Setup(x => x.GetFeatures())
-                .Returns(new FeatureToggleLookup
-                {
-                    Data = new List<FeatureToggleItem>
-                    {
-                        new FeatureToggleItem
-                        {
-                            Controller = "Test",
-                            Action = "TestView",
-                            WhiteList = new[] { whitelistPattern }
-                        }
-                    }
-                });
-            // Act
-            var actual = Invoke(() => _controller.TestView());
-
-            // Assert
-            Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<ContentResult>(actual);
-        }
-
-        [Test]
-        public void ThenItShouldReturnFeatureNotEnabledIfToggleEnabledWithNoWhiteList()
-        {
-            // Arrange
-            _featureToggle.Setup(x => x.GetFeatures())
-                .Returns(new FeatureToggleLookup
-                {
-                    Data = new List<FeatureToggleItem>
-                    {
-                        new FeatureToggleItem
-                        {
-                            Controller = "Test",
-                            Action = "TestView",
-                            WhiteList = new string[0]
-                        }
-                    }
-                });
-
-            // Act
-            var actual = Invoke(() => _controller.TestView());
-
-            // Assert
-            Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<ViewResult>(actual);
-            Assert.AreEqual("FeatureNotEnabled", ((ViewResult)actual).ViewName);
-        }
-
-        [Test]
-        public void ThenItShouldReturnFeatureNotEnabledIfToggleEnabledButUserNotOnWhiteList()
-        {
-            // Arrange
-            _featureToggle.Setup(x => x.GetFeatures())
-                .Returns(new FeatureToggleLookup
-                {
-                    Data = new List<FeatureToggleItem>
-                    {
-                        new FeatureToggleItem
-                        {
-                            Controller = "Test",
-                            Action = "TestView",
-                            WhiteList = new[] { "different.user@somewhere.else" }
-                        }
-                    }
-                });
-
-            // Act
-            var actual = Invoke(() => _controller.TestView());
-
-            // Assert
-            Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<ViewResult>(actual);
-            Assert.AreEqual("FeatureNotEnabled", ((ViewResult)actual).ViewName);
         }
         
         [TestCase("user\\.one@unit\\.tests",true, UserEmail)]
@@ -235,9 +145,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
         
         internal class TestController : BaseController
         {
-            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IMultiVariantTestingService multiVariantTestingService, 
+            public TestController(IOwinWrapper owinWrapper, IMultiVariantTestingService multiVariantTestingService, 
                 ICookieStorageService<FlashMessageViewModel> flashMessage)
-                : base(owinWrapper, featureToggle, multiVariantTestingService ,flashMessage)
+                : base(owinWrapper, multiVariantTestingService ,flashMessage)
             {
 
             }

@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerTeamControllerTests
         private EmployerTeamController _controller;
         private Mock<EmployerTeamOrchestrator> _orchestrator;
         private Mock<IOwinWrapper> _owinWrapper;
-        private Mock<IFeatureToggle> _featureToggle;
+        private Mock<IFeatureToggleService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerTeamControllerTests
         {
             
             _owinWrapper = new Mock<IOwinWrapper>();
-            _featureToggle = new Mock<IFeatureToggle>();
+            _featureToggle = new Mock<IFeatureToggleService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 

@@ -22,9 +22,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly ILog _logger;
 
         public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator,
-            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ILog logger, 
+            IFeatureToggleService featureToggle, IMultiVariantTestingService multiVariantTestingService, ILog logger, 
             ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, featureToggle,multiVariantTestingService,flashMessage)
+            : base(owinWrapper,multiVariantTestingService,flashMessage)
         {
             if (employerAccountOrchestrator == null)
             {

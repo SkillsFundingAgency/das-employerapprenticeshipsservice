@@ -19,11 +19,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public EmployerTeamController(
             IOwinWrapper owinWrapper,
-            IFeatureToggle featureToggle,
+            IFeatureToggleService featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator)
-            : base(owinWrapper, featureToggle, multiVariantTestingService, flashMessage)
+            : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
         }

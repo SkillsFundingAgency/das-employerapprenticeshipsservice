@@ -5,21 +5,22 @@ namespace SFA.DAS.EAS.Application.Validation
 {
     public class ValidationResult
     {
+        public bool IsUnauthorized { get; set; }
+        public Dictionary<string, string> ValidationDictionary { get; set; }
+
         public ValidationResult()
         {
             ValidationDictionary = new Dictionary<string, string>();
         }
 
-        public Dictionary<string, string> ValidationDictionary { get; set; }
+        public void AddError(string propertyName)
+        {
+            ValidationDictionary.Add(propertyName, $"{propertyName} has not been supplied");
+        }
 
         public void AddError(string propertyName, string validationError)
         {
             ValidationDictionary.Add(propertyName, validationError);
-        }
-
-        public void AddError(string propertyName)
-        {
-            ValidationDictionary.Add(propertyName, $"{propertyName} has not been supplied");
         }
 
         public bool IsValid()
@@ -31,7 +32,5 @@ namespace SFA.DAS.EAS.Application.Validation
 
             return !ValidationDictionary.Any();
         }
-
-        public bool IsUnauthorized { get; set; }
     }
 }

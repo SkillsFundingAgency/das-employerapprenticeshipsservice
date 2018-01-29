@@ -16,49 +16,34 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     {
         public abstract string ConfigurationName { get; }
         public abstract ILog Logger { get; set; }
-        protected IConfigurationRepository GetDataFromAzure()
-        {
-            IConfigurationRepository configurationRepository;
-            if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
-            {
-                configurationRepository = new FileStorageConfigurationRepository();
-            }
-            else
-            {
-                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
-            }
-            return configurationRepository;
-        }
 
         public virtual T GetDataFromStorage()
         {
             var environment = Environment.GetEnvironmentVariable("DASENV");
+
             if (string.IsNullOrEmpty(environment))
             {
                 environment = CloudConfigurationManager.GetSetting("EnvironmentName");
             }
 
             var configurationRepository = GetDataFromAzure();
-            var configurationService = new ConfigurationService(
-                configurationRepository,
-                new ConfigurationOptions(ConfigurationName, environment, "1.0"));
-
+            var configurationService = new ConfigurationService(configurationRepository, new ConfigurationOptions(ConfigurationName, environment, "1.0"));
             var config = configurationService.Get<T>();
 
             return config;
         }
 
-        public async Task<T> GetModelFromBlobStorage<T>(string containerName, string blobName)
+        public async Task<T> GetModelFromBlobStorage(string containerName, string blobName)
         {
             using (var blobData = await GetBlobDataFromAzure(containerName, blobName))
             {
                 using (var reader = new StreamReader(blobData))
                 {
-                    var jsonContent = reader.ReadToEnd();
+                    var value = reader.ReadToEnd();
 
-                    return string.IsNullOrEmpty(jsonContent)
+                    return string.IsNullOrEmpty(value)
                         ? default(T)
-                        : JsonConvert.DeserializeObject<T>(jsonContent);
+                        : JsonConvert.DeserializeObject<T>(value);
                 }
             }
         }
@@ -67,28 +52,38 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             try
             {
-                var storageAccount =
-                    CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
-
+                var storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
                 var client = storageAccount.CreateCloudBlobClient();
-
                 var container = client.GetContainerReference(blobContainer);
-
                 var blob = container.GetBlobReference(blobName);
-
                 var stream = new MemoryStream();
-                
+
                 await blob.DownloadRangeToStreamAsync(stream, 0, null);
                 
                 return stream;
-                
             }
-            catch (StorageException e)
+            catch (StorageException ex)
             {
-                Logger.Warn(e, "Unable to get blob from azure storage");
+                Logger.Warn(ex, "Unable to get blob from azure storage.");
             }
 
             return null;
+        }
+
+        protected IConfigurationRepository GetDataFromAzure()
+        {
+            IConfigurationRepository configurationRepository;
+
+            if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
+            {
+                configurationRepository = new FileStorageConfigurationRepository();
+            }
+            else
+            {
+                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+            }
+
+            return configurationRepository;
         }
     }
 }
