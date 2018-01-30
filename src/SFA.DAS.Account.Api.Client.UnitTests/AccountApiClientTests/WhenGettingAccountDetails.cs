@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
