@@ -259,21 +259,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransactionsDownloadReque
         [Test]
         public void WithInValidEndMonthThenEndDateToDateTimeThrowsException()
         {
-            //var viewModel = new TransactionsDownloadResultViewModel
-            //{
-            //    Account = null,
-            //    StartDate = new TransactionsDownloadResultViewModel.TransactionsDownloadDateTimeViewModel
-            //    {
-            //        Month = 1,
-            //        Year = 2000,
-            //    },
-            //    EndDate = new TransactionsDownloadResultViewModel.TransactionsDownloadDateTimeViewModel
-            //    {
-            //        Month = -1,
-            //        Year = 2018,
-            //    },
-            //    Transactions = null
-            //};
             var viewModel = new Application.Queries.GetTransactionsDownloadResultViewModel.GetTransactionsDownloadRequestAndResponse
             {
                 StartDate = new TransactionsDownloadStartDateMonthYearDateTime

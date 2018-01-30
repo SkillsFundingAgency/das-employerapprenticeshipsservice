@@ -1,23 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTransactions;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments;
 using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
-using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -401,40 +395,5 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
         }
-
-        //public virtual async Task<OrchestratorResponse<TransactionsDownloadResultViewModel>> GetTransactionsDownloadResultViewModel(
-        //    string hashedId, string externalUserId, DateTime fromDate,
-        //    DateTime toDate)
-        //{
-        //    var accountId = _hashingService.DecodeValue(hashedId);
-
-        //    var employerAccountPaymentsResult = await _mediator.SendAsync(new GetTransactionsDownloadResultViewModel
-        //    {
-        //        AccountId = accountId,
-        //        ExternalUserId = externalUserId,
-        //        FromDate = fromDate,
-        //        ToDate = toDate
-        //    });
-
-        //    return new OrchestratorResponse<TransactionsDownloadResultViewModel>
-        //    {
-        //        Data = new TransactionsDownloadResultViewModel
-        //        {
-        //            Account = new Account {HashedId = hashedId },
-        //            StartDate = new TransactionsDownloadResultViewModel.TransactionsDownloadDateTimeViewModel
-        //            {
-        //                Month = fromDate.Month,
-        //                Year = fromDate.Year,
-        //            },
-        //            EndDate = new TransactionsDownloadResultViewModel.TransactionsDownloadDateTimeViewModel
-        //            {
-        //                Month = toDate.Month,
-        //                Year = toDate.Year,
-        //            },
-        //            Transactions = employerAccountPaymentsResult.Transactions
-        //        }
-        //    };
-            
-        //}
     }
 }

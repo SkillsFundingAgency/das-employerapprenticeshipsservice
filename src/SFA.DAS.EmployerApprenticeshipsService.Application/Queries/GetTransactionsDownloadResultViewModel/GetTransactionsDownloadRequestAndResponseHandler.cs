@@ -35,11 +35,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel
             {
                 message.IsUnauthorized = true;
                 return message;
-                //return new GetTransactionsDownloadResultViewModelResponse
-                //{
-                //    ViewModel = message,
-                //    IsUnauthorized = result.IsUnauthorized
-                //};
             }
 
             var caller = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
@@ -47,11 +42,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel
             {
                 message.IsUnauthorized = true;
                 return message;
-                //return new GetTransactionsDownloadResultViewModelResponse
-                //{
-                //    ViewModel = message,
-                //    IsUnauthorized = true
-                //};
             }
 
             message.Transactions =
@@ -66,14 +56,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel
             message.MimeType = fileFormatter.MimeType;
             message.IsUnauthorized = false;
             return message;
-            //return new GetTransactionsDownloadResultViewModelResponse
-            //{
-            //    ViewModel = message,
-            //    FileDate = fileFormatter.GetFileData(message.Transactions),
-            //    FileExtension = fileFormatter.FileExtension,
-            //    MimeType = fileFormatter.MimeType,
-            //    IsUnauthorized = false
-            //};
         }
     }
 }
