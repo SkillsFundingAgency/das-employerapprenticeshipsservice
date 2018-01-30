@@ -2,7 +2,8 @@
 {
     public enum DownloadFormatType
     {
-        Csv,
+        // ReSharper disable once InconsistentNaming Must be capital!
+        CSV,
         Excel,
     }
 }

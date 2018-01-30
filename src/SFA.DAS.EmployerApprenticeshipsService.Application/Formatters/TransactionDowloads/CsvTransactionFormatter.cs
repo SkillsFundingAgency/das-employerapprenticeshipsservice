@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Application.Formatters.TransactionDowloads
         public string FileExtension => "csv";
 
         public DownloadFormatType DownloadFormatType =>
-            DownloadFormatType.Csv;
+            DownloadFormatType.CSV;
 
         public byte[] GetFileData(IEnumerable<TransactionDownloadLine> transactions)
         {

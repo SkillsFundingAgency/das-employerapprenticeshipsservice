@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Formatters.Transactions
 
         public override string ExpectedFileExtension => "csv";
 
-        public override DownloadFormatType ExpectedDownloadFormats => DownloadFormatType.Csv;
+        public override DownloadFormatType ExpectedDownloadFormats => DownloadFormatType.CSV;
 
         [Test]
         public void WhenICallGetContentsIGetCorrectHeaderFormat()

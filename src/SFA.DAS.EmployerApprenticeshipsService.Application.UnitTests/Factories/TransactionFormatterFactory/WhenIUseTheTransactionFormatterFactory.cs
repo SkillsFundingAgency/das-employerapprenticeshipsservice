@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Factories.TransactionFormatterFactor
             _csvFormatter = new Mock<ITransactionFormatter>();
             _excelFormatter = new Mock<ITransactionFormatter>();
 
-            _csvFormatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.Csv);
+            _csvFormatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.CSV);
             _excelFormatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.Excel);
 
             _paymentFormatterFactory = new Application.Queries.GetTransactionsDownloadResultViewModel.TransactionFormatterFactory(new List<ITransactionFormatter>
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Factories.TransactionFormatterFactor
         [Test]
         public void ThenIShouldGetCsvFormatter()
         {
-            var formatter = _paymentFormatterFactory.GetTransactionsFormatterByType(DownloadFormatType.Csv);
+            var formatter = _paymentFormatterFactory.GetTransactionsFormatterByType(DownloadFormatType.CSV);
 
             Assert.AreEqual(_csvFormatter.Object, formatter);
         }

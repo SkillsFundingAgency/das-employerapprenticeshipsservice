@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _formatter.Setup(x => x.GetFileData(It.IsAny<List<TransactionDownloadLine>>()))
                 .Returns(new byte[] {1, 2, 3, 4});
             _formatter.Setup(x => x.MimeType).Returns("txt/csv");
-            _formatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.Csv);
+            _formatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.CSV);
 
             _hashingService = new Mock<IHashingService>();
             _mediator = new Mock<IMediator>();
