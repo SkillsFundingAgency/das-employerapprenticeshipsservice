@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Application.Formatters.TransactionDowloads
             {
                 builder.Append($"{transaction.DateCreated:G},");
                 builder.Append($"{transaction.TransactionType},");
-                builder.Append($"{transaction.EmpRef},");
+                builder.Append($"{transaction.PayeScheme},");
                 builder.Append($"{transaction.PeriodEnd},");
                 builder.Append($"{transaction.LevyDeclared.ToString(NumberFormatInfo.InvariantInfo)},");
                 builder.Append($"{transaction.EnglishFraction.ToString(NumberFormatInfo.InvariantInfo)},");

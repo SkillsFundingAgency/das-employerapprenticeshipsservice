@@ -8,8 +8,9 @@ create table #output
 (
 DateCreated datetime,
 TransactionType varchar(100),
-EmpRef nvarchar(50),
-PeriodEnd nvarchar(50),	
+PAYEScheme nvarchar(50),
+PayrollYear nvarchar(50),
+PayrollMonth int,
 LevyDeclared decimal(18,4),
 EnglishFraction decimal(18,5),
 TenPercentTopUp decimal(18,4),
@@ -27,8 +28,9 @@ Total decimal(18,4)
 INSERT INTO #output (
 		DateCreated,
 		TransactionType,
-		EmpRef,
-		PeriodEnd,
+		PAYEScheme,
+		PayrollYear,
+		PayrollMonth,
 		LevyDeclared,
 		EnglishFraction,
 		TenPercentTopUp,
@@ -38,14 +40,17 @@ INSERT INTO #output (
 
 SELECT DateCreated,
 	tlt.[Description],
-	EmpRef,
-	PeriodEnd,
+	tl.EmpRef,
+	ld.PayrollYear,
+	ld.PayrollMonth,
 	LevyDeclared,
 	EnglishFraction,
-	Amount - LevyDeclared as TenPercentTopUp,
-	Amount
- from [employer_financial].[TransactionLine] tl
+	tl.Amount - LevyDeclared as TenPercentTopUp,
+	tl.Amount
+from [employer_financial].TransactionLine tl
 LEFT JOIN [employer_financial].[TransactionLineTypes] tlt on tlt.TransactionType = IIF(Amount >= 0, 1, 2)
+inner join [employer_financial].LevyDeclarationTopup ldt on ldt.SubmissionId = tl.SubmissionId
+inner join [employer_financial].LevyDeclaration ld on ld.submissionid = tl.submissionid
 where tl.AccountId = @accountId 
 AND tl.TransactionType in(1,2) 
 AND DateCreated >= @fromDate 
@@ -115,4 +120,3 @@ FROM [employer_financial].[Payment] p
 SELECT * From #output
 
 drop table #output
-

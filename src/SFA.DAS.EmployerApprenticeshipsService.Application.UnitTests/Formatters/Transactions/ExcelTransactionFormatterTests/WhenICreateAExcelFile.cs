@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Formatters.Transactions.ExcelTransac
             _transactionLine = new TransactionDownloadLine
             {
                 Apprentice = "Joe Bloggs",
-                EmpRef = "123/ABCDE",
+                PayeScheme = "123/ABCDE",
                 ApprenticeTrainingCourse = "Testing",
                 CohortReference = "123456",
                 DateCreated = DateTime.Now,
@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Formatters.Transactions.ExcelTransac
                 new[]
                 {
                     _transactionLine.DateCreated.ToString(), _transactionLine.TransactionType,
-                    _transactionLine.EmpRef, _transactionLine.PeriodEnd, _transactionLine.LevyDeclared.ToString(),
+                    _transactionLine.PayeScheme, _transactionLine.PeriodEnd, _transactionLine.LevyDeclared.ToString(),
                     _transactionLine.EnglishFraction.ToString(), _transactionLine.TenPercentTopUp.ToString(),
                     _transactionLine.TrainingProvider, _transactionLine.CohortReference, _transactionLine.Uln,
                     _transactionLine.Apprentice, _transactionLine.ApprenticeTrainingCourse,

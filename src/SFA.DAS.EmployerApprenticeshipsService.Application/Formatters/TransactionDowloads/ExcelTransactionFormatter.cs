@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.Formatters.TransactionDowloads
             {
                 transaction.DateCreated.ToString("G"),
                 transaction.TransactionType,
-                transaction.EmpRef,
+                transaction.PayeScheme,
                 transaction.PeriodEnd,
                 transaction.LevyDeclared.ToString(NumberFormatInfo.InvariantInfo),
                 transaction.EnglishFraction.ToString(NumberFormatInfo.InvariantInfo),

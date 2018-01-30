@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.Sql.Client;
 using SFA.DAS.NLog.Logger;
 
@@ -154,7 +155,18 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     commandType: CommandType.StoredProcedure);
             });
 
-            return result.ToList();
+            var hmrcDateService = new HmrcDateService();
+            var list = result.ToList();
+            foreach (var res in list)
+            {
+                if (!string.IsNullOrEmpty(res.PayrollYear) && res.PayrollMonth != 0)
+                {
+                    res.PeriodEnd = hmrcDateService.GetDateFromPayrollYearMonth(res.PayrollYear, res.PayrollMonth).ToString("MMM yyyy"); 
+                }
+
+            }
+
+            return list;
         }
 
         private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)

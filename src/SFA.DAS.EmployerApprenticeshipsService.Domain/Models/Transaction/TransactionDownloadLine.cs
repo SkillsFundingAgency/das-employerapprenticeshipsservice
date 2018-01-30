@@ -1,5 +1,4 @@
 ﻿using System;
-using SFA.DAS.Provider.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Domain.Models.Transaction
 {
@@ -9,9 +8,13 @@ namespace SFA.DAS.EAS.Domain.Models.Transaction
 
         public string TransactionType { get; set; }
 
-        public string EmpRef { get; set; }
+        public string PayeScheme { get; set; }
 
         public string PeriodEnd { get; set; }
+
+        public string PayrollYear { get; set; }
+
+        public int PayrollMonth { get; set; }
 
         public decimal LevyDeclared { get; set; }
 
