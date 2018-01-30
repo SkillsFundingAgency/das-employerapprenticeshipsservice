@@ -46,16 +46,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("activity")]
-        public async Task<ActionResult> Activity(string hashedAccountId, int? take = null)
-        {
-            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
-            var response = await _employerTeamOrchestrator.GetAccountActivities(hashedAccountId, externalUserId, take);
-
-            return View(response);
-        }
-
-        [HttpGet]
         [Route("view")]
         public async Task<ActionResult> ViewTeam(string hashedAccountId)
         {

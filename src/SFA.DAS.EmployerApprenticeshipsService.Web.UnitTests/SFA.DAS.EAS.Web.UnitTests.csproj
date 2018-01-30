@@ -206,6 +206,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ActivitiesControllerTests\WhenIViewTheActivitiesPage.cs" />
     <Compile Include="Controllers\BaseControllerTests\WhenOnActionExecuting.cs" />
     <Compile Include="Controllers\BaseControllerTests\WhenReturningView.cs" />
     <Compile Include="Controllers\BaseControllerTests\WhenStoringFlashMessages.cs" />

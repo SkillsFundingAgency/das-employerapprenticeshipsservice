@@ -13,11 +13,11 @@ using SFA.DAS.EAS.Application.Commands.DeleteInvitation;
 using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
 using SFA.DAS.EAS.Application.Commands.ResendInvitation;
 using SFA.DAS.EAS.Application.Commands.UpdateShowWizard;
-using SFA.DAS.EAS.Application.Queries.GetAccountActivities;
 using SFA.DAS.EAS.Application.Queries.GetAccountLatestActivities;
 using SFA.DAS.EAS.Application.Queries.GetAccountStats;
 using SFA.DAS.EAS.Application.Queries.GetAccountTasks;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
+using SFA.DAS.EAS.Application.Queries.GetActivities;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetInvitation;
 using SFA.DAS.EAS.Application.Queries.GetMember;
@@ -28,6 +28,7 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Activities;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -215,67 +216,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             catch (Exception ex)
             {
                 return new OrchestratorResponse<AccountDashboardViewModel>
-                {
-                    Status = HttpStatusCode.InternalServerError,
-                    Exception = ex
-                };
-            }
-        }
-
-        public async Task<OrchestratorResponse<AccountActivitiesViewModel>> GetAccountActivities(string hashedAccountId, string externalUserId, int? take)
-        {
-            try
-            {
-                var accountResponse = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
-                {
-                    HashedAccountId = hashedAccountId,
-                    UserId = externalUserId
-                });
-
-                GetAccountActivitiesResponse activitiesResponse;
-
-                try
-                {
-                    activitiesResponse = await _mediator.SendAsync(new GetAccountActivitiesQuery
-                    {
-                        AccountId = accountResponse.Account.Id,
-                        Take = take
-                    });
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error(ex, "Could not retrieve account activities successfully.");
-
-                    activitiesResponse = new GetAccountActivitiesResponse
-                    {
-                        Result = new ActivitiesResult
-                        {
-                            Activities = new Activity[0],
-                            Total = 0
-                        }
-                    };
-                }
-
-                return new OrchestratorResponse<AccountActivitiesViewModel>
-                {
-                    Status = HttpStatusCode.OK,
-                    Data = new AccountActivitiesViewModel
-                    {
-                        ActivitiesResult = activitiesResponse.Result
-                    }
-                };
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return new OrchestratorResponse<AccountActivitiesViewModel>
-                {
-                    Status = HttpStatusCode.Unauthorized,
-                    Exception = ex
-                };
-            }
-            catch (Exception ex)
-            {
-                return new OrchestratorResponse<AccountActivitiesViewModel>
                 {
                     Status = HttpStatusCode.InternalServerError,
                     Exception = ex

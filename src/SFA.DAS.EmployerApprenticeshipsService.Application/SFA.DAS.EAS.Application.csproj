@@ -393,10 +393,9 @@
     <Compile Include="Queries\FindAccountCoursePayments\FindAccountCoursePaymentsQueryHandler.cs" />
     <Compile Include="Queries\FindAccountCoursePayments\FindAccountCoursePaymentsQueryValidator.cs" />
     <Compile Include="Queries\FindAccountCoursePayments\FindAccountCoursePaymentsResponse.cs" />
-    <Compile Include="Queries\GetAccountActivities\GetAccountActivitiesQueryHandler.cs" />
-    <Compile Include="Queries\GetAccountActivities\GetAccountActivitiesQuery.cs" />
-    <Compile Include="Queries\GetAccountActivities\GetAccountActivitiesQueryValidator.cs" />
-    <Compile Include="Queries\GetAccountActivities\GetAccountActivitiesResponse.cs" />
+    <Compile Include="Queries\GetActivities\GetActivitiesQueryHandler.cs" />
+    <Compile Include="Queries\GetActivities\GetActivitiesQuery.cs" />
+    <Compile Include="Queries\GetActivities\GetActivitiesResponse.cs" />
     <Compile Include="Queries\GetAccountLatestActivities\GetAccountLatestActivitiesQuery.cs" />
     <Compile Include="Queries\GetAccountLatestActivities\GetAccountLatestActivitiesQueryHandler.cs" />
     <Compile Include="Queries\GetAccountLatestActivities\GetAccountLatestActivitiesResponse.cs" />
