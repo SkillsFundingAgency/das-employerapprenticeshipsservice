@@ -1,24 +1,17 @@
-﻿using System.Web.Mvc;
-using Microsoft.ApplicationInsights;
-using NLog;
+﻿using System;
+using System.Net;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.Filters
 {
-    public class HandleErrorFilter : HandleErrorAttribute
+    public class HandleErrorFilter : IExceptionFilter
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-
-        public override void OnException(ExceptionContext filterContext)
+        public void OnException(ExceptionContext filterContext)
         {
-            if (!filterContext.ExceptionHandled)
+            if (filterContext.Exception is UnauthorizedAccessException)
             {
-                var exception = filterContext.Exception;
-                var telemetryClient = new TelemetryClient();
-
-                Logger.Error(exception);
-                telemetryClient.TrackException(exception);
-
-                base.OnException(filterContext);
+                filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                filterContext.ExceptionHandled = true;
             }
         }
     }

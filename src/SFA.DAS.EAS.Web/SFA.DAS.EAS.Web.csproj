@@ -427,6 +427,7 @@
     <Compile Include="Attributes\ModelStateTempDataAttribute.cs" />
     <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Filters\EnsureFeatureIsEnabledFilter.cs" />
+    <Compile Include="Filters\HandleErrorFilter.cs" />
     <Compile Include="Mappings\ViewModelMaps.cs" />
     <Compile Include="Logging\RequestContext.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -488,7 +489,6 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
-    <Compile Include="Filters\HandleInvalidStateErrorFilter.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\DecimalExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
@@ -573,7 +573,6 @@
     <Compile Include="ViewModels\TransactionViewResultViewModel.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
-    <Compile Include="Filters\HandleErrorFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validators\AddLegalEntityViewModelValidator.cs" />
@@ -1038,7 +1037,6 @@
     <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
     <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
     <Content Include="src\sass\_agreement.scss" />
-    <Content Include="Views\Error\InvalidState.cshtml" />
     <Content Include="Views\Shared\_SetupAccount.cshtml" />
     <Content Include="Views\Home\SetupAccount.cshtml" />
     <Content Include="Views\Home\LegalAgreement.cshtml" />

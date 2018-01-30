@@ -14,9 +14,8 @@ namespace SFA.DAS.EAS.Web
 
             filters.Add(new EnsureFeatureIsEnabledFilter(() => dependencyResolver.GetService<ICurrentUserService>(), () => dependencyResolver.GetService<IFeatureToggleService>()));
             filters.Add(new GoogleAnalyticsFilter());
-            filters.Add(new MapViewModelToMessageFilter(() => dependencyResolver.GetService<IMapper>()));
             filters.Add(new HandleErrorFilter());
-            filters.Add(new HandleInvalidStateErrorFilter());
+            filters.Add(new MapViewModelToMessageFilter(() => dependencyResolver.GetService<IMapper>()));
         }
     }
 }
