@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Application.Formatters.TransactionDowloads
         private const string WorksheetName = "Transactions";
         private static readonly string [] HeaderRow = {
             "Transaction date", "Transaction type", "PAYE scheme", "Payroll month", "Levy declared",
-            "English %", "10% top up", "Training provider", "Cohort reference", "Unique learner number",
+            "English %", "10% top up", "Training provider", "Unique learner number",
             "Apprentice", "Apprenticeship training course", "Paid from levy", "Your contribution",
             "Government contribution", "Total"
         };
@@ -40,7 +40,6 @@ namespace SFA.DAS.EAS.Application.Formatters.TransactionDowloads
                 transaction.EnglishFraction.ToString(NumberFormatInfo.InvariantInfo),
                 transaction.TenPercentTopUp.ToString(NumberFormatInfo.InvariantInfo),
                 transaction.TrainingProvider,
-                transaction.CohortReference,
                 transaction.Uln,
                 transaction.Apprentice,
                 transaction.ApprenticeTrainingCourse,

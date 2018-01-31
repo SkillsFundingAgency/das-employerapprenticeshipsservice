@@ -40,7 +40,6 @@ namespace SFA.DAS.EAS.Application.Formatters.TransactionDowloads
             headerBuilder.Append("English %,");
             headerBuilder.Append("10% top up,");
             headerBuilder.Append("Training provider,");
-            headerBuilder.Append("Cohort reference,");
             headerBuilder.Append("Unique learner number,");
             headerBuilder.Append("Apprentice,");
             headerBuilder.Append("Apprenticeship training course,");
@@ -64,7 +63,6 @@ namespace SFA.DAS.EAS.Application.Formatters.TransactionDowloads
                 builder.Append($"{transaction.EnglishFraction.ToString(NumberFormatInfo.InvariantInfo)},");
                 builder.Append($"{transaction.TenPercentTopUp.ToString(NumberFormatInfo.InvariantInfo)},");
                 builder.Append($"{transaction.TrainingProvider},");
-                builder.Append($"{transaction.CohortReference},");
                 builder.Append($"{transaction.Uln},");
                 builder.Append($"{transaction.Apprentice},");
                 builder.Append($"{transaction.ApprenticeTrainingCourse}{transaction.ApprenticeTrainingCourseLevel},");
