@@ -10,7 +10,7 @@ using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsControllerTests
 {
-    public class WhenISubmitTheStartTransferConnectionPage
+    public class WhenISubmitTheStartTransferConnectionInvitationPage
     {
         private const string SenderHashedAccountId = "ABC123";
         private const string ReceiverHashedAccountId = "XYZ987";

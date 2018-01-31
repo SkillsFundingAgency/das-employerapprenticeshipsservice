@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
                 SenderUserId = membership.UserId,
                 SenderAccountId = senderAccount.Id,
                 ReceiverAccountId = receiverAccount.Id,
-                Status = TransferConnectionInvitationStatus.Sent,
+                Status = TransferConnectionInvitationStatus.Pending,
                 CreatedDate = DateTime.UtcNow
             };
 

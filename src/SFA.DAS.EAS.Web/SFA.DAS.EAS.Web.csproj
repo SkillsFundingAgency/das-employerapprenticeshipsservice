@@ -463,7 +463,7 @@
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
     <Compile Include="Helpers\AccountTaskHelper.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />
-    <Compile Include="Mappings\TransferConnectionMaps.cs" />
+    <Compile Include="Mappings\TransferConnectionInvitationMaps.cs" />
     <Compile Include="Orchestrators\IOrchestratorCookie.cs" />
     <Compile Include="Models\GoogleAnalyticsModel.cs" />
     <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
@@ -555,6 +555,7 @@
     <Compile Include="ViewModels\Organisation\OrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\SendTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\SentTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\TransferConnectionInvitationsViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\SignInUserViewModel.cs" />
     <Compile Include="ViewModels\FlashMessageViewModel.cs" />
@@ -615,6 +616,7 @@
     <Content Include="Views\TransferConnectionInvitations\Send.cshtml" />
     <Content Include="Views\TransferConnectionInvitations\Sent.cshtml" />
     <Content Include="Views\Shared\_ValidationSummary.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\SentDetails.cshtml" />
     <Content Include="Views\Activities\Latest.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
             var senderAccount = await _employerAccountRepository.GetAccountById(senderAccountId);
             var transferConnectionInvitations = await _transferConnectionInvitationRepository.GetTransferConnectionInvitations(senderAccount.Id, receiverAccount.Id);
 
-            if (transferConnectionInvitations.Any(t => t.Status == TransferConnectionInvitationStatus.Sent))
+            if (transferConnectionInvitations.Any(t => t.Status == TransferConnectionInvitationStatus.Pending))
             {
                 throw new ValidationException(nameof(message.ReceiverAccountPublicHashedId), "You've already sent a connection request to this employer");
             }

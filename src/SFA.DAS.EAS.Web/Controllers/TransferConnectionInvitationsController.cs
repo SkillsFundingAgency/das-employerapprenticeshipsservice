@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
-using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitationQuery;
+using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
 using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -105,6 +105,16 @@ namespace SFA.DAS.EAS.Web.Controllers
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model.Choice));
             }
+        }
+
+        [HttpNotFoundForNullModel]
+        [Route("{transferConnectionInvitationId}/sent/details")]
+        public async Task<ActionResult> SentDetails(GetSentTransferConnectionInvitationQuery query)
+        {
+            var response = await _mediator.SendAsync(query);
+            var model = _mapper.Map<SentTransferConnectionInvitationViewModel>(response);
+
+            return View(model);
         }
     }
 }

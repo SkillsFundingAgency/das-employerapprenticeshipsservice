@@ -4,7 +4,7 @@ using MediatR;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
-namespace SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitationQuery
+namespace SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation
 {
     public class GetSentTransferConnectionInvitationQueryHandler : IAsyncRequestHandler<GetSentTransferConnectionInvitationQuery, GetSentTransferConnectionInvitationResponse>
     {
@@ -34,9 +34,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitationQue
                 return null;
             }
 
-            var user = await _membershipRepository.GetCaller(transferConnection.SenderAccountId, _currentUser.ExternalUserId);
+            var membership = await _membershipRepository.GetCaller(transferConnection.SenderAccountId, _currentUser.ExternalUserId);
 
-            if (user == null)
+            if (membership == null)
             {
                 throw new UnauthorizedAccessException();
             }

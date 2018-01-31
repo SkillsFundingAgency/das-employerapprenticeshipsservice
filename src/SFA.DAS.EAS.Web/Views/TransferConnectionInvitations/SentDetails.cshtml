@@ -1,0 +1,36 @@
+@model SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations.SentTransferConnectionInvitationViewModel
+
+@{
+    ViewBag.Title = "Transfer connection invitation details";
+    ViewBag.Section = "finance";
+    ViewBag.PageID = "page-transfer-connection-invitations-details";
+    ViewBag.GaData.Vpv = "/accounts/transfers/connections/invitations/sent/details";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Connection request details</h1>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Account name</td>
+                    <td>@Model.ReceiverAccount.Name</td>
+                </tr>
+                <tr>
+                    <td>Account ID</td>
+                    <td>@Model.ReceiverAccount.HashedId</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>@Model.TransferConnectionInvitation.Status.ToString()</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs" id="js-breadcrumbs">
+        <a aria-label="Back" class="back-link" href="@Url.Action("Index", "Transfers")">Back</a>
+    </div>
+}
