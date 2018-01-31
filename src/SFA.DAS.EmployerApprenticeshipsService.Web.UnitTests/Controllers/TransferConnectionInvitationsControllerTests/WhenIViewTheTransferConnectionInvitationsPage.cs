@@ -7,7 +7,7 @@ using SFA.DAS.EAS.Web.Controllers;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsControllerTests
 {
-    public class WhenIViewTheTransferConnectionsPage
+    public class WhenIViewTheTransferConnectionInvitationsPage
     {
         private TransferConnectionInvitationsController _controller;
         private readonly Mock<IMediator> _mediator = new Mock<IMediator>();

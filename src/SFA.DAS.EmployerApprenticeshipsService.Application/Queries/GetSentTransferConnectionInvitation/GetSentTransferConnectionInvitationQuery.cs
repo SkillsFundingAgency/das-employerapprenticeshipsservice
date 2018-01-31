@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using MediatR;
 
-namespace SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitationQuery
+namespace SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation
 {
     public class GetSentTransferConnectionInvitationQuery : IAsyncRequest<GetSentTransferConnectionInvitationResponse>
     {

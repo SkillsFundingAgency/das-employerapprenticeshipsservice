@@ -1,4 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
+using AutoMapper;
+using MediatR;
+using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
+using SFA.DAS.EAS.Web.ViewModels.Transfers;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -6,15 +11,22 @@ namespace SFA.DAS.EAS.Web.Controllers
     [RoutePrefix("accounts/{hashedAccountId}/transfers")]
     public class TransfersController : Controller
     {
-        [Route]
-        public ActionResult Index(string hashedAccountId)
+        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
+
+        public TransfersController(IMapper mapper, IMediator mediator)
         {
-            return View();
+            _mapper = mapper;
+            _mediator = mediator;
         }
-        [Route("details")]
-        public ActionResult Details(string hashedAccountId)
+
+        [Route]
+        public async Task<ActionResult> Index(GetTransferConnectionInvitationsQuery query)
         {
-            return View();
+            var response = await _mediator.SendAsync(query);
+            var model = _mapper.Map<TransferConnectionInvitationsViewModel>(response);
+
+            return View(model);
         }
     }
 }

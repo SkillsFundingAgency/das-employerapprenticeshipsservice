@@ -111,7 +111,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
             Assert.That(_transferConnectionInvitation.ReceiverAccountId, Is.EqualTo(ReceiverAccountId));
             Assert.That(_transferConnectionInvitation.SenderAccountId, Is.EqualTo(SenderAccountId));
             Assert.That(_transferConnectionInvitation.SenderUserId, Is.EqualTo(UserId));
-            Assert.That(_transferConnectionInvitation.Status, Is.EqualTo(TransferConnectionInvitationStatus.Sent));
+            Assert.That(_transferConnectionInvitation.Status, Is.EqualTo(TransferConnectionInvitationStatus.Pending));
             Assert.That(_transferConnectionInvitation.CreatedDate, Is.GreaterThanOrEqualTo(now));
             Assert.That(_transferConnectionInvitation.ModifiedDate, Is.Null);
         }

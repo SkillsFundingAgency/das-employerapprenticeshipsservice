@@ -4,13 +4,13 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitationQuery;
+using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsControllerTests
 {
-    public class WhenIViewTheSentTransferConnectionPage
+    public class WhenIViewTheSentTransferConnectionInvitationPage
     {
         private TransferConnectionInvitationsController _controller;
         private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
