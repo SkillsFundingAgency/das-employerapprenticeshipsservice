@@ -192,11 +192,11 @@
     <Reference Include="Polly, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.1.0\lib\net45\Polly.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Activities, Version=1.0.0.53577, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.53577\lib\net45\SFA.DAS.Activities.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities, Version=1.0.0.56220, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.56220\lib\net45\SFA.DAS.Activities.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Activities.Client, Version=1.0.0.53577, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.53577\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities.Client, Version=1.0.0.56220, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.56220\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.10.29\lib\net45\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
@@ -425,8 +425,10 @@
     <Compile Include="Attributes\ExportModelStateToTempDataAttribute.cs" />
     <Compile Include="Attributes\ImportModelStateFromTempDataAttribute.cs" />
     <Compile Include="Attributes\ModelStateTempDataAttribute.cs" />
+    <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Filters\EnsureFeatureIsEnabledFilter.cs" />
+    <Compile Include="Mappings\ActivityMaps.cs" />
     <Compile Include="Filters\HandleErrorFilter.cs" />
     <Compile Include="Mappings\ViewModelMaps.cs" />
     <Compile Include="Logging\RequestContext.cs" />
@@ -463,7 +465,7 @@
     <Compile Include="Orchestrators\TaskOrchestrator.cs" />
     <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
     <Compile Include="ViewModels\AccountPaye\PayeSchemeNextStepsViewModel.cs" />
-    <Compile Include="ViewModels\AccountActivitiesViewModel.cs" />
+    <Compile Include="ViewModels\Activities\ActivitiesViewModel.cs" />
     <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
@@ -597,7 +599,7 @@
     <Content Include="Views\Organisation\AddOrganisation.cshtml" />
     <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
     <Content Include="Views\SearchOrganisation\FindAddress.cshtml" />
-    <Content Include="Views\EmployerTeam\Activity.cshtml" />
+    <Content Include="Views\Activities\Index.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\TransactionsDownload.cshtml" />
     <Content Include="Views\Transfers\Index.cshtml" />
