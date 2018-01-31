@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
