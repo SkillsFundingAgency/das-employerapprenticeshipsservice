@@ -94,10 +94,16 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
         {
             EnsureStarted();
             ClearDownForNewTest();
-
-            var result = await TestServer.HttpClient.GetAsync(call.Uri);
+            var result = await GetClient(call).GetAsync(call.Uri);
             CheckCallWasSuccessful(result, call);
             return result;
+        }
+
+        private HttpClient GetClient(CallRequirements call)
+        {
+            var client = TestServer.HttpClient;
+            client.Timeout = call.TimeOut;
+            return client;
         }
 
         private void ClearDownForNewTest()

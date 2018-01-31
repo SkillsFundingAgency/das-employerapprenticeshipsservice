@@ -10,6 +10,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
     /// </summary>
     public class CallRequirements
     {
+        private static readonly TimeSpan DefaultTimeOut = new TimeSpan(0,5,0);
+
         public CallRequirements(string uri, HttpStatusCode acceptableStatusCode) : this(uri, new[] { acceptableStatusCode })
         {
         }
@@ -18,6 +20,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
         {
             Uri = uri;
             AcceptableStatusCodes = acceptableStatusCodes.ToArray();
+            TimeOut = DefaultTimeOut;
         }
 
         /// <summary>
@@ -41,6 +44,11 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
         ///     was created during the test.
         /// </summary>
         public Type ExpectedControllerType { get; set; }
+
+        /// <summary>
+        ///     HTTP request timeout to use. 
+        /// </summary>
+        public TimeSpan TimeOut { get; set; }
     }
 
     /// <summary>
