@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
@@ -35,7 +36,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
         /// <param name="call">Details the requirements of teh call to be made.</param>
         /// <remarks>
         ///     This is a shortcut to run individual tests. If running multiple tests then using <see cref="InvokeGetAsync"/>
-        ///     is more eficient.
+        ///     is more efficient.
         /// </remarks>
         public static async Task InvokeIsolatedGetAsync(CallRequirements call)
         {
@@ -147,25 +148,37 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
 
         private void CheckCallWasSuccessful(HttpResponseMessage response, CallRequirements call)
         {
-            string failMessage = null;
+            StringBuilder failMessage = new StringBuilder();
 
-            if (!IsAcceptableStatusCode(response, call.AcceptableStatusCodes) || _exceptionHandler.IsFaulted)
+            if (!IsAcceptableStatusCode(response, call.AcceptableStatusCodes))
             {
-                failMessage = $"Received response {response.StatusCode} " +
-                                  $"when expected any of [{string.Join(",", call.AcceptableStatusCodes)}]. " +
-                                  $"Additional information sent to the client: {response.ReasonPhrase}. " +
-                                  $"Server exception (not sent to the client):{(_exceptionHandler.IsFaulted ? _exceptionHandler.Exception.Message : "none")}";
+                failMessage.AppendLine($"Received response {response.StatusCode} " +
+                                       $"when expected any of [{string.Join(",", call.AcceptableStatusCodes)}]. " +
+                                       $"Additional information sent to the client: {response.ReasonPhrase}. ");
+            }
+
+            if (WasUnacceptableExceptionThrownInServer(call))
+            {
+                failMessage.AppendLine($"An unexpected unhandled exception occurred in the server during the call:{_exceptionHandler.Exception.GetType().Name} - {_exceptionHandler.Exception.Message}");
             }
 
             if (!WasExpectedControllerCreated(call.ExpectedControllerType))
             {
-                failMessage = $"The controller {call.ExpectedControllerType.Name} was not created by DI. Controllers that were created are: {string.Join(",", GetCreatedControllers())}";
+                failMessage.AppendLine($"The controller {call.ExpectedControllerType.Name} was not created by DI. "+
+                                       $"Controllers that were created are: {string.Join(",", GetCreatedControllers())}");
             }
 
-            if (!string.IsNullOrWhiteSpace(failMessage))
+            if (failMessage.Length > 0)
             {
-                Assert.Fail(failMessage);
+                Assert.Fail(failMessage.ToString());
             }
+        }
+
+        private bool WasUnacceptableExceptionThrownInServer(CallRequirements call)
+        {
+            return _exceptionHandler.IsFaulted
+                   && (call.IgnoreExceptionTypes == null 
+                        || !call.IgnoreExceptionTypes.Contains(_exceptionHandler.Exception.GetType()));
         }
 
         private bool WasExpectedControllerCreated(Type controllerType)
