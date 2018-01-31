@@ -59,7 +59,9 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
             // just call base
         }
 
-        private TResultType Result { get; set; }
+        /// <summary>
+        ///     The response returned from the call.
+        /// </summary>
+        public TResultType Result { get; set; }
     }
-
 }

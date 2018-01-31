@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Http.Dependencies;
-using Microsoft.Practices.ServiceLocation;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
 {
-    public class IntegrationTestDependencyResolver : IDependencyResolver, IDependencyScope
+    public class IntegrationTestDependencyResolver : IDependencyResolver
     {
 
         private readonly HashSet<Type> _createdServices = new HashSet<Type>();

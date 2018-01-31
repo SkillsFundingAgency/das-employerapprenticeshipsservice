@@ -154,7 +154,6 @@
     <Compile Include="HealthCheckControllerTests\WhenHealthCheck.cs" />
     <Compile Include="TestUtils\ApiIntegrationTester.cs" />
     <Compile Include="TestUtils\CallRequirements.cs" />
-    <Compile Include="TestUtils\ExceptionLoggerDecorator.cs" />
     <Compile Include="TestUtils\IntegrationTestExceptionHandler.cs" />
     <Compile Include="TestUtils\IntegrationTestDependencyResolver.cs" />
     <Compile Include="TestUtils\TestWebApiResolver.cs" />

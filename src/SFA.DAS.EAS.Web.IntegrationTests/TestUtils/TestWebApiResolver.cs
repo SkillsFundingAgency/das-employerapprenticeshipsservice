@@ -6,10 +6,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
 {
     /// <summary>
     ///     Substitute assembly resolver to use during integration testing to allow MVC to find the 
-    ///     controller routes.
+    ///     controller routes in a different assembly.
     /// </summary>
     /// <typeparam name="TExampleController">
-    ///     An example of an actual controller - all routes in the assembly that contains this controller will
+    ///     An example of an actual controller - all routes in the assembly containing this controller will
     ///     be registered.
     /// </typeparam>
     public class TestWebApiResolver<TExampleController> : DefaultAssembliesResolver

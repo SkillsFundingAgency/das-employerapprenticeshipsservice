@@ -5,17 +5,23 @@ using System.Web.Http.ExceptionHandling;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
 {
-    public class IntegrationTestExceptionHandler : ExceptionLoggerDecorator, IExceptionHandler
+    /// <summary>
+    ///     A decorator for the existing global exception handler which will keep a reference to 
+    ///     any unhandled exception that occurred.
+    /// </summary>
+    public class IntegrationTestExceptionHandler : IExceptionHandler
     {
-        public IntegrationTestExceptionHandler(IExceptionHandler runtimeExceptionHandler) : base(runtimeExceptionHandler)
+        private readonly IExceptionHandler _wrappedExceptionHandler;
+
+        public IntegrationTestExceptionHandler(IExceptionHandler runtimeExceptionHandler) 
         {
-            // just call base        
+            _wrappedExceptionHandler = runtimeExceptionHandler;
         }
 
         public Task HandleAsync(ExceptionHandlerContext context, CancellationToken cancellationToken)
         {
             Exception = context.Exception;
-            return WrappedExceptionHandler.HandleAsync(context, cancellationToken);
+            return _wrappedExceptionHandler.HandleAsync(context, cancellationToken);
         }
 
         public Exception Exception { get; private set; }

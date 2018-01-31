@@ -16,7 +16,6 @@ using SFA.DAS.EAS.Api;
 using SFA.DAS.EAS.Api.Controllers;
 using SFA.DAS.EAS.Api.DependencyResolution;
 using SFA.DAS.NLog.Logger;
-using WebGrease.Configuration;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
 {
@@ -69,13 +68,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
         {
             if (IsTestServerStarted)
             {
-                TestServer.Dispose();
+                EndTests();
             }
         }
 
         public void EndTests()
         {
             TestServer?.Dispose();
+            TestServer = null;
         }
 
         public Task InvokeGetAsync(CallRequirements call)
@@ -86,8 +86,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
         public async Task<TResult> InvokeGetAsync<TResult>(CallRequirements<TResult> call)
         {
             var result = await GetResponseAsync(call);
-            var returnedObject = await FetchCompleteResponse<TResult>(result);
-            return returnedObject;
+            call.Result = await FetchCompleteResponse<TResult>(result);
+            return call.Result;
         }
 
         private async Task<HttpResponseMessage> GetResponseAsync(CallRequirements call)
