@@ -11,5 +11,10 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return View();
         }
+        [Route("details")]
+        public ActionResult Details(string hashedAccountId)
+        {
+            return View();
+        }
     }
 }

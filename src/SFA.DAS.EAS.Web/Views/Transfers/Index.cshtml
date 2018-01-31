@@ -11,15 +11,26 @@
         <p>Employers who pay the apprenticeship levy can transfer up to 10% of their previous year’s levy to other employers with an apprenticeship service account.</p>
         <p>Employers who want to transfer funds must first connect with a receiving employer through the apprenticeship service. Once a connection is made, a receiving employer can request transfer funds from a funding employer.</p>
         <p>Before getting started, make sure you understand the <a href="">rules for sending and receiving transfers</a>.</p>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <div class="govuk-box-highlight esfa-standout-amount">
+            <p class="heading-xlarge">£85,123.23</p>
+            <p class="font-medium">Remaining transfer allowance</p>
+        </div>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
         <a class="button" href="@Url.Action("Index", "TransferConnectionInvitations")">Connect with employer</a>
     </div>
 </div>
 
-<!-- Hardcoded by GB - START -->
 <div class="grid-row">
     <div class="column-full">
-        <h2 class="heading-medium">Connection requests</h2>
         <table class="responsive">
+            <caption class="heading-medium">Connection requests</caption>
             <thead>
                 <tr>
                     <th>Employer</th>
@@ -31,28 +42,27 @@
                 <tr>
                     <td data-label="Employer">Good Employer Ltd</td>
                     <td data-label="Status">Pending</td>
-                    <td data-label=""><a href="@Url.Action("Details", "Transfers")">Details</a></td>
+                    <td><a href="@Url.Action("Details", "Transfers")">Details</a></td>
                 </tr>
                 <tr>
                     <td data-label="Employer">Super Employer Ltd</td>
                     <td data-label="Status">Approved</td>
-                    <td data-label=""><a href="@Url.Action("Details", "Transfers")">Details</a></td>
+                    <td><a href="@Url.Action("Details", "Transfers")">Details</a></td>
                 </tr>
                 <tr>
                     <td data-label="Employer">Cool Employer Ltd</td>
                     <td data-label="Status">Approved</td>
-                    <td data-label=""><a href="@Url.Action("Details", "Transfers")">Details</a></td>
+                    <td><a href="@Url.Action("Details", "Transfers")">Details</a></td>
                 </tr>
                 <tr>
                     <td data-label="Employer">Awesome Employer Ltd</td>
                     <td data-label="Status">Rejected</td>
-                    <td data-label=""><a href="@Url.Action("Details", "Transfers")">Details</a></td>
+                    <td><a href="@Url.Action("Details", "Transfers")">Details</a></td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
-<!-- Hardcoded by GB - END -->
 
 @section breadcrumb {
     <div class="breadcrumbs">
