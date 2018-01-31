@@ -78,7 +78,7 @@ else
                     <ul class="js-tabs" role="tablist">
                         <li role="tab" id="tab-tasks" aria-controls="pane-tasks"><a href="#pane-tasks">Tasks</a></li>
                         
-                        @if (Model.Data.LatestActivitiesResult != null)
+                        @if (Html.IsFeatureEnabled("Activities", "Index") && Model.Data.LatestActivitiesResult != null)
                         {
                             <li role="tab" id="tab-activity" aria-controls="pane-activity"><a href="#pane-activity">Activity</a></li>
                         }
@@ -140,7 +140,7 @@ else
                         }
                     </div>
 
-                    @if (Model.Data.LatestActivitiesResult != null)
+                    @if (Html.IsFeatureEnabled("Activities", "Index") && Model.Data.LatestActivitiesResult != null)
                     {
                         <div class="js-tab-pane" id="pane-activity" role="tabpanel">
                             @Html.LatestActivities(Model.Data.LatestActivitiesResult)

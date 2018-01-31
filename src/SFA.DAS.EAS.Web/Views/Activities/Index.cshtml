@@ -1,7 +1,6 @@
 ﻿@using SFA.DAS.Activities.Client
-@using SFA.DAS.EAS.Web
 
-@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AccountActivitiesViewModel>
+@model SFA.DAS.EAS.Web.ViewModels.Activities.ActivitiesViewModel
 
 @{
     ViewBag.Title = "Activity";
@@ -61,6 +60,6 @@
         </div>
     </div>*@
     <div class="column-two-thirds">
-        @Html.Activities(Model.Data.ActivitiesResult)
+        @Html.Activities(Model.Result)
     </div>
 </div>

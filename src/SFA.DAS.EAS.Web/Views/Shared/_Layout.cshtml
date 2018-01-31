@@ -145,7 +145,10 @@
                                         }
                                         <li><a href="@UserLinksViewModel.ChangePasswordLink" class="sub-menu-item">Change your password</a></li>
                                         <li><a href="@UserLinksViewModel.ChangeEmailLink" class="sub-menu-item">Change your email address</a></li>
-                                        <li><a href="@Url.Action("NotificationSettings", "Settings")" class="sub-menu-item">Notification settings</a></li>
+				        @if (!DynamicExtensions.ParseHideNavFromViewBag(ViewBag))
+				        {
+					    <li><a href="@Url.Action("NotificationSettings", "Settings")" class="sub-menu-item">Notification settings</a></li>
+				        }
                                     </ul>
                                 </li>
                                 <li><a href="@Url.Action("SignOut", "Home")" role="menuitem">Sign out</a></li>

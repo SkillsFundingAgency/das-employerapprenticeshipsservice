@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             _mediator = mediator;
         }
 
-        [Route("")]
+        [Route]
         public ActionResult Index()
         {
             return View();

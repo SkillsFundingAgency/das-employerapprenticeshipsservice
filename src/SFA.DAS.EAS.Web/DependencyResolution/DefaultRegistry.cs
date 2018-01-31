@@ -16,7 +16,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net.Http;
@@ -24,6 +23,7 @@ using System.Reflection;
 using System.Web;
 using AutoMapper;
 using MediatR;
+using Microsoft.ApplicationInsights;
 using Microsoft.Azure;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Commitments.Api.Client;
@@ -33,7 +33,6 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.CookieService;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using NotificationsApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.NotificationsApiClientConfiguration;
@@ -60,7 +59,6 @@ using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Tasks.API.Client;
 using StructureMap;
 using StructureMap.TypeRules;
-using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
