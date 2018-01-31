@@ -8,6 +8,27 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Connection request details</h1>
-        
+        <table>
+            <tbody>
+                <tr>
+                    <td>Account name</td>
+                    <td>Good Supplier Ltd</td>
+                </tr>
+                <tr>
+                    <td>Account ID</td>
+                    <td>DFR345</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>Pending</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Index", "Transfers")" aria-label="Back" class="back-link">Back</a>
+    </div>
+}

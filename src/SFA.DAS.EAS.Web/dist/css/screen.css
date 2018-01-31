@@ -1314,6 +1314,10 @@ table td {
   border-bottom: 1px solid #bfc1c3;
 }
 
+table caption {
+  text-align: left;
+}
+
 @media (min-width: 641px) {
   table th,
   table td {
@@ -3405,6 +3409,21 @@ a#link-settings:focus {
   color: #fff;
   z-index: 1;
   margin: 0 auto;
+}
+
+.govuk-box-highlight.esfa-standout-amount {
+  display: block;
+  text-align: center;
+  background: #912B88;
+  margin-bottom: 1.25em;
+}
+
+@media (min-width: 641px) {
+  .govuk-box-highlight.esfa-standout-amount {
+    text-align: left;
+    display: inline-block;
+    margin-bottom: 1.875em;
+  }
 }
 
 .floating-menu nav#user-nav {
