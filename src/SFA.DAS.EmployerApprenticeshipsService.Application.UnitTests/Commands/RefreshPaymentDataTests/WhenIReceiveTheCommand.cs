@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Moq;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
@@ -31,6 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         private List<PaymentDetails> _paymentDetails;
         private List<Guid> _existingPaymentIds;
         private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<IMapper> _mapper;
 
         [SetUp]
         public void Arrange()
@@ -72,14 +74,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
             _messagePublisher = new Mock<IMessagePublisher>();
-            
+            _mapper = new Mock<IMapper>();
             _handler = new RefreshPaymentDataCommandHandler(
                 _messagePublisher.Object,
                 _validator.Object, 
                 _paymentService.Object, 
                 _dasLevyRepository.Object, 
                 _mediator.Object, 
-                _logger.Object);
+                _logger.Object,
+                _mapper.Object);
         }
 
         [Test]

@@ -14,6 +14,7 @@
     <dependencies>
       <group targetFramework=".NETFramework4.5">
         <dependency id="SFA.DAS.Messaging" version="3.0.0.39271"/>
+        <dependency id="SFA.DAS.Provider.Events.Api.Client" version="2.0.0.40478"/>
       </group>
     </dependencies>
   </metadata>
