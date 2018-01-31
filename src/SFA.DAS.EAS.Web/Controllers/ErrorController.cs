@@ -1,56 +1,32 @@
 ﻿using System.Net;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    [RoutePrefix("Error")]
     public class ErrorController : Controller
     {
-        private readonly ILog _logger;
-
-        public ErrorController(ILog logger)
+        [Route("accessdenied")]
+        public ActionResult AccessDenied()
         {
-            _logger = logger;
-        }
-        
-        [Route]
-        public ActionResult Index()
-        {
-            try
-            {
-                var lastError = Server.GetLastError();
-
-                if (lastError != null)
-                {
-                    _logger.Error(lastError, $"Unhandled Exception: {lastError.Message}");
-                }
-            }
-            catch
-            {
-
-            }
-            return View("Error");
-        }
-        
-        public ActionResult NotFound()
-        {
-            Response.StatusCode = (int)HttpStatusCode.NotFound;
-            Response.TrySkipIisCustomErrors = true;
+            Response.StatusCode = (int)HttpStatusCode.Forbidden;
 
             return View();
         }
 
-        [Route("InvalidState/{hashedAccountId}")]
-        public ActionResult InvalidState(string hashedAccountId)
+        [Route("error")]
+        public ActionResult Error()
         {
-            var vm = new InvalidStateViewModel
-            {
-                HashedAccountId = hashedAccountId
-            };
+            Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            return View(vm);
+            return View();
+        }
+
+        [Route("notfound")]
+        public ActionResult NotFound()
+        {
+            Response.StatusCode = (int)HttpStatusCode.NotFound;
+
+            return View();
         }
     }
 }
