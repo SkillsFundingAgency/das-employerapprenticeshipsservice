@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -31,32 +32,23 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
         public TestServer TestServer { get; private set; }
 
         /// <summary>
-        ///     An overload to <see cref="InvokeIsolatedGetAsync"/> that does not return a value (only a status code).
-        /// </summary>
-        /// <param name="call">Details the requirements of teh call to be made.</param>
-        /// <remarks>
-        ///     This is a shortcut to run individual tests. If running multiple tests then using <see cref="InvokeGetAsync"/>
-        ///     is more efficient.
-        /// </remarks>
-        public static async Task InvokeIsolatedGetAsync(CallRequirements call)
-        {
-            using (var tester = new ApiIntegrationTester())
-            {
-                await tester.InvokeGetAsync(call);
-            }
-        }
-
-        /// <summary>
         ///     Send a GET to the specified URI using a test server and configuration created just for this call.
         /// </summary>
-        /// <typeparam name="TResult">The type of the result expected from the GET request.</typeparam>
         /// <param name="call">Details the requirements of the call to be made.</param>
         /// <returns>A task that will result in an instance of <see cref="TResult"/>.</returns>
-        public static async Task<TResult> InvokeIsolatedGetAsync<TResult>(CallRequirements<TResult> call)
+        public static async Task<CallResponse> InvokeIsolatedGetAsync(CallRequirements call)
         {
             using (var tester = new ApiIntegrationTester() )
             {
                 return await tester.InvokeGetAsync(call);
+            }
+        }
+
+        public static async Task<CallResponse<TResult>> InvokeIsolatedGetAsync<TResult>(CallRequirements call)
+        {
+            using (var tester = new ApiIntegrationTester())
+            {
+                return await tester.InvokeGetAsync<TResult>(call);
             }
         }
 
@@ -79,25 +71,49 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
             TestServer = null;
         }
 
-        public Task InvokeGetAsync(CallRequirements call)
+        public Task<CallResponse> InvokeGetAsync(CallRequirements call)
         {
             return GetResponseAsync(call);
         }
 
-        public async Task<TResult> InvokeGetAsync<TResult>(CallRequirements<TResult> call)
+        public Task<CallResponse<TResult>> InvokeGetAsync<TResult>(CallRequirements call)
         {
-            var result = await GetResponseAsync(call);
-            call.Result = await FetchCompleteResponse<TResult>(result);
-            return call.Result;
+            return GetResponseAsync<TResult>(call);
         }
 
-        private async Task<HttpResponseMessage> GetResponseAsync(CallRequirements call)
+        private async Task<CallResponse> GetResponseAsync(CallRequirements call)
+        {
+            var callResponse = new CallResponse();
+            await BuildResponseAsync(call, callResponse);
+            return callResponse;
+        }
+
+        private async Task<CallResponse<TResult>> GetResponseAsync<TResult>(CallRequirements call)
+        {
+            var callResponse = new CallResponse<TResult>();
+            await BuildResponseAsync(call, callResponse);
+            await FetchCompleteResponse(callResponse);
+            return callResponse;
+        }
+
+        private async Task BuildResponseAsync(CallRequirements call, CallResponse response)
         {
             EnsureStarted();
             ClearDownForNewTest();
-            var result = await GetClient(call).GetAsync(call.Uri);
-            CheckCallWasSuccessful(result, call);
-            return result;
+            await MakeCall(call, response);
+            CheckCallWasSuccessful(call, response);
+        }
+
+        private async Task MakeCall(CallRequirements call, CallResponse response)
+        {
+            var client = GetClient(call);
+            response.Response = await client.GetAsync(call.Uri);
+        }
+
+        private async Task FetchCompleteResponse<TResult>(CallResponse<TResult> response)
+        {
+            var responseContent = await response.Response.Content.ReadAsStringAsync();
+            response.Data = JsonConvert.DeserializeObject<TResult>(responseContent);
         }
 
         private HttpClient GetClient(CallRequirements call)
@@ -146,31 +162,49 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
             configuration.DependencyResolver = _dependencyResolver;
         }
 
-        private void CheckCallWasSuccessful(HttpResponseMessage response, CallRequirements call)
+        private void CheckCallWasSuccessful(CallRequirements call, CallResponse response)
         {
             StringBuilder failMessage = new StringBuilder();
 
-            if (!IsAcceptableStatusCode(response, call.AcceptableStatusCodes))
-            {
-                failMessage.AppendLine($"Received response {response.StatusCode} " +
-                                       $"when expected any of [{string.Join(",", call.AcceptableStatusCodes)}]. " +
-                                       $"Additional information sent to the client: {response.ReasonPhrase}. ");
-            }
+            CheckStatusCode(call, response, failMessage);
 
-            if (WasUnacceptableExceptionThrownInServer(call))
-            {
-                failMessage.AppendLine($"An unexpected unhandled exception occurred in the server during the call:{_exceptionHandler.Exception.GetType().Name} - {_exceptionHandler.Exception.Message}");
-            }
+            CheckUnhandledExceptions(call, failMessage);
 
-            if (!WasExpectedControllerCreated(call.ExpectedControllerType))
-            {
-                failMessage.AppendLine($"The controller {call.ExpectedControllerType.Name} was not created by DI. "+
-                                       $"Controllers that were created are: {string.Join(",", GetCreatedControllers())}");
-            }
+            CheckExpectedControllerCalled(call, failMessage);
 
             if (failMessage.Length > 0)
             {
-                Assert.Fail(failMessage.ToString());
+                response.Failed = true;
+                response.FailureMessage = failMessage.ToString();
+                Assert.Fail(response.FailureMessage);
+            }
+        }
+
+        private void CheckExpectedControllerCalled(CallRequirements call, StringBuilder failMessage)
+        {
+            if (!WasExpectedControllerCreated(call.ExpectedControllerType))
+            {
+                failMessage.AppendLine($"The controller {call.ExpectedControllerType.Name} was not created by DI. " +
+                                       $"Controllers that were created are: {string.Join(",", GetCreatedControllers())}");
+            }
+        }
+
+        private void CheckUnhandledExceptions(CallRequirements call, StringBuilder failMessage)
+        {
+            if (WasUnacceptableExceptionThrownInServer(call))
+            {
+                failMessage.AppendLine(
+                    $"An unexpected unhandled exception occurred in the server during the call:{_exceptionHandler.Exception.GetType().Name} - {_exceptionHandler.Exception.Message}");
+            }
+        }
+
+        private void CheckStatusCode(CallRequirements call, CallResponse response, StringBuilder failMessage)
+        {
+            if (!IsAcceptableStatusCode(response, call.AcceptableStatusCodes))
+            {
+                failMessage.AppendLine($"Received response {response.Response.StatusCode} " +
+                                       $"when expected any of [{string.Join(",", call.AcceptableStatusCodes)}]. " +
+                                       $"Additional information sent to the client: {response.Response.ReasonPhrase}. ");
             }
         }
 
@@ -194,16 +228,9 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
                 .Select(t => t.Name);
         }
 
-        private bool IsAcceptableStatusCode(HttpResponseMessage response, IEnumerable<HttpStatusCode> acceptableStatusCodes)
+        private bool IsAcceptableStatusCode(CallResponse response, IEnumerable<HttpStatusCode> acceptableStatusCodes)
         {
-            return acceptableStatusCodes.Contains(response.StatusCode);
-        }
-
-        private async Task<TResult> FetchCompleteResponse<TResult>(HttpResponseMessage message)
-        {
-            var responseContent = await message.Content.ReadAsStringAsync();
-            var returnedObject = JsonConvert.DeserializeObject<TResult>(responseContent);
-            return returnedObject;
+            return acceptableStatusCodes.Contains(response.Response.StatusCode);
         }
     }
 }

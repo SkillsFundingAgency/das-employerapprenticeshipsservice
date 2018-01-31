@@ -1,33 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using FluentValidation;
-using SFA.DAS.EAS.Application;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
 {
-    public static class CallRequirementsExtensions
-    {
-        /// <summary>
-        ///     Set the call request to expect a <see cref="HttpStatusCode.BadRequest"/> and to ignore
-        ///     the <see cref="ValidationException"/> and <see cref="InvalidRequestException"/>.
-        /// </summary>
-        public static CallRequirements ExpectValidationError(this CallRequirements call)
-        {
-            call.AcceptableStatusCodes = new[] {HttpStatusCode.BadRequest};
-            call.IgnoreExceptionTypes = new[] {typeof(InvalidRequestException), typeof(ValidationException)};
-            return call;
-        }
-
-        public static CallRequirements<TResult> ExpectValidationError<TResult>(this CallRequirements<TResult> call)
-        {
-            call.AcceptableStatusCodes = new[] { HttpStatusCode.BadRequest };
-            call.IgnoreExceptionTypes = new[] { typeof(InvalidRequestException), typeof(ValidationException) };
-            return call;
-        }
-    }
-
     /// <summary>
     ///     Specifies the expectations for a call, for example the acceptable status codes/
     /// </summary>
@@ -38,19 +14,9 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
 
         private static readonly TimeSpan DefaultTimeOut = new TimeSpan(0,5,0);
 
-        public CallRequirements(string uri) : this(uri, EmptyStatusCodes)
-        {
-            // just call other constructor
-        }
-
-        public CallRequirements(string uri, HttpStatusCode acceptableStatusCode) : this(uri, new[] { acceptableStatusCode })
-        {
-        }
-
-        public CallRequirements(string uri, IEnumerable<HttpStatusCode> acceptableStatusCodes)
+        public CallRequirements(string uri)
         {
             Uri = uri;
-            AcceptableStatusCodes = acceptableStatusCodes.ToArray();
             TimeOut = DefaultTimeOut;
         }
 
@@ -58,7 +24,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
         ///     The URI that will be used for the call. This should not include the hodt name (which will be 
         ///     set automatically).
         /// </summary>
-        public string Uri { get; }
+        public string Uri { get; set; }
 
         /// <summary>
         ///     The status codes that will be required to consider the call successful. 
@@ -81,32 +47,11 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
         ///     HTTP request timeout to use. 
         /// </summary>
         public TimeSpan TimeOut { get; set; }
-    }
-
-    /// <summary>
-    ///     A generic form of <see cref="CallRequirements"/> which will deserialise the full response into the
-    ///     the specified type.
-    /// </summary>
-    public class CallRequirements<TResultType> : CallRequirements
-    {
-        public CallRequirements(string uri) : this(uri, EmptyStatusCodes)
-        {
-            // just call other constructor
-        }
-
-        public CallRequirements(string uri, HttpStatusCode acceptableStatusCode) : this(uri, new[] { acceptableStatusCode })
-        {
-            // Just call other constructor.
-        }
-
-        public CallRequirements(string uri, IEnumerable<HttpStatusCode> acceptableStatusCodes) : base(uri, acceptableStatusCodes)
-        {
-            // just call base
-        }
 
         /// <summary>
-        ///     The response returned from the call.
+        ///     The type of the response that is excpected from this call. If specified then then body of
+        ///     the response will be deserialised into an instance of this type.
         /// </summary>
-        public TResultType Result { get; set; }
+        public Type ExpectResponseType { get; set; }
     }
 }

@@ -16,16 +16,15 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         {
             // Arrange
             var callRequirements =
-                new CallRequirements<LegalEntities>("api/accounts/ZZZZZZ/legalentities", HttpStatusCode.NotFound)
-                {
-                    ExpectedControllerType = typeof(AccountLegalEntitiesController)
-                };
+                new CallRequirements("api/accounts/ZZZZZZ/legalentities")
+                    .AllowStatusCodes(HttpStatusCode.NotFound)
+                    .ExpectControllerType(typeof(AccountLegalEntitiesController));
 
             // Act
-            var legalEntities = await ApiIntegrationTester.InvokeIsolatedGetAsync(callRequirements);
+            var legalEntities = await ApiIntegrationTester.InvokeIsolatedGetAsync<LegalEntities>(callRequirements);
 
             // Assert
-            Assert.IsNull(legalEntities);
+            Assert.IsNull(legalEntities.Data);
         }
     }
 }
