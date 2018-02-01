@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.HealthCheckControllerTests
 {

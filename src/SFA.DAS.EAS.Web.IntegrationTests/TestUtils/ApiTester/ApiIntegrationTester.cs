@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -14,12 +13,16 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Owin;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Api;
 using SFA.DAS.EAS.Api.Controllers;
 using SFA.DAS.EAS.Api.DependencyResolution;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.NLog.Logger;
+using StructureMap;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
+namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
     sealed class ApiIntegrationTester : IDisposable
     {
@@ -27,7 +30,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
 
         private IntegrationTestExceptionHandler _exceptionHandler;
 
+        private readonly Lazy<DbBuilder> _dbBuilder;
+
         public bool IsTestServerStarted => TestServer != null;
+
+        public ApiIntegrationTester()
+        {
+            _dbBuilder = new Lazy<DbBuilder>(Resolve<DbBuilder>);    
+        }
 
         public TestServer TestServer { get; private set; }
 
@@ -80,6 +90,18 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
         {
             return GetResponseAsync<TResult>(call);
         }
+
+        /// <summary>
+        ///     Use the DI container used for the test to resolve the specified service.
+        /// </summary>
+        public T Resolve<T>()
+        {
+            EnsureStarted();
+
+            return _dependencyResolver.Container.GetInstance<T>();
+        }
+
+        public DbBuilder DbBuilder => _dbBuilder.Value;
 
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
         {
@@ -147,17 +169,24 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
 
         private void CustomiseIoC(HttpConfiguration configuration)
         {
-            var existingExceptionHandler = (IExceptionHandler) configuration.Services.GetService(typeof(IExceptionHandler));
+            var existingExceptionHandler = configuration.Services.GetExceptionHandler();
             _exceptionHandler = new IntegrationTestExceptionHandler(existingExceptionHandler);
-
             configuration.Services.Replace(typeof(IAssembliesResolver), new TestWebApiResolver<AccountLegalEntitiesController>());
             configuration.Services.Replace(typeof(IExceptionHandler), _exceptionHandler);
 
             StructuremapMvc.Start();
             StructuremapWebApi.Start();
+
             var container = ((StructureMapWebApiDependencyResolver)GlobalConfiguration.Configuration.DependencyResolver).Container;
+
             var requestContextMock = new Mock<IRequestContext>();
-            container.Inject(requestContextMock.Object);
+
+            container.Configure(c =>
+            {
+                c.For<IUserRepository>().Use<UserRepository>();
+                c.For<IRequestContext>().Use(requestContextMock.Object);
+            });
+
             _dependencyResolver = new IntegrationTestDependencyResolver(container);
             configuration.DependencyResolver = _dependencyResolver;
         }
@@ -203,7 +232,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
             if (!IsAcceptableStatusCode(response, call.AcceptableStatusCodes))
             {
                 failMessage.AppendLine($"Received response {response.Response.StatusCode} " +
-                                       $"when expected any of [{string.Join(",", call.AcceptableStatusCodes)}]. " +
+                                       $"when expected any of [{string.Join(",", call.AcceptableStatusCodes.Select(sc => sc))}]. " +
                                        $"Additional information sent to the client: {response.Response.ReasonPhrase}. ");
             }
         }

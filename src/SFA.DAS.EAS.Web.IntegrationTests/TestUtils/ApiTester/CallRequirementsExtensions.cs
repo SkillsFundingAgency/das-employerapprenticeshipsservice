@@ -4,7 +4,7 @@ using System.Net;
 using FluentValidation;
 using SFA.DAS.EAS.Application;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
+namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
     /// <summary>
     ///     Extension methods to help build up the requirements to a call. A fluent syntax is used allowing the 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
+namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
     /// <summary>
     ///     Specifies the expectations for a call, for example the acceptable status codes/

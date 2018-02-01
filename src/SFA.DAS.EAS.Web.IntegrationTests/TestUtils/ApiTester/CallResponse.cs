@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
+namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
     public class CallResponse
     {

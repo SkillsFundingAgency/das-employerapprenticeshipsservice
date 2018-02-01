@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web.Http.Dependencies;
 using StructureMap;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
+namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
     public class IntegrationTestDependencyResolver : IDependencyResolver
     {
