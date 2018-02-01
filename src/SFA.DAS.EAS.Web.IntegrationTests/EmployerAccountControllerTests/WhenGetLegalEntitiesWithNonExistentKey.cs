@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
                 .EnsureAccountExists(builder.BuildEmployerAccountInput(accountName))
                 .WithLegalEntity(builder.BuildEntityWithAgreementInput(legalEntityName));
 
-            var hashedAccountId = _tester.DbBuilder.Context.ActiveEmployerAccount.HashedAccountId;
+            var hashedAccountId = builder.Context.ActiveEmployerAccount.HashedAccountId;
 
             var callRequirements =
                 new CallRequirements($"api/accounts/{hashedAccountId}/legalentities")
