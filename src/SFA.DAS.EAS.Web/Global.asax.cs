@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Web;
@@ -18,6 +17,7 @@ using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.NLog.Logger;
@@ -94,10 +94,11 @@ namespace SFA.DAS.EAS.Web
                 // Request not available
             }
 
-            var telemetryClient = new TelemetryClient();
+            var message = exception.GetMessage();
             var logger = new NLogLogger(typeof(MvcApplication));
+            var telemetryClient = new TelemetryClient();
 
-            logger.Error(exception, "Unhandled exception", properties);
+            logger.Error(exception, message, properties);
             telemetryClient.TrackException(exception);
         }
     }

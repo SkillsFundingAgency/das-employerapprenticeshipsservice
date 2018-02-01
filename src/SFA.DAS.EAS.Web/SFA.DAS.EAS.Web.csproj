@@ -426,6 +426,7 @@
     <Compile Include="Attributes\ImportModelStateFromTempDataAttribute.cs" />
     <Compile Include="Attributes\ModelStateTempDataAttribute.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
+    <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Filters\EnsureFeatureIsEnabledFilter.cs" />
     <Compile Include="Mappings\ActivityMaps.cs" />
