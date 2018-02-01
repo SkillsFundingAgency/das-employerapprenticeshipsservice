@@ -9,12 +9,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel
     public class GetTransactionsDownloadQuery : IAsyncRequest<GetTransactionsDownloadResponse>
     {
         [Required]
-        public TransactionsDownloadStartDateMonthYearDateTime StartDate { get; set; } =
-            new TransactionsDownloadStartDateMonthYearDateTime();
+        public TransactionsDownloadStartDateMonthYearDateTime StartDate { get; set; }
 
         [Required]
-        public TransactionsDownloadEndDateMonthYearDateTime EndDate { get; set; } =
-            new TransactionsDownloadEndDateMonthYearDateTime();
+        public TransactionsDownloadEndDateMonthYearDateTime EndDate { get; set; } 
 
         public DownloadFormatType DownloadFormat { get; set; }
 

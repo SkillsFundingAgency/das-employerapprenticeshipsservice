@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
-using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Extensions;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
@@ -23,7 +21,6 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
         private readonly IMediator _mediator;
-        private readonly IHashingService _hashingService;
 
         public EmployerAccountTransactionsController(IOwinWrapper owinWrapper, IFeatureToggleService featureToggle,
             IHashingService hashingService,
@@ -33,7 +30,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _mediator = mediator;
-            _hashingService = hashingService;
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }
 
@@ -55,11 +51,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance/downloadtransactions")]
         public ActionResult TransactionsDownload(string hashedAccountId)
         {
-            return View(new TransactionDownloadViewModel
+            var viewModel = new TransactionDownloadViewModel
             {
                 AccountHashedId = hashedAccountId,
-                Message = new GetTransactionsDownloadQuery()
-            });
+                Message = new GetTransactionsDownloadQuery
+                {
+                    StartDate = new TransactionsDownloadStartDateMonthYearDateTime(),
+                    EndDate = new TransactionsDownloadEndDateMonthYearDateTime()
+                }
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -69,8 +71,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> TransactionDownloadByDate(TransactionDownloadViewModel model)
         {
             const string viewName = @"TransactionsDownload";
-
-            model.SetMessageFromViewModel();
 
             var response = await _mediator.SendAsync(model.Message);
 

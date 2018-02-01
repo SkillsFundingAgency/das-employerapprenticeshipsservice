@@ -8,16 +8,48 @@ namespace SFA.DAS.EAS.Web.ViewModels
     {
         public string AccountHashedId { get; set; }
 
-        public TransactionsDownloadStartDateMonthYearDateTime StartDate { get; set; } =
-            new TransactionsDownloadStartDateMonthYearDateTime();
-
-        public TransactionsDownloadEndDateMonthYearDateTime EndDate { get; set; } =
-            new TransactionsDownloadEndDateMonthYearDateTime();
-        
-        public void SetMessageFromViewModel()
+        public TransactionsDownloadStartDateMonthYearDateTime StartDate
         {
-            Message.StartDate = StartDate;
-            Message.EndDate = EndDate;
+            get
+            {
+                if (Message != null)
+                {
+                    return Message.StartDate;
+                }
+
+                return null;
+            }
+            set
+            {
+                if (Message == null)
+                {
+                    Message = new GetTransactionsDownloadQuery();
+                }
+
+                Message.StartDate = value;
+            }
+        }
+
+        public TransactionsDownloadEndDateMonthYearDateTime EndDate
+        {
+            get
+            {
+                if (Message != null)
+                {
+                    return Message.EndDate;
+                }
+
+                return null;
+            }
+            set
+            {
+                if (Message == null)
+                {
+                    Message = new GetTransactionsDownloadQuery();
+                }
+
+                Message.EndDate = value;
+            }
         }
 
         public bool Valid => Message.StartDate.Valid && Message.EndDate.Valid;

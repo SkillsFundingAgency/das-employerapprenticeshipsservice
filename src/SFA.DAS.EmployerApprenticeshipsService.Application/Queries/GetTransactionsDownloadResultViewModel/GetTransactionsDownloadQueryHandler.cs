@@ -87,8 +87,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel
 
             return new GetTransactionsDownloadResponse
             {
-                //StartDate = message.StartDate,
-                //EndDate = message.EndDate,
                 FileDate = fileFormatter.GetFileData(transactions),
                 FileExtension = fileFormatter.FileExtension,
                 MimeType = fileFormatter.MimeType,

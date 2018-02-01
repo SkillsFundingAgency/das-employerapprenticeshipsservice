@@ -42,17 +42,20 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _transactionDownloadViewModel = new TransactionDownloadViewModel
             {
                 AccountHashedId = "",
-                StartDate = new TransactionsDownloadStartDateMonthYearDateTime()
+
+                Message = new GetTransactionsDownloadQuery
                 {
-                    Month = 1,
-                    Year = 2000
-                },
-                EndDate = new TransactionsDownloadEndDateMonthYearDateTime
-                {
-                    Month = 1,
-                    Year = 2018
-                },
-                Message = new GetTransactionsDownloadQuery()
+                    StartDate = new TransactionsDownloadStartDateMonthYearDateTime()
+                    {
+                        Month = 1,
+                        Year = 2000
+                    },
+                    EndDate = new TransactionsDownloadEndDateMonthYearDateTime
+                    {
+                        Month = 1,
+                        Year = 2018
+                    },
+                }
             };
             _mediator = new Mock<IMediator>();
 

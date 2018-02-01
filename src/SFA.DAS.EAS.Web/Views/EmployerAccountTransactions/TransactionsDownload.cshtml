@@ -26,10 +26,9 @@
             <p>Enter a start and end date to download transactions within a specific date range.</p>
 
             @using (Html.BeginForm("TransactionDownloadByDate", "EmployerAccountTransactions", FormMethod.Post, new { onsubmit = "return clearErrors();" }))
-            {
+    {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Message.AccountHashedId)
-
         <div id="start-date-group" class="form-error-group form-group @(Html.IsValid(m => m.Message.StartDate) ? "" : "error")">
             <span class="form-label-bold">Start date</span>
             <span class="form-hint">For example, 5 2017</span>
@@ -73,11 +72,11 @@
         <div class="form-group">
             <label class="form-label" for="DownloadFormat">Select format</label>
             @Html.DropDownList("DownloadFormat",
-          EnumHelper.GetSelectList(typeof(DownloadFormatType)),
-          new
-          {
-              @class = "form-control",
-          })
+ EnumHelper.GetSelectList(typeof(DownloadFormatType)),
+ new
+ {
+     @class = "form-control",
+ })
         </div>
 
         <button type="submit" class="button" aria-label="Download" id="submit-download">Download</button>
