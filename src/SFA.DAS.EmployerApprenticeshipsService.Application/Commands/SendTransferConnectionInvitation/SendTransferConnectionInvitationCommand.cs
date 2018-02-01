@@ -4,7 +4,7 @@ using MediatR;
 
 namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
 {
-    public class SendTransferConnectionInvitationCommand : IAsyncRequest<long>
+    public class SendTransferConnectionInvitationCommand : IAsyncRequest<long>, IValidatableObject
     {
         [Required(ErrorMessage = "Account ID is required.")]
         [RegularExpression(@"^[A-Za-z\d]{6,6}$", ErrorMessage = "Account ID must be 6 alphanumeric characters.")]
@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (ReceiverAccountHashedId == SenderAccountHashedId)
+            if (ReceiverAccountHashedId?.ToLower() == SenderAccountHashedId?.ToLower())
             {
                 yield return new ValidationResult("Account ID cannot be the current account's ID.", new [] { nameof(ReceiverAccountHashedId) });
             }
