@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMoq;
 using MediatR;
 using Moq;
+using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types.Events.Levy;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -16,13 +19,17 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Events.Api.Types;
 using SFA.DAS.HashingService;
+using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTests
 {
     public class WhenIReceiveTheCommand
     {
+        private AutoMoqer _moqer;
         private RefreshEmployerLevyDataCommandHandler _refreshEmployerLevyDataCommandHandler;
         private Mock<IValidator<RefreshEmployerLevyDataCommand>> _validator;
         private Mock<IDasLevyRepository> _levyRepository;
@@ -37,23 +44,25 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
         [SetUp]
         public void Arrange()
         {
-            _levyRepository = new Mock<IDasLevyRepository>();
-            _levyRepository.Setup(x => x.GetLastSubmissionForScheme(ExpectedEmpRef)).ReturnsAsync(new DasDeclaration { LevyDueYtd = 1000m, LevyAllowanceForFullYear = 1200m });
-            
-            _validator = new Mock<IValidator<RefreshEmployerLevyDataCommand>>();
-            _validator.Setup(x => x.Validate(It.IsAny<RefreshEmployerLevyDataCommand>())).Returns(new ValidationResult());
-            
-            _mediator = new Mock<IMediator>();
+            _moqer = new AutoMoqer();
 
-            _hmrcDateService = new Mock<IHmrcDateService>();
+            _levyRepository = _moqer.GetMock<IDasLevyRepository>();
+            _levyRepository.Setup(x => x.GetLastSubmissionForScheme(ExpectedEmpRef)).ReturnsAsync(new DasDeclaration { LevyDueYtd = 1000m, LevyAllowanceForFullYear = 1200m });
+          
+            _validator = _moqer.GetMock<IValidator<RefreshEmployerLevyDataCommand>>();
+            _validator.Setup(x => x.Validate(It.IsAny<RefreshEmployerLevyDataCommand>())).Returns(new ValidationResult());
+
+            _mediator = _moqer.GetMock<IMediator>();
+
+            _hmrcDateService = _moqer.GetMock<IHmrcDateService>();
             _hmrcDateService.Setup(x => x.IsSubmissionForFuturePeriod(It.IsAny<string>(), It.IsAny<short>(), It.IsAny<DateTime>())).Returns(false);
 
-            _levyEventFactory = new Mock<ILevyEventFactory>();
-            _genericEventFactory = new Mock<IGenericEventFactory>();
-            _hashingService = new Mock<IHashingService>();
+            _levyEventFactory = _moqer.GetMock<ILevyEventFactory>();
+            _genericEventFactory = _moqer.GetMock<IGenericEventFactory>();
+            _hashingService = _moqer.GetMock<IHashingService>();
 
-            _refreshEmployerLevyDataCommandHandler = new RefreshEmployerLevyDataCommandHandler(_validator.Object, _levyRepository.Object, _mediator.Object, _hmrcDateService.Object,
-                _levyEventFactory.Object, _genericEventFactory.Object, _hashingService.Object);
+            
+            _refreshEmployerLevyDataCommandHandler = _moqer.Resolve<RefreshEmployerLevyDataCommandHandler>();
         }
 
         [Test]
@@ -175,7 +184,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
         }
 
         [Test]
-        public async Task ThenIfLevyDataHasChangedThenALevyDeclarationUpdatedEventIsPublished()
+        public async Task ThenIfLevyDataHasChangedThenAGenericLevyDeclarationUpdatedEventIsPublished()
         {
             //Arrange
             var data = RefreshEmployerLevyDataCommandObjectMother.CreateLevyDataWithMultiplePeriods(ExpectedAccountId, DateTime.UtcNow);
@@ -219,5 +228,139 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             //Assert
             _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.IsAny<IEnumerable<DasDeclaration>>(), It.IsAny<string>(), It.IsAny<long>()), Times.Never);
         }
+
+        [Test]
+        public async Task ThenIfLevyDataHasChangedThenALevySchemeDeclarationUpdatedEventIsPublished()
+        {
+            //Arrange
+            var data = RefreshEmployerLevyDataCommandObjectMother.CreateLevyDataWithMultiplePeriods(ExpectedAccountId, DateTime.UtcNow);
+
+            var hashedAccountId = "ABC123";
+            _hashingService.Setup(x => x.HashValue(ExpectedAccountId)).Returns(hashedAccountId);
+
+            var expectedLevyEvents = new List<LevyDeclarationUpdatedEvent> { new LevyDeclarationUpdatedEvent { ResourceUri = "ABC" }, new LevyDeclarationUpdatedEvent { ResourceUri = "ZZZ" } };
+            var expectedGenericEvents = new List<GenericEvent> { new GenericEvent { Id = 1 }, new GenericEvent { Id = 2 } };
+
+            _levyEventFactory.Setup(
+                x =>
+                    x.CreateDeclarationUpdatedEvent(hashedAccountId, data.EmployerLevyData.First().Declarations.Declarations[0].PayrollYear,
+                        data.EmployerLevyData.First().Declarations.Declarations[0].PayrollMonth)).Returns(expectedLevyEvents[0]);
+            _genericEventFactory.Setup(x => x.Create(expectedLevyEvents[0])).Returns(expectedGenericEvents[0]);
+            _levyEventFactory.Setup(
+                x =>
+                    x.CreateDeclarationUpdatedEvent(hashedAccountId, data.EmployerLevyData.ElementAt(1).Declarations.Declarations[0].PayrollYear,
+                        data.EmployerLevyData.ElementAt(1).Declarations.Declarations[0].PayrollMonth)).Returns(expectedLevyEvents[1]);
+            _genericEventFactory.Setup(x => x.Create(expectedLevyEvents[1])).Returns(expectedGenericEvents[1]);
+
+            var oldTaxYear = DateTime.Today.Month < 4;
+            var payrollMonth =  (short)(oldTaxYear ? 9 + DateTime.Today.Month : DateTime.Today.Month - 3);
+            var year = DateTime.Today.AddYears(oldTaxYear ? -1 : 0);
+            var payrollYear = $"{year:yy}-{year.AddYears(1):yy}";
+            //TODO: should really be linked to the data generated by RefreshEmployerLevyDataCommandObjectMother
+            _levyRepository
+                .Setup(x =>
+                    x.GetAccountLevyDeclarations(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<short>()))
+                .ReturnsAsync(new List<LevyDeclarationView>
+                {
+                    new LevyDeclarationView
+                    {
+                        AccountId = 1,
+                        LevyDeclaredInMonth = 960m,
+                        PayrollMonth = payrollMonth,
+                        PayrollYear = payrollYear,
+                        CreatedDate = DateTime.UtcNow,
+                        LevyDueYtd = 1000m,
+                        LevyAllowanceForYear = 12000m,
+                        EmpRef = "abcd"
+                    },
+                    new LevyDeclarationView
+                    {
+                        AccountId = 1,
+                        LevyDeclaredInMonth = 960m,
+                        PayrollMonth = payrollMonth,
+                        PayrollYear = payrollYear,
+                        CreatedDate = DateTime.UtcNow,
+                        LevyDueYtd = 1000m,
+                        LevyAllowanceForYear = 12000m,
+                        EmpRef = "efgh"
+                    }
+                });
+
+            //Act
+            await _refreshEmployerLevyDataCommandHandler.Handle(data);
+
+            //Assert
+            var publisher = _moqer.GetMock<IMessagePublisher>();
+            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationUpdatedMessage>(msg => msg.LevyDeclaredInMonth == 1920 && msg.AccountId == 1 && msg.PayrollYear == payrollYear && msg.PayrollMonth == payrollMonth)),Times.Exactly(2));
+            publisher.Verify(x => x.PublishAsync(It.Is<LevySchemeDeclarationUpdatedMessage>(msg => msg.EmpRef == "abcd")), Times.Exactly(1));
+            publisher.Verify(x => x.PublishAsync(It.Is<LevySchemeDeclarationUpdatedMessage>(msg => msg.EmpRef == "efgh")), Times.Exactly(1));
+        }
+        [Test]
+        public async Task ThenIfLevyDataHasChangedThenALevyDeclarationUpdatedEventIsPublished()
+        {
+            //Arrange
+            var data = RefreshEmployerLevyDataCommandObjectMother.CreateLevyDataWithMultiplePeriods(ExpectedAccountId, DateTime.UtcNow);
+
+            var hashedAccountId = "ABC123";
+            _hashingService.Setup(x => x.HashValue(ExpectedAccountId)).Returns(hashedAccountId);
+
+            var expectedLevyEvents = new List<LevyDeclarationUpdatedEvent> { new LevyDeclarationUpdatedEvent { ResourceUri = "ABC" }, new LevyDeclarationUpdatedEvent { ResourceUri = "ZZZ" } };
+            var expectedGenericEvents = new List<GenericEvent> { new GenericEvent { Id = 1 }, new GenericEvent { Id = 2 } };
+
+            _levyEventFactory.Setup(
+                x =>
+                    x.CreateDeclarationUpdatedEvent(hashedAccountId, data.EmployerLevyData.First().Declarations.Declarations[0].PayrollYear,
+                        data.EmployerLevyData.First().Declarations.Declarations[0].PayrollMonth)).Returns(expectedLevyEvents[0]);
+            _genericEventFactory.Setup(x => x.Create(expectedLevyEvents[0])).Returns(expectedGenericEvents[0]);
+            _levyEventFactory.Setup(
+                x =>
+                    x.CreateDeclarationUpdatedEvent(hashedAccountId, data.EmployerLevyData.ElementAt(1).Declarations.Declarations[0].PayrollYear,
+                        data.EmployerLevyData.ElementAt(1).Declarations.Declarations[0].PayrollMonth)).Returns(expectedLevyEvents[1]);
+            _genericEventFactory.Setup(x => x.Create(expectedLevyEvents[1])).Returns(expectedGenericEvents[1]);
+
+            var oldTaxYear = DateTime.Today.Month < 4;
+            var payrollMonth = (short)(oldTaxYear ? 9 + DateTime.Today.Month : DateTime.Today.Month - 3);
+            var year = DateTime.Today.AddYears(oldTaxYear ? -1 : 0);
+            var payrollYear = $"{year:yy}-{year.AddYears(1):yy}";
+            //TODO: should really be linked to the data generated by RefreshEmployerLevyDataCommandObjectMother
+            _levyRepository
+                .Setup(x =>
+                    x.GetAccountLevyDeclarations(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<short>()))
+                .ReturnsAsync(new List<LevyDeclarationView>
+                {
+                    new LevyDeclarationView
+                    {
+                        AccountId = 1,
+                        LevyDeclaredInMonth = 960m,
+                        PayrollMonth = payrollMonth,
+                        PayrollYear = payrollYear,
+                        CreatedDate = DateTime.UtcNow,
+                        LevyDueYtd = 1000m,
+                        LevyAllowanceForYear = 12000m,
+                        EmpRef = "abcd"
+                    },
+                    new LevyDeclarationView
+                    {
+                        AccountId = 1,
+                        LevyDeclaredInMonth = 960m,
+                        PayrollMonth = payrollMonth,
+                        PayrollYear = payrollYear,
+                        CreatedDate = DateTime.UtcNow,
+                        LevyDueYtd = 1000m,
+                        LevyAllowanceForYear = 12000m,
+                        EmpRef = "efgh"
+                    }
+                });
+
+            //Act
+            await _refreshEmployerLevyDataCommandHandler.Handle(data);
+
+            //Assert
+            var publisher = _moqer.GetMock<IMessagePublisher>();
+            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationUpdatedMessage>(msg => msg.LevyDeclaredInMonth == 1920 && msg.AccountId == 1 && msg.PayrollYear == payrollYear && msg.PayrollMonth == payrollMonth)), Times.Exactly(2));
+            publisher.Verify(x => x.PublishAsync(It.Is<LevySchemeDeclarationUpdatedMessage>(msg => msg.EmpRef == "abcd")), Times.Exactly(1));
+            publisher.Verify(x => x.PublishAsync(It.Is<LevySchemeDeclarationUpdatedMessage>(msg => msg.EmpRef == "efgh")), Times.Exactly(1));
+        }
+
     }
 }

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
+using Newtonsoft.Json;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Events.ProcessDeclaration;
 using SFA.DAS.EAS.Application.Exceptions;
@@ -12,7 +14,10 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.HashingService;
+using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 {
@@ -25,9 +30,13 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
         private readonly ILevyEventFactory _levyEventFactory;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IHashingService _hashingService;
+        private readonly IMapper _mapper;
+        private readonly IMessagePublisher _messagePublisher;
+        private readonly ILog _logger;
 
         public RefreshEmployerLevyDataCommandHandler(IValidator<RefreshEmployerLevyDataCommand> validator, IDasLevyRepository dasLevyRepository, IMediator mediator, IHmrcDateService hmrcDateService,
-            ILevyEventFactory levyEventFactory, IGenericEventFactory genericEventFactory, IHashingService hashingService)
+            ILevyEventFactory levyEventFactory, IGenericEventFactory genericEventFactory, IHashingService hashingService,
+            IMapper mapper, IMessagePublisher messagePublisher, ILog logger )
         {
             _validator = validator;
             _dasLevyRepository = dasLevyRepository;
@@ -36,6 +45,9 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
             _levyEventFactory = levyEventFactory;
             _genericEventFactory = genericEventFactory;
             _hashingService = hashingService;
+            _mapper = mapper;
+            _messagePublisher = messagePublisher;
+            _logger = logger;
         }
 
         protected override async Task HandleCore(RefreshEmployerLevyDataCommand message)
@@ -98,7 +110,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
         private async Task<DasDeclaration[]> FilterActiveDeclarations(EmployerLevyData employerLevyData, IEnumerable<DasDeclaration> declarations)
         {
             var existingSubmissionIds = await _dasLevyRepository.GetEmployerDeclarationSubmissionIds(employerLevyData.EmpRef);
-            var existingSubmissionIdsLookup = new HashSet<string>(existingSubmissionIds.Select( x => x.ToString()));
+            var existingSubmissionIdsLookup = new HashSet<string>(existingSubmissionIds.Select(x => x.ToString()));
 
             //NOTE: The submissionId in our database is the same as the declaration ID from HMRC (DasDeclaration)
             declarations = declarations.Where(x => !existingSubmissionIdsLookup.Contains(x.Id)).ToArray();
@@ -142,7 +154,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
             dasDeclaration.EndOfYearAdjustmentAmount = adjustmentDeclaration?.LevyDueYtd - dasDeclaration.LevyDueYtd ?? 0;
         }
 
-     
+
 
         private async Task PublishDeclarationUpdatedEvents(long accountId, IEnumerable<DasDeclaration> savedDeclarations)
         {
@@ -155,16 +167,60 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
                     x.PayrollMonth
                 }).Distinct();
 
-            var tasks = periodsChanged.Select(x => CreateDeclarationUpdatedEvent(hashedAccountId, x.PayrollYear, x.PayrollMonth));
+            var tasks = periodsChanged.Select(x => CreateDeclarationUpdatedGenericEvent(hashedAccountId, x.PayrollYear, x.PayrollMonth));
             await Task.WhenAll(tasks);
         }
 
-        private Task CreateDeclarationUpdatedEvent(string hashedAccountId, string payrollYear, short? payrollMonth)
+        private async Task CreateDeclarationUpdatedGenericEvent(string hashedAccountId, string payrollYear, short? payrollMonth)
         {
             var declarationUpdatedEvent = _levyEventFactory.CreateDeclarationUpdatedEvent(hashedAccountId, payrollYear, payrollMonth);
             var genericEvent = _genericEventFactory.Create(declarationUpdatedEvent);
 
-            return _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+            await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+            await PublishDeclarationUpdatedEventMessage(hashedAccountId, payrollYear, payrollMonth);
+        }
+
+        private async Task PublishDeclarationUpdatedEventMessage(string hashedAccountId, string payrollYear, short? payrollMonth)
+        {
+            if (!payrollMonth.HasValue)
+                return;
+
+            try
+            {
+                var accountId = _hashingService.DecodeValue(hashedAccountId);
+                var dasLevyDeclarations = await _dasLevyRepository.GetAccountLevyDeclarations(accountId, payrollYear, payrollMonth.Value);
+                if (!dasLevyDeclarations.Any())
+                {
+                    _logger.Warn($"No levy declarations found for account: {accountId}, payroll year: {payrollYear}, month: {payrollMonth}");
+                    return;
+                }
+                foreach (var levyDeclarationView in dasLevyDeclarations)
+                {
+                    try
+                    {
+                        var levySchemeDeclarationUpdatedEvent =
+                            new LevySchemeDeclarationUpdatedMessage(accountId, null, null);
+                        _mapper.Map(levyDeclarationView, levySchemeDeclarationUpdatedEvent);
+                        await _messagePublisher.PublishAsync(levySchemeDeclarationUpdatedEvent);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Error(ex, $"Error while trying to publish levy scheme declaration changed event. Error: {ex.Message}. Levy data: {JsonConvert.SerializeObject(levyDeclarationView)}");
+                        throw;  //TODO: Not sure if we should rollback the levy processing tx if the publishing fails
+                    }
+                }
+                var levyDeclarationEvent = new LevyDeclarationUpdatedMessage(accountId,null,null)
+                {
+                    LevyDeclaredInMonth = dasLevyDeclarations.Sum(levy => levy.LevyDeclaredInMonth),
+                    PayrollMonth = payrollMonth.Value,
+                    PayrollYear = payrollYear
+                };
+                await _messagePublisher.PublishAsync(levyDeclarationEvent);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error publishing levy declaration events. Error: {ex}");
+            }
         }
     }
 }
