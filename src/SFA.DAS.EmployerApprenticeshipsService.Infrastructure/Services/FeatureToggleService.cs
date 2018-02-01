@@ -49,12 +49,12 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 return true;
             }
 
-            if (actionToggle.WhiteList == null)
+            if (actionToggle.Whitelist == null)
             {
                 return false;
             }
 
-            return actionToggle.WhiteList.Any(p => Regex.IsMatch(userEmail, p, RegexOptions.IgnoreCase));
+            return actionToggle.Whitelist.Any(p => Regex.IsMatch(userEmail, p, RegexOptions.IgnoreCase));
         }
 
         private FeatureToggleConfiguration GetFeatures()

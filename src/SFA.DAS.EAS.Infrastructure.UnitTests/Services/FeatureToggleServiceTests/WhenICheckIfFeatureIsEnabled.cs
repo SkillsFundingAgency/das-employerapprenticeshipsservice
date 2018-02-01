@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
                         {
                             Controller = ControllerName,
                             Action = ActionName,
-                            WhiteList = new [] { whitelistPattern }
+                            Whitelist = new [] { whitelistPattern }
                         }
                     }
                 });
@@ -109,7 +109,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
                         {
                             Controller = ControllerName,
                             Action = ActionName,
-                            WhiteList = new [] { "different.user@somewhere.else" }
+                            Whitelist = new [] { "different.user@somewhere.else" }
                         }
                     }
                 });

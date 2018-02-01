@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     public class UserWhiteListService : AzureServiceBase<UserWhiteListLookUp>, IUserWhiteList
     {
         private readonly ICacheProvider _cacheProvider;
-        public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.WhiteList";
+        public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.Whitelist";
         public sealed override ILog Logger { get; set; }
 
         public UserWhiteListService(ICacheProvider cacheProvider, ILog logger)

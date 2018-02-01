@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), Mock.Of<ILog>());
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>());
         }
 
         [Test]
