@@ -1,12 +1,7 @@
-﻿using System.Net;
-using System.Security.Policy;
-using System.Threading.Tasks;
-using Microsoft.Owin.Security.DataHandler.Encoder;
+﻿using System.Threading.Tasks;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 using SFA.DAS.EAS.Api.Controllers;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {

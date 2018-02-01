@@ -20,7 +20,6 @@ using SFA.DAS.EAS.Api.DependencyResolution;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.NLog.Logger;
-using StructureMap;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
@@ -45,7 +44,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         ///     Send a GET to the specified URI using a test server and configuration created just for this call.
         /// </summary>
         /// <param name="call">Details the requirements of the call to be made.</param>
-        /// <returns>A task that will result in an instance of <see cref="TResult"/>.</returns>
         public static async Task<CallResponse> InvokeIsolatedGetAsync(CallRequirements call)
         {
             using (var tester = new ApiIntegrationTester() )

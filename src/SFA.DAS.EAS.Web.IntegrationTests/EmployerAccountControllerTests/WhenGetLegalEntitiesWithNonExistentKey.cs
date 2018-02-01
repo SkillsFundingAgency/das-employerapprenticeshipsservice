@@ -1,14 +1,11 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Api.Controllers;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
-using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {

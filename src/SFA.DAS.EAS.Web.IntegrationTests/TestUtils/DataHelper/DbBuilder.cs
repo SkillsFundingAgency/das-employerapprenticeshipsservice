@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -57,7 +56,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
                     input.Sector);
 
                 output = await DependentRepositories.DbDirectRepository.GetAccountDetailsAsync(input.OrganisationName);
-            };
+            }
 
             if (string.IsNullOrWhiteSpace(output.HashedAccountId))
             {
@@ -128,12 +127,18 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
         {
             var failMessage = new StringBuilder();
 
-            if (action.IsCanceled)
-            {
-                failMessage.AppendLine(
-                    $"A DB task has been cancelled, possibly because it has timed out. Timeout value is: {TestConstants.DbTimeout}");
-            }
+            CheckIfTaskCanceled(action, failMessage);
 
+            CheckIfTaskFaulted(action, failMessage);
+
+            if (failMessage.Length > 0)
+            {
+                Assert.Fail(failMessage.ToString());
+            }
+        }
+
+        private static void CheckIfTaskFaulted(Task action, StringBuilder failMessage)
+        {
             if (action.IsFaulted)
             {
                 failMessage.Append("A DB task has faulted. ");
@@ -145,10 +150,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
                     }
                 }
             }
+        }
 
-            if (failMessage.Length > 0)
+        private static void CheckIfTaskCanceled(Task action, StringBuilder failMessage)
+        {
+            if (action.IsCanceled)
             {
-                Assert.Fail(failMessage.ToString());
+                failMessage.AppendLine(
+                    $"A DB task has been cancelled, possibly because it has timed out. Timeout value is: {TestConstants.DbTimeout}");
             }
         }
     }

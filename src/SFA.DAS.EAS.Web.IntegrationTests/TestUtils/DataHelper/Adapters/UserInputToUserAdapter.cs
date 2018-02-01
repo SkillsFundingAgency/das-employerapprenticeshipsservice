@@ -7,10 +7,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters
     {
         public UserInputToUserAdapter(UserInput input)
         {
-            this.Email = input.Email;
-            this.FirstName = input.FirstName;
-            this.LastName = input.LastName;
-            this.UserRef = input.UserRef;
+            Email = input.Email;
+            FirstName = input.FirstName;
+            LastName = input.LastName;
+            UserRef = input.UserRef;
         }
     }
 }

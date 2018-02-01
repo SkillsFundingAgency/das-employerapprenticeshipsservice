@@ -32,19 +32,9 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
                 });
         }
 
-        private async Task<bool> ExistsAsync(string sql)
-        {
-            return await WithConnection<bool>(async conn =>
-            {
-                var reader = await conn.ExecuteReaderAsync(sql, commandType: CommandType.Text);
-                var hasRows = reader.Read();
-                return hasRows;
-            });
-        }
-
         private async Task<TValueType> GetValueAsync<TValueType>(string sql)
         {
-            return await WithConnection<TValueType>(async conn =>
+            return await WithConnection(async conn =>
             {
                 var value = await conn.ExecuteScalarAsync<TValueType>(sql, commandType: CommandType.Text);
                 return value;
@@ -53,7 +43,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 
         private async Task<TValueType> GetValueFromRowAsync<TValueType>(string sql, Func<IDataReader, TValueType> rowProcessor)
         {
-            return await WithConnection<TValueType>(async conn =>
+            return await WithConnection(async conn =>
             {
                 var reader = await conn.ExecuteReaderAsync(sql, commandType: CommandType.Text);
                 if (reader.Read())

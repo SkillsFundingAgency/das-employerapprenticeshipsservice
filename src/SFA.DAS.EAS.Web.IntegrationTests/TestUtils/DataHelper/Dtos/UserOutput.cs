@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos
+﻿namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos
 {
     public class UserOutput
     {

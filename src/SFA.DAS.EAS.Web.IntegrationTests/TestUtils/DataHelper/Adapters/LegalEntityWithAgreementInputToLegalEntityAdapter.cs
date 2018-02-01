@@ -7,15 +7,15 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters
     {
         public LegalEntityWithAgreementInputToLegalEntityAdapter(LegalEntityWithAgreementInput input)
         {
-            this.Name = input.CompanyName;
-            this.Code = null;
-            this.CompanyStatus = input.Status;
-            this.DateOfIncorporation = input.CompanyDateOfIncorporation;
-            this.Id = 0L;
-            this.PublicSectorDataSource = input.PublicSectorDataSource;
-            this.RegisteredAddress = input.CompanyAddress;
-            this.Sector = input.Sector;
-            this.Source = input.Source;
+            Name = input.CompanyName;
+            Code = null;
+            CompanyStatus = input.Status;
+            DateOfIncorporation = input.CompanyDateOfIncorporation;
+            Id = 0L;
+            PublicSectorDataSource = input.PublicSectorDataSource;
+            RegisteredAddress = input.CompanyAddress;
+            Sector = input.Sector;
+            Source = input.Source;
         }
     }
 }
