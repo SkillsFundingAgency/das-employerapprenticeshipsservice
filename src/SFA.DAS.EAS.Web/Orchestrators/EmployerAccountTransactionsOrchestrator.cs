@@ -13,6 +13,7 @@ using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -291,6 +292,33 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 currentBalance = 0;
                 currentBalanceCalcultedOn = DateTime.Today;
+            }
+
+            if (data.Data.TransactionLines != null &&
+                data.Data.TransactionLines.Any() &&
+                data.Data.TransactionLines.Count(t => t.TransactionType == TransactionItemType.Declaration) > 1)
+            {
+                var transactions = new List<TransactionLine>();
+
+                var levyTransactions =
+                    data.Data.TransactionLines.Where(t => t.TransactionType == TransactionItemType.Declaration).ToArray();
+
+                if (levyTransactions.Any())
+                {
+                    var levyTransaction = new LevyDeclarationTransactionLine
+                    {
+                        Description = levyTransactions.First().Description,
+                        DateCreated = levyTransactions.First().DateCreated,
+                        Amount = levyTransactions.Sum(t => t.Amount),
+                        TransactionType = TransactionItemType.Declaration
+                    };
+
+                    transactions.Add(levyTransaction);
+                }
+
+                transactions.AddRange(data.Data.TransactionLines.Where(t => t.TransactionType != TransactionItemType.Declaration));
+
+                data.Data.TransactionLines = transactions;
             }
 
 

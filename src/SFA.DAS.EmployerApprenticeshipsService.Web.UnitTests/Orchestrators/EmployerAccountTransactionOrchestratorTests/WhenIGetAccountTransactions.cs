@@ -6,13 +6,16 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using TransactionLine = SFA.DAS.EAS.Domain.Models.Transaction.TransactionLine;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrchestratorTests
 {
@@ -51,7 +54,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
             _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
 
-            SetupGetTransactionsResponse();
+            SetupGetTransactionsResponse(2017, 5, null);
 
             _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object, Mock.Of<ILog>());
         }
@@ -88,7 +91,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             //Arrange
             const int year = 2016;
             const int month = 2;
-            SetupGetTransactionsResponse(year, month);
+            SetupGetTransactionsResponse(year, month, null);
 
             //Act
             var result = await _orchestrator.GetAccountTransactions(HashedAccountId, year, month, ExternalUser);
@@ -103,11 +106,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         {
             //Arrange
             _currentTime.Setup(x => x.Now).Returns(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1));
-            SetupGetTransactionsResponse(DateTime.Now.Year, DateTime.Now.Month);
+            SetupGetTransactionsResponse(DateTime.Now.Year, DateTime.Now.Month, null);
 
             //Act
             var resultLatestMonth = await _orchestrator.GetAccountTransactions(HashedAccountId, DateTime.Now.Year, DateTime.Now.Month, ExternalUser);
-            SetupGetTransactionsResponse(2016, 1);
+            SetupGetTransactionsResponse(2016, 1, null);
             var resultHistoricalMonth = await _orchestrator.GetAccountTransactions(HashedAccountId, 2016, 1, ExternalUser);
 
             //Assert
@@ -125,22 +128,71 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             Assert.IsTrue(result.Data.AccountHasPreviousTransactions);
         }
 
-        private void SetupGetTransactionsResponse(int year = 0, int month = 0)
+        [Test]
+        public async Task ThenOnlyOneLevyTransactionShouldBeShownForSummary()
         {
+            //Arrange
+            var levyTransactions = new List<LevyDeclarationTransactionLine>
+            {
+                CreateLevyTransaction(new DateTime(2017,5,18), 200),
+                CreateLevyTransaction(new DateTime(2017,6,18), 300),
+                CreateLevyTransaction(new DateTime(2017,7,18), 500)
+            };
+
+            var transactions = new List<TransactionLine>();
+
+            transactions.AddRange(levyTransactions);
+            transactions.Add(new PaymentTransactionLine { Amount = 200, TransactionType = TransactionItemType.Payment });
+
+            SetupGetTransactionsResponse(2018, 2, transactions);
+
+            //Act
+            var result = await _orchestrator.GetAccountTransactions(HashedAccountId, default(int), default(int), ExternalUser);
+
+            var actualTransactions = result?.Data?.Model?.Data?.TransactionLines;
+
+            var levyDeclaration =
+                actualTransactions?.SingleOrDefault(t => t.TransactionType == TransactionItemType.Declaration);
+
+            //Assert
+            Assert.IsNotNull(actualTransactions);
+            Assert.IsNotNull(levyDeclaration);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(levyDeclaration.Description));
+            Assert.AreEqual(2, actualTransactions.Count);
+            Assert.AreEqual(levyTransactions.Sum(t => t.Amount), actualTransactions.Single(t => t.TransactionType == TransactionItemType.Declaration).Amount);
+        }
+
+
+        private void SetupGetTransactionsResponse(int year, int month, ICollection<TransactionLine> transactions)
+        {
+            transactions = transactions ?? new List<TransactionLine>
+            {
+                new TransactionLine()
+            };
+
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountTransactionsQuery>()))
                 .ReturnsAsync(new GetEmployerAccountTransactionsResponse
                 {
                     Data = new AggregationData
                     {
-                        TransactionLines = new List<TransactionLine>
-                        {
-                            new LevyDeclarationTransactionLine()
-                        }
+                        TransactionLines = transactions
                     },
                     Year = year,
                     Month = month,
                     AccountHasPreviousTransactions = true
                 });
+        }
+
+        private LevyDeclarationTransactionLine CreateLevyTransaction(DateTime submissionDate, int amount)
+        {
+            return new LevyDeclarationTransactionLine
+            {
+                Amount = amount,
+                DateCreated = DateTime.Now,
+                TransactionDate = submissionDate,
+                TransactionType = TransactionItemType.Declaration,
+                Description = "Levy"
+            };
         }
     }
 }
