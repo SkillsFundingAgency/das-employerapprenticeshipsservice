@@ -16,94 +16,97 @@
 | Client  | [![NuGet Badge](https://buildstats.info/nuget/SFA.DAS.Account.Api.Client)](https://www.nuget.org/packages/SFA.DAS.Account.Api.Client)  |
 
 
-### Developer Setup
+### Integration Testing
+#### Purpose
+- __Integration Tests__ run code to test for expected results. It will run a single item (usually an end point) using no mocks and run with real data.
+- __Unit tests__ also run code but will use mocks/fakes and won't use real data.
+- __Acceptance tests__ also run code but will typically run end-to-end to cover a feature or user journey.
 
-#### Requirements
+The intention of the integration test is to verify that the individual end points work in a realistic environment. Integration tests usually have a dependency on actual data.
 
-1. Install [Visual Studio] with these workloads:
-    - ASP.NET and web development
-    - Azure development
-    - .NET desktop development
-2. Install [SQL Server Management Studio]
-3. Install [Azure Storage Explorer]
-4. Administator Access
+#### Writing Unit Tests
+ 
+Integration tests are written in the same way as unit tests (i.e. using nunit and a suitable test runner). The  difference is that the test setup does not use mocks. Below is an example of a simple integration test that calls the __api/Healthcheck__ end point and expects a status code of __OK__. 
 
-#### Setup
+        [Test]
+        public async Task ThenTheStatusShouldBeOk()
+        {
+            // Arrange
+            var call = new CallRequirements("api/HealthCheck")
+                            .AllowStatusCodes(HttpStatusCode.OK);
 
-##### Install SSL certificates for HTTPS on IIS express
+            // Act
+            await ApiIntegrationTester.InvokeIsolatedGetAsync(call);
 
-- Open PowerShell as an administrator
-- Run src\DevInstall.ps1
+            // Assert
+            Assert.Pass("Verified we got OK");
+        }
 
-##### Install Elastic Search
+#####Arrange#####
+The test sets up the requirements using a new instance of a `CallRequirements()` object. Once this object is the `AllowStatusCodes()` extension method is used to specify the status codes that indicate that the call worked okay - in this case only the status code __OK__ is acceptable. All other status codes indicate that an error has occurred.
 
-- Follow the readme at [SFA.DAS.Activities] to install [Elastic Search]
+Other extension methods allow other requirements to be set. For example:
 
-##### Open the solution
+- ExpectControllerType
+- ExpectValidationError
+- IgnoreExceptionTypes
 
-- Open Visual Studio as an administrator
-- Open the solution
-- Set SFA.DAS.CloudService as the startup project
-- Running the solution will launch the site in your browser
+#####Act#####
+Here, the call is made by passing the `CallRequirements` created previously to the `InvokeIsolatedGetAsync()` method. This is a static method, so we don't need an instance of the ApiIntegrationTester. In this example the test is only interested in the status code - there is no response body here so no further checks are required.
 
-##### Publish the databases
+If the response body is expected to return something then it can be obtained by using the generic version of the Invoke method as follows:
 
-Repeat these steps for:
+            var legalEntities = await _tester.InvokeIsolatedGetAsync<ResourceList>(callRequirements);
 
-1. SFA.DAS.EAS.Employer_Account.Database
-2. SFA.DAS.EAS.Employer_Financial.Database
+In this example the invoke method will return an instance of `ResourceList` (which may be null if the response body was blank).
 
-Steps:
 
-* Right click on the db project in the solution explorer
-* Click on publish menu item
-* Click the edit button
 
-![Click the edit button](/docs/img/db1.PNG)
+> In the previous examples the InvokeIsolatedGetAsync method was used. This is great for running a single test but starts up an in memory web server, with all the configuration from the web API project so takes quite a long time to get started. If you're going to run multiple tests then it is better to use the non-isolated get methods. 
 
-* Select Local > ProjectsV13
+######Non-Isolated Invoke Methods
 
-![Select Local > ProjectsV13](/docs/img/db2.PNG)
+These have the same name and signatures as the IsolatedInvoke methods but instead of being static methods these are instance methods, so an instance of `ApiIntegrationTester` will be required. This should be created in the test class's start up method and then disposed in the corresponding tear down method. The instance can then be shared with the individual test methods in the normal way.
+ 
+#####Assert#####
 
-* Add the project name in again as the Database name (i.e. SFA.DAS.EAS.Employer_Account.Database)
-* Click publish
+These can do whatever asserts are appropriate for the test. 
+Note that you do not need to test:
 
-![Select Local > ProjectsV13](/docs/img/db3.PNG)
+- the status code is the expected status code - *always tested*
+- whether the web server threw an unhandled exception - *always tested*
+- whether the expected controller was created - * only if the call specified an expected controller*
+- whether the returned body can be deserialised into the required type correctly - *only if the generic Invoke method was used*
 
-**TODO replace the publish with a post deploy step on building**
+The above will all be validated automatically - there is no need to validate these explicitly.  
 
-##### Add configuration to Azure Storage Emulator
+###Building Test Data
 
-The configuration is loaded from azure table storage.
+You can use the `APIIntegrationTester` to setup the required data for the test. This will write data to the actual database configured for the current environment.
+To do this you will need to use the `DbBuilder` property on the `ApiIntegrationTester` instance.
 
-* Run the Azure Storage Emulator
-* Clone the [das-employer-config](https://github.com/SkillsFundingAgency/das-employer-config) repository
-* Clone the [das-employer-config-updater](https://github.com/SkillsFundingAgency/das-employer-config-updater) repository
-* Run the das-employer-config-updater console application and follow the instructions to import the config from the das-employer-config directory
+            var builder = _tester.DbBuilder;
 
-> The two repos above are private. If the links appear to be dead make sure you are logged into github with an account that has access to these (i.e. that you are part of the Skills Funding Agency Team organization).
+Once you have this you can call methods to set update, like so:
+
+            builder
+                .EnsureUserExists(builder.BuildUserInput())
+                .EnsureAccountExists(builder.BuildEmployerAccountInput(accountName))
+                .WithLegalEntity(builder.BuildEntityWithAgreementInput(legalEntityName));
+
+The builder methods (`EnsureUserExists` etc) accept an input message. Some of these are quite big, so there are helper extension methods (such as `BuildEmployeeAccountInput`) that can be used to create these.
+
+As each method is used to create data details of the created data are stored and then used in subsequent calls. So in the above example:
+
+
+- the user created by the `EnsureUserExists`() will be the user used in all subsequent calls until the next call to `EnsureUserExists`().
+- the account created by the `EnsureAccountExists`() will the account used in all subsequent calls until the next call to `EnsureAccountExists`().      
+
+> You can get access to the current context by using the DbBuilderContext property on the DbBuilder, like so:
+> 
+>             var hashedAccountId = builder.Context.ActiveEmployerAccount.HashedAccountId;
+
+ 
+
 
   
-### Feature Toggles
-
-You can enable or disable controller actions by using feature toggles e.g. To disable the `EmployerTeamController.Invite` action for all users except user with email address `john.doe@ma.local`, find the `SFA.DAS.EmployerApprenticeshipsService.Features_1.0` key in Azure table storage and update it's value to:
-
-```JavaScript
-{
-    "Data": [{
-        "Controller": "EmployerTeam",
-        "Action": "Invite",
-        "Whitelist": ["john.doe@ma.local"]
-    }]
-}
-```
-
-Using `"Action": "*"` can also be used to disable all actions on the controller.
-
-[Azure Storage Explorer]: http://storageexplorer.com/
-[Choclatey]: https://chocolatey.org
-[Docker]: https://www.docker.com
-[Elastic Search]: https://www.elastic.co/products/elasticsearch
-[SFA.DAS.Activities]: https://github.com/SkillsFundingAgency/das-activities/blob/master/README.md
-[SQL Server Management Studio]: https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms
-[Visual Studio]: https://www.visualstudio.com

@@ -56,16 +56,5 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             call.ExpectedControllerType = controllerType;
             return call;
         }
-
-        /// <summary>
-        ///     Specify that the call is expcted to return the specfied object type. If this is set 
-        ///     then call response body will be de-serialised into the specified type. If not set then
-        ///     the response body (if any) will be ignored.
-        /// </summary>
-        public static CallRequirements ExpectResultType(this CallRequirements call, Type resultType)
-        {
-            call.ExpectResponseType = resultType;
-            return call;
-        }
     }
 }

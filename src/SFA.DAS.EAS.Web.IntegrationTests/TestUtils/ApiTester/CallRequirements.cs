@@ -46,11 +46,5 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         ///     HTTP request timeout to use. 
         /// </summary>
         public TimeSpan TimeOut { get; set; }
-
-        /// <summary>
-        ///     The type of the response that is excpected from this call. If specified then then body of
-        ///     the response will be deserialised into an instance of this type.
-        /// </summary>
-        public Type ExpectResponseType { get; set; }
     }
 }

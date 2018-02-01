@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
                     .ExpectControllerType(typeof(AccountLegalEntitiesController));
 
             // Act
-            var legalEntities = await _tester.InvokeGetAsync<LegalEntities>(callRequirements);
+            var legalEntities = await _tester.InvokeGetAsync<ResourceList>(callRequirements);
 
             // Assert
             Assert.IsNull(legalEntities.Data);
