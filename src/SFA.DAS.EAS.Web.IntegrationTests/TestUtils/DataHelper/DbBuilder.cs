@@ -126,29 +126,29 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 
         private void CheckTaskResult(Task action)
         {
-            var sb = new StringBuilder();
+            var failMessage = new StringBuilder();
 
             if (action.IsCanceled)
             {
-                sb.AppendLine(
+                failMessage.AppendLine(
                     $"A DB task has been cancelled, possibly because it has timed out. Timeout value is: {TestConstants.DbTimeout}");
             }
 
             if (action.IsFaulted)
             {
-                sb.Append("A DB task has faulted. ");
+                failMessage.Append("A DB task has faulted. ");
                 if (action.Exception != null)
                 {
                     foreach (var exception in action.Exception.Flatten().InnerExceptions)
                     {
-                        sb.AppendLine($">>:e => {exception.GetType().Name} : {exception.Message}");
+                        failMessage.AppendLine($">>:e => {exception.GetType().Name} : {exception.Message}");
                     }
                 }
             }
 
-            if (sb.Length > 0)
+            if (failMessage.Length > 0)
             {
-                Assert.Fail(sb.ToString());
+                Assert.Fail(failMessage.ToString());
             }
         }
     }

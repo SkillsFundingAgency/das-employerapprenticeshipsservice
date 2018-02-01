@@ -187,7 +187,7 @@
     <Compile Include="TestUtils\DataHelper\DbBuilderContext.cs" />
     <Compile Include="TestUtils\DataHelper\DbBuilderDependentRepositories.cs" />
     <Compile Include="TestUtils\DataHelper\DbDirectRepository.cs" />
-    <Compile Include="TestUtils\DataHelper\DbDtoBuilder.cs" />
+    <Compile Include="TestUtils\DataHelper\DbDtoBuilderExtensions.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\EmployerAccountInput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\EmployerAccountOutput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\LegalEnityWithAgreementOutput.cs" />

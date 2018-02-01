@@ -3,9 +3,9 @@ using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 {
-    static class DbDtoBuilder
+    static class DbDtoBuilderExtensions
     {
-        public static EmployerAccountInput BuildEmployerAccountData(this DbBuilder dbBuilder, string accountName)
+        public static EmployerAccountInput BuildEmployerAccountInput(this DbBuilder dbBuilder, string accountName)
         {
             return new EmployerAccountInput
             { 

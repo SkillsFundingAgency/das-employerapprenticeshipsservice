@@ -106,19 +106,19 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
         {
             var callResponse = new CallResponse();
-            await BuildResponseAsync(call, callResponse);
+            await FetchInitialResponseAsync(call, callResponse);
             return callResponse;
         }
 
         private async Task<CallResponse<TResult>> GetResponseAsync<TResult>(CallRequirements call)
         {
             var callResponse = new CallResponse<TResult>();
-            await BuildResponseAsync(call, callResponse);
-            await FetchCompleteResponse(callResponse);
+            await FetchInitialResponseAsync(call, callResponse);
+            await FetchCompleteResponseAsync(callResponse);
             return callResponse;
         }
 
-        private async Task BuildResponseAsync(CallRequirements call, CallResponse response)
+        private async Task FetchInitialResponseAsync(CallRequirements call, CallResponse response)
         {
             EnsureStarted();
             ClearDownForNewTest();
@@ -132,7 +132,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             response.Response = await client.GetAsync(call.Uri);
         }
 
-        private async Task FetchCompleteResponse<TResult>(CallResponse<TResult> response)
+        private async Task FetchCompleteResponseAsync<TResult>(CallResponse<TResult> response)
         {
             var responseContent = await response.Response.Content.ReadAsStringAsync();
             response.Data = JsonConvert.DeserializeObject<TResult>(responseContent);
