@@ -6,7 +6,6 @@ using SFA.DAS.EAS.Application.Queries.GetLatestActivities;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestActivitiesTests
 {
@@ -22,7 +21,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestActivitiesTests
         private GetLatestActivitiesResponse _response;
         private CurrentUser _currentUser;
         private Mock<IActivitiesClient> _activitiesClient;
-        private Mock<ILog> _logger;
         private Mock<IMembershipRepository> _membershipRepository;
         private readonly MembershipView _membershipView = new MembershipView { AccountId = AccountId, UserId = UserId };
         private readonly AggregatedActivitiesResult _latestActivitiesResult = new AggregatedActivitiesResult();
@@ -32,7 +30,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestActivitiesTests
         {
             _currentUser = new CurrentUser { ExternalUserId = ExternalUserId };
             _activitiesClient = new Mock<IActivitiesClient>();
-            _logger = new Mock<ILog>();
             _membershipRepository = new Mock<IMembershipRepository>();
 
             _membershipRepository.Setup(r => r.GetCaller(HashedAccountId, ExternalUserId)).ReturnsAsync(_membershipView);
@@ -43,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestActivitiesTests
                 HashedAccountId = HashedAccountId
             };
 
-            _handler = new GetLatestActivitiesQueryHandler(_currentUser, _activitiesClient.Object, _logger.Object, _membershipRepository.Object);
+            _handler = new GetLatestActivitiesQueryHandler(_currentUser, _activitiesClient.Object, _membershipRepository.Object);
         }
 
         [Test]
@@ -78,19 +75,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestActivitiesTests
             _membershipRepository.Setup(r => r.GetCaller(HashedAccountId, ExternalUserId)).ReturnsAsync(null);
 
             Assert.Throws<UnauthorizedAccessException>(() => _handler.Handle(_query));
-        }
-
-        [Test]
-        public void ThenShouldReturnGetActivitiesResponseIfClientThrowsAnException()
-        {
-            _activitiesClient.Setup(c => c.GetActivities(It.IsAny<ActivitiesQuery>())).Throws<Exception>();
-
-            _response = _handler.Handle(_query);
-
-            Assert.That(_response, Is.Not.Null);
-            Assert.That(_response.Result, Is.Not.Null);
-            Assert.That(_response.Result.Aggregates, Is.Empty);
-            Assert.That(_response.Result.Total, Is.Zero);
         }
     }
 }

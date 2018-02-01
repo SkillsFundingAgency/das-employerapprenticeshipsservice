@@ -16,33 +16,32 @@
 | Client  | [![NuGet Badge](https://buildstats.info/nuget/SFA.DAS.Account.Api.Client)](https://www.nuget.org/packages/SFA.DAS.Account.Api.Client)  |
 
 
-The Employer Apprenticeships Service provides a REST Api and client for accessing Employer accounts. Nuget link above.
-
-* The API can be found in [src/SFA.DAS.EAS.Api](src/SFA.DAS.EAS.Api)
-* The client can be found in [src/SFA.DAS.Account.Api.Client](src/SFA.DAS.Account.Api.Client)
-
 ### Developer Setup
 
 #### Requirements
 
-- Install [Visual Studio 2017 Enterprise](https://www.visualstudio.com/downloads/) with these workloads:
-    - .NET desktop development
+1. Install [Visual Studio] with these workloads:
     - ASP.NET and web development
     - Azure development
-- Install [SQL Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms)
-- Install [Azure Storage Explorer](http://storageexplorer.com/)
-- Administator Access
+    - .NET desktop development
+2. Install [SQL Server Management Studio]
+3. Install [Azure Storage Explorer]
+4. Administator Access
 
 #### Setup
 
-##### Add certs for https on IIS express
+##### Install SSL certificates for HTTPS on IIS express
 
 - Open PowerShell as an administrator
 - Run src\DevInstall.ps1
 
+##### Install Elastic Search
+
+- Follow the readme at [SFA.DAS.Activities] to install [Elastic Search]
+
 ##### Open the solution
 
-- Open Visual studio as an administrator
+- Open Visual Studio as an administrator
 - Open the solution
 - Set SFA.DAS.CloudService as the startup project
 - Running the solution will launch the site in your browser
@@ -100,3 +99,11 @@ You can enable or disable controller actions by using feature toggles e.g. To di
 ```
 
 Using `"Action": "*"` can also be used to disable all actions on the controller.
+
+[Azure Storage Explorer]: http://storageexplorer.com/
+[Choclatey]: https://chocolatey.org
+[Docker]: https://www.docker.com
+[Elastic Search]: https://www.elastic.co/products/elasticsearch
+[SFA.DAS.Activities]: https://github.com/SkillsFundingAgency/das-activities/blob/master/README.md
+[SQL Server Management Studio]: https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms
+[Visual Studio]: https://www.visualstudio.com

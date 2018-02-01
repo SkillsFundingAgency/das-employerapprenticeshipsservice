@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Activities;
 using SFA.DAS.Activities.Client;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Queries.GetActivities
 {
@@ -14,18 +11,12 @@ namespace SFA.DAS.EAS.Application.Queries.GetActivities
     {
         private readonly CurrentUser _currentUser;
         private readonly IActivitiesClient _activitiesClient;
-        private readonly ILog _logger;
         private readonly IMembershipRepository _membershipRepository;
 
-        public GetActivitiesQueryHandler(
-            CurrentUser currentUser,
-            IActivitiesClient activitiesClient,
-            ILog logger,
-            IMembershipRepository membershipRepository)
+        public GetActivitiesQueryHandler(CurrentUser currentUser, IActivitiesClient activitiesClient, IMembershipRepository membershipRepository)
         {
             _currentUser = currentUser;
             _activitiesClient = activitiesClient;
-            _logger = logger;
             _membershipRepository = membershipRepository;
         }
 
@@ -38,41 +29,21 @@ namespace SFA.DAS.EAS.Application.Queries.GetActivities
                 throw new UnauthorizedAccessException();
             }
 
-            GetActivitiesResponse response;
-
-            try
+            var result = await _activitiesClient.GetActivities(new ActivitiesQuery
             {
-                var result = await _activitiesClient.GetActivities(new ActivitiesQuery
-                {
-                    AccountId = membership.AccountId,
-                    Take = message.Take,
-                    From = message.From,
-                    To = message.To,
-                    Term = message.Term,
-                    Category = message.Category,
-                    Data = message.Data
-                });
+                AccountId = membership.AccountId,
+                Take = message.Take,
+                From = message.From,
+                To = message.To,
+                Term = message.Term,
+                Category = message.Category,
+                Data = message.Data
+            });
 
-                return new GetActivitiesResponse
-                {
-                    Result = result
-                };
-            }
-            catch (Exception ex)
+            return new GetActivitiesResponse
             {
-                _logger.Error(ex, "Failed to load activities.");
-
-                response = new GetActivitiesResponse
-                {
-                    Result = new ActivitiesResult
-                    {
-                        Activities = new List<Activity>(),
-                        Total = 0
-                    }
-                };
-            }
-
-            return response;
+                Result = result
+            };
         }
     }
 }
