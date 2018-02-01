@@ -87,13 +87,14 @@ The configuration is loaded from azure table storage.
   
 ### Feature Toggles
 
-You can enable or disable controller actions by using feature toggles e.g. To disable the `EmployerTeamController.Invite` action, find the `SFA.DAS.EmployerApprenticeshipsService.Features_1.0` key in Azure table storage and update it's value to:
+You can enable or disable controller actions by using feature toggles e.g. To disable the `EmployerTeamController.Invite` action for all all users except user with email address `john.doe@ma.local`, find the `SFA.DAS.EmployerApprenticeshipsService.Features_1.0` key in Azure table storage and update it's value to:
 
 ```JavaScript
 {
     "Data": [{
         "Controller": "EmployerTeam",
-        "Action": "Invite" // Using "*" here instead would disable all actions on the controller
+        "Action": "Invite", // Using "*" here instead would disable all actions on the controller
+        "Whitelist": ["john.doe@ma.local"]
     }]
 }
 ```
