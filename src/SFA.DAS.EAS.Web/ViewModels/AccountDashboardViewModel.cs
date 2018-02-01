@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.Activities.Client;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -23,6 +22,5 @@ namespace SFA.DAS.EAS.Web.ViewModels
 
         public bool ShowAcademicYearBanner { get; set; }
         public ICollection<AccountTask> Tasks { get; set; }
-        public AggregatedActivitiesResult LatestActivitiesResult { get; set; }
     }
 }

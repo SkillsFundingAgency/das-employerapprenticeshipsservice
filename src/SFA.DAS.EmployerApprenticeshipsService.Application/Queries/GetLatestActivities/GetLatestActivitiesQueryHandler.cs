@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Activities;
 using SFA.DAS.Activities.Client;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Application.Queries.GetActivities
+namespace SFA.DAS.EAS.Application.Queries.GetLatestActivities
 {
-    public class GetActivitiesQueryHandler : IAsyncRequestHandler<GetActivitiesQuery, GetActivitiesResponse>
+    public class GetLatestActivitiesQueryHandler : IRequestHandler<GetLatestActivitiesQuery, GetLatestActivitiesResponse>
     {
         private readonly CurrentUser _currentUser;
         private readonly IActivitiesClient _activitiesClient;
         private readonly ILog _logger;
         private readonly IMembershipRepository _membershipRepository;
 
-        public GetActivitiesQueryHandler(
+        public GetLatestActivitiesQueryHandler(
             CurrentUser currentUser,
             IActivitiesClient activitiesClient,
             ILog logger,
@@ -29,44 +28,35 @@ namespace SFA.DAS.EAS.Application.Queries.GetActivities
             _membershipRepository = membershipRepository;
         }
 
-        public async Task<GetActivitiesResponse> Handle(GetActivitiesQuery message)
+        public GetLatestActivitiesResponse Handle(GetLatestActivitiesQuery message)
         {
-            var membership = await _membershipRepository.GetCaller(message.HashedAccountId, _currentUser.ExternalUserId);
+            var membership = Task.Run(async () => await _membershipRepository.GetCaller(message.HashedAccountId, _currentUser.ExternalUserId)).Result;
 
             if (membership == null)
             {
                 throw new UnauthorizedAccessException();
             }
 
-            GetActivitiesResponse response;
+            GetLatestActivitiesResponse response;
 
             try
             {
-                var result = await _activitiesClient.GetActivities(new ActivitiesQuery
-                {
-                    AccountId = membership.AccountId,
-                    Take = message.Take,
-                    From = message.From,
-                    To = message.To,
-                    Term = message.Term,
-                    Category = message.Category,
-                    Data = message.Data
-                });
+                var result = Task.Run(async () => await _activitiesClient.GetLatestActivities(membership.AccountId)).Result;
 
-                return new GetActivitiesResponse
+                return new GetLatestActivitiesResponse
                 {
                     Result = result
                 };
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Failed to load activities.");
+                _logger.Error(ex, "Failed to load latest activities.");
 
-                response = new GetActivitiesResponse
+                response = new GetLatestActivitiesResponse
                 {
-                    Result = new ActivitiesResult
+                    Result = new AggregatedActivitiesResult
                     {
-                        Activities = new List<Activity>(),
+                        Aggregates = new List<AggregatedActivityResult>(),
                         Total = 0
                     }
                 };

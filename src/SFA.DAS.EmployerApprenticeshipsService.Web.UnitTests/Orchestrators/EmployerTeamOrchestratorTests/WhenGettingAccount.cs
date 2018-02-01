@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Activities.Client;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
-using SFA.DAS.EAS.Application.Queries.GetAccountLatestActivities;
 using SFA.DAS.EAS.Application.Queries.GetAccountStats;
 using SFA.DAS.EAS.Application.Queries.GetAccountTasks;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
@@ -17,7 +15,6 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 {
@@ -33,7 +30,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         private Mock<ICurrentDateTime> _currentDateTime;
  		private List<AccountTask> _tasks;
         private AccountTask _testTask;
-        private AggregatedActivitiesResult _testLatestActivitiesResult;
 
         [SetUp]
         public void Arrange()
@@ -57,8 +53,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                 _testTask
             };
 
-            _testLatestActivitiesResult = new AggregatedActivitiesResult();
-
             _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(It.Is<GetEmployerAccountHashedQuery>(q => q.HashedAccountId == HashedAccountId)))
                 .ReturnsAsync(new GetEmployerAccountResponse
@@ -75,12 +69,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                 .ReturnsAsync(new GetAccountTasksResponse
                 {
                     Tasks = _tasks
-                });
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLatestActivitiesQuery>()))
-                .ReturnsAsync(new GetAccountLatestActivitiesResponse
-                {
-                    Result = _testLatestActivitiesResult
                 });
 
             _mediator.Setup(m => m.SendAsync(It.Is<GetUserAccountRoleQuery>(q => q.ExternalUserId == UserId)))
@@ -109,7 +97,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 
             _currentDateTime = new Mock<ICurrentDateTime>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, Mock.Of<ILog>());
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object);
         }
         
         [Test]
@@ -134,18 +122,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             //Assert
             Assert.IsNotNull(actual.Data);
             Assert.Contains(_testTask, actual.Data.Tasks.ToArray());
-        }
-
-        [Test]
-        [Ignore("Activities disabled for now.")]
-        public async Task ThenShouldReturnLatestActivitiesResult()
-        {
-            // Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert
-            Assert.IsNotNull(actual.Data);
-            Assert.AreEqual(_testLatestActivitiesResult, actual.Data.LatestActivitiesResult);
         }
 
         [Test]
@@ -186,18 +162,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             //Assert
             Assert.AreEqual(_tasks, actual.Data.Tasks);
             _mediator.Verify(x => x.SendAsync(It.Is<GetAccountTasksQuery>(r => r.AccountId.Equals(AccountId))),Times.Once);
-        }
-
-        [Test]
-        [Ignore("Activities disabled for now.")]
-        public async Task ThenShouldReturnAccountsActivities()
-        {
-            //Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert
-            Assert.AreEqual(_tasks, actual.Data.Tasks);
-            _mediator.Verify(x => x.SendAsync(It.Is<GetAccountLatestActivitiesQuery>(r => r.AccountId.Equals(AccountId))), Times.Once);
         }
 
         [TestCase("2017-10-19", true, Description = "Banner visible")]

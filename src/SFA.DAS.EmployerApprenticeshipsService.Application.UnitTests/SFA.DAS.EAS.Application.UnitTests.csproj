@@ -108,11 +108,11 @@
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Activities, Version=1.0.0.56220, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.56220\lib\net45\SFA.DAS.Activities.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities, Version=1.0.0.56587, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.56587\lib\net45\SFA.DAS.Activities.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Activities.Client, Version=1.0.0.56220, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.56220\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities.Client, Version=1.0.0.56587, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.56587\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Audit.Client, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Client.dll</HintPath>
@@ -287,8 +287,7 @@
     <Compile Include="Commands\RefreshEmployerLevyDataTests\WhenIReceiveTheCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetActivitiesTests\WhenIGetActivities.cs" />
-    <Compile Include="Queries\GetAccountLatestActivitiesTests\WhenIGetAnAccountsLatestActivities.cs" />
-    <Compile Include="Queries\GetAccountLatestActivitiesTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetLatestActivitiesTests\WhenIGetLatestActivities.cs" />
     <Compile Include="Queries\GetAccountBalancesTests\WhenIGetAccountBalances.cs" />
     <Compile Include="Queries\GetAccountBalancesTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementRemove\WhenIGetAccountEmployerAgreementToRemove.cs" />
