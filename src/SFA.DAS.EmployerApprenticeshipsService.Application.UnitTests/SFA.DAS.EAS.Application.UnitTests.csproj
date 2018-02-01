@@ -314,8 +314,7 @@
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetCharity\WhenIGetCharity.cs" />
     <Compile Include="Queries\GetCharity\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetTransactionsDownloadRequestAndResponse\GetTransactionsDownloadRequestAndResponseTests.cs" />
-    <Compile Include="Queries\GetTransactionsDownloadRequestAndResponse\WhenIGetTransactionsDownloadRequestAndResponse.cs" />
+    <Compile Include="Queries\GetTransactionsDownloadTests\WhenIGetTransactionsDownload.cs" />
     <Compile Include="Queries\GetEmployerAgreementPdfTests\WhenIGetTheEmployerAgreement.cs" />
     <Compile Include="Queries\GetEmployerAgreementPdfTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementByIdTests\WhenIGetAnAgreement.cs" />

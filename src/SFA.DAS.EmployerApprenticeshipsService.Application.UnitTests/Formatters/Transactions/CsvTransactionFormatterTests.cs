@@ -42,14 +42,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Formatters.Transactions
             Assert.AreEqual("English %", headerColumns[5]);
             Assert.AreEqual("10% top up", headerColumns[6]);
             Assert.AreEqual("Training provider", headerColumns[7]);
-            Assert.AreEqual("Cohort reference", headerColumns[8]);
-            Assert.AreEqual("Unique learner number", headerColumns[9]);
-            Assert.AreEqual("Apprentice", headerColumns[10]);
-            Assert.AreEqual("Apprenticeship training course", headerColumns[11]);
-            Assert.AreEqual("Paid from levy", headerColumns[12]);
-            Assert.AreEqual("Your contribution", headerColumns[13]);
-            Assert.AreEqual("Government contribution", headerColumns[14]);
-            Assert.AreEqual("Total", headerColumns[15]);
+            Assert.AreEqual("Unique learner number", headerColumns[8]);
+            Assert.AreEqual("Apprentice", headerColumns[9]);
+            Assert.AreEqual("Apprenticeship training course", headerColumns[10]);
+            Assert.AreEqual("Paid from levy", headerColumns[11]);
+            Assert.AreEqual("Your contribution", headerColumns[12]);
+            Assert.AreEqual("Government contribution", headerColumns[13]);
+            Assert.AreEqual("Total", headerColumns[14]);
         }
 
         [Test]
@@ -81,14 +80,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Formatters.Transactions
                 Assert.AreEqual((i / 10).ToString(CultureInfo.CurrentCulture), dataRow[5]);
                 Assert.AreEqual((i * 100).ToString(CultureInfo.CurrentCulture), dataRow[6]);
                 Assert.AreEqual($"{TrainingProviderPrefix}{i}", dataRow[7]);
-                Assert.AreEqual($"{CohortReferencePrefix}{i}", dataRow[8]);
-                Assert.AreEqual($"{UlnPrefix}{i}", dataRow[9]);
-                Assert.AreEqual($"{ApprenticePrefix}{i}", dataRow[10]);
-                Assert.AreEqual($"{ApprenticeTrainingCoursePrefix}{i}", dataRow[11]);
-                Assert.AreEqual((i * 10).ToString(CultureInfo.CurrentCulture), dataRow[12]);
-                Assert.AreEqual((i).ToString(CultureInfo.CurrentCulture), dataRow[13]);
-                Assert.AreEqual((i * 10000).ToString(CultureInfo.CurrentCulture), dataRow[14]);
-                Assert.AreEqual(((i* 1000) + (i * 100)).ToString(CultureInfo.CurrentCulture), dataRow[15]);
+                Assert.AreEqual($"{UlnPrefix}{i}", dataRow[8]);
+                Assert.AreEqual($"{ApprenticePrefix}{i}", dataRow[9]);
+                Assert.AreEqual($"{ApprenticeTrainingCoursePrefix}{i}", dataRow[10]);
+                Assert.AreEqual((i * 10).ToString(CultureInfo.CurrentCulture), dataRow[11]);
+                Assert.AreEqual((i).ToString(CultureInfo.CurrentCulture), dataRow[12]);
+                Assert.AreEqual((i * 10000).ToString(CultureInfo.CurrentCulture), dataRow[13]);
+                Assert.AreEqual(((i* 1000) + (i * 100)).ToString(CultureInfo.CurrentCulture), dataRow[14]);
                 i++;
             }
         }

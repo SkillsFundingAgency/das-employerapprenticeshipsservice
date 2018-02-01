@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Formatters.TransactionDowloads;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
+using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Authentication;
@@ -17,6 +18,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
 {
     public class WhenIDownloadTransactionsByDate
     {
+        private readonly byte[] _expectedFileData = new byte[] { };
+
+        private const string ExpectedFileExtension = "hello";
+
+        private const string ExpectedMimeType = @"text/csv";
+
+
         private Web.Controllers.EmployerAccountTransactionsController _controller;
         private Mock<EmployerAccountTransactionsOrchestrator> _orchestrator;
         private Mock<IOwinWrapper> _owinWrapper;
@@ -25,12 +33,42 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private Mock<ITransactionFormatter> _formatter;
         private Mock<IHashingService> _hashingService;
-        private Mock<IMediator> _mediator
-            ;
+        private Mock<IMediator> _mediator;
+        private TransactionDownloadViewModel _transactionDownloadViewModel;
 
         [SetUp]
         public void Arrange()
         {
+            _transactionDownloadViewModel = new TransactionDownloadViewModel
+            {
+                AccountHashedId = "",
+                StartDate = new TransactionsDownloadStartDateMonthYearDateTime()
+                {
+                    Month = 1,
+                    Year = 2000
+                },
+                EndDate = new TransactionsDownloadEndDateMonthYearDateTime
+                {
+                    Month = 1,
+                    Year = 2018
+                },
+                Message = new GetTransactionsDownloadQuery()
+            };
+            _mediator = new Mock<IMediator>();
+
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetTransactionsDownloadQuery>()))
+                .ReturnsAsync(new GetTransactionsDownloadResponse()
+                {
+                    ValidationResult = new ValidationResult
+                    {
+                        ValidationDictionary = new Dictionary<string, string>()
+                    },
+                    MimeType = ExpectedMimeType,
+                    FileExtension = ExpectedFileExtension,
+                    FileDate = _expectedFileData,
+                });
+
+
             _orchestrator = new Mock<EmployerAccountTransactionsOrchestrator>();
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggleService>();
@@ -44,7 +82,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _formatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.CSV);
 
             _hashingService = new Mock<IHashingService>();
-            _mediator = new Mock<IMediator>();
 
             var transactionFormatterFactory = new Mock<ITransactionFormatterFactory>();
 
@@ -59,275 +96,84 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                 transactionFormatterFactory.Object);
         }
 
-        [Test]
-        public async Task WithAnInvalidFromMonthThenValidStartDateIsFalseAndTransactionsAreNotRetrievedForTheAccount()
-        {
-            var result = await _controller.TransactionDownloadByDate("HashedAccountId",
-                new GetTransactionsDownloadRequestAndResponse
-                {
-                    StartDate = new TransactionsDownloadStartDateMonthYearDateTime()
-                    {
-                        Month = -1,
-                        Year = 2000
-                    },
-                    EndDate = new TransactionsDownloadEndDateMonthYearDateTime
-                    {
-                        Month = -1,
-                        Year = 2000
-                    },
-                }
-                ) as ViewResultBase;
-
-            Assert.IsNotNull(result);
-
-            var viewModel = result.Model as GetTransactionsDownloadRequestAndResponse;
-            Assert.IsNotNull(viewModel);
-            Assert.IsNotNull(viewModel);
-            Assert.IsFalse(viewModel.StartDate.Valid);
-            Assert.IsNull(viewModel.Transactions);
-
-            _mediator.Verify(
-                x => x.SendAsync(It.IsAny<GetTransactionsDownloadRequestAndResponse>()), Times.Never);
-        }
 
         [Test]
-        public async Task WithAnInvalidFromYearThenValidStartDateIsFalseAndTransactionsAreNotRetrievedForTheAccount()
+        public async Task ThenAGetTransactionsDownloadQueryShouldBeSent()
         {
-            var result = await _controller.TransactionDownloadByDate("HashedAccountId",
-                new GetTransactionsDownloadRequestAndResponse
-                {
-                    StartDate = new TransactionsDownloadStartDateMonthYearDateTime
-                    {
-                        Month = 1,
-                        Year = -1
-                    },
-                    EndDate = new TransactionsDownloadEndDateMonthYearDateTime()
-                    {
-                        Month = 1,
-                        Year = 2000
-                    },
-                }) as ViewResultBase;
+            await _controller.TransactionDownloadByDate(_transactionDownloadViewModel);
 
-            Assert.IsNotNull(result);
-
-            var viewModel = result.Model as GetTransactionsDownloadRequestAndResponse;
-            Assert.IsNotNull(viewModel);
-            Assert.IsFalse(viewModel.StartDate.Valid);
-            Assert.IsNull(viewModel.Transactions);
-
-            _mediator.Verify(
-                x => x.SendAsync(It.IsAny<GetTransactionsDownloadRequestAndResponse>()), Times.Never);
-        }
-
-        [Test]
-        public async Task WithAnInvalidEndMonthThenValidToDateIsFalseAndTransactionsAreNotRetrievedForTheAccount()
-        {
-            var result = await _controller.TransactionDownloadByDate("HashedAccountId",
-                new GetTransactionsDownloadRequestAndResponse
-                {
-                    StartDate = new TransactionsDownloadStartDateMonthYearDateTime
-                    {
-                        Month = 1,
-                        Year = 2000
-                    },
-                    EndDate = new TransactionsDownloadEndDateMonthYearDateTime()
-                    {
-                        Month = -1,
-                        Year = 2000
-                    },
-                }) as ViewResultBase;
-
-            Assert.IsNotNull(result);
-
-            var viewModel = result.Model as GetTransactionsDownloadRequestAndResponse;
-            Assert.IsNotNull(viewModel);
-            Assert.IsFalse(viewModel.EndDate.Valid);
-            Assert.IsNull(viewModel.Transactions);
-
-            _mediator.Verify(
-                x => x.SendAsync(It.IsAny<GetTransactionsDownloadRequestAndResponse>()), Times.Never);
-        }
-
-        [Test]
-        public async Task WithAnInvalidtoYearThenValidToDateIsFalseAndTransactionsAreNotRetrievedForTheAccount()
-        {
-            var result = await _controller.TransactionDownloadByDate("HashedAccountId",
-                new GetTransactionsDownloadRequestAndResponse
-                {
-                    StartDate = new TransactionsDownloadStartDateMonthYearDateTime
-                    {
-                        Month = 1,
-                        Year = 2000
-                    },
-                    EndDate = new TransactionsDownloadEndDateMonthYearDateTime()
-                    {
-                        Month = 1,
-                        Year = -1
-                    },
-                }) as ViewResultBase;
-
-            Assert.IsNotNull(result);
-
-            var viewModel = result.Model as GetTransactionsDownloadRequestAndResponse;
-            Assert.IsNotNull(viewModel);
-            Assert.IsFalse(viewModel.EndDate.Valid);
-            Assert.IsNull(viewModel.Transactions);
-
-            _mediator.Verify(
-                x => x.SendAsync(It.IsAny<GetTransactionsDownloadRequestAndResponse>()), Times.Never);
-        }
-
-        [Test]
-        public async Task WithValidDatesThenTransactionsAreRetrievedForTheAccount()
-        {
-            const int fromMonth = 1;
-            const int fromYear = 2000;
-            const int toMonth = 1;
-            const int toYear = 2018;
-
-            _mediator.Setup(
-                    x => x.SendAsync(It.IsAny<GetTransactionsDownloadRequestAndResponse>()))
-                .ReturnsAsync(new GetTransactionsDownloadRequestAndResponse
-                {
-                    StartDate = new TransactionsDownloadStartDateMonthYearDateTime
-                    {
-                        Month = fromMonth,
-                        Year = fromYear,
-                    },
-                    EndDate = new TransactionsDownloadEndDateMonthYearDateTime()
-                    {
-                        Month = toMonth,
-                        Year = toYear,
-                    },
-                    Transactions = new List<TransactionDownloadLine>()
-                    {
-                        new TransactionDownloadLine()
-                    },
-                    MimeType = @"text/csv",
-                    FileExtension = "hello",
-                    FileDate = new byte[]{},
-                });
-
-            var result = await _controller.TransactionDownloadByDate("HashedAccountId",
-                new GetTransactionsDownloadRequestAndResponse
-                {
-                    StartDate = new TransactionsDownloadStartDateMonthYearDateTime
-                    {
-                        Month = fromMonth,
-                        Year = fromYear
-                    },
-                    EndDate = new TransactionsDownloadEndDateMonthYearDateTime()
-                    {
-                        Month = toMonth,
-                        Year = toYear
-                    },
-                }) as FileContentResult;
-
-            Assert.IsNotNull(result);
-
-            _mediator.Verify(
-                x => x.SendAsync(It.IsAny<GetTransactionsDownloadRequestAndResponse>()), Times.Once);
+            _mediator.Verify(m => m.SendAsync(_transactionDownloadViewModel.Message), Times.Once);
         }
 
 
         [Test]
-        public async Task WithValidDatesThatFindNoResultsThenViewModelIsReturned()
+        public async Task ThenTheModelStateShouldBeValid()
         {
-            const int fromMonth = 1;
-            const int fromYear = 2000;
-            const int toMonth = 1;
-            const int toYear = 2018;
+            await _controller.TransactionDownloadByDate(_transactionDownloadViewModel);
 
-            _mediator.Setup(
-                    x => x.SendAsync(It.IsAny<GetTransactionsDownloadRequestAndResponse>()))
-                .ReturnsAsync(new GetTransactionsDownloadRequestAndResponse
-                {
-                    StartDate = new TransactionsDownloadStartDateMonthYearDateTime
-                    {
-                        Month = fromMonth,
-                        Year = fromYear,
-                    },
-                    EndDate = new TransactionsDownloadEndDateMonthYearDateTime()
-                    {
-                        Month = toMonth,
-                        Year = toYear,
-                    },
-                    Transactions = new List<TransactionDownloadLine>()
-                });
+            Assert.That(_controller.ModelState.IsValid, Is.True);
+        }
 
-            var result = await _controller.TransactionDownloadByDate("HashedAccountId",
-                new GetTransactionsDownloadRequestAndResponse
+        [Test]
+        public async Task ThenIShouldBeRedirectedToTheSendTransferConnectionPage()
+        {
+            var result = await _controller.TransactionDownloadByDate(_transactionDownloadViewModel) as FileContentResult;
+
+            Assert.That(result, Is.Not.Null);
+
+            Assert.AreEqual(result.ContentType, ExpectedMimeType);
+            Assert.AreEqual(result.FileContents, _expectedFileData);
+            Assert.IsTrue(result.FileDownloadName.EndsWith(ExpectedFileExtension));
+        }
+
+
+        [Test]
+        public async Task ThenTheModelStateShouldNotBeValidIfErrorsAreReturned()
+        {
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetTransactionsDownloadQuery>()))
+                .ReturnsAsync(new GetTransactionsDownloadResponse()
                 {
-                    StartDate = new TransactionsDownloadStartDateMonthYearDateTime
+                    ValidationResult = new ValidationResult
                     {
-                        Month = fromMonth,
-                        Year = fromYear
-                    },
-                    EndDate = new TransactionsDownloadEndDateMonthYearDateTime()
-                    {
-                        Month = toMonth,
-                        Year = toYear
+                        ValidationDictionary = new Dictionary<string, string>
+                        {
+                            ["Foo"] = "Bar"
+                        }
                     },
                 });
 
-            Assert.IsNull(result as FileContentResult);
-            Assert.IsNotNull(result as ViewResultBase);
+            var result = await _controller.TransactionDownloadByDate(_transactionDownloadViewModel) as FileContentResult;
 
-            _mediator.Verify(
-                x => x.SendAsync(It.IsAny<GetTransactionsDownloadRequestAndResponse>()), Times.Once);
+            Assert.That(_controller.ModelState.IsValid, Is.False);
         }
 
+
         [Test]
-        public async Task WithValidDatesButInvalidAccountIdThenUnauthorizedIsReturned()
+        public async Task ThenIShouldReturnThePage()
         {
-            const string expectedAction = "Index";
-            const string expectedController = "AccessDenied";
-
-            const int fromMonth = 1;
-            const int fromYear = 2000;
-            const int toMonth = 1;
-            const int toYear = 2018;
-
-            _mediator.Setup(
-                    x => x.SendAsync(It.IsAny<GetTransactionsDownloadRequestAndResponse>()))
-                .ReturnsAsync(new GetTransactionsDownloadRequestAndResponse
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetTransactionsDownloadQuery>()))
+                .ReturnsAsync(new GetTransactionsDownloadResponse()
                 {
-                    StartDate = new TransactionsDownloadStartDateMonthYearDateTime
+                    ValidationResult = new ValidationResult
                     {
-                        Month = fromMonth,
-                        Year = fromYear,
+                        ValidationDictionary = new Dictionary<string, string>
+                        {
+                            ["Foo"] = "Bar"
+                        }
                     },
-                    EndDate = new TransactionsDownloadEndDateMonthYearDateTime()
-                    {
-                        Month = toMonth,
-                        Year = toYear,
-                    },
-                    Transactions = new List<TransactionDownloadLine>()
-                    {
-                        new TransactionDownloadLine()
-                    },
-                    IsUnauthorized = true
                 });
 
-            var result = await _controller.TransactionDownloadByDate("HashedAccountId",
-                new GetTransactionsDownloadRequestAndResponse
-                {
-                    StartDate = new TransactionsDownloadStartDateMonthYearDateTime
-                    {
-                        Month = fromMonth,
-                        Year = fromYear
-                    },
-                    EndDate = new TransactionsDownloadEndDateMonthYearDateTime
-                    {
-                        Month = toMonth,
-                        Year = toYear
-                    },
-                }) as RedirectToRouteResult;
+            var result = await _controller.TransactionDownloadByDate(_transactionDownloadViewModel) as ViewResultBase;
 
-            Assert.IsNotNull(result);
+            Assert.That(result, Is.Not.Null);
+        }
+        
 
-            Assert.AreEqual(expectedAction, result.RouteValues["action"]);
-            Assert.AreEqual(expectedController, result.RouteValues["controller"]);
+        private static ValidationResult PopulatedValidationResult()
+        {
+            var validationResult = new ValidationResult();
+            validationResult.AddError("Something", "There are no transactions in the date range");
+            return validationResult;
         }
     }
 }

@@ -15,11 +15,9 @@ namespace SFA.DAS.EAS.Domain.Models.Transaction
             if (!ValidYear)
                 throw new InvalidOperationException("This object has an invalid StartDate.Year");
 
-            if (DateInFuture)
-                throw new InvalidOperationException("This StartDate is in the future");
-
             return new DateTime(Year, Month, 1);
         }
-        public override bool Valid => ValidMonth && ValidYear & !DateInFuture;
+
+        public override bool Valid => ValidMonth && ValidYear;
     }
 }

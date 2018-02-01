@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Formatters.Transactions.ExcelTransac
                 new[]
                 {
                     "Transaction date", "Transaction type", "PAYE scheme", "Payroll month", "Levy declared",
-                    "English %", "10% top up", "Training provider", "Cohort reference", "Unique learner number",
+                    "English %", "10% top up", "Training provider", "Unique learner number",
                     "Apprentice", "Apprenticeship training course", "Paid from levy", "Your contribution",
                     "Government contribution", "Total"
                 },
@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Formatters.Transactions.ExcelTransac
                     _transactionLine.DateCreated.ToString(), _transactionLine.TransactionType,
                     _transactionLine.PayeScheme, _transactionLine.PeriodEnd, _transactionLine.LevyDeclared.ToString(),
                     _transactionLine.EnglishFraction.ToString(), _transactionLine.TenPercentTopUp.ToString(),
-                    _transactionLine.TrainingProvider, _transactionLine.CohortReference, _transactionLine.Uln,
+                    _transactionLine.TrainingProvider, _transactionLine.Uln,
                     _transactionLine.Apprentice, _transactionLine.ApprenticeTrainingCourse,
                     _transactionLine.PaidFromLevy.ToString(), _transactionLine.EmployerContribution.ToString(),
                     _transactionLine.GovermentContribution.ToString(), _transactionLine.Total.ToString()

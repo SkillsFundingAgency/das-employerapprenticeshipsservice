@@ -471,6 +471,7 @@
     <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\TransactionDownloadViewModel.cs" />
     <Compile Include="ViewModels\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\DismissTaskViewModel.cs" />
     <Compile Include="ViewModels\EnvironmentDetailsViewModel.cs" />
