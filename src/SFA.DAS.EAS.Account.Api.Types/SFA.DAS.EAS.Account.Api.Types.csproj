@@ -1,90 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8AFB0BBE-1E53-488C-A971-D236DF9EAA77}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFA.DAS.EAS.Account.Api.Types</RootNamespace>
-    <AssemblyName>SFA.DAS.EAS.Account.Api.Types</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AccountResourceList.cs" />
-    <Compile Include="EmployerAgreementStatus.cs" />
-    <Compile Include="EmployerAgreementView.cs" />
-    <Compile Include="Events\Account\AccountCreatedEvent.cs" />
-    <Compile Include="Events\Account\AccountRenamedEvent.cs" />
-    <Compile Include="Events\Agreement\AgreementRemovedEvent.cs" />
-    <Compile Include="Events\Agreement\AgreementSignedEvent.cs" />
-    <Compile Include="Events\LegalEntity\LegalEntityCreatedEvent.cs" />
-    <Compile Include="Events\Levy\LevyDeclarationUpdatedEvent.cs" />
-    <Compile Include="Events\PayeScheme\PayeSchemeAddedEvent.cs" />
-    <Compile Include="Events\PayeScheme\PayeSchemeRemovedEvent.cs" />
-    <Compile Include="InvitationStatus.cs" />
-    <Compile Include="LevyDeclarationViewModel.cs" />
-    <Compile Include="PayeSchemeViewModel.cs" />
-    <Compile Include="AccountDetailViewModel.cs" />
-    <Compile Include="LegalEntityViewModel.cs" />
-    <Compile Include="AccountWithBalanceViewModel.cs" />
-    <Compile Include="IAccountResource.cs" />
-    <Compile Include="PagedApiResponseViewModel.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResourceList.cs" />
-    <Compile Include="ResourceViewModel.cs" />
-    <Compile Include="TeamMemberViewModel.cs" />
-    <Compile Include="TransactionItemType.cs" />
-    <Compile Include="TransactionSummaryViewModel.cs" />
-    <Compile Include="TransactionViewModel.cs" />
-    <Compile Include="TransactionsViewModel.cs" />
-    <Compile Include="TransferConnectionViewModel.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="SFA.DAS.Account.Api.Types.nuspec" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <PropertyGroup>
+    <PackageId>SFA.DAS.Account.Api.Types</PackageId>
+    <PackageVersion>2.0.0</PackageVersion>
+    <Authors>Esfa</Authors>
+    <Title>Types used by the DAS Employer Account Api</Title>
+    <Description>Types used by the DAS Employer Account Api</Description>
+    <PackageLicenseUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/tree/master/src/SFA.DAS.EAS.Account.Api.Types</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice</RepositoryUrl>
+    <PackageTags>Esfa;Das;</PackageTags>
+    <PackageReleaseNotes>Added support for .NetStandard2.0</PackageReleaseNotes>
+  </PropertyGroup>
 </Project>
