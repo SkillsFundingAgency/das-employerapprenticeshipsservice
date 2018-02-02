@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             if (whiteListLookUp != null)
                 return whiteListLookUp;
 
-            whiteListLookUp = GetDataFromStorage();
+            whiteListLookUp = GetDataFromTableStorage();
 
             if (whiteListLookUp?.EmailPatterns == null || !whiteListLookUp.EmailPatterns.Any())
                 return null;

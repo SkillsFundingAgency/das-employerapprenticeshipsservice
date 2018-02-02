@@ -23,55 +23,49 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public virtual bool IsFeatureEnabled(string controllerName, string actionName, string userEmail)
         {
-            var features = GetFeatures();
+            var config = GetConfiguration();
+            var isFeatureEnabled = true;
 
-            if (features?.Data == null)
+            if (config?.Data != null)
             {
-                return true;
+                var controllerToggles = config.Data.Where(c => c.Controller == controllerName).ToList();
+
+                if (controllerToggles.Any())
+                {
+                    var actionToggle = controllerToggles.Where(t => t.Action == actionName || t.Action == "*").OrderByDescending(t => t.Action).FirstOrDefault();
+
+                    if (actionToggle != null)
+                    {
+                        var whitelistToggle = actionToggle.Whitelist.Any(p => Regex.IsMatch(userEmail, p, RegexOptions.IgnoreCase));
+
+                        if (!whitelistToggle)
+                        {
+                            isFeatureEnabled = false;
+                        }
+                    }
+                }
             }
             
-            var controllerToggles = features.Data
-                .Where(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase))
-                .ToList();
+            Logger.Info($"Is feature enabled check for controllerName '{controllerName}', actionName '{actionName}' and userEmail '{userEmail}' is '{isFeatureEnabled}'.");
 
-            if (!controllerToggles.Any())
-            {
-                return true;
-            }
-            
-            var actionToggle = controllerToggles
-                .Where(t => t.Action.Equals(actionName, StringComparison.CurrentCultureIgnoreCase) || t.Action == "*")
-                .OrderByDescending(t => t.Action) // Should put action = * last as specific action toggle should win
-                .FirstOrDefault();
-
-            if (actionToggle == null)
-            {
-                return true;
-            }
-
-            if (actionToggle.Whitelist == null)
-            {
-                return false;
-            }
-
-            return actionToggle.Whitelist.Any(p => Regex.IsMatch(userEmail, p, RegexOptions.IgnoreCase));
+            return isFeatureEnabled;
         }
 
-        private FeatureToggleConfiguration GetFeatures()
+        private FeatureToggleConfiguration GetConfiguration()
         {
-            var features = _cacheProvider.Get<FeatureToggleConfiguration>(nameof(FeatureToggleConfiguration));
+            var config = _cacheProvider.Get<FeatureToggleConfiguration>(nameof(FeatureToggleConfiguration));
 
-            if (features == null)
+            if (config == null)
             {
-                features = GetDataFromStorage();
+                config = GetDataFromTableStorage();
 
-                if (features?.Data != null && features.Data.Any())
+                if (config?.Data != null && config.Data.Any())
                 {
-                    _cacheProvider.Set(nameof(FeatureToggleConfiguration), features, new TimeSpan(0, 30, 0));
+                    _cacheProvider.Set(nameof(FeatureToggleConfiguration), config, new TimeSpan(0, 30, 0));
                 }
             }
 
-            return features;
+            return config;
         }
     }
 }

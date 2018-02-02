@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
             if (views == null)
             {
-                views = GetDataFromStorage();
+                views = GetDataFromTableStorage();
                 if (views.Data != null && views.Data.Any())
                 {
                     _cacheProvider.Set(nameof(MultiVariantViewLookup),views,new TimeSpan(0,30,0));

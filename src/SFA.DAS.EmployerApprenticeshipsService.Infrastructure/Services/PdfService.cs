@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<MemoryStream> SubsituteValuesForPdf(string fileName, Dictionary<string,string> valuesToSubsitute )
         {
-            var pdfStream = await GetBlobDataFromAzure(ConfigurationName, fileName);
+            var pdfStream = await StreamDataFromBlobStorage(ConfigurationName, fileName);
             
             await SetPdfLicense();
 
@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         private async Task SetPdfLicense()
         {
-            using (var licenseStream = await GetBlobDataFromAzure(ConfigurationName, "Aspose.Total.lic"))
+            using (var licenseStream = await StreamDataFromBlobStorage(ConfigurationName, "Aspose.Total.lic"))
             {
                 var license = new License();
                 licenseStream.Position = 0;

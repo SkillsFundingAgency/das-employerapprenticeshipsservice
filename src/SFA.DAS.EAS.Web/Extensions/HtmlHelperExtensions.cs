@@ -24,8 +24,9 @@ namespace SFA.DAS.EAS.Web.Extensions
             var currenUserService = dependencyResolver.GetService<ICurrentUserService>();
             var currentUser = currenUserService.GetCurrentUser();
             var featureToggleService = dependencyResolver.GetService<IFeatureToggleService>();
+            var isFeatureEnabled = featureToggleService.IsFeatureEnabled(controllerName, actionName, currentUser.Email);
 
-            return featureToggleService.IsFeatureEnabled(controllerName, actionName, currentUser.Email);
+            return isFeatureEnabled;
         }
 
         public static bool IsValid<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
