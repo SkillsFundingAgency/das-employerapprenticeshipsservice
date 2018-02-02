@@ -361,17 +361,26 @@ sfa.stickyNav = {
     },
     init: function() {
         window.addEventListener('scroll', this.fixedNav(this));
+        window.addEventListener('resize', this.pageResized(this));
+    },
+    pageResized: function(self) {
+        return function() {
+            self.settings.topOfNav = $('.floating-menu').offset().top;
+        };
     },
     fixedNav: function(self) {
         return function() {
+            var isSticky = $(document.body).hasClass('sticky-nav');
             if (window.scrollY >= self.settings.topOfNav) {
+                if (!isSticky) {
                 $(document.body)
-                .addClass('fixed-nav')
-                .css('padding-top', self.settings.nav.height() + 'px');
-            } else {
+                    .addClass('sticky-nav')
+                    .css('padding-top', self.settings.nav.height() + 'px');
+                }
+            } else if (isSticky) {
                 $(document.body)
-                .removeClass('fixed-nav')
-                .css('padding-top', '0');
+                .removeClass('sticky-nav')
+                .css('padding-top', 0);
             }
         };
     }

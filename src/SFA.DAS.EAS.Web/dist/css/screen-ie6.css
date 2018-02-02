@@ -2859,14 +2859,14 @@ a#link-settings:focus {
   padding: 0 30px;
 }
 
-.fixed-nav .floating-menu {
+.sticky-nav .floating-menu {
   position: fixed;
   top: 0;
   left: 0;
   max-width: 100%;
 }
 
-.fixed-nav .js-float {
+.sticky-nav .js-float {
   max-width: 960px;
   margin: 0 auto;
   padding: 0 30px;
