@@ -2908,6 +2908,7 @@ a#link-settings:focus {
 .floating-menu p.floating-head-text {
   float: left;
   margin: 10px 0 0 10px;
+  text-align: left;
   font-weight: bold;
   font-size: 19px;
   margin: 10px 0 0 0px;

@@ -112,52 +112,6 @@ sfa.navigation = {
 }
 
 sfa.tabs = {
-
-    elems: {
-        tabs: $('ul.js-tabs li a'),
-        panels: $('.js-tab-pane')
-    },
-
-    init: function () {
-
-        if (this.elems.tabs) {
-            this.setUpEvents(this.elems.tabs);
-            this.hidePanels(this.elems.panels);
-        }
-
-        this.elems.tabs.eq(0).click();
-
-    },
-
-    hidePanels: function (panels) {
-        panels.hide();
-    },
-
-    showPanel: function (panel) {
-        panel.show();
-    },
-
-    setUpEvents: function (tabs) {
-
-        var that = this;
-
-        tabs.on('click touchstart', function (e) {
-
-            tabs.removeClass('selected');
-            $(this).addClass('selected');
-
-            var target = $(this).attr('href');
-
-            that.hidePanels(that.elems.panels);
-            that.showPanel($(target));
-
-            e.preventDefault();
-        });
-
-    }
-};
-
-sfa.tabs = {
     elems: {
         tabs: $('ul.js-tabs li a'),
         panels: $('.js-tab-pane')
@@ -238,7 +192,6 @@ sfa.tagHelper = {
         });
     }
 };
-
 
 sfa.backLink = {
     init: function () {
@@ -355,28 +308,28 @@ sfa.welcomeWizard = {
 }
 
 sfa.stickyNav = {
-    settings: {
+    elems: {
         nav: $('.floating-menu')
     },
     init: function() {
-        if (!this.settings.nav.length) return false;
-        this.settings.topOfNav = $('.floating-menu').offset().top;
+        if (!this.elems.nav.length) return false;
+        this.elems.topOfNav = this.elems.nav.offset().top;
         window.addEventListener('scroll', this.fixedNav(this));
         window.addEventListener('resize', this.pageResized(this));
     },
     pageResized: function(self) {
         return function() {
-            self.settings.topOfNav = $('.floating-menu').offset().top;
+            self.elems.topOfNav = self.elems.nav.offset().top;
         };
     },
     fixedNav: function(self) {
         return function() {
             var isSticky = $(document.body).hasClass('sticky-nav');
-            if (window.scrollY >= self.settings.topOfNav) {
+            if (window.scrollY >= self.elems.topOfNav) {
                 if (!isSticky) {
                 $(document.body)
                     .addClass('sticky-nav')
-                    .css('padding-top', self.settings.nav.height() + 'px');
+                    .css('padding-top', self.elems.nav.height() + 'px');
                 }
             } else if (isSticky) {
                 $(document.body)
@@ -386,7 +339,6 @@ sfa.stickyNav = {
         };
     }
 };
-  
 
 getIndexOf = function (accountId, items) {
     var i = 0;
@@ -460,7 +412,6 @@ $('.container-head').on('click touchstart', (function () {
 }));
 
 // Push confirmation messages to the Google dateLayer array
-
 var successMessage = $('.success-summary h1');
 if (successMessage.length > 0) {
     var dataLoadedObj = dataLayer[0];
@@ -471,7 +422,6 @@ if (successMessage.length > 0) {
 }
 
 // Push error messages to the Google dateLayer array
-
 var errorMessage = $('.error-summary');
 if (errorMessage.length > 0) {
     var errorContent = errorMessage.find('ul li a').eq(0).text(),
@@ -482,17 +432,3 @@ if (errorMessage.length > 0) {
         dataLayer[0] = dataLoadedObj;
     }
 }
-
-
-//floating header script
-// $(window).scroll(function () {
-//     if ($(window).scrollTop() >= 110) {
-//         $('.floating-menu').addClass('fixed-header');
-//         $('.js-float').addClass('width-adjust');
-//     }
-//     else {
-//         $('.floating-menu').removeClass('fixed-header');
-//         $('.js-float').removeClass('width-adjust');
-//     }
-// });
-
