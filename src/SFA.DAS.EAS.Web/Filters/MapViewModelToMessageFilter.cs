@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using AutoMapper;
 using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Filters
 {

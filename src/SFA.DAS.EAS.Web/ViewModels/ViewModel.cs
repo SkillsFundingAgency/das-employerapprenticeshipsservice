@@ -1,8 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 
-namespace SFA.DAS.EAS.Application.Messages
+namespace SFA.DAS.EAS.Web.ViewModels
 {
     public abstract class ViewModel<T> : ViewModel where T : class
     {

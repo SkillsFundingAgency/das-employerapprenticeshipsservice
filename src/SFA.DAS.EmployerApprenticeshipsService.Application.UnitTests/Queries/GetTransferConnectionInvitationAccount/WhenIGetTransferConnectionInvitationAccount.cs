@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
+using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
@@ -103,8 +104,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
             Assert.That(_response, Is.Not.Null);
             Assert.That(_response.ReceiverAccount, Is.SameAs(_receiverAccount));
             Assert.That(_response.SenderAccount, Is.SameAs(_senderAccount));
-            Assert.That(_response.ValidationResult, Is.Not.Null);
-            Assert.That(_response.ValidationResult.IsValid, Is.True);
         }
 
         [Test]
@@ -116,21 +115,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
         }
 
         [Test]
-        public async Task ThenShouldReturnErrorIfReceiverAccountIsNull()
+        public void ThenShouldThrowValidationExceptionIfReceiverAccountIsNull()
         {
             _employerAccountRepository.Setup(r => r.GetAccountByHashedId(ReceiverHashedAccountId)).ReturnsAsync(null);
 
-            _response = await _handler.Handle(_query);
+            var exception = Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_query));
 
-            Assert.That(_response, Is.Not.Null);
-            Assert.That(_response.ValidationResult, Is.Not.Null);
-            Assert.That(_response.ValidationResult.ValidationDictionary.TryGetValue(nameof(_query.ReceiverAccountHashedId), out var errorMessage), Is.True);
-            Assert.That(errorMessage, Is.Not.Null);
-            Assert.That(errorMessage, Is.EqualTo("You must enter a valid account ID"));
+            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountHashedId)));
+            Assert.That(exception.ErrorMessage, Is.EqualTo("You must enter a valid account ID"));
         }
 
         [Test]
-        public async Task ThenShouldReturnErrorIfInvitationsAlreadySent()
+        public void ThenShouldThrowValidationExceptionIfInvitationsAlreadySent()
         {
             _transferConnectionRepository.Setup(r => r.GetTransferConnectionInvitations(SenderAccountId, ReceiverAccountId))
                 .ReturnsAsync(new List<TransferConnectionInvitation>
@@ -141,13 +137,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
                     }
                 });
 
-            _response = await _handler.Handle(_query);
+            var exception = Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_query));
 
-            Assert.That(_response, Is.Not.Null);
-            Assert.That(_response.ValidationResult, Is.Not.Null);
-            Assert.That(_response.ValidationResult.ValidationDictionary.TryGetValue(nameof(_query.ReceiverAccountHashedId), out var errorMessage), Is.True);
-            Assert.That(errorMessage, Is.Not.Null);
-            Assert.That(errorMessage, Is.EqualTo("You've already sent a connection request to this employer"));
+            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountHashedId)));
+            Assert.That(exception.ErrorMessage, Is.EqualTo("You've already sent a connection request to this employer"));
         }
     }
 }

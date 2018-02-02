@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
-using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.ViewModels;
 
@@ -26,13 +24,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         public void Arrange()
         {
             _mediator.Setup(m => m.SendAsync(It.IsAny<GetTransferConnectionInvitationAccountQuery>()))
-                .ReturnsAsync(new GetTransferConnectionInvitationAccountResponse
-                {
-                    ValidationResult = new ValidationResult
-                    {
-                        ValidationDictionary = new Dictionary<string, string>()
-                    }
-                });
+                .ReturnsAsync(new GetTransferConnectionInvitationAccountResponse());
 
             _controller = new TransferConnectionInvitationsController(_mapper.Object, _mediator.Object);
 
@@ -55,14 +47,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         }
 
         [Test]
-        public async Task ThenTheModelStateShouldBeValid()
-        {
-            await _controller.Start(_viewModel);
-
-            Assert.That(_controller.ModelState.IsValid, Is.True);
-        }
-
-        [Test]
         public async Task ThenIShouldBeRedirectedToTheSendTransferConnectionPage()
         {
             var result = await _controller.Start(_viewModel) as RedirectToRouteResult;
@@ -75,51 +59,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
             Assert.That(senderHashedAccountId, Is.EqualTo(SenderHashedAccountId));
             Assert.That(result.RouteValues.TryGetValue("ReceiverAccountHashedId", out var receiverHashedAccountId), Is.True);
             Assert.That(receiverHashedAccountId, Is.EqualTo(ReceiverHashedAccountId));
-        }
-
-        [Test]
-        public async Task ThenTheModelStateShouldNotBeValidIfErrorsAreReturned()
-        {
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetTransferConnectionInvitationAccountQuery>()))
-                .ReturnsAsync(new GetTransferConnectionInvitationAccountResponse
-                {
-                    ValidationResult = new ValidationResult
-                    {
-                        ValidationDictionary = new Dictionary<string, string>
-                        {
-                            ["Foo"] = "Bar"
-                        }
-                    }
-                });
-
-            await _controller.Start(_viewModel);
-
-            Assert.That(_controller.ModelState.IsValid, Is.False);
-        }
-
-        [Test]
-        public async Task ThenIShouldBeRedirectedToTheStartTransferConnectionPage()
-        {
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetTransferConnectionInvitationAccountQuery>()))
-                .ReturnsAsync(new GetTransferConnectionInvitationAccountResponse
-                {
-                    ValidationResult = new ValidationResult
-                    {
-                        ValidationDictionary = new Dictionary<string, string>
-                        {
-                            ["Foo"] = "Bar"
-                        }
-                    }
-                });
-
-            var result = await _controller.Start(_viewModel) as RedirectToRouteResult;
-
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.RouteValues.TryGetValue("action", out var actionName), Is.True);
-            Assert.That(actionName, Is.EqualTo("Start"));
-            Assert.That(result.RouteValues.ContainsKey("controller"), Is.False);
-            Assert.That(result.RouteValues.TryGetValue("hashedAccountId", out var hashedAccountId), Is.True);
-            Assert.That(hashedAccountId, Is.EqualTo(SenderHashedAccountId));
         }
     }
 }

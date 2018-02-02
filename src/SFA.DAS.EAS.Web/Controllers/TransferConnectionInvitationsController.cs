@@ -6,7 +6,6 @@ using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitationQuery;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
 using SFA.DAS.EAS.Web.Attributes;
-using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 
@@ -47,13 +46,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("start")]
         public async Task<ActionResult> Start(StartTransferConnectionInvitationViewModel model)
         {
-            var response = await _mediator.SendAsync(model.Message);
-            
-            ModelState.AddValidationResult(response.ValidationResult);
+            await _mediator.SendAsync(model.Message);
 
-            return ModelState.IsValid
-                ? RedirectToAction("Send", model.Message)
-                : RedirectToAction("Start", new { hashedAccountId = model.Message.SenderAccountHashedId });
+            return RedirectToAction("Send", model.Message);
         }
 
         [HttpNotFoundForNullModel]

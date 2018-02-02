@@ -40,33 +40,27 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
             {
                 throw new UnauthorizedAccessException();
             }
-
-            var validationResult = new ValidationResult();
-            var senderAccountId = _hashingService.DecodeValue(message.SenderAccountHashedId);
-            var senderAccountTask = _employerAccountRepository.GetAccountById(senderAccountId);
-            var receiverAccountTask = _employerAccountRepository.GetAccountByHashedId(message.ReceiverAccountHashedId);
-            var senderAccount = await senderAccountTask;
-            var receiverAccount = await receiverAccountTask;
+            
+            var receiverAccount = await _employerAccountRepository.GetAccountByHashedId(message.ReceiverAccountHashedId);
 
             if (receiverAccount == null)
             {
-                validationResult.AddError(nameof(message.ReceiverAccountHashedId), "You must enter a valid account ID");
+                throw new ValidationException(nameof(message.ReceiverAccountHashedId), "You must enter a valid account ID");
             }
-            else
-            {
-                var transferConnectionInvitations = await _transferConnectionInvitationRepository.GetTransferConnectionInvitations(senderAccount.Id, receiverAccount.Id);
 
-                if (transferConnectionInvitations.Any(t => t.Status == TransferConnectionInvitationStatus.Sent))
-                {
-                    validationResult.AddError(nameof(message.ReceiverAccountHashedId), "You've already sent a connection request to this employer");
-                }
+            var senderAccountId = _hashingService.DecodeValue(message.SenderAccountHashedId);
+            var senderAccount = await _employerAccountRepository.GetAccountById(senderAccountId);
+            var transferConnectionInvitations = await _transferConnectionInvitationRepository.GetTransferConnectionInvitations(senderAccount.Id, receiverAccount.Id);
+
+            if (transferConnectionInvitations.Any(t => t.Status == TransferConnectionInvitationStatus.Sent))
+            {
+                throw new ValidationException(nameof(message.ReceiverAccountHashedId), "You've already sent a connection request to this employer");
             }
 
             return new GetTransferConnectionInvitationAccountResponse
             {
                 ReceiverAccount = receiverAccount,
-                SenderAccount = senderAccount,
-                ValidationResult = validationResult
+                SenderAccount = senderAccount
             };
         }
     }
