@@ -10,7 +10,10 @@ namespace SFA.DAS.EAS.Infrastructure.Mapping.Profiles
         public PaymentMappings()
         {
             CreateMap<Payment, PaymentDetails>();
-            CreateMap<PaymentDetails, PaymentCreatedMessage>();
+            CreateMap<PaymentDetails, PaymentCreatedMessage>()
+                .ForMember(dest => dest.AccountId, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatorName, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatorUserRef, opt => opt.Ignore());
         }
     }
 }

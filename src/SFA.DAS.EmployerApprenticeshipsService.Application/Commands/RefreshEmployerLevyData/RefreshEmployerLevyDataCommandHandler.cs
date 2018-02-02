@@ -189,7 +189,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
             {
                 var accountId = _hashingService.DecodeValue(hashedAccountId);
                 var dasLevyDeclarations = await _dasLevyRepository.GetAccountLevyDeclarations(accountId, payrollYear, payrollMonth.Value);
-                if (!dasLevyDeclarations.Any())
+                if (!dasLevyDeclarations?.Any() ?? true)
                 {
                     _logger.Warn($"No levy declarations found for account: {accountId}, payroll year: {payrollYear}, month: {payrollMonth}");
                     return;
@@ -220,6 +220,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
             catch (Exception ex)
             {
                 _logger.Error(ex, $"Error publishing levy declaration events. Error: {ex}");
+                //TODO: Not sure if we should rollback the levy processing tx if the publishing fails
             }
         }
     }

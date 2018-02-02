@@ -230,7 +230,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         {
             //Arrange
             var expectedPayment = _paymentDetails.First();
-
+            _mapper.Setup(x => x.Map(It.IsAny<PaymentDetails>(),It.IsAny<PaymentCreatedMessage>())).Callback<PaymentDetails, PaymentCreatedMessage>(
+                (payment, message) =>
+                {
+                    message.ProviderName = payment.ProviderName;
+                    message.Amount = payment.Amount;
+                });
             //Act
             await _handler.Handle(new RefreshPaymentDataCommand());
 
