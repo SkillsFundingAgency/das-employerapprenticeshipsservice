@@ -562,6 +562,10 @@
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersResponse.cs" />
     <Compile Include="Queries\GetSentTransferConnectionInvitationQuery\GetSentTransferConnectionInvitationQuery.cs" />
     <Compile Include="Queries\GetSentTransferConnectionInvitationQuery\GetSentTransferConnectionInvitationQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferBalance\GetTransferBalanceRequest.cs" />
+    <Compile Include="Queries\GetTransferBalance\GetTransferBalanceRequestHandler.cs" />
+    <Compile Include="Queries\GetTransferBalance\GetTransferBalanceRequestValidator.cs" />
+    <Compile Include="Queries\GetTransferBalance\GetTransferBalanceResponse.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountQuery.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountResponse.cs" />
