@@ -164,7 +164,7 @@ sfa.forms = {
         var btns = $('form').not('.has-client-side-validation').find('.button');
         btns.removeAttr('disabled');
     }
-}
+};
 
 // Helper for gta events
 sfa.tagHelper = {
@@ -201,7 +201,7 @@ sfa.backLink = {
             .on('click', function (e) { window.history.back(); e.preventDefault(); });
         $('#js-breadcrumbs').html(backLink);
     }
-}
+};
 
 if (localStorage.getItem("answers") === null) {
     localStorage.setItem("answers", JSON.stringify([]));
@@ -305,36 +305,38 @@ sfa.welcomeWizard = {
             $('#confirmation').hide();
         }
     }
-}
+};
 
 sfa.stickyNav = {
     elems: {
-        nav: $('.floating-menu')
+        $nav: $(".floating-menu"),
+        $navHolder: $("#floating-menu-holder"),
+        $window: $(window),
+        $body: $(document.body)
     },
     init: function() {
-        if (!this.elems.nav.length) return false;
-        this.elems.topOfNav = this.elems.nav.offset().top;
-        window.addEventListener('scroll', this.fixedNav(this));
-        window.addEventListener('resize', this.pageResized(this));
+        if (!this.elems.$nav.length) return false;
+        this.elems.topOfNav = this.elems.$navHolder.offset().top;
+        this.elems.$window.on("scroll", this.fixedNav(this));
+        this.elems.$window.on("resize", this.pageResized(this));
     },
     pageResized: function(self) {
         return function() {
-            self.elems.topOfNav = self.elems.nav.offset().top;
+            self.elems.topOfNav = self.elems.$navHolder.offset().top;
         };
     },
     fixedNav: function(self) {
         return function() {
-            var isSticky = $(document.body).hasClass('sticky-nav');
-            if (window.scrollY >= self.elems.topOfNav) {
+            var isSticky = self.elems.$body.hasClass("sticky-nav");
+            console.log(self.elems.$window.scrollTop(), self.elems.topOfNav);
+            if (self.elems.$window.scrollTop() >= self.elems.topOfNav) {
                 if (!isSticky) {
-                $(document.body)
-                    .addClass('sticky-nav')
-                    .css('padding-top', self.elems.nav.height() + 'px');
+                self.elems.$body
+                    .addClass("sticky-nav")
+                    .css("padding-top", self.elems.$nav.height() + "px");
                 }
             } else if (isSticky) {
-                $(document.body)
-                .removeClass('sticky-nav')
-                .css('padding-top', 0);
+                self.elems.$body.removeClass("sticky-nav").css("padding-top", 0);
             }
         };
     }
@@ -349,7 +351,7 @@ getIndexOf = function (accountId, items) {
         }
     }
     return -1;
-}
+};
 
 if ($('#js-breadcrumbs')) {
     sfa.backLink.init();
