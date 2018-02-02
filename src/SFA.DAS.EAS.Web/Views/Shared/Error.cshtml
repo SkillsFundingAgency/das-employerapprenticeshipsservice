@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.PageID = "page-error";
     ViewBag.Title = "Error";
+    ViewBag.HideNav = true;
 }
 
 <div class="grid-row">
@@ -10,13 +11,10 @@
     </div>
 </div>
 
-@section gaDataLayer {
-<script>
-    window.dataLayer = window.dataLayer || [];
-    dataLayer.push(
-        {
-            'success': 'Theres been an error'
-        }
-    );
-</script>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/" class="back-link">Back to the homepage</a></li>
+        </ol>
+    </div>
 }
