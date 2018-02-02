@@ -356,10 +356,11 @@ sfa.welcomeWizard = {
 
 sfa.stickyNav = {
     settings: {
-        nav: $('.floating-menu'),
-        topOfNav: $('.floating-menu').offset().top
+        nav: $('.floating-menu')
     },
     init: function() {
+        if (!this.settings.nav.length) return false;
+        this.settings.topOfNav = $('.floating-menu').offset().top;
         window.addEventListener('scroll', this.fixedNav(this));
         window.addEventListener('resize', this.pageResized(this));
     },
