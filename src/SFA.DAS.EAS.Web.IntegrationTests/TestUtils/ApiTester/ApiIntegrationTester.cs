@@ -257,7 +257,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private bool IsAcceptableStatusCode(CallResponse response, IEnumerable<HttpStatusCode> acceptableStatusCodes)
         {
-            return acceptableStatusCodes.Contains(response.Response.StatusCode);
+            return acceptableStatusCodes == null || acceptableStatusCodes.Contains(response.Response.StatusCode);
         }
     }
 }

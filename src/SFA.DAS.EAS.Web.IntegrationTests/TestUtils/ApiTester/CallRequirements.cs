@@ -8,9 +8,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
     /// </summary>
     public class CallRequirements
     {
-        // ReSharper disable once StaticMemberInGenericType
-        protected static readonly HttpStatusCode[] EmptyStatusCodes = new HttpStatusCode[0];
-
         private static readonly TimeSpan DefaultTimeOut = new TimeSpan(0,5,0);
 
         public CallRequirements(string uri)
