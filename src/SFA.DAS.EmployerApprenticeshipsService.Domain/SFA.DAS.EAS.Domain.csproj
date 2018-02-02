@@ -195,6 +195,7 @@
     <Compile Include="Data\IUnitOfWork.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
     <Compile Include="Data\Repositories\ITransferConnectionInvitationRepository.cs" />
+    <Compile Include="Data\Repositories\ITransferRepository.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Http\InternalServerErrorException.cs" />
     <Compile Include="Http\RequestTimeOutException.cs" />
