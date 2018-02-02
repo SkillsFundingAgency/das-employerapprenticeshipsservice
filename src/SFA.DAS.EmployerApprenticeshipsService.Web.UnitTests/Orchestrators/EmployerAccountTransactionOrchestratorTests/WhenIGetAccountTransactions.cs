@@ -155,10 +155,95 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 actualTransactions?.SingleOrDefault(t => t.TransactionType == TransactionItemType.Declaration);
 
             //Assert
-            Assert.IsNotNull(actualTransactions);
             Assert.IsNotNull(levyDeclaration);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(levyDeclaration.Description));
+        }
+
+        [Test]
+        public async Task ThenLevyAggregationShouldNotAffectOtherTransactions()
+        {
+            //Arrange
+            var levyTransactions = new List<LevyDeclarationTransactionLine>
+            {
+                CreateLevyTransaction(new DateTime(2017,5,18), 200),
+                CreateLevyTransaction(new DateTime(2017,6,18), 300),
+                CreateLevyTransaction(new DateTime(2017,7,18), 500)
+            };
+
+            var transactions = new List<TransactionLine>();
+
+            transactions.AddRange(levyTransactions);
+            transactions.Add(new PaymentTransactionLine { Amount = 200, TransactionType = TransactionItemType.Payment });
+
+            SetupGetTransactionsResponse(2018, 2, transactions);
+
+            //Act
+            var result = await _orchestrator.GetAccountTransactions(HashedAccountId, default(int), default(int), ExternalUser);
+
+            var actualTransactions = result?.Data?.Model?.Data?.TransactionLines;
+
+            var paymenTransaction =
+                actualTransactions?.SingleOrDefault(t => t.TransactionType == TransactionItemType.Payment);
+
+            //Assert
+            Assert.IsNotNull(paymenTransaction);
             Assert.AreEqual(2, actualTransactions.Count);
+        }
+
+        [Test]
+        public async Task ThenAggregatedLevyTransactionShouldHaveCorrectDescription()
+        {
+            //Arrange
+            var levyTransactions = new List<LevyDeclarationTransactionLine>
+            {
+                CreateLevyTransaction(new DateTime(2017,5,18), 200),
+                CreateLevyTransaction(new DateTime(2017,6,18), 300),
+                CreateLevyTransaction(new DateTime(2017,7,18), 500)
+            };
+
+            var transactions = new List<TransactionLine>();
+
+            transactions.AddRange(levyTransactions);
+            transactions.Add(new PaymentTransactionLine { Amount = 200, TransactionType = TransactionItemType.Payment });
+
+            SetupGetTransactionsResponse(2018, 2, transactions);
+
+            //Act
+            var result = await _orchestrator.GetAccountTransactions(HashedAccountId, default(int), default(int), ExternalUser);
+
+            var actualTransactions = result?.Data?.Model?.Data?.TransactionLines;
+
+            var levyDeclaration =
+                actualTransactions?.SingleOrDefault(t => t.TransactionType == TransactionItemType.Declaration);
+
+            //Assert
+            Assert.AreEqual(levyTransactions.First().Description, levyDeclaration?.Description);
+        }
+
+        [Test]
+        public async Task ThenAggregatedLevyTransactionShouldHaveCorrectAmount()
+        {
+            //Arrange
+            var levyTransactions = new List<LevyDeclarationTransactionLine>
+            {
+                CreateLevyTransaction(new DateTime(2017,5,18), 200),
+                CreateLevyTransaction(new DateTime(2017,6,18), 300),
+                CreateLevyTransaction(new DateTime(2017,7,18), 500)
+            };
+
+            var transactions = new List<TransactionLine>();
+
+            transactions.AddRange(levyTransactions);
+            transactions.Add(new PaymentTransactionLine { Amount = 200, TransactionType = TransactionItemType.Payment });
+
+            SetupGetTransactionsResponse(2018, 2, transactions);
+
+            //Act
+            var result = await _orchestrator.GetAccountTransactions(HashedAccountId, default(int), default(int), ExternalUser);
+
+            var actualTransactions = result?.Data?.Model?.Data?.TransactionLines;
+
+            //Assert
+            Assert.IsNotNull(actualTransactions);
             Assert.AreEqual(levyTransactions.Sum(t => t.Amount), actualTransactions.Single(t => t.TransactionType == TransactionItemType.Declaration).Amount);
         }
 
@@ -183,7 +268,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 });
         }
 
-        private LevyDeclarationTransactionLine CreateLevyTransaction(DateTime submissionDate, int amount)
+        private static LevyDeclarationTransactionLine CreateLevyTransaction(DateTime submissionDate, int amount)
         {
             return new LevyDeclarationTransactionLine
             {

@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransact
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
+using SFA.DAS.EAS.Domain.Extensions;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
@@ -314,35 +315,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        private static ICollection<TransactionLine> AggregateLevyTransactions(ICollection<TransactionLine> transactions)
-        {
-            if (transactions == null || !transactions.Any())
-                return new List<TransactionLine>();
-
-            if (transactions.Count(t => t.TransactionType == TransactionItemType.Declaration) < 2)
-                return transactions;
-
-
-            var levyTransactions = transactions.Where(t => t.TransactionType == TransactionItemType.Declaration)
-                                               .ToArray();
-
-            var aggregatedTransactions = transactions.Except(levyTransactions).ToList();
-
-            //We haven't populated all the values here as the view doesn't support them yet
-            var levyTransaction = new LevyDeclarationTransactionLine
-            {
-                Description = levyTransactions.First().Description,
-                DateCreated = levyTransactions.Max(t => t.DateCreated),
-                Amount = levyTransactions.Sum(t => t.Amount),
-                TransactionType = TransactionItemType.Declaration,
-                TransactionDate = levyTransactions.Max(t => t.TransactionDate)
-            };
-
-            aggregatedTransactions.Add(levyTransaction);
-
-
-            return aggregatedTransactions;
-        }
 
         public virtual async Task<OrchestratorResponse<CoursePaymentDetailsViewModel>> GetCoursePaymentSummary(
             string hashedAccountId, long ukprn, string courseName, int courseLevel, int? pathwayCode,
@@ -421,5 +393,63 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
         }
+
+        private static ICollection<TransactionLine> AggregateLevyTransactions(ICollection<TransactionLine> transactions)
+        {
+            if (transactions == null || transactions.Count == 0)
+                return new List<TransactionLine>();
+
+            if (!transactions.HasAtLeast(2, t => t.TransactionType == TransactionItemType.Declaration))
+                return transactions;
+
+            var levyTransactions = transactions.Where(t => t.TransactionType == TransactionItemType.Declaration)
+                                               .ToList();
+
+            var aggregatedTransactions = transactions.Except(levyTransactions).ToList();
+
+            var levyTransaction = GetAggregatedLevyTransaction(levyTransactions);
+
+            aggregatedTransactions.Add(levyTransaction);
+
+
+            return aggregatedTransactions;
+        }
+
+        private static LevyDeclarationTransactionLine GetAggregatedLevyTransaction(List<TransactionLine> levyTransactions)
+        {
+            var maxDateCreated = DateTime.MinValue;
+            var totalAmount = 0m;
+            var maxTransactionDate = DateTime.MaxValue;
+
+            foreach (var transaction in levyTransactions)
+            {
+                if (transaction.DateCreated > maxDateCreated)
+                {
+                    maxDateCreated = transaction.DateCreated;
+                }
+
+                if (transaction.TransactionDate > maxTransactionDate)
+                {
+                    maxTransactionDate = transaction.TransactionDate;
+                }
+
+                totalAmount += transaction.Amount;
+            }
+
+            //We haven't populated all the values here as the view doesn't support them yet
+            var levyTransaction = new LevyDeclarationTransactionLine
+            {
+                Description = levyTransactions.First().Description,
+                DateCreated = maxDateCreated,
+                Amount = totalAmount,
+                TransactionType = TransactionItemType.Declaration,
+                TransactionDate = maxTransactionDate,
+                SubTransactions = levyTransactions
+            };
+
+
+            return levyTransaction;
+        }
+
     }
 }
