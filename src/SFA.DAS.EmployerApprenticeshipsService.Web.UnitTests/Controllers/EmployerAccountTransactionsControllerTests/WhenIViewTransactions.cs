@@ -13,7 +13,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.HashingService;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsController
+namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {
     public class WhenIViewTransactions
     {

@@ -4,13 +4,12 @@ using System.Web.Mvc;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Transactions;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.Controllers
@@ -47,44 +46,24 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(transactionViewResult);
         }
 
+        [ImportModelStateFromTempData]
         [Route("finance/downloadtransactions")]
-        [Route("balance/downloadtransactions")]
         public ActionResult TransactionsDownload(string hashedAccountId)
         {
-            var viewModel = new TransactionDownloadViewModel
+            return View(new TransactionDownloadViewModel
             {
-                AccountHashedId = hashedAccountId,
-                Message = new GetTransactionsDownloadQuery
-                {
-                    StartDate = new TransactionsDownloadStartDateMonthYearDateTime(),
-                    EndDate = new TransactionsDownloadEndDateMonthYearDateTime()
-                }
-            };
-
-            return View(viewModel);
+                HashedAccountId = hashedAccountId
+            });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateModelState]
-        [Route("finance/downloadtransactionsdata")]
-        public async Task<ActionResult> TransactionDownloadByDate(TransactionDownloadViewModel model)
+        [Route("finance/downloadtransactions")]
+        public async Task<ActionResult> TransactionsDownload(TransactionDownloadViewModel model)
         {
-            const string viewName = @"TransactionsDownload";
-
             var response = await _mediator.SendAsync(model.Message);
-
-            ModelState.AddValidationResult(response.ValidationResult);
-
-            if (!ModelState.IsValid)
-            {
-                return View(viewName, model);
-            }
-
-            return File(response.FileDate,
-                response.MimeType,
-                $"esfaTransactions_{DateTime.Now:yyyyMMddHHmmss}.{response.FileExtension}");
-
+            return File(response.FileData, response.MimeType, $"esfaTransactions_{DateTime.Now:yyyyMMddHHmmss}.{response.FileExtension}");
         }
 
         [Route("finance/{year}/{month}")]

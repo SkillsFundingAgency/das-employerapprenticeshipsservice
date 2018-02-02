@@ -11,7 +11,14 @@
                         foreach (var error in modelState.Value.Errors)
                         {
                             <li>
-                                <a href="#@Html.Id(modelState.Key)">@error.ErrorMessage</a>
+                                @if (string.IsNullOrWhiteSpace(modelState.Key))
+                                {
+                                    @error.ErrorMessage
+                                }
+                                else
+                                {
+                                    <a href="#@Html.Id(modelState.Key)">@error.ErrorMessage</a>
+                                }
                             </li>
                         }
                     }

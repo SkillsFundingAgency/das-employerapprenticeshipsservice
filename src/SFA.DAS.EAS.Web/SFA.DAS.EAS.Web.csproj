@@ -51,6 +51,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="BrockAllen.CookieTempData, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\BrockAllen.CookieTempData.dll.1.3.0\lib\net45\BrockAllen.CookieTempData.dll</HintPath>
     </Reference>
     <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -426,7 +427,10 @@
     <Compile Include="Attributes\ImportModelStateFromTempDataAttribute.cs" />
     <Compile Include="Attributes\ModelStateTempDataAttribute.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
+    <Compile Include="Serialization\SerializableModelStateDictionary.cs" />
+    <Compile Include="Serialization\SerializableModelState.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Extensions\SerializableModelStateDictionaryExtensions.cs" />
     <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Filters\EnsureFeatureIsEnabledFilter.cs" />
     <Compile Include="Mappings\ActivityMaps.cs" />
@@ -471,7 +475,7 @@
     <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
-    <Compile Include="ViewModels\TransactionDownloadViewModel.cs" />
+    <Compile Include="ViewModels\Transactions\TransactionDownloadViewModel.cs" />
     <Compile Include="ViewModels\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\DismissTaskViewModel.cs" />
     <Compile Include="ViewModels\EnvironmentDetailsViewModel.cs" />
@@ -1098,6 +1102,9 @@
     </Content>
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

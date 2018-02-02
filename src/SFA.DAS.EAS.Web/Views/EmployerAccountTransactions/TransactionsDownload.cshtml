@@ -1,94 +1,72 @@
 ﻿@using SFA.DAS.EAS.Application.Formatters.TransactionDowloads
 @using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.ViewModels.TransactionDownloadViewModel
-@{ViewBag.PageID = "download-transactions"; }
-@{ViewBag.Section = "finance"; }
-@{ViewBag.Title = "Download transactions";}
+
+@model SFA.DAS.EAS.Web.ViewModels.Transactions.TransactionDownloadViewModel
+
 @{
+    ViewBag.PageID = "download-transactions";
+    ViewBag.Section = "finance";
+    ViewBag.Title = "Download transactions";
     ViewBag.GaData.Vpv = "/accounts/finance/downloadtransactions";
 }
-<script type="text/javascript">
-    function clearErrors() {
-        $('.error-summary').hide();
-        $('.field-validation-error').hide();
-        $('#end-date-group').removeClass("error");
-        $('#start-date-group').removeClass("error");
-    }
-</script>
-@Html.Partial("_ValidationSummary", ViewData.ModelState.DistinctByErrorMessage())
+
+@Html.Partial("_ValidationSummary", ViewData.ModelState)
 <div class="grid-row">
     <div class="column-full">
-        <h1 class="heading-xlarge">
-            Download transactions
-        </h1>
-
+        <h1 class="heading-xlarge">Download transactions</h1>
         <div class="column-one-third">
             <p>Enter a start and end date to download transactions within a specific date range.</p>
-
-            @using (Html.BeginForm("TransactionDownloadByDate", "EmployerAccountTransactions", FormMethod.Post, new { onsubmit = "return clearErrors();" }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(m => m.Message.AccountHashedId)
-        <div id="start-date-group" class="form-error-group form-group @(Html.IsValid(m => m.Message.StartDate) ? "" : "error")">
-            <span class="form-label-bold">Start date</span>
-            <span class="form-hint">For example, 5 2017</span>
-            <div id="StartDate" class="form-date">
-                @Html.ValidationMessageFor(m => m.Message.StartDate)
-                <div class="form-group form-group-month">
-                    <label for="StartDate.Month">
-                        Month
-                    </label>
-                    @Html.TextBox("StartDate.Month", Model.StartDate.Month, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = "StartDate.Month" })
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.Message.HashedAccountId)
+                <div class="form-group @(Html.IsValid(m => m.Message.StartDate.Month) && Html.IsValid(m => m.Message.StartDate.Year) ? "" : "error")">
+                    <span class="form-label-bold">Start date</span>
+                    <span class="form-hint">For example, 5 2017</span>
+                    <div class="form-date">
+                        @Html.ValidationMessageFor(m => m.Message.StartDate.Month)
+                        @Html.ValidationMessageFor(m => m.Message.StartDate.Year)
+                        <div class="form-group">
+                            <label for="@Html.IdFor(m => m.Message.StartDate.Month)">Month</label>
+                            @Html.TextBoxFor(m => m.Message.StartDate.Month, new { @class = "form-control", type = "number" })
+                        </div>
+                        <div class="form-group">
+                            <label for="@Html.IdFor(m => m.Message.StartDate.Year)">Year</label>
+                            @Html.TextBoxFor(m => m.Message.StartDate.Year, new { @class = "form-control", type = "number" })
+                        </div>
+                    </div>
                 </div>
-
-
-                <div class="form-group form-group-month">
-                    <label for="StartDate.Year">
-                        Year
-                    </label>
-                    @Html.TextBox("StartDate.Year", Model.StartDate.Year, new { @class = "form-control length-limit", type = "number", maxlength = "4", min = "1900", max = "9999", aria_labelledby = "StartDate.Year" })
+                <div class="form-group @(Html.IsValid(m => m.Message.EndDate.Month) && Html.IsValid(m => m.Message.EndDate.Year) ? "" : "error")">
+                    <span class="form-label-bold">End date</span>
+                    <span class="form-hint">For example, 10 2017</span>
+                    <div class="form-date">
+                        @Html.ValidationMessageFor(m => m.Message.EndDate.Month)
+                        @Html.ValidationMessageFor(m => m.Message.EndDate.Year)
+                        <div class="form-group">
+                            <label for="@Html.IdFor(m => m.Message.EndDate.Month)">Month</label>
+                            @Html.TextBoxFor(m => m.Message.EndDate.Month, new { @class = "form-control", type = "number" })
+                        </div>
+                        <div class="form-group">
+                            <label for="@Html.IdFor(m => m.Message.EndDate.Year)">Year</label>
+                            @Html.TextBoxFor(m => m.Message.EndDate.Year, new { @class = "form-control", type = "number" })
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div id="end-date-group" class="form-error-group form-group @(Html.IsValid(m => m.Message.EndDate) ? "" : "error")">
-            <span class="form-label-bold">End date</span>
-            <span class="form-hint">For example, 10 2017</span>
-            <div id="EndDate" class="form-date">
-                @Html.ValidationMessageFor(m => m.Message.EndDate)
-                <div class="form-group form-group-month">
-                    <label for="EndDate.Month">
-                        Month
-                    </label>
-                    @Html.TextBox("EndDate.Month", Model.EndDate.Month, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = "EndDate.Month" })
+                <div class="form-group">
+                    <label class="form-label" for="@Html.IdFor(m => m.Message.DownloadFormat)">Select format</label>
+                    @Html.DropDownListFor(m => m.Message.DownloadFormat, EnumHelper.GetSelectList(typeof(DownloadFormatType)), new { @class = "form-control" })
                 </div>
-                <div class="form-group form-group-month">
-                    <label for="StartDate.Year">
-                        Year
-                    </label>
-                    @Html.TextBox("EndDate.Year", Model.EndDate.Year, new { @class = "form-control length-limit", type = "number", maxlength = "4", min = "1900", max = "9999", aria_labelledby = "EndDate.Year" })
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="form-label" for="DownloadFormat">Select format</label>
-            @Html.DropDownList("DownloadFormat",
- EnumHelper.GetSelectList(typeof(DownloadFormatType)),
- new
- {
-     @class = "form-control",
- })
-        </div>
-
-        <button type="submit" class="button" aria-label="Download" id="submit-download">Download</button>
-}
+                <button class="button" aria-label="Download">Download</button>
+            }
         </div>
     </div>
 </div>
+
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = Model.Message.AccountHashedId})">Home</a></li>
-            <li><a href="@Url.Action("Index", "EmployerAccountTransactions", new {HashedAccountId = Model.Message.AccountHashedId})">Finance</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAccountTransactions")">Finance</a></li>
             <li>@ViewBag.Title</li>
         </ol>
     </div>
