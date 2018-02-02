@@ -294,33 +294,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 currentBalanceCalcultedOn = DateTime.Today;
             }
 
-            if (data.Data.TransactionLines != null &&
-                data.Data.TransactionLines.Any() &&
-                data.Data.TransactionLines.Count(t => t.TransactionType == TransactionItemType.Declaration) > 1)
-            {
-                var transactions = new List<TransactionLine>();
-
-                var levyTransactions =
-                    data.Data.TransactionLines.Where(t => t.TransactionType == TransactionItemType.Declaration).ToArray();
-
-                if (levyTransactions.Any())
-                {
-                    var levyTransaction = new LevyDeclarationTransactionLine
-                    {
-                        Description = levyTransactions.First().Description,
-                        DateCreated = levyTransactions.First().DateCreated,
-                        Amount = levyTransactions.Sum(t => t.Amount),
-                        TransactionType = TransactionItemType.Declaration
-                    };
-
-                    transactions.Add(levyTransaction);
-                }
-
-                transactions.AddRange(data.Data.TransactionLines.Where(t => t.TransactionType != TransactionItemType.Declaration));
-
-                data.Data.TransactionLines = transactions;
-            }
-
+            data.Data.TransactionLines = AggregateLevyTransactions(data.Data.TransactionLines);
 
             return new OrchestratorResponse<TransactionViewResultViewModel>
             {
@@ -338,6 +312,36 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     AccountHasPreviousTransactions = data.AccountHasPreviousTransactions
                 }
             };
+        }
+
+        private static ICollection<TransactionLine> AggregateLevyTransactions(ICollection<TransactionLine> transactions)
+        {
+            if (transactions == null || !transactions.Any())
+                return new List<TransactionLine>();
+
+            if (transactions.Count(t => t.TransactionType == TransactionItemType.Declaration) < 2)
+                return transactions;
+
+
+            var levyTransactions = transactions.Where(t => t.TransactionType == TransactionItemType.Declaration)
+                                               .ToArray();
+
+            var aggregatedTransactions = transactions.Except(levyTransactions).ToList();
+
+            //We haven't populated all the values here as the view doesn't support them yet
+            var levyTransaction = new LevyDeclarationTransactionLine
+            {
+                Description = levyTransactions.First().Description,
+                DateCreated = levyTransactions.Max(t => t.DateCreated),
+                Amount = levyTransactions.Sum(t => t.Amount),
+                TransactionType = TransactionItemType.Declaration,
+                TransactionDate = levyTransactions.Max(t => t.TransactionDate)
+            };
+
+            aggregatedTransactions.Add(levyTransaction);
+
+
+            return aggregatedTransactions;
         }
 
         public virtual async Task<OrchestratorResponse<CoursePaymentDetailsViewModel>> GetCoursePaymentSummary(
