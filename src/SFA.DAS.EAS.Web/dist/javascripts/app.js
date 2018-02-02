@@ -328,7 +328,6 @@ sfa.stickyNav = {
     fixedNav: function(self) {
         return function() {
             var isSticky = self.elems.$body.hasClass("sticky-nav");
-            console.log(self.elems.$window.scrollTop(), self.elems.topOfNav);
             if (self.elems.$window.scrollTop() >= self.elems.topOfNav) {
                 if (!isSticky) {
                 self.elems.$body
