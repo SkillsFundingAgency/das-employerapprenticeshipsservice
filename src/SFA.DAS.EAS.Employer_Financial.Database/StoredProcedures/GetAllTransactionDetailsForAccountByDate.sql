@@ -1,34 +1,34 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetAllTransactionDetailsForAccountByDate]
 	@AccountId BIGINT,
-	@fromDate DATETIME,
-	@toDate DATETIME
+	@FromDate DATETIME,
+	@ToDate DATETIME
 
 AS
-create table #output
+CREATE TABLE #output
 (
-DateCreated datetime,
-TransactionType varchar(100),
-PAYEScheme nvarchar(50),
-PayrollYear nvarchar(50),
-PayrollMonth int,
-LevyDeclared decimal(18,4),
-EnglishFraction decimal(18,5),
-TenPercentTopUp decimal(18,4),
-TrainingProvider varchar(max),
-ULN bigint,
-Apprentice varchar(max),
-ApprenticeTrainingCourse varchar(max),
-ApprenticeTrainingCourseLevel int,
-PaidFromLevy decimal(18,4),
-EmployerContribution decimal(18,4),
-GovermentContribution decimal(18,4),
-Total decimal(18,4)
+DateCreated DATETIME,
+TransactionType VARCHAR(100),
+PayeScheme NVARCHAR(50),
+PayrollYear NVARCHAR(50),
+PayrollMonth INT,
+LevyDeclared DECIMAL(18,4),
+EnglishFraction DECIMAL(18,5),
+TenPercentTopUp DECIMAL(18,4),
+TrainingProvider VARCHAR(MAX),
+Uln BIGINT,
+Apprentice VARCHAR(MAX),
+ApprenticeTrainingCourse VARCHAR(MAX),
+ApprenticeTrainingCourseLevel INT,
+PaidFromLevy DECIMAL(18,4),
+EmployerContribution DECIMAL(18,4),
+GovermentContribution DECIMAL(18,4),
+Total DECIMAL(18,4)
 )
 
 INSERT INTO #output (
 		DateCreated,
 		TransactionType,
-		PAYEScheme,
+		PayeScheme,
 		PayrollYear,
 		PayrollMonth,
 		LevyDeclared,
@@ -45,16 +45,16 @@ SELECT DateCreated,
 	ld.PayrollMonth,
 	LevyDeclared,
 	EnglishFraction,
-	tl.Amount - LevyDeclared as TenPercentTopUp,
+	tl.Amount - LevyDeclared AS TenPercentTopUp,
 	tl.Amount
-from [employer_financial].TransactionLine tl
-LEFT JOIN [employer_financial].[TransactionLineTypes] tlt on tlt.TransactionType = IIF(Amount >= 0, 1, 2)
-inner join [employer_financial].LevyDeclarationTopup ldt on ldt.SubmissionId = tl.SubmissionId
-inner join [employer_financial].LevyDeclaration ld on ld.submissionid = tl.submissionid
-where tl.AccountId = @accountId 
-AND tl.TransactionType in(1,2) 
-AND DateCreated >= @fromDate 
-AND DateCreated <= @toDate
+FROM [employer_financial].TransactionLine tl
+LEFT JOIN [employer_financial].[TransactionLineTypes] tlt ON tlt.TransactionType = IIF(Amount >= 0, 1, 2)
+INNER JOIN [employer_financial].LevyDeclarationTopup ldt ON ldt.SubmissionId = tl.SubmissionId
+INNER JOIN [employer_financial].LevyDeclaration ld ON ld.SubmissionId = tl.SubmissionId
+WHERE tl.AccountId = @accountId 
+AND tl.TransactionType IN (1, 2) 
+AND DateCreated >= @FromDate 
+AND DateCreated < @ToDate
 
 
 INSERT INTO #output
@@ -62,7 +62,7 @@ INSERT INTO #output
 	DateCreated,
 	TransactionType,
 	TrainingProvider,
-	ULN,
+	Uln,
 	Apprentice,
 	ApprenticeTrainingCourse,
 	ApprenticeTrainingCourseLevel,
@@ -71,42 +71,42 @@ INSERT INTO #output
 	GovermentContribution,
 	Total
 )
-SELECT MAX(transLine.DateCreated) as DateCreated,
+SELECT MAX(transLine.DateCreated) AS DateCreated,
 	ptt.[Description],
-	meta.ProviderName as TrainingProvider,
-	p.Uln as ULN,
-	meta.ApprenticeName as Apprentice,
-	meta.ApprenticeshipCourseName as ApprenticeTrainingCourse,
-	meta.ApprenticeshipCourseLevel as ApprenticeTrainingCourseLevel,
-	COALESCE((SUM(pays1.[Amount]) * -1), 0) as PaidFromLevy,
-	COALESCE((SUM(pays3.Amount) * -1), 0) as EmployerContribution,
-	COALESCE((SUM(pays2.Amount) * -1), 0) as GovermentContribution,
-	COALESCE((SUM(pays1.[Amount]) * -1),0) + COALESCE((SUM(pays2.[Amount]) * -1),0) + COALESCE((SUM(pays3.[Amount]) * -1),0)   as Total
+	meta.ProviderName AS TrainingProvider,
+	p.Uln AS Uln,
+	meta.ApprenticeName AS Apprentice,
+	meta.ApprenticeshipCourseName AS ApprenticeTrainingCourse,
+	meta.ApprenticeshipCourseLevel AS ApprenticeTrainingCourseLevel,
+	COALESCE((SUM(pays1.[Amount]) * -1), 0) AS PaidFromLevy,
+	COALESCE((SUM(pays3.Amount) * -1), 0) AS EmployerContribution,
+	COALESCE((SUM(pays2.Amount) * -1), 0) AS GovermentContribution,
+	COALESCE((SUM(pays1.[Amount]) * -1),0) + COALESCE((SUM(pays2.[Amount]) * -1),0) + COALESCE((SUM(pays3.[Amount]) * -1),0) AS Total
 
 FROM [employer_financial].[Payment] p
-  inner join [employer_financial].[PaymentTransactionTypes] ptt on ptt.TransactionType =  p.TransactionType
-  inner join [employer_financial].[PaymentMetaData] meta ON p.PaymentMetaDataId = meta.Id
-  inner join (select PeriodEnd,AccountId,ukprn, EmpRef, TransactionDate, DateCreated, LevyDeclared, EnglishFraction from employer_financial.TransactionLine where DateCreated >= @fromDate AND 
-        DateCreated <= @toDate) transLine on transLine.AccountId = p.AccountId and transLine.PeriodEnd = p.PeriodEnd and transLine.Ukprn = p.Ukprn
-  left join [employer_financial].[Payment] pays1 
-	on pays1.AccountId = p.AccountId 
-		and pays1.Ukprn = p.Ukprn 
-		and pays1.FundingSource = 1 
-		and pays1.PaymentMetaDataId = meta.id
-  left join [employer_financial].[Payment] pays2 
-	on pays2.AccountId = p.AccountId 
-	and pays2.Ukprn = p.Ukprn 
-	and pays2.FundingSource = 2 
-	and pays2.PaymentMetaDataId = meta.id
-  left join [employer_financial].[Payment] pays3 
-	on pays3.AccountId = p.AccountId 
-	and pays3.Ukprn = p.Ukprn 
-	and pays3.FundingSource = 3 
-	and pays3.PaymentMetaDataId = meta.id
-  where 
+  INNER JOIN [employer_financial].[PaymentTransactionTypes] ptt ON ptt.TransactionType =  p.TransactionType
+  INNER JOIN [employer_financial].[PaymentMetaData] meta ON p.PaymentMetaDataId = meta.Id
+  INNER JOIN (SELECT PeriodEnd,AccountId,ukprn, EmpRef, TransactionDate, DateCreated, LevyDeclared, EnglishFraction FROM employer_financial.TransactionLine WHERE DateCreated >= @FromDate AND 
+        DateCreated <= @ToDate) transLine ON transLine.AccountId = p.AccountId AND transLine.PeriodEnd = p.PeriodEnd AND transLine.Ukprn = p.Ukprn
+  LEFT JOIN [employer_financial].[Payment] pays1 
+	ON pays1.AccountId = p.AccountId 
+		AND pays1.Ukprn = p.Ukprn 
+		AND pays1.FundingSource = 1 
+		AND pays1.PaymentMetaDataId = meta.id
+  LEFT JOIN [employer_financial].[Payment] pays2 
+	ON pays2.AccountId = p.AccountId 
+	AND pays2.Ukprn = p.Ukprn 
+	AND pays2.FundingSource = 2 
+	AND pays2.PaymentMetaDataId = meta.id
+  LEFT JOIN [employer_financial].[Payment] pays3 
+	ON pays3.AccountId = p.AccountId 
+	AND pays3.Ukprn = p.Ukprn 
+	AND pays3.FundingSource = 3 
+	AND pays3.PaymentMetaDataId = meta.id
+  WHERE 
 	  p.AccountId = @accountid AND
 	  p.FundingSource IN (1,2,3)  
-  group by p.AccountId, 
+  GROUP BY p.AccountId, 
 	  p.Ukprn, 
 	  p.TransactionType, 
 	  ptt.[Description],
@@ -117,6 +117,6 @@ FROM [employer_financial].[Payment] p
 	  meta.PathwayName, 
 	  meta.ApprenticeName
 
-SELECT * From #output
+SELECT * FROM #output
 
-drop table #output
+DROP TABLE #output

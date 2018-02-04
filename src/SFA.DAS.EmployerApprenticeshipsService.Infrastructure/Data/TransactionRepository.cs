@@ -156,17 +156,16 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
 
             var hmrcDateService = new HmrcDateService();
-            var list = result.ToList();
-            foreach (var res in list)
+            var transactionDownloadLines = result as TransactionDownloadLine[] ?? result.ToArray();
+            foreach (var res in transactionDownloadLines)
             {
                 if (!string.IsNullOrEmpty(res.PayrollYear) && res.PayrollMonth != 0)
                 {
                     res.PeriodEnd = hmrcDateService.GetDateFromPayrollYearMonth(res.PayrollYear, res.PayrollMonth).ToString("MMM yyyy"); 
                 }
-
             }
 
-            return list;
+            return transactionDownloadLines.ToList();
         }
 
         private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)
