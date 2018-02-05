@@ -167,14 +167,22 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private void CustomiseIoC(HttpConfiguration configuration)
         {
+            SetupApiServices(configuration);
+            StructuremapMvc.Start();
+            StructuremapWebApi.Start();
+            SetupReplacementServicesForTest(configuration);
+        }
+
+        private void SetupApiServices(HttpConfiguration configuration)
+        {
             var existingExceptionHandler = configuration.Services.GetExceptionHandler();
             _exceptionHandler = new IntegrationTestExceptionHandler(existingExceptionHandler);
             configuration.Services.Replace(typeof(IAssembliesResolver), new TestWebApiResolver<AccountLegalEntitiesController>());
             configuration.Services.Replace(typeof(IExceptionHandler), _exceptionHandler);
+        }
 
-            StructuremapMvc.Start();
-            StructuremapWebApi.Start();
-
+        private void SetupReplacementServicesForTest(HttpConfiguration configuration)
+        {
             var container = ((StructureMapWebApiDependencyResolver)GlobalConfiguration.Configuration.DependencyResolver).Container;
 
             var requestContextMock = new Mock<IRequestContext>();
