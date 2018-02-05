@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.ExceptionHandling;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
+namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
     /// <summary>
     ///     A decorator for the existing global exception handler which will keep a reference to 

@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Web.Http.Dispatcher;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils
+namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
     /// <summary>
     ///     Substitute assembly resolver to use during integration testing to allow MVC to find the 

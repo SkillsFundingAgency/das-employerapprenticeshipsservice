@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Web.Http.ExceptionHandling;
 using FluentValidation;
 using NLog;
+using SFA.DAS.EAS.Application;
 
 namespace SFA.DAS.EAS.Api
 {
@@ -12,10 +13,10 @@ namespace SFA.DAS.EAS.Api
 
         public override void Handle(ExceptionHandlerContext context)
         {
-            if (context.Exception is ValidationException)
+            if (context.Exception is ValidationException || context.Exception is InvalidRequestException)
             {
                 var response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                var message = ((ValidationException)context.Exception).Message;
+                var message = context.Exception.Message;
                 response.Content = new StringContent(message);
                 context.Result = new ValidationErrorResult(context.Request, response);
                 return;

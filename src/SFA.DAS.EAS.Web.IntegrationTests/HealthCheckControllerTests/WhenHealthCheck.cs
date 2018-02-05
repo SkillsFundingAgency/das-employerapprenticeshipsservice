@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.HealthCheckControllerTests
 {
@@ -12,9 +12,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.HealthCheckControllerTests
         [Test]
         public async Task ThenTheStatusShouldBeOk()
         {
-            await ApiIntegrationTester.InvokeIsolatedGetAsync(
-                new CallRequirements("api/HealthCheck", HttpStatusCode.OK));
+            // Arrange
+            var call = new CallRequirements("api/HealthCheck")
+                            .AllowStatusCodes(HttpStatusCode.OK);
 
+            // Act
+            await ApiIntegrationTester.InvokeIsolatedGetAsync(call);
+
+            // Assert
             Assert.Pass("Verified we got OK");
         }
     }

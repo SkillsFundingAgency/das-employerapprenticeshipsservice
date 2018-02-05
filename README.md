@@ -107,3 +107,6 @@ Using `"Action": "*"` can also be used to disable all actions on the controller.
 [SFA.DAS.Activities]: https://github.com/SkillsFundingAgency/das-activities/blob/master/README.md
 [SQL Server Management Studio]: https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms
 [Visual Studio]: https://www.visualstudio.com
+
+##See Also
+[Integration Tests](IntegrationTesting.md)
