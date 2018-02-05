@@ -84,6 +84,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransactionsDownloadTests
         }
 
         [Test]
+        public async Task ThenShouldReturnValidResponse()
+        {
+            var response = await _handler.Handle(_query);
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual("csv", response.FileExtension);
+            Assert.AreEqual("text/csv", response.MimeType);
+            Assert.IsNotNull(response.FileData);
+        }
+
+        [Test]
         public void ThenShouldThrowUnauthorizedAccessExceptionIfUserIsNull()
         {
             _membershipRepository.Setup(r => r.GetCaller(HashedAccountId, ExternalUserId)).ReturnsAsync(null);
