@@ -7,5 +7,6 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
     {
         Task Add(TransferConnectionInvitation transferConnectionInvitation);
         Task<TransferConnectionInvitation> GetTransferConnectionInvitationById(int transferConnectionInvitationId);
+        Task<TransferConnectionInvitation> GetLatestOutstandingTransferConnectionInvitation(long receiverAccountId);
     }
 }

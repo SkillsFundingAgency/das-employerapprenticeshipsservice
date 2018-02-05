@@ -252,6 +252,7 @@
     <Compile Include="Queries\GetRejectedTransferConnectionInvitationTests\WhenIGetRejectedTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetSentTransferConnectionInvitationTests\WhenIGetSentTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccountTests\WhenIGetTransferConnectionInvitationAccount.cs" />
+    <Compile Include="Queries\GetLatestOutstandingTransferInvitationTests\WhenIGetTheLatestTransfer.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminderTests\WhenIDismissATaskReminder.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminderTests\WhenTheCommandIsValidated.cs" />
     <Compile Include="Commands\RemoveLegalEntityTests\WhenIRemoveALegalEntity.cs" />

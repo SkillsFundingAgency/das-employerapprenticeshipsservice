@@ -16,6 +16,7 @@ using SFA.DAS.EAS.Application.Queries.GetAccountTasks;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetInvitation;
+using SFA.DAS.EAS.Application.Queries.GetLatestOutstandingTransferInvitation;
 using SFA.DAS.EAS.Application.Queries.GetMember;
 using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Application.Queries.GetUser;
@@ -131,13 +132,33 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             try
             {
-                var accountResponse = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
                     HashedAccountId = accountId,
                     UserId = externalUserId
                 });
 
-                var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
+                var userRoleResponseTask = GetUserAccountRole(accountId, externalUserId);
+
+                var userResponseTask = _mediator.SendAsync(new GetTeamMemberQuery
+                {
+                    HashedAccountId = accountId,
+                    TeamMemberId = externalUserId
+                });
+
+                var accountStatsResponseTask = _mediator.SendAsync(new GetAccountStatsQuery
+                {
+                    HashedAccountId = accountId,
+                    ExternalUserId = externalUserId
+                });
+
+                await Task.WhenAll(accountStatsResponseTask, userRoleResponseTask, userResponseTask,
+                    accountStatsResponseTask);
+
+                var accountResponse = accountResponseTask.Result;
+                var userRoleResponse = userRoleResponseTask.Result;
+                var userResponse = userResponseTask.Result;
+                var accountStatsResponse = accountStatsResponseTask.Result;
 
                 var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
                 {
@@ -146,18 +167,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 });
 
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0).ToList() ?? new List<AccountTask>();
+                
+                var outstandingConnectionRequests = tasks.Count(t => t.Type == "ReviewConnectionRequest");
 
-                var userResponse = await _mediator.SendAsync(new GetTeamMemberQuery
+                GetLatestOutstandingTransferInvitationResponse latestOutstandingTransferInvitation = null;
+                if (outstandingConnectionRequests == 1)
                 {
-                    HashedAccountId = accountId,
-                    TeamMemberId = externalUserId
-                });
-
-                var accountStatsResponse = await _mediator.SendAsync(new GetAccountStatsQuery
-                {
-                    HashedAccountId = accountId,
-                    ExternalUserId = externalUserId
-                });
+                    latestOutstandingTransferInvitation = await _mediator.SendAsync(new GetLatestOutstandingTransferInvitationQuery {ReceiverAccountHashedId = accountId});
+                }
 
                 //We only show account wizards to owners
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;              
@@ -173,7 +190,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
                     ShowWizard = showWizard,
                     ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
-                    Tasks = tasks
+                    Tasks = tasks,
+                    HashedAccountId = accountId,
+                    OutstandingConnectionRequestCount = outstandingConnectionRequests,
+                    OnlyOutstandingConnectionRequestId = latestOutstandingTransferInvitation?.TransferConnectionInvitation?.Id
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>

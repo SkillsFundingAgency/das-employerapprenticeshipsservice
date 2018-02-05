@@ -9,11 +9,13 @@ using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountStats;
 using SFA.DAS.EAS.Application.Queries.GetAccountTasks;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
+using SFA.DAS.EAS.Application.Queries.GetLatestOutstandingTransferInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
@@ -30,7 +32,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         private Mock<ICurrentDateTime> _currentDateTime;
  		private List<AccountTask> _tasks;
         private AccountTask _testTask;
-
+        private GetLatestOutstandingTransferInvitationResponse _getLatestOutstandingTransferInvitationResponse;
         [SetUp]
         public void Arrange()
         {
@@ -41,6 +43,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                 PayeSchemeCount = 4,
                 TeamMemberCount = 8
             };
+
+            _getLatestOutstandingTransferInvitationResponse = new GetLatestOutstandingTransferInvitationResponse();
 
             _testTask = new AccountTask
             {
@@ -94,6 +98,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountStatsQuery>()))
                      .ReturnsAsync(new GetAccountStatsResponse {Stats = _accountStats});
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetLatestOutstandingTransferInvitationQuery>()))
+                     .ReturnsAsync(_getLatestOutstandingTransferInvitationResponse);
 
             _currentDateTime = new Mock<ICurrentDateTime>();
 
@@ -162,6 +169,80 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             //Assert
             Assert.AreEqual(_tasks, actual.Data.Tasks);
             _mediator.Verify(x => x.SendAsync(It.Is<GetAccountTasksQuery>(r => r.AccountId.Equals(AccountId))),Times.Once);
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        public async Task ThenShouldSetRequestCountCorrectly(int expectedRequestCount)
+        {
+            // Arrange
+            _tasks.Clear();
+            for (int i = 0; i < expectedRequestCount; i++)
+            {
+                _tasks.Add(new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 });
+            }
+
+            var expectedLatestTransfer = new TransferConnectionInvitation { Id = new Random().Next(int.MaxValue) };
+            _getLatestOutstandingTransferInvitationResponse.TransferConnectionInvitation = expectedLatestTransfer;
+
+            //Act
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            int actualNumberOfRequests = actual.Data.OutstandingConnectionRequestCount;
+            Assert.AreEqual(expectedRequestCount, actualNumberOfRequests);
+        }
+
+        [Test]
+        public async Task ThenShouldSetLatestTransferIdWhenOnlyOneRequestExists()
+        {
+            // Arrange
+            _tasks.Clear();
+            _tasks.Add(new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 });
+            var expectedLatestTransfer = new TransferConnectionInvitation {Id = new Random().Next(int.MaxValue)};
+            _getLatestOutstandingTransferInvitationResponse.TransferConnectionInvitation = expectedLatestTransfer;
+
+            //Act
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            Assert.AreEqual(expectedLatestTransfer.Id, actual.Data.OnlyOutstandingConnectionRequestId);
+        }
+
+        [Test]
+        public async Task ThenShouldNotSetLatestTransferIdWhenMoreThanOneRequestExists()
+        {
+            // Arrange
+            _tasks.Clear();
+            _tasks.AddRange(new [] {
+                    new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 },
+                    new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 }
+                    });
+            var expectedLatestTransfer = new TransferConnectionInvitation {Id = new Random().Next(int.MaxValue)};
+            _getLatestOutstandingTransferInvitationResponse.TransferConnectionInvitation = expectedLatestTransfer;
+
+            //Act
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            Assert.IsNull(actual.Data.OnlyOutstandingConnectionRequestId);
+        }
+
+        [Test]
+        public async Task ThenShouldSetAccountHashId()
+        {
+            // Arrange
+            _tasks.Clear();
+            _tasks.Add(new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 });
+            var expectedLatestTransfer = new TransferConnectionInvitation {Id = new Random().Next(int.MaxValue)};
+            _getLatestOutstandingTransferInvitationResponse.TransferConnectionInvitation = expectedLatestTransfer;
+
+            //Act
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            Assert.AreEqual(HashedAccountId, actual.Data.HashedAccountId);
         }
 
         [TestCase("2017-10-19", true, Description = "Banner visible")]

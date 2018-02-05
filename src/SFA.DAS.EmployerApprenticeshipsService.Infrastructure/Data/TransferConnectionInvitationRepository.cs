@@ -32,5 +32,25 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 .Where(i => i.Id == transferConnectionInvitationId)
                 .SingleAsync();
         }
+
+        public async Task<TransferConnectionInvitation> GetLatestOutstandingTransferConnectionInvitation(long receiverAccountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@receiverAccountId", receiverAccountId, DbType.Int64);
+
+                return await c.QueryFirstOrDefaultAsync<TransferConnectionInvitation>(
+                    sql: "SELECT TOP 1 * "+
+                         "FROM [employer_account].[TransferConnectionInvitation] "+
+                         $"WHERE ReceiverAccountId = @receiverAccountId AND Status = {(int)TransferConnectionInvitationStatus.Pending} "+
+                         "ORDER BY CreatedDate DESC;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result;
+        }
     }
 }
