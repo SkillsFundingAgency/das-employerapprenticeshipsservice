@@ -31,20 +31,39 @@
                         Current funds
                     </dt>
                     @{
-                        var balance = Model.Data.CurrentLevyFunds.ToString("C0", culture);
-                        var balanceClass = string.Empty;
+            var balance = Model.Data.CurrentLevyFunds.ToString("C0", culture);
+            var balanceClass = string.Empty;
 
-                        if (balance.Length > 8)
-                        {
-                            balanceClass = "long";
-                        }
-                        if (balance.Length > 10)
-                        {
-                            balanceClass = "longer";
-                        }
-
+            if (balance.Length > 8)
+            {
+                balanceClass = "long";
+            }
+            if (balance.Length > 10)
+            {
+                balanceClass = "longer";
+            }
                     }
                     <dd class="@balanceClass">@balance</dd>
+                </dl>
+
+                <dl>
+                    <dt>
+                        Current transfer funds
+                    </dt>
+                    @{
+                        var transferBalance = Model.Data.CurrentTransferFunds.ToString("C0", culture);
+                        var transferBalanceClass = string.Empty;
+
+                        if (transferBalance.Length > 8)
+                        {
+                            transferBalanceClass = "long";
+                        }
+                        if (transferBalance.Length > 10)
+                        {
+                            transferBalanceClass = "longer";
+                        }
+                    }
+                    <dd class="@transferBalanceClass">@transferBalance</dd>
                 </dl>
             </div>
         </div>

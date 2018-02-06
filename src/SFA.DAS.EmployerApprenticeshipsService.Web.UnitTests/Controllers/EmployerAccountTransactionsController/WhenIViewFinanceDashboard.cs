@@ -1,13 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsController
 {
@@ -21,6 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
         private const decimal CurrentLevyFunds = 12345;
+        private const decimal CurrentTransferFunds = 100.56M;
         private const string HashedAccountId = "Test";
 
         [SetUp]
@@ -35,10 +35,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _orchestrator.Setup(x => x.GetFinanceDashboardViewModel(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<FinanceDashboardViewModel>
                 {
-                    Data = new FinanceDashboardViewModel()
+                    Data = new FinanceDashboardViewModel
                     {
                         Account = new Account(),
                         CurrentLevyFunds = CurrentLevyFunds,
+                        CurrentTransferFunds = CurrentTransferFunds
                     }
                 });
 
@@ -74,6 +75,22 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             Assert.IsNotNull(model);
             Assert.IsNotNull(model.Data);
             Assert.AreEqual(CurrentLevyFunds, model.Data.CurrentLevyFunds);
+        }
+
+        [Test]
+        public async Task ThenTheTransferBalanceShouldBeCorrect()
+        {
+            //Act
+            var result = await _controller.Index("HashedAccountId");
+
+            //Assert
+            var viewResult = result as ViewResultBase;
+            Assert.IsNotNull(viewResult);
+
+            var model = viewResult.Model as OrchestratorResponse<FinanceDashboardViewModel>;
+            Assert.IsNotNull(model);
+            Assert.IsNotNull(model.Data);
+            Assert.AreEqual(CurrentTransferFunds, model.Data.CurrentTransferFunds);
         }
     }
 }
