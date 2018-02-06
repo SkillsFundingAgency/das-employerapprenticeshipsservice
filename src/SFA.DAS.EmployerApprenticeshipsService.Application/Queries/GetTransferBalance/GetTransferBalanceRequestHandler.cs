@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferBalance
 
             var balance = await _repository.GetTransferBalance(message.HashedAccountId);
 
-            return new GetTransferBalanceResponse { Amount = balance };
+            return new GetTransferBalanceResponse { Balance = balance };
         }
     }
 }

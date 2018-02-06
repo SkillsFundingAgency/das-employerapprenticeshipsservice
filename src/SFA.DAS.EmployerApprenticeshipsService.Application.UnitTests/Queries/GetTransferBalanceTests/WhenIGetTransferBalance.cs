@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferBalanceTests
         public override Mock<IValidator<GetTransferBalanaceRequest>> RequestValidator { get; set; }
 
         private const string HashedAccountId = "ABC123";
-        private const double ExpectedTransferBalance = 25300.50;
+        private const decimal ExpectedTransferBalance = 25300.50M;
 
 
         [SetUp]
@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferBalanceTests
             var actual = await RequestHandler.Handle(Query);
 
             //Assert
-            Assert.AreEqual(ExpectedTransferBalance, actual.Amount);
+            Assert.AreEqual(ExpectedTransferBalance, actual.Balance);
         }
     }
 }
