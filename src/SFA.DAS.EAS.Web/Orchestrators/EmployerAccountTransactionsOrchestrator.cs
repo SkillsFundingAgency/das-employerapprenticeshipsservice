@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.EAS.Application;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTransactions;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments;
 using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
+using SFA.DAS.EAS.Application.Queries.GetTransferBalance;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -243,17 +241,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         Month = month,
                         HashedAccountId = hashedId
                     });
-            var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
+            var latestLineItem = data?.Data?.TransactionLines?.FirstOrDefault();
 
-            decimal currentBalance;
-            currentBalance = latestLineItem != null ? latestLineItem.Balance : 0;
+            var currentBalance = latestLineItem?.Balance ?? 0;
+
+            var transferBalanceResponse = await _mediator.SendAsync(new GetTransferBalanaceRequest { HashedAccountId = hashedId });
 
             return new OrchestratorResponse<FinanceDashboardViewModel>
             {
-                Data = new FinanceDashboardViewModel()
+                Data = new FinanceDashboardViewModel
                 {
                     Account = employerAccountResult.Account,
-                    CurrentLevyFunds = currentBalance
+                    CurrentLevyFunds = currentBalance,
+                    CurrentTransferFunds = transferBalanceResponse?.Balance ?? 0
                 }
             };
         }
