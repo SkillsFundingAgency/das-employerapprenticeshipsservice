@@ -2,6 +2,6 @@
 {
     public class GetTransferBalanceResponse
     {
-        public decimal Balance { get; set; }
+        public decimal? Balance { get; set; }
     }
 }
