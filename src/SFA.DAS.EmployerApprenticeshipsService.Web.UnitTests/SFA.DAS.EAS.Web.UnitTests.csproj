@@ -265,6 +265,7 @@
     <Compile Include="Orchestrators\EmployerAccountTransactionOrchestratorTests\WhenIGetAccountTransactions.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionOrchestratorTests\WhenIGetCoursePayments.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionOrchestratorTests\WhenIGetPaymentDetails.cs" />
+    <Compile Include="Orchestrators\EmployerAccountTransactionOrchestratorTests\WhenIGetTransactionDashboardDetails.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenICreateAnAgreement.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetTheConfirmRemoveAgreementModel.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetThePdfAgreement.cs" />
