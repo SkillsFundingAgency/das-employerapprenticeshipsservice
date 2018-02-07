@@ -6,7 +6,8 @@
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="3.16.0" />
-    <PackageReference Include="SFA.DAS.Account.Api.Types" Version="1.1.0" />
+    <PackageReference Include="SFA.DAS.Account.Api.Types" Version="1.1.0" Condition="'$(TargetFramework)' == 'net45'" />
+	<PackageReference Include="SFA.DAS.Account.Api.Types" Version="2.0.0" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
