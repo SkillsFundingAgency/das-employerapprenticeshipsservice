@@ -1,6 +1,9 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetAccountTransferBalance]
 	@accountId BIGINT NOT NULL	
 AS
+
+SET NOCOUNT ON
+
 	DECLARE @currentDate AS DATETIME = GETDATE()
 	DECLARE @currentYear AS INT = DATEPART(year, @currentDate)
 	DECLARE @financialYearStartDate AS DATETIME
