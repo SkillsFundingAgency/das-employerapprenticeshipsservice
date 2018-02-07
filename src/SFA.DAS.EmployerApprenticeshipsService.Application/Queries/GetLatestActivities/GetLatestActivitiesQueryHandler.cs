@@ -1,35 +1,25 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Activities.Client;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.Queries.GetLatestActivities
 {
-    public class GetLatestActivitiesQueryHandler : IRequestHandler<GetLatestActivitiesQuery, GetLatestActivitiesResponse>
+    public class GetLatestActivitiesQueryHandler : IAsyncRequestHandler<GetLatestActivitiesQuery, GetLatestActivitiesResponse>
     {
-        private readonly CurrentUser _currentUser;
         private readonly IActivitiesClient _activitiesClient;
-        private readonly IMembershipRepository _membershipRepository;
+        private readonly IHashingService _hashingService;
 
-        public GetLatestActivitiesQueryHandler(CurrentUser currentUser, IActivitiesClient activitiesClient, IMembershipRepository membershipRepository)
+        public GetLatestActivitiesQueryHandler(IActivitiesClient activitiesClient, IHashingService hashingService)
         {
-            _currentUser = currentUser;
             _activitiesClient = activitiesClient;
-            _membershipRepository = membershipRepository;
+            _hashingService = hashingService;
         }
 
-        public GetLatestActivitiesResponse Handle(GetLatestActivitiesQuery message)
+        public async Task<GetLatestActivitiesResponse> Handle(GetLatestActivitiesQuery message)
         {
-            var membership = Task.Run(async () => await _membershipRepository.GetCaller(message.HashedAccountId, _currentUser.ExternalUserId)).Result;
-
-            if (membership == null)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
-            var result = Task.Run(async () => await _activitiesClient.GetLatestActivities(membership.AccountId)).Result;
+            var accountId = _hashingService.DecodeValue(message.AccountHashedId);
+            var result = await _activitiesClient.GetLatestActivities(accountId);
 
             return new GetLatestActivitiesResponse
             {

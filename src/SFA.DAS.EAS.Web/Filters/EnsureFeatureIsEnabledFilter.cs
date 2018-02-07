@@ -8,21 +8,21 @@ namespace SFA.DAS.EAS.Web.Filters
 {
     public class EnsureFeatureIsEnabledFilter : ActionFilterAttribute
     {
-        private readonly Func<ICurrentUserService> _currentUserServiceFactory;
-        private readonly Func<IFeatureToggleService> _featureToggleServiceFactory;
+        private readonly Func<ICurrentUserService> _currentUserService;
+        private readonly Func<IFeatureToggleService> _featureToggleService;
 
-        public EnsureFeatureIsEnabledFilter(Func<ICurrentUserService> currentUserServiceFactory, Func<IFeatureToggleService> featureToggleServiceFactory)
+        public EnsureFeatureIsEnabledFilter(Func<ICurrentUserService> currentUserService, Func<IFeatureToggleService> featureToggleService)
         {
-            _currentUserServiceFactory = currentUserServiceFactory;
-            _featureToggleServiceFactory = featureToggleServiceFactory;
+            _currentUserService = currentUserService;
+            _featureToggleService = featureToggleService;
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var controllerName = (string)filterContext.RouteData.Values[ControllerConstants.ControllerKeyName];
             var actionName = (string)filterContext.RouteData.Values[ControllerConstants.ActionKeyName];
-            var currentUser = _currentUserServiceFactory().GetCurrentUser();
-            var isFeatureEnabled = _featureToggleServiceFactory().IsFeatureEnabled(controllerName, actionName, currentUser?.Email);
+            var currentUser = _currentUserService().GetCurrentUser();
+            var isFeatureEnabled = _featureToggleService().IsFeatureEnabled(controllerName, actionName, currentUser?.Email);
 
             if (!isFeatureEnabled)
             {

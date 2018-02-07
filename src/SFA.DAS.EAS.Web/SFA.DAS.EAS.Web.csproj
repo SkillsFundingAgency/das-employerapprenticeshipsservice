@@ -60,6 +60,12 @@
     <Reference Include="Elasticsearch.Net, Version=5.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
       <HintPath>..\packages\Elasticsearch.Net.5.6.0\lib\net46\Elasticsearch.Net.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
       <Private>True</Private>
@@ -422,10 +428,16 @@
   <ItemGroup>
     <Compile Include="App_Start\BinderConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\DatabaseConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="Attributes\ExportModelStateToTempDataAttribute.cs" />
     <Compile Include="Attributes\ImportModelStateFromTempDataAttribute.cs" />
     <Compile Include="Attributes\ModelStateTempDataAttribute.cs" />
+    <Compile Include="Attributes\ValidateAccountMembershipAttribute.cs" />
+    <Compile Include="Authentication\CurrentUser.cs" />
+    <Compile Include="Authentication\CurrentUserService.cs" />
+    <Compile Include="Authentication\ICurrentUserService.cs" />
+    <Compile Include="Binders\DefaultBinder.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Serialization\SerializableModelStateDictionary.cs" />
     <Compile Include="Serialization\SerializableModelState.cs" />
@@ -433,16 +445,14 @@
     <Compile Include="Extensions\SerializableModelStateDictionaryExtensions.cs" />
     <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Filters\EnsureFeatureIsEnabledFilter.cs" />
+    <Compile Include="Filters\UnitOfWorkManagerFilter.cs" />
     <Compile Include="Mappings\ActivityMaps.cs" />
     <Compile Include="Filters\HandleErrorFilter.cs" />
-    <Compile Include="Mappings\ViewModelMaps.cs" />
     <Compile Include="Logging\RequestContext.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Attributes\HttpNotFoundForNullModelAttribute.cs" />
     <Compile Include="Attributes\ValidateModelStateAttribute.cs" />
-    <Compile Include="Authentication\CurrentUserService.cs" />
-    <Compile Include="Authentication\ICurrentUserService.cs" />
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
@@ -475,8 +485,10 @@
     <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitations\ApprovedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitations\RejectedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitations\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\Transactions\TransactionDownloadViewModel.cs" />
-    <Compile Include="ViewModels\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\DismissTaskViewModel.cs" />
     <Compile Include="ViewModels\EnvironmentDetailsViewModel.cs" />
     <Compile Include="ViewModels\FinanceDashboardViewModel.cs" />
@@ -508,7 +520,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Mappings\OrganisationMaps.cs" />
-    <Compile Include="Binders\TrimStringModelBinder.cs" />
+    <Compile Include="Binders\TrimStringBinder.cs" />
     <Compile Include="Validators\Messages\ValidationMessage.cs" />
     <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
     <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
@@ -553,8 +565,10 @@
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SelectEmployerViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationDetailsViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitations\ReceiveTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\SendTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\SentTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitations\TransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\Transfers\TransferConnectionInvitationsViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\SignInUserViewModel.cs" />
@@ -616,8 +630,11 @@
     <Content Include="Views\TransferConnectionInvitations\Send.cshtml" />
     <Content Include="Views\TransferConnectionInvitations\Sent.cshtml" />
     <Content Include="Views\Shared\_ValidationSummary.cshtml" />
-    <Content Include="Views\TransferConnectionInvitations\SentDetails.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Details.cshtml" />
     <Content Include="Views\Activities\Latest.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Receive.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Approved.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Rejected.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />
@@ -1085,6 +1102,10 @@
     <Content Include="Views\Shared\GoogleAnalyticsInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj">
+      <Project>{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Events</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
       <Name>SFA.DAS.EAS.Application</Name>

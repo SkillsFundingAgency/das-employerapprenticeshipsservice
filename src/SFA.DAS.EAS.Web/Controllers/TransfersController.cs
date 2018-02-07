@@ -3,12 +3,14 @@ using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
+using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.ViewModels.Transfers;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [RoutePrefix("accounts/{hashedAccountId}/transfers")]
+    [ValidateAccountMembership]
+    [RoutePrefix("accounts/{HashedAccountId}/transfers")]
     public class TransfersController : Controller
     {
         private readonly IMapper _mapper;

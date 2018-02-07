@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.ViewModels.StartTransferConnectionInvitationViewModel
+
+@model SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations.StartTransferConnectionInvitationViewModel
 
 @{
     ViewBag.Title = "Start transfer connection invitation";
@@ -15,14 +16,13 @@
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
-            @Html.HiddenFor(m => m.Message.SenderAccountHashedId)
-            <div class="form-group @(Html.IsValid(m => m.Message.ReceiverAccountPublicHashedId) ? "" : "error")">
-                <label for="@Html.IdFor(m => m.Message.ReceiverAccountPublicHashedId)">
+            <div class="form-group @(Html.IsValid(m => m.GetTransferConnectionInvitationAccountQuery.ReceiverAccountPublicHashedId) ? "" : "error")">
+                <label for="@Html.IdFor(m => m.GetTransferConnectionInvitationAccountQuery.ReceiverAccountPublicHashedId)">
                     <span class="form-label-bold">Enter the employer's apprenticeship account ID</span>
                     <span class="form-hint">You need to request this directly from the employer. Account IDs can be found under the account name on the apprenticeship service homepage.</span>
-                    @Html.ValidationMessageFor(m => m.Message.ReceiverAccountPublicHashedId)
+                    @Html.ValidationMessageFor(m => m.GetTransferConnectionInvitationAccountQuery.ReceiverAccountPublicHashedId)
                 </label>
-                @Html.TextBoxFor(m => m.Message.ReceiverAccountPublicHashedId, new { aria_required = true, @class = "form-control form-control-3-4" })
+                @Html.TextBoxFor(m => m.GetTransferConnectionInvitationAccountQuery.ReceiverAccountPublicHashedId, new { aria_required = true, @class = "form-control form-control-3-4" })
             </div>
             <button class="button" type="submit">Continue</button>
         }

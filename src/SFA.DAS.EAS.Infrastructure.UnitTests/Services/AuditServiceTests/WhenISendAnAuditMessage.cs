@@ -9,6 +9,7 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.NLog.Logger;
+using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.AuditServiceTests
 {

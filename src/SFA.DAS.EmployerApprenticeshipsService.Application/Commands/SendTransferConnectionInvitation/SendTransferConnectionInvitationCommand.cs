@@ -1,24 +1,21 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MediatR;
-using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Application.Messages;
 
 namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
 {
-    public class SendTransferConnectionInvitationCommand : IAsyncRequest<long>, IValidatableObject
+    public class SendTransferConnectionInvitationCommand : AuthorizedMessage, IAsyncRequest<long>, IValidatableObject
     {
-        [Required(ErrorMessage = "Account ID is required.")]
-        [RegularExpression(Constants.HashedAccountIdRegex, ErrorMessage = "Account ID must be 6 alphanumeric characters.")]
-        public string ReceiverAccountPublicHashedId { get; set; }
-
         [Required]
-        public string SenderAccountHashedId { get; set; }
+        [RegularExpression(Constants.AccountHashedIdRegex)]
+        public string ReceiverAccountPublicHashedId { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (ReceiverAccountPublicHashedId?.ToLower() == SenderAccountHashedId?.ToLower())
+            if (ReceiverAccountPublicHashedId?.ToLower() == AccountPublicHashedId?.ToLower())
             {
-                yield return new ValidationResult("Account ID cannot be the current account's ID.", new [] { nameof(ReceiverAccountPublicHashedId) });
+                yield return new ValidationResult("You must enter a valid account ID", new [] { nameof(ReceiverAccountPublicHashedId) });
             }
         }
     }

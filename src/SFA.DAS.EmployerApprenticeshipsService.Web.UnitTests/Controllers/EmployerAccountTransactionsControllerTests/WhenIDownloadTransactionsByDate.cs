@@ -19,6 +19,7 @@ using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {
+    [TestFixture]
     public class WhenIDownloadTransactionsByDate
     {
         private const string ExpectedFileExtension = "hello";
@@ -41,9 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         {
             _transactionDownloadViewModel = new TransactionDownloadViewModel
             {
-                HashedAccountId = "",
-
-                Message = new GetTransactionsDownloadQuery
+                GetTransactionsDownloadQuery = new GetTransactionsDownloadQuery
                 {
                     StartDate = new MonthYear
                     {
@@ -99,7 +98,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         {
             await _controller.TransactionsDownload(_transactionDownloadViewModel);
 
-            _mediator.Verify(m => m.SendAsync(_transactionDownloadViewModel.Message), Times.Once);
+            _mediator.Verify(m => m.SendAsync(_transactionDownloadViewModel.GetTransactionsDownloadQuery), Times.Once);
         }
 
         [Test]

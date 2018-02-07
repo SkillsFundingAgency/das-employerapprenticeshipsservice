@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
@@ -10,31 +10,25 @@ using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsControllerTests
 {
+    [TestFixture]
     public class WhenISubmitTheSendTransferConnectionInvitationPage
     {
-        private const string SenderHashedAccountId = "ABC123";
-        private const string ReceiverHashedAccountId = "XYZ987";
         private const long TransferConnectionId = 123;
 
         private TransferConnectionInvitationsController _controller;
         private SendTransferConnectionInvitationViewModel _viewModel;
         private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
-        private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 
         [SetUp]
         public void Arrange()
         {
             _mediator.Setup(m => m.SendAsync(It.IsAny<IAsyncRequest<long>>())).ReturnsAsync(TransferConnectionId);
 
-            _controller = new TransferConnectionInvitationsController(_mapper.Object, _mediator.Object);
+            _controller = new TransferConnectionInvitationsController(Mapper.Instance, _mediator.Object);
 
             _viewModel = new SendTransferConnectionInvitationViewModel
             {
-                Message = new SendTransferConnectionInvitationCommand
-                {
-                    SenderAccountHashedId = SenderHashedAccountId,
-                    ReceiverAccountPublicHashedId = ReceiverHashedAccountId
-                }
+                SendTransferConnectionInvitationCommand = new SendTransferConnectionInvitationCommand()
             };
         }
 
@@ -45,7 +39,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
 
             await _controller.Send(_viewModel);
 
-            _mediator.Verify(m => m.SendAsync(_viewModel.Message), Times.Once);
+            _mediator.Verify(m => m.SendAsync(_viewModel.SendTransferConnectionInvitationCommand), Times.Once);
         }
 
         [Test]
@@ -70,7 +64,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
 
             await _controller.Send(_viewModel);
 
-            _mediator.Verify(m => m.SendAsync(_viewModel.Message), Times.Never);
+            _mediator.Verify(m => m.SendAsync(_viewModel.SendTransferConnectionInvitationCommand), Times.Never);
         }
 
         [Test]

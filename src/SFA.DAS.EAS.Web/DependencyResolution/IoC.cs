@@ -15,8 +15,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
-using SFA.DAS.Activities;
 using SFA.DAS.Activities.Client;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;

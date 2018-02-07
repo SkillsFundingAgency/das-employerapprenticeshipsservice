@@ -50,8 +50,16 @@
     "subscription": [ "MA_PaymentDataProcessor" ]
   },
   {
+    "topicName": "transfer_connection_invitation_approved",
+    "subscription": [ "Task_TransferConnectionInvitiationApproved" ]
+  },
+  {
+    "topicName": "transfer_connection_invitation_rejected",
+    "subscription": [ "Task_TransferConnectionInvitiationRejected" ]
+  },
+  {
     "topicName": "transfer_connection_invitation_sent",
-    "subscription": [ "Task_TransferConnectionInvitiationSentProcessor" ] 
+    "subscription": [ "Task_TransferConnectionInvitiationSentProcessor" ]
   },
   {
     "topicName": "user_invited",

@@ -4,12 +4,14 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetActivities;
 using SFA.DAS.EAS.Application.Queries.GetLatestActivities;
+using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.ViewModels.Activities;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [RoutePrefix("accounts/{hashedAccountId}/activity")]
+    [ValidateAccountMembership]
+    [RoutePrefix("accounts/{HashedAccountId}/activity")]
     public class ActivitiesController : Controller
     {
         private readonly IMapper _mapper;
@@ -34,7 +36,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("latest")]
         public ActionResult Latest(GetLatestActivitiesQuery query)
         {
-            var response = _mediator.Send(query);
+            var response = Task.Run(async () => await _mediator.SendAsync(query)).Result;
             var model = _mapper.Map<LatestActivitiesViewModel>(response);
 
             return PartialView(model);

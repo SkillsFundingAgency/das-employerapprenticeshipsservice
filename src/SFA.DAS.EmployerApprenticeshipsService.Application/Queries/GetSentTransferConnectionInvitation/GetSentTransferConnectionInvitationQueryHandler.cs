@@ -1,52 +1,48 @@
-﻿using System;
+﻿using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
 using MediatR;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Application.Data;
+using SFA.DAS.EAS.Application.Dtos;
+using SFA.DAS.EAS.Domain.Models.TransferConnections;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation
 {
     public class GetSentTransferConnectionInvitationQueryHandler : IAsyncRequestHandler<GetSentTransferConnectionInvitationQuery, GetSentTransferConnectionInvitationResponse>
     {
-        private readonly CurrentUser _currentUser;
-        private readonly IEmployerAccountRepository _employerAccountRepository;
-        private readonly IMembershipRepository _membershipRepository;
-        private readonly ITransferConnectionInvitationRepository _transferConnectionInvitationRepository;
+        private readonly EmployerAccountDbContext _db;
+        private readonly IHashingService _hashingService;
 
-        public GetSentTransferConnectionInvitationQueryHandler(
-            CurrentUser currentUser,
-            IEmployerAccountRepository employerAccountRepository,
-            IMembershipRepository membershipRepository,
-            ITransferConnectionInvitationRepository transferConnectionInvitationRepository)
+        public GetSentTransferConnectionInvitationQueryHandler(EmployerAccountDbContext db, IHashingService hashingService)
         {
-            _currentUser = currentUser;
-            _employerAccountRepository = employerAccountRepository;
-            _membershipRepository = membershipRepository;
-            _transferConnectionInvitationRepository = transferConnectionInvitationRepository;
+            _db = db;
+            _hashingService = hashingService;
         }
 
         public async Task<GetSentTransferConnectionInvitationResponse> Handle(GetSentTransferConnectionInvitationQuery message)
         {
-            var transferConnection = await _transferConnectionInvitationRepository.GetSentTransferConnectionInvitation(message.TransferConnectionInvitationId.Value);
+            var accountId = _hashingService.DecodeValue(message.AccountHashedId);
 
-            if (transferConnection == null)
+            var transferConnectionInvitation = await _db.TransferConnectionInvitations
+                .Include(i => i.ReceiverAccount)
+                .Where(i => 
+                    i.Id == message.TransferConnectionInvitationId.Value &&
+                    i.SenderAccount.Id == accountId &&
+                    i.Status == TransferConnectionInvitationStatus.Pending
+                )
+                .ProjectTo<TransferConnectionInvitationDto>()
+                .SingleOrDefaultAsync();
+
+            if (transferConnectionInvitation == null)
             {
                 return null;
             }
 
-            var membership = await _membershipRepository.GetCaller(transferConnection.SenderAccountId, _currentUser.ExternalUserId);
-
-            if (membership == null)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
-            var receiverAccount = await _employerAccountRepository.GetAccountById(transferConnection.ReceiverAccountId);
-
             return new GetSentTransferConnectionInvitationResponse
             {
-                ReceiverAccount = receiverAccount,
-                TransferConnectionInvitation = transferConnection
+                TransferConnectionInvitation = transferConnectionInvitation
             };
         }
     }

@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MediatR;
+﻿using MediatR;
+using SFA.DAS.EAS.Application.Messages;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations
 {
-    public class GetTransferConnectionInvitationsQuery : IAsyncRequest<GetTransferConnectionInvitationsResponse>
+    public class GetTransferConnectionInvitationsQuery : AuthorizedMessage, IAsyncRequest<GetTransferConnectionInvitationsResponse>
     {
-        [Required]
-        [RegularExpression(@"^[A-Za-z\d]{6,6}$")]
-        public string HashedAccountId { get; set; }
     }
 }

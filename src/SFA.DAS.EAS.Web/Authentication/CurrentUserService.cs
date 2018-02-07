@@ -1,32 +1,32 @@
-﻿using SFA.DAS.EAS.Domain.Models.UserProfile;
+﻿using System;
 using SFA.DAS.EAS.Web.Helpers;
 
 namespace SFA.DAS.EAS.Web.Authentication
 {
     public class CurrentUserService : ICurrentUserService
     {
-        private readonly IOwinWrapper _owinWrapper;
+        private readonly IOwinWrapper _owinService;
 
-        public CurrentUserService(IOwinWrapper owinWrapper)
+        public CurrentUserService(IOwinWrapper owinService)
         {
-            _owinWrapper = owinWrapper;
+            _owinService = owinService;
         }
 
         public CurrentUser GetCurrentUser()
         {
-            var isAuthenticated = _owinWrapper.IsUserAuthenticated();
+            var isAuthenticated = _owinService.IsUserAuthenticated();
 
             if (!isAuthenticated)
             {
                 return null;
             }
 
-            var externalUserId = _owinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
-            var email = _owinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
+            var externalId = Guid.Parse(_owinService.GetClaimValue(ControllerConstants.SubClaimKeyName));
+            var email = _owinService.GetClaimValue(ControllerConstants.EmailClaimKeyName);
 
             return new CurrentUser
             {
-                ExternalUserId = externalUserId,
+                ExternalId = externalId,
                 Email = email
             };
         }

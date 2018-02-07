@@ -7,16 +7,16 @@ using SFA.DAS.EAS.Web.Controllers;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsControllerTests
 {
+    [TestFixture]
     public class WhenIViewTheTransferConnectionInvitationsPage
     {
         private TransferConnectionInvitationsController _controller;
         private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
-        private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 
         [SetUp]
         public void Arrange()
         {
-            _controller = new TransferConnectionInvitationsController(_mapper.Object, _mediator.Object);
+            _controller = new TransferConnectionInvitationsController(Mapper.Instance, _mediator.Object);
         }
 
         [Test]

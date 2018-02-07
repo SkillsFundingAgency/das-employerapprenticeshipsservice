@@ -206,6 +206,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrangeWebTest.cs" />
+    <Compile Include="Attributes\ValidateAccountMembershipAttributeTests\WhenIViewAPage.cs" />
+    <Compile Include="Authentication\CurrentUserServiceTests\WhenIGetTheCurrentUser.cs" />
+    <Compile Include="Binders\DefaultBinderTests\WhenIBindAViewModel.cs" />
     <Compile Include="Controllers\ActivitiesControllerTests\WhenIViewTheLatestActivitiesPage.cs" />
     <Compile Include="Controllers\ActivitiesControllerTests\WhenIViewTheActivitiesPage.cs" />
     <Compile Include="Controllers\BaseControllerTests\WhenOnActionExecuting.cs" />
@@ -245,16 +249,21 @@
     <Compile Include="Controllers\OrganisationSharedTests\WhenISearchForAnAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenISelectAnAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenIUpdateAnOrganisationsAddress.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheRejectedTransferConnectionInvitationPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheApprovedTransferConnectionInvitationPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheSentTransferConnectionInvitationPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheSendTransferConnectionInvitationPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheStartTransferConnectionInvitationPage.cs" />
-    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheSentTransferConnectionInvitationDetailsPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheRejectedTransferConnectionInvitationPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheApprovedTransferConnectionInvitationPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheTransferConnectionInvitationDetailsPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheTransferConnectionInvitationsPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheSentTransferConnectionInvitationPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheSendTransferConnectionInvitationPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheCreateTransferConnectionPage.cs" />
     <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransfersPage.cs" />
-    <Compile Include="Filters\WhenIViewAPage.cs" />
+    <Compile Include="Filters\EnsureFeatureIsEnabledFilterTests\WhenIViewAPage.cs" />
+    <Compile Include="Filters\UnitOfWorkManagerFilterTests\WhenIViewAPage.cs" />
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />

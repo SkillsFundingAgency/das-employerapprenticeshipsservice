@@ -1,99 +1,61 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.HashingService;
+using SFA.DAS.EAS.TestCommon;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitationAccountTests
 {
+    [TestFixture]
     public class WhenIGetTransferConnectionInvitationAccount
     {
-        private const string SenderHashedAccountId = "ABC123";
-        private const string ReceiverHashedAccountId = "XYZ987";
-        private const string ExternalUserId = "ABCDEF";
-        private const long UserId = 123456;
-        private const long ReceiverAccountId = 111111;
-        private const long SenderAccountId = 222222;
-
         private GetTransferConnectionInvitationAccountQueryHandler _handler;
         private GetTransferConnectionInvitationAccountQuery _query;
         private GetTransferConnectionInvitationAccountResponse _response;
-        private readonly CurrentUser _currentUser = new CurrentUser { ExternalUserId = ExternalUserId };
-        private readonly Mock<IHashingService> _hashingService = new Mock<IHashingService>();
-        private Mock<IEmployerAccountRepository> _employerAccountRepository;
-        private Mock<IMembershipRepository> _membershipRepository;
-        private Mock<ITransferConnectionInvitationRepository> _transferConnectionRepository;
-        private readonly MembershipView _membershipView = new MembershipView { UserId = UserId };
-        private readonly Domain.Data.Entities.Account.Account _receiverAccount = new Domain.Data.Entities.Account.Account { Id = ReceiverAccountId };
-        private readonly Domain.Data.Entities.Account.Account _senderAccount = new Domain.Data.Entities.Account.Account { Id = SenderAccountId };
+        private Mock<EmployerAccountDbContext> _db;
+        private DbSetStub<Domain.Data.Entities.Account.Account> _accountsDbSet;
+        private List<Domain.Data.Entities.Account.Account> _accounts;
+        private DbSetStub<TransferConnectionInvitation> _transferConnectionInvitationsDbSet;
+        private List<TransferConnectionInvitation> _transferConnectionInvitations;
+        private Domain.Data.Entities.Account.Account _receiverAccount;
+        private Domain.Data.Entities.Account.Account _senderAccount;
 
         [SetUp]
-        public void SetUp()
+        public void Arrange()
         {
-            _employerAccountRepository = new Mock<IEmployerAccountRepository>();
-            _membershipRepository = new Mock<IMembershipRepository>();
-            _transferConnectionRepository = new Mock<ITransferConnectionInvitationRepository>();
+            _db = new Mock<EmployerAccountDbContext>();
+
+            _receiverAccount = new Domain.Data.Entities.Account.Account
+            {
+                HashedId = "ABC123",
+                Id = 111111
+            };
+
+            _senderAccount = new Domain.Data.Entities.Account.Account
+            {
+                HashedId = "XYZ987",
+                Id = 222222
+            };
+
+            _accounts = new List<Domain.Data.Entities.Account.Account>{ _receiverAccount, _senderAccount };
+            _accountsDbSet = new DbSetStub<Domain.Data.Entities.Account.Account>(_accounts);
+            _transferConnectionInvitations = new List<TransferConnectionInvitation>();
+            _transferConnectionInvitationsDbSet = new DbSetStub<TransferConnectionInvitation>(_transferConnectionInvitations);
             
-            _hashingService.Setup(h => h.DecodeValue(SenderHashedAccountId)).Returns(SenderAccountId);
-            _membershipRepository.Setup(r => r.GetCaller(SenderHashedAccountId, ExternalUserId)).ReturnsAsync(_membershipView);
-            _employerAccountRepository.Setup(r => r.GetAccountByPublicHashedId(ReceiverHashedAccountId)).ReturnsAsync(_receiverAccount);
-            _employerAccountRepository.Setup(r => r.GetAccountById(SenderAccountId)).ReturnsAsync(_senderAccount);
+            _db.Setup(d => d.Accounts).Returns(_accountsDbSet);
+            _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
 
-            _transferConnectionRepository.Setup(r => r.GetTransferConnectionInvitations(SenderAccountId, ReceiverAccountId))
-                .ReturnsAsync(new List<TransferConnectionInvitation>());
-
-            _handler = new GetTransferConnectionInvitationAccountQueryHandler(
-                _currentUser,
-                _employerAccountRepository.Object,
-                _hashingService.Object,
-                _membershipRepository.Object,
-                _transferConnectionRepository.Object
-            );
+            _handler = new GetTransferConnectionInvitationAccountQueryHandler(_db.Object);
 
             _query = new GetTransferConnectionInvitationAccountQuery
             {
-                SenderAccountHashedId = SenderHashedAccountId,
-                ReceiverAccountPublicHashedId = ReceiverHashedAccountId
+                AccountId = _senderAccount.Id,
+                ReceiverAccountHashedId = _receiverAccount.HashedId
             };
-        }
-
-        [Test]
-        public async Task ThenShouldGetUser()
-        {
-            _response = await _handler.Handle(_query);
-
-            _membershipRepository.Verify(r => r.GetCaller(SenderHashedAccountId, ExternalUserId), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenShouldGetReceiversAccount()
-        {
-            _response = await _handler.Handle(_query);
-
-            _employerAccountRepository.Verify(r => r.GetAccountByPublicHashedId(ReceiverHashedAccountId), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenShouldGetSendersAccount()
-        {
-            _response = await _handler.Handle(_query);
-
-            _employerAccountRepository.Verify(r => r.GetAccountById(SenderAccountId), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenShouldGetTransferConnectionInvitations()
-        {
-            _response = await _handler.Handle(_query);
-
-            _transferConnectionRepository.Verify(r => r.GetTransferConnectionInvitations(SenderAccountId, ReceiverAccountId), Times.Once);
         }
 
         [Test]
@@ -102,45 +64,51 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
             _response = await _handler.Handle(_query);
 
             Assert.That(_response, Is.Not.Null);
-            Assert.That(_response.ReceiverAccount, Is.SameAs(_receiverAccount));
-            Assert.That(_response.SenderAccount, Is.SameAs(_senderAccount));
-        }
-
-        [Test]
-        public void ThenShouldThrowUnauthorizedAccessExceptionIfUserIsNull()
-        {
-            _membershipRepository.Setup(r => r.GetCaller(SenderHashedAccountId, ExternalUserId)).ReturnsAsync(null);
-
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(_query));
+            Assert.That(_response.ReceiverAccount, Is.Not.Null);
+            Assert.That(_response.ReceiverAccount.Id, Is.EqualTo(_receiverAccount.Id));
         }
 
         [Test]
         public void ThenShouldThrowValidationExceptionIfReceiverAccountIsNull()
         {
-            _employerAccountRepository.Setup(r => r.GetAccountByPublicHashedId(ReceiverHashedAccountId)).ReturnsAsync(null);
+            _accounts.Remove(_receiverAccount);
 
-            var exception = Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_query));
+            var exception = Assert.ThrowsAsync<ValidationException<GetTransferConnectionInvitationAccountQuery>>(async () => await _handler.Handle(_query));
 
-            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
-            Assert.That(exception.ErrorMessage, Is.EqualTo("You must enter a valid account ID"));
+            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountHashedId)));
+            Assert.That(exception.Message, Is.EqualTo("You must enter a valid account ID"));
         }
 
         [Test]
         public void ThenShouldThrowValidationExceptionIfInvitationsAlreadySent()
         {
-            _transferConnectionRepository.Setup(r => r.GetTransferConnectionInvitations(SenderAccountId, ReceiverAccountId))
-                .ReturnsAsync(new List<TransferConnectionInvitation>
-                {
-                    new TransferConnectionInvitation
-                    {
-                        Status = TransferConnectionInvitationStatus.Pending
-                    }
-                });
+            _transferConnectionInvitations.Add(new TransferConnectionInvitation
+            {
+                SenderAccount = _senderAccount,
+                ReceiverAccount = _receiverAccount,
+                Status = TransferConnectionInvitationStatus.Pending
+            });
 
-            var exception = Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_query));
+            var exception = Assert.ThrowsAsync<ValidationException<GetTransferConnectionInvitationAccountQuery>>(async () => await _handler.Handle(_query));
 
-            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
-            Assert.That(exception.ErrorMessage, Is.EqualTo("You've already sent a connection request to this employer"));
+            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountHashedId)));
+            Assert.That(exception.Message, Is.EqualTo("You've already sent a connection request to this employer"));
+        }
+
+        [Test]
+        public void ThenShouldThrowValidationExceptionIfInvitationsAlreadyApproved()
+        {
+            _transferConnectionInvitations.Add(new TransferConnectionInvitation
+            {
+                SenderAccount = _senderAccount,
+                ReceiverAccount = _receiverAccount,
+                Status = TransferConnectionInvitationStatus.Approved
+            });
+
+            var exception = Assert.ThrowsAsync<ValidationException<GetTransferConnectionInvitationAccountQuery>>(async () => await _handler.Handle(_query));
+
+            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountHashedId)));
+            Assert.That(exception.Message, Is.EqualTo("You're already connected with this employer"));
         }
     }
 }

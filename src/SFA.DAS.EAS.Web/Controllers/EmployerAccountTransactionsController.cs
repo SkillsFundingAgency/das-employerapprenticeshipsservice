@@ -46,23 +46,22 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(transactionViewResult);
         }
 
+        [ValidateAccountMembership]
         [ImportModelStateFromTempData]
         [Route("finance/downloadtransactions")]
         public ActionResult TransactionsDownload(string hashedAccountId)
         {
-            return View(new TransactionDownloadViewModel
-            {
-                HashedAccountId = hashedAccountId
-            });
+            return View(new TransactionDownloadViewModel());
         }
 
         [HttpPost]
+        [ValidateAccountMembership]
         [ValidateAntiForgeryToken]
         [ValidateModelState]
         [Route("finance/downloadtransactions")]
         public async Task<ActionResult> TransactionsDownload(TransactionDownloadViewModel model)
         {
-            var response = await _mediator.SendAsync(model.Message);
+            var response = await _mediator.SendAsync(model.GetTransactionsDownloadQuery);
             return File(response.FileData, response.MimeType, $"esfaTransactions_{DateTime.Now:yyyyMMddHHmmss}.{response.FileExtension}");
         }
 

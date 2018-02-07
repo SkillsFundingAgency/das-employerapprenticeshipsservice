@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Web.Binders
 {
-    public sealed class TrimStringModelBinder : IModelBinder
+    public sealed class TrimStringBinder : IModelBinder
     {
         public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {

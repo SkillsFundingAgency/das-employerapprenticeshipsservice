@@ -1,10 +1,10 @@
-@model SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations.SentTransferConnectionInvitationViewModel
+@model SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations.TransferConnectionInvitationViewModel
 
 @{
     ViewBag.Title = "Transfer connection invitation details";
     ViewBag.Section = "finance";
     ViewBag.PageID = "page-transfer-connection-invitations-details";
-    ViewBag.GaData.Vpv = "/accounts/transfers/connections/invitations/sent/details";
+    ViewBag.GaData.Vpv = "/accounts/transfers/connections/invitations/details";
 }
 
 <div class="grid-row">
@@ -12,13 +12,16 @@
         <h1 class="heading-xlarge">Connection request details</h1>
         <table>
             <tbody>
+                @{
+                    var peerAccount = Model.TransferConnectionInvitation.GetPeerAccount(Model.AccountId);
+                }
                 <tr>
                     <td>Account name</td>
-                    <td>@Model.ReceiverAccount.Name</td>
+                    <td>@peerAccount.Name</td>
                 </tr>
                 <tr>
                     <td>Account ID</td>
-                    <td>@Model.ReceiverAccount.HashedId</td>
+                    <td>@peerAccount.HashedId</td>
                 </tr>
                 <tr>
                     <td>Status</td>

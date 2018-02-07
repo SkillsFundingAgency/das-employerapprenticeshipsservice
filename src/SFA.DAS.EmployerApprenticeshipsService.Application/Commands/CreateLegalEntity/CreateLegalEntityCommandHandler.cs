@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.HashingService;
 using SFA.DAS.Messaging.Interfaces;
+using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 {

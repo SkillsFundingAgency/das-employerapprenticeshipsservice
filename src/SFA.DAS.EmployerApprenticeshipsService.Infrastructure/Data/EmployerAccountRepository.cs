@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -14,25 +16,17 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class EmployerAccountRepository : BaseRepository, IEmployerAccountRepository
     {
-        
-        public EmployerAccountRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+        private readonly EmployerAccountDbContext _db;
+
+        public EmployerAccountRepository(EmployerAccountDbContext db, EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         {
+            _db = db;
         }
 
         public async Task<Account> GetAccountById(long id)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@id", id, DbType.Int64);
-
-                return await c.QueryAsync<Account>(
-                    sql: "select a.* from [employer_account].[Account] a where a.Id = @id;",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
-            return result.SingleOrDefault();
+            return await _db.Accounts.SingleOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<Account> GetAccountByHashedId(string hashedAccountId)

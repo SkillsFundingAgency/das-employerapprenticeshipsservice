@@ -23,7 +23,6 @@ using System.Reflection;
 using System.Web;
 using AutoMapper;
 using MediatR;
-using Microsoft.ApplicationInsights;
 using Microsoft.Azure;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Commitments.Api.Client;
@@ -33,13 +32,14 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.CookieService;
+using SFA.DAS.EAS.Application.Data;
+using SFA.DAS.EAS.Application.Services;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using NotificationsApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.NotificationsApiClientConfiguration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Factories;
@@ -92,11 +92,14 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi).SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
             For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
+            For<IMembershipService>().Use<MembershipService>();
             For<IPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
             For<ITaskApiConfiguration>().Use(taskApiConfig);
             For<ITaskService>().Use<TaskService>();
+            For<IUnitOfWorkManager>().Use<UnitOfWorkManager>();
             For<IUserRepository>().Use<UserRepository>();
             For<IValidationApi>().Use<ValidationApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
+            ForConcreteType<EmployerAccountDbContext>().Configure.Ctor<string>().Is(config.DatabaseConnectionString);
 
             RegisterMapper();
             RegisterMediator();
@@ -201,7 +204,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
                 .Select(t => (Profile)Activator.CreateInstance(t));
 
-            var config = new MapperConfiguration(c =>
+            Mapper.Initialize(c =>
             {
                 foreach (var profile in profiles)
                 {
@@ -209,10 +212,8 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 }
             });
 
-            var mapper = config.CreateMapper();
-
-            For<IConfigurationProvider>().Use(config).Singleton();
-            For<IMapper>().Use(mapper).Singleton();
+            For<IConfigurationProvider>().Use(Mapper.Configuration).Singleton();
+            For<IMapper>().Use(Mapper.Instance).Singleton();
         }
 
         private void RegisterMediator()

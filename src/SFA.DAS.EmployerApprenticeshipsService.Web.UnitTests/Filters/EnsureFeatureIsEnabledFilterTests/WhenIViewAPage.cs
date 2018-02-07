@@ -3,13 +3,13 @@ using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Filters;
 using SFA.DAS.EAS.Web.Helpers;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Filters
+namespace SFA.DAS.EAS.Web.UnitTests.Filters.EnsureFeatureIsEnabledFilterTests
 {
+    [TestFixture]
     public class WhenIViewAPage
     {
         private const string ControllerName = "Foo";
@@ -17,11 +17,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters
         private const string CurrentUserEmail = "foo@bar.test";
 
         private EnsureFeatureIsEnabledFilter _filter;
+        private ActionExecutingContext _filterContext;
+        private RouteData _routeData;
         private Mock<ICurrentUserService> _currentUserService;
         private Mock<IFeatureToggleService> _featureToggleService;
         private CurrentUser _currentUser;
-        private ActionExecutingContext _filterContext;
-        private RouteData _routeData;
         private readonly ControllerBase _controller = Mock.Of<ControllerBase>();
         
         [SetUp]

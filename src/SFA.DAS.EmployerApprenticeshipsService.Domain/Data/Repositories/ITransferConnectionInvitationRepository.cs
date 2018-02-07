@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 
 namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
     public interface ITransferConnectionInvitationRepository
     {
-        Task<long> Add(TransferConnectionInvitation transferConnectionInvitation);
-        Task<TransferConnectionInvitation> GetSentTransferConnectionInvitation(long id);
-        Task<IEnumerable<TransferConnectionInvitation>> GetSentTransferConnectionInvitations(long senderAccountId);
-        Task<IEnumerable<TransferConnectionInvitation>> GetTransferConnectionInvitations(long senderAccountId, long receiverAccountId);
+        Task Add(TransferConnectionInvitation transferConnectionInvitation);
+        Task<TransferConnectionInvitation> GetTransferConnectionInvitationToApproveOrReject(long transferConnectionInvitationId, long receiverAccountId);
     }
 }

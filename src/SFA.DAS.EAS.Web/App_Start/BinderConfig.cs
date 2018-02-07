@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Binders;
 
 namespace SFA.DAS.EAS.Web
@@ -7,7 +8,8 @@ namespace SFA.DAS.EAS.Web
     {
         public static void RegisterBinders(ModelBinderDictionary binders)
         {
-            binders.Add(typeof(string), new TrimStringModelBinder());
+            binders.DefaultBinder = new DefaultBinder(() => DependencyResolver.Current.GetService<ICurrentUserService>());
+            binders.Add(typeof(string), new TrimStringBinder());
         }
     }
 }

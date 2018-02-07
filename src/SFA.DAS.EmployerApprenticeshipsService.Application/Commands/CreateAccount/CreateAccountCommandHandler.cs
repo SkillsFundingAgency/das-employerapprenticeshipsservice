@@ -17,6 +17,7 @@ using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.HashingService;
+using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 {

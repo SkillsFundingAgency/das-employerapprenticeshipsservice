@@ -1,4 +1,4 @@
-﻿using Moq;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AcceptInvitation;
 using SFA.DAS.EAS.Application.Validation;
