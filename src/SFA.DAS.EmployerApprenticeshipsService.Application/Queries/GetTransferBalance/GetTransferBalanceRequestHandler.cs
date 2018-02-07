@@ -2,7 +2,6 @@
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.NLog.Logger;
-using System;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferBalance
@@ -32,17 +31,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferBalance
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
-            decimal? balance = null;
-
-            try
-            {
-                balance = await _repository.GetTransferBalance(message.HashedAccountId);
-
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, $"Could not get transfer balance from repository for account Id {message.HashedAccountId}");
-            }
+            var balance = await _repository.GetTransferBalance(message.HashedAccountId);
 
             return new GetTransferBalanceResponse { Balance = balance };
         }

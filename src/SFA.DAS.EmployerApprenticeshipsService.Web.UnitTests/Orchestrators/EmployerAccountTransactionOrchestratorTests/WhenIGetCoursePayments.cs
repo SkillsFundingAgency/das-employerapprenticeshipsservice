@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Net;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application;
@@ -13,6 +7,13 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrchestratorTests
 {
@@ -48,10 +49,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
             _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
-            _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object);
+            _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object, Mock.Of<ILog>());
         }
 
-        
+
         [Test]
         public async Task ThenIShouldGetTotalsByCourseForLevyPayments()
         {
@@ -136,7 +137,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 EmployerCoInvestmentAmount = 10,
                 TransactionType = TransactionItemType.Payment
             };
-          
+
             var expectedTotal = payment.LineAmount + payment.SfaCoInvestmentAmount + payment.EmployerCoInvestmentAmount;
 
             _response = new FindAccountProviderPaymentsResponse
@@ -180,8 +181,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             var expectedLevyPaymentsTotal = payment1.LineAmount + payment2.LineAmount;
             var expectedSFACoInvestmentTotal = payment1.SfaCoInvestmentAmount + payment2.SfaCoInvestmentAmount;
             var expectedEmployerCoInvestmentTotal = payment1.EmployerCoInvestmentAmount + payment2.EmployerCoInvestmentAmount;
-            var expectedPaymentsTotal = payment1.LineAmount + 
-                                        payment1.SfaCoInvestmentAmount + 
+            var expectedPaymentsTotal = payment1.LineAmount +
+                                        payment1.SfaCoInvestmentAmount +
                                         payment1.EmployerCoInvestmentAmount +
                                         payment2.LineAmount +
                                         payment2.SfaCoInvestmentAmount +
@@ -205,7 +206,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             Assert.AreEqual(expectedEmployerCoInvestmentTotal, result.Data.EmployerCoInvestmentsTotal);
             Assert.AreEqual(expectedPaymentsTotal, result.Data.PaymentsTotal);
         }
-        
+
         [Test]
         public async Task ThenIfNoTransactionsAreFoundANotFoundStatusIsReturned()
         {

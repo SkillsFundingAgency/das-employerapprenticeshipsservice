@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 using System;
 using System.Linq;
 using System.Net;
@@ -22,6 +23,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     public class EmployerAccountTransactionsOrchestrator
     {
         private readonly ICurrentDateTime _currentTime;
+        private readonly ILog _logger;
         private readonly IMediator _mediator;
 
         protected EmployerAccountTransactionsOrchestrator()
@@ -29,12 +31,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
-        public EmployerAccountTransactionsOrchestrator(IMediator mediator, ICurrentDateTime currentTime)
+        public EmployerAccountTransactionsOrchestrator(IMediator mediator, ICurrentDateTime currentTime, ILog logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
             _currentTime = currentTime;
+            _logger = logger;
         }
 
         public async Task<OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>>
@@ -245,7 +248,24 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             var currentBalance = latestLineItem?.Balance ?? 0;
 
-            var transferBalanceResponse = await _mediator.SendAsync(new GetTransferBalanaceRequest { HashedAccountId = hashedId });
+            decimal transferBalance = 0;
+
+            try
+            {
+                var transferBalanceResponse =
+                    await _mediator.SendAsync(new GetTransferBalanaceRequest { HashedAccountId = hashedId });
+                transferBalance = transferBalanceResponse.Balance;
+
+            }
+            catch (InvalidRequestException)
+            {
+                //We don't want to catch this issue as its handled by global MVC handlers instead
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Could not get transfer balance from repository for account Id {hashedId}");
+            }
 
             return new OrchestratorResponse<FinanceDashboardViewModel>
             {
@@ -253,7 +273,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Account = employerAccountResult.Account,
                     CurrentLevyFunds = currentBalance,
-                    CurrentTransferFunds = transferBalanceResponse?.Balance ?? 0
+                    CurrentTransferFunds = transferBalance
                 }
             };
         }
