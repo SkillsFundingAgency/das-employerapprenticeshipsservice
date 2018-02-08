@@ -9,6 +9,19 @@
     float: left;
 }
 
+.govuk-box-highlight.esfa-standout-amount {
+    display: block;
+    text-align: center;
+    background: $fuschia;
+    margin-bottom: 1.25em;
+
+    @include media (tablet) {
+        text-align: left;
+        display: inline-block;
+        margin-bottom: 1.875em;
+    }
+}
+
 // custom to overwrite the GDS defaults
 .hr-double {
     border-bottom: 4px solid $grey-2;

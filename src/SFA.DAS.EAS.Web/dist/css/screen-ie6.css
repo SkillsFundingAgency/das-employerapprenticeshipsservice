@@ -2856,20 +2856,20 @@ a#link-settings:focus {
 /*floating menu style - EMPLOYER */
 #floating-menu-holder {
   background: #6f72af;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding: 0 30px;
 }
 
-#floating-menu-holder .fixed-header {
+.sticky-nav .floating-menu {
   position: fixed;
   top: 0;
   left: 0;
   max-width: 100%;
 }
 
-#floating-menu-holder .width-adjust {
+.sticky-nav .js-float {
   max-width: 960px;
   margin: 0 auto;
+  padding: 0 30px;
 }
 
 .floating-menu {
@@ -2908,6 +2908,7 @@ a#link-settings:focus {
 .floating-menu p.floating-head-text {
   float: left;
   margin: 10px 0 0 10px;
+  text-align: left;
   font-weight: bold;
   font-size: 19px;
   margin: 10px 0 0 0px;
@@ -3273,6 +3274,10 @@ table {
 
 table td.numeric {
   font-size: inherit;
+}
+
+table caption {
+  text-align: left;
 }
 
 td.link-right {
@@ -4792,6 +4797,16 @@ table .float-right, h2 .float-right {
     font-weight: normal;
     margin-top: 5px;
   }
+}
+
+.govuk-box-highlight.esfa-standout-amount {
+  display: block;
+  text-align: center;
+  background: #912b88;
+  margin-bottom: 1.25em;
+  text-align: left;
+  display: inline-block;
+  margin-bottom: 1.875em;
 }
 
 .hr-double {
