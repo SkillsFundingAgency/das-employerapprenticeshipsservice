@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using MediatR;
 using SFA.DAS.EAS.Application.Formatters.TransactionDowloads;
 using SFA.DAS.EAS.Application.Helpers;
@@ -68,6 +69,19 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransactionsDownload
             {
                 yield return new ValidationResult($"The latest end date you can enter is {today:MM yyyy}", new[] { NameOf.Property(this, q => q.EndDate.Month) });
             }
+
+            var earliestDate = DateTime.ParseExact("19000101", "yyyyMMdd", CultureInfo.InvariantCulture);
+
+            if (EndDate.Month != null && EndDate.Year != null && EndDate.IsValid() && EndDate < earliestDate)
+            {
+                yield return new ValidationResult($"The earliest end date you can enter is {earliestDate:MM yyyy}", new[] { NameOf.Property(this, q => q.EndDate.Month) });
+            }
+
+            if (StartDate.Month != null && StartDate.Year != null && StartDate.IsValid() && StartDate < earliestDate)
+            {
+                yield return new ValidationResult($"The earliest start date you can enter is {earliestDate:MM yyyy}", new[] { NameOf.Property(this, q => q.StartDate.Month) });
+            }
+
         }
     }
 }
