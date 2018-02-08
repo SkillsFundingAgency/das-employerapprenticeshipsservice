@@ -28,11 +28,11 @@
                         @Html.ValidationMessageFor(m => m.Message.StartDate.Year)
                         <div class="form-group">
                             <label for="@Html.IdFor(m => m.Message.StartDate.Month)">Month</label>
-                            @Html.TextBoxFor(m => m.Message.StartDate.Month, new { @class = "form-control", type = "number" })
+                            @Html.TextBoxFor(m => m.Message.StartDate.Month, new { @class = "form-control", type = "number", maxlength = "2", min = "1", max = "12" })
                         </div>
                         <div class="form-group">
                             <label for="@Html.IdFor(m => m.Message.StartDate.Year)">Year</label>
-                            @Html.TextBoxFor(m => m.Message.StartDate.Year, new { @class = "form-control", type = "number" })
+                            @Html.TextBoxFor(m => m.Message.StartDate.Year, new { @class = "form-control", type = "number", maxlength = "4", min = "1900", max = "9999" })
                         </div>
                     </div>
                 </div>
@@ -44,11 +44,11 @@
                         @Html.ValidationMessageFor(m => m.Message.EndDate.Year)
                         <div class="form-group">
                             <label for="@Html.IdFor(m => m.Message.EndDate.Month)">Month</label>
-                            @Html.TextBoxFor(m => m.Message.EndDate.Month, new { @class = "form-control", type = "number" })
+                            @Html.TextBoxFor(m => m.Message.EndDate.Month, new { @class = "form-control", type = "number", maxlength = "2", min = "1", max = "12" })
                         </div>
                         <div class="form-group">
                             <label for="@Html.IdFor(m => m.Message.EndDate.Year)">Year</label>
-                            @Html.TextBoxFor(m => m.Message.EndDate.Year, new { @class = "form-control", type = "number" })
+                            @Html.TextBoxFor(m => m.Message.EndDate.Year, new { @class = "form-control", type = "number", maxlength = "4", min = "1900", max = "9999" })
                         </div>
                     </div>
                 </div>
