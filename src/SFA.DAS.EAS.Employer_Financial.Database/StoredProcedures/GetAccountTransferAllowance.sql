@@ -1,9 +1,30 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetAccountTransferAllowance]
-	@accountId bigint = 0	
+	@accountId BIGINT = 0
 AS
-	SELECT SUM(tl.Amount) FROM [employer_financial].[TransactionLine] tl
-	INNER JOIN [employer_financial].[PeriodEnd] pe ON tl.PeriodEnd = pe.PeriodEndId
-	WHERE pe.CalendarPeriodYear > Year(GETDATE()) - 2
-	AND pe.CalendarPeriodMonth = 4
-	AND tl.AccountId = @accountId
+	SET NOCOUNT ON
 
+	DECLARE @currentDate AS DATETIME = GETDATE()
+	DECLARE @currentYear AS INT = DATEPART(year, @currentDate)
+	DECLARE @financialYearStartDate AS DATETIME
+	DECLARE @financialYearEndDate AS DATETIME
+
+	BEGIN
+		IF DATEPART(month, @currentDate) > 4
+			BEGIN
+				SELECT @financialYearStartDate = DATEFROMPARTS(@currentYear - 1, 4, 20),
+				 @financialYearEndDate = DATEFROMPARTS(@currentYear, 4, 20)
+			END
+		ELSE
+			BEGIN
+				SELECT @financialYearStartDate = DATEFROMPARTS(@currentYear - 2, 4, 20),
+				 @financialYearEndDate = DATEFROMPARTS(@currentYear - 1, 4, 20)
+			END
+	END
+
+	SELECT SUM(Amount) * 0.1 FROM [employer_financial].[TransactionLine] 
+	WHERE TransactionDate >= @financialYearStartDate
+	AND TransactionDate < @financialYearEndDate
+	AND TransactionType = 1
+	AND AccountId = @accountId
+
+	GO

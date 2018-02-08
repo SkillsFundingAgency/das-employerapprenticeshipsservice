@@ -87,17 +87,17 @@ this.ScenarioSetup(scenarioInfo);
                         "223/ABC",
                         "1000",
                         "16-17",
-                        "11",
+                        "10",
                         "1",
-                        "2017-03-18",
-                        "2017-03-23"});
+                        "2017-02-18",
+                        "2017-02-23"});
             table1.AddRow(new string[] {
                         "223/ABC",
                         "2000",
                         "16-17",
                         "11",
                         "1",
-                        "2017-03-20",
+                        "2017-03-18",
                         "2017-03-23"});
             table1.AddRow(new string[] {
                         "223/ABC",
@@ -134,7 +134,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 8
  testRunner.When("I have the following submissions", ((string)(null)), table1, "When ");
 #line 16
- testRunner.Then("the transfer balance should be 3300 on the financial dashboard screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the transfer balance should be 330 on the financial dashboard screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

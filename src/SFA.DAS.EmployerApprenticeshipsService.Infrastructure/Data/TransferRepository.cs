@@ -1,21 +1,42 @@
-﻿using SFA.DAS.EAS.Domain.Configuration;
+﻿using Dapper;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
+using System;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class TransferRepository : BaseRepository, ITransferRepository
     {
-        public TransferRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+        public TransferRepository(LevyDeclarationProviderConfiguration configuration, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         {
         }
 
-        public Task<decimal> GetTransferBalance(string hashedAccountId)
+        public async Task<decimal> GetTransferBalance(long accountId)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var result = await WithConnection(async c =>
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@accountId", accountId, DbType.Int64);
+
+                    return await c.QuerySingleAsync<decimal>(
+                        sql: "[employer_financial].[GetAccountTransferAllowance]",
+                        param: parameters,
+                        commandType: CommandType.StoredProcedure);
+                });
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

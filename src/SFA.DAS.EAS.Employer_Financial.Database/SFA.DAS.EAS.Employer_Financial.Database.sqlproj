@@ -111,7 +111,6 @@
     <Build Include="StoredProcedures\GetLevyDeclarationSubmissionIdsByEmpRef.sql" />
     <Build Include="StoredProcedures\GetTransactionSummary_ByAccountId.sql" />
     <Build Include="StoredProcedures\GetAccountTransferAllowance.sql" />
-    <Build Include="StoredProcedures\GetAccountTransferBalance.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />
