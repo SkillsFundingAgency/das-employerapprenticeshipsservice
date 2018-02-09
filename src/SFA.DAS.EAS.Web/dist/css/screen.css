@@ -6176,7 +6176,8 @@ h2 .float-right {
 
 #page-transactions .column-half .data dl {
   position: relative;
-  height: 170px;
+  min-height: 170px;
+  padding-bottom: 50px;
   background: #2e358b;
 }
 
@@ -6187,6 +6188,18 @@ h2 .float-right {
 
 #page-transactions .column-half .data dl dt a {
   color: #fff;
+}
+
+#page-transactions .column-half .data dl dd {
+  word-break: break-all;
+}
+
+#page-transactions .column-half .data dl.current-funds {
+  background: #2e358b;
+}
+
+#page-transactions .column-half .data dl.current-transfer-funds {
+  background: #df3034;
 }
 
 /*See all activity*/

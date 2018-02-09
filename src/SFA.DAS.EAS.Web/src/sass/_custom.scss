@@ -694,7 +694,8 @@ body {
 
             dl {
                 position: relative;
-                height: 170px;
+                min-height: 170px;
+                padding-bottom: 50px;
                 background: $purple;
 
                 dt {
@@ -705,6 +706,18 @@ body {
                         color: #fff;
                     }
                 }
+
+                dd {
+                    word-break: break-all;
+                }
+            }
+
+            dl.current-funds {
+                background: $purple;
+            }
+
+            dl.current-transfer-funds {
+                background: $mellow-red;
             }
         }
     }

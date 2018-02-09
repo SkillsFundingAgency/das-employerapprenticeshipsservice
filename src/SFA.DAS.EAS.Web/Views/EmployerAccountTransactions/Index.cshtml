@@ -23,30 +23,37 @@
     </div>
 </div>
 <div class="grid-row">
+
     <div class="column-half">
         <div class="data-wrap">
             <div class="data">
-                <dl>
+                <dl class="transfer-funds">
                     <dt>
                         Current funds
                     </dt>
                     @{
-            var balance = Model.Data.CurrentLevyFunds.ToString("C0", culture);
-            var balanceClass = string.Empty;
+                        var balance = Model.Data.CurrentLevyFunds.ToString("C0", culture);
+                        var balanceClass = string.Empty;
 
-            if (balance.Length > 8)
-            {
-                balanceClass = "long";
-            }
-            if (balance.Length > 10)
-            {
-                balanceClass = "longer";
-            }
+                        if (balance.Length > 8)
+                        {
+                            balanceClass = "long";
+                        }
+                        if (balance.Length > 10)
+                        {
+                            balanceClass = "longer";
+                        }
                     }
                     <dd class="@balanceClass">@balance</dd>
                 </dl>
+            </div>
+        </div>
+    </div>
 
-                <dl>
+    <div class="column-half">
+        <div class="data-wrap">
+            <div class="data">
+                <dl class="current-transfer-funds">
                     <dt>
                         Current transfer funds
                     </dt>
@@ -68,7 +75,9 @@
             </div>
         </div>
     </div>
+
 </div>
+
 <div class="grid-row">
     <div class="column-half">
         <h2 class="heading-medium">
