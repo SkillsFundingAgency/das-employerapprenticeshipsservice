@@ -18,6 +18,8 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public EventsApiClientConfiguration EventsApi { get; set; }
         public string Hashstring { get; set; }
         public string AllowedHashstringCharacters { get; set; }
+        public string ExternalHashstring { get; set; }
+        public string ExternalAllowedHashstringCharacters { get; set; }
 		public PostcodeAnywhereConfiguration PostcodeAnywhere { get; set; }
     }
 }

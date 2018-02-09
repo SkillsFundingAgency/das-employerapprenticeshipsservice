@@ -59,6 +59,7 @@ using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Tasks.API.Client;
 using StructureMap;
 using StructureMap.TypeRules;
+using SFA.DAS.EAS.Application.Hashing;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -91,6 +92,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi).SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
             For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
+            For<IExternalAccountHashingService>().Use(x => new ExternalAccountHashingService(config.ExternalAllowedHashstringCharacters, config.ExternalHashstring));
             For<ITaskApiConfiguration>().Use(taskApiConfig);
             For<ITaskService>().Use<TaskService>();
             For<IUserRepository>().Use<UserRepository>();
