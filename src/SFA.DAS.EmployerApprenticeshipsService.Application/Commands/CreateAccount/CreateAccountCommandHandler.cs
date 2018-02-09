@@ -6,6 +6,7 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
+using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -29,6 +30,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAccountCommand> _validator;
         private readonly IHashingService _hashingService;
+        private readonly IHashingService _externalHashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
@@ -39,7 +41,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IMessagePublisher messagePublisher, 
             IMediator mediator, 
             IValidator<CreateAccountCommand> validator, 
-            IHashingService hashingService, 
+            IHashingService hashingService,
+            IExternalAccountHashingService externalHashingService,
             IGenericEventFactory genericEventFactory, 
             IAccountEventFactory accountEventFactory, 
             IRefreshEmployerLevyService refreshEmployerLevyService,
@@ -51,6 +54,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _mediator = mediator;
             _validator = validator;
             _hashingService = hashingService;
+            _externalHashingService = externalHashingService;
             _genericEventFactory = genericEventFactory;
             _accountEventFactory = accountEventFactory;
             _refreshEmployerLevyService = refreshEmployerLevyService;
@@ -72,6 +76,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
             await _accountRepository.SetHashedId(hashedAccountId, createAccountResult.AccountId);
+
+            var externalHashedAccountId = _externalHashingService.HashValue(createAccountResult.AccountId);
+            await _accountRepository.SetExternalHashedId(externalHashedAccountId, createAccountResult.AccountId);
 
             await RefreshLevy(createAccountResult, message.PayeReference);
 

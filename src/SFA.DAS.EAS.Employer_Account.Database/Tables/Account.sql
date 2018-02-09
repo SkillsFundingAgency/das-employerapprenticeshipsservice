@@ -4,7 +4,8 @@
 	[HashedId] NVARCHAR(100) NULL,
     [Name] NVARCHAR(100) NOT NULL ,
 	[CreatedDate] DATETIME NOT NULL,
-	[ModifiedDate] DATETIME NULL
+	[ModifiedDate] DATETIME NULL, 
+    [ExternalHashedId] NVARCHAR(100) NULL
 )
 GO
 

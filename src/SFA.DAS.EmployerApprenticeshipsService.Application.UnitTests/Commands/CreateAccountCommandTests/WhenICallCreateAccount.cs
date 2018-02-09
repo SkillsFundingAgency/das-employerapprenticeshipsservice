@@ -9,6 +9,7 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Factories;
+using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -34,6 +35,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IMediator> _mediator;
         private Mock<IValidator<CreateAccountCommand>> _validator;
         private Mock<IHashingService> _hashingService;
+        private Mock<IExternalAccountHashingService> _externalhashingService;
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IAccountEventFactory> _accountEventFactory;
         private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
@@ -42,6 +44,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
         private const string ExpectedHashString = "123ADF23";
+        private const string ExpectedExternalHashString = "SCUFF";
+        
         private User _user;
 
         [SetUp]
@@ -65,6 +69,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.HashValue(ExpectedAccountId)).Returns(ExpectedHashString);
 
+            _externalhashingService = new Mock<IExternalAccountHashingService>();
+            _externalhashingService.Setup(x => x.HashValue(ExpectedAccountId)).Returns(ExpectedExternalHashString);
+
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _accountEventFactory = new Mock<IAccountEventFactory>();
 
@@ -78,7 +85,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 _messagePublisher.Object, 
                 _mediator.Object, 
                 _validator.Object, 
-                _hashingService.Object, 
+                _hashingService.Object,
+                _externalhashingService.Object,
                 _genericEventFactory.Object,
                 _accountEventFactory.Object,
                 _refreshEmployerLevyService.Object,
@@ -99,6 +107,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         }
 
         [Test]
+        public async Task ThenTheIdExternalHashingServiceIsCalledAfterTheAccountIsCreated()
+        {
+            //Arrange
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
+
+            //Act
+            await _handler.Handle(createAccountCommand);
+
+            //Assert
+            _externalhashingService.Verify(x => x.HashValue(ExpectedAccountId), Times.Once);
+        }
+
+        [Test]
         public async Task ThenTheAccountIsUpdatedWithTheHashedId()
         {
             //Arrange
@@ -109,6 +130,20 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 
             //Assert
             _accountRepository.Verify(x => x.SetHashedId(ExpectedHashString, ExpectedAccountId), Times.Once);
+        }
+
+
+        [Test]
+        public async Task ThenTheAccountIsUpdatedWithTheExternalHashedId()
+        {
+            //Arrange
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
+
+            //Act
+            await _handler.Handle(createAccountCommand);
+
+            //Assert
+            _accountRepository.Verify(x => x.SetExternalHashedId(ExpectedExternalHashString, ExpectedAccountId), Times.Once);
         }
 
         [Test]
@@ -162,6 +197,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 
             var expectedHashedAccountId = "DJRR4359";
             _hashingService.Setup(x => x.HashValue(accountId)).Returns(expectedHashedAccountId);
+
+            var expectedExternalHashedAccountId = "SCUFF";
+            _externalhashingService.Setup(x => x.HashValue(accountId)).Returns(expectedExternalHashedAccountId);
 
             await _handler.Handle(cmd);
 
