@@ -4,6 +4,7 @@ AS
 Select 
 	acc.Id AS AccountId,
 	acc.HashedId,
+	acc.ExternalHashedId,
 	acc.Name,
 	acc.CreatedDate,
 	t.Email as OwnerEmail,

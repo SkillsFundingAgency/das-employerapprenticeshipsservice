@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
@@ -17,6 +18,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
         private readonly IHashingService _hashingService;
         private readonly IMembershipRepository _membershipRepository;
         private readonly ITransferConnectionInvitationRepository _transferConnectionInvitationRepository;
+        private readonly IExternalAccountHashingService _externalHashingService;
 
         public GetTransferConnectionInvitationAccountQueryHandler(
             CurrentUser currentUser,
@@ -41,7 +43,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
                 throw new UnauthorizedAccessException();
             }
             
-            var receiverAccount = await _employerAccountRepository.GetAccountByHashedId(message.ReceiverAccountHashedId);
+            var receiverAccount = await _employerAccountRepository.GetAccountByExternalHashedId(message.ReceiverAccountHashedId);
 
             if (receiverAccount == null)
             {

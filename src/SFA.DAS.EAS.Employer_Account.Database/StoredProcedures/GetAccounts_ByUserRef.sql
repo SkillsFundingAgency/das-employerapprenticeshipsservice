@@ -3,7 +3,7 @@
 	
 AS
 select 
-	a.Id, a.Name, m.RoleId ,a.HashedId
+	a.Id, a.Name, m.RoleId ,a.HashedId, a.ExternalHashedId
 from 
 	[employer_account].[User] u 
 inner join 

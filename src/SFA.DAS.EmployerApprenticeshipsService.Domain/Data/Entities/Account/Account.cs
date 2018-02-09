@@ -7,6 +7,8 @@ namespace SFA.DAS.EAS.Domain.Data.Entities.Account
         public string Name { get; set; }
         public long Id { get; set; }
         public string HashedId { get; set; }
+
+        public string ExternalHashedId { get; set; }
         public int RoleId { get; set; }
         public string RoleName => ((Role)RoleId).ToString();
     }
