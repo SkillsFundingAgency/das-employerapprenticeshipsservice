@@ -13,7 +13,7 @@
                             <li>
                                 @if (string.IsNullOrWhiteSpace(modelState.Key))
                                 {
-                                    @error.ErrorMessage
+                                    <a href="#">@error.ErrorMessage</a>
                                 }
                                 else
                                 {
