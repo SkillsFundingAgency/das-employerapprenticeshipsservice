@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransact
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
+using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
@@ -16,7 +17,6 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -248,24 +248,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             var currentBalance = latestLineItem?.Balance ?? 0;
 
-            decimal transferBalance = 0;
-
-            try
-            {
-                var transferBalanceResponse =
-                    await _mediator.SendAsync(new GetTransferAllowanceRequest { HashedAccountId = hashedId });
-                transferBalance = transferBalanceResponse.Balance;
-
-            }
-            catch (InvalidRequestException)
-            {
-                //We don't want to catch this issue as its handled by global MVC handlers instead
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, $"Could not get transfer balance from repository for account Id {hashedId}");
-            }
+            var transferAllowance = await GetTransferAllowance(hashedId, externalUserId);
 
             return new OrchestratorResponse<FinanceDashboardViewModel>
             {
@@ -273,10 +256,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Account = employerAccountResult.Account,
                     CurrentLevyFunds = currentBalance,
-                    CurrentTransferFunds = transferBalance
+                    CurrentTransferFunds = transferAllowance
                 }
             };
         }
+
+
 
         public virtual async Task<OrchestratorResponse<TransactionViewResultViewModel>> GetAccountTransactions(string hashedId, int year, int month, string externalUserId)
         {
@@ -410,6 +395,36 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Exception = e
                 };
             }
+        }
+
+        private async Task<decimal> GetTransferAllowance(string hashedId, string externalUserId)
+        {
+            try
+            {
+                var transferBalanceResponse =
+                    await _mediator.SendAsync(new GetTransferAllowanceRequest
+                    {
+                        HashedAccountId = hashedId,
+                        ExternalUserId = externalUserId
+                    });
+
+                return transferBalanceResponse.Balance;
+            }
+            catch (InvalidRequestException)
+            {
+                //We don't want to catch this issue as its handled by global MVC handlers instead
+                throw;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Could not get transfer balance from repository for account Id {hashedId}");
+            }
+
+            return 0;
         }
     }
 }

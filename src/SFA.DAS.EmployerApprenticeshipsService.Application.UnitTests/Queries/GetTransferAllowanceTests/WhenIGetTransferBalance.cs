@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
             _hashngService = new Mock<IHashingService>();
             _logger = new Mock<ILog>();
 
-            _repository.Setup(x => x.GetTransferBalance(It.IsAny<long>()))
+            _repository.Setup(x => x.GetTransferAllowance(It.IsAny<long>()))
                        .ReturnsAsync(ExpectedTransferBalance);
 
             _hashngService.Setup(x => x.DecodeValue(It.IsAny<string>()))
@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
 
             //Assert
             _hashngService.Verify(x => x.DecodeValue(HashedAccountId), Times.Once);
-            _repository.Verify(x => x.GetTransferBalance(AccountId), Times.Once);
+            _repository.Verify(x => x.GetTransferAllowance(AccountId), Times.Once);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
             Assert.ThrowsAsync<UnauthorizedAccessException>(() => RequestHandler.Handle(Query));
 
             _hashngService.Verify(x => x.DecodeValue(It.IsAny<string>()), Times.Never);
-            _repository.Verify(x => x.GetTransferBalance(It.IsAny<long>()), Times.Never);
+            _repository.Verify(x => x.GetTransferAllowance(It.IsAny<long>()), Times.Never);
             RequestValidator.Verify(x => x.ValidateAsync(Query), Times.Once);
         }
 

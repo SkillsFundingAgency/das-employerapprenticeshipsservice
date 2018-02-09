@@ -3,7 +3,6 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
-using System;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -16,27 +15,20 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<decimal> GetTransferBalance(long accountId)
+        public async Task<decimal> GetTransferAllowance(long accountId)
         {
-            try
+            var result = await WithConnection(async c =>
             {
-                var result = await WithConnection(async c =>
-                {
-                    var parameters = new DynamicParameters();
-                    parameters.Add("@accountId", accountId, DbType.Int64);
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
 
-                    return await c.QuerySingleAsync<decimal>(
-                        sql: "[employer_financial].[GetAccountTransferAllowance]",
-                        param: parameters,
-                        commandType: CommandType.StoredProcedure);
-                });
+                return await c.QuerySingleAsync<decimal>(
+                    sql: "[employer_financial].[GetAccountTransferAllowance]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return result;
         }
     }
 }

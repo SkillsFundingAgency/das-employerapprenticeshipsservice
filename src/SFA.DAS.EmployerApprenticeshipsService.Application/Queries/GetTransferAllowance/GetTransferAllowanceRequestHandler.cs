@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferAllowance
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
-            var balance = await _repository.GetTransferBalance(accountId);
+            var balance = await _repository.GetTransferAllowance(accountId);
 
             _logger.Debug($"Retrieved transfer allowance of {balance} for account ID {message.HashedAccountId}");
 
