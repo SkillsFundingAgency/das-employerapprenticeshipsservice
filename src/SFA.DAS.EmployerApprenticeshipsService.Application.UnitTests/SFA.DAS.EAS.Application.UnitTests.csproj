@@ -233,8 +233,8 @@
   <ItemGroup>
     <Compile Include="Commands\AddPayeToAccountTests\WhenIAddPayeToAnAccount.cs" />
     <Compile Include="Commands\AddPayeToAccountTests\WhenIValidateTheCommand.cs" />
-    <Compile Include="Queries\GetTransferBalanceTests\WhenIGetTransferBalance.cs" />
-    <Compile Include="Queries\GetTransferBalanceTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetTransferAllowanceTests\WhenIGetTransferBalance.cs" />
+    <Compile Include="Queries\GetTransferAllowanceTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccount\WhenIGetTransferConnectionInvitationAccount.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminderTests\WhenIDismissATaskReminder.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminderTests\WhenTheCommandIsValidated.cs" />

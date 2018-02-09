@@ -1,22 +1,23 @@
 ﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetTransferBalance;
+using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
+using System;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferBalanceTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
 {
-    public class WhenIGetTransferBalance : QueryBaseTest<GetTransferBalanceRequestHandler, GetTransferBalanaceRequest, GetTransferBalanceResponse>
+    public class WhenIGetTransferBalance : QueryBaseTest<GetTransferAllowanceRequestHandler, GetTransferAllowanceRequest, GetTransferAllowanceResponse>
     {
         private Mock<ITransferRepository> _repository;
         private Mock<IHashingService> _hashngService;
         private Mock<ILog> _logger;
-        public override GetTransferBalanaceRequest Query { get; set; }
-        public override GetTransferBalanceRequestHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetTransferBalanaceRequest>> RequestValidator { get; set; }
+        public override GetTransferAllowanceRequest Query { get; set; }
+        public override GetTransferAllowanceRequestHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetTransferAllowanceRequest>> RequestValidator { get; set; }
 
         private const string HashedAccountId = "ABC123";
         private const long AccountId = 1234;
@@ -38,9 +39,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferBalanceTests
             _hashngService.Setup(x => x.DecodeValue(It.IsAny<string>()))
                           .Returns(AccountId);
 
-            Query = new GetTransferBalanaceRequest { HashedAccountId = HashedAccountId };
+            Query = new GetTransferAllowanceRequest { HashedAccountId = HashedAccountId };
 
-            RequestHandler = new GetTransferBalanceRequestHandler(_repository.Object, _hashngService.Object, RequestValidator.Object, _logger.Object);
+            RequestHandler = new GetTransferAllowanceRequestHandler(_repository.Object, _hashngService.Object, RequestValidator.Object, _logger.Object);
         }
 
         [Test]
@@ -63,5 +64,21 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferBalanceTests
             //Assert
             Assert.AreEqual(ExpectedTransferBalance, actual.Balance);
         }
+
+        [Test]
+        public void ThenIfUserIsUnauthorisedTheyShouldNotGetABalance()
+        {
+            //Arrange
+            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetTransferAllowanceRequest>()))
+                .ReturnsAsync(new ValidationResult { IsUnauthorized = true });
+
+            //Act + Assert
+            Assert.ThrowsAsync<UnauthorizedAccessException>(() => RequestHandler.Handle(Query));
+
+            _hashngService.Verify(x => x.DecodeValue(It.IsAny<string>()), Times.Never);
+            _repository.Verify(x => x.GetTransferBalance(It.IsAny<long>()), Times.Never);
+            RequestValidator.Verify(x => x.ValidateAsync(Query), Times.Once);
+        }
+
     }
 }

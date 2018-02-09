@@ -3,7 +3,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EAS.Application.Queries.GetTransferBalance;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -11,6 +10,7 @@ using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrchestratorTests
 {
@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
-        private GetTransferBalanceResponse _response;
+        private GetTransferAllowanceResponse _response;
         private Mock<ICurrentDateTime> _currentTime;
         private Mock<ILog> _logger;
 
@@ -45,9 +45,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
                 .ReturnsAsync(accountResponse);
 
-            _response = new GetTransferBalanceResponse { Balance = ExpectedTransferBalance };
+            _response = new GetTransferAllowanceResponse { Balance = ExpectedTransferBalance };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferBalanaceRequest>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceRequest>()))
                      .ReturnsAsync(_response);
 
 
@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenIShouldAZeroBalanceIfTheTransferBalanaceCannotBeRetrieved()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferBalanaceRequest>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceRequest>()))
                 .ReturnsAsync(null);
 
             //Act
@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public async Task ThenIfAnErrorOccursANullValueShouldBeReturnedForTheBalance()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferBalanaceRequest>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceRequest>()))
                      .ThrowsAsync(new Exception());
 
             //Act
@@ -100,7 +100,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         {
             //Arrange
             var exception = new Exception();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferBalanaceRequest>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceRequest>()))
                      .ThrowsAsync(exception);
 
             //Act
@@ -114,7 +114,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         public void ThenIfAnInvalidRequestOccursItShouldThrowTheException()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferBalanaceRequest>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceRequest>()))
                      .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act + Assert
