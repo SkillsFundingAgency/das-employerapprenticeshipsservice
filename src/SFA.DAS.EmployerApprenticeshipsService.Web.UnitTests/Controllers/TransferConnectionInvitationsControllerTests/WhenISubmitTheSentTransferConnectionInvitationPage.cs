@@ -8,7 +8,7 @@ using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsControllerTests
 {
-    public class WhenISubmitTheSentTransferConnectionPage
+    public class WhenISubmitTheSentTransferConnectionInvitationPage
     {
         private TransferConnectionInvitationsController _controller;
         private readonly SentTransferConnectionInvitationViewModel _viewModel = new SentTransferConnectionInvitationViewModel();

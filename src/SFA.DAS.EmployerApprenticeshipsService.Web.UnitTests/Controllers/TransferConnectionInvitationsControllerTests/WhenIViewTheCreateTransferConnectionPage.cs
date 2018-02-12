@@ -8,7 +8,7 @@ using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsControllerTests
 {
-    public class WhenIRequestTheStartTransferConnectionPage
+    public class WhenIRequestTheStartTransferConnectionInvitationPage
     {
         private const string HashedAccountId = "FOOBAR";
 

@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Mappings
         {
             _config = new MapperConfiguration(c =>
             {
-                c.AddProfile<TransferConnectionMaps>();
+                c.AddProfile<TransferConnectionInvitationMaps>();
             });
         }
 

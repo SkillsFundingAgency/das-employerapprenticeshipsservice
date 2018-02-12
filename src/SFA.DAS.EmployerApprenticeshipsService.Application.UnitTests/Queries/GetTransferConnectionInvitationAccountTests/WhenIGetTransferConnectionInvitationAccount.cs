@@ -11,7 +11,7 @@ using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.HashingService;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitationAccount
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitationAccountTests
 {
     public class WhenIGetTransferConnectionInvitationAccount
     {
@@ -133,7 +133,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
                 {
                     new TransferConnectionInvitation
                     {
-                        Status = TransferConnectionInvitationStatus.Sent
+                        Status = TransferConnectionInvitationStatus.Pending
                     }
                 });
 

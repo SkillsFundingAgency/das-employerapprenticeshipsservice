@@ -2,6 +2,6 @@
 {
     public enum TransferConnectionInvitationStatus
     {
-        Sent = 1
+        Pending = 1
     }
 }

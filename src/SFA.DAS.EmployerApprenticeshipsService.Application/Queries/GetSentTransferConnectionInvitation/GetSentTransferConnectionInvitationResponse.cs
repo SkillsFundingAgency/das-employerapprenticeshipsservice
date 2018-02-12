@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EAS.Domain.Models.TransferConnections;
 
-namespace SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitationQuery
+namespace SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation
 {
     public class GetSentTransferConnectionInvitationResponse
     {
