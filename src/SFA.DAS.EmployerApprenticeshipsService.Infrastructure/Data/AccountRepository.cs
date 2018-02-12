@@ -193,16 +193,17 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task SetExternalHashedId(string externalHashedId, long accountId)
+        public async Task SetExternalHashes(string externalHashedId, string hashedId, long accountId)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@AccountId", accountId, DbType.Int64);
-                parameters.Add("@HashedId", externalHashedId, DbType.String);
+                parameters.Add("@ExternalHashedId", externalHashedId, DbType.String);
+                parameters.Add("@HashedId", hashedId, DbType.String);
 
                 var result = await c.ExecuteAsync(
-                    sql: "[employer_account].[UpdateAccount_SetAccountExternalHashId]",
+                    sql: "[employer_account].[UpdateAccount_SetAccountHashes]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
 

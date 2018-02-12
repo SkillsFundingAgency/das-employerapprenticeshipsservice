@@ -119,8 +119,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _externalhashingService.Verify(x => x.HashValue(ExpectedAccountId), Times.Once);
         }
 
+
+
         [Test]
-        public async Task ThenTheAccountIsUpdatedWithTheHashedId()
+        public async Task ThenTheAccountIsUpdatedWithTheHashes()
         {
             //Arrange
             var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
@@ -129,21 +131,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _accountRepository.Verify(x => x.SetHashedId(ExpectedHashString, ExpectedAccountId), Times.Once);
-        }
-
-
-        [Test]
-        public async Task ThenTheAccountIsUpdatedWithTheExternalHashedId()
-        {
-            //Arrange
-            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
-
-            //Act
-            await _handler.Handle(createAccountCommand);
-
-            //Assert
-            _accountRepository.Verify(x => x.SetExternalHashedId(ExpectedExternalHashString, ExpectedAccountId), Times.Once);
+            _accountRepository.Verify(x => x.SetExternalHashes(ExpectedExternalHashString, ExpectedHashString, ExpectedAccountId), Times.Once);
         }
 
         [Test]

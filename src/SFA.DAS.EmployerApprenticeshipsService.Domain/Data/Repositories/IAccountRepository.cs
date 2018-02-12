@@ -20,10 +20,11 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<List<EmployerAgreementView>> GetEmployerAgreementsLinkedToAccount(long accountId);
         Task SetHashedId(string hashedId, long accountId);
 
+        Task SetExternalHashes(string externalHashedId, string hashedId, long accountId);
+
         Task<List<UserNotificationSetting>> GetUserAccountSettings(string userRef);
         Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings);
 
         Task<AccountStats> GetAccountStats(long accountId);
-        Task SetExternalHashedId(string externalHashedId, long accountId);
     }
 }

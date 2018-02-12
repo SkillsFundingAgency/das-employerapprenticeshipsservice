@@ -74,11 +74,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             var createAccountResult = await _accountRepository.CreateAccount(userResponse.User.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, message.PayeReference, message.AccessToken, message.RefreshToken, message.OrganisationStatus, message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource, message.Sector);
 
-            var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
-            await _accountRepository.SetHashedId(hashedAccountId, createAccountResult.AccountId);
-
-            var externalHashedAccountId = _externalHashingService.HashValue(createAccountResult.AccountId);
-            await _accountRepository.SetExternalHashedId(externalHashedAccountId, createAccountResult.AccountId);
+            var hashedAccountId = await SetAccountHashes(createAccountResult);
 
             await RefreshLevy(createAccountResult, message.PayeReference);
 
@@ -103,6 +99,14 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             {
                 HashedAccountId = hashedAccountId
             };
+        }
+
+        private async Task<string> SetAccountHashes(CreateAccountResult createAccountResult)
+        {
+            var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
+            var externalHashedAccountId = _externalHashingService.HashValue(createAccountResult.AccountId);
+            await _accountRepository.SetExternalHashes(externalHashedAccountId, hashedAccountId, createAccountResult.AccountId);
+            return hashedAccountId;
         }
 
         private async Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, string userRef)
