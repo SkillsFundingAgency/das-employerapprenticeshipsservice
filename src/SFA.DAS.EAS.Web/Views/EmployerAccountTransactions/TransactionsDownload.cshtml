@@ -14,9 +14,11 @@
 <div class="grid-row">
     <div class="column-full">
         <h1 class="heading-xlarge">Download transactions</h1>
-        <div class="column-one-third">
+        <div class="column-two-thirds">
             <p>Enter a start and end date to download transactions within a specific date range.</p>
-            @using (Html.BeginForm())
+        </div>
+        <div class="column-one-third">
+                @using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(m => m.Message.HashedAccountId)
@@ -28,11 +30,11 @@
                         @Html.ValidationMessageFor(m => m.Message.StartDate.Year)
                         <div class="form-group">
                             <label for="@Html.IdFor(m => m.Message.StartDate.Month)">Month</label>
-                            @Html.TextBoxFor(m => m.Message.StartDate.Month, new { @class = "form-control", type = "number" })
+                            @Html.TextBoxFor(m => m.Message.StartDate.Month, new { @class = "form-control", type = "number", maxlength = "2" })
                         </div>
-                        <div class="form-group">
+                        <div class="form-group form-group-year">
                             <label for="@Html.IdFor(m => m.Message.StartDate.Year)">Year</label>
-                            @Html.TextBoxFor(m => m.Message.StartDate.Year, new { @class = "form-control", type = "number" })
+                            @Html.TextBoxFor(m => m.Message.StartDate.Year, new { @class = "form-control", type = "number", maxlength = "4" })
                         </div>
                     </div>
                 </div>
@@ -44,11 +46,11 @@
                         @Html.ValidationMessageFor(m => m.Message.EndDate.Year)
                         <div class="form-group">
                             <label for="@Html.IdFor(m => m.Message.EndDate.Month)">Month</label>
-                            @Html.TextBoxFor(m => m.Message.EndDate.Month, new { @class = "form-control", type = "number" })
+                            @Html.TextBoxFor(m => m.Message.EndDate.Month, new { @class = "form-control", type = "number", maxlength = "2" })
                         </div>
-                        <div class="form-group">
+                        <div class="form-group form-group-year">
                             <label for="@Html.IdFor(m => m.Message.EndDate.Year)">Year</label>
-                            @Html.TextBoxFor(m => m.Message.EndDate.Year, new { @class = "form-control", type = "number" })
+                            @Html.TextBoxFor(m => m.Message.EndDate.Year, new { @class = "form-control", type = "number", maxlength = "4" })
                         </div>
                     </div>
                 </div>
@@ -57,10 +59,10 @@
                     @Html.DropDownListFor(m => m.Message.DownloadFormat, EnumHelper.GetSelectList(typeof(DownloadFormatType)), new { @class = "form-control" })
                 </div>
                 <button class="button" aria-label="Download">Download</button>
-            }
+        }
+            </div>
         </div>
     </div>
-</div>
 
 @section breadcrumb {
     <div class="breadcrumbs">
