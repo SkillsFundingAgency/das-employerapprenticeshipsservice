@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Domain.Models.Transaction
 
         public decimal GovermentContribution { get; set; }
 
-        public string GovermentContributionFormatted => EmployerContribution.ToString("0.00", NumberFormatInfo.InvariantInfo);
+        public string GovermentContributionFormatted => GovermentContribution.ToString("0.00", NumberFormatInfo.InvariantInfo);
 
         public decimal Total { get; set; }
 

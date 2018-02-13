@@ -58,12 +58,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Formatters.Transactions.ExcelTransac
                 new[]
                 {
                     _transactionLine.DateCreated.ToString(), _transactionLine.TransactionType,
-                    _transactionLine.PayeScheme, _transactionLine.PeriodEnd, _transactionLine.LevyDeclared.ToString(),
-                    _transactionLine.EnglishFraction.ToString(), _transactionLine.TenPercentTopUp.ToString(),
+                    _transactionLine.PayeScheme, _transactionLine.PeriodEnd, _transactionLine.LevyDeclaredFormatted,
+                    _transactionLine.EnglishFractionFormatted, _transactionLine.TenPercentTopUpFormatted,
                     _transactionLine.TrainingProvider, _transactionLine.Uln,
                     _transactionLine.Apprentice, _transactionLine.ApprenticeTrainingCourse,
-                    _transactionLine.PaidFromLevy.ToString(), _transactionLine.EmployerContribution.ToString(),
-                    _transactionLine.GovermentContribution.ToString(), _transactionLine.Total.ToString()
+                    _transactionLine.PaidFromLevyFormatted, _transactionLine.EmployerContributionFormatted,
+                    _transactionLine.GovermentContributionFormatted, _transactionLine.TotalFormatted
                 }
             };
 
