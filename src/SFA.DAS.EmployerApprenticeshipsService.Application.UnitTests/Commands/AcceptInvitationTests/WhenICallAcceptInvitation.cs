@@ -1,14 +1,17 @@
-﻿using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AcceptInvitation;
+using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.TimeProvider;
+using System;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
 {
@@ -22,25 +25,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
         private Mock<IUserAccountRepository> _userAccountRepository;
         private Mock<IAuditService> _auditService;
         private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<IValidator<AcceptInvitationCommand>> _validator;
 
         [SetUp]
         public void Setup()
         {
-            _invitationRepository = new Mock<IInvitationRepository>();
-            _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(a => a.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(new MembershipView(){FirstName = "f", LastName = "l"}));
-
-            _userAccountRepository = new Mock<IUserAccountRepository>();
-            _auditService = new Mock<IAuditService>();
-            _messagePublisher=new Mock<IMessagePublisher>();
-
-            _handler = new AcceptInvitationCommandHandler(
-                _invitationRepository.Object, 
-                _membershipRepository.Object, 
-                _userAccountRepository.Object,
-                _auditService.Object,
-                _messagePublisher.Object);
             _invitation = new Invitation
             {
                 Id = 1,
@@ -48,8 +37,31 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
                 Email = "test.user@test.local",
                 Status = InvitationStatus.Pending,
                 ExpiryDate = DateTimeProvider.Current.UtcNow.AddDays(2),
-                RoleId = Role.Owner
+                RoleId = Role.Owner,
+                Name = "Bob Green"
             };
+
+            _invitationRepository = new Mock<IInvitationRepository>();
+            _membershipRepository = new Mock<IMembershipRepository>();
+            _userAccountRepository = new Mock<IUserAccountRepository>();
+            _auditService = new Mock<IAuditService>();
+            _messagePublisher = new Mock<IMessagePublisher>();
+            _validator = new Mock<IValidator<AcceptInvitationCommand>>();
+
+            _validator.Setup(x => x.Validate(It.IsAny<AcceptInvitationCommand>())).Returns(new ValidationResult());
+
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
+
+            _invitationRepository.Setup(x => x.Get(It.IsAny<long>())).ReturnsAsync(_invitation);
+            _userAccountRepository.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(new User());
+
+            _handler = new AcceptInvitationCommandHandler(
+                _invitationRepository.Object,
+                _membershipRepository.Object,
+                _userAccountRepository.Object,
+                _auditService.Object,
+                _messagePublisher.Object,
+                _validator.Object);
         }
 
         [TearDown]
@@ -59,130 +71,119 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
         }
 
         [Test]
-        public async Task IfExistsAndStatusIsPending()
+        public async Task ThenTheInviatationWillBeAccepted()
         {
-            _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
-            _userAccountRepository.Setup(x => x.Get(_invitation.Email)).ReturnsAsync(new User());
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
+            //Act
+            await _handler.Handle(new AcceptInvitationCommand());
 
-            await _handler.Handle(new AcceptInvitationCommand
-            {
-                Id = _invitation.Id
-            });
-
+            //Assert
             _invitationRepository.Verify(x => x.Accept(_invitation.Email, _invitation.AccountId, (short)_invitation.RoleId), Times.Once);
         }
 
         [Test]
         public async Task ThenShouldAuditWheninviteHasBeenAccepted()
         {
-            //Arrange
-            _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
-            _userAccountRepository.Setup(x => x.Get(_invitation.Email)).ReturnsAsync(new User());
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
-
             //Act
-            await _handler.Handle(new AcceptInvitationCommand
-            {
-                Id = _invitation.Id
-            });
+            await _handler.Handle(new AcceptInvitationCommand());
 
             //Assert
             _auditService.Verify(x => x.SendAuditMessage(It.IsAny<EasAuditMessage>()), Times.Once);
         }
 
         [Test]
-        public void IfUserEmailNotFound()
+        public void ThenIfUserIsNotFound()
         {
-            _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
+            //Assign
             _userAccountRepository.Setup(x => x.Get(_invitation.Email)).ReturnsAsync(null);
 
-            var command = new AcceptInvitationCommand
-            {
-                Id = _invitation.Id
-            };
-
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
-
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+            //Act + Assert
+            Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(new AcceptInvitationCommand()));
         }
 
         [Test]
-        public void IfAlreadyAMember()
+        public void ThenIfUserIsAlreadyATeamMember()
         {
-            _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
-            _userAccountRepository.Setup(x => x.Get(_invitation.Email)).ReturnsAsync(new User());
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new MembershipView());
+            //Assign
+            _membershipRepository.Setup(a => a.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
+                                 .Returns(Task.FromResult(new MembershipView { FirstName = "Bob", LastName = "Green" }));
 
-            var command = new AcceptInvitationCommand
-            {
-                Id = _invitation.Id
-            };
-
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
-
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+            //Act + Assert
+            Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(new AcceptInvitationCommand()));
         }
 
         [Test]
-        public void IfNotExists()
+        public void ThenIfTheInvitationDoesNotExist()
         {
-            const long invitationId = 1;
+            //Assign
+            _invitationRepository.Setup(x => x.Get(It.IsAny<long>())).ReturnsAsync(null);
 
-            _invitationRepository.Setup(x => x.Get(invitationId)).ReturnsAsync(null);
+            //Act + Assert
 
-            var command = new AcceptInvitationCommand
-            {
-                Id = _invitation.Id
-            };
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
-
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(new AcceptInvitationCommand()));
         }
 
         [Test]
-        public void IfStatusIsNotPending()
+        public void ThenIfInvitationStatusIsNotPending()
         {
+            //Assign
             _invitation.Status = InvitationStatus.Accepted;
 
-            _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
+            //Act + Assert
 
-            var command = new AcceptInvitationCommand
-            {
-                Id = _invitation.Id
-            };
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
-
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+            Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(new AcceptInvitationCommand()));
         }
 
         [Test]
-        public void IfHasExpired()
+        public void ThenIfInvitationHasExpired()
         {
+            //Assign
             _invitation.ExpiryDate = DateTimeProvider.Current.UtcNow.AddDays(-2);
 
-            _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
 
-            var command = new AcceptInvitationCommand
-            {
-                Id = _invitation.Id
-            };
+            //Act + Assert
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+            Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(new AcceptInvitationCommand()));
         }
 
         [Test]
-        public void IfInvalidRequest()
+        public void ThenIfTheRequestIsInvalid()
         {
-            var command = new AcceptInvitationCommand();
+            //Assign
+            _invitationRepository.Setup(x => x.Get(It.IsAny<long>())).ReturnsAsync(null);
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+            //Act + Assert
+            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(new AcceptInvitationCommand()));
+        }
 
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+        [Test]
+        public async Task ThenTheInviationNameShouldbeUsedIfTheUserNameIsNotPopulated()
+        {
+            //Act
+            await _handler.Handle(new AcceptInvitationCommand());
+
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<UserJoinedMessage>(
+                                          m => m.CreatorName.Equals(_invitation.Name))), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenTheInviationNameShouldbeUsedNameIfItIsPopulated()
+        {
+            //Assign
+            var user = new User { FirstName = "Bill", LastName = "Green" };
+
+            _userAccountRepository.Setup(x => x.Get(_invitation.Email))
+                                 .ReturnsAsync(user);
+
+            //Act
+            await _handler.Handle(new AcceptInvitationCommand());
+
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<UserJoinedMessage>(
+                                          m => m.CreatorName.Equals(user.FullName))), Times.Once);
         }
     }
 }
