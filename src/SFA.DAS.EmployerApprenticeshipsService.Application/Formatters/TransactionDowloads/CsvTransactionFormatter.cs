@@ -59,17 +59,17 @@ namespace SFA.DAS.EAS.Application.Formatters.TransactionDowloads
                 builder.Append($"{transaction.TransactionType},");
                 builder.Append($"{transaction.PayeScheme},");
                 builder.Append($"{transaction.PeriodEnd},");
-                builder.Append($"{transaction.LevyDeclared.ToString(NumberFormatInfo.InvariantInfo)},");
-                builder.Append($"{transaction.EnglishFraction.ToString(NumberFormatInfo.InvariantInfo)},");
-                builder.Append($"{transaction.TenPercentTopUp.ToString(NumberFormatInfo.InvariantInfo)},");
+                builder.Append($"{transaction.LevyDeclaredFormatted},");
+                builder.Append($"{transaction.EnglishFractionFormatted},");
+                builder.Append($"{transaction.TenPercentTopUpFormatted},");
                 builder.Append($"{transaction.TrainingProvider},");
                 builder.Append($"{transaction.Uln},");
                 builder.Append($"{transaction.Apprentice},");
                 builder.Append($"{transaction.ApprenticeTrainingCourse}{transaction.ApprenticeTrainingCourseLevel},");
-                builder.Append($"{transaction.PaidFromLevy.ToString(NumberFormatInfo.InvariantInfo)},");
-                builder.Append($"{transaction.EmployerContribution.ToString(NumberFormatInfo.InvariantInfo)},");
-                builder.Append($"{transaction.GovermentContribution.ToString(NumberFormatInfo.InvariantInfo)},");
-                builder.Append($"{transaction.Total.ToString(NumberFormatInfo.InvariantInfo)},");
+                builder.Append($"{transaction.PaidFromLevyFormatted},");
+                builder.Append($"{transaction.EmployerContributionFormatted},");
+                builder.Append($"{transaction.GovermentContributionFormatted},");
+                builder.Append($"{transaction.TotalFormatted},");
                 builder.AppendLine();
             }
 

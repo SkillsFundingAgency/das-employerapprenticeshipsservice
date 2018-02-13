@@ -36,17 +36,17 @@ namespace SFA.DAS.EAS.Application.Formatters.TransactionDowloads
                 transaction.TransactionType,
                 transaction.PayeScheme,
                 transaction.PeriodEnd,
-                transaction.LevyDeclared.ToString(NumberFormatInfo.InvariantInfo),
-                transaction.EnglishFraction.ToString(NumberFormatInfo.InvariantInfo),
-                transaction.TenPercentTopUp.ToString(NumberFormatInfo.InvariantInfo),
+                transaction.LevyDeclaredFormatted,
+                transaction.EnglishFractionFormatted,
+                transaction.TenPercentTopUpFormatted,
                 transaction.TrainingProvider,
                 transaction.Uln,
                 transaction.Apprentice,
                 transaction.ApprenticeTrainingCourse,
-                transaction.PaidFromLevy.ToString(NumberFormatInfo.InvariantInfo),
-                transaction.EmployerContribution.ToString(NumberFormatInfo.InvariantInfo),
-                transaction.GovermentContribution.ToString(NumberFormatInfo.InvariantInfo),
-                transaction.Total.ToString(NumberFormatInfo.InvariantInfo)
+                transaction.PaidFromLevyFormatted,
+                transaction.EmployerContributionFormatted,
+                transaction.GovermentContributionFormatted,
+                transaction.TotalFormatted
             }));
 
             var transactionData = new Dictionary<string, string[][]>
