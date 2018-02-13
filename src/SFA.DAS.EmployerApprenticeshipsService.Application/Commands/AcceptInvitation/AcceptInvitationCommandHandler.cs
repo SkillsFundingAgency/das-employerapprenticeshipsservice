@@ -62,9 +62,9 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
 
             await CreateAuditEntry(message, user, invitation);
 
-            var invitedUserName = string.IsNullOrWhiteSpace(user.FullName) ? invitation.Name : user.FullName;
 
-            await PublishUserJoinedMessage(invitation.AccountId, invitedUserName, user.UserRef);
+
+            await PublishUserJoinedMessage(invitation.AccountId, user);
         }
 
         private async Task CheckIfUserIsAlreadyAMember(Invitation invitation, User user)
@@ -114,9 +114,9 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
             });
         }
 
-        private async Task PublishUserJoinedMessage(long accountId, string invitedUserName, string userRef)
+        private async Task PublishUserJoinedMessage(long accountId, User user)
         {
-            await _messagePublisher.PublishAsync(new UserJoinedMessage(accountId, invitedUserName, userRef));
+            await _messagePublisher.PublishAsync(new UserJoinedMessage(accountId, user.FullName, user.UserRef));
         }
     }
 }

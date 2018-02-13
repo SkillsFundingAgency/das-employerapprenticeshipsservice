@@ -159,18 +159,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
         }
 
         [Test]
-        public async Task ThenTheInviationNameShouldbeUsedIfTheUserNameIsNotPopulated()
-        {
-            //Act
-            await _handler.Handle(new AcceptInvitationCommand());
-
-            //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<UserJoinedMessage>(
-                                          m => m.CreatorName.Equals(_invitation.Name))), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenTheInviationNameShouldbeUsedNameIfItIsPopulated()
+        public async Task ThenTheUserFullNameShouldBeUsed()
         {
             //Assign
             var user = new User { FirstName = "Bill", LastName = "Green" };
