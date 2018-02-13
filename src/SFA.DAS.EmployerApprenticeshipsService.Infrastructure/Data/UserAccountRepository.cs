@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email FROM [employer_account].[User] WHERE Id = @id;",
+                    sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
