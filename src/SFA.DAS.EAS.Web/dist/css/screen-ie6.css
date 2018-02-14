@@ -5619,3 +5619,73 @@ h2 .float-right {
     word-wrap: break-word;
   }
 }
+
+.circle-white {
+  color: #005ea5;
+  background: #fff;
+  float: left;
+  margin-right: 10px;
+}
+
+.flash-card {
+  margin-top: 1em;
+  padding: 30px;
+  background: #005ea5;
+  color: #fff;
+}
+
+.flash-card h1:first-of-type, .flash-card h2:first-of-type {
+  margin-top: 0 !important;
+}
+
+.flash-card li p {
+  margin-left: 32px;
+}
+
+.flash-card li h2 {
+  margin: 0.7em 0px 0.3em 0px !important;
+}
+
+.flash-card a {
+  color: #fff;
+}
+
+.flash-card a:visited, .flash-card a:hover, .flash-card a:active {
+  color: #fff;
+}
+
+.flash-card details summary {
+  color: #fff;
+}
+
+.flash-card details .panel {
+  border-left-color: #fff;
+}
+
+.flash-card .button, .flash-card .button-link {
+  color: #005ea5;
+  background-color: #fff;
+}
+
+.flash-card .button a, .flash-card .button-link a {
+  color: #005ea5;
+}
+
+.flash-card .button:visited, .flash-card .button-link:visited {
+  color: #4c2c92;
+}
+
+.flash-card .button:hover, .flash-card .button-link:hover {
+  color: #2b8cc4;
+}
+
+.flash-card .button:active, .flash-card .button-link:active {
+  color: #2b8cc4;
+}
+
+@media (min-width: 769px) {
+  .flash-card {
+    margin-top: 1.25em;
+    padding: 35px 50px;
+  }
+}

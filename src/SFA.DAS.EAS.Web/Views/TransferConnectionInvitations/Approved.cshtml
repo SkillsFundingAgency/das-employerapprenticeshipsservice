@@ -16,15 +16,28 @@
             <h1 class="bold-large">Connection confirmed</h1>
             <p><i class="icon-green-tick"></i> You can now request transfer funds from @Model.TransferConnectionInvitation.SenderAccount.Name.</p>
         </div>
-        <div>
-            <h2>How do I request transfer funds?</h2>
-            <ol class="list list-number">
-                <li>Agree the apprentices, training and costs that the transfer will cover</li>
-                <li>Add apprentices, training and cost details in the apprenticeship service</li>
-                <li>Confirm details with your training provider</li>
-            </ol>
+
+        <div class="flash-card">
+            <header>
+                <h2 class="heading-medium">How do I request transfer funds?</h2>
+            </header>
+            <ul class="how-to-renew" data-id="how-to-renew-uk">
+                <li>
+                    <span class="circle circle-step circle-white">1</span>
+                    <p>Agree the apprentices, training and costs that the transfer will cover</p>
+                </li>
+                <li>
+                    <span class="circle circle-step circle-white">2</span>
+                    <p>Add apprentices, training and cost details in the apprenticeship service</p>
+                </li>
+                <li>
+                    <span class="circle circle-step circle-white">3</span>
+                    <p>Confirm details with your training provider</p>
+                </li>
+            </ul>
             <p>Once you and your training provider approve the apprenticeship details, a transfer request is automatically sent to the sending employer to review.</p>
         </div>
+
         <h2 class="heading-xlarge">What next?</h2>
         @using (Html.BeginForm())
         {
