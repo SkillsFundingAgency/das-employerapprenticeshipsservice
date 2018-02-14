@@ -225,6 +225,7 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -342,6 +343,7 @@
     <Compile Include="Factories\IPayeSchemeEventFactory.cs" />
     <Compile Include="Factories\LegalEntityEventFactory.cs" />
     <Compile Include="Factories\PayeSchemeEventFactory.cs" />
+    <Compile Include="Helpers\NameOf.cs" />
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
@@ -440,6 +442,15 @@
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsHandler.cs" />
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsQueryValidator.cs" />
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsResponse.cs" />
+    <Compile Include="Formatters\TransactionDowloads\CsvTransactionFormatter.cs" />
+    <Compile Include="Formatters\TransactionDowloads\DownloadFormatType.cs" />
+    <Compile Include="Formatters\TransactionDowloads\ExcelTransactionFormatter.cs" />
+    <Compile Include="Queries\GetTransactionsDownload\GetTransactionsDownloadQuery.cs" />
+    <Compile Include="Queries\GetTransactionsDownload\GetTransactionsDownloadQueryHandler.cs" />
+    <Compile Include="Queries\GetTransactionsDownload\GetTransactionsDownloadResponse.cs" />
+    <Compile Include="Formatters\TransactionDowloads\ITransactionFormatter.cs" />
+    <Compile Include="Factories\ITransactionFormatterFactory.cs" />
+    <Compile Include="Factories\TransactionFormatterFactory.cs" />
     <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfQueryHandler.cs" />
     <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfResponse.cs" />
@@ -593,9 +604,12 @@
     <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndQueryHandler.cs" />
     <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndRequest.cs" />
     <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndResponse.cs" />
+    <Compile Include="Messages\DayMonthYear.cs" />
     <Compile Include="Validation\IValidator.cs" />
+    <Compile Include="Messages\MonthYear.cs" />
     <Compile Include="Validation\ValidationException.cs" />
     <Compile Include="Validation\ValidationResult.cs" />
+    <Compile Include="Messages\Year.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">

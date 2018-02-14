@@ -6230,6 +6230,56 @@ h2 .float-right {
   outline: none;
 }
 
+/*Download transactions page UI*/
+
+#download-transactions .column-one-third {
+    width: 100%;
+}
+
+@media (min-width: 641px) {
+
+    #download-transactions .column-one-third {
+        width: 45%;
+    }
+}
+
+#download-transactions .column-one-quarter {
+    width: 100%;
+    text-align: center;
+}
+
+@media (min-width: 641px) {
+
+    #download-transactions .column-one-quarter {
+        width: 10%;
+    }
+}
+
+#download-transactions .grey-rounded {
+    background: #6f777b;
+    color: #fff;
+    border-radius: 100%;
+    padding: 0;
+    width: 45px;
+    height: 45px;
+    margin: 40px auto;
+}
+
+@media (min-width: 641px) {
+
+    #download-transactions .grey-rounded {
+        margin: 0;
+    }
+}
+
+#download-transactions .grey-rounded .rounded-text {
+    display: block;
+    padding: 13px 10px 10px 9px;
+    font-weight: bold;
+}
+
+
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;

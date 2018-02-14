@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTransactions;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments;
 using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
@@ -18,6 +15,7 @@ using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -25,18 +23,24 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly ICurrentDateTime _currentTime;
         private readonly IMediator _mediator;
+        private readonly IHashingService _hashingService;
 
         protected EmployerAccountTransactionsOrchestrator()
         {
 
         }
 
-        public EmployerAccountTransactionsOrchestrator(IMediator mediator, ICurrentDateTime currentTime)
+        public EmployerAccountTransactionsOrchestrator(IMediator mediator, ICurrentDateTime currentTime, IHashingService hashingService)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
+
+            if (hashingService == null)
+                throw new ArgumentNullException(nameof(hashingService));
+            
             _mediator = mediator;
             _currentTime = currentTime;
+            _hashingService = hashingService;
         }
 
         public async Task<OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>>

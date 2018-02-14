@@ -18,5 +18,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<int> GetPreviousTransactionsCount(long accountId, DateTime fromDate);
 
         Task<List<TransactionSummary>> GetAccountTransactionSummary(long accountId);
+
+        Task<List<TransactionDownloadLine>> GetAllTransactionDetailsForAccountByDate(long accountId, DateTime fromDate, DateTime toDate);
     }
 }

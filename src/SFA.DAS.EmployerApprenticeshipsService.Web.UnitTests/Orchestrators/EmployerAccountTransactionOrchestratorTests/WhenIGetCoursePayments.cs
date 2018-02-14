@@ -13,12 +13,14 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrchestratorTests
 {
     class WhenIGetCoursePayments
     {
         private const string HashedAccountId = "123ABC";
+        private const long AccountId = 1234;
         private const string ExternalUser = "Test user";
         private const long ExpectedUkPrn = 46789465;
         private readonly DateTime _fromDate = DateTime.Now.AddDays(-20);
@@ -28,12 +30,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         private EmployerAccountTransactionsOrchestrator _orchestrator;
         private FindAccountProviderPaymentsResponse _response;
         private Mock<ICurrentDateTime> _currentTime;
+        private Mock<IHashingService> _hashingService;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
             _currentTime = new Mock<ICurrentDateTime>();
+            _hashingService = new Mock<IHashingService>();
 
             _response = new FindAccountProviderPaymentsResponse
             {
@@ -48,7 +52,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
             _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
-            _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object);
+            _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
+
+            _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object, _hashingService.Object);
         }
 
         

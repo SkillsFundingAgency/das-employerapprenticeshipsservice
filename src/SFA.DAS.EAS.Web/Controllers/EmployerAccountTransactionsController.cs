@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MediatR;
+using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Transactions;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -14,12 +19,16 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class EmployerAccountTransactionsController : BaseController
     {
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
+        private readonly IMediator _mediator;
 
         public EmployerAccountTransactionsController(IOwinWrapper owinWrapper, IFeatureToggleService featureToggle,
+            IHashingService hashingService,
+            IMediator mediator,
             EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
+            ICookieStorageService<FlashMessageViewModel> flashMessage, ITransactionFormatterFactory transactionsFormatterFactory)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
+            _mediator = mediator;
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }
 
@@ -37,14 +46,24 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(transactionViewResult);
         }
 
+        [ImportModelStateFromTempData]
         [Route("finance/downloadtransactions")]
-        [Route("balance/downloadtransactions")]
         public ActionResult TransactionsDownload(string hashedAccountId)
         {
-            return View(new OrchestratorResponse<TransactionsDownloadResultViewModel>
+            return View(new TransactionDownloadViewModel
             {
-                Data = new TransactionsDownloadResultViewModel { HashedAccountId = hashedAccountId }
+                HashedAccountId = hashedAccountId
             });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateModelState]
+        [Route("finance/downloadtransactions")]
+        public async Task<ActionResult> TransactionsDownload(TransactionDownloadViewModel model)
+        {
+            var response = await _mediator.SendAsync(model.Message);
+            return File(response.FileData, response.MimeType, $"esfaTransactions_{DateTime.Now:yyyyMMddHHmmss}.{response.FileExtension}");
         }
 
         [Route("finance/{year}/{month}")]

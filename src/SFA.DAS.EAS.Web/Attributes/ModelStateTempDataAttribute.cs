@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
+using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Web.Serialization;
 
 namespace SFA.DAS.EAS.Web.Attributes
 {
@@ -10,12 +12,17 @@ namespace SFA.DAS.EAS.Web.Attributes
      
         protected void ExportModelStateToTempData(ControllerContext context)
         {
-            context.Controller.TempData[Key] = context.Controller.ViewData.ModelState;
+            var serializeableModelState = context.Controller.ViewData.ModelState.ToSerializable();
+
+            context.Controller.TempData[Key] = serializeableModelState;
         }
 
         protected void ImportModelStateFromTempData(ControllerContext context)
         {
-            context.Controller.ViewData.ModelState.Merge(context.Controller.TempData[Key] as ModelStateDictionary);
+            var serializeableModelState = context.Controller.TempData[Key] as SerializableModelStateDictionary;
+            var modelState = serializeableModelState?.ToModelState();
+
+            context.Controller.ViewData.ModelState.Merge(modelState);
         }
 
         protected void RemoveModelStateFromTempData(ControllerContext context)

@@ -1,15 +1,17 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
+using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.HashingService;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsController
+namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {
     public class WhenIViewFinanceDashboard
     {
@@ -19,6 +21,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         private Mock<IFeatureToggleService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+        private Mock<IHashingService> _hashingService;
+        private Mock<IMediator> _mediator;
 
         private const decimal CurrentLevyFunds = 12345;
         private const string HashedAccountId = "Test";
@@ -32,6 +36,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
+            _hashingService = new Mock<IHashingService>();
+            _mediator = new Mock<IMediator>();
+
             _orchestrator.Setup(x => x.GetFinanceDashboardViewModel(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<FinanceDashboardViewModel>
                 {
@@ -42,8 +49,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                     }
                 });
 
-            _controller = new Web.Controllers.EmployerAccountTransactionsController(_owinWrapper.Object, _featureToggle.Object,
-                _orchestrator.Object, _userViewTestingService.Object, _flashMessage.Object);
+            _controller = new Web.Controllers.EmployerAccountTransactionsController(_owinWrapper.Object,
+                _featureToggle.Object, _hashingService.Object, _mediator.Object,
+                _orchestrator.Object, _userViewTestingService.Object, _flashMessage.Object,
+                Mock.Of<ITransactionFormatterFactory>());
         }
 
         [Test]

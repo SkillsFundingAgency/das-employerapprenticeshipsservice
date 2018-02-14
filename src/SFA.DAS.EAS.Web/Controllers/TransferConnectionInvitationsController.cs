@@ -47,7 +47,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> Start(StartTransferConnectionInvitationViewModel model)
         {
             await _mediator.SendAsync(model.Message);
-
             return RedirectToAction("Send", model.Message);
         }
 

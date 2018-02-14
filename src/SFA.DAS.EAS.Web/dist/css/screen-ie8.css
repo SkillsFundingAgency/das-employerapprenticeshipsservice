@@ -5465,6 +5465,37 @@ h2 .float-right {
   display: block;
 }
 
+
+
+/*Download transactions page UI*/
+#download-transactions .column-one-third {
+    width: 45%;
+    width: 100%;
+}
+
+#download-transactions .column-one-quarter {
+    width: 10%;
+    width: 100%;
+    text-align: center;
+}
+
+#download-transactions .grey-rounded {
+    background: #6f777b;
+    color: #fff;
+    border-radius: 100%;
+    padding: 0;
+    width: 45px;
+    height: 45px;
+    margin: 40px auto;
+    margin: 0;
+}
+
+#download-transactions .grey-rounded .rounded-text {
+    display: block;
+    padding: 13px 10px 10px 9px;
+    font-weight: bold;
+}
+
 .js-enabled ul.js-tabs a.selected {
   outline: none;
 }
