@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Web.Filters
             var actionName = (string)filterContext.RouteData.Values[ControllerConstants.ActionKeyName];
             var currentUser = _currentUserServiceFactory().GetCurrentUser();
 
-            if (!_featureToggleServiceFactory().IsFeatureEnabled(controllerName, actionName, currentUser?.Email))
+            if (!_featureToggleServiceFactory().IsFeatureEnabled(controllerName, actionName, currentUser?.ExternalUserId, currentUser?.Email))
             {
                 filterContext.Result = new ViewResult
                 {

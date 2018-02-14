@@ -2,6 +2,6 @@
 {
     public interface IFeatureToggleService
     {
-        bool IsFeatureEnabled(string controllerName, string actionName, string userEmail);
+        bool IsFeatureEnabled(string controllerName, string actionName, string userExternalId, string userEmail);
     }
 }
