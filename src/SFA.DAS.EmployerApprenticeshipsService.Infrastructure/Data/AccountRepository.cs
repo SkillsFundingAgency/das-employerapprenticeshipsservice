@@ -193,6 +193,37 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
+        public async Task<List<long>> GetAccountsMissingExternalHashId()
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+
+                return await c.QueryAsync<long>(
+                    sql: "[employer_account].[GetAccountsMissingExternalHashId]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+            return result.ToList();
+        }
+
+        public async Task SetExternalHashedId(string externalHashedId, long accountId)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@AccountId", accountId, DbType.Int64);
+                parameters.Add("@ExternalHashedId", externalHashedId, DbType.String);
+
+                var result = await c.ExecuteAsync(
+                    sql: "[employer_account].[UpdateAccount_SetAccountExternalHashId]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+
+                return result;
+            });
+        }
+
         public async Task SetExternalHashes(string externalHashedId, string hashedId, long accountId)
         {
             await WithConnection(async c =>

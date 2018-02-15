@@ -130,6 +130,8 @@
     <Build Include="StoredProcedures\CreateTransferConnectionInvitation.sql" />
     <Build Include="StoredProcedures\UpdateAccount_SetAccountHashes.sql" />
     <Build Include="StoredProcedures\GetAccount_ByExternalHashedId.sql" />
+    <Build Include="StoredProcedures\GetAccountsMissingExternalHashId.sql" />
+    <Build Include="StoredProcedures\UpdateAccount_SetAccountExternalHashId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />
