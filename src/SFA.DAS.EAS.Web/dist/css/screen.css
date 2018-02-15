@@ -2532,12 +2532,12 @@ table.top-border {
   border-top: 1px solid #bfc1c3;
 }
 
-.action-add {
+.action-add, .action-download {
   margin-bottom: 20px;
 }
 
 @media (min-width: 641px) {
-  .action-add {
+  .action-add, .action-download {
     margin-top: 60px;
     float: right;
     clear: both;
@@ -6230,56 +6230,6 @@ h2 .float-right {
   outline: none;
 }
 
-/*Download transactions page UI*/
-
-#download-transactions .column-one-third {
-    width: 100%;
-}
-
-@media (min-width: 641px) {
-
-    #download-transactions .column-one-third {
-        width: 45%;
-    }
-}
-
-#download-transactions .column-one-quarter {
-    width: 100%;
-    text-align: center;
-}
-
-@media (min-width: 641px) {
-
-    #download-transactions .column-one-quarter {
-        width: 10%;
-    }
-}
-
-#download-transactions .grey-rounded {
-    background: #6f777b;
-    color: #fff;
-    border-radius: 100%;
-    padding: 0;
-    width: 45px;
-    height: 45px;
-    margin: 40px auto;
-}
-
-@media (min-width: 641px) {
-
-    #download-transactions .grey-rounded {
-        margin: 0;
-    }
-}
-
-#download-transactions .grey-rounded .rounded-text {
-    display: block;
-    padding: 13px 10px 10px 9px;
-    font-weight: bold;
-}
-
-
-
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
@@ -6359,15 +6309,15 @@ h2 .float-right {
 }
 
 .flash-card h1:first-of-type, .flash-card h2:first-of-type {
-  margin-top: 0 !important;
+  margin-top: 0;
 }
 
 .flash-card li p {
   margin-left: 32px;
 }
 
-.flash-card li h2 {
-  margin: 0.7em 0px 0.3em 0px !important;
+.flash-card > p:last-of-type {
+  margin-bottom: 0;
 }
 
 .flash-card a {
@@ -6378,36 +6328,7 @@ h2 .float-right {
   color: #fff;
 }
 
-.flash-card details summary {
-  color: #fff;
-}
-
-.flash-card details .panel {
-  border-left-color: #fff;
-}
-
-.flash-card .button, .flash-card .button-link {
-  color: #005ea5;
-  background-color: #fff;
-}
-
-.flash-card .button a, .flash-card .button-link a {
-  color: #005ea5;
-}
-
-.flash-card .button:visited, .flash-card .button-link:visited {
-  color: #4c2c92;
-}
-
-.flash-card .button:hover, .flash-card .button-link:hover {
-  color: #2b8cc4;
-}
-
-.flash-card .button:active, .flash-card .button-link:active {
-  color: #2b8cc4;
-}
-
-@media (min-width: 769px) {
+@media (min-width: 641px) {
   .flash-card {
     margin-top: 1.25em;
     padding: 35px 50px;

@@ -1,4 +1,4 @@
-
+﻿
 @mixin green-tick {
     background:url(/dist/images/icon-green-tick.png) no-repeat 0 -4px;
     width: 30px;
@@ -829,8 +829,6 @@ body {
             }
         }
     }
-// Pattern: flash cards
-// Problem: interupt the user with important information
 
 .circle-white {
     color: #005ea5;
@@ -847,7 +845,7 @@ body {
 
     h1, h2 {
         &:first-of-type {
-            margin-top: 0 !important;
+            margin-top: 0;
         }
     }
 
@@ -855,9 +853,10 @@ body {
         p {
             margin-left: 32px;
         }
-        h2 {
-            margin: 0.7em 0px 0.3em 0px !important;
-        }
+    }
+    
+    >p:last-of-type {
+        margin-bottom: 0;
     }
 
     a {
@@ -866,36 +865,9 @@ body {
             color: $page-colour; 
         }
     }
-
-    details {
-        summary {
-            color: $page-colour;
-        }
-        .panel {
-            border-left-color: $page-colour;
-        }
-    }
-    
-    .button {
-        color: $link-colour;
-        background-color: $page-colour;
-        // Link styles
-        a {
-            color: $link-colour;
-        }
-        &:visited {
-            color: $link-visited-colour;
-        }
-        &:hover {
-            color: $link-hover-colour;
-        }
-        &:active {
-            color: $link-active-colour;
-        }
-    }
 }
 
-@media (min-width: 769px) {
+@include media(tablet) {
     .flash-card {
         margin-top: 1.25em;
         padding: 35px 50px;
