@@ -20,8 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
         private const decimal CurrentLevyFunds = 12345;
-        private const decimal CurrentTransferFunds = 100.56M;
-        private const string HashedAccountId = "Test";
+
 
         [SetUp]
         public void Arrange()
@@ -38,8 +37,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                     Data = new FinanceDashboardViewModel
                     {
                         Account = new Account(),
-                        CurrentLevyFunds = CurrentLevyFunds,
-                        CurrentTransferFunds = CurrentTransferFunds
+                        CurrentLevyFunds = CurrentLevyFunds
                     }
                 });
 
@@ -75,22 +73,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             Assert.IsNotNull(model);
             Assert.IsNotNull(model.Data);
             Assert.AreEqual(CurrentLevyFunds, model.Data.CurrentLevyFunds);
-        }
-
-        [Test]
-        public async Task ThenTheTransferBalanceShouldBeCorrect()
-        {
-            //Act
-            var result = await _controller.Index("HashedAccountId");
-
-            //Assert
-            var viewResult = result as ViewResultBase;
-            Assert.IsNotNull(viewResult);
-
-            var model = viewResult.Model as OrchestratorResponse<FinanceDashboardViewModel>;
-            Assert.IsNotNull(model);
-            Assert.IsNotNull(model.Data);
-            Assert.AreEqual(CurrentTransferFunds, model.Data.CurrentTransferFunds);
         }
     }
 }

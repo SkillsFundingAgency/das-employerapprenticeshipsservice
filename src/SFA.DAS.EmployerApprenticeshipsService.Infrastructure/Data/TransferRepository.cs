@@ -22,13 +22,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
-                return await c.QuerySingleAsync<decimal>(
+                return await c.QuerySingleOrDefaultAsync<decimal?>(
                     sql: "[employer_financial].[GetAccountTransferAllowance]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
 
-            return result;
+            return result ?? 0;
         }
     }
 }

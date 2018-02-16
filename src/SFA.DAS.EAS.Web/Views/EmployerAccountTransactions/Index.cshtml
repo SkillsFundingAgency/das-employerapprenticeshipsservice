@@ -49,33 +49,6 @@
             </div>
         </div>
     </div>
-
-    <div class="column-half">
-        <div class="data-wrap">
-            <div class="data">
-                <dl class="current-transfer-funds">
-                    <dt>
-                        Current transfer funds
-                    </dt>
-                    @{
-                        var transferBalance = Model.Data.CurrentTransferFunds.ToString("C0", culture);
-                        var transferBalanceClass = string.Empty;
-
-                        if (transferBalance.Length > 8)
-                        {
-                            transferBalanceClass = "long";
-                        }
-                        if (transferBalance.Length > 10)
-                        {
-                            transferBalanceClass = "longer";
-                        }
-                    }
-                    <dd class="@transferBalanceClass">@transferBalance</dd>
-                </dl>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 <div class="grid-row">

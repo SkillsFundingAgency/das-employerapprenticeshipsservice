@@ -44,18 +44,18 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.FinancialDashboardSteps
             _container.Dispose();
         }
 
-        [Then(@"the transfer balance should be (.*) on the financial dashboard screen")]
-        public void ThenTheTransferBalanceShouldBeOnTheFinancialDashboardScreen(decimal expectedTransferBalance)
+        [Then(@"the transfer allowance should be (.*) on the transfer dashboard screen")]
+        public void ThenTheTransferAllowanceShouldBeOnTheTransferDashboardScreen(decimal expectedTransferBalance)
         {
             var hashedAccountId = ScenarioContext.Current["HashedAccountId"].ToString();
             var userId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
 
-            var orchestrator = _container.GetInstance<EmployerAccountTransactionsOrchestrator>();
-            var response = orchestrator.GetFinanceDashboardViewModel(hashedAccountId, 0, 0, userId).Result;
+            var orchestrator = _container.GetInstance<TransferOrchestrator>();
+            var response = orchestrator.GetTransferAllowance(hashedAccountId, userId).Result;
 
             Assert.IsNotNull(response?.Data);
 
-            Assert.AreEqual(expectedTransferBalance, response.Data.CurrentTransferFunds);
+            Assert.AreEqual(expectedTransferBalance, response.Data.TransferAllowance);
         }
     }
 }

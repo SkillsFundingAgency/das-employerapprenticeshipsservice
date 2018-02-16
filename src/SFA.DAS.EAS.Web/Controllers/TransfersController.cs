@@ -1,4 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Helpers;
+using SFA.DAS.EAS.Web.Orchestrators;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -6,10 +10,23 @@ namespace SFA.DAS.EAS.Web.Controllers
     [RoutePrefix("accounts/{hashedAccountId}/transfers")]
     public class TransfersController : Controller
     {
-        [Route]
-        public ActionResult Index(string hashedAccountId)
+        private readonly IOwinWrapper _owinWrapper;
+        private readonly TransferOrchestrator _orchestrator;
+
+        public TransfersController(IOwinWrapper owinWrapper, TransferOrchestrator orchestrator)
         {
-            return View();
+            _owinWrapper = owinWrapper;
+            _orchestrator = orchestrator;
+        }
+
+        [Route]
+        public async Task<ActionResult> Index(string hashedAccountId)
+        {
+            var externalUserId = _owinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+
+            var response = await _orchestrator.GetTransferAllowance(hashedAccountId, externalUserId);
+
+            return View(response);
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using System.Web.Mvc;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Web.Controllers;
+using System.Web.Mvc;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersController
+namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsControllerTests
 {
     public class WhenIViewTheTransfersPage
     {

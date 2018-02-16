@@ -251,7 +251,7 @@
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheSentTransferConnectionPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheSendTransferConnectionPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheCreateTransferConnectionPage.cs" />
-    <Compile Include="Controllers\TransfersController\WhenIViewTheTransfersPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheTransfersPage.cs" />
     <Compile Include="Filters\WhenIViewAPage.cs" />
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
@@ -291,6 +291,8 @@
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingUserAccounts.cs" />
     <Compile Include="Orchestrators\InvitationOrchestratorTests\WhenGettingAllInvitations.cs" />
     <Compile Include="Orchestrators\TaskOrchestratorTests\WhenIDismissAMonthlyTaskReminder.cs" />
+    <Compile Include="Controllers\TransfersController\WhenIViewTheTransfersDashboard.cs" />
+    <Compile Include="Orchestrators\TransferOrchestratorTests\WhenIGetTransferDashboardDetails.cs" />
     <Compile Include="Orchestrators\UserSettingsOrchestrator\WhenUnsubscribingFromNotification.cs" />
     <Compile Include="Orchestrators\SearchOrganisationOrchestratorTests\WhenISearchForAnOrganisation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
