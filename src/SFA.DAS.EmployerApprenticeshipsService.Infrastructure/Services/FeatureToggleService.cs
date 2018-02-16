@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             Logger = logger;
         }
 
-        public virtual bool IsFeatureEnabled(string controllerName, string actionName, string userEmail)
+        public virtual bool IsFeatureEnabled(string controllerName, string actionName, string userExternalId, string userEmail)
         {
             var config = GetConfiguration();
             var isFeatureEnabled = true;
@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 }
             }
             
-            Logger.Info($"Is feature enabled check for controllerName '{controllerName}', actionName '{actionName}' and userEmail '{userEmail}' is '{isFeatureEnabled}'.");
+            Logger.Info($"Is feature enabled check for controllerName '{controllerName}', actionName '{actionName}' and userExternalId '{userExternalId}' is '{isFeatureEnabled}'.");
 
             return isFeatureEnabled;
         }

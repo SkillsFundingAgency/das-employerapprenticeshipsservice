@@ -20,11 +20,10 @@ namespace SFA.DAS.EAS.Web.Extensions
 
         public static bool IsFeatureEnabled(this HtmlHelper htmlHelper, string controllerName, string actionName)
         {
-            var dependencyResolver = DependencyResolver.Current;
-            var currenUserService = dependencyResolver.GetService<ICurrentUserService>();
+            var currenUserService = DependencyResolver.Current.GetService<ICurrentUserService>();
+            var featureToggleService = DependencyResolver.Current.GetService<IFeatureToggleService>();
             var currentUser = currenUserService.GetCurrentUser();
-            var featureToggleService = dependencyResolver.GetService<IFeatureToggleService>();
-            var isFeatureEnabled = featureToggleService.IsFeatureEnabled(controllerName, actionName, currentUser.Email);
+            var isFeatureEnabled = featureToggleService.IsFeatureEnabled(controllerName, actionName, currentUser?.ExternalUserId, currentUser?.Email);
 
             return isFeatureEnabled;
         }

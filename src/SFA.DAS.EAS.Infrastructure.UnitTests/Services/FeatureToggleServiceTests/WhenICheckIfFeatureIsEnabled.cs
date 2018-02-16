@@ -9,13 +9,16 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTests
 {
+    [TestFixture]
     public class WhenICheckIfFeatureIsEnabled
     {
         private const string ControllerName = "Foo";
         private const string ActionName = "Bar";
+        private static readonly string UserExternalId = Guid.NewGuid().ToString();
         private const string UserEmail = "user.one@unit.tests";
 
         private Mock<ICacheProvider> _cacheProvider;
+        private Mock<ILog> _logger;
         private Mock<FeatureToggleService> _featureToggleServiceMock;
         private FeatureToggleService _featureToggleService;
 
@@ -23,13 +26,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         public void Arrange()
         {
             _cacheProvider = new Mock<ICacheProvider>();
+            _logger = new Mock<ILog>();
 
             _cacheProvider.SetupSequence(c => c.Get<FeatureToggleConfiguration>(nameof(FeatureToggleConfiguration))).Returns(null).Returns(new FeatureToggleConfiguration());
 
-            _featureToggleServiceMock = new Mock<FeatureToggleService>(_cacheProvider.Object, Mock.Of<ILog>());
+            _featureToggleServiceMock = new Mock<FeatureToggleService>(_cacheProvider.Object, _logger.Object);
 
             _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage()).Returns(new FeatureToggleConfiguration());
-            _featureToggleServiceMock.Setup(f => f.IsFeatureEnabled(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).CallBase();
+            _featureToggleServiceMock.Setup(f => f.IsFeatureEnabled(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).CallBase();
 
             _featureToggleService = _featureToggleServiceMock.Object;
         }
@@ -37,35 +41,28 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         [Test]
         public void ThenShouldGetFeaturesFromStorageOnce()
         {
-            //Act
-            _featureToggleService.IsFeatureEnabled("", "", null);
-            _featureToggleService.IsFeatureEnabled("", "", null);
-
-            //Assert
+            _featureToggleService.IsFeatureEnabled("", "", null, null);
+            _featureToggleService.IsFeatureEnabled("", "", null, null);
+            
             _featureToggleServiceMock.Verify(f => f.GetDataFromTableStorage(), Times.Once());
         }
 
         [Test]
         public void ThenShouldGetFeaturesFromCache()
         {
-            //Act
-            _featureToggleService.IsFeatureEnabled("", "", null);
-            _featureToggleService.IsFeatureEnabled("", "", null);
+            _featureToggleService.IsFeatureEnabled("", "", null, null);
+            _featureToggleService.IsFeatureEnabled("", "", null, null);
 
-            //Assert
             _cacheProvider.Verify(c => c.Get<FeatureToggleConfiguration>(nameof(FeatureToggleConfiguration)), Times.Exactly(2));
         }
 
         [Test]
         public void ThenShouldNotCacheFeatureIfEmpty()
         {
-            //Arrange
             _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage()).Returns(new FeatureToggleConfiguration());
-
-            //Act
-            _featureToggleService.IsFeatureEnabled("", "", null);
-
-            //Assert
+            
+            _featureToggleService.IsFeatureEnabled("", "", null, null);
+            
             _cacheProvider.Verify(c => c.Set(nameof(FeatureToggleConfiguration),It.IsAny<FeatureToggleConfiguration>(), It.IsAny<TimeSpan>()), Times.Never);
         }
 
@@ -74,7 +71,6 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         [TestCase(".*@unit\\.tests")]
         public void ThenShouldReturnTrueIfFeatureIsDisabledButUserIsInWhitelist(string whitelistPattern)
         {
-            // Arrange
             _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage())
                 .Returns(new FeatureToggleConfiguration
                 {
@@ -88,18 +84,15 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
                         }
                     }
                 });
-
-            // Act
-            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, UserEmail);
-
-            // Assert
+            
+            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, UserExternalId, UserEmail);
+            
             Assert.That(isFeatureEnabled, Is.True);
         }
 
         [Test]
         public void ThenShouldReturnFalseIfFeatureIsDisabledAndUserIsNotInWhitelist()
         {
-            // Arrange
             _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage())
                 .Returns(new FeatureToggleConfiguration
                 {
@@ -113,18 +106,44 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
                         }
                     }
                 });
-
-            // Act
-            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, UserEmail);
-
-            // Assert
+            
+            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, UserExternalId, UserEmail);
+            
             Assert.That(isFeatureEnabled, Is.False);
         }
 
         [Test]
         public void ThenShouldReturnFalseIfFeatureIsDisabled()
         {
-            // Arrange
+            _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage())
+                .Returns(new FeatureToggleConfiguration
+                {
+                    Data = new List<FeatureToggle>
+                    {
+                        new FeatureToggle
+                        {
+                            Controller = ControllerName,
+                            Action = ActionName
+                        }
+                    }
+                });
+            
+            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, UserExternalId, UserEmail);
+            
+            Assert.That(isFeatureEnabled, Is.False);
+        }
+
+        [Test]
+        public void ThenShouldLogTrueResultIfFeatureIsEnabled()
+        {
+            _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, UserExternalId, UserEmail);
+
+            _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userExternalId '{UserExternalId}' is '{true}'."), Times.Once);
+        }
+
+        [Test]
+        public void ThenShouldLogFalseResultIfFeatureIsDisabled()
+        {
             _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage())
                 .Returns(new FeatureToggleConfiguration
                 {
@@ -138,11 +157,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
                     }
                 });
 
-            // Act
-            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, UserEmail);
+            _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, UserExternalId, UserEmail);
 
-            // Assert
-            Assert.That(isFeatureEnabled, Is.False);
+            _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userExternalId '{UserExternalId}' is '{false}'."), Times.Once);
         }
     }
 }
