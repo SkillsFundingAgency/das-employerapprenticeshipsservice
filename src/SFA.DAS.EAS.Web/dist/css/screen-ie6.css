@@ -4826,12 +4826,12 @@ table .float-right, h2 .float-right {
   border-color: #2b8cc4;
 }
 
-.missingForApproval {
+t .missingForApproval {
   border-left: 5px solid #b10e1e;
   padding-left: 15px;
 }
 
-.missingForApproval .form-label-bold {
+t .missingForApproval .form-label-bold {
   color: #b10e1e;
 }
 
@@ -5506,6 +5506,11 @@ h2 .float-right {
 
 #page-transactions .column-half .data dl.current-transfer-funds {
   background: #df3034;
+}
+
+/* Transfers */
+.govuk-box-highlight.govuk-box-highlight__bottom-margin {
+  margin-bottom: 2em;
 }
 
 /*See all activity*/

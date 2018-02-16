@@ -38,7 +38,7 @@
 .alert-default {
     background-color: $light-blue-25;
     border-color: $light-blue;
-}
+}t
 
 //validation styles
 .missingForApproval{
@@ -721,6 +721,12 @@ body {
             }
         }
     }
+}
+
+/* Transfers */
+
+.govuk-box-highlight.govuk-box-highlight__bottom-margin {
+   margin-bottom: 2em;
 }
 
 /*See all activity*/
