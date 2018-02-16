@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
@@ -19,17 +20,20 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
     {
         private const string HashedAccountId = "123ABC";
         private const string ExternalUser = "Test user";
+        private const long AccountId = 1234;
 
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
         private GetEmployerAccountResponse _response;
         private Mock<ICurrentDateTime> _currentTime;
+        private Mock<IHashingService> _hashingService;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
             _currentTime = new Mock<ICurrentDateTime>();
+            _hashingService = new Mock<IHashingService>();
 
             _response = new GetEmployerAccountResponse
             {
@@ -40,8 +44,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 }
             };
 
+            _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
+
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
                 .ReturnsAsync(_response);
+
+            _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
 
             SetupGetTransactionsResponse();
 

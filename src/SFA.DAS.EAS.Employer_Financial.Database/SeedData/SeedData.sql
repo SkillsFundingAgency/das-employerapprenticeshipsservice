@@ -42,3 +42,23 @@ EXECUTE [employer_financial].[ProcessDeclarationsTransactions] 3, '123/SFAT029'
 EXECUTE [employer_financial].[ProcessDeclarationsTransactions] 4, '101/CUR00016'
 
 DROP PROCEDURE #CreateLevy
+
+
+IF (NOT EXISTS(SELECT TransactionType FROM [employer_financial].[TransactionLineTypes] WHERE TransactionType = 1))
+BEGIN
+	INSERT [employer_financial].[TransactionLineTypes] ([TransactionType], [Description]) VALUES (1, N'Levy')
+END
+IF (NOT EXISTS(SELECT TransactionType FROM [employer_financial].[TransactionLineTypes] WHERE TransactionType = 2))
+BEGIN
+	INSERT [employer_financial].[TransactionLineTypes] ([TransactionType], [Description]) VALUES (2, N'Levy Adjustment')
+END
+
+
+IF (NOT EXISTS(SELECT TransactionType FROM [employer_financial].[PaymentTransactionTypes] WHERE TransactionType = 1))
+BEGIN
+	INSERT [employer_financial].[PaymentTransactionTypes] ([TransactionType], [Description]) VALUES (N'1', N'Monthly Payment')
+END
+IF (NOT EXISTS(SELECT TransactionType FROM [employer_financial].[PaymentTransactionTypes] WHERE TransactionType = 2))
+BEGIN
+	INSERT [employer_financial].[PaymentTransactionTypes] ([TransactionType], [Description]) VALUES (N'2', N'Completion Payment')
+END

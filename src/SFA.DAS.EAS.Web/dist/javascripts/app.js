@@ -112,52 +112,6 @@ sfa.navigation = {
 }
 
 sfa.tabs = {
-
-    elems: {
-        tabs: $('ul.js-tabs li a'),
-        panels: $('.js-tab-pane')
-    },
-
-    init: function () {
-
-        if (this.elems.tabs) {
-            this.setUpEvents(this.elems.tabs);
-            this.hidePanels(this.elems.panels);
-        }
-
-        this.elems.tabs.eq(0).click();
-
-    },
-
-    hidePanels: function (panels) {
-        panels.hide();
-    },
-
-    showPanel: function (panel) {
-        panel.show();
-    },
-
-    setUpEvents: function (tabs) {
-
-        var that = this;
-
-        tabs.on('click touchstart', function (e) {
-
-            tabs.removeClass('selected');
-            $(this).addClass('selected');
-
-            var target = $(this).attr('href');
-
-            that.hidePanels(that.elems.panels);
-            that.showPanel($(target));
-
-            e.preventDefault();
-        });
-
-    }
-};
-
-sfa.tabs = {
     elems: {
         tabs: $('ul.js-tabs li a'),
         panels: $('.js-tab-pane')
@@ -210,7 +164,7 @@ sfa.forms = {
         var btns = $('form').not('.has-client-side-validation').find('.button');
         btns.removeAttr('disabled');
     }
-}
+};
 
 // Helper for gta events
 sfa.tagHelper = {
@@ -239,7 +193,6 @@ sfa.tagHelper = {
     }
 };
 
-
 sfa.backLink = {
     init: function () {
         var backLink = $('<a>')
@@ -248,7 +201,7 @@ sfa.backLink = {
             .on('click', function (e) { window.history.back(); e.preventDefault(); });
         $('#js-breadcrumbs').html(backLink);
     }
-}
+};
 
 if (localStorage.getItem("answers") === null) {
     localStorage.setItem("answers", JSON.stringify([]));
@@ -352,7 +305,41 @@ sfa.welcomeWizard = {
             $('#confirmation').hide();
         }
     }
-}
+};
+
+sfa.stickyNav = {
+    elems: {
+        $nav: $(".floating-menu"),
+        $navHolder: $("#floating-menu-holder"),
+        $window: $(window),
+        $body: $(document.body)
+    },
+    init: function() {
+        if (!this.elems.$nav.length) return false;
+        this.elems.topOfNav = this.elems.$navHolder.offset().top;
+        this.elems.$window.on("scroll", this.fixedNav(this));
+        this.elems.$window.on("resize", this.pageResized(this));
+    },
+    pageResized: function(self) {
+        return function() {
+            self.elems.topOfNav = self.elems.$navHolder.offset().top;
+        };
+    },
+    fixedNav: function(self) {
+        return function() {
+            var isSticky = self.elems.$body.hasClass("sticky-nav");
+            if (self.elems.$window.scrollTop() >= self.elems.topOfNav) {
+                if (!isSticky) {
+                self.elems.$body
+                    .addClass("sticky-nav")
+                    .css("padding-top", self.elems.$nav.height() + "px");
+                }
+            } else if (isSticky) {
+                self.elems.$body.removeClass("sticky-nav").css("padding-top", 0);
+            }
+        };
+    }
+};
 
 getIndexOf = function (accountId, items) {
     var i = 0;
@@ -363,7 +350,7 @@ getIndexOf = function (accountId, items) {
         }
     }
     return -1;
-}
+};
 
 if ($('#js-breadcrumbs')) {
     sfa.backLink.init();
@@ -381,6 +368,7 @@ window.onunload = function () {
 sfa.forms.init();
 sfa.navigation.init();
 sfa.tabs.init();
+sfa.stickyNav.init();
 
 $('ul#global-nav-links').collapsableNav();
 
@@ -425,7 +413,6 @@ $('.container-head').on('click touchstart', (function () {
 }));
 
 // Push confirmation messages to the Google dateLayer array
-
 var successMessage = $('.success-summary h1');
 if (successMessage.length > 0) {
     var dataLoadedObj = dataLayer[0];
@@ -436,7 +423,6 @@ if (successMessage.length > 0) {
 }
 
 // Push error messages to the Google dateLayer array
-
 var errorMessage = $('.error-summary');
 if (errorMessage.length > 0) {
     var errorContent = errorMessage.find('ul li a').eq(0).text(),
@@ -447,17 +433,3 @@ if (errorMessage.length > 0) {
         dataLayer[0] = dataLoadedObj;
     }
 }
-
-
-//floating header script
-$(window).scroll(function () {
-    if ($(window).scrollTop() >= 110) {
-        $('.floating-menu').addClass('fixed-header');
-        $('.js-float').addClass('width-adjust');
-    }
-    else {
-        $('.floating-menu').removeClass('fixed-header');
-        $('.js-float').removeClass('width-adjust');
-    }
-});
-

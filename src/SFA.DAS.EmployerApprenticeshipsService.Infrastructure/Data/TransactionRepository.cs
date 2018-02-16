@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.Sql.Client;
 using SFA.DAS.NLog.Logger;
 
@@ -137,6 +138,34 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     commandType: CommandType.StoredProcedure);
             });
             return result.ToList();
+        }
+
+        public async Task<List<TransactionDownloadLine>> GetAllTransactionDetailsForAccountByDate(long accountId, DateTime fromDate, DateTime toDate)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@AccountId", accountId, DbType.Int64);
+                parameters.Add("@fromDate", fromDate, DbType.DateTime);
+                parameters.Add("@toDate", toDate, DbType.DateTime);
+
+                return await c.QueryAsync<TransactionDownloadLine>(
+                    sql: "[employer_financial].[GetAllTransactionDetailsForAccountByDate]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            var hmrcDateService = new HmrcDateService();
+            var transactionDownloadLines = result as TransactionDownloadLine[] ?? result.ToArray();
+            foreach (var res in transactionDownloadLines)
+            {
+                if (!string.IsNullOrEmpty(res.PayrollYear) && res.PayrollMonth != 0)
+                {
+                    res.PeriodEnd = hmrcDateService.GetDateFromPayrollYearMonth(res.PayrollYear, res.PayrollMonth).ToString("MMM yyyy"); 
+                }
+            }
+
+            return transactionDownloadLines.ToList();
         }
 
         private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)

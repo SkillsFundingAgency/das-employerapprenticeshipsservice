@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MediatR;
 using SFA.DAS.Activities;
+using SFA.DAS.EAS.Domain;
 
 namespace SFA.DAS.EAS.Application.Queries.GetActivities
 {
     public class GetActivitiesQuery : IAsyncRequest<GetActivitiesResponse>
     {
         [Required]
-        [RegularExpression(@"^[A-Za-z\d]{6,6}$")]
+        [RegularExpression(Constants.HashedAccountIdRegex)]
         public string HashedAccountId { get; set; }
 
         public int? Take { get; set; }

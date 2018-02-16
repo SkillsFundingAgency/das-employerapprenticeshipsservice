@@ -2856,20 +2856,20 @@ a#link-settings:focus {
 /*floating menu style - EMPLOYER */
 #floating-menu-holder {
   background: #6f72af;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding: 0 30px;
 }
 
-#floating-menu-holder .fixed-header {
+.sticky-nav .floating-menu {
   position: fixed;
   top: 0;
   left: 0;
   max-width: 100%;
 }
 
-#floating-menu-holder .width-adjust {
+.sticky-nav .js-float {
   max-width: 960px;
   margin: 0 auto;
+  padding: 0 30px;
 }
 
 .floating-menu {
@@ -2908,6 +2908,7 @@ a#link-settings:focus {
 .floating-menu p.floating-head-text {
   float: left;
   margin: 10px 0 0 10px;
+  text-align: left;
   font-weight: bold;
   font-size: 19px;
   margin: 10px 0 0 0px;
@@ -3273,6 +3274,10 @@ table {
 
 table td.numeric {
   font-size: inherit;
+}
+
+table caption {
+  text-align: left;
 }
 
 td.link-right {
@@ -4794,6 +4799,16 @@ table .float-right, h2 .float-right {
   }
 }
 
+.govuk-box-highlight.esfa-standout-amount {
+  display: block;
+  text-align: center;
+  background: #912b88;
+  margin-bottom: 1.25em;
+  text-align: left;
+  display: inline-block;
+  margin-bottom: 1.875em;
+}
+
 .hr-double {
   border-bottom: 4px solid #bfc1c3;
   margin-bottom: 20px;
@@ -5523,6 +5538,36 @@ h2 .float-right {
 .timeline .all-activity p.activity a {
   margin-top: 15px;
   display: block;
+}
+
+
+/*Download transactions page UI*/
+#download-transactions .column-one-third {
+    width: 45%;
+    width: 100%;
+}
+
+#download-transactions .column-one-quarter {
+    width: 10%;
+    width: 100%;
+    text-align: center;
+}
+
+#download-transactions .grey-rounded {
+    background: #6f777b;
+    color: #fff;
+    border-radius: 100%;
+    padding: 0;
+    width: 45px;
+    height: 45px;
+    margin: 40px auto;
+    margin: 0;
+}
+
+#download-transactions .grey-rounded .rounded-text {
+    display: block;
+    padding: 13px 10px 10px 9px;
+    font-weight: bold;
 }
 
 .js-enabled ul.js-tabs a.selected {

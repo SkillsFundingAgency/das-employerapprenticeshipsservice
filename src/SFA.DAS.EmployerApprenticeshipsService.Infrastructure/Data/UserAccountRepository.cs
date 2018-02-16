@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Dapper;
+﻿using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.Sql.Client;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Sql.Client;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@email", email, DbType.String);
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email FROM [employer_account].[User] WHERE Email = @email;",
+                    sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Email = @email;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email FROM [employer_account].[User] WHERE Id = @id;",
+                    sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
