@@ -9,7 +9,6 @@ using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionInvitation
 {
@@ -19,7 +18,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
         private ApproveTransferConnectionInvitationCommandHandler _handler;
         private ApproveTransferConnectionInvitationCommand _command;
         private Mock<IEmployerAccountRepository> _employerAccountRepository;
-        private Mock<IHashingService> _hashingService;
         private Mock<ITransferConnectionInvitationRepository> _transferConnectionInvitationRepository;
         private Mock<IUserRepository> _userRepository;
         private TransferConnectionInvitation _transferConnectionInvitation;
@@ -32,7 +30,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
         public void Arrange()
         {
             _employerAccountRepository = new Mock<IEmployerAccountRepository>();
-            _hashingService = new Mock<IHashingService>();
             _transferConnectionInvitationRepository = new Mock<ITransferConnectionInvitationRepository>();
             _userRepository = new Mock<IUserRepository>();
 
@@ -65,25 +62,22 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
                 ReceiverAccount = _receiverAccount,
                 Status = TransferConnectionInvitationStatus.Pending
             };
-
-            _hashingService.Setup(h => h.DecodeValue(_receiverAccount.HashedId)).Returns(_receiverAccount.Id);
-            _hashingService.Setup(h => h.DecodeValue(_senderAccount.HashedId)).Returns(_senderAccount.Id);
-            _userRepository.Setup(r => r.GetUserByExternalId(_receiverUser.ExternalId)).ReturnsAsync(_receiverUser);
+            
+            _userRepository.Setup(r => r.GetUserById(_receiverUser.Id)).ReturnsAsync(_receiverUser);
             _employerAccountRepository.Setup(r => r.GetAccountById(_senderAccount.Id)).ReturnsAsync(_senderAccount);
             _employerAccountRepository.Setup(r => r.GetAccountById(_receiverAccount.Id)).ReturnsAsync(_receiverAccount);
             _transferConnectionInvitationRepository.Setup(r => r.GetTransferConnectionInvitationToApproveOrReject(_transferConnectionInvitation.Id, _receiverAccount.Id)).ReturnsAsync(_transferConnectionInvitation);
 
             _handler = new ApproveTransferConnectionInvitationCommandHandler(
                 _employerAccountRepository.Object,
-                _hashingService.Object,
                 _transferConnectionInvitationRepository.Object,
                 _userRepository.Object
             );
 
             _command = new ApproveTransferConnectionInvitationCommand
             {
-                UserExternalId = _receiverUser.ExternalId,
-                AccountHashedId = _receiverAccount.HashedId,
+                AccountId = _receiverAccount.Id,
+                UserId = _receiverUser.Id,
                 TransferConnectionInvitationId = _transferConnectionInvitation.Id
             };
         }
@@ -101,7 +95,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
         {
             await _handler.Handle(_command);
 
-            _userRepository.Verify(r => r.GetUserByExternalId(_receiverUser.ExternalId), Times.Once);
+            _userRepository.Verify(r => r.GetUserById(_receiverUser.Id), Times.Once);
         }
 
         [Test]

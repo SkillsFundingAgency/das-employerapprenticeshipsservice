@@ -16,7 +16,7 @@ using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [ValidateAccountMembership]
+    [ValidateMembership]
     [RoutePrefix("accounts/{HashedAccountId}/transfers/connections/invitations")]
     public class TransferConnectionInvitationsController : Controller
     {

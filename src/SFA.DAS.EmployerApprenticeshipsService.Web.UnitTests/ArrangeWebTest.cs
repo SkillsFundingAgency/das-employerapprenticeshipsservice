@@ -1,20 +1,8 @@
-﻿using AutoMapper;
-using NUnit.Framework;
-using SFA.DAS.EAS.Web.Mappings;
+﻿using SFA.DAS.EAS.TestCommon;
 
 namespace SFA.DAS.EAS.Web.UnitTests
 {
-    [SetUpFixture]
-    public class ArrangeWebTest
+    public class ArrangeWebTest : ArrangeTest
     {
-        [OneTimeSetUp]
-        public void Arrange()
-        {
-            Mapper.Initialize(c =>
-            {
-                c.AddProfile<ActivityMaps>();
-                c.AddProfile<TransferConnectionInvitationMaps>();
-            });
-        }
     }
 }

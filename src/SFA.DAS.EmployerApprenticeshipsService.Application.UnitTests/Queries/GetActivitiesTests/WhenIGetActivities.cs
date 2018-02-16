@@ -6,35 +6,30 @@ using NUnit.Framework;
 using SFA.DAS.Activities;
 using SFA.DAS.Activities.Client;
 using SFA.DAS.EAS.Application.Queries.GetActivities;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetActivitiesTests
 {
     [TestFixture]
     public class WhenIGetActivities
     {
-        private const string AccountHashedId = "ABC123";
         private const long AccountId = 111111;
 
         private GetActivitiesQuery _query;
         private GetActivitiesQueryHandler _handler;
         private GetActivitiesResponse _response;
         private Mock<IActivitiesClient> _activitiesClient;
-        private Mock<IHashingService> _hashingService;
         private readonly ActivitiesResult _activitiesResult = new ActivitiesResult();
 
         [SetUp]
         public void Arrange()
         {
             _activitiesClient = new Mock<IActivitiesClient>();
-            _hashingService = new Mock<IHashingService>();
-
-            _hashingService.Setup(h => h.DecodeValue(AccountHashedId)).Returns(AccountId);
+            
             _activitiesClient.Setup(c => c.GetActivities(It.IsAny<ActivitiesQuery>())).ReturnsAsync(_activitiesResult);
 
             _query = new GetActivitiesQuery
             {
-                AccountHashedId = AccountHashedId,
+                AccountId = AccountId,
                 Take = 100,
                 From = DateTime.UtcNow.AddDays(-1),
                 To = DateTime.UtcNow,
@@ -46,7 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetActivitiesTests
                 }
             };
 
-            _handler = new GetActivitiesQueryHandler(_activitiesClient.Object, _hashingService.Object);
+            _handler = new GetActivitiesQueryHandler(_activitiesClient.Object);
         }
 
         [Test]

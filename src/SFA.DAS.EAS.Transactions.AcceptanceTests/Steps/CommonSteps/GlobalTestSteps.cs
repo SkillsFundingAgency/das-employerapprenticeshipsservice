@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
     public static class GlobalTestSteps
     {
         private static Mock<IMessagePublisher> _messagePublisher;
-        private static Mock<IOwinWrapper> _owinWrapper;
+        private static Mock<IAuthenticationService> _owinWrapper;
         private static Container _container;
         private static Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private static Mock<IEventsApi> _eventsApi;
@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
         public static void Arrange()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
             _employerCommitmentsApi = new Mock<IEmployerCommitmentApi>();

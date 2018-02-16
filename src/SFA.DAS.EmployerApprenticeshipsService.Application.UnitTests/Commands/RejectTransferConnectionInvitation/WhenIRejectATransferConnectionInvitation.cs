@@ -38,8 +38,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
 
             _receiverUser = new User
             {
-                Id = 123456,
                 ExternalId = Guid.NewGuid(),
+                Id = 123456,
                 FirstName = "John",
                 LastName = "Doe"
             };
@@ -47,14 +47,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
             _senderAccount = new Domain.Data.Entities.Account.Account
             {
                 Id = 333333,
-                HashedId = "ABC123",
                 Name = "Sender"
             };
 
             _receiverAccount = new Domain.Data.Entities.Account.Account
             {
                 Id = 222222,
-                HashedId = "XYZ987",
                 Name = "Receiver"
             };
 
@@ -68,22 +66,21 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
 
             _hashingService.Setup(h => h.DecodeValue(_receiverAccount.HashedId)).Returns(_receiverAccount.Id);
             _hashingService.Setup(h => h.DecodeValue(_senderAccount.HashedId)).Returns(_senderAccount.Id);
-            _userRepository.Setup(r => r.GetUserByExternalId(_receiverUser.ExternalId)).ReturnsAsync(_receiverUser);
+            _userRepository.Setup(r => r.GetUserById(_receiverUser.Id)).ReturnsAsync(_receiverUser);
             _employerAccountRepository.Setup(r => r.GetAccountById(_senderAccount.Id)).ReturnsAsync(_senderAccount);
             _employerAccountRepository.Setup(r => r.GetAccountById(_receiverAccount.Id)).ReturnsAsync(_receiverAccount);
             _transferConnectionInvitationRepository.Setup(r => r.GetTransferConnectionInvitationToApproveOrReject(_transferConnectionInvitation.Id, _receiverAccount.Id)).ReturnsAsync(_transferConnectionInvitation);
 
             _handler = new RejectTransferConnectionInvitationCommandHandler(
                 _employerAccountRepository.Object,
-                _hashingService.Object,
                 _transferConnectionInvitationRepository.Object,
                 _userRepository.Object
             );
 
             _command = new RejectTransferConnectionInvitationCommand
             {
-                UserExternalId = _receiverUser.ExternalId,
-                AccountHashedId = _receiverAccount.HashedId,
+                AccountId = _receiverAccount.Id,
+                UserId = _receiverUser.Id,
                 TransferConnectionInvitationId = _transferConnectionInvitation.Id
             };
         }
@@ -101,7 +98,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
         {
             await _handler.Handle(_command);
 
-            _userRepository.Verify(r => r.GetUserByExternalId(_receiverUser.ExternalId), Times.Once);
+            _userRepository.Verify(r => r.GetUserById(_receiverUser.Id), Times.Once);
         }
 
         [Test]

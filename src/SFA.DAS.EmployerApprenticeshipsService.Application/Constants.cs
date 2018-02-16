@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.Domain
+﻿namespace SFA.DAS.EAS.Application
 {
     public static class Constants
     {

@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly HomeOrchestrator _homeOrchestrator;
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
-        public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator,
+        public HomeController(IAuthenticationService owinWrapper, HomeOrchestrator homeOrchestrator,
             EmployerApprenticeshipsServiceConfiguration configuration, IFeatureToggleService featureToggle, 
             IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Index")]
         public async Task<ActionResult> Index()
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
             if (!string.IsNullOrWhiteSpace(userId))
             {
 
@@ -190,7 +190,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 await OwinWrapper.UpdateClaims();
 
-                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
                 var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
                 var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
                 var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);

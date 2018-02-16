@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Domain.Models.UserProfile
         [Obsolete("Please use 'ExternalId' instead.")]
         public string UserRef
         {
-            get => _userRef ?? ExternalId.ToString();
+            get => _userRef ?? _externalId.Value.ToString();
             set => _userRef = value;
         }
 

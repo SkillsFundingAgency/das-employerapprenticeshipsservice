@@ -5,19 +5,20 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using IdentityModel.Client;
-using Microsoft.Owin;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Authentication
 {
-    public class OwinWrapper : IOwinWrapper
+    public class OwinAuthenticationService : IAuthenticationService
     {
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+        private readonly HttpContextBase _httpContext;
 
-        public OwinWrapper(EmployerApprenticeshipsServiceConfiguration configuration)
+        public OwinAuthenticationService(EmployerApprenticeshipsServiceConfiguration configuration, HttpContextBase httpContext)
         {
             _configuration = configuration;
+            _httpContext = httpContext;
         }
 
         public string GetClaimValue(string claimKey)
@@ -45,6 +46,16 @@ namespace SFA.DAS.EAS.Web.Authentication
             return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken, owinContext.Request.Uri.Scheme, owinContext.Request.Uri.Authority));   
         }
 
+        public bool TryGetClaimValue(string key, out string value)
+        {
+            var identity = _httpContext.User.Identity as ClaimsIdentity;
+            var claim = identity?.Claims.FirstOrDefault(c => c.Type == key);
+
+            value = claim?.Value;
+
+            return value != null;
+        }
+
         public async Task UpdateClaims()
         {
             var constants = new Constants(_configuration.Identity);
@@ -67,7 +78,6 @@ namespace SFA.DAS.EAS.Web.Authentication
                     identity.AddClaim(new Claim(DasClaimTypes.Email, claim.Item2));   
                 }
             }
-            
         }
     }
 }

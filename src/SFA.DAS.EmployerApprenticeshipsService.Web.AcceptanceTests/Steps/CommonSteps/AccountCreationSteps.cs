@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
     {
         private IContainer _container;
         private Mock<IMessagePublisher> _messagePublisher;
-        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IAuthenticationService> _owinWrapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
         private string _externalUserId;
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
         public AccountCreationSteps()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
             _validator = new Mock<IValidator<GetAccountPayeSchemesQuery>>();

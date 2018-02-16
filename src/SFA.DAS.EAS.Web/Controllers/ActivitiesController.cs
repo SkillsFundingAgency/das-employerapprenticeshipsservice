@@ -10,7 +10,7 @@ using SFA.DAS.EAS.Web.ViewModels.Activities;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [ValidateAccountMembership]
+    [ValidateMembership]
     [RoutePrefix("accounts/{HashedAccountId}/activity")]
     public class ActivitiesController : Controller
     {

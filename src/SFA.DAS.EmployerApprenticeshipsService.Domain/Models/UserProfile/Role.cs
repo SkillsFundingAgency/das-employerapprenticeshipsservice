@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Domain.Models.UserProfile
 {
-    public enum Role : short
+    public enum Role
     {
         None = 0,
         Owner = 1,

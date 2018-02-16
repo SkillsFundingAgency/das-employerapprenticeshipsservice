@@ -3,18 +3,17 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Application.Messages;
-using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Helpers;
+using SFA.DAS.EAS.Web.Authorization;
 
 namespace SFA.DAS.EAS.Web.Binders
 {
     public class DefaultBinder : DefaultModelBinder
     {
-        private readonly Func<ICurrentUserService> _currentUserService;
+        private readonly Func<IMembershipService> _membershipService;
 
-        public DefaultBinder(Func<ICurrentUserService> currentUserService)
+        public DefaultBinder(Func<IMembershipService> membershipService)
         {
-            _currentUserService = currentUserService;
+            _membershipService = membershipService;
         }
 
         protected override void BindProperty(ControllerContext controllerContext, ModelBindingContext bindingContext, PropertyDescriptor propertyDescriptor)
@@ -23,25 +22,26 @@ namespace SFA.DAS.EAS.Web.Binders
             {
                 var model = (IAuthorizedMessage)bindingContext.Model;
                 var key = $"{bindingContext.ModelName}.{propertyDescriptor.Name}";
+                var membershipContext = _membershipService().GetMembershipContext();
 
-                if (propertyDescriptor.Name == nameof(IAuthorizedMessage.UserExternalId))
+                switch (propertyDescriptor.Name)
                 {
-                    var currentUser = _currentUserService().GetCurrentUser();
-
-                    model.UserExternalId = currentUser.ExternalId;
-                    bindingContext.ModelState.SetModelValue(key, new ValueProviderResult(model.UserExternalId, model.UserExternalId.ToString(), CultureInfo.InvariantCulture));
-
-                    return;
-                }
-
-                if (propertyDescriptor.Name == nameof(IAuthorizedMessage.AccountHashedId))
-                {
-                    var accountHashedId = controllerContext.RouteData.Values[ControllerConstants.HashedAccountIdKeyName].ToString();
-
-                    model.AccountHashedId = accountHashedId;
-                    bindingContext.ModelState.SetModelValue(key, new ValueProviderResult(model.AccountHashedId, model.AccountHashedId, CultureInfo.InvariantCulture));
-
-                    return;
+                    case nameof(IAuthorizedMessage.AccountHashedId):
+                        model.AccountHashedId = membershipContext?.AccountHashedId;
+                        bindingContext.ModelState.SetModelValue(key, new ValueProviderResult(model.AccountHashedId, model.AccountHashedId, CultureInfo.InvariantCulture));
+                        return;
+                    case nameof(IAuthorizedMessage.AccountId):
+                        model.AccountId = membershipContext?.AccountId;
+                        bindingContext.ModelState.SetModelValue(key, new ValueProviderResult(model.AccountId, model.AccountId?.ToString(), CultureInfo.InvariantCulture));
+                        return;
+                    case nameof(IAuthorizedMessage.UserExternalId):
+                        model.UserExternalId = membershipContext?.UserExternalId;
+                        bindingContext.ModelState.SetModelValue(key, new ValueProviderResult(model.UserExternalId, model.UserExternalId?.ToString(), CultureInfo.InvariantCulture));
+                        return;
+                    case nameof(IAuthorizedMessage.UserId):
+                        model.UserId = membershipContext?.UserId;
+                        bindingContext.ModelState.SetModelValue(key, new ValueProviderResult(model.UserId, model.UserId?.ToString(), CultureInfo.InvariantCulture));
+                        return;
                 }
             }
 

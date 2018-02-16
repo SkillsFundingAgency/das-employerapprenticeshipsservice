@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Web.Extensions
         public static string EmployerCommitmentsAction(this UrlHelper helper, string path)
         {
             var baseUrl = CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName)?.TrimEnd('/');
-            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.HashedAccountIdKeyName];
+            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
 
             return $"{baseUrl}/accounts/{hashedAccountId}/{path}";
         }

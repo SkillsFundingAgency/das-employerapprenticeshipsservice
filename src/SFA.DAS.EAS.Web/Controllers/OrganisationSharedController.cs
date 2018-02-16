@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly IMapper _mapper;
         private readonly ILog _logger;
 
-        public OrganisationSharedController(IOwinWrapper owinWrapper,
+        public OrganisationSharedController(IAuthenticationService owinWrapper,
             OrganisationOrchestrator orchestrator,
             IFeatureToggleService featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
@@ -92,7 +92,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Status = HttpStatusCode.OK
             };
 
-            if (RouteData.Values[ControllerConstants.HashedAccountIdKeyName] == null && !string.IsNullOrEmpty(request.OrganisationAddress))
+            if (RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName] == null && !string.IsNullOrEmpty(request.OrganisationAddress))
             {
                 var organisationDetailsViewModel = _orchestrator.StartConfirmOrganisationDetails(request);
 
@@ -160,7 +160,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             ReturnConfirmOrganisationDetailsViewIfHashedAccountIdIsNotPresentInTheRouteAndOrganisationAddressIsNotNullOrEmpty(
                 AddOrganisationAddressViewModel request)
         {
-            if (RouteData.Values[ControllerConstants.HashedAccountIdKeyName] != null ||
+            if (RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName] != null ||
                 string.IsNullOrEmpty(request.OrganisationAddress))
             {
                 return null;
@@ -215,7 +215,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private RedirectToRouteResult RedirectToGatewayInformWhenHashedAccountIdIsNotPresentInTheRoute(OrchestratorResponse<OrganisationDetailsViewModel> response)
         {
-            if (RouteData.Values[ControllerConstants.HashedAccountIdKeyName] != null)
+            if (RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName] != null)
             {
                 return null;
             }

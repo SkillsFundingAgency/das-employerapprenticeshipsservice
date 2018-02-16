@@ -25,18 +25,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<User> GetUserById(long id)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@id", id, DbType.Int64);
-
-                var res = await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Id = @id",
-                    param: parameters,
-                    commandType: CommandType.Text);
-                return res;
-            });
-            return result.SingleOrDefault();
+            return await _db.Users.SingleOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<User> GetUserByRef(string id)
@@ -68,11 +57,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     commandType: CommandType.Text);
             });
             return result.SingleOrDefault();
-        }
-
-        public async Task<User> GetUserByExternalId(Guid externalId)
-        {
-            return await _db.Users.SingleOrDefaultAsync(u => u.ExternalId == externalId);
         }
 
         public async Task Create(User user)

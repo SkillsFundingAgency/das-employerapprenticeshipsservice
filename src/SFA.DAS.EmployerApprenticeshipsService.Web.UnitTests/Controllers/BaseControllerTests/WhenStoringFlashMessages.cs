@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
         private const string UserEmail = "user.one@unit.tests";
         private const string FlashMessageCookieName = "sfa-das-employerapprenticeshipsservice-flashmessage";
         
-        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IAuthenticationService> _owinWrapper;
         private Mock<IMultiVariantTestingService> _multiVariantTestingService;
         private TestController _controller;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
         public void Arrange()
         { 
             base.Arrange();
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _owinWrapper.Setup(x => x.GetClaimValue("email"))
                 .Returns(UserEmail);
 
@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
 
         internal class TestController : BaseController
         {
-            public TestController(IOwinWrapper owinWrapper, 
+            public TestController(IAuthenticationService owinWrapper, 
                 IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
                 : base(owinWrapper, multiVariantTestingService, flashMessage)
             {

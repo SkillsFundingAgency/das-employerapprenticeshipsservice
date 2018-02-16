@@ -5,7 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Application.Queries.GetReceivedTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
-using SFA.DAS.HashingService;
+using SFA.DAS.EAS.TestCommon;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetReceivedTransferConnectionInvitationTests
 {
@@ -15,7 +15,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetReceivedTransferConnectio
         private GetReceivedTransferConnectionInvitationQueryHandler _handler;
         private GetReceivedTransferConnectionInvitationQuery _query;
         private Mock<EmployerAccountDbContext> _db;
-        private Mock<IHashingService> _hashingService;
         private DbSetStub<TransferConnectionInvitation> _transferConnectionInvitationsDbSet;
         private List<TransferConnectionInvitation> _transferConnectionInvitations;
         private TransferConnectionInvitation _receivedTransferConnectionInvitation;
@@ -27,19 +26,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetReceivedTransferConnectio
         public void Arrange()
         {
             _db = new Mock<EmployerAccountDbContext>();
-            _hashingService = new Mock<IHashingService>();
 
             _senderAccount = new Domain.Data.Entities.Account.Account
             {
-                Id = 333333,
                 HashedId = "ABC123",
+                Id = 333333,
                 Name = "Sender"
             };
 
             _receiverAccount = new Domain.Data.Entities.Account.Account
             {
-                Id = 222222,
                 HashedId = "XYZ987",
+                Id = 222222,
                 Name = "Receiver"
             };
 
@@ -62,14 +60,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetReceivedTransferConnectio
             _transferConnectionInvitations = new List<TransferConnectionInvitation> { _receivedTransferConnectionInvitation, _rejectedTransferConnectionInvitation };
             _transferConnectionInvitationsDbSet = new DbSetStub<TransferConnectionInvitation>(_transferConnectionInvitations);
             
-            _hashingService.Setup(h => h.DecodeValue(_senderAccount.HashedId)).Returns(_receiverAccount.Id);
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
 
-            _handler = new GetReceivedTransferConnectionInvitationQueryHandler(_db.Object, _hashingService.Object);
+            _handler = new GetReceivedTransferConnectionInvitationQueryHandler(_db.Object);
 
             _query = new GetReceivedTransferConnectionInvitationQuery
             {
-                AccountHashedId = _senderAccount.HashedId,
+                AccountId = _receiverAccount.Id,
                 TransferConnectionInvitationId = _receivedTransferConnectionInvitation.Id
             };
         }

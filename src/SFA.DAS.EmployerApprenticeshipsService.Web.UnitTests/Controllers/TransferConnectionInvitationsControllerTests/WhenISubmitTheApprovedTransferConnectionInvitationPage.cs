@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         {
             var routeData = new RouteData();
 
-            routeData.Values[ControllerConstants.HashedAccountIdKeyName] = AccountHashedId;
+            routeData.Values[ControllerConstants.AccountHashedIdRouteKeyName] = AccountHashedId;
 
             var urlHelper = new UrlHelper(new RequestContext(Mock.Of<HttpContextBase>(), routeData));
 

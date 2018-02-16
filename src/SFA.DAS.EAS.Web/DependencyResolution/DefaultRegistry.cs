@@ -33,19 +33,15 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application.Data;
-using SFA.DAS.EAS.Application.Services;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using NotificationsApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.NotificationsApiClientConfiguration;
-using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
-using SFA.DAS.EAS.Infrastructure.Caching;
-using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Factories;
 using SFA.DAS.EAS.Infrastructure.Interfaces.REST;
 using SFA.DAS.EAS.Infrastructure.Services;
-using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Authorization;
 using SFA.DAS.EAS.Web.Logging;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
@@ -59,6 +55,9 @@ using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Tasks.API.Client;
 using StructureMap;
 using StructureMap.TypeRules;
+using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Application.Hashing;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
@@ -80,15 +79,13 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
                 s.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(c => c.Singleton());
             });
-
-            For<CurrentUser>().Use(c => c.GetInstance<ICurrentUserService>().GetCurrentUser());
+            
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For<IApprenticeshipApi>().Use<ApprenticeshipApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
-            For<ICache>().Use<InMemoryCache>(); //RedisCache
+            For<ICache>().Use<InMemoryCache>();
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
-            For<ICurrentUserService>().Use<CurrentUserService>();
             For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi).SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
             For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
@@ -96,7 +93,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<IPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
             For<ITaskApiConfiguration>().Use(taskApiConfig);
             For<ITaskService>().Use<TaskService>();
-            For<IUnitOfWorkManager>().Use<UnitOfWorkManager>();
             For<IUserRepository>().Use<UserRepository>();
             For<IValidationApi>().Use<ValidationApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             ForConcreteType<EmployerAccountDbContext>().Configure.Ctor<string>().Is(config.DatabaseConnectionString);

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using AutoMapper;
@@ -15,14 +10,13 @@ using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationSharedTests
 {
     public abstract class OrganisationSharedControllerTestBase
     {
-        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IAuthenticationService> _owinWrapper;
         private Mock<IFeatureToggleService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ILog> _logger;
@@ -35,7 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationSharedTests
         public virtual void Arrange()
         {
             Orchestrator = new Mock<OrganisationOrchestrator>();
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _featureToggle = new Mock<IFeatureToggleService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             Mapper = new Mock<IMapper>();
@@ -69,7 +63,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationSharedTests
         protected void SetupPopulatedRouteData()
         {
             var routeData = new RouteData();
-            routeData.Values.Add(ControllerConstants.HashedAccountIdKeyName, "ABC123");
+            routeData.Values.Add(ControllerConstants.AccountHashedIdRouteKeyName, "ABC123");
             Controller.ControllerContext = new ControllerContext(new Mock<HttpContextBase>().Object, routeData, Controller);
         }
 

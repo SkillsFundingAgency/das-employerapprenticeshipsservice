@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly IMapper _mapper;
 
 
-        public SearchOrganisationController(IOwinWrapper owinWrapper,
+        public SearchOrganisationController(IAuthenticationService owinWrapper,
             SearchOrganisationOrchestrator orchestrator,
             IFeatureToggleService featureToggle,
             IMultiVariantTestingService multiVariantTestingService,

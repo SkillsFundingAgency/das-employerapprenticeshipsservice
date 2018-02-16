@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
-using SFA.DAS.EAS.Domain;
 
 namespace SFA.DAS.EAS.Application.Messages
 {
@@ -9,11 +8,18 @@ namespace SFA.DAS.EAS.Application.Messages
     {
         [IgnoreMap]
         [Required]
+        public string AccountHashedId { get; set; }
+
+        [IgnoreMap]
+        [Required]
+        public long? AccountId { get; set; }
+
+        [IgnoreMap]
+        [Required]
         public Guid? UserExternalId { get; set; }
 
         [IgnoreMap]
         [Required]
-        [RegularExpression(Constants.AccountHashedIdRegex)]
-        public string AccountHashedId { get; set; }
+        public long? UserId { get; set; }
     }
 }

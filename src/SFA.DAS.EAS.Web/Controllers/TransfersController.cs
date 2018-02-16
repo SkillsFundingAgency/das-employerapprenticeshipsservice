@@ -9,7 +9,7 @@ using SFA.DAS.EAS.Web.ViewModels.Transfers;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [ValidateAccountMembership]
+    [ValidateMembership]
     [RoutePrefix("accounts/{HashedAccountId}/transfers")]
     public class TransfersController : Controller
     {

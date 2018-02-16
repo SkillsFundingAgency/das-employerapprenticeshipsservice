@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -10,17 +9,13 @@ using SFA.DAS.EAS.Application.Queries.GetTransactionsDownload;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Transaction;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransactionsDownloadTests
 {
     [TestFixture]
     public class WhenIGetTransactionsDownload
     {
-        private const string HashedAccountId = "ABC123";
         private const long AccountId = 111111;
         private static readonly MonthYear StartDate = new MonthYear { Month = "1", Year = "2000" };
         private static readonly MonthYear EndDate = new MonthYear { Month = "1", Year = "2000" };
@@ -28,7 +23,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransactionsDownloadTests
 
         private GetTransactionsDownloadQueryHandler _handler;
         private GetTransactionsDownloadQuery _query;
-        private readonly Mock<IHashingService> _hashingService = new Mock<IHashingService>();
         private Mock<ITransactionFormatterFactory> _transactionFormatterFactory;
         private Mock<ITransactionRepository> _transactionsRepository;
         
@@ -38,20 +32,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransactionsDownloadTests
             _transactionsRepository = new Mock<ITransactionRepository>();
             _transactionFormatterFactory = new Mock<ITransactionFormatterFactory>();
             
-            _hashingService.Setup(x => x.DecodeValue(HashedAccountId)).Returns(AccountId);
             _transactionFormatterFactory.Setup(x => x.GetTransactionsFormatterByType(It.IsAny<DownloadFormatType>())).Returns(new CsvTransactionFormatter());
 
             _transactionsRepository.Setup(x => x.GetAllTransactionDetailsForAccountByDate(AccountId, StartDate.ToDate(), ToDate))
                 .ReturnsAsync(new List<TransactionDownloadLine> { new TransactionDownloadLine() });
 
-            _handler = new GetTransactionsDownloadQueryHandler(
-                _hashingService.Object,
-                _transactionFormatterFactory.Object,
-                _transactionsRepository.Object);
+            _handler = new GetTransactionsDownloadQueryHandler(_transactionFormatterFactory.Object, _transactionsRepository.Object);
 
             _query = new GetTransactionsDownloadQuery
             {
-                AccountHashedId = HashedAccountId,
+                AccountId = AccountId,
                 DownloadFormat = DownloadFormatType.CSV,
                 StartDate = StartDate,
                 EndDate = EndDate

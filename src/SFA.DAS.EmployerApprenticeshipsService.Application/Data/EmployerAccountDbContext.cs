@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
@@ -10,6 +11,7 @@ namespace SFA.DAS.EAS.Application.Data
     public class EmployerAccountDbContext : DbContext
     {
         public virtual DbSet<Domain.Data.Entities.Account.Account> Accounts { get; set; }
+        public virtual DbSet<Membership> Memberships { get; set; }
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
@@ -34,6 +36,11 @@ namespace SFA.DAS.EAS.Application.Data
             modelBuilder.Entity<Domain.Data.Entities.Account.Account>()
                 .Ignore(a => a.RoleId)
                 .Ignore(a => a.RoleName);
+
+            modelBuilder.Entity<Membership>()
+                .HasKey(m => new { m.AccountId, m.UserId })
+                .Ignore(m => m.RoleId)
+                .Property(m => m.Role).HasColumnName(nameof(Membership.RoleId));
 
             modelBuilder.Entity<User>()
                 .Ignore(u => u.FullName)

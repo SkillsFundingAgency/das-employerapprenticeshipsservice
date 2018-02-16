@@ -9,7 +9,6 @@ using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.Events.Api.Client;
-using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.Interfaces;
 using StructureMap;
 using TechTalk.SpecFlow;
@@ -21,7 +20,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.LevyDeclarationS
     {
         private static IContainer _container;
         private static Mock<IMessagePublisher> _messagePublisher;
-        private static Mock<IOwinWrapper> _owinWrapper;
+        private static Mock<IAuthenticationService> _owinWrapper;
         private static Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private static Mock<IEventsApi> _eventsApi;
         private static Mock<IEmployerCommitmentApi> _commitmentsApi;
@@ -30,7 +29,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.LevyDeclarationS
         public static void Arrange()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
             _commitmentsApi = new Mock<IEmployerCommitmentApi>();
