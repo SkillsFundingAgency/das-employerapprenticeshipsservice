@@ -51,4 +51,35 @@
       <Setting name="ProcessPayments" value="false" />
     </ConfigurationSettings>
   </Role>
+  <NetworkConfiguration>
+    <Dns>
+      <DnsServers>
+        <DnsServer name="Primary" IPAddress="__PrimaryDnsIP__" />
+        <DnsServer name="Secondary" IPAddress="__SecondaryDnsIP__" />
+      </DnsServers>
+    </Dns>
+    <VirtualNetworkSite name="__vnet__" />
+    <AddressAssignments>
+      <InstanceAddress roleName="SFA.DAS.EAS.Web">
+        <Subnets>
+          <Subnet name="__subnet__" />
+        </Subnets>
+      </InstanceAddress>
+      <InstanceAddress roleName="SFA.DAS.EAS.LevyDeclarationProvider.Worker">
+        <Subnets>
+          <Subnet name="__subnet__" />
+        </Subnets>
+      </InstanceAddress>
+      <InstanceAddress roleName="SFA.DAS.EAS.PaymentProvider.Worker">
+        <Subnets>
+          <Subnet name="__subnet__" />
+        </Subnets>
+      </InstanceAddress>
+    </AddressAssignments>
+    <LoadBalancers>
+      <LoadBalancer name="__ilbname__">
+        <FrontendIPConfiguration type="private" subnet="__subnet__" staticVirtualNetworkIPAddress="10.78.125.158" />
+      </LoadBalancer>
+    </LoadBalancers>
+  </NetworkConfiguration>
 </ServiceConfiguration>
