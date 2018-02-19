@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 
             For<IHashingService>().Use(new HashingService.HashingService("12345QWERTYUIOPNDGHAK", "TEST: Dummy hash code London is a city in UK"));
 
-            For<IExternalAccountHashingService>().Use(x => new ExternalAccountHashingService("BCDEFGHIJKLMMOPQRSTUVWXYZ", "haShStRiNg"));
+            For<IPublicHashingService>().Use(x => new PublicHashingService("BCDEFGHIJKLMMOPQRSTUVWXYZ", "haShStRiNg"));
 
             For<IUserRepository>().Use<UserRepository>();
 

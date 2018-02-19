@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Application.Hashing
 {
-    public interface IExternalAccountHashingService : IHashingService
+    public interface IPublicHashingService : IHashingService
     {
     }
 }

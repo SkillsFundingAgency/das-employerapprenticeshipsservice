@@ -92,7 +92,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi).SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
             For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
-            For<IExternalAccountHashingService>().Use(x => new ExternalAccountHashingService(config.ExternalAllowedHashstringCharacters, config.ExternalHashstring));
+            For<IPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
             For<ITaskApiConfiguration>().Use(taskApiConfig);
             For<ITaskService>().Use<TaskService>();
             For<IUserRepository>().Use<UserRepository>();

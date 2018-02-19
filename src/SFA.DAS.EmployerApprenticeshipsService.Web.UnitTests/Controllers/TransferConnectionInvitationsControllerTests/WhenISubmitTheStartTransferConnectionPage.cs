@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
                 Message = new GetTransferConnectionInvitationAccountQuery
                 {
                     SenderAccountHashedId = SenderHashedAccountId,
-                    ReceiverAccountHashedId = ReceiverHashedAccountId
+                    ReceiverAccountPublicHashedId = ReceiverHashedAccountId
                 }
             };
         }
@@ -55,10 +55,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
             Assert.That(result.RouteValues.TryGetValue("action", out var actionName), Is.True);
             Assert.That(actionName, Is.EqualTo("Send"));
             Assert.That(result.RouteValues.ContainsKey("controller"), Is.False);
-            Assert.That(result.RouteValues.TryGetValue("SenderAccountHashedId", out var senderHashedAccountId), Is.True);
-            Assert.That(senderHashedAccountId, Is.EqualTo(SenderHashedAccountId));
-            Assert.That(result.RouteValues.TryGetValue("ReceiverAccountHashedId", out var receiverHashedAccountId), Is.True);
-            Assert.That(receiverHashedAccountId, Is.EqualTo(ReceiverHashedAccountId));
+            Assert.That(result.RouteValues.TryGetValue("SenderAccountHashedId", out var senderAccountHashedId), Is.True);
+            Assert.That(senderAccountHashedId, Is.EqualTo(SenderHashedAccountId));
+            Assert.That(result.RouteValues.TryGetValue("ReceiverAccountPublicHashedId", out var receiverAccountPublicHashedId), Is.True);
+            Assert.That(receiverAccountPublicHashedId, Is.EqualTo(ReceiverHashedAccountId));
         }
     }
 }

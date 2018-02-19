@@ -343,8 +343,8 @@
     <Compile Include="Factories\IPayeSchemeEventFactory.cs" />
     <Compile Include="Factories\LegalEntityEventFactory.cs" />
     <Compile Include="Factories\PayeSchemeEventFactory.cs" />
-    <Compile Include="Hashing\ExternalAccountHashingService.cs" />
-    <Compile Include="Hashing\IExternalAccountHashingService.cs" />
+    <Compile Include="Hashing\PublicHashingService.cs" />
+    <Compile Include="Hashing\IPublicHashingService.cs" />
     <Compile Include="Helpers\NameOf.cs" />
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />

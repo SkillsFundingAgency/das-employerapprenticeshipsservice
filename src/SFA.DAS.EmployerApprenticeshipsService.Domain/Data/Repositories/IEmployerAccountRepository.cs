@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<Account> GetAccountById(long id);
         Task<Account> GetAccountByHashedId(string hashedAccountId);
 
-        Task<Account> GetAccountByExternalHashedId(string hashedAccountId);
+        Task<Account> GetAccountByPublicHashedId(string publicHashedAccountId);
         
         Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize);
         Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId);

@@ -11,20 +11,15 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
     public interface IAccountRepository
     {
-        Task<CreateAccountResult> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector);
-        
-        Task<List<PayeView>> GetPayeSchemesByAccountId(long accountId);
-        Task RemovePayeFromAccount(long accountId, string payeRef);
-        Task<EmployerAgreementView> CreateLegalEntity(long accountId, LegalEntity legalEntity);
         Task AddPayeToAccount(Paye payeScheme);
-        Task<List<EmployerAgreementView>> GetEmployerAgreementsLinkedToAccount(long accountId);
-        Task SetHashedId(string hashedId, long accountId);
-
-        Task SetExternalHashes(string externalHashedId, string hashedId, long accountId);
-
-        Task<List<UserNotificationSetting>> GetUserAccountSettings(string userRef);
-        Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings);
-
+        Task<CreateAccountResult> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector);
+        Task<EmployerAgreementView> CreateLegalEntity(long accountId, LegalEntity legalEntity);
         Task<AccountStats> GetAccountStats(long accountId);
+        Task<List<EmployerAgreementView>> GetEmployerAgreementsLinkedToAccount(long accountId);
+        Task<List<PayeView>> GetPayeSchemesByAccountId(long accountId);
+        Task<List<UserNotificationSetting>> GetUserAccountSettings(string userRef);
+        Task RemovePayeFromAccount(long accountId, string payeRef);
+        Task UpdateAccountHashedIds(long accountId, string hashedId, string publicHashedId);
+        Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings);
     }
 }

@@ -9,16 +9,16 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
     {
         [Required(ErrorMessage = "You must enter a valid account ID")]
         [RegularExpression(Constants.HashedAccountIdRegex, ErrorMessage = "You must enter a valid account ID")]
-        public string ReceiverAccountHashedId { get; set; }
+        public string ReceiverAccountPublicHashedId { get; set; }
 
         [Required]
         public string SenderAccountHashedId { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (ReceiverAccountHashedId?.ToLower() == SenderAccountHashedId?.ToLower())
+            if (ReceiverAccountPublicHashedId?.ToLower() == SenderAccountHashedId?.ToLower())
             {
-                yield return new ValidationResult("You must enter a valid account ID", new[] { nameof(ReceiverAccountHashedId) });
+                yield return new ValidationResult("You must enter a valid account ID", new[] { nameof(ReceiverAccountPublicHashedId) });
             }
         }
     }
