@@ -67,6 +67,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\LevyDeclarationUpdatedMessage.cs" />
+    <Compile Include="Messages\LevySchemeDeclarationUpdatedMessage.cs" />
     <Compile Include="Messages\PaymentCreatedMessage.cs" />
     <Compile Include="Messages\AccountNameChangedMessage.cs" />
     <Compile Include="Messages\AgreementCreatedMessage.cs" />
