@@ -23,34 +23,34 @@
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(m => m.Message.HashedAccountId)
                 <div class="form-group @(Html.IsValid(m => m.Message.StartDate.Month) && Html.IsValid(m => m.Message.StartDate.Year) ? "" : "error")">
-                    <span id="StartDate" class="form-label-bold">Start date</span>
+                    <span id="@Html.IdFor(m => m.Message.StartDate)" class="form-label-bold">Start date</span>
                     <span class="form-hint">For example, 5 2017</span>
                     <div class="form-date">
                         @Html.ValidationMessageFor(m => m.Message.StartDate.Month)
                         @Html.ValidationMessageFor(m => m.Message.StartDate.Year)
                         <div class="form-group">
                             <label for="@Html.IdFor(m => m.Message.StartDate.Month)">Month</label>
-                            @Html.TextBoxFor(m => m.Message.StartDate.Month, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = "StartDate " + @Html.IdFor(m => m.Message.StartDate.Month)})
+                            @Html.TextBoxFor(m => m.Message.StartDate.Month, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = $"{Html.IdFor(m => m.Message.StartDate)} {Html.IdFor(m => m.Message.StartDate.Month)}" })
                         </div>
                         <div class="form-group form-group-year">
                             <label for="@Html.IdFor(m => m.Message.StartDate.Year)">Year</label>
-                            @Html.TextBoxFor(m => m.Message.StartDate.Year, new { @class = "form-control length-limit", type = "number", maxlength = "4", min = "1900", max = "9999", aria_labelledby = "StartDate " + @Html.IdFor(m => m.Message.StartDate.Year) })
+                            @Html.TextBoxFor(m => m.Message.StartDate.Year, new { @class = "form-control length-limit", type = "number", maxlength = "4", min = "1900", max = "9999", aria_labelledby = $"{Html.IdFor(m => m.Message.StartDate)} {Html.IdFor(m => m.Message.StartDate.Year)}" })
                         </div>
                     </div>
                 </div>
                 <div class="form-group @(Html.IsValid(m => m.Message.EndDate.Month) && Html.IsValid(m => m.Message.EndDate.Year) ? "" : "error")">
-                    <span id="EndDate"  class="form-label-bold">End date</span>
+                    <span id="@Html.IdFor(m => m.Message.EndDate)" class="form-label-bold">End date</span>
                     <span class="form-hint">For example, 10 2017</span>
                     <div class="form-date">
                         @Html.ValidationMessageFor(m => m.Message.EndDate.Month)
                         @Html.ValidationMessageFor(m => m.Message.EndDate.Year)
                         <div class="form-group">
                             <label for="@Html.IdFor(m => m.Message.EndDate.Month)">Month</label>
-                            @Html.TextBoxFor(m => m.Message.EndDate.Month, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = "EndDate " + @Html.IdFor(m => m.Message.EndDate.Month) })
+                            @Html.TextBoxFor(m => m.Message.EndDate.Month, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = $"{Html.IdFor(m => m.Message.EndDate)} {Html.IdFor(m => m.Message.EndDate.Month)}" })
                         </div>
                         <div class="form-group form-group-year">
                             <label for="@Html.IdFor(m => m.Message.EndDate.Year)">Year</label>
-                            @Html.TextBoxFor(m => m.Message.EndDate.Year, new { @class = "form-control length-limit", type = "number", maxlength = "4", min = "1900", max = "9999", aria_labelledby = "EndDate " + @Html.IdFor(m => m.Message.EndDate.Year) })
+                            @Html.TextBoxFor(m => m.Message.EndDate.Year, new { @class = "form-control length-limit", type = "number", maxlength = "4", min = "1900", max = "9999", aria_labelledby = $"{Html.IdFor(m => m.Message.EndDate)} {Html.IdFor(m => m.Message.EndDate.Year)}" })
                         </div>
                     </div>
                 </div>
