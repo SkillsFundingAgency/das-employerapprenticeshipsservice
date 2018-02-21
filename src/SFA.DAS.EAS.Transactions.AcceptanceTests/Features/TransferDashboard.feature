@@ -13,4 +13,5 @@ Scenario: Transfer Allowance
 		| 223/ABC     | 1000       | 17-18        | 1             | 1                | 2017-05-18     | 2017-05-23  |
 		| 223/ABC     | 2000       | 17-18        | 2             | 1                | 2017-06-18     | 2017-06-23  |
 		| 223/ABC     | 3000       | 17-18        | 3             | 1                | 2017-07-18     | 2017-07-23  |
+	And The transfer allowance ratio is 10 percent
 	Then the transfer allowance should be 330 on the transfer dashboard screen

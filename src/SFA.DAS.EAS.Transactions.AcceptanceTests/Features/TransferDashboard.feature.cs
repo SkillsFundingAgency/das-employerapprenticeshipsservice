@@ -133,6 +133,8 @@ this.ScenarioSetup(scenarioInfo);
 #line 8
  testRunner.When("I have the following submissions", ((string)(null)), table1, "When ");
 #line 16
+ testRunner.And("The transfer allowance ratio is 10 percent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 17
  testRunner.Then("the transfer allowance should be 330 on the transfer dashboard screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

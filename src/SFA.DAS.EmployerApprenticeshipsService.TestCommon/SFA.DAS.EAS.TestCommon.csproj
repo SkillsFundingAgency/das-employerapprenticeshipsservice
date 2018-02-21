@@ -214,6 +214,7 @@
     <Compile Include="MockModels\MockMessage.cs" />
     <Compile Include="MockPolicy\MockMessageSubscriberPolicy.cs" />
     <Compile Include="MockPolicy\MockMessagePublisherPolicy.cs" />
+    <Compile Include="MockPolicy\TestConfigurationPolicy.cs" />
     <Compile Include="ObjectMothers\AddPayeToNewLegalEntityCommandObjectMother.cs" />
     <Compile Include="ObjectMothers\ApprenticeshipObjectMother.cs" />
     <Compile Include="ObjectMothers\DeclarationsObjectMother.cs" />

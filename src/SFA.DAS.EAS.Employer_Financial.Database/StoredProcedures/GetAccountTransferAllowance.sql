@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetAccountTransferAllowance]
-	@accountId BIGINT = 0
+	@accountId BIGINT = 0,
+	@allowanceRatio FLOAT = 0
 AS
 	SET NOCOUNT ON
 
@@ -21,7 +22,7 @@ AS
 			END
 	END
 
-	SELECT SUM(Amount) * 0.1 FROM [employer_financial].[TransactionLine] 
+	SELECT SUM(Amount) * @allowanceRatio FROM [employer_financial].[TransactionLine] 
 	WHERE TransactionDate >= @financialYearStartDate
 	AND TransactionDate < @financialYearEndDate
 	AND TransactionType = 1

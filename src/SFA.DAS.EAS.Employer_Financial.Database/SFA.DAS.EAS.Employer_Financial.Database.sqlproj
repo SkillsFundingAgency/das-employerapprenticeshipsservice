@@ -110,7 +110,7 @@
     <Build Include="StoredProcedures\GetAccountPaymentIds.sql" />
     <Build Include="StoredProcedures\GetLevyDeclarationSubmissionIdsByEmpRef.sql" />
     <Build Include="StoredProcedures\GetTransactionSummary_ByAccountId.sql" />
-      <Build Include="StoredProcedures\GetAccountTransferAllowance.sql" />
+    <Build Include="StoredProcedures\GetAccountTransferAllowance.sql" />
     <Build Include="StoredProcedures\GetAllTransactionDetailsForAccountByDate.sql" />
     <Build Include="Tables\PaymentTransactionTypes.sql" />
     <Build Include="Tables\TransactionLineTypes.sql" />

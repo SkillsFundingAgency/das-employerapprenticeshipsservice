@@ -194,7 +194,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steps\CommonSteps\AccountCreationSteps.cs" />
     <Compile Include="Steps\CommonSteps\GlobalTestSteps.cs" />
-    <Compile Include="Steps\FinancialDashboardSteps\FinancialDashboardSteps.cs" />
+    <Compile Include="Steps\TransferDashboardSteps\TransferDashboardSteps.cs" />
     <Compile Include="Steps\PaymentDetailsSteps\PaymentDetailsSteps.cs" />
     <Compile Include="Steps\TransactionSteps\TransactionSteps.cs" />
   </ItemGroup>
