@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
+using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
@@ -11,13 +12,16 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
     class DbBuilder
     {
         private readonly IHashingService _hashingService;
+        private readonly IPublicHashingService _publicHashingService;
 
         public DbBuilder(
             DbBuilderDependentRepositories dependentRepositories,
-            IHashingService hashingService)
+            IHashingService hashingService,
+            IPublicHashingService publicHashingService)
         {
             DependentRepositories = dependentRepositories;
             _hashingService = hashingService;
+            _publicHashingService = publicHashingService;
         }
 
         public DbBuilderContext Context { get;  } = new DbBuilderContext();
@@ -61,7 +65,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             if (string.IsNullOrWhiteSpace(output.HashedAccountId))
             {
                 output.HashedAccountId = _hashingService.HashValue(output.AccountId);
-                await DependentRepositories.AccountRepository.SetHashedId(output.HashedAccountId, output.AccountId);
+                output.PublicHashedAccountId = _publicHashingService.HashValue(output.AccountId);
+                await DependentRepositories.AccountRepository.UpdateAccountHashedIds(output.AccountId, output.HashedAccountId, output.PublicHashedAccountId);
             }
 
             Context.ActiveEmployerAccount = output;

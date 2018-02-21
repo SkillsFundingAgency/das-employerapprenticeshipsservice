@@ -105,7 +105,6 @@
     <Build Include="StoredProcedures\GetPayeSchemesInUse.sql" />
     <Build Include="StoredProcedures\UpdatePaye.sql" />
     <Build Include="StoredProcedures\CreateLegalEntityWithAgreement.sql" />
-    <Build Include="StoredProcedures\UpdateAccount_SetAccountHashId.sql" />
     <Build Include="StoredProcedures\GetAccountHistory.sql" />
     <Build Include="StoredProcedures\UpdateAccount_SetAccountName.sql" />
     <Build Include="StoredProcedures\GetAccountDetails_ByHashedId.sql" />
@@ -128,6 +127,11 @@
     <Build Include="StoredProcedures\GetTeamMember.sql" />
     <Build Include="Tables\TransferConnectionInvitation.sql" />
     <Build Include="StoredProcedures\CreateTransferConnectionInvitation.sql" />
+    <Build Include="StoredProcedures\GetAccount_ByPublicHashedId.sql" />
+    <Build Include="StoredProcedures\GetAccountsMissingPublicHashedId.sql" />
+    <Build Include="StoredProcedures\UpdateAccountHashedIds.sql" />
+    <Build Include="StoredProcedures\UpdateAccountPublicHashedIds.sql" />
+    <Build Include="UserDefinedTypes\AccountPublicHashedIdsTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />

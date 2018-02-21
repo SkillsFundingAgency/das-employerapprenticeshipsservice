@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
             
             _hashingService.Setup(h => h.DecodeValue(SenderHashedAccountId)).Returns(SenderAccountId);
             _membershipRepository.Setup(r => r.GetCaller(SenderHashedAccountId, ExternalUserId)).ReturnsAsync(_membershipView);
-            _employerAccountRepository.Setup(r => r.GetAccountByHashedId(ReceiverHashedAccountId)).ReturnsAsync(_receiverAccount);
+            _employerAccountRepository.Setup(r => r.GetAccountByPublicHashedId(ReceiverHashedAccountId)).ReturnsAsync(_receiverAccount);
             _employerAccountRepository.Setup(r => r.GetAccountById(SenderAccountId)).ReturnsAsync(_senderAccount);
 
             _transferConnectionRepository.Setup(r => r.GetTransferConnectionInvitations(SenderAccountId, ReceiverAccountId))
@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
             _query = new GetTransferConnectionInvitationAccountQuery
             {
                 SenderAccountHashedId = SenderHashedAccountId,
-                ReceiverAccountHashedId = ReceiverHashedAccountId
+                ReceiverAccountPublicHashedId = ReceiverHashedAccountId
             };
         }
 
@@ -77,7 +77,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
         {
             _response = await _handler.Handle(_query);
 
-            _employerAccountRepository.Verify(r => r.GetAccountByHashedId(ReceiverHashedAccountId), Times.Once);
+            _employerAccountRepository.Verify(r => r.GetAccountByPublicHashedId(ReceiverHashedAccountId), Times.Once);
         }
 
         [Test]
@@ -117,11 +117,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
         [Test]
         public void ThenShouldThrowValidationExceptionIfReceiverAccountIsNull()
         {
-            _employerAccountRepository.Setup(r => r.GetAccountByHashedId(ReceiverHashedAccountId)).ReturnsAsync(null);
+            _employerAccountRepository.Setup(r => r.GetAccountByPublicHashedId(ReceiverHashedAccountId)).ReturnsAsync(null);
 
             var exception = Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_query));
 
-            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountHashedId)));
+            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
             Assert.That(exception.ErrorMessage, Is.EqualTo("You must enter a valid account ID"));
         }
 
@@ -139,7 +139,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
 
             var exception = Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_query));
 
-            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountHashedId)));
+            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
             Assert.That(exception.ErrorMessage, Is.EqualTo("You've already sent a connection request to this employer"));
         }
     }

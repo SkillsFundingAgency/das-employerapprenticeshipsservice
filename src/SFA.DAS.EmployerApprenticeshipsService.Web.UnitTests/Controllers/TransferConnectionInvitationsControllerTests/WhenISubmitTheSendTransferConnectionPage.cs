@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
                 Message = new SendTransferConnectionInvitationCommand
                 {
                     SenderAccountHashedId = SenderHashedAccountId,
-                    ReceiverAccountHashedId = ReceiverHashedAccountId
+                    ReceiverAccountPublicHashedId = ReceiverHashedAccountId
                 }
             };
         }

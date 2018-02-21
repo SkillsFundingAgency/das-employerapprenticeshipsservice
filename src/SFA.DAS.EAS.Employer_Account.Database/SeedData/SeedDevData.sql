@@ -25,7 +25,8 @@ CREATE PROC #CreateAccount
 	@publicSectorDataSource TINYINT,
 	@employerRefName varchar(500) null,
 	@sector NVARCHAR(100),
-	@hashedAccountId NVARCHAR(50)
+	@hashedAccountId NVARCHAR(50),
+	@publicHashedAccountId NVARCHAR(50)
 AS
 BEGIN
 
@@ -36,6 +37,7 @@ BEGIN
 		SET IDENTITY_INSERT  [employer_account].[Account] ON
 		INSERT INTO [employer_account].[Account](Id, Name, CreatedDate) VALUES (@accountId, @employerName, GETDATE());
 		UPDATE [employer_account].[Account] SET [HashedId] = @hashedAccountId WHERE [Id] = @accountId
+		UPDATE [employer_account].[Account] SET [PublicHashedId] = @publicHashedAccountId WHERE [Id] = @accountId
 		SET IDENTITY_INSERT  [employer_account].[Account] OFF
 
 		if(@employerNumber is not null)
@@ -82,14 +84,15 @@ EXEC sp_executesql @sqlStatement
 SET IDENTITY_INSERT  [employer_account].[Account] ON
 IF (NOT EXISTS(SELECT * FROM [employer_account].[Account] WHERE Id = 1))
 BEGIN 
-    INSERT INTO [employer_account].[Account](Id, Name, HashedId, CreatedDate) 
-    VALUES(1, 'ACME LTD', 'KAKAKAKA', GETDATE()) 
+    INSERT INTO [employer_account].[Account](Id, Name, HashedId, PublicHashedId, CreatedDate) 
+    VALUES(1, 'ACME LTD', 'KAKAKAKA', 'KAKAKAKA', GETDATE()) 
 END 
 ELSE 
 BEGIN 
     UPDATE [employer_account].[Account] 
     SET Name = 'ACME LTD',
-	HashedId = 'KAKAKAKA'
+	HashedId = 'KAKAKAKA',
+	PublicHashedId = 'LDMVWV'
     WHERE Id = 1
 END 
 SET IDENTITY_INSERT  [employer_account].[Account] OFF
@@ -141,8 +144,8 @@ DECLARE @userId BIGINT
 SELECT @userId = Id FROM [employer_account].[User] WHERE UserRef = @userRef
 
 -- Account seed data
-EXECUTE #CreateAccount 2, @userId, '00445790', 'Tesco Plc', '222/ZZ00002', 'Tesco House, Shire Park, Kestrel Way, Welwyn Garden City, AL7 1GA', '1947-11-27 00:00:00.000', 'active', 1, NULL, 'Employer for scenario 2 scheme 2', '', '84VBNV'
-EXECUTE #CreateAccount 3, @userId, 'SC171417', 'SAINSBURY''S LIMITED', '123/SFZZ029', 'No 2 Lochrin Square, 96 Fountainbridge, Edinburgh, EH3 9QA', '1997-01-16 00:00:00.000', 'active', 1, NULL, '', '', 'JLVKPM'
-EXECUTE #CreateAccount 4, @userId, '07297044', 'DINE CONTRACT CATERING LIMITED', '101/ZZR00016', '1st Floor The Centre, Birchwood Park, Warrington, Lancashire, WA3 6YN', '2010-06-28 00:00:00.000', 'active', 1, NULL, '', '', 'G6M7RV'
+EXECUTE #CreateAccount 2, @userId, '00445790', 'Tesco Plc', '222/ZZ00002', 'Tesco House, Shire Park, Kestrel Way, Welwyn Garden City, AL7 1GA', '1947-11-27 00:00:00.000', 'active', 1, NULL, 'Employer for scenario 2 scheme 2', '', '84VBNV', 'BDXBDV'
+EXECUTE #CreateAccount 3, @userId, 'SC171417', 'SAINSBURY''S LIMITED', '123/SFZZ029', 'No 2 Lochrin Square, 96 Fountainbridge, Edinburgh, EH3 9QA', '1997-01-16 00:00:00.000', 'active', 1, NULL, '', '', 'JLVKPM', 'XWBVWN'
+EXECUTE #CreateAccount 4, @userId, '07297044', 'DINE CONTRACT CATERING LIMITED', '101/ZZR00016', '1st Floor The Centre, Birchwood Park, Warrington, Lancashire, WA3 6YN', '2010-06-28 00:00:00.000', 'active', 1, NULL, '', '', 'G6M7RV', 'XWGMWV'
 
 DROP PROCEDURE #CreateAccount
