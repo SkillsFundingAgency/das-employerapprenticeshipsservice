@@ -165,7 +165,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 }
             }
 
-            return transactionDownloadLines.ToList();
+            return transactionDownloadLines.OrderByDescending(txn => txn.DateCreated).ToList();
         }
 
         private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)
