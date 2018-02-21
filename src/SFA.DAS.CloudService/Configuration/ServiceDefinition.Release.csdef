@@ -28,6 +28,7 @@
       <Setting name="ShowPayeHistory" />
       <Setting name="CurrentTime" />
       <Setting name="EmployerCommitmentsBaseUrl" />
+      <Setting name="EmployerRecruitBaseUrl" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-eas-ilb"/>

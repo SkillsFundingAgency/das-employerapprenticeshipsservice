@@ -16,6 +16,7 @@
       <Setting name="ShowPayeHistory" value="false" />
       <Setting name="CurrentTime" value="" />
       <Setting name="EmployerCommitmentsBaseUrl" value="__EmployerCommitmentsBaseUrl__" />
+      <Setting name="EmployerRecruitBaseUrl" value="__EmployerRecruitBaseUrl__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="BF55F64F778FC5F4E4EEBAE6493E37464B3E2AD7" thumbprintAlgorithm="sha1" />
@@ -51,29 +52,4 @@
       <Setting name="ProcessPayments" value="false" />
     </ConfigurationSettings>
   </Role>
-  <NetworkConfiguration>
-    <VirtualNetworkSite name="__vnet__" />
-    <AddressAssignments>
-      <InstanceAddress roleName="SFA.DAS.EAS.Web">
-        <Subnets>
-          <Subnet name="__subnet__" />
-        </Subnets>
-      </InstanceAddress>
-      <InstanceAddress roleName="SFA.DAS.EAS.LevyDeclarationProvider.Worker">
-        <Subnets>
-          <Subnet name="__subnet__" />
-        </Subnets>
-      </InstanceAddress>
-      <InstanceAddress roleName="SFA.DAS.EAS.PaymentProvider.Worker">
-        <Subnets>
-          <Subnet name="__subnet__" />
-        </Subnets>
-      </InstanceAddress>
-    </AddressAssignments>
-    <LoadBalancers>
-      <LoadBalancer name="__ilbname__">
-        <FrontendIPConfiguration type="private" subnet="__subnet__" staticVirtualNetworkIPAddress="10.78.125.158" />
-      </LoadBalancer>
-    </LoadBalancers>
-  </NetworkConfiguration>
 </ServiceConfiguration>
