@@ -22,6 +22,7 @@ using StructureMap.Graph;
 using WebGrease.Css.Extensions;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 using SFA.DAS.HashingService;
+using SFA.DAS.EAS.Application.Hashing;
 
 namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 {
@@ -38,6 +39,8 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
             });
 
             For<IHashingService>().Use(new HashingService.HashingService("12345QWERTYUIOPNDGHAK", "TEST: Dummy hash code London is a city in UK"));
+
+            For<IPublicHashingService>().Use(x => new PublicHashingService("BCDEFGHIJKLMMOPQRSTUVWXYZ", "haShStRiNg"));
 
             For<IUserRepository>().Use<UserRepository>();
 

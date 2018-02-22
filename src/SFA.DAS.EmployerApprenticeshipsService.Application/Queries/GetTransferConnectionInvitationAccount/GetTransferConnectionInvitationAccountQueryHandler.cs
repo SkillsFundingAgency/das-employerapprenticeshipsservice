@@ -41,11 +41,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
                 throw new UnauthorizedAccessException();
             }
             
-            var receiverAccount = await _employerAccountRepository.GetAccountByHashedId(message.ReceiverAccountHashedId);
+            var receiverAccount = await _employerAccountRepository.GetAccountByPublicHashedId(message.ReceiverAccountPublicHashedId);
 
             if (receiverAccount == null)
             {
-                throw new ValidationException(nameof(message.ReceiverAccountHashedId), "You must enter a valid account ID");
+                throw new ValidationException(nameof(message.ReceiverAccountPublicHashedId), "You must enter a valid account ID");
             }
 
             var senderAccountId = _hashingService.DecodeValue(message.SenderAccountHashedId);
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
 
             if (transferConnectionInvitations.Any(t => t.Status == TransferConnectionInvitationStatus.Sent))
             {
-                throw new ValidationException(nameof(message.ReceiverAccountHashedId), "You've already sent a connection request to this employer");
+                throw new ValidationException(nameof(message.ReceiverAccountPublicHashedId), "You've already sent a connection request to this employer");
             }
 
             return new GetTransferConnectionInvitationAccountResponse

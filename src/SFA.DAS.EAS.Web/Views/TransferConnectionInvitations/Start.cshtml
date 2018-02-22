@@ -16,13 +16,13 @@
         {
             @Html.AntiForgeryToken()
             @Html.HiddenFor(m => m.Message.SenderAccountHashedId)
-            <div class="form-group @(Html.IsValid(m => m.Message.ReceiverAccountHashedId) ? "" : "error")">
-                <label for="@Html.IdFor(m => m.Message.ReceiverAccountHashedId)">
+            <div class="form-group @(Html.IsValid(m => m.Message.ReceiverAccountPublicHashedId) ? "" : "error")">
+                <label for="@Html.IdFor(m => m.Message.ReceiverAccountPublicHashedId)">
                     <span class="form-label-bold">Enter the employer's apprenticeship account ID</span>
                     <span class="form-hint">You need to request this directly from the employer. Account IDs can be found under the account name on the apprenticeship service homepage.</span>
-                    @Html.ValidationMessageFor(m => m.Message.ReceiverAccountHashedId)
+                    @Html.ValidationMessageFor(m => m.Message.ReceiverAccountPublicHashedId)
                 </label>
-                @Html.TextBoxFor(m => m.Message.ReceiverAccountHashedId, new { aria_required = true, @class = "form-control form-control-3-4" })
+                @Html.TextBoxFor(m => m.Message.ReceiverAccountPublicHashedId, new { aria_required = true, @class = "form-control form-control-3-4" })
             </div>
             <button class="button" type="submit">Continue</button>
         }

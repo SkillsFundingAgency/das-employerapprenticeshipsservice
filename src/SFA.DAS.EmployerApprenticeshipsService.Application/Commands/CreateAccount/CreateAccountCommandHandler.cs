@@ -6,17 +6,16 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
+using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Audit;
-using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
-using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateAccount
@@ -29,6 +28,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAccountCommand> _validator;
         private readonly IHashingService _hashingService;
+        private readonly IHashingService _publicHashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
@@ -39,7 +39,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IMessagePublisher messagePublisher, 
             IMediator mediator, 
             IValidator<CreateAccountCommand> validator, 
-            IHashingService hashingService, 
+            IHashingService hashingService,
+            IPublicHashingService publicHashingService,
             IGenericEventFactory genericEventFactory, 
             IAccountEventFactory accountEventFactory, 
             IRefreshEmployerLevyService refreshEmployerLevyService,
@@ -51,6 +52,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _mediator = mediator;
             _validator = validator;
             _hashingService = hashingService;
+            _publicHashingService = publicHashingService;
             _genericEventFactory = genericEventFactory;
             _accountEventFactory = accountEventFactory;
             _refreshEmployerLevyService = refreshEmployerLevyService;
@@ -69,9 +71,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             }
 
             var createAccountResult = await _accountRepository.CreateAccount(userResponse.User.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, message.PayeReference, message.AccessToken, message.RefreshToken, message.OrganisationStatus, message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource, message.Sector);
-
+            
             var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
-            await _accountRepository.SetHashedId(hashedAccountId, createAccountResult.AccountId);
+            var publicHashedAccountId = _publicHashingService.HashValue(createAccountResult.AccountId);
+
+            await _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId);
 
             await RefreshLevy(createAccountResult, message.PayeReference);
 

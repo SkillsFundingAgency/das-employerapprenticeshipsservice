@@ -15,7 +15,7 @@
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
-            @Html.HiddenFor(m => m.Message.ReceiverAccountHashedId)
+            @Html.HiddenFor(m => m.Message.ReceiverAccountPublicHashedId)
             @Html.HiddenFor(m => m.Message.SenderAccountHashedId)
             <div class="form-group">
                 <table>
@@ -26,7 +26,7 @@
                         </tr>
                         <tr>
                             <th scope="row">Account ID</th>
-                            <td>@Model.ReceiverAccount.HashedId</td>
+                            <td>@Model.ReceiverAccount.PublicHashedId</td>
                         </tr>
                     </tbody>
                 </table>

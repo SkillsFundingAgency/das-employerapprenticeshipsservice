@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -16,6 +17,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
         private readonly IEmployerAccountRepository _employerAccountRepository;
         private readonly IHashingService _hashingService;
         private readonly IMembershipRepository _membershipRepository;
+        private readonly IPublicHashingService _publicHashingService;
         private readonly ITransferConnectionInvitationRepository _transferConnectionInvitationRepository;
         private readonly IMessagePublisher _messagePublisher;
 
@@ -24,6 +26,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
             IEmployerAccountRepository employerAccountRepository,
             IHashingService hashingService,
             IMembershipRepository membershipRepository,
+            IPublicHashingService publicHashingService,
             ITransferConnectionInvitationRepository transferConnectionInvitationRepository,
             IMessagePublisher messagePublisher)
         {
@@ -31,6 +34,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
             _employerAccountRepository = employerAccountRepository;
             _hashingService = hashingService;
             _membershipRepository = membershipRepository;
+            _publicHashingService = publicHashingService;
             _transferConnectionInvitationRepository = transferConnectionInvitationRepository;
             _messagePublisher = messagePublisher;
         }
@@ -44,7 +48,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
                 throw new UnauthorizedAccessException();
             }
 
-            var receiverAccountId = _hashingService.DecodeValue(message.ReceiverAccountHashedId);
+            var receiverAccountId = _publicHashingService.DecodeValue(message.ReceiverAccountPublicHashedId);
             var senderAccountId = _hashingService.DecodeValue(message.SenderAccountHashedId);
             var senderAccountTask = _employerAccountRepository.GetAccountById(senderAccountId);
             var receiverAccountTask = _employerAccountRepository.GetAccountById(receiverAccountId);
