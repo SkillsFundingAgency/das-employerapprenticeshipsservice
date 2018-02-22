@@ -4,17 +4,14 @@ namespace SFA.DAS.EAS.Application.Messages
 {
     public class Year : DayMonthYear
     {
-        public Year()
-        {
-            Day = 1;
-            Month = 1;
-        }
+        public override string Day => 1.ToString();
+        public override string Month => 1.ToString();
 
         public static implicit operator Year(DateTime dateTime)
         {
             return new Year
             {
-                Year = dateTime.Year
+                Year = dateTime.Year.ToString()
             };
         }
 

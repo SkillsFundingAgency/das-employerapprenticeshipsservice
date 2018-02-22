@@ -235,6 +235,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
+    <Compile Include="Attributes\DateAttribute.cs" />
+    <Compile Include="Attributes\DayAttribute.cs" />
+    <Compile Include="Attributes\YearAttribute.cs" />
+    <Compile Include="Attributes\MonthAttribute.cs" />
     <Compile Include="Commands\SendTransferConnectionInvitation\SendTransferConnectionInvitationCommand.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommand.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommandHandler.cs" />
