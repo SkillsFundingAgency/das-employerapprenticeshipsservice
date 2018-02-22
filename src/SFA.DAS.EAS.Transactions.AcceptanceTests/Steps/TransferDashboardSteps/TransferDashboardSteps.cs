@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransferDashboardSteps
         [When(@"The transfer allowance ratio is (.*) percent")]
         public void WhenTheTransferAllowanceRatioIsPercent(int percentage)
         {
-            _levyDeclarationProviderConfiguration.TransferAllowanceRatio = percentage / 100f;
+            _levyDeclarationProviderConfiguration.TransferAllowancePercentage = percentage / 100f;
         }
 
 

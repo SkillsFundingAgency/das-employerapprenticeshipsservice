@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.TransferOrchestratorTests
 
             _response = new GetTransferAllowanceResponse { Balance = ExpectedTransferBalance };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceRequest>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceQuery>()))
                 .ReturnsAsync(_response);
 
             _orchestrator = new TransferOrchestrator(_mediator.Object, _logger.Object);
@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.TransferOrchestratorTests
         public void ThenIfAnExceptionOccursItWillNoBeSupressed()
         {
             //Assign
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceRequest>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceQuery>()))
                 .Throws<Exception>();
 
             //Act + Assert
@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.TransferOrchestratorTests
         {
             //Arrange
             var exception = new Exception();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceRequest>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceQuery>()))
                 .ThrowsAsync(exception);
 
             //Act
@@ -77,7 +77,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.TransferOrchestratorTests
         public void ThenIfAnInvalidRequestOccursItShouldThrowTheException()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceRequest>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceQuery>()))
                 .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act + Assert

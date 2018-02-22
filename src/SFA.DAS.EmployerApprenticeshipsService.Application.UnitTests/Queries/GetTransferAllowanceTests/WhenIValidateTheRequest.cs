@@ -27,18 +27,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
         public async Task ThenTheRequestIsInvalidIfTheFieldsAreNotPopulated()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetTransferAllowanceRequest { HashedAccountId = string.Empty });
+            var actual = await _validator.ValidateAsync(new GetTransferAllowanceQuery { HashedAccountId = string.Empty });
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.IsTrue(actual.ValidationDictionary.ContainsKey(nameof(GetTransferAllowanceRequest.HashedAccountId)));
+            Assert.IsTrue(actual.ValidationDictionary.ContainsKey(nameof(GetTransferAllowanceQuery.HashedAccountId)));
         }
 
         [Test]
         public async Task ThenTheRequestIsInvalidIfTheFieldIsNull()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetTransferAllowanceRequest());
+            var actual = await _validator.ValidateAsync(new GetTransferAllowanceQuery());
 
             //Assert
             Assert.IsFalse(actual.IsValid());
@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
         public async Task ThenTheRequestIsValidIfTheFieldsArePopulated()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetTransferAllowanceRequest { HashedAccountId = "1234" });
+            var actual = await _validator.ValidateAsync(new GetTransferAllowanceQuery { HashedAccountId = "1234" });
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
                                  .ReturnsAsync(null);
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetTransferAllowanceRequest { HashedAccountId = "1234" });
+            var actual = await _validator.ValidateAsync(new GetTransferAllowanceQuery { HashedAccountId = "1234" });
 
             //Assert
             Assert.IsTrue(actual.IsUnauthorized);

@@ -10,12 +10,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class TransferRepository : BaseRepository, ITransferRepository
     {
-        private readonly float _allowanceRatio;
+        private readonly float _allowancePercentage;
 
         public TransferRepository(LevyDeclarationProviderConfiguration configuration, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         {
-            _allowanceRatio = configuration.TransferAllowanceRatio;
+            _allowancePercentage = configuration.TransferAllowancePercentage;
         }
 
         public async Task<decimal> GetTransferAllowance(long accountId)
@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@accountId", accountId, DbType.Int64);
-                parameters.Add("@allowanceRatio", _allowanceRatio, DbType.Single);
+                parameters.Add("@allowancePercentage", _allowancePercentage, DbType.Single);
 
                 return await c.QuerySingleOrDefaultAsync<decimal?>(
                     sql: "[employer_financial].[GetAccountTransferAllowance]",

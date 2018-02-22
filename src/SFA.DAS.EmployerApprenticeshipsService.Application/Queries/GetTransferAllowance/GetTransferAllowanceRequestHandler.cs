@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferAllowance
 {
-    public class GetTransferAllowanceRequestHandler : IAsyncRequestHandler<GetTransferAllowanceRequest, GetTransferAllowanceResponse>
+    public class GetTransferAllowanceRequestHandler : IAsyncRequestHandler<GetTransferAllowanceQuery, GetTransferAllowanceResponse>
     {
         private readonly ITransferRepository _repository;
         private readonly IHashingService _hashingService;
-        private readonly IValidator<GetTransferAllowanceRequest> _validator;
+        private readonly IValidator<GetTransferAllowanceQuery> _validator;
         private readonly ILog _logger;
 
         public GetTransferAllowanceRequestHandler(
             ITransferRepository repository,
             IHashingService hashingService,
-            IValidator<GetTransferAllowanceRequest> validator,
+            IValidator<GetTransferAllowanceQuery> validator,
             ILog logger)
         {
             _repository = repository;
@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferAllowance
             _logger = logger;
         }
 
-        public async Task<GetTransferAllowanceResponse> Handle(GetTransferAllowanceRequest message)
+        public async Task<GetTransferAllowanceResponse> Handle(GetTransferAllowanceQuery message)
         {
             var validationResult = await _validator.ValidateAsync(message);
 

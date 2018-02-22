@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             try
             {
                 var transferBalanceResponse =
-                    await _mediator.SendAsync(new GetTransferAllowanceRequest
+                    await _mediator.SendAsync(new GetTransferAllowanceQuery
                     {
                         HashedAccountId = hashedId,
                         ExternalUserId = externalUserId

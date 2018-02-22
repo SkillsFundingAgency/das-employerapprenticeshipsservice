@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
 {
-    public class WhenIGetTransferBalance : QueryBaseTest<GetTransferAllowanceRequestHandler, GetTransferAllowanceRequest, GetTransferAllowanceResponse>
+    public class WhenIGetTransferBalance : QueryBaseTest<GetTransferAllowanceRequestHandler, GetTransferAllowanceQuery, GetTransferAllowanceResponse>
     {
         private Mock<ITransferRepository> _repository;
         private Mock<IHashingService> _hashngService;
         private Mock<ILog> _logger;
-        public override GetTransferAllowanceRequest Query { get; set; }
+        public override GetTransferAllowanceQuery Query { get; set; }
         public override GetTransferAllowanceRequestHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetTransferAllowanceRequest>> RequestValidator { get; set; }
+        public override Mock<IValidator<GetTransferAllowanceQuery>> RequestValidator { get; set; }
 
         private const string HashedAccountId = "ABC123";
         private const long AccountId = 1234;
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
             _hashngService.Setup(x => x.DecodeValue(It.IsAny<string>()))
                           .Returns(AccountId);
 
-            Query = new GetTransferAllowanceRequest { HashedAccountId = HashedAccountId };
+            Query = new GetTransferAllowanceQuery { HashedAccountId = HashedAccountId };
 
             RequestHandler = new GetTransferAllowanceRequestHandler(_repository.Object, _hashngService.Object, RequestValidator.Object, _logger.Object);
         }
@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
         public void ThenIfUserIsUnauthorisedTheyShouldNotGetABalance()
         {
             //Arrange
-            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetTransferAllowanceRequest>()))
+            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetTransferAllowanceQuery>()))
                 .ReturnsAsync(new ValidationResult { IsUnauthorized = true });
 
             //Act + Assert

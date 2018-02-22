@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferAllowance
 {
-    public class GetTransferAllowanceRequestValidator : IValidator<GetTransferAllowanceRequest>
+    public class GetTransferAllowanceRequestValidator : IValidator<GetTransferAllowanceQuery>
     {
         private readonly IMembershipRepository _membershipRepository;
 
@@ -14,12 +14,12 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferAllowance
             _membershipRepository = membershipRepository;
         }
 
-        public ValidationResult Validate(GetTransferAllowanceRequest item)
+        public ValidationResult Validate(GetTransferAllowanceQuery item)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetTransferAllowanceRequest item)
+        public async Task<ValidationResult> ValidateAsync(GetTransferAllowanceQuery item)
         {
             var result = new ValidationResult();
 
