@@ -44,23 +44,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<Account> GetAccountByPublicHashedId(string publicHashedAccountId)
-        {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-
-                parameters.Add("@publicHashedAccountId", publicHashedAccountId, DbType.String);
-
-                return await c.QueryAsync<Account>(
-                    sql: "[employer_account].[GetAccount_ByPublicHashedId]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
-
-            return result.SingleOrDefault();
-        }
-
         public async Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize)
         {
             var parameters = new DynamicParameters();

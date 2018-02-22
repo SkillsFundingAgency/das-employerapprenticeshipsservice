@@ -35,7 +35,6 @@ namespace SFA.DAS.EAS.Web
             AreaRegistration.RegisterAllAreas();
             BinderConfig.RegisterBinders(ModelBinders.Binders);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            DatabaseConfig.Configure();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             FluentValidationModelValidatorProvider.Configure();
             LoggingConfig.ConfigureLogging();

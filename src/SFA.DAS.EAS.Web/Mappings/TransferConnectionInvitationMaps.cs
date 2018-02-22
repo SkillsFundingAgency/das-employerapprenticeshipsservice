@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Web.Mappings
             CreateMap<SendTransferConnectionInvitationViewModel, SendTransferConnectionInvitationCommand>();
 
             CreateMap<StartTransferConnectionInvitationViewModel, GetTransferConnectionInvitationAccountQuery>()
-                .ForMember(m => m.ReceiverAccountHashedId, o => o.Ignore());
+                .ForMember(m => m.ReceiverAccountPublicHashedId, o => o.Ignore());
         }
     }
 }

@@ -14,15 +14,12 @@ namespace SFA.DAS.EAS.Web.Extensions
             return $"{baseUrl}/accounts/{hashedAccountId}/{path}";
         }
 
-        public static string EmployerRecruitAction(this UrlHelper helper, string controllerName, string actionName = "")
+        public static string EmployerRecruitAction(this UrlHelper helper, string path)
         {
-            var baseUrl = CloudConfigurationManager.GetSetting(ControllerConstants.EmployerRecruitControllerName).EndsWith("/")
-                ? CloudConfigurationManager.GetSetting(ControllerConstants.EmployerRecruitControllerName)
-                : CloudConfigurationManager.GetSetting(ControllerConstants.EmployerRecruitControllerName) + "/";
+            var baseUrl = CloudConfigurationManager.GetSetting(ControllerConstants.EmployerRecruitBaseUrlKeyName)?.TrimEnd('/');
+            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
 
-            var accountId = helper.RequestContext.RouteData.Values[ControllerConstants.HashedAccountIdKeyName];
-
-            return $"{baseUrl}accounts/{accountId}/{controllerName}/{actionName}";
+            return $"{baseUrl}/accounts/{hashedAccountId}/{path}";
         }
     }
 }

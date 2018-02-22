@@ -48,8 +48,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization.MembershipServiceTests
 
             _account = new Account
             {
-                HashedId = "ABC123",
-                Id = 111111
+                Id = 111111,
+                HashedId = "ABC123"
             };
 
             _user = new User

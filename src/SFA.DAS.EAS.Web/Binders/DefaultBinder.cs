@@ -30,6 +30,10 @@ namespace SFA.DAS.EAS.Web.Binders
                         model.AccountHashedId = membershipContext?.AccountHashedId;
                         bindingContext.ModelState.SetModelValue(key, new ValueProviderResult(model.AccountHashedId, model.AccountHashedId, CultureInfo.InvariantCulture));
                         return;
+                    case nameof(IAuthorizedMessage.AccountPublicHashedId):
+                        model.AccountPublicHashedId = membershipContext?.AccountPublicHashedId;
+                        bindingContext.ModelState.SetModelValue(key, new ValueProviderResult(model.AccountPublicHashedId, model.AccountPublicHashedId, CultureInfo.InvariantCulture));
+                        return;
                     case nameof(IAuthorizedMessage.AccountId):
                         model.AccountId = membershipContext?.AccountId;
                         bindingContext.ModelState.SetModelValue(key, new ValueProviderResult(model.AccountId, model.AccountId?.ToString(), CultureInfo.InvariantCulture));

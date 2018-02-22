@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -15,7 +16,13 @@ namespace SFA.DAS.EAS.Application.Data
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
-        public EmployerAccountDbContext(string connectionString) : base(connectionString)
+        static EmployerAccountDbContext()
+        {
+            Database.SetInitializer<EmployerAccountDbContext>(null);
+        }
+
+        public EmployerAccountDbContext(EmployerApprenticeshipsServiceConfiguration config)
+            : base(config.DatabaseConnectionString)
         {
         }
 

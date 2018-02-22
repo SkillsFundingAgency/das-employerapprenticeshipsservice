@@ -31,14 +31,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
 
             _receiverAccount = new Domain.Data.Entities.Account.Account
             {
-                HashedId = "ABC123",
-                Id = 111111
+                Id = 111111,
+                PublicHashedId = "ABC123"
             };
 
             _senderAccount = new Domain.Data.Entities.Account.Account
             {
-                HashedId = "XYZ987",
-                Id = 222222
+                Id = 222222,
+                PublicHashedId = "XYZ987"
             };
 
             _accounts = new List<Domain.Data.Entities.Account.Account>{ _receiverAccount, _senderAccount };
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
             _query = new GetTransferConnectionInvitationAccountQuery
             {
                 AccountId = _senderAccount.Id,
-                ReceiverAccountHashedId = _receiverAccount.HashedId
+                ReceiverAccountPublicHashedId = _receiverAccount.PublicHashedId
             };
         }
 
@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
 
             var exception = Assert.ThrowsAsync<ValidationException<GetTransferConnectionInvitationAccountQuery>>(async () => await _handler.Handle(_query));
 
-            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountHashedId)));
+            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
             Assert.That(exception.Message, Is.EqualTo("You must enter a valid account ID"));
         }
 
@@ -91,7 +91,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
 
             var exception = Assert.ThrowsAsync<ValidationException<GetTransferConnectionInvitationAccountQuery>>(async () => await _handler.Handle(_query));
 
-            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountHashedId)));
+            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
             Assert.That(exception.Message, Is.EqualTo("You've already sent a connection request to this employer"));
         }
 
@@ -107,7 +107,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
 
             var exception = Assert.ThrowsAsync<ValidationException<GetTransferConnectionInvitationAccountQuery>>(async () => await _handler.Handle(_query));
 
-            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountHashedId)));
+            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
             Assert.That(exception.Message, Is.EqualTo("You're already connected with this employer"));
         }
     }

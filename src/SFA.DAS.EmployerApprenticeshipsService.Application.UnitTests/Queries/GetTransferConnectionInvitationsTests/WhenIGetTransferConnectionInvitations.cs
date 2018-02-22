@@ -31,8 +31,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
 
             _account = new Domain.Data.Entities.Account.Account
             {
-                HashedId = "ABC123",
                 Id = 333333,
+                HashedId = "ABC123",
                 Name = "Account"
             };
 

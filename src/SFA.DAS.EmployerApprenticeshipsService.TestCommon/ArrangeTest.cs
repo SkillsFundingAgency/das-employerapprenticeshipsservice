@@ -16,6 +16,7 @@ namespace SFA.DAS.EAS.TestCommon
                 c.AddProfile<Application.Mappings.TransferConnectionInvitationMaps>();
                 c.AddProfile<Application.Mappings.UserMaps>();
                 c.AddProfile<Web.Mappings.ActivityMaps>();
+                c.AddProfile<Web.Mappings.TransactionMaps>();
                 c.AddProfile<Web.Mappings.TransferConnectionInvitationMaps>();
             });
         }

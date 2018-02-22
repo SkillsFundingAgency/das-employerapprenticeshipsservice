@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation;
+using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
@@ -20,7 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
         private SendTransferConnectionInvitationCommand _command;
         private long? _id;
         private Mock<IEmployerAccountRepository> _employerAccountRepository;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IPublicHashingService> _publicHashingService;
         private Mock<ITransferConnectionInvitationRepository> _transferConnectionInvitationRepository;
         private Mock<IUserRepository> _userRepository;
         private TransferConnectionInvitation _transferConnectionInvitation;
@@ -33,7 +34,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
         public void Arrange()
         {
             _employerAccountRepository = new Mock<IEmployerAccountRepository>();
-            _hashingService = new Mock<IHashingService>();
+            _publicHashingService = new Mock<IPublicHashingService>();
             _transferConnectionInvitationRepository = new Mock<ITransferConnectionInvitationRepository>();
             _userRepository = new Mock<IUserRepository>();
 
@@ -48,16 +49,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
             _senderAccount = new Domain.Data.Entities.Account.Account
             {
                 Id = 333333,
+                PublicHashedId = "ABC123",
                 Name = "Sender"
             };
 
             _receiverAccount = new Domain.Data.Entities.Account.Account
             {
                 Id = 222222,
+                PublicHashedId = "XYZ987",
                 Name = "Receiver"
             };
 
-            _hashingService.Setup(h => h.DecodeValue(_receiverAccount.HashedId)).Returns(_receiverAccount.Id);
+            _publicHashingService.Setup(h => h.DecodeValue(_receiverAccount.PublicHashedId)).Returns(_receiverAccount.Id);
             _userRepository.Setup(r => r.GetUserById(_senderUser.Id)).ReturnsAsync(_senderUser);
             _employerAccountRepository.Setup(r => r.GetAccountById(_senderAccount.Id)).ReturnsAsync(_senderAccount);
             _employerAccountRepository.Setup(r => r.GetAccountById(_receiverAccount.Id)).ReturnsAsync(_receiverAccount);
@@ -65,7 +68,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
 
             _handler = new SendTransferConnectionInvitationCommandHandler(
                 _employerAccountRepository.Object,
-                _hashingService.Object,
+                _publicHashingService.Object,
                 _transferConnectionInvitationRepository.Object,
                 _userRepository.Object
             );
@@ -74,7 +77,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
             {
                 AccountId = _senderAccount.Id,
                 UserId = _senderUser.Id,
-                ReceiverAccountHashedId = _receiverAccount.HashedId
+                ReceiverAccountPublicHashedId = _receiverAccount.PublicHashedId
             };
         }
 

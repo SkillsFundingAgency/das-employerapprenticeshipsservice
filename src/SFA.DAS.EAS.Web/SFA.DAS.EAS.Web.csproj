@@ -427,7 +427,6 @@
   <ItemGroup>
     <Compile Include="App_Start\BinderConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\DatabaseConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="Attributes\ExportModelStateToTempDataAttribute.cs" />
     <Compile Include="Attributes\ImportModelStateFromTempDataAttribute.cs" />
@@ -439,6 +438,7 @@
     <Compile Include="Binders\DefaultBinder.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Extensions\HashingServiceExtensions.cs" />
+    <Compile Include="Mappings\TransactionMaps.cs" />
     <Compile Include="Serialization\SerializableModelStateDictionary.cs" />
     <Compile Include="Serialization\SerializableModelState.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />

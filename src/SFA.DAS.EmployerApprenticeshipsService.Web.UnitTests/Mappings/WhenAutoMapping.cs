@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Mappings
     public class WhenAutoMapping
     {
         [Test]
-        public void ThenShouldAutoMap()
+        public void ThenShouldUseValidConfiguration()
         {
             Mapper.AssertConfigurationIsValid();
         }

@@ -29,15 +29,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetReceivedTransferConnectio
 
             _senderAccount = new Domain.Data.Entities.Account.Account
             {
-                HashedId = "ABC123",
                 Id = 333333,
+                HashedId = "ABC123",
                 Name = "Sender"
             };
 
             _receiverAccount = new Domain.Data.Entities.Account.Account
             {
-                HashedId = "XYZ987",
                 Id = 222222,
+                HashedId = "XYZ987",
                 Name = "Receiver"
             };
 

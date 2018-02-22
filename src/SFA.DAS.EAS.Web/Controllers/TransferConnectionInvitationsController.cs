@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> Start(StartTransferConnectionInvitationViewModel model)
         {
             await _mediator.SendAsync(model.GetTransferConnectionInvitationAccountQuery);
-            return RedirectToAction("Send", new { receiverAccountHashedId = model.GetTransferConnectionInvitationAccountQuery.ReceiverAccountHashedId });
+            return RedirectToAction("Send", new { receiverAccountPublicHashedId = model.GetTransferConnectionInvitationAccountQuery.ReceiverAccountPublicHashedId });
         }
 
         [HttpNotFoundForNullModel]

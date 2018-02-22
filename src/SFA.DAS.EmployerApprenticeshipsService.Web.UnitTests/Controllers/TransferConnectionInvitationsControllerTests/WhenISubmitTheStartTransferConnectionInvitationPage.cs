@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
     [TestFixture]
     public class WhenISubmitTheStartTransferConnectionInvitationPage
     {
-        private const string ReceiverPublicHashedAccountId = "XYZ987";
+        private const string ReceiverAccountPublicHashedId = "XYZ987";
 
         private TransferConnectionInvitationsController _controller;
         private StartTransferConnectionInvitationViewModel _viewModel;
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
             {
                 GetTransferConnectionInvitationAccountQuery = new GetTransferConnectionInvitationAccountQuery
                 {
-                    ReceiverPublicHashedAccountId = ReceiverPublicHashedAccountId
+                    ReceiverAccountPublicHashedId = ReceiverAccountPublicHashedId
                 }
             };
         }
@@ -53,8 +53,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
             Assert.That(result.RouteValues.TryGetValue("action", out var actionName), Is.True);
             Assert.That(actionName, Is.EqualTo("Send"));
             Assert.That(result.RouteValues.ContainsKey("controller"), Is.False);
-            Assert.That(result.RouteValues.TryGetValue("ReceiverPublicHashedAccountId", out var receiverPublicHashedAccountId), Is.True);
-            Assert.That(receiverPublicHashedAccountId, Is.EqualTo(ReceiverPublicHashedAccountId));
+            Assert.That(result.RouteValues.TryGetValue("ReceiverAccountPublicHashedId", out var receiverPublicHashedAccountId), Is.True);
+            Assert.That(receiverPublicHashedAccountId, Is.EqualTo(ReceiverAccountPublicHashedId));
         }
     }
 }

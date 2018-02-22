@@ -7,6 +7,7 @@ namespace SFA.DAS.EAS.Domain.Models.Authorization
     {
         long AccountId { get; }
         string AccountHashedId { get; }
+        string AccountPublicHashedId { get; }
         long UserId { get; }
         Guid UserExternalId { get; }
         string UserEmail { get; }

@@ -22,7 +22,7 @@
             {
                 @Html.AntiForgeryToken()
                 <div class="form-group @(Html.IsValid(m => m.GetTransactionsDownloadQuery.StartDate.Month) && Html.IsValid(m => m.GetTransactionsDownloadQuery.StartDate.Year) ? "" : "error")">
-                    <span id="@Html.IdFor(m => m.Message.StartDate)" class="form-label-bold">Start date</span>
+                    <span id="@Html.IdFor(m => m.GetTransactionsDownloadQuery.StartDate)" class="form-label-bold">Start date</span>
                     <span class="form-hint">For example, 5 2017</span>
                     <div class="form-date">
                         @Html.ValidationMessageFor(m => m.GetTransactionsDownloadQuery.StartDate.Month)
@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="form-group @(Html.IsValid(m => m.GetTransactionsDownloadQuery.EndDate.Month) && Html.IsValid(m => m.GetTransactionsDownloadQuery.EndDate.Year) ? "" : "error")">
-                    <span id="@Html.IdFor(m => m.Message.EndDate)" class="form-label-bold">End date</span>
+                    <span id="@Html.IdFor(m => m.GetTransactionsDownloadQuery.EndDate)" class="form-label-bold">End date</span>
                     <span class="form-hint">For example, 10 2017</span>
                     <div class="form-date">
                         @Html.ValidationMessageFor(m => m.GetTransactionsDownloadQuery.EndDate.Month)
