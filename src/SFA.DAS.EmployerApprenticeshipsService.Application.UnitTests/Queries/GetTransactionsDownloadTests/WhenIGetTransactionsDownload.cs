@@ -23,9 +23,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransactionsDownloadTests
         private const string ExternalUserId = "ABCDEF";
         private const long AccountId = 111111;
         private const long UserId = 222222;
-        private static readonly MonthYear StartDate = new MonthYear { Month = 1, Year = 2000 };
-        private static readonly MonthYear EndDate = new MonthYear { Month = 1, Year = 2000 };
-        private static readonly DateTime ToDate = new DateTime(EndDate.Year.Value, EndDate.Month.Value, 1).AddMonths(1);
+        private static readonly MonthYear StartDate = new MonthYear { Month = "1", Year = "2000" };
+        private static readonly MonthYear EndDate = new MonthYear { Month = "1", Year = "2000" };
+        private static readonly DateTime ToDate = new DateTime(2000, 2, 1);
 
         private GetTransactionsDownloadQueryHandler _handler;
         private GetTransactionsDownloadQuery _query;

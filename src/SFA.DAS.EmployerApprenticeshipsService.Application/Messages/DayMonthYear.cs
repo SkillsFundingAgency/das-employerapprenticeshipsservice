@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Globalization;
 
 namespace SFA.DAS.EAS.Application.Messages
 {
     public class DayMonthYear
     {
-        public int? Day { get; set; }
-        public int? Month { get; set; }
-        public int? Year { get; set; }
+        public virtual string Day { get; set; }
+        public virtual string Month { get; set; }
+        public virtual string Year { get; set; }
 
         public static implicit operator DayMonthYear(DateTime dateTime)
         {
             return new DayMonthYear
             {
-                Day = dateTime.Day,
-                Month = dateTime.Month,
-                Year = dateTime.Year
+                Day = dateTime.Day.ToString(),
+                Month = dateTime.Month.ToString(),
+                Year = dateTime.Year.ToString()
             };
         }
 
@@ -25,12 +26,12 @@ namespace SFA.DAS.EAS.Application.Messages
 
         public bool IsValid()
         {
-            return Day != null && Month != null && Year != null && DateTime.TryParse($"{Year}-{Month}-{Day}", out var _);
+            return Day != null && Month != null && Year != null && DateTime.TryParseExact($"{Year}-{Month}-{Day}", "yyyy-M-d", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _);
         }
 
         public DateTime ToDate()
         {
-            return new DateTime(Year.Value, Month.Value, Day.Value, 0, 0, 0);
+            return new DateTime(int.Parse(Year), int.Parse(Month), int.Parse(Day), 0, 0, 0);
         }
     }
 }
