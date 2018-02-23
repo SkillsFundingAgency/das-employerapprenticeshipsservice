@@ -1,19 +1,17 @@
-﻿using System;
+﻿using Dapper;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.Sql.Client;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Dapper;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.Levy;
-using SFA.DAS.EAS.Domain.Models.Payments;
-using SFA.DAS.Sql.Client;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -197,13 +195,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 param: parameters,
                 commandType: CommandType.StoredProcedure));
         }
-        
+
         public async Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new AccountIdUserTableParam(accountIds);
-                
+
                 return await c.QueryAsync<AccountBalance>(
                  "[employer_financial].[GetAccountBalance_ByAccountIds]",
                  parameters,
@@ -239,10 +237,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 "[employer_financial].[GetLatestPeriodEnd]",
                 null,
                 commandType: CommandType.StoredProcedure));
-            
+
             return result.SingleOrDefault();
         }
-        
+
         public async Task CreatePaymentData(IEnumerable<PaymentDetails> payments)
         {
             using (var connection = new SqlConnection(_configuration.DatabaseConnectionString))
@@ -342,6 +340,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 sql: "[employer_financial].[ProcessPaymentDataTransactions]",
                 param: parameters,
                 commandType: CommandType.StoredProcedure));
+        }
+
+        public Task<IEnumerable<Payment>> GetAccountPaymentsByPeriodEnd(long accountId, string periodEnd)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef)

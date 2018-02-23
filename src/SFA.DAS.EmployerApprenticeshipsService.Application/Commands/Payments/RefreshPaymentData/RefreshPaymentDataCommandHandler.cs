@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
 using SFA.DAS.EAS.Application.Validation;
@@ -12,6 +7,10 @@ using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 {
@@ -23,13 +22,13 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
         private readonly IDasLevyRepository _dasLevyRepository;
         private readonly IMediator _mediator;
         private readonly ILog _logger;
-       
+
 
         public RefreshPaymentDataCommandHandler(
             IMessagePublisher messagePublisher,
-            IValidator<RefreshPaymentDataCommand> validator, 
-            IPaymentService paymentService, 
-            IDasLevyRepository dasLevyRepository, 
+            IValidator<RefreshPaymentDataCommand> validator,
+            IPaymentService paymentService,
+            IDasLevyRepository dasLevyRepository,
             IMediator mediator,
             ILog logger)
         {
@@ -58,7 +57,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             }
             catch (WebException ex)
             {
-                _logger.Error(ex,$"Unable to get payment information for {message.PeriodEnd} accountid {message.AccountId}");
+                _logger.Error(ex, $"Unable to get payment information for {message.PeriodEnd} accountid {message.AccountId}");
             }
 
             if (payments == null || !payments.Any()) return;
@@ -66,12 +65,12 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             var existingPaymentIds = await _dasLevyRepository.GetAccountPaymentIds(message.AccountId);
 
             var newPayments = payments.Where(p => !existingPaymentIds.Any(x => x.ToString().Equals(p.Id))).ToArray();
-            
-            if(!newPayments.Any()) return;
+
+            if (!newPayments.Any()) return;
 
             await _dasLevyRepository.CreatePaymentData(newPayments);
 
-            await _mediator.PublishAsync(new ProcessPaymentEvent { AccountId = message.AccountId});
+            await _mediator.PublishAsync(new ProcessPaymentEvent { AccountId = message.AccountId });
 
             foreach (var payment in newPayments)
             {
