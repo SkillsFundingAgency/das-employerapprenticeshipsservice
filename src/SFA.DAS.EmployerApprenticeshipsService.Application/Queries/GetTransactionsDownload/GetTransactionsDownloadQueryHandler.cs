@@ -42,8 +42,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransactionsDownload
             }
             
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            var toDate = new DateTime(message.EndDate.Year.Value, message.EndDate.Month.Value, 1).AddMonths(1);
-            var transactions = await _transactionRepository.GetAllTransactionDetailsForAccountByDate(accountId, message.StartDate, toDate);
+            var endDate = message.EndDate.ToDate();
+            var endDateBeginningOfNextMonth = new DateTime(endDate.Year, endDate.Month, 1).AddMonths(1);
+            var transactions = await _transactionRepository.GetAllTransactionDetailsForAccountByDate(accountId, message.StartDate, endDateBeginningOfNextMonth);
 
             if (!transactions.Any())
             {

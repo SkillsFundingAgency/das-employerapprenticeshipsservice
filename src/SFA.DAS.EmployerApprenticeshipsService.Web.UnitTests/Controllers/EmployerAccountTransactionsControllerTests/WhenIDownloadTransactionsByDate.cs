@@ -47,13 +47,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                 {
                     StartDate = new MonthYear
                     {
-                        Month = 1,
-                        Year = 2000
+                        Month = "1",
+                        Year = "2000"
                     },
                     EndDate = new MonthYear
                     {
-                        Month = 1,
-                        Year = 2018
+                        Month = "1",
+                        Year = "2018"
                     }
                 }
             };
