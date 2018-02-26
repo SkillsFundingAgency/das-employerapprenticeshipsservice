@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
@@ -36,10 +37,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("latest")]
         public ActionResult Latest(GetLatestActivitiesQuery query)
         {
-            var response = Task.Run(async () => await _mediator.SendAsync(query)).Result;
-            var model = _mapper.Map<LatestActivitiesViewModel>(response);
+            try
+            {
+                var response = _mediator.Send(query).Result;
+                var model = _mapper.Map<LatestActivitiesViewModel>(response);
 
-            return PartialView(model);
+                return PartialView(model);
+            }
+            catch (Exception e)
+            {
+                return Content("Activities are currently unavailable.");
+            }
         }
     }
 }
