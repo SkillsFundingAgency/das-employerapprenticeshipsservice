@@ -33,6 +33,7 @@
   </PropertyGroup>
   <!-- Items for the project -->
   <ItemGroup>
+    <ServiceConfiguration Include="ServiceConfiguration.MO.cscfg" />
     <ServiceDefinition Include="ServiceDefinition.csdef" />
     <None Include="Configuration\ServiceDefinition.Release.csdef" />
     <None Include="Configuration\ServiceDefinition.Cloud.csdef" />
