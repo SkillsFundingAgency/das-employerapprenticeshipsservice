@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 {
     public class WhenIViewTheHomePage
     {
-        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IAuthenticationService> _owinWrapper;
         private HomeController _homeController;
         private Mock<HomeOrchestrator> _homeOrchestrator;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         {
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.RequiresVerification)).Returns("false");
 
             _homeOrchestrator = new Mock<HomeOrchestrator>();

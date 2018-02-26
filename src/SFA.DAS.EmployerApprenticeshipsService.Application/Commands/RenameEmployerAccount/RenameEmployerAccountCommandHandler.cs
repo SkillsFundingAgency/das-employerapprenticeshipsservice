@@ -13,6 +13,7 @@ using SFA.DAS.EmployerAccounts.Events.Messages;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 using SFA.DAS.HashingService;
 using SFA.DAS.Messaging.Interfaces;
+using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
 {

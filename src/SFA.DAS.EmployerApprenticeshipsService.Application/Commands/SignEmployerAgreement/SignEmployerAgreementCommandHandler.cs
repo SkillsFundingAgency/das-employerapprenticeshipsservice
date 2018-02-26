@@ -17,6 +17,7 @@ using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 using SFA.DAS.HashingService;
+using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 {

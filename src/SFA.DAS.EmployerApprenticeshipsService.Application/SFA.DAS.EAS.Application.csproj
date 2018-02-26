@@ -34,6 +34,12 @@
     <Reference Include="Elasticsearch.Net, Version=5.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
       <HintPath>..\packages\Elasticsearch.Net.5.6.0\lib\net46\Elasticsearch.Net.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
     </Reference>
@@ -54,14 +60,14 @@
     <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Data.Edm, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.Edm.5.6.4\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    <Reference Include="Microsoft.Data.Edm, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.7.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Data.OData, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.OData.5.6.4\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    <Reference Include="Microsoft.Data.OData, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.7.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.4\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.7.0\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.16.0.14, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.16.0\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
@@ -196,8 +202,8 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Spatial, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Spatial.5.6.4\lib\net40\System.Spatial.dll</HintPath>
+    <Reference Include="System.Spatial, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.7.0\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
     <Reference Include="System.Text.Encodings.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encodings.Web.4.0.0\lib\netstandard1.0\System.Text.Encodings.Web.dll</HintPath>
@@ -235,6 +241,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
+    <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommand.cs" />
+    <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommandHandler.cs" />
+    <Compile Include="Commands\RejectTransferConnectionInvitation\RejectTransferConnectionInvitationCommandHandler.cs" />
+    <Compile Include="Commands\RejectTransferConnectionInvitation\RejectTransferConnectionInvitationCommand.cs" />
     <Compile Include="Attributes\DateAttribute.cs" />
     <Compile Include="Attributes\DayAttribute.cs" />
     <Compile Include="Attributes\YearAttribute.cs" />
@@ -331,6 +341,13 @@
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommand.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandHandler.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandValidator.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Data\EmployerAccountDbContext.cs" />
+    <Compile Include="Data\IUnitOfWorkManager.cs" />
+    <Compile Include="Data\UnitOfWorkManager.cs" />
+    <Compile Include="Dtos\AccountDto.cs" />
+    <Compile Include="Dtos\TransferConnectionInvitationDto.cs" />
+    <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Events\ProcessDeclaration\ProcessDeclarationsEvent.cs" />
     <Compile Include="Events\ProcessDeclaration\ProcessDeclarationsEventHandler.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEvent.cs" />
@@ -351,8 +368,14 @@
     <Compile Include="Hashing\IPublicHashingService.cs" />
     <Compile Include="Helpers\NameOf.cs" />
     <Compile Include="InvalidRequestException.cs" />
+    <Compile Include="Mappings\AccountMaps.cs" />
+    <Compile Include="Mappings\MembershipMaps.cs" />
+    <Compile Include="Mappings\TransferConnectionInvitationMaps.cs" />
+    <Compile Include="Mappings\UserMaps.cs" />
+    <Compile Include="Messages\AuthorizedMessage.cs" />
     <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
+    <Compile Include="Messages\IAuthorizedMessage.cs" />
     <Compile Include="Messages\PaymentProcessorQueueMessage.cs" />
     <Compile Include="NotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -402,6 +425,13 @@
     <Compile Include="Queries\GetActivities\GetActivitiesQueryHandler.cs" />
     <Compile Include="Queries\GetActivities\GetActivitiesQuery.cs" />
     <Compile Include="Queries\GetActivities\GetActivitiesResponse.cs" />
+    <Compile Include="Queries\GetApprovedTransferConnectionInvitation\GetApprovedTransferConnectionInvitationQuery.cs" />
+    <Compile Include="Queries\GetApprovedTransferConnectionInvitation\GetApprovedTransferConnectionInvitationResponse.cs" />
+    <Compile Include="Queries\GetApprovedTransferConnectionInvitation\GetApprovedTransferConnectionInvitationQueryHandler.cs" />
+    <Compile Include="Queries\GetReceivedTransferConnectionInvitation\GetReceivedTransferConnectionInvitationQueryHandler.cs" />
+    <Compile Include="Queries\GetRejectedTransferConnectionInvitation\GetRejectedTransferConnectionInvitationQueryHandler.cs" />
+    <Compile Include="Queries\GetRejectedTransferConnectionInvitation\GetRejectedTransferConnectionInvitationQuery.cs" />
+    <Compile Include="Queries\GetRejectedTransferConnectionInvitation\GetRejectedTransferConnectionInvitationResponse.cs" />
     <Compile Include="Queries\GetLatestActivities\GetLatestActivitiesQuery.cs" />
     <Compile Include="Queries\GetLatestActivities\GetLatestActivitiesQueryHandler.cs" />
     <Compile Include="Queries\GetLatestActivities\GetLatestActivitiesResponse.cs" />
@@ -561,7 +591,9 @@
     <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationQuery.cs" />
     <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationResponse.cs" />
     <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrgainsationValidator.cs" />
-    <Compile Include="Queries\GetSentTransferConnectionInvitationQuery\GetSentTransferConnectionInvitationResponse.cs" />
+    <Compile Include="Queries\GetReceivedTransferConnectionInvitation\GetReceivedTransferConnectionInvitationQuery.cs" />
+    <Compile Include="Queries\GetReceivedTransferConnectionInvitation\GetReceivedTransferConnectionInvitationResponse.cs" />
+    <Compile Include="Queries\GetSentTransferConnectionInvitation\GetSentTransferConnectionInvitationResponse.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfQueryHandler.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfRequest.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfResponse.cs" />
@@ -573,11 +605,17 @@
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequestHandler.cs" />
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequestValidator.cs" />
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersResponse.cs" />
-    <Compile Include="Queries\GetSentTransferConnectionInvitationQuery\GetSentTransferConnectionInvitationQuery.cs" />
-    <Compile Include="Queries\GetSentTransferConnectionInvitationQuery\GetSentTransferConnectionInvitationQueryHandler.cs" />
+    <Compile Include="Queries\GetSentTransferConnectionInvitation\GetSentTransferConnectionInvitationQuery.cs" />
+    <Compile Include="Queries\GetSentTransferConnectionInvitation\GetSentTransferConnectionInvitationQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountQuery.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountResponse.cs" />
+    <Compile Include="Queries\GetTransferConnectionInvitations\GetTransferConnectionInvitationsQuery.cs" />
+    <Compile Include="Queries\GetTransferConnectionInvitations\GetTransferConnectionInvitationsQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferConnectionInvitations\GetTransferConnectionInvitationsResponse.cs" />
+    <Compile Include="Queries\GetTransferConnectionInvitation\GetTransferConnectionInvitationQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferConnectionInvitation\GetTransferConnectionInvitationQuery.cs" />
+    <Compile Include="Queries\GetTransferConnectionInvitation\GetTransferConnectionInvitationResponse.cs" />
     <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleHandler.cs" />
     <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleQuery.cs" />
     <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleResponse.cs" />

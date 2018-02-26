@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         private readonly ILog _logger;
 
-        public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator,
+        public EmployerAccountController(IAuthenticationService owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator,
             IFeatureToggleService featureToggle, IMultiVariantTestingService multiVariantTestingService, ILog logger, 
             ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper,multiVariantTestingService,flashMessage)
@@ -187,7 +187,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(string hashedAccountId)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
             var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
             return View(vm);
         }
@@ -197,7 +197,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
             var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, userIdClaim);
 
             if (response.Status == HttpStatusCode.OK)
@@ -230,7 +230,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private string GetUserId()
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
             return userIdClaim ?? "";
         }
 

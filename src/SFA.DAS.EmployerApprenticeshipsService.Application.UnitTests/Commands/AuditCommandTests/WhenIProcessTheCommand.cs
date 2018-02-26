@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.AuditCommandTests
 {

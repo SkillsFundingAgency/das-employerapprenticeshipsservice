@@ -1,4 +1,4 @@
-﻿using Moq;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AcceptInvitation;
 using SFA.DAS.EAS.Application.Validation;
@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
 
             _invitationRepository.Setup(x => x.Get(It.IsAny<long>())).ReturnsAsync(_invitation);
-            _userAccountRepository.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(new User());
+            _userAccountRepository.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(new User { UserRef = Guid.NewGuid().ToString() });
 
             _handler = new AcceptInvitationCommandHandler(
                 _invitationRepository.Object,
@@ -162,7 +162,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
         public async Task ThenTheUserFullNameShouldBeUsed()
         {
             //Assign
-            var user = new User { FirstName = "Bill", LastName = "Green" };
+            var user = new User { FirstName = "Bill", LastName = "Green", UserRef = Guid.NewGuid().ToString() };
 
             _userAccountRepository.Setup(x => x.Get(_invitation.Email))
                                  .ReturnsAsync(user);

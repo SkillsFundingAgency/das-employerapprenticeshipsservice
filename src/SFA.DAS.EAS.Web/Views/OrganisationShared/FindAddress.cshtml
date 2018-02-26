@@ -5,7 +5,7 @@
     ViewBag.Section = "organisations";
     ViewBag.PageID = "find-organisation-address";
 
-    var hasHashedOrganisationId = this.ViewContext.RouteData.Values[ControllerConstants.HashedAccountIdKeyName] != null;
+    var hasHashedOrganisationId = this.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName] != null;
     ViewBag.HideNav = hasHashedOrganisationId == false;
 }
 

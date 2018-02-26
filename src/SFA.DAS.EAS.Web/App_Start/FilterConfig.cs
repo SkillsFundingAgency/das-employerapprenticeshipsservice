@@ -1,7 +1,8 @@
 ﻿using System.Web.Mvc;
 using AutoMapper;
+using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Authorization;
 using SFA.DAS.EAS.Web.Filters;
 
 namespace SFA.DAS.EAS.Web
@@ -10,12 +11,11 @@ namespace SFA.DAS.EAS.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            var dependencyResolver = DependencyResolver.Current;
-
-            filters.Add(new EnsureFeatureIsEnabledFilter(() => dependencyResolver.GetService<ICurrentUserService>(), () => dependencyResolver.GetService<IFeatureToggleService>()));
+            filters.Add(new ValidateFeatureFilter(() => DependencyResolver.Current.GetService<IFeatureToggleService>(), () => DependencyResolver.Current.GetService<IMembershipService>()));
             filters.Add(new GoogleAnalyticsFilter());
+            filters.Add(new MapViewModelToMessageFilter(() => DependencyResolver.Current.GetService<IMapper>()));
+            filters.Add(new UnitOfWorkManagerFilter(() => DependencyResolver.Current.GetService<IUnitOfWorkManager>()));
             filters.Add(new HandleErrorFilter());
-            filters.Add(new MapViewModelToMessageFilter(() => dependencyResolver.GetService<IMapper>()));
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
+﻿using SFA.DAS.EAS.Application.Dtos;
+
+namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
 {
     public class GetTransferConnectionInvitationAccountResponse
     {
-        public Domain.Data.Entities.Account.Account ReceiverAccount { get; set; }
-        public Domain.Data.Entities.Account.Account SenderAccount { get; set; }
+        public AccountDto ReceiverAccount { get; set; }
     }
 }

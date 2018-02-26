@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
     {
         private EmployerAgreementController _controller;
         private Mock<EmployerAgreementOrchestrator> _orchestrator;
-        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IAuthenticationService> _owinWrapper;
         private Mock<IFeatureToggleService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
         public void Arrange()
         {
             _orchestrator = new Mock<EmployerAgreementOrchestrator>();
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _featureToggle = new Mock<IFeatureToggleService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();

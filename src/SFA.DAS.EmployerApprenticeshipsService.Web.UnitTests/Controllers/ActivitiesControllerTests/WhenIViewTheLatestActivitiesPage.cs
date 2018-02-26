@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Web.ViewModels.Activities;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.ActivitiesControllerTests
 {
+    [TestFixture]
     public class WhenIViewTheLatestActivitiesPage
     {
         private ActivitiesController _controller;
@@ -21,7 +22,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.ActivitiesControllerTests
         [SetUp]
         public void Arrange()
         {
-            _mediator.Setup(m => m.Send(_query)).Returns(_response);
+            _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
             _mapper.Setup(m => m.Map<LatestActivitiesViewModel>(_response)).Returns(_viewModel);
 
             _controller = new ActivitiesController(_mapper.Object, _mediator.Object);
@@ -32,7 +33,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.ActivitiesControllerTests
         {
             _controller.Latest(_query);
 
-            _mediator.Verify(m => m.Send(_query), Times.Once);
+            _mediator.Verify(m => m.SendAsync(_query), Times.Once);
         }
 
         [Test]

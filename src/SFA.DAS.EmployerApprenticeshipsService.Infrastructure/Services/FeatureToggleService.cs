@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.NLog.Logger;
@@ -21,7 +22,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             Logger = logger;
         }
 
-        public virtual bool IsFeatureEnabled(string controllerName, string actionName, string userEmail)
+        public virtual bool IsFeatureEnabled(string controllerName, string actionName, IMembershipContext membershipContext)
         {
             var config = GetConfiguration();
             var isFeatureEnabled = true;
@@ -36,7 +37,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                     if (actionToggle != null)
                     {
-                        var whitelistToggle = actionToggle.Whitelist.Any(p => Regex.IsMatch(userEmail, p, RegexOptions.IgnoreCase));
+                        var whitelistToggle = membershipContext != null && actionToggle.Whitelist.Any(p => Regex.IsMatch(membershipContext.UserEmail, p, RegexOptions.IgnoreCase));
 
                         if (!whitelistToggle)
                         {
@@ -46,7 +47,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 }
             }
             
-            Logger.Info($"Is feature enabled check for controllerName '{controllerName}', actionName '{actionName}' and userEmail '{userEmail}' is '{isFeatureEnabled}'.");
+            Logger.Info($"Is feature enabled check for controllerName '{controllerName}', actionName '{actionName}' and userId '{membershipContext?.UserId}' is '{isFeatureEnabled}'.");
 
             return isFeatureEnabled;
         }

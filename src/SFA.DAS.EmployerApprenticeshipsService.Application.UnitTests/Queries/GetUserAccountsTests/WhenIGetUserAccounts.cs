@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountsTests
             //Assert
             var account = actual.Accounts.AccountList.FirstOrDefault();
             Assert.IsNotNull(account);
-            Assert.AreEqual("Owner",account.RoleName);
+            Assert.AreEqual("Owner", account.RoleName);
         }
 
     }

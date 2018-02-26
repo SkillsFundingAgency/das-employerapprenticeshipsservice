@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
 
         public EmployerManageApprenticesController(
-            IOwinWrapper owinWrapper,
+            IAuthenticationService owinWrapper,
             IFeatureToggleService featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage)

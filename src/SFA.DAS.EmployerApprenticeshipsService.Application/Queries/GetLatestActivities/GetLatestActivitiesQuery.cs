@@ -1,13 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MediatR;
-using SFA.DAS.EAS.Domain;
+﻿using MediatR;
+using SFA.DAS.EAS.Application.Messages;
 
 namespace SFA.DAS.EAS.Application.Queries.GetLatestActivities
 {
-    public class GetLatestActivitiesQuery : IRequest<GetLatestActivitiesResponse>
+    public class GetLatestActivitiesQuery : AuthorizedMessage, IAsyncRequest<GetLatestActivitiesResponse>
     {
-        [Required]
-        [RegularExpression(Constants.HashedAccountIdRegex)]
-        public string HashedAccountId { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 {
     public class WhenIModifyMyUserAccount : ControllerTestBase
     {
-        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IAuthenticationService> _owinWrapper;
         private Mock<HomeOrchestrator> _homeOrchestrator;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IFeatureToggleService> _featureToggle;
@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         {
             base.Arrange();
 
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _homeOrchestrator = new Mock<HomeOrchestrator>();
             _featureToggle = new Mock<IFeatureToggleService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();

@@ -19,6 +19,7 @@ using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {
+    [TestFixture]
     public class WhenIDownloadTransactionsByDate
     {
         private const string ExpectedFileExtension = "hello";
@@ -26,7 +27,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         private static readonly byte[] ExpectedFileData = {};
 
         private EmployerAccountTransactionsController _controller;
-        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IAuthenticationService> _owinWrapper;
         private Mock<IFeatureToggleService> _featureToggle;
         private Mock<IHashingService> _hashingService;
         private Mock<IMediator> _mediator;
@@ -41,9 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         {
             _transactionDownloadViewModel = new TransactionDownloadViewModel
             {
-                HashedAccountId = "",
-
-                Message = new GetTransactionsDownloadQuery
+                GetTransactionsDownloadQuery = new GetTransactionsDownloadQuery
                 {
                     StartDate = new MonthYear
                     {
@@ -58,7 +57,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                 }
             };
 
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _featureToggle = new Mock<IFeatureToggleService>();
             _hashingService = new Mock<IHashingService>();
             _mediator = new Mock<IMediator>();
@@ -99,7 +98,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         {
             await _controller.TransactionsDownload(_transactionDownloadViewModel);
 
-            _mediator.Verify(m => m.SendAsync(_transactionDownloadViewModel.Message), Times.Once);
+            _mediator.Verify(m => m.SendAsync(_transactionDownloadViewModel.GetTransactionsDownloadQuery), Times.Once);
         }
 
         [Test]

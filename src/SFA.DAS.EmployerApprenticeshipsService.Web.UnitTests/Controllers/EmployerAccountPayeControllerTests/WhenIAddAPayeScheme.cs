@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
     public class WhenIAddAPayeScheme
     {
         private Mock<Web.Orchestrators.EmployerAccountPayeOrchestrator> _employerAccountPayeOrchestrator;
-        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IAuthenticationService> _owinWrapper;
         private EmployerAccountPayeController _controller;
         private Mock<IFeatureToggleService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         {
             _employerAccountPayeOrchestrator = new Mock<Web.Orchestrators.EmployerAccountPayeOrchestrator>();
             
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
             _featureToggle = new Mock<IFeatureToggleService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();

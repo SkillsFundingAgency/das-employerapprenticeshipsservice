@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Authorization;
 
 namespace SFA.DAS.EAS.Web.Extensions
 {
@@ -20,11 +20,10 @@ namespace SFA.DAS.EAS.Web.Extensions
 
         public static bool IsFeatureEnabled(this HtmlHelper htmlHelper, string controllerName, string actionName)
         {
-            var dependencyResolver = DependencyResolver.Current;
-            var currenUserService = dependencyResolver.GetService<ICurrentUserService>();
-            var currentUser = currenUserService.GetCurrentUser();
-            var featureToggleService = dependencyResolver.GetService<IFeatureToggleService>();
-            var isFeatureEnabled = featureToggleService.IsFeatureEnabled(controllerName, actionName, currentUser.Email);
+            var membershipService = DependencyResolver.Current.GetService<IMembershipService>();
+            var featureToggleService = DependencyResolver.Current.GetService<IFeatureToggleService>();
+            var membership = membershipService.GetMembershipContext();
+            var isFeatureEnabled = featureToggleService.IsFeatureEnabled(controllerName, actionName, membership);
 
             return isFeatureEnabled;
         }

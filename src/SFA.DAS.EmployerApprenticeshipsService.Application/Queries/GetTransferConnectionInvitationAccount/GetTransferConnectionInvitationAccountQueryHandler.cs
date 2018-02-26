@@ -1,66 +1,62 @@
-using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
 using MediatR;
+using SFA.DAS.EAS.Application.Data;
+using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
 {
     public class GetTransferConnectionInvitationAccountQueryHandler : IAsyncRequestHandler<GetTransferConnectionInvitationAccountQuery, GetTransferConnectionInvitationAccountResponse>
     {
-        private readonly CurrentUser _currentUser;
-        private readonly IEmployerAccountRepository _employerAccountRepository;
-        private readonly IHashingService _hashingService;
-        private readonly IMembershipRepository _membershipRepository;
-        private readonly ITransferConnectionInvitationRepository _transferConnectionInvitationRepository;
+        private readonly EmployerAccountDbContext _db;
 
-        public GetTransferConnectionInvitationAccountQueryHandler(
-            CurrentUser currentUser,
-            IEmployerAccountRepository employerAccountRepository,
-            IHashingService hashingService,
-            IMembershipRepository membershipRepository,
-            ITransferConnectionInvitationRepository transferConnectionInvitationRepository)
+        public GetTransferConnectionInvitationAccountQueryHandler(EmployerAccountDbContext db)
         {
-            _currentUser = currentUser;
-            _employerAccountRepository = employerAccountRepository;
-            _hashingService = hashingService;
-            _membershipRepository = membershipRepository;
-            _transferConnectionInvitationRepository = transferConnectionInvitationRepository;
+            _db = db;
         }
 
         public async Task<GetTransferConnectionInvitationAccountResponse> Handle(GetTransferConnectionInvitationAccountQuery message)
         {
-            var membership = await _membershipRepository.GetCaller(message.SenderAccountHashedId, _currentUser.ExternalUserId);
-
-            if (membership == null)
-            {
-                throw new UnauthorizedAccessException();
-            }
-            
-            var receiverAccount = await _employerAccountRepository.GetAccountByPublicHashedId(message.ReceiverAccountPublicHashedId);
+            var receiverAccount = await _db.Accounts
+                .ProjectTo<AccountDto>()
+                .SingleOrDefaultAsync(a => a.PublicHashedId == message.ReceiverAccountPublicHashedId);
 
             if (receiverAccount == null)
             {
-                throw new ValidationException(nameof(message.ReceiverAccountPublicHashedId), "You must enter a valid account ID");
+                throw new ValidationException<GetTransferConnectionInvitationAccountQuery>(q => q.ReceiverAccountPublicHashedId, "You must enter a valid account ID");
             }
 
-            var senderAccountId = _hashingService.DecodeValue(message.SenderAccountHashedId);
-            var senderAccount = await _employerAccountRepository.GetAccountById(senderAccountId);
-            var transferConnectionInvitations = await _transferConnectionInvitationRepository.GetTransferConnectionInvitations(senderAccount.Id, receiverAccount.Id);
+            var anyPendingtransferConnectionInvitations = await _db.TransferConnectionInvitations
+                .Where(i => 
+                    i.SenderAccount.Id == message.AccountId.Value &&
+                    i.ReceiverAccount.Id == receiverAccount.Id &&
+                    i.Status == TransferConnectionInvitationStatus.Pending)
+                .AnyAsync();
 
-            if (transferConnectionInvitations.Any(t => t.Status == TransferConnectionInvitationStatus.Sent))
+            if (anyPendingtransferConnectionInvitations)
             {
-                throw new ValidationException(nameof(message.ReceiverAccountPublicHashedId), "You've already sent a connection request to this employer");
+                throw new ValidationException<GetTransferConnectionInvitationAccountQuery>(q => q.ReceiverAccountPublicHashedId, "You've already sent a connection request to this employer");
+            }
+
+            var anyApprovedtransferConnectionInvitations = await _db.TransferConnectionInvitations
+                .Where(i => (
+                    i.SenderAccount.Id == message.AccountId.Value && i.ReceiverAccount.Id == receiverAccount.Id ||
+                    i.SenderAccount.Id == receiverAccount.Id && i.ReceiverAccount.Id == message.AccountId.Value) &&
+                    i.Status == TransferConnectionInvitationStatus.Approved)
+                .AnyAsync();
+
+            if (anyApprovedtransferConnectionInvitations)
+            {
+                throw new ValidationException<GetTransferConnectionInvitationAccountQuery>(q => q.ReceiverAccountPublicHashedId, "You're already connected with this employer");
             }
 
             return new GetTransferConnectionInvitationAccountResponse
             {
-                ReceiverAccount = receiverAccount,
-                SenderAccount = senderAccount
+                ReceiverAccount = receiverAccount
             };
         }
     }

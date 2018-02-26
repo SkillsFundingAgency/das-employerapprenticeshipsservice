@@ -75,9 +75,8 @@ namespace SFA.DAS.EAS.Web
 
             try
             {
-                var dependecyResolver = DependencyResolver.Current;
-                var owinService = dependecyResolver.GetService<IOwinWrapper>();
-                var externalUserId = owinService.GetClaimValue(ControllerConstants.SubClaimKeyName);
+                var owinService = DependencyResolver.Current.GetService<IAuthenticationService>();
+                var externalUserId = owinService.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
 
                 properties = new Dictionary<string, object>
                 {

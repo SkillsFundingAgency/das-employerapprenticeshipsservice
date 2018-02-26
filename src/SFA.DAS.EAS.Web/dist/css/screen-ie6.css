@@ -2144,7 +2144,7 @@ table.top-border {
   border-top: 1px solid #bfc1c3;
 }
 
-.action-add {
+.action-add, .action-download {
   margin-bottom: 20px;
   margin-top: 60px;
   float: right;
@@ -5522,36 +5522,6 @@ h2 .float-right {
   display: block;
 }
 
-
-/*Download transactions page UI*/
-#download-transactions .column-one-third {
-    width: 45%;
-    width: 100%;
-}
-
-#download-transactions .column-one-quarter {
-    width: 10%;
-    width: 100%;
-    text-align: center;
-}
-
-#download-transactions .grey-rounded {
-    background: #6f777b;
-    color: #fff;
-    border-radius: 100%;
-    padding: 0;
-    width: 45px;
-    height: 45px;
-    margin: 40px auto;
-    margin: 0;
-}
-
-#download-transactions .grey-rounded .rounded-text {
-    display: block;
-    padding: 13px 10px 10px 9px;
-    font-weight: bold;
-}
-
 .js-enabled ul.js-tabs a.selected {
   outline: none;
 }
@@ -5618,4 +5588,43 @@ h2 .float-right {
     margin-top: 5px;
     word-wrap: break-word;
   }
+}
+
+.circle-white {
+  color: #005ea5;
+  background: #fff;
+  float: left;
+  margin-right: 10px;
+}
+
+.flash-card {
+  margin-top: 1em;
+  padding: 30px;
+  background: #005ea5;
+  color: #fff;
+}
+
+.flash-card h1:first-of-type, .flash-card h2:first-of-type {
+  margin-top: 0;
+}
+
+.flash-card li p {
+  margin-left: 32px;
+}
+
+.flash-card > p:last-of-type {
+  margin-bottom: 0;
+}
+
+.flash-card a {
+  color: #fff;
+}
+
+.flash-card a:visited, .flash-card a:hover, .flash-card a:active {
+  color: #fff;
+}
+
+.flash-card {
+  margin-top: 1.25em;
+  padding: 35px 50px;
 }

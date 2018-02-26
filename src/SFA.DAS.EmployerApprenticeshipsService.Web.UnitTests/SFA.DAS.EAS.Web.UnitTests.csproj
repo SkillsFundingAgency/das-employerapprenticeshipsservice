@@ -42,6 +42,12 @@
     <Reference Include="Elasticsearch.Net, Version=5.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
       <HintPath>..\packages\Elasticsearch.Net.5.6.0\lib\net46\Elasticsearch.Net.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="FluentAssertions, Version=4.17.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.4.17.0\lib\net45\FluentAssertions.dll</HintPath>
       <Private>True</Private>
@@ -67,14 +73,14 @@
     <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Data.Edm, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.Edm.5.6.4\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    <Reference Include="Microsoft.Data.Edm, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.7.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Data.OData, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.OData.5.6.4\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    <Reference Include="Microsoft.Data.OData, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.7.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.4\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.7.0\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.ServiceBus.3.3.2\lib\net45-full\Microsoft.ServiceBus.dll</HintPath>
@@ -164,8 +170,8 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Spatial, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Spatial.5.6.4\lib\net40\System.Spatial.dll</HintPath>
+    <Reference Include="System.Spatial, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.7.0\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
     <Reference Include="System.Text.Encodings.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encodings.Web.4.0.0\lib\netstandard1.0\System.Text.Encodings.Web.dll</HintPath>
@@ -206,6 +212,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrangeWebTest.cs" />
+    <Compile Include="Attributes\ValidateMembershipAttributeTests\WhenIViewAPage.cs" />
+    <Compile Include="Authorization\MembershipServiceTests\WhenIGetMembership.cs" />
+    <Compile Include="Authorization\MembershipServiceTests\WhenIValidateMembership.cs" />
+    <Compile Include="Binders\DefaultBinderTests\WhenIBindAViewModel.cs" />
     <Compile Include="Controllers\ActivitiesControllerTests\WhenIViewTheLatestActivitiesPage.cs" />
     <Compile Include="Controllers\ActivitiesControllerTests\WhenIViewTheActivitiesPage.cs" />
     <Compile Include="Controllers\BaseControllerTests\WhenOnActionExecuting.cs" />
@@ -245,15 +256,21 @@
     <Compile Include="Controllers\OrganisationSharedTests\WhenISearchForAnAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenISelectAnAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenIUpdateAnOrganisationsAddress.cs" />
-    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheSentTransferConnectionPage.cs" />
-    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheSendTransferConnectionPage.cs" />
-    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheStartTransferConnectionPage.cs" />
-    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheTransferConnectionsPage.cs" />
-    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheSentTransferConnectionPage.cs" />
-    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheSendTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheRejectedTransferConnectionInvitationPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheApprovedTransferConnectionInvitationPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheSentTransferConnectionInvitationPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheSendTransferConnectionInvitationPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheStartTransferConnectionInvitationPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheRejectedTransferConnectionInvitationPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheApprovedTransferConnectionInvitationPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheTransferConnectionInvitationDetailsPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheTransferConnectionInvitationsPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheSentTransferConnectionInvitationPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheSendTransferConnectionInvitationPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheCreateTransferConnectionPage.cs" />
-    <Compile Include="Controllers\TransfersController\WhenIViewTheTransfersPage.cs" />
-    <Compile Include="Filters\WhenIViewAPage.cs" />
+    <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransfersPage.cs" />
+    <Compile Include="Filters\EnsureFeatureIsEnabledFilterTests\WhenIViewAPage.cs" />
+    <Compile Include="Filters\UnitOfWorkManagerFilterTests\WhenIViewAPage.cs" />
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
@@ -322,6 +339,10 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Web\SFA.DAS.EAS.Web.csproj">
       <Project>{65DB60B1-80F0-432C-926E-7A6DD02A5645}</Project>
       <Name>SFA.DAS.EAS.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EAS.TestCommon.csproj">
+      <Project>{05d7c094-e2c9-4ccd-b0d7-85d263254b26}</Project>
+      <Name>SFA.DAS.EAS.TestCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

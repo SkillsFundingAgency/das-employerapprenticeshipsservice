@@ -5,10 +5,8 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.PaymentUpdater.WebJob.Updater;
-using StructureMap;
-using StructureMap.Graph;
-using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 using SFA.DAS.NLog.Logger;
+using StructureMap;
 
 namespace SFA.DAS.EAS.PaymentUpdater.WebJob.DependencyResolution
 {
@@ -16,14 +14,13 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.DependencyResolution
     {
         public DefaultRegistry()
         {
-            Scan(
-                scan =>
-                {
-                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
-                    scan.RegisterConcreteTypesAgainstTheFirstInterface();
-                });
+            Scan(s =>
+            {
+                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
+                s.RegisterConcreteTypesAgainstTheFirstInterface();
+            });
 
-            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
+            For<Domain.Interfaces.IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             For<IPaymentProcessor>().Use<PaymentProcessor>();
 
             RegisterMapper();

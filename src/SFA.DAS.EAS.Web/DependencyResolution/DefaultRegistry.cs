@@ -23,7 +23,6 @@ using System.Reflection;
 using System.Web;
 using AutoMapper;
 using MediatR;
-using Microsoft.ApplicationInsights;
 using Microsoft.Azure;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Commitments.Api.Client;
@@ -33,19 +32,18 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.CookieService;
+using SFA.DAS.EAS.Application.Data;
+using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
-using NotificationsApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.NotificationsApiClientConfiguration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
-using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Factories;
 using SFA.DAS.EAS.Infrastructure.Interfaces.REST;
 using SFA.DAS.EAS.Infrastructure.Services;
-using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Authorization;
 using SFA.DAS.EAS.Web.Logging;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
@@ -59,7 +57,6 @@ using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Tasks.API.Client;
 using StructureMap;
 using StructureMap.TypeRules;
-using SFA.DAS.EAS.Application.Hashing;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -71,7 +68,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
         public DefaultRegistry()
         {
             var config = GetConfiguration();
-            var notificationsApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration<NotificationsApiClientConfiguration>($"{ServiceName}.Notifications");
+            var notificationsApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration<Domain.Configuration.NotificationsApiClientConfiguration>($"{ServiceName}.Notifications");
             var taskApiConfig = Infrastructure.DependencyResolution.ConfigurationHelper.GetConfiguration<TaskApiConfiguration>($"SFA.DAS.Tasks.Api");
 
             Scan(s =>
@@ -80,18 +77,17 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
                 s.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(c => c.Singleton());
             });
-
-            For<CurrentUser>().Use(c => c.GetInstance<ICurrentUserService>().GetCurrentUser());
+            
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For<IApprenticeshipApi>().Use<ApprenticeshipApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
-            For<ICache>().Use<InMemoryCache>(); //RedisCache
-            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
+            For<ICache>().Use<InMemoryCache>();
+            For<Domain.Interfaces.IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
-            For<ICurrentUserService>().Use<CurrentUserService>();
-            For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi).SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
+            For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi).SelectConstructor(() => new EventsApi(null));
             For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
+            For<IMembershipService>().Use<MembershipService>();
             For<IPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
             For<ITaskApiConfiguration>().Use(taskApiConfig);
             For<ITaskService>().Use<TaskService>();
@@ -201,7 +197,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
                 .Select(t => (Profile)Activator.CreateInstance(t));
 
-            var config = new MapperConfiguration(c =>
+            Mapper.Initialize(c =>
             {
                 foreach (var profile in profiles)
                 {
@@ -209,10 +205,8 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 }
             });
 
-            var mapper = config.CreateMapper();
-
-            For<IConfigurationProvider>().Use(config).Singleton();
-            For<IMapper>().Use(mapper).Singleton();
+            For<IConfigurationProvider>().Use(Mapper.Configuration).Singleton();
+            For<IMapper>().Use(Mapper.Instance).Singleton();
         }
 
         private void RegisterMediator()
@@ -222,7 +216,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
         }
 
-        private void ReisterNotificationsApi(NotificationsApiClientConfiguration config)
+        private void ReisterNotificationsApi(Domain.Configuration.NotificationsApiClientConfiguration config)
         {
             HttpClient httpClient;
 

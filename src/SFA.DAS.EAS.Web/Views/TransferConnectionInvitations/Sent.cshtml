@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
+
 @model SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations.SentTransferConnectionInvitationViewModel
 
 @{
@@ -13,9 +14,9 @@
     <div class="column-two-thirds">
         <div class="success-summary">
             <h1 class="bold-large">Request sent</h1>
-            <p><i class="icon-green-tick"></i> A request to connect has been sent to @Model.ReceiverAccount.Name with account ID @Model.ReceiverAccount.PublicHashedId</p>
+            <p><i class="icon-green-tick"></i> A request to connect has been sent to @Model.TransferConnectionInvitation.ReceiverAccount.Name with account ID @Model.TransferConnectionInvitation.ReceiverAccount.PublicHashedId</p>
         </div>
-        <h1 class="heading-xlarge">What next?</h1>
+        <h2 class="heading-xlarge">What next?</h2>
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
