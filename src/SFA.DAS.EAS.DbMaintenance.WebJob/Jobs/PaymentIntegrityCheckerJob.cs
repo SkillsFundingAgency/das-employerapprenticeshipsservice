@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
-using System;
+using SFA.DAS.NLog.Logger;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.DbMaintenance.WebJob.Jobs
@@ -8,35 +9,49 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Jobs
     public class PaymentIntegrityCheckerJob : IJob
     {
         private readonly IPaymentService _paymentService;
+        private readonly IEmployerAccountRepository _employerAccountRepository;
         private readonly IDasLevyRepository _levyRepository;
+        private readonly ILog _logger;
 
-        public PaymentIntegrityCheckerJob(IPaymentService paymentService, IDasLevyRepository levyRepository)
+        public PaymentIntegrityCheckerJob(
+            IPaymentService paymentService,
+            IEmployerAccountRepository employerAccountRepository,
+            IDasLevyRepository levyRepository,
+            ILog logger)
         {
             _paymentService = paymentService;
+            _employerAccountRepository = employerAccountRepository;
             _levyRepository = levyRepository;
+            _logger = logger;
         }
 
-        public Task Run()
+        public async Task Run()
         {
-            throw new NotImplementedException();
 
-            //Get all account Ids
-
-            //Get all period ends
+            var accounts = await _employerAccountRepository.GetAllAccounts();
 
 
-            //for each preiod end
+            var lastestPeriodEnd = await _levyRepository.GetLatestPeriodEnd();
 
-            //for each account id
+            foreach (var account in accounts)
+            {
+                var expectedPayments = await _paymentService.GetAccountPayments(lastestPeriodEnd.Id, account.Id);
 
-            //Get payments from payment team
-            //payments = await _paymentService.GetAccountPayments(message.PeriodEnd, message.AccountId);
+                var actualPayments =
+                    await _levyRepository.GetAccountPaymentsByPeriodEnd(account.Id, lastestPeriodEnd.Id);
 
-            //Get payments from database
 
-            //Compare and see if any are missing
+                var expectedPaymentsTotal = expectedPayments.Sum(x => x.Amount);
+                var actualPaymentsTotal = actualPayments.Sum(x => x.Amount);
 
-            //If payment is missing then report.
+                if (actualPaymentsTotal != expectedPaymentsTotal)
+                {
+                    _logger.Warn(
+                        $"Payments for account ID {account.Id} for period end {lastestPeriodEnd.Id} are not correct");
+                }
+
+            }
         }
+
     }
 }
