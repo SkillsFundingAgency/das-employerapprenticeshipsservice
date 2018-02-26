@@ -24,7 +24,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetRejectedTransferConnectionInvitatio
         public async Task<GetRejectedTransferConnectionInvitationResponse> Handle(GetRejectedTransferConnectionInvitationQuery message)
         {
             var transferConnectionInvitation = await _db.TransferConnectionInvitations
-                .Include(i => i.ReceiverAccount)
                 .Where(i => 
                     i.Id == message.TransferConnectionInvitationId.Value &&
                     i.ReceiverAccount.Id == message.AccountId.Value &&

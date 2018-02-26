@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.TestCommon;
+using SFA.DAS.EAS.TestCommon.Builders;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitationTests
 {
@@ -42,15 +43,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
                 HashedId = "XYZ987",
                 Name = "Receiver"
             };
+            
+            _transferConnectionInvitation = new TransferConnectionInvitationBuilder()
+                .WithId(111111)
+                .WithSenderAccount(_senderAccount)
+                .WithReceiverAccount(_receiverAccount)
+                .Build();
 
-            _transferConnectionInvitation = new TransferConnectionInvitation
-            {
-                Id = 111111,
-                SenderAccount = _senderAccount,
-                ReceiverAccount = _receiverAccount
-            };
-
-            _transferConnectionInvitations = new List<TransferConnectionInvitation> { _transferConnectionInvitation, new TransferConnectionInvitation() };
+            _transferConnectionInvitations = new List<TransferConnectionInvitation> { _transferConnectionInvitation, new TransferConnectionInvitationBuilder().Build() };
             _transferConnectionInvitationsDbSet = new DbSetStub<TransferConnectionInvitation>(_transferConnectionInvitations);
 
             _configurationProvider = new MapperConfiguration(c =>

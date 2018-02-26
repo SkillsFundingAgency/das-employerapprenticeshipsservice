@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         }
 
         [Test]
-        public async Task ThenIShouldBeShownTheApprovedTransferConnectionPage()
+        public async Task ThenIShouldBeShownTheApprovedTransferConnectionInvitationPage()
         {
             var result = await _controller.Rejected(_query) as ViewResult;
             var model = result?.Model as RejectedTransferConnectionInvitationViewModel;

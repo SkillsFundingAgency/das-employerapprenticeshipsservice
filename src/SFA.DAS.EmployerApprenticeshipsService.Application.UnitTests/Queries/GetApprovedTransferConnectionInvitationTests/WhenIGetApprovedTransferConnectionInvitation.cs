@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetApprovedTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.TestCommon;
+using SFA.DAS.EAS.TestCommon.Builders;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprovedTransferConnectionInvitationTests
 {
@@ -44,21 +45,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprovedTransferConnectio
                 Name = "Receiver"
             };
 
-            _sentTransferConnectionInvitation = new TransferConnectionInvitation
-            {
-                Id = 222222,
-                SenderAccount = _senderAccount,
-                ReceiverAccount = _receiverAccount,
-                Status = TransferConnectionInvitationStatus.Pending
-            };
+            _sentTransferConnectionInvitation = new TransferConnectionInvitationBuilder()
+                .WithId(222222)
+                .WithSenderAccount(_senderAccount)
+                .WithReceiverAccount(_receiverAccount)
+                .WithStatus(TransferConnectionInvitationStatus.Pending)
+                .Build();
 
-            _approvedTransferConnectionInvitation = new TransferConnectionInvitation
-            {
-                Id = 111111,
-                SenderAccount = _senderAccount,
-                ReceiverAccount = _receiverAccount,
-                Status = TransferConnectionInvitationStatus.Approved
-            };
+            _approvedTransferConnectionInvitation = new TransferConnectionInvitationBuilder()
+                .WithId(111111)
+                .WithSenderAccount(_senderAccount)
+                .WithReceiverAccount(_receiverAccount)
+                .WithStatus(TransferConnectionInvitationStatus.Approved)
+                .Build();
 
             _transferConnectionInvitations = new List<TransferConnectionInvitation> { _sentTransferConnectionInvitation, _approvedTransferConnectionInvitation };
             _transferConnectionInvitationsDbSet = new DbSetStub<TransferConnectionInvitation>(_transferConnectionInvitations);

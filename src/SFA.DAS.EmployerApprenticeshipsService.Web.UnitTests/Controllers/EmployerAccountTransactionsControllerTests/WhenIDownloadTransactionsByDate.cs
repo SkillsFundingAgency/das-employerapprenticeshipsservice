@@ -110,7 +110,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         }
 
         [Test]
-        public async Task ThenIShouldBeRedirectedToTheSendTransferConnectionPage()
+        public async Task ThenIShouldBeRedirectedToTheSendTransferConnectionInvitationPage()
         {
             var result = await _controller.TransactionsDownload(_transactionDownloadViewModel) as FileContentResult;
 

@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.Commands.RejectTransferConnectionInvitation
         {
             var rejectorAccount = await _employerAccountRepository.GetAccountById(message.AccountId.Value);
             var rejectorUser = await _userRepository.GetUserById(message.UserId.Value);
-            var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetTransferConnectionInvitationToApproveOrReject(message.TransferConnectionInvitationId.Value, rejectorAccount.Id);
+            var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetTransferConnectionInvitationById(message.TransferConnectionInvitationId.Value);
 
             transferConnectionInvitation.Reject(rejectorAccount, rejectorUser);
         }

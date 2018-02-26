@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
@@ -6,31 +8,35 @@ namespace SFA.DAS.EAS.Domain.Data.Entities.Account
 {
     public class Account
     {
-        public long Id { get; set; }
-        public string HashedId { get; set; }
-        public string PublicHashedId { get; set; }
-        public string Name { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public int RoleId { get; set; }
+        public virtual long Id { get; set; }
+        public virtual DateTime CreatedDate { get; set; }
+        public virtual string HashedId { get; set; }
+        public virtual DateTime? ModifiedDate { get; set; }
+        public virtual string Name { get; set; }
+        public virtual string PublicHashedId { get; set; }
+        public virtual int RoleId { get; set; }
         public string RoleName => ((Role)RoleId).ToString();
+        public virtual ICollection<TransferConnectionInvitation> SentTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
 
         public TransferConnectionInvitation SendTransferConnectionInvitation(Account receiverAccount, User senderUser)
         {
-            RequiresPendingTransferConnectionInvitationDoesNotAlreadyExist(receiverAccount);
-            RequiresTransferConnectionDoesNotAlreadyExist(receiverAccount);
+            RequiresTransferConnectionInvitationDoesNotAlreadyExist(receiverAccount);
 
-            return new TransferConnectionInvitation(this, receiverAccount, senderUser);
+            var transferConnectionInvitation = new TransferConnectionInvitation(this, receiverAccount, senderUser);
+
+            SentTransferConnectionInvitations.Add(transferConnectionInvitation);
+
+            return transferConnectionInvitation;
         }
 
-        private void RequiresPendingTransferConnectionInvitationDoesNotAlreadyExist(Account receiverAccount)
+        private void RequiresTransferConnectionInvitationDoesNotAlreadyExist(Account receiverAccount)
         {
-            // Rework domain model to allow this invariant to be enforced
-        }
+            var anyTransferConnectionInvitations = SentTransferConnectionInvitations.Any(i =>
+                i.ReceiverAccount.Id == receiverAccount.Id &&
+                i.Status != TransferConnectionInvitationStatus.Rejected);
 
-        private void RequiresTransferConnectionDoesNotAlreadyExist(Account receiverAccount)
-        {
-            // Rework domain model to allow this invariant to be enforced
+            if (anyTransferConnectionInvitations)
+                throw new Exception("Requires transfer connection invitation does not already exist.");
         }
     }
 }

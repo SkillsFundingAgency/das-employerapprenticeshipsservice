@@ -204,5 +204,23 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateModelState]
+        [Route("{transferConnectionInvitationId}/details")]
+        public async Task<ActionResult> Details(TransferConnectionInvitationViewModel model)
+        {
+            switch (model.Choice)
+            {
+                case "Confirm":
+                    await _mediator.SendAsync(model.DeleteTransferConnectionInvitationCommand);
+                    return RedirectToAction("Index", "Transfers");
+                case "GoToTransfersPage":
+                    return RedirectToAction("Index", "Transfers");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(model.Choice));
+            }
+        }
     }
 }

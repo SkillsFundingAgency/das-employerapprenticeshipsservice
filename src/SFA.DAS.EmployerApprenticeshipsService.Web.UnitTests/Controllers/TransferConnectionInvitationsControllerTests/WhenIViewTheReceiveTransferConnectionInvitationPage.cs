@@ -4,7 +4,7 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetApprovedTransferConnectionInvitation;
+using SFA.DAS.EAS.Application.Queries.GetReceivedTransferConnectionInvitation;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Mappings;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
@@ -12,14 +12,14 @@ using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsControllerTests
 {
     [TestFixture]
-    public class WhenIViewTheApprovedTransferConnectionInvitationPage
+    public class WhenIViewTheReceiveTransferConnectionInvitationPage
     {
         private TransferConnectionInvitationsController _controller;
         private IConfigurationProvider _configurationProvider;
         private IMapper _mapper;
         private Mock<IMediator> _mediator;
-        private readonly GetApprovedTransferConnectionInvitationQuery _query = new GetApprovedTransferConnectionInvitationQuery();
-        private readonly GetApprovedTransferConnectionInvitationResponse _response = new GetApprovedTransferConnectionInvitationResponse();
+        private readonly GetReceivedTransferConnectionInvitationQuery _query = new GetReceivedTransferConnectionInvitationQuery();
+        private readonly GetReceivedTransferConnectionInvitationResponse _response = new GetReceivedTransferConnectionInvitationResponse();
 
         [SetUp]
         public void Arrange()
@@ -34,18 +34,18 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         }
 
         [Test]
-        public async Task ThenAGetApprovedTransferConnectionQueryShouldBeSent()
+        public async Task ThenAGetReceivedTransferConnectionInvitationQueryShouldBeSent()
         {
-            await _controller.Approved(_query);
+            await _controller.Receive(_query);
 
             _mediator.Verify(m => m.SendAsync(_query), Times.Once);
         }
 
         [Test]
-        public async Task ThenIShouldBeShownTheApprovedTransferConnectionInvitationPage()
+        public async Task ThenIShouldBeShownTheReceiveTransferConnectionInvitationPage()
         {
-            var result = await _controller.Approved(_query) as ViewResult;
-            var model = result?.Model as ApprovedTransferConnectionInvitationViewModel;
+            var result = await _controller.Receive(_query) as ViewResult;
+            var model = result?.Model as ReceiveTransferConnectionInvitationViewModel;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.ViewName, Is.EqualTo(""));

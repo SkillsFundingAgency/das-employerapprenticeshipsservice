@@ -209,6 +209,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builders\TransferConnectionInvitationBuilder.cs" />
     <Compile Include="DbAsyncEnumerableStub.cs" />
     <Compile Include="DbAsyncEnumeratorStub.cs" />
     <Compile Include="DbAsyncQueryProviderStub.cs" />

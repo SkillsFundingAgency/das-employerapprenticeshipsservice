@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 
@@ -6,46 +7,54 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
 {
     public class TransferConnectionInvitation : Entity
     {
-        public long Id { get; set; }
-        public long SenderUserId { get; set; }
-        public long SenderAccountId { get; set; }
-        public long ReceiverAccountId { get; set; }
-        public long? ApproverUserId { get; set; }
-        public long? RejectorUserId { get; set; }
-        public TransferConnectionInvitationStatus Status { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public virtual User SenderUser { get; set; }
-        public virtual Data.Entities.Account.Account SenderAccount { get; set; }
-        public virtual Data.Entities.Account.Account ReceiverAccount { get; set; }
-        public virtual User ApproverUser { get; set; }
-        public virtual User RejectorUser { get; set; }
+        public virtual int Id { get; protected set; }
+        public virtual ICollection<TransferConnectionInvitationChange> Changes { get; protected set; } = new List<TransferConnectionInvitationChange>();
+        public virtual DateTime CreatedDate { get; protected set; }
+        public virtual bool DeletedByReceiver { get; protected set; }
+        public virtual bool DeletedBySender { get; protected set; }
+        public virtual Data.Entities.Account.Account ReceiverAccount { get; protected set; }
+        public virtual long ReceiverAccountId { get; protected set; }
+        public virtual Data.Entities.Account.Account SenderAccount { get; protected set; }
+        public virtual long SenderAccountId { get; protected set; }
+        public virtual TransferConnectionInvitationStatus Status { get; protected set; }
 
-        public TransferConnectionInvitation(Data.Entities.Account.Account senderAccount, Data.Entities.Account.Account receiverAccount, User senderUser)
+        public TransferConnectionInvitation(Data.Entities.Account.Account senderAccount, Data.Entities.Account.Account receiverAccount, User senderUser) : this()
         {
-            SenderUser = senderUser;
+            var now = DateTime.UtcNow;
+
             SenderAccount = senderAccount;
             ReceiverAccount = receiverAccount;
             Status = TransferConnectionInvitationStatus.Pending;
-            CreatedDate = DateTime.UtcNow;
-
-            Publish<TransferConnectionInvitationSentMessage>(e =>
+            CreatedDate = now;
+            
+            Changes.Add(new TransferConnectionInvitationChange
             {
-                e.TransferConnectionId = Id;
-                e.TransferConnectionInvitationId = Id;
-                e.SenderAccountId = SenderAccount.Id;
-                e.SenderAccountName = SenderAccount.Name;
+                SenderAccount = SenderAccount,
+                ReceiverAccount = ReceiverAccount,
+                Status = Status,
+                DeletedBySender = DeletedBySender,
+                DeletedByReceiver = DeletedByReceiver,
+                User = senderUser,
+                CreatedDate = now
+            });
+
+            Publish<SentTransferConnectionInvitationEvent>(e =>
+            {
+                e.CreatedAt = now;
+                e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
                 e.ReceiverAccountId = ReceiverAccount.Id;
                 e.ReceiverAccountName = ReceiverAccount.Name;
-                e.CreatorUserRef = SenderUser.ExternalId.ToString();
-                e.SenderUserExternalId = SenderUser.ExternalId;
-                e.CreatorName = SenderUser.FullName;
-                e.SenderUserName = SenderUser.FullName;
-                e.CreatedAt = CreatedDate;
+                e.SenderAccountHashedId = SenderAccount.HashedId;
+                e.SenderAccountId = SenderAccount.Id;
+                e.SenderAccountName = SenderAccount.Name;
+                e.SentByUserExternalId = senderUser.ExternalId;
+                e.SentByUserId = senderUser.Id;
+                e.SentByUserName = senderUser.FullName;
+                e.TransferConnectionInvitationId = Id;
             });
         }
 
-        public TransferConnectionInvitation()
+        protected TransferConnectionInvitation()
         {
         }
 
@@ -54,20 +63,63 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
             RequiresApproverAccountIsTheReceiverAccount(approverAccount);
             RequiresTransferConnectionInvitationIsPending();
 
-            ApproverUser = approverUser;
+            var now = DateTime.UtcNow;
+            
             Status = TransferConnectionInvitationStatus.Approved;
-            ModifiedDate = DateTime.UtcNow;
 
-            Publish<TransferConnectionInvitationApprovedMessage>(e =>
+            Changes.Add(new TransferConnectionInvitationChange
             {
-                e.TransferConnectionInvitationId = Id;
-                e.SenderAccountId = SenderAccount.Id;
-                e.SenderAccountName = SenderAccount.Name;
+                Status = Status,
+                User = approverUser,
+                CreatedDate = now
+            });
+
+            Publish<ApprovedTransferConnectionInvitationEvent>(e =>
+            {
+                e.ApprovedByUserExternalId = approverUser.ExternalId;
+                e.ApprovedByUserId = approverUser.Id;
+                e.ApprovedByUserName = approverUser.FullName;
+                e.CreatedAt = now;
+                e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
                 e.ReceiverAccountId = ReceiverAccount.Id;
                 e.ReceiverAccountName = ReceiverAccount.Name;
-                e.ApproverUserExternalId = ApproverUser.ExternalId;
-                e.ApproverUserName = ApproverUser.FullName;
-                e.CreatedAt = ModifiedDate.Value;
+                e.SenderAccountHashedId = SenderAccount.HashedId;
+                e.SenderAccountId = SenderAccount.Id;
+                e.SenderAccountName = SenderAccount.Name;
+                e.TransferConnectionInvitationId = Id;
+            });
+        }
+
+        public void Delete(Data.Entities.Account.Account deleterAccount, User deleterUser)
+        {
+            RequiresDeleterAccountIsTheSenderAccount(deleterAccount);
+            RequiresTransferConnectionInvitationIsRejected();
+
+            var now = DateTime.UtcNow;
+
+            DeletedBySender = true;
+
+            Changes.Add(new TransferConnectionInvitationChange
+            {
+                DeletedBySender = DeletedBySender,
+                User = deleterUser,
+                CreatedDate = now
+            });
+
+            Publish<DeletedTransferConnectionInvitationEvent>(e =>
+            {
+                e.CreatedAt = now;
+                e.DeletedByAccountId = deleterAccount.Id;
+                e.DeletedByUserExternalId = deleterUser.ExternalId;
+                e.DeletedByUserId = deleterUser.Id;
+                e.DeletedByUserName = deleterUser.FullName;
+                e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
+                e.ReceiverAccountId = ReceiverAccount.Id;
+                e.ReceiverAccountName = ReceiverAccount.Name;
+                e.SenderAccountHashedId = SenderAccount.HashedId;
+                e.SenderAccountId = SenderAccount.Id;
+                e.SenderAccountName = SenderAccount.Name;
+                e.TransferConnectionInvitationId = Id;
             });
         }
 
@@ -76,45 +128,61 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
             RequiresRejectorAccountIsTheReceiverAccount(rejectorAccount);
             RequiresTransferConnectionInvitationIsPending();
 
-            RejectorUser = rejectorUser;
-            Status = TransferConnectionInvitationStatus.Rejected;
-            ModifiedDate = DateTime.UtcNow;
+            var now = DateTime.UtcNow;
 
-            Publish<TransferConnectionInvitationRejectedMessage>(e =>
+            Status = TransferConnectionInvitationStatus.Rejected;
+            
+            Changes.Add(new TransferConnectionInvitationChange
             {
-                e.TransferConnectionInvitationId = Id;
-                e.SenderAccountId = SenderAccount.Id;
-                e.SenderAccountName = SenderAccount.Name;
+                Status = Status,
+                User = rejectorUser,
+                CreatedDate = now
+            });
+
+            Publish<RejectedTransferConnectionInvitationEvent>(e =>
+            {
+                e.CreatedAt = now;
+                e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
                 e.ReceiverAccountId = ReceiverAccount.Id;
                 e.ReceiverAccountName = ReceiverAccount.Name;
-                e.RejectorUserExternalId = RejectorUser.ExternalId;
-                e.RejectorUserName = RejectorUser.FullName;
-                e.CreatedAt = ModifiedDate.Value;
+                e.RejectorUserExternalId = rejectorUser.ExternalId;
+                e.RejectorUserId = rejectorUser.Id;
+                e.RejectorUserName = rejectorUser.FullName;
+                e.SenderAccountHashedId = SenderAccount.HashedId;
+                e.SenderAccountId = SenderAccount.Id;
+                e.SenderAccountName = SenderAccount.Name;
+                e.TransferConnectionInvitationId = Id;
             });
         }
 
         private void RequiresApproverAccountIsTheReceiverAccount(Data.Entities.Account.Account approverAccount)
         {
             if (approverAccount.Id != ReceiverAccount.Id)
-            {
                 throw new Exception("Requires approver account is the receiver account.");
-            }
+        }
+
+        private void RequiresDeleterAccountIsTheSenderAccount(Data.Entities.Account.Account deleterAccount)
+        {
+            if (deleterAccount.Id != SenderAccount.Id)
+                throw new Exception("Requires deleter account is the sender account.");
         }
 
         private void RequiresRejectorAccountIsTheReceiverAccount(Data.Entities.Account.Account rejectorAccount)
         {
             if (rejectorAccount.Id != ReceiverAccount.Id)
-            {
                 throw new Exception("Requires rejector account is the receiver account.");
-            }
         }
 
         private void RequiresTransferConnectionInvitationIsPending()
         {
             if (Status != TransferConnectionInvitationStatus.Pending)
-            {
                 throw new Exception("Requires transfer connection invitation is pending.");
-            }
+        }
+
+        private void RequiresTransferConnectionInvitationIsRejected()
+        {
+            if (Status != TransferConnectionInvitationStatus.Rejected)
+                throw new Exception("Requires transfer connection invitation is rejected.");
         }
     }
 }

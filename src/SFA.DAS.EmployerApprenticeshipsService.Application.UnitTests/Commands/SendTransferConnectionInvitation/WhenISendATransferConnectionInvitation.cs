@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
@@ -9,8 +10,8 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.TestCommon.Builders;
 using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvitation
 {
@@ -114,42 +115,76 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
 
             _transferConnectionInvitationRepository.Verify(r => r.Add(It.IsAny<TransferConnectionInvitation>()), Times.Once);
 
-            Assert.That(_transferConnectionInvitation, Is.Not.Null);
-            Assert.That(_transferConnectionInvitation.SenderUser.Id, Is.EqualTo(_senderUser.Id));
-            Assert.That(_transferConnectionInvitation.ReceiverAccount.Id, Is.EqualTo(_receiverAccount.Id));
-            Assert.That(_transferConnectionInvitation.SenderAccount.Id, Is.EqualTo(_senderAccount.Id));
-            Assert.That(_transferConnectionInvitation.SenderUser.Id, Is.EqualTo(_senderUser.Id));
-            Assert.That(_transferConnectionInvitation.Status, Is.EqualTo(TransferConnectionInvitationStatus.Pending));
             Assert.That(_transferConnectionInvitation.CreatedDate, Is.GreaterThanOrEqualTo(now));
-            Assert.That(_transferConnectionInvitation.ModifiedDate, Is.Null);
+            Assert.That(_transferConnectionInvitation.DeletedByReceiver, Is.False);
+            Assert.That(_transferConnectionInvitation.DeletedBySender, Is.False);
+            Assert.That(_transferConnectionInvitation.ReceiverAccount, Is.SameAs(_receiverAccount));
+            Assert.That(_transferConnectionInvitation.SenderAccount, Is.SameAs(_senderAccount));
+            Assert.That(_transferConnectionInvitation.Status, Is.EqualTo(TransferConnectionInvitationStatus.Pending));
+            Assert.That(_transferConnectionInvitation.Changes.Count, Is.EqualTo(1));
+
+            var change = _transferConnectionInvitation.Changes.Single();
+
+            Assert.That(change.CreatedDate, Is.EqualTo(_transferConnectionInvitation.CreatedDate));
+            Assert.That(change.DeletedByReceiver, Is.EqualTo(_transferConnectionInvitation.DeletedByReceiver));
+            Assert.That(change.DeletedBySender, Is.EqualTo(_transferConnectionInvitation.DeletedBySender));
+            Assert.That(change.ReceiverAccount, Is.SameAs(_transferConnectionInvitation.ReceiverAccount));
+            Assert.That(change.SenderAccount, Is.SameAs(_transferConnectionInvitation.SenderAccount));
+            Assert.That(change.Status, Is.EqualTo(_transferConnectionInvitation.Status));
+            Assert.That(change.User, Is.Not.Null);
+            Assert.That(change.User.Id, Is.EqualTo(_senderUser.Id));
         }
 
         [Test]
-        public async Task ThenShouldPublishTransferConnectionInvitationSentMessage()
+        public async Task ThenShouldPublishSentTransferConnectionInvitationEvent()
         {
             _id = await _handler.Handle(_command);
             
             var messages = _entity.GetEvents().ToList();
-            var message = messages.OfType<TransferConnectionInvitationSentMessage>().FirstOrDefault();
+            var message = messages.OfType<SentTransferConnectionInvitationEvent>().FirstOrDefault();
 
             Assert.That(messages.Count, Is.EqualTo(1));
             Assert.That(message, Is.Not.Null);
-            Assert.That(message.TransferConnectionId, Is.EqualTo(_transferConnectionInvitation.Id));
-            Assert.That(message.TransferConnectionInvitationId, Is.EqualTo(_transferConnectionInvitation.Id));
-            Assert.That(message.SenderAccountId, Is.EqualTo(_senderAccount.Id));
-            Assert.That(message.SenderAccountName, Is.EqualTo(_senderAccount.Name));
+            Assert.That(message.CreatedAt, Is.EqualTo(_transferConnectionInvitation.Changes.Select(c => c.CreatedDate).Cast<DateTime?>().SingleOrDefault()));
+            Assert.That(message.ReceiverAccountHashedId, Is.EqualTo(_receiverAccount.HashedId));
             Assert.That(message.ReceiverAccountId, Is.EqualTo(_receiverAccount.Id));
             Assert.That(message.ReceiverAccountName, Is.EqualTo(_receiverAccount.Name));
-            Assert.That(message.CreatorUserRef, Is.EqualTo(_senderUser.ExternalId.ToString()));
-            Assert.That(message.SenderUserExternalId, Is.EqualTo(_senderUser.ExternalId));
-            Assert.That(message.CreatorName, Is.EqualTo(_senderUser.FullName));
-            Assert.That(message.SenderUserName, Is.EqualTo(_senderUser.FullName));
+            Assert.That(message.SenderAccountHashedId, Is.EqualTo(_senderAccount.HashedId));
+            Assert.That(message.SenderAccountId, Is.EqualTo(_senderAccount.Id));
+            Assert.That(message.SenderAccountName, Is.EqualTo(_senderAccount.Name));
+            Assert.That(message.SentByUserExternalId, Is.EqualTo(_senderUser.ExternalId));
+            Assert.That(message.SentByUserId, Is.EqualTo(_senderUser.Id));
+            Assert.That(message.SentByUserName, Is.EqualTo(_senderUser.FullName));
+            Assert.That(message.TransferConnectionInvitationId, Is.EqualTo(_transferConnectionInvitation.Id));
         }
 
         [Test]
-        public void ThenShouldReturnTransferConnectionInvitationId()
+        public async Task ThenShouldReturnTransferConnectionInvitationId()
         {
+            _id = await _handler.Handle(_command);
+
             Assert.That(_id, Is.Not.Null);
+        }
+
+        [Test]
+        public void ThenShouldThrowExceptionIfTransferConnectionInvitationAlreadyExists()
+        {
+            _senderAccount.SentTransferConnectionInvitations.Add(new TransferConnectionInvitationBuilder()
+                .WithReceiverAccount(_receiverAccount)
+                .Build());
+
+            Assert.ThrowsAsync<Exception>(() => _handler.Handle(_command), "Requires transfer connection invitation does not already exist.");
+        }
+
+        [Test]
+        public async Task ThenShouldNotThrowExceptionIfRejectedTransferConnectionInvitationAlreadyExists()
+        {
+            _senderAccount.SentTransferConnectionInvitations.Add(new TransferConnectionInvitationBuilder()
+                .WithReceiverAccount(_receiverAccount)
+                .WithStatus(TransferConnectionInvitationStatus.Rejected)
+                .Build());
+
+            await _handler.Handle(_command);
         }
     }
 }

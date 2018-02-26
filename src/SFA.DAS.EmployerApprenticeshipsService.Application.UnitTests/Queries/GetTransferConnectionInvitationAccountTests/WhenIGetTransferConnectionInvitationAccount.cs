@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.TestCommon;
+using SFA.DAS.EAS.TestCommon.Builders;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitationAccountTests
 {
@@ -87,12 +88,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
         [Test]
         public void ThenShouldThrowValidationExceptionIfInvitationsAlreadySent()
         {
-            _transferConnectionInvitations.Add(new TransferConnectionInvitation
-            {
-                SenderAccount = _senderAccount,
-                ReceiverAccount = _receiverAccount,
-                Status = TransferConnectionInvitationStatus.Pending
-            });
+            _transferConnectionInvitations.Add(new TransferConnectionInvitationBuilder()
+                .WithSenderAccount(_senderAccount)
+                .WithReceiverAccount(_receiverAccount)
+                .WithStatus(TransferConnectionInvitationStatus.Pending)
+                .Build());
 
             var exception = Assert.ThrowsAsync<ValidationException<GetTransferConnectionInvitationAccountQuery>>(async () => await _handler.Handle(_query));
 
@@ -103,12 +103,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
         [Test]
         public void ThenShouldThrowValidationExceptionIfInvitationsAlreadyApproved()
         {
-            _transferConnectionInvitations.Add(new TransferConnectionInvitation
-            {
-                SenderAccount = _senderAccount,
-                ReceiverAccount = _receiverAccount,
-                Status = TransferConnectionInvitationStatus.Approved
-            });
+            _transferConnectionInvitations.Add(new TransferConnectionInvitationBuilder()
+                .WithSenderAccount(_senderAccount)
+                .WithReceiverAccount(_receiverAccount)
+                .WithStatus(TransferConnectionInvitationStatus.Approved)
+                .Build());
 
             var exception = Assert.ThrowsAsync<ValidationException<GetTransferConnectionInvitationAccountQuery>>(async () => await _handler.Handle(_query));
 

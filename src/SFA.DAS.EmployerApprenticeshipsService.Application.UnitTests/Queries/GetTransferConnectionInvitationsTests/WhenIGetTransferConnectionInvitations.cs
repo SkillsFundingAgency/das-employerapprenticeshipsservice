@@ -5,6 +5,7 @@ using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.TestCommon;
+using SFA.DAS.EAS.TestCommon.Builders;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
@@ -49,32 +50,29 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
                 Name = "Account"
             };
 
-            _sentTransferConnectionInvitation = new TransferConnectionInvitation
-            {
-                Id = 222222,
-                SenderAccount = _account,
-                ReceiverAccount = new Domain.Data.Entities.Account.Account(),
-                CreatedDate = DateTime.UtcNow
-            };
+            _sentTransferConnectionInvitation = new TransferConnectionInvitationBuilder()
+                .WithId(222222)
+                .WithSenderAccount(_account)
+                .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                .WithCreatedDate(DateTime.UtcNow)
+                .Build();
 
-            _receivedTransferConnectionInvitation = new TransferConnectionInvitation
-            {
-                Id = 111111,
-                SenderAccount = new Domain.Data.Entities.Account.Account(),
-                ReceiverAccount = _account,
-                CreatedDate = DateTime.UtcNow.AddDays(-1)
-            };
+            _receivedTransferConnectionInvitation = new TransferConnectionInvitationBuilder()
+                .WithId(111111)
+                .WithSenderAccount(new Domain.Data.Entities.Account.Account())
+                .WithReceiverAccount(_account)
+                .WithCreatedDate(DateTime.UtcNow.AddDays(-1))
+                .Build();
 
             _transferConnectionInvitations = new List<TransferConnectionInvitation>
             {
                 _sentTransferConnectionInvitation,
                 _receivedTransferConnectionInvitation,
-                new TransferConnectionInvitation
-                {
-                    SenderAccount = new Domain.Data.Entities.Account.Account(),
-                    ReceiverAccount = new Domain.Data.Entities.Account.Account(),
-                    CreatedDate = DateTime.UtcNow.AddDays(-2)
-                }
+                new TransferConnectionInvitationBuilder()
+                    .WithSenderAccount(new Domain.Data.Entities.Account.Account())
+                    .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                    .WithCreatedDate(DateTime.UtcNow.AddDays(-2))
+                    .Build()
             };
 
             _transferConnectionInvitationsDbSet = new DbSetStub<TransferConnectionInvitation>(_transferConnectionInvitations);

@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         }
 
         [Test]
-        public async Task ThenIShouldBeRedirectedToTheSendTransferConnectionPage()
+        public async Task ThenIShouldBeRedirectedToTheSendTransferConnectionInvitationPage()
         {
             var result = await _controller.Start(_viewModel) as RedirectToRouteResult;
 

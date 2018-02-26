@@ -2,15 +2,15 @@
 using MediatR;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 
-namespace SFA.DAS.EAS.Application.Commands.ApproveTransferConnectionInvitation
+namespace SFA.DAS.EAS.Application.Commands.DeleteSentTransferConnectionInvitation
 {
-    public class ApproveTransferConnectionInvitationCommandHandler : AsyncRequestHandler<ApproveTransferConnectionInvitationCommand>
+    public class DeleteTransferConnectionInvitationCommandHandler : AsyncRequestHandler<DeleteTransferConnectionInvitationCommand>
     {
         private readonly IEmployerAccountRepository _employerAccountRepository;
         private readonly ITransferConnectionInvitationRepository _transferConnectionInvitationRepository;
         private readonly IUserRepository _userRepository;
 
-        public ApproveTransferConnectionInvitationCommandHandler(
+        public DeleteTransferConnectionInvitationCommandHandler(
             IEmployerAccountRepository employerAccountRepository,
             ITransferConnectionInvitationRepository transferConnectionInvitationRepository,
             IUserRepository userRepository)
@@ -20,13 +20,13 @@ namespace SFA.DAS.EAS.Application.Commands.ApproveTransferConnectionInvitation
             _userRepository = userRepository;
         }
 
-        protected override async Task HandleCore(ApproveTransferConnectionInvitationCommand message)
+        protected override async Task HandleCore(DeleteTransferConnectionInvitationCommand message)
         {
-            var approverAccount = await _employerAccountRepository.GetAccountById(message.AccountId.Value);
-            var approverUser = await _userRepository.GetUserById(message.UserId.Value);
+            var deleterAccount = await _employerAccountRepository.GetAccountById(message.AccountId.Value);
+            var deleterUser = await _userRepository.GetUserById(message.UserId.Value);
             var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetTransferConnectionInvitationById(message.TransferConnectionInvitationId.Value);
 
-            transferConnectionInvitation.Approve(approverAccount, approverUser);
+            transferConnectionInvitation.Delete(deleterAccount, deleterUser);
         }
     }
 }

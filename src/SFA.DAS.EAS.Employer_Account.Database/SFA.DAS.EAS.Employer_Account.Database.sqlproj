@@ -130,6 +130,7 @@
     <Build Include="StoredProcedures\UpdateAccountHashedIds.sql" />
     <Build Include="StoredProcedures\UpdateAccountPublicHashedIds.sql" />
     <Build Include="UserDefinedTypes\AccountPublicHashedIdsTable.sql" />
+    <Build Include="Tables\TransferConnectionInvitationChange.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />

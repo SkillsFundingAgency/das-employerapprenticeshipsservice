@@ -81,3 +81,8 @@ IF EXISTS(Select 1 from INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='employer_a
 BEGIN
 	DELETE FROM [employer_account].[EmployerAgreementTemplate]
 END
+
+IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'TransferConnectionInvitation' AND COLUMN_NAME='SenderUserId')
+BEGIN
+	DELETE FROM [employer_account].[TransferConnectionInvitation]
+END

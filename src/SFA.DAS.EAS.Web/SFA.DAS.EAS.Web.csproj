@@ -438,6 +438,7 @@
     <Compile Include="Binders\DefaultBinder.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Extensions\HashingServiceExtensions.cs" />
+    <Compile Include="Extensions\TransferConnectionInvitationDtoExtensions.cs" />
     <Compile Include="Mappings\TransactionMaps.cs" />
     <Compile Include="Serialization\SerializableModelStateDictionary.cs" />
     <Compile Include="Serialization\SerializableModelState.cs" />
