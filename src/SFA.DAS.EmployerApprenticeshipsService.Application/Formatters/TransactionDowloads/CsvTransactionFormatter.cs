@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Application.Formatters.TransactionDowloads
         {
             foreach (var transaction in transactions)
             {
-                builder.Append($"{transaction.DateCreated:G},");
+                builder.Append($"{transaction.DateCreated:dd/MM/yyyy},");
                 builder.Append($"{transaction.TransactionType},");
                 builder.Append($"{transaction.PayeScheme},");
                 builder.Append($"{transaction.PeriodEnd},");
