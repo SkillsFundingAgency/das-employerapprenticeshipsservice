@@ -304,6 +304,7 @@
     <Compile Include="Services\ExcelService.cs" />
     <Compile Include="Services\FeatureToggle\FeatureToggleCache.cs" />
     <Compile Include="Services\FeatureToggle\IControllerMetaDataService.cs" />
+    <Compile Include="Services\FeatureToggle\FeatureToggleService.cs" />
     <Compile Include="Services\FeatureToggle\OperationAuthorisationService.cs" />
     <Compile Include="Services\FeatureToggle\IFeatureToggleCache.cs" />
     <Compile Include="Services\FeatureToggle\OperationFilterAttribute.cs" />

@@ -4,6 +4,7 @@ using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 using SFA.DAS.EAS.Infrastructure.Pipeline;
 using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
+using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTests
@@ -23,10 +24,44 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         {
             _pipeline = new Mock<IOperationAuthorisationHandler>();
             _authorisationContext = new Mock<IAuthorizationContext>();
+            _cacheProvider.SetupSequence(c => c.Get<FeatureToggleCache>(nameof(FeatureToggleCache))).Returns(null).Returns(new FeatureToggleCache(null));
+            _cacheProvider.Verify(c => c.Get<FeatureToggleCache>(nameof(FeatureToggleCache)), Times.Exactly(2));
+        public void ThenShouldCacheFeatureForAShortTimeIfEmpty()
+            _cacheProvider.Verify(c => c.Set(nameof(FeatureToggleCache),It.IsAny<FeatureToggleCache>(), FeatureToggleService.ShortLivedCacheTime), Times.Once);
+                .Returns(Build(whitelistPattern));
+                .Returns(Build("different.user@somewhere.else"));
+                .Returns(Build(null));
 
-            _pipeline.Setup(x => x.CanAccessAsync(It.IsAny<OperationContext>())).ReturnsAsync(true);
+            // Act
+            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
 
-            _operationAuthorisationService = new OperationAuthorisationService(_pipeline.Object);
+            // Assert
+            Assert.That(isFeatureEnabled, Is.False);
+        }
+
+        private FeatureToggleConfiguration Build(string whitelistPattern)
+        {
+            return new FeatureToggleConfiguration
+            {
+                Data = new FeatureToggleCollection
+                {
+                    Features = new List<Domain.Models.FeatureToggles.FeatureToggle>
+                    {
+                        new Domain.Models.FeatureToggles.FeatureToggle
+                        {
+                            Actions = new List<ControllerAction>
+                            {
+                                new ControllerAction
+                                {
+                                    Controller = ControllerName,
+                                    Action = ActionName
+                                }
+                            },
+                            Whitelist = new WhiteList {Emails = string.IsNullOrWhiteSpace(whitelistPattern) ? null : new List<string> {whitelistPattern}}
+                        }
+                    }
+                }
+            };
         }
 
         [Test]
@@ -44,6 +79,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         {
             //Assign
             _pipeline.Setup(x => x.CanAccessAsync(It.IsAny<OperationContext>())).ReturnsAsync(false);
+                .Returns(Build(null));
 
             //Act
             var result = _operationAuthorisationService.IsOperationAuthorised(ControllerName, ActionName, _authorisationContext.Object);

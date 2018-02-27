@@ -185,6 +185,7 @@
     <Compile Include="Services\FeatureToggle\FeatureToggleCacheTests\WhenIProvideSeveralFeaturesWithSharedControllers.cs" />
     <Compile Include="Services\FeatureToggle\FeatureToggleCacheTests\WhenIProvideSingleFeature.cs" />
     <Compile Include="Services\FeatureToggle\FeatureToggleCacheTests\WhenIProvideSeveralFeatures.cs" />
+    <Compile Include="Services\FeatureToggle\FeatureToggleCacheTests\WhenIProvideSeveralFeatures.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveNoResponse.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveJsonResponse.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveAStringResponse.cs" />
