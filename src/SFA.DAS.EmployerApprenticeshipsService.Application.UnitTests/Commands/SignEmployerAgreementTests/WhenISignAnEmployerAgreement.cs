@@ -40,6 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         private AgreementSignedEvent _agreementEvent;
         private Mock<ICommitmentService> _commintmentService;
         private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<IAccountAgreementService> _accountAgreement;
 
         private const long AccountId = 223344;
         private const long AgreementId = 123433;
@@ -98,7 +99,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
                 .ReturnsAsync(new List<Cohort>());
 
             _messagePublisher = new Mock<IMessagePublisher>();
-            
+
+            _accountAgreement = new Mock<IAccountAgreementService>();
+
             _handler = new SignEmployerAgreementCommandHandler(
                 _membershipRepository.Object, 
                 _agreementRepository.Object, 
@@ -108,7 +111,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
                 _genericEventFactory.Object,
                 _mediator.Object,
                 _messagePublisher.Object,
-                _commintmentService.Object);
+                _commintmentService.Object,
+                _accountAgreement.Object);
 
             _owner = new MembershipView
             {

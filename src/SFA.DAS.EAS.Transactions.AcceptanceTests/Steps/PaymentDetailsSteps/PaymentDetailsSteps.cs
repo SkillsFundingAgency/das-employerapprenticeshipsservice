@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         private static Mock<IPaymentsEventsApiClient> _paymentEventsApi;
         private static Mock<IEmployerCommitmentApi> _employerCommitmentApi;
         private static Mock<IApprenticeshipInfoServiceWrapper> _apprenticeshipInfoService;
-        private static Mock<ICacheProvider> _cacheProvider;
+        private static Mock<IInProcessCache> _inProcessCache;
         private static Mock<IEmployerCommitmentApi> _commitmentsApi;
 
         [BeforeScenario]
@@ -53,17 +53,17 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             _paymentEventsApi = new Mock<IPaymentsEventsApiClient>();
             _employerCommitmentApi = new Mock<IEmployerCommitmentApi>();
             _apprenticeshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
-            _cacheProvider = new Mock<ICacheProvider>();
+            _inProcessCache = new Mock<IInProcessCache>();
             _commitmentsApi = new Mock<IEmployerCommitmentApi>();
 
             _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi, _commitmentsApi);
             _container.Inject(typeof(IPaymentsEventsApiClient), _paymentEventsApi.Object);
             _container.Inject(typeof(IEmployerCommitmentApi), _employerCommitmentApi.Object);
             _container.Inject(typeof(IApprenticeshipInfoServiceWrapper), _apprenticeshipInfoService.Object);
-            _container.Inject(typeof(ICacheProvider), _cacheProvider.Object);
+            _container.Inject(typeof(IInProcessCache), _inProcessCache.Object);
 
-            _cacheProvider.Setup(x => x.Get<Standard>(It.IsAny<string>())).Returns((Standard) null);
-            _cacheProvider.Setup(x => x.Get<Framework>(It.IsAny<string>())).Returns((Framework) null);
+            _inProcessCache.Setup(x => x.Get<Standard>(It.IsAny<string>())).Returns((Standard) null);
+            _inProcessCache.Setup(x => x.Get<Framework>(It.IsAny<string>())).Returns((Framework) null);
 
             RegisterMapper();
 

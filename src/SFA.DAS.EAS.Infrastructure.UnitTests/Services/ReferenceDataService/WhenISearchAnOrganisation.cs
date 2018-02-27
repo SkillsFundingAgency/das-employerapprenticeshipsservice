@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.ReferenceData.Api.Client;
 using FluentAssertions;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.ReferenceData.Api.Client.Dto;
@@ -19,7 +20,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
         private Mock<IReferenceDataApiClient> _apiClient;
         private Infrastructure.Services.ReferenceDataService _referenceDataService;
         private Mock<IMapper> _mapper;
-        private Mock<ICacheProvider> _cacheProvider;
+        private Mock<IInProcessCache> _inProcessCache;
         private ReferenceData.Api.Client.Dto.Organisation _expectedOrganisation;
 
         [SetUp]
@@ -39,9 +40,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     }
                 );
 
-            _cacheProvider = new Mock<ICacheProvider>();
+            _inProcessCache = new Mock<IInProcessCache>();
 
-            _referenceDataService = new Infrastructure.Services.ReferenceDataService(_apiClient.Object, _mapper.Object, _cacheProvider.Object);
+            _referenceDataService = new Infrastructure.Services.ReferenceDataService(_apiClient.Object, _mapper.Object, _inProcessCache.Object);
         }
 
         [Test]
@@ -77,7 +78,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             //Arrange
             var expectedSearchTerm = "Some Org";
             var searchKey = $"SearchKey_{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(expectedSearchTerm))}";
-            _cacheProvider.SetupSequence(c => c.Get<List<OrganisationName>>(searchKey))
+            _inProcessCache.SetupSequence(c => c.Get<List<OrganisationName>>(searchKey))
                 .Returns(null)
                 .Returns(new List<OrganisationName> { new OrganisationName() });
 
@@ -87,8 +88,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
 
             //Assert
             _apiClient.Verify(x => x.SearchOrganisations(expectedSearchTerm, 500), Times.Once);
-            _cacheProvider.Verify(x => x.Get<List<OrganisationName>>(searchKey), Times.Exactly(2));
-            _cacheProvider.Verify(x => x.Set(searchKey, It.Is<List<OrganisationName>>(c => c != null), It.Is<TimeSpan>(c => c.Minutes.Equals(15))), Times.Once);
+            _inProcessCache.Verify(x => x.Get<List<OrganisationName>>(searchKey), Times.Exactly(2));
+            _inProcessCache.Verify(x => x.Set(searchKey, It.Is<List<OrganisationName>>(c => c != null), It.Is<TimeSpan>(c => c.Minutes.Equals(15))), Times.Once);
         }
 
         [Test]

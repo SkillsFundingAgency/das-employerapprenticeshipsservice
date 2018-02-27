@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
         private readonly IMediator _mediator;
 
-        public EmployerAccountTransactionsController(IAuthenticationService owinWrapper, IFeatureToggleService featureToggle,
+        public EmployerAccountTransactionsController(IAuthenticationService owinWrapper, IOperationAuthorisationService operationAuthorisation,
             IHashingService hashingService,
             IMediator mediator,
             EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService,
