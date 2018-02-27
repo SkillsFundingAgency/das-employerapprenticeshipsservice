@@ -4,6 +4,6 @@ namespace SFA.DAS.EAS.Domain.Models.FeatureToggles
 {
     public class FeatureToggleConfiguration
     {
-        public List<FeatureToggle> Data { get; set; }
+        public Feature[] Data { get; set; }
     }
 }

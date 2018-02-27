@@ -7,5 +7,6 @@ namespace SFA.DAS.EAS.Domain.Models.EmployerAgreement
         public int Id { get; set; }
         public string PartialViewName { get; set; }
         public DateTime CreatedDate { get; set; }
+        public int VersionNumber { get; set; }
     }
 }

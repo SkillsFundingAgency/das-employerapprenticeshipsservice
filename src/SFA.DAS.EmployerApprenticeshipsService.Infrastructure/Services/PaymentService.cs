@@ -25,16 +25,16 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoService;
         private readonly IMapper _mapper;
         private readonly ILog _logger;
-        private readonly ICacheProvider _cacheProvider;
+        private readonly IInProcessCache _inProcessCache;
 
-        public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient, IEmployerCommitmentApi commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService, IMapper mapper, ILog logger, ICacheProvider cacheProvider)
+        public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient, IEmployerCommitmentApi commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService, IMapper mapper, ILog logger, IInProcessCache inProcessCache)
         {
             _paymentsEventsApiClient = paymentsEventsApiClient;
             _commitmentsApiClient = commitmentsApiClient;
             _apprenticeshipInfoService = apprenticeshipInfoService;
             _mapper = mapper;
             _logger = logger;
-            _cacheProvider = cacheProvider;
+            _inProcessCache = inProcessCache;
         }
 
         public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId)
@@ -154,14 +154,14 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             {
                 try
                 {
-                    var providerView = _cacheProvider.Get<ProvidersView>($"{nameof(ProvidersView)}_{ukPrn}");
+                    var providerView = _inProcessCache.Get<ProvidersView>($"{nameof(ProvidersView)}_{ukPrn}");
 
                     if (providerView == null)
                     {
                         providerView = _apprenticeshipInfoService.GetProvider(ukPrn);
                         if (providerView != null)
                         {
-                            _cacheProvider.Set($"{nameof(ProvidersView)}_{ukPrn}", providerView, new TimeSpan(1, 0, 0));
+                            _inProcessCache.Set($"{nameof(ProvidersView)}_{ukPrn}", providerView, new TimeSpan(1, 0, 0));
                         }
                     }
                     
@@ -181,7 +181,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             try
             {
-                var standardsView = _cacheProvider.Get<StandardsView>(nameof(StandardsView));
+                var standardsView = _inProcessCache.Get<StandardsView>(nameof(StandardsView));
 
                 if (standardsView != null)
                     return standardsView.Standards?.SingleOrDefault(s => s.Code.Equals(standardCode));
@@ -190,7 +190,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                 if (standardsView != null)
                 {
-                    _cacheProvider.Set(nameof(StandardsView), standardsView, new TimeSpan(1, 0, 0));
+                    _inProcessCache.Set(nameof(StandardsView), standardsView, new TimeSpan(1, 0, 0));
                 }
 
                 return standardsView?.Standards?.SingleOrDefault(s => s.Code.Equals(standardCode));
@@ -207,7 +207,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             try
             {
-                var frameworksView = _cacheProvider.Get<FrameworksView>(nameof(FrameworksView));
+                var frameworksView = _inProcessCache.Get<FrameworksView>(nameof(FrameworksView));
 
                 if (frameworksView != null)
                     return frameworksView.Frameworks.SingleOrDefault(f =>
@@ -219,7 +219,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                 if (frameworksView != null)
                 {
-                    _cacheProvider.Set(nameof(FrameworksView),frameworksView, new TimeSpan(1,0,0));
+                    _inProcessCache.Set(nameof(FrameworksView),frameworksView, new TimeSpan(1,0,0));
                 }
 
                 return frameworksView?.Frameworks.SingleOrDefault(f =>

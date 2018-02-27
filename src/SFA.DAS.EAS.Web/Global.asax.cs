@@ -35,8 +35,6 @@ namespace SFA.DAS.EAS.Web
 
         protected void Application_Start()
         {
-            var environmentName = ConfigurationHelper.GetEnvironmentName();
-
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
             AreaRegistration.RegisterAllAreas();
             BinderConfig.RegisterBinders(ModelBinders.Binders);
@@ -60,9 +58,9 @@ namespace SFA.DAS.EAS.Web
                 };
             });
 
-            if (environmentName == "LOCAL" || environmentName == "AT" || environmentName == "TEST")
+            if(ConfigurationHelper.IsAnyOf(DasEnvironment.Local, DasEnvironment.AT, DasEnvironment.Test))
             {
-                SystemDetailsViewModel.EnvironmentName = environmentName;
+                SystemDetailsViewModel.EnvironmentName = ConfigurationHelper.CurrentEnvironmentName;
                 SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
         }
