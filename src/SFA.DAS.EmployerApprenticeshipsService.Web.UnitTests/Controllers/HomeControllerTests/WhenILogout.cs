@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         private Mock<IAuthenticationService> _owinWrapper;
         private HomeController _homeController;
         private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
-        private Mock<IFeatureToggleService> _featureToggle;
+        private Mock<IOperationAuthorisationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         {
             _owinWrapper = new Mock<IAuthenticationService>();
             _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
-            _featureToggle = new Mock<IFeatureToggleService>();
+            _featureToggle = new Mock<IOperationAuthorisationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 

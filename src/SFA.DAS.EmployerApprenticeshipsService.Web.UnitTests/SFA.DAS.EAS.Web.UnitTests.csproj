@@ -283,6 +283,7 @@
     <Compile Include="Filters\EnsureFeatureIsEnabledFilterTests\WhenIViewAPage.cs" />
     <Compile Include="Filters\UnitOfWorkManagerFilterTests\WhenIViewAPage.cs" />
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
+    <Compile Include="Helpers\ControllerMetaDataServiceTests\WhenIInvokce.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenCreatingTheAccount.cs" />

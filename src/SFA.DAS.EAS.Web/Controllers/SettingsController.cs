@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public SettingsController(IAuthenticationService owinWrapper,
             UserSettingsOrchestrator userSettingsOrchestrator,
-            IFeatureToggleService featureToggle,
+            IOperationAuthorisationService operationAuthorisation,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
