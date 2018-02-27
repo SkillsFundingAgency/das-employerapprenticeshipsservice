@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Formatters.Transactions.ExcelTransac
                 },
                 new[]
                 {
-                    _transactionLine.DateCreated.ToString("dd/MM/yyyy"), _transactionLine.TransactionType,
+                    _transactionLine.DateCreated.ToString(), _transactionLine.TransactionType,
                     _transactionLine.PayeScheme, _transactionLine.PeriodEnd, _transactionLine.LevyDeclaredFormatted,
                     _transactionLine.EnglishFractionFormatted, _transactionLine.TenPercentTopUpFormatted,
                     _transactionLine.TrainingProvider, _transactionLine.Uln,
