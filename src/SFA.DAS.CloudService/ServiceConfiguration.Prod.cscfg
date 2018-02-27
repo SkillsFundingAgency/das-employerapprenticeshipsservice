@@ -16,6 +16,7 @@
       <Setting name="ShowPayeHistory" value="false" />
       <Setting name="CurrentTime" value="" />
       <Setting name="EmployerCommitmentsBaseUrl" value="__EmployerCommitmentsBaseUrl__" />
+      <Setting name="EmployerRecruitBaseUrl" value="__EmployerRecruitBaseUrl__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="BF55F64F778FC5F4E4EEBAE6493E37464B3E2AD7" thumbprintAlgorithm="sha1" />
@@ -34,8 +35,7 @@
       <Setting name="DeclarationsEnabled" value="both" />
       <Setting name="TokenServiceCertificateThumbprint" value="__TokenServiceCertificateThumbprint__" />
     </ConfigurationSettings>
-    <Certificates>
-    </Certificates>
+    <Certificates></Certificates>
   </Role>
   <Role name="SFA.DAS.EAS.PaymentProvider.Worker">
     <Instances count="3" />
