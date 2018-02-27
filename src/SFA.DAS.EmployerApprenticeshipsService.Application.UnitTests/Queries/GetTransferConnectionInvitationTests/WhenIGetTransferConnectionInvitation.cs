@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Data;
+using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.TestCommon;
@@ -20,6 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
         private TransferConnectionInvitation _transferConnectionInvitation;
         private Domain.Data.Entities.Account.Account _senderAccount;
         private Domain.Data.Entities.Account.Account _receiverAccount;
+        private IConfigurationProvider _configurationProvider;
 
         [SetUp]
         public void Arrange()
@@ -49,10 +52,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
 
             _transferConnectionInvitations = new List<TransferConnectionInvitation> { _transferConnectionInvitation, new TransferConnectionInvitation() };
             _transferConnectionInvitationsDbSet = new DbSetStub<TransferConnectionInvitation>(_transferConnectionInvitations);
-            
+
+            _configurationProvider = new MapperConfiguration(c =>
+            {
+                c.AddProfile<AccountMaps>();
+                c.AddProfile<TransferConnectionInvitationMaps>();
+                c.AddProfile<UserMaps>();
+            });
+
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
 
-            _handler = new GetTransferConnectionInvitationQueryHandler(_db.Object);
+            _handler = new GetTransferConnectionInvitationQueryHandler(_db.Object, _configurationProvider);
 
             _query = new GetTransferConnectionInvitationQuery
             {

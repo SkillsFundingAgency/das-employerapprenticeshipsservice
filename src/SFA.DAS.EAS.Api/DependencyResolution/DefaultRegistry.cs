@@ -83,10 +83,10 @@ namespace SFA.DAS.EAS.Api.DependencyResolution
                 .Where(t => typeof(Profile).IsAssignableFrom(t))
                 .Select(t => (Profile)Activator.CreateInstance(t));
 
-            var config = new MapperConfiguration(cfg =>
+            var config = new MapperConfiguration(c =>
             {
-                apiProfiles.ForEach(cfg.AddProfile);
-                infrastructureProfiles.ForEach(cfg.AddProfile);
+                apiProfiles.ForEach(c.AddProfile);
+                infrastructureProfiles.ForEach(c.AddProfile);
             });
 
             var mapper = config.CreateMapper();

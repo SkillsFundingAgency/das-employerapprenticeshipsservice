@@ -212,7 +212,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArrangeWebTest.cs" />
     <Compile Include="Attributes\ValidateMembershipAttributeTests\WhenIViewAPage.cs" />
     <Compile Include="Authorization\MembershipServiceTests\WhenIGetMembership.cs" />
     <Compile Include="Authorization\MembershipServiceTests\WhenIValidateMembership.cs" />

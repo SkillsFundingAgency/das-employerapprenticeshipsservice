@@ -22,6 +22,7 @@ using WebGrease.Css.Extensions;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Hashing;
+using StructureMap.TypeRules;
 
 namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 {
@@ -30,57 +31,42 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 
         public DefaultRegistry(Mock<IAuthenticationService> owinWrapperMock, Mock<ICookieStorageService<EmployerAccountData>> cookieServiceMock, Mock<IEventsApi> eventApi, Mock<IEmployerCommitmentApi> commitmentsApi)
         {
-            Scan(scan =>
+            Scan(s =>
             {
-                scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
-                scan.RegisterConcreteTypesAgainstTheFirstInterface();
-                scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
+                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
+                s.RegisterConcreteTypesAgainstTheFirstInterface();
+                s.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
             });
 
+            For<IAuthenticationService>().Use(() => owinWrapperMock.Object);
+            For<ICache>().Use<InMemoryCache>();
+            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
+            For<ICookieStorageService<EmployerAccountData>>().Use(() => cookieServiceMock.Object);
+            For<IEmployerCommitmentApi>().Use(commitmentsApi.Object);
+            For<IEventsApi>().Use(() => eventApi.Object);
             For<IHashingService>().Use(new HashingService.HashingService("12345QWERTYUIOPNDGHAK", "TEST: Dummy hash code London is a city in UK"));
-
+            For<ILog>().Use(Mock.Of<ILog>());
+            For<INotificationsApi>().Use(() => Mock.Of<INotificationsApi>());
             For<IPublicHashingService>().Use(x => new PublicHashingService("BCDEFGHIJKLMMOPQRSTUVWXYZ", "haShStRiNg"));
-
             For<IUserRepository>().Use<UserRepository>();
 
-            For<IAuthenticationService>().Use(() => owinWrapperMock.Object);
-
-            For<ICookieStorageService<EmployerAccountData>>().Use(() => cookieServiceMock.Object);
-            
-            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
-
-            For<ICache>().Use<InMemoryCache>();
-            For<IEventsApi>().Use(() => eventApi.Object);
-
-            For<ILog>().Use(Mock.Of<ILog>());
-
-            For<IEmployerCommitmentApi>().Use(commitmentsApi.Object);
-
-            For<INotificationsApi>().Use(() => Mock.Of<INotificationsApi>());
-            
-            AddMediatrRegistrations();
-
             RegisterMapper();
+            RegisterMediator();
 			RegisterAuditService();
-        }
-
-        private void AddMediatrRegistrations()
-        {
-            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
-            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
-
-            For<IMediator>().Use<Mediator>();
         }
 
         private void RegisterMapper()
         {
-            var profiles = Assembly.Load("SFA.DAS.EAS.Infrastructure").GetTypes()
-                            .Where(t => typeof(Profile).IsAssignableFrom(t))
-                            .Select(t => (Profile)Activator.CreateInstance(t));
+            var profiles = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .Where(a => a.FullName.StartsWith("SFA.DAS.EAS"))
+                .SelectMany(a => a.GetTypes())
+                .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
+                .Select(t => (Profile)Activator.CreateInstance(t));
 
-            var config = new MapperConfiguration(cfg =>
+            var config = new MapperConfiguration(c =>
             {
-                profiles.ForEach(cfg.AddProfile);
+                profiles.ForEach(c.AddProfile);
             });
 
             var mapper = config.CreateMapper();
@@ -88,8 +74,15 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
             For<IConfigurationProvider>().Use(config).Singleton();
             For<IMapper>().Use(mapper).Singleton();
         }
-		
-		private void RegisterAuditService()
+
+        private void RegisterMediator()
+        {
+            For<IMediator>().Use<Mediator>();
+            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
+            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
+        }
+
+        private void RegisterAuditService()
         {
             For<IAuditApiClient>().Use<StubAuditApiClient>();
         }

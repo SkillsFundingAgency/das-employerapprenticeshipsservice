@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using SFA.DAS.EAS.Application.Mappings;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitationsTests
 {
@@ -26,6 +28,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
         private TransferConnectionInvitation _sentTransferConnectionInvitation;
         private TransferConnectionInvitation _receivedTransferConnectionInvitation;
         private Domain.Data.Entities.Account.Account _account;
+        private IConfigurationProvider _configurationProvider;
 
         private const decimal ExpectedTransferBalance = 25300.50M;
 
@@ -76,9 +79,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
 
             _transferConnectionInvitationsDbSet = new DbSetStub<TransferConnectionInvitation>(_transferConnectionInvitations);
 
+            _configurationProvider = new MapperConfiguration(c =>
+            {
+                c.AddProfile<AccountMaps>();
+                c.AddProfile<TransferConnectionInvitationMaps>();
+                c.AddProfile<UserMaps>();
+            });
+
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
 
-            _handler = new GetTransferConnectionInvitationsQueryHandler(_db.Object, _transferRepository.Object, Mock.Of<ILog>());
+            _handler = new GetTransferConnectionInvitationsQueryHandler(_db.Object, _configurationProvider, Mock.Of<ILog>(), _transferRepository.Object);
 
             _query = new GetTransferConnectionInvitationsQuery
             {

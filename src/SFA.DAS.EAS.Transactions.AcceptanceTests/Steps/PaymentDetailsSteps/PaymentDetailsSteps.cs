@@ -240,16 +240,19 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
         private static void RegisterMapper()
         {
-            var profiles = Assembly.Load("SFA.DAS.EAS.Infrastructure").GetTypes()
+            var profiles = Assembly.Load("SFA.DAS.EAS.Infrastructure")
+                .GetTypes()
                 .Where(t => typeof(Profile).IsAssignableFrom(t))
-                .Select(t => (Profile)Activator.CreateInstance(t)).ToList();
+                .Select(t => (Profile)Activator.CreateInstance(t))
+                .ToList();
 
-            var config = new MapperConfiguration(cfg =>
+            var config = new MapperConfiguration(c =>
             {
-                profiles.ForEach(cfg.AddProfile);
+                profiles.ForEach(c.AddProfile);
             });
 
             var mapper = config.CreateMapper();
+
             _container.Inject(typeof(IMapper), mapper);
         }
     }

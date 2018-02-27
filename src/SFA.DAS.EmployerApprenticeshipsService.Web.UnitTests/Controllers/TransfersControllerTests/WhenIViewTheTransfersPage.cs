@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
 using SFA.DAS.EAS.Web.ViewModels.Transfers;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EAS.Web.Mappings;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
 {
@@ -13,16 +14,21 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
     public class WhenIViewTheTransfersPage
     {
         private Web.Controllers.TransfersController _controller;
-        private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
+        private IConfigurationProvider _mapperConfig;
+        private IMapper _mapper;
+        private Mock<IMediator> _mediator;
         private readonly GetTransferConnectionInvitationsQuery _query = new GetTransferConnectionInvitationsQuery();
         private readonly GetTransferConnectionInvitationsResponse _response = new GetTransferConnectionInvitationsResponse();
 
         [SetUp]
         public void Arrange()
         {
+            _mapperConfig = new MapperConfiguration(c => c.AddProfile<TransferConnectionInvitationMaps>());
+            _mapper = _mapperConfig.CreateMapper();
+            _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
 
-            _controller = new Web.Controllers.TransfersController(Mapper.Instance, _mediator.Object);
+            _controller = new Web.Controllers.TransfersController(_mapper, _mediator.Object);
         }
 
         [Test]

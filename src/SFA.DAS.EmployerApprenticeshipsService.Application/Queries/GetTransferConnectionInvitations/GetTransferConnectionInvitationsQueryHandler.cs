@@ -7,20 +7,23 @@ using SFA.DAS.NLog.Logger;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations
 {
     public class GetTransferConnectionInvitationsQueryHandler : IAsyncRequestHandler<GetTransferConnectionInvitationsQuery, GetTransferConnectionInvitationsResponse>
     {
         private readonly EmployerAccountDbContext _db;
-        private readonly ITransferRepository _transferRepository;
+        private readonly IConfigurationProvider _configurationProvider;
         private readonly ILog _logger;
+        private readonly ITransferRepository _transferRepository;
 
-        public GetTransferConnectionInvitationsQueryHandler(EmployerAccountDbContext db, ITransferRepository transferRepository, ILog logger)
+        public GetTransferConnectionInvitationsQueryHandler(EmployerAccountDbContext db, IConfigurationProvider configurationProvider, ILog logger, ITransferRepository transferRepository)
         {
             _db = db;
-            _transferRepository = transferRepository;
+            _configurationProvider = configurationProvider;
             _logger = logger;
+            _transferRepository = transferRepository;
         }
 
         public async Task<GetTransferConnectionInvitationsResponse> Handle(GetTransferConnectionInvitationsQuery message)
@@ -30,7 +33,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations
                 .Include(i => i.SenderAccount)
                 .Where(i => i.SenderAccount.Id == message.AccountId.Value || i.ReceiverAccount.Id == message.AccountId.Value)
                 .OrderBy(i => i.CreatedDate)
-                .ProjectTo<TransferConnectionInvitationDto>()
+                .ProjectTo<TransferConnectionInvitationDto>(_configurationProvider)
                 .ToListAsync();
 
             _logger.Debug($"Getting transfer allowance for account ID {message.AccountHashedId}");

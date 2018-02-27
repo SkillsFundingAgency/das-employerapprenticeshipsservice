@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -22,10 +21,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         [SetUp]
         public void Arrange()
         {
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetTransferConnectionInvitationAccountQuery>()))
-                .ReturnsAsync(new GetTransferConnectionInvitationAccountResponse());
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetTransferConnectionInvitationAccountQuery>())).ReturnsAsync(new GetTransferConnectionInvitationAccountResponse());
 
-            _controller = new TransferConnectionInvitationsController(Mapper.Instance, _mediator.Object);
+            _controller = new TransferConnectionInvitationsController(null, _mediator.Object);
 
             _viewModel = new StartTransferConnectionInvitationViewModel
             {

@@ -1,6 +1,7 @@
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using SFA.DAS.EAS.Application.Data;
@@ -13,16 +14,18 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
     public class GetTransferConnectionInvitationAccountQueryHandler : IAsyncRequestHandler<GetTransferConnectionInvitationAccountQuery, GetTransferConnectionInvitationAccountResponse>
     {
         private readonly EmployerAccountDbContext _db;
+        private readonly IConfigurationProvider _configurationProvider;
 
-        public GetTransferConnectionInvitationAccountQueryHandler(EmployerAccountDbContext db)
+        public GetTransferConnectionInvitationAccountQueryHandler(EmployerAccountDbContext db, IConfigurationProvider configurationProvider)
         {
             _db = db;
+            _configurationProvider = configurationProvider;
         }
 
         public async Task<GetTransferConnectionInvitationAccountResponse> Handle(GetTransferConnectionInvitationAccountQuery message)
         {
             var receiverAccount = await _db.Accounts
-                .ProjectTo<AccountDto>()
+                .ProjectTo<AccountDto>(_configurationProvider)
                 .SingleOrDefaultAsync(a => a.PublicHashedId == message.ReceiverAccountPublicHashedId);
 
             if (receiverAccount == null)

@@ -209,7 +209,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArrangeTest.cs" />
     <Compile Include="DbAsyncEnumerableStub.cs" />
     <Compile Include="DbAsyncEnumeratorStub.cs" />
     <Compile Include="DbAsyncQueryProviderStub.cs" />

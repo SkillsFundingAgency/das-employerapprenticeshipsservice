@@ -1,7 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -29,7 +28,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
 
             var urlHelper = new UrlHelper(new RequestContext(Mock.Of<HttpContextBase>(), routeData));
 
-            _controller = new TransferConnectionInvitationsController(Mapper.Instance, _mediator.Object) { Url = urlHelper };
+            _controller = new TransferConnectionInvitationsController(null, _mediator.Object) { Url = urlHelper };
         }
 
         [Test]
