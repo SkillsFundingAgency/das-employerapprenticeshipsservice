@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Application.Formatters.TransactionDowloads
 
             excelRows.AddRange(transactions.Select(transaction => new[]
             {
-                transaction.DateCreated.ToString("dd/MM/yyyy"),
+                transaction.DateCreated.ToString("G"),
                 transaction.TransactionType,
                 transaction.PayeScheme,
                 transaction.PeriodEnd,
