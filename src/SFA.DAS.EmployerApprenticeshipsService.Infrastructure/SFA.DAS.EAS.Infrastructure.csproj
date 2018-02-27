@@ -294,10 +294,12 @@
     <Compile Include="Services\AzureServiceBase.cs" />
     <Compile Include="Services\CommitmentService.cs" />
     <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />
+    <Compile Include="Services\FeatureToggle\ControllerActionItem.cs" />
     <Compile Include="Services\CookieStorageService.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
     <Compile Include="Services\ExcelService.cs" />
-    <Compile Include="Services\FeatureToggleService.cs" />
+    <Compile Include="Services\FeatureToggle\FeatureToggleCache.cs" />
+    <Compile Include="Services\FeatureToggle\FeatureToggleService.cs" />
     <Compile Include="Services\HmrcDateService.cs" />
     <Compile Include="Services\HmrcService.cs" />
     <Compile Include="Services\HttpClientWrapper.cs" />

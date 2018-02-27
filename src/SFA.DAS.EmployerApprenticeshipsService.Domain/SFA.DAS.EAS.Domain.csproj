@@ -247,6 +247,9 @@
     <Compile Include="Models\EmployerAgreement\SignEmployerAgreement.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\IEntity.cs" />
+    <Compile Include="Models\FeatureToggles\ControllerAction.cs" />
+    <Compile Include="Models\FeatureToggles\FeatureToggleCollection.cs" />
+    <Compile Include="Models\FeatureToggles\WhiteList.cs" />
     <Compile Include="Models\Organisation\Address.cs" />
     <Compile Include="Models\Payments\Payment.cs" />
     <Compile Include="Models\Payments\PeriodEnd.cs" />
