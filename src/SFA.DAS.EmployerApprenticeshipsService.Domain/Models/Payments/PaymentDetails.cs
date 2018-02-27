@@ -2,7 +2,7 @@ using System;
 
 namespace SFA.DAS.EAS.Domain.Models.Payments
 {
-    public class PaymentDetails : PaymentEntry
+    public class PaymentDetails : Payment
     {
         public string PeriodEnd { get; set; }
         public string ProviderName { get; set; }

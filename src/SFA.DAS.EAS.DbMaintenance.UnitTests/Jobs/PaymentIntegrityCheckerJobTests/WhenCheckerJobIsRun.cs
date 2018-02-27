@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.DbMaintenance.UnitTests.Jobs.PaymentIntegrityCheckerJobTes
 
             var paymentServicePayments = new List<PaymentDetails>
             {
-                new PaymentDetails{PeriodEnd = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId}
+                new PaymentDetails{CollectionPeriodId = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId}
             };
 
             _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.DbMaintenance.UnitTests.Jobs.PaymentIntegrityCheckerJobTes
 
             var repositoryPayments = new List<Payment>
             {
-                new Payment {CollectionPeriodId = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId.ToString()}
+                new Payment {CollectionPeriodId = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId}
             };
 
             _levyRepository.Setup(x => x.GetAccountPaymentsByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))
@@ -138,8 +138,8 @@ namespace SFA.DAS.EAS.DbMaintenance.UnitTests.Jobs.PaymentIntegrityCheckerJobTes
             //Arrange
             var repositoryPayments = new List<Payment>
             {
-                new Payment {CollectionPeriodId = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId.ToString()},
-                new Payment {CollectionPeriodId = _periodEnd.Id, Amount = 300, EmployerAccountId = AccountId.ToString()}
+                new Payment {CollectionPeriodId = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId},
+                new Payment {CollectionPeriodId = _periodEnd.Id, Amount = 300, EmployerAccountId = AccountId}
             };
 
             _levyRepository.Setup(x => x.GetAccountPaymentsByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))
@@ -150,6 +150,36 @@ namespace SFA.DAS.EAS.DbMaintenance.UnitTests.Jobs.PaymentIntegrityCheckerJobTes
 
             //Assert
             _logger.Verify(x => x.Warn(It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfPaymentTotalIsSameButPaymentsAreNotItShouldBeLogged()
+        {
+            //Assign
+            var paymentServicePayments = new List<PaymentDetails>
+            {
+                new PaymentDetails{PeriodEnd = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId, ApprenticeshipId = 1},
+                new PaymentDetails{PeriodEnd = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId, ApprenticeshipId = 2}
+            };
+
+            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
+                .ReturnsAsync(paymentServicePayments);
+
+            var repositoryPayments = new List<Payment>
+            {
+                new Payment {CollectionPeriodId = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId, ApprenticeshipId = 1},
+                new Payment {CollectionPeriodId = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId, ApprenticeshipId = 1}
+            };
+
+            _levyRepository.Setup(x => x.GetAccountPaymentsByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))
+                .ReturnsAsync(repositoryPayments);
+
+            //Act
+            await _job.Run();
+
+            //Assert
+            _logger.Verify(x => x.Warn(It.IsAny<string>()), Times.Once);
+
         }
     }
 }

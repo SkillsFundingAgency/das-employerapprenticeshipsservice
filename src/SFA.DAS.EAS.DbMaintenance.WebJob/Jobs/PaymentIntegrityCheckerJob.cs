@@ -1,6 +1,8 @@
 ﻿using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.NLog.Logger;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,31 +29,34 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Jobs
 
         public async Task Run()
         {
-
             var accounts = await _employerAccountRepository.GetAllAccounts();
-
 
             var lastestPeriodEnd = await _levyRepository.GetLatestPeriodEnd();
 
             foreach (var account in accounts)
             {
-                var expectedPayments = await _paymentService.GetAccountPayments(lastestPeriodEnd.Id, account.Id);
+                var expectedPayments = (IEnumerable<Payment>)await _paymentService.GetAccountPayments(lastestPeriodEnd.Id, account.Id);
 
                 var actualPayments =
-                    await _levyRepository.GetAccountPaymentsByPeriodEnd(account.Id, lastestPeriodEnd.Id);
+                    (await _levyRepository.GetAccountPaymentsByPeriodEnd(account.Id, lastestPeriodEnd.Id)).ToArray();
 
 
-                var expectedPaymentsTotal = expectedPayments.Sum(x => x.Amount);
+                var expectedPaymentsTotal = expectedPayments?.Sum(x => x.Amount) ?? 0;
                 var actualPaymentsTotal = actualPayments.Sum(x => x.Amount);
 
-                if (actualPaymentsTotal != expectedPaymentsTotal)
+                var paymentMissing = actualPaymentsTotal != expectedPaymentsTotal;
+
+                if (!paymentMissing)
                 {
-                    _logger.Warn(
-                        $"Payments for account ID {account.Id} for period end {lastestPeriodEnd.Id} are not correct");
+                    paymentMissing = expectedPayments?.Except(actualPayments).Any() ?? false;
                 }
 
+                if (paymentMissing)
+                {
+                    _logger.Warn(
+                        $"Some payments for account ID {account.Id} for period end {lastestPeriodEnd.Id} are missing");
+                }
             }
         }
-
     }
 }
