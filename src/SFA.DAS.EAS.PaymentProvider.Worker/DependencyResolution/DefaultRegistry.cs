@@ -8,13 +8,8 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Caching;
-using StructureMap;
-using StructureMap.Graph;
-using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 using SFA.DAS.NLog.Logger;
-using System.Web;
-using SFA.DAS.EAS.Application.Messages;
-using SFA.DAS.Messaging;
+using StructureMap;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution
 {
@@ -22,24 +17,19 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution
     {
         public DefaultRegistry()
         {
-
-            Scan(scan =>
+            Scan(s =>
             {
-                scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS."));
-                scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS."));
+                s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
 
-            For<IConfiguration>().Use<PaymentProviderConfiguration>();
+            For<Domain.Interfaces.IConfiguration>().Use<PaymentProviderConfiguration>();
             For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>();
             For<ICache>().Use<InMemoryCache>();
-            
 
             RegisterExecutionPolicies();
-
             RegisterMapper();
-
             AddMediatrRegistrations();
-
             RegisterLogger();
         }
 

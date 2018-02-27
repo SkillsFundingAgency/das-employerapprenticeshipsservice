@@ -1,32 +1,34 @@
-﻿using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Helpers;
-using SFA.DAS.EAS.Web.Orchestrators;
+﻿using AutoMapper;
+using MediatR;
+using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
+using SFA.DAS.EAS.Web.Attributes;
+using SFA.DAS.EAS.Web.ViewModels.Transfers;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [RoutePrefix("accounts/{hashedAccountId}/transfers")]
+    [ValidateMembership]
+    [RoutePrefix("accounts/{HashedAccountId}/transfers")]
     public class TransfersController : Controller
     {
-        private readonly IOwinWrapper _owinWrapper;
-        private readonly TransferOrchestrator _orchestrator;
+        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public TransfersController(IOwinWrapper owinWrapper, TransferOrchestrator orchestrator)
+        public TransfersController(IMapper mapper, IMediator mediator)
         {
-            _owinWrapper = owinWrapper;
-            _orchestrator = orchestrator;
+            _mapper = mapper;
+            _mediator = mediator;
         }
 
         [Route]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        public async Task<ActionResult> Index(GetTransferConnectionInvitationsQuery query)
         {
-            var externalUserId = _owinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            var response = await _mediator.SendAsync(query);
+            var model = _mapper.Map<TransferConnectionInvitationsViewModel>(response);
 
-            var response = await _orchestrator.GetTransferAllowance(hashedAccountId, externalUserId);
-
-            return View(response);
+            return View(model);
         }
     }
 }

@@ -1,16 +1,20 @@
 ﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.Controllers;
+using SFA.DAS.EAS.Web.ViewModels.Transfers;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging.Interfaces;
 using StructureMap;
+using System;
+using System.Web.Mvc;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransferDashboardSteps
@@ -21,7 +25,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransferDashboardSteps
 
         private static IContainer _container;
         private static Mock<IMessagePublisher> _messagePublisher;
-        private static Mock<IOwinWrapper> _owinWrapper;
+        private static Mock<IAuthenticationService> _owinWrapper;
         private string _hashedAccountId;
         private static Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private static Mock<IEventsApi> _eventsApi;
@@ -33,7 +37,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransferDashboardSteps
         public static void Arrange()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
             _commitmentsApi = new Mock<IEmployerCommitmentApi>();
@@ -67,14 +71,22 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransferDashboardSteps
         public void ThenTheTransferAllowanceShouldBeOnTheTransferDashboardScreen(decimal expectedTransferBalance)
         {
             var hashedAccountId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
+            var accountId = (long)ScenarioContext.Current["AccountId"];
+            var externalUserId = Guid.Parse(ScenarioContext.Current["AccountOwnerUserId"].ToString());
 
-            var orchestrator = _container.GetInstance<TransferOrchestrator>();
-            var response = orchestrator.GetTransferAllowance(hashedAccountId, userId).Result;
+            var controller = _container.GetInstance<TransfersController>();
+            var view = controller.Index(new GetTransferConnectionInvitationsQuery
+            {
+                AccountHashedId = hashedAccountId,
+                AccountId = accountId,
+                UserExternalId = externalUserId
+            }).Result as ViewResult;
 
-            Assert.IsNotNull(response?.Data);
+            var viewModel = view?.Model as TransferConnectionInvitationsViewModel;
 
-            Assert.AreEqual(expectedTransferBalance.ToString("C0"), response.Data.TransferAllowance.ToString("C0"));
+            Assert.IsNotNull(viewModel);
+
+            Assert.AreEqual(expectedTransferBalance.ToString("C0"), viewModel.TransferAllowance.ToString("C0"));
         }
     }
 }

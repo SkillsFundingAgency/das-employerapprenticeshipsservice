@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly ILog _logger;
 
         public TaskController(
-            IOwinWrapper owinWrapper, 
+            IAuthenticationService owinWrapper, 
             TaskOrchestrator taskOrchestrator,
             IFeatureToggleService featureToggle, 
             IMultiVariantTestingService multiVariantTestingService,
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("dismissTask", Name = "DismissTask")]
         public async Task<ActionResult> DismissTask(DismissTaskViewModel viewModel)
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName)))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
             {
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }

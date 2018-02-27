@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 {
     public class WhenILoginAUser
     {
-        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IAuthenticationService> _owinWrapper;
         private Mock<HomeOrchestrator> _homeOrchestrator;
         private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
         private HomeController _homeController;
@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         [SetUp]
         public void Arrange()
         {
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _homeOrchestrator = new Mock<HomeOrchestrator>();
             _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
             _featureToggle = new Mock<IFeatureToggleService>();

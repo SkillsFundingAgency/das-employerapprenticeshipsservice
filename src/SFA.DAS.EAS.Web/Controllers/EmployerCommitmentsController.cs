@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Web.Controllers
     [RoutePrefix("accounts/{hashedaccountId}/apprentices")]
     public class EmployerCommitmentsController : BaseController
     {
-        public EmployerCommitmentsController(IOwinWrapper owinWrapper,
+        public EmployerCommitmentsController(IAuthenticationService owinWrapper,
             IFeatureToggleService featureToggle, IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)

@@ -27,7 +27,7 @@
         public const string EmployerCommitmentsBaseUrlKeyName = "EmployerCommitmentsBaseUrl";
         public const string EmployerTeamActionName = "EmployerTeam";
         public const string EmployerTeamControllerName = "EmployerTeam";
-        public const string EmployerRecruitControllerName = "EmployerRecruitBaseUrl";
+        public const string EmployerRecruitBaseUrlKeyName = "EmployerRecruitBaseUrl";
         public const string ErrorControllerName = "Error";
         public const string FeatureNotEnabledViewName = "FeatureNotEnabled";
         public const string FindAddressViewName = "../OrganisationShared/FindAddress";
@@ -36,7 +36,7 @@
         public const string GatewayViewName = "Gateway";
         public const string GateWayResponseActionName = "GateWayResponse";
         public const string GetGatewayActionName = "GetGateway";
-        public const string HashedAccountIdKeyName = "HashedAccountId";
+        public const string AccountHashedIdRouteKeyName = "HashedAccountId";
         public const string HomeControllerName = "Home";
         public const string IndexActionName = "Index";
         public const string InformActionName = "Inform";
@@ -65,7 +65,7 @@
         public const string SetupAccountViewName = "SetupAccount";
         public const string SignAgreementViewName = "SignAgreement";
         public const string SignInActionName = "SignIn";
-        public const string SubClaimKeyName = "sub";
+        public const string UserExternalIdClaimKeyName = "sub";
         public const string SummaryActionName = "Summary";
         public const string ViewTeamActionName = "ViewTeam";
         public const string ViewTeamViewName = "ViewTeam";

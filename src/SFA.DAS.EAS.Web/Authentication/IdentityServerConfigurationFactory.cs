@@ -1,5 +1,4 @@
-﻿using System;
-using SFA.DAS.EAS.Domain.Configuration;
+﻿using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Authentication
@@ -15,7 +14,10 @@ namespace SFA.DAS.EAS.Web.Authentication
 
         public override ConfigurationContext Get()
         {
-            return new ConfigurationContext {AccountActivationUrl = _configuration.Identity.BaseAddress.Replace("/identity","") + _configuration.Identity.AccountActivationUrl};
+            return new ConfigurationContext
+            {
+                AccountActivationUrl = _configuration.Identity.BaseAddress.Replace("/identity", "") + _configuration.Identity.AccountActivationUrl
+            };
         }
     }
 }

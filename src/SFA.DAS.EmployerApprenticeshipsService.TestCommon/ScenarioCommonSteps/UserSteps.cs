@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
     {
         private IContainer _container;
         private Mock<IMessagePublisher> _messagePublisher;
-        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IAuthenticationService> _owinWrapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private Mock<IEventsApi> _eventsApi;
         private Mock<IEmployerCommitmentApi> _commitmentsApi;
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         public UserSteps()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
             _commitmentsApi = new Mock<IEmployerCommitmentApi>();

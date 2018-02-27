@@ -18,25 +18,24 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Web;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Api.Logging;
+using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.HashingService;
-
+using SFA.DAS.NLog.Logger;
 using StructureMap;
 using WebGrease.Css.Extensions;
 
-namespace SFA.DAS.EAS.Api.DependencyResolution {
-    using Domain.Interfaces;
-    using Infrastructure.Caching;
-    using SFA.DAS.NLog.Logger;
-
-    using StructureMap.Graph;
-    using System.Web;
-
-    public class DefaultRegistry : Registry {
+namespace SFA.DAS.EAS.Api.DependencyResolution
+{
+    public class DefaultRegistry : Registry
+    {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
         private const string ServiceNamespace = "SFA.DAS";
 
@@ -51,7 +50,7 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
             });
 
             For<ICache>().Use<InMemoryCache>();
-            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
+            For<Domain.Interfaces.IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
 
             RegisterHashingService(config);
             RegisterMapper();

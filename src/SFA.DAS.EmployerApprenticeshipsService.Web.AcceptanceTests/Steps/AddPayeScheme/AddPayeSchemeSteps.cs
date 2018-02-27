@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         public static void Arrange()
         {
             var messagePublisher = new Mock<IMessagePublisher>();
-            var owinWrapper = new Mock<IOwinWrapper>();
+            var owinWrapper = new Mock<IAuthenticationService>();
             var cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             var eventsApi = new Mock<IEventsApi>();
 

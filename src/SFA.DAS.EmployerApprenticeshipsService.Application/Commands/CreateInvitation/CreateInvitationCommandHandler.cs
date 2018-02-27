@@ -15,6 +15,7 @@ using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.TimeProvider;
+using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
 {

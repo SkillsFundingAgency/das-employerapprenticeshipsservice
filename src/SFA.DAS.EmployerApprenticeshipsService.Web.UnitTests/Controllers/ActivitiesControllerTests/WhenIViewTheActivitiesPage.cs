@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Web.ViewModels.Activities;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.ActivitiesControllerTests
 {
+    [TestFixture]
     public class WhenIViewTheActivitiesPage
     {
         private ActivitiesController _controller;

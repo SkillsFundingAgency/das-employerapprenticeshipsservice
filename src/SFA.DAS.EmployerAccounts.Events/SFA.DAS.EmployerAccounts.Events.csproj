@@ -64,6 +64,8 @@
     <Compile Include="Messages\PaymentCreatedMessage.cs" />
     <Compile Include="Messages\AccountNameChangedMessage.cs" />
     <Compile Include="Messages\AgreementCreatedMessage.cs" />
+    <Compile Include="Messages\TransferConnectionInvitationApprovedMessage.cs" />
+    <Compile Include="Messages\TransferConnectionInvitationRejectedMessage.cs" />
     <Compile Include="Messages\TransferConnectionInvitationSentMessage.cs" />
     <Compile Include="Messages\UserInvitedMessage.cs" />
     <Compile Include="Messages\UserJoinedMessage.cs" />
@@ -80,12 +82,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="SFA.DAS.EmployerAccounts.Events.nuspec" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
-      <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
-      <Name>SFA.DAS.EAS.Domain</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

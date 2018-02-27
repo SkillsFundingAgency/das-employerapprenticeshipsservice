@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using MediatR;
+using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Infrastructure.Data;
@@ -10,11 +11,9 @@ using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Events.Api.Client.Configuration;
 using SFA.DAS.HashingService;
-using StructureMap;
-using StructureMap.Graph;
-using WebGrease.Css.Extensions;
-using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 using SFA.DAS.NLog.Logger;
+using StructureMap;
+using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
 {
@@ -22,30 +21,22 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
     {
         public DefaultRegistry()
         {
+            var config = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService");
 
-            Scan(scan =>
+            Scan(s =>
             {
-                scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS."));
-                scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS."));
+                s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
 
+            For<Domain.Interfaces.IConfiguration>().Use<LevyDeclarationProviderConfiguration>();
+            For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi).SelectConstructor(() => new EventsApi(null));
             For<IUserRepository>().Use<UserRepository>();
 
-            For<IConfiguration>().Use<LevyDeclarationProviderConfiguration>();
-
-            var config = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService");
-            For<IEventsApi>().Use<EventsApi>()
-               .Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi)
-               .SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
-
             ConfigureHashingService(config);
-
             RegisterExecutionPolicies();
-
             RegisterMapper();
-
             AddMediatrRegistrations();
-
             RegisterLogger();
         }
 

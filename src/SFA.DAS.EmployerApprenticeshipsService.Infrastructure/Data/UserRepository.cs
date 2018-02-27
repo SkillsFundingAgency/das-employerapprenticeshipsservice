@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -13,25 +15,17 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class UserRepository : BaseRepository, IUserRepository
     {
+        private readonly EmployerAccountDbContext _db;
 
-        public UserRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger) : base(configuration.DatabaseConnectionString, logger)
+        public UserRepository(EmployerAccountDbContext db, EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+            : base(configuration.DatabaseConnectionString, logger)
         {
+            _db = db;
         }
 
         public async Task<User> GetUserById(long id)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@id", id, DbType.Int64);
-
-                var res = await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Id = @id",
-                    param: parameters,
-                    commandType: CommandType.Text);
-                return res;
-            });
-            return result.SingleOrDefault();
+            return await _db.Users.SingleOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<User> GetUserByRef(string id)
@@ -64,7 +58,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
             return result.SingleOrDefault();
         }
-
 
         public async Task Create(User user)
         {

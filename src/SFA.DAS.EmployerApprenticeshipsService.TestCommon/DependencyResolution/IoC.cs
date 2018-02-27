@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 
         public static Container CreateContainer(
             Mock<IMessagePublisher> messagePublisher,
-            Mock<IOwinWrapper> owinWrapper,
+            Mock<IAuthenticationService> owinWrapper,
             Mock<ICookieStorageService<EmployerAccountData>> cookieService,
             Mock<IEventsApi> eventsApi,
             Mock<IEmployerCommitmentApi> commitmentApi)
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 
         public static Container CreateContainer(
             Mock<IMessagePublisher> messagePublisher,
-            Mock<IOwinWrapper> owinWrapper,
+            Mock<IAuthenticationService> owinWrapper,
             Mock<ICookieStorageService<EmployerAccountData>> cookieService,
             Mock<IEventsApi> eventsApi,
             Mock<IEmployerCommitmentApi> commitmentApi,

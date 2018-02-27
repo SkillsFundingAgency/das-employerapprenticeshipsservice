@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
 
-        public EmployerAccountPayeController(IOwinWrapper owinWrapper,EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator, 
+        public EmployerAccountPayeController(IAuthenticationService owinWrapper,EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator, 
             IFeatureToggleService featureToggle, IMultiVariantTestingService multiVariantTestingService, 
             ICookieStorageService<FlashMessageViewModel> flashMessage) 
             : base(owinWrapper, multiVariantTestingService, flashMessage)
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("schemes")]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
-            var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
+            var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
             if (flashMessage != null)
@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("schemes/next")]
         public async Task<ActionResult> NextSteps(string hashedAccountId)
         {
-            var model = await _employerAccountPayeOrchestrator.GetNextStepsViewModel(OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName),hashedAccountId);
+            var model = await _employerAccountPayeOrchestrator.GetNextStepsViewModel(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName),hashedAccountId);
 
             model.FlashMessage = GetFlashMessageViewModelFromCookie();
 
@@ -83,7 +83,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             empRef = empRef.FormatPayeFromUrl();
 
-            var response = await _employerAccountPayeOrchestrator.GetPayeDetails(empRef, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
+            var response = await _employerAccountPayeOrchestrator.GetPayeDetails(empRef, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
             
             return View(response);
         }
@@ -119,7 +119,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 gatewayResponseModel.Status = HttpStatusCode.OK;
 
-                var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
+                var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
                 model.FlashMessage = gatewayResponseModel.FlashMessage;
 
                 return View(ControllerConstants.IndexActionName, model);
@@ -132,7 +132,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("schemes/confirm")]
         public async Task<ActionResult> ConfirmPayeScheme(string hashedAccountId, AddNewPayeSchemeViewModel model)
         {
-            var result = await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
+            var result = await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             if (result.Status != HttpStatusCode.OK)
             {
@@ -162,7 +162,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 HashedAccountId = hashedAccountId,
                 PayeRef = empRef.FormatPayeFromUrl(),
-                UserId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName)
+                UserId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)
             });
 
             return View(model);
@@ -173,7 +173,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("schemes/remove")]
         public async Task<ActionResult> RemovePaye(string hashedAccountId, RemovePayeSchemeViewModel model)
         {
-            model.UserId = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            model.UserId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
 
             if (model.RemoveScheme == 1)
             {

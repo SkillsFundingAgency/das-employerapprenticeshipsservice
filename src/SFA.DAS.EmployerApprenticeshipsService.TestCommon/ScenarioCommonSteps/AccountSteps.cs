@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
     {
         private IContainer _container;
         private Mock<IMessagePublisher> _messagePublisher;
-        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IAuthenticationService> _owinWrapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
         private string _externalUserId;
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         public AccountSteps()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
             _validator = new Mock<IValidator<GetAccountPayeSchemesQuery>>();
@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
             scenarioContext["HashedAccountId"] = account.HashedId;
         }
 
-        public void CreateAccountWithOwner(EmployerAccountOrchestrator orchestrator, IMediator mediator, Mock<IOwinWrapper> owinWrapper, HomeOrchestrator homeOrchestrator)
+        public void CreateAccountWithOwner(EmployerAccountOrchestrator orchestrator, IMediator mediator, Mock<IAuthenticationService> owinWrapper, HomeOrchestrator homeOrchestrator)
         {
             var accountOwnerUserId = Guid.NewGuid().ToString();
             ScenarioContext.Current["AccountOwnerUserId"] = accountOwnerUserId;

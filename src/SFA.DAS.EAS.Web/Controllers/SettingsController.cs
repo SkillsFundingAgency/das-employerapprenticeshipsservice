@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly UserSettingsOrchestrator _userSettingsOrchestrator;
 
-        public SettingsController(IOwinWrapper owinWrapper,
+        public SettingsController(IAuthenticationService owinWrapper,
             UserSettingsOrchestrator userSettingsOrchestrator,
             IFeatureToggleService featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("notifications")]
         public async Task<ActionResult> NotificationSettings()
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
             var vm = await _userSettingsOrchestrator.GetNotificationSettingsViewModel(userIdClaim);
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("notifications")]
         public async Task<ActionResult> NotificationSettings(NotificationSettingsViewModel vm)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
 
             await _userSettingsOrchestrator.UpdateNotificationSettings(userIdClaim,
                 vm.NotificationSettings);
@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("notifications/unsubscribe/{hashedAccountId}")]
         public async Task<ActionResult> NotificationUnsubscribe(string hashedAccountId)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
             
             var url = Url.Action(ControllerConstants.NotificationSettingsActionName);
             var model = await _userSettingsOrchestrator.Unsubscribe(userIdClaim, hashedAccountId, url);

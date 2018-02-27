@@ -46,6 +46,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return null;
         }
+
+        public async Task<User> GetUserByExternalId(Guid externalId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task Create(User registerUser)
         {
             throw new NotImplementedException();

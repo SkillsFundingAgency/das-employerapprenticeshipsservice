@@ -126,8 +126,6 @@
     <Build Include="StoredProcedures\UpdateShowWizard.sql" />
     <Build Include="StoredProcedures\GetTeamMember.sql" />
     <Build Include="Tables\TransferConnectionInvitation.sql" />
-    <Build Include="StoredProcedures\CreateTransferConnectionInvitation.sql" />
-    <Build Include="StoredProcedures\GetAccount_ByPublicHashedId.sql" />
     <Build Include="StoredProcedures\GetAccountsMissingPublicHashedId.sql" />
     <Build Include="StoredProcedures\UpdateAccountHashedIds.sql" />
     <Build Include="StoredProcedures\UpdateAccountPublicHashedIds.sql" />

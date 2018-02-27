@@ -1,7 +1,6 @@
-﻿@using System.Globalization
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Transfers.TransferDashboardViewModel>
-
-
+﻿@using SFA.DAS.EAS.Domain.Models.TransferConnections
+@model SFA.DAS.EAS.Web.ViewModels.Transfers.TransferConnectionInvitationsViewModel
+@using System.Globalization
 @{
     ViewBag.Title = "Transfers";
     ViewBag.Section = "finance";
@@ -11,27 +10,71 @@
     var culture = new CultureInfo("en-GB");
 }
 
-    <div class="grid-row">
-        <div class="column-two-thirds">
-            <h1 class="heading-xlarge">Transfers</h1>
-            <p>Employers who pay the apprenticeship levy can transfer up to 10% of their previous year’s levy to other employers with an apprenticeship service account.</p>
-            <p>Employers who want to transfer funds must first connect with a receiving employer through the apprenticeship service. Once a connection is made, a receiving employer can request transfer funds from a funding employer.</p>
-            <p>Before getting started, make sure you understand the <a href="">rules for sending and receiving transfers</a>.</p>
-        </div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Transfers</h1>
+        <p>Employers who pay the apprenticeship levy can transfer up to 10% of their previous year’s levy to other employers with an apprenticeship service account.</p>
+        <p>Employers who want to transfer funds must first connect with a receiving employer through the apprenticeship service. Once a connection is made, a receiving employer can request transfer funds from a sending employer.</p>
+        <p>Before getting started, make sure you understand the <a href="">rules for sending and receiving transfers</a>.</p>
     </div>
+</div>
     <div class="grid-row">
         <div class="column-two-thirds">
             <div class="govuk-box-highlight govuk-box-highlight__bottom-margin">
-                <p class="heading-xlarge">@Model.Data.TransferAllowance.ToString("C0", culture)</p>
+                <p class="heading-xlarge">@Model.TransferAllowance.ToString("C0", culture)</p>
                 <p class="font-large">Remaining transfer allowance</p>
             </div>
         </div>
     </div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <a class="button" href="@Url.Action("Index", "TransferConnectionInvitations")">Connect with employer</a>
+    </div>
+</div>
+
+@if (Model.TransferConnectionInvitations.Any())
+{
     <div class="grid-row">
-        <div class="column-two-thirds">   
-            <a class="button" href="@Url.Action("Index", "TransferConnectionInvitations")">Connect with employer</a>
+        <div class="column-full">
+            <table class="responsive">
+                <caption class="heading-medium">Connection requests</caption>
+                <thead>
+                    <tr>
+                        <th>Employer</th>
+                        <th>Status</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var transferConnectionInvitation in Model.TransferConnectionInvitations)
+                    {
+                        var peerAccount = transferConnectionInvitation.GetPeerAccount(Model.AccountId);
+
+                        <tr>
+                            <td data-label="Employer">@peerAccount.Name</td>
+                            <td data-label="Status">@transferConnectionInvitation.Status.ToString()</td>
+                            <td>
+                                @if (Model.AccountId == transferConnectionInvitation.ReceiverAccount.Id && transferConnectionInvitation.Status == TransferConnectionInvitationStatus.Pending)
+                                {
+                                    <a href="@Url.Action("Receive", "TransferConnectionInvitations", new { transferConnectionInvitationId = transferConnectionInvitation.Id })">Details</a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Details", "TransferConnectionInvitations", new { transferConnectionInvitationId = transferConnectionInvitation.Id })">Details</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
+}
+else
+{
+    <h2 class="heading-medium">Connection requests</h2>
+    <p>You have no pending or approved requests</p>
+}
 
 @section breadcrumb {
     <div class="breadcrumbs">

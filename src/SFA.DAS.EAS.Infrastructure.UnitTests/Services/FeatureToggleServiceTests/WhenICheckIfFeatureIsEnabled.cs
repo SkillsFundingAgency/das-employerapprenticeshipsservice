@@ -2,34 +2,46 @@
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTests
 {
+    [TestFixture]
     public class WhenICheckIfFeatureIsEnabled
     {
         private const string ControllerName = "Foo";
         private const string ActionName = "Bar";
-        private const string UserEmail = "user.one@unit.tests";
 
         private Mock<ICacheProvider> _cacheProvider;
+        private Mock<ILog> _logger;
         private Mock<FeatureToggleService> _featureToggleServiceMock;
         private FeatureToggleService _featureToggleService;
+        private IMembershipContext _membershipContext;
 
         [SetUp]
         public void Arrange()
         {
+            _membershipContext = new MembershipContext
+            {
+                UserId = 111111,
+                UserEmail = "user.one@unit.tests"
+            };
+
             _cacheProvider = new Mock<ICacheProvider>();
+            _logger = new Mock<ILog>();
 
             _cacheProvider.SetupSequence(c => c.Get<FeatureToggleConfiguration>(nameof(FeatureToggleConfiguration))).Returns(null).Returns(new FeatureToggleConfiguration());
 
-            _featureToggleServiceMock = new Mock<FeatureToggleService>(_cacheProvider.Object, Mock.Of<ILog>());
+            _featureToggleServiceMock = new Mock<FeatureToggleService>(_cacheProvider.Object, _logger.Object);
 
             _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage()).Returns(new FeatureToggleConfiguration());
-            _featureToggleServiceMock.Setup(f => f.IsFeatureEnabled(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).CallBase();
+            _featureToggleServiceMock.Setup(f => f.IsFeatureEnabled(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IMembershipContext>())).CallBase();
 
             _featureToggleService = _featureToggleServiceMock.Object;
         }
@@ -90,7 +102,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
                 });
 
             // Act
-            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, UserEmail);
+            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
 
             // Assert
             Assert.That(isFeatureEnabled, Is.True);
@@ -115,7 +127,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
                 });
 
             // Act
-            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, UserEmail);
+            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
 
             // Assert
             Assert.That(isFeatureEnabled, Is.False);
@@ -139,10 +151,54 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
                 });
 
             // Act
-            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, UserEmail);
+            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
 
             // Assert
             Assert.That(isFeatureEnabled, Is.False);
+        }
+
+        [Test]
+        public void ThenShouldLogTrueResultIfFeatureIsEnabled()
+        {
+            // Act
+            _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
+
+            // Assert
+            _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{_membershipContext.UserId}' is '{true}'."), Times.Once);
+        }
+
+        [Test]
+        public void ThenShouldLogFalseResultIfFeatureIsDisabled()
+        {
+            // Arrange
+            _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage())
+                .Returns(new FeatureToggleConfiguration
+                {
+                    Data = new List<FeatureToggle>
+                    {
+                        new FeatureToggle
+                        {
+                            Controller = ControllerName,
+                            Action = ActionName
+                        }
+                    }
+                });
+
+            // Act
+            _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
+
+            // Assert
+            _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{_membershipContext.UserId}' is '{false}'."), Times.Once);
+        }
+
+        [Test]
+        public void ThenShouldLogNullUserExternalIdIfMembershipIsNull()
+        {
+            // Act
+            _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, null);
+
+            // Assert
+            _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{null}' is '{true}'."), Times.Once);
         }
     }
 }

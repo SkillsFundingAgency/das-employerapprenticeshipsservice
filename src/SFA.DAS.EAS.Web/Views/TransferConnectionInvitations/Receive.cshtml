@@ -1,0 +1,64 @@
+﻿@using SFA.DAS.EAS.Web.Extensions
+
+@model SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations.ReceiveTransferConnectionInvitationViewModel
+
+@{
+    ViewBag.Title = "Receive transfer connection invitation";
+    ViewBag.Section = "finance";
+    ViewBag.PageID = "page-transfer-connection-invitations-receive";
+    ViewBag.GaData.Vpv = "/accounts/transfers/connections/invitations/receive";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Connection request details</h1>
+        <p>@Model.TransferConnectionInvitation.SenderAccount.Name wants to connect with you. Once you accept the connection request you'll be able to request transfer funds from this employer.</p>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ApproveTransferConnectionInvitationCommand.TransferConnectionInvitationId)
+            @Html.HiddenFor(m => m.RejectTransferConnectionInvitationCommand.TransferConnectionInvitationId)
+            <div class="form-group">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Account name</td>
+                            <td>@Model.TransferConnectionInvitation.SenderAccount.Name</td>
+                        </tr>
+                        <tr>
+                            <td>Account ID</td>
+                            <td>@Model.TransferConnectionInvitation.SenderAccount.PublicHashedId</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>@Model.TransferConnectionInvitation.Status.ToString()</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group @(Html.IsValid(m => m.Choice) ? "" : "error")">
+                <fieldset>
+                    <legend>
+                        <span class="form-label-bold">Do you want to approve this connection request?</span>
+                        @Html.ValidationMessageFor(m => m.Choice)
+                    </legend>
+                    <label class="block-label selection-button-radio">
+                        @Html.RadioButtonFor(m => m.Choice, "Approve")
+                        Yes, approve the request
+                    </label>
+                    <label class="block-label selection-button-radio">
+                        @Html.RadioButtonFor(m => m.Choice, "Reject")
+                        No, reject the request
+                    </label>
+                </fieldset>
+            </div>
+            <button class="button" type="submit">Continue</button>
+        }
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs" id="js-breadcrumbs">
+        <a aria-label="Back" class="link-back" href="@Url.Action("Index", "Transfers")">Back</a>
+    </div>
+}

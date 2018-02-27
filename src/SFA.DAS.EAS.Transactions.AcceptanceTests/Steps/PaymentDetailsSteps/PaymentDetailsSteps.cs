@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         private static PaymentTestData _testData;
         private static IContainer _container;
         private static Mock<IMessagePublisher> _messagePublisher;
-        private static Mock<IOwinWrapper> _owinWrapper;
+        private static Mock<IAuthenticationService> _owinWrapper;
         private static Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private static Mock<IEventsApi> _eventsApi;
         private static Mock<IPaymentsEventsApiClient> _paymentEventsApi;
@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         public static void Arrange()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
-            _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper = new Mock<IAuthenticationService>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
             _paymentEventsApi = new Mock<IPaymentsEventsApiClient>();

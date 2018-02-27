@@ -15,6 +15,7 @@ using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.TimeProvider;
+using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
 {

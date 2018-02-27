@@ -1,7 +1,7 @@
 ﻿@using SFA.DAS.EAS.Web.Helpers
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.SelectOrganisationAddressViewModel>
 @{
-    var hasHashedOrganisationId = this.ViewContext.RouteData.Values[ControllerConstants.HashedAccountIdKeyName] != null;
+    var hasHashedOrganisationId = this.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName] != null;
     ViewBag.Title = "Select address";
     ViewBag.PageID = "select-organisation-address";
 

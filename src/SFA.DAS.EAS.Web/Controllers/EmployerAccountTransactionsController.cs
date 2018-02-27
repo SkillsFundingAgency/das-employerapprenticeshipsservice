@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
         private readonly IMediator _mediator;
 
-        public EmployerAccountTransactionsController(IOwinWrapper owinWrapper, IFeatureToggleService featureToggle,
+        public EmployerAccountTransactionsController(IAuthenticationService owinWrapper, IFeatureToggleService featureToggle,
             IHashingService hashingService,
             IMediator mediator,
             EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService,
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance")]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
-            var transactionViewResult = await _accountTransactionsOrchestrator.GetFinanceDashboardViewModel(hashedAccountId, 0, 0, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
+            var transactionViewResult = await _accountTransactionsOrchestrator.GetFinanceDashboardViewModel(hashedAccountId, 0, 0, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             if (transactionViewResult.Data.Account == null)
             {
@@ -46,23 +46,22 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(transactionViewResult);
         }
 
+        [ValidateMembership]
         [ImportModelStateFromTempData]
         [Route("finance/downloadtransactions")]
         public ActionResult TransactionsDownload(string hashedAccountId)
         {
-            return View(new TransactionDownloadViewModel
-            {
-                HashedAccountId = hashedAccountId
-            });
+            return View(new TransactionDownloadViewModel());
         }
 
         [HttpPost]
+        [ValidateMembership]
         [ValidateAntiForgeryToken]
         [ValidateModelState]
         [Route("finance/downloadtransactions")]
         public async Task<ActionResult> TransactionsDownload(TransactionDownloadViewModel model)
         {
-            var response = await _mediator.SendAsync(model.Message);
+            var response = await _mediator.SendAsync(model.GetTransactionsDownloadQuery);
             return File(response.FileData, response.MimeType, $"esfaTransactions_{DateTime.Now:yyyyMMddHHmmss}.{response.FileExtension}");
         }
 
@@ -70,7 +69,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance/{year}/{month}")]
         public async Task<ActionResult> TransactionsView(string hashedAccountId, int year, int month)
         {
-            var transactionViewResult = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, year, month, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
+            var transactionViewResult = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, year, month, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             if (transactionViewResult.Data.Account == null)
             {
@@ -85,7 +84,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance/levyDeclaration/details")]
         public async Task<ActionResult> LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
         {
-            var viewModel = await _accountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
+            var viewModel = await _accountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             return View(ControllerConstants.LevyDeclarationDetailViewName, viewModel);
         }
@@ -94,7 +93,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance/provider/summary")]
         public async Task<ActionResult> ProviderPaymentSummary(string hashedAccountId, long ukprn, DateTime fromDate, DateTime toDate)
         {
-            var viewModel = await _accountTransactionsOrchestrator.GetProviderPaymentSummary(hashedAccountId, ukprn, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
+            var viewModel = await _accountTransactionsOrchestrator.GetProviderPaymentSummary(hashedAccountId, ukprn, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             return View(ControllerConstants.ProviderPaymentSummaryViewName, viewModel);
         }
@@ -114,7 +113,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var viewModel = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(
                                                                         hashedAccountId, ukprn, courseName, courseLevel, pathwayCode,
-                                                                        fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
+                                                                        fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             return View(ControllerConstants.CoursePaymentSummaryViewName, viewModel);
         }

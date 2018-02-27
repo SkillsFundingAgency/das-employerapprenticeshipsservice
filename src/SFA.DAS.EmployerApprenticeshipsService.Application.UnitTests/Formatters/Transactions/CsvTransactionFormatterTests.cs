@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Formatters.Transactions
         [Test]
         public void WhenICallGetContentsIGetCorrectDataFormat()
         {
-            var formattedFileData = PaymentFormatter.GetFileData(TransactionDownloadLines);
+            var formattedFileData = PaymentFormatter.GetFileData(TransactionDownloadLines); 
 
             var formattedFileContent = Encoding.UTF8.GetString(formattedFileData);
 
@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Formatters.Transactions
                 // We should be able to extract known values from each row
                 var dataRow = rows[Convert.ToInt32(i)].Split(char.Parse(","));
 
-                Assert.AreEqual(DateTime.Today.AddMonths(Convert.ToInt32(-i)), DateTime.Parse(dataRow[0]));
+                Assert.AreEqual(DateTime.Today.AddMonths(Convert.ToInt32(-i)).ToString("dd/MM/yyyy"), dataRow[0]);
                 Assert.AreEqual($"{TransactionTypePrefix}{i}", dataRow[1]);
                 Assert.AreEqual($"{EmpRefPrefix}{i}", dataRow[2]);
                 Assert.AreEqual($"{PeriodEndPrefix}{i}", dataRow[3]);

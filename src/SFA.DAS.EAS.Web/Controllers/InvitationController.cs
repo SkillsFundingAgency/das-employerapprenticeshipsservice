@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
-        public InvitationController(InvitationOrchestrator invitationOrchestrator, IOwinWrapper owinWrapper, 
+        public InvitationController(InvitationOrchestrator invitationOrchestrator, IAuthenticationService owinWrapper, 
             IFeatureToggleService featureToggle, IMultiVariantTestingService multiVariantTestingService, 
             EmployerApprenticeshipsServiceConfiguration configuration, 
             ICookieStorageService<FlashMessageViewModel> flashMessage) 
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("invite")]
         public ActionResult Invite()
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName)))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
             {
                 return View();
             }
@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route]
         public async Task<ActionResult> All()
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName)))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
             {
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }
@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("view")]
         public async Task<ActionResult> View(string invitationId)
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName)))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
             {
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }
@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("accept")]
         public async Task<ActionResult> Accept(long invitation, UserInvitationsViewModel model)
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName)))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
             {
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }
@@ -92,7 +92,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }
 
-            await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
+            await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
             
             var flashMessage = new FlashMessageViewModel
             {
@@ -112,12 +112,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("create")]
         public async Task<ActionResult> Create(InviteTeamMemberViewModel model)
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName)))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
             {
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);     
             }
 
-            await _invitationOrchestrator.CreateInvitation(model, OwinWrapper.GetClaimValue(ControllerConstants.SubClaimKeyName));
+            await _invitationOrchestrator.CreateInvitation(model, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }

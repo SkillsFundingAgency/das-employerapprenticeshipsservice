@@ -13,14 +13,14 @@ namespace SFA.DAS.EAS.Web.Controllers
 {
     public class BaseController : Controller
     {
-        public IOwinWrapper OwinWrapper;
+        public IAuthenticationService OwinWrapper;
 
         private const string FlashMessageCookieName = "sfa-das-employerapprenticeshipsservice-flashmessage";
 
         private readonly IMultiVariantTestingService _multiVariantTestingService;
         private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
 
-        public BaseController(IOwinWrapper owinWrapper, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
+        public BaseController(IAuthenticationService owinWrapper, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
         {
             OwinWrapper = owinWrapper;
             _multiVariantTestingService = multiVariantTestingService;
@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (orchestratorResponse.Status == HttpStatusCode.Unauthorized)
             {
-                var accountId = Request.Params[ControllerConstants.HashedAccountIdKeyName];
+                var accountId = Request.Params[ControllerConstants.AccountHashedIdRouteKeyName];
 
                 if (accountId != null)
                 {
