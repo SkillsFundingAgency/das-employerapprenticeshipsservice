@@ -65,13 +65,14 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
 
         private void RegisterMapper()
         {
-            var profiles = Assembly.Load("SFA.DAS.EAS.Infrastructure").GetTypes()
-                            .Where(t => typeof(Profile).IsAssignableFrom(t))
-                            .Select(t => (Profile)Activator.CreateInstance(t));
+            var profiles = Assembly.Load("SFA.DAS.EAS.Infrastructure")
+                .GetTypes()
+                .Where(t => typeof(Profile).IsAssignableFrom(t))
+                .Select(t => (Profile)Activator.CreateInstance(t));
 
-            var config = new MapperConfiguration(cfg =>
+            var config = new MapperConfiguration(c =>
             {
-                profiles.ForEach(cfg.AddProfile);
+                profiles.ForEach(c.AddProfile);
             });
 
             var mapper = config.CreateMapper();

@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Web.Mvc;
-using MediatR;
+﻿using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
@@ -10,6 +8,8 @@ using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.HashingService;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {
@@ -42,10 +42,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _orchestrator.Setup(x => x.GetFinanceDashboardViewModel(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<FinanceDashboardViewModel>
                 {
-                    Data = new FinanceDashboardViewModel()
+                    Data = new FinanceDashboardViewModel
                     {
                         Account = new Account(),
-                        CurrentLevyFunds = CurrentLevyFunds,
+                        CurrentLevyFunds = CurrentLevyFunds
                     }
                 });
 

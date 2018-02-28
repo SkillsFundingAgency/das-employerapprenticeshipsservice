@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using AutoMapper;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.Payments;
@@ -18,23 +16,17 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Mapping.PaymentMappingTests
         [SetUp]
         public void Arrange()
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("SFA.DAS.EAS"));
+            var profiles = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .Where(a => a.FullName.StartsWith("SFA.DAS.EAS"))
+                .SelectMany(a => a.GetTypes())
+                .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
+                .Select(t => (Profile)Activator.CreateInstance(t))
+                .ToList();
 
-            var mappingProfiles = new List<Profile>();
-
-            foreach (var assembly in assemblies)
+            var config = new MapperConfiguration(c =>
             {
-                var profiles = Assembly.Load(assembly.FullName).GetTypes()
-                    .Where(t => typeof(Profile).IsAssignableFrom(t))
-                    .Where(t => t.IsConcrete() && t.HasConstructors())
-                    .Select(t => (Profile)Activator.CreateInstance(t));
-
-                mappingProfiles.AddRange(profiles);
-            }
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                mappingProfiles.ForEach(cfg.AddProfile);
+                profiles.ForEach(c.AddProfile);
             });
 
             _mapper = config.CreateMapper();

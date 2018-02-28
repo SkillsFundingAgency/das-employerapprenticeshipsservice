@@ -7,6 +7,7 @@ using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Data;
+using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Authorization;
@@ -26,6 +27,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization.MembershipServiceTests
         private Mock<EmployerAccountDbContext> _db;
         private Mock<HttpContextBase> _httpContext;
         private Mock<IAuthenticationService> _authenticationService;
+        private IConfigurationProvider _configurationProvider;
         private Mock<IHashingService> _hashingService;
         private DbSetStub<Membership> _membershipDbSet;
         private List<Membership> _memberships;
@@ -44,6 +46,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization.MembershipServiceTests
             _db = new Mock<EmployerAccountDbContext>();
             _httpContext = new Mock<HttpContextBase>();
             _authenticationService = new Mock<IAuthenticationService>();
+            _configurationProvider = new MapperConfiguration(c => c.AddProfile<MembershipMaps>());
             _hashingService = new Mock<IHashingService>();
 
             _account = new Account
@@ -91,7 +94,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization.MembershipServiceTests
             _authenticationService.Setup(a => a.TryGetClaimValue(ControllerConstants.UserExternalIdClaimKeyName, out _userExternalIdClaimValue)).Returns(true);
             _hashingService.Setup(h => h.DecodeValue(_account.HashedId)).Returns(_account.Id);
 
-            _membershipService = new MembershipService(_db.Object, _httpContext.Object, _authenticationService.Object, _hashingService.Object);
+            _membershipService = new MembershipService(_db.Object, _httpContext.Object, _authenticationService.Object, _configurationProvider, _hashingService.Object);
         }
 
         [Test]
@@ -120,7 +123,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization.MembershipServiceTests
         [Test]
         public void ThenShouldReturMembershipFromTheRequestCache()
         {
-            var cachedMembershipContext = Mapper.Map<MembershipContext>(_validMembership);
+            var cachedMembershipContext = new MembershipContext();
 
             _items[typeof(MembershipContext).FullName] = cachedMembershipContext;
 

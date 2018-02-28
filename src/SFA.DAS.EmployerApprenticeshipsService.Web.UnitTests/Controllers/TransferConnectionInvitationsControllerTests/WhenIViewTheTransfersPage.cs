@@ -1,18 +1,22 @@
-﻿using System.Web.Mvc;
+﻿using AutoMapper;
+using MediatR;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Web.Controllers;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsControllerTests
 {
-    [TestFixture]
-    public class WhenIViewTheTransferConnectionInvitationsPage
+    public class WhenIViewTheTransfersPage
     {
         private TransferConnectionInvitationsController _controller;
+        private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
+        private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 
         [SetUp]
         public void Arrange()
         {
-            _controller = new TransferConnectionInvitationsController(null, null);
+            _controller = new TransferConnectionInvitationsController(_mapper.Object, _mediator.Object);
         }
 
         [Test]

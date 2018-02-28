@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
@@ -10,9 +7,12 @@ using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
-using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrchestratorTests
 {
@@ -53,21 +53,21 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
             SetupGetTransactionsResponse();
 
-            _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object, _hashingService.Object);
+            _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object, Mock.Of<ILog>());
         }
 
         [Test]
-        [TestCase(2,2017)]
+        [TestCase(2, 2017)]
         [TestCase(6, 2017)]
         [TestCase(8, 2019)]
         [TestCase(12, 2020)]
         public async Task ThenARequestShouldBeMadeForTransactions(int month, int year)
         {
             //Act
-           await _orchestrator.GetAccountTransactions(HashedAccountId, year, month, ExternalUser);
+            await _orchestrator.GetAccountTransactions(HashedAccountId, year, month, ExternalUser);
 
             //Assert
-            _mediator.Verify(x=> x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(
+            _mediator.Verify(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(
                 q => q.Year == year && q.Month == month)), Times.Once);
         }
 
@@ -104,7 +104,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             //Arrange
             _currentTime.Setup(x => x.Now).Returns(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1));
             SetupGetTransactionsResponse(DateTime.Now.Year, DateTime.Now.Month);
-            
+
             //Act
             var resultLatestMonth = await _orchestrator.GetAccountTransactions(HashedAccountId, DateTime.Now.Year, DateTime.Now.Month, ExternalUser);
             SetupGetTransactionsResponse(2016, 1);

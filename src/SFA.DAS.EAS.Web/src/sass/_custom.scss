@@ -51,7 +51,7 @@
 .alert-default {
     background-color: $light-blue-25;
     border-color: $light-blue;
-}
+}t
 
 //validation styles
 .missingForApproval{
@@ -700,14 +700,15 @@ body {
 }
 
 /*Finance dashboard UI new*/
-#page-transactions {
+#page-transactions, #page-transfers {
     .column-half {
         .data {
             width: 100%;
 
             dl {
                 position: relative;
-                height: 170px;
+                min-height: 170px;
+                padding-bottom: 50px;
                 background: $purple;
 
                 dt {
@@ -718,9 +719,36 @@ body {
                         color: #fff;
                     }
                 }
+
+                dd {
+                    word-break: break-all;
+                }
+            }
+
+            dl.current-funds {
+                background: $purple;
+            }
+
+            dl.current-transfer-funds {
+                background: $mellow-red;
             }
         }
     }
+}
+
+/* Transfers */
+#page-transfers {
+    .data {
+        width: auto;
+        @include media(tablet) {
+            margin-top: 30px;
+            margin-bottom: 60px;
+        }
+    }
+}
+
+.govuk-box-highlight.govuk-box-highlight__bottom-margin {
+   margin-bottom: 2em;
 }
 
 /*See all activity*/

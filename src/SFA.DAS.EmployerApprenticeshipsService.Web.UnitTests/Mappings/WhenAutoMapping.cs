@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using NUnit.Framework;
+using SFA.DAS.EAS.Web.Mappings;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Mappings
 {
@@ -9,7 +10,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Mappings
         [Test]
         public void ThenShouldUseValidConfiguration()
         {
-            Mapper.AssertConfigurationIsValid();
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddProfile<ActivityMaps>();
+                c.AddProfile<TransactionMaps>();
+                c.AddProfile<TransferConnectionInvitationMaps>();
+            });
+
+            config.AssertConfigurationIsValid();
         }
     }
 }

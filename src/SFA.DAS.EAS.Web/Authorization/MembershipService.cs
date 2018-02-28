@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Domain.Models.Authorization;
@@ -18,13 +19,15 @@ namespace SFA.DAS.EAS.Web.Authorization
         private readonly EmployerAccountDbContext _db;
         private readonly HttpContextBase _httpContext;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IConfigurationProvider _configurationProvider;
         private readonly IHashingService _hashingService;
 
-        public MembershipService(EmployerAccountDbContext db, HttpContextBase httpContext, IAuthenticationService authenticationService, IHashingService hashingService)
+        public MembershipService(EmployerAccountDbContext db, HttpContextBase httpContext, IAuthenticationService authenticationService, IConfigurationProvider configurationProvider, IHashingService hashingService)
         {
             _db = db;
             _httpContext = httpContext;
             _authenticationService = authenticationService;
+            _configurationProvider = configurationProvider;
             _hashingService = hashingService;
         }
 
@@ -62,7 +65,7 @@ namespace SFA.DAS.EAS.Web.Authorization
 
             var membershipContext = _db.Memberships
                 .Where(m => m.Account.Id == accountId && m.User.ExternalId == userExternalId)
-                .ProjectTo<MembershipContext>()
+                .ProjectTo<MembershipContext>(_configurationProvider)
                 .SingleOrDefault();
 
             _httpContext.Items[Key] = membershipContext;

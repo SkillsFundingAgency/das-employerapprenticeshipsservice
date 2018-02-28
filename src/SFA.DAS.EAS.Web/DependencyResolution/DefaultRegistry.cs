@@ -32,7 +32,6 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.CookieService;
-using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -57,6 +56,7 @@ using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Tasks.API.Client;
 using StructureMap;
 using StructureMap.TypeRules;
+using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -197,16 +197,15 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
                 .Select(t => (Profile)Activator.CreateInstance(t));
 
-            Mapper.Initialize(c =>
+            var config = new MapperConfiguration(c =>
             {
-                foreach (var profile in profiles)
-                {
-                    c.AddProfile(profile);
-                }
+                profiles.ForEach(c.AddProfile);
             });
 
-            For<IConfigurationProvider>().Use(Mapper.Configuration).Singleton();
-            For<IMapper>().Use(Mapper.Instance).Singleton();
+            var mapper = config.CreateMapper();
+
+            For<IConfigurationProvider>().Use(config).Singleton();
+            For<IMapper>().Use(mapper).Singleton();
         }
 
         private void RegisterMediator()

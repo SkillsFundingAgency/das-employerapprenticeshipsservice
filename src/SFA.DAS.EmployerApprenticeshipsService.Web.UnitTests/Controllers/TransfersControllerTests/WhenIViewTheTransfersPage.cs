@@ -1,29 +1,34 @@
-﻿using System.Threading.Tasks;
-using System.Web.Mvc;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
-using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.ViewModels.Transfers;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using SFA.DAS.EAS.Web.Mappings;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
 {
     [TestFixture]
     public class WhenIViewTheTransfersPage
     {
-        private TransfersController _controller;
-        private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
+        private Web.Controllers.TransfersController _controller;
+        private IConfigurationProvider _mapperConfig;
+        private IMapper _mapper;
+        private Mock<IMediator> _mediator;
         private readonly GetTransferConnectionInvitationsQuery _query = new GetTransferConnectionInvitationsQuery();
         private readonly GetTransferConnectionInvitationsResponse _response = new GetTransferConnectionInvitationsResponse();
 
         [SetUp]
         public void Arrange()
         {
+            _mapperConfig = new MapperConfiguration(c => c.AddProfile<TransferConnectionInvitationMaps>());
+            _mapper = _mapperConfig.CreateMapper();
+            _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
 
-            _controller = new TransfersController(Mapper.Instance, _mediator.Object);
+            _controller = new Web.Controllers.TransfersController(_mapper, _mediator.Object);
         }
 
         [Test]

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments;
 using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
@@ -15,32 +11,30 @@ using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerAccountTransactionsOrchestrator
     {
         private readonly ICurrentDateTime _currentTime;
+        private readonly ILog _logger;
         private readonly IMediator _mediator;
-        private readonly IHashingService _hashingService;
 
         protected EmployerAccountTransactionsOrchestrator()
         {
 
         }
 
-        public EmployerAccountTransactionsOrchestrator(IMediator mediator, ICurrentDateTime currentTime, IHashingService hashingService)
+        public EmployerAccountTransactionsOrchestrator(IMediator mediator, ICurrentDateTime currentTime, ILog logger)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-
-            if (hashingService == null)
-                throw new ArgumentNullException(nameof(hashingService));
-            
             _mediator = mediator;
             _currentTime = currentTime;
-            _hashingService = hashingService;
+            _logger = logger;
         }
 
         public async Task<OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>>
@@ -247,20 +241,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         Month = month,
                         HashedAccountId = hashedId
                     });
-            var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
+            var latestLineItem = data?.Data?.TransactionLines?.FirstOrDefault();
 
-            decimal currentBalance;
-            currentBalance = latestLineItem != null ? latestLineItem.Balance : 0;
+            var currentBalance = latestLineItem?.Balance ?? 0;
 
             return new OrchestratorResponse<FinanceDashboardViewModel>
             {
-                Data = new FinanceDashboardViewModel()
+                Data = new FinanceDashboardViewModel
                 {
                     Account = employerAccountResult.Account,
                     CurrentLevyFunds = currentBalance
                 }
             };
         }
+
 
         public virtual async Task<OrchestratorResponse<TransactionViewResultViewModel>> GetAccountTransactions(string hashedId, int year, int month, string externalUserId)
         {
