@@ -5491,39 +5491,45 @@ h2 .float-right {
 }
 
 /*Finance dashboard UI new*/
-#page-transactions .column-half .data {
+#page-transactions .column-half .data, #page-transfers .column-half .data {
   width: 100%;
 }
 
-#page-transactions .column-half .data dl {
+#page-transactions .column-half .data dl, #page-transfers .column-half .data dl {
   position: relative;
   min-height: 170px;
   padding-bottom: 50px;
   background: #2e358b;
 }
 
-#page-transactions .column-half .data dl dt {
+#page-transactions .column-half .data dl dt, #page-transfers .column-half .data dl dt {
   position: absolute;
   bottom: 10px;
 }
 
-#page-transactions .column-half .data dl dt a {
+#page-transactions .column-half .data dl dt a, #page-transfers .column-half .data dl dt a {
   color: #fff;
 }
 
-#page-transactions .column-half .data dl dd {
+#page-transactions .column-half .data dl dd, #page-transfers .column-half .data dl dd {
   word-break: break-all;
 }
 
-#page-transactions .column-half .data dl.current-funds {
+#page-transactions .column-half .data dl.current-funds, #page-transfers .column-half .data dl.current-funds {
   background: #2e358b;
 }
 
-#page-transactions .column-half .data dl.current-transfer-funds {
+#page-transactions .column-half .data dl.current-transfer-funds, #page-transfers .column-half .data dl.current-transfer-funds {
   background: #df3034;
 }
 
 /* Transfers */
+#page-transfers .data {
+  width: auto;
+  margin-top: 30px;
+  margin-bottom: 60px;
+}
+
 .govuk-box-highlight.govuk-box-highlight__bottom-margin {
   margin-bottom: 2em;
 }

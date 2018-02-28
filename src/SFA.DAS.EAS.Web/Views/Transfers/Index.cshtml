@@ -18,14 +18,21 @@
         <p>Before getting started, make sure you understand the <a href="">rules for sending and receiving transfers</a>.</p>
     </div>
 </div>
-    <div class="grid-row">
-        <div class="column-two-thirds">
-            <div class="govuk-box-highlight govuk-box-highlight__bottom-margin">
-                <p class="heading-xlarge">@Model.TransferAllowance.ToString("C0", culture)</p>
-                <p class="font-large">Remaining transfer allowance</p>
+<div class="grid-row">
+    <div class="column-full">
+        <div class="data-wrap">
+            <div class="data">
+                <dl class="transfer-funds">
+                    <dt>
+                        Remaining transfer allowance
+                    </dt>
+
+                    <dd class="">@Model.TransferAllowance.ToString("C0", culture)</dd>
+                </dl>
             </div>
         </div>
     </div>
+</div>
 <div class="grid-row">
     <div class="column-two-thirds">
         <a class="button" href="@Url.Action("Index", "TransferConnectionInvitations")">Connect with employer</a>

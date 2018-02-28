@@ -700,7 +700,7 @@ body {
 }
 
 /*Finance dashboard UI new*/
-#page-transactions {
+#page-transactions, #page-transfers {
     .column-half {
         .data {
             width: 100%;
@@ -737,6 +737,15 @@ body {
 }
 
 /* Transfers */
+#page-transfers {
+    .data {
+        width: auto;
+        @include media(tablet) {
+            margin-top: 30px;
+            margin-bottom: 60px;
+        }
+    }
+}
 
 .govuk-box-highlight.govuk-box-highlight__bottom-margin {
    margin-bottom: 2em;
