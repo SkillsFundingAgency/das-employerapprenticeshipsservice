@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application.Queries.GetActivities;
 using SFA.DAS.EAS.Application.Queries.GetLatestActivities;
 using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.ViewModels.Activities;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -17,11 +18,13 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
+        private readonly ILog _logger;
 
-        public ActivitiesController(IMapper mapper, IMediator mediator)
+        public ActivitiesController(IMapper mapper, IMediator mediator, ILog logger)
         {
             _mapper = mapper;
             _mediator = mediator;
+            _logger = logger;
         }
         
         [Route]
@@ -39,15 +42,19 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             try
             {
-                var response = _mediator.Send(query).Result;
+                var response = Task.Run(async () => await _mediator.SendAsync(query)).Result; 
+
                 var model = _mapper.Map<LatestActivitiesViewModel>(response);
 
                 return PartialView(model);
             }
             catch (Exception e)
             {
-                return Content("Activities are currently unavailable.");
+                _logger.Warn($"Failed to get the latest activities: {e.GetType().Name} - {e.Message}");
+                return Content(ActivitiesUnavailableMessage);
             }
         }
+
+        public const string ActivitiesUnavailableMessage = "Activities are currently unavailable.";
     }
 }
