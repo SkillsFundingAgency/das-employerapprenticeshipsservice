@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 
 namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
@@ -9,7 +10,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
 
         public ControllerActionCacheItem(string controller, string action)
         {
-            Controller = Controller;
+            Controller = controller;
             Action = action;
             WhiteLists = new List<WhiteList>();
             _hashvalue = GetHash(Controller, Action);
@@ -26,9 +27,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
 
         public override bool Equals(object obj)
         {
-            return (obj is ControllerAction action) &&
-                   string.Equals(action.Controller, Controller) &&
-                   string.Equals(action.Action, Action);
+            return (obj is ControllerActionCacheItem action) &&
+                   string.Equals(action.Controller, Controller, StringComparison.InvariantCultureIgnoreCase) &&
+                   string.Equals(action.Action, Action, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public List<WhiteList> WhiteLists { get; }
