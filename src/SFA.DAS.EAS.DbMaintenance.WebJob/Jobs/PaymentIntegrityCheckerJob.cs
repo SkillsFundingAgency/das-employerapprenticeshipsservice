@@ -31,30 +31,38 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Jobs
         {
             var accounts = await _employerAccountRepository.GetAllAccounts();
 
-            var lastestPeriodEnd = await _levyRepository.GetLatestPeriodEnd();
+            var periodEnds = await _levyRepository.GetAllPeriodEnds();
 
-            foreach (var account in accounts)
+            foreach (var periodEnd in periodEnds)
             {
-                var expectedPayments = (IEnumerable<Payment>)await _paymentService.GetAccountPayments(lastestPeriodEnd.Id, account.Id);
-
-                var actualPayments =
-                    (await _levyRepository.GetAccountPaymentsByPeriodEnd(account.Id, lastestPeriodEnd.Id)).ToArray();
-
-
-                var expectedPaymentsTotal = expectedPayments?.Sum(x => x.Amount) ?? 0;
-                var actualPaymentsTotal = actualPayments.Sum(x => x.Amount);
-
-                var paymentMissing = actualPaymentsTotal != expectedPaymentsTotal;
-
-                if (!paymentMissing)
+                foreach (var account in accounts)
                 {
-                    paymentMissing = expectedPayments?.Except(actualPayments).Any() ?? false;
-                }
+                    var expectedPayments =
+                        (IEnumerable<Payment>)await _paymentService.GetAccountPayments(periodEnd.Id,
+                            account.Id);
 
-                if (paymentMissing)
-                {
-                    _logger.Warn(
-                        $"Some payments for account ID {account.Id} for period end {lastestPeriodEnd.Id} are missing");
+                    var actualPayments =
+                        (await _levyRepository.GetAccountPaymentsByPeriodEnd(account.Id, periodEnd.Id))
+                        .ToArray();
+
+
+                    var expectedPaymentsTotal = expectedPayments?.Sum(x => x.Amount) ?? 0;
+                    var actualPaymentsTotal = actualPayments.Sum(x => x.Amount);
+
+                    var paymentMissing = actualPaymentsTotal != expectedPaymentsTotal;
+
+                    //If the totals add up we check to see if all the payments are correct
+                    //just in case a duplicate or incorrect record has the same amount as a correct one
+                    if (!paymentMissing)
+                    {
+                        paymentMissing = expectedPayments?.Except(actualPayments).Any() ?? false;
+                    }
+
+                    if (paymentMissing)
+                    {
+                        _logger.Warn(
+                            $"Some payments for account ID {account.Id} for period end {periodEnd.Id} are missing");
+                    }
                 }
             }
         }

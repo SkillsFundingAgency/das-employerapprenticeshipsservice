@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.DbMaintenance.UnitTests.Jobs.PaymentIntegrityCheckerJobTes
 
             _periodEnd = new PeriodEnd { Id = "1718-R01" };
 
-            _levyRepository.Setup(x => x.GetLatestPeriodEnd()).ReturnsAsync(_periodEnd);
+            _levyRepository.Setup(x => x.GetAllPeriodEnds()).ReturnsAsync(new List<PeriodEnd> { _periodEnd });
 
             var paymentServicePayments = new List<PaymentDetails>
             {
@@ -88,7 +88,7 @@ namespace SFA.DAS.EAS.DbMaintenance.UnitTests.Jobs.PaymentIntegrityCheckerJobTes
             await _job.Run();
 
             //Assert
-            _levyRepository.Verify(x => x.GetLatestPeriodEnd(), Times.Once);
+            _levyRepository.Verify(x => x.GetAllPeriodEnds(), Times.Once);
         }
 
         [Test]
