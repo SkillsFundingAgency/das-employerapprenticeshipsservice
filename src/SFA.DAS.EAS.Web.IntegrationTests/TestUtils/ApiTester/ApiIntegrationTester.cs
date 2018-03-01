@@ -1,4 +1,17 @@
-﻿using System;
+﻿using Microsoft.Owin.Testing;
+using Moq;
+using Newtonsoft.Json;
+using NUnit.Framework;
+using Owin;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
+using SFA.DAS.EAS.Api;
+using SFA.DAS.EAS.Api.Controllers;
+using SFA.DAS.EAS.Api.DependencyResolution;
+using SFA.DAS.EAS.Application.Hashing;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.NLog.Logger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -8,18 +21,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using System.Web.Http.ExceptionHandling;
-using Microsoft.Owin.Testing;
-using Moq;
-using Newtonsoft.Json;
-using NUnit.Framework;
-using Owin;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
-using SFA.DAS.EAS.Api;
-using SFA.DAS.EAS.Api.Controllers;
-using SFA.DAS.EAS.Api.DependencyResolution;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
@@ -35,7 +36,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         public ApiIntegrationTester()
         {
-            _dbBuilder = new Lazy<DbBuilder>(Resolve<DbBuilder>);    
+            _dbBuilder = new Lazy<DbBuilder>(Resolve<DbBuilder>);
         }
 
         public TestServer TestServer { get; private set; }
@@ -46,7 +47,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         /// <param name="call">Details the requirements of the call to be made.</param>
         public static async Task<CallResponse> InvokeIsolatedGetAsync(CallRequirements call)
         {
-            using (var tester = new ApiIntegrationTester() )
+            using (var tester = new ApiIntegrationTester())
             {
                 return await tester.InvokeGetAsync(call);
             }
@@ -189,6 +190,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
             container.Configure(c =>
             {
+                c.For<IPublicHashingService>().Use(Mock.Of<IPublicHashingService>());
                 c.For<IUserRepository>().Use<UserRepository>();
                 c.For<IRequestContext>().Use(requestContextMock.Object);
             });
@@ -246,7 +248,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         private bool WasUnacceptableExceptionThrownInServer(CallRequirements call)
         {
             return _exceptionHandler.IsFaulted
-                   && (call.IgnoreExceptionTypes == null 
+                   && (call.IgnoreExceptionTypes == null
                         || !call.IgnoreExceptionTypes.Contains(_exceptionHandler.Exception.GetType()));
         }
 
