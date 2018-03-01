@@ -30,6 +30,7 @@
       <Setting name="CurrentTime" />
       <Setting name="EmployerCommitmentsBaseUrl" />
       <Setting name="EmployerRecruitBaseUrl" />
+      <Setting name="EmployerProjectionsBaseUrl" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" />

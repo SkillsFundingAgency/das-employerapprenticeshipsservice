@@ -71,6 +71,17 @@
             <p>Download your financial transactions within a specific date range. </p>
         </div>
     }
+    @if (Html.IsFeatureEnabled("EmployerProjections", "Index"))
+    {
+        <div class="column-half">
+            <h2 class="heading-medium">
+                <a title="Download transactions" href="@Url.EmployerProjectionsAction("forecasting")">
+                    Funding Projection
+                </a>
+            </h2>
+            <p>View funding projection to plan your future spending. </p>
+        </div>
+    }
     @if (Html.IsFeatureEnabled("Transfers", "Index"))
     {
         <div class="column-half">
