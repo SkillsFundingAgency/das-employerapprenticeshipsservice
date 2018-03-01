@@ -114,6 +114,7 @@
     <Build Include="StoredProcedures\GetAllTransactionDetailsForAccountByDate.sql" />
     <Build Include="Tables\PaymentTransactionTypes.sql" />
     <Build Include="Tables\TransactionLineTypes.sql" />
+    <Build Include="StoredProcedures\GetAccountPaymentsByPeriodEnd.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

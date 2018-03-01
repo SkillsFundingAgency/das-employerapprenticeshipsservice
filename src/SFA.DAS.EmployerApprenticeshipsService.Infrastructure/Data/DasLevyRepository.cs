@@ -241,6 +241,16 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
+        public async Task<IEnumerable<PeriodEnd>> GetAllPeriodEnds()
+        {
+            var result = await WithConnection(async c =>
+                await c.QueryAsync<PeriodEnd>(
+                    sql: "Select * FROM PeriodEnd",
+                    commandType: CommandType.Text));
+
+            return result;
+        }
+
         public async Task CreatePaymentData(IEnumerable<PaymentDetails> payments)
         {
             using (var connection = new SqlConnection(_configuration.DatabaseConnectionString))
@@ -342,9 +352,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 commandType: CommandType.StoredProcedure));
         }
 
-        public Task<IEnumerable<Payment>> GetAccountPaymentsByPeriodEnd(long accountId, string periodEnd)
+        public async Task<IEnumerable<Payment>> GetAccountPaymentsByPeriodEnd(long accountId, string periodEnd)
         {
-            throw new NotImplementedException();
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@periodEnd", periodEnd, DbType.String);
+
+                return await c.QueryAsync<Payment>(
+                    sql: "[employer_financial].[GetAccountPaymentsByPeriodEnd]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result;
         }
 
         public async Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef)

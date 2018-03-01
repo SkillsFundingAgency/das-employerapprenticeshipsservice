@@ -23,6 +23,8 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task CreateNewPeriodEnd(PeriodEnd periodEnd);
         Task<PeriodEnd> GetLatestPeriodEnd();
 
+        Task<IEnumerable<PeriodEnd>> GetAllPeriodEnds();
+
         Task CreatePaymentData(IEnumerable<PaymentDetails> payments);
         Task<Payment> GetPaymentData(Guid paymentId);
         Task<IEnumerable<Guid>> GetAccountPaymentIds(long accountId);
