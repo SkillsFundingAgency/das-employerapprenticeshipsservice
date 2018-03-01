@@ -245,7 +245,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             var result = await WithConnection(async c =>
                 await c.QueryAsync<PeriodEnd>(
-                    sql: "Select * FROM PeriodEnd",
+                    sql: "SELECT * FROM [employer_financial].[PeriodEnd]",
                     commandType: CommandType.Text));
 
             return result;

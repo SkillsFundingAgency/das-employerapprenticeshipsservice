@@ -1,8 +1,14 @@
-﻿using SFA.DAS.EAS.Application.Hashing;
+﻿using AutoMapper;
+using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
+using StructureMap.TypeRules;
+using System;
+using System.Linq;
 
 namespace SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution
 {
@@ -23,10 +29,34 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution
 
             For<ILog>().Use(c => new NLogLogger(c.ParentType, null, null)).AlwaysUnique();
             For<IPublicHashingService>().Use(() => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
+            For<ICache>().Use<InMemoryCache>();
             Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
             Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
             Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
             Policies.Add(new ConfigurationPolicy<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI"));
+
+            RegisterMapper();
+        }
+
+        private void RegisterMapper()
+        {
+            var profiles = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .Where(a => a.FullName.StartsWith("SFA.DAS.EAS"))
+                .SelectMany(a => a.GetTypes())
+                .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
+                .Select(t => (Profile)Activator.CreateInstance(t));
+
+            Mapper.Initialize(c =>
+            {
+                foreach (var profile in profiles)
+                {
+                    c.AddProfile(profile);
+                }
+            });
+
+            For<IConfigurationProvider>().Use(Mapper.Configuration).Singleton();
+            For<IMapper>().Use(Mapper.Instance).Singleton();
         }
     }
 }
