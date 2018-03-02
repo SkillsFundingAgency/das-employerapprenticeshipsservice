@@ -16,6 +16,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
+using SFA.DAS.EAS.TestCommon.Builders;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
@@ -183,7 +184,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                 _tasks.Add(new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 });
             }
 
-            var expectedLatestTransfer = new TransferConnectionInvitation { Id = new Random().Next(int.MaxValue) };
+            var expectedLatestTransfer = new TransferConnectionInvitationBuilder()
+                .WithId(new Random().Next(int.MaxValue))
+                .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                .WithSenderAccount(new Domain.Data.Entities.Account.Account())
+                .Build();
+
             _getLatestOutstandingTransferInvitationResponse.TransferConnectionInvitation = expectedLatestTransfer;
 
             //Act
@@ -200,7 +206,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             // Arrange
             _tasks.Clear();
             _tasks.Add(new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 });
-            var expectedLatestTransfer = new TransferConnectionInvitation {Id = new Random().Next(int.MaxValue)};
+            var expectedLatestTransfer = new TransferConnectionInvitationBuilder()
+                .WithId(new Random().Next(int.MaxValue))
+                .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                .WithSenderAccount(new Domain.Data.Entities.Account.Account())
+                .Build();
+
             _getLatestOutstandingTransferInvitationResponse.TransferConnectionInvitation = expectedLatestTransfer;
 
             //Act
@@ -219,7 +230,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                     new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 },
                     new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 }
                     });
-            var expectedLatestTransfer = new TransferConnectionInvitation {Id = new Random().Next(int.MaxValue)};
+            var expectedLatestTransfer = new TransferConnectionInvitationBuilder()
+                .WithId(new Random().Next(int.MaxValue))
+                .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                .WithSenderAccount(new Domain.Data.Entities.Account.Account())
+                .Build();
+
             _getLatestOutstandingTransferInvitationResponse.TransferConnectionInvitation = expectedLatestTransfer;
 
             //Act
@@ -235,7 +251,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             // Arrange
             _tasks.Clear();
             _tasks.Add(new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 });
-            var expectedLatestTransfer = new TransferConnectionInvitation {Id = new Random().Next(int.MaxValue)};
+            var expectedLatestTransfer = new TransferConnectionInvitationBuilder()
+                .WithId(new Random().Next(int.MaxValue))
+                .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                .WithSenderAccount(new Domain.Data.Entities.Account.Account())
+                .Build();
+
             _getLatestOutstandingTransferInvitationResponse.TransferConnectionInvitation = expectedLatestTransfer;
 
             //Act

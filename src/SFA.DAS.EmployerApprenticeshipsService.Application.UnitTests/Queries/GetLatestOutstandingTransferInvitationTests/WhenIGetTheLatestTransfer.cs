@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.TestCommon.Builders;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestOutstandingTransferInvitationTests
@@ -17,7 +18,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestOutstandingTransfer
     {
         private Mock<ITransferConnectionInvitationRepository> _transferConnectionInvitationRepository;
         private Mock<IHashingService> _hashingService;
-        private Mock<IMembershipRepository> _membershipRepository;
         private TransferConnectionInvitation _expectedTransferConnectionInvitation;
         private int _expectedAccountId = 1882;
 
@@ -32,15 +32,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestOutstandingTransfer
             SetUp();
             const string expectedHashedAccountId = "AABBCC";
 
-            _expectedTransferConnectionInvitation = new TransferConnectionInvitation();
-            _hashingService = new Mock<IHashingService>();
-            _membershipRepository = new Mock<IMembershipRepository>();
-            _transferConnectionInvitationRepository = new Mock<ITransferConnectionInvitationRepository>();
+            _expectedTransferConnectionInvitation = new TransferConnectionInvitationBuilder()
+                                                            .WithId(123)
+                                                            .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                                                            .WithSenderAccount(new Domain.Data.Entities.Account.Account())
+                                                            .Build();
 
-            var currentUser = new CurrentUser
-            {
-                ExternalUserId = Guid.NewGuid().ToString()
-            };
+            _hashingService = new Mock<IHashingService>();
+            _transferConnectionInvitationRepository = new Mock<ITransferConnectionInvitationRepository>();
 
             Query = new GetLatestOutstandingTransferInvitationQuery
             {
@@ -51,18 +50,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestOutstandingTransfer
                 .Setup(m => m.DecodeValue(Query.ReceiverAccountHashedId))
                 .Returns(_expectedAccountId);
 
-            _membershipRepository
-                .Setup(x => x.GetCaller(Query.ReceiverAccountHashedId, currentUser.ExternalUserId))
-                .ReturnsAsync(new MembershipView());
-
             _transferConnectionInvitationRepository
                 .Setup(x => x.GetLatestOutstandingTransferConnectionInvitation(It.IsAny<long>()))
                 .ReturnsAsync(_expectedTransferConnectionInvitation);
 
             RequestHandler = new GetLatestOutstandingTransferInvitationHandler(
-                                            currentUser, 
-                                            _hashingService.Object, 
-                                            _membershipRepository.Object, 
+                                            _hashingService.Object,
                                             _transferConnectionInvitationRepository.Object,
                                             RequestValidator.Object);
         }
