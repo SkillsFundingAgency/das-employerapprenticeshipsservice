@@ -1,11 +1,11 @@
-﻿using System;
+﻿using SFA.DAS.EAS.Domain.Models.FeatureToggles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 
 namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
 {
-    public class FeatureToggleCache
+    public class FeatureToggleCache : IFeatureToggleCache
     {
         private readonly HashSet<string> _toggledControllers;
         private readonly Dictionary<string, ControllerActionCacheItem> _controllerActions;
