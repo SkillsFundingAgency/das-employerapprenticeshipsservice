@@ -101,6 +101,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                             parameters.Add("@EndOfYearAdjustmentAmount", dasDeclaration.EndOfYearAdjustmentAmount,
                                 DbType.Decimal);
 
+                            parameters.Add("@NoPaymentForPeriod", dasDeclaration.NoPaymentForPeriod, DbType.Boolean);
+
                             await unitOfWork.Execute("[employer_financial].[CreateDeclaration]", parameters,
                                 CommandType.StoredProcedure);
                         }

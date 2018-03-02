@@ -13,7 +13,8 @@
 	@InactiveFrom DATETIME = NULL,
 	@InactiveTo DATETIME = NULL,
 	@EndOfYearAdjustment BIT,
-	@EndOfYearAdjustmentAmount DECIMAL(18,4)
+	@EndOfYearAdjustmentAmount DECIMAL(18,4),
+	@NoPaymentForPeriod BIT
 AS
 	
 
@@ -33,7 +34,8 @@ INSERT INTO [employer_financial].[LevyDeclaration]
 		DateCeased,
 		InactiveFrom,
 		InactiveTo,
-		HmrcSubmissionId
+		HmrcSubmissionId,
+		NoPaymentForPeriod
 	) 
 VALUES 
 	(
@@ -51,5 +53,6 @@ VALUES
 		@DateCeased,
 		@InactiveFrom,
 		@InactiveTo,
-		@HmrcSubmissionId
+		@HmrcSubmissionId,
+		@NoPaymentForPeriod
 	);
