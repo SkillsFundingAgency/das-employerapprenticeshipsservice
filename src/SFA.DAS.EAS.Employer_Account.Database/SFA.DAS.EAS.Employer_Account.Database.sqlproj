@@ -59,14 +59,14 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-    <Folder Include="SeedData" />
     <Folder Include="StoredProcedures" />
     <Folder Include="Views" />
     <Folder Include="Tables" />
     <Folder Include="Schemas" />
-    <Folder Include="Pre-deployment" />
-    <Folder Include="Post-Deployment" />
     <Folder Include="UserDefinedTypes" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\PostDeployment" />
+    <Folder Include="Scripts\PreDeployment" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="StoredProcedures\Cleardown.sql" />
@@ -131,10 +131,11 @@
     <Build Include="StoredProcedures\UpdateAccountPublicHashedIds.sql" />
     <Build Include="UserDefinedTypes\AccountPublicHashedIdsTable.sql" />
     <Build Include="Tables\TransferConnectionInvitationChange.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SeedData\SeedDevData.sql" />
-    <None Include="SeedData\SeedProdData.sql" />
+    <PostDeploy Include="Scripts\PostDeployment\PostDeployment.sql" />
+    <None Include="Scripts\PostDeployment\TransferConnectionInvitationDataMigration.sql" />
+    <PreDeploy Include="Scripts\PreDeployment\PreDeployment.sql" />
+    <None Include="Scripts\PreDeployment\TransferConnectionInvitationDataMigration.sql" />
+    <None Include="Scripts\PostDeployment\SeedDevData.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
@@ -146,12 +147,5 @@
     <Build Include="Tables\Invitation.sql" />
     <Build Include="Tables\Membership.sql" />
     <Build Include="Tables\Paye.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <PostDeploy Include="SeedData\PostDeploymentRules.sql" />
-    <None Include="Post-Deployment\Script.PostDeployment1.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <PreDeploy Include="Pre-deployment\Script.PreDeployment1.sql" />
   </ItemGroup>
 </Project>
