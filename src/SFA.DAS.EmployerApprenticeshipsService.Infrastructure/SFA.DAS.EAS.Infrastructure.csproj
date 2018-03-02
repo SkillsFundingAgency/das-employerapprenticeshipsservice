@@ -277,6 +277,10 @@
     <Compile Include="Models\PostcodeAnywhere\PcaAddress.cs" />
     <Compile Include="Models\PostcodeAnywhere\PcaServiceFindResult.cs" />
     <Compile Include="Data\TransactionRepository.cs" />
+    <Compile Include="Pipeline\Features\FeatureTogglePipeline.cs" />
+    <Compile Include="Pipeline\Features\Sections\WhitelistPipelineSection.cs" />
+    <Compile Include="Pipeline\IPipeline.cs" />
+    <Compile Include="Pipeline\IPipelineSection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AddressLookupService.cs" />
     <Compile Include="Services\AuditService.cs" />
@@ -292,6 +296,7 @@
     <Compile Include="Services\ExcelService.cs" />
     <Compile Include="Services\FeatureToggle\FeatureToggleCache.cs" />
     <Compile Include="Services\FeatureToggle\FeatureToggleService.cs" />
+    <Compile Include="Services\FeatureToggle\IFeatureToggleCache.cs" />
     <Compile Include="Services\HmrcDateService.cs" />
     <Compile Include="Services\HmrcService.cs" />
     <Compile Include="Services\HttpClientWrapper.cs" />
