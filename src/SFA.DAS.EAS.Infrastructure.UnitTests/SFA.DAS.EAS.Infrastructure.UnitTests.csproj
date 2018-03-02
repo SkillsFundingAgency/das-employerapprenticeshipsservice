@@ -179,6 +179,7 @@
     <Compile Include="NoopExecutionPolicy.cs" />
     <Compile Include="Pipeline\Features\FeatureTogglePipelineTests\WhenIProcessARequest.cs" />
     <Compile Include="Pipeline\Features\Handlers\FeatureToggleAuthorisationHandlerTests.cs" />
+    <Compile Include="Pipeline\Features\Sections\WhitelistPipelineSectionTests\WhenICheckIfAFeatureIsToggled.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\FeatureToggle\ControllerActionCacheItemTests\WhenCreatingItems.cs" />
     <Compile Include="Services\FeatureToggle\FeatureToggleCacheTests\WhenIProvideNoFeatures.cs" />
