@@ -27,10 +27,7 @@ else
 {
 <h1 class="heading-xlarge heading-dashboard" id="company-Name">
     @Model.Data.Account.Name
-    @if (Html.IsFeatureEnabled("Transfers", "Index"))
-    {
-        <span class="heading-secondary">Account ID: @Model.Data.Account.PublicHashedId</span>
-    }
+    <span class="heading-secondary">Account ID: @Model.Data.Account.PublicHashedId</span>
 </h1>
     <div class="grid-row page-dashboard">
         <div class="column-two-thirds">
