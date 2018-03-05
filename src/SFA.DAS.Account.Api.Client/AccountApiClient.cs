@@ -146,10 +146,10 @@ namespace SFA.DAS.EAS.Account.Api.Client
             return JsonConvert.DeserializeObject<ICollection<TransactionSummaryViewModel>>(json);
         }
 
-        public async Task<ICollection<TransferConnectionViewModel>> GetTransferConnections(string accountId)
+        public async Task<ICollection<TransferConnectionViewModel>> GetTransferConnections(string accountHashedId)
         {
             var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/accounts/{accountId}/transferconnections";
+            var url = $"{baseUrl}api/accounts/{accountHashedId}/transfers/connections";
             var json = await _httpClient.GetAsync(url);
 
             return JsonConvert.DeserializeObject<ICollection<TransferConnectionViewModel>>(json);

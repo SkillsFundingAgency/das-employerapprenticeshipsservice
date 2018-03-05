@@ -285,6 +285,9 @@
     <Compile Include="DependencyResolution\TasksRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
     <Compile Include="Logging\RequestContext.cs" />
+    <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQuery.cs" />
+    <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsResponse.cs" />
     <Compile Include="Services\ApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommand.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommandHandler.cs" />

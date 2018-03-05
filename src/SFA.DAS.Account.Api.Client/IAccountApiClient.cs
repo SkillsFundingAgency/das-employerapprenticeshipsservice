@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Account.Api.Client
         Task<T> GetResource<T>(string uri) where T : IAccountResource;
         Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month);
         Task<ICollection<TransactionSummaryViewModel>> GetTransactionSummary(string accountId);
-        Task<ICollection<TransferConnectionViewModel>> GetTransferConnections(string accountId);
+        Task<ICollection<TransferConnectionViewModel>> GetTransferConnections(string accountHashedId);
         Task<ICollection<AccountDetailViewModel>> GetUserAccounts(string userId);
     }
 }

@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
                 .ProjectTo<AccountDto>(_configurationProvider)
                 .SingleOrDefaultAsync(a => a.PublicHashedId == message.ReceiverAccountPublicHashedId);
 
-            if (receiverAccount == null)
+            if (receiverAccount == null || receiverAccount.Id == message.AccountId)
             {
                 throw new ValidationException<GetTransferConnectionInvitationAccountQuery>(q => q.ReceiverAccountPublicHashedId, "You must enter a valid account ID");
             }

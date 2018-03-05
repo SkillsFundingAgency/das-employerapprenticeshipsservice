@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 
@@ -11,6 +12,9 @@ namespace SFA.DAS.EAS.Application.Mappings
         {
             CreateMap<TransferConnectionInvitation, TransferConnectionInvitationDto>()
                 .ForMember(m => m.Changes, o => o.MapFrom(i => i.Changes.OrderBy(c => c.CreatedDate)));
+
+            CreateMap<TransferConnectionInvitation, TransferConnectionViewModel>()
+                .ForMember(m => m.SenderAccountId, o => o.MapFrom(i => i.SenderAccount.Id));
 
             CreateMap<TransferConnectionInvitationChange, TransferConnectionInvitationChangeDto>();
         }
