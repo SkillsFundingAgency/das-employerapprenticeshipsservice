@@ -16,6 +16,7 @@
       <Setting name="ShowPayeHistory" value="false" />
       <Setting name="CurrentTime" value="" />
       <Setting name="EmployerCommitmentsBaseUrl" value="__EmployerCommitmentsBaseUrl__" />
+      <Setting name="EmployerRecruitBaseUrl" value="__EmployerRecruitBaseUrl__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="E280E23D933FE3A62AF335BE9768A2C9D65CCC9A" thumbprintAlgorithm="sha1" />
