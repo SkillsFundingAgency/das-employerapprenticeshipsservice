@@ -188,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ServiceBusConnectionKeyAttribute.cs" />
+    <Compile Include="Configuration\IdProcessorConfiguration.cs" />
     <Compile Include="Configuration\CommitmentsApiClientConfiguration.cs" />
     <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />

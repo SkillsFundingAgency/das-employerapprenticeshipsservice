@@ -123,6 +123,8 @@
     <Build Include="StoredProcedures\UpdateAccountHashedIds.sql" />
     <Build Include="StoredProcedures\UpdateAccountPublicHashedIds.sql" />
     <Build Include="UserDefinedTypes\AccountPublicHashedIdsTable.sql" />
+    <Build Include="StoredProcedures\GetLegalEntities_WithoutSpecificAgreement.sql" />
+    <Build Include="StoredProcedures\GetAccountsLinkedToLegalEntity.sql" />
     <Build Include="Tables\TransferConnectionInvitationChange.sql" />
     <PostDeploy Include="Scripts\PostDeployment\PostDeployment.sql" />
     <None Include="Scripts\PostDeployment\TransferConnectionInvitationDataMigration.sql" />
