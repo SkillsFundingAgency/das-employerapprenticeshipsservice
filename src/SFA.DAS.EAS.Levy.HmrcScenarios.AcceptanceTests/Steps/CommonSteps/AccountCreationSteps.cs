@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.CommonSteps
 
             var hashedAccountId = (string) ScenarioContext.Current["HashedAccountId"];
 
-            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
+            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
 
             var viewModel = new AddNewPayeSchemeViewModel
             {
@@ -97,7 +97,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.CommonSteps
         {
             orchestrator.CreateAccount(new CreateAccountViewModel
             {
-                UserId = userView.UserId,
+                UserId = userView.UserRef,
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
                 OrganisationDateOfInception = new DateTime(2016, 01, 01),
@@ -120,7 +120,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.CommonSteps
                 Email = "test@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
                 FirstName = "test",
                 LastName = "tester",
-                UserId = _externalUserId
+                UserRef = _externalUserId
             };
             var userCreation = new UserSteps();
             userCreation.UpsertUser(signInModel);
@@ -138,11 +138,10 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.CommonSteps
         private void CreateAccountWithOwner()
         {
             var accountOwnerUserId = Guid.NewGuid().ToString();
-            ScenarioContext.Current["AccountOwnerUserId"] = accountOwnerUserId;
 
             var signInUserModel = new UserViewModel
             {
-                UserId = accountOwnerUserId,
+                UserRef = accountOwnerUserId,
                 Email = "accountowner@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
                 FirstName = "Test",
                 LastName = "Tester"
@@ -153,11 +152,14 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.CommonSteps
             var user = userCreationSteps.GetExistingUserAccount();
 
             CreateDasAccount(user, _container.GetInstance<EmployerAccountOrchestrator>());
+
+            ScenarioContext.Current["AccountOwnerUserId"] = user.Id;
+            ScenarioContext.Current["AccountOwnerUserRef"] = user.UserRef;
         }
 
         private void SetAccountIdForUser()
         {
-            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
+            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
             var mediator = _container.GetInstance<IMediator>();
             var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { UserRef = accountOwnerId }).Result;
 

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Web.Serialization;
+using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.EAS.Web.Validation;
 
 namespace SFA.DAS.EAS.Web.Extensions
 {

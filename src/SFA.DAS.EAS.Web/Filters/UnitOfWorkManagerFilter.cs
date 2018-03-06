@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Application.Data;
+using SFA.DAS.EAS.Infrastructure.Data;
 
 namespace SFA.DAS.EAS.Web.Filters
 {

@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         }
         public static void SetAccountIdForUser(IMediator mediator, ScenarioContext scenarioContext)
         {
-            var accountOwnerId = scenarioContext["AccountOwnerUserId"].ToString();
+            var accountOwnerId = scenarioContext["AccountOwnerUserRef"].ToString();
             var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { UserRef = accountOwnerId }).Result;
 
             var account = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault();
@@ -61,11 +61,10 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         public void CreateAccountWithOwner(EmployerAccountOrchestrator orchestrator, IMediator mediator, Mock<IAuthenticationService> owinWrapper, HomeOrchestrator homeOrchestrator)
         {
             var accountOwnerUserId = Guid.NewGuid().ToString();
-            ScenarioContext.Current["AccountOwnerUserId"] = accountOwnerUserId;
 
             var signInUserModel = new UserViewModel
             {
-                UserId = accountOwnerUserId,
+                UserRef = accountOwnerUserId,
                 Email = "accountowner@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
                 FirstName = "Test",
                 LastName = "Tester"
@@ -76,6 +75,9 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
             var user = userCreationSteps.GetExistingUserAccount();
 
             CreateDasAccount(user, _container.GetInstance<EmployerAccountOrchestrator>());
+
+            ScenarioContext.Current["AccountOwnerUserId"] = user.Id;
+            ScenarioContext.Current["AccountOwnerUserRef"] = user.UserRef;
         }
 
         public static void CreateDasAccount(UserViewModel userView, EmployerAccountOrchestrator orchestrator)
@@ -83,7 +85,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
 
             orchestrator.CreateAccount(new CreateAccountViewModel
             {
-                UserId = userView.UserId,
+                UserId = userView.UserRef,
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
                 OrganisationDateOfInception = new DateTime(2016, 01, 01),

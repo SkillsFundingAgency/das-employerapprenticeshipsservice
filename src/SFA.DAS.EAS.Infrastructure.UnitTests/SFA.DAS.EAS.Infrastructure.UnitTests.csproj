@@ -185,14 +185,6 @@
     <Compile Include="Services\CommitmentsServiceTests\WhenIRequestAccountCommitments.cs" />
     <Compile Include="Services\CompaniesHouseEmployerVerificationServiceTests\WhenIGetCompanyInformation.cs" />
     <Compile Include="Services\CookieStorageTests\WhenIUseTheCookieStorageService.cs" />
-    <Compile Include="Services\DasAccountServiceTests\WhenIGetEmployerInformation.cs" />
-    <Compile Include="Services\DasAccountServiceTests\WhenIUpdatePayeSchemeNames.cs" />
-    <Compile Include="Services\DasLevyServiceTests\WhenIGetAccountBalances.cs" />
-    <Compile Include="Services\DasLevyServiceTests\WhenIGetEnglishFractionForAnEmpref.cs" />
-    <Compile Include="Services\DasLevyServiceTests\WhenIGetPreviousTransactionCount.cs" />
-    <Compile Include="Services\DasLevyServiceTests\WhenIGetTheLastDeclarationForAPayeRef.cs" />
-    <Compile Include="Services\DasLevyServiceTests\WhenIGetTransactionDetailInformation.cs" />
-    <Compile Include="Services\DasLevyServiceTests\WhenIGetTransactionInformation.cs" />
     <Compile Include="Services\ExcelService\WhenICreatedAnExcelFile.cs" />
     <Compile Include="Services\FeatureToggleServiceTests\WhenICheckIfFeatureIsEnabled.cs" />
     <Compile Include="Services\HmrcDateServiceTests\WhenICompareTheSubmissionDateToPayrolDate.cs" />
@@ -208,7 +200,6 @@
     <Compile Include="Services\ReferenceDataService\WhenIEnterACompanyNameWithASuffix.cs" />
     <Compile Include="Services\ReferenceDataService\WhenISearchAndGetCloseMatches.cs" />
     <Compile Include="Services\ReferenceDataService\WhenISearchAnOrganisation.cs" />
-    <Compile Include="Services\RefreshEmployerLevyServiceTests\WhenQueuingAMessage.cs" />
     <Compile Include="Services\TaskServiceTests\WhenIGetTasks.cs" />
     <Compile Include="Services\TaskServiceTests\WhenIDismissAReminderTask.cs" />
     <Compile Include="Services\WhiteListTests\WhenIGetUserWhiteList.cs" />

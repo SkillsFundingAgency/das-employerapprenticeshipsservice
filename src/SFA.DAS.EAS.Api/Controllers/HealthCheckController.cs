@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 
-namespace SFA.DAS.EAS.Api.Controllers
+namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     public class HealthCheckController : ApiController
     {

@@ -16,9 +16,7 @@ namespace SFA.DAS.EAS.Web.Filters
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            var viewModel = filterContext.Controller.ViewData.Model as ViewModel;
-
-            if (viewModel != null)
+            if (filterContext.Controller.ViewData.Model is ViewModel viewModel)
             {
                 viewModel.Map(_mapper());
             }

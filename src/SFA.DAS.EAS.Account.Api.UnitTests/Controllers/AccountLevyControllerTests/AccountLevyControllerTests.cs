@@ -6,8 +6,8 @@ using Castle.Core.Internal;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Api.Controllers;
-using SFA.DAS.EAS.Api.Orchestrators;
+using SFA.DAS.EAS.Account.Api.Controllers;
+using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
 
         private IMapper ConfigureMapper()
         {
-            var profiles = Assembly.Load($"SFA.DAS.EAS.Api")
+            var profiles = Assembly.Load($"SFA.DAS.EAS.Account.Api")
                 .GetTypes()
                 .Where(t => typeof(Profile).IsAssignableFrom(t))
                 .Select(t => (Profile)Activator.CreateInstance(t));

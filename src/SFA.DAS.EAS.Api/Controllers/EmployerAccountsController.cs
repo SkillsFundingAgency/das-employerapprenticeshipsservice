@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Api.Attributes;
-using SFA.DAS.EAS.Api.Orchestrators;
+using SFA.DAS.EAS.Account.Api.Attributes;
+using SFA.DAS.EAS.Account.Api.Orchestrators;
 
-namespace SFA.DAS.EAS.Api.Controllers
+namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     [RoutePrefix("api/accounts")]
     public class EmployerAccountsController : ApiController

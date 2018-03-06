@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
 
             mediator.SendAsync(new UpsertRegisteredUserCommand
             {
-                UserRef = userView.UserId,
+                UserRef = userView.UserRef,
                 FirstName = userView.FirstName,
                 LastName = userView.LastName,
                 EmailAddress = userView.Email
@@ -55,9 +55,9 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
 
         public UserViewModel GetExistingUserAccount()
         {
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ScenarioContext.Current["AccountOwnerUserId"].ToString());
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ScenarioContext.Current["AccountOwnerUserRef"].ToString());
             var orchestrator = _container.GetInstance<HomeOrchestrator>();
-            var user = orchestrator.GetUsers().Result.AvailableUsers.FirstOrDefault(c => c.UserId.Equals(ScenarioContext.Current["AccountOwnerUserId"].ToString(), StringComparison.CurrentCultureIgnoreCase));
+            var user = orchestrator.GetUsers().Result.AvailableUsers.FirstOrDefault(c => c.UserRef.Equals(ScenarioContext.Current["AccountOwnerUserRef"].ToString(), StringComparison.CurrentCultureIgnoreCase));
             return user;
         }
 

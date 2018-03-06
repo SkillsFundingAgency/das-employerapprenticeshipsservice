@@ -9,7 +9,7 @@ using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.NLog.Logger;
 using TransactionItemType = SFA.DAS.EAS.Account.Api.Types.TransactionItemType;
 
-namespace SFA.DAS.EAS.Api.Orchestrators
+namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
     public class AccountTransactionsOrchestrator
     {

@@ -70,16 +70,14 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransferDashboardSteps
         [Then(@"the transfer allowance should be (.*) on the transfer dashboard screen")]
         public void ThenTheTransferAllowanceShouldBeOnTheTransferDashboardScreen(decimal expectedTransferBalance)
         {
-            var hashedAccountId = ScenarioContext.Current["HashedAccountId"].ToString();
             var accountId = (long)ScenarioContext.Current["AccountId"];
-            var externalUserId = Guid.Parse(ScenarioContext.Current["AccountOwnerUserId"].ToString());
+            var userId = (long)ScenarioContext.Current["AccountOwnerUserId"];
 
             var controller = _container.GetInstance<TransfersController>();
             var view = controller.Index(new GetTransferConnectionInvitationsQuery
             {
-                AccountHashedId = hashedAccountId,
                 AccountId = accountId,
-                UserExternalId = externalUserId
+                UserId = userId
             }).Result as ViewResult;
 
             var viewModel = view?.Model as TransferConnectionInvitationsViewModel;

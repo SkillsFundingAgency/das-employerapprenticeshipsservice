@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using MediatR;
-using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Infrastructure.Data;

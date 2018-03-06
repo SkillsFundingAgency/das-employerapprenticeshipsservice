@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             Logger = logger;
         }
 
-        public virtual bool IsFeatureEnabled(string controllerName, string actionName, IMembershipContext membershipContext)
+        public virtual bool IsFeatureEnabled(string controllerName, string actionName, IAuthorizationContext authorizationContext)
         {
             var config = GetConfiguration();
             var isFeatureEnabled = true;
@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                     if (actionToggle != null)
                     {
-                        var whitelistToggle = membershipContext != null && actionToggle.Whitelist.Any(p => Regex.IsMatch(membershipContext.UserEmail, p, RegexOptions.IgnoreCase));
+                        var whitelistToggle = authorizationContext.UserContext != null && actionToggle.Whitelist.Any(p => Regex.IsMatch(authorizationContext.UserContext.Email, p, RegexOptions.IgnoreCase));
 
                         if (!whitelistToggle)
                         {
@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 }
             }
             
-            Logger.Info($"Is feature enabled check for controllerName '{controllerName}', actionName '{actionName}' and userId '{membershipContext?.UserId}' is '{isFeatureEnabled}'.");
+            Logger.Info($"Is feature enabled check for controllerName '{controllerName}', actionName '{actionName}' and userId '{authorizationContext.UserContext?.Id}' is '{isFeatureEnabled}'.");
 
             return isFeatureEnabled;
         }

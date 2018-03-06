@@ -1,6 +1,5 @@
 ﻿using AutoMapper.QueryableExtensions;
 using MediatR;
-using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.NLog.Logger;
@@ -8,6 +7,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using SFA.DAS.EAS.Infrastructure.Data;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations
 {
@@ -34,11 +34,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations
                 .ProjectTo<TransferConnectionInvitationDto>(_configurationProvider)
                 .ToListAsync();
 
-            _logger.Debug($"Getting transfer allowance for account ID {message.AccountHashedId}");
+            _logger.Debug($"Getting transfer allowance for account ID {message.AccountId}");
 
             var transferAllowance = await _transferRepository.GetTransferAllowance(message.AccountId.Value);
 
-            _logger.Debug($"Retrieved transfer allowance of for account ID {message.AccountHashedId}");
+            _logger.Debug($"Retrieved transfer allowance of for account ID {message.AccountId}");
 
             return new GetTransferConnectionInvitationsResponse
             {

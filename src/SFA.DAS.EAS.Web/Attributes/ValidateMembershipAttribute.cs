@@ -4,23 +4,24 @@ using SFA.DAS.EAS.Web.Authorization;
 
 namespace SFA.DAS.EAS.Web.Attributes
 {
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class ValidateMembershipAttribute : ActionFilterAttribute
     {
-        private readonly Func<IMembershipService> _membershipService;
+        private readonly Func<IAuthorizationService> _authorizationService;
 
         public ValidateMembershipAttribute()
-            : this(() => DependencyResolver.Current.GetService<IMembershipService>())
+            : this(() => DependencyResolver.Current.GetService<IAuthorizationService>())
         {
         }
 
-        public ValidateMembershipAttribute(Func<IMembershipService> membershipService)
+        public ValidateMembershipAttribute(Func<IAuthorizationService> authorizationService)
         {
-            _membershipService = membershipService;
+            _authorizationService = authorizationService;
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            _membershipService().ValidateMembership();
+            _authorizationService().ValidateMembership();
         }
     }
 }

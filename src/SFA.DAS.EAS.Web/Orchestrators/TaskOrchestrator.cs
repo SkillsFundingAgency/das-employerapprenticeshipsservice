@@ -2,8 +2,8 @@
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.DismissMonthlyTaskReminder;
+using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Tasks.API.Types.Enums;
 

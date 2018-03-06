@@ -20,7 +20,7 @@ using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransferAllowance;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 
-namespace SFA.DAS.EAS.Api.Orchestrators
+namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
     public class AccountsOrchestrator
     {

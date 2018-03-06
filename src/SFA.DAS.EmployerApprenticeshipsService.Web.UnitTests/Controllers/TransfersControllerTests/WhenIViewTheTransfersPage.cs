@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
         [SetUp]
         public void Arrange()
         {
-            _mapperConfig = new MapperConfiguration(c => c.AddProfile<TransferConnectionInvitationMaps>());
+            _mapperConfig = new MapperConfiguration(c => c.AddProfile<TransferConnectionInvitationMappings>());
             _mapper = _mapperConfig.CreateMapper();
             _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);

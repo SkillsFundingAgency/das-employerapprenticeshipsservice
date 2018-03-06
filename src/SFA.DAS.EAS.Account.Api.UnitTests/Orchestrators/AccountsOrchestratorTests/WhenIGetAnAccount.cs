@@ -5,17 +5,14 @@ using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using Castle.Core.Internal;
-using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Api.Orchestrators;
+using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransferAllowance;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 
@@ -109,7 +106,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
 
         private IMapper ConfigureMapper()
         {
-            var profiles = Assembly.Load("SFA.DAS.EAS.Api")
+            var profiles = Assembly.Load("SFA.DAS.EAS.Account.Api")
                 .GetTypes()
                 .Where(t => typeof(Profile).IsAssignableFrom(t))
                 .Select(t => (Profile)Activator.CreateInstance(t));

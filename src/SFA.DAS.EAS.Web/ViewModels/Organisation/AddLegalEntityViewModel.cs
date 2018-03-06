@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Attributes;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EAS.Web.Validators;
+using SFA.DAS.EAS.Web.Validation;
 
 namespace SFA.DAS.EAS.Web.ViewModels.Organisation
 {
