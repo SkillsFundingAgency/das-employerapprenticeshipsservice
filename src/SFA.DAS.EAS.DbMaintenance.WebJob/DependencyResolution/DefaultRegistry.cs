@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using MediatR;
 using SFA.DAS.EAS.Application.Hashing;
+using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Caching;
@@ -25,6 +27,7 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution
             {
                 s.AssembliesAndExecutablesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
+                s.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(c => c.Singleton());
             });
 
             For<ILog>().Use(c => new NLogLogger(c.ParentType, null, null)).AlwaysUnique();
@@ -35,8 +38,17 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution
             Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
             Policies.Add(new ConfigurationPolicy<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI"));
 
+            RegisterMediator();
+
             RegisterMapper();
         }
+        
+        private void RegisterMediator()
+        {
+            For<IMediator>().Use<Mediator>();
+            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
+            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
+	}
 
         private void RegisterMapper()
         {

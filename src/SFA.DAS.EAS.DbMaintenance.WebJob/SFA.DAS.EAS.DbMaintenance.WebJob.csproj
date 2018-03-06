@@ -43,6 +43,9 @@
     <Reference Include="Hashids.net, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Hashids.net.1.2.2\lib\net45\Hashids.net.dll</HintPath>
     </Reference>
+    <Reference Include="MediatR, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
     </Reference>
@@ -162,12 +165,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IdProcessor\ProcessingContext.cs" />
+    <Compile Include="IdProcessor\ProcessorException.cs" />
+    <Compile Include="IdProcessor\CheckpointDummy.cs" />
     <Compile Include="Data\AccountMaintenanceRepository.cs" />
     <Compile Include="Data\IAccountMaintenanceRepository.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Jobs\PaymentIntegrityCheckerJob.cs" />
+    <Compile Include="IdProcessor\Broker.cs" />
+    <Compile Include="Jobs\GenerateAgreements\Constants.cs" />
+    <Compile Include="Jobs\GenerateAgreements\GenerateAgreementsProcessor.cs" />
+    <Compile Include="Jobs\GenerateAgreements\GenerateAgreementsIdProvider.cs" />
+    <Compile Include="Jobs\GenerateAgreements\GenerateAgreementsJob.cs" />
+    <Compile Include="IdProcessor\IBroker.cs" />
+    <Compile Include="IdProcessor\ICheckpoint.cs" />
+    <Compile Include="IdProcessor\IIdProvider.cs" />
+    <Compile Include="IdProcessor\IProcessor.cs" />
+    <Compile Include="IdProcessor\ProcessingInfo.cs" />
+    <Compile Include="IdProcessor\ProcessingState.cs" />
     <Compile Include="Jobs\UpdateAccountPublicHashedIdsJob.cs" />
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Program.cs" />
@@ -209,6 +226,7 @@
       <Name>SFA.DAS.EAS.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Web.WebJobs.Publish.1.0.12\tools\webjobs.targets" Condition="Exists('..\packages\Microsoft.Web.WebJobs.Publish.1.0.12\tools\webjobs.targets')" />
   <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution;
 using SFA.DAS.EAS.DbMaintenance.WebJob.Jobs;
+using SFA.DAS.EAS.DbMaintenance.WebJob.Jobs.GenerateAgreements;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.DbMaintenance.WebJob
@@ -15,14 +16,11 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob
 
             try
             {
-                foreach (var job in container.GetAllInstances<IJob>())
-                {
-                    var jobTypeName = job.GetType().Name;
-
-                    logger.Info($"Job '{jobTypeName}' started.");
-                    job.Run().Wait();
-                    logger.Info($"Job '{jobTypeName}' finished.");
-                }
+                var job = container.GetInstance<GenerateAgreementsJob>() as IJob;
+                var jobTypeName = job.GetType().Name;
+                logger.Info($"Job '{jobTypeName}' started.");
+                job.Run().Wait();
+                logger.Info($"Job '{jobTypeName}' finished.");
             }
             catch (Exception ex)
             {
