@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.ActivitiesControllerTests
         public void ThenResponseShouldBeEmptyWhenExceptionIsThrown()
         {
             // Arrange
-            _mediator.Setup(m => m.Send(It.IsAny<GetLatestActivitiesQuery>())).Throws<Exception>();
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetLatestActivitiesQuery>())).Throws<Exception>();
 
             // Act
             var result = _controller.Latest(_query) as ContentResult;
@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.ActivitiesControllerTests
         public void ThenExceptionShouldBeLoggedWhenExceptionIsThrown()
         {
             // Arrange
-            _mediator.Setup(m => m.Send(It.IsAny<GetLatestActivitiesQuery>())).Throws<Exception>();
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetLatestActivitiesQuery>())).Throws<Exception>();
 
             // Act
             var result = _controller.Latest(_query);
