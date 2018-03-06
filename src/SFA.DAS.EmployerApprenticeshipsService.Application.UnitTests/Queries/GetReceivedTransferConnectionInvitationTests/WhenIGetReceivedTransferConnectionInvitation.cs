@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetReceivedTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.TestCommon;
+using SFA.DAS.EAS.TestCommon.Builders;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetReceivedTransferConnectionInvitationTests
 {
@@ -44,21 +45,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetReceivedTransferConnectio
                 Name = "Receiver"
             };
 
-            _receivedTransferConnectionInvitation = new TransferConnectionInvitation
-            {
-                Id = 111111,
-                SenderAccount = _senderAccount,
-                ReceiverAccount = _receiverAccount,
-                Status = TransferConnectionInvitationStatus.Pending
-            };
+            _receivedTransferConnectionInvitation = new TransferConnectionInvitationBuilder()
+                .WithId(111111)
+                .WithSenderAccount(_senderAccount)
+                .WithReceiverAccount(_receiverAccount)
+                .WithStatus(TransferConnectionInvitationStatus.Pending)
+                .Build();
 
-            _rejectedTransferConnectionInvitation = new TransferConnectionInvitation
-            {
-                Id = 111111,
-                SenderAccount = _senderAccount,
-                ReceiverAccount = _receiverAccount,
-                Status = TransferConnectionInvitationStatus.Rejected
-            };
+            _rejectedTransferConnectionInvitation = new TransferConnectionInvitationBuilder()
+                .WithId(111111)
+                .WithSenderAccount(_senderAccount)
+                .WithReceiverAccount(_receiverAccount)
+                .WithStatus(TransferConnectionInvitationStatus.Rejected)
+                .Build();
 
             _transferConnectionInvitations = new List<TransferConnectionInvitation> { _receivedTransferConnectionInvitation, _rejectedTransferConnectionInvitation };
             _transferConnectionInvitationsDbSet = new DbSetStub<TransferConnectionInvitation>(_transferConnectionInvitations);

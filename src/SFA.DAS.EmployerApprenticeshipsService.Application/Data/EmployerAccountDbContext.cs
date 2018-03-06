@@ -42,7 +42,9 @@ namespace SFA.DAS.EAS.Application.Data
 
             modelBuilder.Entity<Domain.Data.Entities.Account.Account>()
                 .Ignore(a => a.RoleId)
-                .Ignore(a => a.RoleName);
+                .Ignore(a => a.RoleName)
+                .HasMany(a => a.SentTransferConnectionInvitations)
+                .WithRequired(i => i.SenderAccount);
 
             modelBuilder.Entity<Membership>()
                 .HasKey(m => new { m.AccountId, m.UserId })

@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.Commands.ApproveTransferConnectionInvitation
         {
             var approverAccount = await _employerAccountRepository.GetAccountById(message.AccountId.Value);
             var approverUser = await _userRepository.GetUserById(message.UserId.Value);
-            var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetTransferConnectionInvitationToApproveOrReject(message.TransferConnectionInvitationId.Value, approverAccount.Id);
+            var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetTransferConnectionInvitationById(message.TransferConnectionInvitationId.Value);
 
             transferConnectionInvitation.Approve(approverAccount, approverUser);
         }

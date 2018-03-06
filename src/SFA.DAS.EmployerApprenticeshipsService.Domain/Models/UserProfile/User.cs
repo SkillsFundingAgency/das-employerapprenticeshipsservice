@@ -4,10 +4,13 @@ namespace SFA.DAS.EAS.Domain.Models.UserProfile
 {
     public class User
     {
-        private string _userRef;
-        private Guid? _externalId;
+        public virtual long Id { get; set; }
 
-        public long Id { get; set; }
+        public virtual Guid ExternalId
+        {
+            get => _externalId ?? Guid.Parse(_userRef);
+            set => _externalId = value;
+        }
 
         [Obsolete("Please use 'ExternalId' instead.")]
         public string UserRef
@@ -16,15 +19,12 @@ namespace SFA.DAS.EAS.Domain.Models.UserProfile
             set => _userRef = value;
         }
 
-        public Guid ExternalId
-        {
-            get => _externalId ?? Guid.Parse(_userRef);
-            set => _externalId = value;
-        }
-
-        public string Email { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public virtual string Email { get; set; }
+        public virtual string FirstName { get; set; }
+        public virtual string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName}";
+
+        private Guid? _externalId;
+        private string _userRef;
     }
 }

@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         }
 
         [Test]
-        public void ThenIShouldBeShownTheStartTransferConnectionPage()
+        public void ThenIShouldBeShownTheStartTransferConnectionInvitationPage()
         {
             var result = _controller.Start() as ViewResult;
             var model = result?.Model as StartTransferConnectionInvitationViewModel;

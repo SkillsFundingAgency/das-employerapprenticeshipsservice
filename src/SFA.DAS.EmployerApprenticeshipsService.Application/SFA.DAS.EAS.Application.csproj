@@ -243,6 +243,8 @@
     <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommand.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommandHandler.cs" />
+    <Compile Include="Commands\DeleteSentTransferConnectionInvitation\DeleteTransferConnectionInvitationCommand.cs" />
+    <Compile Include="Commands\DeleteSentTransferConnectionInvitation\DeleteTransferConnectionInvitationCommandHandler.cs" />
     <Compile Include="Commands\RejectTransferConnectionInvitation\RejectTransferConnectionInvitationCommandHandler.cs" />
     <Compile Include="Commands\RejectTransferConnectionInvitation\RejectTransferConnectionInvitationCommand.cs" />
     <Compile Include="Attributes\DateAttribute.cs" />
@@ -346,6 +348,7 @@
     <Compile Include="Data\IUnitOfWorkManager.cs" />
     <Compile Include="Data\UnitOfWorkManager.cs" />
     <Compile Include="Dtos\AccountDto.cs" />
+    <Compile Include="Dtos\TransferConnectionInvitationChangeDto.cs" />
     <Compile Include="Dtos\TransferConnectionInvitationDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Events\ProcessDeclaration\ProcessDeclarationsEvent.cs" />

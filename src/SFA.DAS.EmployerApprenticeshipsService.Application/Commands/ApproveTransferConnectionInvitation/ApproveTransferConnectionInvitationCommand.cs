@@ -7,6 +7,6 @@ namespace SFA.DAS.EAS.Application.Commands.ApproveTransferConnectionInvitation
     public class ApproveTransferConnectionInvitationCommand : AuthorizedMessage, IAsyncRequest
     {
         [Required]
-        public long? TransferConnectionInvitationId { get; set; }
+        public int? TransferConnectionInvitationId { get; set; }
     }
 }

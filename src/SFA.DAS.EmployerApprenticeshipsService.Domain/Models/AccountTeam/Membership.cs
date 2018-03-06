@@ -5,11 +5,16 @@ namespace SFA.DAS.EAS.Domain.Models.AccountTeam
 {
     public class Membership
     {
-        private int? _roleId;
-        private Role? _role;
+        public virtual Data.Entities.Account.Account Account { get; set; }
+        public virtual long AccountId { get; set; }
+        public virtual User User { get; set; }
+        public virtual long UserId { get; set; }
 
-        public long AccountId { get; set; }
-        public long UserId { get; set; }
+        public virtual Role Role
+        {
+            get => _role ?? (Role)_roleId.Value;
+            set => _role = value;
+        }
 
         [Obsolete("Please use 'Role' instead.")]
         public int RoleId
@@ -18,13 +23,7 @@ namespace SFA.DAS.EAS.Domain.Models.AccountTeam
             set => _roleId = value;
         }
 
-        public Role Role
-        {
-            get => _role ?? (Role)_roleId.Value;
-            set => _role = value;
-        }
-
-        public Data.Entities.Account.Account Account { get; set; }
-        public User User { get; set; }
+        private Role? _role;
+        private int? _roleId;
     }
 }

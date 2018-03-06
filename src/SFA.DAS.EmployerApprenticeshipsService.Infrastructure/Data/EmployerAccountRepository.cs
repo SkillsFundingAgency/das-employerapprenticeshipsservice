@@ -24,9 +24,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             _db = db;
         }
 
-        public async Task<Account> GetAccountById(long id)
+        public Task<Account> GetAccountById(long id)
         {
-            return await _db.Accounts.SingleOrDefaultAsync(a => a.Id == id);
+            return _db.Accounts.SingleOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<Account> GetAccountByHashedId(string hashedAccountId)

@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         }
 
         [Test]
-        public async Task ThenIShouldBeShownTheSentTransferConnectionPage()
+        public async Task ThenIShouldBeShownTheSentTransferConnectionInvitationPage()
         {
             var result = await _controller.Sent(_query) as ViewResult;
             var model = result?.Model as SentTransferConnectionInvitationViewModel;

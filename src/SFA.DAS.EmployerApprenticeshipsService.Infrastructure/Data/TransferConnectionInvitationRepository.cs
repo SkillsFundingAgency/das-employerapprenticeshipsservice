@@ -16,23 +16,20 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             _db = db;
         }
 
-        public async Task Add(TransferConnectionInvitation transferConnectionInvitation)
+        public Task Add(TransferConnectionInvitation transferConnectionInvitation)
         {
             _db.TransferConnectionInvitations.Add(transferConnectionInvitation);
 
-            await _db.SaveChangesAsync();
+            return _db.SaveChangesAsync();
         }
 
-        public async Task<TransferConnectionInvitation> GetTransferConnectionInvitationToApproveOrReject(long transferConnectionInvitationId, long receiverAccountId)
+        public Task<TransferConnectionInvitation> GetTransferConnectionInvitationById(int transferConnectionInvitationId)
         {
-            return await _db.TransferConnectionInvitations
-                .Include(i => i.SenderAccount)
+            return _db.TransferConnectionInvitations
+                .Include(i => i.Changes)
                 .Include(i => i.ReceiverAccount)
-                .Where(i => 
-                    i.Id == transferConnectionInvitationId &&
-                    i.ReceiverAccount.Id == receiverAccountId &&
-                    i.Status == TransferConnectionInvitationStatus.Pending
-                )
+                .Include(i => i.SenderAccount)
+                .Where(i => i.Id == transferConnectionInvitationId)
                 .SingleAsync();
         }
     }
