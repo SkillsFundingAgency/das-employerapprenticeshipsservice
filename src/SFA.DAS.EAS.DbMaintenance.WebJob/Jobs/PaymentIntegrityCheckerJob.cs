@@ -63,6 +63,10 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Jobs
                         _logger.Warn(
                             $"Some payments for account ID {account.Id} for period end {periodEnd.Id} are missing");
                     }
+                    else
+                    {
+                        _logger.Debug($"All payments for account ID {account.Id} for period end {periodEnd.Id} are correct");
+                    }
                 }
             }
         }
