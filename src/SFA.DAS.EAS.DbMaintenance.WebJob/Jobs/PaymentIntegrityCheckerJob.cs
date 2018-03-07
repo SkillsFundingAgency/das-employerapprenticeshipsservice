@@ -1,8 +1,6 @@
 ﻿using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.NLog.Logger;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -37,16 +35,14 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Jobs
             {
                 foreach (var account in accounts)
                 {
-                    var expectedPayments =
-                        (IEnumerable<Payment>)await _paymentService.GetAccountPayments(periodEnd.Id,
-                            account.Id);
+                    var expectedPayments = await _paymentService.GetAccountPayments(periodEnd.Id, account.Id);
 
                     var actualPayments =
                         (await _levyRepository.GetAccountPaymentsByPeriodEnd(account.Id, periodEnd.Id))
                         .ToArray();
 
 
-                    var expectedPaymentsTotal = expectedPayments?.Sum(x => x.Amount) ?? 0;
+                    var expectedPaymentsTotal = expectedPayments.Sum(x => x.Amount);
                     var actualPaymentsTotal = actualPayments.Sum(x => x.Amount);
 
                     var paymentMissing = actualPaymentsTotal != expectedPaymentsTotal;
@@ -55,7 +51,7 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Jobs
                     //just in case a duplicate or incorrect record has the same amount as a correct one
                     if (!paymentMissing)
                     {
-                        paymentMissing = expectedPayments?.Except(actualPayments).Any() ?? false;
+                        paymentMissing = expectedPayments.Except(actualPayments).Any();
                     }
 
                     if (paymentMissing)
