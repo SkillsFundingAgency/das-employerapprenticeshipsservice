@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Application.Validation;
 
 namespace SFA.DAS.EAS.Application.Queries.GetLatestOutstandingTransferInvitation
 {
-    public class GetLatestOutstandingTransferInvitation : IValidator<GetLatestOutstandingTransferInvitationQuery>
+    public class GetLatestOutstandingTransferInvitationValidator : IValidator<GetLatestOutstandingTransferInvitationQuery>
     {
         public ValidationResult Validate(GetLatestOutstandingTransferInvitationQuery item)
         {

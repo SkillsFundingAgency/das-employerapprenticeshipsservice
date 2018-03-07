@@ -1,15 +1,12 @@
-using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.Queries.GetLatestOutstandingTransferInvitation
 {
-    public class GetLatestOutstandingTransferInvitationHandler : AuthorizedMessage, IAsyncRequestHandler<GetLatestOutstandingTransferInvitationQuery, GetLatestOutstandingTransferInvitationResponse>
+    public class GetLatestOutstandingTransferInvitationHandler : IAsyncRequestHandler<GetLatestOutstandingTransferInvitationQuery, GetLatestOutstandingTransferInvitationResponse>
     {
         private readonly IHashingService _hashingService;
         private readonly ITransferConnectionInvitationRepository _transferConnectionInvitationRepository;
