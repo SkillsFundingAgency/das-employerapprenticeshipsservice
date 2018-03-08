@@ -138,39 +138,32 @@ else
                                                     @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="@Url.EmployerCommitmentsAction("apprentices/cohorts/review")">View cohorts</a>
                                                 </p>
                                                 break;
+                                            case "ReviewConnectionRequest":
+                                                <p>
+                                                    @{
+                                                        var message = "";
+                                                        var action = "";
+                                                        var linkText = "";
+                                                        if (task.ItemsDueCount == 1)
+                                                        {
+                                                            message = "1 connection request to review";
+                                                            action = Url.Action("Receive", "TransferConnectionInvitations", new {hashedAccountId = Model.Data.HashedAccountId, transferConnectionInvitationId = Model.Data.OnlyOutstandingConnectionRequestId});
+                                                            linkText = "View Details";
+                                                        }
+                                                        else
+                                                        {
+                                                            message = $"{task.ItemsDueCount} requests to review";
+                                                            action = Url.Action("Index", "Transfers", new { hashedAccountId = Model.Data.HashedAccountId });
+                                                            linkText = "View Transfer Dashboard";
+                                                        }
+                                                    }
+                                                    <p>@message</p>
+                                                    <a href="@action" > @linkText</a >
+                                                </p>
+                                                break;
                                        }
                                     </li>
                                 }
-                                
-                                @{
-                                    if (Model.Data.OutstandingConnectionRequestCount > 0)
-                                    {
-                                        <li>
-                                            <p>
-                                                @{
-                                                    var message = "";
-                                                    var action = "";
-                                                    var linkText = "";
-                                                    if (Model.Data.OutstandingConnectionRequestCount == 1)
-                                                    {
-                                                        message = "1 connection request to review";
-                                                        action = Url.Action("Detail", "TransferConnectionInvitations", new {hashedAccountId = Model.Data.HashedAccountId, transferConnectionInvitationId = Model.Data.OnlyOutstandingConnectionRequestId});
-                                                        linkText = "View Details";
-                                                    }
-                                                    else
-                                                    {
-                                                        message = $"{Model.Data.OutstandingConnectionRequestCount} connection requests to review";
-                                                        action = Url.Action("Index", "Transfers", new { hashedAccountId = Model.Data.HashedAccountId });
-                                                        linkText = "View Transfer Dashboard";
-                                                    }
-                                                }
-                                                <p>@message</p>
-                                                <a href="@action" > @linkText</a >
-                                            </p>
-                                        </li>
-                                    }
-                                }
-
                             </ul>
                         }
                         else

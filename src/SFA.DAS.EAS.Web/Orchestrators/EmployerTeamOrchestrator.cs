@@ -153,7 +153,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 });
 
                 await Task.WhenAll(accountStatsResponseTask, userRoleResponseTask, userResponseTask,
-                    accountStatsResponseTask);
+                    accountStatsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
@@ -167,11 +167,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 });
 
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0).ToList() ?? new List<AccountTask>();
-                
-                var outstandingConnectionRequests = tasks.Count(t => t.Type == "ReviewConnectionRequest");
+
+                var outstandingConnectionRequest = tasks.SingleOrDefault(t => t.Type == "ReviewConnectionRequest");
 
                 GetLatestOutstandingTransferInvitationResponse latestOutstandingTransferInvitation = null;
-                if (outstandingConnectionRequests == 1)
+                if (outstandingConnectionRequest?.ItemsDueCount == 1)
                 {
                     latestOutstandingTransferInvitation = await _mediator.SendAsync(new GetLatestOutstandingTransferInvitationQuery {ReceiverAccountHashedId = accountId});
                 }
@@ -192,7 +192,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
                     Tasks = tasks,
                     HashedAccountId = accountId,
-                    OutstandingConnectionRequestCount = outstandingConnectionRequests,
                     OnlyOutstandingConnectionRequestId = latestOutstandingTransferInvitation?.TransferConnectionInvitation?.Id
                 };
 

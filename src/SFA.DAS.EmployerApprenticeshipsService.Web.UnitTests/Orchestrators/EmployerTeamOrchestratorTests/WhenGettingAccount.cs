@@ -172,34 +172,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Verify(x => x.SendAsync(It.Is<GetAccountTasksQuery>(r => r.AccountId.Equals(AccountId))),Times.Once);
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        public async Task ThenShouldSetRequestCountCorrectly(int expectedRequestCount)
-        {
-            // Arrange
-            _tasks.Clear();
-            for (int i = 0; i < expectedRequestCount; i++)
-            {
-                _tasks.Add(new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 });
-            }
-
-            var expectedLatestTransfer = new TransferConnectionInvitationBuilder()
-                .WithId(new Random().Next(int.MaxValue))
-                .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
-                .WithSenderAccount(new Domain.Data.Entities.Account.Account())
-                .Build();
-
-            _getLatestOutstandingTransferInvitationResponse.TransferConnectionInvitation = expectedLatestTransfer;
-
-            //Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert
-            int actualNumberOfRequests = actual.Data.OutstandingConnectionRequestCount;
-            Assert.AreEqual(expectedRequestCount, actualNumberOfRequests);
-        }
-
         [Test]
         public async Task ThenShouldSetLatestTransferIdWhenOnlyOneRequestExists()
         {

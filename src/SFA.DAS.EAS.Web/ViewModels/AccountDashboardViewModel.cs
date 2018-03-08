@@ -26,11 +26,6 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public string HashedAccountId { get; set; }
 
         /// <summary>
-        ///     The number of outstanding connection requests.
-        /// </summary>
-        public int OutstandingConnectionRequestCount { get; set; }
-
-        /// <summary>
         ///     This is set if there is exactly one - and only one - outstanding connection request. <see cref="OutstandingConnectionRequestCount"/>.
         ///     If there are multiple outstanding connection requests then this will be null. 
         /// </summary>
