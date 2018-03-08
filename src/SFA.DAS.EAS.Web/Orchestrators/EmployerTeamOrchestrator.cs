@@ -168,14 +168,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0).ToList() ?? new List<AccountTask>();
 
-                var outstandingConnectionRequest = tasks.SingleOrDefault(t => t.Type == "ReviewConnectionRequest");
-
-                GetLatestOutstandingTransferInvitationResponse latestOutstandingTransferInvitation = null;
-                if (outstandingConnectionRequest?.ItemsDueCount == 1)
-                {
-                    latestOutstandingTransferInvitation = await _mediator.SendAsync(new GetLatestOutstandingTransferInvitationQuery {ReceiverAccountHashedId = accountId});
-                }
-
                 //We only show account wizards to owners
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;              
 
@@ -191,8 +183,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ShowWizard = showWizard,
                     ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
                     Tasks = tasks,
-                    HashedAccountId = accountId,
-                    OnlyOutstandingConnectionRequestId = latestOutstandingTransferInvitation?.TransferConnectionInvitation?.Id
+                    HashedAccountId = accountId
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>

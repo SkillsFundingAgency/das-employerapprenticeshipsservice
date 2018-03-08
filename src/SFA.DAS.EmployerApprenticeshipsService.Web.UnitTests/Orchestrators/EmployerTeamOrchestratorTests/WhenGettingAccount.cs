@@ -173,50 +173,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         }
 
         [Test]
-        public async Task ThenShouldSetLatestTransferIdWhenOnlyOneRequestExists()
-        {
-            // Arrange
-            _tasks.Clear();
-            _tasks.Add(new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 });
-            var expectedLatestTransfer = new TransferConnectionInvitationBuilder()
-                .WithId(new Random().Next(int.MaxValue))
-                .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
-                .WithSenderAccount(new Domain.Data.Entities.Account.Account())
-                .Build();
-
-            _getLatestOutstandingTransferInvitationResponse.TransferConnectionInvitation = expectedLatestTransfer;
-
-            //Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert
-            Assert.AreEqual(expectedLatestTransfer.Id, actual.Data.OnlyOutstandingConnectionRequestId);
-        }
-
-        [Test]
-        public async Task ThenShouldNotSetLatestTransferIdWhenMoreThanOneRequestExists()
-        {
-            // Arrange
-            _tasks.Clear();
-            _tasks.AddRange(new [] {
-                    new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 2 }
-                    });
-            var expectedLatestTransfer = new TransferConnectionInvitationBuilder()
-                .WithId(new Random().Next(int.MaxValue))
-                .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
-                .WithSenderAccount(new Domain.Data.Entities.Account.Account())
-                .Build();
-
-            _getLatestOutstandingTransferInvitationResponse.TransferConnectionInvitation = expectedLatestTransfer;
-
-            //Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert
-            Assert.IsNull(actual.Data.OnlyOutstandingConnectionRequestId);
-        }
-
-        [Test]
         public async Task ThenShouldSetAccountHashId()
         {
             // Arrange

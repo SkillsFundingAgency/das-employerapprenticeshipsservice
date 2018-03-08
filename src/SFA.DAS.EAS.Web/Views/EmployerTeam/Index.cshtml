@@ -147,13 +147,13 @@ else
                                                         if (task.ItemsDueCount == 1)
                                                         {
                                                             message = "1 connection request to review";
-                                                            action = Url.Action("Receive", "TransferConnectionInvitations", new {hashedAccountId = Model.Data.HashedAccountId, transferConnectionInvitationId = Model.Data.OnlyOutstandingConnectionRequestId});
+                                                            action = Url.Action("Outstanding", "TransferConnectionInvitations");
                                                             linkText = "View Details";
                                                         }
                                                         else
                                                         {
                                                             message = $"{task.ItemsDueCount} requests to review";
-                                                            action = Url.Action("Index", "Transfers", new { hashedAccountId = Model.Data.HashedAccountId });
+                                                            action = Url.Action("Index", "Transfers");
                                                             linkText = "View Transfer Dashboard";
                                                         }
                                                     }
