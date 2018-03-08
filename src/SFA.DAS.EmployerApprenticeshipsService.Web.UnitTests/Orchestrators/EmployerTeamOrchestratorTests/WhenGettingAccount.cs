@@ -199,8 +199,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             // Arrange
             _tasks.Clear();
             _tasks.AddRange(new [] {
-                    new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 },
-                    new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 }
+                    new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 2 }
                     });
             var expectedLatestTransfer = new TransferConnectionInvitationBuilder()
                 .WithId(new Random().Next(int.MaxValue))
