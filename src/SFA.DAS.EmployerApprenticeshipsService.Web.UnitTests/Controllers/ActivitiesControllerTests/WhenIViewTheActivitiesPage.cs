@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetActivities;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.ViewModels.Activities;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.ActivitiesControllerTests
 {
@@ -16,6 +17,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.ActivitiesControllerTests
         private ActivitiesController _controller;
         private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
         private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
+        private readonly Mock<ILog> _logger = new Mock<ILog>();
         private readonly GetActivitiesQuery _query = new GetActivitiesQuery();
         private readonly GetActivitiesResponse _response = new GetActivitiesResponse();
         private readonly ActivitiesViewModel _viewModel = new ActivitiesViewModel();
@@ -26,7 +28,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.ActivitiesControllerTests
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
             _mapper.Setup(m => m.Map<ActivitiesViewModel>(_response)).Returns(_viewModel);
 
-            _controller = new ActivitiesController(_mapper.Object, _mediator.Object);
+            _controller = new ActivitiesController(_mapper.Object, _mediator.Object, _logger.Object);
         }
 
         [Test]
