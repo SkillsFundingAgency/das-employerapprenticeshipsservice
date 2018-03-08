@@ -23,6 +23,7 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Api.Logging;
 using SFA.DAS.EAS.Application.Data;
+using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Caching;
@@ -61,6 +62,7 @@ namespace SFA.DAS.EAS.Api.DependencyResolution
         private void RegisterHashingService(EmployerApprenticeshipsServiceConfiguration config)
         {
             For<IHashingService>().Use(c => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
+            For<IPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
         }
 
         private void RegisterLogger()

@@ -16,11 +16,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             _db = db;
         }
 
-        public Task Add(TransferConnectionInvitation transferConnectionInvitation)
+        public async Task Add(TransferConnectionInvitation transferConnectionInvitation)
         {
             _db.TransferConnectionInvitations.Add(transferConnectionInvitation);
 
-            return _db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
         }
 
         public Task<TransferConnectionInvitation> GetTransferConnectionInvitationById(int transferConnectionInvitationId)
@@ -31,6 +31,18 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 .Include(i => i.SenderAccount)
                 .Where(i => i.Id == transferConnectionInvitationId)
                 .SingleAsync();
+        }
+
+        public Task<TransferConnectionInvitation> GetLatestOutstandingTransferConnectionInvitation(long receiverAccountId)
+        {
+            return _db.TransferConnectionInvitations
+                .Include(i => i.Changes)
+                .Include(i => i.SenderAccount)
+                .Include(i => i.ReceiverAccount)
+                .OrderByDescending(i => i.CreatedDate)
+                .FirstOrDefaultAsync(i =>
+                    i.ReceiverAccountId == receiverAccountId && i.Status == TransferConnectionInvitationStatus.Pending);
+
         }
     }
 }

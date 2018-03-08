@@ -4,13 +4,16 @@ using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetApprovedTransferConnectionInvitation;
+using SFA.DAS.EAS.Application.Queries.GetLatestOutstandingTransferInvitation;
 using SFA.DAS.EAS.Application.Queries.GetReceivedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetRejectedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 
 namespace SFA.DAS.EAS.Web.Controllers
@@ -221,6 +224,22 @@ namespace SFA.DAS.EAS.Web.Controllers
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model.Choice));
             }
+        }
+
+        [HttpGet]
+        [Route("outstanding")]
+        public async Task<ActionResult> Outstanding(string hashedAccountId)
+        {
+            var latestOutstandingTransferInvitation = 
+                await _mediator.SendAsync(new GetLatestOutstandingTransferInvitationQuery { ReceiverAccountHashedId = hashedAccountId });
+
+            if (latestOutstandingTransferInvitation.TransferConnectionInvitation != null)
+                return RedirectToAction("Receive", new
+                {
+                    transferConnectionInvitationId = latestOutstandingTransferInvitation.TransferConnectionInvitation.Id
+                });
+
+            return RedirectToAction("Index", "Transfers");
         }
     }
 }

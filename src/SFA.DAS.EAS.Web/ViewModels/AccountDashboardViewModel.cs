@@ -22,5 +22,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
 
         public bool ShowAcademicYearBanner { get; set; }
         public ICollection<AccountTask> Tasks { get; set; }
+
+        public string HashedAccountId { get; set; }
     }
 }
