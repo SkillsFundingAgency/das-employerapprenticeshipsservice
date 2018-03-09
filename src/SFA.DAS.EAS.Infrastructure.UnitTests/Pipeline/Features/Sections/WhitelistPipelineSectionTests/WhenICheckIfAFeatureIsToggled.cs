@@ -6,14 +6,20 @@ using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Sections;
 using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.WhitelistPipelineSectionTests
 {
     public class WhenICheckIfAFeatureIsToggled
     {
+        private const long UserId = 111111;
         private const string UserEmail = "test@test.com";
+        private const string ControllerName = "TestController";
+        private const string ActionName = "TestAction";
 
+        private Mock<WhitelistPipelineSection> _whitelistSectionMock;
         private WhitelistPipelineSection _whitelistSection;
         private Mock<ICacheProvider> _cacheProvider;
         private Mock<ILog> _logger;
@@ -41,25 +47,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
 
             _membershipContext = new Mock<IMembershipContext>();
             _membershipContext.Setup(x => x.UserEmail).Returns(UserEmail);
+            _membershipContext.Setup(x => x.UserId).Returns(UserId);
 
-            _whitelistSection = new WhitelistPipelineSection(_cacheProvider.Object, _logger.Object);
+            _whitelistSectionMock = new Mock<WhitelistPipelineSection>(_cacheProvider.Object, _logger.Object);
+            _whitelistSection = _whitelistSectionMock.Object;
 
-            //_membershipContext = new MembershipContext
-            //{
-            //    UserId = 111111,
-            //    UserEmail = "user.one@unit.tests"
-            //};
-
-            //_cacheProvider = new Mock<ICacheProvider>();
-            //_logger = new Mock<ILog>();
-
-            //_cacheProvider.SetupSequence(c => c.Get<FeatureToggleCache>(nameof(FeatureToggleCache))).Returns(null).Returns(new FeatureToggleCache(null));
-
-            //_featureToggleServiceMock = new Mock<FeatureToggleService>(_cacheProvider.Object, _logger.Object);
-
-            //_featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage()).Returns(new FeatureToggleConfiguration());
-            //_featureToggleServiceMock.Setup(f => f.IsFeatureEnabled(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IMembershipContext>())).CallBase();
-
+            _whitelistSectionMock.Setup(f => f.GetDataFromTableStorage()).Returns(new FeatureToggleConfiguration());
         }
 
         [Test]
@@ -92,143 +85,194 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
             Assert.False(result);
         }
 
-        //[Test]
-        //public void ThenShouldGetFeaturesFromStorageOnce()
-        //{
-        //    //Act
-        //    _featureToggleService.IsFeatureEnabled("", "", null);
-        //    _featureToggleService.IsFeatureEnabled("", "", null);
+        [Test]
+        public async Task ThenShouldGetFeaturesFromStorageOnce()
+        {
+            //Arrange
+            _cacheProvider.SetupSequence(x => x.Get<IFeatureToggleCache>(It.IsAny<string>()))
+                .Returns(null)
+                .Returns(_featureToggleCache.Object);
 
-        //    //Assert
-        //    _featureToggleServiceMock.Verify(f => f.GetDataFromTableStorage(), Times.Once());
-        //}
+            //Act
+            await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
+            await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
 
-        //[Test]
-        //public void ThenShouldGetFeaturesFromCache()
-        //{
-        //    //Act
-        //    _featureToggleService.IsFeatureEnabled("", "", null);
-        //    _featureToggleService.IsFeatureEnabled("", "", null);
+            //Assert
+            _whitelistSectionMock.Verify(f => f.GetDataFromTableStorage(), Times.Once());
+        }
 
-        //    //Assert
-        //    _cacheProvider.Verify(c => c.Get<FeatureToggleCache>(nameof(FeatureToggleCache)), Times.Exactly(2));
-        //}
+        [Test]
+        public async Task ThenShouldGetFeaturesFromCache()
+        {
+            //Arrange
+            _cacheProvider.SetupSequence(x => x.Get<IFeatureToggleCache>(It.IsAny<string>()))
+                .Returns(null)
+                .Returns(_featureToggleCache.Object);
 
-        //[Test]
-        //public void ThenShouldCacheFeatureForAShortTimeIfEmpty()
-        //{
-        //    //Arrange
-        //    _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage()).Returns(new FeatureToggleConfiguration());
+            //Act
+            await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
+            await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
 
-        //    //Act
-        //    _featureToggleService.IsFeatureEnabled("", "", null);
+            //Assert
+            _cacheProvider.Verify(c => c.Get<IFeatureToggleCache>(nameof(FeatureToggleCache)), Times.Exactly(2));
+        }
 
-        //    //Assert
-        //    _cacheProvider.Verify(c => c.Set(nameof(FeatureToggleCache), It.IsAny<FeatureToggleCache>(), FeatureToggleService.ShortLivedCacheTime), Times.Once);
-        //}
+        [Test]
+        public async Task ThenShouldCacheFeatureForAShortTimeIfEmpty()
+        {
+            //Arrange
+            _cacheProvider.SetupSequence(x => x.Get<IFeatureToggleCache>(It.IsAny<string>()))
+                .Returns(null)
+                .Returns(_featureToggleCache.Object);
 
-        //[TestCase("user\\.one@unit\\.tests")]
-        //[TestCase("USER\\.ONE@UNIT\\.TESTS")]
-        //[TestCase(".*@unit\\.tests")]
-        //public void ThenShouldReturnTrueIfFeatureIsDisabledButUserIsInWhitelist(string whitelistPattern)
-        //{
-        //    // Arrange
-        //    _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage())
-        //        .Returns(Build(whitelistPattern));
+            _whitelistSectionMock.Setup(f => f.GetDataFromTableStorage()).Returns(new FeatureToggleConfiguration());
+            _cacheProvider.Setup(c => c.Set(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<TimeSpan>()));
 
-        //    // Act
-        //    var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
 
-        //    // Assert
-        //    Assert.That(isFeatureEnabled, Is.True);
-        //}
+            //Act
+            await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
 
-        //[Test]
-        //public void ThenShouldReturnFalseIfFeatureIsDisabledAndUserIsNotInWhitelist()
-        //{
-        //    // Arrange
-        //    _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage())
-        //        .Returns(Build("different.user@somewhere.else"));
+            //Assert
+            _cacheProvider.Verify(c => c.Set(nameof(FeatureToggleCache), It.IsAny<IFeatureToggleCache>(), WhitelistPipelineSection.ShortLivedCacheTime), Times.Once);
+        }
 
-        //    // Act
-        //    var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
+        [TestCase("user\\.one@unit\\.tests")]
+        [TestCase("USER\\.ONE@UNIT\\.TESTS")]
+        [TestCase(".*@unit\\.tests")]
+        public async Task ThenShouldReturnTrueIfFeatureIsDisabledButUserIsInWhitelist(string whitelistPattern)
+        {
+            // Arrange
+            _cacheProvider.SetupSequence(x => x.Get<IFeatureToggleCache>(It.IsAny<string>()))
+                .Returns(null)
+                .Returns(_featureToggleCache.Object);
 
-        //    // Assert
-        //    Assert.That(isFeatureEnabled, Is.False);
-        //}
+            _whitelistSectionMock.Setup(f => f.GetDataFromTableStorage())
+                .Returns(Build(whitelistPattern));
 
-        //[Test]
-        //public void ThenShouldReturnFalseIfFeatureIsDisabled()
-        //{
-        //    // Arrange
-        //    _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage())
-        //        .Returns(Build(null));
+            // Act
+            var isFeatureEnabled = await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
 
-        //    // Act
-        //    var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
+            // Assert
+            Assert.That(isFeatureEnabled, Is.True);
+        }
 
-        //    // Assert
-        //    Assert.That(isFeatureEnabled, Is.False);
-        //}
+        [Test]
+        public async Task ThenShouldReturnFalseIfFeatureIsDisabledAndUserIsNotInWhitelist()
+        {
+            // Arrange
+            _whitelistSectionMock.Setup(f => f.GetDataFromTableStorage())
+                .Returns(Build("different.user@somewhere.else"));
 
-        //private FeatureToggleConfiguration Build(string whitelistPattern)
-        //{
-        //    return new FeatureToggleConfiguration
-        //    {
-        //        Data = new FeatureToggleCollection
-        //        {
-        //            Features = new List<Domain.Models.FeatureToggles.FeatureToggle>
-        //            {
-        //                new Domain.Models.FeatureToggles.FeatureToggle
-        //                {
-        //                    Actions = new List<ControllerAction>
-        //                    {
-        //                        new ControllerAction
-        //                        {
-        //                            Controller = ControllerName,
-        //                            Action = ActionName
-        //                        }
-        //                    },
-        //                    Whitelist = new WhiteList {Emails = string.IsNullOrWhiteSpace(whitelistPattern) ? null : new List<string> {whitelistPattern}}
-        //                }
-        //            }
-        //        }
-        //    };
-        //    var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
-        //}
+            // Act
+            var isFeatureEnabled = await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
 
-        //[Test]
-        //public void ThenShouldLogTrueResultIfFeatureIsEnabled()
-        //{
-        //    // Act
-        //    _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
+            // Assert
+            Assert.That(isFeatureEnabled, Is.False);
+        }
 
-        //    // Assert
-        //    _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{_membershipContext.UserId}' is '{true}'."), Times.Once);
-        //}
+        [Test]
+        public async Task ThenShouldReturnFalseIfFeatureIsDisabled()
+        {
+            // Arrange
+            _whitelistSectionMock.Setup(f => f.GetDataFromTableStorage())
+                .Returns(Build(null));
 
-        //[Test]
-        //public void ThenShouldLogFalseResultIfFeatureIsDisabled()
-        //{
-        //    // Arrange
-        //    _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage())
-        //        .Returns(Build(null));
+            // Act
+            var isFeatureEnabled =
+                await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
 
-        //    // Act
-        //    _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
+            // Assert
+            Assert.That(isFeatureEnabled, Is.False);
+        }
 
-        //    // Assert
-        //    _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{_membershipContext.UserId}' is '{false}'."), Times.Once);
-        //}
 
-        //[Test]
-        //public void ThenShouldLogNullUserExternalIdIfMembershipIsNull()
-        //{
-        //    // Act
-        //    _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, null);
+        [Test]
+        public async Task ThenShouldLogTrueResultIfFeatureIsEnabled()
+        {
+            //Arrange
+            _cacheProvider.SetupSequence(x => x.Get<IFeatureToggleCache>(It.IsAny<string>()))
+                .Returns(null)
+                .Returns(_featureToggleCache.Object);
 
-        //    // Assert
-        //    _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{null}' is '{true}'."), Times.Once);
-        //}
+            // Act
+            await _whitelistSection.ProcessAsync(new FeatureToggleRequest
+            {
+                Controller = ControllerName,
+                Action = ActionName,
+                MembershipContext = _membershipContext.Object
+            });
+
+            // Assert
+            _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{UserId}' is '{true}'."), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenShouldLogFalseResultIfFeatureIsDisabled()
+        {
+            // Arrange
+            _cacheProvider.SetupSequence(x => x.Get<IFeatureToggleCache>(It.IsAny<string>()))
+                .Returns(null)
+                .Returns(_featureToggleCache.Object);
+
+            _whitelistSectionMock.Setup(f => f.GetDataFromTableStorage())
+                .Returns(Build(null));
+
+            // Act
+            await _whitelistSection.ProcessAsync(new FeatureToggleRequest
+            {
+                Controller = ControllerName,
+                Action = ActionName,
+                MembershipContext = _membershipContext.Object
+            });
+
+            // Assert
+            _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{UserId}' is '{false}'."), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenShouldLogNullUserExternalIdIfMembershipIsNull()
+        {
+            //Arrange
+            _cacheProvider.SetupSequence(x => x.Get<IFeatureToggleCache>(It.IsAny<string>()))
+                .Returns(null)
+                .Returns(_featureToggleCache.Object);
+
+            // Act
+            await _whitelistSection.ProcessAsync(new FeatureToggleRequest
+            {
+                Controller = ControllerName,
+                Action = ActionName,
+                MembershipContext = null
+            });
+
+            // Assert
+            _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{null}' is '{true}'."), Times.Once);
+        }
+
+        private FeatureToggleConfiguration Build(string whitelistPattern)
+        {
+            return new FeatureToggleConfiguration
+            {
+                Data = new FeatureToggleCollection
+                {
+                    Features = new List<FeatureToggle>
+                    {
+                        new FeatureToggle
+                        {
+                            Actions = new List<ControllerAction>
+                            {
+                                new ControllerAction
+                                {
+                                    Controller = ControllerName,
+                                    Action = ActionName
+                                }
+                            },
+                            Whitelist = new WhiteList {Emails = string.IsNullOrWhiteSpace(whitelistPattern) ? null : new List<string> {whitelistPattern}}
+                        }
+                    }
+                }
+            };
+        }
+
     }
 }
