@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Account.Api.ExceptionLoggers
             var properties = new Dictionary<string, object>
             {
                 ["HttpMethod"] = context.Request.Method,
-                ["IsAuthenticated"] = context.RequestContext.Principal.Identity.IsAuthenticated,
+                ["IsAuthenticated"] = context.RequestContext.Principal?.Identity?.IsAuthenticated ?? false,
                 ["Url"] = context.Request.RequestUri.PathAndQuery,
                 ["UrlReferrer"] = context.Request.Headers.Referrer?.PathAndQuery
             };

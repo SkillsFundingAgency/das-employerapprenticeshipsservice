@@ -5,7 +5,6 @@ using SFA.DAS.EAS.Account.Api.Controllers;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {
-
     [TestFixture]
     public class WhenGetLegalEntitiesWithNoKey
     {
