@@ -243,10 +243,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<IEnumerable<PeriodEnd>> GetAllPeriodEnds()
         {
-            var result = await WithConnection(async c =>
-                await c.QueryAsync<PeriodEnd>(
-                    sql: "SELECT * FROM [employer_financial].[PeriodEnd]",
-                    commandType: CommandType.Text));
+            var result = await WithConnection(async c => await c.QueryAsync<PeriodEnd>(
+                "[employer_financial].[GetAllPeriodEnds]",
+                null,
+                commandType: CommandType.StoredProcedure));
 
             return result;
         }
