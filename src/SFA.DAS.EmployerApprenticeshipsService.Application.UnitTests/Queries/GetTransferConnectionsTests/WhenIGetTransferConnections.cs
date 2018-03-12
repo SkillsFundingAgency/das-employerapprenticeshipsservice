@@ -128,17 +128,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionsTests
 
             var transferConnectionInvitation1 = _response.TransferConnections.ElementAt(0);
             
-            Assert.That(transferConnectionInvitation1.SenderAccountId, Is.EqualTo(_senderAccount1.Id));
-            Assert.That(transferConnectionInvitation1.SenderAccountHashedId, Is.EqualTo(_senderAccount1.HashedId));
-            Assert.That(transferConnectionInvitation1.SenderAccountPublicHashedId, Is.EqualTo(_senderAccount1.PublicHashedId));
-            Assert.That(transferConnectionInvitation1.SenderAccountName, Is.EqualTo(_senderAccount1.Name));
+            Assert.That(transferConnectionInvitation1.FundingEmployerAccountId, Is.EqualTo(_senderAccount1.Id));
+            Assert.That(transferConnectionInvitation1.FundingEmployerHashedAccountId, Is.EqualTo(_senderAccount1.HashedId));
+            Assert.That(transferConnectionInvitation1.FundingEmployerPublicHashedAccountId, Is.EqualTo(_senderAccount1.PublicHashedId));
+            Assert.That(transferConnectionInvitation1.FundingEmployerAccountName, Is.EqualTo(_senderAccount1.Name));
 
             var transferConnectionInvitation2 = _response.TransferConnections.ElementAt(1);
             
-            Assert.That(transferConnectionInvitation2.SenderAccountId, Is.EqualTo(_senderAccount2.Id));
-            Assert.That(transferConnectionInvitation2.SenderAccountHashedId, Is.EqualTo(_senderAccount2.HashedId));
-            Assert.That(transferConnectionInvitation2.SenderAccountPublicHashedId, Is.EqualTo(_senderAccount2.PublicHashedId));
-            Assert.That(transferConnectionInvitation2.SenderAccountName, Is.EqualTo(_senderAccount2.Name));
+            Assert.That(transferConnectionInvitation2.FundingEmployerAccountId, Is.EqualTo(_senderAccount2.Id));
+            Assert.That(transferConnectionInvitation2.FundingEmployerHashedAccountId, Is.EqualTo(_senderAccount2.HashedId));
+            Assert.That(transferConnectionInvitation2.FundingEmployerPublicHashedAccountId, Is.EqualTo(_senderAccount2.PublicHashedId));
+            Assert.That(transferConnectionInvitation2.FundingEmployerAccountName, Is.EqualTo(_senderAccount2.Name));
         }
     }
 }

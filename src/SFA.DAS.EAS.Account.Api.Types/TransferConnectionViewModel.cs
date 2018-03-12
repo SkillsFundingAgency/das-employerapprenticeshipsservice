@@ -2,9 +2,9 @@
 {
     public class TransferConnectionViewModel
     {
-        public long SenderAccountId { get; set; }
-        public string SenderAccountHashedId { get; set; }
-        public string SenderAccountPublicHashedId { get; set; }
-        public string SenderAccountName { get; set; }
+        public long FundingEmployerAccountId { get; set; }
+        public string FundingEmployerHashedAccountId { get; set; }
+        public string FundingEmployerPublicHashedAccountId { get; set; }
+        public string FundingEmployerAccountName { get; set; }
     }
 }
