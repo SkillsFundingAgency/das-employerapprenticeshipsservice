@@ -15,7 +15,8 @@
 	[DateCeased] DATETIME NULL,
 	[InactiveFrom] DATETIME NULL,
 	[InactiveTo] DATETIME NULL,
-	[HmrcSubmissionId] BIGINT NULL
+	[HmrcSubmissionId] BIGINT NULL,
+	[NoPaymentForPeriod] BIT DEFAULT 0
 )
 
 GO

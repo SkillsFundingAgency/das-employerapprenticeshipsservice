@@ -7,15 +7,15 @@ SELECT
 	ld.SubmissionDate AS SubmissionDate,
 	ld.SubmissionId AS SubmissionId,
 	ld.LevyDueYTD AS LevyDueYTD,
-	coalesce(efo.Amount, t.Amount, 1) AS EnglishFraction,
-	w.amount as TopUpPercentage,
+	coalesce(EnglishFractionOverride.Amount, EnglishFraction.Amount, 1) AS EnglishFraction, -- The EnglishFraction To Use
+	TopUpPercentage.amount as TopUpPercentage, -- The TopUpPercentage To Use
 	ld.PayrollYear as PayrollYear,
 	ld.PayrollMonth as PayrollMonth,
 	CASE 
-		x.submissionid 
+		LatestSubmission.submissionid 
 	when 
 		ld.submissionid then 1 
-	else 0 end as LastSubmission,
+	else 0 end as LastSubmission, -- Last submission if LevDeclaration Id matches the LatestSubmission
 	ld.CreatedDate,
 	ld.EndOfYearAdjustment,
 	ld.EndOfYearAdjustmentAmount,
@@ -26,11 +26,15 @@ SELECT
 	ld.HmrcSubmissionId AS HmrcSubmissionId
 FROM [employer_financial].[LevyDeclaration] ld
 left join
-(	
+(
+	-- Find the latest submisison
 	select max(submissionid) submissionid,empRef,PayrollMonth,PayrollYear from
 	[employer_financial].LevyDeclaration xld
 	where submissiondate in 
-		(select max(submissiondate) from [employer_financial].LevyDeclaration WHERE EndOfYearAdjustment = 0 
+		(select max(submissiondate) from [employer_financial].LevyDeclaration 
+		WHERE
+		NoPaymentForPeriod = 0
+		and EndOfYearAdjustment = 0 
 		and submissiondate < [employer_financial].[CalculateSubmissionCutoffDate](PayrollMonth, PayrollYear)
 		and PayrollYear = xld.PayrollYear
 		and PayrollMonth = xld.PayrollMonth
@@ -38,26 +42,29 @@ left join
 		group by empRef,PayrollYear,PayrollMonth)
 	and submissiondate < [employer_financial].[CalculateSubmissionCutoffDate](PayrollMonth, PayrollYear)
 		group by empRef,PayrollYear,PayrollMonth
-)x on x.empRef = ld.empRef and x.PayrollMonth = ld.PayrollMonth and x.PayrollYear = ld.PayrollYear AND ld.EndOfYearAdjustment = 0
+)LatestSubmission on LatestSubmission.empRef = ld.empRef and LatestSubmission.PayrollMonth = ld.PayrollMonth and LatestSubmission.PayrollYear = ld.PayrollYear AND ld.EndOfYearAdjustment = 0
 
 OUTER APPLY
 (
+	-- The English Fraction in use at the time of the LevyDeclaration
 	SELECT TOP 1 Amount
 	FROM [employer_financial].[EnglishFraction] ef
 	WHERE ef.EmpRef = ld.empRef 
 		AND ef.[DateCalculated] < [employer_financial].[CalculateSubmissionCutoffDate](ld.PayrollMonth, ld.PayrollYear)
 	ORDER BY [DateCalculated] DESC
-) t
+) EnglishFraction
 outer apply
 (
+	-- The Top Up Percentage in use at the time of the LevyDeclaration
 	SELECT top 1 Amount
 	from [employer_financial].[TopUpPercentage] tp
 	WHERE tp.[DateFrom] < [employer_financial].[CalculateSubmissionCutoffDate](ld.PayrollMonth, ld.PayrollYear)
-) w
+) TopUpPercentage
 outer apply
 (
+	-- Any English Fraction Override in use at the time of the LevyDeclaration
 	SELECT top 1 Amount
 	FROM [employer_financial].[EnglishFractionOverride] o
 	WHERE o.AccountId = ld.AccountId and o.EmpRef = ld.empref AND o.DateFrom < [employer_financial].[CalculateSubmissionCutoffDate](ld.PayrollMonth, ld.PayrollYear)
 	ORDER BY DateFrom DESC
-) efo
+) EnglishFractionOverride

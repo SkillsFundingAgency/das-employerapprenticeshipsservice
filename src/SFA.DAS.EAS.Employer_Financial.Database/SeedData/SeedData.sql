@@ -21,7 +21,7 @@ BEGIN
 	DECLARE @submissionDate DATETIME
 	SET @submissionDate = GETDATE()
 
-	EXEC [employer_financial].[CreateDeclaration] @levyAmount, @payeScheme, @submissionDate, 123, 123, @accountId, @levyAmount, ''17-18'', 1, @submissionDate, NULL, NULL, NULL, 0, 0 
+	EXEC [employer_financial].[CreateDeclaration] @levyAmount, @payeScheme, @submissionDate, 123, 123, @accountId, @levyAmount, ''17-18'', 1, @submissionDate, NULL, NULL, NULL, 0, 0, 0
 END'
 
 EXEC sp_executesql @sqlCommand
