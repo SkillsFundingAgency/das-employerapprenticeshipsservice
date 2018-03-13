@@ -4,28 +4,12 @@
 AS
 	SET NOCOUNT ON
 
-	DECLARE @currentDate AS DATETIME = GETDATE()
-	DECLARE @currentYear AS INT = DATEPART(year, @currentDate)
-	DECLARE @financialYearStartDate AS DATETIME
-	DECLARE @financialYearEndDate AS DATETIME
+	SELECT	SUM(Amount) * @allowancePercentage 
+	FROM		[employer_financial].[TransactionLine] as lines
+			CROSS JOIN employer_financial.GetPreviousFinancialYearDates(DEFAULT) as previousFinancialYear
+	WHERE	TransactionDate >= previousFinancialYear.YearStart
+			AND TransactionDate < previousFinancialYear.YearEnd
+			AND TransactionType = 1
+			AND AccountId = @accountId
 
-	BEGIN
-		IF DATEPART(month, @currentDate) > 4
-			BEGIN
-				SELECT @financialYearStartDate = DATEFROMPARTS(@currentYear - 1, 4, 20),
-				 @financialYearEndDate = DATEFROMPARTS(@currentYear, 4, 20)
-			END
-		ELSE
-			BEGIN
-				SELECT @financialYearStartDate = DATEFROMPARTS(@currentYear - 2, 4, 20),
-				 @financialYearEndDate = DATEFROMPARTS(@currentYear - 1, 4, 20)
-			END
-	END
-
-	SELECT SUM(Amount) * @allowancePercentage FROM [employer_financial].[TransactionLine] 
-	WHERE TransactionDate >= @financialYearStartDate
-	AND TransactionDate < @financialYearEndDate
-	AND TransactionType = 1
-	AND AccountId = @accountId
-
-	GO
+GO

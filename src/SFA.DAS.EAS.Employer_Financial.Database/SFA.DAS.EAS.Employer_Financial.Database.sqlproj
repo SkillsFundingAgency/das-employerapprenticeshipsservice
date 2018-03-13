@@ -115,6 +115,7 @@
     <Build Include="Tables\PaymentTransactionTypes.sql" />
     <Build Include="Tables\TransactionLineTypes.sql" />
     <Build Include="StoredProcedures\GetAccountPaymentsByPeriodEnd.sql" />
+    <Build Include="Functions\GetPreviousFinancialYearDates.sql" />
     <Build Include="StoredProcedures\GetAllPeriodEnds.sql" />
   </ItemGroup>
   <ItemGroup>

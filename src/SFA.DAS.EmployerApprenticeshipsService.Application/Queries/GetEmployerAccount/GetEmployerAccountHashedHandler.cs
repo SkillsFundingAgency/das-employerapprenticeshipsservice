@@ -12,7 +12,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccount
         private readonly IEmployerAccountRepository _employerAccountRepository;
         private readonly IValidator<GetEmployerAccountHashedQuery> _validator;
 
-        public GetEmployerAccountHashedHandler(IEmployerAccountRepository employerAccountRepository, IValidator<GetEmployerAccountHashedQuery> validator)
+        public GetEmployerAccountHashedHandler(
+            IEmployerAccountRepository employerAccountRepository, 
+            IValidator<GetEmployerAccountHashedQuery> validator)
         {
             _employerAccountRepository = employerAccountRepository;
             _validator = validator;
@@ -38,7 +40,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccount
             {
                 Account = employerAccount
             };
-            
         }
     }
 }
