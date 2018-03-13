@@ -1,12 +1,13 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
+using SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.Messaging.AzureServiceBus.Attributes;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
 {
@@ -67,7 +68,14 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
                 PaymentUrl = message.Content.AccountPaymentUrl
             });
 
-            _logger.Info($"Completed publishing refresh payment command for AccountId '{message.Content.AccountId}' and PeriodEnd '{message.Content.PeriodEndId}'");
+            _logger.Info($"Processing refresh account transfers command for AccountId:{message.Content.AccountId} PeriodEnd:{message.Content.PeriodEndId}");
+
+
+            await _mediator.SendAsync(new RefreshAccountTransfersCommand
+            {
+                AccountId = message.Content.AccountId,
+                PeriodEnd = message.Content.PeriodEndId
+            });
 
             await message.CompleteAsync();
         }
