@@ -144,7 +144,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             try
             {
-                return await _paymentsEventsApiClient.GetPayments(periodEnd, employerAccountId.ToString(), page);
+                return await _paymentsEventsApiClient.GetPayments(periodEnd, employerAccountId.ToString(), page, null);
             }
             catch (WebException ex)
             {
