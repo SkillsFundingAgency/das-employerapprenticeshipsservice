@@ -118,6 +118,7 @@
     <Build Include="Functions\GetPreviousFinancialYearDates.sql" />
     <Build Include="StoredProcedures\GetAllPeriodEnds.sql" />
     <Build Include="Tables\AccountTransfers.sql" />
+    <Build Include="StoredProcedures\CreateAccountTransfer.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />
