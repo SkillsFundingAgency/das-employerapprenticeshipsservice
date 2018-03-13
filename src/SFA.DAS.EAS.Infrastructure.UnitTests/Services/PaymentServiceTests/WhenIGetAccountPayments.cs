@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Castle.Components.DictionaryAdapter;
 using Moq;
 using NUnit.Framework;
@@ -15,9 +10,14 @@ using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
-using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
 {
@@ -25,6 +25,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
     {
         private const string PeriodEnd = "R12-13";
         private const long AccountId = 2;
+        private const int Ukprn = 10000;
         private const string StandardCourseName = "Standard Course";
         private const string FrameworkCourseName = "Framework Course";
 
@@ -85,7 +86,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
-            _paymentsApiClient.Verify(x => x.GetPayments(PeriodEnd, AccountId.ToString(), 1));
+            _paymentsApiClient.Verify(x => x.GetPayments(PeriodEnd, AccountId.ToString(), 1, Ukprn));
         }
 
         [Test]
@@ -104,7 +105,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         {
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
             _apprenticeshipInfoService.Verify(x => x.GetProvider(_provider.Ukprn), Times.Once);
@@ -117,7 +118,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             _cacheProvider.SetupSequence(
                 x => x.Get<ProvidersView>($"{nameof(ProvidersView)}_{_provider.Ukprn.ToString()}"))
                 .Returns(null)
-                .Returns(new ProvidersView {Provider = new Domain.Models.ApprenticeshipProvider.Provider()});
+                .Returns(new ProvidersView { Provider = new Domain.Models.ApprenticeshipProvider.Provider() });
 
             //Act
             await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
@@ -132,7 +133,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         public async Task ThenTheAppreticeshipsApiIsCalledToGetStandardDetails()
         {
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
             _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Once);
@@ -146,8 +147,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             _cacheProvider.SetupSequence(
                 x => x.Get<StandardsView>(nameof(StandardsView)))
                 .Returns(null)
-                .Returns(new StandardsView { Standards = new List<Standard>()});
-            
+                .Returns(new StandardsView { Standards = new List<Standard>() });
+
 
             //Act
             await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
@@ -166,7 +167,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
                      .Returns(() => _frameworkPayment);
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
             _apprenticeshipInfoService.Verify(x => x.GetFrameworksAsync(false), Times.Once);
@@ -197,7 +198,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         public async Task ThenIShouldGetPaymentDetails()
         {
             //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
             Assert.AreEqual(AccountId, details.First().EmployerAccountId);
@@ -207,7 +208,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         public async Task ThenIShouldGetCorrectPeriodEnd()
         {
             //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
             Assert.AreEqual(PeriodEnd, details.First().PeriodEnd);
@@ -217,7 +218,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         public async Task ThenIShouldGetCorrectProviderName()
         {
             //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
             Assert.AreEqual(_provider.ProviderName, details.First().ProviderName);
@@ -227,7 +228,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         public async Task ThenIShouldGetCorrectStandardCourseName()
         {
             //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
             Assert.AreEqual(StandardCourseName, details.First().CourseName);
@@ -241,7 +242,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
                     .Returns(() => _frameworkPayment);
 
             //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
             Assert.AreEqual(FrameworkCourseName, details.First().CourseName);
@@ -265,10 +266,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         public async Task ThenIShouldGetCorrectApprenticeDetails()
         {
             //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
-            var apprenticeName = $"{_apprenticeship.FirstName} {_apprenticeship.LastName}"; 
+            var apprenticeName = $"{_apprenticeship.FirstName} {_apprenticeship.LastName}";
 
             Assert.AreEqual(apprenticeName, details.First().ApprenticeName);
             Assert.AreEqual(_apprenticeship.NINumber, details.First().ApprenticeNINumber);
@@ -282,11 +283,11 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
                 .Throws<WebException>();
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
-            _logger.Verify(x => x.Warn(It.IsAny<Exception>(), 
-                $"Unable to get Apprenticeship with Employer Account ID {AccountId} and " + 
+            _logger.Verify(x => x.Warn(It.IsAny<Exception>(),
+                $"Unable to get Apprenticeship with Employer Account ID {AccountId} and " +
                 $"apprenticeship ID {_standardPayment.ApprenticeshipId} from commitments API."), Times.Once);
         }
 
@@ -294,14 +295,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         public async Task ThenShouldLogErrorIfPaymentsApiCallFails()
         {
             //Arrange
-            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                               .Throws<WebException>();
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
-            _logger.Verify(x => x.Error(It.IsAny<Exception>(), 
+            _logger.Verify(x => x.Error(It.IsAny<Exception>(),
                 $"Unable to get payment information for {PeriodEnd} accountid {AccountId}"), Times.Once);
         }
 
@@ -313,10 +314,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
                                       .Throws<WebException>();
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
-            _logger.Verify(x => x.Warn(It.IsAny<Exception>(), 
+            _logger.Verify(x => x.Warn(It.IsAny<Exception>(),
                 $"Unable to get provider details with UKPRN {_provider.Ukprn} from apprenticeship API."), Times.Once);
         }
 
@@ -328,7 +329,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
                                       .Throws<WebException>();
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
             _logger.Verify(x => x.Warn(It.IsAny<Exception>(), "Could not get standards from apprenticeship API."), Times.Once);
@@ -344,7 +345,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
                                       .Throws<WebException>();
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd,AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
             _logger.Verify(x => x.Warn(It.IsAny<Exception>(), "Could not get frameworks from apprenticeship API."), Times.Once);
@@ -356,10 +357,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             //Arrange
             const int numberOfPages = 3;
 
-            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment>
                 {
-                    Items = new[]{ new Provider.Events.Api.Types.Payment(), new Provider.Events.Api.Types.Payment() },
+                    Items = new[] { new Provider.Events.Api.Types.Payment(), new Provider.Events.Api.Types.Payment() },
                     TotalNumberOfPages = numberOfPages
                 });
 
@@ -367,10 +368,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             var result = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
-            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Exactly(numberOfPages));
-            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(),1), Times.Once);
-            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(),2), Times.Once);
-            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 3), Times.Once);
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()), Times.Exactly(numberOfPages));
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1, It.IsAny<int>()), Times.Once);
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 2, It.IsAny<int>()), Times.Once);
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 3, It.IsAny<int>()), Times.Once);
 
             Assert.AreEqual(2 * numberOfPages, result.Count);
 
@@ -410,34 +411,34 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             };
 
             _standardPayment = new PaymentDetails
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    EmployerAccountId = AccountId,
-                    Ukprn = _provider.Ukprn,
-                    ApprenticeshipId = _apprenticeship.Id,
-                    StandardCode = _standard.Code,
-                   
-                };
+            {
+                Id = Guid.NewGuid().ToString(),
+                EmployerAccountId = AccountId,
+                Ukprn = _provider.Ukprn,
+                ApprenticeshipId = _apprenticeship.Id,
+                StandardCode = _standard.Code,
+
+            };
 
             _frameworkPayment = new PaymentDetails
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    EmployerAccountId = AccountId,
-                    Ukprn = _provider.Ukprn,
-                    ApprenticeshipId = _apprenticeship.Id,
-                    FrameworkCode = _framework.FrameworkCode,
-                    PathwayCode = _framework.PathwayCode,
-                    ProgrammeType = _framework.ProgrammeType
-                };
+            {
+                Id = Guid.NewGuid().ToString(),
+                EmployerAccountId = AccountId,
+                Ukprn = _provider.Ukprn,
+                ApprenticeshipId = _apprenticeship.Id,
+                FrameworkCode = _framework.FrameworkCode,
+                PathwayCode = _framework.PathwayCode,
+                ProgrammeType = _framework.ProgrammeType
+            };
         }
 
         private void SetupPaymentsApiMock()
         {
             _paymentsApiClient = new Mock<IPaymentsEventsApiClient>();
-            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment>
                 {
-                    Items = new[]{ new Provider.Events.Api.Types.Payment() }
+                    Items = new[] { new Provider.Events.Api.Types.Payment() }
                 });
         }
 
@@ -447,7 +448,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             _commitmentsApiClient.Setup(x => x.GetEmployerApprenticeship(It.IsAny<long>(), It.IsAny<long>()))
                 .ReturnsAsync(_apprenticeship);
         }
-        
+
         private void SetupApprenticeshipServiceMock()
         {
             _apprenticeshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();

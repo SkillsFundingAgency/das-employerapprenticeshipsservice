@@ -120,6 +120,7 @@
     <Build Include="StoredProcedures\GetAccountPaymentsByPeriodEnd.sql" />
     <Build Include="Functions\GetPreviousFinancialYearDates.sql" />
     <Build Include="StoredProcedures\GetAllPeriodEnds.sql" />
+    <Build Include="Tables\AccountTransfers.sql" />
     <Build Include="UserDefinedTypes\PaymentsTable.sql" />
     <Build Include="StoredProcedures\CreatePayments.sql" />
     <None Include="Scripts\PostDeployment\SeedDevData.sql" />
