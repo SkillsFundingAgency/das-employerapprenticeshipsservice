@@ -301,6 +301,9 @@
     <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteSentTransferConnectionInvitation\DeleteTransferConnectionInvitationCommand.cs" />
     <Compile Include="Commands\DeleteSentTransferConnectionInvitation\DeleteTransferConnectionInvitationCommandHandler.cs" />
+    <Compile Include="Commands\RefreshAccountTransfers\RefreshAccountTransfersCommand.cs" />
+    <Compile Include="Commands\RefreshAccountTransfers\RefreshAccountTransfersCommandHandler.cs" />
+    <Compile Include="Commands\RefreshAccountTransfers\RefreshAccountTransfersCommandValidator.cs" />
     <Compile Include="Commands\RejectTransferConnectionInvitation\RejectTransferConnectionInvitationCommandHandler.cs" />
     <Compile Include="Commands\RejectTransferConnectionInvitation\RejectTransferConnectionInvitationCommand.cs" />
     <Compile Include="Attributes\DateAttribute.cs" />

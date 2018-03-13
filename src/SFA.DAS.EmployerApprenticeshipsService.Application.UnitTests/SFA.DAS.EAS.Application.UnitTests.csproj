@@ -248,6 +248,8 @@
     <Compile Include="Commands\AddPayeToAccountTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\WhenIApproveATransferConnectionInvitation.cs" />
     <Compile Include="Commands\DeleteTransferConnectionInvitationTests.cs" />
+    <Compile Include="Commands\RefreshAccountTransfersTests\WhenIRefreshAnAccountsTransfers.cs" />
+    <Compile Include="Commands\RefreshAccountTransfersTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\RejectTransferConnectionInvitation\WhenIRejectATransferConnectionInvitation.cs" />
     <Compile Include="Commands\SendTransferConnectionInvitation\SendTransferConnectionInvitationHandlerTests.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
