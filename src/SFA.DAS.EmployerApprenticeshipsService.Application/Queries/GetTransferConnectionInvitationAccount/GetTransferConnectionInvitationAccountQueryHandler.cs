@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using FluentValidation;
 using MediatR;
 using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Application.Dtos;
@@ -31,6 +32,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
             if (receiverAccount == null)
             {
                 throw new ValidationException<GetTransferConnectionInvitationAccountQuery>(q => q.ReceiverAccountPublicHashedId, "You must enter a valid account ID");
+            }
+
+            var isReceiverASender = await _db.TransferConnectionInvitations.AnyAsync(tci =>
+                tci.SenderAccountId == receiverAccount.Id && tci.Status != TransferConnectionInvitationStatus.Rejected);
+
+            if (isReceiverASender)
+            {
+                throw new ValidationException<GetTransferConnectionInvitationAccountQuery>(q => q.ReceiverAccountPublicHashedId, "You can’t connect with this employer because they already have pending or accepted connection requests");
             }
 
             var anyPendingtransferConnectionInvitations = await _db.TransferConnectionInvitations
