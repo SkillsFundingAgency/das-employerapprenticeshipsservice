@@ -78,6 +78,7 @@
     <Reference Include="Polly, Version=5.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.7.0\lib\net45\Polly.dll</HintPath>
     </Reference>
+   
     <Reference Include="ServiceStack.Text, Version=3.9.11.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.3.9.11\lib\net35\ServiceStack.Text.dll</HintPath>
       <Private>True</Private>

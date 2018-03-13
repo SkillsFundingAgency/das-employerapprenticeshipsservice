@@ -88,6 +88,7 @@
     <Reference Include="Polly, Version=5.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.7.0\lib\net45\Polly.dll</HintPath>
     </Reference>
+    
     <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.68.0.34798, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.68.0.34798\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
@@ -168,8 +169,8 @@
   <ItemGroup>
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\IPaymentDataProcessor.cs" />
     <Compile Include="Providers\PaymentDataProcessor.cs" />
+    <Compile Include="Providers\TransferDataProcessor.cs" />
     <Compile Include="WorkerRole.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,16 +1,18 @@
-using System.Diagnostics;
-using System.Net;
-using System.Threading;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution;
-using SFA.DAS.EAS.PaymentProvider.Worker.Providers;
 using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker
 {
@@ -25,11 +27,18 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
             LoggingConfig.ConfigureLogging();
             Trace.TraceInformation("SFA.DAS.EAS.PaymentProvider.Worker is running");
 
-            
             try
             {
-                var paymentDataProcessor = _container.GetInstance<IPaymentDataProcessor>();
-                paymentDataProcessor.RunAsync(_cancellationTokenSource.Token).Wait();
+                var processors = _container.GetAllInstances<IMessageProcessor>().ToArray();
+
+                var processorTasks = new Task[processors.Length];
+
+                for (var index = 0; index < processors.Length; index++)
+                {
+                    processorTasks[index] = processors[index].RunAsync(_cancellationTokenSource.Token);
+                }
+
+                Task.WaitAll(processorTasks);
             }
             finally
             {
@@ -48,7 +57,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
             var result = base.OnStart();
 
             Trace.TraceInformation("SFA.DAS.EAS.PaymentProvider.Worker has been started");
-           
+
             _container = new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
