@@ -14,14 +14,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class TransferRepository : BaseRepository, ITransferRepository
     {
-        private readonly ILog _logger;
-
-
+        private readonly float _allowancePercentage;
+ 		private readonly ILog _logger;
         public TransferRepository(LevyDeclarationProviderConfiguration configuration, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _logger = logger;
-
+            _allowancePercentage = configuration.TransferAllowancePercentage;
         }
 
         public async Task CreateAccountTransfers(IEnumerable<AccountTransfer> transfers)
@@ -87,6 +86,23 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
 
             return result;
+        }
+		  
+		public async Task<decimal> GetTransferAllowance(long accountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@allowancePercentage", _allowancePercentage, DbType.Single);
+
+                return await c.QuerySingleOrDefaultAsync<decimal?>(
+                    sql: "[employer_financial].[GetAccountTransferAllowance]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result ?? 0;
         }
 
         public async Task<IEnumerable<AccountTransfer>> GetAccountTransfersByPeriodEnd(long senderAccountId, string periodEnd)
