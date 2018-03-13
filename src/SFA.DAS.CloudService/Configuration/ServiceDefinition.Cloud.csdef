@@ -77,4 +77,16 @@
       <Setting name="ProcessPayments" />
     </ConfigurationSettings>
   </WorkerRole>
+  <WorkerRole name="SFA.DAS.EAS.Account.Worker" vmsize="Small">
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="EnvironmentName" />
+      <Setting name="StorageConnectionString" />
+      <Setting name="LogLevel" />
+      <Setting name="InstrumentationKey" />
+      <Setting name="LoggingRedisConnectionString" />
+      <Setting name="LoggingRedisKey" />
+    </ConfigurationSettings>
+  </WorkerRole>
 </ServiceDefinition>

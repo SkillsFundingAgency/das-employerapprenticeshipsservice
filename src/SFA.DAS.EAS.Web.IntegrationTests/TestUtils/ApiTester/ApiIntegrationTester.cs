@@ -173,8 +173,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
             container.Configure(c =>
             {
+                c.For<ILoggingContext>().Use(Mock.Of<ILoggingContext>());
                 c.For<IPublicHashingService>().Use(Mock.Of<IPublicHashingService>());
-                c.For<IRequestContext>().Use(Mock.Of<IRequestContext>());
             });
 
             _dependencyResolver = new IntegrationTestDependencyResolver(container);

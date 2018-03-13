@@ -94,8 +94,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization.AuthorizationServiceTests
             _routeData = new RouteData();
             _routeData.Values[ControllerConstants.AccountHashedIdRouteKeyName] = _account.HashedId;
             _userExternalIdClaimValue = _user.ExternalId.ToString();
-
-            _db.Setup(d => d.SqlQuery<bool>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Guid>())).Returns(new List<bool> { true });
+            
             _db.Setup(d => d.Accounts).Returns(_accountsDbSet);
             _db.Setup(d => d.Users).Returns(_usersDbSet);
             _db.Setup(d => d.Memberships).Returns(_membershipsDbSet);

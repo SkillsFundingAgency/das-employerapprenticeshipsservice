@@ -6,6 +6,7 @@
         public const string AccessDeniedViewName = "AccessDenied";
         public const string AccessDeniedControllerName = "AccessDenied";
         public const string ActionKeyName = "Action";
+        public const string ActivitiesUnavailableMessage = "Activities are currently unavailable.";
         public const string AddOrganisationAddressViewName = "../OrganisationShared/AddOrganisationAddress";
         public const string AddOrganisationAddressActionName = "AddOrganisationAddress";
         public const string AddOrganisationViewName = "AddOrganisation";

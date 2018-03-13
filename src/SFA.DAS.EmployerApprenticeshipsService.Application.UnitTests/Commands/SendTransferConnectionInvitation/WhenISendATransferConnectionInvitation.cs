@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
@@ -95,7 +94,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
         {
             await _handler.Handle(_command);
 
-            _employerAccountRepository.Verify(r => r.GetAccountById(_receiverAccount.Id), Times.Once);
+            _employerAccountRepository.Verify(r => r.GetAccountById(_senderAccount.Id), Times.Once);
         }
 
         [Test]

@@ -53,4 +53,17 @@
       <Setting name="ProcessPayments" value="true" />
     </ConfigurationSettings>
   </Role>
+  <Role name="SFA.DAS.EAS.Account.Worker">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="EnvironmentName" value="LOCAL" />
+      <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="InstrumentationKey" value="" />
+      <Setting name="LogLevel" value="Debug" />
+      <Setting name="LoggingRedisKey" value="" />
+      <Setting name="LoggingRedisConnectionString" value="" />
+    </ConfigurationSettings>
+  </Role>
 </ServiceConfiguration>
