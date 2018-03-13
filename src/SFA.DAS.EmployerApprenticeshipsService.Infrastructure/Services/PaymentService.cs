@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
-using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using Payment = SFA.DAS.Provider.Events.Api.Types.Payment;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
@@ -66,6 +67,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             }
 
             return populatedPayments;
+        }
+
+        public Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long employerAccountId)
+        {
+            throw new NotImplementedException();
         }
 
         private async Task GetCourseDetails(PaymentDetails payment)
@@ -164,7 +170,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                             _cacheProvider.Set($"{nameof(ProvidersView)}_{ukPrn}", providerView, new TimeSpan(1, 0, 0));
                         }
                     }
-                    
+
                     return providerView?.Provider;
                 }
                 catch (Exception e)
@@ -219,7 +225,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                 if (frameworksView != null)
                 {
-                    _cacheProvider.Set(nameof(FrameworksView),frameworksView, new TimeSpan(1,0,0));
+                    _cacheProvider.Set(nameof(FrameworksView), frameworksView, new TimeSpan(1, 0, 0));
                 }
 
                 return frameworksView?.Frameworks.SingleOrDefault(f =>
