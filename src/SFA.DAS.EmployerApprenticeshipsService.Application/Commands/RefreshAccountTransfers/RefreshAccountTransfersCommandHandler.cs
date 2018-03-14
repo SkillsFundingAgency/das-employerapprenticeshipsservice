@@ -1,10 +1,13 @@
 using MediatR;
 using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
@@ -14,6 +17,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
         private readonly IValidator<RefreshAccountTransfersCommand> _validator;
         private readonly IPaymentService _paymentService;
         private readonly ITransferRepository _transferRepository;
+        private readonly IMessagePublisher _messagePublisher;
         private readonly ILog _logger;
 
 
@@ -21,12 +25,14 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
             IValidator<RefreshAccountTransfersCommand> validator,
             IPaymentService paymentService,
             ITransferRepository transferRepository,
+            IMessagePublisher messagePublisher,
             ILog logger)
         {
 
             _validator = validator;
             _paymentService = paymentService;
             _transferRepository = transferRepository;
+            _messagePublisher = messagePublisher;
             _logger = logger;
         }
 
@@ -41,9 +47,17 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
 
             try
             {
-                var transfers = await _paymentService.GetAccountTransfers(message.PeriodEnd, message.AccountId);
+                var paymentTransfers = await _paymentService.GetAccountTransfers(message.PeriodEnd, message.AccountId);
+
+                var transfers = paymentTransfers.ToArray();
 
                 await _transferRepository.CreateAccountTransfers(transfers);
+
+                await _messagePublisher.PublishAsync(new AccountTransfersCreatedQueueMessage
+                {
+                    SenderAccountId = message.AccountId,
+                    PeriodEnd = message.PeriodEnd
+                });
             }
             catch (Exception ex)
             {
