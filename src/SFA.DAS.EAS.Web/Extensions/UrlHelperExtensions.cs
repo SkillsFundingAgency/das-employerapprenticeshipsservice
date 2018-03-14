@@ -8,18 +8,25 @@ namespace SFA.DAS.EAS.Web.Extensions
     {
         public static string EmployerCommitmentsAction(this UrlHelper helper, string path)
         {
-            var baseUrl = CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName)?.TrimEnd('/');
+            return EmployerAction(helper, path, ControllerConstants.EmployerCommitmentsBaseUrlKeyName);
+        }
+
+        public static string EmployerRecruitAction(this UrlHelper helper, string path)
+        {
+            return EmployerAction(helper, path, ControllerConstants.EmployerRecruitBaseUrlKeyName);
+        }
+
+        private static string EmployerAction(UrlHelper helper, string path, string baseUrlKeyName)
+        {
+            var baseUrl = CloudConfigurationManager.GetSetting(baseUrlKeyName)?.TrimEnd('/');
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
 
             return $"{baseUrl}/accounts/{hashedAccountId}/{path}";
         }
 
-        public static string EmployerRecruitAction(this UrlHelper helper, string path)
+        public static string EmployerProjectionsAction(this UrlHelper helper, string path)
         {
-            var baseUrl = CloudConfigurationManager.GetSetting(ControllerConstants.EmployerRecruitBaseUrlKeyName)?.TrimEnd('/');
-            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
-
-            return $"{baseUrl}/accounts/{hashedAccountId}/{path}";
+            return EmployerAction(helper, path, ControllerConstants.EmployerProjectionsBaseUrlKeyName);
         }
     }
 }

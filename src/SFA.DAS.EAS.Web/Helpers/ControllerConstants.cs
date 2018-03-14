@@ -28,6 +28,7 @@
         public const string EmployerTeamActionName = "EmployerTeam";
         public const string EmployerTeamControllerName = "EmployerTeam";
         public const string EmployerRecruitBaseUrlKeyName = "EmployerRecruitBaseUrl";
+        public const string  EmployerProjectionsBaseUrlKeyName = "EmployerProjectionsBaseUrl";
         public const string ErrorControllerName = "Error";
         public const string FeatureNotEnabledViewName = "FeatureNotEnabled";
         public const string FindAddressViewName = "../OrganisationShared/FindAddress";
