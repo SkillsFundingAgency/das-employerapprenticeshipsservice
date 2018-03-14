@@ -133,61 +133,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Features\HMRC Scenarios\ScenarioEight.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScenarioEight.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\HMRC Scenarios\ScenarioFive1.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScenarioFive.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\HMRC Scenarios\ScenarioFourA1.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScenarioFourA.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\HMRC Scenarios\ScenarioFourB1.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScenarioFourB.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\HMRC Scenarios\ScenarioNine.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScenarioNine.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\HMRC Scenarios\ScenarioOne1.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScenarioOne.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\HMRC Scenarios\ScenarioSeven1.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScenarioSeven.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\HMRC Scenarios\ScenarioSix1.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScenarioSix.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\HMRC Scenarios\ScenarioTen.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScenarioTen.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\HMRC Scenarios\ScenarioThree1.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScenarioThree.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Features\HMRC Scenarios\ScenarioTwo1.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScenarioTwo.feature</DependentUpon>
-    </Compile>
     <Compile Include="PaymentTestData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steps\CommonSteps\AccountCreationSteps.cs" />

@@ -108,21 +108,21 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         [When(@"I make a payment for the apprenticeship standard")]
         public void WhenIMakeAPaymentForTheApprenticeshipStandard()
         {
-            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1, It.IsAny<int>()))
+            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1, null))
                 .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment> { Items = new[] { _testData.StandardPayment } });
         }
 
         [When(@"I make a payment for the apprenticeship framework")]
         public void WhenIMakeAPaymentForTheApprenticeshipFramework()
         {
-            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1, It.IsAny<int>()))
+            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1, null))
                 .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment> { Items = new[] { _testData.FrameworkPayment } });
         }
 
         [When(@"I make a co-investment payment for the apprenticeship")]
         public void WhenIMakeACo_InvestmentPaymentForTheApprenticeship()
         {
-            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1, It.IsAny<int>()))
+            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1, null))
                 .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment>
                 {
                     Items = new[]

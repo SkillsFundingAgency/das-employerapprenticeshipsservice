@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
 
                 for (var index = 0; index < processors.Length; index++)
                 {
-                    processorTasks[index] = processors[index].RunAsync(_cancellationTokenSource.Token);
+                    processorTasks[index] = processors[index].RunAsync(_cancellationTokenSource);
                 }
 
                 Task.WaitAll(processorTasks);
