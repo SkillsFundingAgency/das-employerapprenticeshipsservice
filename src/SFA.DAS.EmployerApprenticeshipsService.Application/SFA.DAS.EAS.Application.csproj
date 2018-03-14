@@ -618,6 +618,9 @@
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersResponse.cs" />
     <Compile Include="Queries\GetSentTransferConnectionInvitation\GetSentTransferConnectionInvitationQuery.cs" />
     <Compile Include="Queries\GetSentTransferConnectionInvitation\GetSentTransferConnectionInvitationQueryHandler.cs" />
+    <Compile Include="Queries\GetAccountTransferRole\GetAccountTransferRoleQuery.cs" />
+    <Compile Include="Queries\GetAccountTransferRole\GetAccountTransferRoleHandler.cs" />
+    <Compile Include="Queries\GetAccountTransferRole\GetAccountTransferRoleResponse.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountQuery.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountResponse.cs" />

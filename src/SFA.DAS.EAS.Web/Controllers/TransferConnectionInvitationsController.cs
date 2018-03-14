@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
+using SFA.DAS.EAS.Application.Queries.GetAccountTransferRole;
 using SFA.DAS.EAS.Application.Queries.GetApprovedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetLatestOutstandingTransferInvitation;
 using SFA.DAS.EAS.Application.Queries.GetReceivedTransferConnectionInvitation;
@@ -33,9 +34,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [Route]
-        public ActionResult Index()
+        public async Task<ActionResult> Index(GetAccountTransferRoleQuery query)
         {
-            return View();
+            var response = await _mediator.SendAsync(query);
+            var model = _mapper.Map<IndexTransferConnectionInvitationViewModel>(response);
+
+            return View(model);
         }
         
         [ImportModelStateFromTempData]
