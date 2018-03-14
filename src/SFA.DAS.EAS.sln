@@ -107,9 +107,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.DbMaintenance.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Account.Api", "SFA.DAS.EAS.Api\SFA.DAS.EAS.Account.Api.csproj", "{40190475-1220-4CF8-8A60-223FACAFEDA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.DbMaintenance.UnitTests", "SFA.DAS.EAS.DbMaintenance.UnitTests\SFA.DAS.EAS.DbMaintenance.UnitTests.csproj", "{14619584-8C7A-4FAB-B9E3-CE9B7CB60BA7}"
-EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.API", "SFA.DAS.API\SFA.DAS.API.ccproj", "{D89C34DD-1A5B-4A18-9EA1-3D5846F228CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.DbMaintenance.UnitTests", "SFA.DAS.EAS.DbMaintenance.UnitTests\SFA.DAS.EAS.DbMaintenance.UnitTests.csproj", "{14619584-8C7A-4FAB-B9E3-CE9B7CB60BA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -62,6 +62,8 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         {
             var accountOwnerUserId = Guid.NewGuid().ToString();
 
+            ScenarioContext.Current["AccountOwnerUserRef"] = accountOwnerUserId;
+
             var signInUserModel = new UserViewModel
             {
                 UserRef = accountOwnerUserId,
@@ -69,7 +71,9 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
                 FirstName = "Test",
                 LastName = "Tester"
             };
+
             var userCreationSteps = new UserSteps();
+
             userCreationSteps.UpsertUser(signInUserModel);
 
             var user = userCreationSteps.GetExistingUserAccount();
@@ -77,7 +81,6 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
             CreateDasAccount(user, _container.GetInstance<EmployerAccountOrchestrator>());
 
             ScenarioContext.Current["AccountOwnerUserId"] = user.Id;
-            ScenarioContext.Current["AccountOwnerUserRef"] = user.UserRef;
         }
 
         public static void CreateDasAccount(UserViewModel userView, EmployerAccountOrchestrator orchestrator)
