@@ -13,7 +13,8 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
         private readonly ILog _logger;
         private readonly IMediator _mediator;
 
-        public TransferDataProcessor(IMessageSubscriberFactory subscriberFactory, ILog logger, IMediator mediator) 
+
+        public TransferDataProcessor(IMessageSubscriberFactory subscriberFactory, IMediator mediator, ILog logger)
             : base(subscriberFactory, logger)
         {
             _logger = logger;

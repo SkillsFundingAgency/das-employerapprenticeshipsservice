@@ -2,10 +2,12 @@
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers;
 using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Transfers;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
@@ -23,6 +25,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
         private Mock<ILog> _logger;
         private ICollection<AccountTransfer> _transfers;
         private RefreshAccountTransfersCommand _command;
+        private Mock<IMessagePublisher> _messagePublisher;
 
 
         [SetUp]
@@ -31,11 +34,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
             _validator = new Mock<IValidator<RefreshAccountTransfersCommand>>();
             _paymentService = new Mock<IPaymentService>();
             _transferRepository = new Mock<ITransferRepository>();
+            _messagePublisher = new Mock<IMessagePublisher>();
             _logger = new Mock<ILog>();
 
             _transfers = new List<AccountTransfer>
             {
-                new AccountTransfer()
+                new AccountTransfer
+                {
+                    SenderAccountId = 12,
+                    RecieverAccountId = 32,
+                    CommitmentId = 1245,
+                    Amount = 1200,
+                    TransferDate = DateTime.Now
+                }
             };
 
             _command = new RefreshAccountTransfersCommand
@@ -45,7 +56,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
             };
 
             _handler = new RefreshAccountTransfersCommandHandler(
-                _validator.Object, _paymentService.Object, _transferRepository.Object, _logger.Object);
+                _validator.Object,
+                _paymentService.Object,
+                _transferRepository.Object,
+                _messagePublisher.Object,
+                _logger.Object);
 
             _validator.Setup(x => x.Validate(It.IsAny<RefreshAccountTransfersCommand>()))
                 .Returns(new ValidationResult());
@@ -170,6 +185,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
             Assert.ThrowsAsync<Exception>(() => _handler.Handle(_command));
 
             _logger.Verify(x => x.Error(exception, It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenATransferCreatedMessageShouldBeCreated()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountTransfersCreatedQueueMessage>(
+                msg => msg.SenderAccountId.Equals(_command.AccountId) &&
+                       msg.PeriodEnd.Equals(_command.PeriodEnd))), Times.Once());
         }
     }
 }
