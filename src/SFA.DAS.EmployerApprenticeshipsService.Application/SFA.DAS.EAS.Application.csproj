@@ -290,6 +290,7 @@
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQuery.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceResponse.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQueryHandler.cs" />
+    <Compile Include="Messages\AccountTransfersCreatedQueueMessage.cs" />
     <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQuery.cs" />
     <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsResponse.cs" />
