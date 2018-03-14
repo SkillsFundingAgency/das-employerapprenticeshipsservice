@@ -65,13 +65,25 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.TransactionSteps
             {
                 var dasDeclaration = new DasDeclaration
                 {
-                    LevyDueYtd = Convert.ToDecimal(tableRow["LevyDueYtd"]),
                     PayrollYear = tableRow["Payroll_Year"],
                     PayrollMonth = Convert.ToInt16(tableRow["Payroll_Month"]),
                     LevyAllowanceForFullYear = 15000,
                     SubmissionDate = DateTime.Parse(tableRow["SubmissionDate"]),
-                    Id = lineCount.ToString()
+                    Id = lineCount.ToString(),
                 };
+
+                if (table.ContainsColumn("NonDeclaration"))
+                {
+                    dasDeclaration.NoPaymentForPeriod = Convert.ToBoolean(tableRow["NonDeclaration"]);
+                }
+
+                decimal temp;
+                // replace null with default
+                decimal? numericValue =
+                    decimal.TryParse(tableRow["LevyDueYtd"], out temp) ? temp : default(decimal?);
+
+                dasDeclaration.LevyDueYtd = numericValue;
+
                 lineCount++;
                 if (!emprefDictionary.ContainsKey(tableRow["Paye_scheme"]))
                 {

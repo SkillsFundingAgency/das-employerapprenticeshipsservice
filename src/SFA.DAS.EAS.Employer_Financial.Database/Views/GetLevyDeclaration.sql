@@ -32,9 +32,7 @@ left join
 	[employer_financial].LevyDeclaration xld
 	where submissiondate in 
 		(select max(submissiondate) from [employer_financial].LevyDeclaration 
-		WHERE
-		NoPaymentForPeriod = 0
-		and EndOfYearAdjustment = 0 
+		WHERE EndOfYearAdjustment = 0 
 		and submissiondate < [employer_financial].[CalculateSubmissionCutoffDate](PayrollMonth, PayrollYear)
 		and PayrollYear = xld.PayrollYear
 		and PayrollMonth = xld.PayrollMonth
@@ -68,3 +66,4 @@ outer apply
 	WHERE o.AccountId = ld.AccountId and o.EmpRef = ld.empref AND o.DateFrom < [employer_financial].[CalculateSubmissionCutoffDate](ld.PayrollMonth, ld.PayrollYear)
 	ORDER BY DateFrom DESC
 ) EnglishFractionOverride
+WHERE 		ld.NoPaymentForPeriod = 0

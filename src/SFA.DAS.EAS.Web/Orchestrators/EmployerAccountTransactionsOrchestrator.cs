@@ -62,16 +62,22 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 transaction.PayeSchemeName = payeSchemeData?.PayeScheme?.Name ?? string.Empty;
             }
 
-            return new OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>
+            var outputData = new OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>
             {
                 Status = HttpStatusCode.OK,
                 Data = new TransactionLineViewModel<LevyDeclarationTransactionLine>
                 {
                     Amount = data.Total,
                     SubTransactions = data.Transactions,
-                    TransactionDate = data.Transactions.First().DateCreated
                 }
             };
+
+            if (data.Transactions.Any())
+            {
+                outputData.Data.TransactionDate = data.Transactions.First().DateCreated;
+            }
+
+            return outputData;
         }
 
         public async Task<OrchestratorResponse<ProviderPaymentsSummaryViewModel>> GetProviderPaymentSummary(
