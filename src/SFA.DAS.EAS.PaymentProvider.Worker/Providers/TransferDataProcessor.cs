@@ -1,14 +1,16 @@
 ﻿using MediatR;
 using SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers;
-using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.AzureServiceBus.Attributes;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
 {
-    public class TransferDataProcessor : MessageProcessor<PaymentProcessorQueueMessage>
+    [TopicSubscription("MA_TransferDataProcessor")]
+    public class TransferDataProcessor : MessageProcessor<AccountPaymentsProcessingFinishedMessage>
     {
         private readonly ILog _logger;
         private readonly IMediator _mediator;
@@ -21,14 +23,14 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
             _mediator = mediator;
         }
 
-        protected override async Task ProcessMessage(PaymentProcessorQueueMessage message)
+        protected override async Task ProcessMessage(AccountPaymentsProcessingFinishedMessage message)
         {
-            _logger.Info($"Processing refresh account transfers command for AccountId:{message.AccountId} PeriodEnd:{message.PeriodEndId}");
+            _logger.Info($"Processing refresh account transfers command for AccountId:{message.AccountId} PeriodEnd:{message.PeriodEnd}");
 
             await _mediator.SendAsync(new RefreshAccountTransfersCommand
             {
                 AccountId = message.AccountId,
-                PeriodEnd = message.PeriodEndId
+                PeriodEnd = message.PeriodEnd
             });
         }
     }
