@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\AccountPaymentsProcessingFinishedMessage.cs" />
     <Compile Include="Messages\DeletedTransferConnectionInvitationEvent.cs" />
     <Compile Include="Messages\PaymentCreatedMessage.cs" />
     <Compile Include="Messages\AccountNameChangedMessage.cs" />
