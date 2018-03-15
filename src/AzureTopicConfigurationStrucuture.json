@@ -72,5 +72,13 @@
   {
     "topicName": "payment_created",
     "subscription": [ "Activity_PaymentCreatedMessageProcessor" ]
+  },
+  {
+    "topicName": "account_payments_processing_finished",
+    "subscription": [ "MA_TransferDataProcessor" ]
+  },
+  {
+    "topicName": "account_transfers_created",
+    "subscription": [ "" ]
   }
 ]

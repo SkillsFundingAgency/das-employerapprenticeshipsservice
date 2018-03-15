@@ -194,6 +194,10 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj">
+      <Project>{0e46510c-0d06-4b63-8e17-b9037db7c7ed}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Events</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
       <Name>SFA.DAS.EAS.Application</Name>
