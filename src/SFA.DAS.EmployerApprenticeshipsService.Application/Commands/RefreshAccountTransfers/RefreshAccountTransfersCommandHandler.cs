@@ -51,6 +51,21 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
 
                 var transfers = paymentTransfers.ToArray();
 
+                //TODO: Check for transfers that already exist in database
+
+                foreach (var transfer in transfers)
+                {
+                    transfer.PeriodEnd = message.PeriodEnd;
+
+                    var paymentDetails = await _transferRepository.GetTransferPaymentDetails(transfer);
+
+                    transfer.CourseName = paymentDetails.CourseName;
+                    transfer.ApprenticeCount = paymentDetails.ApprenticeCount;
+
+                    if (transfer.Amount != paymentDetails.PaymentTotal)
+                        _logger.Warn("Transfer total does not match transfer payments total");
+                }
+
                 await _transferRepository.CreateAccountTransfers(transfers);
 
                 await _messagePublisher.PublishAsync(new AccountTransfersCreatedQueueMessage

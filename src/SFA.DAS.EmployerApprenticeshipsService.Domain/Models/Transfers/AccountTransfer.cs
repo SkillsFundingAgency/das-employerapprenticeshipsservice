@@ -12,7 +12,10 @@ namespace SFA.DAS.EAS.Domain.Models.Transfers
     {
         public long SenderAccountId { get; set; }
         public long RecieverAccountId { get; set; }
-        public long CommitmentId { get; set; }
+        public long ApprenticeshipId { get; set; }
+        public string CourseName { get; set; }
+        public uint ApprenticeCount { get; set; }
+        public string PeriodEnd { get; set; }
         public decimal Amount { get; set; }
         public AccountTransferType Type { get; set; }
         public DateTime TransferDate { get; set; }
