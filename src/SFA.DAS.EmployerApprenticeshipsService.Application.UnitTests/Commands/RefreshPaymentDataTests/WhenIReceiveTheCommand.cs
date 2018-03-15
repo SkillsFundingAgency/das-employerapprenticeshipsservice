@@ -1,11 +1,6 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Moq;
+using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
 using SFA.DAS.EAS.Application.Exceptions;
@@ -16,6 +11,11 @@ using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 {
@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 
             _validator = new Mock<IValidator<RefreshPaymentDataCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<RefreshPaymentDataCommand>()))
-                      .Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> ()});
+                      .Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
 
             _dasLevyRepository = new Mock<IDasLevyRepository>();
             _dasLevyRepository.Setup(x => x.GetAccountPaymentIds(It.IsAny<long>()))
@@ -72,13 +72,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
             _messagePublisher = new Mock<IMessagePublisher>();
-            
+
             _handler = new RefreshPaymentDataCommandHandler(
                 _messagePublisher.Object,
-                _validator.Object, 
-                _paymentService.Object, 
-                _dasLevyRepository.Object, 
-                _mediator.Object, 
+                _validator.Object,
+                _paymentService.Object,
+                _dasLevyRepository.Object,
+                _mediator.Object,
                 _logger.Object);
         }
 
@@ -97,8 +97,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         {
             //Arrange
             _validator.Setup(x => x.Validate(It.IsAny<RefreshPaymentDataCommand>()))
-                      .Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
-            
+                      .Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
+
             //Act Assert
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new RefreshPaymentDataCommand()));
         }
@@ -108,11 +108,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         {
             //Act
             await _handler.Handle(_command);
-            
+
             //Assert
             _paymentService.Verify(x => x.GetAccountPayments(_command.PeriodEnd, _command.AccountId));
         }
-        
+
         [Test]
         public async Task ThenTheRepositoryIsNotCalledIfTheCommandIsValidAndThereAreNotPayments()
         {
@@ -135,7 +135,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             //Assert
             _dasLevyRepository.Verify(x => x.CreatePaymentData(_paymentDetails), Times.Once);
         }
-        
+
         [Test]
         public async Task ThenTheEventIsCalledToUpdateTheDeclarationDataWhenNewPaymentsHaveBeenCreated()
         {
@@ -215,13 +215,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.Is<IEnumerable<PaymentDetails>>(s => 
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.Is<IEnumerable<PaymentDetails>>(s =>
                 s.Any(p => p.Id.Equals(newPaymentGuid.ToString())) &&
                 s.Count() == 1)));
 
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Once);
         }
-        
+
         [Test]
         public async Task ThenAnPaymentCreatedMessageIsCreated()
         {
@@ -249,6 +249,33 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 
             //Assert
             _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<PaymentCreatedMessage>()), Times.Never());
+        }
+
+        [Test]
+        public async Task ThenTheSystemIsNotifiedWhenAllPaymentsAreProcessed()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountPaymentsProcessingFinishedMessage>
+            (m => m.AccountId.Equals(_command.AccountId) &&
+                  m.PeriodEnd.Equals(_command.PeriodEnd))), Times.Once);
+        }
+
+        [Test]
+        public void ThenTheSystemShouldNotBeNotifiedIfAllPaymentsAreNotProcessed()
+        {
+            //Arrange
+            _dasLevyRepository.Setup(x => x.CreatePaymentData(It.IsAny<IEnumerable<PaymentDetails>>()))
+                .Throws<Exception>();
+
+            //Act + Assert
+            Assert.ThrowsAsync<Exception>(() => _handler.Handle(_command));
+
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountPaymentsProcessingFinishedMessage>
+            (m => m.AccountId.Equals(_command.AccountId) &&
+                  m.PeriodEnd.Equals(_command.PeriodEnd))), Times.Never);
         }
 
     }
