@@ -258,7 +258,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountPaymentsProcessingFinishedMessage>
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountPaymentsProcessingCompletedMessage>
             (m => m.AccountId.Equals(_command.AccountId) &&
                   m.PeriodEnd.Equals(_command.PeriodEnd))), Times.Once);
         }
@@ -273,7 +273,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             //Act + Assert
             Assert.ThrowsAsync<Exception>(() => _handler.Handle(_command));
 
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountPaymentsProcessingFinishedMessage>
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountPaymentsProcessingCompletedMessage>
             (m => m.AccountId.Equals(_command.AccountId) &&
                   m.PeriodEnd.Equals(_command.PeriodEnd))), Times.Never);
         }
