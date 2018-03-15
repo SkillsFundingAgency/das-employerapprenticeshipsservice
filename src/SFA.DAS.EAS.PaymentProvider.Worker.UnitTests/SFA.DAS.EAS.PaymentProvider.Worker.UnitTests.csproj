@@ -89,7 +89,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\PaymentDataProcessorTests\WhenIProcessPaymentData.cs" />
-    <Compile Include="Providers\TransferDataProcessorTests\WhenIProcessPaymentData.cs" />
+    <Compile Include="Providers\TransferDataProcessorTests\WhenIProcessTransferData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -99,6 +99,10 @@
     <ProjectReference Include="..\SFA.DAS.EAS.PaymentProvider.Worker\SFA.DAS.EAS.PaymentProvider.Worker.csproj">
       <Project>{52069B5E-6A8D-413E-B4BD-A7C7C4FD2CCF}</Project>
       <Name>SFA.DAS.EAS.PaymentProvider.Worker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj">
+      <Project>{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Events</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
