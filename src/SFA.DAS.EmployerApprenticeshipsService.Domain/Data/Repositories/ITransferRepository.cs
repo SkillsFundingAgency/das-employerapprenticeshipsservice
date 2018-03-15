@@ -8,5 +8,6 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
     {
         Task<decimal> GetTransferAllowance(long accountId);
         Task CreateAccountTransfers(IEnumerable<AccountTransfer> transfers);
+        Task<AccountTransferPaymentDetails> GetTransferPaymentDetails(AccountTransfer transfer);
     }
 }

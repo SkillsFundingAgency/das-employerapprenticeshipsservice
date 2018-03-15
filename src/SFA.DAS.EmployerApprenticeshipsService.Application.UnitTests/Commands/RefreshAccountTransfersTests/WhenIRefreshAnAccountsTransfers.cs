@@ -11,6 +11,7 @@ using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -26,6 +27,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
         private ICollection<AccountTransfer> _transfers;
         private RefreshAccountTransfersCommand _command;
         private Mock<IMessagePublisher> _messagePublisher;
+        private AccountTransferPaymentDetails _paymentDetails;
 
 
         [SetUp]
@@ -37,13 +39,20 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
             _messagePublisher = new Mock<IMessagePublisher>();
             _logger = new Mock<ILog>();
 
+            _paymentDetails = new AccountTransferPaymentDetails
+            {
+                CourseName = "Testing Level 2",
+                ApprenticeCount = 3,
+                PaymentTotal = 1200
+            };
+
             _transfers = new List<AccountTransfer>
             {
                 new AccountTransfer
                 {
                     SenderAccountId = 12,
                     RecieverAccountId = 32,
-                    CommitmentId = 1245,
+                    ApprenticeshipId = 1245,
                     Amount = 1200,
                     TransferDate = DateTime.Now
                 }
@@ -67,6 +76,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
 
             _paymentService.Setup(x => x.GetAccountTransfers(It.IsAny<string>(), It.IsAny<long>()))
                 .ReturnsAsync(_transfers);
+
+            _transferRepository.Setup(x => x.GetTransferPaymentDetails(It.IsAny<AccountTransfer>()))
+                .ReturnsAsync(_paymentDetails);
         }
 
         [Test]
@@ -87,6 +99,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
 
             //Assert
             _transferRepository.Verify(x => x.CreateAccountTransfers(_transfers), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenTheRetrievedTransfersShouldBeLinkedToPeriodEnd()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _transferRepository.Verify(x => x.CreateAccountTransfers(
+                It.Is<IEnumerable<AccountTransfer>>(transfers =>
+                   transfers.All(t => _command.PeriodEnd.Equals(t.PeriodEnd)))), Times.Once);
         }
 
         [Test]
@@ -197,6 +221,48 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountTransfersCreatedQueueMessage>(
                 msg => msg.SenderAccountId.Equals(_command.AccountId) &&
                        msg.PeriodEnd.Equals(_command.PeriodEnd))), Times.Once());
+        }
+
+        [Test]
+
+        public async Task ThenPaymentDetailsShouldBeCalledForEachTransfer()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            foreach (var transfer in _transfers)
+            {
+                _transferRepository.Verify(x => x.GetTransferPaymentDetails(transfer), Times.Once);
+            }
+        }
+
+        [Test]
+
+        public async Task ThenATransferShouldBeCreatedWithTheCorrectPaymentDetails()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _transferRepository.Verify(x => x.CreateAccountTransfers(It.Is<IEnumerable<AccountTransfer>>(
+                transfers =>
+                    transfers.All(t => t.CourseName.Equals(_paymentDetails.CourseName) &&
+                                       t.ApprenticeCount.Equals(_paymentDetails.ApprenticeCount)))), Times.Once);
+        }
+
+        [Test]
+
+        public async Task ThenIfTransferAmountAndPaymentTotalsDoNotMatchAWarningIsLogged()
+        {
+            //Assign
+            _paymentDetails.PaymentTotal = 10; //Should be 1200
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _logger.Verify(x => x.Warn("Transfer total does not match transfer payments total"));
         }
     }
 }

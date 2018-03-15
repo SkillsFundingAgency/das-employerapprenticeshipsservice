@@ -119,6 +119,7 @@
     <Build Include="StoredProcedures\GetAllPeriodEnds.sql" />
     <Build Include="Tables\AccountTransfers.sql" />
     <Build Include="StoredProcedures\CreateAccountTransfer.sql" />
+    <Build Include="StoredProcedures\GetTransferPaymentDetails.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

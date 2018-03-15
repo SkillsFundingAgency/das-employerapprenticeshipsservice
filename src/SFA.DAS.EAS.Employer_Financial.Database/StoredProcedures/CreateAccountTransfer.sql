@@ -3,6 +3,7 @@
 	@recieverAccountId bigint,
 	@commitmentId bigint,
 	@amount decimal,
+	@periodEnd nvarchar(20),
 	@type smallint,
 	@transferDate datetime
 
@@ -11,7 +12,8 @@ AS
 	(
 		SenderAccountId, 
 		RecieverAccountId, 
-		CommitmentId, 
+		ApprenticeshipId, 
+		PeriodEnd,
 		Amount, 
 		Type, 
 		TransferDate, 
@@ -22,6 +24,7 @@ AS
 		@senderAccountId,
 		@recieverAccountId,
 		@commitmentId,
+		@periodEnd,
 		@amount,
 		@type,
 		@transferDate,
