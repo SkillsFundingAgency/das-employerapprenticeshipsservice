@@ -107,55 +107,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
         }
 
         [Test]
-        public async Task ThenShouldCreateTransferConnectionInvitation()
+        public async Task ThenShouldAddTransferConnectionInvitationToRepository()
         {
-            var now = DateTime.UtcNow;
-
-            _id = await _handler.Handle(_command);
+            await _handler.Handle(_command);
 
             _transferConnectionInvitationRepository.Verify(r => r.Add(It.IsAny<TransferConnectionInvitation>()), Times.Once);
-
-            Assert.That(_transferConnectionInvitation.CreatedDate, Is.GreaterThanOrEqualTo(now));
-            Assert.That(_transferConnectionInvitation.DeletedByReceiver, Is.False);
-            Assert.That(_transferConnectionInvitation.DeletedBySender, Is.False);
-            Assert.That(_transferConnectionInvitation.ReceiverAccount, Is.SameAs(_receiverAccount));
-            Assert.That(_transferConnectionInvitation.SenderAccount, Is.SameAs(_senderAccount));
-            Assert.That(_transferConnectionInvitation.Status, Is.EqualTo(TransferConnectionInvitationStatus.Pending));
-            Assert.That(_transferConnectionInvitation.Changes.Count, Is.EqualTo(1));
-
-            var change = _transferConnectionInvitation.Changes.Single();
-
-            Assert.That(change.CreatedDate, Is.EqualTo(_transferConnectionInvitation.CreatedDate));
-            Assert.That(change.DeletedByReceiver, Is.EqualTo(_transferConnectionInvitation.DeletedByReceiver));
-            Assert.That(change.DeletedBySender, Is.EqualTo(_transferConnectionInvitation.DeletedBySender));
-            Assert.That(change.ReceiverAccount, Is.SameAs(_transferConnectionInvitation.ReceiverAccount));
-            Assert.That(change.SenderAccount, Is.SameAs(_transferConnectionInvitation.SenderAccount));
-            Assert.That(change.Status, Is.EqualTo(_transferConnectionInvitation.Status));
-            Assert.That(change.User, Is.Not.Null);
-            Assert.That(change.User.Id, Is.EqualTo(_senderUser.Id));
-        }
-
-        [Test]
-        public async Task ThenShouldPublishSentTransferConnectionInvitationEvent()
-        {
-            _id = await _handler.Handle(_command);
-            
-            var messages = _entity.GetEvents().ToList();
-            var message = messages.OfType<SentTransferConnectionInvitationEvent>().FirstOrDefault();
-
-            Assert.That(messages.Count, Is.EqualTo(1));
-            Assert.That(message, Is.Not.Null);
-            Assert.That(message.CreatedAt, Is.EqualTo(_transferConnectionInvitation.Changes.Select(c => c.CreatedDate).Cast<DateTime?>().SingleOrDefault()));
-            Assert.That(message.ReceiverAccountHashedId, Is.EqualTo(_receiverAccount.HashedId));
-            Assert.That(message.ReceiverAccountId, Is.EqualTo(_receiverAccount.Id));
-            Assert.That(message.ReceiverAccountName, Is.EqualTo(_receiverAccount.Name));
-            Assert.That(message.SenderAccountHashedId, Is.EqualTo(_senderAccount.HashedId));
-            Assert.That(message.SenderAccountId, Is.EqualTo(_senderAccount.Id));
-            Assert.That(message.SenderAccountName, Is.EqualTo(_senderAccount.Name));
-            Assert.That(message.SentByUserExternalId, Is.EqualTo(_senderUser.ExternalId));
-            Assert.That(message.SentByUserId, Is.EqualTo(_senderUser.Id));
-            Assert.That(message.SentByUserName, Is.EqualTo(_senderUser.FullName));
-            Assert.That(message.TransferConnectionInvitationId, Is.EqualTo(_transferConnectionInvitation.Id));
         }
 
         [Test]
@@ -186,5 +142,31 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
 
             await _handler.Handle(_command);
         }
+
+        [Test]
+        public async Task ThenShouldPublishSentTransferConnectionInvitationEvent()
+        {
+            _id = await _handler.Handle(_command);
+
+            var messages = _entity.GetEvents().ToList();
+            var message = messages.OfType<SentTransferConnectionInvitationEvent>().FirstOrDefault();
+
+            Assert.That(messages.Count, Is.EqualTo(1));
+            Assert.That(message, Is.Not.Null);
+            Assert.That(message.CreatedAt, Is.EqualTo(_transferConnectionInvitation.Changes.Select(c => c.CreatedDate).Cast<DateTime?>().SingleOrDefault()));
+            Assert.That(message.ReceiverAccountHashedId, Is.EqualTo(_receiverAccount.HashedId));
+            Assert.That(message.ReceiverAccountId, Is.EqualTo(_receiverAccount.Id));
+            Assert.That(message.ReceiverAccountName, Is.EqualTo(_receiverAccount.Name));
+            Assert.That(message.SenderAccountHashedId, Is.EqualTo(_senderAccount.HashedId));
+            Assert.That(message.SenderAccountId, Is.EqualTo(_senderAccount.Id));
+            Assert.That(message.SenderAccountName, Is.EqualTo(_senderAccount.Name));
+            Assert.That(message.SentByUserExternalId, Is.EqualTo(_senderUser.ExternalId));
+            Assert.That(message.SentByUserId, Is.EqualTo(_senderUser.Id));
+            Assert.That(message.SentByUserName, Is.EqualTo(_senderUser.FullName));
+            Assert.That(message.TransferConnectionInvitationId, Is.EqualTo(_transferConnectionInvitation.Id));
+        }
+
+
+
     }
 }
