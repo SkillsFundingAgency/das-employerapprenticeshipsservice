@@ -1,4 +1,7 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
@@ -6,15 +9,14 @@ using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Sections;
 using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
 using SFA.DAS.NLog.Logger;
-using System.Threading.Tasks;
 
-namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.WhitelistPipelineSectionTests
+namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Handlers.WhitelistPipelineSectionTests
 {
     public class WhenICheckIfAFeatureIsToggled
     {
         private const string UserEmail = "test@test.com";
 
-        private WhitelistPipelineSection _whitelistSection;
+        private FeatureToggleService _whitelistSection;
         private Mock<ICacheProvider> _cacheProvider;
         private Mock<ILog> _logger;
         private Mock<IFeatureToggleCache> _featureToggleCache;
@@ -69,7 +71,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
             _actionCacheItem.WhiteLists.Add(new WhiteList { Emails = { UserEmail } });
 
             //Act
-            var result = await _whitelistSection.ProcessAsync(new FeatureToggleRequest
+            var result = await _whitelistSection.IsFeatureEnabled(new OperationContext
             {
                 MembershipContext = _membershipContext.Object
             });
@@ -83,7 +85,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
         public async Task ThenItShouldntBeAvailableIfUserIsNotOnWhitelist()
         {
             //Act
-            var result = await _whitelistSection.ProcessAsync(new FeatureToggleRequest
+            var result = await _whitelistSection.IsFeatureEnabled(new OperationContext
             {
                 MembershipContext = _membershipContext.Object
             });
@@ -226,7 +228,6 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
         //{
         //    // Act
         //    _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, null);
-
         //    // Assert
         //    _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{null}' is '{true}'."), Times.Once);
         //}

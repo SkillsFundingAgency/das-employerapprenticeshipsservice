@@ -4,6 +4,10 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Pipeline;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers;
+using SFA.DAS.EAS.Infrastructure.Pipeline;
+using SFA.DAS.EAS.Infrastructure.Pipeline.Features;
+using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers;
+using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Sections;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
 using SFA.DAS.EAS.Web.Controllers;
@@ -27,6 +31,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
             ForConcreteType<TransfersController>().Configure.SetLifecycleTo<UniquePerRequestLifecycle>();
             RegisterAuthorisationPipeline();
+            RegisterAuthorisationPipeline();
         }
 
         private void RegisterAuthorisationPipeline()
@@ -37,6 +42,15 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 ctx.GetInstance<FeatureToggleAuthorisationHandler>()
             }).Singleton();
             For<IOperationAuthorisationHandler>().Use<OperationAuthorisation>().Singleton();
+            For<IFeatureToggleService>().Use<FeatureToggleService>().Singleton();
+            For<IFeatureToggleCache>().Use<FeatureToggleCache>().Singleton();
+        {
+            For<IOperationAuthorisationHandler[]>().Use(ctx => new[]
+            {
+                // The order of the types specified here is the order in which the handlers will be executed. 
+                ctx.GetInstance<FeatureToggleAuthorisationHandler>()
+            }).Singleton();
+            For<IOperationAuthorisationHandler>().Use<OperationAuthorisationPipeline>().Singleton();
             For<IFeatureToggleService>().Use<FeatureToggleService>().Singleton();
             For<IFeatureToggleCache>().Use<FeatureToggleCache>().Singleton();
         }

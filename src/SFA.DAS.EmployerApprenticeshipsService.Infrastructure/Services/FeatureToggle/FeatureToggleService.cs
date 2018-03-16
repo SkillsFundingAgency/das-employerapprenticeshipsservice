@@ -1,12 +1,18 @@
 ﻿using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
-using SFA.DAS.EAS.Infrastructure.Pipeline;
+using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
+namespace SFA.DAS.EAS.Infrastructure.Pipeline.Features.Sections
 {
-    public class FeatureToggleService : IFeatureToggleService
+    public class FeatureToggleService : AzureServiceBase<FeatureToggleConfiguration>, IFeatureToggleService
     {
         private readonly ICacheProvider _cacheProvider;
         private readonly IFeatureToggleCacheFactory _featureToggleCacheFactory;
@@ -23,7 +29,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
             {
                 var cacheConfig = GetConfiguration();
 
-                bool isFeatureEnabled;
+        public static TimeSpan DefaultCacheTime { get; } = new TimeSpan(0, 0, 30, 0);
+        public static TimeSpan ShortLivedCacheTime { get; } = new TimeSpan(0, 0, 1, 0);
+        public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.Features";
 
                 if (cacheConfig.TryGetControllerActionSubjectToToggle(context.Controller, context.Action,
                     out ControllerActionCacheItem controllerAction))
@@ -61,16 +69,13 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
         {
             var cachedConfig = _cacheProvider.Get<IFeatureToggleCache>(nameof(FeatureToggleCache));
             {
-                Controller = controllerName,
-                Action = actionName,
-                MembershipContext = membershipContext
-            };
+                var cacheConfig = GetConfiguration();
 
                 cachedConfig = _featureToggleCacheFactory.Create(config.Data);
                 _cacheProvider.Set(nameof(FeatureToggleCache), cachedConfig,
                     cachedConfig.IsAvailable ? DefaultCacheTime : ShortLivedCacheTime);
 
-            return _featurePipeline.ProcessAsync(request).Result;
+                if (cacheConfig.TryGetControllerActionSubjectToToggle(context.Controller, context.Action, out ControllerActionCacheItem controllerAction))
         }
     }
 
@@ -91,6 +96,29 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
         public IFeatureToggleCache Create(FeatureToggleCollection features)
         {
             return new FeatureToggleCache(features, _controllerMetaDataService);
+                return false;
+
+            return controllerAction.WhiteLists.Any(whiteList => IsWhiteListed(context, whiteList));
+        }
+
+        private static bool IsWhiteListed(OperationContext context, WhiteList whiteList)
+        {
+            return whiteList.Emails.Any(email => Regex.IsMatch(context.MembershipContext.UserEmail, email, RegexOptions.IgnoreCase));
+        }
+
+        private IFeatureToggleCache GetConfiguration()
+        {
+            var cachedConfig = _cacheProvider.Get<IFeatureToggleCache>(nameof(FeatureToggleCache));
+            if (cachedConfig == null)
+            {
+                var config = GetDataFromTableStorage();
+
+                cachedConfig = new FeatureToggleCache(config.Data);
+                _cacheProvider.Set(nameof(FeatureToggleCache), cachedConfig,
+                    cachedConfig.IsAvailable ? DefaultCacheTime : ShortLivedCacheTime);
+            }
+
+            return cachedConfig;
         }
     }
 }
