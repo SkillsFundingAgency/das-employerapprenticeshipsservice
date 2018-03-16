@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [employer_financial].[CreateAccountTransfer]
 	@senderAccountId bigint,
 	@recieverAccountId bigint,
-	@commitmentId bigint,
+	@apprenticeshipId bigint,
 	@amount decimal,
 	@periodEnd nvarchar(20),
 	@type smallint,
@@ -23,7 +23,7 @@ AS
 	(
 		@senderAccountId,
 		@recieverAccountId,
-		@commitmentId,
+		@apprenticeshipId,
 		@periodEnd,
 		@amount,
 		@type,
