@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Entities.Transaction;
@@ -11,20 +6,28 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Infrastructure.Services;
-using SFA.DAS.Sql.Client;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Sql.Client;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class TransactionRepository : BaseRepository, ITransactionRepository
     {
         private readonly IMapper _mapper;
+        private readonly ILog _logger;
 
         public TransactionRepository(LevyDeclarationProviderConfiguration configuration, IMapper mapper, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<List<TransactionLine>> GetAccountTransactionsByDateRange(
@@ -84,7 +87,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return MapTransactions(result);
         }
-        
+
         public async Task<List<TransactionLine>> GetAccountCoursePaymentsByDateRange(
             long accountId, long ukprn, string courseName, int courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
@@ -131,7 +134,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@AccountId", accountId, DbType.Int64);
-                
+
                 return await c.QueryAsync<TransactionSummary>(
                     sql: "[employer_financial].[GetTransactionSummary_ByAccountId]",
                     param: parameters,
@@ -161,11 +164,49 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 if (!string.IsNullOrEmpty(res.PayrollYear) && res.PayrollMonth != 0)
                 {
-                    res.PeriodEnd = hmrcDateService.GetDateFromPayrollYearMonth(res.PayrollYear, res.PayrollMonth).ToString("MMM yyyy"); 
+                    res.PeriodEnd = hmrcDateService.GetDateFromPayrollYearMonth(res.PayrollYear, res.PayrollMonth).ToString("MMM yyyy");
                 }
             }
 
             return transactionDownloadLines.OrderByDescending(txn => txn.DateCreated).ToList();
+        }
+
+        public async Task CreateTransferTransactions(IEnumerable<TransferTransactionLine> transactions)
+        {
+            await WithConnection(async c =>
+            {
+                var trans = c.BeginTransaction();
+
+                try
+                {
+                    foreach (var transaction in transactions)
+                    {
+                        var parameters = new DynamicParameters();
+
+                        parameters.Add("@senderAccountId", transaction.AccountId, DbType.Int64);
+                        parameters.Add("@receiverAccountId", transaction.ReceiverAccountId, DbType.Int64);
+                        parameters.Add("@receiversAccountName", transaction.ReceiverAccountName, DbType.String);
+                        parameters.Add("@periodEnd", transaction.PeriodEnd, DbType.String);
+                        parameters.Add("@amount", transaction.Amount, DbType.Decimal);
+                        parameters.Add("@transactionType", TransactionItemType.Transfer, DbType.Int16);
+                        parameters.Add("@transactionDate", transaction.TransactionDate, DbType.DateTime);
+
+                        var result = await c.ExecuteAsync(
+                            sql: "[employer_financial].[CreateAccountTransferTransactions]",
+                            param: parameters,
+                            commandType: CommandType.StoredProcedure, transaction: trans);
+                    }
+
+                    trans.Commit();
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Failed to save transfer transactions to database");
+                    throw;
+                }
+
+                return true;
+            });
         }
 
         private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)

@@ -90,6 +90,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\PaymentDataProcessorTests\WhenIProcessPaymentData.cs" />
     <Compile Include="Providers\TransferDataProcessorTests\WhenIProcessTransferData.cs" />
+    <Compile Include="Providers\TransferTransactionProcessorTests\WhenIProcessAccountTransfers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

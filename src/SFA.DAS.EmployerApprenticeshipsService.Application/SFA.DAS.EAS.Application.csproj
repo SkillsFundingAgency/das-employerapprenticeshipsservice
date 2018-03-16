@@ -266,6 +266,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommand.cs" />
+    <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommandHandler.cs" />
+    <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommandValidator.cs" />
     <Compile Include="DependencyResolution\AuditRegistry.cs" />
     <Compile Include="DependencyResolution\CachesRegistry.cs" />
     <Compile Include="DependencyResolution\CommitmentsRegistry.cs" />

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Dapper;
+﻿using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -11,8 +6,13 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.Settings;
-using SFA.DAS.Sql.Client;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Sql.Client;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@employerAgreementId", null, DbType.Int64, ParameterDirection.Output, 8);
                 parameters.Add("@accessToken", accessToken, DbType.String);
                 parameters.Add("@refreshToken", refreshToken, DbType.String);
-                parameters.Add("@addedDate",DateTime.UtcNow,DbType.DateTime);
+                parameters.Add("@addedDate", DateTime.UtcNow, DbType.DateTime);
                 parameters.Add("@employerRefName", employerRefName, DbType.String);
                 parameters.Add("@status", companyStatus);
                 parameters.Add("@source", source);
@@ -91,7 +91,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task<EmployerAgreementView> CreateLegalEntity(long accountId, LegalEntity legalEntity) 
+        public async Task<EmployerAgreementView> CreateLegalEntity(long accountId, LegalEntity legalEntity)
         {
             return await WithConnection(async c =>
             {
@@ -213,7 +213,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@AccountId", accountId, DbType.Int64);
                 parameters.Add("@PayeRef", payeRef, DbType.String);
                 parameters.Add("@RemovedDate", DateTime.UtcNow, DbType.DateTime);
-                
+
                 var result = await c.ExecuteAsync(
                    sql: "[employer_account].[UpdateAccountHistory]",
                    param: parameters,
@@ -266,6 +266,24 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
+        }
+
+        public async Task<Dictionary<long, string>> GetAccountNames(IEnumerable<long> accountIds)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@accountIds", accountIds, DbType.Object);
+
+                return await c.QueryAsync<Tuple<long, string>>(
+                    sql: "SELECT Id, Name FROM [employer_account].[Account] WHERE Id IN @accountIds",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            //Item1 = Account Id, Item 2 = Account Name
+            return result.ToDictionary(data => data.Item1, data => data.Item2);
         }
     }
 }

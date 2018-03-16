@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
+﻿using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.Settings;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
@@ -21,5 +21,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task RemovePayeFromAccount(long accountId, string payeRef);
         Task UpdateAccountHashedIds(long accountId, string hashedId, string publicHashedId);
         Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings);
+        Task<Dictionary<long, string>> GetAccountNames(IEnumerable<long> accountIds);
+
     }
 }
