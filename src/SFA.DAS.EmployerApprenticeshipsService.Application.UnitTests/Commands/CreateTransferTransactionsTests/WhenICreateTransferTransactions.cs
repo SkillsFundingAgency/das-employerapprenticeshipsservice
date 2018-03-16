@@ -21,6 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
         private Mock<IValidator<CreateTransferTransactionsCommand>> _validator;
         private Mock<ITransferRepository> _transferRepository;
         private Mock<ITransactionRepository> _transactionRepository;
+        private Mock<IAccountRepository> _accountRepository;
         private Mock<ILog> _logger;
         private CreateTransferTransactionsCommand _command;
         private List<AccountTransfer> _accountTransfers;
@@ -31,6 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
             _validator = new Mock<IValidator<CreateTransferTransactionsCommand>>();
             _transferRepository = new Mock<ITransferRepository>();
             _transactionRepository = new Mock<ITransactionRepository>();
+            _accountRepository = new Mock<IAccountRepository>();
             _logger = new Mock<ILog>();
 
             _accountTransfers = new List<AccountTransfer>
@@ -55,6 +57,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
                 _validator.Object,
                 _transferRepository.Object,
                 _transactionRepository.Object,
+                _accountRepository.Object,
                 _logger.Object);
 
             _validator.Setup(x => x.Validate(It.IsAny<CreateTransferTransactionsCommand>()))
@@ -62,6 +65,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
 
             _transferRepository.Setup(x => x.GetAccountTransfersByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))
                 .ReturnsAsync(_accountTransfers);
+
+            _accountRepository.Setup(x => x.GetAccountNames(It.IsAny<IEnumerable<long>>()))
+                .ReturnsAsync(new Dictionary<long, string>
+                {
+                    {2, ReceiverAccountName},
+                    {3, ReceiverAccountName}
+                });
         }
 
         [Test]
