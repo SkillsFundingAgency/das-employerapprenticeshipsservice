@@ -279,7 +279,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 return await c.QueryAsync<Tuple<long, string>>(
                     sql: "SELECT Id, Name FROM [employer_account].[Account] WHERE Id IN @accountIds",
                     param: parameters,
-                    commandType: CommandType.StoredProcedure);
+                    commandType: CommandType.Text);
             });
 
             //Item1 = Account Id, Item 2 = Account Name
