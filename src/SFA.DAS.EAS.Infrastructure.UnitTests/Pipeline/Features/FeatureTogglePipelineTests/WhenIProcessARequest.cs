@@ -12,33 +12,32 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.FeatureTogglePi
 {
     class WhenIProcessARequest
     {
-        private FeatureToggleRequest _request;
-        private FeatureTogglePipeline _pipeline;
-        private Mock<IPipelineSection<FeatureToggleRequest, bool>> _pipeSection;
+        private OperationContext _operationContext;
+        private OperationAuthorisationPipeline _operationAuthorisationPipeline;
+        private Mock<IOperationAuthorisationHandler> _pipeSection;
 
         [SetUp]
         public void Arrange()
         {
-            _request = new FeatureToggleRequest();
+            _operationContext = new OperationContext();
 
-            _pipeSection = new Mock<IPipelineSection<FeatureToggleRequest, bool>>();
+            _pipeSection = new Mock<IOperationAuthorisationHandler>();
 
-            _pipeSection.Setup(x => x.Priority).Returns(1);
-            _pipeSection.Setup(x => x.ProcessAsync(It.IsAny<FeatureToggleRequest>())).ReturnsAsync(true);
+            _pipeSection.Setup(x => x.CanAccessAsync(It.IsAny<OperationContext>())).ReturnsAsync(true);
 
-            var sections = new List<IPipelineSection<FeatureToggleRequest, bool>>
+            var sections = new[]
             {
                 _pipeSection.Object
             };
 
-            _pipeline = new FeatureTogglePipeline(sections, Mock.Of<ILog>());
+            _operationAuthorisationPipeline = new OperationAuthorisationPipeline(sections, Mock.Of<ILog>());
         }
 
         [Test]
         public async Task ThenACorrectResponseShouldBeReturned()
         {
             //Act
-            var result = await _pipeline.ProcessAsync(_request);
+            var result = await _operationAuthorisationPipeline.CanAccessAsync(_operationContext);
 
             //Assert
             Assert.IsTrue(result);
@@ -48,106 +47,57 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.FeatureTogglePi
         public async Task ThenAllSectionsShouldBeProcessed()
         {
             //Arrange
-            var sectionMocks = new List<Mock<IPipelineSection<FeatureToggleRequest, bool>>>
+            var sectionMocks = new []
             {
-                new Mock<IPipelineSection<FeatureToggleRequest, bool>>(),
-                new Mock<IPipelineSection<FeatureToggleRequest, bool>>(),
-                new Mock<IPipelineSection<FeatureToggleRequest, bool>>()
+                new Mock<IOperationAuthorisationHandler>(),
+                new Mock<IOperationAuthorisationHandler>(),
+                new Mock<IOperationAuthorisationHandler>()
             };
 
             foreach (var mock in sectionMocks)
             {
-                mock.Setup(x => x.ProcessAsync(It.IsAny<FeatureToggleRequest>())).ReturnsAsync(true);
+                mock.Setup(x => x.CanAccessAsync(It.IsAny<OperationContext>())).ReturnsAsync(true);
             }
 
-            _pipeline = new FeatureTogglePipeline(sectionMocks.Select(x => x.Object), Mock.Of<ILog>());
+            _operationAuthorisationPipeline = new OperationAuthorisationPipeline(sectionMocks.Select(x => x.Object).ToArray(), Mock.Of<ILog>());
 
             //Act
-            await _pipeline.ProcessAsync(_request);
+            await _operationAuthorisationPipeline.CanAccessAsync(_operationContext);
 
             //Assert
             foreach (var mock in sectionMocks)
             {
-                mock.Verify(x => x.ProcessAsync(_request), Times.Once);
+                mock.Verify(x => x.CanAccessAsync(_operationContext), Times.Once);
             }
-        }
-
-        [Test]
-        public async Task ThenSectionsShouldBeProcessedInPriorityOrder()
-        {
-            //Arrange
-            var firstSectionCalled = false;
-            var secondSectionCalled = false;
-            var thirdSectionCalled = false;
-
-
-            var firstSection = new Mock<IPipelineSection<FeatureToggleRequest, bool>>();
-            var secondSection = new Mock<IPipelineSection<FeatureToggleRequest, bool>>();
-            var thirdSection = new Mock<IPipelineSection<FeatureToggleRequest, bool>>();
-
-            firstSection.Setup(x => x.Priority).Returns(1);
-            secondSection.Setup(x => x.Priority).Returns(2);
-            thirdSection.Setup(x => x.Priority).Returns(3);
-
-            firstSection.Setup(x => x.ProcessAsync(It.IsAny<FeatureToggleRequest>()))
-                .ReturnsAsync(true)
-                .Callback(() => { firstSectionCalled = true; });
-
-            secondSection.Setup(x => x.ProcessAsync(It.IsAny<FeatureToggleRequest>()))
-                .ReturnsAsync(true)
-                .Callback(() => { secondSectionCalled = firstSectionCalled; });
-
-            thirdSection.Setup(x => x.ProcessAsync(It.IsAny<FeatureToggleRequest>()))
-                .ReturnsAsync(true)
-                .Callback(() => { thirdSectionCalled = secondSectionCalled; });
-
-            var sectionMocks = new List<Mock<IPipelineSection<FeatureToggleRequest, bool>>>
-            {
-                thirdSection,
-                firstSection,
-                secondSection
-            };
-
-            _pipeline = new FeatureTogglePipeline(sectionMocks.Select(x => x.Object), Mock.Of<ILog>());
-
-            //Act
-            await _pipeline.ProcessAsync(_request);
-
-            //Assert
-            Assert.IsTrue(thirdSectionCalled);
         }
 
         [Test]
         public async Task ThenIfSectionReturnsFalseAllRemainingSectionAreNotCalled()
         {
             //Arrange
-            var firstSection = new Mock<IPipelineSection<FeatureToggleRequest, bool>>();
-            var secondSection = new Mock<IPipelineSection<FeatureToggleRequest, bool>>();
-            var thirdSection = new Mock<IPipelineSection<FeatureToggleRequest, bool>>();
+            var firstSection = new Mock<IOperationAuthorisationHandler>();
+            var secondSection = new Mock<IOperationAuthorisationHandler>();
+            var thirdSection = new Mock<IOperationAuthorisationHandler>();
 
-            firstSection.Setup(x => x.Priority).Returns(1);
-            secondSection.Setup(x => x.Priority).Returns(2);
-            thirdSection.Setup(x => x.Priority).Returns(3);
-
-            firstSection.Setup(x => x.ProcessAsync(It.IsAny<FeatureToggleRequest>()))
+            firstSection.Setup(x => x.CanAccessAsync(It.IsAny<OperationContext>()))
                         .ReturnsAsync(false);
 
-            var sectionMocks = new List<Mock<IPipelineSection<FeatureToggleRequest, bool>>>
+            var sectionMocks = new List<Mock<IOperationAuthorisationHandler>>
             {
-                thirdSection,
                 firstSection,
-                secondSection
+                secondSection,
+                thirdSection
             };
 
-            _pipeline = new FeatureTogglePipeline(sectionMocks.Select(x => x.Object), Mock.Of<ILog>());
+            _operationAuthorisationPipeline = new OperationAuthorisationPipeline(sectionMocks.Select(x => x.Object).ToArray(), Mock.Of<ILog>());
 
             //Act
-            await _pipeline.ProcessAsync(_request);
+            await _operationAuthorisationPipeline.CanAccessAsync(_operationContext);
 
             //Assert
-            firstSection.Verify(x => x.ProcessAsync(_request), Times.Once);
-            secondSection.Verify(x => x.ProcessAsync(_request), Times.Never);
-            thirdSection.Verify(x => x.ProcessAsync(_request), Times.Never);
+            firstSection.Verify(x => x.CanAccessAsync(_operationContext), Times.Once);
+            secondSection.Verify(x => x.CanAccessAsync(_operationContext), Times.Never);
+            thirdSection.Verify(x => x.CanAccessAsync(_operationContext), Times.Never);
         }
     }
 }

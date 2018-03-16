@@ -14,28 +14,26 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         private const string ControllerName = "Test_Controller";
         private const string ActionName = "Test_Action";
 
-        private Mock<ILog> _logger;
-        private Mock<IPipeline<FeatureToggleRequest, bool>> _pipeline;
+        private Mock<IOperationAuthorisationHandler> _pipeline;
 	private IAuthorizationContext _authorizationContext;
-        private FeatureToggleService _featureToggleService;
+        private OperationAuthorisationService _operationAuthorisationService;
 
         [SetUp]
         public void Arrange()
         {
-            _pipeline = new Mock<IPipeline<FeatureToggleRequest, bool>>();
+            _pipeline = new Mock<IOperationAuthorisationHandler>();
             _membershipContext = new Mock<IMembershipContext>();
-            _logger = new Mock<ILog>();
 
-            _pipeline.Setup(x => x.ProcessAsync(It.IsAny<FeatureToggleRequest>())).ReturnsAsync(true);
+            _pipeline.Setup(x => x.CanAccessAsync(It.IsAny<OperationContext>())).ReturnsAsync(true);
 
-            _featureToggleService = new FeatureToggleService(_pipeline.Object, _logger.Object);
+            _operationAuthorisationService = new OperationAuthorisationService(_pipeline.Object);
         }
 
         [Test]
         public void ThenShouldReturnThatFeatureIsEnabled()
         {
             //Act
-            var result = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext.Object);
+            var result = _operationAuthorisationService.IsOperationAuthorised(ControllerName, ActionName, _membershipContext.Object);
 
             //Assert
             Assert.IsTrue(result);
@@ -45,10 +43,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         public void ThenShouldReturnThatFeatureIsNotEnabled()
         {
             //Assign
-            _pipeline.Setup(x => x.ProcessAsync(It.IsAny<FeatureToggleRequest>())).ReturnsAsync(false);
+            _pipeline.Setup(x => x.CanAccessAsync(It.IsAny<OperationContext>())).ReturnsAsync(false);
 
             //Act
-            var result = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext.Object);
+            var result = _operationAuthorisationService.IsOperationAuthorised(ControllerName, ActionName, _membershipContext.Object);
 
             //Assert
             Assert.IsFalse(result);
@@ -58,13 +56,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         public void ThenShouldRequestDetails()
         {
             //Act
-            _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, ontext _authorization);
+            _operationAuthorisationService.IsOperationAuthorised(ControllerName, ActionName, _authorisationContext);
 
             //Assert
-            _pipeline.Verify(x => x.ProcessAsync(It.Is<FeatureToggleRequest>(
-                request => request.Controller.Equals(ControllerName) &&
-                request.Action.Equals(ActionName) &&
-                request.MembershipContext == _membershipContext.Object)), Times.Once);
+            _pipeline.Verify(x => x.CanAccessAsync(It.Is<OperationContext>(
+                operationContext => operationContext.Controller.Equals(ControllerName) &&
+                operationContext.Action.Equals(ActionName) &&
+                operationContext.MembershipContext == _membershipContext.Object)), Times.Once);
         }
     }
 }

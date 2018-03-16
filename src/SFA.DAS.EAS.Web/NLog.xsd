@@ -294,12 +294,12 @@
         </xs:attribute>
         <xs:attribute name="overflowAction" type="NLog.Targets.Wrappers.AsyncTargetWrapperOverflowAction">
           <xs:annotation>
-            <xs:documentation>Action to be taken when the lazy writer thread request queue count exceeds the set limit.</xs:documentation>
+            <xs:documentation>Action to be taken when the lazy writer thread context queue count exceeds the set limit.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="queueLimit" type="xs:integer">
           <xs:annotation>
-            <xs:documentation>Limit on the number of requests in the lazy writer thread request queue.</xs:documentation>
+            <xs:documentation>Limit on the number of contexts in the lazy writer thread context queue.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="timeToSleepBetweenBatches" type="xs:integer">
@@ -1576,7 +1576,7 @@
         </xs:attribute>
         <xs:attribute name="useOneWayContract" type="xs:boolean">
           <xs:annotation>
-            <xs:documentation>Indicates whether to use a WCF service contract that is one way (fire and forget) or two way (request-reply)</xs:documentation>
+            <xs:documentation>Indicates whether to use a WCF service contract that is one way (fire and forget) or two way (context-reply)</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="clientId" type="SimpleLayoutAttribute">

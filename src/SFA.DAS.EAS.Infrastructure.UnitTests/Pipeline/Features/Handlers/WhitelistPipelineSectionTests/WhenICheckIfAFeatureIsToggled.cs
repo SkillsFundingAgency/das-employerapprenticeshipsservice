@@ -1,4 +1,7 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
@@ -6,11 +9,8 @@ using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Sections;
 using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
 using SFA.DAS.NLog.Logger;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.WhitelistPipelineSectionTests
+namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Handlers.WhitelistPipelineSectionTests
 {
     public class WhenICheckIfAFeatureIsToggled
     {
@@ -19,8 +19,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
         private const string ControllerName = "TestController";
         private const string ActionName = "TestAction";
 
-        private Mock<WhitelistPipelineSection> _whitelistSectionMock;
-        private WhitelistPipelineSection _whitelistSection;
+        private Mock<FeatureToggleService> _whitelistSectionMock;
+        private FeatureToggleService _whitelistSection;
         private Mock<ICacheProvider> _cacheProvider;
         private Mock<ILog> _logger;
         private Mock<IFeatureToggleCache> _featureToggleCache;
@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
             _membershipContext.Setup(x => x.UserEmail).Returns(UserEmail);
             _membershipContext.Setup(x => x.UserId).Returns(UserId);
 
-            _whitelistSectionMock = new Mock<WhitelistPipelineSection>(_cacheProvider.Object, _logger.Object);
+            _whitelistSectionMock = new Mock<FeatureToggleService>(_cacheProvider.Object, _logger.Object);
             _whitelistSection = _whitelistSectionMock.Object;
 
             _whitelistSectionMock.Setup(f => f.GetDataFromTableStorage()).Returns(new FeatureToggleConfiguration());
@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
             _actionCacheItem.WhiteLists.Add(new WhiteList { Emails = { UserEmail } });
 
             //Act
-            var result = await _whitelistSection.ProcessAsync(new FeatureToggleRequest
+            var result = await _whitelistSection.IsFeatureEnabled(new OperationContext
             {
                 MembershipContext = _membershipContext.Object
             });
@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
         public async Task ThenItShouldntBeAvailableIfUserIsNotOnWhitelist()
         {
             //Act
-            var result = await _whitelistSection.ProcessAsync(new FeatureToggleRequest
+            var result = await _whitelistSection.IsFeatureEnabled(new OperationContext
             {
                 MembershipContext = _membershipContext.Object
             });
@@ -94,8 +94,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
                 .Returns(_featureToggleCache.Object);
 
             //Act
-            await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
-            await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
+            await _whitelistSection.IsFeatureEnabled(new OperationContext { MembershipContext = _membershipContext.Object });
+            await _whitelistSection.IsFeatureEnabled(new OperationContext { MembershipContext = _membershipContext.Object });
 
             //Assert
             _whitelistSectionMock.Verify(f => f.GetDataFromTableStorage(), Times.Once());
@@ -110,8 +110,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
                 .Returns(_featureToggleCache.Object);
 
             //Act
-            await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
-            await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
+            await _whitelistSection.IsFeatureEnabled(new OperationContext { MembershipContext = _membershipContext.Object });
+            await _whitelistSection.IsFeatureEnabled(new OperationContext { MembershipContext = _membershipContext.Object });
 
             //Assert
             _cacheProvider.Verify(c => c.Get<IFeatureToggleCache>(nameof(FeatureToggleCache)), Times.Exactly(2));
@@ -130,10 +130,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
 
 
             //Act
-            await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
+            await _whitelistSection.IsFeatureEnabled(new OperationContext { MembershipContext = _membershipContext.Object });
 
             //Assert
-            _cacheProvider.Verify(c => c.Set(nameof(FeatureToggleCache), It.IsAny<IFeatureToggleCache>(), WhitelistPipelineSection.ShortLivedCacheTime), Times.Once);
+            _cacheProvider.Verify(c => c.Set(nameof(FeatureToggleCache), It.IsAny<IFeatureToggleCache>(), FeatureToggleService.ShortLivedCacheTime), Times.Once);
         }
 
         [TestCase("user\\.one@unit\\.tests")]
@@ -150,7 +150,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
                 .Returns(Build(whitelistPattern));
 
             // Act
-            var isFeatureEnabled = await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
+            var isFeatureEnabled = await _whitelistSection.IsFeatureEnabled(new OperationContext { MembershipContext = _membershipContext.Object });
 
             // Assert
             Assert.That(isFeatureEnabled, Is.True);
@@ -164,7 +164,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
                 .Returns(Build("different.user@somewhere.else"));
 
             // Act
-            var isFeatureEnabled = await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
+            var isFeatureEnabled = await _whitelistSection.IsFeatureEnabled(new OperationContext { MembershipContext = _membershipContext.Object });
 
             // Assert
             Assert.That(isFeatureEnabled, Is.False);
@@ -179,7 +179,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
 
             // Act
             var isFeatureEnabled =
-                await _whitelistSection.ProcessAsync(new FeatureToggleRequest { MembershipContext = _membershipContext.Object });
+                await _whitelistSection.IsFeatureEnabled(new OperationContext { MembershipContext = _membershipContext.Object });
 
             // Assert
             Assert.That(isFeatureEnabled, Is.False);
@@ -195,7 +195,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
                 .Returns(_featureToggleCache.Object);
 
             // Act
-            await _whitelistSection.ProcessAsync(new FeatureToggleRequest
+            await _whitelistSection.IsFeatureEnabled(new OperationContext
             {
                 Controller = ControllerName,
                 Action = ActionName,
@@ -218,7 +218,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
                 .Returns(Build(null));
 
             // Act
-            await _whitelistSection.ProcessAsync(new FeatureToggleRequest
+            await _whitelistSection.IsFeatureEnabled(new OperationContext
             {
                 Controller = ControllerName,
                 Action = ActionName,
@@ -238,7 +238,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
                 .Returns(_featureToggleCache.Object);
 
             // Act
-            await _whitelistSection.ProcessAsync(new FeatureToggleRequest
+            await _whitelistSection.IsFeatureEnabled(new OperationContext
             {
                 Controller = ControllerName,
                 Action = ActionName,
@@ -267,12 +267,11 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Sections.Whitel
                                     Action = ActionName
                                 }
                             },
-                            Whitelist = new WhiteList {Emails = string.IsNullOrWhiteSpace(whitelistPattern) ? null : new List<string> {whitelistPattern}}
+                            Whitelist = string.IsNullOrWhiteSpace(whitelistPattern) ? new WhiteList() : new WhiteList {Emails = new List<string> {whitelistPattern}}
                         }
                     }
                 }
             };
         }
-
     }
 }

@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new ValidateFeatureFilter(() => DependencyResolver.Current.GetService<IFeatureToggleService>(), () => DependencyResolver.Current.GetService<IAuthorizationService>()));
+            filters.Add(new ValidateFeatureFilter(() => DependencyResolver.Current.GetService<IOperationAuthorisationService>(), () => DependencyResolver.Current.GetService<IAuthorisationService>()));
             filters.Add(new GoogleAnalyticsFilter());
             filters.Add(new MapViewModelToMessageFilter(() => DependencyResolver.Current.GetService<IMapper>()));
             filters.Add(new UnitOfWorkManagerFilter(() => DependencyResolver.Current.GetService<IUnitOfWorkManager>()));
