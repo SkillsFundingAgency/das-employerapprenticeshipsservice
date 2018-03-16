@@ -8,12 +8,12 @@ namespace SFA.DAS.EAS.Web.Filters
 {
     public class ValidateFeatureFilter : ActionFilterAttribute
     {
-        private readonly Func<IFeatureToggleService> _featureToggleService;
+        private readonly Func<IOperationAuthorisationService> _operationAuthorisationService;
         private readonly Func<IMembershipService> _membershipService;
 
-        public ValidateFeatureFilter(Func<IFeatureToggleService> featureToggleService, Func<IMembershipService> membershipService)
+        public ValidateFeatureFilter(Func<IOperationAuthorisationService> operationAuthorisationService, Func<IMembershipService> membershipService)
         {
-            _featureToggleService = featureToggleService;
+            _operationAuthorisationService = operationAuthorisationService;
             _membershipService = membershipService;
         }
 
@@ -22,9 +22,9 @@ namespace SFA.DAS.EAS.Web.Filters
             var controllerName = filterContext.RouteData.Values[ControllerConstants.ControllerKeyName].ToString();
             var actionName = filterContext.RouteData.Values[ControllerConstants.ActionKeyName].ToString();
             var membershipContext = _membershipService().GetMembershipContext();
-            var isFeatureEnabled = _featureToggleService().IsFeatureEnabled(controllerName, actionName, membershipContext);
+            var isOperationAuthorised = _operationAuthorisationService().IsOperationAuthorised(controllerName, actionName, membershipContext);
 
-            if (!isFeatureEnabled)
+            if (!isOperationAuthorised)
             {
                 filterContext.Result = new ViewResult { ViewName = ControllerConstants.FeatureNotEnabledViewName };
             }

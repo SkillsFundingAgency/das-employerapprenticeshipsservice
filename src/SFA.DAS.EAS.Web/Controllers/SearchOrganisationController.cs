@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public SearchOrganisationController(IAuthenticationService owinWrapper,
             SearchOrganisationOrchestrator orchestrator,
-            IFeatureToggleService featureToggle,
+            IOperationAuthorisationService operationAuthorisation,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IMapper mapper)

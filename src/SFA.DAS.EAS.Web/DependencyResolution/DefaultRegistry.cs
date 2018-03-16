@@ -41,7 +41,12 @@ using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Factories;
 using SFA.DAS.EAS.Infrastructure.Interfaces.REST;
+using SFA.DAS.EAS.Infrastructure.Pipeline;
+using SFA.DAS.EAS.Infrastructure.Pipeline.Features;
+using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers;
+using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Sections;
 using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
 using SFA.DAS.EAS.Web.Authorization;
 using SFA.DAS.EAS.Web.Logging;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -101,6 +106,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             RegisterPostCodeAnywhereService();
             RegisterExecutionPolicies();
             RegisterLogger();
+            RegisterAuthorisationPipeline();
         }
 
         private EmployerApprenticeshipsServiceConfiguration GetConfiguration()
@@ -237,6 +243,18 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<IAddressLookupService>().Use<AddressLookupService>();
             For<IRestClientFactory>().Use<RestClientFactory>();
             For<IRestServiceFactory>().Use<RestServiceFactory>();
+        }
+
+        private void RegisterAuthorisationPipeline()
+        {
+            For<IOperationAuthorisationHandler[]>().Use(ctx => new[]
+            {
+                // The order of the types specified here is the order in which the handlers will be executed. 
+                ctx.GetInstance<FeatureToggleAuthorisationHandler>()
+            }).Singleton();
+            For<IOperationAuthorisationHandler>().Use<OperationAuthorisationPipeline>().Singleton();
+            For<IFeatureToggleService>().Use<FeatureToggleService>().Singleton();
+            For<IFeatureToggleCache>().Use<FeatureToggleCache>().Singleton();
         }
     }
 }

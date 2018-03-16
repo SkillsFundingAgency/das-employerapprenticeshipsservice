@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters.EnsureFeatureIsEnabledFilterTests
         private ActionExecutingContext _filterContext;
         private RouteData _routeData;
         private readonly ControllerBase _controller = Mock.Of<ControllerBase>();
-        private Mock<IFeatureToggleService> _featureToggleService;
+        private Mock<IOperationAuthorisationService> _featureToggleService;
         private Mock<IMembershipService> _membershipService;
         private IMembershipContext _membershipContext;
         
@@ -38,12 +38,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters.EnsureFeatureIsEnabledFilterTests
                 Controller = _controller
             };
 
-            _featureToggleService = new Mock<IFeatureToggleService>();
+            _featureToggleService = new Mock<IOperationAuthorisationService>();
             _membershipService = new Mock<IMembershipService>();
             _membershipContext = new MembershipContext();
 
             _membershipService.Setup(m => m.GetMembershipContext()).Returns(_membershipContext);
-            _featureToggleService.Setup(f => f.IsFeatureEnabled(ControllerName, ActionName, _membershipContext)).Returns(true);
+            _featureToggleService.Setup(f => f.IsOperationAuthorised(ControllerName, ActionName, _membershipContext)).Returns(true);
 
             _filter = new ValidateFeatureFilter(() => _featureToggleService.Object, () => _membershipService.Object);
         }
@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters.EnsureFeatureIsEnabledFilterTests
         [Test]
         public void ThenIShouldNotBeShownThePageIfTheFeatureIsDisabled()
         {
-            _featureToggleService.Setup(f => f.IsFeatureEnabled(ControllerName, ActionName, _membershipContext)).Returns(false);
+            _featureToggleService.Setup(f => f.IsOperationAuthorised(ControllerName, ActionName, _membershipContext)).Returns(false);
 
             _filter.OnActionExecuting(_filterContext);
 

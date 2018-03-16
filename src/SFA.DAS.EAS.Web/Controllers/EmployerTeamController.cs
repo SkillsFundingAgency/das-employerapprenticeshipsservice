@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper,
-            IFeatureToggleService featureToggle,
+            IOperationAuthorisationService operationAuthorisation,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator)
