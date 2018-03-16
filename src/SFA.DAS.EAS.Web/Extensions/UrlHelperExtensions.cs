@@ -11,9 +11,9 @@ namespace SFA.DAS.EAS.Web.Extensions
             return EmployerAction(helper, path, ControllerConstants.EmployerCommitmentsBaseUrlKeyName);
         }
 
-        public static string EmployerRecruitAction(this UrlHelper helper, string path)
+        public static string EmployerRecruitAction(this UrlHelper helper)
         {
-            return EmployerAction(helper, path, ControllerConstants.EmployerRecruitBaseUrlKeyName);
+            return EmployerAction(helper, string.Empty, ControllerConstants.EmployerRecruitBaseUrlKeyName);
         }
 
         private static string EmployerAction(UrlHelper helper, string path, string baseUrlKeyName)
