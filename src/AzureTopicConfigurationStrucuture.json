@@ -54,6 +54,14 @@
     "subscription": [ "Task_SentTransferConnectionInvitiationProcessor" ]
   },
   {
+    "topicName": "approved_transfer_connection_invitation",
+    "subscription": [ "Task_ApprovedTransferConnectionInvitation" ]
+  },
+  {
+    "topicName": "rejected_transfer_connection_invitation",
+    "subscription": [ "Task_RejectedTransferConnectionInvitation" ]
+  },
+  {
     "topicName": "user_invited",
     "subscription": [ "Activity_UserInvitedMessageProcessor" ]
   },
