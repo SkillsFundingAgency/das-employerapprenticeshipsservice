@@ -1,4 +1,4 @@
-﻿CREATE TABLE [employer_financial].TransactionLine
+﻿CREATE TABLE [employer_financial].[TransactionLine]
 (
 	AccountId BIGINT NOT NULL,
 	DateCreated DATETIME NOT NULL,
@@ -9,10 +9,12 @@
 	Amount DECIMAL(18,4) NOT NULL DEFAULT 0, 
 	EmpRef nVarchar(50) null,
 	PeriodEnd nVarchar(50) null,
-	Ukprn BIGINT null, 
-    SfaCoInvestmentAmount DECIMAL(18, 4) NOT NULL DEFAULT 0, 
-    EmployerCoInvestmentAmount DECIMAL(18, 4) NOT NULL DEFAULT 0,
-	[EnglishFraction] DECIMAL(18, 5) NULL
+	UkPrn BIGINT null, 
+	SfaCoInvestmentAmount DECIMAL(18, 4) NOT NULL DEFAULT 0, 
+	EmployerCoInvestmentAmount DECIMAL(18, 4) NOT NULL DEFAULT 0,
+	[EnglishFraction] DECIMAL(18, 5) NULL, 
+	[TransferReceiverAccountId] BIGINT NULL, 
+	[TransferReceiverAccountName] NVARCHAR(100) NULL
 )
 GO
 

@@ -98,5 +98,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return result;
         }
+
+        public Task<IEnumerable<AccountTransfer>> GetAccountTransfersByPeriodEnd(long senderAccountId, string periodEnd)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

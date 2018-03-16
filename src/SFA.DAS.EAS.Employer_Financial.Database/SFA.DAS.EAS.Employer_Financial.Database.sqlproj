@@ -123,6 +123,7 @@
     <Build Include="Tables\AccountTransfers.sql" />
     <Build Include="StoredProcedures\CreateAccountTransfer.sql" />
     <Build Include="StoredProcedures\GetTransferPaymentDetails.sql" />
+    <Build Include="StoredProcedures\CreateAccountTransferTransactions.sql" />
     <Build Include="UserDefinedTypes\PaymentsTable.sql" />
     <Build Include="StoredProcedures\CreatePayments.sql" />
     <None Include="Scripts\PostDeployment\SeedDevData.sql" />
