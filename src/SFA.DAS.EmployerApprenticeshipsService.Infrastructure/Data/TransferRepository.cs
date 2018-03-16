@@ -107,19 +107,65 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<IEnumerable<AccountTransfer>> GetAccountTransfersByPeriodEnd(long senderAccountId, string periodEnd)
         {
+            await WithTransaction(async (connection, transaction) =>
+            {
+                var accountTransfers = transfers as AccountTransfer[] ?? transfers.ToArray();
+
+                try
+                {
+                    foreach (var transfer in accountTransfers)
+                    {
+                        var parameters = new DynamicParameters();
+                        parameters.Add("@senderAccountId", transfer.SenderAccountId, DbType.Int64);
+                        parameters.Add("@recieverAccountId", transfer.RecieverAccountId, DbType.Int64);
+                        parameters.Add("@commitmentId", transfer.ApprenticeshipId, DbType.Int64);
+                        parameters.Add("@periodEnd", transfer.PeriodEnd, DbType.String);
+                        parameters.Add("@amount", transfer.Amount, DbType.Decimal);
+                        parameters.Add("@type", transfer.Type, DbType.Int16);
+                        parameters.Add("@transferDate", transfer.TransferDate, DbType.DateTime);
+
+                        await connection.ExecuteAsync(
+                            sql: "[employer_financial].[CreateAccountTransfer]",
+                            param: parameters,
+                            commandType: CommandType.StoredProcedure);
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+
+                    var transfer = accountTransfers.FirstOrDefault();
+
+                    _logger.Error(ex, $"Failed to save transfers for account id {transfer?.SenderAccountId}");
+
+                    throw;
+                }
+            });
+        }
+
+        public async Task<AccountTransferPaymentDetails> GetTransferPaymentDetails(AccountTransfer transfer)
+        {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@senderAccountId", senderAccountId, DbType.Int64);
-                parameters.Add("@periodEnd", periodEnd, DbType.String);
+                parameters.Add("@receiverAccountId", transfer.RecieverAccountId, DbType.Int64);
+                parameters.Add("@periodEnd", transfer.PeriodEnd, DbType.String);
+                parameters.Add("@apprenticeshipId", transfer.ApprenticeshipId, DbType.Int64);
 
-                return await c.QueryAsync<AccountTransfer>(
-                    sql: "[employer_financial].[GetAccountTransfersByPeriodEnd]",
+                return await c.QuerySingleOrDefaultAsync<AccountTransferPaymentDetails>(
+                    sql: "[employer_financial].[GetTransferPaymentDetails]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
 
             return result;
+        }
+
+        public Task<IEnumerable<AccountTransfer>> GetAccountTransfersByPeriodEnd(long senderAccountId, string periodEnd)
+        {
+            throw new NotImplementedException();
         }
     }
 }
