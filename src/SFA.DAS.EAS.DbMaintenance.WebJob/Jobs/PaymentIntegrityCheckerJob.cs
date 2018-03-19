@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Jobs
                     }
                     else
                     {
-                        _logger.Debug($"All payments for account ID {account.Id} for period end {periodEnd.Id} are correct");
+                        _logger.Info($"All payments for account ID {account.Id} for period end {periodEnd.Id} are correct");
                     }
                 }
             }
