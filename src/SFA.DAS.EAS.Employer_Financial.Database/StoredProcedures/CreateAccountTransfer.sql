@@ -1,8 +1,10 @@
 ﻿CREATE PROCEDURE [employer_financial].[CreateAccountTransfer]
 	@senderAccountId bigint,
-	@recieverAccountId bigint,
+	@receiverAccountId bigint,
+	@receiverAccountName NVARCHAR(100),
 	@apprenticeshipId bigint,
-	@amount decimal,
+	@courseName varchar(max),	
+	@amount decimal(18,5),
 	@periodEnd nvarchar(20),
 	@type smallint,
 	@transferDate datetime
@@ -11,8 +13,10 @@ AS
 	INSERT INTO [employer_financial].[AccountTransfers] 
 	(
 		SenderAccountId, 
-		RecieverAccountId, 
+		ReceiverAccountId, 
+		ReceiverAccountName,
 		ApprenticeshipId, 
+		CourseName,	
 		PeriodEnd,
 		Amount, 
 		Type, 
@@ -22,8 +26,10 @@ AS
 	VALUES
 	(
 		@senderAccountId,
-		@recieverAccountId,
+		@receiverAccountId,
+		@receiverAccountName,
 		@apprenticeshipId,
+		@courseName,		
 		@periodEnd,
 		@amount,
 		@type,

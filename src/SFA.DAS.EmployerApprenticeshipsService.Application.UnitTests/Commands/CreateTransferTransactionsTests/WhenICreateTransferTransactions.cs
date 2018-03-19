@@ -21,7 +21,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
         private Mock<IValidator<CreateTransferTransactionsCommand>> _validator;
         private Mock<ITransferRepository> _transferRepository;
         private Mock<ITransactionRepository> _transactionRepository;
-        private Mock<IAccountRepository> _accountRepository;
         private Mock<ILog> _logger;
         private CreateTransferTransactionsCommand _command;
         private List<AccountTransfer> _accountTransfers;
@@ -32,7 +31,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
             _validator = new Mock<IValidator<CreateTransferTransactionsCommand>>();
             _transferRepository = new Mock<ITransferRepository>();
             _transactionRepository = new Mock<ITransactionRepository>();
-            _accountRepository = new Mock<IAccountRepository>();
             _logger = new Mock<ILog>();
 
             _accountTransfers = new List<AccountTransfer>
@@ -40,7 +38,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
                 new AccountTransfer
                 {
                     SenderAccountId = 1,
-                    RecieverAccountId = 2,
+                    ReceiverAccountId = 2,
+                    ReceiverAccountName = ReceiverAccountName,
                     ApprenticeshipId = 100,
                     Amount = 200
                 }
@@ -56,7 +55,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
                 _validator.Object,
                 _transferRepository.Object,
                 _transactionRepository.Object,
-                _accountRepository.Object,
                 _logger.Object);
 
             _validator.Setup(x => x.Validate(It.IsAny<CreateTransferTransactionsCommand>()))
@@ -64,13 +62,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
 
             _transferRepository.Setup(x => x.GetAccountTransfersByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))
                 .ReturnsAsync(_accountTransfers);
-
-            _accountRepository.Setup(x => x.GetAccountNames(It.IsAny<IEnumerable<long>>()))
-                .ReturnsAsync(new Dictionary<long, string>
-                {
-                    {2, ReceiverAccountName},
-                    {3, ReceiverAccountName}
-                });
         }
 
         [Test]
@@ -91,7 +82,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
 
             _transactionRepository.Verify(x => x.CreateTransferTransactions(
                 It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
-                    transactions.Single().ReceiverAccountId.Equals(transfer.RecieverAccountId))), Times.Once);
+                    transactions.Single().ReceiverAccountId.Equals(transfer.ReceiverAccountId))), Times.Once);
 
             _transactionRepository.Verify(x => x.CreateTransferTransactions(
                 It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
@@ -122,7 +113,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
             _accountTransfers.Add(new AccountTransfer
             {
                 SenderAccountId = 1,
-                RecieverAccountId = 2,
+                ReceiverAccountId = 2,
+                ReceiverAccountName = ReceiverAccountName,
                 ApprenticeshipId = 200,
                 Amount = 100
             });
@@ -139,7 +131,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
             _transactionRepository.Verify(x => x.CreateTransferTransactions(It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
                 transactions.Single().AccountId.Equals(transfer.SenderAccountId) &&
                 transactions.Single().Amount.Equals(expectedTotalAmount) &&
-                transactions.Single().ReceiverAccountId.Equals(transfer.RecieverAccountId))), Times.Once);
+                transactions.Single().ReceiverAccountId.Equals(transfer.ReceiverAccountId))), Times.Once);
         }
 
 
@@ -149,10 +141,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
             //Arrange
             _accountTransfers = new List<AccountTransfer>
             {
-                new AccountTransfer { SenderAccountId = 1, RecieverAccountId = 2, ApprenticeshipId = 100, Amount = 100 },
-                new AccountTransfer { SenderAccountId = 1, RecieverAccountId = 2, ApprenticeshipId = 200, Amount = 200 },
-                new AccountTransfer { SenderAccountId = 1, RecieverAccountId = 3, ApprenticeshipId = 300, Amount = 400 },
-                new AccountTransfer { SenderAccountId = 1, RecieverAccountId = 3, ApprenticeshipId = 400, Amount = 800 }
+                new AccountTransfer { SenderAccountId = 1, ReceiverAccountId = 2, ReceiverAccountName = ReceiverAccountName,
+                                      ApprenticeshipId = 100, Amount = 100 },
+
+                new AccountTransfer { SenderAccountId = 1, ReceiverAccountId = 2, ReceiverAccountName = ReceiverAccountName,
+                                      ApprenticeshipId = 200, Amount = 200 },
+
+                new AccountTransfer { SenderAccountId = 1, ReceiverAccountId = 3, ReceiverAccountName = ReceiverAccountName,
+                                      ApprenticeshipId = 300, Amount = 400 },
+
+                new AccountTransfer { SenderAccountId = 1, ReceiverAccountId = 3, ReceiverAccountName = ReceiverAccountName,
+                                      ApprenticeshipId = 400, Amount = 800 }
             };
 
             _transferRepository.Setup(x => x.GetAccountTransfersByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))
