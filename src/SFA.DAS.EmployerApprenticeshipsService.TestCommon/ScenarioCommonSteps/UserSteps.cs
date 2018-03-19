@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using MediatR;
+﻿using MediatR;
 using Moq;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser;
@@ -15,6 +13,8 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging.Interfaces;
 using StructureMap;
+using System;
+using System.Linq;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
@@ -58,6 +58,14 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ScenarioContext.Current["AccountOwnerUserRef"].ToString());
             var orchestrator = _container.GetInstance<HomeOrchestrator>();
             var user = orchestrator.GetUsers().Result.AvailableUsers.FirstOrDefault(c => c.UserRef.Equals(ScenarioContext.Current["AccountOwnerUserRef"].ToString(), StringComparison.CurrentCultureIgnoreCase));
+            return user;
+        }
+
+        public UserViewModel GetExistingUserAccount(string userRef)
+        {
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(userRef);
+            var orchestrator = _container.GetInstance<HomeOrchestrator>();
+            var user = orchestrator.GetUsers().Result.AvailableUsers.FirstOrDefault(c => c.UserRef.Equals(userRef, StringComparison.CurrentCultureIgnoreCase));
             return user;
         }
 

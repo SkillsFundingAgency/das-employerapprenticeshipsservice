@@ -8,6 +8,7 @@ using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -20,7 +21,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
     {
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent _runCompleteEvent = new ManualResetEvent(false);
-        private IContainer _container;
+        protected IContainer Container;
 
         public override void Run()
         {
@@ -29,7 +30,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
 
             try
             {
-                var processors = _container.GetAllInstances<IMessageProcessor>().ToArray();
+                var processors = Container.GetAllInstances<IMessageProcessor>().ToArray();
 
                 var processorTasks = new Task[processors.Length];
 
@@ -38,7 +39,19 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
                     processorTasks[index] = processors[index].RunAsync(_cancellationTokenSource);
                 }
 
-                Task.WaitAll(processorTasks);
+                try
+                {
+                    Task.WaitAll(processorTasks, _cancellationTokenSource.Token);
+                }
+                catch (OperationCanceledException e)
+                {
+                    Console.WriteLine(e);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
             finally
             {
@@ -58,12 +71,13 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
 
             Trace.TraceInformation("SFA.DAS.EAS.PaymentProvider.Worker has been started");
 
-            _container = new Container(c =>
+            Container = new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
                 c.Policies.Add(new ConfigurationPolicy<PaymentProviderConfiguration>("SFA.DAS.PaymentProvider"));
                 c.Policies.Add(new ConfigurationPolicy<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI"));
                 c.Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
+                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService", "1.0", new NLogLogger(typeof(TopicMessagePublisher))));
                 c.Policies.Add(new MessageSubscriberPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add(new ExecutionPolicyPolicy());

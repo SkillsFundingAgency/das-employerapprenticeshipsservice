@@ -272,18 +272,23 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             var result = await WithConnection(async c =>
             {
-                var parameters = new DynamicParameters();
+                // var parameters = new DynamicParameters();
 
-                parameters.Add("@accountIds", accountIds, DbType.Object);
+                //parameters.Add("@accountIds", accountIds, DbType.);
 
-                return await c.QueryAsync<Tuple<long, string>>(
-                    sql: "SELECT Id, Name FROM [employer_account].[Account] WHERE Id IN @accountIds",
-                    param: parameters,
-                    commandType: CommandType.Text);
+                return await c.QueryAsync<AccountNameItem>(
+                     "SELECT Id, Name FROM [employer_account].[Account] WHERE Id IN @accountIds"
+                    , new { accountIds = accountIds });
             });
 
-            //Item1 = Account Id, Item 2 = Account Name
-            return result.ToDictionary(data => data.Item1, data => data.Item2);
+            return result.ToDictionary(data => data.Id, data => data.Name);
+        }
+
+        // ReSharper disable once ClassNeverInstantiated.Local
+        private class AccountNameItem
+        {
+            public long Id { get; set; }
+            public string Name { get; set; }
         }
     }
 }

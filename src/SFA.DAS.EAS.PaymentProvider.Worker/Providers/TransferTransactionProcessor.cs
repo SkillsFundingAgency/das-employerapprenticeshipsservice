@@ -2,12 +2,14 @@
 using SFA.DAS.EAS.Application.Commands.CreateTransferTransactions;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.AzureServiceBus.Attributes;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
 {
+    [TopicSubscription("MA_TransferTransactionProcessor")]
     public class TransferTransactionProcessor : MessageProcessor<AccountTransfersProcessingCompletedMessage>
     {
         private readonly IMediator _mediator;

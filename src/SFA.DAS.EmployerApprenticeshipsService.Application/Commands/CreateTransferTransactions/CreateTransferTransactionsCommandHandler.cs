@@ -15,7 +15,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
         private readonly IValidator<CreateTransferTransactionsCommand> _validator;
         private readonly ITransferRepository _transferRepository;
         private readonly ITransactionRepository _transactionRepository;
-        private readonly IAccountRepository _accountRepository;
         private readonly ILog _logger;
 
 
@@ -23,13 +22,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
             IValidator<CreateTransferTransactionsCommand> validator,
             ITransferRepository transferRepository,
             ITransactionRepository transactionRepository,
-            IAccountRepository accountRepository,
             ILog logger)
         {
             _validator = validator;
             _transferRepository = transferRepository;
             _transactionRepository = transactionRepository;
-            _accountRepository = accountRepository;
             _logger = logger;
         }
 
@@ -48,17 +45,13 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
 
                 var accountTransfers = transfers as AccountTransfer[] ?? transfers.ToArray();
 
-                var receiverAccountIds = accountTransfers.Select(x => x.RecieverAccountId);
-
-                var transferReceiverAccountName = await _accountRepository.GetAccountNames(receiverAccountIds);
-
-                var receiverTransfers = accountTransfers.GroupBy(t => t.RecieverAccountId).ToArray();
+                var receiverTransfers = accountTransfers.GroupBy(t => t.ReceiverAccountId).ToArray();
 
                 var transactions = receiverTransfers.Select(t =>
                 {
-                    var receiverAccountId = t.Key;
-                    var receiverAccountName = transferReceiverAccountName[t.Key];
                     var groupTransfers = t.ToArray();
+                    var receiverAccountId = t.Key;
+                    var receiverAccountName = groupTransfers.First().ReceiverAccountName;
 
                     return new TransferTransactionLine
                     {

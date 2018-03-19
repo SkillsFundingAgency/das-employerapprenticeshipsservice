@@ -17,21 +17,22 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
         private readonly IValidator<RefreshAccountTransfersCommand> _validator;
         private readonly IPaymentService _paymentService;
         private readonly ITransferRepository _transferRepository;
+        private readonly IAccountRepository _accountRepository;
         private readonly IMessagePublisher _messagePublisher;
         private readonly ILog _logger;
-
 
         public RefreshAccountTransfersCommandHandler(
             IValidator<RefreshAccountTransfersCommand> validator,
             IPaymentService paymentService,
             ITransferRepository transferRepository,
+            IAccountRepository accountRepository,
             IMessagePublisher messagePublisher,
             ILog logger)
         {
-
             _validator = validator;
             _paymentService = paymentService;
             _transferRepository = transferRepository;
+            _accountRepository = accountRepository;
             _messagePublisher = messagePublisher;
             _logger = logger;
         }
@@ -51,6 +52,10 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
 
                 var transfers = paymentTransfers.ToArray();
 
+                var transferReceiverIds = transfers.Select(t => t.ReceiverAccountId).Distinct();
+
+                var transferReceiverAccountNames = await _accountRepository.GetAccountNames(transferReceiverIds);
+
                 //TODO: Check for transfers that already exist in database
 
                 foreach (var transfer in transfers)
@@ -59,8 +64,9 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
 
                     var paymentDetails = await _transferRepository.GetTransferPaymentDetails(transfer);
 
-                    transfer.CourseName = paymentDetails.CourseName;
+                    transfer.CourseName = paymentDetails.CourseName ?? "Unknown Course";
                     transfer.ApprenticeCount = paymentDetails.ApprenticeCount;
+                    transfer.ReceiverAccountName = transferReceiverAccountNames[transfer.ReceiverAccountId];
 
                     if (transfer.Amount != paymentDetails.PaymentTotal)
                         _logger.Warn("Transfer total does not match transfer payments total");

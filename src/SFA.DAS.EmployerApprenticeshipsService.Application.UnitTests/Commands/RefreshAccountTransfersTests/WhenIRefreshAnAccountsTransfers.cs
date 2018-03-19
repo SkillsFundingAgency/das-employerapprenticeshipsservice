@@ -19,10 +19,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
 {
     public class WhenIRefreshAnAccountsTransfers
     {
+        private const string ReceiverAccountName = "Receiver Account";
+
         private RefreshAccountTransfersCommandHandler _handler;
         private Mock<IValidator<RefreshAccountTransfersCommand>> _validator;
         private Mock<IPaymentService> _paymentService;
         private Mock<ITransferRepository> _transferRepository;
+        private Mock<IAccountRepository> _accountRepository;
         private Mock<ILog> _logger;
         private ICollection<AccountTransfer> _transfers;
         private RefreshAccountTransfersCommand _command;
@@ -36,6 +39,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
             _validator = new Mock<IValidator<RefreshAccountTransfersCommand>>();
             _paymentService = new Mock<IPaymentService>();
             _transferRepository = new Mock<ITransferRepository>();
+            _accountRepository = new Mock<IAccountRepository>();
             _messagePublisher = new Mock<IMessagePublisher>();
             _logger = new Mock<ILog>();
 
@@ -46,16 +50,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
                 PaymentTotal = 1200
             };
 
+            var accountTransfer = new AccountTransfer
+            {
+                SenderAccountId = 12,
+                ReceiverAccountId = 32,
+                ApprenticeshipId = 1245,
+                Amount = 1200,
+                TransferDate = DateTime.Now
+            };
+
             _transfers = new List<AccountTransfer>
             {
-                new AccountTransfer
-                {
-                    SenderAccountId = 12,
-                    RecieverAccountId = 32,
-                    ApprenticeshipId = 1245,
-                    Amount = 1200,
-                    TransferDate = DateTime.Now
-                }
+                accountTransfer
             };
 
             _command = new RefreshAccountTransfersCommand
@@ -68,6 +74,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
                 _validator.Object,
                 _paymentService.Object,
                 _transferRepository.Object,
+                _accountRepository.Object,
                 _messagePublisher.Object,
                 _logger.Object);
 
@@ -79,6 +86,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
 
             _transferRepository.Setup(x => x.GetTransferPaymentDetails(It.IsAny<AccountTransfer>()))
                 .ReturnsAsync(_paymentDetails);
+
+            _accountRepository.Setup(x => x.GetAccountNames(It.IsAny<IEnumerable<long>>()))
+                .ReturnsAsync(new Dictionary<long, string>
+                {
+                    {accountTransfer.ReceiverAccountId, ReceiverAccountName}
+                });
         }
 
         [Test]
@@ -249,6 +262,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
                 transfers =>
                     transfers.All(t => t.CourseName.Equals(_paymentDetails.CourseName) &&
                                        t.ApprenticeCount.Equals(_paymentDetails.ApprenticeCount)))), Times.Once);
+        }
+
+        [Test]
+
+        public async Task ThenATransferShouldBeCreatedWithTheCorrectReceiverAccountName()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _transferRepository.Verify(x => x.CreateAccountTransfers(It.Is<IEnumerable<AccountTransfer>>(
+                transfers =>
+                    transfers.All(t => t.ReceiverAccountName.Equals(ReceiverAccountName)))), Times.Once);
         }
 
         [Test]

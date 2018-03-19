@@ -69,9 +69,27 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return populatedPayments;
         }
 
-        public Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long employerAccountId)
+        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long employerAccountId)
         {
-            throw new NotImplementedException();
+            var pageOfTransfers = await _paymentsEventsApiClient.GetAccountTransfers(periodEnd, employerAccountId);
+
+            var transfers = new List<AccountTransfer>();
+
+            foreach (var item in pageOfTransfers.Items)
+            {
+                transfers.Add(new AccountTransfer
+                {
+                    SenderAccountId = item.SenderAccountId,
+                    ReceiverAccountId = item.ReceiverAccountId,
+                    PeriodEnd = periodEnd,
+                    Amount = item.Amount,
+                    ApprenticeshipId = item.CommitmentId,
+                    Type = (AccountTransferType)item.Type,
+                    TransferDate = item.TransferDate
+                });
+            }
+
+            return transfers;
         }
 
         private async Task GetCourseDetails(PaymentDetails payment)
@@ -181,7 +199,6 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 return null;
             });
         }
-
 
         private async Task<Standard> GetStandard(long standardCode)
         {

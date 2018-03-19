@@ -4,11 +4,12 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.TestCommon.ScenarioCommonSteps;
+using SFA.DAS.EAS.TestCommon.TestModels;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -16,6 +17,7 @@ using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging.Interfaces;
 using StructureMap;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using TechTalk.SpecFlow;
@@ -25,7 +27,8 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
     [Binding]
     public class AccountCreationSteps
     {
-        private IContainer _container;
+        public IContainer Container { get; }
+
         private Mock<IMessagePublisher> _messagePublisher;
         private Mock<IAuthenticationService> _owinWrapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
@@ -48,28 +51,87 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
             _validator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountPayeSchemesQuery>()))
                 .ReturnsAsync(new ValidationResult());
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi, _commitmentsApi);
+            Container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi, _commitmentsApi);
 
-            _container.Inject(_validator.Object);
+            Container.Inject(_validator.Object);
 
-            _testData = new PaymentTestData(_container);
+            _testData = new PaymentTestData(Container);
         }
 
         [Given(@"I have an account")]
         public void GivenIHaveAnAccount()
         {
-            CreateAccountWithOwner();
+            var user = CreateUser();
 
-            SetAccountIdForUser();
+            ScenarioContext.Current["AccountOwnerUserRef"] = user.UserRef;
+            ScenarioContext.Current["AccountOwnerUserId"] = user.Id;
+            ScenarioContext.Current["ExternalUserId"] = user.UserRef;
 
-            //Create a new user with passed in role
+            var account = CreateAccount(user);
 
-            _externalUserId = Guid.NewGuid().ToString();
-            ScenarioContext.Current["ExternalUserId"] = _externalUserId;
-
-            CreateUserWithRole("Owner");
+            _testData.AccountId = account?.Id ?? default(long);
+            ScenarioContext.Current["AccountId"] = account?.Id;
+            ScenarioContext.Current["HashedAccountId"] = account?.HashedId;
         }
-        public static void CreateDasAccount(UserViewModel userView, EmployerAccountOrchestrator orchestrator)
+
+        public TestUser CreateAccount()
+        {
+            var user = CreateUser();
+            var account = CreateAccount(user);
+
+            return new TestUser
+            {
+                Id = user.Id,
+                UserRef = user.UserRef,
+                Accounts = new List<TestAccount>
+                {
+                    new TestAccount
+                    {
+                        Id = account.Id,
+                        HashedId = account.HashedId,
+                        Name = account.Name
+                    }
+                }
+            };
+        }
+
+        private UserViewModel CreateUser()
+        {
+            var userRef = Guid.NewGuid().ToString();
+
+            var signInUserModel = new UserViewModel
+            {
+                UserRef = userRef,
+                Email = "accountowner@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
+                FirstName = "Test",
+                LastName = "Tester"
+            };
+
+            var userCreationSteps = new UserSteps();
+
+            userCreationSteps.UpsertUser(signInUserModel);
+
+            return userCreationSteps.GetExistingUserAccount(userRef);
+        }
+
+        private Account CreateAccount(UserViewModel owner)
+        {
+            CreateDasAccount(owner, Container.GetInstance<EmployerAccountOrchestrator>());
+
+            var account = GetUserAccounts(owner).FirstOrDefault();
+
+            return account;
+        }
+
+        private IEnumerable<Account> GetUserAccounts(UserViewModel user)
+        {
+            var mediator = Container.GetInstance<IMediator>();
+            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { UserRef = user.UserRef }).Result;
+
+            return getUserAccountsQueryResponse.Accounts.AccountList;
+        }
+
+        private static void CreateDasAccount(UserViewModel userView, EmployerAccountOrchestrator orchestrator)
         {
             orchestrator.CreateAccount(new CreateAccountViewModel
             {
@@ -83,70 +145,6 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
                 OrganisationAddress = "Address Line 1",
                 OrganisationStatus = "active"
             }, new Mock<HttpContextBase>().Object).Wait();
-        }
-
-        private void CreateUserWithRole(string accountRole)
-        {
-            var accountId = (long)ScenarioContext.Current["AccountId"];
-            Role roleOut;
-            Enum.TryParse(accountRole, out roleOut);
-
-            var signInModel = new UserViewModel
-            {
-                Email = "test@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
-                FirstName = "test",
-                LastName = "tester",
-                UserRef = _externalUserId
-            };
-            var userCreation = new UserSteps();
-            userCreation.UpsertUser(signInModel);
-
-            userCreation.CreateUserWithRole(
-                new User
-                {
-                    Email = signInModel.Email,
-                    FirstName = signInModel.FirstName,
-                    LastName = signInModel.LastName,
-                    UserRef = _externalUserId
-                }, roleOut, accountId);
-        }
-
-        private void CreateAccountWithOwner()
-        {
-            var accountOwnerUserId = Guid.NewGuid().ToString();
-
-            ScenarioContext.Current["AccountOwnerUserRef"] = accountOwnerUserId;
-
-            var signInUserModel = new UserViewModel
-            {
-                UserRef = accountOwnerUserId,
-                Email = "accountowner@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
-                FirstName = "Test",
-                LastName = "Tester"
-            };
-
-            var userCreationSteps = new UserSteps();
-
-            userCreationSteps.UpsertUser(signInUserModel);
-
-            var user = userCreationSteps.GetExistingUserAccount();
-
-            CreateDasAccount(user, _container.GetInstance<EmployerAccountOrchestrator>());
-
-            ScenarioContext.Current["AccountOwnerUserId"] = user.Id;
-        }
-
-        private void SetAccountIdForUser()
-        {
-            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
-            var mediator = _container.GetInstance<IMediator>();
-            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { UserRef = accountOwnerId }).Result;
-
-            var account = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault();
-
-            _testData.AccountId = account?.Id ?? default(long);
-
-            ScenarioContext.Current["HashedAccountId"] = account.HashedId;
         }
     }
 }
