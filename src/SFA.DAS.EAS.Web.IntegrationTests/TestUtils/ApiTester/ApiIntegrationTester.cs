@@ -190,6 +190,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
             container.Configure(c =>
             {
+                c.For<IPublicHashingService>().Use(Mock.Of<IPublicHashingService>());
                 c.For<IUserRepository>().Use<UserRepository>();
                 c.For<IRequestContext>().Use(requestContextMock.Object);
                 c.For<IPublicHashingService>().Use(Mock.Of<IPublicHashingService>());
