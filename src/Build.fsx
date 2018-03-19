@@ -16,7 +16,7 @@ open Fake
 
 "Set version number"
    ==>"Set Solution Name"
-   ==>"Update Assembly Info Version Numbers"
+   ==>"Custom Update Assembly Info Version Numbers"
    ==>"Clean Directories"
    ==>"Dotnet Restore"
    ==>"Build Projects"
