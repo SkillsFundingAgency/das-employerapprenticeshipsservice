@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 {
@@ -48,22 +49,22 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 
             var toDate = CalculateToDate(message);
             var fromDate = new DateTime(toDate.Year, toDate.Month, 1);
-            
+
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             var transactions = await _dasLevyService.GetAccountTransactionsByDateRange(accountId, fromDate, toDate);
 
             var hasPreviousTransactions = await _dasLevyService.GetPreviousAccountTransaction(accountId, fromDate) > 0;
-            
+
             if (!transactions.Any())
             {
                 return GetResponse(message.HashedAccountId, accountId, hasPreviousTransactions, toDate.Year, toDate.Month);
             }
-            
+
             foreach (var transaction in transactions)
             {
                 GenerateTransactionDescription(transaction);
             }
-            
+
             return GetResponse(message.HashedAccountId, accountId, transactions, hasPreviousTransactions, toDate.Year, toDate.Month);
         }
 
@@ -89,6 +90,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 var paymentTransaction = (PaymentTransactionLine)transaction;
 
                 transaction.Description = GetPaymentTransactionDescription(paymentTransaction);
+            }
+            else if (transaction.GetType() == typeof(TransferTransactionLine))
+            {
+                var transferTransaction = (TransferTransactionLine)transaction;
+                transaction.Description = $"Transfer sent to {transferTransaction.ReceiverAccountName}";
             }
         }
 

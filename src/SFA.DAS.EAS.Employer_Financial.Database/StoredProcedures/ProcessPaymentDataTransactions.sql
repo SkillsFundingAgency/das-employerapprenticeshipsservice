@@ -19,7 +19,9 @@ select mainUpdate.* from
             x.Ukprn,
             Sum(ISNULL(pco.Amount, 0)) * -1 as SfaCoInvestmentAmount,
             Sum(ISNULL(pci.Amount, 0)) * -1 as EmployerCoInvestmentAmount,
-			0 as EnglishFraction
+			0 as EnglishFraction,
+			null as TransferReceiverAccountId,
+			null as TransferReceiverAccountName
         FROM 
             employer_financial.[Payment] x
 		inner join [employer_financial].[PeriodEnd] pe 

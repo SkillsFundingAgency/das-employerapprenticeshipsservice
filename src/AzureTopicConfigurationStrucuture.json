@@ -85,6 +85,6 @@
   },
   {
     "topicName": "account_transfers_created",
-    "subscription": [ "" ]
+    "subscription": [ "MA_TransferTransactionProcessor" ]
   }
 ]

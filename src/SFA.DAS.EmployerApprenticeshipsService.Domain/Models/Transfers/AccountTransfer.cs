@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Domain.Models.Transfers
     public class AccountTransfer
     {
         public long SenderAccountId { get; set; }
-        public long RecieverAccountId { get; set; }
+        public long ReceiverAccountId { get; set; }
         public string ReceiverAccountName { get; set; }
         public long ApprenticeshipId { get; set; }
         public string CourseName { get; set; }

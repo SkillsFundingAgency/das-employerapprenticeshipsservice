@@ -56,7 +56,9 @@ select mainUpdate.* from
 			null as Ukprn,
 			0 as SfaCoInvestmentAmount,
 			0 as EmployerCoInvestmentAmount,
-			x.EnglishFraction
+			x.EnglishFraction,
+			null as TransferReceiverAccountId,
+			null as TransferReceiverAccountName
 		FROM 
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		where
@@ -75,7 +77,9 @@ select mainUpdate.* from
 			null as Ukprn,
 			0 as SfaCoInvestmentAmount,
 			0 as EmployerCoInvestmentAmount,
-			NULL AS EnglishFraction
+			NULL AS EnglishFraction,
+			null as TransferReceiverAccountId,
+			null as TransferReceiverAccountName
 		FROM 
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		inner join

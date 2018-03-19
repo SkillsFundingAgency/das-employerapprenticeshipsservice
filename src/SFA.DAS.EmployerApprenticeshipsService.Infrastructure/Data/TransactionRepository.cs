@@ -174,7 +174,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             await WithConnection(async c =>
             {
-                var trans = c.BeginTransaction();
+                //var trans = c.BeginTransaction();
 
                 try
                 {
@@ -193,10 +193,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                         var result = await c.ExecuteAsync(
                             sql: "[employer_financial].[CreateAccountTransferTransactions]",
                             param: parameters,
-                            commandType: CommandType.StoredProcedure, transaction: trans);
+                            commandType: CommandType.StoredProcedure);//, transaction: trans);
                     }
 
-                    trans.Commit();
+                    // trans.Commit();
                 }
                 catch (Exception ex)
                 {
@@ -223,6 +223,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
                     case TransactionItemType.Payment:
                         transactions.Add(_mapper.Map<PaymentTransactionLine>(entity));
+                        break;
+
+                    case TransactionItemType.Transfer:
+                        transactions.Add(_mapper.Map<TransferTransactionLine>(entity));
                         break;
 
                     case TransactionItemType.Unknown:
