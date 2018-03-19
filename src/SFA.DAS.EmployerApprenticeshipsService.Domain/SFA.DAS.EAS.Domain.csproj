@@ -310,7 +310,6 @@
     <Compile Include="Models\AccountTeam\Membership.cs" />
     <Compile Include="Models\AccountTeam\MembershipView.cs" />
     <Compile Include="Interfaces\IPaymentService.cs" />
-    <Compile Include="Models\Payments\PaymentEntry.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentDetails.cs" />
     <Compile Include="Models\FeatureToggles\FeatureToggle.cs" />
