@@ -37,7 +37,6 @@ INSERT INTO #output (
 		Total
 	) 
 
-
 SELECT DateCreated,
 	tlt.[Description],
 	tl.EmpRef,
@@ -45,7 +44,7 @@ SELECT DateCreated,
 	ld.PayrollMonth,
 	LevyDeclared,
 	EnglishFraction,
-	tl.Amount - LevyDeclared AS TenPercentTopUp,
+	tl.Amount - (LevyDeclared * EnglishFraction) AS TenPercentTopUp,
 	tl.Amount
 FROM [employer_financial].TransactionLine tl
 LEFT JOIN [employer_financial].[TransactionLineTypes] tlt ON tlt.TransactionType = IIF(Amount >= 0, 1, 2)
