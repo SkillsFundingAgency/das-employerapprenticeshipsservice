@@ -6,26 +6,18 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
     [TestFixture]
     public class WhenIProvideSeveralFeatures
     {
-        private FeatureToggleCollection BuildToggledFeatures(int requiredFeatures)
-        {
-            var featureConfig = FeatureToggleCollectionBuilder.Create();
-            for (int i = 0; i < requiredFeatures; i++)
-            {
-                var feature = FeatureToggleBuilder.Create($"feature-{i}").WithControllerAction("ToggledController-{i}", "index");
-                featureConfig.WithFeature(feature);
-            }
-            return featureConfig;
-        }
-
         [Test]
         public void ThenFeatureShouldBeSubjectToAToggle()
         {
             // arrange
-            var featureConfig = BuildToggledFeatures(3);
-            var ftc = new Infrastructure.Services.FeatureToggle.FeatureToggleCache(featureConfig);
+            var fixtures = new ToggleFeatureTestFixtures()
+                .WithFeature((Feature) 0, "controller1.index")
+                .WithFeature((Feature) 1, "controller2.index");
+
+            var ftc = fixtures.CreateFixtureCache();
 
             // act
-            var isControllerSubjectToToggle = ftc.IsControllerSubjectToFeatureToggle(featureConfig.Features[0].Actions[0].Controller);
+            var isControllerSubjectToToggle = ftc.IsControllerSubjectToFeatureToggle("controller1");
 
             // assert
             Assert.IsTrue(isControllerSubjectToToggle);
@@ -35,13 +27,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         public void ThenActionShouldBeSubjectToAToggle()
         {
             // arrange
-            var featureConfig = BuildToggledFeatures(3);
-            var ftc = new Infrastructure.Services.FeatureToggle.FeatureToggleCache(featureConfig);
+            var fixtures = new ToggleFeatureTestFixtures()
+                .WithFeature((Feature)0, "controller1.index")
+                .WithFeature((Feature)1, "controller2.index");
+
+            var ftc = fixtures.CreateFixtureCache();
 
             // act
-            var controller = featureConfig.Features[0].Actions[0].Controller;
-            var action = featureConfig.Features[0].Actions[0].Action;
-            var isControllerSubjectToToggle = ftc.TryGetControllerActionSubjectToToggle(controller, action, out _);
+            var isControllerSubjectToToggle = ftc.TryGetControllerActionSubjectToToggle("controller1", "index", out _);
 
             // assert
             Assert.IsTrue(isControllerSubjectToToggle);

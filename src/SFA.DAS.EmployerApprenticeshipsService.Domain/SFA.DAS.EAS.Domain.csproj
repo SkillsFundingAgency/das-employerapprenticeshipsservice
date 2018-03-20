@@ -238,6 +238,7 @@
     <Compile Include="Models\EmployerAgreement\RemoveEmployerAgreementView.cs" />
     <Compile Include="Models\EmployerAgreement\SignEmployerAgreement.cs" />
     <Compile Include="Models\Entity.cs" />
+    <Compile Include="Models\FeatureToggles\Feature.cs" />
     <Compile Include="Models\FeatureToggles\OperationContext.cs" />
     <Compile Include="Models\IEntity.cs" />
     <Compile Include="Models\FeatureToggles\ControllerAction.cs" />

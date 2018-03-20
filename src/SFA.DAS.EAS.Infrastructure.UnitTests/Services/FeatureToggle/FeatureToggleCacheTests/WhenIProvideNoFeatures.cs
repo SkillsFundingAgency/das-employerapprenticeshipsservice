@@ -1,5 +1,10 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using System.Linq;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Moq;
+using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
+using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureToggleCacheTests
 {
@@ -10,7 +15,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         public void ThenNoFeaturesShouldBeSubjectToAToggle()
         {
             // arrange
-            var ftc = new Infrastructure.Services.FeatureToggle.FeatureToggleCache(FeatureToggleCollectionBuilder.Create());
+            var fixtures = new ToggleFeatureTestFixtures();
+            var ftc = new Infrastructure.Services.FeatureToggle.FeatureToggleCache(fixtures.FeatureToggleCollection, fixtures.ControllerMetaDataService);
 
             // act
             var isControllerSubjectToToggle = ftc.IsControllerSubjectToFeatureToggle("foo");
@@ -23,7 +29,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         public void ThenNoActionShouldBeSubjectToAToggle()
         {
             // arrange
-            var ftc = new Infrastructure.Services.FeatureToggle.FeatureToggleCache(FeatureToggleCollectionBuilder.Create());
+            var fixtures = new ToggleFeatureTestFixtures();
+            var ftc = new Infrastructure.Services.FeatureToggle.FeatureToggleCache(fixtures.FeatureToggleCollection, fixtures.ControllerMetaDataService);
 
             // act
             var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToToggle("foo", "action", out _);
@@ -59,41 +66,81 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         }
     }
 
-    internal static class FeatureToggleCollectionBuilder
+    public class ToggleFeatureTestFixtures
     {
-        public static FeatureToggleCollection Create()
+        public ToggleFeatureTestFixtures()
         {
-            return new FeatureToggleCollection();
+            ControllerMetaDataServiceMock = new Mock<IControllerMetaDataService>();    
+            FeatureToggleCollection = new FeatureToggleCollection();
         }
 
-        public static FeatureToggleCollection WithFeature(this FeatureToggleCollection featureToggleCollection,
-            Domain.Models.FeatureToggles.FeatureToggle featureToggle)
-        {
-            featureToggleCollection.Features.Add(featureToggle);
-            return featureToggleCollection;
-        }
-    }
+        public IControllerMetaDataService ControllerMetaDataService => ControllerMetaDataServiceMock.Object;
+        public Mock<IControllerMetaDataService> ControllerMetaDataServiceMock { get; }
 
-    internal static class FeatureToggleBuilder
-    { 
-        public static Domain.Models.FeatureToggles.FeatureToggle Create(string name)
-        {
-            var newFeature = new Domain.Models.FeatureToggles.FeatureToggle { Name = name };
-            return newFeature;
-        }
+        public FeatureToggleCollection FeatureToggleCollection { get; set; }
 
-        public static Domain.Models.FeatureToggles.FeatureToggle WithControllerAction(this Domain.Models.FeatureToggles.FeatureToggle featureToggle, string controller, string action)
+        public ToggleFeatureTestFixtures WithFeature(Feature feature, params string[] actions)
         {
-            featureToggle.Actions.Add(new ControllerAction {Controller = controller, Action = action});
-            return featureToggle;
+            return WithWhiteListedFeature(feature, null, actions);
         }
 
 
-        public static Domain.Models.FeatureToggles.FeatureToggle WithWhitelistedEmail(this Domain.Models.FeatureToggles.FeatureToggle featureToggle, string whitelistedEmail)
+        public ToggleFeatureTestFixtures WithWhiteListedFeature(Feature feature, string whitelistedEmail, params string[] actions)
         {
-            featureToggle.Whitelist.Emails.Add(whitelistedEmail);
+            var controllerActions = actions.Select(action =>
+            {
+                var parts = action.Split('.');
 
-            return featureToggle;
+                return new ControllerAction(parts[0], parts[1]);
+            }).ToArray();
+
+            ControllerMetaDataServiceMock
+                .Setup(svc => svc.GetControllerMethodsLinkedToAFeature(feature))
+                .Returns(controllerActions);
+
+            AddFeature(feature, whitelistedEmail);
+
+            return this;
+        }
+
+        public ToggleFeatureTestFixtures BuildToggledFeatures(int requiredFeatures, params string[] actions)
+        {
+            for (int i = 0; i < requiredFeatures; i++)
+            {
+                WithWhiteListedFeature((Feature) i, $"email-{i}", actions);
+            }
+
+            return this;
+        }
+
+        public ToggleFeatureTestFixtures AddFeature(Feature feature, string whitelistedEmail)
+        {
+            var newFeatureToggle = new Domain.Models.FeatureToggles.FeatureToggle
+            {
+                Feature = feature,
+                Enabled = true,
+                Name = feature.ToString()
+            };
+
+            FeatureToggleCollection.Features.Add(newFeatureToggle);
+
+            if (whitelistedEmail != null)
+            {
+                newFeatureToggle.Whitelist.Emails.Add(whitelistedEmail);
+            }
+
+            return this;
+        }
+
+        public ToggleFeatureTestFixtures AddFeature(Feature feature)
+        {
+            AddFeature(feature, null);
+            return this;
+        }
+
+        public FeatureToggleCache CreateFixtureCache()
+        {
+            return new Infrastructure.Services.FeatureToggle.FeatureToggleCache(FeatureToggleCollection, ControllerMetaDataService);
         }
     }
 }

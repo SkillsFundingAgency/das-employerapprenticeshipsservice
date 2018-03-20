@@ -9,13 +9,16 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
     {
         private readonly HashSet<string> _toggledControllers;
         private readonly Dictionary<string, ControllerActionCacheItem> _controllerActions;
+        private readonly IControllerMetaDataService _controllerMetaDataService;
 
-
-        public FeatureToggleCache(FeatureToggleCollection featureToggleCollection)
+        public FeatureToggleCache(
+            FeatureToggleCollection featureToggleCollection, 
+            IControllerMetaDataService controllerMetaDataService)
         {
+            _controllerMetaDataService = controllerMetaDataService;
+
             _toggledControllers = BuildControllerNamesCache(featureToggleCollection);
             _controllerActions = BuildControllerActionsCache(featureToggleCollection);
-
             IsAvailable = featureToggleCollection?.Features?.Count != null;
         }
 
@@ -23,12 +26,14 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
 
         public bool IsControllerSubjectToFeatureToggle(string controllerName)
         {
-            return _toggledControllers.Contains(controllerName);
+            return _toggledControllers.Contains(ControllerAction.StripController(controllerName));
         }
 
         public bool TryGetControllerActionSubjectToToggle(string controllerName, string actionName, out ControllerActionCacheItem controllerAction)
         {
             controllerAction = null;
+
+            controllerName = ControllerAction.StripController(controllerName);
 
             if (!IsControllerSubjectToFeatureToggle(controllerName))
             {
@@ -46,8 +51,10 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
             {
                 var controllerNames = featureToggleCollection
                                         .Features
-                                        .SelectMany(feature => feature.Actions)
-                                        .Select(a => a.Controller).Distinct();
+                                        .SelectMany(feature => _controllerMetaDataService.GetControllerMethodsLinkedToAFeature(feature.Feature))
+                                        .Select(a => a.Controller)
+                                        .Distinct();
+
                 foreach (var controllerName in controllerNames)
                 {
                     result.Add(controllerName);
@@ -63,25 +70,25 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
 
             if (featureToggleCollection?.Features != null)
             {
-                for (int i = 0; i < featureToggleCollection.Features.Count; i++)
+                foreach (var feature in featureToggleCollection.Features)
                 {
-                    var feature = featureToggleCollection.Features[i];
-                    for (int j = 0; j < feature.Actions.Count; j++)
+                    var controllerActionsForThisFeature =
+                        _controllerMetaDataService.GetControllerMethodsLinkedToAFeature(feature.Feature);
+
+                    foreach (var action in controllerActionsForThisFeature)
                     {
-                        var action = feature.Actions[j];
                         var cachedItem = Ensure(temp, action);
                         cachedItem.WhiteLists.Add(feature.Whitelist);
                     }
                 }
             }
+
             return temp;
         }
 
         private ControllerActionCacheItem Ensure(Dictionary<string, ControllerActionCacheItem> cache, ControllerAction action)
         {
-            ControllerActionCacheItem result;
-
-            if (!cache.TryGetValue(action.QualifiedName, out result))
+            if (!cache.TryGetValue(action.QualifiedName, out var result))
             {
                 result = new ControllerActionCacheItem(action.Controller, action.Action);
                 cache.Add(action.QualifiedName, result);
