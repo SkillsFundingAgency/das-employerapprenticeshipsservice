@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 
             _validator = new Mock<IValidator<RefreshPaymentDataCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<RefreshPaymentDataCommand>()))
-                      .Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> ()});
+                      .Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
 
             _dasLevyRepository = new Mock<IDasLevyRepository>();
             _dasLevyRepository.Setup(x => x.GetAccountPaymentIds(It.IsAny<long>()))
@@ -77,10 +77,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             _mapper = new Mock<IMapper>();
             _handler = new RefreshPaymentDataCommandHandler(
                 _messagePublisher.Object,
-                _validator.Object, 
-                _paymentService.Object, 
-                _dasLevyRepository.Object, 
-                _mediator.Object, 
+                _validator.Object,
+                _paymentService.Object,
+                _dasLevyRepository.Object,
+                _mediator.Object,
                 _logger.Object,
                 _mapper.Object);
         }
@@ -100,8 +100,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         {
             //Arrange
             _validator.Setup(x => x.Validate(It.IsAny<RefreshPaymentDataCommand>()))
-                      .Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
-            
+                      .Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
+
             //Act Assert
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new RefreshPaymentDataCommand()));
         }
@@ -111,11 +111,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         {
             //Act
             await _handler.Handle(_command);
-            
+
             //Assert
             _paymentService.Verify(x => x.GetAccountPayments(_command.PeriodEnd, _command.AccountId));
         }
-        
+
         [Test]
         public async Task ThenTheRepositoryIsNotCalledIfTheCommandIsValidAndThereAreNotPayments()
         {
@@ -138,7 +138,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             //Assert
             _dasLevyRepository.Verify(x => x.CreatePaymentData(_paymentDetails), Times.Once);
         }
-        
+
         [Test]
         public async Task ThenTheEventIsCalledToUpdateTheDeclarationDataWhenNewPaymentsHaveBeenCreated()
         {
@@ -218,24 +218,26 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.Is<IEnumerable<PaymentDetails>>(s => 
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.Is<IEnumerable<PaymentDetails>>(s =>
                 s.Any(p => p.Id.Equals(newPaymentGuid.ToString())) &&
                 s.Count() == 1)));
 
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Once);
         }
-        
+
         [Test]
         public async Task ThenAnPaymentCreatedMessageIsCreated()
         {
             //Arrange
             var expectedPayment = _paymentDetails.First();
-            _mapper.Setup(x => x.Map(It.IsAny<PaymentDetails>(),It.IsAny<PaymentCreatedMessage>())).Callback<PaymentDetails, PaymentCreatedMessage>(
-                (payment, message) =>
-                {
-                    message.ProviderName = payment.ProviderName;
-                    message.Amount = payment.Amount;
-                });
+            var createdEvent = new PaymentCreatedMessage
+            {
+                ProviderName = expectedPayment.ProviderName,
+                Amount = expectedPayment.Amount
+            };
+            _mapper.Setup(x => x.Map<PaymentDetails, PaymentCreatedMessage>(It.IsAny<PaymentDetails>()))
+                .Returns(createdEvent);
+
             //Act
             await _handler.Handle(new RefreshPaymentDataCommand());
 

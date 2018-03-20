@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Infrastructure.Mapping.Profiles
     {
         public LevyDeclarationMappings()
         {
-            CreateMap<LevyDeclarationView, LevySchemeDeclarationUpdatedMessage>();
+            CreateMap<LevyDeclarationView, LevyDeclarationProcessedEvent>();
         }
     }
 }

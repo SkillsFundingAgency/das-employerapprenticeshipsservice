@@ -4,8 +4,8 @@ using SFA.DAS.Messaging.Attributes;
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     [Serializable]
-    [MessageGroup("levy_scheme_declaration_updated")]
-    public class LevySchemeDeclarationUpdatedMessage: AccountMessageBase
+    [MessageGroup("levy_declaration_processed")]
+    public class LevyDeclarationProcessedEvent: AccountMessageBase
     {
         public long Id { get; set; }
         public string EmpRef { get; set; }
@@ -22,8 +22,8 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public decimal TotalAmount { get; set; }
         public decimal LevyDeclaredInMonth { get; set; }
 
-        public LevySchemeDeclarationUpdatedMessage(): base(0, null, null) { }
-        public LevySchemeDeclarationUpdatedMessage(long accountId, string creatorName, string creatorUserRef)
+        public LevyDeclarationProcessedEvent(): base(0, null, null) { }
+        public LevyDeclarationProcessedEvent(long accountId, string creatorName, string creatorUserRef)
             : base(accountId, creatorName, creatorUserRef) { }
     }
 }

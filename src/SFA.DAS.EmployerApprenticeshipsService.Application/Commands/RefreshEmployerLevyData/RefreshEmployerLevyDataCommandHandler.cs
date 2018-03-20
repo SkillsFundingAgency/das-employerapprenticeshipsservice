@@ -167,7 +167,13 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
                     x.PayrollMonth
                 }).Distinct();
 
-            var tasks = periodsChanged.Select(x => CreateDeclarationUpdatedGenericEvent(hashedAccountId, x.PayrollYear, x.PayrollMonth));
+
+            var tasks = new List<Task>();
+            foreach (var x in periodsChanged)
+            {
+                tasks.Add(CreateDeclarationUpdatedGenericEvent(hashedAccountId, x.PayrollYear, x.PayrollMonth));
+                tasks.Add(PublishDeclarationUpdatedEventMessage(accountId, x.PayrollYear, x.PayrollMonth));
+            }
             await Task.WhenAll(tasks);
         }
 
@@ -177,29 +183,22 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
             var genericEvent = _genericEventFactory.Create(declarationUpdatedEvent);
 
             await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
-            await PublishDeclarationUpdatedEventMessage(hashedAccountId, payrollYear, payrollMonth);
         }
 
-        private async Task PublishDeclarationUpdatedEventMessage(string hashedAccountId, string payrollYear, short? payrollMonth)
+        private async Task PublishDeclarationUpdatedEventMessage(long accountId, string payrollYear, short? payrollMonth)
         {
             if (!payrollMonth.HasValue)
                 return;
 
             try
             {
-                var accountId = _hashingService.DecodeValue(hashedAccountId);
                 var dasLevyDeclarations = await _dasLevyRepository.GetAccountLevyDeclarations(accountId, payrollYear, payrollMonth.Value);
-                if (!dasLevyDeclarations?.Any() ?? true)
-                {
-                    _logger.Warn($"No levy declarations found for account: {accountId}, payroll year: {payrollYear}, month: {payrollMonth}");
-                    return;
-                }
                 foreach (var levyDeclarationView in dasLevyDeclarations)
                 {
                     try
                     {
                         var levySchemeDeclarationUpdatedEvent =
-                            new LevySchemeDeclarationUpdatedMessage(accountId, null, null);
+                            new LevyDeclarationProcessedEvent(accountId, null, null);
                         _mapper.Map(levyDeclarationView, levySchemeDeclarationUpdatedEvent);
                         await _messagePublisher.PublishAsync(levySchemeDeclarationUpdatedEvent);
                     }
@@ -209,7 +208,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
                         throw;  //TODO: Not sure if we should rollback the levy processing tx if the publishing fails
                     }
                 }
-                var levyDeclarationEvent = new LevyDeclarationUpdatedMessage(accountId,null,null)
+                var levyDeclarationEvent = new LevyDeclarationsProcessedEvent(accountId,null,null)
                 {
                     LevyDeclaredInMonth = dasLevyDeclarations.Sum(levy => levy.LevyDeclaredInMonth),
                     PayrollMonth = payrollMonth.Value,

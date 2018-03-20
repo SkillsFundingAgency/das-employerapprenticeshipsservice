@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             IPaymentService paymentService,
             IDasLevyRepository dasLevyRepository,
             IMediator mediator,
-            ILog logger, 
+            ILog logger,
             IMapper mapper)
         {
             _messagePublisher = messagePublisher;
@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             _dasLevyRepository = dasLevyRepository;
             _mediator = mediator;
             _logger = logger;
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _mapper = mapper;
         }
 
         protected override async Task HandleCore(RefreshPaymentDataCommand message)
@@ -93,8 +93,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 
             foreach (var payment in newPayments)
             {
-                var paymentEvent = new PaymentCreatedMessage(payment.EmployerAccountId, string.Empty, string.Empty);
-                _mapper.Map(payment, paymentEvent);
+                var paymentEvent = _mapper.Map<PaymentDetails, PaymentCreatedMessage>(payment);
                 await _messagePublisher.PublishAsync(paymentEvent);
             }
 

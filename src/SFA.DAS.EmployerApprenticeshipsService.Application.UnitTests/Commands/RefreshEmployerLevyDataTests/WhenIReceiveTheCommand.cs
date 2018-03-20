@@ -287,8 +287,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
                 });
 
             _moqer.GetMock<IMapper>()
-                .Setup(x => x.Map(It.IsAny<LevyDeclarationView>(), It.IsAny<LevySchemeDeclarationUpdatedMessage>()))
-                .Callback<LevyDeclarationView, LevySchemeDeclarationUpdatedMessage>((view, msg) =>
+                .Setup(x => x.Map(It.IsAny<LevyDeclarationView>(), It.IsAny<LevyDeclarationProcessedEvent>()))
+                .Callback<LevyDeclarationView, LevyDeclarationProcessedEvent>((view, msg) =>
                 {
                     msg.LevyDeclaredInMonth = view.LevyDeclaredInMonth;
                     msg.EmpRef = view.EmpRef;
@@ -299,8 +299,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
 
             //Assert
             var publisher = _moqer.GetMock<IMessagePublisher>();
-            publisher.Verify(x => x.PublishAsync(It.Is<LevySchemeDeclarationUpdatedMessage>(msg => msg.AccountId == 1 && msg.LevyDeclaredInMonth == 100 && msg.EmpRef == "abcd")), Times.Exactly(2));
-            publisher.Verify(x => x.PublishAsync(It.Is<LevySchemeDeclarationUpdatedMessage>(msg => msg.AccountId == 1 && msg.LevyDeclaredInMonth == 300 && msg.EmpRef == "efgh")), Times.Exactly(2));
+            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationProcessedEvent>(msg => msg.AccountId == 1 && msg.LevyDeclaredInMonth == 100 && msg.EmpRef == "abcd")), Times.Exactly(2));
+            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationProcessedEvent>(msg => msg.AccountId == 1 && msg.LevyDeclaredInMonth == 300 && msg.EmpRef == "efgh")), Times.Exactly(2));
         }
 
         [Test]
@@ -364,7 +364,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
 
             //Assert
             var publisher = _moqer.GetMock<IMessagePublisher>();
-            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationUpdatedMessage>(msg => msg.LevyDeclaredInMonth == 1920m && msg.AccountId == 1)), Times.Exactly(2));
+            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationsProcessedEvent>(msg => msg.LevyDeclaredInMonth == 1920m && msg.AccountId == 1)), Times.Exactly(2));
         }
 
     }
