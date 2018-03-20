@@ -67,6 +67,8 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
                 PaymentUrl = message.Content.AccountPaymentUrl
             });
 
+            _logger.Info($"Completed publishing refresh payment command for AccountId:{message.Content.AccountId} PeriodEnd:{message.Content.PeriodEndId}");
+
             await message.CompleteAsync();
         }
     }
