@@ -14,25 +14,3 @@ Target "Dotnet Restore" (fun _ ->
         { p with
                 Project = ".\\SFA.DAS.EAS.Account.Api.Types" })
 )
-
-Target "Run EAS Acceptance Tests" (fun _ ->
-
-    trace "Run EAS Acceptance Tests"
-
-    let mutable shouldRunTests = false
-
-    let testDlls = !! ("./**/bin/" + testDirectory + "/*.AcceptanceTests.dll")
-
-    for testDll in testDlls do
-        shouldRunTests <- true
-
-    if shouldRunTests then
-        testDlls |> Fake.Testing.NUnit3.NUnit3 (fun p ->
-            {p with
-                ToolPath = (nUnitToolPath + @"tools\" + nUnitRunner);
-                StopOnError = false;
-                Agents = Some 1;
-                Testlist = acceptanceTestPlayList;
-                ResultSpecs = [("TestResult.xml;format=" + nunitTestFormat)];
-                })
-)
