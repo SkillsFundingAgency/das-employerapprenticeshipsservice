@@ -1,44 +1,63 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 
 namespace SFA.DAS.EAS.Domain.Models.FeatureToggles
 {
     public class ControllerAction
     {
-        private string _controller;
-        private string _action;
-
-        public string Controller
+        public ControllerAction(string qualifiedName)
         {
-            get => _controller;
-            set
+            var parts = qualifiedName.Split('.');
+            if (parts.Length != 2)
             {
-                _controller = value;
-                SetQualifiedName();
+                throw new ArgumentException("The name must be in the form <controller-name>.<method-name>", nameof(qualifiedName));
             }
+
+            SetValues(parts[0], parts[1]);
         }
 
-        public string Action
+        public ControllerAction(string controller, string action)
         {
-            get => _action;
-            set
-            {
-                _action = value;
-                SetQualifiedName();
-            }
+            SetValues(controller, action);
         }
+
+        private void SetValues(string controllerName, string actionName)
+        {
+            Controller = StripController(controllerName);
+            Action = actionName;
+            QualifiedName = $"{Controller}.{Action}";
+        }
+
+        public string Controller { get; private set; }
+
+        public string Action { get; private set; }
 
         public string QualifiedName { get; private set; }
 
-        private void SetQualifiedName()
+        public bool IsControllerLevel => Action == "*";
+
+        public override bool Equals(object obj)
         {
-            if (string.IsNullOrWhiteSpace(_controller) || string.IsNullOrWhiteSpace(_action))
+            return obj is ControllerAction action &&
+                   QualifiedName == action.QualifiedName;
+        }
+
+        public override int GetHashCode()
+        {
+            return -1980123662 + EqualityComparer<string>.Default.GetHashCode(QualifiedName);
+        }
+
+        public static string StripController(string controllerName)
+        {
+            const string controller = "Controller";
+
+            if (controllerName.EndsWith(controller, StringComparison.InvariantCultureIgnoreCase))
             {
-                QualifiedName = string.Empty;
+                return controllerName.Remove(controllerName.Length - controller.Length);
             }
-            else
-            {
-                QualifiedName = $"{_controller}.{_action}";
-            }
+
+            return controllerName;
         }
     }
 }

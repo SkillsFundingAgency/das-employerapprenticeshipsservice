@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.FeatureTogglePi
     class WhenIProcessARequest
     {
         private OperationContext _operationContext;
-        private OperationAuthorisationPipeline _operationAuthorisationPipeline;
+        private OperationAuthorisation _operationAuthorisation;
         private Mock<IOperationAuthorisationHandler> _pipeSection;
 
         [SetUp]
@@ -30,14 +30,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.FeatureTogglePi
                 _pipeSection.Object
             };
 
-            _operationAuthorisationPipeline = new OperationAuthorisationPipeline(sections, Mock.Of<ILog>());
+            _operationAuthorisation = new OperationAuthorisation(sections, Mock.Of<ILog>());
         }
 
         [Test]
         public async Task ThenACorrectResponseShouldBeReturned()
         {
             //Act
-            var result = await _operationAuthorisationPipeline.CanAccessAsync(_operationContext);
+            var result = await _operationAuthorisation.CanAccessAsync(_operationContext);
 
             //Assert
             Assert.IsTrue(result);
@@ -59,10 +59,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.FeatureTogglePi
                 mock.Setup(x => x.CanAccessAsync(It.IsAny<OperationContext>())).ReturnsAsync(true);
             }
 
-            _operationAuthorisationPipeline = new OperationAuthorisationPipeline(sectionMocks.Select(x => x.Object).ToArray(), Mock.Of<ILog>());
+            _operationAuthorisation = new OperationAuthorisation(sectionMocks.Select(x => x.Object).ToArray(), Mock.Of<ILog>());
 
             //Act
-            await _operationAuthorisationPipeline.CanAccessAsync(_operationContext);
+            await _operationAuthorisation.CanAccessAsync(_operationContext);
 
             //Assert
             foreach (var mock in sectionMocks)
@@ -89,10 +89,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.FeatureTogglePi
                 thirdSection
             };
 
-            _operationAuthorisationPipeline = new OperationAuthorisationPipeline(sectionMocks.Select(x => x.Object).ToArray(), Mock.Of<ILog>());
+            _operationAuthorisation = new OperationAuthorisation(sectionMocks.Select(x => x.Object).ToArray(), Mock.Of<ILog>());
 
             //Act
-            await _operationAuthorisationPipeline.CanAccessAsync(_operationContext);
+            await _operationAuthorisation.CanAccessAsync(_operationContext);
 
             //Assert
             firstSection.Verify(x => x.CanAccessAsync(_operationContext), Times.Once);

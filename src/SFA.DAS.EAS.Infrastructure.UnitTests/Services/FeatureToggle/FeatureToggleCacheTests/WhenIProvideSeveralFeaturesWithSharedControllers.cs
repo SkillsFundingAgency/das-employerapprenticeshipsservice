@@ -10,26 +10,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         private const string SharedControllerName = "SharedController";
         private const string SharedActionName = "SharedActionName";
 
-        private FeatureToggleCollection BuildToggledFeatures(int requiredFeatures)
-        {
-            var featureConfig = FeatureToggleCollectionBuilder.Create();
-            for (int i = 0; i < requiredFeatures; i++)
-            {
-                var feature = FeatureToggleBuilder.Create($"feature-{i}")
-                    .WithControllerAction("ToggledController-{i}", "index")
-                    .WithControllerAction(SharedControllerName, SharedActionName)
-                    .WithWhitelistedEmail($"email-{i}");
-                featureConfig.WithFeature(feature);
-            }
-            return featureConfig;
-        }
-
         [Test]
         public void ThenFeatureShouldBeSubjectToAToggle()
         {
             // arrange
-            var featureConfig = BuildToggledFeatures(3);
-            var ftc = new Infrastructure.Services.FeatureToggle.FeatureToggleCache(featureConfig);
+            var fixtures = new ToggleFeatureTestFixtures().BuildToggledFeatures(3, $"{SharedControllerName}.{SharedActionName}");
+
+            var ftc = fixtures.CreateFixtureCache();
 
             // act
             var isActionSubjectToToggle = ftc.IsControllerSubjectToFeatureToggle(SharedControllerName);
@@ -42,8 +29,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         public void ThenActionShouldBeSubjectToAToggle()
         {
             // arrange
-            var featureConfig = BuildToggledFeatures(3);
-            var ftc = new Infrastructure.Services.FeatureToggle.FeatureToggleCache(featureConfig);
+            var fixtures = new ToggleFeatureTestFixtures().BuildToggledFeatures(3, $"{SharedControllerName}.{SharedActionName}");
+            var ftc = fixtures.CreateFixtureCache();
 
             // act
             var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToToggle(SharedControllerName, SharedActionName, out _);
@@ -56,12 +43,11 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         public void ThenWhitelistsShouldBeAppendedTogether()
         {
             // arrange
-            var featureConfig = BuildToggledFeatures(3);
-            var ftc = new Infrastructure.Services.FeatureToggle.FeatureToggleCache(featureConfig);
+            var fixtures = new ToggleFeatureTestFixtures().BuildToggledFeatures(3, $"{SharedControllerName}.{SharedActionName}");
+            var ftc = fixtures.CreateFixtureCache();
 
             // act
-            ControllerActionCacheItem cachedItem;
-            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToToggle(SharedControllerName, SharedActionName, out cachedItem);
+            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToToggle(SharedControllerName, SharedActionName, out var cachedItem);
 
             // assert
             const int expectedNumberOfWhitelists = 3;

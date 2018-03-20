@@ -4,7 +4,6 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Pipeline;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers;
-using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Sections;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
 using StructureMap;
@@ -36,7 +35,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 // The order of the types specified here is the order in which the handlers will be executed. 
                 ctx.GetInstance<FeatureToggleAuthorisationHandler>()
             }).Singleton();
-            For<IOperationAuthorisationHandler>().Use<OperationAuthorisationPipeline>().Singleton();
+            For<IOperationAuthorisationHandler>().Use<OperationAuthorisation>().Singleton();
             For<IFeatureToggleService>().Use<FeatureToggleService>().Singleton();
             For<IFeatureToggleCache>().Use<FeatureToggleCache>().Singleton();
         }

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Infrastructure.Pipeline.Features
 {
-    public class OperationAuthorisationPipeline : IOperationAuthorisationHandler
+    public class OperationAuthorisation : IOperationAuthorisationHandler
     {
         private readonly ILog _logger;
         private readonly IOperationAuthorisationHandler[] _pipeSections;
 
-        public OperationAuthorisationPipeline(IOperationAuthorisationHandler[] pipeSections, ILog logger)
+        public OperationAuthorisation(IOperationAuthorisationHandler[] pipeSections, ILog logger)
         {
             _logger = logger;
             _pipeSections = pipeSections;
