@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Api.Controllers;
 using SFA.DAS.EAS.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EAS.TestCommon.Extensions;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.NLog.Logger;
 
@@ -100,7 +101,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);
 
             var expectedUri = "someuri";
-            _urlHelper.Setup(x => x.Route("GetTransactions", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, year = year - 1, month = 12 }.GetHashCode()))).Returns(expectedUri);
+            _urlHelper.Setup(x => x.Route("GetTransactions", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, year = year - 1, month = 12 })))).Returns(expectedUri);
 
             var response = await _controller.GetTransactions(hashedAccountId, year, month);
             var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
@@ -152,7 +153,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             _urlHelper.Setup(
                     x =>
                         x.Route("GetLevyForPeriod",
-                            It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, payrollYear = levyTransaction.PayrollYear, payrollMonth = levyTransaction.PayrollMonth }.GetHashCode())))
+                            It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, payrollYear = levyTransaction.PayrollYear, payrollMonth = levyTransaction.PayrollMonth }))))
                 .Returns(expectedUri);
 
             var response = await _controller.GetTransactions(hashedAccountId, year, month);
