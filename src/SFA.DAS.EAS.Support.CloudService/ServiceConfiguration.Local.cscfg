@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="SFA.DAS.EAS.Support.CloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="5" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="SFA.DAS.EAS.Support.Web">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true;" />
+      <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true;" />
+      <Setting name="LoggingRedisConnectionString" value="" />
+      <Setting name="EnvironmentName" value="LOCAL" />
+      <Setting name="InstrumentationKey" value="" />
+      <Setting name="LevySubmissionLevySubmissionsApiConfigurationLevyTokenCertificatethumprint" value="" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="WebSslCert" thumbprint="A2FEC613BC54AEFFA6202869DBC9D0170EF25947" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+</ServiceConfiguration>
