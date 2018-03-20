@@ -16,8 +16,8 @@ open Fake
 
 "Set version number"
    ==>"Set Solution Name"
-   ==>"Custom Update Assembly Info Version Numbers"
-   ==>"Clean Directories"
+   ==>"Update Assembly Info Version Numbers"
+   ==>"Clean Directories" 
    ==>"Dotnet Restore"
    ==>"Build Projects"
    ==>"Run NUnit Tests"
@@ -25,8 +25,8 @@ open Fake
    ==>"Run Jasmine Tests"
    ==>"Build Cloud Projects"
    ==>"Build Database project"
-   ==>"Build WebJob Project"
-   ==>"Publish Solution"
+   ==>"Build WebJob Project" 
+   ==>"Publish Solution"  
    ==>"Compile Views"
    ==>"Create Nuget Package"
 
@@ -37,5 +37,5 @@ open Fake
 "Set version number"
     ==>"Set Solution Name"
     ==> "Zip Compiled Source"
-
+   
 RunTargetOrDefault  "Create Nuget Package"
