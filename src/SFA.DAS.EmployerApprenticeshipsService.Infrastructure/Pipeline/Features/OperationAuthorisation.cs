@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Infrastructure.Pipeline.Features
                 {
                     if (await handler.CanAccessAsync(context) == false)
                     {
-                        _logger.Info($"context {context.AuthorisationContext?.AccountContext?.Id} has been blocked from {context.Controller}.{context.Action} by {handler.GetType().Name}");
+                        _logger.Info($"context {context.MembershipContext?.AccountId} has been blocked from {context.Controller}.{context.Action} by {handler.GetType().Name}");
                         return false;
                     }
                 }
