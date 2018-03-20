@@ -53,6 +53,12 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="FluentAssertions, Version=4.17.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.17.0\lib\net45\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions.Core, Version=4.17.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.17.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Hashids.net, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Hashids.net.1.2.2\lib\net45\Hashids.net.dll</HintPath>
     </Reference>
@@ -224,6 +230,7 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\LevyWorkerDefaultRegistry.cs" />
     <Compile Include="Extensions\DateTimeExtention.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="MockModels\MockMessage.cs" />
     <Compile Include="MockPolicy\MockMessageSubscriberPolicy.cs" />
     <Compile Include="MockPolicy\MockMessagePublisherPolicy.cs" />

@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Api.Controllers;
 using SFA.DAS.EAS.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionSummary;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EAS.TestCommon.Extensions;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsControllerTests
@@ -49,13 +50,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             _urlHelper.Setup(
                     x =>
                         x.Route("GetTransactions",
-                            It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, year = transactionSummaryResponse.Data.First().Year, month = transactionSummaryResponse.Data.First().Month }.GetHashCode())))
+                            It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, year = transactionSummaryResponse.Data.First().Year, month = transactionSummaryResponse.Data.First().Month }))))
                 .Returns(firstExpectedUri);
             var secondExpectedUri = "someotheruri";
             _urlHelper.Setup(
                     x =>
                         x.Route("GetTransactions",
-                            It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, year = transactionSummaryResponse.Data.Last().Year, month = transactionSummaryResponse.Data.Last().Month }.GetHashCode())))
+                            It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, year = transactionSummaryResponse.Data.Last().Year, month = transactionSummaryResponse.Data.Last().Month }))))
                 .Returns(secondExpectedUri);
 
             var response = await _controller.Index(hashedAccountId);
