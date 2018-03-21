@@ -231,6 +231,7 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\LevyWorkerDefaultRegistry.cs" />
     <Compile Include="Extensions\DateTimeExtention.cs" />
+    <Compile Include="FluentTest.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="MockModels\MockMessage.cs" />
     <Compile Include="MockPolicy\MockMessageSubscriberPolicy.cs" />
