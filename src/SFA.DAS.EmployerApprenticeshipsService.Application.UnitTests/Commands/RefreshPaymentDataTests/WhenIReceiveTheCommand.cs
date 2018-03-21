@@ -180,8 +180,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             //Assert
             _dasLevyRepository.Verify(x => x.GetAccountPaymentIds(_command.AccountId), Times.Never);
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Never);
+
             _logger.Verify(x => x.Error(It.IsAny<WebException>(),
-                $"Unable to get payment information for {_command.PeriodEnd} accountid {_command.AccountId}"));
+                $"Unable to get payment information for periodEnd = '{_command.PeriodEnd}' and accountid = '{_command.AccountId}'"));
         }
 
         [Test]
