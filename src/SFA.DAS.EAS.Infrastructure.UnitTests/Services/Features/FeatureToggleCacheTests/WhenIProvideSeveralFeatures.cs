@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 
-namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureToggleCacheTests
+namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureToggleCacheTests
 {
     [TestFixture]
     public class WhenIProvideSeveralFeatures
@@ -11,13 +11,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         {
             // arrange
             var fixtures = new ToggleFeatureTestFixtures()
-                .WithFeature((Feature) 0, "controller1.index")
-                .WithFeature((Feature) 1, "controller2.index");
+                .WithFeature((FeatureType) 0, "controller1.index")
+                .WithFeature((FeatureType) 1, "controller2.index");
 
             var ftc = fixtures.CreateFixtureCache();
 
             // act
-            var isControllerSubjectToToggle = ftc.IsControllerSubjectToFeatureToggle("controller1");
+            var isControllerSubjectToToggle = ftc.IsControllerSubjectToFeature("controller1");
 
             // assert
             Assert.IsTrue(isControllerSubjectToToggle);
@@ -28,13 +28,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         {
             // arrange
             var fixtures = new ToggleFeatureTestFixtures()
-                .WithFeature((Feature)0, "controller1.index")
-                .WithFeature((Feature)1, "controller2.index");
+                .WithFeature((FeatureType)0, "controller1.index")
+                .WithFeature((FeatureType)1, "controller2.index");
 
             var ftc = fixtures.CreateFixtureCache();
+            var operationContext = new OperationContext {Controller = "controller1", Action = "index" };
 
             // act
-            var isControllerSubjectToToggle = ftc.TryGetControllerActionSubjectToToggle("controller1", "index", out _);
+            var isControllerSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature( operationContext, out _);
 
             // assert
             Assert.IsTrue(isControllerSubjectToToggle);

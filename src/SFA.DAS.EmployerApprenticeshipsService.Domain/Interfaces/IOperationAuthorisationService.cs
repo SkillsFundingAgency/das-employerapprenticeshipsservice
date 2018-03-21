@@ -7,8 +7,8 @@ namespace SFA.DAS.EAS.Domain.Interfaces
     ///     available in a particular membership context.
     /// </summary>
     /// <remarks>
-    ///     The distinction between this and <see cref="IFeatureToggleService"/> is that this service will perform
-    ///     whatever checks are defined to determine when an operation is available whereas <see cref="IFeatureToggleService"/>
+    ///     The distinction between this and <see cref="IFeatureService"/> is that this service will perform
+    ///     whatever checks are defined to determine when an operation is available whereas <see cref="IFeatureService"/>
     ///     only performs a whitelist check, which is just one specific check made by here.
     /// </remarks>
     public interface IOperationAuthorisationService

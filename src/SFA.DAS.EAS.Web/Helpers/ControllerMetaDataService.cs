@@ -4,24 +4,27 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
-using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
+using SFA.DAS.EAS.Infrastructure.Services.Features;
 
 namespace SFA.DAS.EAS.Web.Helpers
 {
     public class ControllerMetaDataService : IControllerMetaDataService
     {
-        private readonly Lazy<Dictionary<Feature, ControllerAction[]>> _controllerActionsCache;
+        private readonly Lazy<Dictionary<FeatureType, ControllerAction[]>> _controllerActionsCache;
 
         private static readonly ControllerAction[] EmptyControllerActions = new ControllerAction[0];
 
-        public ControllerMetaDataService()
+        private readonly Assembly _controllerAssembly;
+
+        public ControllerMetaDataService(Assembly controllerAssembly = null)
         {
-            _controllerActionsCache = new Lazy<Dictionary<Feature, ControllerAction[]>>(InitialiseControllerActionsCache);    
+            _controllerActionsCache = new Lazy<Dictionary<FeatureType, ControllerAction[]>>(InitialiseControllerActionsCache);
+            _controllerAssembly = controllerAssembly ?? this.GetType().Assembly;
         }
 
-        public ControllerAction[] GetControllerMethodsLinkedToAFeature(Feature feature)
+        public ControllerAction[] GetControllerMethodsLinkedToAFeature(FeatureType featureType)
         {
-            if (!_controllerActionsCache.Value.TryGetValue(feature, out var result))
+            if (!_controllerActionsCache.Value.TryGetValue(featureType, out var result))
             {
                 result = EmptyControllerActions;
             }
@@ -29,16 +32,16 @@ namespace SFA.DAS.EAS.Web.Helpers
             return result;
         }
 
-        private Dictionary<Feature, ControllerAction[]> InitialiseControllerActionsCache()
+        private Dictionary<FeatureType, ControllerAction[]> InitialiseControllerActionsCache()
         {
             var allControllers = GetAllControllers();
 
             var controllerActionsLinkedToFeature = GetControllerGlobalActions(allControllers)
                 .Union(GetControllerMethodActions(allControllers))
-                .GroupBy(controllerActions => controllerActions.Item1.RequiresAccessToFeature, controllerActions => controllerActions.Item2);
+                .GroupBy(controllerActions => controllerActions.Item1.RequiresAccessToFeatureType, controllerActions => controllerActions.Item2);
 
 
-            var result = new Dictionary<Feature, ControllerAction[]>();
+            var result = new Dictionary<FeatureType, ControllerAction[]>();
 
             foreach (var controllerAction in controllerActionsLinkedToFeature)
             {
@@ -49,7 +52,7 @@ namespace SFA.DAS.EAS.Web.Helpers
             return result;
         }
 
-        private IEnumerable<ControllerAction> GetControllerActionsForFeature(Feature feature, IEnumerable<ControllerAction> controllerActions)
+        private IEnumerable<ControllerAction> GetControllerActionsForFeature(FeatureType featureType, IEnumerable<ControllerAction> controllerActions)
         {
             var actionsByController = controllerActions.GroupBy(ca => ca.Controller);
 
@@ -72,54 +75,32 @@ namespace SFA.DAS.EAS.Web.Helpers
 
         private Type[] GetAllControllers()
         {
-            return AppDomain.CurrentDomain
-                .GetAssemblies()
-                .SelectMany(assembly => assembly.GetTypes()).Where(type => typeof(Controller).IsAssignableFrom(type))
-                .ToArray();
+            // This class must be in the Web app to find the controllers.
+            return _controllerAssembly
+                            .GetTypes()
+                            .Where(type => typeof(Controller).IsAssignableFrom(type))
+                            .ToArray();
         }
 
         private IEnumerable<(OperationFilterAttribute, ControllerAction)> GetControllerGlobalActions(Type[] controllers)
         {
-            var controllersWithFeatureLink = controllers.Select(controller => new
-                {
-                    Controller = controller,
-                    OperationFilterAttributes = controller.GetCustomAttributes<OperationFilterAttribute>(false).Where(ofa => ofa.RequiresAccessToFeature != Feature.NotSpecified).ToArray()
-                })
-                .Where(controller => controller.OperationFilterAttributes.Length > 0);
-
-            foreach (var controller in controllersWithFeatureLink)
-            {
-                foreach (var attribute in controller.OperationFilterAttributes)
-                {
-                    yield return (attribute, new ControllerAction(controller.Controller.Name, "*"));
-                }
-            }
+            return controllers.Select(controller =>
+                (
+                    controller.GetCustomAttribute<OperationFilterAttribute>(false),
+                    new ControllerAction(controller.Name, "*")
+                ))
+                .Where(controller => controller.Item1 != null && controller.Item1.RequiresAccessToFeatureType != FeatureType.NotSpecified);
         }
 
         private IEnumerable<(OperationFilterAttribute, ControllerAction)> GetControllerMethodActions(Type[] controllers)
         {
-            var controllersAndMethods = controllers.Select(controller => new
-                {
-                    Controller = controller,
-                    Methods = controller.GetMethods().Select(method => new
-                    {
-                        Method = method,
-                        MethodAttributes = method.GetCustomAttributes<OperationFilterAttribute>(false).Where(ofa => ofa.RequiresAccessToFeature != Feature.NotSpecified).ToArray()
-                    }).Where(method => method.MethodAttributes.Length > 0).ToArray()
-                })
-                .Where(controller => controller.Methods.Length > 0);
-
-
-            foreach (var controllerMethods in controllersAndMethods)
-            {
-                foreach (var controllerMethod in controllerMethods.Methods)
-                {
-                    foreach (var methodAttribute in controllerMethod.MethodAttributes)
-                    {
-                        yield return (methodAttribute, new ControllerAction(controllerMethods.Controller.Name, controllerMethod.Method.Name));
-                    }
-                }
-            }
+            return controllers
+                .SelectMany(controller => controller
+                    .GetMethods()
+                    .Select(method => (
+                        method.GetCustomAttribute<OperationFilterAttribute>(),
+                        new ControllerAction(controller.Name, method.Name)))
+                    .Where(ca => ca.Item1 != null && ca.Item1.RequiresAccessToFeatureType != FeatureType.NotSpecified));
         }
     }
 }

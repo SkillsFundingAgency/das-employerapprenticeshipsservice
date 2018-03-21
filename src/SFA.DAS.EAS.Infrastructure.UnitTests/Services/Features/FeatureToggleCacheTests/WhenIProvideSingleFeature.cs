@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 
-namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureToggleCacheTests
+namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureToggleCacheTests
 {
     [TestFixture]
     public class WhenIProvideSingleFeature
@@ -14,12 +14,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         {
             // arrange
             var fixtures = new ToggleFeatureTestFixtures()
-                                .WithFeature(Feature.Transfer, $"{TestControllerName}.{TestActionName}");
+                                .WithFeature(FeatureType.Transfer, $"{TestControllerName}.{TestActionName}");
 
             var ftc = fixtures.CreateFixtureCache();
 
             // act
-            var isControllerSubjectToToggle = ftc.IsControllerSubjectToFeatureToggle(TestControllerName);
+            var isControllerSubjectToToggle = ftc.IsControllerSubjectToFeature(TestControllerName);
 
             // assert
             Assert.IsTrue(isControllerSubjectToToggle);
@@ -30,12 +30,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         {
             // arrange
             var fixtures = new ToggleFeatureTestFixtures()
-                .WithFeature(Feature.Transfer, $"{TestControllerName}.{TestActionName}");
+                .WithFeature(FeatureType.Transfer, $"{TestControllerName}.{TestActionName}");
 
             var ftc = fixtures.CreateFixtureCache();
+            var operationContext = new OperationContext { Controller = TestControllerName, Action = TestActionName };
 
             // act
-            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToToggle(TestControllerName, TestActionName, out _);
+            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature(operationContext, out _);
 
             // assert
             Assert.IsTrue(isActionSubjectToToggle);
@@ -46,12 +47,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         {
             // arrange
             var fixtures = new ToggleFeatureTestFixtures()
-                .WithFeature(Feature.Transfer, $"{TestControllerName}.{TestActionName}");
+                .WithFeature(FeatureType.Transfer, $"{TestControllerName}.{TestActionName}");
 
             var ftc = fixtures.CreateFixtureCache();
 
             // act
-            var isControllerSubjectToToggle = ftc.IsControllerSubjectToFeatureToggle(TestControllerName.InvertCase());
+            var isControllerSubjectToToggle = ftc.IsControllerSubjectToFeature(TestControllerName.InvertCase());
 
             // assert
             Assert.IsTrue(isControllerSubjectToToggle);
@@ -62,12 +63,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         {
             // arrange
             var fixtures = new ToggleFeatureTestFixtures()
-                .WithFeature(Feature.Transfer, $"{TestControllerName}.{TestActionName}");
+                .WithFeature(FeatureType.Transfer, $"{TestControllerName}.{TestActionName}");
 
             var ftc = fixtures.CreateFixtureCache();
+            var operationContext = new OperationContext { Controller = TestControllerName.InvertCase(), Action = TestActionName.InvertCase() };
 
             // act
-            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToToggle(TestControllerName.InvertCase(), TestActionName.InvertCase(), out _);
+            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature(operationContext, out _);
 
             // assert
             Assert.IsTrue(isActionSubjectToToggle);
@@ -78,12 +80,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         {
             // arrange
             var fixtures = new ToggleFeatureTestFixtures()
-                .WithFeature(Feature.Transfer, $"{TestControllerName}.{TestActionName}");
+                .WithFeature(FeatureType.Transfer, $"{TestControllerName}.{TestActionName}");
 
             var ftc = fixtures.CreateFixtureCache();
 
             // act
-            var isActionSubjectToToggle = ftc.IsControllerSubjectToFeatureToggle("NonToggledController");
+            var isActionSubjectToToggle = ftc.IsControllerSubjectToFeature("NonToggledController");
 
             // assert
             Assert.IsFalse(isActionSubjectToToggle);
@@ -94,12 +96,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         {
             // arrange
             var fixtures = new ToggleFeatureTestFixtures()
-                .WithFeature(Feature.Transfer, $"{TestControllerName}.{TestActionName}");
+                .WithFeature(FeatureType.Transfer, $"{TestControllerName}.{TestActionName}");
 
             var ftc = fixtures.CreateFixtureCache();
+            var operationContext = new OperationContext { Controller = "NonToggledController", Action = "Index" };
 
             // act
-            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToToggle("NonToggledController", "Index", out _);
+            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature(operationContext, out _);
 
             // assert
             Assert.IsFalse(isActionSubjectToToggle);

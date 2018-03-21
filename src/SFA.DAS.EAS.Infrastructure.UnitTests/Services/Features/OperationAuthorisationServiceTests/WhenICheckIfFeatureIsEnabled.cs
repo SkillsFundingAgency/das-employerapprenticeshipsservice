@@ -3,11 +3,10 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 using SFA.DAS.EAS.Infrastructure.Pipeline;
+using SFA.DAS.EAS.Infrastructure.Services.Features;
 using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
-using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
-using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTests
+namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.OperationAuthorisationServiceTests
 {
     [TestFixture]
     public class WhenICheckIfFeatureIsEnabled

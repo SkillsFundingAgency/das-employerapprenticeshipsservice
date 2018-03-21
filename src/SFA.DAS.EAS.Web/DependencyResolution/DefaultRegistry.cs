@@ -8,8 +8,9 @@ using SFA.DAS.EAS.Infrastructure.Pipeline;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers;
 using SFA.DAS.EAS.Infrastructure.Services;
-using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
+using SFA.DAS.EAS.Infrastructure.Services.Features;
 using SFA.DAS.EAS.Web.Controllers;
+using SFA.DAS.EAS.Web.Helpers;
 using StructureMap;
 using StructureMap.Pipeline;
 
@@ -44,14 +45,19 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<IFeatureToggleService>().Use<FeatureToggleService>().Singleton();
             For<IFeatureToggleCache>().Use<FeatureToggleCache>().Singleton();
         {
-            For<IOperationAuthorisationHandler[]>().Use(ctx => new[]
+            For<IOperationAuthorisationHandler[]>().Use(ctx => new IOperationAuthorisationHandler[]
             {
                 // The order of the types specified here is the order in which the handlers will be executed. 
-                ctx.GetInstance<FeatureToggleAuthorisationHandler>()
+                ctx.GetInstance<FeatureToggleAuthorisationHandler>(),
+                ctx.GetInstance<AgreementFeatureAuthorisationHandler>()
             }).Singleton();
+
             For<IOperationAuthorisationHandler>().Use<OperationAuthorisation>().Singleton();
-            For<IFeatureToggleService>().Use<FeatureToggleService>().Singleton();
-            For<IFeatureToggleCache>().Use<FeatureToggleCache>().Singleton();
+            For<IFeatureService>().Use<FeatureService>().Singleton();
+            For<IFeatureCache>().Use<FeatureCache>().Singleton();
+            For<IControllerMetaDataService>().Use<ControllerMetaDataService>().Singleton();
+            For<IFeatureCache>().Use<FeatureCache>().Singleton();
+            For<IAccountAgreementService>().Use<AccountAgreementService>().Singleton();
         }
     }
 }

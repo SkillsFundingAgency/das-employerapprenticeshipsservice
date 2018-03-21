@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
@@ -19,6 +20,10 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 
         public static string GetEnvironmentName()
         {
+        }
+
+        private static ConfigurationService CreateConfigurationService(string serviceName)
+        {
             var environmentName = Environment.GetEnvironmentVariable("DASENV");
 
             if (string.IsNullOrEmpty(environmentName))
@@ -27,6 +32,10 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
             }
 
             return environmentName;
+            var configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+            var configurationService = new ConfigurationService(configurationRepository, new ConfigurationOptions(serviceName, environmentName, "1.0"));
+
+            return configurationService;
         }   
     }
 }

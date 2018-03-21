@@ -1,24 +1,25 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
+using SFA.DAS.EAS.Infrastructure.Services.Features;
 
 namespace SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers
 {
     /// <summary>
-    ///     Exposes the <see cref="IFeatureToggleService"/> as a <see cref="IOperationAuthorisationHandler"/>.
+    ///     Exposes the <see cref="IFeatureService"/> as a <see cref="IOperationAuthorisationHandler"/>.
     /// </summary>
     public class FeatureToggleAuthorisationHandler : IOperationAuthorisationHandler
     {
-        private readonly IFeatureToggleService _featureToggleService;
+        private readonly IFeatureWhiteListingService _featureWhiteListingService;
 
-        public FeatureToggleAuthorisationHandler(IFeatureToggleService featureToggleService)
+        public FeatureToggleAuthorisationHandler(IFeatureWhiteListingService featureWhiteListingService)
         {
-            _featureToggleService = featureToggleService;
+            _featureWhiteListingService = featureWhiteListingService;
         }
 
         public Task<bool> CanAccessAsync(OperationContext context)
         {
-            return _featureToggleService.IsFeatureEnabled(context);
+            return _featureWhiteListingService.IsFeatureEnabledForContextAsync(context);
         }
     }
 }

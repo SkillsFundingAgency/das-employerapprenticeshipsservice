@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
-using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
+using SFA.DAS.EAS.Infrastructure.Services.Features;
 
-namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureToggleCacheTests
+namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureToggleCacheTests
 {
     [TestFixture]
     public class WhenIProvideNoFeatures
@@ -16,10 +15,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         {
             // arrange
             var fixtures = new ToggleFeatureTestFixtures();
-            var ftc = new Infrastructure.Services.FeatureToggle.FeatureToggleCache(fixtures.FeatureToggleCollection, fixtures.ControllerMetaDataService);
+            var ftc = new FeatureCache(fixtures.Features, fixtures.ControllerMetaDataService);
 
             // act
-            var isControllerSubjectToToggle = ftc.IsControllerSubjectToFeatureToggle("foo");
+            var isControllerSubjectToToggle = ftc.IsControllerSubjectToFeature("foo");
 
             // assert
             Assert.IsFalse(isControllerSubjectToToggle);
@@ -30,10 +29,11 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         {
             // arrange
             var fixtures = new ToggleFeatureTestFixtures();
-            var ftc = new Infrastructure.Services.FeatureToggle.FeatureToggleCache(fixtures.FeatureToggleCollection, fixtures.ControllerMetaDataService);
+            var ftc = new FeatureCache(fixtures.Features, fixtures.ControllerMetaDataService);
+            var operationContext = new OperationContext {Controller = "foo", Action = "action"};
 
             // act
-            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToToggle("foo", "action", out _);
+            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature(operationContext, out _);
 
             // assert
             Assert.IsFalse(isActionSubjectToToggle);
@@ -68,24 +68,25 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
 
     public class ToggleFeatureTestFixtures
     {
+        private readonly List<Feature> _features;
+
         public ToggleFeatureTestFixtures()
         {
             ControllerMetaDataServiceMock = new Mock<IControllerMetaDataService>();    
-            FeatureToggleCollection = new FeatureToggleCollection();
+            _features = new List<Feature>();
         }
 
         public IControllerMetaDataService ControllerMetaDataService => ControllerMetaDataServiceMock.Object;
         public Mock<IControllerMetaDataService> ControllerMetaDataServiceMock { get; }
 
-        public FeatureToggleCollection FeatureToggleCollection { get; set; }
+        public Feature[] Features => _features.ToArray();
 
-        public ToggleFeatureTestFixtures WithFeature(Feature feature, params string[] actions)
+        public ToggleFeatureTestFixtures WithFeature(FeatureType featureType, params string[] actions)
         {
-            return WithWhiteListedFeature(feature, null, actions);
+            return WithWhiteListedFeature(featureType, null, actions);
         }
 
-
-        public ToggleFeatureTestFixtures WithWhiteListedFeature(Feature feature, string whitelistedEmail, params string[] actions)
+        public ToggleFeatureTestFixtures WithWhiteListedFeature(FeatureType featureType, string whitelistedEmail, params string[] actions)
         {
             var controllerActions = actions.Select(action =>
             {
@@ -95,10 +96,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
             }).ToArray();
 
             ControllerMetaDataServiceMock
-                .Setup(svc => svc.GetControllerMethodsLinkedToAFeature(feature))
+                .Setup(svc => svc.GetControllerMethodsLinkedToAFeature(featureType))
                 .Returns(controllerActions);
 
-            AddFeature(feature, whitelistedEmail);
+            AddFeature(featureType, whitelistedEmail);
 
             return this;
         }
@@ -107,40 +108,40 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.FeatureTog
         {
             for (int i = 0; i < requiredFeatures; i++)
             {
-                WithWhiteListedFeature((Feature) i, $"email-{i}", actions);
+                WithWhiteListedFeature((FeatureType) i, $"email-{i}", actions);
             }
 
             return this;
         }
 
-        public ToggleFeatureTestFixtures AddFeature(Feature feature, string whitelistedEmail)
+        public ToggleFeatureTestFixtures AddFeature(FeatureType featureType, string whitelistedEmail)
         {
-            var newFeatureToggle = new Domain.Models.FeatureToggles.FeatureToggle
+            var newFeature = new Domain.Models.FeatureToggles.Feature
             {
-                Feature = feature,
+                FeatureType = featureType,
                 Enabled = true,
-                Name = feature.ToString()
+                Name = featureType.ToString()
             };
 
-            FeatureToggleCollection.Features.Add(newFeatureToggle);
+            _features.Add(newFeature);
 
             if (whitelistedEmail != null)
             {
-                newFeatureToggle.Whitelist.Emails.Add(whitelistedEmail);
+                newFeature.WhiteList = new[] {whitelistedEmail};
             }
 
             return this;
         }
 
-        public ToggleFeatureTestFixtures AddFeature(Feature feature)
+        public ToggleFeatureTestFixtures AddFeature(FeatureType featureType)
         {
-            AddFeature(feature, null);
+            AddFeature(featureType, null);
             return this;
         }
 
-        public FeatureToggleCache CreateFixtureCache()
+        public FeatureCache CreateFixtureCache()
         {
-            return new Infrastructure.Services.FeatureToggle.FeatureToggleCache(FeatureToggleCollection, ControllerMetaDataService);
+            return new FeatureCache(Features, ControllerMetaDataService);
         }
     }
 }
