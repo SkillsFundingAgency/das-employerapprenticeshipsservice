@@ -1,24 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 
-namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
+namespace SFA.DAS.EAS.Infrastructure.Services.Features
 {
     public class ControllerActionCacheItem
     {
         private readonly int _hashvalue;
+        private readonly ControllerAction _controllerAction;
 
-        public ControllerActionCacheItem(string controller, string action)
+        public ControllerActionCacheItem(ControllerAction controllerAction, Feature feature)
         {
-            Controller = controller;
-            Action = action;
-            WhiteLists = new List<WhiteList>();
+            _controllerAction = controllerAction;
+            Feature = feature;
             _hashvalue = GetHash(Controller, Action);
         }
 
-        public string Controller { get; }
+        public string Controller => _controllerAction.Controller;
 
-        public string Action { get; }
+        public string Action => _controllerAction.Action;
+
+        public string QualifiedName => _controllerAction.QualifiedName;
 
         public override int GetHashCode()
         {
@@ -32,7 +33,13 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
                    string.Equals(action.Action, Action, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public List<WhiteList> WhiteLists { get; }
+        public Feature Feature { get; }
+
+        public string[] WhiteList => Feature.WhiteList;
+
+        public FeatureType FeatureType => Feature.FeatureType;
+
+        public decimal EnabledByAgreementVersion => Feature.EnabledByAgreementVersion;
 
         private int GetHash(string controller, string action)
         {

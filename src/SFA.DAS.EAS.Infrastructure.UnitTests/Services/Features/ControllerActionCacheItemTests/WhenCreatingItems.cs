@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
-using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
+﻿using NUnit.Framework;
+using SFA.DAS.EAS.Domain.Models.FeatureToggles;
+using SFA.DAS.EAS.Infrastructure.Services.Features;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.ControllerActionCacheItemTests
 {
@@ -35,9 +31,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggle.Controller
 
         private ControllerActionCacheItem Create(string controllerActionName)
         {
-            var parts = controllerActionName.Split(new[] {'.'});
+            var controllerAction = new ControllerAction(controllerActionName);
 
-            return new ControllerActionCacheItem(parts[0], parts[1]);
+            return new ControllerActionCacheItem(controllerAction, new Feature());
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 
-namespace SFA.DAS.EAS.Domain.Interfaces
+namespace SFA.DAS.EAS.Infrastructure.Services.Features
 {
     /// <summary>
-    ///     Represents a service that can determine whether a feature is toggled if so whether it should be available 
-    ///     to the current <see cref="OperationContext"/>.
+    ///     Represents a service that can determine whether a feature is whitelisted and whether the current user
+    ///     is included in the whitelist.
     /// </summary>
-    public interface IFeatureToggleService
+    public interface IFeatureWhiteListingService
     {
         /// <summary>
         ///     Checks the operation context against the configured feature toggles to determine if the operation
@@ -18,6 +18,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
         ///     is whbite listed.
         ///     false if the operation is feature toggled and the current user is not white listed.
         /// </returns>
-        Task<bool> IsFeatureEnabled(OperationContext context);
+        Task<bool> IsFeatureEnabledForContextAsync(OperationContext context);
     }
 }

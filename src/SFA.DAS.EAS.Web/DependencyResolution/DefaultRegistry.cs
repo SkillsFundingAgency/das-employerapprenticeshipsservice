@@ -45,8 +45,9 @@ using SFA.DAS.EAS.Infrastructure.Pipeline;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers;
 using SFA.DAS.EAS.Infrastructure.Services;
-using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
+using SFA.DAS.EAS.Infrastructure.Services.Features;
 using SFA.DAS.EAS.Web.Authorization;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Logging;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
@@ -59,6 +60,7 @@ using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Tasks.API.Client;
 using StructureMap;
+using StructureMap.Pipeline;
 using StructureMap.TypeRules;
 using WebGrease.Css.Extensions;
 
@@ -246,14 +248,19 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
         private void RegisterAuthorisationPipeline()
         {
-            For<IOperationAuthorisationHandler[]>().Use(ctx => new[]
+            For<IOperationAuthorisationHandler[]>().Use(ctx => new IOperationAuthorisationHandler[]
             {
                 // The order of the types specified here is the order in which the handlers will be executed. 
-                ctx.GetInstance<FeatureToggleAuthorisationHandler>()
+                ctx.GetInstance<FeatureToggleAuthorisationHandler>(),
+                ctx.GetInstance<AgreementFeatureAuthorisationHandler>()
             }).Singleton();
+
             For<IOperationAuthorisationHandler>().Use<OperationAuthorisation>().Singleton();
-            For<IFeatureToggleService>().Use<FeatureToggleService>().Singleton();
-            For<IFeatureToggleCache>().Use<FeatureToggleCache>().Singleton();
+            For<IFeatureService>().Use<FeatureService>().Singleton();
+            For<IFeatureCache>().Use<FeatureCache>().Singleton();
+            For<IControllerMetaDataService>().Use<ControllerMetaDataService>().Singleton();
+            For<IFeatureCache>().Use<FeatureCache>().Singleton();
+            For<IAccountAgreementService>().Use<AccountAgreementService>().Singleton();
         }
     }
 }

@@ -5,8 +5,6 @@ using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.ViewModels.Transfers;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
-using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {

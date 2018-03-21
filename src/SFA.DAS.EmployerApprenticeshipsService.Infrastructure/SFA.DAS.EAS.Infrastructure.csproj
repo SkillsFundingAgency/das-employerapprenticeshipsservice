@@ -277,9 +277,13 @@
     <Compile Include="Models\PostcodeAnywhere\PcaAddress.cs" />
     <Compile Include="Models\PostcodeAnywhere\PcaServiceFindResult.cs" />
     <Compile Include="Data\TransactionRepository.cs" />
+    <Compile Include="Pipeline\Features\Handlers\AgreementFeatureAuthorisationHandler.cs" />
     <Compile Include="Pipeline\Features\OperationAuthorisation.cs" />
     <Compile Include="Pipeline\Features\Handlers\FeatureToggleAuthorisationHandler.cs" />
-    <Compile Include="Services\FeatureToggle\FeatureToggleService.cs" />
+    <Compile Include="Services\Features\AccountAgreementService.cs" />
+    <Compile Include="Services\Features\FeatureAgreementService.cs" />
+    <Compile Include="Services\Features\FeatureCacheFactory.cs" />
+    <Compile Include="Services\Features\FeatureService.cs" />
     <Compile Include="Pipeline\IOperationAuthorisationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AddressLookupService.cs" />
@@ -288,17 +292,21 @@
     <Compile Include="Services\AzureServiceBase.cs" />
     <Compile Include="Services\CommitmentService.cs" />
     <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />
-    <Compile Include="Services\FeatureToggle\ControllerActionItem.cs" />
+    <Compile Include="Services\Features\ControllerActionCacheItem.cs" />
     <Compile Include="Services\CookieStorageService.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
     <Compile Include="Services\DasLevyService.cs" />
     <Compile Include="Services\DasAccountService.cs" />
     <Compile Include="Services\ExcelService.cs" />
-    <Compile Include="Services\FeatureToggle\FeatureToggleCache.cs" />
-    <Compile Include="Services\FeatureToggle\IControllerMetaDataService.cs" />
-    <Compile Include="Services\FeatureToggle\OperationAuthorisationService.cs" />
-    <Compile Include="Services\FeatureToggle\IFeatureToggleCache.cs" />
-    <Compile Include="Services\FeatureToggle\OperationFilterAttribute.cs" />
+    <Compile Include="Services\Features\FeatureCache.cs" />
+    <Compile Include="Services\Features\FeatureWhiteListingService.cs" />
+    <Compile Include="Services\Features\IAccountAgreementService.cs" />
+    <Compile Include="Services\Features\IControllerMetaDataService.cs" />
+    <Compile Include="Services\Features\IFeatureCacheFactory.cs" />
+    <Compile Include="Services\Features\IFeatureWhiteListingService.cs" />
+    <Compile Include="Services\Features\OperationAuthorisationService.cs" />
+    <Compile Include="Services\Features\IFeatureCache.cs" />
+    <Compile Include="Services\Features\OperationFilterAttribute.cs" />
     <Compile Include="Services\HmrcDateService.cs" />
     <Compile Include="Services\HmrcService.cs" />
     <Compile Include="Services\HttpClientWrapper.cs" />
@@ -310,7 +318,6 @@
     <Compile Include="Services\MultiVariantTestingService.cs" />
     <Compile Include="Services\PaymentService.cs" />
     <Compile Include="Services\TaskService.cs" />
-    <Compile Include="Services\UserWhiteListService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\PostcodeAnywhere\" />

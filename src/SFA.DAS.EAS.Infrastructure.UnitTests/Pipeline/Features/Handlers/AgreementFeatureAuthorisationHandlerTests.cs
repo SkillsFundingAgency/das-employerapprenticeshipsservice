@@ -9,20 +9,20 @@ using SFA.DAS.EAS.Infrastructure.Services.Features;
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Handlers
 {
     [TestFixture]
-    public class FeatureToggleAuthorisationHandlerTests
+    public class AgreementFeatureAuthorisationHandlerTests
     {
         [TestCase(true)]
         [TestCase(false)]
-        public async Task CanAccessAsync_WhenOperationHasSpecifiedEnabledState__ShouldReturnSameCanAccess(bool shouldFeatureBeEnabled)
+        public async Task CanAccessAsync_WhenUserHasSignedRelevantAgreement_ShouldReturnSameCanAccess(bool shouldFeatureBeEnabled)
         {
             //Arrange
-            var featureToggleServiceMock = new Mock<IFeatureWhiteListingService>();
+            var featureAgreementService = new Mock<IFeatureAgreementService>();
 
-            featureToggleServiceMock
-                .Setup(fts => fts.IsFeatureEnabledForContextAsync(It.IsAny<OperationContext>()))
+            featureAgreementService
+                .Setup(fts => fts.IsFeatureEnabled(It.IsAny<OperationContext>()))
                 .ReturnsAsync(shouldFeatureBeEnabled);
 
-            var handler = new FeatureToggleAuthorisationHandler(featureToggleServiceMock.Object);
+            var handler = new AgreementFeatureAuthorisationHandler(featureAgreementService.Object);
 
             // Act
             var actualCanAccess = await handler.CanAccessAsync(new OperationContext());

@@ -208,7 +208,8 @@
     <Compile Include="Http\ServiceUnavailableException.cs" />
     <Compile Include="Http\TooManyRequestsException.cs" />
     <Compile Include="Interfaces\IExcelService.cs" />
-    <Compile Include="Interfaces\IFeatureToggleService.cs" />
+    <Compile Include="Interfaces\IFeatureAgreementService.cs" />
+    <Compile Include="Interfaces\IFeatureService.cs" />
     <Compile Include="Interfaces\IHmrcDateService.cs" />
     <Compile Include="Interfaces\IHttpResponseLogger.cs" />
     <Compile Include="Interfaces\IPdfService.cs" />
@@ -238,11 +239,11 @@
     <Compile Include="Models\EmployerAgreement\RemoveEmployerAgreementView.cs" />
     <Compile Include="Models\EmployerAgreement\SignEmployerAgreement.cs" />
     <Compile Include="Models\Entity.cs" />
-    <Compile Include="Models\FeatureToggles\Feature.cs" />
+    <Compile Include="Models\FeatureToggles\FeatureEnabledInformation.cs" />
+    <Compile Include="Models\FeatureToggles\FeatureType.cs" />
     <Compile Include="Models\FeatureToggles\OperationContext.cs" />
     <Compile Include="Models\IEntity.cs" />
     <Compile Include="Models\FeatureToggles\ControllerAction.cs" />
-    <Compile Include="Models\FeatureToggles\FeatureToggleCollection.cs" />
     <Compile Include="Models\FeatureToggles\WhiteList.cs" />
     <Compile Include="Models\Organisation\Address.cs" />
     <Compile Include="Models\Payments\Payment.cs" />
@@ -299,7 +300,6 @@
     <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Http\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
-    <Compile Include="Interfaces\IUserWhiteList.cs" />
     <Compile Include="Models\AccountTeam\Invitation.cs" />
     <Compile Include="Models\AccountTeam\InvitationStatus.cs" />
     <Compile Include="Models\AccountTeam\InvitationView.cs" />
@@ -316,7 +316,7 @@
     <Compile Include="Interfaces\IPaymentService.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentDetails.cs" />
-    <Compile Include="Models\FeatureToggles\FeatureToggle.cs" />
+    <Compile Include="Models\FeatureToggles\Feature.cs" />
     <Compile Include="Models\FeatureToggles\FeatureToggleConfiguration.cs" />
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
     <Compile Include="Models\HmrcLevy\EmployerLevyData.cs" />
