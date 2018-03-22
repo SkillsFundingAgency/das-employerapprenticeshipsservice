@@ -17,13 +17,14 @@ namespace SFA.DAS.EAS.Domain.Data.Entities.Account
         public virtual int RoleId { get; set; }
         public string RoleName => ((Role)RoleId).ToString();
         public virtual ICollection<TransferConnectionInvitation> SentTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
-
         public virtual ICollection<TransferConnectionInvitation> ReceivedTransferConnectionInvitation { get; set; } = new List<TransferConnectionInvitation>();
+        public bool IsSender => SentTransferConnectionInvitations.Any(i =>i.Status != TransferConnectionInvitationStatus.Rejected);
 
         public TransferConnectionInvitation SendTransferConnectionInvitation(Account receiverAccount, User senderUser)
         {
-            RequiresTransferConnectionInvitationDoesNotAlreadyExist(receiverAccount);
             RequiresReceiverAccountIsNotAlreadyASender(receiverAccount);
+            RequiresReceiverAccountIsNotTheSenderAccount(receiverAccount);
+            RequiresTransferConnectionInvitationDoesNotAlreadyExist(receiverAccount);
 
             var transferConnectionInvitation = new TransferConnectionInvitation(this, receiverAccount, senderUser);
 
@@ -32,7 +33,17 @@ namespace SFA.DAS.EAS.Domain.Data.Entities.Account
             return transferConnectionInvitation;
         }
 
-        public bool IsSender => SentTransferConnectionInvitations.Any(i =>i.Status != TransferConnectionInvitationStatus.Rejected);
+        private void RequiresReceiverAccountIsNotAlreadyASender(Account receiverAccount)
+        {
+            if (receiverAccount.IsSender)
+                throw new Exception("Requires receiver account is not already a sender.");
+        }
+
+        private void RequiresReceiverAccountIsNotTheSenderAccount(Account receiverAccount)
+        {
+            if (receiverAccount.Id == Id)
+                throw new Exception("Requires receiver account is not the sender account.");
+        }
 
         private void RequiresTransferConnectionInvitationDoesNotAlreadyExist(Account receiverAccount)
         {
@@ -42,12 +53,6 @@ namespace SFA.DAS.EAS.Domain.Data.Entities.Account
 
             if (anyTransferConnectionInvitations)
                 throw new Exception("Requires transfer connection invitation does not already exist.");
-        }
-
-        private void RequiresReceiverAccountIsNotAlreadyASender(Account receiverAccount)
-        {
-            if (receiverAccount.IsSender)
-                throw new Exception("Requires receiver of transfer connection request is not a sender");
         }
     }
 }

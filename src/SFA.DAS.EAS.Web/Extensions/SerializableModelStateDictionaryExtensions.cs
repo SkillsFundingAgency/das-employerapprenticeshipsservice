@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Web.Serialization;
+using SFA.DAS.EAS.Web.Validation;
 
 namespace SFA.DAS.EAS.Web.Extensions
 {

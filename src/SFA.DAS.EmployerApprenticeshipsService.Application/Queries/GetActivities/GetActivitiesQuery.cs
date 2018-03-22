@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Application.Messages;
 
 namespace SFA.DAS.EAS.Application.Queries.GetActivities
 {
-    public class GetActivitiesQuery : AuthorizedMessage, IAsyncRequest<GetActivitiesResponse>
+    public class GetActivitiesQuery : MembershipMessage, IAsyncRequest<GetActivitiesResponse>
     {
         public int? Take { get; set; }
         public DateTime? From { get; set; }

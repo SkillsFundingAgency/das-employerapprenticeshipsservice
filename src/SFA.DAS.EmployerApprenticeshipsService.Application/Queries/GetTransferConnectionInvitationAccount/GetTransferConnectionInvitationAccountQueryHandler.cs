@@ -5,10 +5,10 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using MediatR;
-using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Application.Dtos;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
+using SFA.DAS.EAS.Infrastructure.Data;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
 {
@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
                 .ProjectTo<AccountDto>(_configurationProvider)
                 .SingleOrDefaultAsync(a => a.PublicHashedId == message.ReceiverAccountPublicHashedId);
 
-            if (receiverAccount == null)
+            if (receiverAccount == null || receiverAccount.Id == message.AccountId)
             {
                 throw new ValidationException<GetTransferConnectionInvitationAccountQuery>(q => q.ReceiverAccountPublicHashedId, "You must enter a valid account ID");
             }

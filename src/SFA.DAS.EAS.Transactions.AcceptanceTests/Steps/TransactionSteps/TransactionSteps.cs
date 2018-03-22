@@ -189,7 +189,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
         {
             var employerAccountTransactionsOrchestrator = _container.GetInstance<EmployerAccountTransactionsOrchestrator>();
             var hashedAccountId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
+            var userId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
             
             var actual = employerAccountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId,DateTime.Now.Year, DateTime.Now.Month, userId).Result;
 

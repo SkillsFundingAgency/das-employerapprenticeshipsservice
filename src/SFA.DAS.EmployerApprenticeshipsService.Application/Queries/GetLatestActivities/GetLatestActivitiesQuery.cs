@@ -3,7 +3,7 @@ using SFA.DAS.EAS.Application.Messages;
 
 namespace SFA.DAS.EAS.Application.Queries.GetLatestActivities
 {
-    public class GetLatestActivitiesQuery : AuthorizedMessage, IAsyncRequest<GetLatestActivitiesResponse>
+    public class GetLatestActivitiesQuery : MembershipMessage, IAsyncRequest<GetLatestActivitiesResponse>
     {
     }
 }

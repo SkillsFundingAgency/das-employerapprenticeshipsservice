@@ -11,16 +11,16 @@ namespace SFA.DAS.EAS.Web.UnitTests.Attributes.ValidateMembershipAttributeTests
     public class WhenIViewAPage
     {
         private ValidateMembershipAttribute _filter;
-        private Mock<IMembershipService> _membershipService;
+        private Mock<IAuthorizationService> _authorizationService;
         private ActionExecutingContext _filterContext;
         
         [SetUp]
         public void Arrange()
         {
-            _membershipService = new Mock<IMembershipService>();
+            _authorizationService = new Mock<IAuthorizationService>();
             _filterContext = new ActionExecutingContext();
 
-            _filter = new ValidateMembershipAttribute(() => _membershipService.Object);
+            _filter = new ValidateMembershipAttribute(() => _authorizationService.Object);
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Attributes.ValidateMembershipAttributeTests
         [Test]
         public void ThenIShouldNotBeShownThePageIfAccountMembershipIsValid()
         {
-            _membershipService.Setup(m => m.ValidateMembership()).Throws<UnauthorizedAccessException>();
+            _authorizationService.Setup(m => m.ValidateMembership()).Throws<UnauthorizedAccessException>();
             
             Assert.Throws<UnauthorizedAccessException>(() => _filter.OnActionExecuting(_filterContext));
         }

@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.InviteMember
         [Then(@"A user invite is ""(.*)""")]
         public void ThenAUserInviteIsWithPendingStatus(string createdStatus)
         {
-            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
+            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
             var orcehstrator = _container.GetInstance<EmployerTeamOrchestrator>();
             var teamMembers = orcehstrator.GetTeamMembers(_hashedAccountId, accountOwnerId).Result;
 
@@ -100,7 +100,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.InviteMember
 
         private void CreateInvitationForGivenEmailAndName(string email, string name)
         {
-            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
+            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
             var orchestrator = _container.GetInstance<InvitationOrchestrator>();
             orchestrator.CreateInvitation(new InviteTeamMemberViewModel
             {
@@ -113,7 +113,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.InviteMember
 
         private void SetAccountIdForUser()
         {
-            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
+            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
             var mediator = _container.GetInstance<IMediator>();
             var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery {UserRef = accountOwnerId }).Result;
 

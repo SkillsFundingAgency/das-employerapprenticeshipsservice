@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments;
 using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
@@ -18,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Application.Exceptions;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

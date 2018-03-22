@@ -3,7 +3,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Data;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Web.Filters;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Filters.UnitOfWorkManagerFilterTests

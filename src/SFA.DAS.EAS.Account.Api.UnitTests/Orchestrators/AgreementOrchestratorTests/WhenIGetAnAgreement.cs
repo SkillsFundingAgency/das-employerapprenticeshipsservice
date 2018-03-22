@@ -8,7 +8,7 @@ using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Api.Orchestrators;
+using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AgreementOrchestratorT
 
         private IMapper ConfigureMapper()
         {
-            var profiles = Assembly.Load("SFA.DAS.EAS.Api")
+            var profiles = Assembly.Load("SFA.DAS.EAS.Account.Api")
                 .GetTypes()
                 .Where(t => typeof(Profile).IsAssignableFrom(t))
                 .Select(t => (Profile)Activator.CreateInstance(t));

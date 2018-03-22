@@ -2,12 +2,10 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
-using Castle.DynamicProxy.Generators;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetAccountTransferRole;
-using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
+using SFA.DAS.EAS.Application.Queries.GetTransferConnectionRoles;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Mappings;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
@@ -21,16 +19,16 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         private IConfigurationProvider _configurationProvider;
         private IMapper _mapper;
         private Mock<IMediator> _mediator;
-        private readonly GetAccountTransferRoleResponse _response = new GetAccountTransferRoleResponse();
+        private readonly GetTransferConnectionRolesResponse _response = new GetTransferConnectionRolesResponse();
 
         [SetUp]
         public void Arrange()
         {
-            _configurationProvider = new MapperConfiguration(c => c.AddProfile<TransferConnectionInvitationMaps>());
+            _configurationProvider = new MapperConfiguration(c => c.AddProfile<TransferConnectionInvitationMappings>());
             _mapper = _configurationProvider.CreateMapper();
             _mediator = new Mock<IMediator>();
 
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetAccountTransferRoleQuery>())).ReturnsAsync(_response);
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetTransferConnectionRolesQuery>())).ReturnsAsync(_response);
             _controller = new TransferConnectionInvitationsController(_mapper, _mediator.Object);
         }
 
@@ -82,13 +80,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
             return CheckModelProperty(true, true, model => Assert.IsTrue(model.IsApprovedReceiver));
         }
 
-        private async Task CheckModelProperty(bool isApprovedReceiver, bool isPendingreceiver, Action<IndexTransferConnectionInvitationViewModel> check)
+        private async Task CheckModelProperty(bool isApprovedReceiver, bool isPendingreceiver, Action<TransferConnectionRolesViewModel> check)
         {
             _response.IsApprovedReceiver = isApprovedReceiver;
             _response.IsPendingReceiver = isPendingreceiver;
 
-            var result = await _controller.Index(new GetAccountTransferRoleQuery()) as ViewResult;
-            var model = result?.Model as IndexTransferConnectionInvitationViewModel;
+            var result = await _controller.Index(new GetTransferConnectionRolesQuery()) as ViewResult;
+            var model = result?.Model as TransferConnectionRolesViewModel;
 
             check(model);
         }

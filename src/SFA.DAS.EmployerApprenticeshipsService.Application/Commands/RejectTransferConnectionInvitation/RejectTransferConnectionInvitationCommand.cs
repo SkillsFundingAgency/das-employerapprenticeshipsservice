@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Application.Messages;
 
 namespace SFA.DAS.EAS.Application.Commands.RejectTransferConnectionInvitation
 {
-    public class RejectTransferConnectionInvitationCommand : AuthorizedMessage, IAsyncRequest
+    public class RejectTransferConnectionInvitationCommand : MembershipMessage, IAsyncRequest
     {
         [Required]
         public int? TransferConnectionInvitationId { get; set; }

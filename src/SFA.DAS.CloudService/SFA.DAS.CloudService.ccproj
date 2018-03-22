@@ -44,7 +44,6 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Profiles" />
     <Folder Include="Configuration" />
     <Folder Include="SFA.DAS.EAS.PaymentProvider.WorkerContent\" />
     <Folder Include="SFA.DAS.EAS.WebContent" />
@@ -78,9 +77,6 @@
       <RoleType>Worker</RoleType>
       <RoleName>SFA.DAS.EAS.LevyDeclarationProvider.Worker</RoleName>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <PublishProfile Include="Profiles\das-at-eas-cs (stage).azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

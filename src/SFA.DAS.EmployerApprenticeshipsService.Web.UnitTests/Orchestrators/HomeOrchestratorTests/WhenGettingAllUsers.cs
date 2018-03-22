@@ -73,7 +73,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HomeOrchestratorTests
 
             //Assert
             Assert.AreEqual(1, actual.AvailableUsers.Count);
-            Assert.IsTrue(actual.AvailableUsers.Any(x => x.UserId.Equals(_user.UserRef) && x.Email.Equals(_user.Email) && x.FirstName.Equals(_user.FirstName) && x.LastName.Equals(_user.LastName)));
+            Assert.IsTrue(actual.AvailableUsers.Any(x => x.UserRef.Equals(_user.UserRef) && x.Email.Equals(_user.Email) && x.FirstName.Equals(_user.FirstName) && x.LastName.Equals(_user.LastName)));
 
         }
     }

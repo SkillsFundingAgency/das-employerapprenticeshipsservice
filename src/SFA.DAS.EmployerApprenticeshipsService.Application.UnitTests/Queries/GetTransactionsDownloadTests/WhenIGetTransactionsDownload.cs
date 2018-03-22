@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Formatters.TransactionDowloads;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownload;

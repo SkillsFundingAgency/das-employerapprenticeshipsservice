@@ -22,15 +22,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         private Mock<ILog> _logger;
         private Mock<FeatureToggleService> _featureToggleServiceMock;
         private FeatureToggleService _featureToggleService;
-        private IMembershipContext _membershipContext;
+        private IAuthorizationContext _authorizationContext;
 
         [SetUp]
         public void Arrange()
         {
-            _membershipContext = new MembershipContext
+            _authorizationContext = new AuthorizationContext
             {
-                UserId = 111111,
-                UserEmail = "user.one@unit.tests"
+                UserContext = new UserContext { Id = 111111, Email = "user.one@unit.tests" }
             };
 
             _cacheProvider = new Mock<ICacheProvider>();
@@ -41,7 +40,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
             _featureToggleServiceMock = new Mock<FeatureToggleService>(_cacheProvider.Object, _logger.Object);
 
             _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage()).Returns(new FeatureToggleConfiguration());
-            _featureToggleServiceMock.Setup(f => f.IsFeatureEnabled(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IMembershipContext>())).CallBase();
+            _featureToggleServiceMock.Setup(f => f.IsFeatureEnabled(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IAuthorizationContext>())).CallBase();
 
             _featureToggleService = _featureToggleServiceMock.Object;
         }
@@ -50,8 +49,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         public void ThenShouldGetFeaturesFromStorageOnce()
         {
             //Act
-            _featureToggleService.IsFeatureEnabled("", "", null);
-            _featureToggleService.IsFeatureEnabled("", "", null);
+            _featureToggleService.IsFeatureEnabled("", "", new AuthorizationContext());
 
             //Assert
             _featureToggleServiceMock.Verify(f => f.GetDataFromTableStorage(), Times.Once());
@@ -61,8 +59,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         public void ThenShouldGetFeaturesFromCache()
         {
             //Act
-            _featureToggleService.IsFeatureEnabled("", "", null);
-            _featureToggleService.IsFeatureEnabled("", "", null);
+            _featureToggleService.IsFeatureEnabled("", "", new AuthorizationContext());
+            _featureToggleService.IsFeatureEnabled("", "", new AuthorizationContext());
 
             //Assert
             _cacheProvider.Verify(c => c.Get<FeatureToggleConfiguration>(nameof(FeatureToggleConfiguration)), Times.Exactly(2));
@@ -75,7 +73,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
             _featureToggleServiceMock.Setup(f => f.GetDataFromTableStorage()).Returns(new FeatureToggleConfiguration());
 
             //Act
-            _featureToggleService.IsFeatureEnabled("", "", null);
+            _featureToggleService.IsFeatureEnabled("", "", new AuthorizationContext());
 
             //Assert
             _cacheProvider.Verify(c => c.Set(nameof(FeatureToggleConfiguration),It.IsAny<FeatureToggleConfiguration>(), It.IsAny<TimeSpan>()), Times.Never);
@@ -102,7 +100,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
                 });
 
             // Act
-            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
+            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _authorizationContext);
 
             // Assert
             Assert.That(isFeatureEnabled, Is.True);
@@ -127,7 +125,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
                 });
 
             // Act
-            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
+            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _authorizationContext);
 
             // Assert
             Assert.That(isFeatureEnabled, Is.False);
@@ -151,7 +149,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
                 });
 
             // Act
-            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
+            var isFeatureEnabled = _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _authorizationContext);
 
             // Assert
             Assert.That(isFeatureEnabled, Is.False);
@@ -161,10 +159,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         public void ThenShouldLogTrueResultIfFeatureIsEnabled()
         {
             // Act
-            _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
+            _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _authorizationContext);
 
             // Assert
-            _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{_membershipContext.UserId}' is '{true}'."), Times.Once);
+            _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{_authorizationContext.UserContext.Id}' is '{true}'."), Times.Once);
         }
 
         [Test]
@@ -185,17 +183,17 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
                 });
 
             // Act
-            _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _membershipContext);
+            _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, _authorizationContext);
 
             // Assert
-            _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{_membershipContext.UserId}' is '{false}'."), Times.Once);
+            _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{_authorizationContext.UserContext.Id}' is '{false}'."), Times.Once);
         }
 
         [Test]
         public void ThenShouldLogNullUserExternalIdIfMembershipIsNull()
         {
             // Act
-            _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, null);
+            _featureToggleService.IsFeatureEnabled(ControllerName, ActionName, new AuthorizationContext());
 
             // Assert
             _logger.Verify(l => l.Info($"Is feature enabled check for controllerName '{ControllerName}', actionName '{ActionName}' and userId '{null}' is '{true}'."), Times.Once);

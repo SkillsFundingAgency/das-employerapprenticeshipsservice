@@ -233,6 +233,8 @@
     <Compile Include="Caching\RedisCache.cs" />
     <Compile Include="Caching\TaskSynchronizationScope.cs" />
     <Compile Include="Data\AccountIdUserTableParam.cs" />
+    <Compile Include="Data\EmployerAccountDbContext.cs" />
+    <Compile Include="Data\IUnitOfWorkManager.cs" />
     <Compile Include="Data\PayeRepository.cs" />
     <Compile Include="Data\LegalEntityRepository.cs" />
     <Compile Include="Data\AccountRepository.cs" />
@@ -249,6 +251,7 @@
     <Compile Include="Data\TransferConnectionInvitationRepository.cs" />
     <Compile Include="Data\TransferRepository.cs" />
     <Compile Include="Data\UnitOfWork.cs" />
+    <Compile Include="Data\UnitOfWorkManager.cs" />
     <Compile Include="Data\UserAccountRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
     <Compile Include="DependencyResolution\ConfigurationHelper.cs" />
@@ -286,8 +289,6 @@
     <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />
     <Compile Include="Services\CookieStorageService.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
-    <Compile Include="Services\DasLevyService.cs" />
-    <Compile Include="Services\DasAccountService.cs" />
     <Compile Include="Services\ExcelService.cs" />
     <Compile Include="Services\FeatureToggleService.cs" />
     <Compile Include="Services\HmrcDateService.cs" />
@@ -296,7 +297,6 @@
     <Compile Include="Services\HttpResponseLogger.cs" />
     <Compile Include="Services\PdfService.cs" />
     <Compile Include="Services\ReferenceDataService.cs" />
-    <Compile Include="Services\RefreshEmployerLevyService.cs" />
     <Compile Include="Services\RestService.cs" />
     <Compile Include="Services\MultiVariantTestingService.cs" />
     <Compile Include="Services\PaymentService.cs" />
@@ -307,10 +307,6 @@
     <Folder Include="Interfaces\PostcodeAnywhere\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
-      <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
-      <Name>SFA.DAS.EAS.Application</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EAS.Domain</Name>

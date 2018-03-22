@@ -9,6 +9,16 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
     {
         public static T GetConfiguration<T>(string serviceName)
         {
+            var environmentName = GetEnvironmentName();
+            var configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+            var configurationService = new ConfigurationService(configurationRepository, new ConfigurationOptions(serviceName, environmentName, "1.0"));
+            var configuration = configurationService.Get<T>();
+
+            return configuration;
+        }
+
+        public static string GetEnvironmentName()
+        {
             var environmentName = Environment.GetEnvironmentVariable("DASENV");
 
             if (string.IsNullOrEmpty(environmentName))
@@ -16,11 +26,7 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
                 environmentName = CloudConfigurationManager.GetSetting("EnvironmentName");
             }
 
-            var configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
-            var configurationService = new ConfigurationService(configurationRepository, new ConfigurationOptions(serviceName, environmentName, "1.0"));
-            var config = configurationService.Get<T>();
-
-            return config;
-        }
+            return environmentName;
+        }   
     }
 }

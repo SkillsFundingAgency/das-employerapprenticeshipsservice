@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Application.Messages;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransactionsDownload
 {
-    public class GetTransactionsDownloadQuery : AuthorizedMessage, IAsyncRequest<GetTransactionsDownloadResponse>
+    public class GetTransactionsDownloadQuery : MembershipMessage, IAsyncRequest<GetTransactionsDownloadResponse>
     {
         [Display(Name = "Start date")]
         [Required]

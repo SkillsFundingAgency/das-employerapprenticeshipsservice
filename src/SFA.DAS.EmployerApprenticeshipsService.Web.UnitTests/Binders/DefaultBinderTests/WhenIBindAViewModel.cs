@@ -6,22 +6,22 @@ using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Messages;
-using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Web.Authorization;
 using SFA.DAS.EAS.Web.Binders;
+using AuthorizationContext = SFA.DAS.EAS.Domain.Models.Authorization.AuthorizationContext;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Binders.DefaultBinderTests
 {
     [TestFixture]
     public class WhenIBindAViewModel
     {
-        private DefaultBinder _binder;
+        private MessageModelBinder _modelBinder;
         private ControllerContext _controllerContext;
         private ModelBindingContext _bindingContext;
         private NameValueCollectionValueProvider _valueProvider;
-        private Mock<IMembershipService> _membershipService;
-        private IMembershipContext _membershipContext;
+        private Mock<IAuthorizationService> _authorizationService;
+        private AuthorizationContext _authorizationContext;
 
         [SetUp]
         public void Arrange()
@@ -33,67 +33,72 @@ namespace SFA.DAS.EAS.Web.UnitTests.Binders.DefaultBinderTests
             {
                 ModelName = "",
                 ValueProvider = _valueProvider,
-                ModelMetadata = ModelMetadataProviders.Current.GetMetadataForType(null, typeof(AuthorizedMessageStub))
+                ModelMetadata = ModelMetadataProviders.Current.GetMetadataForType(null, typeof(MembershipMessageStub))
             };
 
-            _membershipService = new Mock<IMembershipService>();
+            _authorizationService = new Mock<IAuthorizationService>();
 
-            _membershipContext = new MembershipContext
+            _authorizationContext = new AuthorizationContext
             {
-                AccountHashedId = "ABC123",
-                AccountId = 111111,
-                UserExternalId = Guid.NewGuid(),
-                UserId = 222222
+                AccountContext = new AccountContext {  PublicHashedId = "ABC123", Id = 111111 },
+                UserContext = new UserContext { ExternalId = Guid.NewGuid(), Id = 222222 },
             };
 
-            _membershipService.Setup(c => c.GetMembershipContext()).Returns(_membershipContext);
+            _authorizationService.Setup(c => c.GetAuthorizationContext()).Returns(_authorizationContext);
 
-            _binder = new DefaultBinder(() => _membershipService.Object);
+            _modelBinder = new MessageModelBinder(() => _authorizationService.Object);
         }
 
         [Test]
         public void ThenShouldBindAuthorizedMessageProperties()
         {
-            var message = _binder.BindModel(_controllerContext, _bindingContext) as AuthorizedMessageStub;
+            var message = _modelBinder.BindModel(_controllerContext, _bindingContext) as MembershipMessageStub;
 
             Assert.That(message, Is.Not.Null);
-            Assert.That(message.AccountHashedId, Is.EqualTo(_membershipContext.AccountHashedId));
-            Assert.That(message.AccountId, Is.EqualTo(_membershipContext.AccountId));
-            Assert.That(message.UserId, Is.EqualTo(_membershipContext.UserId));
+            Assert.That(message.AccountId, Is.EqualTo(_authorizationContext.AccountContext.Id));
+            Assert.That(message.UserId, Is.EqualTo(_authorizationContext.UserContext.Id));
         }
 
         [Test]
-        public void ThenShouldNotBindAuthorizedMessagePropertiesIfMembershipIsNull()
+        public void ThenShouldNotBindAccountMessagePropertiesIfAccountContextIsNull()
         {
-            _membershipService.Setup(m => m.GetMembershipContext()).Returns<Membership>(null);
+            _authorizationContext.AccountContext = null;
 
-            var message = _binder.BindModel(_controllerContext, _bindingContext) as AuthorizedMessageStub;
+            var message = _modelBinder.BindModel(_controllerContext, _bindingContext) as MembershipMessageStub;
 
             Assert.That(message, Is.Not.Null);
             Assert.That(message.AccountId, Is.Null);
+        }
+
+        [Test]
+        public void ThenShouldNotBindUserMessagePropertiesIfUserContextIsNull()
+        {
+            _authorizationContext.UserContext = null;
+
+            var message = _modelBinder.BindModel(_controllerContext, _bindingContext) as MembershipMessageStub;
+
+            Assert.That(message, Is.Not.Null);
             Assert.That(message.UserId, Is.Null);
         }
 
         [Test]
-        public void ThenShouldNotBindAuthorizedMessagePropertiesForNonAuthorizedMessageType()
+        public void ThenShouldNotBindAuthorizedMessagePropertiesForUnknownMessageType()
         {
             _bindingContext.ModelMetadata = ModelMetadataProviders.Current.GetMetadataForType(null, typeof(MessageStub));
 
-            var message = _binder.BindModel(_controllerContext, _bindingContext) as MessageStub;
+            var message = _modelBinder.BindModel(_controllerContext, _bindingContext) as MessageStub;
 
             Assert.That(message, Is.Not.Null);
-            Assert.That(message.AccountHashedId, Is.Null);
             Assert.That(message.AccountId, Is.Null);
             Assert.That(message.UserId, Is.Null);
         }
 
-        private class AuthorizedMessageStub : AuthorizedMessage
+        private class MembershipMessageStub : MembershipMessage
         {
         }
 
         private class MessageStub
         {
-            public string AccountHashedId { get; set; }
             public long? AccountId { get; set; }
             public long? UserId { get; set; }
         }
