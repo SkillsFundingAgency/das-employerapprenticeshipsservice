@@ -62,6 +62,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 transaction.PayeSchemeName = payeSchemeData?.PayeScheme?.Name ?? string.Empty;
             }
 
+            if (!data.Transactions.Any())
+            {
+                return new OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>
+                {
+                    Status = HttpStatusCode.OK,
+                    Data = null
+                };
+            }
+
             return new OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>
             {
                 Status = HttpStatusCode.OK,

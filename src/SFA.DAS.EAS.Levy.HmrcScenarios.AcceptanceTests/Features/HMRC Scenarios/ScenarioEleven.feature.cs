@@ -18,20 +18,20 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Features.HMRCScenarios
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.2.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("HMRC Scenario one - Single PAYE no adjustments")]
-    public partial class HMRCScenarioOne_SinglePAYENoAdjustmentsFeature
+    [NUnit.Framework.DescriptionAttribute("HMRC Scenario Eleven - Non Delarations")]
+    public partial class HMRCScenarioEleven_NonDelarationsFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "ScenarioOne.feature"
+#line 1 "ScenarioEleven.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "HMRC Scenario one - Single PAYE no adjustments", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "HMRC Scenario Eleven - Non Delarations", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -75,6 +75,7 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                         "Paye_scheme",
+                        "NonDeclaration",
                         "LevyDueYtd",
                         "Payroll_Year",
                         "Payroll_Month",
@@ -83,6 +84,7 @@ this.ScenarioSetup(scenarioInfo);
                         "CreatedDate"});
             table1.AddRow(new string[] {
                         "123/ABC",
+                        "False",
                         "10000",
                         "17-18",
                         "1",
@@ -113,6 +115,7 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                         "Paye_scheme",
+                        "NonDeclaration",
                         "LevyDueYtd",
                         "Payroll_Year",
                         "Payroll_Month",
@@ -121,6 +124,7 @@ this.ScenarioSetup(scenarioInfo);
                         "CreatedDate"});
             table2.AddRow(new string[] {
                         "123/ABC",
+                        "False",
                         "10000",
                         "17-18",
                         "1",
@@ -129,7 +133,8 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-05-23"});
             table2.AddRow(new string[] {
                         "123/ABC",
-                        "20000",
+                        "True",
+                        "0",
                         "17-18",
                         "2",
                         "1",
@@ -138,11 +143,11 @@ this.ScenarioSetup(scenarioInfo);
 #line 14
  testRunner.When("I have the following submissions", ((string)(null)), table2, "When ");
 #line 18
- testRunner.Then("the balance on 06/2017 should be 22000 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the balance on 06/2017 should be 11000 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 19
- testRunner.And("the total levy shown for month 06/2017 should be 11000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the total levy shown for month 06/2017 should be 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 20
- testRunner.And("For month 06/2017 the levy declared should be 10000 and the topup should be 1000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("For month 06/2017 the levy declared should be 0 and the topup should be 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -159,6 +164,7 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
                         "Paye_scheme",
+                        "NonDeclaration",
                         "LevyDueYtd",
                         "Payroll_Year",
                         "Payroll_Month",
@@ -167,6 +173,7 @@ this.ScenarioSetup(scenarioInfo);
                         "CreatedDate"});
             table3.AddRow(new string[] {
                         "123/ABC",
+                        "False",
                         "10000",
                         "17-18",
                         "1",
@@ -175,7 +182,8 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-05-23"});
             table3.AddRow(new string[] {
                         "123/ABC",
-                        "20000",
+                        "True",
+                        "0",
                         "17-18",
                         "2",
                         "1",
@@ -183,6 +191,7 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-06-23"});
             table3.AddRow(new string[] {
                         "123/ABC",
+                        "False",
                         "30000",
                         "17-18",
                         "3",
@@ -194,18 +203,18 @@ this.ScenarioSetup(scenarioInfo);
 #line 29
  testRunner.Then("the balance on 07/2017 should be 33000 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 30
- testRunner.And("the total levy shown for month 07/2017 should be 11000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the total levy shown for month 07/2017 should be 22000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 31
- testRunner.And("For month 07/2017 the levy declared should be 10000 and the topup should be 1000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("For month 07/2017 the levy declared should be 20000 and the topup should be 2000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Month six submission")]
-        public virtual void MonthSixSubmission()
+        [NUnit.Framework.DescriptionAttribute("Month four submission")]
+        public virtual void MonthFourSubmission()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Month six submission", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Month four submission", ((string[])(null)));
 #line 33
 this.ScenarioSetup(scenarioInfo);
 #line 34
@@ -213,6 +222,7 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
                         "Paye_scheme",
+                        "NonDeclaration",
                         "LevyDueYtd",
                         "Payroll_Year",
                         "Payroll_Month",
@@ -221,6 +231,7 @@ this.ScenarioSetup(scenarioInfo);
                         "CreatedDate"});
             table4.AddRow(new string[] {
                         "123/ABC",
+                        "False",
                         "10000",
                         "17-18",
                         "1",
@@ -229,7 +240,8 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-05-23"});
             table4.AddRow(new string[] {
                         "123/ABC",
-                        "20000",
+                        "True",
+                        "0",
                         "17-18",
                         "2",
                         "1",
@@ -237,6 +249,7 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-06-23"});
             table4.AddRow(new string[] {
                         "123/ABC",
+                        "False",
                         "30000",
                         "17-18",
                         "3",
@@ -245,52 +258,38 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-07-23"});
             table4.AddRow(new string[] {
                         "123/ABC",
-                        "40000",
+                        "True",
+                        "NULL",
                         "17-18",
                         "4",
                         "1",
                         "2017-08-15",
                         "2017-08-23"});
-            table4.AddRow(new string[] {
-                        "123/ABC",
-                        "50000",
-                        "17-18",
-                        "5",
-                        "1",
-                        "2017-09-15",
-                        "2017-09-23"});
-            table4.AddRow(new string[] {
-                        "123/ABC",
-                        "60000",
-                        "17-18",
-                        "6",
-                        "1",
-                        "2017-10-15",
-                        "2017-10-23"});
 #line 35
  testRunner.When("I have the following submissions", ((string)(null)), table4, "When ");
+#line 41
+ testRunner.Then("the balance on 08/2017 should be 33000 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 42
+ testRunner.And("the total levy shown for month 08/2017 should be 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 43
- testRunner.Then("the balance on 10/2017 should be 66000 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 44
- testRunner.And("the total levy shown for month 10/2017 should be 11000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 45
- testRunner.And("For month 10/2017 the levy declared should be 10000 and the topup should be 1000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("For month 08/2017 the levy declared should be 0 and the topup should be 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Month twelve submission")]
-        public virtual void MonthTwelveSubmission()
+        [NUnit.Framework.DescriptionAttribute("Month five submission")]
+        public virtual void MonthFiveSubmission()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Month twelve submission", ((string[])(null)));
-#line 47
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Month five submission", ((string[])(null)));
+#line 45
 this.ScenarioSetup(scenarioInfo);
-#line 48
+#line 46
  testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
                         "Paye_scheme",
+                        "NonDeclaration",
                         "LevyDueYtd",
                         "Payroll_Year",
                         "Payroll_Month",
@@ -299,6 +298,7 @@ this.ScenarioSetup(scenarioInfo);
                         "CreatedDate"});
             table5.AddRow(new string[] {
                         "123/ABC",
+                        "False",
                         "10000",
                         "17-18",
                         "1",
@@ -307,7 +307,8 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-05-23"});
             table5.AddRow(new string[] {
                         "123/ABC",
-                        "20000",
+                        "True",
+                        "0",
                         "17-18",
                         "2",
                         "1",
@@ -315,6 +316,7 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-06-23"});
             table5.AddRow(new string[] {
                         "123/ABC",
+                        "False",
                         "30000",
                         "17-18",
                         "3",
@@ -323,7 +325,8 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-07-23"});
             table5.AddRow(new string[] {
                         "123/ABC",
-                        "40000",
+                        "True",
+                        "NULL",
                         "17-18",
                         "4",
                         "1",
@@ -331,76 +334,21 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-08-23"});
             table5.AddRow(new string[] {
                         "123/ABC",
-                        "50000",
+                        "False",
+                        "40000",
                         "17-18",
                         "5",
                         "1",
                         "2017-09-15",
                         "2017-09-23"});
-            table5.AddRow(new string[] {
-                        "123/ABC",
-                        "60000",
-                        "17-18",
-                        "6",
-                        "1",
-                        "2017-10-15",
-                        "2017-10-23"});
-            table5.AddRow(new string[] {
-                        "123/ABC",
-                        "70000",
-                        "17-18",
-                        "7",
-                        "1",
-                        "2017-11-15",
-                        "2017-11-23"});
-            table5.AddRow(new string[] {
-                        "123/ABC",
-                        "80000",
-                        "17-18",
-                        "8",
-                        "1",
-                        "2017-12-15",
-                        "2017-12-23"});
-            table5.AddRow(new string[] {
-                        "123/ABC",
-                        "90000",
-                        "17-18",
-                        "9",
-                        "1",
-                        "2018-01-15",
-                        "2018-01-23"});
-            table5.AddRow(new string[] {
-                        "123/ABC",
-                        "100000",
-                        "17-18",
-                        "10",
-                        "1",
-                        "2018-02-15",
-                        "2018-02-23"});
-            table5.AddRow(new string[] {
-                        "123/ABC",
-                        "110000",
-                        "17-18",
-                        "11",
-                        "1",
-                        "2018-03-15",
-                        "2018-03-23"});
-            table5.AddRow(new string[] {
-                        "123/ABC",
-                        "120000",
-                        "17-18",
-                        "12",
-                        "1",
-                        "2018-04-15",
-                        "2018-04-23"});
-#line 49
+#line 47
  testRunner.When("I have the following submissions", ((string)(null)), table5, "When ");
-#line 63
- testRunner.Then("the balance on 04/2018 should be 132000 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 64
- testRunner.And("the total levy shown for month 04/2018 should be 11000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 65
- testRunner.And("For month 04/2018 the levy declared should be 10000 and the topup should be 1000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 54
+ testRunner.Then("the balance on 09/2017 should be 44000 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 55
+ testRunner.And("the total levy shown for month 09/2017 should be 11000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 56
+ testRunner.And("For month 09/2017 the levy declared should be 10000 and the topup should be 1000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
