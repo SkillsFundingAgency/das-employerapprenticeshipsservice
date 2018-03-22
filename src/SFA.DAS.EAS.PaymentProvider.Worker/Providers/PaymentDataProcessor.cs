@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
                 return;
             }
 
-            _logger.Info($"Processing refresh payment command for AccountId:{message.Content.AccountId} PeriodEnd:{message.Content.PeriodEndId}");
+            _logger.Info($"Processing refresh payment command for AccountId='{message.Content.AccountId}' and  PeriodEnd = '{message.Content.PeriodEndId}'");
 
             await _mediator.SendAsync(new RefreshPaymentDataCommand
             {
@@ -66,6 +66,8 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
                 PeriodEnd = message.Content.PeriodEndId,
                 PaymentUrl = message.Content.AccountPaymentUrl
             });
+
+            _logger.Info($"Completed publishing refresh payment command for AccountId '{message.Content.AccountId}' and PeriodEnd '{message.Content.PeriodEndId}'");
 
             await message.CompleteAsync();
         }
