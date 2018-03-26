@@ -16,17 +16,17 @@ namespace SFA.DAS.EAS.Web.Extensions
             return EmployerAction(helper, string.Empty, ControllerConstants.EmployerRecruitBaseUrlKeyName);
         }
 
+        public static string EmployerProjectionsAction(this UrlHelper helper, string path)
+        {
+            return EmployerAction(helper, path, ControllerConstants.EmployerProjectionsBaseUrlKeyName);
+        }
+
         private static string EmployerAction(UrlHelper helper, string path, string baseUrlKeyName)
         {
             var baseUrl = CloudConfigurationManager.GetSetting(baseUrlKeyName)?.TrimEnd('/');
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
 
             return $"{baseUrl}/accounts/{hashedAccountId}/{path}";
-        }
-
-        public static string EmployerProjectionsAction(this UrlHelper helper, string path)
-        {
-            return EmployerAction(helper, path, ControllerConstants.EmployerProjectionsBaseUrlKeyName);
         }
     }
 }

@@ -53,8 +53,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Authorization.AuthorizationServiceTe
             _accountsDbSet = new DbSetStub<Domain.Data.Entities.Account.Account>(_accounts);
             _routeDataValues = new Dictionary<string, object> { [ControllerConstants.AccountHashedIdRouteKeyName] = _account.HashedId };
             _routeData = new Mock<IHttpRouteData>();
-
-            _db.Setup(d => d.SqlQuery<bool>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Guid>())).Returns(new List<bool> { true });
+            
             _db.Setup(d => d.Accounts).Returns(_accountsDbSet);
             _routeData.Setup(d => d.Values).Returns(_routeDataValues);
             _httpRequestMessage.SetRequestContext(new HttpRequestContext { RouteData = _routeData.Object });

@@ -9,8 +9,8 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public LoggerRegistry()
         {
-            For<ILog>().Use(c => new NLogLogger(c.ParentType, c.GetInstance<IRequestContext>(), null)).AlwaysUnique();
-            For<IRequestContext>().Use(c => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
+            For<ILog>().Use(c => new NLogLogger(c.ParentType, c.GetInstance<ILoggingContext>(), null)).AlwaysUnique();
+            For<ILoggingContext>().Use(c => HttpContext.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContext.Current)));
         }
     }
 }

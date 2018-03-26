@@ -16,7 +16,7 @@
 )
 GO
 
-CREATE INDEX [IX_PendingTransferConnectionInvitation_SenderAccountId_ReceiverAccountId_Status]
+CREATE INDEX [IX_TransferConnectionInvitation_SenderAccountId_ReceiverAccountId_Status]
 ON [employer_account].[TransferConnectionInvitation]([SenderAccountId] ASC, [ReceiverAccountId] ASC, [Status] ASC)
 GO
 

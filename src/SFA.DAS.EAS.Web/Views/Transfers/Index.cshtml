@@ -1,16 +1,8 @@
-﻿@using SFA.DAS.EAS.Domain.Models.TransferConnections
-@using System.Globalization
-@using SFA.DAS.EAS.Web.Extensions
-
-@model SFA.DAS.EAS.Web.ViewModels.Transfers.TransferConnectionInvitationsViewModel
-
-@{
+﻿@{
     ViewBag.Title = "Transfers";
     ViewBag.Section = "finance";
     ViewBag.PageID = "page-transfers";
     ViewBag.GaData.Vpv = "/accounts/transfers";
-
-    var culture = new CultureInfo("en-GB");
 }
 
 <div class="grid-row">
@@ -21,68 +13,14 @@
         <p>Before getting started, make sure you understand the <a href="">rules for sending and receiving transfers</a>.</p>
     </div>
 </div>
-<div class="grid-row">
-    <div class="column-full">
-        <div class="data-wrap">
-            <div class="data">
-                <dl class="transfer-funds">
-                    <dt>
-                        Remaining transfer allowance
-                    </dt>
-
-                    <dd class="">@Model.TransferAllowance.ToString("C0", culture)</dd>
-                </dl>
-            </div>
-        </div>
-    </div>
-</div>
+@Html.Action("TransferAllowance")
 <div class="grid-row">
     <div class="column-two-thirds">
         <a class="button" href="@Url.Action("Index", "TransferConnectionInvitations")">Connect with employer</a>
     </div>
 </div>
-
-@if (Model.TransferConnectionInvitations.Any())
-{
-    <div class="grid-row">
-        <div class="column-full">
-            <table class="responsive">
-                <caption class="heading-medium">Connection requests</caption>
-                <thead>
-                    <tr>
-                        <th>Employer</th>
-                        <th>Status</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var transferConnectionInvitation in Model.TransferConnectionInvitations)
-                    {
-                        <tr>
-                            <td data-label="Employer">@transferConnectionInvitation.GetPeerAccount(Model.AccountId).Name</td>
-                            <td data-label="Status">@transferConnectionInvitation.Status.ToString()</td>
-                            <td>
-                                @if (Model.AccountId == transferConnectionInvitation.ReceiverAccount.Id && transferConnectionInvitation.Status == TransferConnectionInvitationStatus.Pending)
-                                {
-                                    <a href="@Url.Action("Receive", "TransferConnectionInvitations", new { transferConnectionInvitationId = transferConnectionInvitation.Id })">Details</a>
-                                }
-                                else
-                                {
-                                    <a href="@Url.Action("Details", "TransferConnectionInvitations", new { transferConnectionInvitationId = transferConnectionInvitation.Id })">Details</a>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-}
-else
-{
-    <h2 class="heading-medium">Connection requests</h2>
-    <p>You have no pending or approved requests</p>
-}
+@Html.Action("TransferConnectionInvitations")
+@Html.Action("TransferRequests")
 
 @section breadcrumb {
     <div class="breadcrumbs">

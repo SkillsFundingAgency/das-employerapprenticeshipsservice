@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Mappings
             {
                 c.AddProfile<ActivityMappings>();
                 c.AddProfile<TransactionMappings>();
-                c.AddProfile<TransferConnectionInvitationMappings>();
+                c.AddProfile<TransferMappings>();
             });
 
             config.AssertConfigurationIsValid();
