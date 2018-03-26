@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
+    [DbConfigurationType(typeof(SqlAzureDbConfiguration))]
     public class EmployerAccountDbContext : DbContext
     {
         public virtual DbSet<Domain.Data.Entities.Account.Account> Accounts { get; set; }
