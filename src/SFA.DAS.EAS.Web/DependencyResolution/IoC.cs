@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();
-                c.AddRegistry<MessagingRegistry>();
+                c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<ServicesRegistry>();

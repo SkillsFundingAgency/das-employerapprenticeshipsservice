@@ -15,11 +15,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             _db = db;
         }
 
-        public async Task Add(TransferConnectionInvitation transferConnectionInvitation)
+        public Task Add(TransferConnectionInvitation transferConnectionInvitation)
         {
             _db.TransferConnectionInvitations.Add(transferConnectionInvitation);
 
-            await _db.SaveChangesAsync();
+            return _db.SaveChangesAsync();
         }
 
         public Task<TransferConnectionInvitation> GetTransferConnectionInvitationById(int transferConnectionInvitationId)

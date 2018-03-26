@@ -4,6 +4,5 @@
     {
         string DatabaseConnectionString { get; set; }
         string MessageServiceBusConnectionString { get; set; }
-        string ServiceBusConnectionString { get; set; }
     }
 }

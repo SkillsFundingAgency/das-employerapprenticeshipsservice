@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetAccountTransferAllowance]
 	@accountId BIGINT = 0,
-	@allowancePercentage FLOAT = 0
+	@allowancePercentage DECIMAL(3,2) = 0
 AS
 	SET NOCOUNT ON
 
