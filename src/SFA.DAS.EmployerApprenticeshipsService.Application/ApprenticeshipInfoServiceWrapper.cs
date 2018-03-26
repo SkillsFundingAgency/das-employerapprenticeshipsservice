@@ -19,41 +19,41 @@ namespace SFA.DAS.EAS.Application
         private const string StandardsKey = "Standards";
         private const string FrameworksKey = "Frameworks";
 
-        private readonly ICache _cache;
+        private readonly IInProcessCache _cache;
 
-        public ApprenticeshipInfoServiceWrapper(ICache cache)
+        public ApprenticeshipInfoServiceWrapper(IInProcessCache cache)
         {
-            if (cache == null)
-                throw new ArgumentNullException(nameof(cache));
-            _cache = cache;
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
         }
 
-        public async Task<StandardsView> GetStandardsAsync(bool refreshCache = false)
+        public Task<StandardsView> GetStandardsAsync(bool refreshCache = false)
         {
-            if (!await _cache.ExistsAsync(StandardsKey) || refreshCache)
+            if (!_cache.Exists(StandardsKey) || refreshCache)
             {
                 var api = new StandardApiClient();
 
+                //BUG: FindAll should be FindAllAsync - currently a blocking call.
                 var standards = api.FindAll().OrderBy(x => x.Title).ToList();
 
-                await _cache.SetCustomValueAsync(StandardsKey, MapFrom(standards));
+                _cache.Set(StandardsKey, MapFrom(standards));
             }
 
-            return await _cache.GetCustomValueAsync<StandardsView>(StandardsKey);
+            return Task.FromResult(_cache.Get<StandardsView>(StandardsKey));
         }
 
-        public async Task<FrameworksView> GetFrameworksAsync(bool refreshCache = false)
+        public Task<FrameworksView> GetFrameworksAsync(bool refreshCache = false)
         {
-            if (!await _cache.ExistsAsync(FrameworksKey) || refreshCache)
+            if (!_cache.Exists(FrameworksKey) || refreshCache)
             {
                 var api = new FrameworkApiClient();
 
+                //BUG: FindAll should be FindAllAsync
                 var frameworks = api.FindAll().OrderBy(x => x.Title).ToList();
 
-                await _cache.SetCustomValueAsync(FrameworksKey, MapFrom(frameworks));
+                _cache.Set(FrameworksKey, MapFrom(frameworks));
             }
 
-            return await _cache.GetCustomValueAsync<FrameworksView>(FrameworksKey);
+            return Task.FromResult(_cache.Get<FrameworksView>(FrameworksKey));
         }
 
         public ProvidersView GetProvider(long ukPrn)

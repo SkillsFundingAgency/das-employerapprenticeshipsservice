@@ -25,7 +25,8 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution
 
             For<Domain.Interfaces.IConfiguration>().Use<PaymentProviderConfiguration>();
             For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>();
-            For<ICache>().Use<InMemoryCache>();
+            For<IInProcessCache>().Use<InProcessCache>().Singleton();
+            For<IDistributedCache>().Use<RedisCache>().Singleton();
 
             RegisterExecutionPolicies();
             RegisterMapper();

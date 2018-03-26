@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
             });
 
             For<IAuthenticationService>().Use(() => owinWrapperMock.Object);
-            For<ICache>().Use<InMemoryCache>();
+            For<IInProcessCache>().Use<InProcessCache>();
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             For<ICookieStorageService<EmployerAccountData>>().Use(() => cookieServiceMock.Object);
             For<IEmployerCommitmentApi>().Use(commitmentsApi.Object);

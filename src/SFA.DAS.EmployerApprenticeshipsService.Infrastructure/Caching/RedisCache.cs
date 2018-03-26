@@ -7,42 +7,66 @@ using StackExchange.Redis;
 
 namespace SFA.DAS.EAS.Infrastructure.Caching
 {
-    public class RedisCache : ICache
+    public class RedisCache : IDistributedCache
     {
-        private readonly IDatabase _cache;
-
-        public RedisCache()
-        {
-            var connectionMultiplexer = ConnectionMultiplexer.Connect(CloudConfigurationManager.GetSetting("RedisConnection"));
-            _cache = connectionMultiplexer.GetDatabase();
-        }
+        private readonly Lazy<IDatabase> _cache = new Lazy<IDatabase>(InitialiseRedis);
 
         public async Task<bool> ExistsAsync(string key)
         {
-            return await _cache.KeyExistsAsync(key);
+            return await _cache.Value.KeyExistsAsync(key);
         }
 
         public async Task<T> GetCustomValueAsync<T>(string key)
         {
-            var redisValue = await _cache.StringGetAsync(key);
+            var redisValue = await _cache.Value.StringGetAsync(key);
 
             return JsonConvert.DeserializeObject<T>(redisValue);
         }
 
-        public async Task SetCustomValueAsync<T>(string key, T customType, int secondsInCache = 300)
+        public Task SetCustomValueAsync<T>(string key, T customType, TimeSpan cacheTime)
         {
-            if (!await _cache.KeyExistsAsync(key))
-            {
-                var _lock = new TaskSynchronizationScope();
+            return _cache.Value.StringSetAsync(key, JsonConvert.SerializeObject(customType), cacheTime);
+        }
 
-                await _lock.RunAsync(async () =>
-                {
-                    if (!await _cache.KeyExistsAsync(key))
-                    {
-                        await _cache.StringSetAsync(key, JsonConvert.SerializeObject(customType), TimeSpan.FromSeconds(secondsInCache));
-                    }
-                });
+        public Task SetCustomValueAsync<T>(string key, T customType)
+        {
+            return _cache.Value.StringSetAsync(key, JsonConvert.SerializeObject(customType), Constants.DefaultCacheTime);
+        }
+
+        public async Task<T> GetOrAddAsync<T>(string key, Func<string, Task<T>> getter, TimeSpan maxCacheTime)
+        {
+            T result;
+
+            var existingValue = await _cache.Value.StringGetAsync(key);
+
+            if (existingValue.IsNull)
+            {
+                result = await getter(key);
+                await SetCustomValueAsync(key, result, maxCacheTime);
             }
+            else
+            {
+                result = JsonConvert.DeserializeObject<T>(existingValue);
+            }
+
+            return result;
+        }
+
+        public Task<T> GetOrAddAsync<T>(string key, Func<string, Task<T>> getter)
+        {
+            return GetOrAddAsync<T>(key, getter, Constants.DefaultCacheTime);
+        }
+
+        public Task RemoveFromCache(string key)
+        {
+            return _cache.Value.KeyDeleteAsync(key);
+        }
+
+        private static IDatabase InitialiseRedis()
+        {
+            var connectionMultiplexer = ConnectionMultiplexer.Connect(CloudConfigurationManager.GetSetting("RedisConnection"));
+            var cache = connectionMultiplexer.GetDatabase();
+            return cache;
         }
     }
 }

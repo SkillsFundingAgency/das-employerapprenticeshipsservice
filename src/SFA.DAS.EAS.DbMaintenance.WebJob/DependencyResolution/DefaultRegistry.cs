@@ -29,7 +29,9 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution
 
             For<ILog>().Use(c => new NLogLogger(c.ParentType, null, null)).AlwaysUnique();
             For<IPublicHashingService>().Use(() => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
-            For<ICache>().Use<InMemoryCache>();
+            For<IInProcessCache>().Use<InProcessCache>().Singleton();
+            For<IDistributedCache>().Use<RedisCache>().Singleton();
+
             Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
             Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
             Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));

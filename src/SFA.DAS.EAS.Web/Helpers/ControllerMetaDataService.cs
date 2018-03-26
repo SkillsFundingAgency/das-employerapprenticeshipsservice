@@ -16,10 +16,10 @@ namespace SFA.DAS.EAS.Web.Helpers
 
         private readonly Assembly _controllerAssembly;
 
-        public ControllerMetaDataService(Assembly controllerAssembly = null)
+        public ControllerMetaDataService(Assembly controllerAssembly)
         {
             _controllerActionsCache = new Lazy<Dictionary<FeatureType, ControllerAction[]>>(InitialiseControllerActionsCache);
-            _controllerAssembly = controllerAssembly ?? this.GetType().Assembly;
+            _controllerAssembly = controllerAssembly;
         }
 
         public ControllerAction[] GetControllerMethodsLinkedToAFeature(FeatureType featureType)

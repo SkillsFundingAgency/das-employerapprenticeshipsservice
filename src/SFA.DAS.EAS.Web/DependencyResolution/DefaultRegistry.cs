@@ -47,6 +47,7 @@ using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Infrastructure.Services.Features;
 using SFA.DAS.EAS.Web.Authorization;
+using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Logging;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -86,7 +87,8 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For<IApprenticeshipApi>().Use<ApprenticeshipApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
-            For<ICache>().Use<InMemoryCache>();
+            For<IInProcessCache>().Use<InProcessCache>().Singleton();
+            For<IDistributedCache>().Use<RedisCache>().Singleton();
             For<Domain.Interfaces.IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
@@ -258,7 +260,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             For<IOperationAuthorisationHandler>().Use<OperationAuthorisation>().Singleton();
             For<IFeatureService>().Use<FeatureService>().Singleton();
             For<IFeatureCache>().Use<FeatureCache>().Singleton();
-            For<IControllerMetaDataService>().Use<ControllerMetaDataService>().Singleton();
+            For<IControllerMetaDataService>().Use(() => new ControllerMetaDataService(typeof(HomeController).Assembly)).Singleton();
             For<IFeatureCache>().Use<FeatureCache>().Singleton();
             For<IAccountAgreementService>().Use<AccountAgreementService>().Singleton();
         }
