@@ -315,6 +315,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Filters\HandleErrorFilter.cs" />
     <Compile Include="Filters\ValidateModelStateFilter.cs" />
     <Compile Include="Authorization\AuthorizationService.cs" />
@@ -348,6 +349,7 @@
     <Compile Include="Orchestrators\AccountsOrchestrator.cs" />
     <Compile Include="Orchestrators\AgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\OrchestratorResponse.cs" />
+    <Compile Include="Orchestrators\StatisticsOrchestrator.cs" />
     <Compile Include="Orchestrators\UsersOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

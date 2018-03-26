@@ -136,6 +136,7 @@
     <PreDeploy Include="Scripts\PreDeployment\PreDeployment.sql" />
     <None Include="Scripts\PreDeployment\TransferConnectionInvitationDataMigration.sql" />
     <None Include="Scripts\PostDeployment\SeedDevData.sql" />
+    <Build Include="StoredProcedures\GetTheRequiredRdsStatistics.sql" />
     <Build Include="Tables\TransferRequest.sql" />
   </ItemGroup>
   <ItemGroup>
