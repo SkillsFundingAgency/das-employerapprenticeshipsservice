@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
+    [DbConfigurationType(typeof(SqlAzureDbConfiguration))]
     public class EmployerFinancialDbContext : DbContext
     {
         static EmployerFinancialDbContext()
