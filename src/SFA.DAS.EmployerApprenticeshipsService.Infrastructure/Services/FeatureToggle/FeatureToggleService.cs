@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
                 }
 
                 Logger.Info($"Is feature enabled check for controllerName '{context.Controller}', " +
-                            $"actionName '{context.Action}' and userId '{context.MembershipContext?.UserId}' " +
+                            $"actionName '{context.Action}' and userId '{context.AuthorisationContext?.UserContext?.Id}' " +
                             $"is '{isFeatureEnabled}'.");
 
 
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
 
         private static bool IsFeatureEnabled(OperationContext context, ControllerActionCacheItem controllerAction)
         {
-            if (string.IsNullOrWhiteSpace(context.MembershipContext?.UserEmail))
+            if (string.IsNullOrWhiteSpace(context.AuthorisationContext?.UserContext?.Email))
                 return false;
 
             return controllerAction.WhiteLists.Any(whiteList => IsWhiteListed(context, whiteList));
@@ -65,8 +65,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
 
         private static bool IsWhiteListed(OperationContext context, WhiteList whiteList)
         {
-            return whiteList.Emails.Any(email =>
-                Regex.IsMatch(context.MembershipContext.UserEmail, email, RegexOptions.IgnoreCase));
+            return string.IsNullOrWhiteSpace(context.AuthorisationContext?.UserContext?.Email) || 
+                   whiteList.Emails.Any(email =>
+                                Regex.IsMatch(context.AuthorisationContext?.UserContext?.Email, email, RegexOptions.IgnoreCase));
         }
 
         private IFeatureToggleCache GetConfiguration()

@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Infrastructure.Pipeline.Features;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
+using SFA.DAS.EAS.Web.Controllers;
 using StructureMap;
 using StructureMap.Pipeline;
 

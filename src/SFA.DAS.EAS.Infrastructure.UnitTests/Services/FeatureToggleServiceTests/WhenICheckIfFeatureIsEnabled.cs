@@ -15,14 +15,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         private const string ActionName = "Test_Action";
 
         private Mock<IOperationAuthorisationHandler> _pipeline;
-	private IAuthorizationContext _authorizationContext;
+	    private Mock<IAuthorizationContext> _authorisationContext;
         private OperationAuthorisationService _operationAuthorisationService;
 
         [SetUp]
         public void Arrange()
         {
             _pipeline = new Mock<IOperationAuthorisationHandler>();
-            _membershipContext = new Mock<IMembershipContext>();
+            _authorisationContext = new Mock<IAuthorizationContext>();
 
             _pipeline.Setup(x => x.CanAccessAsync(It.IsAny<OperationContext>())).ReturnsAsync(true);
 
@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         public void ThenShouldReturnThatFeatureIsEnabled()
         {
             //Act
-            var result = _operationAuthorisationService.IsOperationAuthorised(ControllerName, ActionName, _membershipContext.Object);
+            var result = _operationAuthorisationService.IsOperationAuthorised(ControllerName, ActionName, _authorisationContext.Object);
 
             //Assert
             Assert.IsTrue(result);
@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
             _pipeline.Setup(x => x.CanAccessAsync(It.IsAny<OperationContext>())).ReturnsAsync(false);
 
             //Act
-            var result = _operationAuthorisationService.IsOperationAuthorised(ControllerName, ActionName, _membershipContext.Object);
+            var result = _operationAuthorisationService.IsOperationAuthorised(ControllerName, ActionName, _authorisationContext.Object);
 
             //Assert
             Assert.IsFalse(result);
@@ -56,13 +56,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleServiceTest
         public void ThenShouldRequestDetails()
         {
             //Act
-            _operationAuthorisationService.IsOperationAuthorised(ControllerName, ActionName, _authorisationContext);
+            _operationAuthorisationService.IsOperationAuthorised(ControllerName, ActionName, _authorisationContext.Object);
 
             //Assert
             _pipeline.Verify(x => x.CanAccessAsync(It.Is<OperationContext>(
                 operationContext => operationContext.Controller.Equals(ControllerName) &&
                 operationContext.Action.Equals(ActionName) &&
-                operationContext.MembershipContext == _membershipContext.Object)), Times.Once);
+                operationContext.AuthorisationContext == _authorisationContext.Object)), Times.Once);
         }
     }
 }

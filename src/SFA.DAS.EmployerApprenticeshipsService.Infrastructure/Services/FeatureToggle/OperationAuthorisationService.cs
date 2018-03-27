@@ -14,13 +14,13 @@ namespace SFA.DAS.EAS.Infrastructure.Services.FeatureToggle
             _operationAuthorisationHandler = operationAuthorisationPipeline;
         }
 
-        public bool IsOperationAuthorised(string controllerName, string actionName, IMembershipContext membershipContext)
+        public bool IsOperationAuthorised(string controllerName, string actionName, IAuthorizationContext authorisationContext)
         {
             var request = new OperationContext
             {
                 Controller = controllerName,
                 Action = actionName,
-                MembershipContext = membershipContext
+                AuthorisationContext = authorisationContext
             };
 
             return _operationAuthorisationHandler.CanAccessAsync(request).Result;

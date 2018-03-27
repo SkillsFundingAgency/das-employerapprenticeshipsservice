@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Web.Filters
         private readonly Func<IOperationAuthorisationService> _operationAuthorisationService;
         private readonly Func<IAuthorizationService> _authorizationService;
 
-        public ValidateFeatureFilter(Func<IOperationAuthorisationService> operationAuthorisationService, Func<IMembershipService> _authorizationService)
+        public ValidateFeatureFilter(Func<IOperationAuthorisationService> operationAuthorisationService, Func<IAuthorizationService> authorizationService)
         {
             _operationAuthorisationService = operationAuthorisationService;
             _authorizationService = authorizationService;
