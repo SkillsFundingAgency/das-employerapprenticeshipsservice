@@ -294,7 +294,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         public async Task ThenShouldLogErrorIfPaymentsApiCallFails()
         {
             //Arrange
-            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<long>()))
+            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<long?>()))
                               .Throws<WebException>();
 
             //Act
@@ -356,7 +356,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             //Arrange
             const int numberOfPages = 3;
 
-            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<long>()))
+            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<long?>()))
                 .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment>
                 {
                     Items = new[] { new Provider.Events.Api.Types.Payment(), new Provider.Events.Api.Types.Payment() },
@@ -367,10 +367,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             var result = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
-            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<long>()), Times.Exactly(numberOfPages));
-            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1, It.IsAny<long>()), Times.Once);
-            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 2, It.IsAny<long>()), Times.Once);
-            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 3, It.IsAny<long>()), Times.Once);
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<long?>()), Times.Exactly(numberOfPages));
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1, It.IsAny<long?>()), Times.Once);
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 2, It.IsAny<long?>()), Times.Once);
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 3, It.IsAny<long?>()), Times.Once);
 
             Assert.AreEqual(2 * numberOfPages, result.Count);
 
@@ -434,7 +434,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         private void SetupPaymentsApiMock()
         {
             _paymentsApiClient = new Mock<IPaymentsEventsApiClient>();
-            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<long>()))
+            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.Is<long?>(ukprn => null == ukprn)))
                 .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment>
                 {
                     Items = new[] { new Provider.Events.Api.Types.Payment() }

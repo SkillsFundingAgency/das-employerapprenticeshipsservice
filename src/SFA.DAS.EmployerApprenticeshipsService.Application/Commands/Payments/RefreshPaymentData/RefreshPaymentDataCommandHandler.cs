@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             }
             catch (WebException ex)
             {
-                throw new WebException($"Unable to get payment information for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'", ex);
+                _logger.Error(ex,$"Unable to get payment information for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
             }
 
             if (payments == null || !payments.Any())
