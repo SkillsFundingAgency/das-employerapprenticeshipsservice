@@ -17,6 +17,7 @@
 
 
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.Messaging.AzureServiceBus;
 
@@ -34,6 +35,7 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
                 c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
                 c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName, new NLogLogger(typeof(TopicMessagePublisher))));
                 c.AddRegistry<DefaultRegistry>();
+                c.AddRegistry<CacheRegistry>();
             });
         }
     }

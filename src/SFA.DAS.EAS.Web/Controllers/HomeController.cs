@@ -20,11 +20,15 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public HomeController(IAuthenticationService owinWrapper, HomeOrchestrator homeOrchestrator,
             EmployerApprenticeshipsServiceConfiguration configuration, IOperationAuthorisationService operationAuthorisation, 
-            IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
+            IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage,
+            IDistributedCache cache)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _homeOrchestrator = homeOrchestrator;
             _configuration = configuration;
+
+            cache.SetCustomValueAsync("hey", new {name="fred"});
+            cache.ExistsAsync("hey");
         }
 
         [Route("~/")]

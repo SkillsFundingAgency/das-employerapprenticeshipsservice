@@ -17,6 +17,7 @@
 
 using SFA.DAS.Activities.Client;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
@@ -45,6 +46,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName, new NLogLogger(typeof(TopicMessagePublisher))));
                 c.AddRegistry<ActivitiesClientRegistry>();
                 c.AddRegistry<DefaultRegistry>();
+                c.AddRegistry<CacheRegistry>();
             });
         }
     }

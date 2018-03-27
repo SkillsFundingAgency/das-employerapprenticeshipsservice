@@ -17,6 +17,7 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -35,7 +36,7 @@ namespace SFA.DAS.EAS.Web
         public void Configuration(IAppBuilder app)
         {
             var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
-            var config = GetConfigurationObject();
+            var config = ConfigurationHelper.GetConfigForService<EmployerApprenticeshipsServiceConfiguration>(ServiceName);
             var constants = new Constants(config.Identity);
             var logger = LogManager.GetLogger("Startup");
             var urlHelper = new UrlHelper();
@@ -107,44 +108,6 @@ namespace SFA.DAS.EAS.Web
                     store.Close();
                 }
             };
-        }
-
-      
-
-        private static EmployerApprenticeshipsServiceConfiguration GetConfigurationObject()
-        {
-            var environment = Environment.GetEnvironmentVariable("DASENV");
-
-            if (string.IsNullOrEmpty(environment))
-            {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
-            }
-
-            var configurationRepository = GetConfigurationRepository();
-
-            var configurationService = new ConfigurationService(
-                configurationRepository,
-                new ConfigurationOptions(ServiceName, environment, "1.0"));
-
-            var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
-
-            return config;
-        }
-
-        private static IConfigurationRepository GetConfigurationRepository()
-        {
-            IConfigurationRepository configurationRepository;
-
-            if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
-            {
-                configurationRepository = new FileStorageConfigurationRepository();
-            }
-            else
-            {
-                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
-            }
-
-            return configurationRepository;
         }
 
         private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestrator authenticationOrchestrator, ILogger logger, Constants constants)

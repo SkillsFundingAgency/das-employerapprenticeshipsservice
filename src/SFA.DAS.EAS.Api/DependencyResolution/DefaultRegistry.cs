@@ -50,9 +50,6 @@ namespace SFA.DAS.EAS.Api.DependencyResolution
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
 
-            For<IInProcessCache>().Use<InProcessCache>().Singleton();
-            For<IDistributedCache>().Use<RedisCache>().Singleton();
-
             For<Domain.Interfaces.IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
 
             RegisterHashingService(config);

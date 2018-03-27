@@ -39,6 +39,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Infrastructure.Factories;
 using SFA.DAS.EAS.Infrastructure.Interfaces.REST;
 using SFA.DAS.EAS.Infrastructure.Pipeline;
@@ -87,8 +88,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For<IApprenticeshipApi>().Use<ApprenticeshipApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
-            For<IInProcessCache>().Use<InProcessCache>().Singleton();
-            For<IDistributedCache>().Use<RedisCache>().Singleton();
             For<Domain.Interfaces.IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
@@ -114,21 +113,12 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
         private EmployerApprenticeshipsServiceConfiguration GetConfiguration()
         {
-            var environment = Environment.GetEnvironmentVariable("DASENV");
-
-            if (string.IsNullOrEmpty(environment))
-            {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+            if(ConfigurationHelper.IsAnyOf(DasEnvironment.Local, DasEnvironment.AT, DasEnvironment.Test))
+            { 
+                PopulateSystemDetails(ConfigurationHelper.CurrentEnvironmentName);
             }
 
-            if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
-            {
-                PopulateSystemDetails(environment);
-            }
-
-            var configurationRepository = GetConfigurationRepository();
-            var configurationService = new ConfigurationService(configurationRepository, new ConfigurationOptions(ServiceName, environment, "1.0"));
-            var configuration = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
+            var configuration = ConfigurationHelper.GetConfigForService<EmployerApprenticeshipsServiceConfiguration>(ServiceName);
 
             return configuration;
         }
@@ -157,16 +147,10 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
         private void RegisterAuditService()
         {
-            var environment = Environment.GetEnvironmentVariable("DASENV");
-
-            if (string.IsNullOrEmpty(environment))
-            {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
-            }
 
             For<IAuditMessageFactory>().Use<AuditMessageFactory>().Singleton();
 
-            if (environment.Equals("LOCAL"))
+            if (ConfigurationHelper.IsAnyOf(DasEnvironment.Local))
             {
                 For<IAuditApiClient>().Use<StubAuditApiClient>();
             }
