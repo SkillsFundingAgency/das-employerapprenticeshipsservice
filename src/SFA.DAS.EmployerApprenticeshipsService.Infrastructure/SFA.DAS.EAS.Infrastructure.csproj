@@ -259,6 +259,7 @@
     <Compile Include="Data\UserRepository.cs" />
     <Compile Include="DependencyResolution\ConfigurationHelper.cs" />
     <Compile Include="DependencyResolution\CurrentDatePolicy.cs" />
+    <Compile Include="DependencyResolution\DasEnvironment.cs" />
     <Compile Include="DependencyResolution\ExecutionPolicyPolicy.cs" />
     <Compile Include="DependencyResolution\MessageSubscriberPolicy.cs" />
     <Compile Include="ExecutionPolicies\CompaniesHouseExecutionPolicy.cs" />

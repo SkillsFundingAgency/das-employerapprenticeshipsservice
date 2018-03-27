@@ -21,13 +21,13 @@ namespace SFA.DAS.EAS.Infrastructure.Services.Features
         {
             var feature = await _featureService.GetFeatureThatAllowsAccessToOperationAsync(context);
 
-            if (feature == null)
+            if (feature == null || context.AuthorisationContext?.AccountContext?.Id == null)
             {
                 return true;
             }
 
             var latestAgreementForAccount =
-                await _accountAgreementService.GetLatestAgreementSignedByAccountAsync(context.MembershipContext.AccountId);
+                await _accountAgreementService.GetLatestAgreementSignedByAccountAsync(context.AuthorisationContext.AccountContext.Id);
 
             return latestAgreementForAccount >= feature.EnabledByAgreementVersion;
         }

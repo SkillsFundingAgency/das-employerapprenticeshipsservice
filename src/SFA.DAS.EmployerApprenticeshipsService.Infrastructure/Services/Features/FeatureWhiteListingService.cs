@@ -23,11 +23,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services.Features
                 return true;
             }
 
-            if (string.IsNullOrWhiteSpace(context.MembershipContext?.UserEmail))
+            if (string.IsNullOrWhiteSpace(context.AuthorisationContext?.UserContext?.Email))
                 return false;
 
             return whitelist.Any(email =>
-                Regex.IsMatch(context.MembershipContext.UserEmail, email, RegexOptions.IgnoreCase));
+                Regex.IsMatch(context.AuthorisationContext.UserContext.Email, email, RegexOptions.IgnoreCase));
         }
     }
 }

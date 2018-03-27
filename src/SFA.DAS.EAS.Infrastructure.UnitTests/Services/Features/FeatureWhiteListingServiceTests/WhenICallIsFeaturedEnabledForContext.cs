@@ -51,15 +51,19 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureWhiteLis
     {
         public FeatureWhiteListingServiceTestFixtures()
         {
-            FeatureServiceMock = new Mock<IFeatureService>();    
-            MembershipContextMock = new Mock<IMembershipContext>();
+            FeatureServiceMock = new Mock<IFeatureService>();
+            AuthorisationContextMock = new Mock<IAuthorizationContext>();
+            UserContextMock = new Mock<IUserContext>();
         }
 
         public Mock<IFeatureService> FeatureServiceMock { get; }
         public IFeatureService FeatureService => FeatureServiceMock.Object;
 
-        public Mock<IMembershipContext> MembershipContextMock { get; }
-        public IMembershipContext MembershipContext => MembershipContextMock.Object;
+        public Mock<IAuthorizationContext> AuthorisationContextMock { get; }
+        public IAuthorizationContext AuthorisationContext => AuthorisationContextMock.Object;
+
+        public Mock<IUserContext> UserContextMock { get; }
+        public IUserContext UserContext => UserContextMock.Object; 
 
         public FeatureWhiteListingService CreateFeatureWhiteListingService()
         {
@@ -74,13 +78,15 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureWhiteLis
             {
                 Action = ca.Action,
                 Controller = ca.Controller,
-                MembershipContext = MembershipContext
+                AuthorisationContext = AuthorisationContext
             }; 
         }
 
         public FeatureWhiteListingServiceTestFixtures WithUserEmail(string userEmail)
         {
-            MembershipContextMock.Setup(mc => mc.UserEmail).Returns(userEmail);
+            UserContextMock.Setup(uc => uc.Email).Returns(userEmail);
+
+            AuthorisationContextMock.Setup(mc => mc.UserContext).Returns(UserContext);
 
             return this;
         }
