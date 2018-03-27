@@ -299,12 +299,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
 
             //Assert
             var publisher = _moqer.GetMock<IMessagePublisher>();
-            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationProcessedEvent>(msg => msg.AccountId == 1 && msg.LevyDeclaredInMonth == 100 && msg.EmpRef == "abcd")), Times.Exactly(2));
-            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationProcessedEvent>(msg => msg.AccountId == 1 && msg.LevyDeclaredInMonth == 300 && msg.EmpRef == "efgh")), Times.Exactly(2));
+            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationProcessedEvent>(msg => msg.AccountId == ExpectedAccountId && msg.LevyDeclaredInMonth == 100 && msg.EmpRef == "abcd")), Times.Exactly(2));
+            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationProcessedEvent>(msg => msg.AccountId == ExpectedAccountId && msg.LevyDeclaredInMonth == 300 && msg.EmpRef == "efgh")), Times.Exactly(2));
         }
 
         [Test]
-        public async Task ThenIfLevyDataHasChangedThenALevyDeclarationUpdatedEventIsPublished()
+        public async Task ThenIfLevyDataHasChangedThenALevyDeclarationsProcessedEventIsPublishedForEachPeriodChanged()
         {
             //Arrange
             var data = RefreshEmployerLevyDataCommandObjectMother.CreateLevyDataWithMultiplePeriods(ExpectedAccountId, DateTime.UtcNow);
@@ -364,7 +364,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
 
             //Assert
             var publisher = _moqer.GetMock<IMessagePublisher>();
-            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationsProcessedEvent>(msg => msg.LevyDeclaredInMonth == 1920m && msg.AccountId == 1)), Times.Exactly(2));
+            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationsProcessedEvent>(msg => msg.LevyDeclaredInMonth == 1920m && msg.AccountId == ExpectedAccountId)), Times.Exactly(2));
         }
 
     }
