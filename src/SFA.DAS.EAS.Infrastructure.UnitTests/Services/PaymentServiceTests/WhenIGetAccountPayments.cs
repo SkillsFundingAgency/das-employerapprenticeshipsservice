@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         private Mock<IPaymentsEventsApiClient> _paymentsApiClient;
         private Mock<IMapper> _mapper;
         private Mock<ILog> _logger;
-        private Mock<ICacheProvider> _cacheProvider;
+        private Mock<IInProcessCache> _cacheProvider;
 
         private PaymentService _paymentService;
         private Framework _framework;
@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             SetupMapperMock();
             SetupLoggerMock();
 
-            _cacheProvider = new Mock<ICacheProvider>();
+            _cacheProvider = new Mock<IInProcessCache>();
 
             _paymentService = new PaymentService(
                 _paymentsApiClient.Object,

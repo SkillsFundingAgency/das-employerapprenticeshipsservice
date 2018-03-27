@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services.Features
 {
     public class FeatureService : AzureServiceBase<FeatureToggleConfiguration>, IFeatureService
     {
-        private readonly ICacheProvider _cacheProvider;
+        private readonly IInProcessCache _cacheProvider;
         private readonly IFeatureCacheFactory _featureCacheFactory;
 
         public sealed override ILog Logger { get; set; }
@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services.Features
         public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.Features";
 
         public FeatureService(
-            ICacheProvider cacheProvider, 
+            IInProcessCache cacheProvider, 
             ILog logger,
             IFeatureCacheFactory featureCacheFactory)
         {

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Services.Features;
@@ -47,14 +48,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features
     {
         public FeatureServiceTestFixtures()
         {
-            CacheProviderMock = new Mock<ICacheProvider>();    
+            CacheProviderMock = new Mock<IInProcessCache>();    
             LoggerMock = new Mock<ILog>();
             FeatureToggleCacheFactoryMock = new Mock<IFeatureCacheFactory>();
             FeatureToggleCacheMock = new Mock<IFeatureCache>();
         }
 
-        public Mock<ICacheProvider> CacheProviderMock { get; }
-        public ICacheProvider CacheProvider => CacheProviderMock.Object;
+        public Mock<IInProcessCache> CacheProviderMock { get; }
+        public IInProcessCache CacheProvider => CacheProviderMock.Object;
 
         public Mock<ILog> LoggerMock { get; }
         public ILog Logger => LoggerMock.Object;

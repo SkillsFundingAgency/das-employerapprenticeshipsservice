@@ -113,7 +113,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
         private EmployerApprenticeshipsServiceConfiguration GetConfiguration()
         {
             if (ConfigurationHelper.IsAnyOf(DasEnvironment.Local, DasEnvironment.AT, DasEnvironment.Test))
-            {
+            { 
                 PopulateSystemDetails(ConfigurationHelper.CurrentEnvironmentName);
             }
 

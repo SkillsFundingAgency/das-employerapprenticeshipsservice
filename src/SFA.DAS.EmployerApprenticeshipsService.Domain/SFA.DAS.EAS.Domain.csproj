@@ -201,6 +201,7 @@
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Http\InternalServerErrorException.cs" />
     <Compile Include="Http\RequestTimeOutException.cs" />
+    <Compile Include="Interfaces\IAccountAgreementService.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\IAzureAdAuthenticationService.cs" />
     <Compile Include="Interfaces\ICommitmentService.cs" />
@@ -215,6 +216,7 @@
     <Compile Include="Interfaces\IFeatureService.cs" />
     <Compile Include="Interfaces\IHmrcDateService.cs" />
     <Compile Include="Interfaces\IHttpResponseLogger.cs" />
+    <Compile Include="Interfaces\IInProcessCache.cs" />
     <Compile Include="Interfaces\IPdfService.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
     <Compile Include="Interfaces\IMultiVariantTestingService.cs" />
@@ -298,7 +300,7 @@
     <Compile Include="Extensions\NullableDateTimeExtension.cs" />
     <Compile Include="Interfaces\IAddressLookupService.cs" />
     <Compile Include="Interfaces\IAuditService.cs" />
-    <Compile Include="Interfaces\ICache.cs" />
+    <Compile Include="Interfaces\IDistributedCache.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
     <Compile Include="Data\ILegalEntityRepository.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />

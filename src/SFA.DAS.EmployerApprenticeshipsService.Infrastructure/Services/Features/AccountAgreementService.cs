@@ -2,32 +2,31 @@
 using System.Globalization;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Infrastructure.Services.Features
 {
     public class AccountAgreementService : IAccountAgreementService
     {
-        // value stored in memcache as proxy for null
-        private const decimal StoredValueThatMeansNull = -1;
+        // value stored in cache as proxy for null (we can't store nulls)
+        private const int StoredValueThatMeansNull = -1;
 
-        private readonly ICacheProvider _cacheProvider;
+        private readonly IDistributedCache _cache;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
 
         public AccountAgreementService(
-            ICacheProvider cacheProvider,
+            IDistributedCache cache,
             IEmployerAgreementRepository employerAgreementRepository)
         {
-            _cacheProvider = cacheProvider;
+            _cache = cache;
             _employerAgreementRepository = employerAgreementRepository;
         }
 
-        public async Task<decimal?> GetLatestAgreementSignedByAccountAsync(long accountId)
+        public async Task<int?> GetLatestAgreementSignedByAccountAsync(long accountId)
         {
-            var latestAgreementId = await _cacheProvider
-                .GetOrAdd(accountId.ToString(CultureInfo.InvariantCulture), 
-                            key => FetchLatestAgreeemntNumberFromStoreAsync(accountId),
-                            DateTimeOffset.Now.AddMinutes(30L));
+            var latestAgreementId = await _cache
+                .GetOrAddAsync(GetCacheKeyForAccount(accountId), 
+                            key => FetchLatestAgreeemntNumberFromStoreAsync(accountId));
 
             if (latestAgreementId == StoredValueThatMeansNull)
             {
@@ -37,9 +36,19 @@ namespace SFA.DAS.EAS.Infrastructure.Services.Features
             return latestAgreementId;
         }
 
-        private async Task<decimal?> FetchLatestAgreeemntNumberFromStoreAsync(long accountId)
+        public Task RemoveFromCacheAsync(long accountId)
+        {
+            return _cache.RemoveFromCache(GetCacheKeyForAccount(accountId));
+        }
+
+        private async Task<int?> FetchLatestAgreeemntNumberFromStoreAsync(long accountId)
         {
             return await _employerAgreementRepository.GetLatestSignedAgreementVersion(accountId) ?? StoredValueThatMeansNull;
+        }
+
+        private string GetCacheKeyForAccount(long accountId)
+        {
+            return "Account:"+accountId.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

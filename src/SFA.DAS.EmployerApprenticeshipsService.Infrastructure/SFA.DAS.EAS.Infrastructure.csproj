@@ -228,11 +228,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Caching\ICacheProvider.cs" />
-    <Compile Include="Caching\InMemoryCache.cs" />
-    <Compile Include="Caching\InProcessCacheProvider.cs" />
+    <Compile Include="Caching\Constants.cs" />
+    <Compile Include="Caching\InProcessCache.cs" />
+    <Compile Include="Caching\IoCRegistration.cs" />
+    <Compile Include="Caching\LocalDevCache.cs" />
     <Compile Include="Caching\RedisCache.cs" />
-    <Compile Include="Caching\TaskSynchronizationScope.cs" />
     <Compile Include="Data\AccountIdUserTableParam.cs" />
     <Compile Include="Data\SqlAzureDbConfiguration.cs" />
     <Compile Include="Data\EmployerFinancialDbContext.cs" />
@@ -309,12 +309,11 @@
     <Compile Include="Services\ExcelService.cs" />
     <Compile Include="Services\Features\FeatureCache.cs" />
     <Compile Include="Services\Features\FeatureWhiteListingService.cs" />
-    <Compile Include="Services\Features\IAccountAgreementService.cs" />
     <Compile Include="Services\Features\IControllerMetaDataService.cs" />
+    <Compile Include="Services\Features\IFeatureCache.cs" />
     <Compile Include="Services\Features\IFeatureCacheFactory.cs" />
     <Compile Include="Services\Features\IFeatureWhiteListingService.cs" />
     <Compile Include="Services\Features\OperationAuthorisationService.cs" />
-    <Compile Include="Services\Features\IFeatureCache.cs" />
     <Compile Include="Services\Features\OperationFilterAttribute.cs" />
     <Compile Include="Services\HmrcDateService.cs" />
     <Compile Include="Services\HmrcService.cs" />

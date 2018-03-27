@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.ReferenceData.Api.Client;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using Organisation = SFA.DAS.ReferenceData.Api.Client.Dto.Organisation;
@@ -20,16 +21,16 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
         private Mock<IReferenceDataApiClient> _apiClient;
         private Infrastructure.Services.ReferenceDataService _referenceDataService;
         private Mock<IMapper> _mapper;
-        private Mock<ICacheProvider> _cacheProvider;
+        private Mock<IInProcessCache> _inProcessCache;
 
         [SetUp]
         public void Arrange()
         {
             _apiClient = new Mock<IReferenceDataApiClient>();
             _mapper = new Mock<IMapper>();
-            _cacheProvider = new Mock<ICacheProvider>();
+            _inProcessCache = new Mock<IInProcessCache>();
 
-            _referenceDataService = new Infrastructure.Services.ReferenceDataService(_apiClient.Object, _mapper.Object, _cacheProvider.Object);
+            _referenceDataService = new Infrastructure.Services.ReferenceDataService(_apiClient.Object, _mapper.Object, _inProcessCache.Object);
         }
 
         [Test]

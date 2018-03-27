@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 using SFA.DAS.EAS.Infrastructure.Services.Features;
@@ -14,7 +15,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Helpers.ControllerMetaDataServiceTests
         [Test]
         public void ItShouldNotThrowException()
         {
-            var controllerMetaDataService = new ControllerMetaDataService();
+            var controllerMetaDataService = new ControllerMetaDataService(Assembly.GetExecutingAssembly());
 
             var foundControllers = controllerMetaDataService.GetControllerMethodsLinkedToAFeature(FeatureType.Test1);
 
@@ -24,7 +25,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Helpers.ControllerMetaDataServiceTests
         [Test]
         public void ItShouldNotReturnNull()
         {
-            var controllerMetaDataService = new ControllerMetaDataService();
+            var controllerMetaDataService = new ControllerMetaDataService(Assembly.GetExecutingAssembly());
 
             var foundControllers = controllerMetaDataService.GetControllerMethodsLinkedToAFeature(FeatureType.Test1);
 
