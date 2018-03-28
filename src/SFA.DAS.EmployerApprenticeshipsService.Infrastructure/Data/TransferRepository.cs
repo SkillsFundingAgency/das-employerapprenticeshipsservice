@@ -15,30 +15,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     public class TransferRepository : BaseRepository, ITransferRepository
     {
         private readonly ILog _logger;
-        private readonly float _allowancePercentage;
+
 
         public TransferRepository(LevyDeclarationProviderConfiguration configuration, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _logger = logger;
-            _allowancePercentage = configuration.TransferAllowancePercentage;
-        }
 
-        public async Task<decimal> GetTransferAllowance(long accountId)
-        {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int64);
-                parameters.Add("@allowancePercentage", _allowancePercentage, DbType.Single);
-
-                return await c.QuerySingleOrDefaultAsync<decimal?>(
-                    sql: "[employer_financial].[GetAccountTransferAllowance]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
-
-            return result ?? 0;
         }
 
         public async Task CreateAccountTransfers(IEnumerable<AccountTransfer> transfers)
@@ -88,7 +71,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task<AccountTransferPaymentDetails> GetTransferPaymentDetails(AccountTransfer transfer)
+        public async Task<AccountTransferDetails> GetTransferPaymentDetails(AccountTransfer transfer)
         {
             var result = await WithConnection(async c =>
             {
@@ -97,7 +80,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@periodEnd", transfer.PeriodEnd, DbType.String);
                 parameters.Add("@apprenticeshipId", transfer.ApprenticeshipId, DbType.Int64);
 
-                return await c.QuerySingleOrDefaultAsync<AccountTransferPaymentDetails>(
+                return await c.QuerySingleOrDefaultAsync<AccountTransferDetails>(
                     sql: "[employer_financial].[GetTransferPaymentDetails]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
