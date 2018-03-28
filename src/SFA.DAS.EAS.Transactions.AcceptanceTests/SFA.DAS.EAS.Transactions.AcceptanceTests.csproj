@@ -175,6 +175,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\LevyDetailsSelection.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LevyDetailsSelection.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\LevyDetailsValues.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LevyDetailsValues.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\PaymentDetailsSelection.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PaymentDetailsSelection.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\PaymentDetailsValues.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PaymentDetailsValues.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\TransactionLine.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TransactionLine.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\TransferDashboard.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TransferDashboard.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\TransferTransactions.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TransferTransactions.feature</DependentUpon>
+    </Compile>
     <Compile Include="PaymentTestData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steps\CommonSteps\AccountCreationSteps.cs" />
@@ -182,6 +217,7 @@
     <Compile Include="Steps\TransferDashboardSteps\TransferDashboardSteps.cs" />
     <Compile Include="Steps\PaymentDetailsSteps\PaymentDetailsSteps.cs" />
     <Compile Include="Steps\TransactionSteps\TransactionSteps.cs" />
+    <Compile Include="Steps\TransferTransactionSteps\TransferTransactionsSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.config" />
@@ -214,6 +250,10 @@
     <None Include="Features\TransactionLine.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TransactionLine.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\TransferTransactions.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TransferTransactions.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
