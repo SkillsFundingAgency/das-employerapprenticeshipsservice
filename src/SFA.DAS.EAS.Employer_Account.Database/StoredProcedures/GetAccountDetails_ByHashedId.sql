@@ -16,7 +16,7 @@ inner join employer_account.EmployerAgreement ea on ea.Id = aea.EmployerAgreemen
 inner join employer_account.AccountHistory ach on ach.AccountId = acc.Id
 OUTER APPLY
 (
-	SELECT TOP 1 u.email
+	SELECT TOP 1 u.Email
 	FROM employer_account.Membership m
 	inner join employer_account.[User] u on u.Id = m.UserId
 	where m.RoleId = 1 and m.AccountId = acc.Id

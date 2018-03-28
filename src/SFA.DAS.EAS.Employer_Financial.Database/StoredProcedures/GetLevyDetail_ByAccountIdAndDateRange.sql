@@ -28,7 +28,7 @@ select
 	tl.EmployerCoInvestmentAmount
 from [employer_financial].TransactionLine tl
 inner join [employer_financial].LevyDeclarationTopup ldt on ldt.SubmissionId = tl.SubmissionId
-inner join [employer_financial].LevyDeclaration ld on ld.submissionid = tl.submissionid
+inner join [employer_financial].LevyDeclaration ld on ld.SubmissionId = tl.SubmissionId
 where    tl.DateCreated >= @fromDate AND 
         tl.DateCreated <= @toDate AND 
         tl.AccountId = @accountId 

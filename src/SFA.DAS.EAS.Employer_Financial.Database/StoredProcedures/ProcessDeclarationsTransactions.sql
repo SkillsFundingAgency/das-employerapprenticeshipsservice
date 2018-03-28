@@ -31,10 +31,10 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 		x.LevyDueYTD is not null and x.EndOfYearAdjustment = 1  AND x.AccountId = @accountId AND x.EmpRef = @empRef
 	) mainUpdate
 	inner join (
-		select submissionId from [employer_financial].LevyDeclaration
+		select SubmissionId from [employer_financial].LevyDeclaration
 	EXCEPT
 		select SubmissionId from [employer_financial].LevyDeclarationTopup
-	) dervx on dervx.submissionId = mainUpdate.SubmissionId
+	) dervx on dervx.SubmissionId = mainUpdate.SubmissionId
 
 
 -- Create Declarations
@@ -79,12 +79,12 @@ select mainUpdate.* from
 		FROM 
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		inner join
-			[employer_financial].[LevyDeclarationTopup] ldt on ldt.submissionId = x.submissionId
+			[employer_financial].[LevyDeclarationTopup] ldt on ldt.SubmissionId = x.SubmissionId
 		where x.EndOfYearAdjustment = 1  AND x.AccountId = @accountId AND x.EmpRef = @empRef
 	) mainUpdate
 	inner join (
-		select submissionId from [employer_financial].LevyDeclaration
+		select SubmissionId from [employer_financial].LevyDeclaration
 	EXCEPT
 		select SubmissionId from [employer_financial].TransactionLine where TransactionType = 1
-	) dervx on dervx.submissionId = mainUpdate.SubmissionId
+	) dervx on dervx.SubmissionId = mainUpdate.SubmissionId
 GO

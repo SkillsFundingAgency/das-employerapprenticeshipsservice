@@ -31,7 +31,7 @@ SELECT
   left join [employer_financial].[Payment] pays2 on pays2.AccountId = p.AccountId and pays2.Ukprn = p.Ukprn and pays2.FundingSource = 2 and pays2.PaymentMetaDataId = meta.id
   left join [employer_financial].[Payment] pays3 on pays3.AccountId = p.AccountId and pays3.Ukprn = p.Ukprn and pays3.FundingSource = 3 and pays3.PaymentMetaDataId = meta.id
   where 
-  p.AccountId = @accountid AND
+  p.AccountId = @accountId AND
   p.Ukprn = @ukprn  AND
   p.FundingSource IN (1,2,3)   
   group by p.AccountId, p.Ukprn, meta.ApprenticeshipCourseName, meta.ApprenticeshipCourseLevel,meta.PathwayName

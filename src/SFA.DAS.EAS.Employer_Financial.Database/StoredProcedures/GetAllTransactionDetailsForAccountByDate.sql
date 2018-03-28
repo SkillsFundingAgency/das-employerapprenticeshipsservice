@@ -50,7 +50,7 @@ FROM [employer_financial].TransactionLine tl
 LEFT JOIN [employer_financial].[TransactionLineTypes] tlt ON tlt.TransactionType = IIF(Amount >= 0, 1, 2)
 INNER JOIN [employer_financial].LevyDeclarationTopup ldt ON ldt.SubmissionId = tl.SubmissionId
 INNER JOIN [employer_financial].LevyDeclaration ld ON ld.SubmissionId = tl.SubmissionId
-WHERE tl.AccountId = @accountId 
+WHERE tl.AccountId = @AccountId 
 AND tl.TransactionType IN (1, 2) 
 AND DateCreated >= @FromDate 
 AND DateCreated < @ToDate

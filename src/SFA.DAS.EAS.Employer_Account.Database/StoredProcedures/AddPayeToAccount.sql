@@ -10,7 +10,7 @@ BEGIN
 	DECLARE @employerAgreementId BIGINT
 
 	
-	IF EXISTS(select 1 from [employer_account].[Paye] where ref = @employerRef)
+	IF EXISTS(select 1 from [employer_account].[Paye] where Ref = @employerRef)
 	BEGIN
 		EXEC [employer_account].[UpdatePaye] @employerRef,@accessToken, @refreshToken,@employerRefName
 	END

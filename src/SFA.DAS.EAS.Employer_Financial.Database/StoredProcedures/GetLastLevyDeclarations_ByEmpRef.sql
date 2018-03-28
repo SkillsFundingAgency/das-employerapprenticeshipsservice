@@ -6,5 +6,5 @@ AS
 	FROM 
 		[employer_financial].[LevyDeclaration]
 	where
-		EmpRef = @empRef
+		empRef = @empRef
 	order by SubmissionDate desc

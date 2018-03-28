@@ -20,7 +20,7 @@ AS
 
 INSERT INTO [employer_financial].[LevyDeclaration] 
 	(
-		LevyDueYtd, 
+		LevyDueYTD, 
 		empRef, 
 		SubmissionDate, 
 		SubmissionId, 

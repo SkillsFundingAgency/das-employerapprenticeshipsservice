@@ -8,7 +8,7 @@ AS
 	FROM 
 		[employer_financial].[LevyDeclaration]
 	where
-		EmpRef = @empRef
+		empRef = @empRef
 	AND
 		PayrollMonth = @payrollMonth
 	AND
