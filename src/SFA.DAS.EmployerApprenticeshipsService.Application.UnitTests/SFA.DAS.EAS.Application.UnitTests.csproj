@@ -405,6 +405,7 @@
     <Compile Include="Queries\GetTransferConnectionInvitationsTests\WhenIGetTransferConnectionInvitations.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationTests\WhenIGetTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetTransferRequestsTests\WhenIGetTransferRequests.cs" />
+    <Compile Include="Queries\GetTransferSenderTransactionDetailsTests\WhenIGetTransferTransactionDetails.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIGetAUserAccountRole.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />

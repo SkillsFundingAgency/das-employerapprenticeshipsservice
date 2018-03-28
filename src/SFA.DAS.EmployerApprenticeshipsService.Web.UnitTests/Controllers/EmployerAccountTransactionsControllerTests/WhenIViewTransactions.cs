@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -12,6 +10,9 @@ using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.HashingService;
+using System;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {
@@ -55,7 +56,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _controller = new Web.Controllers.EmployerAccountTransactionsController(_owinWrapper.Object,
                 _featureToggle.Object, _hashingService.Object, _mediator.Object,
                 _orchestrator.Object, _userViewTestingService.Object, _flashMessage.Object,
-                Mock.Of<ITransactionFormatterFactory>());
+                Mock.Of<ITransactionFormatterFactory>(), Mock.Of<IMapper>());
         }
 
         [Test]
@@ -65,7 +66,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             var result = await _controller.TransactionsView("TEST", 2017, 1);
 
             //Assert
-            _orchestrator.Verify(x=> x.GetAccountTransactions(It.Is<string>(s => s=="TEST"), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Once);
+            _orchestrator.Verify(x => x.GetAccountTransactions(It.Is<string>(s => s == "TEST"), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Once);
             Assert.IsNotNull(result as ViewResult);
         }
 

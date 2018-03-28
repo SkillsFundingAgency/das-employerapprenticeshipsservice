@@ -198,6 +198,7 @@
     <Compile Include="Data\IUnitOfWork.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
     <Compile Include="Data\Repositories\ITransferConnectionInvitationRepository.cs" />
+    <Compile Include="Data\Repositories\ITransferRepository.cs" />
     <Compile Include="Data\Repositories\ITransferRequestRepository.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Http\InternalServerErrorException.cs" />
@@ -352,7 +353,7 @@
     <Compile Include="Models\TransferRequests\TransferRequest.cs" />
     <Compile Include="Models\TransferRequests\TransferRequestStatus.cs" />
     <Compile Include="Models\Transfers\AccountTransfer.cs" />
-    <Compile Include="Models\Transfers\AccountTransferPaymentDetails.cs" />
+    <Compile Include="Models\Transfers\AccountTransferDetails.cs" />
     <Compile Include="Models\Transfers\TransferTransactionLine.cs" />
     <Compile Include="Models\UserProfile\Role.cs" />
     <Compile Include="Models\UserProfile\User.cs" />

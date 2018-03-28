@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using AutoMapper;
 using MediatR;
+using SFA.DAS.EAS.Application.Queries.GetAccountTransferTransactionDetails;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Attributes;
@@ -11,6 +10,9 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Transactions;
 using SFA.DAS.HashingService;
+using System;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -19,17 +21,20 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class EmployerAccountTransactionsController : BaseController
     {
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
+        private readonly IMapper _mapper;
         private readonly IMediator _mediator;
 
         public EmployerAccountTransactionsController(IAuthenticationService owinWrapper, IFeatureToggleService featureToggle,
             IHashingService hashingService,
             IMediator mediator,
             EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage, ITransactionFormatterFactory transactionsFormatterFactory)
+            ICookieStorageService<FlashMessageViewModel> flashMessage, ITransactionFormatterFactory transactionsFormatterFactory,
+            IMapper mapper)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _mediator = mediator;
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
+            _mapper = mapper;
         }
 
         [Route("finance")]
@@ -108,7 +113,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [Route("finance/course/framework/summary")]
         [Route("balance/course/framework/summary")]
-        public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName, 
+        public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName,
             int courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
             var viewModel = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(
@@ -116,6 +121,17 @@ namespace SFA.DAS.EAS.Web.Controllers
                                                                         fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             return View(ControllerConstants.CoursePaymentSummaryViewName, viewModel);
+        }
+
+        [Route("finance/transfer/details")]
+        [Route("balance/transfer/details")]
+        public async Task<ActionResult> TransferDetail(GetSenderTransferTransactionDetailsQuery query)
+        {
+            var response = await _mediator.SendAsync(query);
+
+            var model = _mapper.Map<TransferSenderTransactionDetailsViewModel>(response);
+
+            return View(ControllerConstants.TransferDetailsForSenderViewName, model);
         }
     }
 }
