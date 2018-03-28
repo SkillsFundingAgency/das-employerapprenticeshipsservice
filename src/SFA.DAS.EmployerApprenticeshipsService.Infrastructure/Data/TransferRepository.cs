@@ -21,6 +21,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             _logger = logger;
             _allowancePercentage = configuration.TransferAllowancePercentage;
+
         }
 
         public async Task CreateAccountTransfers(IEnumerable<AccountTransfer> transfers)
@@ -154,7 +155,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@periodEnd", transfer.PeriodEnd, DbType.String);
                 parameters.Add("@apprenticeshipId", transfer.ApprenticeshipId, DbType.Int64);
 
-                return await c.QuerySingleOrDefaultAsync<AccountTransferPaymentDetails>(
+                return await c.QuerySingleOrDefaultAsync<AccountTransferDetails>(
                     sql: "[employer_financial].[GetTransferPaymentDetails]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
@@ -163,9 +164,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result;
         }
 
-        public Task<IEnumerable<AccountTransfer>> GetAccountTransfersByPeriodEnd(long senderAccountId, string periodEnd)
+        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfersByPeriodEnd(long senderAccountId, string periodEnd)
         {
-            throw new NotImplementedException();
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@senderAccountId", senderAccountId, DbType.Int64);
+                parameters.Add("@periodEnd", periodEnd, DbType.String);
+
+                return await c.QueryAsync<AccountTransfer>(
+                    sql: "[employer_financial].[GetAccountTransfersByPeriodEnd]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result;
         }
     }
 }

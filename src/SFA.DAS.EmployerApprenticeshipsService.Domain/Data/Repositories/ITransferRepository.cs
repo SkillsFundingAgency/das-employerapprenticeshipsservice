@@ -6,7 +6,6 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
     public interface ITransferRepository
     {
-        Task<decimal> GetTransferAllowance(long accountId);
         Task CreateAccountTransfers(IEnumerable<AccountTransfer> transfers);
         Task<AccountTransferDetails> GetTransferPaymentDetails(AccountTransfer transfer);
         Task<IEnumerable<AccountTransfer>> GetAccountTransfersByPeriodEnd(long senderAccountId, string periodEnd);
