@@ -3,9 +3,9 @@ using MediatR;
 using SFA.DAS.EAS.Application.Messages;
 using System.ComponentModel.DataAnnotations;
 
-namespace SFA.DAS.EAS.Application.Queries.GetAccountTransferTransactionDetails
+namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
 {
-    public class GetSenderTransferTransactionDetailsQuery : MembershipMessage, IAsyncRequest<GetSenderTransferTransactionDetailsResponse>
+    public class GetTransferSenderTransactionDetailsQuery : MembershipMessage, IAsyncRequest<GetTransferSenderTransactionDetailsResponse>
     {
         [IgnoreMap]
         [Required]
@@ -13,5 +13,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountTransferTransactionDetails
 
         [Required]
         public string PeriodEnd { get; set; }
+
     }
 }
