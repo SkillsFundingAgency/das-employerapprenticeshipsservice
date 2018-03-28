@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using SFA.DAS.EAS.Application.Queries.GetAccountTransferTransactionDetails;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
+using SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Authentication;
@@ -125,7 +125,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [Route("finance/transfer/details")]
         [Route("balance/transfer/details")]
-        public async Task<ActionResult> TransferDetail(GetSenderTransferTransactionDetailsQuery query)
+        public async Task<ActionResult> TransferDetail(GetTransferSenderTransactionDetailsQuery query)
         {
             var response = await _mediator.SendAsync(query);
 
