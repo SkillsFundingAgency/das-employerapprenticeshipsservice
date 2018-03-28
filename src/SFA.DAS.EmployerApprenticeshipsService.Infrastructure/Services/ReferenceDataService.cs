@@ -20,15 +20,15 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         private readonly IReferenceDataApiClient _client;
         private readonly IMapper _mapper;
-        private readonly ICacheProvider _cacheProvider;
+        private readonly IInProcessCache _inProcessCache;
 
         private readonly List<string> _termsToRemove = new List<string> { "ltd", "ltd.", "limited", "plc", "plc." };
 
-        public ReferenceDataService(IReferenceDataApiClient client, IMapper mapper, ICacheProvider cacheProvider)
+        public ReferenceDataService(IReferenceDataApiClient client, IMapper mapper, IInProcessCache inProcessCache)
         {
             _client = client;
             _mapper = mapper;
-            _cacheProvider = cacheProvider;
+            _inProcessCache = inProcessCache;
         }
 
         public async Task<Charity> GetCharity(int registrationNumber)
@@ -201,7 +201,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             var cacheKey = $"SearchKey_{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(searchTerm))}";
 
-            var result = _cacheProvider.Get<List<OrganisationName>>(cacheKey);
+            var result = _inProcessCache.Get<List<OrganisationName>>(cacheKey);
             if (result != null) return result;
 
             var processedSearchTerm = CleanSearchTerm(searchTerm);
@@ -213,7 +213,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
             result = SortOrganisations(convertedOrgs, processedSearchTerm);
 
-            _cacheProvider.Set(cacheKey, result, new TimeSpan(0, 15, 0));
+            _inProcessCache.Set(cacheKey, result, new TimeSpan(0, 15, 0));
             return result;
         }
 
