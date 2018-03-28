@@ -85,7 +85,7 @@ SELECT MAX(transLine.DateCreated) AS DateCreated,
 FROM [employer_financial].[Payment] p
   INNER JOIN [employer_financial].[PaymentTransactionTypes] ptt ON ptt.TransactionType =  p.TransactionType
   INNER JOIN [employer_financial].[PaymentMetaData] meta ON p.PaymentMetaDataId = meta.Id
-  INNER JOIN (SELECT PeriodEnd,AccountId,ukprn, EmpRef, TransactionDate, DateCreated, LevyDeclared, EnglishFraction FROM employer_financial.TransactionLine WHERE DateCreated >= @FromDate AND 
+  INNER JOIN (SELECT PeriodEnd,AccountId,UkPrn, EmpRef, TransactionDate, DateCreated, LevyDeclared, EnglishFraction FROM employer_financial.TransactionLine WHERE DateCreated >= @FromDate AND 
         DateCreated <= @ToDate) transLine ON transLine.AccountId = p.AccountId AND transLine.PeriodEnd = p.PeriodEnd AND transLine.Ukprn = p.Ukprn
   LEFT JOIN [employer_financial].[Payment] pays1 
 	ON pays1.AccountId = p.AccountId 

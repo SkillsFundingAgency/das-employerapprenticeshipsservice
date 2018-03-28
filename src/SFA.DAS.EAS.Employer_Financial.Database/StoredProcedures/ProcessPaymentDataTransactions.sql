@@ -35,7 +35,7 @@ select mainUpdate.* from
             x.UkPrn,x.PeriodEnd,x.accountId
     ) mainUpdate
     inner join (
-        select accountid,ukprn,periodend from [employer_financial].Payment where FundingSource IN (1,2,3)      
+        select accountid,Ukprn,periodend from [employer_financial].Payment where FundingSource IN (1,2,3)      
     EXCEPT
         select accountid,ukprn,periodend from [employer_financial].transactionline where TransactionType = 3
     ) dervx on dervx.accountId = mainUpdate.accountId and dervx.PeriodEnd = mainUpdate.PeriodEnd and dervx.Ukprn = mainUpdate.ukprn

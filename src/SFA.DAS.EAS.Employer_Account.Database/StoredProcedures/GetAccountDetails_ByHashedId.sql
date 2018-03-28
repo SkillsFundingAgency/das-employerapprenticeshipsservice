@@ -10,7 +10,7 @@ Select
 	t.Email as OwnerEmail,
 	ach.PayeRef as PayeSchemeId,
 	ea.LegalEntityId
-from employer_account.account acc
+from employer_account.Account acc
 inner join employer_account.AccountEmployerAgreement aea on aea.AccountId = acc.Id
 inner join employer_account.EmployerAgreement ea on ea.Id = aea.EmployerAgreementId
 inner join employer_account.AccountHistory ach on ach.AccountId = acc.Id

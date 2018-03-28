@@ -14,7 +14,7 @@ SELECT
 	CASE 
 		LatestSubmission.submissionid 
 	when 
-		ld.submissionid then 1 
+		ld.SubmissionId then 1 
 	else 0 end as LastSubmission, -- Last submission if LevDeclaration Id matches the LatestSubmission
 	ld.CreatedDate,
 	ld.EndOfYearAdjustment,
