@@ -2,6 +2,7 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Queries.GetAccountTransferTransactionDetails;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
 using SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails;
 using SFA.DAS.EAS.Domain.Interfaces;
