@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Application.Queries.GetTransferRequests;
+using SFA.DAS.EAS.Infrastructure.Services.FeatureToggle;
+using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {

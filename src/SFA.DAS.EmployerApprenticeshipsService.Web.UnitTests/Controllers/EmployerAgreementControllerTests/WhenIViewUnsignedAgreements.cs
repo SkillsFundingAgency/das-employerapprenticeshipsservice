@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
         private EmployerAgreementController _controller;
         private Mock<EmployerAgreementOrchestrator> _orchestrator;
         private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IFeatureToggleService> _featureToggle;
+        private Mock<IOperationAuthorisationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private string _hashedAccountId;
@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
         {
             _orchestrator = new Mock<EmployerAgreementOrchestrator>();
             _owinWrapper = new Mock<IAuthenticationService>();
-            _featureToggle = new Mock<IFeatureToggleService>();
+            _featureToggle = new Mock<IOperationAuthorisationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 

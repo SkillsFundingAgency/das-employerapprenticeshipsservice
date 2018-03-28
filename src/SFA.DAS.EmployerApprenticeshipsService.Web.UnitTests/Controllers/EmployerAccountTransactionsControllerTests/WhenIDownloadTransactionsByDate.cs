@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
 
         private EmployerAccountTransactionsController _controller;
         private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IFeatureToggleService> _featureToggle;
+        private Mock<IOperationAuthorisationService> _featureToggle;
         private Mock<IHashingService> _hashingService;
         private Mock<IMediator> _mediator;
         private Mock<EmployerAccountTransactionsOrchestrator> _orchestrator;
@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             };
 
             _owinWrapper = new Mock<IAuthenticationService>();
-            _featureToggle = new Mock<IFeatureToggleService>();
+            _featureToggle = new Mock<IOperationAuthorisationService>();
             _hashingService = new Mock<IHashingService>();
             _mediator = new Mock<IMediator>();
             _orchestrator = new Mock<EmployerAccountTransactionsOrchestrator>();
