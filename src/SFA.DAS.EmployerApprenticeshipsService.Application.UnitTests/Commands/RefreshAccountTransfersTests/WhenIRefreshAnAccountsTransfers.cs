@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
         private ICollection<AccountTransfer> _transfers;
         private RefreshAccountTransfersCommand _command;
         private Mock<IMessagePublisher> _messagePublisher;
-        private AccountTransferPaymentDetails _paymentDetails;
+        private AccountTransferDetails _details;
 
 
         [SetUp]
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
             _messagePublisher = new Mock<IMessagePublisher>();
             _logger = new Mock<ILog>();
 
-            _paymentDetails = new AccountTransferPaymentDetails
+            _details = new AccountTransferDetails
             {
                 CourseName = "Testing Level 2",
                 ApprenticeCount = 3,
@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
                 .ReturnsAsync(_transfers);
 
             _transferRepository.Setup(x => x.GetTransferPaymentDetails(It.IsAny<AccountTransfer>()))
-                .ReturnsAsync(_paymentDetails);
+                .ReturnsAsync(_details);
 
             _accountRepository.Setup(x => x.GetAccountNames(It.IsAny<IEnumerable<long>>()))
                 .ReturnsAsync(new Dictionary<long, string>
@@ -260,8 +260,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
             //Assert
             _transferRepository.Verify(x => x.CreateAccountTransfers(It.Is<IEnumerable<AccountTransfer>>(
                 transfers =>
-                    transfers.All(t => t.CourseName.Equals(_paymentDetails.CourseName) &&
-                                       t.ApprenticeCount.Equals(_paymentDetails.ApprenticeCount)))), Times.Once);
+                    transfers.All(t => t.CourseName.Equals(_details.CourseName) &&
+                                       t.ApprenticeCount.Equals(_details.ApprenticeCount)))), Times.Once);
         }
 
         [Test]
@@ -282,7 +282,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
         public async Task ThenIfTransferAmountAndPaymentTotalsDoNotMatchAWarningIsLogged()
         {
             //Assign
-            _paymentDetails.PaymentTotal = 10; //Should be 1200
+            _details.PaymentTotal = 10; //Should be 1200
 
             //Act
             await _handler.Handle(_command);
