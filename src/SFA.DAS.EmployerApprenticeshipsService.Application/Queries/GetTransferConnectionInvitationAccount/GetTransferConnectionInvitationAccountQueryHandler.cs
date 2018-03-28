@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
 
             if (anyPendingtransferConnectionInvitations)
             {
-                throw new ValidationException<GetTransferConnectionInvitationAccountQuery>(q => q.ReceiverAccountPublicHashedId, "You've already sent a connection request to this employer");
+                throw new ValidationException<GetTransferConnectionInvitationAccountQuery>(q => q.ReceiverAccountPublicHashedId, "You can't connect with this employer because they already have a pending or accepted connection request");
             }
 
             var anyApprovedtransferConnectionInvitations = await _db.TransferConnectionInvitations
@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount
 
             if (anyApprovedtransferConnectionInvitations)
             {
-                throw new ValidationException<GetTransferConnectionInvitationAccountQuery>(q => q.ReceiverAccountPublicHashedId, "You're already connected with this employer");
+                throw new ValidationException<GetTransferConnectionInvitationAccountQuery>(q => q.ReceiverAccountPublicHashedId, "You can't connect with this employer because they already have a pending or accepted connection request");
             }
 
             return new GetTransferConnectionInvitationAccountResponse
