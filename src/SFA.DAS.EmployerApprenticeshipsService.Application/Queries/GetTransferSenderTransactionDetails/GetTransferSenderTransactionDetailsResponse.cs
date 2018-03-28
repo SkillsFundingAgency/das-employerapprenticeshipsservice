@@ -1,9 +1,9 @@
 ﻿using SFA.DAS.EAS.Domain.Models.Transfers;
 using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Application.Queries.GetAccountTransferTransactionDetails
+namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
 {
-    public class GetSenderTransferTransactionDetailsResponse
+    public class GetTransferSenderTransactionDetailsResponse
     {
         public string ReceiverAccountName { get; set; }
         public string ReceiverPublicHashedId { get; set; }

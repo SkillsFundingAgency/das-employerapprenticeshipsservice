@@ -309,14 +309,15 @@
     <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationQuery.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationResponse.cs" />
-    <Compile Include="Queries\GetAccountTransferTransactionDetails\GetSenderTransferTransactionDetailsQuery.cs" />
-    <Compile Include="Queries\GetAccountTransferTransactionDetails\GetSenderTransferTransactionDetailsResponse.cs" />
     <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQuery.cs" />
     <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsResponse.cs" />
     <Compile Include="Queries\GetTransferRequests\GetTransferRequestsQuery.cs" />
     <Compile Include="Queries\GetTransferRequests\GetTransferRequestsQueryHandler.cs" />
     <Compile Include="Queries\GetTransferRequests\GetTransferRequestsResponse.cs" />
+    <Compile Include="Queries\GetTransferSenderTransactionDetails\GetTransferSenderTransactionDetailsQuery.cs" />
+    <Compile Include="Queries\GetTransferSenderTransactionDetails\GetTransferSenderTransactionDetailsQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferSenderTransactionDetails\GetTransferSenderTransactionDetailsResponse.cs" />
     <Compile Include="Services\ApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommand.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommandHandler.cs" />

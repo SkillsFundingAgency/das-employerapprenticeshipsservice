@@ -2,8 +2,8 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetAccountTransferTransactionDetails;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
+using SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Web.Authentication;
@@ -66,14 +66,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                 TransferDetails = new List<AccountTransferDetails>()
             };
 
-            var query = new GetSenderTransferTransactionDetailsQuery
+            var query = new GetTransferSenderTransactionDetailsQuery
             {
                 AccountId = senderHashedAccountId,
                 ReceiverAccountId = receiverHashedAccountId,
                 PeriodEnd = periodEnd
             };
 
-            var response = new GetSenderTransferTransactionDetailsResponse
+            var response = new GetTransferSenderTransactionDetailsResponse
             {
                 ReceiverAccountName = "Test Group",
                 ReceiverPublicHashedId = "GFH657",
@@ -83,7 +83,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _mapper.Setup(x => x.Map<TransferSenderTransactionDetailsViewModel>(response))
                    .Returns(expectedViewModel);
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSenderTransferTransactionDetailsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferSenderTransactionDetailsQuery>()))
                 .ReturnsAsync(response);
 
             //Act
