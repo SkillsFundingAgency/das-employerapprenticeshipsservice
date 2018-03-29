@@ -1,6 +1,7 @@
 ﻿@using System.Globalization
 @using SFA.DAS.EAS.Domain.Models.Payments
 @using SFA.DAS.EAS.Domain.Models.Transaction
+@using SFA.DAS.EAS.Domain.Models.Transfers
 @using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.TransactionViewResultViewModel>
 @{
@@ -127,7 +128,7 @@
 
                             <td class="link-right">
                                 @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
-aggregationLine.TransactionType == TransactionItemType.TopUp)
+                                     aggregationLine.TransactionType == TransactionItemType.TopUp)
                                 {
                                     <a title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
                                         Details <span class="vh"> for the transaction on @date</span>
@@ -142,6 +143,22 @@ aggregationLine.TransactionType == TransactionItemType.TopUp)
 
                                     </a>
                                 }
+                                else if (aggregationLine.TransactionType == TransactionItemType.Transfer)
+                                {
+                                    var transferTransaction = aggregationLine as TransferTransactionLine;
+
+                                    <a title="View details for the transfer transaction on @date" 
+                                       href="@Url.Action("TransferDetail", "EmployerAccountTransactions",
+                                                 new
+                                                 {
+                                                     HashedAccountId = Model.Data.Model.Data.HashedAccountId,
+                                                     ReceiverAccountId = transferTransaction?.ReceiverAccountPublicHashedId,
+                                                     PeriodEnd = transferTransaction?.PeriodEnd
+                                                 })">
+                                        Details <span class="vh"> for the transfer transaction on @date</span>
+                                    </a>
+                                }
+
                             </td>
                         </tr>
                     }

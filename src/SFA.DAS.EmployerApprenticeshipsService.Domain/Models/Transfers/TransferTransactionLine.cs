@@ -6,6 +6,7 @@ namespace SFA.DAS.EAS.Domain.Models.Transfers
     {
         public string PeriodEnd { get; set; }
         public long ReceiverAccountId { get; set; }
+        public string ReceiverAccountPublicHashedId { get; set; }
         public string ReceiverAccountName { get; set; }
     }
 }
