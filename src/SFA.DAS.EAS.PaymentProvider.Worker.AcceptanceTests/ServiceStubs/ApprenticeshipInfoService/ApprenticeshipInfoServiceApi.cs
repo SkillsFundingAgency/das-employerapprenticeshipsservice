@@ -12,7 +12,5 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.ServiceStubs.Appren
             ApiMessageHandler = apiMessageHandler;
             BaseAddress = apiMessageHandler.BaseAddress;
         }
-
-
     }
 }
