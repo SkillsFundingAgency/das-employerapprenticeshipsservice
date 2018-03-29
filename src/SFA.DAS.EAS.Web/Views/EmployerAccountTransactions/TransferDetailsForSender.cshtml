@@ -1,2 +1,81 @@
-﻿@model SFA.DAS.EAS.Web.ViewModels.Transactions.TransferSenderTransactionDetailsViewModel
+﻿@using System.Globalization
+@model SFA.DAS.EAS.Web.ViewModels.Transactions.TransferSenderTransactionDetailsViewModel
 
+@{
+    var culture = new CultureInfo("en-GB");
+    ViewBag.PageID = "page-transfer-transaction-details";
+    ViewBag.Title = "Levy Transfer";
+    ViewBag.Section = "finance";
+
+}
+@{
+    ViewBag.GaData.Vpv = "/accounts/balance/levyDeclaration/page-transaction-details";
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Levy transfer</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="responsive-tr">
+                    <td>Date</td>
+                    <td>@Model.DateCreated.ToString("dd MMMM yyyy")</td>
+                </tr>
+                <tr class="responsive-tr">
+                    <td>Account name</td>
+                    <td>@Model.ReceiverAccountName</td>
+                </tr>
+                <tr class="responsive-tr">
+                    <td>Account ID</td>
+                    <td>@Model.ReceiverAccountPublicHashedId</td>
+                </tr>
+            </tbody>
+        </table>
+       
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Course</th>
+                    <th scope="col">Apprentices</th>
+                    <th scope="col" class="numeric">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var transferDetail in Model.TransferDetails)
+                {
+                    <tr>
+                        <td>
+                            @transferDetail.CourseName
+                        </td>
+                        <td>
+                            @transferDetail.ApprenticeCount
+                        </td>
+                        <td class="numeric">
+                            @transferDetail.PaymentTotal
+                        </td>
+                    </tr>
+                }
+            
+            <tr class="total">
+                <td colspan="2"></td>
+                <td class="numeric">@Model.TransferPaymentTotal.ToString("C2", culture)</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAccountTransactions")">Your transactions</a></li>
+            <li>Debit details</li>
+        </ol>
+    </div>
+}

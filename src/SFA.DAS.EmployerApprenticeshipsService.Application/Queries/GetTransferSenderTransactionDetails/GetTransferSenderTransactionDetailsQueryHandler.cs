@@ -4,6 +4,7 @@ using SFA.DAS.EAS.Domain.Extensions;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -40,13 +41,18 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
                 CourseName = ct.First().CourseName,
                 PaymentTotal = ct.Sum(t => t.Amount),
                 ApprenticeCount = (uint)ct.DistinctBy(t => t.ApprenticeshipId).Count()
-            });
+            }).ToArray();
+
+            var transferDate = transfers.FirstOrDefault()?.TransferDate ?? default(DateTime);
+            var transfersPaymentTotal = transferDetails.Sum(t => t.PaymentTotal);
 
             return new GetTransferSenderTransactionDetailsResponse
             {
+                DateCreated = transferDate,
                 ReceiverAccountName = receiverAccountName,
-                TransferDetails = transferDetails.ToArray(),
-                ReceiverPublicHashedId = receiverPublicHashedAccountId
+                TransferDetails = transferDetails,
+                ReceiverPublicHashedId = receiverPublicHashedAccountId,
+                TransferPaymentTotal = transfersPaymentTotal
             };
         }
     }
