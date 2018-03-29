@@ -321,8 +321,10 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
 
             accountRepository.GetAccountNames(new List<long> { transfer.ReceiverAccountId });
 
+            var expectedTransactionTotal = payment.Amount * -1;
+
             Assert.AreEqual(transfer.ReceiverAccountName, transactionLine.ReceiverAccountName);
-            Assert.AreEqual(payment.Amount, transactionLine.Amount);
+            Assert.AreEqual(expectedTransactionTotal, transactionLine.Amount);
         }
 
         private void WaitForPaymentsProcessingToComplete()

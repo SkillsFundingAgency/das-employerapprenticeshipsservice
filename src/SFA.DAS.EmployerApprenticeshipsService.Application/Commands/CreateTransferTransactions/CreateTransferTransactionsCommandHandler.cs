@@ -52,11 +52,12 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
                     var groupTransfers = t.ToArray();
                     var receiverAccountId = t.Key;
                     var receiverAccountName = groupTransfers.First().ReceiverAccountName;
+                    var transferTotal = groupTransfers.Sum(gt => gt.Amount);
 
                     return new TransferTransactionLine
                     {
                         AccountId = groupTransfers[0].SenderAccountId,
-                        Amount = groupTransfers.Sum(gt => gt.Amount),
+                        Amount = -transferTotal,
                         DateCreated = DateTime.Now,
                         TransactionDate = DateTime.Now,
                         ReceiverAccountId = receiverAccountId,
