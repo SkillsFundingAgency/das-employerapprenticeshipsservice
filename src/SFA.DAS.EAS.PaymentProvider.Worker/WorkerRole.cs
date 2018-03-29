@@ -8,7 +8,6 @@ using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
-using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -39,19 +38,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
                     processorTasks[index] = processors[index].RunAsync(_cancellationTokenSource);
                 }
 
-                try
-                {
-                    Task.WaitAll(processorTasks, _cancellationTokenSource.Token);
-                }
-                catch (OperationCanceledException e)
-                {
-                    Console.WriteLine(e);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+                Task.WaitAll(processorTasks, _cancellationTokenSource.Token);
             }
             finally
             {

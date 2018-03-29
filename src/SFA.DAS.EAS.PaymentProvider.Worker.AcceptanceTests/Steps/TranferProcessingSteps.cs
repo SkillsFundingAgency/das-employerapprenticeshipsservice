@@ -95,10 +95,10 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
 
             _logger.Debug("Creating payments API service");
 
-            _paymentServiceApiHandler = new PaymentServiceApiMessageHandler(paymentApiClientConfig.ApiBaseUrl, _logger);
+            _paymentServiceApiHandler = new PaymentServiceApiMessageHandler(paymentApiClientConfig.ApiBaseUrl);
             _paymentServiceApi = new PaymentServiceApi(_paymentServiceApiHandler);
 
-            _apprenticeshipInfoServiceApiHandler = new ApprenticeshipInfoServiceApiMessageHandler(easConfig.ApprenticeshipInfoService.BaseUrl, _logger);
+            _apprenticeshipInfoServiceApiHandler = new ApprenticeshipInfoServiceApiMessageHandler(easConfig.ApprenticeshipInfoService.BaseUrl);
             _apprenticeshipInfoServiceApi = new ApprenticeshipInfoServiceApi(_apprenticeshipInfoServiceApiHandler);
 
             _logger.Debug("Starting worker");
@@ -321,7 +321,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
 
             accountRepository.GetAccountNames(new List<long> { transfer.ReceiverAccountId });
 
-            var expectedTransactionTotal = payment.Amount * -1;
+            var expectedTransactionTotal = -payment.Amount;
 
             Assert.AreEqual(transfer.ReceiverAccountName, transactionLine.ReceiverAccountName);
             Assert.AreEqual(expectedTransactionTotal, transactionLine.Amount);
@@ -368,8 +368,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
 
         private static void ClearSubscriptionMessageQueue(string connectionString, string topicName, string subscriptionName)
         {
-
-            var batchSize = 100;
+            const int batchSize = 100;
             var subscriptionClient = SubscriptionClient.CreateFromConnectionString(connectionString, topicName, subscriptionName, ReceiveMode.ReceiveAndDelete);
 
             do
