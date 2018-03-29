@@ -10,5 +10,6 @@ namespace SFA.DAS.EAS.Web.ViewModels.Transactions
         public string ReceiverAccountName { get; set; }
         public string ReceiverAccountPublicHashedId { get; set; }
         public List<AccountTransferDetails> TransferDetails { get; set; }
+        public decimal TransferPaymentTotal { get; set; }
     }
 }
