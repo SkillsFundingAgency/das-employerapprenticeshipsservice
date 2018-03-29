@@ -19,7 +19,6 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly OrganisationOrchestrator _orchestrator;
         private readonly IMapper _mapper;
-        private readonly ILog _logger;
 
         public OrganisationSharedController(IAuthenticationService owinWrapper,
             OrganisationOrchestrator orchestrator,
