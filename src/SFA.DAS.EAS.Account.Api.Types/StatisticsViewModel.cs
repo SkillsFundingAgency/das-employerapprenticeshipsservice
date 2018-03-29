@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public class RdsRequiredStatisticsViewModel
+    public class StatisticsViewModel
     {
         public long TotalAccounts { get; set; }
         public long TotalLegalEntities { get; set; }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Http.Results;
 using Moq;
 using NUnit.Framework;
@@ -27,12 +23,12 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
         }
 
         [Test]
-        public async Task TheOrchestratorGetTheRdsRequiredStatisticsMethodIsCalled()
+        public async Task WhenStatisticsMethodIsCalled()
         {
             SetupOrchestratorToReturnAResponse(true);
-            await _controller.GetTheRdsStatistics();
+            await _controller.GetStatistics();
 
-            _orchestrator.Verify(o => o.GetTheRdsRequiredStatistics(), Times.Once);
+            _orchestrator.Verify(o => o.GetStatistics(), Times.Once);
         }
 
         [Test]
@@ -40,17 +36,17 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
         {
             SetupOrchestratorToReturnAResponse(true);
 
-            var actual = await _controller.GetTheRdsStatistics();
+            var actual = await _controller.GetStatistics();
             
             Assert.IsNotNull(actual);
         }
 
         private void SetupOrchestratorToReturnAResponse(bool withValidData)
         {
-            _orchestrator.Setup(o => o.GetTheRdsRequiredStatistics())
-                .ReturnsAsync(new OrchestratorResponse<RdsRequiredStatisticsViewModel>()
+            _orchestrator.Setup(o => o.GetStatistics())
+                .ReturnsAsync(new OrchestratorResponse<StatisticsViewModel>()
                 {
-                    Data = withValidData ? new RdsRequiredStatisticsViewModel() : null
+                    Data = withValidData ? new StatisticsViewModel() : null
                 });
         }
 
@@ -59,7 +55,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
         {
             SetupOrchestratorToReturnAResponse(false);
 
-            var actual = await _controller.GetTheRdsStatistics();
+            var actual = await _controller.GetStatistics();
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOf<NotFoundResult>(actual);

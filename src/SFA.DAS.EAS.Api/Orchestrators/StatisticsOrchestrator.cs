@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetTheRdsRequiredStatistics;
+using SFA.DAS.EAS.Application.Queries.GetStatistics;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
     public interface IStatisticsOrchestrator
     {
-        Task<OrchestratorResponse<RdsRequiredStatisticsViewModel>> GetTheRdsRequiredStatistics();
+        Task<OrchestratorResponse<StatisticsViewModel>> GetStatistics();
     }
 
     public class StatisticsOrchestrator : IStatisticsOrchestrator
@@ -26,13 +23,13 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             _logger = logger;
         }
 
-        public async Task<OrchestratorResponse<RdsRequiredStatisticsViewModel>> GetTheRdsRequiredStatistics()
+        public async Task<OrchestratorResponse<StatisticsViewModel>> GetStatistics()
         {
             _logger.Debug($"Fetching the statistics required for RDS at {DateTime.UtcNow}");
 
-            var response = await _mediator.SendAsync(new GetTheRdsRequiredStatisticsRequest());
+            var response = await _mediator.SendAsync(new GetStatisticsRequest());
 
-            return new OrchestratorResponse<RdsRequiredStatisticsViewModel>
+            return new OrchestratorResponse<StatisticsViewModel>
             {
                 Data = response.Statistics.IsEmpty() ? null : response.Statistics
             };

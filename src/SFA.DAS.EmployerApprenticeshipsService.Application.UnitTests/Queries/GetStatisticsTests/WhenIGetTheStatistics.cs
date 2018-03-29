@@ -1,44 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel.Configuration;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetTheRdsRequiredStatistics;
+using SFA.DAS.EAS.Application.Queries.GetStatistics;
 using SFA.DAS.EAS.Domain.Data.Entities;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTheRdsRequiredStatisticsTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
 {
     [TestFixture]
     public class WhenIGetTheStatistics
     {
-        private GetTheRdsRequiredStatisticsHandler _handler;
+        private GetStatisticsHandler _handler;
         private Mock<IStatisticsRepository> _repository;
 
         [SetUp]
         public void Setup()
         {
             _repository = new Mock<IStatisticsRepository>();
-            _handler = new GetTheRdsRequiredStatisticsHandler(_repository.Object);
+            _handler = new GetStatisticsHandler(_repository.Object);
         }
 
         [Test]
-        public async Task ThenTheRepositoryMethodGetTheRequiredRdsStatisticsIsCalled()
+        public async Task ThenTheRepositoryMethodGetStatisticsIsCalled()
         {
             SetupTheRepositoryToReturnData(true);
-            await _handler.Handle(new GetTheRdsRequiredStatisticsRequest());
+            await _handler.Handle(new GetStatisticsRequest());
 
-            _repository.Verify(o => o.GetTheRequiredRdsStatistics(), Times.Once);
+            _repository.Verify(o => o.GetStatistics(), Times.Once);
         }
 
         [Test]
-        public async Task ThenIfTheRepositoryMethodGetTheRequiredRdsStatisticsIsCalledAndReturnsNoDataAndEmptyObjectIsReturned()
+        public async Task ThenIfTheRepositoryMethodGetStatisticsIsCalledAndReturnsNoDataAndEmptyObjectIsReturned()
         {
             SetupTheRepositoryToReturnData(false);
-            var actual = await _handler.Handle(new GetTheRdsRequiredStatisticsRequest());
+            var actual = await _handler.Handle(new GetStatisticsRequest());
 
             Assert.IsNotNull(actual);
             Assert.AreEqual(0, actual.Statistics.TotalPayments);
@@ -53,7 +48,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTheRdsRequiredStatisticsT
         {
             SetupTheRepositoryToReturnData(true);
 
-            var actual = await _handler.Handle(new GetTheRdsRequiredStatisticsRequest());
+            var actual = await _handler.Handle(new GetStatisticsRequest());
 
             Assert.IsNotNull(actual);
             Assert.IsNotNull(actual.Statistics);
@@ -66,8 +61,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTheRdsRequiredStatisticsT
 
         private void SetupTheRepositoryToReturnData(bool returnInstantiatedObject)
         {
-            _repository.Setup(o => o.GetTheRequiredRdsStatistics())
-                .ReturnsAsync(returnInstantiatedObject ? new RdsStatistics()
+            _repository.Setup(o => o.GetStatistics())
+                .ReturnsAsync(returnInstantiatedObject ? new Statistics()
                 {
                     TotalAccounts = 1,
                     TotalPayments = 2,

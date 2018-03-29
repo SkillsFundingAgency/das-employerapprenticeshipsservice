@@ -10,6 +10,6 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
     public interface IStatisticsRepository
     {
-        Task<RdsStatistics> GetTheRequiredRdsStatistics();
+        Task<Statistics> GetStatistics();
     }
 }

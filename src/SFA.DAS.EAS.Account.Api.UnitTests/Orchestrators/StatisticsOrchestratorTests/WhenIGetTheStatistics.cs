@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetTheRdsRequiredStatistics;
+using SFA.DAS.EAS.Application.Queries.GetStatistics;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.StatisticsOrchestratorTests
@@ -34,9 +30,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.StatisticsOrchestrator
         {
             SetupTheMediatorToReturnAResponse(true);
 
-            await _orchestrator.GetTheRdsRequiredStatistics();
+            await _orchestrator.GetStatistics();
 
-            _mediator.Verify(o => o.SendAsync(It.IsAny<GetTheRdsRequiredStatisticsRequest>()), Times.Once);
+            _mediator.Verify(o => o.SendAsync(It.IsAny<GetStatisticsRequest>()), Times.Once);
         }
 
         [Test]
@@ -44,7 +40,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.StatisticsOrchestrator
         {
             SetupTheMediatorToReturnAResponse(true);
 
-            var actual = await _orchestrator.GetTheRdsRequiredStatistics();
+            var actual = await _orchestrator.GetStatistics();
             
             Assert.IsNotNull(actual);
         }
@@ -54,7 +50,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.StatisticsOrchestrator
         {
             SetupTheMediatorToReturnAResponse(false);
 
-            var actual = await _orchestrator.GetTheRdsRequiredStatistics();
+            var actual = await _orchestrator.GetStatistics();
 
             Assert.IsNotNull(actual);
             Assert.IsNull(actual.Data);
@@ -62,13 +58,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.StatisticsOrchestrator
 
         private void SetupTheMediatorToReturnAResponse(bool returnPopulatedModel)
         {
-            _mediator.Setup(o => o.SendAsync(It.IsAny<GetTheRdsRequiredStatisticsRequest>()))
-                .ReturnsAsync(new GetTheRdsRequiredStatisticsResponse
+            _mediator.Setup(o => o.SendAsync(It.IsAny<GetStatisticsRequest>()))
+                .ReturnsAsync(new GetStatisticsResponse
                 {
-                    Statistics = returnPopulatedModel ? new RdsRequiredStatisticsViewModel()
+                    Statistics = returnPopulatedModel ? new StatisticsViewModel()
                     {
                         TotalPayments = 1
-                    } : new RdsRequiredStatisticsViewModel()
+                    } : new StatisticsViewModel()
                 });
         }
     }

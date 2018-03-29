@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Domain.Data.Entities
 {
-    public class RdsStatistics
+    public class Statistics
     {
         public long TotalAccounts { get; set; }
         public long TotalLegalEntities { get; set; }

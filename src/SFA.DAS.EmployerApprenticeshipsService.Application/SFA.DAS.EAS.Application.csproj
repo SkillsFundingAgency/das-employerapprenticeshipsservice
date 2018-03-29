@@ -284,9 +284,9 @@
     <Compile Include="DependencyResolution\ServicesRegistry.cs" />
     <Compile Include="DependencyResolution\TasksRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
-    <Compile Include="Queries\GetTheRdsRequiredStatistics\GetTheRdsRequiredStatisticsHandler.cs" />
-    <Compile Include="Queries\GetTheRdsRequiredStatistics\GetTheRdsRequiredStatisticsRequest.cs" />
-    <Compile Include="Queries\GetTheRdsRequiredStatistics\GetTheRdsRequiredStatisticsResponse.cs" />
+    <Compile Include="Queries\GetStatistics\GetStatisticsHandler.cs" />
+    <Compile Include="Queries\GetStatistics\GetStatisticsRequest.cs" />
+    <Compile Include="Queries\GetStatistics\GetStatisticsResponse.cs" />
     <Compile Include="Dtos\TransferRequestDto.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\TransferRequestMappings.cs" />

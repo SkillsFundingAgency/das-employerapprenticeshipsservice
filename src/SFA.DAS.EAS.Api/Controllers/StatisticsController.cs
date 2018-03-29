@@ -22,9 +22,9 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IHttpActionResult> GetTheRdsStatistics()
+        public async Task<IHttpActionResult> GetStatistics()
         {
-            var model = await _orchestrator.GetTheRdsRequiredStatistics();
+            var model = await _orchestrator.GetStatistics();
 
             if (model.Data == null)
             {

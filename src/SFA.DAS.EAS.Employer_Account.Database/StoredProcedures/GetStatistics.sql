@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [employer_account].[GetTheRequiredRdsStatistics]
+﻿CREATE PROCEDURE [employer_account].[GetStatistics]
 
 AS
 SELECT 

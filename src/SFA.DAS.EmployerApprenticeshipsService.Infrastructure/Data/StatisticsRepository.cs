@@ -16,10 +16,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class StatisticsRepository : BaseRepository, IStatisticsRepository
     {
-        public async Task<RdsStatistics> GetTheRequiredRdsStatistics()
+        public async Task<Statistics> GetStatistics()
         {
-            var result = await WithConnection(async c => await c.QuerySingleOrDefaultAsync<RdsStatistics>(
-                sql: "[employer_account].[GetTheRequiredRdsStatistics]",
+            var result = await WithConnection(async c => await c.QuerySingleOrDefaultAsync<Statistics>(
+                sql: "[employer_account].[GetStatistics]",
                 commandType: CommandType.StoredProcedure));
 
             return result;
