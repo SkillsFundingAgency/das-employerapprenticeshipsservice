@@ -10,19 +10,18 @@ SELECT
 	SELECT COUNT(Id)
 	FROM [employer_account].[LegalEntity]
 	WHERE status = 'active'
-) AS TotalLegalEntities,
+) AS TotalActiveLegalEntities,
 (
-	SELECT DISTINCT COUNT(Ref)
+	SELECT COUNT(Ref)
 	FROM [employer_account].[Paye]
-	GROUP BY Ref
 ) AS TotalPayeSchemes,
 (
 	SELECT COUNT(Id) 
 	FROM [employer_account].[EmployerAgreement]
 	WHERE StatusId = 2
-) AS TotalAgreements,
+) AS TotalSignedAgreements,
 (
 	SELECT COUNT(PaymentId) 
 	FROM [employer_financial].[Payment]
 	WHERE CollectionPeriodYear = YEAR(GETDATE())
-) AS TotalPayments
+) AS TotalPaymentsThisYear

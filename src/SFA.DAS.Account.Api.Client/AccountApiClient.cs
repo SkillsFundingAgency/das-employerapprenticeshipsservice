@@ -128,6 +128,15 @@ namespace SFA.DAS.EAS.Account.Api.Client
             return JsonConvert.DeserializeObject<T>(json);
         }
 
+        public async Task<StatisticsViewModel> GetStatistics()
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/statistics";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<StatisticsViewModel>(json);
+        }
+
         public async Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month)
         {
             var baseUrl = GetBaseUrl();

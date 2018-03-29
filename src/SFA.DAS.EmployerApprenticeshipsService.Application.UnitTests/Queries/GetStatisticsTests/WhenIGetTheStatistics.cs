@@ -36,10 +36,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
             var actual = await _handler.Handle(new GetStatisticsRequest());
 
             Assert.IsNotNull(actual);
-            Assert.AreEqual(0, actual.Statistics.TotalPayments);
+            Assert.AreEqual(0, actual.Statistics.TotalPaymentsThisYear);
             Assert.AreEqual(0, actual.Statistics.TotalAccounts);
-            Assert.AreEqual(0, actual.Statistics.TotalAgreements);
-            Assert.AreEqual(0, actual.Statistics.TotalLegalEntities);
+            Assert.AreEqual(0, actual.Statistics.TotalSignedAgreements);
+            Assert.AreEqual(0, actual.Statistics.TotalActiveLegalEntities);
             Assert.AreEqual(0, actual.Statistics.TotalPAYESchemes);
         }
 
@@ -53,9 +53,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
             Assert.IsNotNull(actual);
             Assert.IsNotNull(actual.Statistics);
             Assert.AreEqual(1, actual.Statistics.TotalAccounts);
-            Assert.AreEqual(2, actual.Statistics.TotalPayments);
-            Assert.AreEqual(3, actual.Statistics.TotalLegalEntities);
-            Assert.AreEqual(4, actual.Statistics.TotalAgreements);
+            Assert.AreEqual(2, actual.Statistics.TotalPaymentsThisYear);
+            Assert.AreEqual(3, actual.Statistics.TotalActiveLegalEntities);
+            Assert.AreEqual(4, actual.Statistics.TotalSignedAgreements);
             Assert.AreEqual(5, actual.Statistics.TotalPAYESchemes);
         }
 

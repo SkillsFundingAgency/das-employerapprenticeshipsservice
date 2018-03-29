@@ -28,10 +28,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetStatistics
                 viewModel = new StatisticsViewModel
                 {
                     TotalAccounts = model.TotalAccounts,
-                    TotalAgreements = model.TotalAgreements,
-                    TotalLegalEntities = model.TotalLegalEntities,
+                    TotalSignedAgreements = model.TotalAgreements,
+                    TotalActiveLegalEntities = model.TotalLegalEntities,
                     TotalPAYESchemes = model.TotalPAYESchemes,
-                    TotalPayments = model.TotalPayments
+                    TotalPaymentsThisYear = model.TotalPayments
                 };
             }
             return new GetStatisticsResponse

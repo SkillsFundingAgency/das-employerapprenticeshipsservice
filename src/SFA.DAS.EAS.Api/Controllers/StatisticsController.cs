@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Http;
+using SFA.DAS.EAS.Account.Api.Attributes;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Account.Api.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
+    [ApiAuthorize(Roles = "ReadUserAccounts")]
     [RoutePrefix("api/statistics")]
     public class StatisticsController : ApiController
     {

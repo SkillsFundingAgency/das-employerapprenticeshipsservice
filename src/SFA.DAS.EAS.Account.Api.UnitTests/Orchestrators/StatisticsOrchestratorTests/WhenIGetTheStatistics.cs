@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.StatisticsOrchestrator
                 {
                     Statistics = returnPopulatedModel ? new StatisticsViewModel()
                     {
-                        TotalPayments = 1
+                        TotalPaymentsThisYear = 1
                     } : new StatisticsViewModel()
                 });
         }
