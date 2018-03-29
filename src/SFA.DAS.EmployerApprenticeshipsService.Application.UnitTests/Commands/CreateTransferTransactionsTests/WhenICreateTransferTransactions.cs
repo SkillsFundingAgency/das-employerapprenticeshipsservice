@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
 
             _transactionRepository.Verify(x => x.CreateTransferTransactions(
                 It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
-                    transactions.Single().Amount.Equals(transfer.Amount))), Times.Once);
+                    transactions.Single().Amount.Equals(-transfer.Amount))), Times.Once);
 
             _transactionRepository.Verify(x => x.CreateTransferTransactions(
                 It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
@@ -119,7 +119,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
                 Amount = 100
             });
 
-            var expectedTotalAmount = _accountTransfers.Sum(t => t.Amount);
+            var expectedTotalAmount = -_accountTransfers.Sum(t => t.Amount);
 
             //Act
             await _handler.Handle(_command);
@@ -163,8 +163,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
             //Assert
             _transactionRepository.Verify(x => x.CreateTransferTransactions(It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
                 transactions.All(t => t.AccountId.Equals(1)) &&
-                transactions.Any(t => t.Amount.Equals(300)) &&
-                transactions.Any(t => t.Amount.Equals(1200)))), Times.Once);
+                transactions.Any(t => t.Amount.Equals(-300)) &&
+                transactions.Any(t => t.Amount.Equals(-1200)))), Times.Once);
         }
 
         [Test]
