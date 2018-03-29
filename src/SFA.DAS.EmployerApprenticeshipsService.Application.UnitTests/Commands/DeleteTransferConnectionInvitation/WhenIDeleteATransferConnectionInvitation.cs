@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
@@ -154,11 +155,39 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteTransferConnectionInv
         }
 
         [Test]
-        public void ThenShouldThrowExceptionIfDeleterIsNotTheSender()
+        public async Task ThenShouldSetSenderDeletedWhenAccountIsSender()
+        {
+            _command.AccountId = _senderAccount.Id;
+            _transferConnectionInvitation = new TransferConnectionInvitationBuilder()
+                .WithId(111111)
+                .WithSenderAccount(_senderAccount)
+                .WithReceiverAccount(_receiverAccount)
+                .WithStatus(TransferConnectionInvitationStatus.Rejected)
+                .Build();
+            _transferConnectionInvitationRepository.Setup(r => r.GetTransferConnectionInvitationById(_transferConnectionInvitation.Id)).ReturnsAsync(_transferConnectionInvitation);
+
+            await _handler.Handle(_command);
+            Assert.IsTrue(_transferConnectionInvitation.DeletedBySender);
+            Assert.IsFalse(_transferConnectionInvitation.DeletedByReceiver);
+            Assert.IsTrue(_transferConnectionInvitation.Changes.SingleOrDefault(tcic => tcic.DeletedBySender.HasValue && tcic.DeletedBySender.Value && !tcic.DeletedByReceiver.HasValue) != null);
+        }
+
+        [Test]
+        public async Task ThenShouldSetSenderDeletedWhenAccountIsReceiver()
         {
             _command.AccountId = _receiverAccount.Id;
+            _transferConnectionInvitation = new TransferConnectionInvitationBuilder()
+                .WithId(111111)
+                .WithSenderAccount(_senderAccount)
+                .WithReceiverAccount(_receiverAccount)
+                .WithStatus(TransferConnectionInvitationStatus.Rejected)
+                .Build();
+            _transferConnectionInvitationRepository.Setup(r => r.GetTransferConnectionInvitationById(_transferConnectionInvitation.Id)).ReturnsAsync(_transferConnectionInvitation);
 
-            Assert.ThrowsAsync<Exception>(() => _handler.Handle(_command), "Requires deleter account is the sender account.");
+            await _handler.Handle(_command);
+            Assert.IsTrue(_transferConnectionInvitation.DeletedByReceiver);
+            Assert.IsFalse(_transferConnectionInvitation.DeletedBySender);
+            Assert.IsTrue(_transferConnectionInvitation.Changes.SingleOrDefault(tcic => tcic.DeletedByReceiver.HasValue && tcic.DeletedByReceiver.Value && !tcic.DeletedBySender.HasValue) != null);
         }
 
         [Test]

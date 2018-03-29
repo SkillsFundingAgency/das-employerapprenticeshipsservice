@@ -63,7 +63,7 @@
                     </tbody>
                 </table>
             </div>
-            if (Model.AccountId == Model.TransferConnectionInvitation.SenderAccount.Id && Model.TransferConnectionInvitation.Status == TransferConnectionInvitationStatus.Rejected)
+            if (Model.TransferConnectionInvitation.Status == TransferConnectionInvitationStatus.Rejected)
             {
                 <div class="form-group @(Html.IsValid(m => m.Choice) ? "" : "error")">
                     <fieldset>
@@ -73,7 +73,7 @@
                         </legend>
                         <label class="block-label selection-button-radio">
                             @Html.RadioButtonFor(m => m.Choice, "Confirm")
-                            Yes, delete the request
+                            Yes, delete this request
                         </label>
                         <label class="block-label selection-button-radio">
                             @Html.RadioButtonFor(m => m.Choice, "GoToTransfersPage")

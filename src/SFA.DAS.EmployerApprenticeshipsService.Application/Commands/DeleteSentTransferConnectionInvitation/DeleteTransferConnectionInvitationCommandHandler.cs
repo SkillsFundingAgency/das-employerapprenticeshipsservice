@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.TransferConnections;
 
 namespace SFA.DAS.EAS.Application.Commands.DeleteSentTransferConnectionInvitation
 {
@@ -26,7 +27,17 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteSentTransferConnectionInvitatio
             var deleterUser = await _userRepository.GetUserById(message.UserId.Value);
             var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetTransferConnectionInvitationById(message.TransferConnectionInvitationId.Value);
 
-            transferConnectionInvitation.Delete(deleterAccount, deleterUser);
+            var mode = DeleteTransferConnectionInvitationMode.NotSpecified;
+            if (transferConnectionInvitation.ReceiverAccountId == message.AccountId)
+            {
+                mode = DeleteTransferConnectionInvitationMode.ReceiverIsDeleting;
+            }
+            else if (transferConnectionInvitation.SenderAccountId == message.AccountId)
+            {
+                mode = DeleteTransferConnectionInvitationMode.SenderIsDeleting;
+            }
+
+            transferConnectionInvitation.Delete(deleterAccount, deleterUser, mode);
         }
     }
 }

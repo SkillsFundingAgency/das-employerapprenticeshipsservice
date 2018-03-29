@@ -5,6 +5,14 @@ using SFA.DAS.EmployerAccounts.Events.Messages;
 
 namespace SFA.DAS.EAS.Domain.Models.TransferConnections
 {
+    [Flags]
+    public enum DeleteTransferConnectionInvitationMode
+    {
+        NotSpecified = 0,
+        SenderIsDeleting = 1,
+        ReceiverIsDeleting = 2
+    }
+
     public class TransferConnectionInvitation : Entity
     {
         public virtual int Id { get; protected set; }
@@ -90,18 +98,32 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
             });
         }
 
-        public void Delete(Data.Entities.Account.Account deleterAccount, User deleterUser)
+        public void Delete(Data.Entities.Account.Account deleterAccount, User deleterUser, DeleteTransferConnectionInvitationMode deletionMode)
         {
-            RequiresDeleterAccountIsTheSenderAccount(deleterAccount);
             RequiresTransferConnectionInvitationIsRejected();
 
             var now = DateTime.UtcNow;
+            var deletedBySender = deletionMode.HasFlag(DeleteTransferConnectionInvitationMode.SenderIsDeleting)? true: (bool?) null;
+            var deletedByReceiver = deletionMode.HasFlag(DeleteTransferConnectionInvitationMode.ReceiverIsDeleting)? true: (bool?) null;
 
-            DeletedBySender = true;
+            if (deletedBySender ?? false)
+            {
+                RequiresDeleterAccountIsTheSenderAccount(deleterAccount);
+                RequiresNotAlreadyDeletedBySender();
+                DeletedBySender = true;
+            }
+
+            if (deletedByReceiver ?? false)
+            {
+                RequiresDeleterAccountIsTheReceiverAccount(deleterAccount);
+                RequiresNotAlreadyDeletedByReceiver();
+                DeletedByReceiver = true;
+            }
 
             Changes.Add(new TransferConnectionInvitationChange
             {
-                DeletedBySender = DeletedBySender,
+                DeletedBySender =  deletedBySender,
+                DeletedByReceiver = deletedByReceiver,
                 User = deleterUser,
                 CreatedDate = now
             });
@@ -165,6 +187,24 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
         {
             if (deleterAccount.Id != SenderAccount.Id)
                 throw new Exception("Requires deleter account is the sender account.");
+        }
+
+        private void RequiresDeleterAccountIsTheReceiverAccount(Data.Entities.Account.Account deleterAccount)
+        {
+            if (deleterAccount.Id != ReceiverAccount.Id)
+                throw new Exception("Requires deleter account is the receiver account.");
+        }
+
+        private void RequiresNotAlreadyDeletedBySender()
+        {
+            if (DeletedBySender)
+                throw new Exception("Requires not already deleted by sender.");
+        }
+
+        private void RequiresNotAlreadyDeletedByReceiver()
+        {
+            if (DeletedByReceiver)
+                throw new Exception("Requires not already deleted by receiver.");
         }
 
         private void RequiresRejectorAccountIsTheReceiverAccount(Data.Entities.Account.Account rejectorAccount)
