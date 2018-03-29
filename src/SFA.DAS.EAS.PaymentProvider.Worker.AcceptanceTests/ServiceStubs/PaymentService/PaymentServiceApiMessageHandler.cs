@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.ApiSubstitute.WebAPI.MessageHandlers;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Types;
 using System.Collections.Generic;
 using System.Net;
@@ -10,16 +9,13 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.ServiceStubs.Paymen
 {
     public class PaymentServiceApiMessageHandler : ApiMessageHandlers
     {
-        private readonly ILog _logger;
-
         public int PageNumber { get; set; }
         public string PeriodEnd { get; set; }
         public long EmployerAccountId { get; set; }
         public long? UkPrn { get; set; }
 
-        public PaymentServiceApiMessageHandler(string baseAddress, ILog logger) : base(baseAddress)
+        public PaymentServiceApiMessageHandler(string baseAddress) : base(baseAddress)
         {
-            _logger = logger;
             PageNumber = 1;
         }
 
