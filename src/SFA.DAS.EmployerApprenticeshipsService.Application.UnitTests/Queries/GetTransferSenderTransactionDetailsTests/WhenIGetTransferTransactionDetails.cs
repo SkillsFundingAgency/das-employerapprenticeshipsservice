@@ -4,6 +4,7 @@ using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Infrastructure.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -50,7 +51,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferSenderTransaction
                         ReceiverAccountName = ReceiverAccountName,
                         ApprenticeshipId = 1,
                         CourseName = FirstCourseName,
-                        Amount = 123.4567M
+                        Amount = 123.4567M,
+                        TransferDate = DateTime.Now
                     },
                     new AccountTransfer
                     {
@@ -59,7 +61,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferSenderTransaction
                         ReceiverAccountName = ReceiverAccountName,
                         ApprenticeshipId = 2,
                         CourseName = SecondCourseName,
-                        Amount = 346.789M
+                        Amount = 346.789M,
+                        TransferDate = DateTime.Now
                     },
 
                     new AccountTransfer
@@ -69,7 +72,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferSenderTransaction
                         ReceiverAccountId = _query.ReceiverAccountId,
                         ReceiverAccountName = ReceiverAccountName,
                         CourseName = SecondCourseName,
-                        Amount = 234.56M
+                        Amount = 234.56M,
+                        TransferDate = DateTime.Now
                     },
 
                 };
@@ -169,6 +173,30 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferSenderTransaction
 
             Assert.AreEqual(expectedFirstCourseApprenticeCount, firstCourseApprenticeCount);
             Assert.AreEqual(expectedSecondCourseApprenticeCount, secondCourseApprenticeCount);
+        }
+
+        [Test]
+        public async Task ThenIShouldReturnTransferPaymentTotal()
+        {
+            //Act
+            var result = await _handler.Handle(_query);
+
+            //Assert
+            var expectedPaymentTotal = _transfers.Sum(t => t.Amount);
+
+            Assert.AreEqual(expectedPaymentTotal, result.TransferPaymentTotal);
+        }
+
+        [Test]
+        public async Task ThenIShouldReturnTransferDate()
+        {
+            //Act
+            var result = await _handler.Handle(_query);
+
+            //Assert
+            var expectedTransferDate = _transfers.First().TransferDate;
+
+            Assert.AreEqual(expectedTransferDate, result.DateCreated);
         }
     }
 }
