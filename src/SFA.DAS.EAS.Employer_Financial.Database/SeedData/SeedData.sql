@@ -13,23 +13,23 @@ Post-Deployment Script Template
 DECLARE @sqlCommand NVARCHAR(4000)
 SELECT @sqlCommand = '
 CREATE PROCEDURE #CreateLevy
-	@accountId BIGINT,
+	@AccountId BIGINT,
 	@payeScheme NVARCHAR(50),
 	@levyAmount DECIMAL
 AS
 BEGIN
-	DECLARE @submissionDate DATETIME
-	SET @submissionDate = GETDATE()
+	DECLARE @SubmissionDate DATETIME
+	SET @SubmissionDate = GETDATE()
 
-	EXEC [employer_financial].[CreateDeclaration] @levyAmount, @payeScheme, @submissionDate, 123, 123, @accountId, @levyAmount, ''17-18'', 1, @submissionDate, NULL, NULL, NULL, 0, 0, 0
+	EXEC [employer_financial].[CreateDeclaration] @levyAmount, @payeScheme, @SubmissionDate, 123, 123, @AccountId, @levyAmount, ''17-18'', 1, @SubmissionDate, NULL, NULL, NULL, 0, 0, 0
 END'
 
 EXEC sp_executesql @sqlCommand
 
-IF NOT EXISTS(SELECT 1 FROM [employer_financial].[TopUpPercentage] WHERE datefrom='2015-01-01 00:00:00.000' and amount=0.1 )
+IF NOT EXISTS(SELECT 1 FROM [employer_financial].[TopUpPercentage] WHERE datefrom='2015-01-01 00:00:00.000' and Amount=0.1 )
 BEGIN
 	insert into [employer_financial].[TopUpPercentage]
-	(datefrom,amount)
+	(datefrom,Amount)
 	values
 	('2015-01-01 00:00:00.000',0.1)
 END

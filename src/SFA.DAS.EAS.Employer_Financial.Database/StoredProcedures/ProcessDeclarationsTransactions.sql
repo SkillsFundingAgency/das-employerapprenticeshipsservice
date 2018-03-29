@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [employer_financial].[ProcessDeclarationsTransactions]
-@accountId BIGINT,
-@empRef NVARCHAR(50)
+@AccountId BIGINT,
+@EmpRef NVARCHAR(50)
 AS
 
 --Add the topup from the declaration
@@ -17,7 +17,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 	FROM 
 		[employer_financial].[GetLevyDeclarationAndTopUp] x
 	where
-		x.LevyDueYTD is not null AND x.LastSubmission = 1 AND x.AccountId = @accountId AND x.EmpRef = @empRef
+		x.LevyDueYTD is not null AND x.LastSubmission = 1 AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
 	union all
 	select
 		x.AccountId,
@@ -28,7 +28,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 	FROM 
 		[employer_financial].[GetLevyDeclarationAndTopUp] x
 	where
-		x.LevyDueYTD is not null and x.EndOfYearAdjustment = 1  AND x.AccountId = @accountId AND x.EmpRef = @empRef
+		x.LevyDueYTD is not null and x.EndOfYearAdjustment = 1  AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
 	) mainUpdate
 	inner join (
 		select SubmissionId from [employer_financial].LevyDeclaration
@@ -53,14 +53,14 @@ select mainUpdate.* from
 			x.TotalAmount as Amount,		
 			x.EmpRef as EmpRef,
 			null as PeriodEnd,
-			null as UkPrn,
+			null as Ukprn,
 			0 as SfaCoInvestmentAmount,
 			0 as EmployerCoInvestmentAmount,
 			x.EnglishFraction
 		FROM 
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		where
-			x.LevyDueYTD is not null AND x.LastSubmission = 1  AND x.AccountId = @accountId AND x.EmpRef = @empRef
+			x.LevyDueYTD is not null AND x.LastSubmission = 1  AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
 	union all	
 		select 
 			x.AccountId,
@@ -69,10 +69,10 @@ select mainUpdate.* from
 			x.SubmissionDate as TransactionDate,
 			1 as TransactionType,
 			x.LevyDueYTD as LevyDeclared,
-			((x.endofyearadjustmentamount * ISNULL(x.EnglishFraction,0)) - ldt.amount) * -1 as Amount,
+			((x.EndOfYearAdjustmentAmount * ISNULL(x.EnglishFraction,0)) - ldt.Amount) * -1 as Amount,
 			x.EmpRef as EmpRef,
 			null as PeriodEnd,
-			null as UkPrn,
+			null as Ukprn,
 			0 as SfaCoInvestmentAmount,
 			0 as EmployerCoInvestmentAmount,
 			NULL AS EnglishFraction
@@ -80,7 +80,7 @@ select mainUpdate.* from
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		inner join
 			[employer_financial].[LevyDeclarationTopup] ldt on ldt.SubmissionId = x.SubmissionId
-		where x.EndOfYearAdjustment = 1  AND x.AccountId = @accountId AND x.EmpRef = @empRef
+		where x.EndOfYearAdjustment = 1  AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
 	) mainUpdate
 	inner join (
 		select SubmissionId from [employer_financial].LevyDeclaration

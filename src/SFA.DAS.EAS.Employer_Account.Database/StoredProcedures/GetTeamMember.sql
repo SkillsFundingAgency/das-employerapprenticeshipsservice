@@ -3,5 +3,5 @@
 	@externalUserId NVARCHAR(50)
 AS
 	SELECT * FROM [employer_account].[MembershipView] m 
-	INNER JOIN [employer_account].Account a ON a.id=m.AccountId 
+	INNER JOIN [employer_account].Account a ON a.Id=m.AccountId 
 	WHERE a.HashedId = @hashedAccountId AND UserRef = @externalUserId

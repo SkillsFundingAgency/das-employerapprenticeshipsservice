@@ -9,4 +9,4 @@
 )
 GO
 
-CREATE INDEX [IX_LevyDeclarationtopup_submissionid] ON [employer_financial].[LevyDeclarationTopup] (SubmissionId)
+CREATE INDEX [IX_LevyDeclarationtopup_SubmissionId] ON [employer_financial].[LevyDeclarationTopup] (SubmissionId)

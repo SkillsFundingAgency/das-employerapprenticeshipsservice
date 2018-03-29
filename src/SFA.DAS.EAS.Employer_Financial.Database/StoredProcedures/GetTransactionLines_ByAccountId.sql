@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetTransactionLines_ByAccountId]
-	@accountId BIGINT,
+	@AccountId BIGINT,
 	@fromDate datetime,
 	@toDate datetime
 AS
@@ -9,9 +9,9 @@ select
     ,bal.balance AS Balance
 from
 (
-	select Sum(amount) as balance,accountid 
+	select Sum(Amount) as balance,AccountId 
 	from employer_financial.TransactionLine 
-	WHERE AccountId = @accountId and transactiontype in (1,2,3) group by accountid) as bal
+	WHERE AccountId = @AccountId and TransactionType in (1,2,3) group by AccountId) as bal
 left join
 (
     SELECT 
@@ -19,15 +19,15 @@ left join
       ,tl.TransactionType
 	  ,MAX(tl.TransactionDate) as TransactionDate
       ,Sum(tl.Amount) as Amount
-      ,tl.UkPrn
+      ,tl.Ukprn
       ,tl.DateCreated
 	  ,tl.SfaCoInvestmentAmount
 	  ,tl.EmployerCoInvestmentAmount
 	  ,ld.PayrollYear
 	  ,ld.PayrollMonth
   FROM [employer_financial].[TransactionLine] tl
-  LEFT JOIN [employer_financial].LevyDeclaration ld on ld.submissionid = tl.submissionid
-  WHERE tl.AccountId = @accountId AND tl.DateCreated >= @fromDate AND DateCreated <= @toDate
-  GROUP BY tl.DateCreated, tl.AccountId, tl.UKPRN, tl.SfaCoInvestmentAmount, tl.EmployerCoInvestmentAmount, tl.TransactionType, ld.PayrollMonth, ld.PayrollYear
+  LEFT JOIN [employer_financial].LevyDeclaration ld on ld.SubmissionId = tl.SubmissionId
+  WHERE tl.AccountId = @AccountId AND tl.DateCreated >= @fromDate AND DateCreated <= @toDate
+  GROUP BY tl.DateCreated, tl.AccountId, tl.Ukprn, tl.SfaCoInvestmentAmount, tl.EmployerCoInvestmentAmount, tl.TransactionType, ld.PayrollMonth, ld.PayrollYear
 ) as main on main.AccountId = bal.AccountId
-order by DateCreated desc, TransactionType desc, ukprn desc
+order by DateCreated desc, TransactionType desc, Ukprn desc
