@@ -27,17 +27,7 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteSentTransferConnectionInvitatio
             var deleterUser = await _userRepository.GetUserById(message.UserId.Value);
             var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetTransferConnectionInvitationById(message.TransferConnectionInvitationId.Value);
 
-            var mode = DeleteTransferConnectionInvitationMode.NotSpecified;
-            if (transferConnectionInvitation.ReceiverAccountId == message.AccountId)
-            {
-                mode = DeleteTransferConnectionInvitationMode.ReceiverIsDeleting;
-            }
-            else if (transferConnectionInvitation.SenderAccountId == message.AccountId)
-            {
-                mode = DeleteTransferConnectionInvitationMode.SenderIsDeleting;
-            }
-
-            transferConnectionInvitation.Delete(deleterAccount, deleterUser, mode);
+            transferConnectionInvitation.Delete(deleterAccount, deleterUser);
         }
     }
 }

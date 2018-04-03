@@ -23,19 +23,16 @@ namespace SFA.DAS.EAS.TestCommon
             act?.Invoke(testFixture);
             assert?.Invoke(testFixture);
         }
-    }
 
-    public abstract class FluentTestAsync<T> where T : new()
-    {
-        public Task Run(Func<T, Task> act, Action<T> assert)
+        public Task RunAsync(Func<T, Task> act, Action<T> assert)
         {
-            return Run(null, act, assert);
+            return RunAsync(null, act, assert);
         }
 
-        public async Task Run(Action<T> arrange, Func<T, Task> act, Action<T> assert)
+        public async Task RunAsync(Action<T> arrange, Func<T, Task> act, Action<T> assert)
         {
             var testFixture = new T();
-            
+
             arrange?.Invoke(testFixture);
 
             if (act != null)

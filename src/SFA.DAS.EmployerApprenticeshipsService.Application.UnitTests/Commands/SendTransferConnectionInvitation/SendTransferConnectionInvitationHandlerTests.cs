@@ -13,12 +13,12 @@ using SFA.DAS.EAS.TestCommon.Builders;
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvitation
 {
     [TestFixture]
-    public class SendTransferConnectionInvitationHandlerTests : FluentTestAsync<SendTransferConnectionInvitationHandlerTestsFixture>
+    public class SendTransferConnectionInvitationHandlerTests : FluentTest<SendTransferConnectionInvitationHandlerTestsFixture>
     {
         [Test]
         public Task Handle_WhenISendATransferConnectionInvitation_ThenShouldAddTransferConnectionInvitationToRepository()
         {
-            return Run(f => f.Handle(), f => f.TransferConnectionInvitationRepository.Verify(r => r.Add(It.IsAny<TransferConnectionInvitation>()), Times.Once));
+            return RunAsync(f => f.Handle(), f => f.TransferConnectionInvitationRepository.Verify(r => r.Add(It.IsAny<TransferConnectionInvitation>()), Times.Once));
         }
     }
 
