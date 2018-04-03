@@ -69,9 +69,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return populatedPayments;
         }
 
-        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long employerAccountId)
+        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long receiverAccountId)
         {
-            var pageOfTransfers = await _paymentsEventsApiClient.GetAccountTransfers(periodEnd, employerAccountId);
+            var pageOfTransfers = await _paymentsEventsApiClient.GetAccountTransfers(periodEnd, receiverAccountId);
 
             var transfers = new List<AccountTransfer>();
 
@@ -152,7 +152,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             catch (Exception e)
             {
                 _logger.Warn(e, $"Unable to get Apprenticeship with Employer Account ID {employerAccountId} and " +
-                                 $"apprenticeship ID {apprenticeshipId} from commitments API.");
+                                $"apprenticeship ID {apprenticeshipId} from commitments API.");
             }
 
             return null;

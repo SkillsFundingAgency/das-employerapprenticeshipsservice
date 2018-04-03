@@ -210,16 +210,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
             //Arrange
             _accountTransfers = new List<AccountTransfer>
             {
-                new AccountTransfer { SenderAccountId = 1, ReceiverAccountId = 2, ReceiverAccountName = ReceiverAccountName,
+                new AccountTransfer { SenderAccountId = 1, ReceiverAccountId = 3, ReceiverAccountName = ReceiverAccountName,
                                       ApprenticeshipId = 100, Amount = 100 },
 
-                new AccountTransfer { SenderAccountId = 1, ReceiverAccountId = 2, ReceiverAccountName = ReceiverAccountName,
+                new AccountTransfer { SenderAccountId = 1, ReceiverAccountId = 3, ReceiverAccountName = ReceiverAccountName,
                                       ApprenticeshipId = 200, Amount = 200 },
 
-                new AccountTransfer { SenderAccountId = 1, ReceiverAccountId = 3, ReceiverAccountName = ReceiverAccountName,
+                new AccountTransfer { SenderAccountId = 2, ReceiverAccountId = 3, ReceiverAccountName = ReceiverAccountName,
                                       ApprenticeshipId = 300, Amount = 400 },
 
-                new AccountTransfer { SenderAccountId = 1, ReceiverAccountId = 3, ReceiverAccountName = ReceiverAccountName,
+                new AccountTransfer { SenderAccountId = 2, ReceiverAccountId = 3, ReceiverAccountName = ReceiverAccountName,
                                       ApprenticeshipId = 400, Amount = 800 }
             };
 
@@ -231,7 +231,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
 
             //Assert
             _transactionRepository.Verify(x => x.CreateTransferTransactions(It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
-                transactions.Count(t => t.AccountId.Equals(1)) == 2 &&
+                transactions.Count(t => t.AccountId.Equals(3)) == 2 &&
                 transactions.Any(t => t.Amount.Equals(-300)) &&
                 transactions.Any(t => t.Amount.Equals(-1200)))), Times.Once);
         }

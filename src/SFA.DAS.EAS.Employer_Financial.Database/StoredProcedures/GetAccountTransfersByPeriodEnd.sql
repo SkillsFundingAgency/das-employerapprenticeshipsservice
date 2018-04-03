@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetAccountTransfersByPeriodEnd]
-	@senderAccountId BIGINT,
+	@receiverAccountId BIGINT,
 	@periodEnd NVARCHAR(20)
 AS
 	SELECT * FROM [employer_financial].[AccountTransfers]
-	WHERE SenderAccountId = @senderAccountId
+	WHERE ReceiverAccountId = @receiverAccountId
 	AND PeriodEnd = @periodEnd
 
