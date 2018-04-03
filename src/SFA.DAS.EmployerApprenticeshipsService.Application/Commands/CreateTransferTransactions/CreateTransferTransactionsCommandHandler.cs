@@ -5,6 +5,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.NLog.Logger;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,32 +48,55 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
 
                 var receiverTransfers = accountTransfers.GroupBy(t => t.ReceiverAccountId).ToArray();
 
-                var transactions = receiverTransfers.Select(t =>
-                {
-                    var groupTransfers = t.ToArray();
-                    var receiverAccountId = t.Key;
-                    var receiverAccountName = groupTransfers.First().ReceiverAccountName;
-                    var transferTotal = groupTransfers.Sum(gt => gt.Amount);
-
-                    return new TransferTransactionLine
-                    {
-                        AccountId = groupTransfers[0].SenderAccountId,
-                        Amount = -transferTotal,
-                        DateCreated = DateTime.Now,
-                        TransactionDate = DateTime.Now,
-                        ReceiverAccountId = receiverAccountId,
-                        ReceiverAccountName = receiverAccountName
-                    };
-                }).ToArray();
+                var transactions = receiverTransfers.SelectMany(CreateTransactions).ToArray();
 
                 await _transactionRepository.CreateTransferTransactions(transactions);
-
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, $"Failed to create transfer transaction for accountId {message.AccountId} and period end {message.PeriodEnd}");
                 throw;
             }
+        }
+
+        private static IEnumerable<TransferTransactionLine> CreateTransactions(IGrouping<long, AccountTransfer> receiverTransferGroup)
+        {
+            if (!receiverTransferGroup.Any())
+                return new TransferTransactionLine[0];
+
+            var firstTransfer = receiverTransferGroup.First();
+
+            var senderAccountId = firstTransfer.SenderAccountId;
+            var senderAccountName = firstTransfer.SenderAccountName;
+            var receiverAccountId = receiverTransferGroup.Key; //use key as we have grouped by receiver ID
+            var receiverAccountName = firstTransfer.ReceiverAccountName;
+            var transferTotal = receiverTransferGroup.Sum(gt => gt.Amount);
+
+            var senderTranferTransaction = new TransferTransactionLine
+            {
+                AccountId = senderAccountId,
+                Amount = -transferTotal, //Negative value as we are removing money from sender
+                DateCreated = DateTime.Now,
+                TransactionDate = DateTime.Now,
+                SenderAccountId = senderAccountId,
+                SenderAccountName = senderAccountName,
+                ReceiverAccountId = receiverAccountId,
+                ReceiverAccountName = receiverAccountName
+            };
+
+            var receiverTransferTransaction = new TransferTransactionLine
+            {
+                AccountId = receiverAccountId,
+                Amount = transferTotal, //Positive value as we are adding money to receiver
+                DateCreated = DateTime.Now,
+                TransactionDate = DateTime.Now,
+                SenderAccountId = senderAccountId,
+                SenderAccountName = senderAccountName,
+                ReceiverAccountId = receiverAccountId,
+                ReceiverAccountName = receiverAccountName
+            };
+
+            return new[] { senderTranferTransaction, receiverTransferTransaction };
         }
     }
 }

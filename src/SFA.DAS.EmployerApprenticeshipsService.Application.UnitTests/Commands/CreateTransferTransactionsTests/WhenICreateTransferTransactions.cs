@@ -15,6 +15,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
 {
     public class WhenICreateTransferTransactions
     {
+        private const string SenderAccountName = "Test Account Sender";
         private const string ReceiverAccountName = "Test Account Receiver";
 
         private CreateTransferTransactionsCommandHandler _handler;
@@ -40,6 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
                 new AccountTransfer
                 {
                     SenderAccountId = 1,
+                    SenderAccountName = SenderAccountName,
                     ReceiverAccountId = 2,
                     ReceiverAccountName = ReceiverAccountName,
                     ApprenticeshipId = 100,
@@ -82,21 +84,48 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
 
             //Assert
             var transfer = _accountTransfers.First();
-            _transactionRepository.Verify(x => x.CreateTransferTransactions(
-                It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
-                    transactions.Single().AccountId.Equals(transfer.SenderAccountId))), Times.Once);
 
             _transactionRepository.Verify(x => x.CreateTransferTransactions(
                 It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
-                    transactions.Single().Amount.Equals(-transfer.Amount))), Times.Once);
+                    transactions.First().AccountId.Equals(transfer.SenderAccountId))), Times.Once);
 
             _transactionRepository.Verify(x => x.CreateTransferTransactions(
                 It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
-                    transactions.Single().ReceiverAccountId.Equals(transfer.ReceiverAccountId))), Times.Once);
+                    transactions.First().Amount.Equals(-transfer.Amount))), Times.Once);
 
             _transactionRepository.Verify(x => x.CreateTransferTransactions(
                 It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
-                    transactions.Single().ReceiverAccountName.Equals(ReceiverAccountName))), Times.Once);
+                    transactions.First().ReceiverAccountId.Equals(transfer.ReceiverAccountId))), Times.Once);
+
+            _transactionRepository.Verify(x => x.CreateTransferTransactions(
+                It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
+                    transactions.First().ReceiverAccountName.Equals(ReceiverAccountName))), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenTransferReceiverTransactionsShouldBeSaved()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            var transfer = _accountTransfers.First();
+
+            _transactionRepository.Verify(x => x.CreateTransferTransactions(
+                It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
+                    transactions.ElementAt(1).AccountId.Equals(transfer.ReceiverAccountId))), Times.Once);
+
+            _transactionRepository.Verify(x => x.CreateTransferTransactions(
+                It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
+                    transactions.ElementAt(1).Amount.Equals(transfer.Amount))), Times.Once);
+
+            _transactionRepository.Verify(x => x.CreateTransferTransactions(
+                It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
+                    transactions.ElementAt(1).SenderAccountId.Equals(transfer.SenderAccountId))), Times.Once);
+
+            _transactionRepository.Verify(x => x.CreateTransferTransactions(
+                It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
+                    transactions.ElementAt(1).SenderAccountName.Equals(SenderAccountName))), Times.Once);
         }
 
         [Test]
@@ -123,6 +152,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
             _accountTransfers.Add(new AccountTransfer
             {
                 SenderAccountId = 1,
+                SenderAccountName = SenderAccountName,
                 ReceiverAccountId = 2,
                 ReceiverAccountName = ReceiverAccountName,
                 ApprenticeshipId = 200,
@@ -139,9 +169,38 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
 
             var transfer = _accountTransfers.First();
             _transactionRepository.Verify(x => x.CreateTransferTransactions(It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
-                transactions.Single().AccountId.Equals(transfer.SenderAccountId) &&
-                transactions.Single().Amount.Equals(expectedTotalAmount) &&
-                transactions.Single().ReceiverAccountId.Equals(transfer.ReceiverAccountId))), Times.Once);
+                transactions.First().AccountId.Equals(transfer.SenderAccountId) &&
+                transactions.First().Amount.Equals(expectedTotalAmount) &&
+                transactions.First().ReceiverAccountId.Equals(transfer.ReceiverAccountId))), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenReceiverTransactionsShouldBeTheSumOfTransfersByReceiver()
+        {
+            //Arrange
+            _accountTransfers.Add(new AccountTransfer
+            {
+                SenderAccountId = 1,
+                SenderAccountName = SenderAccountName,
+                ReceiverAccountId = 2,
+                ReceiverAccountName = ReceiverAccountName,
+                ApprenticeshipId = 200,
+                Amount = 100
+            });
+
+            var expectedTotalAmount = _accountTransfers.Sum(t => t.Amount);
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+
+
+            var transfer = _accountTransfers.First();
+            _transactionRepository.Verify(x => x.CreateTransferTransactions(It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
+                transactions.ElementAt(1).AccountId.Equals(transfer.ReceiverAccountId) &&
+                transactions.ElementAt(1).Amount.Equals(expectedTotalAmount) &&
+                transactions.ElementAt(1).SenderAccountId.Equals(transfer.SenderAccountId))), Times.Once);
         }
 
 
@@ -172,7 +231,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
 
             //Assert
             _transactionRepository.Verify(x => x.CreateTransferTransactions(It.Is<IEnumerable<TransferTransactionLine>>(transactions =>
-                transactions.All(t => t.AccountId.Equals(1)) &&
+                transactions.Count(t => t.AccountId.Equals(1)) == 2 &&
                 transactions.Any(t => t.Amount.Equals(-300)) &&
                 transactions.Any(t => t.Amount.Equals(-1200)))), Times.Once);
         }
