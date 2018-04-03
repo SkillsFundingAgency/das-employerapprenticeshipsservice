@@ -10,10 +10,9 @@ namespace SFA.DAS.EAS.Domain.Interfaces
     public interface IFeatureAgreementService
     {
         /// <summary>
-        ///     Will deterine if the action is linked to a feature. If the operation is linked to a feature 
+        ///     Will deterine if the action is linked to a feature controlled by an agreement and if it 
+        ///     is determime if the current account has signed atleast that agreement. 
         /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
         Task<bool> IsFeatureEnabled(OperationContext context);
 
     }

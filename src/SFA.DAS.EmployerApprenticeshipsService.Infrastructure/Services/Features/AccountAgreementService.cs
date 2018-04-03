@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services.Features
         {
             var latestAgreementId = await _cache
                 .GetOrAddAsync(GetCacheKeyForAccount(accountId), 
-                            key => FetchLatestAgreeemntNumberFromStoreAsync(accountId));
+                            key => FetchLatestAgreementNumberFromStoreAsync(accountId));
 
             if (latestAgreementId == StoredValueThatMeansNull)
             {
@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services.Features
             return _cache.RemoveFromCache(GetCacheKeyForAccount(accountId));
         }
 
-        private async Task<int?> FetchLatestAgreeemntNumberFromStoreAsync(long accountId)
+        private async Task<int?> FetchLatestAgreementNumberFromStoreAsync(long accountId)
         {
             return await _employerAgreementRepository.GetLatestSignedAgreementVersion(accountId) ?? StoredValueThatMeansNull;
         }
