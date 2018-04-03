@@ -164,12 +164,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result;
         }
 
-        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfersByPeriodEnd(long senderAccountId, string periodEnd)
+        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfersByPeriodEnd(long receiverAccountId, string periodEnd)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@senderAccountId", senderAccountId, DbType.Int64);
+                parameters.Add("@receiverAccountId", receiverAccountId, DbType.Int64);
                 parameters.Add("@periodEnd", periodEnd, DbType.String);
 
                 return await c.QueryAsync<AccountTransfer>(

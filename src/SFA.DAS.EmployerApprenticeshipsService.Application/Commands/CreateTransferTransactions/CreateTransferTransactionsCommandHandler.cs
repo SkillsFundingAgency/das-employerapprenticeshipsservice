@@ -46,9 +46,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
 
                 var accountTransfers = transfers as AccountTransfer[] ?? transfers.ToArray();
 
-                var receiverTransfers = accountTransfers.GroupBy(t => t.ReceiverAccountId).ToArray();
+                var senderTransfers = accountTransfers.GroupBy(t => t.SenderAccountId);
 
-                var transactions = receiverTransfers.SelectMany(CreateTransactions).ToArray();
+                var transactions = senderTransfers.SelectMany(CreateTransactions).ToArray();
 
                 await _transactionRepository.CreateTransferTransactions(transactions);
             }
@@ -59,23 +59,23 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
             }
         }
 
-        private static IEnumerable<TransferTransactionLine> CreateTransactions(IGrouping<long, AccountTransfer> receiverTransferGroup)
+        private static IEnumerable<TransferTransactionLine> CreateTransactions(IGrouping<long, AccountTransfer> senderTransferGroup)
         {
-            if (!receiverTransferGroup.Any())
+            if (!senderTransferGroup.Any())
                 return new TransferTransactionLine[0];
 
-            var firstTransfer = receiverTransferGroup.First();
+            var firstTransfer = senderTransferGroup.First();
 
-            var senderAccountId = firstTransfer.SenderAccountId;
+            var senderAccountId = senderTransferGroup.Key;
             var senderAccountName = firstTransfer.SenderAccountName;
-            var receiverAccountId = receiverTransferGroup.Key; //use key as we have grouped by receiver ID
+            var receiverAccountId = firstTransfer.ReceiverAccountId;  //use key as we have grouped by receiver ID
             var receiverAccountName = firstTransfer.ReceiverAccountName;
-            var transferTotal = receiverTransferGroup.Sum(gt => gt.Amount);
+            var transferTotal = senderTransferGroup.Sum(gt => gt.Amount);
 
             var senderTranferTransaction = new TransferTransactionLine
             {
                 AccountId = senderAccountId,
-                Amount = -transferTotal, //Negative value as we are removing money from sender
+                Amount = -transferTotal,        //Negative value as we are removing money from sender
                 DateCreated = DateTime.Now,
                 TransactionDate = DateTime.Now,
                 SenderAccountId = senderAccountId,
@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
             var receiverTransferTransaction = new TransferTransactionLine
             {
                 AccountId = receiverAccountId,
-                Amount = transferTotal, //Positive value as we are adding money to receiver
+                Amount = transferTotal,         //Positive value as we are adding money to receiver
                 DateCreated = DateTime.Now,
                 TransactionDate = DateTime.Now,
                 SenderAccountId = senderAccountId,
