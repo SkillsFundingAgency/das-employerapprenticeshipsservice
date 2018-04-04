@@ -118,7 +118,6 @@
     <Reference Include="Polly, Version=5.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.7.0\lib\net45\Polly.dll</HintPath>
     </Reference>
-    
     <Reference Include="SFA.DAS.Activities, Version=1.0.0.59218, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.59218\lib\net45\SFA.DAS.Activities.dll</HintPath>
     </Reference>
@@ -399,7 +398,7 @@
     <Compile Include="Queries\GetTransferConnectionInvitationsTests\WhenIGetTransferConnectionInvitations.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationTests\WhenIGetTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetTransferRequestsTests\WhenIGetTransferRequests.cs" />
-    <Compile Include="Queries\GetTransferSenderTransactionDetailsTests\WhenIGetTransferTransactionDetails.cs" />
+    <Compile Include="Queries\GetTransferTransactionDetailsTests\WhenIGetsTransferTransactionDetails.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIGetAUserAccountRole.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />

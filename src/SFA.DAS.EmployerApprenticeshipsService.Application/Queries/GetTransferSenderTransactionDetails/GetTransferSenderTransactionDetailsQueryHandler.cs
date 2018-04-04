@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
 {
-    public class GetTransferSenderTransactionDetailsQueryHandler : IAsyncRequestHandler<GetTransferSenderTransactionDetailsQuery, GetTransferSenderTransactionDetailsResponse>
+    public class GetTransferSenderTransactionDetailsQueryHandler : IAsyncRequestHandler<GetTransferTransactionDetailsQuery, GetTransferSenderTransactionDetailsResponse>
     {
         private readonly EmployerFinancialDbContext _dbContext;
         private readonly IPublicHashingService _publicHashingService;
@@ -22,17 +22,22 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
             _publicHashingService = publicHashingService;
         }
 
-        public async Task<GetTransferSenderTransactionDetailsResponse> Handle(GetTransferSenderTransactionDetailsQuery query)
+        public async Task<GetTransferSenderTransactionDetailsResponse> Handle(GetTransferTransactionDetailsQuery query)
         {
-            var result = await _dbContext.GetSenderTransfersByReceiver(
+            var result = await _dbContext.GetTransfersByTargetAccountId(
                                     query.AccountId.GetValueOrDefault(),
-                                    query.ReceiverAccountId,
+                                    query.TargetAccountId,
                                     query.PeriodEnd);
 
             var transfers = result as AccountTransfer[] ?? result.ToArray();
 
-            var receiverAccountName = transfers.FirstOrDefault()?.ReceiverAccountName ?? string.Empty;
-            var receiverPublicHashedAccountId = _publicHashingService.HashValue(query.ReceiverAccountId);
+            var firstTransfer = transfers.First();
+
+            var senderAccountName = firstTransfer.SenderAccountName;
+            var senderPublicHashedAccountId = _publicHashingService.HashValue(firstTransfer.SenderAccountId);
+
+            var receiverAccountName = firstTransfer.ReceiverAccountName;
+            var receiverPublicHashedAccountId = _publicHashingService.HashValue(firstTransfer.ReceiverAccountId);
 
             var courseTransfers = transfers.GroupBy(t => t.CourseName);
 
@@ -48,11 +53,13 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
 
             return new GetTransferSenderTransactionDetailsResponse
             {
-                DateCreated = transferDate,
+                SenderAccountName = senderAccountName,
+                SenderPublicHashedId = senderPublicHashedAccountId,
                 ReceiverAccountName = receiverAccountName,
-                TransferDetails = transferDetails,
                 ReceiverPublicHashedId = receiverPublicHashedAccountId,
-                TransferPaymentTotal = transfersPaymentTotal
+                TransferDetails = transferDetails,
+                TransferPaymentTotal = transfersPaymentTotal,
+                DateCreated = transferDate
             };
         }
     }

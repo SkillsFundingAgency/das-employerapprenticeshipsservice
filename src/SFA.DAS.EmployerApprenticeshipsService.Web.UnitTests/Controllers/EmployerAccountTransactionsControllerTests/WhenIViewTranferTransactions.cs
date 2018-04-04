@@ -67,10 +67,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                 TransferDetails = new List<AccountTransferDetails>()
             };
 
-            var query = new GetTransferSenderTransactionDetailsQuery
+            var query = new GetTransferTransactionDetailsQuery
             {
                 AccountId = senderHashedAccountId,
-                ReceiverAccountId = receiverHashedAccountId,
+                TargetAccountId = receiverHashedAccountId,
                 PeriodEnd = periodEnd
             };
 
@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _mapper.Setup(x => x.Map<TransferSenderTransactionDetailsViewModel>(response))
                    .Returns(expectedViewModel);
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferSenderTransactionDetailsQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferTransactionDetailsQuery>()))
                 .ReturnsAsync(response);
 
             //Act

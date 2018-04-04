@@ -18,11 +18,11 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
             return transferAllowance.SingleOrDefault() ?? 0;
         }
 
-        public static async Task<IEnumerable<AccountTransfer>> GetSenderTransfersByReceiver(
+        public static async Task<IEnumerable<AccountTransfer>> GetTransfersByTargetAccountId(
             this EmployerFinancialDbContext db, long senderAccountId, long receiverAccountId, string periodEnd)
         {
             var transfers = await db.SqlQueryAsync<AccountTransfer>(
-                "[employer_financial].[GetTransferSenderTransactionDetails] @senderAccountId = {0}, @receiverAccountId = {1}, @periodEnd = {2}",
+                "[employer_financial].[GetTransferTransactionDetails] @accountId = {0}, @targetAccountId = {1}, @periodEnd = {2}",
                 senderAccountId,
                 receiverAccountId,
                 periodEnd);

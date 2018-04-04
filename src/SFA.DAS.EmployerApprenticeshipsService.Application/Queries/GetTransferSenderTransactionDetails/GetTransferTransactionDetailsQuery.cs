@@ -5,14 +5,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
 {
-    public class GetTransferSenderTransactionDetailsQuery : MembershipMessage, IAsyncRequest<GetTransferSenderTransactionDetailsResponse>
+    public class GetTransferTransactionDetailsQuery : MembershipMessage, IAsyncRequest<GetTransferSenderTransactionDetailsResponse>
     {
         [IgnoreMap]
         [Required]
-        public long ReceiverAccountId { get; set; }
+        public long TargetAccountId { get; set; }
 
         [Required]
         public string PeriodEnd { get; set; }
-
     }
 }

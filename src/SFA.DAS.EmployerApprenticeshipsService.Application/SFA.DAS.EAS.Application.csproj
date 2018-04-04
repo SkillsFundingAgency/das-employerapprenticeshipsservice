@@ -315,7 +315,7 @@
     <Compile Include="Queries\GetTransferRequests\GetTransferRequestsQuery.cs" />
     <Compile Include="Queries\GetTransferRequests\GetTransferRequestsQueryHandler.cs" />
     <Compile Include="Queries\GetTransferRequests\GetTransferRequestsResponse.cs" />
-    <Compile Include="Queries\GetTransferSenderTransactionDetails\GetTransferSenderTransactionDetailsQuery.cs" />
+    <Compile Include="Queries\GetTransferSenderTransactionDetails\GetTransferTransactionDetailsQuery.cs" />
     <Compile Include="Queries\GetTransferSenderTransactionDetails\GetTransferSenderTransactionDetailsQueryHandler.cs" />
     <Compile Include="Queries\GetTransferSenderTransactionDetails\GetTransferSenderTransactionDetailsResponse.cs" />
     <Compile Include="Services\ApprenticeshipInfoServiceWrapper.cs" />
