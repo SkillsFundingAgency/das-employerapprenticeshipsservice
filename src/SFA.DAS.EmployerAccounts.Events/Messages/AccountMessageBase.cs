@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
     public abstract class AccountMessageBase: IAccountEvent
     {
         //We have protected setters to support json serialsation due to the empty constructor
-        public long AccountId { get; protected set; }
+        public long AccountId { get; set; }
         public DateTime CreatedAt { get; protected set; }
         public string CreatorName { get; protected set; }
         public string CreatorUserRef { get; protected set; }
