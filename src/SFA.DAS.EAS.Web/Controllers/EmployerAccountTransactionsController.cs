@@ -127,7 +127,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [Route("finance/transfer/details")]
         [Route("balance/transfer/details")]
-        public async Task<ActionResult> TransferDetail(GetTransferSenderTransactionDetailsQuery query)
+        public async Task<ActionResult> TransferDetail(GetTransferTransactionDetailsQuery query)
         {
             var response = await _mediator.SendAsync(query);
 

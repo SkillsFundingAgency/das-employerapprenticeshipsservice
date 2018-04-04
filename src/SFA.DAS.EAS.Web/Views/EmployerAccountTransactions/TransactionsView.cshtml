@@ -151,8 +151,9 @@
                                        href="@Url.Action("TransferDetail", "EmployerAccountTransactions",
                                                  new
                                                  {
+                                                    
                                                      HashedAccountId = Model.Data.Model.Data.HashedAccountId,
-                                                     ReceiverAccountId = transferTransaction?.ReceiverAccountPublicHashedId,
+                                                     TargetAccountId = transferTransaction?.SenderAccountPublicHashedId,
                                                      PeriodEnd = transferTransaction?.PeriodEnd
                                                  })">
                                         Details <span class="vh"> for the transfer transaction on @date</span>
