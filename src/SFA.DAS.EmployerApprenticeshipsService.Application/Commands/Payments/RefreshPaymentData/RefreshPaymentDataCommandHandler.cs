@@ -93,8 +93,9 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 
             foreach (var payment in newPayments)
             {
-                var paymentEvent = _mapper.Map<PaymentDetails, PaymentCreatedMessage>(payment);
-                await _messagePublisher.PublishAsync(paymentEvent);
+                var paymentCreatedEvent = new PaymentCreatedMessage(payment.EmployerAccountId, null, null);
+                _mapper.Map(payment, paymentCreatedEvent);
+                await _messagePublisher.PublishAsync(paymentCreatedEvent);
             }
 
             _logger.Info($"Finished publishing ProcessPaymentEvent and PaymentCreatedMessage messages for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");

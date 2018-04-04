@@ -5,14 +5,12 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     [Serializable]
     [MessageGroup("levy_declarations_processed")]
-    public class LevyDeclarationsProcessedEvent: AccountMessageBase
+    public class LevyDeclarationsProcessedEvent : IAccountEvent
     {
+        public long AccountId { get; set; }
+        public DateTime CreatedAt { get; set; }
         public string PayrollYear { get; set; }
         public short? PayrollMonth { get; set; }
         public decimal LevyDeclaredInMonth { get; set; }
-
-        public LevyDeclarationsProcessedEvent() : base(0, null, null) { }
-        public LevyDeclarationsProcessedEvent(long accountId, string creatorName, string creatorUserRef)
-            : base(accountId, creatorName, creatorUserRef) { }
     }
 }

@@ -68,7 +68,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Messages\IAccountEvent.cs" />
+    <Compile Include="Messages\IAccountUserEvent.cs" />
     <Compile Include="Messages\IEvent.cs" />
+    <Compile Include="Messages\IUserEvent.cs" />
     <Compile Include="Messages\LevyDeclarationProcessedEvent.cs" />
     <Compile Include="Messages\LevyDeclarationsProcessedEvent.cs" />
     <Compile Include="Messages\DeletedTransferConnectionInvitationEvent.cs" />

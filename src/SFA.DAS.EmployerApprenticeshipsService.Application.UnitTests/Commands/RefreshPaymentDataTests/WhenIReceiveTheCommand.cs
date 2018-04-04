@@ -231,13 +231,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         {
             //Arrange
             var expectedPayment = _paymentDetails.First();
-            var createdEvent = new PaymentCreatedMessage
-            {
-                ProviderName = expectedPayment.ProviderName,
-                Amount = expectedPayment.Amount
-            };
-            _mapper.Setup(x => x.Map<PaymentDetails, PaymentCreatedMessage>(It.IsAny<PaymentDetails>()))
-                .Returns(createdEvent);
+            _mapper.Setup(x => x.Map(It.IsAny<PaymentDetails>(), It.Is<PaymentCreatedMessage>(m => m.AccountId == expectedPayment.EmployerAccountId)))
+                .Callback<PaymentDetails, PaymentCreatedMessage>((d, m) =>
+                {
+                    m.ProviderName = expectedPayment.ProviderName;
+                    m.Amount = expectedPayment.Amount;
+                });
 
             //Act
             await _handler.Handle(new RefreshPaymentDataCommand());

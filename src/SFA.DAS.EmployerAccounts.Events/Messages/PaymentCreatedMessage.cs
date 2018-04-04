@@ -29,9 +29,8 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public FundingSource FundingSource { get; set; }
         public TransactionType TransactionType { get; set; }
 
-        public PaymentCreatedMessage() 
-            : base(0, string.Empty, string.Empty)
-        {}
+        public PaymentCreatedMessage()
+        { }
 
         public PaymentCreatedMessage(long accountId, string creatorName, string creatorUserRef) 
             : base(accountId, creatorName, creatorUserRef)

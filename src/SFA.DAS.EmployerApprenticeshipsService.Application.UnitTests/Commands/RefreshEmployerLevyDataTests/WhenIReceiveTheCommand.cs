@@ -287,11 +287,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
                 });
 
             _moqer.GetMock<IMapper>()
-                .Setup(x => x.Map(It.IsAny<LevyDeclarationView>(), It.IsAny<LevyDeclarationProcessedEvent>()))
-                .Callback<LevyDeclarationView, LevyDeclarationProcessedEvent>((view, msg) =>
+                .Setup(x => x.Map<LevyDeclarationProcessedEvent>(It.IsAny<LevyDeclarationView>()))
+                .Returns<LevyDeclarationView>(d => new LevyDeclarationProcessedEvent
                 {
-                    msg.LevyDeclaredInMonth = view.LevyDeclaredInMonth;
-                    msg.EmpRef = view.EmpRef;
+                    AccountId = ExpectedAccountId,
+                    LevyDeclaredInMonth = d.LevyDeclaredInMonth,
+                    EmpRef = d.EmpRef
                 });
 
             //Act
@@ -320,6 +321,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             var payrollMonth = (short)(oldTaxYear ? 9 + DateTime.Today.Month : DateTime.Today.Month - 3);
             var year = DateTime.Today.AddYears(oldTaxYear ? -1 : 0);
             var payrollYear = $"{year:yy}-{year.AddYears(1):yy}";
+            var now = DateTime.UtcNow;
             _levyRepository.Setup(x =>
                     x.GetAccountLevyDeclarations(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<short>()))
                 .Returns(Task.FromResult<List<LevyDeclarationView>>(new List<LevyDeclarationView>
@@ -348,6 +350,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
                     }
                 }));
 
+            _moqer.GetMock<IMapper>()
+                .Setup(x => x.Map<LevyDeclarationProcessedEvent>(It.IsAny<LevyDeclarationView>()))
+                .Returns<LevyDeclarationView>(d => new LevyDeclarationProcessedEvent
+                {
+                    AccountId = ExpectedAccountId,
+                    LevyDeclaredInMonth = d.LevyDeclaredInMonth,
+                    EmpRef = d.EmpRef
+                });
+
             _levyEventFactory.Setup(
                 x =>
                     x.CreateDeclarationUpdatedEvent(hashedAccountId, data.EmployerLevyData.First().Declarations.Declarations[0].PayrollYear,
@@ -364,7 +375,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
 
             //Assert
             var publisher = _moqer.GetMock<IMessagePublisher>();
-            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationsProcessedEvent>(msg => msg.LevyDeclaredInMonth == 1920m && msg.AccountId == ExpectedAccountId)), Times.Exactly(2));
+            publisher.Verify(x => x.PublishAsync(It.Is<LevyDeclarationsProcessedEvent>(msg => msg.AccountId == ExpectedAccountId && msg.LevyDeclaredInMonth == 1920m && msg.AccountId == ExpectedAccountId && msg.CreatedAt >= now)), Times.Exactly(2));
         }
 
     }

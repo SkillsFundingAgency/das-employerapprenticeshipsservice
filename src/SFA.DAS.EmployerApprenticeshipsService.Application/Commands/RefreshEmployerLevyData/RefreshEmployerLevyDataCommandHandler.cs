@@ -197,10 +197,8 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
                 {
                     try
                     {
-                        var levySchemeDeclarationUpdatedEvent =
-                            new LevyDeclarationProcessedEvent(accountId, null, null);
-                        _mapper.Map(levyDeclarationView, levySchemeDeclarationUpdatedEvent);
-                        await _messagePublisher.PublishAsync(levySchemeDeclarationUpdatedEvent);
+                        var levyDeclarationProcessedEvent = _mapper.Map<LevyDeclarationProcessedEvent>(levyDeclarationView);
+                        await _messagePublisher.PublishAsync(levyDeclarationProcessedEvent);
                     }
                     catch (Exception ex)
                     {
@@ -208,13 +206,15 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
                         throw;  //TODO: Not sure if we should rollback the levy processing tx if the publishing fails
                     }
                 }
-                var levyDeclarationEvent = new LevyDeclarationsProcessedEvent(accountId,null,null)
+                var levyDeclarationsProcessedEvent = new LevyDeclarationsProcessedEvent
                 {
+                    AccountId = accountId,
+                    CreatedAt = DateTime.UtcNow,
                     LevyDeclaredInMonth = dasLevyDeclarations.Sum(levy => levy.LevyDeclaredInMonth),
                     PayrollMonth = payrollMonth.Value,
                     PayrollYear = payrollYear
                 };
-                await _messagePublisher.PublishAsync(levyDeclarationEvent);
+                await _messagePublisher.PublishAsync(levyDeclarationsProcessedEvent);
             }
             catch (Exception ex)
             {

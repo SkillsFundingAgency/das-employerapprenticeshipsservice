@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Infrastructure.Mapping.Profiles
         {
             CreateMap<Payment, PaymentDetails>();
             CreateMap<PaymentDetails, PaymentCreatedMessage>()
-                .ForMember(dest => dest.AccountId, opt => opt.MapFrom(src => src.EmployerAccountId))
+                .ForMember(dest => dest.AccountId, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatorName, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatorUserRef, opt => opt.Ignore());
         }
