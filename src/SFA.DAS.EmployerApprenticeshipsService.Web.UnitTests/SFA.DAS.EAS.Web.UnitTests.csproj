@@ -263,6 +263,7 @@
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheRejectedTransferConnectionInvitationPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheApprovedTransferConnectionInvitationPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheReceiveTransferConnectionInvitationPage.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheTransferConnectionInvitationDeletedPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheTransferConnectionInvitationDetailsPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheSentTransferConnectionInvitationPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenISubmitTheSendTransferConnectionInvitationPage.cs" />

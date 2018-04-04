@@ -220,9 +220,36 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 case "Confirm":
                     await _mediator.SendAsync(model.DeleteTransferConnectionInvitationCommand);
-                    return RedirectToAction("Index", "Transfers");
+                    return RedirectToAction("Deleted");
                 case "GoToTransfersPage":
                     return RedirectToAction("Index", "Transfers");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(model.Choice));
+            }
+        }
+
+        [HttpNotFoundForNullModel]
+        [ImportModelStateFromTempData]
+        [Route("{transferConnectionInvitationId}/deleted")]
+        public ActionResult Deleted()
+        {
+            var model = new DeletedTransferConnectionInvitationViewModel();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateModelState]
+        [Route("{transferConnectionInvitationId}/deleted")]
+        public ActionResult Deleted(DeletedTransferConnectionInvitationViewModel model)
+        {
+            switch (model.Choice)
+            {
+                case "GoToTransferDashboard":
+                    return RedirectToAction("Index", "Transfers");
+                case "GoToHomepage":
+                    return RedirectToAction("Index", "EmployerTeam");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model.Choice));
             }
