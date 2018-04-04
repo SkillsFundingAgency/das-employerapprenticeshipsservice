@@ -147,17 +147,22 @@
                                 {
                                     var transferTransaction = aggregationLine as TransferTransactionLine;
 
-                                    <a title="View details for the transfer transaction on @date" 
-                                       href="@Url.Action("TransferDetail", "EmployerAccountTransactions",
-                                                 new
-                                                 {
-                                                    
-                                                     HashedAccountId = Model.Data.Model.Data.HashedAccountId,
-                                                     TargetAccountId = transferTransaction?.SenderAccountPublicHashedId,
-                                                     PeriodEnd = transferTransaction?.PeriodEnd
-                                                 })">
-                                        Details <span class="vh"> for the transfer transaction on @date</span>
-                                    </a>
+                                    var targetAccountPublicHashedId =
+                                        (Model.Data.AccountId == transferTransaction?.SenderAccountId) ?
+                                            transferTransaction.SenderAccountPublicHashedId :
+                                            transferTransaction?.ReceiverAccountPublicHashedId;
+
+                                        <a title="View details for the transfer transaction on @date"
+                                           href="@Url.Action("TransferDetail", "EmployerAccountTransactions",
+                                                     new
+                                                     {
+                                                         HashedAccountId = Model.Data.Model.Data.HashedAccountId,
+                                                         TargetAccountId = targetAccountPublicHashedId,
+                                                         PeriodEnd = transferTransaction?.PeriodEnd
+                                                     })">
+                                            Details <span class="vh"> for the transfer transaction on @date</span>
+                                        </a>
+                                    
                                 }
 
                             </td>
