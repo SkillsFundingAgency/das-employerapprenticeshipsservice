@@ -6,14 +6,21 @@
     ViewBag.PageID = "page-transfer-transaction-details";
     ViewBag.Title = "Levy Transfer";
     ViewBag.Section = "finance";
-
 }
 @{
     ViewBag.GaData.Vpv = "/accounts/balance/levyDeclaration/page-transaction-details";
 }
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Levy transfer</h1>
+
+        @if (Model.IsTransferSenderAccount)
+        {
+            <h1 class="heading-xlarge">Levy transfer</h1>
+        }
+        else
+        {
+            <h1 class="heading-xlarge">Transfer Received</h1>
+        }
 
         <table>
             <thead>
@@ -29,15 +36,15 @@
                 </tr>
                 <tr class="responsive-tr">
                     <td>Account name</td>
-                    <td>@Model.ReceiverAccountName</td>
+                    <td>@Model.IsTransferSenderAccount ? Model.SenderAccountName : Model.ReceiverAccountName</td>
                 </tr>
                 <tr class="responsive-tr">
                     <td>Account ID</td>
-                    <td>@Model.ReceiverAccountPublicHashedId</td>
+                    <td>@Model.IsTransferSenderAccount ? Model.SenderAccountPublicHashedId : Model.ReceiverAccountPublicHashedId</td>
                 </tr>
             </tbody>
         </table>
-       
+
         <table>
             <thead>
                 <tr>
@@ -48,24 +55,40 @@
             </thead>
             <tbody>
                 @foreach (var transferDetail in Model.TransferDetails)
-                {
-                    <tr>
-                        <td>
-                            @transferDetail.CourseName
-                        </td>
-                        <td>
-                            @transferDetail.ApprenticeCount
-                        </td>
+            {
+                <tr>
+                    <td>
+                        @transferDetail.CourseName
+                    </td>
+                    <td>
+                        @transferDetail.ApprenticeCount
+                    </td>
+                    @if (Model.IsTransferSenderAccount)
+                    {
                         <td class="numeric">
-                            @transferDetail.PaymentTotal
+                            -@transferDetail.PaymentTotal.ToString("C2", culture)
                         </td>
-                    </tr>
-                }
-            
-            <tr class="total">
-                <td colspan="2"></td>
-                <td class="numeric">@Model.TransferPaymentTotal.ToString("C2", culture)</td>
-            </tr>
+                    }
+                    else
+                    {
+                        <td class="numeric">
+                            @transferDetail.PaymentTotal.ToString("C2", culture)
+                        </td>
+                    }
+                </tr>
+        }
+
+                <tr class="total">
+                    <td colspan="2"></td>
+                    @if (Model.IsTransferSenderAccount)
+                    {
+                        <td class="numeric">-@Model.TransferPaymentTotal.ToString("C2", culture)</td>
+                    }
+                    else
+                    {
+                        <td class="numeric">@Model.TransferPaymentTotal.ToString("C2", culture)</td>
+                    }
+                </tr>
             </tbody>
         </table>
     </div>

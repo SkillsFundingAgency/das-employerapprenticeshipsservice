@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
             //Act
             var actual = _validator.Validate(new CreateTransferTransactionsCommand
             {
-                AccountId = 123123,
+                ReceiverAccountId = 123123,
                 PeriodEnd = "123"
             });
 
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("AccountId", "AccountId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("ReceiverAccountId", "ReceiverAccountId has not been supplied"), actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string, string>("PeriodEnd", "PeriodEnd has not been supplied"), actual.ValidationDictionary);
         }
 
@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
             //Act
             var actual = _validator.Validate(new CreateTransferTransactionsCommand
             {
-                AccountId = 123123,
+                ReceiverAccountId = 123123,
                 PeriodEnd = string.Empty
             });
 
@@ -61,13 +61,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
             //Act
             var actual = _validator.Validate(new CreateTransferTransactionsCommand
             {
-                AccountId = -123123,
+                ReceiverAccountId = -123123,
                 PeriodEnd = "123"
             });
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("AccountId", "AccountId cannot be negative"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("ReceiverAccountId", "ReceiverAccountId cannot be negative"), actual.ValidationDictionary);
         }
     }
 }

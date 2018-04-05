@@ -6,7 +6,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
 {
     public class ViewModelBase
     {
-        public long AccountId { get; set; }
+        public string PublicHashedAccountId { get; set; }
         public long UserId { get; set; }
         public bool Valid => !ErrorDictionary.Any();
         public Dictionary<string, string> ErrorDictionary { get; set; }

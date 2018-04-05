@@ -250,6 +250,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
+        public async Task<string> GetAccountName(long accountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+
+                return await c.QueryAsync<string>(
+                    sql: "SELECT Name FROM [employer_account].[Account] WHERE Id = @accountId",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result.SingleOrDefault();
+        }
+
         public async Task<Dictionary<long, string>> GetAccountNames(IEnumerable<long> accountIds)
         {
             var result = await WithConnection(async c =>

@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [employer_financial].[CreateAccountTransfer]
 	@senderAccountId bigint,
+	@senderAccountName NVARCHAR(100),
 	@receiverAccountId bigint,
 	@receiverAccountName NVARCHAR(100),
 	@apprenticeshipId bigint,
@@ -13,6 +14,7 @@ AS
 	INSERT INTO [employer_financial].[AccountTransfers] 
 	(
 		SenderAccountId, 
+		SenderAccountName,
 		ReceiverAccountId, 
 		ReceiverAccountName,
 		ApprenticeshipId, 
@@ -26,6 +28,7 @@ AS
 	VALUES
 	(
 		@senderAccountId,
+		@senderAccountName,
 		@receiverAccountId,
 		@receiverAccountName,
 		@apprenticeshipId,

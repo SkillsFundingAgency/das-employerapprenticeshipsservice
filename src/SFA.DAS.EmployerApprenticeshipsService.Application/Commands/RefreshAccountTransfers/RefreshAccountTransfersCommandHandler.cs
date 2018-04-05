@@ -48,13 +48,15 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
 
             try
             {
-                var paymentTransfers = await _paymentService.GetAccountTransfers(message.PeriodEnd, message.AccountId);
+                var paymentTransfers = await _paymentService.GetAccountTransfers(message.PeriodEnd, message.ReceiverAccountId);
 
                 var transfers = paymentTransfers.ToArray();
 
-                var transferReceiverIds = transfers.Select(t => t.ReceiverAccountId).Distinct();
+                var transferSenderIds = transfers.Select(t => t.SenderAccountId).Distinct();
 
-                var transferReceiverAccountNames = await _accountRepository.GetAccountNames(transferReceiverIds);
+                var transferSenderAccountNames = await _accountRepository.GetAccountNames(transferSenderIds);
+
+                var transferReceiverAccountName = await _accountRepository.GetAccountName(message.ReceiverAccountId);
 
                 //TODO: Check for transfers that already exist in database
 
@@ -66,7 +68,9 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
 
                     transfer.CourseName = paymentDetails.CourseName ?? "Unknown Course";
                     transfer.ApprenticeCount = paymentDetails.ApprenticeCount;
-                    transfer.ReceiverAccountName = transferReceiverAccountNames[transfer.ReceiverAccountId];
+
+                    transfer.SenderAccountName = transferSenderAccountNames[transfer.SenderAccountId];
+                    transfer.ReceiverAccountName = transferReceiverAccountName;
 
                     if (transfer.Amount != paymentDetails.PaymentTotal)
                         _logger.Warn("Transfer total does not match transfer payments total");
@@ -76,13 +80,13 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
 
                 await _messagePublisher.PublishAsync(new AccountTransfersCreatedQueueMessage
                 {
-                    SenderAccountId = message.AccountId,
+                    SenderAccountId = message.ReceiverAccountId,
                     PeriodEnd = message.PeriodEnd
                 });
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Could not process transfers for Account Id {message.AccountId} and Period End {message.PeriodEnd}");
+                _logger.Error(ex, $"Could not process transfers for Account Id {message.ReceiverAccountId} and Period End {message.PeriodEnd}");
                 throw;
             }
         }

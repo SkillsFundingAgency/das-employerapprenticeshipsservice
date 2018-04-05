@@ -75,5 +75,6 @@
         public const string WhatYoullNeedActionName = "WhatYoullNeed";
         public const string TransfersControllerName = "Transfers";
 		public const string TransferDetailsForSenderViewName = "TransferDetailsForSender";
+        public const string TransferDetailsForReceiverViewName = "TransferDetailsForReceiver";
     }
 }

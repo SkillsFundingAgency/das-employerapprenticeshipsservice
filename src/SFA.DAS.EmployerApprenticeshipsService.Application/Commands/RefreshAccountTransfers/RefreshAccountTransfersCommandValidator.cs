@@ -9,13 +9,13 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
         {
             var validationResult = new ValidationResult();
 
-            if (item.AccountId < 0)
+            if (item.ReceiverAccountId < 0)
             {
-                validationResult.AddError(nameof(item.AccountId), "AccountId cannot be negative");
+                validationResult.AddError(nameof(item.ReceiverAccountId), "ReceiverAccountId cannot be negative");
             }
-            else if (item.AccountId == default(long))
+            else if (item.ReceiverAccountId == default(long))
             {
-                validationResult.AddError(nameof(item.AccountId), "AccountId has not been supplied");
+                validationResult.AddError(nameof(item.ReceiverAccountId), "ReceiverAccountId has not been supplied");
             }
 
             if (string.IsNullOrEmpty(item.PeriodEnd))
