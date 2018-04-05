@@ -9,7 +9,7 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Api.Orchestrators
+namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
     public class UsersOrchestrator
     {

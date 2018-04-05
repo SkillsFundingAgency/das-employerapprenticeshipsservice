@@ -1,16 +1,3 @@
-﻿using Microsoft.Owin.Testing;
-using Moq;
-using Newtonsoft.Json;
-using NUnit.Framework;
-using Owin;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
-using SFA.DAS.EAS.Api;
-using SFA.DAS.EAS.Api.Controllers;
-using SFA.DAS.EAS.Api.DependencyResolution;
-using SFA.DAS.EAS.Application.Hashing;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +8,18 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using System.Web.Http.ExceptionHandling;
+using Microsoft.Owin.Testing;
+using Moq;
+using Newtonsoft.Json;
+using NUnit.Framework;
+using Owin;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
+using SFA.DAS.EAS.Account.Api;
+using SFA.DAS.EAS.Account.Api.Controllers;
+using SFA.DAS.EAS.Application.Hashing;
+using SFA.DAS.NLog.Logger;
+using StructureMap;
+using WebApi.StructureMap;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
@@ -28,7 +27,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
     {
         private IntegrationTestDependencyResolver _dependencyResolver;
 
-        private IntegrationTestExceptionHandler _exceptionHandler;
+        private IntegrationTestExceptionLogger _exceptionLogger;
 
         private readonly Lazy<DbBuilder> _dbBuilder;
 
@@ -146,7 +145,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private void ClearDownForNewTest()
         {
-            _exceptionHandler.ClearException();
+            _exceptionLogger.ClearException();
             _dependencyResolver.ClearCreationLog();
         }
 
@@ -160,44 +159,30 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private void InitialiseHost(IAppBuilder app)
         {
-            HttpConfiguration config = new HttpConfiguration();
+            var config = new HttpConfiguration();
+
             WebApiConfig.Register(config);
-            CustomiseIoC(config);
+            CustomiseConfig(config);
             app.UseWebApi(config);
         }
 
-        private void CustomiseIoC(HttpConfiguration configuration)
+        private void CustomiseConfig(HttpConfiguration config)
         {
-            SetupApiServices(configuration);
-            StructuremapMvc.Start();
-            StructuremapWebApi.Start();
-            SetupReplacementServicesForTest(configuration);
-        }
-
-        private void SetupApiServices(HttpConfiguration configuration)
-        {
-            var existingExceptionHandler = configuration.Services.GetExceptionHandler();
-            _exceptionHandler = new IntegrationTestExceptionHandler(existingExceptionHandler);
-            configuration.Services.Replace(typeof(IAssembliesResolver), new TestWebApiResolver<AccountLegalEntitiesController>());
-            configuration.Services.Replace(typeof(IExceptionHandler), _exceptionHandler);
-        }
-
-        private void SetupReplacementServicesForTest(HttpConfiguration configuration)
-        {
-            var container = ((StructureMapWebApiDependencyResolver)GlobalConfiguration.Configuration.DependencyResolver).Container;
-
-            var requestContextMock = new Mock<IRequestContext>();
+            var container = config.DependencyResolver.GetService<IContainer>();
+            var assembliesResolver = new TestWebApiResolver<AccountLegalEntitiesController>();
 
             container.Configure(c =>
             {
-                c.For<IPublicHashingService>().Use(Mock.Of<IPublicHashingService>());
-                c.For<IUserRepository>().Use<UserRepository>();
-                c.For<IRequestContext>().Use(requestContextMock.Object);
+                c.For<ILoggingContext>().Use(Mock.Of<ILoggingContext>());
                 c.For<IPublicHashingService>().Use(Mock.Of<IPublicHashingService>());
             });
 
             _dependencyResolver = new IntegrationTestDependencyResolver(container);
-            configuration.DependencyResolver = _dependencyResolver;
+            _exceptionLogger = new IntegrationTestExceptionLogger();
+
+            config.DependencyResolver = _dependencyResolver;
+            config.Services.Add(typeof(IExceptionLogger), _exceptionLogger);
+            config.Services.Replace(typeof(IAssembliesResolver), assembliesResolver);
         }
 
         private void CheckCallWasSuccessful(CallRequirements call, CallResponse response)
@@ -232,7 +217,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             if (WasUnacceptableExceptionThrownInServer(call))
             {
                 failMessage.AppendLine(
-                    $"An unexpected unhandled exception occurred in the server during the call:{_exceptionHandler.Exception.GetType().Name} - {_exceptionHandler.Exception.Message}");
+                    $"An unexpected unhandled exception occurred in the server during the call:{_exceptionLogger.Exception.GetType().Name} - {_exceptionLogger.Exception.Message}");
             }
         }
 
@@ -248,9 +233,9 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private bool WasUnacceptableExceptionThrownInServer(CallRequirements call)
         {
-            return _exceptionHandler.IsFaulted
+            return _exceptionLogger.IsFaulted
                    && (call.IgnoreExceptionTypes == null
-                        || !call.IgnoreExceptionTypes.Contains(_exceptionHandler.Exception.GetType()));
+                        || !call.IgnoreExceptionTypes.Contains(_exceptionLogger.Exception.GetType()));
         }
 
         private bool WasExpectedControllerCreated(Type controllerType)

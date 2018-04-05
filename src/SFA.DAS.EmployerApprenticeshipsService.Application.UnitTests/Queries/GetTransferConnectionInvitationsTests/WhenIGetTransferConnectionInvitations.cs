@@ -1,25 +1,22 @@
 ﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
-using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.TestCommon.Builders;
-using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using SFA.DAS.EAS.Application.Mappings;
+using SFA.DAS.EAS.Infrastructure.Data;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitationsTests
 {
     [TestFixture]
     public class WhenIGetTransferConnectionInvitations
     {
-        private Mock<ITransferRepository> _transferRepository;
         private GetTransferConnectionInvitationsQueryHandler _handler;
         private GetTransferConnectionInvitationsQuery _query;
         private GetTransferConnectionInvitationsResponse _response;
@@ -31,16 +28,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
         private Domain.Data.Entities.Account.Account _account;
         private IConfigurationProvider _configurationProvider;
 
-        private const decimal ExpectedTransferBalance = 25300.50M;
-
         [SetUp]
         public void Arrange()
         {
-            _transferRepository = new Mock<ITransferRepository>();
-
-            _transferRepository.Setup(x => x.GetTransferAllowance(It.IsAny<long>()))
-                .ReturnsAsync(ExpectedTransferBalance);
-
             _db = new Mock<EmployerAccountDbContext>();
 
             _account = new Domain.Data.Entities.Account.Account
@@ -79,14 +69,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
 
             _configurationProvider = new MapperConfiguration(c =>
             {
-                c.AddProfile<AccountMaps>();
-                c.AddProfile<TransferConnectionInvitationMaps>();
-                c.AddProfile<UserMaps>();
+                c.AddProfile<AccountMappings>();
+                c.AddProfile<TransferConnectionInvitationMappings>();
+                c.AddProfile<UserMappings>();
             });
 
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
 
-            _handler = new GetTransferConnectionInvitationsQueryHandler(_db.Object, _configurationProvider, Mock.Of<ILog>(), _transferRepository.Object);
+            _handler = new GetTransferConnectionInvitationsQueryHandler(_db.Object, _configurationProvider);
 
             _query = new GetTransferConnectionInvitationsQuery
             {
@@ -106,16 +96,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
             Assert.That(_response.TransferConnectionInvitations.ElementAt(0).Id, Is.EqualTo(_receivedTransferConnectionInvitation.Id));
             Assert.That(_response.TransferConnectionInvitations.ElementAt(1), Is.Not.Null);
             Assert.That(_response.TransferConnectionInvitations.ElementAt(1).Id, Is.EqualTo(_sentTransferConnectionInvitation.Id));
-        }
-
-        [Test]
-        public async Task TheTheTransferAllowanceWithBeRetrieved()
-        {
-            //Act
-            _response = await _handler.Handle(_query);
-
-            //Assert
-            Assert.AreEqual(ExpectedTransferBalance, _response.TransferAllowance);
         }
     }
 }

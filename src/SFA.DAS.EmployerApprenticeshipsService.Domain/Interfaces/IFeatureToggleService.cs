@@ -4,6 +4,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
 {
     public interface IFeatureToggleService
     {
-        bool IsFeatureEnabled(string controllerName, string actionName, IMembershipContext membershipContext);
+        bool IsFeatureEnabled(string controllerName, string actionName, IAuthorizationContext authorizationContext);
     }
 }

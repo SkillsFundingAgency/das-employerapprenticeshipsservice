@@ -12,9 +12,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Mappings
         {
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfile<ActivityMaps>();
-                c.AddProfile<TransactionMaps>();
-                c.AddProfile<TransferConnectionInvitationMaps>();
+                c.AddProfile<ActivityMappings>();
+                c.AddProfile<TransactionMappings>();
+                c.AddProfile<TransferMappings>();
             });
 
             config.AssertConfigurationIsValid();

@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.TestCommon.Builders;
 
@@ -55,9 +55,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
 
             _configurationProvider = new MapperConfiguration(c =>
             {
-                c.AddProfile<AccountMaps>();
-                c.AddProfile<TransferConnectionInvitationMaps>();
-                c.AddProfile<UserMaps>();
+                c.AddProfile<AccountMappings>();
+                c.AddProfile<TransferConnectionInvitationMappings>();
+                c.AddProfile<UserMappings>();
             });
 
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);

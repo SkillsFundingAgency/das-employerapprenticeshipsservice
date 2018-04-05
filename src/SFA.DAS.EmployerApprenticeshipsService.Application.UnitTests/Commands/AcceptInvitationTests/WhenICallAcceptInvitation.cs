@@ -12,6 +12,7 @@ using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.TimeProvider;
 using System;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Application.Exceptions;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
 {

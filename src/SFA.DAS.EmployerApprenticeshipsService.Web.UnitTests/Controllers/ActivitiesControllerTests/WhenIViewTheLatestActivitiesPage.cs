@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetLatestActivities;
 using SFA.DAS.EAS.Web.Controllers;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.ViewModels.Activities;
 using SFA.DAS.NLog.Logger;
 
@@ -61,7 +62,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.ActivitiesControllerTests
             var result = _controller.Latest(_query) as ContentResult;
             
             // Arrange
-            Assert.AreEqual(ActivitiesController.ActivitiesUnavailableMessage, result?.Content);
+            Assert.AreEqual(ControllerConstants.ActivitiesUnavailableMessage, result?.Content);
         }
 
 
@@ -72,10 +73,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.ActivitiesControllerTests
             _mediator.Setup(m => m.SendAsync(It.IsAny<GetLatestActivitiesQuery>())).Throws<Exception>();
 
             // Act
-            var result = _controller.Latest(_query);
+            _controller.Latest(_query);
 
             // Arrange
-            _logger.Verify(l => l.Warn(It.IsAny<string>()), Times.Once);
+            _logger.Verify(l => l.Warn(It.IsAny<Exception>(), "Failed to get the latest activities."), Times.Once);
         }
     }
 }

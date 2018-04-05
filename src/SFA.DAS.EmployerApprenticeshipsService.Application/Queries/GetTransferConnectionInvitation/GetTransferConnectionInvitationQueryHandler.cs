@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Application.Dtos;
+using SFA.DAS.EAS.Infrastructure.Data;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation
 {

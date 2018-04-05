@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Data;
+using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
-using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.TestCommon.Builders;
 
@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
             _transferConnectionInvitations = new List<TransferConnectionInvitation>();
             _transferConnectionInvitationsDbSet = new DbSetStub<TransferConnectionInvitation>(_transferConnectionInvitations);
 
-            _configurationProvider = new MapperConfiguration(c => c.AddProfile<AccountMaps>());
+            _configurationProvider = new MapperConfiguration(c => c.AddProfile<AccountMappings>());
 
             _db.Setup(d => d.Accounts).Returns(_accountsDbSet);
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
@@ -97,7 +97,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
             var exception = Assert.ThrowsAsync<ValidationException<GetTransferConnectionInvitationAccountQuery>>(async () => await _handler.Handle(_query));
 
             Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
-            Assert.That(exception.Message, Is.EqualTo("You've already sent a connection request to this employer"));
+            Assert.That(exception.Message, Is.EqualTo("You can't connect with this employer because they already have a pending or accepted connection request"));
         }
 
         [Test]
@@ -112,7 +112,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
             var exception = Assert.ThrowsAsync<ValidationException<GetTransferConnectionInvitationAccountQuery>>(async () => await _handler.Handle(_query));
 
             Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
-            Assert.That(exception.Message, Is.EqualTo("You're already connected with this employer"));
+            Assert.That(exception.Message, Is.EqualTo("You can't connect with this employer because they already have a pending or accepted connection request"));
         }
     }
 }

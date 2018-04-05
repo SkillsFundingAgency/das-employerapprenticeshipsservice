@@ -4,7 +4,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -17,7 +16,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     {
         private readonly EmployerAccountDbContext _db;
 
-        public UserRepository(EmployerAccountDbContext db, EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+        public UserRepository(EmployerApprenticeshipsServiceConfiguration configuration, EmployerAccountDbContext db, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
@@ -26,6 +25,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public Task<User> GetUserById(long id)
         {
             return _db.Users.SingleOrDefaultAsync(u => u.Id == id);
+        }
+
+        public Task<User> GetUserByExternalId(Guid externalId)
+        {
+            return _db.Users.SingleOrDefaultAsync(u => u.ExternalId == externalId);
         }
 
         public async Task<User> GetUserByRef(string id)

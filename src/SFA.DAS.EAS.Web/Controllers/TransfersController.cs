@@ -5,6 +5,8 @@ using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.ViewModels.Transfers;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
+using SFA.DAS.EAS.Application.Queries.GetTransferRequests;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -23,12 +25,36 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [Route]
-        public async Task<ActionResult> Index(GetTransferConnectionInvitationsQuery query)
+        public ActionResult Index()
         {
-            var response = await _mediator.SendAsync(query);
+            return View();
+        }
+
+        [ChildActionOnly]
+        public ActionResult TransferAllowance(GetTransferAllowanceQuery query)
+        {
+            var response = Task.Run(async () => await _mediator.SendAsync(query)).Result;
+            var model = _mapper.Map<TransferAllowanceViewModel>(response);
+
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult TransferConnectionInvitations(GetTransferConnectionInvitationsQuery query)
+        {
+            var response = Task.Run(async () => await _mediator.SendAsync(query)).Result;
             var model = _mapper.Map<TransferConnectionInvitationsViewModel>(response);
 
-            return View(model);
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult TransferRequests(GetTransferRequestsQuery query)
+        {
+            var response = Task.Run(async () => await _mediator.SendAsync(query)).Result;
+            var model = _mapper.Map<TransferRequestsViewModel>(response);
+
+            return PartialView(model);
         }
     }
 }

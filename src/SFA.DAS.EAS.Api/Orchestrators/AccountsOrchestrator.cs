@@ -17,8 +17,10 @@ using SFA.DAS.EAS.Application.Queries.GetTeamMembers;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransferAllowance;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 
-namespace SFA.DAS.EAS.Api.Orchestrators
+namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
     public class AccountsOrchestrator
     {
@@ -51,20 +53,41 @@ namespace SFA.DAS.EAS.Api.Orchestrators
 
             var data = new List<AccountWithBalanceViewModel>();
 
+            var accountBalanceHash = BuildAccountBalanceHash(transactionResult.Accounts);
+
             accountsResult.Accounts.ForEach(account =>
             {
-                var accountBalance = transactionResult.Accounts.SingleOrDefault(c => c.AccountId == account.Id);
-                data.Add(new AccountWithBalanceViewModel
+                var accountBalanceModel = new AccountWithBalanceViewModel
                 {
                     AccountId = account.Id,
                     AccountName = account.Name,
                     AccountHashId = account.HashedId,
-                    Balance = accountBalance?.Balance ?? 0,
-                    IsLevyPayer = accountBalance == null || accountBalance.IsLevyPayer == 1
-                });
+                    IsLevyPayer = true
+                };
+                
+                if (accountBalanceHash.TryGetValue(account.Id, out var accountBalance))
+                {
+                    accountBalanceModel.Balance = accountBalance.Balance;
+                    accountBalanceModel.TransferAllowance = accountBalance.TransferAllowance;
+                    accountBalanceModel.IsLevyPayer = accountBalance.IsLevyPayer == 1;
+                }
+
+                data.Add(accountBalanceModel);
             });
 
             return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>() { Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel>() { Data = data, Page = pageNumber, TotalPages = (accountsResult.AccountsCount / pageSize) + 1 } };
+        }
+
+        private Dictionary<long, AccountBalance> BuildAccountBalanceHash(List<AccountBalance> accountBalances)
+        {
+            var result = new Dictionary<long, AccountBalance>(accountBalances.Count);
+
+            foreach (var balance in accountBalances)
+            {
+                result.Add(balance.AccountId, balance);
+            }
+
+            return result;
         }
 
         public async Task<OrchestratorResponse<AccountDetailViewModel>> GetAccount(long accountId)
@@ -85,7 +108,18 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             }
 
             var viewModel = ConvertAccountDetailToViewModel(accountResult);
-            viewModel.Balance = await GetBalanceForAccount(accountResult.Account.AccountId);
+
+            var tasks = new []
+            {
+                GetBalanceForAccount(accountResult.Account.AccountId),
+                GetTransferAllowanceForAccount(accountResult.Account.AccountId)
+            };
+
+            await Task.WhenAll(tasks).ConfigureAwait(false);
+
+            viewModel.Balance = tasks[0].Result;
+            viewModel.TransferAllowance = tasks[1].Result;
+
             return new OrchestratorResponse<AccountDetailViewModel> { Data = viewModel };
         }
 
@@ -243,6 +277,16 @@ namespace SFA.DAS.EAS.Api.Orchestrators
 
             var account = balanceResult?.Accounts?.SingleOrDefault();
             return account?.Balance ?? 0;
+        }
+
+        private async Task<decimal> GetTransferAllowanceForAccount(long accountId)
+        {
+            var transferAllowanceResult = await _mediator.SendAsync(new GetAccountTransferAllowanceRequest
+            {
+                AccountId = accountId
+            });
+
+            return transferAllowanceResult?.TransferAllowance ?? 0M;
         }
     }
 }

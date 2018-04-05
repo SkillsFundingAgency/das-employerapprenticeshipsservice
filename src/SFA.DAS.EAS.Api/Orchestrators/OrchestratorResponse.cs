@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace SFA.DAS.EAS.Api.Orchestrators
+namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
     public class OrchestratorResponse
     {

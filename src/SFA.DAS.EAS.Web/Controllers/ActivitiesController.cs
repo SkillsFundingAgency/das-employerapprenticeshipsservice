@@ -6,6 +6,7 @@ using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetActivities;
 using SFA.DAS.EAS.Application.Queries.GetLatestActivities;
 using SFA.DAS.EAS.Web.Attributes;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.ViewModels.Activities;
 using SFA.DAS.NLog.Logger;
 
@@ -37,24 +38,21 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [ChildActionOnly]
-        [Route("latest")]
         public ActionResult Latest(GetLatestActivitiesQuery query)
         {
             try
             {
-                var response = Task.Run(async () => await _mediator.SendAsync(query)).Result; 
-
+                var response = Task.Run(async () => await _mediator.SendAsync(query)).Result;
                 var model = _mapper.Map<LatestActivitiesViewModel>(response);
 
                 return PartialView(model);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.Warn($"Failed to get the latest activities: {e.GetType().Name} - {e.Message}");
-                return Content(ActivitiesUnavailableMessage);
+                _logger.Warn(ex, "Failed to get the latest activities.");
+
+                return Content(ControllerConstants.ActivitiesUnavailableMessage);
             }
         }
-
-        public const string ActivitiesUnavailableMessage = "Activities are currently unavailable.";
     }
 }

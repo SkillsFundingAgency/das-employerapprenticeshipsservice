@@ -189,14 +189,13 @@
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Polly, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Polly.5.1.0\lib\net45\Polly.dll</HintPath>
+    <Reference Include="Polly, Version=5.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.5.7.0\lib\net45\Polly.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Activities, Version=1.0.0.59218, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.59218\lib\net45\SFA.DAS.Activities.dll</HintPath>
@@ -264,20 +263,20 @@
       <HintPath>..\packages\SFA.DAS.Http.1.0.0.35742\lib\net45\SFA.DAS.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.51076, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.51076\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.63765\lib\net45\SFA.DAS.Messaging.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.0.0.49552, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.0.0.49552\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap, Version=3.0.0.49552, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.StructureMap.3.0.0.49552\lib\net45\SFA.DAS.Messaging.AzureServiceBus.StructureMap.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.StructureMap.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.StructureMap.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.39208, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.39208\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.56651, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.56651\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Targets.Redis, Version=1.0.0.34273, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Targets.Redis.1.0.0.34273\lib\net45\SFA.DAS.NLog.Targets.Redis.dll</HintPath>
+    <Reference Include="SFA.DAS.NLog.Targets.Redis, Version=1.0.0.47445, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Targets.Redis.1.0.0.47445\lib\net45\SFA.DAS.NLog.Targets.Redis.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
@@ -318,9 +317,8 @@
     <Reference Include="SFA.DAS.Web.Policy, Version=1.1.0.44309, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Web.Policy.1.1.0.44309\lib\net45\SFA.DAS.Web.Policy.dll</HintPath>
     </Reference>
-    <Reference Include="StackExchange.Redis, Version=1.1.608.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StackExchange.Redis.1.1.608\lib\net45\StackExchange.Redis.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="StackExchange.Redis, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.1.2.6\lib\net46\StackExchange.Redis.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.6.0\lib\net45\StructureMap.dll</HintPath>
@@ -423,33 +421,33 @@
       <Private>True</Private>
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Z.EntityFramework.Plus.EF6, Version=1.7.15.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Plus.EF6.1.7.15\lib\net45\Z.EntityFramework.Plus.EF6.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BinderConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="Attributes\ExportModelStateToTempDataAttribute.cs" />
     <Compile Include="Attributes\ImportModelStateFromTempDataAttribute.cs" />
-    <Compile Include="Attributes\ModelStateTempDataAttribute.cs" />
     <Compile Include="Attributes\ValidateMembershipAttribute.cs" />
     <Compile Include="Authentication\ICurrentAccountService.cs" />
-    <Compile Include="Authorization\IMembershipService.cs" />
-    <Compile Include="Authorization\MembershipService.cs" />
-    <Compile Include="Binders\DefaultBinder.cs" />
+    <Compile Include="Authorization\AuthorizationService.cs" />
+    <Compile Include="Authorization\IAuthorizationService.cs" />
+    <Compile Include="Binders\MessageModelBinder.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
-    <Compile Include="Extensions\HashingServiceExtensions.cs" />
+    <Compile Include="Extensions\RouteValueDictionaryExtensions.cs" />
+    <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
     <Compile Include="Extensions\TransferConnectionInvitationDtoExtensions.cs" />
-    <Compile Include="Mappings\TransactionMaps.cs" />
-    <Compile Include="Serialization\SerializableModelStateDictionary.cs" />
-    <Compile Include="Serialization\SerializableModelState.cs" />
-    <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Mappings\TransactionMappings.cs" />
+    <Compile Include="Validation\SerializableModelStateDictionary.cs" />
+    <Compile Include="Validation\SerializableModelState.cs" />
     <Compile Include="Extensions\SerializableModelStateDictionaryExtensions.cs" />
     <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Filters\ValidateFeatureFilter.cs" />
     <Compile Include="Filters\UnitOfWorkManagerFilter.cs" />
-    <Compile Include="Mappings\ActivityMaps.cs" />
+    <Compile Include="Mappings\ActivityMappings.cs" />
     <Compile Include="Filters\HandleErrorFilter.cs" />
-    <Compile Include="Logging\RequestContext.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Attributes\HttpNotFoundForNullModelAttribute.cs" />
@@ -474,7 +472,7 @@
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
     <Compile Include="Helpers\AccountTaskHelper.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />
-    <Compile Include="Mappings\TransferConnectionInvitationMaps.cs" />
+    <Compile Include="Mappings\TransferMappings.cs" />
     <Compile Include="Orchestrators\IOrchestratorCookie.cs" />
     <Compile Include="Models\GoogleAnalyticsModel.cs" />
     <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
@@ -488,6 +486,7 @@
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\ApprovedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\RejectedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitations\TransferConnectionRolesViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\Transactions\TransactionDownloadViewModel.cs" />
     <Compile Include="ViewModels\DismissTaskViewModel.cs" />
@@ -520,9 +519,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Mappings\OrganisationMaps.cs" />
-    <Compile Include="Binders\TrimStringBinder.cs" />
-    <Compile Include="Validators\Messages\ValidationMessage.cs" />
+    <Compile Include="Mappings\OrganisationMappings.cs" />
+    <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
     <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
     <Compile Include="ViewModels\InvalidStateViewModel.cs" />
@@ -570,7 +568,9 @@
     <Compile Include="ViewModels\TransferConnectionInvitations\SendTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\SentTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\TransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\TransferAllowanceViewModel.cs" />
     <Compile Include="ViewModels\Transfers\TransferConnectionInvitationsViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\TransferRequestsViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\SignInUserViewModel.cs" />
     <Compile Include="ViewModels\FlashMessageViewModel.cs" />
@@ -600,8 +600,8 @@
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Validators\AddLegalEntityViewModelValidator.cs" />
-    <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />
+    <Compile Include="Validation\AddLegalEntityViewModelValidator.cs" />
+    <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
     <Content Include="dist\images\arrow-sprite.png" />
     <Content Include="dist\css\images\option-select-toggle-sprite.png" />
     <Content Include="dist\css\images\pagination-arrow-sprite.png" />
@@ -609,6 +609,9 @@
     <Content Include="dist\javascripts\length-limit.js" />
     <Content Include="dist\javascripts\lodash.js" />
     <Content Include="dist\javascripts\payment-order.js" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="src\sass\_tabs.scss" />
     <Content Include="dist\javascripts\sfa-modernizr.js" />
     <Content Include="src\svg\arrows.svg" />
@@ -636,6 +639,9 @@
     <Content Include="Views\TransferConnectionInvitations\Receive.cshtml" />
     <Content Include="Views\TransferConnectionInvitations\Approved.cshtml" />
     <Content Include="Views\TransferConnectionInvitations\Rejected.cshtml" />
+    <Content Include="Views\Transfers\TransferConnectionInvitations.cshtml" />
+    <Content Include="Views\Transfers\TransferAllowance.cshtml" />
+    <Content Include="Views\Transfers\TransferRequests.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />
@@ -711,12 +717,6 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="App_Data\LOCAL_SFA.DAS.EmployerApprenticeshipsService_1.0.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="App_Data\Features\features_data.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="AppInit.cmd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1145,7 +1145,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>57196</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

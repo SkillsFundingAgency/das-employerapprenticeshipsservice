@@ -32,9 +32,7 @@ left join
 	[employer_financial].LevyDeclaration xld
 	where submissiondate in 
 		(select max(submissiondate) from [employer_financial].LevyDeclaration 
-		WHERE
-		NoPaymentForPeriod = 0
-		and EndOfYearAdjustment = 0 
+		WHERE EndOfYearAdjustment = 0 
 		and submissiondate < [employer_financial].[CalculateSubmissionCutoffDate](PayrollMonth, PayrollYear)
 		and PayrollYear = xld.PayrollYear
 		and PayrollMonth = xld.PayrollMonth

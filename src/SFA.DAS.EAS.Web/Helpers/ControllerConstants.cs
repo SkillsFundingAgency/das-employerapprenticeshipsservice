@@ -6,6 +6,7 @@
         public const string AccessDeniedViewName = "AccessDenied";
         public const string AccessDeniedControllerName = "AccessDenied";
         public const string ActionKeyName = "Action";
+        public const string ActivitiesUnavailableMessage = "Activities are currently unavailable.";
         public const string AddOrganisationAddressViewName = "../OrganisationShared/AddOrganisationAddress";
         public const string AddOrganisationAddressActionName = "AddOrganisationAddress";
         public const string AddOrganisationViewName = "AddOrganisation";
@@ -44,6 +45,7 @@
         public const string InviteActionName = "Invite";
         public const string LegalAgreementViewName = "LegalAgreement";
         public const string LevyDeclarationDetailViewName = "LevyDeclarationDetail";
+        public const string ModelStateTempDataKey = "ModelState";
         public const string NextStepsActionName = "NextSteps";
         public const string NotFoundViewName = "NotFound";
         public const string NotificationSettingsActionName = "NotificationSettings";

@@ -1,0 +1,50 @@
+﻿@using System.Globalization
+@using SFA.DAS.EAS.Web.Extensions
+
+@model SFA.DAS.EAS.Web.ViewModels.Transfers.TransferRequestsViewModel
+
+@{
+    var culture = new CultureInfo("en-GB");
+}
+
+@if (Model.TransferRequests.Any())
+{
+    <div class="grid-row">
+        <div class="column-full">
+            <table class="responsive">
+                <caption class="heading-medium">Transfer requests</caption>
+                <thead>
+                    <tr>
+                        <th>Employer</th>
+                        <th>Status</th>
+                        <th>Total cost</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var transferRequest in Model.TransferRequests)
+                    {
+                        var peerAccount = transferRequest.GetPeerAccount(Model.AccountId);
+
+                        <tr>
+                            <td data-label="Employer">@peerAccount.Name</td>
+                            <td data-label="Status">@transferRequest.Status.ToString()</td>
+                            <td data-label="Total cost">@transferRequest.TransferCost.ToString("C0", culture)</td>
+                            <td>
+                                @if (Model.AccountId == transferRequest.SenderAccount.Id)
+                                {
+                                    <a href="@Url.EmployerCommitmentsAction($"transfers/{transferRequest.CommitmentHashedId}")">Details</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <h2 class="heading-medium">Transfer requests</h2>
+    <p>You have no pending or approved requests</p>
+}

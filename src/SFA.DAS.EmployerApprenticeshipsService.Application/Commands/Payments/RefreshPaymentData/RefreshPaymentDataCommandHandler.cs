@@ -1,5 +1,6 @@
 using MediatR;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
+using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -53,21 +54,35 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 
             try
             {
+                _logger.Info($"GetAccountPayments for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
+
                 payments = await _paymentService.GetAccountPayments(message.PeriodEnd, message.AccountId);
             }
             catch (WebException ex)
             {
-                _logger.Error(ex, $"Unable to get payment information for {message.PeriodEnd} accountid {message.AccountId}");
+                _logger.Error(ex, $"Unable to get payment information for periodEnd = '{message.PeriodEnd}' and accountid = '{message.AccountId}'");
             }
 
-            if (payments == null || !payments.Any()) return;
+            if (payments == null || !payments.Any())
+            {
+                _logger.Info($"GetAccountPayments did not find any payments for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
 
+                return;
+            }
+
+            _logger.Info($"GetAccountPaymentIds for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
             var existingPaymentIds = await _dasLevyRepository.GetAccountPaymentIds(message.AccountId);
 
             var newPayments = payments.Where(p => !existingPaymentIds.Any(x => x.ToString().Equals(p.Id))).ToArray();
 
-            if (!newPayments.Any()) return;
+            if (!newPayments.Any())
+            {
+                _logger.Info($"No new payments for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
 
+                return;
+            }
+
+            _logger.Info($"CreatePaymentData for new payments AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
             await _dasLevyRepository.CreatePaymentData(newPayments);
 
             await _mediator.PublishAsync(new ProcessPaymentEvent { AccountId = message.AccountId });
@@ -77,6 +92,8 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
                 await _messagePublisher.PublishAsync(new PaymentCreatedMessage(
                     payment.ProviderName, payment.Amount, payment.EmployerAccountId, string.Empty, string.Empty));
             }
+
+            _logger.Info($"Finished publishing ProcessPaymentEvent and PaymentCreatedMessage messages for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
         }
     }
 }

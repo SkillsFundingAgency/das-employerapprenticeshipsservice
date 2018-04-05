@@ -12,6 +12,7 @@ using SFA.DAS.TimeProvider;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Application.Exceptions;
 
 namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
 {

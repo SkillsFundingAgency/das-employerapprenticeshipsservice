@@ -1,7 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Application.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 
@@ -16,11 +15,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             _db = db;
         }
 
-        public async Task Add(TransferConnectionInvitation transferConnectionInvitation)
+        public Task Add(TransferConnectionInvitation transferConnectionInvitation)
         {
             _db.TransferConnectionInvitations.Add(transferConnectionInvitation);
 
-            await _db.SaveChangesAsync();
+            return _db.SaveChangesAsync();
         }
 
         public Task<TransferConnectionInvitation> GetTransferConnectionInvitationById(int transferConnectionInvitationId)

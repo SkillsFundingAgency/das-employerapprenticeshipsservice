@@ -8,9 +8,7 @@ namespace SFA.DAS.EAS.Web.Attributes
     {
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            var result = filterContext.Result as ViewResultBase;
-
-            if (result != null && result.Model == null)
+            if (filterContext.Result is ViewResultBase result && result.Model == null)
             {
                 filterContext.Result = new HttpNotFoundResult();
             }

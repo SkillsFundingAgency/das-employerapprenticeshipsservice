@@ -20,10 +20,10 @@ namespace SFA.DAS.EAS.Web.Extensions
 
         public static bool IsFeatureEnabled(this HtmlHelper htmlHelper, string controllerName, string actionName)
         {
-            var membershipService = DependencyResolver.Current.GetService<IMembershipService>();
+            var authorizationService = DependencyResolver.Current.GetService<IAuthorizationService>();
             var featureToggleService = DependencyResolver.Current.GetService<IFeatureToggleService>();
-            var membership = membershipService.GetMembershipContext();
-            var isFeatureEnabled = featureToggleService.IsFeatureEnabled(controllerName, actionName, membership);
+            var authorizationContext = authorizationService.GetAuthorizationContext();
+            var isFeatureEnabled = featureToggleService.IsFeatureEnabled(controllerName, actionName, authorizationContext);
 
             return isFeatureEnabled;
         }

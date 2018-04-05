@@ -34,10 +34,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 AvailableUsers = actual.Users.Select(x =>
                                                 new UserViewModel
                                                 {
+                                                    Id = x.Id,
+                                                    UserRef = x.UserRef,
                                                     Email = x.Email,
                                                     FirstName = x.FirstName,
                                                     LastName = x.LastName,
-                                                    UserId = x.UserRef
                                                 }).ToList()
             };
         }

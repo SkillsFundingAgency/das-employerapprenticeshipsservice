@@ -81,7 +81,6 @@
     </Reference>
     <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.ServiceBus.3.3.2\lib\net45-full\Microsoft.ServiceBus.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -101,6 +100,9 @@
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="Polly, Version=5.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.5.7.0\lib\net45\Polly.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Activities, Version=1.0.0.59218, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.59218\lib\net45\SFA.DAS.Activities.dll</HintPath>
@@ -140,6 +142,9 @@
     <Reference Include="SFA.DAS.Configuration.AzureTableStorage, Version=1.0.0.49931, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.AzureTableStorage.1.0.0.49931\lib\net45\SFA.DAS.Configuration.AzureTableStorage.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Configuration.FileStorage, Version=1.0.0.49931, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Configuration.FileStorage.1.0.0.49931\lib\net45\SFA.DAS.Configuration.FileStorage.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Elastic, Version=1.0.0.52762, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Elastic.1.0.0.52762\lib\net45\SFA.DAS.Elastic.dll</HintPath>
     </Reference>
@@ -157,14 +162,17 @@
       <HintPath>..\packages\SFA.DAS.Http.1.0.0.35742\lib\net45\SFA.DAS.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.51076, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.51076\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.63765\lib\net45\SFA.DAS.Messaging.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.0.0.49552, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.0.0.49552\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.39208, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.39208\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.StructureMap.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.56651, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.56651\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
@@ -184,12 +192,27 @@
       <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.10.29-prerelease\lib\net45\SFA.DAS.Providers.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.33424, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.33424\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Tasks.API.Client, Version=1.7.0.49084, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.7.0.49084\lib\net45\SFA.DAS.Tasks.API.Client.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.7.0.49084, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.7.0.49084\lib\net45\SFA.DAS.Tasks.API.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.TimeProvider, Version=1.0.0.3956, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.TimeProvider.1.0.0.3956\lib\net45\SFA.DAS.TimeProvider.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.TokenService.Api.Types, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.6.0\lib\net45\StructureMap.dll</HintPath>
@@ -238,9 +261,42 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Z.EntityFramework.Plus.EF6, Version=1.7.15.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Plus.EF6.1.7.15\lib\net45\Z.EntityFramework.Plus.EF6.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
+    <Compile Include="DependencyResolution\AuditRegistry.cs" />
+    <Compile Include="DependencyResolution\CachesRegistry.cs" />
+    <Compile Include="DependencyResolution\CommitmentsRegistry.cs" />
+    <Compile Include="DependencyResolution\ConfigurationRegistry.cs" />
+    <Compile Include="DependencyResolution\DateTimeRegistry.cs" />
+    <Compile Include="DependencyResolution\EventsRegistry.cs" />
+    <Compile Include="DependencyResolution\ExecutionPoliciesRegistry.cs" />
+    <Compile Include="DependencyResolution\HashingRegistry.cs" />
+    <Compile Include="DependencyResolution\LoggerRegistry.cs" />
+    <Compile Include="DependencyResolution\MapperRegistry.cs" />
+    <Compile Include="DependencyResolution\MediatorRegistry.cs" />
+    <Compile Include="DependencyResolution\MessagePublisherRegistry.cs" />
+    <Compile Include="DependencyResolution\MessageSubscriberRegistry.cs" />
+    <Compile Include="DependencyResolution\NotificationsRegistry.cs" />
+    <Compile Include="DependencyResolution\RepositoriesRegistry.cs" />
+    <Compile Include="DependencyResolution\ServicesRegistry.cs" />
+    <Compile Include="DependencyResolution\TasksRegistry.cs" />
+    <Compile Include="DependencyResolution\ValidationRegistry.cs" />
+    <Compile Include="Dtos\TransferRequestDto.cs" />
+    <Compile Include="Logging\LoggingContext.cs" />
+    <Compile Include="Mappings\TransferRequestMappings.cs" />
+    <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQuery.cs" />
+    <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceResponse.cs" />
+    <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQuery.cs" />
+    <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsResponse.cs" />
+    <Compile Include="Queries\GetTransferRequests\GetTransferRequestsQuery.cs" />
+    <Compile Include="Queries\GetTransferRequests\GetTransferRequestsQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferRequests\GetTransferRequestsResponse.cs" />
+    <Compile Include="Services\ApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommand.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteSentTransferConnectionInvitation\DeleteTransferConnectionInvitationCommand.cs" />
@@ -344,9 +400,6 @@
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandHandler.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandValidator.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Data\EmployerAccountDbContext.cs" />
-    <Compile Include="Data\IUnitOfWorkManager.cs" />
-    <Compile Include="Data\UnitOfWorkManager.cs" />
     <Compile Include="Dtos\AccountDto.cs" />
     <Compile Include="Dtos\TransferConnectionInvitationChangeDto.cs" />
     <Compile Include="Dtos\TransferConnectionInvitationDto.cs" />
@@ -355,6 +408,8 @@
     <Compile Include="Events\ProcessDeclaration\ProcessDeclarationsEventHandler.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEvent.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEventHandler.cs" />
+    <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Extensions\HashingServiceExtensions.cs" />
     <Compile Include="Factories\LevyEventFactory.cs" />
     <Compile Include="Factories\AccountEventFactory.cs" />
     <Compile Include="Factories\EmployerAgreementEventFactory.cs" />
@@ -370,18 +425,25 @@
     <Compile Include="Hashing\PublicHashingService.cs" />
     <Compile Include="Hashing\IPublicHashingService.cs" />
     <Compile Include="Helpers\NameOf.cs" />
-    <Compile Include="InvalidRequestException.cs" />
-    <Compile Include="Mappings\AccountMaps.cs" />
-    <Compile Include="Mappings\MembershipMaps.cs" />
-    <Compile Include="Mappings\TransferConnectionInvitationMaps.cs" />
-    <Compile Include="Mappings\UserMaps.cs" />
-    <Compile Include="Messages\AuthorizedMessage.cs" />
+    <Compile Include="Exceptions\InvalidRequestException.cs" />
+    <Compile Include="Mappings\AccountMappings.cs" />
+    <Compile Include="Mappings\MembershipMappings.cs" />
+    <Compile Include="Mappings\TransferConnectionInvitationMappings.cs" />
+    <Compile Include="Mappings\UserMappings.cs" />
+    <Compile Include="Messages\AccountMessage.cs" />
+    <Compile Include="Messages\MembershipMessage.cs" />
     <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
-    <Compile Include="Messages\IAuthorizedMessage.cs" />
+    <Compile Include="Messages\IAccountMessage.cs" />
+    <Compile Include="Messages\IUserMessage.cs" />
     <Compile Include="Messages\PaymentProcessorQueueMessage.cs" />
-    <Compile Include="NotFoundException.cs" />
+    <Compile Include="Messages\UserMessage.cs" />
+    <Compile Include="Exceptions\NotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransferAllowance\GetAccountTransferAllowanceQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransferAllowance\GetAccountTransferAllowanceRequest.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransferAllowance\GetAccountTransferAllowanceResponse.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransferAllowance\GetAccountTransferAllowanceValidator.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesResponse.cs" />
@@ -614,6 +676,9 @@
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersResponse.cs" />
     <Compile Include="Queries\GetSentTransferConnectionInvitation\GetSentTransferConnectionInvitationQuery.cs" />
     <Compile Include="Queries\GetSentTransferConnectionInvitation\GetSentTransferConnectionInvitationQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferConnectionRoles\GetTransferConnectionRolesQuery.cs" />
+    <Compile Include="Queries\GetTransferConnectionRoles\GetTransferConnectionRolesQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferConnectionRoles\GetTransferConnectionRolesResponse.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountQuery.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountResponse.cs" />
@@ -656,9 +721,12 @@
     <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndRequest.cs" />
     <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndResponse.cs" />
     <Compile Include="Messages\DayMonthYear.cs" />
+    <Compile Include="Services\DasAccountService.cs" />
+    <Compile Include="Services\DasLevyService.cs" />
+    <Compile Include="Services\RefreshEmployerLevyService.cs" />
     <Compile Include="Validation\IValidator.cs" />
     <Compile Include="Messages\MonthYear.cs" />
-    <Compile Include="Validation\ValidationException.cs" />
+    <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Validation\ValidationResult.cs" />
     <Compile Include="Messages\Year.cs" />
   </ItemGroup>
@@ -674,6 +742,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EAS.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
+      <Project>{01ac2bc2-ac01-400f-ab8f-548dd5c0ee74}</Project>
+      <Name>SFA.DAS.EAS.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

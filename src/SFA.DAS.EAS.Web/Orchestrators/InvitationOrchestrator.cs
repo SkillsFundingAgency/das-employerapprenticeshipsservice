@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using NLog;
-using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.AcceptInvitation;
 using SFA.DAS.EAS.Application.Commands.CreateInvitation;
+using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.GetInvitation;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Queries.GetUserInvitations;

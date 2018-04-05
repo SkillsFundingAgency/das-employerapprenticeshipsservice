@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web.Http;
-using SFA.DAS.EAS.Api.Attributes;
+using SFA.DAS.EAS.Account.Api.Attributes;
 
-namespace SFA.DAS.EAS.Api.Controllers
+namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     [RoutePrefix("api/accounts/{hashedAccountId}/transfersconnections")]
     public class AccountTransferConnectionsController : ApiController

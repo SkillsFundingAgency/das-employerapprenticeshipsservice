@@ -8,8 +8,8 @@ namespace SFA.DAS.EAS.Web
     {
         public static void RegisterBinders(ModelBinderDictionary binders)
         {
-            binders.DefaultBinder = new DefaultBinder(() => DependencyResolver.Current.GetService<IMembershipService>());
-            binders.Add(typeof(string), new TrimStringBinder());
+            binders.DefaultBinder = new MessageModelBinder(() => DependencyResolver.Current.GetService<IAuthorizationService>());
+            binders.Add(typeof(string), new TrimStringModelBinder());
         }
     }
 }
