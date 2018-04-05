@@ -228,7 +228,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
         }
 
-        [HttpNotFoundForNullModel]
         [ImportModelStateFromTempData]
         [Route("{transferConnectionInvitationId}/deleted")]
         public ActionResult Deleted()
