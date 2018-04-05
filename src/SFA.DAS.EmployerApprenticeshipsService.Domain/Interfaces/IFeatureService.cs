@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 
 namespace SFA.DAS.EAS.Domain.Interfaces
@@ -8,8 +9,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
     /// </summary>
     public interface IFeatureService
     {
-        Task<string[]> GetWhitelistForOperationAsync(OperationContext context);
-
-        Task<Feature> GetFeatureThatAllowsAccessToOperationAsync(OperationContext context);
+        Task<Feature> GetFeatureThatAllowsAccessToOperationAsync(string controller, string action);
     }
 }

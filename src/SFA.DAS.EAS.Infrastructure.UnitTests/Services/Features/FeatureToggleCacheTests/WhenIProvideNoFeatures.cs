@@ -2,6 +2,7 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 using SFA.DAS.EAS.Infrastructure.Services.Features;
 
@@ -30,10 +31,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureToggleCa
             // arrange
             var fixtures = new ToggleFeatureTestFixtures();
             var ftc = new FeatureCache(fixtures.Features, fixtures.ControllerMetaDataService);
-            var operationContext = new OperationContext {Controller = "foo", Action = "action"};
+            var operationContext = new AuthorizationContext { CurrentFeature = new Feature()};
 
             // act
-            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature(operationContext, out _);
+            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature("Foo", "Bar", out _);
 
             // assert
             Assert.IsFalse(isActionSubjectToToggle);

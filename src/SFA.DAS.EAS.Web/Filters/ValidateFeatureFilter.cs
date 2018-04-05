@@ -19,10 +19,8 @@ namespace SFA.DAS.EAS.Web.Filters
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var controllerName = filterContext.RouteData.Values[ControllerConstants.ControllerKeyName].ToString();
-            var actionName = filterContext.RouteData.Values[ControllerConstants.ActionKeyName].ToString();
             var authorizationContext = _authorizationService().GetAuthorizationContext();
-            var isOperationAuthorised = _operationAuthorisationService().IsOperationAuthorised(controllerName, actionName, authorizationContext);
+            var isOperationAuthorised = _operationAuthorisationService().IsOperationAuthorised(authorizationContext);
 
             if (!isOperationAuthorised)
             {

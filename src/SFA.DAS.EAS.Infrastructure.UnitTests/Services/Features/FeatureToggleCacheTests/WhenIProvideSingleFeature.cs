@@ -33,10 +33,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureToggleCa
                 .WithFeature(FeatureType.Transfer, $"{TestControllerName}.{TestActionName}");
 
             var ftc = fixtures.CreateFixtureCache();
-            var operationContext = new OperationContext { Controller = TestControllerName, Action = TestActionName };
 
             // act
-            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature(operationContext, out _);
+            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature(TestControllerName, TestActionName, out _);
 
             // assert
             Assert.IsTrue(isActionSubjectToToggle);
@@ -66,10 +65,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureToggleCa
                 .WithFeature(FeatureType.Transfer, $"{TestControllerName}.{TestActionName}");
 
             var ftc = fixtures.CreateFixtureCache();
-            var operationContext = new OperationContext { Controller = TestControllerName.InvertCase(), Action = TestActionName.InvertCase() };
 
             // act
-            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature(operationContext, out _);
+            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature(TestControllerName.InvertCase(), TestActionName.InvertCase(), out _);
 
             // assert
             Assert.IsTrue(isActionSubjectToToggle);
@@ -99,10 +97,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureToggleCa
                 .WithFeature(FeatureType.Transfer, $"{TestControllerName}.{TestActionName}");
 
             var ftc = fixtures.CreateFixtureCache();
-            var operationContext = new OperationContext { Controller = "NonToggledController", Action = "Index" };
 
             // act
-            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature(operationContext, out _);
+            var isActionSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature("NonToggledController", "Index", out _);
 
             // assert
             Assert.IsFalse(isActionSubjectToToggle);

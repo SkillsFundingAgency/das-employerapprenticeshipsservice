@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -8,7 +7,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services.Features
 {
     public class AccountAgreementService : IAccountAgreementService
     {
-        // value stored in cache as proxy for null (we can't store nulls)
+        // value stored in cache as proxy for null (we can't store nulls in the cache)
         private const int StoredValueThatMeansNull = -1;
 
         private readonly IDistributedCache _cache;
@@ -41,7 +40,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services.Features
             return _cache.RemoveFromCache(GetCacheKeyForAccount(accountId));
         }
 
-        private async Task<int?> FetchLatestAgreeemntNumberFromStoreAsync(long accountId)
+        private async Task<int> FetchLatestAgreeemntNumberFromStoreAsync(long accountId)
         {
             return await _employerAgreementRepository.GetLatestSignedAgreementVersion(accountId) ?? StoredValueThatMeansNull;
         }

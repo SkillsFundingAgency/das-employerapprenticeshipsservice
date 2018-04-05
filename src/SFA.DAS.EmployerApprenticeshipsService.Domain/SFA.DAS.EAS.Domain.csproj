@@ -212,7 +212,6 @@
     <Compile Include="Http\ServiceUnavailableException.cs" />
     <Compile Include="Http\TooManyRequestsException.cs" />
     <Compile Include="Interfaces\IExcelService.cs" />
-    <Compile Include="Interfaces\IFeatureAgreementService.cs" />
     <Compile Include="Interfaces\IFeatureService.cs" />
     <Compile Include="Interfaces\IHmrcDateService.cs" />
     <Compile Include="Interfaces\IHttpResponseLogger.cs" />

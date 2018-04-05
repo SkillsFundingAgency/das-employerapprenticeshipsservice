@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -43,6 +44,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization.AuthorizationServiceTests
         private Mock<HttpRequestBase> _request;
         private RouteData _routeData;
         private string _userExternalIdClaimValue;
+        private Mock<IFeatureService> _featureService;
 
         [SetUp]
         public void Arrange()
@@ -52,6 +54,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization.AuthorizationServiceTests
             _db = new Mock<EmployerAccountDbContext>();
             _httpContext = new Mock<HttpContextBase>();
             _authenticationService = new Mock<IAuthenticationService>();
+            _featureService = new Mock<IFeatureService>();
 
             _configurationProvider = new MapperConfiguration(c =>
             {
@@ -105,7 +108,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization.AuthorizationServiceTests
             _authenticationService.Setup(a => a.TryGetClaimValue(ControllerConstants.UserExternalIdClaimKeyName, out _userExternalIdClaimValue)).Returns(true);
             _hashingService.Setup(h => h.DecodeValue(_account.HashedId)).Returns(_account.Id);
 
-            _authorizationService = new AuthorizationService(_db.Object, _httpContext.Object, _authenticationService.Object, _configurationProvider, _hashingService.Object);
+            _authorizationService = new AuthorizationService(_db.Object, _httpContext.Object, _authenticationService.Object, _configurationProvider, _hashingService.Object, _featureService.Object);
         }
 
         [Test]

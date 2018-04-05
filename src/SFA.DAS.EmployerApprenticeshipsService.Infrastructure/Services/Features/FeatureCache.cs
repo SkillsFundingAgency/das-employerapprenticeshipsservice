@@ -34,18 +34,18 @@ namespace SFA.DAS.EAS.Infrastructure.Services.Features
             return _toggledControllers.Contains(ControllerAction.StripController(controllerName));
         }
 
-        public bool TryGetControllerActionSubjectToFeature(OperationContext context, out ControllerActionCacheItem controllerAction)
+        public bool TryGetControllerActionSubjectToFeature(string controller, string action, out ControllerActionCacheItem controllerAction)
         {
             controllerAction = null;
 
-            var controllerName = ControllerAction.StripController(context.Controller);
+            var controllerName = ControllerAction.StripController(controller);
 
             if (!IsControllerSubjectToFeature(controllerName))
             {
                 return false;
             }
 
-            if (_controllerActions.TryGetValue($"{controllerName}.{context.Action}", out controllerAction))
+            if (_controllerActions.TryGetValue($"{controllerName}.{action}", out controllerAction))
             {
                 return true;
             }

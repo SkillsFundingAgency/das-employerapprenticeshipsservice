@@ -32,10 +32,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureToggleCa
                 .WithFeature((FeatureType)1, "controller2.index");
 
             var ftc = fixtures.CreateFixtureCache();
-            var operationContext = new OperationContext {Controller = "controller1", Action = "index" };
 
             // act
-            var isControllerSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature( operationContext, out _);
+            var isControllerSubjectToToggle = ftc.TryGetControllerActionSubjectToFeature("controller1", "index", out _);
 
             // assert
             Assert.IsTrue(isControllerSubjectToToggle);

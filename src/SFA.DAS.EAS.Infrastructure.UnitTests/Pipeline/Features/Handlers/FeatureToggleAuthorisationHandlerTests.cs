@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Infrastructure.Services.Features;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Handlers
@@ -11,24 +12,81 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Handlers
     [TestFixture]
     public class FeatureToggleAuthorisationHandlerTests
     {
-        [TestCase(true)]
-        [TestCase(false)]
-        public async Task CanAccessAsync_WhenOperationHasSpecifiedEnabledState__ShouldReturnSameCanAccess(bool shouldFeatureBeEnabled)
+        [Test]
+        public void Constructor()
         {
-            //Arrange
-            var featureToggleServiceMock = new Mock<IFeatureWhiteListingService>();
+            var whiteListingService = new FeatureWhiteListAuthorisationHandler();
 
-            featureToggleServiceMock
-                .Setup(fts => fts.IsFeatureEnabledForContextAsync(It.IsAny<OperationContext>()))
-                .ReturnsAsync(shouldFeatureBeEnabled);
+            Assert.Pass("Shouldn't get an exception");
+        }
 
-            var handler = new FeatureToggleAuthorisationHandler(featureToggleServiceMock.Object);
+        [TestCase(true, "fredflintstone@bedrock.com", "fredflintstone@bedrock.com")]
+        [TestCase(false, "fredflintstone@bedrock.com", "barneyrubble@bedrock.com")]
+        [TestCase(false, "fredflintstone@bedrock.com")]
+        [TestCase(true, "fredflintstone@bedrock.com", FeatureToggleAuthorisationHandlerTestsFixtures.Nullstring)]
+        public async Task TestEmailAssessment(bool expectedIsEnabled, string userEmail, params string[] whitelist)
+        {
+            // Arrange
+            var fixtures = new FeatureToggleAuthorisationHandlerTestsFixtures()
+                .WithUserEmail(userEmail)
+                .WithWhiteListed(whitelist);
+
+            var operationContext = fixtures.CreateOperationContext();
+            var handler = new FeatureWhiteListAuthorisationHandler();
 
             // Act
-            var actualCanAccess = await handler.CanAccessAsync(new OperationContext());
+            var actualIsEnabled =
+                await handler.IsFeatureEnabledForContextAsync(operationContext);
 
             // Assert
-            Assert.AreEqual(shouldFeatureBeEnabled, actualCanAccess);
+            Assert.AreEqual(expectedIsEnabled, actualIsEnabled);
+        }
+
+    }
+
+    internal class FeatureToggleAuthorisationHandlerTestsFixtures
+    {
+        public FeatureToggleAuthorisationHandlerTestsFixtures()
+        {
+            UserContextMock = new Mock<IUserContext>();
+        }
+
+        public Mock<IUserContext> UserContextMock { get; }
+        public IUserContext UserContext => UserContextMock.Object;
+
+        public IAuthorizationContext CreateOperationContext()
+        {
+            var ca = new ControllerAction("home.index");
+
+            return new AuthorizationContext 
+            {
+                CurrentFeature = new Feature { Enabled = true, WhiteList = WhiteList},
+                UserContext = UserContext
+            };
+        }
+
+        public FeatureToggleAuthorisationHandlerTestsFixtures WithUserEmail(string userEmail)
+        {
+            UserContextMock.Setup(uc => uc.Email).Returns(userEmail);
+
+            return this;
+        }
+
+        public const string Nullstring = "null";
+
+        public string[] WhiteList { get; set; }
+
+        public FeatureToggleAuthorisationHandlerTestsFixtures WithWhiteListed(string[] whitelist)
+        {
+            // treat a single element array with only special null string as a null array 
+            if (whitelist.Length == 1 && whitelist[0] == Nullstring)
+            {
+                whitelist = null;
+            }
+
+            WhiteList = whitelist;
+
+            return this;
         }
     }
 }

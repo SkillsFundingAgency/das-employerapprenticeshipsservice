@@ -261,6 +261,7 @@
     <Compile Include="DependencyResolution\CurrentDatePolicy.cs" />
     <Compile Include="DependencyResolution\DasEnvironment.cs" />
     <Compile Include="DependencyResolution\ExecutionPolicyPolicy.cs" />
+    <Compile Include="DependencyResolution\AuthorisationRegistry.cs" />
     <Compile Include="DependencyResolution\MessageSubscriberPolicy.cs" />
     <Compile Include="ExecutionPolicies\CompaniesHouseExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\ExecutionPolicy.cs" />
@@ -289,10 +290,9 @@
     <Compile Include="Models\PostcodeAnywhere\PcaServiceFindResult.cs" />
     <Compile Include="Data\TransactionRepository.cs" />
     <Compile Include="Pipeline\Features\Handlers\AgreementFeatureAuthorisationHandler.cs" />
-    <Compile Include="Pipeline\Features\OperationAuthorisation.cs" />
-    <Compile Include="Pipeline\Features\Handlers\FeatureToggleAuthorisationHandler.cs" />
+    <Compile Include="Pipeline\Features\Handlers\FeatureEnabledAuthorisationHandler.cs" />
+    <Compile Include="Pipeline\Features\Handlers\FeatureWhiteListAuthorisationHandler.cs" />
     <Compile Include="Services\Features\AccountAgreementService.cs" />
-    <Compile Include="Services\Features\FeatureAgreementService.cs" />
     <Compile Include="Services\Features\FeatureCacheFactory.cs" />
     <Compile Include="Services\Features\FeatureService.cs" />
     <Compile Include="Pipeline\IOperationAuthorisationHandler.cs" />
@@ -308,11 +308,9 @@
     <Compile Include="Services\CurrentDateTime.cs" />
     <Compile Include="Services\ExcelService.cs" />
     <Compile Include="Services\Features\FeatureCache.cs" />
-    <Compile Include="Services\Features\FeatureWhiteListingService.cs" />
     <Compile Include="Services\Features\IControllerMetaDataService.cs" />
     <Compile Include="Services\Features\IFeatureCache.cs" />
     <Compile Include="Services\Features\IFeatureCacheFactory.cs" />
-    <Compile Include="Services\Features\IFeatureWhiteListingService.cs" />
     <Compile Include="Services\Features\OperationAuthorisationService.cs" />
     <Compile Include="Services\Features\OperationFilterAttribute.cs" />
     <Compile Include="Services\HmrcDateService.cs" />

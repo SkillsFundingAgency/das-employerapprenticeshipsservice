@@ -4,8 +4,11 @@ using System.Web;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using SFA.DAS.EAS.Application.Extensions;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Authorization;
+using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Infrastructure.Services.Features;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.HashingService;
@@ -22,14 +25,16 @@ namespace SFA.DAS.EAS.Web.Authorization
         private readonly IAuthenticationService _authenticationService;
         private readonly IConfigurationProvider _configurationProvider;
         private readonly IHashingService _hashingService;
+        private readonly IFeatureService _featureService;
 
-        public AuthorizationService(EmployerAccountDbContext db, HttpContextBase httpContext, IAuthenticationService authenticationService, IConfigurationProvider configurationProvider, IHashingService hashingService)
+        public AuthorizationService(EmployerAccountDbContext db, HttpContextBase httpContext, IAuthenticationService authenticationService, IConfigurationProvider configurationProvider, IHashingService hashingService, IFeatureService featureService)
         {
             _db = db;
             _httpContext = httpContext;
             _authenticationService = authenticationService;
             _configurationProvider = configurationProvider;
             _hashingService = hashingService;
+            _featureService = featureService;
         }
 
         public IAuthorizationContext GetAuthorizationContext()
@@ -61,14 +66,23 @@ namespace SFA.DAS.EAS.Web.Authorization
             var userContext = userContextQuery?.SingleOrDefault();
             var membershipContext = membershipContextQuery?.SingleOrDefault();
 
+            var featureTask = _featureService.GetFeatureThatAllowsAccessToOperationAsync(GetControllerName(), GetOperationName());
+
+            if (!featureTask.Wait(60 * 1000))
+            {
+                throw new Exception("Time out waiting for feature definition");
+            }
+
             var authorizationContext = new AuthorizationContext
             {
                 AccountContext = accountContext,
                 UserContext = userContext,
-                MembershipContext = membershipContext
+                MembershipContext = membershipContext,
+                CurrentFeature = featureTask.Result
             };
 
             _httpContext.Items[Key] = authorizationContext;
+           
 
             return authorizationContext;
         }
@@ -116,6 +130,26 @@ namespace SFA.DAS.EAS.Web.Authorization
             }
 
             return userExternalId;
+        }
+
+        private string GetControllerName()
+        {
+            if (!_httpContext.Request.RequestContext.RouteData.Values.TryGetValue(ControllerConstants.ControllerKeyName, out var controllerName))
+            {
+                return null;
+            }
+
+            return (string) controllerName;
+        }
+
+        private string GetOperationName()
+        {
+            if (!_httpContext.Request.RequestContext.RouteData.Values.TryGetValue(ControllerConstants.ActionKeyName, out var operationName))
+            {
+                return null;
+            }
+
+            return (string) operationName;
         }
     }
 }

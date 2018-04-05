@@ -13,6 +13,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
     /// </remarks>
     public interface IOperationAuthorisationService
     {
-        bool IsOperationAuthorised(string controllerName, string actionName, IAuthorizationContext authorisationContext);
+        bool IsOperationAuthorised(IAuthorizationContext authorisationContext);
     }
 }

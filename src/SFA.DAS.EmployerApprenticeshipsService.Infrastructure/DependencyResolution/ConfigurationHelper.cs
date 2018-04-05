@@ -17,10 +17,15 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
             return config;
         }
 
-        public static async Task<T> GetConfigurationAsync<T>(string serviceName)
+        public static Task<T> GetConfigurationAsync<T>(string serviceName)
         {
-            var configurationService = CreateConfigurationService(serviceName);
-            return await configurationService.GetAsync<T>().ConfigureAwait(false);
+            return Task.Run(async () =>
+            {
+                var configurationService = CreateConfigurationService(serviceName);
+                //HACK: the das config service continues on the sync context which deadlocks as ASP is waiting on the config load task to complete on the asp sysnc context
+                // There is a PR to fix this - when the updated nuget package is available the outer task can be removed leaving only the following line of code
+                return await configurationService.GetAsync<T>().ConfigureAwait(false);
+            });
         }
 
         public static bool IsAnyOf(params DasEnvironment[] environment)

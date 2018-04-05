@@ -9,7 +9,7 @@ using SFA.DAS.EAS.Infrastructure.Services.Features;
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureCacheFactoryTests
 {
     [TestFixture]
-    public class WhenICallCreateItSucceeds
+    public class FeatureCacheFactoryTests
     {
         [Test]
         public void Create_WithNoFeatures_ShouldSucceed()
@@ -82,13 +82,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureCacheFac
             {
                 foreach (var controllerAction in fixtures.QualifiedEndpointsAdded)
                 {
-                    var operationContext = new OperationContext
-                    {
-                        Action = controllerAction.Action,
-                        Controller = controllerAction.Controller
-                    };
-
-                    var wasFound = cache.TryGetControllerActionSubjectToFeature(operationContext, out var cacheitem);
+                    var wasFound = cache.TryGetControllerActionSubjectToFeature(controllerAction.Controller, controllerAction.Action, out var cacheitem);
 
                     Assert.IsTrue(wasFound, $"{controllerAction.QualifiedName} was not reported as a feature endpoint");
                     Assert.IsNotNull(cacheitem, $"{controllerAction.QualifiedName} was reported as a feature endpoint but was not found in the cache");
@@ -128,13 +122,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureCacheFac
             {
                 foreach (var controllerAction in fixtures.QualifiedEndpointsAdded)
                 {
-                    var operationContext = new OperationContext
-                    {
-                        Action = controllerAction.Action,
-                        Controller = controllerAction.Controller
-                    };
-
-                    var wasFound = cache.TryGetControllerActionSubjectToFeature(operationContext, out var cacheitem);
+                    var wasFound = cache.TryGetControllerActionSubjectToFeature(controllerAction.Controller, controllerAction.Action, out var cacheitem);
 
                     Assert.IsTrue(wasFound, $"Did not find {controllerAction.QualifiedName}");
                     Assert.IsNotNull(cacheitem.Feature, $"The feature attached to {controllerAction.QualifiedName} is null");

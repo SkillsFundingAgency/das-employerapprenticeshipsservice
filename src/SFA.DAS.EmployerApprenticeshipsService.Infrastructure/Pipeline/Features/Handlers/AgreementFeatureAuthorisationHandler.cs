@@ -1,24 +1,36 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 
 namespace SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers
 {
-    /// <summary>
-    ///     Exposes the <see cref="IFeatureAgreementService"/> as a <see cref="IOperationAuthorisationHandler"/>.
-    /// </summary>
     public class AgreementFeatureAuthorisationHandler : IOperationAuthorisationHandler
     {
-        private readonly IFeatureAgreementService _featureAgreementService;
+        private readonly IAccountAgreementService _accountAgreementService;
 
-        public AgreementFeatureAuthorisationHandler(IFeatureAgreementService featureAgreementService)
+        public AgreementFeatureAuthorisationHandler(
+            IAccountAgreementService accountAgreementService)
         {
-            _featureAgreementService = featureAgreementService;
+            _accountAgreementService = accountAgreementService;
         }
 
-        public Task<bool> CanAccessAsync(OperationContext context)
+        public Task<bool> CanAccessAsync(IAuthorizationContext authorisationContext)
         {
-            return _featureAgreementService.IsFeatureEnabled(context);
+            return IsFeatureEnabled(authorisationContext);
+        }
+
+        public async Task<bool> IsFeatureEnabled(IAuthorizationContext authorisationContext)
+        {
+            if (authorisationContext?.AccountContext?.Id == null)
+            {
+                return true;
+            }
+
+            var latestAgreementForAccount =
+                await _accountAgreementService.GetLatestAgreementSignedByAccountAsync(authorisationContext.AccountContext.Id);
+
+            return latestAgreementForAccount >= authorisationContext.CurrentFeature.EnabledByAgreementVersion;
         }
     }
 }
