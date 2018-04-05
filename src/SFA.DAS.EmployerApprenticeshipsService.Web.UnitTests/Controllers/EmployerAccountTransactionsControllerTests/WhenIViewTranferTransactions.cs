@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                 PeriodEnd = periodEnd
             };
 
-            var response = new GetTransferSenderTransactionDetailsResponse
+            var response = new GetTransferTransactionDetailsResponse
             {
                 ReceiverAccountName = "Test Group",
                 ReceiverPublicHashedId = "GFH657",

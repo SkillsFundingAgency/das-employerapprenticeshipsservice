@@ -19,6 +19,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
 {
     public class WhenIRefreshAnAccountsTransfers
     {
+        private const long SenderAccountId = 1;
+        private const string SenderAccountName = "Sender Account";
+        private const long ReceiverAccountId = 2;
         private const string ReceiverAccountName = "Receiver Account";
 
         private RefreshAccountTransfersCommandHandler _handler;
@@ -52,8 +55,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
 
             var accountTransfer = new AccountTransfer
             {
-                SenderAccountId = 12,
-                ReceiverAccountId = 32,
+                SenderAccountId = SenderAccountId,
+                SenderAccountName = SenderAccountName,
+                ReceiverAccountId = ReceiverAccountId,
+                ReceiverAccountName = ReceiverAccountName,
                 ApprenticeshipId = 1245,
                 Amount = 1200,
                 TransferDate = DateTime.Now
@@ -66,7 +71,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
 
             _command = new RefreshAccountTransfersCommand
             {
-                AccountId = 123,
+                ReceiverAccountId = ReceiverAccountId,
                 PeriodEnd = "1718-R01"
             };
 
@@ -87,10 +92,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
             _transferRepository.Setup(x => x.GetTransferPaymentDetails(It.IsAny<AccountTransfer>()))
                 .ReturnsAsync(_details);
 
-            _accountRepository.Setup(x => x.GetAccountNames(It.IsAny<IEnumerable<long>>()))
+            _accountRepository.Setup(x => x.GetAccountName(ReceiverAccountId))
+                .ReturnsAsync(ReceiverAccountName);
+
+            _accountRepository.Setup(x => x.GetAccountNames(It.Is<IEnumerable<long>>(ids => ids.All(id => id == SenderAccountId))))
                 .ReturnsAsync(new Dictionary<long, string>
                 {
-                    {accountTransfer.ReceiverAccountId, ReceiverAccountName}
+                    {accountTransfer.SenderAccountId, SenderAccountName}
                 });
         }
 
@@ -101,7 +109,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
             await _handler.Handle(_command);
 
             //Assert
-            _paymentService.Verify(x => x.GetAccountTransfers(_command.PeriodEnd, _command.AccountId), Times.Once);
+            _paymentService.Verify(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId), Times.Once);
         }
 
         [Test]
@@ -135,7 +143,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
                 {
                     ValidationDictionary = new Dictionary<string, string>
                     {
-                        {nameof(RefreshAccountTransfersCommand.AccountId), "Error"}
+                        {nameof(RefreshAccountTransfersCommand.ReceiverAccountId), "Error"}
                     }
                 });
 
@@ -152,7 +160,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
                 {
                     ValidationDictionary = new Dictionary<string, string>
                     {
-                        {nameof(RefreshAccountTransfersCommand.AccountId), "Error"}
+                        {nameof(RefreshAccountTransfersCommand.ReceiverAccountId), "Error"}
                     }
                 });
 
@@ -167,7 +175,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
             }
 
             //Assert
-            _paymentService.Verify(x => x.GetAccountTransfers(_command.PeriodEnd, _command.AccountId), Times.Never);
+            _paymentService.Verify(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId), Times.Never);
         }
 
         [Test]
@@ -179,7 +187,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
                 {
                     ValidationDictionary = new Dictionary<string, string>
                     {
-                        { nameof(RefreshAccountTransfersCommand.AccountId), "Error"}
+                        { nameof(RefreshAccountTransfersCommand.ReceiverAccountId), "Error"}
                     }
                 });
 
@@ -232,7 +240,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
 
             //Assert
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountTransfersCreatedQueueMessage>(
-                msg => msg.SenderAccountId.Equals(_command.AccountId) &&
+                msg => msg.SenderAccountId.Equals(_command.ReceiverAccountId) &&
                        msg.PeriodEnd.Equals(_command.PeriodEnd))), Times.Once());
         }
 

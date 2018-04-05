@@ -4,6 +4,7 @@ using SFA.DAS.Apprenticeships.Api.Types;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.ServiceStubs.ApprenticeshipInfoService;
@@ -136,25 +137,25 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
             _workerTask.Dispose();
         }
 
-        [Given(@"I have an account")]
-        public void GivenIHaveAnAccount()
+        [Given(@"the transfer receiver has an account")]
+        public void GivenTheTransferReceiverHasAnAccount()
         {
             _accountCreationSteps.GivenIHaveAnAccount();
         }
 
-        [Given(@"the transfer reciever has an account")]
-        public void GivenTheTransferRecieverHasAnAccount()
+        [Given(@"the transfer sender has an account")]
+        public void GivenTheTransferSenderHasAnAccount()
         {
             var user = _accountCreationSteps.CreateAccount();
             var account = user.Accounts.Single();
 
-            ScenarioContext.Current["RecieverAccount"] = account;
+            ScenarioContext.Current["SenderAccount"] = account;
         }
 
         [Given(@"I get payments for that account")]
         public void GivenIGetPaymentsForThatAccount()
         {
-            var accountId = (long)ScenarioContext.Current["AccountId"];
+            var receiverAccountId = (long)ScenarioContext.Current["AccountId"];
 
             var standardCode = 213;
 
@@ -162,7 +163,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
             {
                 new Payment
                 {
-                    EmployerAccountId = accountId.ToString(),
+                    EmployerAccountId = receiverAccountId.ToString(),
                     ApprenticeshipId = ApprenticeshipId,
                     FundingSource = FundingSource.Levy,
                     Amount = TransferPaymentAmount,
@@ -196,7 +197,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
                 }
             };
 
-            _paymentServiceApiHandler.EmployerAccountId = accountId;
+            _paymentServiceApiHandler.EmployerAccountId = receiverAccountId;
             _paymentServiceApiHandler.PeriodEnd = _periodEnd.Id;
 
             _apprenticeshipInfoServiceApiHandler.StandardCode = standardCode.ToString();
@@ -215,7 +216,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
 
             _messagePublisher.PublishAsync(new PaymentProcessorQueueMessage
             {
-                AccountId = accountId,
+                AccountId = receiverAccountId,
                 PeriodEndId = _periodEnd.Id,
                 AccountPaymentUrl = "test/123"
             }).Wait();
@@ -224,15 +225,15 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
         [Given(@"transfers have been associated with those payments")]
         public void GivenTransfersHaveBeenAssociatedWithThosePayments()
         {
-            var senderAccountId = (long)ScenarioContext.Current["AccountId"];
-            var receiverAccount = (TestAccount)ScenarioContext.Current["RecieverAccount"];
+            var receiverAccountId = (long)ScenarioContext.Current["AccountId"];
+            var senderAccount = (TestAccount)ScenarioContext.Current["SenderAccount"];
 
             _transfers = new List<Transfer>
             {
                 new Transfer
                 {
-                    SenderAccountId = senderAccountId,
-                    ReceiverAccountId = receiverAccount.Id,
+                    SenderAccountId = senderAccount.Id,
+                    ReceiverAccountId = receiverAccountId,
                     CommitmentId = ApprenticeshipId,
                     Amount = TransferPaymentAmount,
                     Type = TransferType.None,
@@ -273,17 +274,17 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
         [Then(@"the account transfers should be save")]
         public void ThenTheAccountTransfersShouldBeSave()
         {
-            var senderAccountId = (long)ScenarioContext.Current["AccountId"];
-            var receiverAccount = (TestAccount)ScenarioContext.Current["RecieverAccount"];
+            var receiverAccountId = (long)ScenarioContext.Current["AccountId"];
+            var senderAccount = (TestAccount)ScenarioContext.Current["SenderAccount"];
 
             var transferRepository = _accountCreationSteps.Container.GetInstance<ITransferRepository>();
 
-            var transfers = transferRepository.GetAccountTransfersByPeriodEnd(senderAccountId, _periodEnd.Id).Result;
+            var transfers = transferRepository.GetReceiverAccountTransfersByPeriodEnd(receiverAccountId, _periodEnd.Id).Result;
             var transfer = transfers.Single();
 
-            Assert.AreEqual(senderAccountId, transfer.SenderAccountId);
-            Assert.AreEqual(receiverAccount.Id, transfer.ReceiverAccountId);
-            Assert.AreEqual(receiverAccount.Name, transfer.ReceiverAccountName);
+            Assert.AreEqual(senderAccount.Id, transfer.SenderAccountId);
+            Assert.AreEqual(receiverAccountId, transfer.ReceiverAccountId);
+            Assert.AreEqual(senderAccount.Name, transfer.SenderAccountName);
             Assert.AreEqual(_periodEnd.Id, transfer.PeriodEnd);
             Assert.AreEqual(DateTime.Now.ToShortDateString(), transfer.TransferDate.ToShortDateString());
             //Assert.AreEqual(TransferType.None, transfer.Type);
@@ -293,16 +294,30 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
 
 
         [Then(@"the transfer senders transactions should be saved")]
-        public void ThenTheTransferSendersTransactionsShouldBeSaved()
+        public void ThenTheTransferSenderTransactionsShouldBeSaved()
         {
-            var accountId = (long)ScenarioContext.Current["AccountId"];
+            var senderAccount = (TestAccount)ScenarioContext.Current["SenderAccount"];
 
             var transactionRepository = _accountCreationSteps.Container.GetInstance<ITransactionRepository>();
 
             var fromDate = DateTime.Now.AddMinutes(-5);
             var toDate = DateTime.Now.AddMinutes(5);
 
-            var transactions = transactionRepository.GetAccountTransactionsByDateRange(accountId, fromDate, toDate).Result;
+            var retries = 0;
+            List<TransactionLine> transactions;
+
+            do
+            {
+                transactions = transactionRepository.GetAccountTransactionsByDateRange(senderAccount.Id, fromDate, toDate).Result;
+
+                if (!transactions.Any())
+                {
+                    retries++;
+                    Task.Delay(1000);
+                }
+
+            } while (!transactions.Any() && retries < 10);
+
 
             var transferTransactions = transactions.OfType<TransferTransactionLine>().ToArray();
 
@@ -311,19 +326,9 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
             var transactionLine = transferTransactions.Single();
             var payment = _payments.Single();
 
-            var transferRepository = _accountCreationSteps.Container.GetInstance<ITransferRepository>();
-
-            var transfers = transferRepository.GetAccountTransfersByPeriodEnd(accountId, _periodEnd.Id).Result;
-
-            var transfer = transfers.Single();
-
-            var accountRepository = _accountCreationSteps.Container.GetInstance<IAccountRepository>();
-
-            accountRepository.GetAccountNames(new List<long> { transfer.ReceiverAccountId });
-
             var expectedTransactionTotal = -payment.Amount;
 
-            Assert.AreEqual(transfer.ReceiverAccountName, transactionLine.ReceiverAccountName);
+            Assert.AreEqual(senderAccount.Name, transactionLine.SenderAccountName);
             Assert.AreEqual(expectedTransactionTotal, transactionLine.Amount);
         }
 

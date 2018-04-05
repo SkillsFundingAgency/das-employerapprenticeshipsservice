@@ -148,8 +148,9 @@
                                     var transferTransaction = aggregationLine as TransferTransactionLine;
 
                                     var targetAccountPublicHashedId =
-                                        (Model.Data.AccountId == transferTransaction?.SenderAccountId) ?
-                                            transferTransaction.SenderAccountPublicHashedId :
+                                        Model.Data.PublicHashedAccountId.Equals(transferTransaction?.SenderAccountPublicHashedId, 
+                                            StringComparison.CurrentCultureIgnoreCase) ?
+                                            transferTransaction?.SenderAccountPublicHashedId :
                                             transferTransaction?.ReceiverAccountPublicHashedId;
 
                                         <a title="View details for the transfer transaction on @date"

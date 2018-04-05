@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
 
             await _mediator.SendAsync(new RefreshAccountTransfersCommand
             {
-                AccountId = message.AccountId,
+                ReceiverAccountId = message.AccountId,
                 PeriodEnd = message.PeriodEnd
             });
 

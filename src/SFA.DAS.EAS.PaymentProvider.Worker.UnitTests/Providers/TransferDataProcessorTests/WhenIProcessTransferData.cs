@@ -89,7 +89,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.TransferDataPro
             await _transferDataProcessor.RunAsync(_cancellationTokenSource);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<RefreshAccountTransfersCommand>(c => c.AccountId.Equals(ExpectedAccountId)
+            _mediator.Verify(x => x.SendAsync(It.Is<RefreshAccountTransfersCommand>(c => c.ReceiverAccountId.Equals(ExpectedAccountId)
                                 && c.PeriodEnd.Equals(ExpectedPeriodEndId))), Times.Once);
         }
 

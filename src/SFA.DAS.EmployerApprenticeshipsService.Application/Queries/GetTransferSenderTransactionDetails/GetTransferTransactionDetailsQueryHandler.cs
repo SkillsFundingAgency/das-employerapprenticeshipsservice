@@ -10,19 +10,19 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
 {
-    public class GetTransferSenderTransactionDetailsQueryHandler : IAsyncRequestHandler<GetTransferTransactionDetailsQuery, GetTransferSenderTransactionDetailsResponse>
+    public class GetTransferTransactionDetailsQueryHandler : IAsyncRequestHandler<GetTransferTransactionDetailsQuery, GetTransferTransactionDetailsResponse>
     {
         private readonly EmployerFinancialDbContext _dbContext;
         private readonly IPublicHashingService _publicHashingService;
 
-        public GetTransferSenderTransactionDetailsQueryHandler(EmployerFinancialDbContext dbContext,
+        public GetTransferTransactionDetailsQueryHandler(EmployerFinancialDbContext dbContext,
             IPublicHashingService publicHashingService)
         {
             _dbContext = dbContext;
             _publicHashingService = publicHashingService;
         }
 
-        public async Task<GetTransferSenderTransactionDetailsResponse> Handle(GetTransferTransactionDetailsQuery query)
+        public async Task<GetTransferTransactionDetailsResponse> Handle(GetTransferTransactionDetailsQuery query)
         {
             var result = await _dbContext.GetTransfersByTargetAccountId(
                                     query.AccountId.GetValueOrDefault(),
@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
             var transferDate = transfers.FirstOrDefault()?.TransferDate ?? default(DateTime);
             var transfersPaymentTotal = transferDetails.Sum(t => t.PaymentTotal);
 
-            return new GetTransferSenderTransactionDetailsResponse
+            return new GetTransferTransactionDetailsResponse
             {
                 SenderAccountName = senderAccountName,
                 SenderPublicHashedId = senderPublicHashedAccountId,

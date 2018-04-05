@@ -37,6 +37,8 @@ namespace SFA.DAS.EAS.Domain.Data.Entities.Transaction
         public decimal EmployerCoInvestmentAmount { get; set; }
 
         //Transfer fields
+        public long SenderAccountId { get; set; }
+        public string SenderAccountName { get; set; }
         public long ReceiverAccountId { get; set; }
         public string ReceiverAccountName { get; set; }
 

@@ -182,7 +182,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     {
                         var parameters = new DynamicParameters();
 
-                        parameters.Add("@senderAccountId", transaction.AccountId, DbType.Int64);
+                        parameters.Add("@accountId", transaction.AccountId, DbType.Int64);
+                        parameters.Add("@senderAccountId", transaction.SenderAccountId, DbType.Int64);
+                        parameters.Add("@senderAccountName", transaction.SenderAccountName, DbType.String);
                         parameters.Add("@receiverAccountId", transaction.ReceiverAccountId, DbType.Int64);
                         parameters.Add("@receiversAccountName", transaction.ReceiverAccountName, DbType.String);
                         parameters.Add("@periodEnd", transaction.PeriodEnd, DbType.String);

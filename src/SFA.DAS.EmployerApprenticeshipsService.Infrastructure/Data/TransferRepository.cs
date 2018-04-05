@@ -38,6 +38,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     {
                         var parameters = new DynamicParameters();
                         parameters.Add("@senderAccountId", transfer.SenderAccountId, DbType.Int64);
+                        parameters.Add("@senderAccountName", transfer.SenderAccountName, DbType.String);
                         parameters.Add("@receiverAccountId", transfer.ReceiverAccountId, DbType.Int64);
                         parameters.Add("@receiverAccountName", transfer.ReceiverAccountName, DbType.String);
                         parameters.Add("@apprenticeshipId", transfer.ApprenticeshipId, DbType.Int64);
@@ -76,7 +77,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@senderAccountId", transfer.SenderAccountId, DbType.Int64);
+                parameters.Add("@receiverAccountId", transfer.ReceiverAccountId, DbType.Int64);
                 parameters.Add("@periodEnd", transfer.PeriodEnd, DbType.String);
                 parameters.Add("@apprenticeshipId", transfer.ApprenticeshipId, DbType.Int64);
 
@@ -164,7 +165,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result;
         }
 
-        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfersByPeriodEnd(long receiverAccountId, string periodEnd)
+        public async Task<IEnumerable<AccountTransfer>> GetReceiverAccountTransfersByPeriodEnd(long receiverAccountId, string periodEnd)
         {
             var result = await WithConnection(async c =>
             {

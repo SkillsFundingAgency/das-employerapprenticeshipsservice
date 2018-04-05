@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
 
             try
             {
-                var transfers = await _transferRepository.GetAccountTransfersByPeriodEnd(message.AccountId, message.PeriodEnd);
+                var transfers = await _transferRepository.GetReceiverAccountTransfersByPeriodEnd(message.ReceiverAccountId, message.PeriodEnd);
 
                 var accountTransfers = transfers as AccountTransfer[] ?? transfers.ToArray();
 
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Failed to create transfer transaction for accountId {message.AccountId} and period end {message.PeriodEnd}");
+                _logger.Error(ex, $"Failed to create transfer transaction for accountId {message.ReceiverAccountId} and period end {message.PeriodEnd}");
                 throw;
             }
         }
@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
             var receiverAccountName = firstTransfer.ReceiverAccountName;
             var transferTotal = senderTransferGroup.Sum(gt => gt.Amount);
 
-            var senderTranferTransaction = new TransferTransactionLine
+            var senderTransferTransaction = new TransferTransactionLine
             {
                 AccountId = senderAccountId,
                 Amount = -transferTotal,        //Negative value as we are removing money from sender
@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
                 ReceiverAccountName = receiverAccountName
             };
 
-            return new[] { senderTranferTransaction, receiverTransferTransaction };
+            return new[] { senderTransferTransaction, receiverTransferTransaction };
         }
     }
 }

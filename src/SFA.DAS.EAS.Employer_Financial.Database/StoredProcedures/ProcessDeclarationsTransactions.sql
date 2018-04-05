@@ -57,8 +57,10 @@ select mainUpdate.* from
 			0 as SfaCoInvestmentAmount,
 			0 as EmployerCoInvestmentAmount,
 			x.EnglishFraction,
+			null as TransferSenderAccountId,
+			null as TransferSenderAccountName,
 			null as TransferReceiverAccountId,
-			null as TransferReceiverAccountName
+			null as TransferReceiverAccountName	
 		FROM 
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		where
@@ -78,8 +80,10 @@ select mainUpdate.* from
 			0 as SfaCoInvestmentAmount,
 			0 as EmployerCoInvestmentAmount,
 			NULL AS EnglishFraction,
+			null as TransferSenderAccountId,
+			null as TransferSenderAccountName,
 			null as TransferReceiverAccountId,
-			null as TransferReceiverAccountName
+			null as TransferReceiverAccountName			
 		FROM 
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		inner join

@@ -1,9 +1,11 @@
 ﻿CREATE PROCEDURE [employer_financial].[CreateAccountTransferTransactions]
+	@accountId bigint,
 	@senderAccountId bigint,
+	@senderAccountName nvarchar(100),
 	@receiverAccountId bigint,
 	@receiversAccountName nvarchar(100),
 	@periodEnd nvarchar(20),
-	@amount decimal,
+	@amount decimal(18,4),
 	@transactionType smallint,
 	@transactionDate datetime
 AS	
@@ -16,17 +18,21 @@ AS
 		,TransactionType 
 		,Amount 		
 		,PeriodEnd 		
+		,TransferSenderAccountId
 		,TransferReceiverAccountId
 		,TransferReceiverAccountName		
+		,TransferSenderAccountName
 	)
 	VALUES
 	(
-		@senderAccountId,
+		@accountId,
 		GETDATE(),
 		@transactionDate,
 		@transactionType,
 		@amount,
 		@periodEnd,
+		@senderAccountId,
 		@receiverAccountId,
-		@receiversAccountName
+		@receiversAccountName,
+		@senderAccountName
 	)

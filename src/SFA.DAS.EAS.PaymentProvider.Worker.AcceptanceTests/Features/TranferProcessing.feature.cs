@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Features
 #line 3
 this.ScenarioSetup(scenarioInfo);
 #line 4
-testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+testRunner.Given("the transfer receiver has an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 5
 testRunner.And("I get payments for that account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 6
@@ -90,9 +90,9 @@ testRunner.Then("the payments processing completed message is created", ((string
 #line 9
 this.ScenarioSetup(scenarioInfo);
 #line 10
-testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+testRunner.Given("the transfer receiver has an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 11
-testRunner.And("the transfer reciever has an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+testRunner.And("the transfer sender has an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
 testRunner.And("I get payments for that account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
@@ -115,9 +115,9 @@ testRunner.Then("the account transfers should be save", ((string)(null)), ((Tech
 #line 19
 this.ScenarioSetup(scenarioInfo);
 #line 20
-testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+testRunner.Given("the transfer receiver has an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 21
-testRunner.And("the transfer reciever has an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+testRunner.And("the transfer sender has an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 22
 testRunner.And("I get payments for that account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 23

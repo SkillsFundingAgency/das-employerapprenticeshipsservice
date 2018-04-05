@@ -25,11 +25,15 @@ left join
 	  ,tl.EmployerCoInvestmentAmount
 	  ,ld.PayrollYear
 	  ,ld.PayrollMonth
+	  ,tl.TransferSenderAccountId as SenderAccountId
+	  ,tl.TransferSenderAccountName as SenderAccountName
 	  ,tl.TransferReceiverAccountId as ReceiverAccountId
-	  ,tl.TransferReceiverAccountName as ReceiverAccountName
+	  ,tl.TransferReceiverAccountName as ReceiverAccountName	  
   FROM [employer_financial].[TransactionLine] tl
   LEFT JOIN [employer_financial].LevyDeclaration ld on ld.submissionid = tl.submissionid
   WHERE tl.AccountId = @accountId AND tl.DateCreated >= @fromDate AND DateCreated <= @toDate
-  GROUP BY tl.DateCreated, tl.AccountId, tl.UKPRN, tl.SfaCoInvestmentAmount, tl.EmployerCoInvestmentAmount, tl.TransactionType, ld.PayrollMonth, ld.PayrollYear, tl.TransferReceiverAccountId, tl.TransferReceiverAccountName
+  GROUP BY tl.DateCreated, tl.AccountId, tl.UKPRN, tl.SfaCoInvestmentAmount, tl.EmployerCoInvestmentAmount, 
+  tl.TransactionType, ld.PayrollMonth, ld.PayrollYear, tl.TransferSenderAccountId, tl.TransferSenderAccountName,
+  tl.TransferReceiverAccountId, tl.TransferReceiverAccountName
 ) as main on main.AccountId = bal.AccountId
 order by DateCreated desc, TransactionType desc, ukprn desc

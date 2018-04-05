@@ -2,6 +2,7 @@
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [SenderAccountId] BIGINT NOT NULL, 
+	[SenderAccountName] NVARCHAR(100) NOT NULL, 
     [ReceiverAccountId] BIGINT NOT NULL, 
 	[ReceiverAccountName] NVARCHAR(100) NOT NULL, 
     [ApprenticeshipId] BIGINT NOT NULL, 	

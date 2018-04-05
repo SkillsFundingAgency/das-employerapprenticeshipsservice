@@ -13,6 +13,8 @@
 	SfaCoInvestmentAmount DECIMAL(18, 4) NOT NULL DEFAULT 0, 
 	EmployerCoInvestmentAmount DECIMAL(18, 4) NOT NULL DEFAULT 0,
 	[EnglishFraction] DECIMAL(18, 5) NULL, 
+	[TransferSenderAccountId] BIGINT NULL, 
+	[TransferSenderAccountName] NVARCHAR(100) NULL,
 	[TransferReceiverAccountId] BIGINT NULL, 
 	[TransferReceiverAccountName] NVARCHAR(100) NULL
 )

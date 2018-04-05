@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
         private const string FirstCourseName = "Course 1";
         private const string SecondCourseName = "Course 2";
 
-        private GetTransferSenderTransactionDetailsQueryHandler _handler;
+        private GetTransferTransactionDetailsQueryHandler _handler;
         private GetTransferTransactionDetailsQuery _query;
         private Mock<EmployerFinancialDbContext> _db;
         private List<AccountTransfer> _transfers;
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
 
             _publicHashingService = new Mock<IPublicHashingService>();
 
-            _handler = new GetTransferSenderTransactionDetailsQueryHandler(_db.Object, _publicHashingService.Object);
+            _handler = new GetTransferTransactionDetailsQueryHandler(_db.Object, _publicHashingService.Object);
 
             _transfers = new List<AccountTransfer>
                 {

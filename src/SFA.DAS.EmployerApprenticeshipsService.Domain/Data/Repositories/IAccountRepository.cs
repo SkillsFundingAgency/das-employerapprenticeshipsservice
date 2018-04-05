@@ -20,6 +20,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task RemovePayeFromAccount(long accountId, string payeRef);
         Task UpdateAccountHashedIds(long accountId, string hashedId, string publicHashedId);
         Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings);
+        Task<string> GetAccountName(long accountId);
         Task<Dictionary<long, string>> GetAccountNames(IEnumerable<long> accountIds);
 
     }

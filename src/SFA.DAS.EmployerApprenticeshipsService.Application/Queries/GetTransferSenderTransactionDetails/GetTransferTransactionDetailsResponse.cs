@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
 {
-    public class GetTransferSenderTransactionDetailsResponse
+    public class GetTransferTransactionDetailsResponse
     {
         public string SenderAccountName { get; set; }
         public string SenderPublicHashedId { get; set; }

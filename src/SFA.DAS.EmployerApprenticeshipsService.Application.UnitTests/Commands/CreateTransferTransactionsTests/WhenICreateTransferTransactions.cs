@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
 
             _command = new CreateTransferTransactionsCommand
             {
-                AccountId = 123,
+                ReceiverAccountId = 123,
                 PeriodEnd = "1718-R01"
             };
 
@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
             _validator.Setup(x => x.Validate(It.IsAny<CreateTransferTransactionsCommand>()))
                 .Returns(new ValidationResult());
 
-            _transferRepository.Setup(x => x.GetAccountTransfersByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))
+            _transferRepository.Setup(x => x.GetReceiverAccountTransfersByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))
                 .ReturnsAsync(_accountTransfers);
 
             _accountRepository.Setup(x => x.GetAccountNames(It.IsAny<IEnumerable<long>>()))
@@ -137,7 +137,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
                 {
                     ValidationDictionary = new Dictionary<string, string>
                     {
-                        {nameof(CreateTransferTransactionsCommand.AccountId), "Error"}
+                        {nameof(CreateTransferTransactionsCommand.ReceiverAccountId), "Error"}
                     }
                 });
 
@@ -223,7 +223,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateTransferTransactionsT
                                       ApprenticeshipId = 400, Amount = 800 }
             };
 
-            _transferRepository.Setup(x => x.GetAccountTransfersByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))
+            _transferRepository.Setup(x => x.GetReceiverAccountTransfersByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))
                 .ReturnsAsync(_accountTransfers);
 
             //Act
