@@ -2,7 +2,6 @@
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetAccountTransferTransactionDetails;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
-using SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.Authorization;
@@ -15,6 +14,7 @@ using SFA.DAS.HashingService;
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {

@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetAccountTransferTransactionDetails;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
-using SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails;
+using SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Web.Authentication;
@@ -12,7 +12,6 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Transactions;
 using SFA.DAS.HashingService;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -21,7 +20,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
 {
     class WhenIViewTranferTransactions
     {
-        private static string _externalUserId = Guid.NewGuid().ToString();
+        private const int SenderHashedAccountId = 1;
+        private const int ReceiverHashedAccountId = 2;
+        private const string PeriodEnd = "1718-R01";
 
         private Web.Controllers.EmployerAccountTransactionsController _controller;
         private Mock<EmployerAccountTransactionsOrchestrator> _orchestrator;
@@ -32,6 +33,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         private Mock<IHashingService> _hashingService;
         private Mock<IMapper> _mapper;
         private Mock<IMediator> _mediator;
+        private GetTransferTransactionDetailsQuery _query;
 
         [SetUp]
         public void Arrange()
@@ -50,32 +52,30 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                 _featureToggle.Object, _hashingService.Object, _mediator.Object,
                 _orchestrator.Object, _userViewTestingService.Object, _flashMessage.Object,
                 Mock.Of<ITransactionFormatterFactory>(), _mapper.Object);
+
+            _query = new GetTransferTransactionDetailsQuery
+            {
+                AccountId = SenderHashedAccountId,
+                TargetAccountId = ReceiverHashedAccountId,
+                PeriodEnd = PeriodEnd
+            };
         }
 
         [Test]
         public async Task ThenIShouldGetTransferDetails()
         {
             //Assign
-            const int senderHashedAccountId = 1;
-            const int receiverHashedAccountId = 2;
-            const string periodEnd = "1718-R01";
-
             var expectedViewModel = new TransferSenderTransactionDetailsViewModel
             {
                 ReceiverAccountName = "Test Group",
                 ReceiverAccountPublicHashedId = "GFH657",
+                IsCurrentAccountSender = true,
                 TransferDetails = new List<AccountTransferDetails>()
-            };
-
-            var query = new GetTransferTransactionDetailsQuery
-            {
-                AccountId = senderHashedAccountId,
-                TargetAccountId = receiverHashedAccountId,
-                PeriodEnd = periodEnd
             };
 
             var response = new GetTransferTransactionDetailsResponse
             {
+                IsCurrentAccountSender = true,
                 ReceiverAccountName = "Test Group",
                 ReceiverPublicHashedId = "GFH657",
                 TransferDetails = new List<AccountTransferDetails>()
@@ -88,7 +88,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                 .ReturnsAsync(response);
 
             //Act
-            var result = await _controller.TransferDetail(query);
+            var result = await _controller.TransferDetail(_query);
 
             //Assert
             var view = result as ViewResult;
