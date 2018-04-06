@@ -1,7 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Hashing;
-using SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails;
+using SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Infrastructure.Data;
 using System;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetailsTests
 {
-    class WhenIGetsTransferTransactionDetails
+    class WhenAReceiverGetsTransferTransactionDetails
     {
         private const long SenderAccountId = 1;
         private const string SenderAccountName = "Test Sender";
@@ -29,6 +29,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
 
         private GetTransferTransactionDetailsQueryHandler _handler;
         private GetTransferTransactionDetailsQuery _query;
+        private GetTransferTransactionDetailsResponse _response;
         private Mock<EmployerFinancialDbContext> _db;
         private List<AccountTransfer> _transfers;
         private Mock<IPublicHashingService> _publicHashingService;
@@ -39,6 +40,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             _db = new Mock<EmployerFinancialDbContext>();
 
             _publicHashingService = new Mock<IPublicHashingService>();
+
+            _query = new GetTransferTransactionDetailsQuery
+            {
+                AccountId = ReceiverAccountId,
+                TargetAccountId = SenderAccountId,
+                PeriodEnd = PeriodEnd,
+                UserId = UserId
+            };
+
+            _response = new GetTransferTransactionDetailsResponse();
 
             _handler = new GetTransferTransactionDetailsQueryHandler(_db.Object, _publicHashingService.Object);
 
@@ -94,19 +105,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
                 .Returns(ReceiverPublicHashedId);
         }
 
-        [TestCase(SenderAccountId, ReceiverAccountId)]
-        [TestCase(ReceiverAccountId, SenderAccountId)]
-        public async Task ThenIShouldReturnCorrectSenderDetails(long accountId, long targetAccountId)
+        [Test]
+        public async Task ThenIShouldReturnCorrectSenderDetails()
         {
-            //Assign
-            _query = _query = new GetTransferTransactionDetailsQuery
-            {
-                AccountId = accountId,
-                TargetAccountId = targetAccountId,
-                PeriodEnd = PeriodEnd,
-                UserId = UserId
-            };
-
             //Act
             var result = await _handler.Handle(_query);
 
@@ -115,19 +116,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             Assert.AreEqual(SenderPublicHashedId, result.SenderPublicHashedId);
         }
 
-        [TestCase(SenderAccountId, ReceiverAccountId)]
-        [TestCase(ReceiverAccountId, SenderAccountId)]
-        public async Task ThenIShouldReturnCorrectReceiverDetails(long accountId, long targetAccountId)
+        [Test]
+        public async Task ThenIShouldReturnCorrectReceiverDetails()
         {
-            //Assign
-            _query = _query = new GetTransferTransactionDetailsQuery
-            {
-                AccountId = accountId,
-                TargetAccountId = targetAccountId,
-                PeriodEnd = PeriodEnd,
-                UserId = UserId
-            };
-
             //Act
             var result = await _handler.Handle(_query);
 
@@ -136,19 +127,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             Assert.AreEqual(ReceiverPublicHashedId, result.ReceiverPublicHashedId);
         }
 
-        [TestCase(SenderAccountId, ReceiverAccountId)]
-        [TestCase(ReceiverAccountId, SenderAccountId)]
-        public async Task ThenIShouldReturnCorrectCourseDetails(long accountId, long targetAccountId)
+        [Test]
+        public async Task ThenIShouldReturnCorrectCourseDetails()
         {
-            //Assign
-            _query = _query = new GetTransferTransactionDetailsQuery
-            {
-                AccountId = accountId,
-                TargetAccountId = targetAccountId,
-                PeriodEnd = PeriodEnd,
-                UserId = UserId
-            };
-
             //Act
             var result = await _handler.Handle(_query);
 
@@ -158,19 +139,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             Assert.IsTrue(result.TransferDetails.Any(t => t.CourseName.Equals(SecondCourseName)));
         }
 
-        [TestCase(SenderAccountId, ReceiverAccountId)]
-        [TestCase(ReceiverAccountId, SenderAccountId)]
-        public async Task ThenIShouldReturnCorrectCourseSubTotals(long accountId, long targetAccountId)
+        [Test]
+        public async Task ThenIShouldReturnCorrectCourseSubTotals()
         {
-            //Assign
-            _query = _query = new GetTransferTransactionDetailsQuery
-            {
-                AccountId = accountId,
-                TargetAccountId = targetAccountId,
-                PeriodEnd = PeriodEnd,
-                UserId = UserId
-            };
-
             //Act
             var result = await _handler.Handle(_query);
 
@@ -190,19 +161,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             Assert.AreEqual(expectedSecondCourseTotal, secondCourseTotal);
         }
 
-        [TestCase(SenderAccountId, ReceiverAccountId)]
-        [TestCase(ReceiverAccountId, SenderAccountId)]
-        public async Task ThenIShouldReturnCorrectCourseApprenticeCount(long accountId, long targetAccountId)
+        [Test]
+        public async Task ThenIShouldReturnCorrectCourseApprenticeCount()
         {
-            //Assign
-            _query = _query = new GetTransferTransactionDetailsQuery
-            {
-                AccountId = accountId,
-                TargetAccountId = targetAccountId,
-                PeriodEnd = PeriodEnd,
-                UserId = UserId
-            };
-
             //Act
             var result = await _handler.Handle(_query);
 
@@ -224,19 +185,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             Assert.AreEqual(expectedSecondCourseApprenticeCount, secondCourseApprenticeCount);
         }
 
-        [TestCase(SenderAccountId, ReceiverAccountId)]
-        [TestCase(ReceiverAccountId, SenderAccountId)]
-        public async Task ThenIShouldReturnTransferPaymentTotal(long accountId, long targetAccountId)
+        [Test]
+        public async Task ThenIShouldReturnTransferPaymentTotal()
         {
-            //Assign
-            _query = _query = new GetTransferTransactionDetailsQuery
-            {
-                AccountId = accountId,
-                TargetAccountId = targetAccountId,
-                PeriodEnd = PeriodEnd,
-                UserId = UserId
-            };
-
             //Act
             var result = await _handler.Handle(_query);
 
@@ -246,19 +197,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             Assert.AreEqual(expectedPaymentTotal, result.TransferPaymentTotal);
         }
 
-        [TestCase(SenderAccountId, ReceiverAccountId)]
-        [TestCase(ReceiverAccountId, SenderAccountId)]
-        public async Task ThenIShouldReturnTransferDate(long accountId, long targetAccountId)
+        [Test]
+        public async Task ThenIShouldReturnTransferDate()
         {
-            //Assign
-            _query = _query = new GetTransferTransactionDetailsQuery
-            {
-                AccountId = accountId,
-                TargetAccountId = targetAccountId,
-                PeriodEnd = PeriodEnd,
-                UserId = UserId
-            };
-
             //Act
             var result = await _handler.Handle(_query);
 
@@ -266,6 +207,35 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             var expectedTransferDate = _transfers.First().TransferDate;
 
             Assert.AreEqual(expectedTransferDate, result.DateCreated);
+        }
+
+        [Test]
+        public async Task ThenIShouldBeToldIfImTheReceiver()
+        {
+            //Act
+            var result = await _handler.Handle(_query);
+
+            //Assert
+            Assert.IsFalse(result.IsCurrentAccountSender);
+        }
+
+        [Test]
+        public async Task ThenIShouldBeToldIfImTheSender()
+        {
+            //Arrange
+            var query = new GetTransferTransactionDetailsQuery
+            {
+                AccountId = SenderAccountId,
+                TargetAccountId = ReceiverAccountId,
+                PeriodEnd = PeriodEnd,
+                UserId = UserId
+            };
+
+            //Act
+            var result = await _handler.Handle(query);
+
+            //Assert
+            Assert.IsTrue(result.IsCurrentAccountSender);
         }
     }
 }

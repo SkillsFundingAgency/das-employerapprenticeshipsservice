@@ -25,3 +25,13 @@ And I have completed getting my payments for that account
 And I have finished getting transfers for that account
 When I process tranfers transactions for that account
 Then the transfer senders transactions should be saved
+
+Scenario: Processing transfer receivers transactions
+Given the transfer receiver has an account
+And the transfer sender has an account
+And I get payments for that account
+And transfers have been associated with those payments
+And I have completed getting my payments for that account
+And I have finished getting transfers for that account
+When I process tranfers transactions for that account
+Then the transfer receiver transactions should be saved

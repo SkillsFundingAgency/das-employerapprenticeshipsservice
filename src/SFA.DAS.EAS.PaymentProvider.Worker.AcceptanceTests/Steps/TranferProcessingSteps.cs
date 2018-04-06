@@ -332,6 +332,48 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
             Assert.AreEqual(expectedTransactionTotal, transactionLine.Amount);
         }
 
+        [Then(@"the transfer receiver transactions should be saved")]
+        public void ThenTheTransferReceiverTransactionsShouldBeSaved()
+        {
+            var receiverAccountId = (long)ScenarioContext.Current["AccountId"];
+
+            var transactionRepository = _accountCreationSteps.Container.GetInstance<ITransactionRepository>();
+            var accountsRepository = _accountCreationSteps.Container.GetInstance<IAccountRepository>();
+
+            var receiverAccountName = accountsRepository.GetAccountName(receiverAccountId).Result;
+
+            var fromDate = DateTime.Now.AddMinutes(-5);
+            var toDate = DateTime.Now.AddMinutes(5);
+
+            var retries = 0;
+            List<TransactionLine> transactions;
+
+            do
+            {
+                transactions = transactionRepository.GetAccountTransactionsByDateRange(receiverAccountId, fromDate, toDate).Result;
+
+                if (!transactions.Any())
+                {
+                    retries++;
+                    Task.Delay(1000);
+                }
+
+            } while (!transactions.Any() && retries < 10);
+
+
+            var transferTransactions = transactions.OfType<TransferTransactionLine>().ToArray();
+
+            Assert.AreEqual(1, transferTransactions.Length);
+
+            var transactionLine = transferTransactions.Single();
+            var payment = _payments.Single();
+
+            var expectedTransactionTotal = payment.Amount;
+
+            Assert.AreEqual(receiverAccountName, transactionLine.SenderAccountName);
+            Assert.AreEqual(expectedTransactionTotal, transactionLine.Amount);
+        }
+
         private void WaitForPaymentsProcessingToComplete()
         {
             _logger.Debug("Waiting for payments to complete");

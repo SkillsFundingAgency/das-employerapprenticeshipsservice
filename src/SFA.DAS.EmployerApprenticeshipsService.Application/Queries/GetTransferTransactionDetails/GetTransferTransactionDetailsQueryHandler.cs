@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
+namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
 {
     public class GetTransferTransactionDetailsQueryHandler : IAsyncRequestHandler<GetTransferTransactionDetailsQuery, GetTransferTransactionDetailsResponse>
     {
@@ -51,12 +51,15 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
             var transferDate = transfers.FirstOrDefault()?.TransferDate ?? default(DateTime);
             var transfersPaymentTotal = transferDetails.Sum(t => t.PaymentTotal);
 
+            var currentAccountPublicHashedId = _publicHashingService.HashValue(query.AccountId.GetValueOrDefault());
+
             return new GetTransferTransactionDetailsResponse
             {
                 SenderAccountName = senderAccountName,
                 SenderPublicHashedId = senderPublicHashedAccountId,
                 ReceiverAccountName = receiverAccountName,
                 ReceiverPublicHashedId = receiverPublicHashedAccountId,
+                IsCurrentAccountSender = currentAccountPublicHashedId.Equals(senderPublicHashedAccountId),
                 TransferDetails = transferDetails,
                 TransferPaymentTotal = transfersPaymentTotal,
                 DateCreated = transferDate

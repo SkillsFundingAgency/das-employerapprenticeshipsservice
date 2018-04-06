@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
+namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
 {
     public class GetTransferTransactionDetailsResponse
     {
@@ -10,6 +10,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
         public string SenderPublicHashedId { get; set; }
         public string ReceiverAccountName { get; set; }
         public string ReceiverPublicHashedId { get; set; }
+        public bool IsCurrentAccountSender { get; set; }
         public IEnumerable<AccountTransferDetails> TransferDetails { get; set; }
         public decimal TransferPaymentTotal { get; set; }
         public DateTime DateCreated { get; set; }

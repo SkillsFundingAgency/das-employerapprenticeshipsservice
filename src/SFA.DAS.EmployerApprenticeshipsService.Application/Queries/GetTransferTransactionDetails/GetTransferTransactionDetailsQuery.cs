@@ -1,9 +1,9 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Application.Messages;
-using System.ComponentModel.DataAnnotations;
 
-namespace SFA.DAS.EAS.Application.Queries.GetTransferSenderTransactionDetails
+namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
 {
     public class GetTransferTransactionDetailsQuery : MembershipMessage, IAsyncRequest<GetTransferTransactionDetailsResponse>
     {
