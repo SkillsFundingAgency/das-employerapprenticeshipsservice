@@ -65,7 +65,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.ActivitiesControllerTests
             Assert.AreEqual(ControllerConstants.ActivitiesUnavailableMessage, result?.Content);
         }
 
-
         [Test]
         public void ThenExceptionShouldBeLoggedWhenExceptionIsThrown()
         {

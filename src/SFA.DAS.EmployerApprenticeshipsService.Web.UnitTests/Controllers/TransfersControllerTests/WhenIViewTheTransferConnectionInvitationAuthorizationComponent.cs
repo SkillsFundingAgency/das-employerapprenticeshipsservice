@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
             _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
 
-            _controller = new TransfersController(_mapper, _mediator.Object);
+            _controller = new TransfersController(null, _mapper, _mediator.Object);
         }
 
         [Test]

@@ -85,10 +85,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventHandlers\CohortApprovalByTransferSenderRequestedEventHandlerTests\WhenACohortApprovalByTransferSenderRequestedEventIsHandled.cs" />
-    <Compile Include="EventHandlers\CohortApprovedByTransferSenderEventHandlerTests\WhenACohortApprovedByTransferSenderEventIsHandled.cs" />
-    <Compile Include="EventHandlers\CohortRejectedByTransferSenderEventHandlerTests\WhenACohortRejectedByTransferSenderEventIsHandled.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Foo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

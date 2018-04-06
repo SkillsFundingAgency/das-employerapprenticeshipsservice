@@ -1,9 +1,7 @@
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Commands.DeleteSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 
@@ -12,8 +10,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
     [TestFixture]
     public class WhenISubmitTheTransferConnectionInvitationDeletedPage
     {
-        private const long TransferConnectionId = 123;
-
         private TransferConnectionInvitationsController _controller;
         private DeletedTransferConnectionInvitationViewModel _viewModel;
         private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
@@ -25,9 +21,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
 
             _controller = new TransferConnectionInvitationsController(null, _mediator.Object);
 
-            _viewModel = new DeletedTransferConnectionInvitationViewModel
-            {
-            };
+            _viewModel = new DeletedTransferConnectionInvitationViewModel();
         }
 
         [Test]
