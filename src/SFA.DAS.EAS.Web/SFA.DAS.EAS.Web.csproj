@@ -643,7 +643,7 @@
     <Content Include="Views\Shared\_Agreement_v2.cshtml" />
     <Content Include="Views\Shared\_Agreement_v2_changes.cshtml" />
     <Content Include="Views\Transfers\TransferConnectionInvitationAuthorization.cshtml" />
-    <Content Include="Views\EmployerAccountTransactions\TransferDetailsForSender.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\TransferDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />
