@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.ViewModels.Transactions.TransferSenderTransactionDetailsViewModel
 
 @{
@@ -22,30 +23,12 @@
             <h1 class="heading-xlarge">Transfer Received</h1>
         }
 
-        <table>
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="responsive-tr">
-                    <td>Date</td>
-                    <td>@Model.DateCreated.ToString("dd MMMM yyyy")</td>
-                </tr>
-                <tr class="responsive-tr">
-                    <td>Account name</td>
-                    
-                    
-                    <td>@(Model.IsCurrentAccountSender ? Model.ReceiverAccountName : Model.SenderAccountName)</td>
-                </tr>
-                <tr class="responsive-tr">
-                    <td>Account ID</td>
-                    <td>@(Model.IsCurrentAccountSender ? Model.ReceiverAccountPublicHashedId : Model.SenderAccountPublicHashedId)</td>
-                </tr>
-            </tbody>
-        </table>
+        <p>Date <b>@Model.DateCreated.ToGdsFormatFull()</b></p>
+        <p>Account Name <b>@(Model.IsCurrentAccountSender ? Model.ReceiverAccountName : Model.SenderAccountName)</b></p>
+        <p>Account ID <b>@(Model.IsCurrentAccountSender ? Model.ReceiverAccountPublicHashedId : Model.SenderAccountPublicHashedId)</b></p>
+    </div>
+
+    <div class="column-full">
 
         <table>
             <thead>
@@ -100,7 +83,7 @@
         <ol role="navigation">
             <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
             <li><a href="@Url.Action("Index", "EmployerAccountTransactions")">Your transactions</a></li>
-            <li>Debit details</li>
+            <li>Levy details</li>
         </ol>
     </div>
 }
