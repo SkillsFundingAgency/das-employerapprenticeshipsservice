@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             _query = new GetTransferTransactionDetailsQuery
             {
                 AccountId = ReceiverAccountId,
-                TargetAccountId = SenderAccountId,
+                TargetAccountPublicHashedId = SenderPublicHashedId,
                 PeriodEnd = PeriodEnd,
                 UserId = UserId
             };
@@ -113,7 +113,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
 
             //Assert
             Assert.AreEqual(SenderAccountName, result.SenderAccountName);
-            Assert.AreEqual(SenderPublicHashedId, result.SenderPublicHashedId);
+            Assert.AreEqual(SenderPublicHashedId, result.SenderAccountPublicHashedId);
         }
 
         [Test]
@@ -124,7 +124,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
 
             //Assert
             Assert.AreEqual(ReceiverAccountName, result.ReceiverAccountName);
-            Assert.AreEqual(ReceiverPublicHashedId, result.ReceiverPublicHashedId);
+            Assert.AreEqual(ReceiverPublicHashedId, result.ReceiverAccountPublicHashedId);
         }
 
         [Test]
@@ -226,7 +226,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             var query = new GetTransferTransactionDetailsQuery
             {
                 AccountId = SenderAccountId,
-                TargetAccountId = ReceiverAccountId,
+                TargetAccountPublicHashedId = ReceiverPublicHashedId,
                 PeriodEnd = PeriodEnd,
                 UserId = UserId
             };

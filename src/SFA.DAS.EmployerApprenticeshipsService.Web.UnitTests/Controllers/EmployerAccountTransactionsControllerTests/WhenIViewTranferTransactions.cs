@@ -20,8 +20,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
 {
     class WhenIViewTranferTransactions
     {
-        private const int SenderHashedAccountId = 1;
-        private const int ReceiverHashedAccountId = 2;
+        private const long SenderAccountId = 1;
+        private const string ReceiverPublicHashedAccountId = "DEF456";
         private const string PeriodEnd = "1718-R01";
 
         private Web.Controllers.EmployerAccountTransactionsController _controller;
@@ -55,8 +55,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
 
             _query = new GetTransferTransactionDetailsQuery
             {
-                AccountId = SenderHashedAccountId,
-                TargetAccountId = ReceiverHashedAccountId,
+                AccountId = SenderAccountId,
+                TargetAccountPublicHashedId = ReceiverPublicHashedAccountId,
                 PeriodEnd = PeriodEnd
             };
         }
@@ -77,7 +77,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             {
                 IsCurrentAccountSender = true,
                 ReceiverAccountName = "Test Group",
-                ReceiverPublicHashedId = "GFH657",
+                ReceiverAccountPublicHashedId = "GFH657",
                 TransferDetails = new List<AccountTransferDetails>()
             };
 

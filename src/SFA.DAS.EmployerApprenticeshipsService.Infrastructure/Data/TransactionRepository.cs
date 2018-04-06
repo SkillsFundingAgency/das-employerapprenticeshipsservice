@@ -172,10 +172,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task CreateTransferTransactions(IEnumerable<TransferTransactionLine> transactions)
         {
-            await WithConnection(async c =>
+            await WithTransaction(async (connection, dbTransaction) =>
             {
-                //var trans = c.BeginTransaction();
-
                 try
                 {
                     foreach (var transaction in transactions)
@@ -192,16 +190,19 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                         parameters.Add("@transactionType", TransactionItemType.Transfer, DbType.Int16);
                         parameters.Add("@transactionDate", transaction.TransactionDate, DbType.DateTime);
 
-                        var result = await c.ExecuteAsync(
+                        var result = await connection.ExecuteAsync(
                             sql: "[employer_financial].[CreateAccountTransferTransactions]",
                             param: parameters,
-                            commandType: CommandType.StoredProcedure);//, transaction: trans);
+                            transaction: dbTransaction,
+                            commandType: CommandType.StoredProcedure);
                     }
 
-                    // trans.Commit();
+                    dbTransaction.Commit();
                 }
                 catch (Exception ex)
                 {
+                    dbTransaction.Rollback();
+
                     _logger.Error(ex, "Failed to save transfer transactions to database");
                     throw;
                 }

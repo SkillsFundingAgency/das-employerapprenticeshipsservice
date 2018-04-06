@@ -24,9 +24,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
 
         public async Task<GetTransferTransactionDetailsResponse> Handle(GetTransferTransactionDetailsQuery query)
         {
+            var targetAccountId = _publicHashingService.DecodeValue(query.TargetAccountPublicHashedId);
+
             var result = await _dbContext.GetTransfersByTargetAccountId(
                                     query.AccountId.GetValueOrDefault(),
-                                    query.TargetAccountId,
+                                    targetAccountId,
                                     query.PeriodEnd);
 
             var transfers = result as AccountTransfer[] ?? result.ToArray();
@@ -56,9 +58,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
             return new GetTransferTransactionDetailsResponse
             {
                 SenderAccountName = senderAccountName,
-                SenderPublicHashedId = senderPublicHashedAccountId,
+                SenderAccountPublicHashedId = senderPublicHashedAccountId,
                 ReceiverAccountName = receiverAccountName,
-                ReceiverPublicHashedId = receiverPublicHashedAccountId,
+                ReceiverAccountPublicHashedId = receiverPublicHashedAccountId,
                 IsCurrentAccountSender = currentAccountPublicHashedId.Equals(senderPublicHashedAccountId),
                 TransferDetails = transferDetails,
                 TransferPaymentTotal = transfersPaymentTotal,

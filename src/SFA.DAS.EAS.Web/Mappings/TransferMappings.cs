@@ -55,6 +55,8 @@ namespace SFA.DAS.EAS.Web.Mappings
             CreateMap<SendTransferConnectionInvitationResponse, SendTransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore())
                 .ForMember(m => m.SendTransferConnectionInvitationCommand, o => o.MapFrom(r => r));
+            CreateMap<GetTransferTransactionDetailsResponse, TransferSenderTransactionDetailsViewModel>();
+
         }
     }
 }

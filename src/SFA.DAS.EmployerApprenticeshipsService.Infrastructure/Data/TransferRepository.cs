@@ -26,11 +26,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task CreateAccountTransfers(IEnumerable<AccountTransfer> transfers)
         {
-            await WithConnection(async connection =>
+            await WithTransaction(async (connection, transaction) =>
             {
                 var accountTransfers = transfers as AccountTransfer[] ?? transfers.ToArray();
-
-                //var transaction = connection.BeginTransaction();
 
                 try
                 {
@@ -51,20 +49,19 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                         await connection.ExecuteAsync(
                             sql: "[employer_financial].[CreateAccountTransfer]",
                             param: parameters,
-                            // transaction: transaction,
+                            transaction: transaction,
                             commandType: CommandType.StoredProcedure);
                     }
 
-                    // transaction.Commit();
+                    transaction.Commit();
 
                     return true;
                 }
                 catch (Exception ex)
                 {
-                    //     transaction.Rollback();
+                    transaction.Rollback();
 
                     var transfer = accountTransfers.FirstOrDefault();
-
                     _logger.Error(ex, $"Failed to save transfers for account id {transfer?.SenderAccountId}");
 
                     throw;
