@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 GenerateTransactionDescription(transaction);
             }
 
-            PopulateTransferReceiverHashedIds(transactions);
+            PopulateTransferPublicHashedIds(transactions);
 
             return GetResponse(message.HashedAccountId, accountId, transactions, hasPreviousTransactions, toDate.Year, toDate.Month);
         }
@@ -150,7 +150,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             };
         }
 
-        private void PopulateTransferReceiverHashedIds(IEnumerable<TransactionLine> transactions)
+        private void PopulateTransferPublicHashedIds(IEnumerable<TransactionLine> transactions)
         {
             var transferTransactions = transactions.OfType<TransferTransactionLine>();
 
@@ -158,6 +158,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             {
                 transaction.ReceiverAccountPublicHashedId =
                     _publicHashingService.HashValue(transaction.ReceiverAccountId);
+
+                transaction.SenderAccountPublicHashedId =
+                    _publicHashingService.HashValue(transaction.SenderAccountId);
             }
         }
     }

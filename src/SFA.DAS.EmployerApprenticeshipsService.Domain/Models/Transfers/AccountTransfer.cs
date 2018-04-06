@@ -3,7 +3,7 @@
 namespace SFA.DAS.EAS.Domain.Models.Transfers
 {
     //TODO: Remove this once the enum is present in the payment events api types nuget package
-    public enum AccountTransferType
+    public enum AccountTransferType : short
     {
         None = 0
     }

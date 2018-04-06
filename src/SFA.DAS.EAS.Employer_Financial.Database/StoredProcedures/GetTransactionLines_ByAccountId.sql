@@ -23,6 +23,7 @@ left join
       ,tl.DateCreated
 	  ,tl.SfaCoInvestmentAmount
 	  ,tl.EmployerCoInvestmentAmount
+	  ,tl.PeriodEnd
 	  ,ld.PayrollYear
 	  ,ld.PayrollMonth
 	  ,tl.TransferSenderAccountId as SenderAccountId

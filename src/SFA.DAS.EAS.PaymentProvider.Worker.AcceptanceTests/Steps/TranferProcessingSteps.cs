@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
     {
         private const long ApprenticeshipId = 3;
         private const decimal TransferPaymentAmount = 321.5823M;
-        private const string CourseName = "Trainging";
+        private const string CourseName = "Training";
 
         private readonly AccountCreationSteps _accountCreationSteps;
         private PaymentsProviderWorkerRoleTestWrapper _worker;
@@ -62,52 +62,20 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
         [BeforeScenario]
         public void SetUp()
         {
+            _logger.Debug("Getting EAS & LAP Configs");
+
             var lapConfig = ConfigurationHelper.GetConfiguration<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider");
-
-            new CleanTransactionsDatabase(lapConfig, _logger).Execute().Wait();
-
-            _logger.Debug("Getting EAS Config");
             var easConfig = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService");
+
+            CleanDatabases(easConfig, lapConfig);
 
             _messageBusConnectionString = easConfig.MessageServiceBusConnectionString;
 
-            _logger.Debug("Clearing Payments Completed Queue");
+            CleanMessageQueues();
 
-            ClearSubscriptionMessageQueue(
-                _messageBusConnectionString,
-                MessageGroupHelper.GetMessageGroupName<AccountPaymentsProcessingCompletedMessage>(),
-                "MA_TransferDataProcessor_TEST");
+            CreateStubbedExternalServices(easConfig);
 
-            _logger.Debug("Clearing Transfers Completed Queue");
-
-            ClearSubscriptionMessageQueue(
-                _messageBusConnectionString,
-                MessageGroupHelper.GetMessageGroupName<AccountTransfersProcessingCompletedMessage>(),
-                "MA_TransferTransactionProcessor_TEST");
-
-            ClearSubscriptionMessageQueue(
-                _messageBusConnectionString,
-                MessageGroupHelper.GetMessageGroupName<PaymentProcessorQueueMessage>(),
-                "MA_PaymentDataProcessor");
-
-            _logger.Debug("Getting Payments API config");
-
-            var paymentApiClientConfig = ConfigurationHelper.GetConfiguration<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI");
-
-            _logger.Debug("Creating payments API service");
-
-            _paymentServiceApiHandler = new PaymentServiceApiMessageHandler(paymentApiClientConfig.ApiBaseUrl);
-            _paymentServiceApi = new PaymentServiceApi(_paymentServiceApiHandler);
-
-            _apprenticeshipInfoServiceApiHandler = new ApprenticeshipInfoServiceApiMessageHandler(easConfig.ApprenticeshipInfoService.BaseUrl);
-            _apprenticeshipInfoServiceApi = new ApprenticeshipInfoServiceApi(_apprenticeshipInfoServiceApiHandler);
-
-            _logger.Debug("Starting worker");
-
-            _worker = new PaymentsProviderWorkerRoleTestWrapper();
-            _worker.OnStart();
-
-            _workerTask = Task.Run(() => _worker.Run());
+            StartWorker();
 
             _periodEnd = new PeriodEnd
             {
@@ -287,11 +255,9 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
             Assert.AreEqual(senderAccount.Name, transfer.SenderAccountName);
             Assert.AreEqual(_periodEnd.Id, transfer.PeriodEnd);
             Assert.AreEqual(DateTime.Now.ToShortDateString(), transfer.TransferDate.ToShortDateString());
-            //Assert.AreEqual(TransferType.None, transfer.Type);
             Assert.AreEqual(TransferPaymentAmount, transfer.Amount);
             Assert.AreEqual(CourseName, transfer.CourseName);
         }
-
 
         [Then(@"the transfer senders transactions should be saved")]
         public void ThenTheTransferSenderTransactionsShouldBeSaved()
@@ -427,6 +393,62 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
                 }
             }
             while (true);
+        }
+
+        private void CleanMessageQueues()
+        {
+            _logger.Debug("Clearing Payments Completed Queue");
+
+            ClearSubscriptionMessageQueue(
+                _messageBusConnectionString,
+                MessageGroupHelper.GetMessageGroupName<AccountPaymentsProcessingCompletedMessage>(),
+                "MA_TransferDataProcessor_TEST");
+
+            _logger.Debug("Clearing Transfers Completed Queue");
+
+            ClearSubscriptionMessageQueue(
+                _messageBusConnectionString,
+                MessageGroupHelper.GetMessageGroupName<AccountTransfersProcessingCompletedMessage>(),
+                "MA_TransferTransactionProcessor_TEST");
+
+            ClearSubscriptionMessageQueue(
+                _messageBusConnectionString,
+                MessageGroupHelper.GetMessageGroupName<PaymentProcessorQueueMessage>(),
+                "MA_PaymentDataProcessor");
+        }
+
+        private void CleanDatabases(EmployerApprenticeshipsServiceConfiguration easConfig,
+            LevyDeclarationProviderConfiguration lapConfig)
+        {
+            new CleanDatabase(easConfig, _logger).Execute().Wait();
+
+            new CleanTransactionsDatabase(lapConfig, _logger).Execute().Wait();
+        }
+
+        private void StartWorker()
+        {
+            _logger.Debug("Starting worker");
+
+            _worker = new PaymentsProviderWorkerRoleTestWrapper();
+            _worker.OnStart();
+
+            _workerTask = Task.Run(() => _worker.Run());
+        }
+
+        private void CreateStubbedExternalServices(EmployerApprenticeshipsServiceConfiguration easConfig)
+        {
+            _logger.Debug("Getting Payments API config");
+
+            var paymentApiClientConfig = ConfigurationHelper.GetConfiguration<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI");
+
+            _logger.Debug("Creating payments API service");
+
+            _paymentServiceApiHandler = new PaymentServiceApiMessageHandler(paymentApiClientConfig.ApiBaseUrl);
+            _paymentServiceApi = new PaymentServiceApi(_paymentServiceApiHandler);
+
+            _apprenticeshipInfoServiceApiHandler =
+                new ApprenticeshipInfoServiceApiMessageHandler(easConfig.ApprenticeshipInfoService.BaseUrl);
+            _apprenticeshipInfoServiceApi = new ApprenticeshipInfoServiceApi(_apprenticeshipInfoServiceApiHandler);
         }
     }
 }

@@ -13,7 +13,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        @if (Model.IsTransferSenderAccount)
+        @if (Model.IsCurrentAccountSender)
         {
             <h1 class="heading-xlarge">Levy transfer</h1>
         }
@@ -36,11 +36,13 @@
                 </tr>
                 <tr class="responsive-tr">
                     <td>Account name</td>
-                    <td>@Model.IsTransferSenderAccount ? Model.SenderAccountName : Model.ReceiverAccountName</td>
+                    
+                    
+                    <td>@(Model.IsCurrentAccountSender ? Model.ReceiverAccountName : Model.SenderAccountName)</td>
                 </tr>
                 <tr class="responsive-tr">
                     <td>Account ID</td>
-                    <td>@Model.IsTransferSenderAccount ? Model.SenderAccountPublicHashedId : Model.ReceiverAccountPublicHashedId</td>
+                    <td>@(Model.IsCurrentAccountSender ? Model.ReceiverAccountPublicHashedId : Model.SenderAccountPublicHashedId)</td>
                 </tr>
             </tbody>
         </table>
@@ -63,7 +65,7 @@
                     <td>
                         @transferDetail.ApprenticeCount
                     </td>
-                    @if (Model.IsTransferSenderAccount)
+                    @if (Model.IsCurrentAccountSender)
                     {
                         <td class="numeric">
                             -@transferDetail.PaymentTotal.ToString("C2", culture)
@@ -80,7 +82,7 @@
 
                 <tr class="total">
                     <td colspan="2"></td>
-                    @if (Model.IsTransferSenderAccount)
+                    @if (Model.IsCurrentAccountSender)
                     {
                         <td class="numeric">-@Model.TransferPaymentTotal.ToString("C2", culture)</td>
                     }

@@ -147,18 +147,17 @@
                                 {
                                     var transferTransaction = aggregationLine as TransferTransactionLine;
 
-                                    var targetAccountPublicHashedId =
-                                        Model.Data.PublicHashedAccountId.Equals(transferTransaction?.SenderAccountPublicHashedId, 
-                                            StringComparison.CurrentCultureIgnoreCase) ?
-                                            transferTransaction?.SenderAccountPublicHashedId :
-                                            transferTransaction?.ReceiverAccountPublicHashedId;
+                                    var targetAccountPublicHashedId = 
+                                        transferTransaction.TransactionAccountIsTransferSender ? 
+                                            transferTransaction?.ReceiverAccountPublicHashedId :
+                                            transferTransaction?.SenderAccountPublicHashedId;
 
                                         <a title="View details for the transfer transaction on @date"
                                            href="@Url.Action("TransferDetail", "EmployerAccountTransactions",
                                                      new
                                                      {
                                                          HashedAccountId = Model.Data.Model.Data.HashedAccountId,
-                                                         TargetAccountId = targetAccountPublicHashedId,
+                                                         TargetAccountPublicHashedId = targetAccountPublicHashedId,
                                                          PeriodEnd = transferTransaction?.PeriodEnd
                                                      })">
                                             Details <span class="vh"> for the transfer transaction on @date</span>
