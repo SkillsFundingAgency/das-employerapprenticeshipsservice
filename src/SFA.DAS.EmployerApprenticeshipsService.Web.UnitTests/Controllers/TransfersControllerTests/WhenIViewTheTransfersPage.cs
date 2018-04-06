@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
         [SetUp]
         public void Arrange()
         {
-            _controller = new TransfersController(null, null);
+            _controller = new TransfersController(null, null, null);
         }
 
         [Test]

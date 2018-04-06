@@ -29,7 +29,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
 
             _response = new GetTransferConnectionInvitationsResponse
             {
-                AccountId = 111111,
                 TransferConnectionInvitations = new List<TransferConnectionInvitationDto>()
             };
 
@@ -38,7 +37,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
             _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
 
-            _controller = new TransfersController(_mapper, _mediator.Object);
+            _controller = new TransfersController(null, _mapper, _mediator.Object);
         }
 
         [Test]
@@ -58,7 +57,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
             Assert.That(result, Is.Not.Null);
             Assert.That(result.ViewName, Is.EqualTo(""));
             Assert.That(model, Is.Not.Null);
-            Assert.That(model.AccountId, Is.EqualTo(_response.AccountId));
             Assert.That(model.TransferConnectionInvitations, Is.EqualTo(_response.TransferConnectionInvitations));
         }
     }
