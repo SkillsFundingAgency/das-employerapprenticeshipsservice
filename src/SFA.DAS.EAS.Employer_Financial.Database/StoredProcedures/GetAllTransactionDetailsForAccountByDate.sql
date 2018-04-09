@@ -57,7 +57,7 @@ AND DateCreated < @ToDate
 
 
 
--- We will use this View to get payments that relate to transaction lines and are funding source 1,2,3
+-- We will use this Common Table Expression to get payments that relate to transaction lines and are funding source 1,2,3
 ;WITH AllFunds (DateCreated, AccountId, Ukprn, Uln, PeriodEnd, PaymentId, FundingSource, Amount, PaymentMetaDataId, TransactionTypeDesc,
 	TrainingProvider,
 	Apprentice,
@@ -65,7 +65,6 @@ AND DateCreated < @ToDate
 	ApprenticeTrainingCourseLevel)
 AS
 (
---	SELECT PaymentId, FundingSource, Amount, p.AccountId, p.Ukprn, p.Uln, p.PeriodEnd, p.PaymentMetaDataId
 	SELECT 
 			transLine.DateCreated,
 			p.AccountId, 
