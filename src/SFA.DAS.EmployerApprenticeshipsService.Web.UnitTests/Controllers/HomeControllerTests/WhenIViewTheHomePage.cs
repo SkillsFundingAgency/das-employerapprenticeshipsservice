@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         private Mock<HomeOrchestrator> _homeOrchestrator;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private string ExpectedUserId = "123ABC";
-        private Mock<IOperationAuthorisationService> _featureToggle;
+        private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
                 }
             };
 
-            _featureToggle = new Mock<IOperationAuthorisationService>();
+            _featureToggle = new Mock<IAuthorizationService>();
             _userTestingService = new Mock<IMultiVariantTestingService>();
 
             _homeController = new HomeController(

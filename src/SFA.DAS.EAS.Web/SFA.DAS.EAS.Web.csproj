@@ -435,8 +435,7 @@
     <Compile Include="Attributes\ImportModelStateFromTempDataAttribute.cs" />
     <Compile Include="Attributes\ValidateMembershipAttribute.cs" />
     <Compile Include="Authentication\ICurrentAccountService.cs" />
-    <Compile Include="Authorization\AuthorizationService.cs" />
-    <Compile Include="Authorization\IAuthorizationService.cs" />
+    <Compile Include="Authorization\CallerContext.cs" />
     <Compile Include="Binders\MessageModelBinder.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Extensions\RouteValueDictionaryExtensions.cs" />
@@ -457,7 +456,6 @@
     <Compile Include="Attributes\HttpNotFoundForNullModelAttribute.cs" />
     <Compile Include="Attributes\ValidateModelStateAttribute.cs" />
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
-    <Compile Include="Authentication\IAuthenticationService.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Controllers\EmployerCommitmentsController.cs" />

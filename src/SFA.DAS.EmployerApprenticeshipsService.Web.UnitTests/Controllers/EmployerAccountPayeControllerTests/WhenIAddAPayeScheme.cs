@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         private Mock<Web.Orchestrators.EmployerAccountPayeOrchestrator> _employerAccountPayeOrchestrator;
         private Mock<IAuthenticationService> _owinWrapper;
         private EmployerAccountPayeController _controller;
-        private Mock<IOperationAuthorisationService> _featureToggle;
+        private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private const string ExpectedAccountId = "AFD123";
@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
             
             _owinWrapper = new Mock<IAuthenticationService>();
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
-            _featureToggle = new Mock<IOperationAuthorisationService>();
+            _featureToggle = new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 

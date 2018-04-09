@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public OrganisationController(
             IAuthenticationService owinWrapper, 
             OrganisationOrchestrator orchestrator,
-            IOperationAuthorisationService operationAuthorisation,
+            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             IMapper mapper,
             ILog logger,

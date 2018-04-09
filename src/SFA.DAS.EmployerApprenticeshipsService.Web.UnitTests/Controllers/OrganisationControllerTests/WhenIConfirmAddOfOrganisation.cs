@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         private OrganisationController _controller;
         private Mock<OrganisationOrchestrator> _orchestrator;
         private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IOperationAuthorisationService> _featureToggle;
+        private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<IMapper> _mapper;
         private Mock<ILog> _logger;
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         {
             _orchestrator = new Mock<OrganisationOrchestrator>();
             _owinWrapper = new Mock<IAuthenticationService>();
-            _featureToggle = new Mock<IOperationAuthorisationService>();
+            _featureToggle = new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _mapper = new Mock<IMapper>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();

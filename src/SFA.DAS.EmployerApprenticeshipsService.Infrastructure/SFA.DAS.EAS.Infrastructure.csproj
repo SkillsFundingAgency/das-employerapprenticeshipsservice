@@ -151,6 +151,9 @@
       <HintPath>..\packages\SFA.DAS.CookieService.1.0.0.27423\lib\net45\SFA.DAS.CookieService.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.HashingService, Version=1.0.0.43004, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.HashingService.1.0.0.43004\lib\net45\SFA.DAS.HashingService.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.63765\lib\net45\SFA.DAS.Messaging.dll</HintPath>
     </Reference>
@@ -226,6 +229,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="Z.EntityFramework.Plus.EF6, Version=1.7.15.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Plus.EF6.1.7.15\lib\net45\Z.EntityFramework.Plus.EF6.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Caching\Constants.cs" />
@@ -270,6 +276,7 @@
     <Compile Include="ExecutionPolicies\PolicyNameAttribute.cs" />
     <Compile Include="ExecutionPolicies\RequiredPolicyAttribute.cs" />
     <Compile Include="Extensions\EmployerFinancialDbContextExtensions.cs" />
+    <Compile Include="Extensions\HashingServiceExtensions.cs" />
     <Compile Include="Mapping\Profiles\PaymentMappings.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringAttribute.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringPolicy.cs" />
@@ -292,6 +299,7 @@
     <Compile Include="Pipeline\Features\Handlers\AgreementFeatureAuthorisationHandler.cs" />
     <Compile Include="Pipeline\Features\Handlers\FeatureEnabledAuthorisationHandler.cs" />
     <Compile Include="Pipeline\Features\Handlers\FeatureWhiteListAuthorisationHandler.cs" />
+    <Compile Include="Services\AuthorizationService.cs" />
     <Compile Include="Services\Features\AccountAgreementService.cs" />
     <Compile Include="Services\Features\FeatureCacheFactory.cs" />
     <Compile Include="Services\Features\FeatureService.cs" />
@@ -311,12 +319,12 @@
     <Compile Include="Services\Features\IControllerMetaDataService.cs" />
     <Compile Include="Services\Features\IFeatureCache.cs" />
     <Compile Include="Services\Features\IFeatureCacheFactory.cs" />
-    <Compile Include="Services\Features\OperationAuthorisationService.cs" />
     <Compile Include="Services\Features\OperationFilterAttribute.cs" />
     <Compile Include="Services\HmrcDateService.cs" />
     <Compile Include="Services\HmrcService.cs" />
     <Compile Include="Services\HttpClientWrapper.cs" />
     <Compile Include="Services\HttpResponseLogger.cs" />
+    <Compile Include="Services\ICallerContext.cs" />
     <Compile Include="Services\PdfService.cs" />
     <Compile Include="Services\ReferenceDataService.cs" />
     <Compile Include="Services\RestService.cs" />

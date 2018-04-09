@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAgreementOrchestrator _orchestrator;
 
         public EmployerAgreementController(IAuthenticationService owinWrapper, EmployerAgreementOrchestrator orchestrator, 
-            IOperationAuthorisationService operationAuthorisation, IMultiVariantTestingService multiVariantTestingService, 
+            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService, 
             ICookieStorageService<FlashMessageViewModel> flashMessage) 
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {

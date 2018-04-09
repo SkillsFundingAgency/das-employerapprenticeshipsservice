@@ -4,10 +4,9 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Authorization;
-using SFA.DAS.EAS.Web.Authorization;
 using SFA.DAS.EAS.Web.Filters;
 using SFA.DAS.EAS.Web.Helpers;
-using AuthorizationContext = SFA.DAS.EAS.Domain.Models.Authorization.AuthorizationContext;
+
 
 namespace SFA.DAS.EAS.Web.UnitTests.Filters.EnsureFeatureIsEnabledFilterTests
 {
@@ -21,7 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters.EnsureFeatureIsEnabledFilterTests
         private ActionExecutingContext _filterContext;
         private RouteData _routeData;
         private readonly ControllerBase _controller = Mock.Of<ControllerBase>();
-        private Mock<IOperationAuthorisationService> _operationAuthorisationService;
+        private Mock<IAuthorizationService> _operationAuthorisationService;
         private Mock<IAuthorizationService> _authorizationService;
         private IAuthorizationContext _authorizationContext;
         
@@ -39,9 +38,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters.EnsureFeatureIsEnabledFilterTests
                 Controller = _controller
             };
 
-            _operationAuthorisationService = new Mock<IOperationAuthorisationService>();
+            _operationAuthorisationService = new Mock<IAuthorizationService>();
             _authorizationService = new Mock<IAuthorizationService>();
-            _authorizationContext = new AuthorizationContext();
+            _authorizationContext = new Domain.Models.Authorization.AuthorizationContext();
 
             _authorizationService.Setup(m => m.GetAuthorizationContext()).Returns(_authorizationContext);
             _operationAuthorisationService.Setup(f => f.IsOperationAuthorised(_authorizationContext)).Returns(true);

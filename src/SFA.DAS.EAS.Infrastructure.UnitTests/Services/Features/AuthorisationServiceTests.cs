@@ -1,18 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.FeatureToggles;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Pipeline;
+using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Infrastructure.Services.Features;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features
 {
-    class OperationAuthorisationServiceTests
+    class AuthorisationServiceTests
     {
         [TestCase(true)]
         [TestCase(true, true)]
@@ -27,7 +30,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features
 
             var handler = fixtures
                 .WithHandlerResults(handlerResults)
-                .CreateOperationAuthorisationService();
+                .CreateAuthorisationService();
 
             var operationContext = fixtures.CreateOperationContext();
 
@@ -63,9 +66,19 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features
 
         public Mock<IFeatureService> FestureServiceMock { get; set; }
         public IFeatureService FeatureService => FestureServiceMock.Object;
-        public OperationAuthorisationService CreateOperationAuthorisationService()
+        public AuthorizationService CreateAuthorisationService()
         {
-            return new OperationAuthorisationService(FeatureService, Log, Handlers);
+	        var dbContextMock = new Mock<EmployerAccountDbContext>();
+	        var configurationMock = new Mock<IConfigurationProvider>();
+	        var callerContextMock = new Mock<ICallerContext>();
+
+			return new AuthorizationService(
+				dbContextMock.Object, 
+				configurationMock.Object,  
+				callerContextMock.Object,
+				FeatureService, 
+				Log, 
+				Handlers);
         }
 
         public OperationAuthorisationServiceTestFixtures WithHandlerResults(params bool[] handlerResults)

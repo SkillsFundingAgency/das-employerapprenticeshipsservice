@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public EmployerManageApprenticesController(
             IAuthenticationService owinWrapper,
-            IOperationAuthorisationService operationAuthorisation,
+            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
                 : base(owinWrapper, multiVariantTestingService, flashMessage)

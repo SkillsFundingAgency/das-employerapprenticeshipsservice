@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         private Mock<IAuthenticationService> _owinWrapper;
         private HomeController _homeController;
         private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
-        private Mock<IOperationAuthorisationService> _featureToggle;
+        private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
@@ -22,23 +22,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         {
             _owinWrapper = new Mock<IAuthenticationService>();
             _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
-            _featureToggle = new Mock<IOperationAuthorisationService>();
+            _featureToggle = new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _homeController = new HomeController(
                 _owinWrapper.Object, null, _configuration.Object, _featureToggle.Object, _userViewTestingService.Object, 
                 _flashMessage.Object);
-        }
-
-        [Test]
-        public void ThenTheOwinWrapperSignOutIsCalled()
-        {
-            //Act
-            _homeController.SignOut();
-
-            //Assert
-            _owinWrapper.Verify(x=>x.SignOutUser());
         }
     }
 }

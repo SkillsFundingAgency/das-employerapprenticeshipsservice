@@ -3,7 +3,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Authorization;
 
 namespace SFA.DAS.EAS.Web.Extensions
 {
@@ -21,7 +20,7 @@ namespace SFA.DAS.EAS.Web.Extensions
         public static bool IsFeatureEnabled(this HtmlHelper htmlHelper, string controllerName, string actionName)
         {
             var authorizationService = DependencyResolver.Current.GetService<IAuthorizationService>();
-            var operationAuthorisationService = DependencyResolver.Current.GetService<IOperationAuthorisationService>();
+            var operationAuthorisationService = DependencyResolver.Current.GetService<IAuthorizationService>();
             var authorizationContext = authorizationService.GetAuthorizationContext();
             var isFeatureEnabled = operationAuthorisationService.IsOperationAuthorised(authorizationContext);
 

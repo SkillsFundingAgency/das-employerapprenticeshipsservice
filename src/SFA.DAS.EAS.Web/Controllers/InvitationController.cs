@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
         public InvitationController(InvitationOrchestrator invitationOrchestrator, IAuthenticationService owinWrapper, 
-            IOperationAuthorisationService operationAuthorisation, IMultiVariantTestingService multiVariantTestingService, 
+            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService, 
             EmployerApprenticeshipsServiceConfiguration configuration, 
             ICookieStorageService<FlashMessageViewModel> flashMessage) 
             : base(owinWrapper,multiVariantTestingService, flashMessage)

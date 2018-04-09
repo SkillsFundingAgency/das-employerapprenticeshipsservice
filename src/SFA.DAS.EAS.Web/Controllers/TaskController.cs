@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public TaskController(
             IAuthenticationService owinWrapper, 
             TaskOrchestrator taskOrchestrator,
-            IOperationAuthorisationService operationAuthorisation, 
+            IAuthorizationService authorization, 
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage, 
             ILog logger) : base(owinWrapper, multiVariantTestingService, flashMessage)

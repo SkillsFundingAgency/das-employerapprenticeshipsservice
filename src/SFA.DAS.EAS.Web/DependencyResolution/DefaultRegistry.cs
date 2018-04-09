@@ -47,7 +47,6 @@ using SFA.DAS.EAS.Infrastructure.Pipeline.Features;
 using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Infrastructure.Services.Features;
-using SFA.DAS.EAS.Web.Authorization;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.ViewModels;

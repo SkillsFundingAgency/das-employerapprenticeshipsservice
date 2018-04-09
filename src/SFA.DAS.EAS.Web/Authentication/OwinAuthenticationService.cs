@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using IdentityModel.Client;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Authentication
@@ -34,16 +35,11 @@ namespace SFA.DAS.EAS.Web.Authentication
             return HttpContext.Current.GetOwinContext().Authentication.User.Identity.IsAuthenticated;
         }
 
-        public ActionResult SignOutUser()
+        public void SignOutUser()
         {
             var owinContext = HttpContext.Current.GetOwinContext();
             var authenticationManager = owinContext.Authentication;
-            var idToken = authenticationManager.User.FindFirst("id_token")?.Value;
-            var constants = new Constants(_configuration.Identity);
-
             authenticationManager.SignOut("Cookies");
-
-            return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken, owinContext.Request.Uri.Scheme, owinContext.Request.Uri.Authority));   
         }
 
         public bool TryGetClaimValue(string key, out string value)

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Application.Messages;
-using SFA.DAS.EAS.Web.Authorization;
+using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Web.Binders
 {

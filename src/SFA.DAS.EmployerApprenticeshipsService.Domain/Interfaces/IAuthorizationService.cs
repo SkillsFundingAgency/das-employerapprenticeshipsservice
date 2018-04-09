@@ -1,10 +1,11 @@
 ﻿using SFA.DAS.EAS.Domain.Models.Authorization;
 
-namespace SFA.DAS.EAS.Web.Authorization
+namespace SFA.DAS.EAS.Domain.Interfaces
 {
     public interface IAuthorizationService
     {
         IAuthorizationContext GetAuthorizationContext();
         void ValidateMembership();
+        bool IsOperationAuthorised(IAuthorizationContext authorisationContext);
     }
 }

@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Authorization;
 using SFA.DAS.EAS.Web.Helpers;
 
 namespace SFA.DAS.EAS.Web.Filters
 {
     public class ValidateFeatureFilter : ActionFilterAttribute
     {
-        private readonly Func<IOperationAuthorisationService> _operationAuthorisationService;
+        private readonly Func<IAuthorizationService> _operationAuthorisationService;
         private readonly Func<IAuthorizationService> _authorizationService;
 
-        public ValidateFeatureFilter(Func<IOperationAuthorisationService> operationAuthorisationService, Func<IAuthorizationService> authorizationService)
+        public ValidateFeatureFilter(Func<IAuthorizationService> operationAuthorisationService, Func<IAuthorizationService> authorizationService)
         {
             _operationAuthorisationService = operationAuthorisationService;
             _authorizationService = authorizationService;

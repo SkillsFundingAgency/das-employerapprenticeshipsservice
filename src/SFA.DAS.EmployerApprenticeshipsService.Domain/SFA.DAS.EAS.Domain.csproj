@@ -203,6 +203,7 @@
     <Compile Include="Http\RequestTimeOutException.cs" />
     <Compile Include="Interfaces\IAccountAgreementService.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
+    <Compile Include="Interfaces\IAuthenticationService.cs" />
     <Compile Include="Interfaces\IAzureAdAuthenticationService.cs" />
     <Compile Include="Interfaces\ICommitmentService.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
@@ -306,7 +307,7 @@
     <Compile Include="Interfaces\IDasAccountService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
-    <Compile Include="Interfaces\IOperationAuthorisationService.cs" />
+    <Compile Include="Interfaces\IAuthorizationService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Http\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />

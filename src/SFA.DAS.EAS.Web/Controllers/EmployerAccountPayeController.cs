@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
 
         public EmployerAccountPayeController(IAuthenticationService owinWrapper,EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator, 
-            IOperationAuthorisationService operationAuthorisation, IMultiVariantTestingService multiVariantTestingService, 
+            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService, 
             ICookieStorageService<FlashMessageViewModel> flashMessage) 
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
