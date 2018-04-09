@@ -81,10 +81,7 @@ AS
 			meta.ApprenticeshipCourseName AS ApprenticeTrainingCourse,
 			meta.ApprenticeshipCourseLevel AS ApprenticeTrainingCourseLevel
 	from [employer_financial].[Payment]   p
-		INNER JOIN (SELECT PeriodEnd,AccountId,ukprn, EmpRef, TransactionDate, DateCreated, LevyDeclared, EnglishFraction 
-					FROM employer_financial.TransactionLine 
-					WHERE DateCreated >= @FromDate AND 
-						DateCreated <= @ToDate) transLine 
+		INNER JOIN  employer_financial.TransactionLine transLine
 			ON transLine.AccountId = p.AccountId 
 				AND transLine.PeriodEnd = p.PeriodEnd 
 				AND transLine.Ukprn = p.Ukprn
