@@ -125,42 +125,42 @@ INSERT INTO #output
 
 -- Join the Views together
 SELECT DISTINCT 
-	COALESCE(MAX(accountFunds1.DateCreated),MAX(accountFunds2.DateCreated),MAX(accountFunds3.DateCreated)) AS DateCreated,
-	COALESCE(MAX(accountFunds1.TransactionTypeDesc),MAX(accountFunds2.TransactionTypeDesc),MAX(accountFunds3.TransactionTypeDesc)) AS [Description],
-	COALESCE(MAX(accountFunds1.TrainingProvider),MAX(accountFunds2.TrainingProvider),MAX(accountFunds3.TrainingProvider)) AS TrainingProvider,
+	COALESCE(MAX(fundsPaidFromLevy.DateCreated),MAX(fundsGovermentContribution.DateCreated),MAX(fundsEmployerContribution.DateCreated)) AS DateCreated,
+	COALESCE(MAX(fundsPaidFromLevy.TransactionTypeDesc),MAX(fundsGovermentContribution.TransactionTypeDesc),MAX(fundsEmployerContribution.TransactionTypeDesc)) AS [Description],
+	COALESCE(MAX(fundsPaidFromLevy.TrainingProvider),MAX(fundsGovermentContribution.TrainingProvider),MAX(fundsEmployerContribution.TrainingProvider)) AS TrainingProvider,
 	uniquePayments.Uln AS Uln, 
-	COALESCE(MAX(accountFunds1.Apprentice),MAX(accountFunds2.Apprentice),MAX(accountFunds3.Apprentice)) AS Apprentice,
-	COALESCE(MAX(accountFunds1.ApprenticeTrainingCourse), MAX(accountFunds2.ApprenticeTrainingCourse), MAX(accountFunds3.ApprenticeTrainingCourse)) AS ApprenticeTrainingCourse,
-	COALESCE(MAX(accountFunds1.ApprenticeTrainingCourseLevel), MAX(accountFunds2.ApprenticeTrainingCourseLevel), MAX(accountFunds3.ApprenticeTrainingCourseLevel)) AS ApprenticeTrainingCourseLevel,
-	COALESCE((SUM(accountFunds1.[Amount]) * -1), 0) AS PaidFromLevy,
-	COALESCE((SUM(accountFunds3.Amount) * -1), 0) AS EmployerContribution,
-	COALESCE((SUM(accountFunds2.Amount) * -1), 0) AS GovermentContribution,
-	COALESCE((SUM(accountFunds1.[Amount]) * -1),0) + COALESCE((SUM(accountFunds2.[Amount]) * -1),0) + COALESCE((SUM(accountFunds3.[Amount]) * -1),0) AS Total
+	COALESCE(MAX(fundsPaidFromLevy.Apprentice),MAX(fundsGovermentContribution.Apprentice),MAX(fundsEmployerContribution.Apprentice)) AS Apprentice,
+	COALESCE(MAX(fundsPaidFromLevy.ApprenticeTrainingCourse), MAX(fundsGovermentContribution.ApprenticeTrainingCourse), MAX(fundsEmployerContribution.ApprenticeTrainingCourse)) AS ApprenticeTrainingCourse,
+	COALESCE(MAX(fundsPaidFromLevy.ApprenticeTrainingCourseLevel), MAX(fundsGovermentContribution.ApprenticeTrainingCourseLevel), MAX(fundsEmployerContribution.ApprenticeTrainingCourseLevel)) AS ApprenticeTrainingCourseLevel,
+	COALESCE((SUM(fundsPaidFromLevy.[Amount]) * -1), 0) AS PaidFromLevy,
+	COALESCE((SUM(fundsEmployerContribution.Amount) * -1), 0) AS EmployerContribution,
+	COALESCE((SUM(fundsGovermentContribution.Amount) * -1), 0) AS GovermentContribution,
+	COALESCE((SUM(fundsPaidFromLevy.[Amount]) * -1),0) + COALESCE((SUM(fundsGovermentContribution.[Amount]) * -1),0) + COALESCE((SUM(fundsEmployerContribution.[Amount]) * -1),0) AS Total
 FROM UniqueApprenticePaymentRecords uniquePayments
-LEFT JOIN AllFunds accountFunds1 
-	ON accountFunds1.AccountId = uniquePayments.AccountId 
-		AND accountFunds1.Ukprn = uniquePayments.Ukprn 
-		AND accountFunds1.Uln = uniquePayments.Uln
-		AND accountFunds1.PeriodEnd = uniquePayments.PeriodEnd
-		AND accountFunds1.FundingSource = 1
-LEFT JOIN AllFunds accountFunds2 
-	ON accountFunds2.AccountId = uniquePayments.AccountId 
-		AND accountFunds2.Ukprn = uniquePayments.Ukprn 
-		AND accountFunds2.Uln = uniquePayments.Uln
-		AND accountFunds2.PeriodEnd = uniquePayments.PeriodEnd
-		AND accountFunds2.FundingSource = 2
-LEFT JOIN AllFunds accountFunds3
-	ON accountFunds3.AccountId = uniquePayments.AccountId 
-		AND accountFunds3.Ukprn = uniquePayments.Ukprn 
-		AND accountFunds3.Uln = uniquePayments.Uln
-		AND accountFunds3.PeriodEnd = uniquePayments.PeriodEnd
-		AND accountFunds3.FundingSource = 3
+LEFT JOIN AllFunds fundsPaidFromLevy 
+	ON fundsPaidFromLevy.AccountId = uniquePayments.AccountId 
+		AND fundsPaidFromLevy.Ukprn = uniquePayments.Ukprn 
+		AND fundsPaidFromLevy.Uln = uniquePayments.Uln
+		AND fundsPaidFromLevy.PeriodEnd = uniquePayments.PeriodEnd
+		AND fundsPaidFromLevy.FundingSource = 1
+LEFT JOIN AllFunds fundsGovermentContribution 
+	ON fundsGovermentContribution.AccountId = uniquePayments.AccountId 
+		AND fundsGovermentContribution.Ukprn = uniquePayments.Ukprn 
+		AND fundsGovermentContribution.Uln = uniquePayments.Uln
+		AND fundsGovermentContribution.PeriodEnd = uniquePayments.PeriodEnd
+		AND fundsGovermentContribution.FundingSource = 2
+LEFT JOIN AllFunds fundsEmployerContribution
+	ON fundsEmployerContribution.AccountId = uniquePayments.AccountId 
+		AND fundsEmployerContribution.Ukprn = uniquePayments.Ukprn 
+		AND fundsEmployerContribution.Uln = uniquePayments.Uln
+		AND fundsEmployerContribution.PeriodEnd = uniquePayments.PeriodEnd
+		AND fundsEmployerContribution.FundingSource = 3
 GROUP BY uniquePayments.AccountId, 
 	uniquePayments.Ukprn, 
 	uniquePayments.Uln, 
 	uniquePayments.PeriodEnd
 HAVING
-	MAX(accountFunds1.[Amount]) > 0 OR MAX(accountFunds2.[Amount]) > 0 OR MAX(accountFunds3.[Amount]) > 0
+	MAX(fundsPaidFromLevy.[Amount]) > 0 OR MAX(fundsGovermentContribution.[Amount]) > 0 OR MAX(fundsEmployerContribution.[Amount]) > 0
 
 SELECT * FROM #output
 
