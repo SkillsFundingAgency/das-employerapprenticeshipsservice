@@ -105,7 +105,15 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             else if (transaction.GetType() == typeof(TransferTransactionLine))
             {
                 var transferTransaction = (TransferTransactionLine)transaction;
-                transaction.Description = $"Transfer sent to {transferTransaction.ReceiverAccountName}";
+
+                if (transferTransaction.TransactionAccountIsTransferSender)
+                {
+                    transaction.Description = $"Transfer sent to {transferTransaction.ReceiverAccountName}";
+                }
+                else
+                {
+                    transaction.Description = $"Transfer received from {transferTransaction.SenderAccountName}";
+                }
             }
         }
 
