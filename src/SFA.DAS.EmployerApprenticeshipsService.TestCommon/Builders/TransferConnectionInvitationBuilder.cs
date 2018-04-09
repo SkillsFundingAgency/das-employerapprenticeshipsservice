@@ -24,12 +24,14 @@ namespace SFA.DAS.EAS.TestCommon.Builders
         public TransferConnectionInvitationBuilder WithReceiverAccount(Account receiverAccount)
         {
             _transferConnectionInvitation.SetupProperty(i => i.ReceiverAccount, receiverAccount);
+            _transferConnectionInvitation.SetupProperty(i => i.ReceiverAccountId, receiverAccount.Id);
             return this;
         }
 
         public TransferConnectionInvitationBuilder WithSenderAccount(Account senderAccount)
         {
             _transferConnectionInvitation.SetupProperty(i => i.SenderAccount, senderAccount);
+            _transferConnectionInvitation.SetupProperty(i => i.SenderAccountId, senderAccount.Id);
             return this;
         }
 

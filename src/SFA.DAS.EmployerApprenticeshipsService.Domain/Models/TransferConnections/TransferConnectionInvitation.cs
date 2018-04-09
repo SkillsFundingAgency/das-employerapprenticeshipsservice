@@ -92,16 +92,33 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
 
         public void Delete(Data.Entities.Account.Account deleterAccount, User deleterUser)
         {
-            RequiresDeleterAccountIsTheSenderAccount(deleterAccount);
             RequiresTransferConnectionInvitationIsRejected();
+            RequiresDeleterIsEitherSenderOrReceiver(deleterAccount);
 
             var now = DateTime.UtcNow;
+        
+            bool? deletedBySender = null;
+            bool? deletedByReceiver = null;
 
-            DeletedBySender = true;
+            if (ReceiverAccountId == deleterAccount.Id)
+            {
+                RequiresDeleterAccountIsTheReceiverAccount(deleterAccount);
+                RequiresNotAlreadyDeletedByReceiver();
+                DeletedByReceiver = true;
+                deletedByReceiver = true;
+            }
+            else 
+            {
+                RequiresDeleterAccountIsTheSenderAccount(deleterAccount);
+                RequiresNotAlreadyDeletedBySender();
+                DeletedBySender = true;
+                deletedBySender = true;
+            }
 
             Changes.Add(new TransferConnectionInvitationChange
             {
-                DeletedBySender = DeletedBySender,
+                DeletedBySender =  deletedBySender,
+                DeletedByReceiver = deletedByReceiver,
                 User = deleterUser,
                 CreatedDate = now
             });
@@ -165,6 +182,32 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
         {
             if (deleterAccount.Id != SenderAccount.Id)
                 throw new Exception("Requires deleter account is the sender account.");
+        }
+
+        private void RequiresDeleterAccountIsTheReceiverAccount(Data.Entities.Account.Account deleterAccount)
+        {
+            if (deleterAccount.Id != ReceiverAccount.Id)
+                throw new Exception("Requires deleter account is the receiver account.");
+        }
+
+        private void RequiresDeleterIsEitherSenderOrReceiver(Data.Entities.Account.Account deleterAccount)
+        {
+            if (deleterAccount.Id != ReceiverAccountId && deleterAccount.Id != SenderAccountId)
+            {
+                throw new Exception("Requires deleter account is either the sender or the receiver");
+            }
+        }
+
+        private void RequiresNotAlreadyDeletedBySender()
+        {
+            if (DeletedBySender)
+                throw new Exception("Requires not already deleted by sender.");
+        }
+
+        private void RequiresNotAlreadyDeletedByReceiver()
+        {
+            if (DeletedByReceiver)
+                throw new Exception("Requires not already deleted by receiver.");
         }
 
         private void RequiresRejectorAccountIsTheReceiverAccount(Data.Entities.Account.Account rejectorAccount)
