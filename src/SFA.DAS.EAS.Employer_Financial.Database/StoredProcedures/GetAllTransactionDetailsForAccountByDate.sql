@@ -42,8 +42,8 @@ SELECT DateCreated,
 	tl.EmpRef,
 	ld.PayrollYear,
 	ld.PayrollMonth,
-	LevyDeclared,
-	EnglishFraction,
+	tl.LevyDeclared,
+	tl.EnglishFraction,
 	tl.Amount - (LevyDeclared * EnglishFraction) AS TenPercentTopUp,
 	tl.Amount
 FROM [employer_financial].TransactionLine tl
@@ -71,9 +71,9 @@ AS
 			p.Ukprn, 
 			p.Uln, 
 			p.PeriodEnd, 
-			PaymentId, 
-			FundingSource, 
-			Amount, 
+			p.PaymentId, 
+			p.FundingSource, 
+			p.Amount, 
 			p.PaymentMetaDataId, 
 			ptt.[Description] AS TransactionTypeDesc,
 			meta.ProviderName AS TrainingProvider,
@@ -93,8 +93,8 @@ AS
 		INNER JOIN [employer_financial].[PaymentMetaData] meta 
 			ON p.PaymentMetaDataId = meta.Id
 	WHERE  p.AccountId = @AccountId
-		AND DateCreated >= @FromDate 
-		AND DateCreated <= @ToDate
+		AND transLine.DateCreated >= @FromDate 
+		AND transLine.DateCreated <= @ToDate
 		AND p.FundingSource in (1,2,3)
 )
 , UniqueApprenticePaymentRecords -- This gets all the unique Account, Provider, Learner, PeriodEnd combinations
