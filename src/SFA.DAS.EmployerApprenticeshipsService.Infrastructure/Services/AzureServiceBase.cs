@@ -33,6 +33,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return ConfigurationHelper.GetConfiguration<T>(ConfigurationName);
         }
 
+        public async Task<T> GetDataFromTableStorageAsync()
+        {
+            return await ConfigurationHelper.GetConfigurationAsync<T>(ConfigurationName).ConfigureAwait(false);
+        }
+
         public async Task<MemoryStream> StreamDataFromBlobStorage(string containerName, string blobName)
         {
             try
