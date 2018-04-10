@@ -45,6 +45,12 @@
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.56651, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.56651\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.0.0.40478, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.40478\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.0.0.40478, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.40478\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -61,6 +67,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\IAccountEvent.cs" />
+    <Compile Include="Messages\IAccountUserEvent.cs" />
+    <Compile Include="Messages\IEvent.cs" />
+    <Compile Include="Messages\IUserEvent.cs" />
+    <Compile Include="Messages\LevyDeclarationProcessedEvent.cs" />
+    <Compile Include="Messages\LevyDeclarationsProcessedEvent.cs" />
     <Compile Include="Messages\DeletedTransferConnectionInvitationEvent.cs" />
     <Compile Include="Messages\PaymentCreatedMessage.cs" />
     <Compile Include="Messages\AccountNameChangedMessage.cs" />
@@ -82,7 +94,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="SFA.DAS.EmployerAccounts.Events.nuspec" />
+    <None Include="SFA.DAS.EmployerAccounts.Events.nuspec">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -163,11 +163,11 @@
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.56651, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.56651\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.0.0.34401, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.34401\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.0.0.40478, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.40478\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.0.0.34401, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.34401\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.0.0.40478, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.40478\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.33424, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.33424\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
@@ -268,6 +268,7 @@
     <Compile Include="ExecutionPolicies\PolicyNameAttribute.cs" />
     <Compile Include="ExecutionPolicies\RequiredPolicyAttribute.cs" />
     <Compile Include="Extensions\EmployerFinancialDbContextExtensions.cs" />
+    <Compile Include="Mapping\Profiles\LevyDeclarationMappings.cs" />
     <Compile Include="Mapping\Profiles\PaymentMappings.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringAttribute.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringPolicy.cs" />
@@ -314,6 +315,10 @@
     <Folder Include="Interfaces\PostcodeAnywhere\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj">
+      <Project>{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Events</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EAS.Domain</Name>

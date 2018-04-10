@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
 using SFA.DAS.EAS.Application.Exceptions;
@@ -23,6 +24,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
         private readonly IDasLevyRepository _dasLevyRepository;
         private readonly IMediator _mediator;
         private readonly ILog _logger;
+        private readonly IMapper _mapper;
 
 
         public RefreshPaymentDataCommandHandler(
@@ -31,7 +33,8 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             IPaymentService paymentService,
             IDasLevyRepository dasLevyRepository,
             IMediator mediator,
-            ILog logger)
+            ILog logger,
+            IMapper mapper)
         {
             _messagePublisher = messagePublisher;
             _validator = validator;
@@ -39,6 +42,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             _dasLevyRepository = dasLevyRepository;
             _mediator = mediator;
             _logger = logger;
+            _mapper = mapper;
         }
 
         protected override async Task HandleCore(RefreshPaymentDataCommand message)
@@ -60,7 +64,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             }
             catch (WebException ex)
             {
-                _logger.Error(ex, $"Unable to get payment information for periodEnd = '{message.PeriodEnd}' and accountid = '{message.AccountId}'");
+                _logger.Error(ex,$"Unable to get payment information for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
             }
 
             if (payments == null || !payments.Any())
@@ -89,8 +93,9 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 
             foreach (var payment in newPayments)
             {
-                await _messagePublisher.PublishAsync(new PaymentCreatedMessage(
-                    payment.ProviderName, payment.Amount, payment.EmployerAccountId, string.Empty, string.Empty));
+                var paymentCreatedEvent = new PaymentCreatedMessage(payment.EmployerAccountId, null, null);
+                _mapper.Map(payment, paymentCreatedEvent);
+                await _messagePublisher.PublishAsync(paymentCreatedEvent);
             }
 
             _logger.Info($"Finished publishing ProcessPaymentEvent and PaymentCreatedMessage messages for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
