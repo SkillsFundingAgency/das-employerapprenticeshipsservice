@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services.Features
 
         public FeatureType FeatureType => Feature.FeatureType;
 
-        public decimal EnabledByAgreementVersion => Feature.EnabledByAgreementVersion;
+        public int EnabledByAgreementVersion => Feature.EnabledByAgreementVersion;
 
         private int GetHash(string controller, string action)
         {
