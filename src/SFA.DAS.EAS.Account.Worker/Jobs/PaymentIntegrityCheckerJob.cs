@@ -31,16 +31,19 @@ namespace SFA.DAS.EAS.Account.Worker.Jobs
 
             _logger.Info($"Found {accounts.Length} to check payments for");
 
-            var periodEnds = (await _levyRepository.GetAllPeriodEnds()).ToArray();
+            var periodEnds = await _levyRepository.GetAllPeriodEnds();
 
-            _logger.Info($"Found {periodEnds.Length} period ends to process payments for");
+            var orderedPeriodEnds = periodEnds.OrderByDescending(pe => pe.CalendarPeriodYear)
+                .ThenByDescending(pe => pe.CalendarPeriodMonth).ToArray();
+
+            _logger.Info($"Found {orderedPeriodEnds.Length} period ends to process payments for");
 
 
-            for (var periodEndIndex = 0; periodEndIndex < periodEnds.Length; periodEndIndex++)
+            for (var periodEndIndex = 0; periodEndIndex < orderedPeriodEnds.Length; periodEndIndex++)
             {
-                var periodEnd = periodEnds[periodEndIndex];
+                var periodEnd = orderedPeriodEnds[periodEndIndex];
 
-                _logger.Info($"Processing payments for period end {periodEnd.Id} ({periodEndIndex + 1}/{periodEnds.Length})");
+                _logger.Info($"Processing payments for period end {periodEnd.Id} ({periodEndIndex + 1}/{orderedPeriodEnds.Length})");
 
                 for (var accountIndex = 0; accountIndex < accounts.Length; accountIndex++)
                 {
