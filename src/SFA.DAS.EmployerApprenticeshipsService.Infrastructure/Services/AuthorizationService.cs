@@ -7,69 +7,65 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Pipeline;
-using SFA.DAS.NLog.Logger;
 using Z.EntityFramework.Plus;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
 	public class AuthorizationService : IAuthorizationService
     {
-
         private readonly EmployerAccountDbContext _db;
-
+        private readonly IAuthorizationContextCache _authorizationContextCache;
+        private readonly IAuthorizationHandler[] _handlers;
+        private readonly ICallerContextProvider _callerContextProvider;
         private readonly IConfigurationProvider _configurationProvider;
         private readonly IFeatureService _featureService;
-        private readonly ILog _logger;
-        private readonly IOperationAuthorisationHandler[] _pipeSections;
-        private readonly ICallerContext _callerContext;
 
         public AuthorizationService(
             EmployerAccountDbContext db,
-            IConfigurationProvider configurationProvider, 
-            ICallerContext callerContext,
-            IFeatureService featureService, 
-            ILog logger,
-            IOperationAuthorisationHandler[] pipeSections)
+            IAuthorizationContextCache authorizationContextCache,
+            IAuthorizationHandler[] handlers,
+            ICallerContextProvider callerContextProvider,
+            IConfigurationProvider configurationProvider,
+            IFeatureService featureService)
         {
             _db = db;
+            _authorizationContextCache = authorizationContextCache;
+            _handlers = handlers;
+            _callerContextProvider = callerContextProvider;
             _configurationProvider = configurationProvider;
             _featureService = featureService;
-            _logger = logger;
-            _pipeSections = pipeSections;
-            _callerContext = callerContext;
         }
 
         public IAuthorizationContext GetAuthorizationContext()
         {
-            AuthorizationContext existingContext = null;
-            if ((existingContext = _callerContext.GetAuthorizationContext()) != null)
+            IAuthorizationContext cachedAuthorizationContext;
+
+            if ((cachedAuthorizationContext = _authorizationContextCache.GetAuthorizationContext()) != null)
             {
-                return existingContext;
+                return cachedAuthorizationContext;
             }
 
-            var accountId = _callerContext.GetAccountId();
-            var userExternalId = _callerContext.GetUserExternalId();
+            var callerContext = _callerContextProvider.GetCallerContext();
 
-            var accountContextQuery = accountId == null ? null : _db.Accounts
-                .Where(a => a.Id == accountId.Value)
+            var accountContextQuery = callerContext.AccountId == null ? null : _db.Accounts
+                .Where(a => a.Id == callerContext.AccountId.Value)
                 .ProjectTo<AccountContext>(_configurationProvider)
                 .Future();
 
-            var userContextQuery = userExternalId == null ? null : _db.Users
-                .Where(u => u.ExternalId == userExternalId)
+            var userContextQuery = callerContext.UserExternalId == null ? null : _db.Users
+                .Where(u => u.ExternalId == callerContext.UserExternalId.Value)
                 .ProjectTo<UserContext>(_configurationProvider)
                 .Future();
 
-            var membershipContextQuery = accountId == null || userExternalId == null ? null : _db.Memberships
-                .Where(m => m.Account.Id == accountId && m.User.ExternalId == userExternalId)
+            var membershipContextQuery = callerContext.AccountId == null || callerContext.UserExternalId == null ? null : _db.Memberships
+                .Where(m => m.Account.Id == callerContext.AccountId.Value && m.User.ExternalId == callerContext.UserExternalId.Value)
                 .ProjectTo<MembershipContext>(_configurationProvider)
                 .Future();
 
             var accountContext = accountContextQuery?.SingleOrDefault();
             var userContext = userContextQuery?.SingleOrDefault();
             var membershipContext = membershipContextQuery?.SingleOrDefault();
-
-            var featureTask = _featureService.GetFeatureThatAllowsAccessToOperationAsync(_callerContext.GetControllerName(), _callerContext.GetOperationName());
+            var featureTask = _featureService.GetFeatureThatAllowsAccessToOperationAsync(callerContext.ControllerName, callerContext.ActionName);
 
             if (!featureTask.Wait(60 * 1000))
             {
@@ -79,70 +75,41 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             var authorizationContext = new AuthorizationContext
             {
                 AccountContext = accountContext,
+                CurrentFeature = featureTask.Result,
                 UserContext = userContext,
-                MembershipContext = membershipContext,
-                CurrentFeature = featureTask.Result
+                MembershipContext = membershipContext
             };
 
-            _callerContext.SetAuthorizationContext(authorizationContext);
-           
+            _authorizationContextCache.SetAuthorizationContext(authorizationContext);
 
             return authorizationContext;
+        }
+
+        public bool IsOperationAuthorized()
+        {
+            var authorisationContext = GetAuthorizationContext();
+
+            if (authorisationContext.CurrentFeature == null)
+            {
+                return true;
+            }
+
+            var isOperationAuthorised = _handlers.All(h =>
+            {
+                var canAccess = Task.Run(async () => await h.CanAccessAsync(authorisationContext)).Result;
+                return canAccess;
+            });
+
+            return isOperationAuthorised;
         }
 
         public void ValidateMembership()
         {
             var authorizationContext = GetAuthorizationContext();
 
-            if (authorizationContext?.MembershipContext == null)
+            if (authorizationContext.MembershipContext == null)
             {
                 throw new UnauthorizedAccessException();
-            }
-        }
-
-
-        public bool IsOperationAuthorised()
-        {
-	        var authorisationContext = GetAuthorizationContext();
-
-			if (authorisationContext.CurrentFeature == null)
-            {
-                return true;
-            }
-
-            var allowedByAllHandlers = _pipeSections.All(handler =>
-            {
-                var handlerTask = Task.Run(() => handler.CanAccessAsync(authorisationContext)).ConfigureAwait(false);
-                return !handlerTask.GetAwaiter().GetResult();
-            });
-
-            return allowedByAllHandlers;
-        }
-
-        public async Task<bool> CanAccessAsync(IAuthorizationContext authorisationContext)
-        {
-            if (authorisationContext == null)
-            {
-                return false;
-            }
-
-            try
-            {
-                foreach (var handler in _pipeSections)
-                {
-                    if (await handler.CanAccessAsync(authorisationContext) == false)
-                    {
-                        _logger.Info($"context {authorisationContext.AccountContext?.Id} has been blocked from {authorisationContext.CurrentFeature.FeatureType} by {handler.GetType().Name}");
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "An error has occurred when processing a feature toggle pipeline context.");
-                throw;
             }
         }
     }

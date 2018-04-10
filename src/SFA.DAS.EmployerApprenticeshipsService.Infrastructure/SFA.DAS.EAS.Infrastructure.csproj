@@ -303,7 +303,7 @@
     <Compile Include="Services\Features\AccountAgreementService.cs" />
     <Compile Include="Services\Features\FeatureCacheFactory.cs" />
     <Compile Include="Services\Features\FeatureService.cs" />
-    <Compile Include="Pipeline\IOperationAuthorisationHandler.cs" />
+    <Compile Include="Pipeline\IAuthorizationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AddressLookupService.cs" />
     <Compile Include="Services\AuditService.cs" />
@@ -319,12 +319,12 @@
     <Compile Include="Services\Features\IControllerMetaDataService.cs" />
     <Compile Include="Services\Features\IFeatureCache.cs" />
     <Compile Include="Services\Features\IFeatureCacheFactory.cs" />
-    <Compile Include="Services\Features\OperationFilterAttribute.cs" />
+    <Compile Include="Services\Features\FeatureAttribute.cs" />
     <Compile Include="Services\HmrcDateService.cs" />
     <Compile Include="Services\HmrcService.cs" />
     <Compile Include="Services\HttpClientWrapper.cs" />
     <Compile Include="Services\HttpResponseLogger.cs" />
-    <Compile Include="Services\ICallerContext.cs" />
+    <Compile Include="Services\IAuthorizationContextCache.cs" />
     <Compile Include="Services\PdfService.cs" />
     <Compile Include="Services\ReferenceDataService.cs" />
     <Compile Include="Services\RestService.cs" />

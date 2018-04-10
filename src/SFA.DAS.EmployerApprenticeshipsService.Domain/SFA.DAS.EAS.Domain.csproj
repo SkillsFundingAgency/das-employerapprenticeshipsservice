@@ -205,6 +205,7 @@
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\IAuthenticationService.cs" />
     <Compile Include="Interfaces\IAzureAdAuthenticationService.cs" />
+    <Compile Include="Interfaces\ICallerContextProvider.cs" />
     <Compile Include="Interfaces\ICommitmentService.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
     <Compile Include="Interfaces\ICurrentDateTime.cs" />
@@ -236,8 +237,10 @@
     <Compile Include="Models\ApprenticeshipProvider\Providers.cs" />
     <Compile Include="Models\ApprenticeshipProvider\ProvidersView.cs" />
     <Compile Include="Models\Authorization\AccountContext.cs" />
+    <Compile Include="Models\Authorization\CallerContext.cs" />
     <Compile Include="Models\Authorization\IAccountContext.cs" />
     <Compile Include="Models\Authorization\IAuthorizationContext.cs" />
+    <Compile Include="Models\Authorization\ICallerContext.cs" />
     <Compile Include="Models\Authorization\IMembershipContext.cs" />
     <Compile Include="Models\Authorization\IUserContext.cs" />
     <Compile Include="Models\Authorization\AuthorizationContext.cs" />

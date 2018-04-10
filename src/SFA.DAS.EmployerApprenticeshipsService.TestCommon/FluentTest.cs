@@ -24,6 +24,11 @@ namespace SFA.DAS.EAS.TestCommon
             assert?.Invoke(testFixture);
         }
 
+        public Task RunAsync(Action<T> assert)
+        {
+            return RunAsync(null, null, assert);
+        }
+
         public Task RunAsync(Func<T, Task> act, Action<T> assert)
         {
             return RunAsync(null, act, assert);

@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Web.Helpers
 
             var controllerActionsLinkedToFeature = GetControllerGlobalActions(allControllers)
                 .Union(GetControllerMethodActions(allControllers))
-                .GroupBy(controllerActions => controllerActions.Item1.RequiresAccessToFeatureType, controllerActions => controllerActions.Item2);
+                .GroupBy(controllerActions => controllerActions.Item1.FeatureType, controllerActions => controllerActions.Item2);
 
 
             var result = new Dictionary<FeatureType, ControllerAction[]>();
@@ -82,25 +82,25 @@ namespace SFA.DAS.EAS.Web.Helpers
                             .ToArray();
         }
 
-        private IEnumerable<(OperationFilterAttribute, ControllerAction)> GetControllerGlobalActions(Type[] controllers)
+        private IEnumerable<(FeatureAttribute, ControllerAction)> GetControllerGlobalActions(Type[] controllers)
         {
             return controllers.Select(controller =>
                 (
-                    controller.GetCustomAttribute<OperationFilterAttribute>(false),
+                    controller.GetCustomAttribute<FeatureAttribute>(false),
                     new ControllerAction(controller.Name, "*")
                 ))
-                .Where(controller => controller.Item1 != null && controller.Item1.RequiresAccessToFeatureType != FeatureType.NotSpecified);
+                .Where(controller => controller.Item1 != null && controller.Item1.FeatureType != FeatureType.NotSpecified);
         }
 
-        private IEnumerable<(OperationFilterAttribute, ControllerAction)> GetControllerMethodActions(Type[] controllers)
+        private IEnumerable<(FeatureAttribute, ControllerAction)> GetControllerMethodActions(Type[] controllers)
         {
             return controllers
                 .SelectMany(controller => controller
                     .GetMethods()
                     .Select(method => (
-                        method.GetCustomAttribute<OperationFilterAttribute>(),
+                        method.GetCustomAttribute<FeatureAttribute>(),
                         new ControllerAction(controller.Name, method.Name)))
-                    .Where(ca => ca.Item1 != null && ca.Item1.RequiresAccessToFeatureType != FeatureType.NotSpecified));
+                    .Where(ca => ca.Item1 != null && ca.Item1.FeatureType != FeatureType.NotSpecified));
         }
     }
 }

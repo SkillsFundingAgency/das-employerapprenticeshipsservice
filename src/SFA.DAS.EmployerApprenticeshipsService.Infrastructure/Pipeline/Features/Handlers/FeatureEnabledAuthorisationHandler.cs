@@ -4,11 +4,11 @@ using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 
 namespace SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers
 {
-    public class FeatureEnabledAuthorisationHandler : IOperationAuthorisationHandler
+    public class FeatureEnabledAuthorisationHandler : IAuthorizationHandler
     {
-        public Task<bool> CanAccessAsync(IAuthorizationContext authorisationContext)
+        public Task<bool> CanAccessAsync(IAuthorizationContext authorizationContext)
         {
-            return authorisationContext.CurrentFeature == null || authorisationContext.CurrentFeature.Enabled ? 
+            return authorizationContext.CurrentFeature == null || authorizationContext.CurrentFeature.Enabled ? 
                 FeatureHandlerResults.FeatureEnabledTask : FeatureHandlerResults.FeatureDisabledTask;
         }
     }

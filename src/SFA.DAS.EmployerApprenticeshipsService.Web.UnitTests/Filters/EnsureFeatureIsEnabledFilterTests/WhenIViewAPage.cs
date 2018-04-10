@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters.EnsureFeatureIsEnabledFilterTests
         [Test]
         public void ThenIShouldBeShownThePageIfTheFeatureIsEnabledAndIAmLoggedIn()
         {
-	        _authorizationService.Setup(authservice => authservice.IsOperationAuthorised()).Returns(true);
+	        _authorizationService.Setup(authservice => authservice.IsOperationAuthorized()).Returns(true);
             _filter.OnActionExecuting(_filterContext);
 
             Assert.That(_filterContext.Result, Is.Null);
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters.EnsureFeatureIsEnabledFilterTests
 		[Test]
         public void ThenIShouldNotBeShownThePageIfTheFeatureIsDisabled()
         {
-            _authorizationService.Setup(f => f.IsOperationAuthorised()).Returns(false);
+            _authorizationService.Setup(f => f.IsOperationAuthorized()).Returns(false);
 
             _filter.OnActionExecuting(_filterContext);
 

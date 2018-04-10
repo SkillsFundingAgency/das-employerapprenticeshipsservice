@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Web.Filters
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var isOperationAuthorised = _authorizationService().IsOperationAuthorised();
+            var isOperationAuthorised = _authorizationService().IsOperationAuthorized();
 
             if (!isOperationAuthorised)
             {

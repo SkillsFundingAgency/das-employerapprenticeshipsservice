@@ -6,12 +6,11 @@ using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 
 namespace SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers
 {
-
-    public class FeatureWhiteListAuthorisationHandler : IOperationAuthorisationHandler
+    public class FeatureWhiteListAuthorisationHandler : IAuthorizationHandler
     {
-        public Task<bool> CanAccessAsync(IAuthorizationContext authorisationContext)
+        public Task<bool> CanAccessAsync(IAuthorizationContext authorizationContext)
         {
-            return IsFeatureEnabledForContextAsync(authorisationContext);
+            return IsFeatureEnabledForContextAsync(authorizationContext);
         }
 
         public Task<bool> IsFeatureEnabledForContextAsync(IAuthorizationContext authorisationContext)
@@ -23,13 +22,12 @@ namespace SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers
                 return FeatureHandlerResults.FeatureEnabledTask;
             }
 
-            if (string.IsNullOrWhiteSpace(authorisationContext?.UserContext?.Email))
+            if (string.IsNullOrWhiteSpace(authorisationContext.UserContext?.Email))
             {
                 return FeatureHandlerResults.FeatureDisabledTask;
             }
 
-            if (feature.WhiteList.Any(email =>
-                Regex.IsMatch(authorisationContext.UserContext.Email, email, RegexOptions.IgnoreCase)))
+            if (feature.WhiteList.Any(email => Regex.IsMatch(authorisationContext.UserContext.Email, email, RegexOptions.IgnoreCase)))
             {
                 return FeatureHandlerResults.FeatureEnabledTask;
             }

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Mvc;
 using IdentityModel.Client;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -22,12 +21,10 @@ namespace SFA.DAS.EAS.Web.Authentication
             _httpContext = httpContext;
         }
 
-        public string GetClaimValue(string claimKey)
+        public string GetClaimValue(string key)
         {
-            var claimIdentity = ((ClaimsIdentity)HttpContext.Current.User.Identity).Claims.FirstOrDefault(c => c.Type == claimKey);
-            
+            var claimIdentity = ((ClaimsIdentity)HttpContext.Current.User.Identity).Claims.FirstOrDefault(c => c.Type == key);
             return claimIdentity == null ? "" : claimIdentity.Value;
-            
         }
 
         public bool IsUserAuthenticated()
@@ -39,6 +36,7 @@ namespace SFA.DAS.EAS.Web.Authentication
         {
             var owinContext = HttpContext.Current.GetOwinContext();
             var authenticationManager = owinContext.Authentication;
+
             authenticationManager.SignOut("Cookies");
         }
 

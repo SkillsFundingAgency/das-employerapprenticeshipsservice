@@ -4,7 +4,7 @@ namespace SFA.DAS.EAS.Domain.Interfaces
 {
     public interface IAuthenticationService
     {
-        string GetClaimValue(string claimKey);
+        string GetClaimValue(string key);
         bool IsUserAuthenticated();
         void SignOutUser();
         bool TryGetClaimValue(string key, out string value);

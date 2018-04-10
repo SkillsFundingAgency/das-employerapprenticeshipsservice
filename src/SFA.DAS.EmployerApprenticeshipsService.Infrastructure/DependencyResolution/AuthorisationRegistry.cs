@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
     {
         public AuthorisationRegistry()
         {
-            For<IOperationAuthorisationHandler[]>().Use(ctx => new IOperationAuthorisationHandler[]
+            For<IAuthorizationHandler[]>().Use(ctx => new IAuthorizationHandler[]
             {
                 // The order of the types specified here is the order in which the handlers will be executed. 
                 ctx.GetInstance<FeatureEnabledAuthorisationHandler>(),

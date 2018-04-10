@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Helpers.ControllerMetaDataServiceTests
         }
     }
 
-    [OperationFilter(RequiresAccessToFeatureType = FeatureType.Test1)]
+    [Feature(FeatureType.Test1)]
     internal class Test1Controller : Controller
     {
         // The operaton filter methods here should be irrelevant
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Helpers.ControllerMetaDataServiceTests
         {
         }
 
-        [OperationFilter(RequiresAccessToFeatureType = FeatureType.Test1)]
+        [Feature(FeatureType.Test1)]
         public void Method2()
         {
         }
@@ -69,12 +69,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Helpers.ControllerMetaDataServiceTests
     internal class Test2Controller : Controller
     {
         // Some methods are linked to features, some are not
-        [OperationFilter(RequiresAccessToFeatureType = FeatureType.Test1)]
+        [Feature(FeatureType.Test1)]
         public void Method1()
         {
         }
 
-        [OperationFilter(RequiresAccessToFeatureType = FeatureType.Test1)]
+        [Feature(FeatureType.Test1)]
         public void Method2()
         {
         }
@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Helpers.ControllerMetaDataServiceTests
 
     internal class Test3Controller : Controller
     {
-        [OperationFilter(RequiresAccessToFeatureType = FeatureType.Test1)]
+        [Feature(FeatureType.Test1)]
         public void Method1()
         {
         }
@@ -95,17 +95,17 @@ namespace SFA.DAS.EAS.Web.UnitTests.Helpers.ControllerMetaDataServiceTests
     internal class Test4Controller : Controller
     {
         // Method linked to not specified should be ignored
-        [OperationFilter(RequiresAccessToFeatureType = FeatureType.NotSpecified)]
+        [Feature(FeatureType.NotSpecified)]
         public void Method1()
         {
         }
     }
 
-    [OperationFilter(RequiresAccessToFeatureType = FeatureType.Test1)]
+    [Feature(FeatureType.Test1)]
     internal class Test5Controller : Controller
     {
         // Method should pick up class feature as well as feature specified here
-        [OperationFilter(RequiresAccessToFeatureType = FeatureType.Test2)]
+        [Feature(FeatureType.Test2)]
         public void Method1()
         {
         }

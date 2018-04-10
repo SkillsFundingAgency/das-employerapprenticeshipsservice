@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization
 		    authorizationService.GetAuthorizationContext();
 
 			// Assert
-		    fixtures.CallerContext.Verify(cc => cc.SetAuthorizationContext(It.IsAny<AuthorizationContext>()));
+		    fixtures.AuthorizationContextCache.Verify(cc => cc.SetAuthorizationContext(It.IsAny<AuthorizationContext>()));
 	    }
 
 	    [Test]
@@ -124,8 +124,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization
 		    Assert.That(authorizationContext.UserContext, Is.Null);
 	    }
 
-
-	    [Test]
+        [Test]
 	    public void GetAuthorizationContext_ThenShouldReturnNullMembershipContextIfMembershipIsInvalid()
 	    {
 			// Arrange
@@ -142,12 +141,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization
 
 	class AuthorizationTestFixtures
 	{
-		public Mock<IAuthenticationService> AuthenticationService;
-		public Mock<ICallerContext> CallerContext;
-		public Mock<EmployerAccountDbContext> Db;
+		public Mock<IAuthorizationContextCache> AuthorizationContextCache;
+	    public Mock<ICallerContextProvider> CallerContextProvider;
+        public Mock<EmployerAccountDbContext> Db;
 		public Mock<IFeatureService> FeatureService;
 		public Mock<ILog> Logger;
-		public List<Mock<IOperationAuthorisationHandler>> OperationAuthorisationHandlers;
+		public List<Mock<IAuthorizationHandler>> OperationAuthorisationHandlers;
 
 		public IConfigurationProvider ConfigurationProvider;
 		public DbSetStub<Account> AccountsDbSet;
@@ -161,12 +160,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization
 
 		public AuthorizationTestFixtures()
 		{
-			AuthenticationService = new Mock<IAuthenticationService>();
-			CallerContext = new Mock<ICallerContext>();
-			Db = new Mock<EmployerAccountDbContext>();
+			AuthorizationContextCache = new Mock<IAuthorizationContextCache>();
+		    CallerContextProvider = new Mock<ICallerContextProvider>();
+            Db = new Mock<EmployerAccountDbContext>();
 			FeatureService = new Mock<IFeatureService>();
 			Logger = new Mock<ILog>();
-			OperationAuthorisationHandlers = new List<Mock<IOperationAuthorisationHandler>>();
+			OperationAuthorisationHandlers = new List<Mock<IAuthorizationHandler>>();
 
 			Accounts = new List<Account>();
 			AccountsDbSet = new DbSetStub<Account>(Accounts);
@@ -176,6 +175,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization
 
 			Memberships = new List<Membership>();
 			MembershipsDbSet = new DbSetStub<Membership>(Memberships);
+
+		    CallerContextProvider.Setup(a => a.GetCallerContext()).Returns(new CallerContext());
 
 			Db.Setup(d => d.Accounts).Returns(AccountsDbSet);
 			Db.Setup(d => d.Users).Returns(UsersDbSet);
@@ -226,15 +227,19 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization
 		{
 			EnsureAccount(accountId);
 			var user = EnsureUser(userId);
-			CallerContext.Setup(cc => cc.GetAccountId()).Returns(accountId);
-			CallerContext.Setup(cc => cc.GetUserExternalId()).Returns(user.ExternalId);
+
+            CallerContextProvider.Setup(a => a.GetCallerContext()).Returns(new CallerContext
+		    {
+		        AccountId = accountId,
+                UserExternalId = user.ExternalId
+		    });
 
 			return this;
 		}
 
 		public AuthorizationTestFixtures WithCachedAuthorizationContext(AuthorizationContext authorizationContext)
 		{
-			CallerContext
+			AuthorizationContextCache
 				.Setup(cc => cc.GetAuthorizationContext())
 				.Returns(authorizationContext);
 
@@ -245,11 +250,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Authorization
 		{
 			return new AuthorizationService(
 				Db.Object,
-				ConfigurationProvider,
-				CallerContext.Object,
-				FeatureService.Object,
-				Logger.Object,
-				OperationAuthorisationHandlers.Select(mock => mock.Object).ToArray());
+                AuthorizationContextCache.Object,
+				OperationAuthorisationHandlers.Select(mock => mock.Object).ToArray(),
+				CallerContextProvider.Object,
+                ConfigurationProvider,
+				FeatureService.Object);
 		}
 
 		private Account EnsureAccount(long accountId)
