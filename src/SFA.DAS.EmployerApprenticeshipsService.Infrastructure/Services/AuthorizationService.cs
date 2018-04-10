@@ -101,9 +101,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         }
 
 
-        public bool IsOperationAuthorised(IAuthorizationContext authorisationContext)
+        public bool IsOperationAuthorised()
         {
-            if (authorisationContext.CurrentFeature == null)
+	        var authorisationContext = GetAuthorizationContext();
+
+			if (authorisationContext.CurrentFeature == null)
             {
                 return true;
             }

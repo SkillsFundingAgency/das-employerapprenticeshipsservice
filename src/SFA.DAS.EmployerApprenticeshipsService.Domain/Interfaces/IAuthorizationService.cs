@@ -6,6 +6,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
     {
         IAuthorizationContext GetAuthorizationContext();
         void ValidateMembership();
-        bool IsOperationAuthorised(IAuthorizationContext authorisationContext);
+        bool IsOperationAuthorised();
     }
 }

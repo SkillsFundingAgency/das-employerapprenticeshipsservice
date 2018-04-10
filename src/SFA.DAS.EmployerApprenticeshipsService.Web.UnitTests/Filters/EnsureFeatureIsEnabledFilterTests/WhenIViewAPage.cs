@@ -20,7 +20,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters.EnsureFeatureIsEnabledFilterTests
         private ActionExecutingContext _filterContext;
         private RouteData _routeData;
         private readonly ControllerBase _controller = Mock.Of<ControllerBase>();
-        private Mock<IAuthorizationService> _operationAuthorisationService;
         private Mock<IAuthorizationService> _authorizationService;
         private IAuthorizationContext _authorizationContext;
         
@@ -38,28 +37,27 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters.EnsureFeatureIsEnabledFilterTests
                 Controller = _controller
             };
 
-            _operationAuthorisationService = new Mock<IAuthorizationService>();
             _authorizationService = new Mock<IAuthorizationService>();
             _authorizationContext = new Domain.Models.Authorization.AuthorizationContext();
 
             _authorizationService.Setup(m => m.GetAuthorizationContext()).Returns(_authorizationContext);
-            _operationAuthorisationService.Setup(f => f.IsOperationAuthorised(_authorizationContext)).Returns(true);
 
-            _filter = new ValidateFeatureFilter(() => _operationAuthorisationService.Object, () => _authorizationService.Object);
+            _filter = new ValidateFeatureFilter(() => _authorizationService.Object);
         }
 
         [Test]
         public void ThenIShouldBeShownThePageIfTheFeatureIsEnabledAndIAmLoggedIn()
         {
+	        _authorizationService.Setup(authservice => authservice.IsOperationAuthorised()).Returns(true);
             _filter.OnActionExecuting(_filterContext);
 
             Assert.That(_filterContext.Result, Is.Null);
         }
 
-        [Test]
+		[Test]
         public void ThenIShouldNotBeShownThePageIfTheFeatureIsDisabled()
         {
-            _operationAuthorisationService.Setup(f => f.IsOperationAuthorised(_authorizationContext)).Returns(false);
+            _authorizationService.Setup(f => f.IsOperationAuthorised()).Returns(false);
 
             _filter.OnActionExecuting(_filterContext);
 
