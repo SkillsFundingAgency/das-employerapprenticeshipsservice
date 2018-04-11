@@ -6,18 +6,18 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Jobs.GenerateAgreements
 {
     public class GenerateAgreementsJob : IJob
     {
-        private readonly IBroker _idBroker;
+        private readonly IIdBroker _idIdBroker;
         private readonly IProcessor _accountProcessor;
         private readonly IIdProvider _accountIdProvider;
         private readonly ILog _log;
 
         public GenerateAgreementsJob(
-            IBroker idBroker, 
+            IIdBroker idIdBroker, 
             IProcessor accountProcessor, 
             IIdProvider accountIdProvider,
             ILog log)
         {
-            _idBroker = idBroker;
+            _idIdBroker = idIdBroker;
             _accountProcessor = accountProcessor;
             _accountIdProvider = accountIdProvider;
             _log = log;
@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Jobs.GenerateAgreements
         {
             _log.Info($"Starting processing of accounts {_accountIdProvider.GetType().Name}");
 
-            var processInfo = await _idBroker.ProcessAsync(_accountIdProvider, _accountProcessor);
+            var processInfo = await _idIdBroker.ProcessAsync(_accountIdProvider, _accountProcessor);
 
             _log.Info($"Finished processing for {_accountIdProvider.GetType().Name}. " +
                       $" processed:{processInfo.IdsProcessed} " +

@@ -6,13 +6,13 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.DbMaintenance.WebJob.IdProcessor
 {
-    public class Broker : IBroker
+    public class IdBroker : IIdBroker
     {
         private readonly IdProcessorConfiguration _idProcessorConfiguration;
         private readonly ICheckpoint _idCheckpoint;
         private readonly ILog _log;
 
-        public Broker(
+        public IdBroker(
             IdProcessorConfiguration idProcessorConfiguration,
             ICheckpoint idCheckpoint,
             ILog log)

@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE [employer_account].[GetAccountsLinkedToLegalEntity]
-	@legalEntityId as bigint
+	@legalEntityId AS bigint
 AS
 BEGIN
 	SET NOCOUNT ON
 
 	SELECT	DISTINCT ea.AccountId
-	FROM		employer_account.EmployerAgreement as ea
+	FROM		employer_account.EmployerAgreement AS ea
 	WHERE	ea.LegalEntityId = @legalEntityId
 END

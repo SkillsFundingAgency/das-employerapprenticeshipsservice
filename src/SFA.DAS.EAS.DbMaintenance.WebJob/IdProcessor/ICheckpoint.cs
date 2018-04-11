@@ -3,7 +3,7 @@
 namespace SFA.DAS.EAS.DbMaintenance.WebJob.IdProcessor
 {
     /// <summary>
-    ///     Responsible for saving and providing access to restart information for the <see cref="Broker"/>.
+    ///     Responsible for saving and providing access to restart information for the <see cref="IdBroker"/>.
     /// </summary>
     public interface ICheckpoint
     {
