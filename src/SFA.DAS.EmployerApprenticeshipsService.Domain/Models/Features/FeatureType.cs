@@ -3,7 +3,10 @@
     public enum FeatureType
     {
         NotSpecified = 0,
-        Transfer = 1,
+        Transfers = 1,
+        Activities = 2,
+        Projections = 3,
+        Recruitments = 4,
 
         // These enums are only used in unit tests - the numbers can be changed 
         Test1 = 100,
