@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
-using Newtonsoft.Json;
+﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {

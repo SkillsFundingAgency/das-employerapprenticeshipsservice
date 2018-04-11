@@ -7,6 +7,7 @@ namespace SFA.DAS.EAS.Domain.Models.Account
     {
         public long AccountId { get; set; }
         public string HashedId { get; set; }
+        public string PublicHashedId { get; set; }
         public string Name { get; set; }
         public DateTime CreatedDate { get; set; }
         public string OwnerEmail { get; set; }

@@ -120,6 +120,7 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Services
             {
                 Account = account.DasAccountName,
                 AccountID = account.HashedAccountId,
+                PublicAccountID = account.PublicHashedAccountId,
                 SearchType = SearchCategory.Account,
                 PayeSchemeIds = account.PayeSchemes?.Select(p => p.PayeRefWithOutSlash).ToList()
             };
