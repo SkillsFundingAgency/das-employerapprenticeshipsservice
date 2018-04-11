@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Attributes;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Attributes.ValidateMembershipAttributeTests

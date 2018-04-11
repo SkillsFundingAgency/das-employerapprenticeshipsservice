@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Net;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Helpers;
+using SFA.DAS.EAS.Infrastructure.Authorization;
+using SFA.DAS.EAS.Infrastructure.Features;
+using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Filters
 {
@@ -16,11 +18,17 @@ namespace SFA.DAS.EAS.Web.Filters
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var isOperationAuthorised = _authorizationService().IsOperationAuthorized();
+            var featureAttribute = filterContext.ActionDescriptor.GetCustomAttribute<FeatureAttribute>();
 
-            if (!isOperationAuthorised)
+            if (featureAttribute != null)
             {
-                filterContext.Result = new ViewResult { ViewName = ControllerConstants.FeatureNotEnabledViewName };
+                var featureType = featureAttribute.FeatureType;
+                var isAuthorized = _authorizationService().IsAuthorized(featureType);
+
+                if (!isAuthorized)
+                {
+                    filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
             }
         }
     }

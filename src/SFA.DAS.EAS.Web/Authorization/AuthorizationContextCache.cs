@@ -1,6 +1,6 @@
 ﻿using System.Web;
 using SFA.DAS.EAS.Domain.Models.Authorization;
-using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 
 namespace SFA.DAS.EAS.Web.Authorization
 {

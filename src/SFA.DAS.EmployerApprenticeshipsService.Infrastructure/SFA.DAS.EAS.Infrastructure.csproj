@@ -234,6 +234,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\IAuthenticationService.cs" />
+    <Compile Include="Authorization\IAuthorizationContextCache.cs" />
+    <Compile Include="Authorization\IAuthorizationService.cs" />
     <Compile Include="Caching\Constants.cs" />
     <Compile Include="Caching\InProcessCache.cs" />
     <Compile Include="Caching\IoCRegistration.cs" />
@@ -277,6 +280,8 @@
     <Compile Include="ExecutionPolicies\RequiredPolicyAttribute.cs" />
     <Compile Include="Extensions\EmployerFinancialDbContextExtensions.cs" />
     <Compile Include="Extensions\HashingServiceExtensions.cs" />
+    <Compile Include="Features\FeatureHandlerResults.cs" />
+    <Compile Include="Features\IFeatureService.cs" />
     <Compile Include="Mapping\Profiles\PaymentMappings.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringAttribute.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringPolicy.cs" />
@@ -296,14 +301,14 @@
     <Compile Include="Models\PostcodeAnywhere\PcaAddress.cs" />
     <Compile Include="Models\PostcodeAnywhere\PcaServiceFindResult.cs" />
     <Compile Include="Data\TransactionRepository.cs" />
-    <Compile Include="Pipeline\Features\Handlers\AgreementFeatureAuthorisationHandler.cs" />
-    <Compile Include="Pipeline\Features\Handlers\FeatureEnabledAuthorisationHandler.cs" />
-    <Compile Include="Pipeline\Features\Handlers\FeatureWhiteListAuthorisationHandler.cs" />
-    <Compile Include="Services\AuthorizationService.cs" />
-    <Compile Include="Services\Features\AccountAgreementService.cs" />
-    <Compile Include="Services\Features\FeatureCacheFactory.cs" />
-    <Compile Include="Services\Features\FeatureService.cs" />
-    <Compile Include="Pipeline\IAuthorizationHandler.cs" />
+    <Compile Include="Features\FeatureAgreementAuthorisationHandler.cs" />
+    <Compile Include="Features\FeatureEnabledAuthorisationHandler.cs" />
+    <Compile Include="Features\FeatureWhitelistAuthorizationHandler.cs" />
+    <Compile Include="Authorization\AuthorizationService.cs" />
+    <Compile Include="Authorization\IAuthorizationHandler.cs" />
+    <Compile Include="Features\AccountAgreementService.cs" />
+    <Compile Include="Features\FeatureCacheFactory.cs" />
+    <Compile Include="Features\FeatureService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AddressLookupService.cs" />
     <Compile Include="Services\AuditService.cs" />
@@ -311,20 +316,17 @@
     <Compile Include="Services\AzureServiceBase.cs" />
     <Compile Include="Services\CommitmentService.cs" />
     <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />
-    <Compile Include="Services\Features\ControllerActionCacheItem.cs" />
     <Compile Include="Services\CookieStorageService.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
     <Compile Include="Services\ExcelService.cs" />
-    <Compile Include="Services\Features\FeatureCache.cs" />
-    <Compile Include="Services\Features\IControllerMetaDataService.cs" />
-    <Compile Include="Services\Features\IFeatureCache.cs" />
-    <Compile Include="Services\Features\IFeatureCacheFactory.cs" />
-    <Compile Include="Services\Features\FeatureAttribute.cs" />
+    <Compile Include="Features\FeatureCache.cs" />
+    <Compile Include="Features\IFeatureCache.cs" />
+    <Compile Include="Features\IFeatureCacheFactory.cs" />
+    <Compile Include="Features\FeatureAttribute.cs" />
     <Compile Include="Services\HmrcDateService.cs" />
     <Compile Include="Services\HmrcService.cs" />
     <Compile Include="Services\HttpClientWrapper.cs" />
     <Compile Include="Services\HttpResponseLogger.cs" />
-    <Compile Include="Services\IAuthorizationContextCache.cs" />
     <Compile Include="Services\PdfService.cs" />
     <Compile Include="Services\ReferenceDataService.cs" />
     <Compile Include="Services\RestService.cs" />
@@ -332,9 +334,7 @@
     <Compile Include="Services\PaymentService.cs" />
     <Compile Include="Services\TaskService.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\PostcodeAnywhere\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>

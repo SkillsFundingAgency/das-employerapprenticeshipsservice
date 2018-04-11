@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Features;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 
 namespace SFA.DAS.EAS.Web.Extensions
 {
@@ -17,12 +18,12 @@ namespace SFA.DAS.EAS.Web.Extensions
             return new MvcHtmlString(htmlAddress);
         }
 
-        public static bool IsFeatureEnabled(this HtmlHelper htmlHelper, string controllerName, string actionName)
+        public static bool IsAuthorized(this HtmlHelper htmlHelper, FeatureType featureType)
         {
-            var operationAuthorisationService = DependencyResolver.Current.GetService<IAuthorizationService>();
-            var isFeatureEnabled = operationAuthorisationService.IsOperationAuthorized();
+            var authorisationService = DependencyResolver.Current.GetService<IAuthorizationService>();
+            var isAuthorized = authorisationService.IsAuthorized(featureType);
 
-            return isFeatureEnabled;
+            return isAuthorized;
         }
 
         public static bool IsValid<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)

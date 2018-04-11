@@ -10,6 +10,8 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.HashingService;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {

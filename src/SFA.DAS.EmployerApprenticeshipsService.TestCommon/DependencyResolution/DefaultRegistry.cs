@@ -22,6 +22,7 @@ using WebGrease.Css.Extensions;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Hashing;
+using SFA.DAS.EAS.Infrastructure.Authentication;
 using StructureMap.TypeRules;
 
 namespace SFA.DAS.EAS.TestCommon.DependencyResolution

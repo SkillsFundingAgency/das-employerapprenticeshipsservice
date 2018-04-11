@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Application.Queries.GetTransferRequests;
+using SFA.DAS.EAS.Domain.Models.Features;
+using SFA.DAS.EAS.Infrastructure.Features;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
+    [Feature(FeatureType.Transfers)]
     [ValidateMembership]
     [RoutePrefix("accounts/{HashedAccountId}/transfers")]
     public class TransfersController : Controller

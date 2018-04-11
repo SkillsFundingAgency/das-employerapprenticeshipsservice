@@ -26,8 +26,6 @@ namespace SFA.DAS.EAS.Account.Api.Authorization
             return new CallerContext
             {
                 AccountId = accountId,
-                ActionName = "",
-                ControllerName = "",
                 UserExternalId = null
             };
         }

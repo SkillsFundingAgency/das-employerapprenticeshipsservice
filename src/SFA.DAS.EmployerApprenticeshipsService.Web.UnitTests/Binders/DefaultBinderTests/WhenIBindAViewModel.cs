@@ -8,6 +8,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Authorization;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Binders;
 using AuthorizationContext = SFA.DAS.EAS.Domain.Models.Authorization.AuthorizationContext;
 

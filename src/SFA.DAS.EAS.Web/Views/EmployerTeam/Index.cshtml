@@ -63,7 +63,7 @@ else
                     </h2>
                     <p>Search for apprenticeships and see details of approved providers who can deliver the training.</p>
 
-                    @if (Html.IsFeatureEnabled("Recruit", "Index"))
+                    @if (Html.IsAuthorized("Recruit", "Index"))
                     {
                         <h2 class="heading-medium">
                             <a href="@Url.EmployerRecruitAction()">Apprenticeship recruitment</a>
@@ -87,7 +87,7 @@ else
                 <nav>
                     <ul class="js-tabs" role="tablist">
                         <li role="tab" id="tab-tasks" aria-controls="pane-tasks"><a href="#pane-tasks">Tasks</a></li>
-                        @if (Html.IsFeatureEnabled("Activities", "Latest"))
+                        @if (Html.IsAuthorized("Activities", "Latest"))
                         {
                             <li role="tab" id="tab-activity" aria-controls="pane-activity"><a href="#pane-activity">Activity</a></li>
                         }
@@ -171,7 +171,7 @@ else
                             <p>You do not have any tasks</p>
                         }
                     </div>
-                    @if (Html.IsFeatureEnabled("Activities", "Latest"))
+                    @if (Html.IsAuthorized("Activities", "Latest"))
                     {
                         <div class="js-tab-pane" id="pane-activity" role="tabpanel">
                             @Html.Action("Latest", "Activities")

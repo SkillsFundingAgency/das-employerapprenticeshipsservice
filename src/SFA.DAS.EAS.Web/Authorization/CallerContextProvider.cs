@@ -3,6 +3,7 @@ using System.Web;
 using SFA.DAS.EAS.Application.Extensions;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Authorization;
+using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.HashingService;
 
@@ -24,15 +25,11 @@ namespace SFA.DAS.EAS.Web.Authorization
         public ICallerContext GetCallerContext()
         {
             var accountId = GetAccountId();
-            var actionName = GetActionName();
-            var controllerName = GetControllerName();
             var userExternalId = GetUserExternalId();
 
             return new CallerContext
             {
                 AccountId = accountId,
-                ActionName = actionName,
-                ControllerName = controllerName,
                 UserExternalId = userExternalId
             };
         }
@@ -50,26 +47,6 @@ namespace SFA.DAS.EAS.Web.Authorization
             }
 
             return accountId;
-        }
-
-        private string GetActionName()
-        {
-            if (!_httpContext.Request.RequestContext.RouteData.Values.TryGetValue(ControllerConstants.ActionKeyName, out var actionName))
-            {
-                return null;
-            }
-
-            return (string)actionName;
-        }
-
-        private string GetControllerName()
-        {
-            if (!_httpContext.Request.RequestContext.RouteData.Values.TryGetValue(ControllerConstants.ControllerKeyName, out var controllerName))
-            {
-                return null;
-            }
-
-            return (string)controllerName;
         }
 
         private Guid? GetUserExternalId()

@@ -1,11 +1,8 @@
-﻿using NLog.Time;
+﻿using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Pipeline;
-using SFA.DAS.EAS.Infrastructure.Pipeline.Features;
-using SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers;
-using SFA.DAS.EAS.Infrastructure.Services.Features;
+using SFA.DAS.EAS.Infrastructure.Authorization;
+using SFA.DAS.EAS.Infrastructure.Features;
 using StructureMap;
-
 
 namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 {
@@ -13,13 +10,12 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
     {
         public AuthorisationRegistry()
         {
-            For<IAuthorizationHandler[]>().Use(ctx => new IAuthorizationHandler[]
+            For<IEnumerable<IAuthorizationHandler>>().Use(c => new List<IAuthorizationHandler>
             {
-                // The order of the types specified here is the order in which the handlers will be executed. 
-                ctx.GetInstance<FeatureEnabledAuthorisationHandler>(),
-                ctx.GetInstance<FeatureWhitelistAuthorisationHandler>(),
-                ctx.GetInstance<AgreementFeatureAuthorisationHandler>()
-            }).Singleton();
+                c.GetInstance<FeatureEnabledAuthorisationHandler>(),
+                c.GetInstance<FeatureWhitelistAuthorizationHandler>(),
+                c.GetInstance<FeatureAgreementAuthorisationHandler>()
+            });
 
             For<IFeatureService>().Use<FeatureService>().Singleton();
             For<IFeatureCache>().Use<FeatureCache>().Singleton();

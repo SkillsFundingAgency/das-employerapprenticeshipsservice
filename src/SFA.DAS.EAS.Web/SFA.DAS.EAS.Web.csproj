@@ -438,10 +438,10 @@
     <Compile Include="Authorization\CallerContextProvider.cs" />
     <Compile Include="Binders\MessageModelBinder.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
+    <Compile Include="Extensions\ActionDescriptorExtensions.cs" />
     <Compile Include="Extensions\RouteValueDictionaryExtensions.cs" />
     <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
     <Compile Include="Extensions\TransferConnectionInvitationDtoExtensions.cs" />
-    <Compile Include="Helpers\ControllerMetaDataService.cs" />
     <Compile Include="Mappings\TransactionMappings.cs" />
     <Compile Include="Validation\SerializableModelStateDictionary.cs" />
     <Compile Include="Validation\SerializableModelState.cs" />

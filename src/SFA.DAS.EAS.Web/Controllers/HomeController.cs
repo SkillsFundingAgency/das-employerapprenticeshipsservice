@@ -5,11 +5,12 @@ using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
-using IAuthenticationService = SFA.DAS.EAS.Domain.Interfaces.IAuthenticationService;
+using IAuthenticationService = SFA.DAS.EAS.Infrastructure.Authentication.IAuthenticationService;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {

@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 using AutoMapper;
-using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Web.Filters;
 

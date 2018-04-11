@@ -56,7 +56,7 @@
         </h2>
         <p>View payments made into and out of your apprenticeship service account. </p>
     </div>
-    @if (Html.IsFeatureEnabled("EmployerAccountTransactions", "TransactionsDownload"))
+    @if (Html.IsAuthorized("EmployerAccountTransactions", "TransactionsDownload"))
     {
         <div class="column-half">
             <h2 class="heading-medium">
@@ -67,7 +67,7 @@
             <p>Download your financial transactions within a specific date range. </p>
         </div>
     }
-    @if (Html.IsFeatureEnabled("EmployerProjections", "Index"))
+    @if (Html.IsAuthorized("EmployerProjections", "Index"))
     {
         <div class="column-half">
             <h2 class="heading-medium">
@@ -78,7 +78,7 @@
             <p>View funding projection to plan your future spending. </p>
         </div>
     }
-    @if (Html.IsFeatureEnabled("Transfers", "Index"))
+    @if (Html.IsAuthorized("Transfers", "Index"))
     {
         <div class="column-half">
             <h2 class="heading-medium">
