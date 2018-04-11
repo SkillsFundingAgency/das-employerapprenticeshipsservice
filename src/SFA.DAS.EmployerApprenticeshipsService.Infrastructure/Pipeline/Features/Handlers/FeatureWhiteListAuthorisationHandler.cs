@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Domain.Models.FeatureToggles;
 
 namespace SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers
 {
-    public class FeatureWhiteListAuthorisationHandler : IAuthorizationHandler
+    public class FeatureWhitelistAuthorisationHandler : IAuthorizationHandler
     {
         public Task<bool> CanAccessAsync(IAuthorizationContext authorizationContext)
         {
@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers
         {
             var feature = authorisationContext.CurrentFeature;
 
-            if (feature?.WhiteList == null)
+            if (feature?.Whitelist == null)
             {
                 return FeatureHandlerResults.FeatureEnabledTask;
             }
@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers
                 return FeatureHandlerResults.FeatureDisabledTask;
             }
 
-            if (feature.WhiteList.Any(email => Regex.IsMatch(authorisationContext.UserContext.Email, email, RegexOptions.IgnoreCase)))
+            if (feature.Whitelist.Any(email => Regex.IsMatch(authorisationContext.UserContext.Email, email, RegexOptions.IgnoreCase)))
             {
                 return FeatureHandlerResults.FeatureEnabledTask;
             }

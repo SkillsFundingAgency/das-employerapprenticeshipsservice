@@ -258,7 +258,6 @@
     <Compile Include="Models\FeatureToggles\OperationContext.cs" />
     <Compile Include="Models\IEntity.cs" />
     <Compile Include="Models\FeatureToggles\ControllerAction.cs" />
-    <Compile Include="Models\FeatureToggles\WhiteList.cs" />
     <Compile Include="Models\Organisation\Address.cs" />
     <Compile Include="Models\Payments\Payment.cs" />
     <Compile Include="Models\Payments\PeriodEnd.cs" />
@@ -367,7 +366,6 @@
     <Compile Include="Models\UserView\MultiVariantView.cs" />
     <Compile Include="Models\UserView\MultiVariantViewLookup.cs" />
     <Compile Include="Models\UserView\ViewAccess.cs" />
-    <Compile Include="Models\WhileList\UserWhiteListLookUp.cs" />
     <Compile Include="Models\PAYE\Paye.cs" />
     <Compile Include="Models\PAYE\PayeView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

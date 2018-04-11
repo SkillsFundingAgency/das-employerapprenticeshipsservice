@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Handlers
         [Test]
         public void Constructor()
         {
-            var whiteListingService = new FeatureWhiteListAuthorisationHandler();
+            var whiteListingService = new FeatureWhitelistAuthorisationHandler();
 
             Assert.Pass("Shouldn't get an exception");
         }
@@ -29,10 +29,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Handlers
             // Arrange
             var fixtures = new FeatureToggleAuthorisationHandlerTestsFixtures()
                 .WithUserEmail(userEmail)
-                .WithWhiteListed(whitelist);
+                .WithWhitelist(whitelist);
 
             var operationContext = fixtures.CreateOperationContext();
-            var handler = new FeatureWhiteListAuthorisationHandler();
+            var handler = new FeatureWhitelistAuthorisationHandler();
 
             // Act
             var actualIsEnabled =
@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Handlers
 
             return new AuthorizationContext 
             {
-                CurrentFeature = new Feature { Enabled = true, WhiteList = WhiteList},
+                CurrentFeature = new Feature { Enabled = true, Whitelist = Whitelist},
                 UserContext = UserContext
             };
         }
@@ -74,9 +74,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Handlers
 
         public const string Nullstring = "null";
 
-        public string[] WhiteList { get; set; }
+        public string[] Whitelist { get; set; }
 
-        public FeatureToggleAuthorisationHandlerTestsFixtures WithWhiteListed(string[] whitelist)
+        public FeatureToggleAuthorisationHandlerTestsFixtures WithWhitelist(string[] whitelist)
         {
             // treat a single element array with only special null string as a null array 
             if (whitelist.Length == 1 && whitelist[0] == Nullstring)
@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Pipeline.Features.Handlers
                 whitelist = null;
             }
 
-            WhiteList = whitelist;
+            Whitelist = whitelist;
 
             return this;
         }

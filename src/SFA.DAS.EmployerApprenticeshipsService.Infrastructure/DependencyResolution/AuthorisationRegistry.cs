@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
             {
                 // The order of the types specified here is the order in which the handlers will be executed. 
                 ctx.GetInstance<FeatureEnabledAuthorisationHandler>(),
-                ctx.GetInstance<FeatureWhiteListAuthorisationHandler>(),
+                ctx.GetInstance<FeatureWhitelistAuthorisationHandler>(),
                 ctx.GetInstance<AgreementFeatureAuthorisationHandler>()
             }).Singleton();
 

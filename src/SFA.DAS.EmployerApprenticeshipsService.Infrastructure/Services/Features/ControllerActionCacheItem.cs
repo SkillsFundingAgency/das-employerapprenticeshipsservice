@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services.Features
 
         public Feature Feature { get; }
 
-        public string[] WhiteList => Feature.WhiteList;
+        public string[] Whitelist => Feature.Whitelist;
 
         public FeatureType FeatureType => Feature.FeatureType;
 

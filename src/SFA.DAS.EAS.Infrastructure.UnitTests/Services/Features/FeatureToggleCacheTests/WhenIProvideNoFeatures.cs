@@ -84,10 +84,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureToggleCa
 
         public ToggleFeatureTestFixtures WithFeature(FeatureType featureType, params string[] actions)
         {
-            return WithWhiteListedFeature(featureType, null, actions);
+            return WithWhitelistedFeature(featureType, null, actions);
         }
 
-        public ToggleFeatureTestFixtures WithWhiteListedFeature(FeatureType featureType, string whitelistedEmail, params string[] actions)
+        public ToggleFeatureTestFixtures WithWhitelistedFeature(FeatureType featureType, string whitelistedEmail, params string[] actions)
         {
             var controllerActions = actions.Select(action =>
             {
@@ -109,7 +109,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureToggleCa
         {
             for (int i = 0; i < requiredFeatures; i++)
             {
-                WithWhiteListedFeature((FeatureType) i, $"email-{i}", actions);
+                WithWhitelistedFeature((FeatureType) i, $"email-{i}", actions);
             }
 
             return this;
@@ -128,7 +128,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.Features.FeatureToggleCa
 
             if (whitelistedEmail != null)
             {
-                newFeature.WhiteList = new[] {whitelistedEmail};
+                newFeature.Whitelist = new[] {whitelistedEmail};
             }
 
             return this;
