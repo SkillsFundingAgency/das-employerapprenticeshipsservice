@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
         {
             var fixtures = new ProcessorTestFixtures();
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             Assert.Pass("Shouldn't throw exception");
         }
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithIds(availableIds)
                 .WithLoggedCalls(processedIds);
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithAllProcessorCallsSuccessful()
                 .WithLoggedCheckpointCalls(checkpointedIds);
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             var info = await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithLoggedCalls(processedIds)
                 .WithLoggedCheckpointCalls(checkpointedIds);
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             var info = await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -107,7 +107,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithBatchSize(10)
                 .WithLoggedCalls(processedIds);
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -129,7 +129,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithLoggedIds(1, 10, processedBatches)
                 .WithStartingAfterLastSuccess(lastSuccessfulId);
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -156,7 +156,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithAllProcessorCallsSuccessful()
                 .WithLoggedIds(1, totalInputSize, processedBatches);
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -180,7 +180,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithAllProcessorCallsSuccessful()
                 .WithLoggedIds(1, totalInputSize, processedBatches);
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             var processInfo =  await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -200,7 +200,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithIds(OffSet, numberOfs)
                 .WithAllProcessorCallsSuccessful();
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             var processInfo = await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -231,7 +231,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithLoggedCalls(processedIds)
                 .WithExactLoggedIds(sequence1, processedBatches);
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             var processInfo = await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -260,7 +260,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithAllProcessorCallsFaulting()
                 .WithAllProcessingFaultsIgnored();
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             var processInfo = await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -279,7 +279,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithAllProcessorCallsFaulting()
                 .WithAllProcessingFaultsIgnored();
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             var processInfo = await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -302,7 +302,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithAllProcessorCallsFaulting()
                 .WithAnyProcessingFaultTerminatingProcess();
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             var processInfo = await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -320,7 +320,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithIds(1, 100)
                 .WithProcessorCallsSuccessfulUntilSetPoint(5);
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             var processInfo = await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -338,7 +338,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithIds(1, 100)
                 .WithAllProcessorCallsSuccessful();
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             var processInfo = await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -360,7 +360,7 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
                 .WithAllProcessorCallsFaulting()
                 .WithAnyProcessingFaultTerminatingProcess();
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             var processInfo = await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -371,14 +371,14 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
         }
 
         [Test]
-        public async Task ProcessAsync_WhenProcessorIndicatesTerminatePartWayThrough_ShouldSetStatusToTerminatedEarly()
+        public async Task ProcessAsync_WhenProcessorIndicatesTerminatePartWayThrough_ShouldBeTerminated()
         {
             // Arrange
             var fixtures = new ProcessorTestFixtures()
                 .WithIds(1, 10)
                 .WithProcessorCallsSuccessfulUntilSetPoint(5);
 
-            var broker = new Broker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+            var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
 
             // Act
             var processInfo = await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
@@ -387,5 +387,23 @@ namespace SFA.DAS.EAS.DBMaintenance.WebJob.UnitTests.IdProcessor
             const int expectedNumberOfIdsProcessed = 4;
             Assert.AreEqual(expectedNumberOfIdsProcessed, processInfo.IdsProcessed);
         }
+
+	    [Test]
+	    public async Task ProcessAsync_WhenProcessorIndicatesTerminatePartWayThrough_ShouldSetStatusToTerminatedEarly()
+	    {
+		    // Arrange
+		    var fixtures = new ProcessorTestFixtures()
+			    .WithIds(1, 10)
+			    .WithProcessorCallsSuccessfulUntilSetPoint(5);
+
+		    var broker = new IdBroker(fixtures.IdProcessorConfiguration, fixtures.Checkpoint, fixtures.Log);
+
+		    // Act
+		    var processInfo = await broker.ProcessAsync(fixtures.IdProvider, fixtures.Processor);
+
+		    // Assert
+		    const ProcessingState expectedNumberOfIdsProcessed = ProcessingState.TerminatedEarly;
+		    Assert.AreEqual(expectedNumberOfIdsProcessed, processInfo.State);
+	    }
     }
 }

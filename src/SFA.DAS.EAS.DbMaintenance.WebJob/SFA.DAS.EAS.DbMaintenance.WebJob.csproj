@@ -174,12 +174,12 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Jobs\PaymentIntegrityCheckerJob.cs" />
-    <Compile Include="IdProcessor\Broker.cs" />
+    <Compile Include="IdProcessor\IdBroker.cs" />
     <Compile Include="Jobs\GenerateAgreements\Constants.cs" />
     <Compile Include="Jobs\GenerateAgreements\GenerateAgreementsProcessor.cs" />
     <Compile Include="Jobs\GenerateAgreements\GenerateAgreementsIdProvider.cs" />
     <Compile Include="Jobs\GenerateAgreements\GenerateAgreementsJob.cs" />
-    <Compile Include="IdProcessor\IBroker.cs" />
+    <Compile Include="IdProcessor\IIdBroker.cs" />
     <Compile Include="IdProcessor\ICheckpoint.cs" />
     <Compile Include="IdProcessor\IIdProvider.cs" />
     <Compile Include="IdProcessor\IProcessor.cs" />

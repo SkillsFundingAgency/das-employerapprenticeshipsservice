@@ -3,9 +3,9 @@
 namespace SFA.DAS.EAS.DbMaintenance.WebJob.IdProcessor
 {
     /// <summary>
-    ///     Obtain account ids and for each invoke a specified processor.
+    ///     Obtain ids and for each invoke a specified processor.
     /// </summary>
-    public interface IBroker
+    public interface IIdBroker
     {
         /// <summary>
         ///     Fetch ids from <see cref="IdProvider"/> in batches and for each id found

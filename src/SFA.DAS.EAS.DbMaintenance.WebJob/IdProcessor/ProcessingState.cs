@@ -23,7 +23,7 @@
         TerminatedEarly = 3,
 
         /// <summary>
-        ///     The processor was terminated prematurely becuase it generated an unhandled exception.
+        ///     The processor was terminated prematurely because it generated an unhandled exception.
         /// </summary>
         TerminatedByErrorHandler = 100,
 

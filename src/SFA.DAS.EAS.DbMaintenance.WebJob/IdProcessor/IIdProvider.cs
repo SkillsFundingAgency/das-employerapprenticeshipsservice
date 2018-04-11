@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.IdProcessor
         /// </param>
         /// <param name="processingContext">
         ///     This can be used by the <see cref="IIdProvider"/> and <see cref="IProcessor"/> to exchange 
-        ///     settings. It is not used by the <see cref="IBroker"/>.
+        ///     settings. It is not used by the <see cref="IIdBroker"/>.
         /// </param>
         /// <returns>
         ///     An enumeration of ids.
