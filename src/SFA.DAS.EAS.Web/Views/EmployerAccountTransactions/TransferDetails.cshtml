@@ -23,9 +23,11 @@
             <h1 class="heading-xlarge">Transfer Received</h1>
         }
 
-        <p>Date <b>@Model.DateCreated.ToGdsFormatFull()</b></p>
-        <p>Account Name <b>@(Model.IsCurrentAccountSender ? Model.ReceiverAccountName : Model.SenderAccountName)</b></p>
-        <p>Account ID <b>@(Model.IsCurrentAccountSender ? Model.ReceiverAccountPublicHashedId : Model.SenderAccountPublicHashedId)</b></p>
+        <div class="account-info">
+            <p>Date <b>@Model.DateCreated.ToGdsFormatFull()</b></p>
+            <p>Account Name <b>@(Model.IsCurrentAccountSender ? Model.ReceiverAccountName : Model.SenderAccountName)</b></p>
+            <p>Account ID <b>@(Model.IsCurrentAccountSender ? Model.ReceiverAccountPublicHashedId : Model.SenderAccountPublicHashedId)</b></p>
+        </div>
     </div>
 
     <div class="column-full">
@@ -33,19 +35,19 @@
         <table>
             <thead>
                 <tr>
-                    <th scope="col">Course</th>
-                    <th scope="col">Apprentices</th>
-                    <th scope="col" class="numeric">Amount</th>
+                    <th class="numeric" scope="col">Course</th>
+                    <th class="numeric" scope="col">Apprentices</th>
+                    <th class="numeric" scope="col">Amount</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var transferDetail in Model.TransferDetails)
             {
                 <tr>
-                    <td>
+                    <td class="numeric">
                         @transferDetail.CourseName
                     </td>
-                    <td>
+                    <td class="numeric">
                         @transferDetail.ApprenticeCount
                     </td>
                     @if (Model.IsCurrentAccountSender)
