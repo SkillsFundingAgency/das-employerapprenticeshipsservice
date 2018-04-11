@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services.Features
 {
     public class FeatureService : AzureServiceBase<FeatureToggleConfiguration>, IFeatureService
     {
-        public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.Features";
+        public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.FeaturesV2";
         public static TimeSpan DefaultCacheTime { get; } = new TimeSpan(0, 0, 30, 0);
         public sealed override ILog Logger { get; set; }
 
