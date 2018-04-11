@@ -5499,6 +5499,23 @@ h2 .float-right {
   margin-bottom: 2em;
 }
 
+/* Transfer transaction detaills */
+.account-info > p {
+  margin-bottom: 0.3125em;
+}
+
+.account-info > p:last-child {
+  margin-bottom: 1.25em;
+}
+
+tr.total td {
+  border-bottom: none;
+}
+
+tr.total td:last-child {
+  border-bottom: 1px solid #0b0c0c;
+}
+
 /*See all activity*/
 .timeline .all-activity p.activity:before {
   width: 20px;
