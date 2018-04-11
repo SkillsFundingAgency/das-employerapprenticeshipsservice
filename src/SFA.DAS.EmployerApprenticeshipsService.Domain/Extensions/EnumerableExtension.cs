@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Domain.Extensions
 
             foreach (var item in items)
             {
-                if (predicate.Invoke(item))
+                if (predicate(item))
                     foundItems++;
 
                 if (foundItems >= count)
