@@ -6,6 +6,8 @@
 
         public string AccountHashId { get; set; }
 
+        public string PublicAccountHashId { get; set; }
+
         public long AccountId { get; set; }
 
         public decimal Balance { get; set; }

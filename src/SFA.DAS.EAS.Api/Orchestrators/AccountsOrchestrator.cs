@@ -62,6 +62,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                     AccountId = account.Id,
                     AccountName = account.Name,
                     AccountHashId = account.HashedId,
+                    PublicAccountHashId = account.PublicHashedId,
                     IsLevyPayer = true
                 };
                 
@@ -258,6 +259,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             {
                 AccountId = accountResult.Account.AccountId,
                 HashedAccountId = accountResult.Account.HashedId,
+                PublicHashedAccountId = accountResult.Account.PublicHashedId,
                 DateRegistered = accountResult.Account.CreatedDate,
                 OwnerEmail = accountResult.Account.OwnerEmail,
                 DasAccountName = accountResult.Account.Name,
