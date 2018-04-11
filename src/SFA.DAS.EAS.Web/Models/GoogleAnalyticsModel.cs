@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Web.Models
 
         public void GetConfiguration()
         {
-            var configuration = ConfigurationHelper.GetConfigForService<GoogleAnalyticsSnippets>(ServiceName);
+            var configuration = ConfigurationHelper.GetConfiguration<GoogleAnalyticsSnippets>(ServiceName);
             PopulateGoogleEnvironmentDetails(configuration);
         }
 

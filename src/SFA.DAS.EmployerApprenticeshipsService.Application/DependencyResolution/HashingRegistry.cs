@@ -12,8 +12,8 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         {
             var config = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(Constants.ServiceName);
 
-            For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
-            For<IPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
+            For<IHashingService>().Use(c => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
+            For<IPublicHashingService>().Use(c => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
         }
     }
 }

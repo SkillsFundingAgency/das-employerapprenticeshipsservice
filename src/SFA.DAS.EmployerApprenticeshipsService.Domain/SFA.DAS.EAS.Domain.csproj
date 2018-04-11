@@ -324,7 +324,7 @@
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentDetails.cs" />
     <Compile Include="Models\Features\Feature.cs" />
-    <Compile Include="Models\Features\FeatureToggleConfiguration.cs" />
+    <Compile Include="Models\Features\FeaturesConfiguration.cs" />
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
     <Compile Include="Models\HmrcLevy\EmployerLevyData.cs" />
     <Compile Include="Models\HmrcLevy\LevyDeclarations.cs" />

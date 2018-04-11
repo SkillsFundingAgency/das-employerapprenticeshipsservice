@@ -83,14 +83,7 @@ namespace SFA.DAS.EAS.Infrastructure.Authorization
         public bool IsAuthorized(FeatureType featureType)
         {
             var authorisationContext = GetAuthorizationContext();
-            var featureTask = _featureService.GetFeature(featureType);
-
-            if (!featureTask.Wait(60 * 1000))
-            {
-                throw new Exception("Timeout waiting for feature");
-            }
-
-            var feature = featureTask.Result;
+            var feature = _featureService.GetFeature(featureType);
             var isAuthorized = _handlers.All(h => Task.Run(async () => await h.CanAccessAsync(authorisationContext, feature)).Result);
 
             return isAuthorized;

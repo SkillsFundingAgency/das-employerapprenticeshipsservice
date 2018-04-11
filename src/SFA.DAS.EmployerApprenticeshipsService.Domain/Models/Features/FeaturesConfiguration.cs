@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Domain.Models.Features
 {
-    public class FeatureToggleConfiguration
+    public class FeaturesConfiguration
     {
         public Feature[] Data { get; set; }
     }

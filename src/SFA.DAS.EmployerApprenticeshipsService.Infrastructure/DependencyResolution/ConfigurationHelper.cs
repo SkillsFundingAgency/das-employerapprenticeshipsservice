@@ -9,30 +9,6 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 {
     public static class ConfigurationHelper
     {
-        public static T GetConfiguration<T>(string serviceName)
-        {
-            var configurationService = CreateConfigurationService(serviceName);
-            var config = configurationService.Get<T>();
-
-            return config;
-        }
-
-        public static Task<T> GetConfigurationAsync<T>(string serviceName)
-        {
-            return Task.Run(async () =>
-            {
-                var configurationService = CreateConfigurationService(serviceName);
-                //HACK: the das config service continues on the sync context which deadlocks as ASP is waiting on the config load task to complete on the asp sysnc context
-                // There is a PR to fix this - when the updated nuget package is available the outer task can be removed leaving only the following line of code
-                return await configurationService.GetAsync<T>().ConfigureAwait(false);
-            });
-        }
-
-        public static bool IsAnyOf(params DasEnvironment[] environment)
-        {
-            return environment.Contains(CurrentEnvironment);
-        }
-
         public static DasEnvironment CurrentEnvironment
         {
             get
@@ -53,17 +29,39 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
         {
             get
             {
+                var environmentName = Environment.GetEnvironmentVariable("DASENV");
+
+                if (string.IsNullOrEmpty(environmentName))
                 {
-                    var environmentName = Environment.GetEnvironmentVariable("DASENV");
-
-                    if (string.IsNullOrEmpty(environmentName))
-                    {
-                        environmentName = CloudConfigurationManager.GetSetting("EnvironmentName");
-                    }
-
-                    return environmentName.ToUpperInvariant();
+                    environmentName = CloudConfigurationManager.GetSetting("EnvironmentName");
                 }
+
+                return environmentName.ToUpperInvariant();
             }
+        }
+
+        public static T GetConfiguration<T>(string serviceName)
+        {
+            var configurationService = CreateConfigurationService(serviceName);
+            var configuration = configurationService.Get<T>();
+
+            return configuration;
+        }
+
+        public static Task<T> GetConfigurationAsync<T>(string serviceName)
+        {
+            return Task.Run(async () =>
+            {
+                var configurationService = CreateConfigurationService(serviceName);
+                // HACK: The das config service continues on the sync context which deadlocks as ASP is waiting on the config load task to complete on the asp sync context
+                // There is a PR to fix this - when the updated nuget package is available the outer task can be removed leaving only the following line of code
+                return await configurationService.GetAsync<T>().ConfigureAwait(false);
+            });
+        }
+
+        public static bool IsAnyOf(params DasEnvironment[] environment)
+        {
+            return environment.Contains(CurrentEnvironment);
         }
 
         private static ConfigurationService CreateConfigurationService(string serviceName)
@@ -73,13 +71,6 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
             var configurationService = new ConfigurationService(configurationRepository, new ConfigurationOptions(serviceName, environmentName, "1.0"));
 
             return configurationService;
-        }
-
-        public static T GetConfigForService<T>(string serviceName)
-        {
-            var configurationService = CreateConfigurationService(serviceName);
-
-            return configurationService.Get<T>();
         }
     }
 }

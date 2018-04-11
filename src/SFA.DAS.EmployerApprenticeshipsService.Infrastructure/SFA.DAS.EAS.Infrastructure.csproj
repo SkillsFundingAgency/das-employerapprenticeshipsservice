@@ -270,7 +270,7 @@
     <Compile Include="DependencyResolution\CurrentDatePolicy.cs" />
     <Compile Include="DependencyResolution\DasEnvironment.cs" />
     <Compile Include="DependencyResolution\ExecutionPolicyPolicy.cs" />
-    <Compile Include="DependencyResolution\AuthorisationRegistry.cs" />
+    <Compile Include="DependencyResolution\AuthorizationRegistry.cs" />
     <Compile Include="DependencyResolution\MessageSubscriberPolicy.cs" />
     <Compile Include="ExecutionPolicies\CompaniesHouseExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\ExecutionPolicy.cs" />
@@ -307,7 +307,6 @@
     <Compile Include="Authorization\AuthorizationService.cs" />
     <Compile Include="Authorization\IAuthorizationHandler.cs" />
     <Compile Include="Features\AccountAgreementService.cs" />
-    <Compile Include="Features\FeatureCacheFactory.cs" />
     <Compile Include="Features\FeatureService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AddressLookupService.cs" />
@@ -319,9 +318,7 @@
     <Compile Include="Services\CookieStorageService.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
     <Compile Include="Services\ExcelService.cs" />
-    <Compile Include="Features\FeatureCache.cs" />
-    <Compile Include="Features\IFeatureCache.cs" />
-    <Compile Include="Features\IFeatureCacheFactory.cs" />
+    <Compile Include="Features\IFeatures.cs" />
     <Compile Include="Features\FeatureAttribute.cs" />
     <Compile Include="Services\HmrcDateService.cs" />
     <Compile Include="Services\HmrcService.cs" />

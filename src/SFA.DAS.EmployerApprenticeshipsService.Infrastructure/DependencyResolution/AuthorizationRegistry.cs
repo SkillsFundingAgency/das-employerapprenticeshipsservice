@@ -6,10 +6,12 @@ using StructureMap;
 
 namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 {
-    public class AuthorisationRegistry : Registry
+    public class AuthorizationRegistry : Registry
     {
-        public AuthorisationRegistry()
+        public AuthorizationRegistry()
         {
+            For<IAccountAgreementService>().Use<AccountAgreementService>();
+
             For<IEnumerable<IAuthorizationHandler>>().Use(c => new List<IAuthorizationHandler>
             {
                 c.GetInstance<FeatureEnabledAuthorisationHandler>(),
@@ -18,8 +20,6 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
             });
 
             For<IFeatureService>().Use<FeatureService>().Singleton();
-            For<IFeatureCache>().Use<FeatureCache>().Singleton();
-            For<IAccountAgreementService>().Use<AccountAgreementService>().Singleton();
         }
     }
 }

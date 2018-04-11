@@ -8,7 +8,7 @@ using SFA.DAS.EAS.Infrastructure.Features;
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
 {
     [TestFixture]
-    public class FeatureToggleAuthorisationHandlerTests
+    public class FeatureWhitelistAuthorisationHandlerTests
     {
         [TestCase(true, "fredflintstone@bedrock.com", "fredflintstone@bedrock.com")]
         [TestCase(false, "fredflintstone@bedrock.com", "barneyrubble@bedrock.com")]

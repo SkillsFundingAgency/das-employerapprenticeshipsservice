@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             {
                 c.AddRegistry<ActivitiesClientRegistry>();
                 c.AddRegistry<AuditRegistry>();
-                c.AddRegistry<AuthorisationRegistry>();
+                c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();

@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
             var dbContextMock = new Mock<EmployerAccountDbContext>();
 
             authorizationContextCacheMock.Setup(c => c.GetAuthorizationContext()).Returns(new AuthorizationContext());
-            FeatureServiceMock.Setup(f => f.GetFeature(Feature.FeatureType)).ReturnsAsync(Feature);
+            FeatureServiceMock.Setup(f => f.GetFeature(Feature.FeatureType)).Returns(Feature);
 
             return new AuthorizationService(
 				dbContextMock.Object,
