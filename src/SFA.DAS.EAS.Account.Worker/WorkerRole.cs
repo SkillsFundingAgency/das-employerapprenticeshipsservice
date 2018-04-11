@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Account.Worker
                     c.AddRegistry<RepositoriesRegistry>();
                     c.AddRegistry<DefaultRegistry>();
                 });
-                
+
                 var messageProcessors = container.GetAllInstances<IMessageProcessor>().ToList();
                 var tasks = messageProcessors.Select(p => p.RunAsync(_cancellationTokenSource)).ToArray();
 
