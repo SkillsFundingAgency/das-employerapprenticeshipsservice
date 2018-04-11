@@ -15,14 +15,14 @@ namespace SFA.DAS.EAS.Infrastructure.Pipeline.Features.Handlers
 
         public async Task<bool> CanAccessAsync(IAuthorizationContext authorizationContext)
         {
-            if (authorizationContext.AccountContext == null)
+            if (authorizationContext.AccountContext == null || authorizationContext.CurrentFeature.EnabledByAgreementVersion == null)
             {
                 return true;
             }
 
             var latestAgreementForAccount = await _accountAgreementService.GetLatestAgreementSignedByAccountAsync(authorizationContext.AccountContext.Id);
 
-            return latestAgreementForAccount >= authorizationContext.CurrentFeature.EnabledByAgreementVersion;
+            return latestAgreementForAccount >= authorizationContext.CurrentFeature.EnabledByAgreementVersion.Value;
         }
     }
 }
