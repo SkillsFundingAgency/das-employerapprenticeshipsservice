@@ -16,8 +16,6 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution
         {
             return new Container(c =>
             {
-                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
-                c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName, "1.0", new NLogLogger(typeof(TopicMessagePublisher))));
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });

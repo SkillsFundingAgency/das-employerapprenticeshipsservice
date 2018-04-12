@@ -222,6 +222,7 @@
     <Compile Include="Interfaces\IMultiVariantTestingService.cs" />
     <Compile Include="Interfaces\IRefreshEmployerLevyService.cs" />
     <Compile Include="Interfaces\ITaskService.cs" />
+    <Compile Include="Interfaces\IWebJobConfiguration.cs" />
     <Compile Include="Interfaces\ITransferAllowanceService.cs" />
     <Compile Include="Models\Account\AccountHistoryEntry.cs" />
     <Compile Include="Models\Account\AccountStats.cs" />
