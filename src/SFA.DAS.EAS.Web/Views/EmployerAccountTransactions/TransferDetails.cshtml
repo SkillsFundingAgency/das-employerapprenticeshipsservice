@@ -52,13 +52,13 @@
                     </td>
                     @if (Model.IsCurrentAccountSender)
                     {
-                        <td class="numeric">
+                        <td class="numeric no-wrap">
                             -@transferDetail.PaymentTotal.ToString("C2", culture)
                         </td>
                     }
                     else
                     {
-                        <td class="numeric">
+                        <td class="numeric no-wrap">
                             @transferDetail.PaymentTotal.ToString("C2", culture)
                         </td>
                     }
@@ -69,11 +69,11 @@
                     <td colspan="2"></td>
                     @if (Model.IsCurrentAccountSender)
                     {
-                        <td class="numeric">-@Model.TransferPaymentTotal.ToString("C2", culture)</td>
+                        <td class="numeric no-wrap">-@Model.TransferPaymentTotal.ToString("C2", culture)</td>
                     }
                     else
                     {
-                        <td class="numeric">@Model.TransferPaymentTotal.ToString("C2", culture)</td>
+                        <td class="numeric no-wrap">@Model.TransferPaymentTotal.ToString("C2", culture)</td>
                     }
                 </tr>
             </tbody>
