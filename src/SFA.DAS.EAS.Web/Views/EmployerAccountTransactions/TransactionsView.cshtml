@@ -88,7 +88,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th scope="col"><span class="no-wrap">Payment date</span></th>
+                        <th scope="col" class="no-wrap">Payment date</th>
                         <th scope="col" class="mobile-hide-cell">Description</th>
                         <th scope="col" class="numeric">Amount</th>
                         <th scope="col"><span class="vh">Action</span></th>
@@ -101,8 +101,8 @@
                         var toDate = new DateTime(aggregationLine.DateCreated.Year, aggregationLine.DateCreated.Month, aggregationLine.DateCreated.Day, 23, 59, 59);
 
                         <tr>
-                            <td>
-                                <span class="no-wrap">@{var date = aggregationLine.DateCreated.ToGdsFormat();} @date </span>
+                            <td class="no-wrap">
+                                @{var date = aggregationLine.DateCreated.ToGdsFormat();} @date
                             </td>
                             <td class="mobile-hide-cell">
                                 <span class="description">
@@ -125,7 +125,7 @@
                                 }
                             }
 
-                            <td class="numeric"> <span class="no-wrap"> @(transactionAmount.ToString("C2", culture)) </span> </td>
+                            <td class="numeric no-wrap">@(transactionAmount.ToString("C2", culture))</td>
 
                             <td class="link-right">
                                 @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
