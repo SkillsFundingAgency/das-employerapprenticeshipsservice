@@ -8,5 +8,7 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Infrastructure.Interfaces
 	public interface IAzureContainerRepository
 	{
 		Task EnsureQueueExistsAsync(string queueName);
+
+		void QueueMessage<TMessage>(string queueName, TMessage message);
 	}
 }

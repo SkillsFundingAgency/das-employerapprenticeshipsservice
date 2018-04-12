@@ -14,10 +14,10 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Infrastructure
 			return GetTriggeredJob<QueueTriggerAttribute>();
 		}
 
-		//public IEnumerable<TriggeredJob> GetScheduledJobs()
-		//{
-		//	return GetTriggeredJob<QueueTriggerAttribute>();
-		//}
+		public IEnumerable<TriggeredJob<TimerTriggerAttribute>> GetScheduledJobs()
+		{
+			return GetTriggeredJob<TimerTriggerAttribute>();
+		}
 
 		private IEnumerable<TriggeredJob<TTriggerAttribute>> GetTriggeredJob<TTriggerAttribute>() where TTriggerAttribute : Attribute
 		{ 
