@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         public async Task ThenIShouldGetTransferDetails()
         {
             //Assign
-            var expectedViewModel = new TransferSenderTransactionDetailsViewModel
+            var expectedViewModel = new TransferTransactionDetailsViewModel
             {
                 ReceiverAccountName = "Test Group",
                 ReceiverAccountPublicHashedId = "GFH657",
@@ -81,7 +81,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                 TransferDetails = new List<AccountTransferDetails>()
             };
 
-            _mapper.Setup(x => x.Map<TransferSenderTransactionDetailsViewModel>(response))
+            _mapper.Setup(x => x.Map<TransferTransactionDetailsViewModel>(response))
                    .Returns(expectedViewModel);
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferTransactionDetailsQuery>()))
@@ -93,7 +93,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             //Assert
             var view = result as ViewResult;
 
-            var viewModel = view?.Model as TransferSenderTransactionDetailsViewModel;
+            var viewModel = view?.Model as TransferTransactionDetailsViewModel;
 
             Assert.AreEqual(expectedViewModel, viewModel);
         }

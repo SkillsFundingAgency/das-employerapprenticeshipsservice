@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Domain.Models.Transaction
 {
-    public enum TransactionItemType
+    public enum TransactionItemType : short
     {
         Unknown = 0,
         Declaration = 1,

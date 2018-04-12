@@ -53,8 +53,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                             commandType: CommandType.StoredProcedure);
                     }
 
-                    transaction.Commit();
-
                     return true;
                 }
                 catch (Exception ex)

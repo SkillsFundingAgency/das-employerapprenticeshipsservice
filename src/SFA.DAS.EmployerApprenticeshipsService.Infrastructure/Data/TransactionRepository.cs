@@ -176,28 +176,17 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 try
                 {
-                    foreach (var transaction in transactions)
-                    {
-                        var parameters = new DynamicParameters();
+                    var transactionTable = CreateTransferTransactionDataTable(transactions);
+                    var parameters = new DynamicParameters();
 
-                        parameters.Add("@accountId", transaction.AccountId, DbType.Int64);
-                        parameters.Add("@senderAccountId", transaction.SenderAccountId, DbType.Int64);
-                        parameters.Add("@senderAccountName", transaction.SenderAccountName, DbType.String);
-                        parameters.Add("@receiverAccountId", transaction.ReceiverAccountId, DbType.Int64);
-                        parameters.Add("@receiversAccountName", transaction.ReceiverAccountName, DbType.String);
-                        parameters.Add("@periodEnd", transaction.PeriodEnd, DbType.String);
-                        parameters.Add("@amount", transaction.Amount, DbType.Decimal);
-                        parameters.Add("@transactionType", TransactionItemType.Transfer, DbType.Int16);
-                        parameters.Add("@transactionDate", transaction.TransactionDate, DbType.DateTime);
+                    parameters.Add("@transferTransactions",
+                        transactionTable.AsTableValuedParameter("[employer_financial].[TransferTransactionsTable]"));
 
-                        var result = await connection.ExecuteAsync(
-                            sql: "[employer_financial].[CreateAccountTransferTransactions]",
-                            param: parameters,
-                            transaction: dbTransaction,
-                            commandType: CommandType.StoredProcedure);
-                    }
-
-                    dbTransaction.Commit();
+                    var result = await connection.ExecuteAsync(
+                        sql: "[employer_financial].[CreateAccountTransferTransactions]",
+                        param: parameters,
+                        transaction: dbTransaction,
+                        commandType: CommandType.StoredProcedure);
                 }
                 catch (Exception ex)
                 {
@@ -241,6 +230,42 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 }
             }
             return transactions;
+        }
+
+        private static DataTable CreateTransferTransactionDataTable(IEnumerable<TransferTransactionLine> transactions)
+        {
+            var table = new DataTable();
+
+            table.Columns.AddRange(new[]
+            {
+                new DataColumn("AccountId", typeof(long)),
+                new DataColumn("SenderAccountId", typeof(long)),
+                new DataColumn("SenderAccountName", typeof(string)),
+                new DataColumn("ReceiverAccountId", typeof(long)),
+                new DataColumn("ReceiverAccountName", typeof(string)),
+                new DataColumn("PeriodEnd", typeof(string)),
+                new DataColumn("Amount", typeof(decimal)),
+                new DataColumn("TransactionType", typeof(short)),
+                new DataColumn("TransactionDate", typeof(DateTime)),
+            });
+
+            foreach (var transaction in transactions)
+            {
+                table.Rows.Add(
+                    transaction.AccountId,
+                    transaction.SenderAccountId,
+                    transaction.SenderAccountName,
+                    transaction.ReceiverAccountId,
+                    transaction.ReceiverAccountName,
+                    transaction.PeriodEnd,
+                    transaction.Amount,
+                    (short)TransactionItemType.Transfer,
+                    transaction.TransactionDate);
+            }
+
+            table.AcceptChanges();
+
+            return table;
         }
     }
 }

@@ -64,18 +64,35 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Transfer Transactions")]
-        public virtual void TransferTransactions()
+        [NUnit.Framework.DescriptionAttribute("Sender Transfer Transactions")]
+        public virtual void SenderTransferTransactions()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Transfer Transactions", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sender Transfer Transactions", ((string[])(null)));
 #line 4
 this.ScenarioSetup(scenarioInfo);
 #line 5
 testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 6
-testRunner.When("I add transfer transactions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+testRunner.When("I send a levy transfer to a company", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 7
-testRunner.Then("They should appear in the transaction summary page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+testRunner.Then("I should see a transfer sent transaction on the transaction summary page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Receiver Transfer Transactions")]
+        public virtual void ReceiverTransferTransactions()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Receiver Transfer Transactions", ((string[])(null)));
+#line 9
+this.ScenarioSetup(scenarioInfo);
+#line 10
+testRunner.Given("I have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 11
+testRunner.When("I receive a levy transfer from a company", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 12
+testRunner.Then("I should see a transfer received transaction on the transaction summary page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

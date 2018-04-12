@@ -126,6 +126,7 @@
     <Build Include="StoredProcedures\CreateAccountTransferTransactions.sql" />
     <Build Include="StoredProcedures\GetAccountTransfersByPeriodEnd.sql" />
     <Build Include="StoredProcedures\GetTransferTransactionDetails.sql" />
+    <Build Include="Types\TransferTransactionsTable.sql" />
     <Build Include="UserDefinedTypes\PaymentsTable.sql" />
     <Build Include="StoredProcedures\CreatePayments.sql" />
     <None Include="Scripts\PostDeployment\SeedDevData.sql" />

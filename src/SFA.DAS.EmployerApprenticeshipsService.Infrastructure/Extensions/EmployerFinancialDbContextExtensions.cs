@@ -19,12 +19,12 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
         }
 
         public static async Task<IEnumerable<AccountTransfer>> GetTransfersByTargetAccountId(
-            this EmployerFinancialDbContext db, long senderAccountId, long receiverAccountId, string periodEnd)
+            this EmployerFinancialDbContext db, long accountId, long targetAccountId, string periodEnd)
         {
             var transfers = await db.SqlQueryAsync<AccountTransfer>(
                 "[employer_financial].[GetTransferTransactionDetails] @accountId = {0}, @targetAccountId = {1}, @periodEnd = {2}",
-                senderAccountId,
-                receiverAccountId,
+                accountId,
+                targetAccountId,
                 periodEnd);
 
             return transfers;

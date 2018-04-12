@@ -71,6 +71,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
             var receiverAccountId = firstTransfer.ReceiverAccountId;  //use key as we have grouped by receiver ID
             var receiverAccountName = firstTransfer.ReceiverAccountName;
             var transferTotal = senderTransferGroup.Sum(gt => gt.Amount);
+            var periodEnd = firstTransfer.PeriodEnd;
 
             var senderTransferTransaction = new TransferTransactionLine
             {
@@ -81,7 +82,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
                 SenderAccountId = senderAccountId,
                 SenderAccountName = senderAccountName,
                 ReceiverAccountId = receiverAccountId,
-                ReceiverAccountName = receiverAccountName
+                ReceiverAccountName = receiverAccountName,
+                PeriodEnd = periodEnd
             };
 
             var receiverTransferTransaction = new TransferTransactionLine
@@ -93,7 +95,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateTransferTransactions
                 SenderAccountId = senderAccountId,
                 SenderAccountName = senderAccountName,
                 ReceiverAccountId = receiverAccountId,
-                ReceiverAccountName = receiverAccountName
+                ReceiverAccountName = receiverAccountName,
+                PeriodEnd = periodEnd
             };
 
             return new[] { senderTransferTransaction, receiverTransferTransaction };

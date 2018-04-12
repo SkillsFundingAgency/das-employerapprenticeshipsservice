@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
             var transferDate = transfers.FirstOrDefault()?.TransferDate ?? default(DateTime);
             var transfersPaymentTotal = transferDetails.Sum(t => t.PaymentTotal);
 
-            var currentAccountPublicHashedId = _publicHashingService.HashValue(query.AccountId.GetValueOrDefault());
+            var isCurrentAccountSender = query.AccountId.GetValueOrDefault() == firstTransfer.SenderAccountId;
 
             return new GetTransferTransactionDetailsResponse
             {
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
                 SenderAccountPublicHashedId = senderPublicHashedAccountId,
                 ReceiverAccountName = receiverAccountName,
                 ReceiverAccountPublicHashedId = receiverPublicHashedAccountId,
-                IsCurrentAccountSender = currentAccountPublicHashedId.Equals(senderPublicHashedAccountId),
+                IsCurrentAccountSender = isCurrentAccountSender,
                 TransferDetails = transferDetails,
                 TransferPaymentTotal = transfersPaymentTotal,
                 DateCreated = transferDate

@@ -481,7 +481,7 @@
     <Compile Include="ViewModels\SignAgreementViewModel.cs" />
     <Compile Include="ViewModels\IAccountViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\DeletedTransferConnectionInvitationViewModel.cs" />
-    <Compile Include="ViewModels\Transactions\TransferSenderTransactionDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Transactions\TransferTransactionDetailsViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\ApprovedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\TransferConnectionInvitationAuthorizationViewModel.cs" />
