@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Azure.WebJobs;
+using SFA.DAS.EAS.DbMaintenance.WebJob.Infrastructure.Interfaces;
 using SFA.DAS.EAS.DbMaintenance.WebJob.Jobs;
 
 namespace SFA.DAS.EAS.DbMaintenance.WebJob.Infrastructure
@@ -23,11 +24,11 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Infrastructure
 			}
 		}
 
-		//public void TickTockJob([TimerTrigger("0 */1 * * * *")]
-		//	AdHocJobParams jobParams, TextWriter logger)
-		//{
-		//	RunJob(typeof(TickTockJob), logger);
-		//}
+		//                                    {second} {minute} {hour} {day} {month} {day-of-week}
+		public void PaymentCheck([TimerTrigger("0 30 5 4 * *")] TimerInfo timer, TextWriter logger)
+		{
+			ScheduleJob<PaymentIntegrityCheckerJob>();	
+		}
 
 		private void RunJob(Type jobtype, TextWriter logger)
 		{
@@ -55,6 +56,12 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Infrastructure
 		private IEnumerable<Type> GetAllPossibleJobs()
 		{
 			return Assembly.GetExecutingAssembly().GetTypes().Where(t => typeof(IJob).IsAssignableFrom(t));
+		}
+
+		private void ScheduleJob<TJob>() where TJob : IJob
+		{
+			var azureRepo = ServiceLocator.Get<IAzureContainerRepository>();
+			azureRepo.QueueMessage(Constants.AzureQueueNames.AdHocJobQueue, new AdHocJobParams {JobName = typeof(TJob).Name });
 		}
 	}
 }
