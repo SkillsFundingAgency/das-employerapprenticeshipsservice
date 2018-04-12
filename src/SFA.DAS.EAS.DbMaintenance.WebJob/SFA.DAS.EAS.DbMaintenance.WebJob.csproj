@@ -165,6 +165,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdHocJobParams.cs" />
+    <Compile Include="Infrastructure\AzureContainerRepository.cs" />
+    <Compile Include="Infrastructure\AzureWebJobHelper.cs" />
+    <Compile Include="Infrastructure\Interfaces\IAzureContainerRepository.cs" />
+    <Compile Include="Infrastructure\Interfaces\IAzureWebJobHelper.cs" />
+    <Compile Include="Infrastructure\Interfaces\IJobHostFactory.cs" />
+    <Compile Include="Infrastructure\Constants.cs" />
     <Compile Include="IdProcessor\ProcessingContext.cs" />
     <Compile Include="IdProcessor\ProcessorException.cs" />
     <Compile Include="IdProcessor\CheckpointDummy.cs" />
@@ -173,6 +180,9 @@
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Infrastructure\Interfaces\ITriggeredJobRepository.cs" />
+    <Compile Include="Infrastructure\JobLogger.cs" />
+    <Compile Include="Infrastructure\JobHostFactory.cs" />
     <Compile Include="Jobs\PaymentIntegrityCheckerJob.cs" />
     <Compile Include="IdProcessor\IdBroker.cs" />
     <Compile Include="Jobs\GenerateAgreements\Constants.cs" />
@@ -189,6 +199,13 @@
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Infrastructure\ServiceLocator.cs" />
+    <Compile Include="Jobs\DemoJobs\ListTriggeredJobs.cs" />
+    <Compile Include="Jobs\DemoJobs\Test2.cs" />
+    <Compile Include="Jobs\DemoJobs\TickTockJob.cs" />
+    <Compile Include="Infrastructure\TriggeredJob.cs" />
+    <Compile Include="Infrastructure\TriggeredJobRepository.cs" />
+    <Compile Include="Infrastructure\TriggeredJobs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

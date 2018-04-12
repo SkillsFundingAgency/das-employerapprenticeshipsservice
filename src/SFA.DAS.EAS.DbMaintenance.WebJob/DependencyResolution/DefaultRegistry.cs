@@ -11,6 +11,8 @@ using StructureMap;
 using StructureMap.TypeRules;
 using System;
 using System.Linq;
+using Microsoft.Azure.WebJobs;
+using SFA.DAS.EAS.DbMaintenance.WebJob.Infrastructure.Interfaces;
 
 namespace SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution
 {
@@ -21,9 +23,12 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution
 
         public DefaultRegistry()
         {
-            var config = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(ServiceName);
+            var employerApprenticeshipsServiceConfig = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService");
+	        var levyAggregationProviderConfig = ConfigurationHelper.GetConfiguration<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider");
+	        var commitmentsAPIConfig = ConfigurationHelper.GetConfiguration<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI");
+	        var paymentsAPIConfig = ConfigurationHelper.GetConfiguration<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI");
 
-            Scan(s =>
+			Scan(s =>
             {
                 s.AssembliesAndExecutablesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
@@ -31,14 +36,16 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution
             });
 
             For<ILog>().Use(c => new NLogLogger(c.ParentType, null, null)).AlwaysUnique();
-            For<IPublicHashingService>().Use(() => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
+            For<IPublicHashingService>().Use(() => new PublicHashingService(employerApprenticeshipsServiceConfig.PublicAllowedHashstringCharacters, employerApprenticeshipsServiceConfig.PublicHashstring));
 
-            Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
-            Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
-            Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
-            Policies.Add(new ConfigurationPolicy<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI"));
+			For<EmployerApprenticeshipsServiceConfiguration>().Use(employerApprenticeshipsServiceConfig);
+	        For<IWebJobConfiguration>().Use(employerApprenticeshipsServiceConfig.WebJobConfig);
+	        For<LevyDeclarationProviderConfiguration>().Use(levyAggregationProviderConfig);
+	        For<CommitmentsApiClientConfiguration>().Use(commitmentsAPIConfig);
+	        For<PaymentsApiClientConfiguration>().Use(paymentsAPIConfig);
+	        For<JobHost>().Use(ctx => ctx.GetInstance<IJobHostFactory>().CreateJobHost());
 
-            RegisterMediator();
+			RegisterMediator();
 
             RegisterMapper();
         }
