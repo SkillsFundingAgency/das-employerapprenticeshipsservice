@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Infrastructure.Interfaces
 		///		Returns all tasks that are triggered by a queue message (on any queue)
 		/// </summary>
 		/// <returns></returns>
-		IEnumerable<TriggeredJob<QueueTriggerAttribute>> GetQueueuTriggeredJobs();
+		IEnumerable<TriggeredJob<QueueTriggerAttribute>> GetQueuedTriggeredJobs();
 
 		/// <summary>
 		///		Returns all tasks that are triggered on a scheduled timer

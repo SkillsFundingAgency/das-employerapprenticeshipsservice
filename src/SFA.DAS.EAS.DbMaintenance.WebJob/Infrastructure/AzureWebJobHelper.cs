@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Infrastructure
 
 		public void EnsureAllQueuesForTriggeredJobs()
 		{
-			foreach (var triggeredJob in _triggeredJobRepository.GetQueueuTriggeredJobs())
+			foreach (var triggeredJob in _triggeredJobRepository.GetQueuedTriggeredJobs())
 			{
 				_azureContainerRepository.EnsureQueueExistsAsync(triggeredJob.Trigger.QueueName);	
 			}

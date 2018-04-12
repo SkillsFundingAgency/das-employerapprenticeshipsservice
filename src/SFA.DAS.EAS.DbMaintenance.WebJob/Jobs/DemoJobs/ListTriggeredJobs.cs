@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Jobs.DemoJobs
 			var sb = new StringBuilder();
 			int i = 0;
 
-			foreach (var job in _triggeredJobRepository.GetQueueuTriggeredJobs())
+			foreach (var job in _triggeredJobRepository.GetQueuedTriggeredJobs())
 			{
 				sb.AppendLine($"{i++}: {job.ContainingClass.FullName}.{job.InvokedMethod.Name} invoked by {job.Trigger} on queue {job.Trigger.QueueName}");
 			}
