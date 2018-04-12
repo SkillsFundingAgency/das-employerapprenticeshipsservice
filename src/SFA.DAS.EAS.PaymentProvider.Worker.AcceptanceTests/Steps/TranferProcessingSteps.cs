@@ -52,6 +52,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
         private List<StandardSummary> _standards;
         private ApprenticeshipInfoServiceApi _apprenticeshipInfoServiceApi;
         private ApprenticeshipInfoServiceApiMessageHandler _apprenticeshipInfoServiceApiHandler;
+        private bool _paymentProcessingCompletedMessageCreated;
 
         public TranferProcessingSteps()
         {
@@ -62,6 +63,8 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
         [BeforeScenario]
         public void SetUp()
         {
+            _paymentProcessingCompletedMessageCreated = false;
+
             _logger.Debug("Getting EAS & LAP Configs");
 
             var lapConfig = ConfigurationHelper.GetConfiguration<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider");
@@ -153,7 +156,6 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
                 }
             };
 
-
             _standards = new List<StandardSummary>
             {
                 new StandardSummary
@@ -236,7 +238,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
         [Then(@"the payments processing completed message is created")]
         public void ThenThePaymentsProcessingCompletedMessageIsCreated()
         {
-            WaitForPaymentsProcessingToComplete();
+            Assert.IsTrue(_paymentProcessingCompletedMessageCreated);
         }
 
         [Then(@"the account transfers should be save")]
@@ -346,7 +348,6 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
 
             var factory = new TopicSubscriberFactory(_messageBusConnectionString, "MA_TransferDataProcessor_TEST", _logger);
 
-
             var subscriber = factory.GetSubscriber<AccountPaymentsProcessingCompletedMessage>();
 
             _logger.Debug("Subscribing to payments processing completed message queue");
@@ -357,10 +358,13 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
 
             var successful = task.Wait(new TimeSpan(0, 5, 0));
 
-            if (!successful)
+            var message = task.Result;
+
+            if (!successful || message == null)
                 Assert.Fail("Payment processing took too long");
 
-            task.Result?.CompleteAsync().Wait();
+            message.CompleteAsync().Wait();
+            _paymentProcessingCompletedMessageCreated = true;
         }
 
         private void WaitForTransferProcessingToComplete()
@@ -373,10 +377,12 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
 
             var successful = task.Wait(new TimeSpan(0, 10, 0));
 
+            var message = task.Result;
+
+            message?.CompleteAsync().Wait();
+
             if (!successful)
                 Assert.Fail("Transfer processing took too long");
-
-            task.Result?.CompleteAsync().Wait();
         }
 
         private static void ClearSubscriptionMessageQueue(string connectionString, string topicName, string subscriptionName)

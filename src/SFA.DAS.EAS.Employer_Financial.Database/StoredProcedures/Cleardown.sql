@@ -9,6 +9,7 @@ AS
 		DELETE FROM [employer_financial].[TopUpPercentage]
 	END
 
+	DELETE FROM [employer_financial].[AccountTransfers]
 	DELETE FROM [employer_financial].[TransactionLine]
 	DELETE FROM [employer_financial].[Payment]
 	DELETE FROM [employer_financial].[PeriodEnd]

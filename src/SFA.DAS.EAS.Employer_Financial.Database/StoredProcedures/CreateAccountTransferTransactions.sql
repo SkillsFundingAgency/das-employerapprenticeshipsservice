@@ -1,13 +1,5 @@
 ﻿CREATE PROCEDURE [employer_financial].[CreateAccountTransferTransactions]
-	@accountId bigint,
-	@senderAccountId bigint,
-	@senderAccountName nvarchar(100),
-	@receiverAccountId bigint,
-	@receiversAccountName nvarchar(100),
-	@periodEnd nvarchar(20),
-	@amount decimal(18,4),
-	@transactionType smallint,
-	@transactionDate datetime
+	@transferTransactions [employer_financial].[TransferTransactionsTable] READONLY
 AS	
 	--Create transfer sender transaction
 	INSERT INTO [employer_financial].[TransactionLine]
@@ -19,20 +11,19 @@ AS
 		,Amount 		
 		,PeriodEnd 		
 		,TransferSenderAccountId
-		,TransferReceiverAccountId
-		,TransferReceiverAccountName		
 		,TransferSenderAccountName
+		,TransferReceiverAccountId
+		,TransferReceiverAccountName			
 	)
-	VALUES
-	(
-		@accountId,
+	SELECT	
+		tt.AccountId,
 		GETDATE(),
-		@transactionDate,
-		@transactionType,
-		@amount,
-		@periodEnd,
-		@senderAccountId,
-		@receiverAccountId,
-		@receiversAccountName,
-		@senderAccountName
-	)
+		tt.TransactionDate,
+		tt.TransactionType,
+		tt.Amount,
+		tt.PeriodEnd,
+		tt.SenderAccountId,
+		tt.SenderAccountName,
+		tt.ReceiverAccountId,
+		tt.ReceiverAccountName		
+	FROM @transferTransactions tt

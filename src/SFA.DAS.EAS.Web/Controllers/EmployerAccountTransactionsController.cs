@@ -131,7 +131,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var response = await _mediator.SendAsync(query);
 
-            var model = _mapper.Map<TransferSenderTransactionDetailsViewModel>(response);
+            var model = _mapper.Map<TransferTransactionDetailsViewModel>(response);
 
             return View(ControllerConstants.TransferDetailsViewName, model);
         }

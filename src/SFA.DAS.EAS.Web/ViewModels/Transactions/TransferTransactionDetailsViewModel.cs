@@ -1,10 +1,11 @@
-﻿using SFA.DAS.EAS.Domain.Models.Transfers;
+﻿using AutoMapper;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 using System;
 using System.Collections.Generic;
 
 namespace SFA.DAS.EAS.Web.ViewModels.Transactions
 {
-    public class TransferSenderTransactionDetailsViewModel : ViewModelBase
+    public class TransferTransactionDetailsViewModel : ViewModel
     {
         public string SenderAccountName { get; set; }
         public string SenderAccountPublicHashedId { get; set; }
@@ -14,5 +15,10 @@ namespace SFA.DAS.EAS.Web.ViewModels.Transactions
         public List<AccountTransferDetails> TransferDetails { get; set; }
         public decimal TransferPaymentTotal { get; set; }
         public DateTime DateCreated { get; set; }
+
+        public override void Map(IMapper mapper)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

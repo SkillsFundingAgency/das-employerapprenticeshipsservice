@@ -98,6 +98,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
                     It.IsAny<string>(), ReceiverAccountId, SenderAccountId, PeriodEnd))
                 .ReturnsAsync(_transfers);
 
+            _publicHashingService.Setup(x => x.DecodeValue(SenderPublicHashedId))
+                .Returns(SenderAccountId);
+
+            _publicHashingService.Setup(x => x.DecodeValue(ReceiverPublicHashedId))
+                .Returns(ReceiverAccountId);
+
             _publicHashingService.Setup(x => x.HashValue(SenderAccountId))
                 .Returns(SenderPublicHashedId);
 
