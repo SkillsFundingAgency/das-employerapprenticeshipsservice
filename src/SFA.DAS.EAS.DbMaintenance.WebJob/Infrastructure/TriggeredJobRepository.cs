@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.Infrastructure
 {
 	public class TriggeredJobRepository : ITriggeredJobRepository
 	{
-		public IEnumerable<TriggeredJob<QueueTriggerAttribute>> GetQueueuTriggeredJobs()
+		public IEnumerable<TriggeredJob<QueueTriggerAttribute>> GetQueuedTriggeredJobs()
 		{
 			return GetTriggeredJob<QueueTriggerAttribute>();
 		}
