@@ -82,10 +82,9 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
                 return;
             }
 
-            _logger.Info($"CreatePaymentData for new payments AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
+            _logger.Info($"CreatePayments for new payments AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
 
-            await _dasLevyRepository.CreatePaymentData(newPayments);
-
+            await _dasLevyRepository.CreatePayments(newPayments);
             await _mediator.PublishAsync(new ProcessPaymentEvent { AccountId = message.AccountId });
 
             foreach (var payment in newPayments)

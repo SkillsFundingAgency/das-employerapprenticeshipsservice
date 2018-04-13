@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Account.Worker.Extensions
+namespace SFA.DAS.EAS.Infrastructure.Extensions
 {
     public static class EnumerableExtensions
     {

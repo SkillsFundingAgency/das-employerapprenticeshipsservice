@@ -68,6 +68,7 @@
     <Folder Include="SeedData" />
     <Folder Include="Types" />
     <Folder Include="Functions" />
+    <Folder Include="UserDefinedTypes" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\EnglishFraction.sql" />
@@ -89,7 +90,6 @@
     <Build Include="StoredProcedures\GetLatestPeriodEnd.sql" />
     <Build Include="StoredProcedures\GetLevyDetail_ByAccountIdAndDateRange.sql" />
     <Build Include="Tables\Payment.sql" />
-    <Build Include="StoredProcedures\CreatePayment.sql" />
     <Build Include="StoredProcedures\GetPaymentData_ById.sql" />
     <Build Include="StoredProcedures\ProcessPaymentDataTransactions.sql" />
     <Build Include="Tables\LevyDeclarationTopup.sql" />
@@ -117,6 +117,8 @@
     <Build Include="StoredProcedures\GetAccountPaymentsByPeriodEnd.sql" />
     <Build Include="Functions\GetPreviousFinancialYearDates.sql" />
     <Build Include="StoredProcedures\GetAllPeriodEnds.sql" />
+    <Build Include="UserDefinedTypes\PaymentsTable.sql" />
+    <Build Include="StoredProcedures\CreatePayments.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

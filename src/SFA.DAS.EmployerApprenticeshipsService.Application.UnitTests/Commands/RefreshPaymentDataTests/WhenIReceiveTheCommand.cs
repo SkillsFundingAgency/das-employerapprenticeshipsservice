@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 
             _dasLevyRepository = new Mock<IDasLevyRepository>();
             _dasLevyRepository.Setup(x => x.GetAccountPaymentIds(It.IsAny<long>()))
-                .ReturnsAsync(_existingPaymentIds);
+                .ReturnsAsync(new HashSet<Guid>(_existingPaymentIds));
 
             _paymentDetails = new List<PaymentDetails>{ new PaymentDetails
             {
@@ -123,7 +123,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<IEnumerable<PaymentDetails>>()), Times.Never);
+            _dasLevyRepository.Verify(x => x.CreatePayments(It.IsAny<IEnumerable<PaymentDetails>>()), Times.Never);
         }
 
         [Test]
@@ -133,7 +133,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(_paymentDetails), Times.Once);
+            _dasLevyRepository.Verify(x => x.CreatePayments(_paymentDetails), Times.Once);
         }
         
         [Test]
@@ -163,7 +163,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<IEnumerable<PaymentDetails>>()), Times.Never);
+            _dasLevyRepository.Verify(x => x.CreatePayments(It.IsAny<IEnumerable<PaymentDetails>>()), Times.Never);
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Never);
 
         }
@@ -215,7 +215,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.Is<IEnumerable<PaymentDetails>>(s => 
+            _dasLevyRepository.Verify(x => x.CreatePayments(It.Is<IEnumerable<PaymentDetails>>(s => 
                 s.Any(p => p.Id.Equals(newPaymentGuid.ToString())) &&
                 s.Count() == 1)));
 
@@ -241,7 +241,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         public void ThenAnAccountPaymentCreatedIsNotCreatedIfPaymentProcessingFails()
         {
             //Arrange
-            _dasLevyRepository.Setup(x => x.CreatePaymentData(It.IsAny<IEnumerable<PaymentDetails>>()))
+            _dasLevyRepository.Setup(x => x.CreatePayments(It.IsAny<IEnumerable<PaymentDetails>>()))
                 .Throws<Exception>();
 
             //Act

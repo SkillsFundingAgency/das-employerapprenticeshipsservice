@@ -289,6 +289,8 @@
     <Compile Include="ExecutionPolicies\PolicyNameAttribute.cs" />
     <Compile Include="ExecutionPolicies\RequiredPolicyAttribute.cs" />
     <Compile Include="Extensions\EmployerFinancialDbContextExtensions.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\PaymentDetailsExtensions.cs" />
     <Compile Include="Extensions\HashingServiceExtensions.cs" />
     <Compile Include="Extensions\QueryFutureEnumerableExtensions.cs" />
     <Compile Include="Features\IFeatureService.cs" />
