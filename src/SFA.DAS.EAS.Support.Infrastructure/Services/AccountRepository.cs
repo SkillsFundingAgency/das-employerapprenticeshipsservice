@@ -153,7 +153,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                     return result;
                 case AccountFieldsSelection.Finance:
                     result.PayeSchemes = await MapToDomainPayeSchemeAsync(response);
-                    result.Transactions = await GetAccountTransactions(response.HashedAccountId); ;
+                    result.Transactions = await GetAccountTransactions(response.HashedAccountId); 
                     return result;
             }
 
