@@ -25,7 +25,6 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
         private readonly IMediator _mediator;
         private readonly ILog _logger;
 
-
         public RefreshPaymentDataCommandHandler(
             IMessagePublisher messagePublisher,
             IValidator<RefreshPaymentDataCommand> validator,
@@ -61,7 +60,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             }
             catch (WebException ex)
             {
-                _logger.Error(ex, $"Unable to get payment information for periodEnd = '{message.PeriodEnd}' and accountid = '{message.AccountId}'");
+                _logger.Error(ex, $"Unable to get payment information for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
             }
 
             if (payments == null || !payments.Any())
@@ -72,8 +71,8 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             }
 
             _logger.Info($"GetAccountPaymentIds for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
-            var existingPaymentIds = await _dasLevyRepository.GetAccountPaymentIds(message.AccountId);
 
+            var existingPaymentIds = await _dasLevyRepository.GetAccountPaymentIds(message.AccountId);
             var newPayments = payments.Where(p => !existingPaymentIds.Any(x => x.Equals(Guid.Parse(p.Id)))).ToArray();
 
             if (!newPayments.Any())
@@ -84,6 +83,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             }
 
             _logger.Info($"CreatePaymentData for new payments AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
+
             await _dasLevyRepository.CreatePaymentData(newPayments);
 
             await _mediator.PublishAsync(new ProcessPaymentEvent { AccountId = message.AccountId });

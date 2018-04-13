@@ -183,7 +183,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Never);
 
             _logger.Verify(x => x.Error(It.IsAny<WebException>(),
-                $"Unable to get payment information for periodEnd = '{_command.PeriodEnd}' and accountid = '{_command.AccountId}'"));
+                $"Unable to get payment information for AccountId = '{_command.AccountId}' and PeriodEnd = '{_command.PeriodEnd}'"));
         }
 
         [Test]
