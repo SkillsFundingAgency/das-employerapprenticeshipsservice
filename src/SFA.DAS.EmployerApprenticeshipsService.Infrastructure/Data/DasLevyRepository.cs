@@ -326,7 +326,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<IEnumerable<Guid>> GetAccountPaymentIds(long accountId)
+        public async Task<ISet<Guid>> GetAccountPaymentIds(long accountId)
         {
             var result = await WithConnection(async c =>
             {
@@ -339,7 +339,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     commandType: CommandType.StoredProcedure);
             });
 
-            return result;
+            return new HashSet<Guid>(result);
         }
 
         public async Task ProcessPaymentData(long accountId)
