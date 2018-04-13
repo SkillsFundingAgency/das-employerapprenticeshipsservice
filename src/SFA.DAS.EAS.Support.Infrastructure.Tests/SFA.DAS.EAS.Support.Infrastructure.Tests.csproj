@@ -61,12 +61,6 @@
     <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.EAS.Account.Api.Client, Version=1.0.0.54190, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Account.Api.Client.1.0.0.54190\lib\net45\SFA.DAS.EAS.Account.Api.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="SFA.DAS.EAS.Account.Api.Types, Version=1.0.0.54237, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Account.Api.Types.1.0.0.54237\lib\net45\SFA.DAS.EAS.Account.Api.Types.dll</HintPath>
-    </Reference>
     <Reference Include="SFA.DAS.HashingService, Version=1.0.0.57835, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.HashingService.1.0.0.57835\lib\net45\SFA.DAS.HashingService.dll</HintPath>
     </Reference>
@@ -114,6 +108,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
+      <Project>{0f0122d6-36f6-4d6c-856e-3daae1b13464}</Project>
+      <Name>SFA.DAS.EAS.Account.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
+      <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
+      <Name>SFA.DAS.EAS.Account.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EAS.Support.ApplicationServices\SFA.DAS.EAS.Support.ApplicationServices.csproj">
       <Project>{84CD1351-253C-43D7-886D-A5E9CA3606CA}</Project>
       <Name>SFA.DAS.EAS.Support.ApplicationServices</Name>
