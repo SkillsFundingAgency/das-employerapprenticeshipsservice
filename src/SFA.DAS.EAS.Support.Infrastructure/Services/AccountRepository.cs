@@ -281,6 +281,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                 AccountId = accountDetailViewModel.AccountId,
                 DasAccountName = accountDetailViewModel.DasAccountName,
                 HashedAccountId = accountDetailViewModel.HashedAccountId,
+                PublicHashedAccountId = accountDetailViewModel.PublicHashedAccountId,
                 DateRegistered = accountDetailViewModel.DateRegistered,
                 OwnerEmail = accountDetailViewModel.OwnerEmail
             };
