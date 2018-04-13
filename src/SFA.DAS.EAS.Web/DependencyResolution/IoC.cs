@@ -1,6 +1,5 @@
 using SFA.DAS.Activities.Client;
 using SFA.DAS.EAS.Application.DependencyResolution;
-using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using StructureMap;
 
@@ -32,7 +31,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.AddRegistry<TasksRegistry>();
                 c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<DefaultRegistry>();
-                c.AddRegistry<CacheRegistry>();
             });
         }
     }

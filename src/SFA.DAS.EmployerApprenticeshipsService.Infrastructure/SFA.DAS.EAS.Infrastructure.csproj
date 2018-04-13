@@ -239,7 +239,6 @@
     <Compile Include="Authorization\IAuthorizationService.cs" />
     <Compile Include="Caching\Constants.cs" />
     <Compile Include="Caching\InProcessCache.cs" />
-    <Compile Include="Caching\IoCRegistration.cs" />
     <Compile Include="Caching\LocalDevCache.cs" />
     <Compile Include="Caching\RedisCache.cs" />
     <Compile Include="Data\AccountIdUserTableParam.cs" />

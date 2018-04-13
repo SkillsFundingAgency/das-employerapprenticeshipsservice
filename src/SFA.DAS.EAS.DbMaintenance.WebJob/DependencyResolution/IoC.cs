@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Infrastructure.Caching;
+﻿using SFA.DAS.EAS.Application.DependencyResolution;
 using StructureMap;
 
 namespace SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution
@@ -9,8 +9,8 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution
         {
             return new Container(c =>
             {
+                c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<DefaultRegistry>();
-                c.AddRegistry<CacheRegistry>();
             });
         }
     }
