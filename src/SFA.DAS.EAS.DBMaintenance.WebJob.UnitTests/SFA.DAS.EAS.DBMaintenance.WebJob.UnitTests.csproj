@@ -188,10 +188,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.DbMaintenance.WebJob\SFA.DAS.EAS.DbMaintenance.WebJob.csproj">
-      <Project>{3f0e2d41-ab53-4fce-9c33-47206af1cbf1}</Project>
-      <Name>SFA.DAS.EAS.DbMaintenance.WebJob</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{ec415cda-9294-4967-bd27-aa900985427d}</Project>
       <Name>SFA.DAS.EAS.Domain</Name>

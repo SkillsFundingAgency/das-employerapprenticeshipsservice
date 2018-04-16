@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.DbMaintenance.WebJob.Infrastructure.Interfaces
+﻿namespace SFA.DAS.EAS.Account.Worker.Infrastructure.Interfaces
 {
 	/// <summary>
 	///		A service that can support webjobs by performing certain setup functions.
