@@ -195,6 +195,7 @@
     <Compile Include="IdProcessor\IdBrokerTests.cs" />
     <Compile Include="IdProcessor\ProcessingContextTests.cs" />
     <Compile Include="Infrastructure\AzureWebJobHelperTests.cs" />
+    <Compile Include="Jobs\PaymentIntegrityCheckerJobTests\WhenCheckerJobIsRun.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestFixtures\BatchInfo.cs" />
     <Compile Include="TestFixtures\ProcessorTestFixtures.cs" />
