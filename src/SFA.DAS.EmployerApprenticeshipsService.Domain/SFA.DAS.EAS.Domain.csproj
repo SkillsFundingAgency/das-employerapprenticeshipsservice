@@ -188,6 +188,7 @@
     <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />
     <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
+    <Compile Include="Configuration\WebJobConfig.cs" />
     <Compile Include="Models\Account\AgreementTemplate.cs" />
     <Compile Include="Models\Account\EmployerAgreement.cs" />
     <Compile Include="Constants.cs" />

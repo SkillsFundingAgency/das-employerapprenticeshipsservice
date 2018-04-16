@@ -23,10 +23,4 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
 		public WebJobConfig WebJobConfig { get; set; }
 	}
-
-	public class WebJobConfig : IWebJobConfiguration
-	{
-		public string DashboardConnectionString { get; set; }
-		public string StorageConnectionString { get; set; }
-	}
 }
