@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -16,6 +14,9 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Transactions;
 using SFA.DAS.HashingService;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {
@@ -24,7 +25,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
     {
         private const string ExpectedFileExtension = "hello";
         private const string ExpectedMimeType = @"text/csv";
-        private static readonly byte[] ExpectedFileData = {};
+        private static readonly byte[] ExpectedFileData = { };
 
         private EmployerAccountTransactionsController _controller;
         private Mock<IAuthenticationService> _owinWrapper;
@@ -90,7 +91,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                 _orchestrator.Object,
                 _userViewTestingService.Object,
                 _flashMessage.Object,
-                transactionFormatterFactory.Object);
+                transactionFormatterFactory.Object,
+                Mock.Of<IMapper>());
         }
 
         [Test]

@@ -203,9 +203,8 @@
     <Reference Include="SFA.DAS.Activities.Client, Version=1.0.0.59218, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.59218\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.10.29\lib\net45\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.29\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Audit.Client, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Client.dll</HintPath>
@@ -485,6 +484,7 @@
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\DeletedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\Transactions\TransferSenderTransactionDetailsViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\ApprovedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\TransferConnectionRolesViewModel.cs" />
@@ -644,6 +644,7 @@
     <Content Include="Views\Transfers\TransferAllowance.cshtml" />
     <Content Include="Views\Transfers\TransferRequests.cshtml" />
     <Content Include="Views\TransferConnectionInvitations\Deleted.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\TransferDetailsForSender.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />

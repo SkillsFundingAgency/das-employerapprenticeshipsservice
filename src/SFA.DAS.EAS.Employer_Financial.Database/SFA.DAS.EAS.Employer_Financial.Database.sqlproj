@@ -117,6 +117,12 @@
     <Build Include="StoredProcedures\GetAccountPaymentsByPeriodEnd.sql" />
     <Build Include="Functions\GetPreviousFinancialYearDates.sql" />
     <Build Include="StoredProcedures\GetAllPeriodEnds.sql" />
+    <Build Include="Tables\AccountTransfers.sql" />
+    <Build Include="StoredProcedures\CreateAccountTransfer.sql" />
+    <Build Include="StoredProcedures\GetTransferPaymentDetails.sql" />
+    <Build Include="StoredProcedures\CreateAccountTransferTransactions.sql" />
+    <Build Include="StoredProcedures\GetAccountTransfersByPeriodEnd.sql" />
+    <Build Include="StoredProcedures\GetTransferSenderTransactionDetails.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

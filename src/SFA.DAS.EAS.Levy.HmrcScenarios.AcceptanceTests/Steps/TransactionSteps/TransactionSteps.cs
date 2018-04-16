@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -13,10 +11,11 @@ using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.Events.Api.Client;
-using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.Provider.Events.Api.Types;
 using StructureMap;
+using System;
+using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.TransactionSteps
@@ -59,7 +58,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.TransactionSteps
             //For each row in the table insert into the levy_Declarations table
             var lineCount = 1;
 
-            var emprefDictionary = new Dictionary<string,decimal>();
+            var emprefDictionary = new Dictionary<string, decimal>();
 
             foreach (var tableRow in table.Rows)
             {
@@ -70,12 +69,13 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.TransactionSteps
                     PayrollMonth = Convert.ToInt16(tableRow["Payroll_Month"]),
                     LevyAllowanceForFullYear = 15000,
                     SubmissionDate = DateTime.Parse(tableRow["SubmissionDate"]),
+                    NoPaymentForPeriod = false,
                     Id = lineCount.ToString()
                 };
                 lineCount++;
                 if (!emprefDictionary.ContainsKey(tableRow["Paye_scheme"]))
                 {
-                    emprefDictionary.Add(tableRow["Paye_scheme"],Convert.ToDecimal(tableRow["English_Fraction"]));
+                    emprefDictionary.Add(tableRow["Paye_scheme"], Convert.ToDecimal(tableRow["English_Fraction"]));
                 }
                 if (tableRow.ContainsKey("EndOfYearAdjustment"))
                 {
@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.TransactionSteps
                     dasDeclaration.EndOfYearAdjustmentAmount = Convert.ToDecimal(tableRow["EndOfYearAdjustmentAmount"]);
                 }
 
-                dasLevyRepository.CreateEmployerDeclarations(new List<DasDeclaration>{ dasDeclaration }, tableRow["Paye_scheme"], accountId).Wait();
+                dasLevyRepository.CreateEmployerDeclarations(new List<DasDeclaration> { dasDeclaration }, tableRow["Paye_scheme"], accountId).Wait();
             }
 
             var englishFractionRepository = _container.GetInstance<IEnglishFractionRepository>();
@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.TransactionSteps
                     Amount = empRef.Value,
                     DateCalculated = new DateTime(2016, 01, 01),
                     EmpRef = empRef.Key
-                },empRef.Key).Wait();
+                }, empRef.Key).Wait();
 
                 dasLevyRepository.ProcessDeclarations(accountId, empRef.Key).Wait();
             }
@@ -110,7 +110,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.TransactionSteps
             foreach (var tableRow in table.Rows)
             {
                 var subId = lineCount;
-                
+
                 if (tableRow.ContainsKey("CreatedDate") && !string.IsNullOrEmpty(tableRow["CreatedDate"]))
                 {
                     updateTransactionLine.Execute(subId, DateTime.Parse(tableRow["CreatedDate"])).Wait();
@@ -124,7 +124,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.TransactionSteps
         [When(@"I have the following payments")]
         public void WhenIHaveTheFollowingPayments(Table table)
         {
-            var accountId = (long) ScenarioContext.Current["AccountId"];
+            var accountId = (long)ScenarioContext.Current["AccountId"];
             var dasLevyRepository = _container.GetInstance<IDasLevyRepository>();
 
             var paymentsList = new List<PaymentDetails>();
@@ -189,10 +189,10 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.TransactionSteps
             var employerAccountTransactionsOrchestrator = _container.GetInstance<EmployerAccountTransactionsOrchestrator>();
             var hashedAccountId = ScenarioContext.Current["HashedAccountId"].ToString();
             var userId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
-            
-            var actual = employerAccountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId,DateTime.Now.Year, DateTime.Now.Month, userId).Result;
 
-            Assert.AreEqual(balance,actual.Data.Model.CurrentBalance);
+            var actual = employerAccountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, DateTime.Now.Year, DateTime.Now.Month, userId).Result;
+
+            Assert.AreEqual(balance, actual.Data.Model.CurrentBalance);
         }
 
         [When(@"I register on month (.*)")]

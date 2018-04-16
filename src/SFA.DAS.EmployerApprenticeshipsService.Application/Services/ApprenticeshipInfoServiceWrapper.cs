@@ -1,14 +1,15 @@
-﻿using System;
+﻿using SFA.DAS.Apprenticeships.Api.Client;
+using SFA.DAS.Apprenticeships.Api.Types;
+using SFA.DAS.Apprenticeships.Api.Types.Exceptions;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using SFA.DAS.Apprenticeships.Api.Client;
-using SFA.DAS.Apprenticeships.Api.Types;
-using SFA.DAS.Apprenticeships.Api.Types.Exceptions;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
-using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using Framework = SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse.Framework;
 using Standard = SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse.Standard;
 
@@ -20,19 +21,21 @@ namespace SFA.DAS.EAS.Application.Services
         private const string FrameworksKey = "Frameworks";
 
         private readonly ICache _cache;
+        private readonly string _apprenticeshipInfoServiceApiBase;
 
-        public ApprenticeshipInfoServiceWrapper(ICache cache)
+        public ApprenticeshipInfoServiceWrapper(ICache cache, EmployerApprenticeshipsServiceConfiguration config)
         {
             if (cache == null)
                 throw new ArgumentNullException(nameof(cache));
             _cache = cache;
+            _apprenticeshipInfoServiceApiBase = config?.ApprenticeshipInfoService?.BaseUrl;
         }
 
         public async Task<StandardsView> GetStandardsAsync(bool refreshCache = false)
         {
             if (!await _cache.ExistsAsync(StandardsKey) || refreshCache)
             {
-                var api = new StandardApiClient();
+                var api = new StandardApiClient(_apprenticeshipInfoServiceApiBase);
 
                 var standards = api.FindAll().OrderBy(x => x.Title).ToList();
 
@@ -46,7 +49,7 @@ namespace SFA.DAS.EAS.Application.Services
         {
             if (!await _cache.ExistsAsync(FrameworksKey) || refreshCache)
             {
-                var api = new FrameworkApiClient();
+                var api = new FrameworkApiClient(_apprenticeshipInfoServiceApiBase);
 
                 var frameworks = api.FindAll().OrderBy(x => x.Title).ToList();
 
@@ -122,7 +125,7 @@ namespace SFA.DAS.EAS.Application.Services
                     Code = long.Parse(x.Id),
                     Level = x.Level,
                     Title = GetTitle(x.Title, x.Level) + " (Standard)",
-                    CourseName = x.Title, 
+                    CourseName = x.Title,
                     Duration = x.Duration,
                     MaxFunding = x.MaxFunding
                 }).ToList()

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EAS.Domain.Interfaces;
+﻿using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
+using System.Collections.Generic;
 
 namespace SFA.DAS.EAS.Domain.Configuration
 {
@@ -20,5 +20,6 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string PublicAllowedHashstringCharacters { get; set; }
         public string PublicHashstring { get; set; }
         public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
+        public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
     }
 }

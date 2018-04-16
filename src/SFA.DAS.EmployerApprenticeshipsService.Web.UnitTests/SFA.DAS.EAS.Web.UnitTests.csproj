@@ -238,6 +238,7 @@
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsControllerTests\WhenIDownloadTransactionsByDate.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsControllerTests\WhenIViewFinanceDashboard.cs" />
+    <Compile Include="Controllers\EmployerAccountTransactionsControllerTests\WhenIViewTranferTransactions.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsControllerTests\WhenIViewTransactions.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIRemoveALegalEntityFromAnAccount.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIViewNextSteps.cs" />

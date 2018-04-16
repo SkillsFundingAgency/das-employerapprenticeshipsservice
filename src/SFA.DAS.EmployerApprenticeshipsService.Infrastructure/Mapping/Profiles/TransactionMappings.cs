@@ -3,6 +3,7 @@ using SFA.DAS.EAS.Domain.Data.Entities.Transaction;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 
 namespace SFA.DAS.EAS.Infrastructure.Mapping.Profiles
 {
@@ -13,6 +14,8 @@ namespace SFA.DAS.EAS.Infrastructure.Mapping.Profiles
             CreateMap<TransactionEntity, TransactionLine>();
             CreateMap<TransactionEntity, PaymentTransactionLine>();
             CreateMap<TransactionEntity, LevyDeclarationTransactionLine>();
+            CreateMap<TransactionEntity, TransferTransactionLine>();
+
         }
     }
 }

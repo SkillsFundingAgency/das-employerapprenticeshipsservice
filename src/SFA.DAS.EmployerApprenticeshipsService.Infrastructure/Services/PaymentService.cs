@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
-using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using Payment = SFA.DAS.Provider.Events.Api.Types.Payment;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
@@ -66,6 +67,29 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             }
 
             return populatedPayments;
+        }
+
+        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long employerAccountId)
+        {
+            var pageOfTransfers = await _paymentsEventsApiClient.GetAccountTransfers(periodEnd, employerAccountId);
+
+            var transfers = new List<AccountTransfer>();
+
+            foreach (var item in pageOfTransfers.Items)
+            {
+                transfers.Add(new AccountTransfer
+                {
+                    SenderAccountId = item.SenderAccountId,
+                    ReceiverAccountId = item.ReceiverAccountId,
+                    PeriodEnd = periodEnd,
+                    Amount = item.Amount,
+                    ApprenticeshipId = item.CommitmentId,
+                    Type = (AccountTransferType)item.Type,
+                    TransferDate = item.TransferDate
+                });
+            }
+
+            return transfers;
         }
 
         private async Task GetCourseDetails(PaymentDetails payment)
@@ -138,7 +162,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             try
             {
-                return await _paymentsEventsApiClient.GetPayments(periodEnd, employerAccountId.ToString(), page);
+                return await _paymentsEventsApiClient.GetPayments(periodEnd, employerAccountId.ToString(), page, null);
             }
             catch (WebException ex)
             {
@@ -164,7 +188,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                             _cacheProvider.Set($"{nameof(ProvidersView)}_{ukPrn}", providerView, new TimeSpan(1, 0, 0));
                         }
                     }
-                    
+
                     return providerView?.Provider;
                 }
                 catch (Exception e)
@@ -175,7 +199,6 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 return null;
             });
         }
-
 
         private async Task<Standard> GetStandard(long standardCode)
         {
@@ -219,7 +242,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                 if (frameworksView != null)
                 {
-                    _cacheProvider.Set(nameof(FrameworksView),frameworksView, new TimeSpan(1,0,0));
+                    _cacheProvider.Set(nameof(FrameworksView), frameworksView, new TimeSpan(1, 0, 0));
                 }
 
                 return frameworksView?.Frameworks.SingleOrDefault(f =>

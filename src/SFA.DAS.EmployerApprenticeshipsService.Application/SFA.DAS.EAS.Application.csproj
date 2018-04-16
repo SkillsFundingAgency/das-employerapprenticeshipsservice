@@ -114,9 +114,8 @@
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Client.0.10.29-prerelease\lib\net45\SFA.DAS.Apprenticeships.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.10.29\lib\net45\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.29\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Audit.Client, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Client.dll</HintPath>
@@ -182,11 +181,11 @@
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.0.0.34401, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.34401\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.2\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.0.0.34401, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.34401\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.2\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Providers.Api.Client, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.10.29-prerelease\lib\net45\SFA.DAS.Providers.Api.Client.dll</HintPath>
@@ -266,6 +265,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommand.cs" />
+    <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommandHandler.cs" />
+    <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommandValidator.cs" />
     <Compile Include="DependencyResolution\AuditRegistry.cs" />
     <Compile Include="DependencyResolution\CachesRegistry.cs" />
     <Compile Include="DependencyResolution\CommitmentsRegistry.cs" />
@@ -290,17 +292,25 @@
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQuery.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceResponse.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQueryHandler.cs" />
+    <Compile Include="Messages\AccountTransfersCreatedQueueMessage.cs" />
+    <Compile Include="Messages\AccountTransfersProcessingCompletedMessage.cs" />
     <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQuery.cs" />
     <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsResponse.cs" />
     <Compile Include="Queries\GetTransferRequests\GetTransferRequestsQuery.cs" />
     <Compile Include="Queries\GetTransferRequests\GetTransferRequestsQueryHandler.cs" />
     <Compile Include="Queries\GetTransferRequests\GetTransferRequestsResponse.cs" />
+    <Compile Include="Queries\GetTransferSenderTransactionDetails\GetTransferSenderTransactionDetailsQuery.cs" />
+    <Compile Include="Queries\GetTransferSenderTransactionDetails\GetTransferSenderTransactionDetailsQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferSenderTransactionDetails\GetTransferSenderTransactionDetailsResponse.cs" />
     <Compile Include="Services\ApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommand.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteSentTransferConnectionInvitation\DeleteTransferConnectionInvitationCommand.cs" />
     <Compile Include="Commands\DeleteSentTransferConnectionInvitation\DeleteTransferConnectionInvitationCommandHandler.cs" />
+    <Compile Include="Commands\RefreshAccountTransfers\RefreshAccountTransfersCommand.cs" />
+    <Compile Include="Commands\RefreshAccountTransfers\RefreshAccountTransfersCommandHandler.cs" />
+    <Compile Include="Commands\RefreshAccountTransfers\RefreshAccountTransfersCommandValidator.cs" />
     <Compile Include="Commands\RejectTransferConnectionInvitation\RejectTransferConnectionInvitationCommandHandler.cs" />
     <Compile Include="Commands\RejectTransferConnectionInvitation\RejectTransferConnectionInvitationCommand.cs" />
     <Compile Include="Attributes\DateAttribute.cs" />

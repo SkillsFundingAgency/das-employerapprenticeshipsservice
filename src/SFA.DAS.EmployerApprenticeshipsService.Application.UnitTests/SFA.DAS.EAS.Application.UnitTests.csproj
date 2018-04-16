@@ -120,6 +120,7 @@
     <Reference Include="Polly, Version=5.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.7.0\lib\net45\Polly.dll</HintPath>
     </Reference>
+    
     <Reference Include="SFA.DAS.Activities, Version=1.0.0.59218, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.59218\lib\net45\SFA.DAS.Activities.dll</HintPath>
     </Reference>
@@ -183,11 +184,11 @@
     <Reference Include="SFA.DAS.Notifications.Api.Types, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.0.0.34401, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.34401\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.2\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.0.0.34401, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.34401\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.2\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.7.0.49084, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.7.0.49084\lib\net45\SFA.DAS.Tasks.API.Types.dll</HintPath>
@@ -247,7 +248,11 @@
     <Compile Include="Commands\AddPayeToAccountTests\WhenIAddPayeToAnAccount.cs" />
     <Compile Include="Commands\AddPayeToAccountTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\WhenIApproveATransferConnectionInvitation.cs" />
+    <Compile Include="Commands\CreateTransferTransactionsTests\WhenICreateTransferTransactions.cs" />
+    <Compile Include="Commands\CreateTransferTransactionsTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\DeleteTransferConnectionInvitationTests.cs" />
+    <Compile Include="Commands\RefreshAccountTransfersTests\WhenIRefreshAnAccountsTransfers.cs" />
+    <Compile Include="Commands\RefreshAccountTransfersTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\RejectTransferConnectionInvitation\WhenIRejectATransferConnectionInvitation.cs" />
     <Compile Include="Commands\SendTransferConnectionInvitation\SendTransferConnectionInvitationHandlerTests.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
@@ -400,6 +405,7 @@
     <Compile Include="Queries\GetTransferConnectionInvitationsTests\WhenIGetTransferConnectionInvitations.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationTests\WhenIGetTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetTransferRequestsTests\WhenIGetTransferRequests.cs" />
+    <Compile Include="Queries\GetTransferSenderTransactionDetailsTests\WhenIGetTransferTransactionDetails.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIGetAUserAccountRole.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />

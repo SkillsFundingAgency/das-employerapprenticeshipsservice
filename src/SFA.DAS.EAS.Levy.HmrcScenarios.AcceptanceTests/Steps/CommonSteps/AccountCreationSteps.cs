@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Web;
-using MediatR;
+﻿using MediatR;
 using Moq;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
@@ -16,9 +13,11 @@ using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
-using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.Interfaces;
 using StructureMap;
+using System;
+using System.Linq;
+using System.Web;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.CommonSteps
@@ -76,7 +75,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.CommonSteps
         {
             var orchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
 
-            var hashedAccountId = (string) ScenarioContext.Current["HashedAccountId"];
+            var hashedAccountId = (string)ScenarioContext.Current["HashedAccountId"];
 
             var accountOwnerId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
 
