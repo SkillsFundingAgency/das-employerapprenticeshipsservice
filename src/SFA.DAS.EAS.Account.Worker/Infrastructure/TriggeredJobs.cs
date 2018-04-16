@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 		}
 
 		//                                    {second} {minute} {hour} {day} {month} {day-of-week}
-		public void PaymentCheck([TimerTrigger("0 30 5 4 * *")] TimerInfo timer, TextWriter logger)
+		public void PaymentCheck([TimerTrigger("0 30 5 1 * *")] TimerInfo timer, TextWriter logger)
 		{
 			ScheduleJob<PaymentIntegrityCheckerJob>();	
 		}
