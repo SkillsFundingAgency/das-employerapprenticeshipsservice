@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         {
             For<IInProcessCache>().Use<InProcessCache>().Singleton();
 
-            if (ConfigurationHelper.IsAnyOf(DasEnvironment.Local))
+            if (ConfigurationHelper.IsAnyOf(Environment.Local))
             {
                 For<IDistributedCache>().Use<LocalDevCache>().Singleton();
             }

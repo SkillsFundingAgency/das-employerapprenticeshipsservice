@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
@@ -9,18 +8,18 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 {
     public static class ConfigurationHelper
     {
-        public static DasEnvironment CurrentEnvironment
+        public static Environment CurrentEnvironment
         {
             get
             {
                 switch (CurrentEnvironmentName)
                 {
-                    case "LOCAL": return DasEnvironment.Local;
-                    case "AT": return DasEnvironment.AT;
-                    case "TEST": return DasEnvironment.Test;
-                    case "PROD": return DasEnvironment.Prod;
-                    case "DEMO": return DasEnvironment.Demo;
-                    default: return DasEnvironment.Unknown;
+                    case "LOCAL": return Environment.Local;
+                    case "AT": return Environment.AT;
+                    case "TEST": return Environment.Test;
+                    case "PROD": return Environment.Prod;
+                    case "DEMO": return Environment.Demo;
+                    default: return Environment.Unknown;
                 }
             }
         }
@@ -29,7 +28,7 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
         {
             get
             {
-                var environmentName = Environment.GetEnvironmentVariable("DASENV");
+                var environmentName = System.Environment.GetEnvironmentVariable("DASENV");
 
                 if (string.IsNullOrEmpty(environmentName))
                 {
@@ -59,7 +58,7 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
             });
         }
 
-        public static bool IsAnyOf(params DasEnvironment[] environment)
+        public static bool IsAnyOf(params Environment[] environment)
         {
             return environment.Contains(CurrentEnvironment);
         }

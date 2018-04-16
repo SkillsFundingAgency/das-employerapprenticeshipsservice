@@ -23,6 +23,7 @@ using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.Web.Policy;
+using Environment = SFA.DAS.EAS.Infrastructure.DependencyResolution.Environment;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -58,7 +59,7 @@ namespace SFA.DAS.EAS.Web
                 };
             });
 
-            if(ConfigurationHelper.IsAnyOf(DasEnvironment.Local, DasEnvironment.AT, DasEnvironment.Test))
+            if(ConfigurationHelper.IsAnyOf(Environment.Local, Environment.AT, Environment.Test))
             {
                 SystemDetailsViewModel.EnvironmentName = ConfigurationHelper.CurrentEnvironmentName;
                 SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();

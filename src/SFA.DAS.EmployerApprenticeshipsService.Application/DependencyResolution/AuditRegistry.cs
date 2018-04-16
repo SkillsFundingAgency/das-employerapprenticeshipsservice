@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public AuditRegistry()
         {
-            if (ConfigurationHelper.IsAnyOf(DasEnvironment.Local))
+            if (ConfigurationHelper.IsAnyOf(Environment.Local))
             {
                 For<IAuditApiClient>().Use<StubAuditApiClient>();
             }

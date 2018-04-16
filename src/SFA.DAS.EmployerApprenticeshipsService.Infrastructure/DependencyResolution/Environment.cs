@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 {
-    public enum DasEnvironment
+    public enum Environment
     {
         Unknown,
         Local,

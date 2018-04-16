@@ -267,7 +267,7 @@
     <Compile Include="Data\UserRepository.cs" />
     <Compile Include="DependencyResolution\ConfigurationHelper.cs" />
     <Compile Include="DependencyResolution\CurrentDatePolicy.cs" />
-    <Compile Include="DependencyResolution\DasEnvironment.cs" />
+    <Compile Include="DependencyResolution\Environment.cs" />
     <Compile Include="DependencyResolution\ExecutionPolicyPolicy.cs" />
     <Compile Include="DependencyResolution\AuthorizationRegistry.cs" />
     <Compile Include="DependencyResolution\MessageSubscriberPolicy.cs" />
