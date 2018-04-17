@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetAccountPaymentIds]
-	@accountId BIGINT = 0	
+	@AccountId BIGINT = 0	
 AS
-	SELECT PaymentId FROM [employer_financial].[Payment] where AccountId = @accountId
+	SELECT PaymentId FROM [employer_financial].[Payment] where AccountId = @AccountId
 

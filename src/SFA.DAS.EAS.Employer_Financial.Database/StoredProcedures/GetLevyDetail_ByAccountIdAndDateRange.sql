@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetLevyDetail_ByAccountIdAndDateRange]
-	@accountId bigint,
+	@AccountId bigint,
 	@fromDate datetime,
 	@toDate datetime
 
@@ -19,7 +19,7 @@ select
     tl.TransactionDate,
     tl.Amount as LineAmount,
     tl.TransactionType,
-	null as UkPrn,
+	null as Ukprn,
 	null as PeriodEnd,
 	DateCreated,
 	ld.PayrollYear,
@@ -28,7 +28,7 @@ select
 	tl.EmployerCoInvestmentAmount
 from [employer_financial].TransactionLine tl
 inner join [employer_financial].LevyDeclarationTopup ldt on ldt.SubmissionId = tl.SubmissionId
-inner join [employer_financial].LevyDeclaration ld on ld.submissionid = tl.submissionid
+inner join [employer_financial].LevyDeclaration ld on ld.SubmissionId = tl.SubmissionId
 where    tl.DateCreated >= @fromDate AND 
         tl.DateCreated <= @toDate AND 
-        tl.AccountId = @accountId 
+        tl.AccountId = @AccountId 

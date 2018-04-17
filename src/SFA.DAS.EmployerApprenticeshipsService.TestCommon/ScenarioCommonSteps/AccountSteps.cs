@@ -27,7 +27,6 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         private Mock<IAuthenticationService> _owinWrapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
-        private string _externalUserId;
         private Mock<IValidator<GetAccountPayeSchemesQuery>> _validator;
         private Mock<IEventsApi> _eventsApi;
         private Mock<IEmployerCommitmentApi> _employerCommitmentsApi;

@@ -131,7 +131,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         }
 
         [Test]
-        public async Task ThenIShouldGetPaymentsGroupedByCourse()
+        public void ThenIShouldGetPaymentsGroupedByCourse()
         {
             //Arrange
             _response.Transactions = new List<PaymentTransactionLine>

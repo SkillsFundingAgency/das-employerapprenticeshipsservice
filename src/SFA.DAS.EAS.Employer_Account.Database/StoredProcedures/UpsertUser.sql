@@ -7,5 +7,5 @@ AS
 	MERGE [employer_account].[User] AS [Target]
 	USING (SELECT @userRef AS UserRef) AS [Source] 
 	ON [Target].UserRef = [Source].UserRef
-	WHEN MATCHED THEN  UPDATE SET [Target].Email = @email, [Target].FirstName = @firstname, [Target].LastName = @lastname
-	WHEN NOT MATCHED THEN  INSERT (UserRef, Email, FirstName, LastName) VALUES (@userRef, @email, @firstname, @lastname);
+	WHEN MATCHED THEN  UPDATE SET [Target].Email = @email, [Target].FirstName = @firstName, [Target].LastName = @lastName
+	WHEN NOT MATCHED THEN  INSERT (UserRef, Email, FirstName, LastName) VALUES (@userRef, @email, @firstName, @lastName);

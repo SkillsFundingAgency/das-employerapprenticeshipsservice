@@ -172,7 +172,6 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
         {
             //Arrange
             ConfigurationManager.AppSettings["DeclarationsEnabled"] = "fractions";
-            var expectedAccessToken = "myaccesstoken";
             _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.EmpRef.Equals(ExpectedPayeRef)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(ExpectedPayeRef));
 
 

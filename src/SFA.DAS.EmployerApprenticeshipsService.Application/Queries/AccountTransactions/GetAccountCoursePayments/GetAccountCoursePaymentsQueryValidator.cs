@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCoursePa
             throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetAccountCoursePaymentsQuery item)
+        public Task<ValidationResult> ValidateAsync(GetAccountCoursePaymentsQuery item)
         {
             var validationResult = new ValidationResult();
 
@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCoursePa
                 validationResult.AddError(nameof(item.ToDate), "To date has not been supplied");
             }
             
-            return validationResult;
+            return Task.FromResult(validationResult);
         }
     }
 }

@@ -18,7 +18,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
         private DateTime _fromDate;
         private DateTime _toDate;
         private long _accountId;
-        private string _externalUserId;
 
         [SetUp]
         public void Arrange()
@@ -26,7 +25,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
             _fromDate = DateTime.Now.AddDays(-10);
             _toDate = DateTime.Now.AddDays(-2);
             _accountId = 2;
-            _externalUserId = "test";
 
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLevyTransactionsQuery>()))

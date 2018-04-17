@@ -6,14 +6,12 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserTest
 {
     public class WhenIGetAUser : QueryBaseTest<GetUserQueryHandler, GetUserQuery, GetUserResponse>
     {
         private Mock<IUserRepository> _repository;
-        private Mock<IHashingService> _hashingService;
 
         public override GetUserQuery Query { get; set; }
         public override GetUserQueryHandler RequestHandler { get; set; }
