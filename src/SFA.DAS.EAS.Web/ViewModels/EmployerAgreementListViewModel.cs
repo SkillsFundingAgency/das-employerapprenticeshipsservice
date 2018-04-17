@@ -6,7 +6,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
     public class EmployerAgreementListViewModel
     {
         public long AccountId { get; set; }
-        public List<EmployerAgreementView> EmployerAgreements { get; set; }
+        public List<EmployerAgreementStatusView> EmployerAgreements { get; set; }
         public string HashedAccountId { get; set; }
     }
 }

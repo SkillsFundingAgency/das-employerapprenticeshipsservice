@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             command.LegalEntity.Code.Equals(request.Code) &&
             command.LegalEntity.RegisteredAddress.Equals(request.Address) &&
             command.LegalEntity.DateOfIncorporation.Equals(request.IncorporatedDate) &&
-            command.LegalEntity.CompanyStatus.Equals(request.LegalEntityStatus))));
+            command.LegalEntity.Status.Equals(request.LegalEntityStatus))));
         }
 
         [TestCase(Role.Owner, HttpStatusCode.OK)]

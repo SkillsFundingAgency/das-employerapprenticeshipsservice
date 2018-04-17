@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Domain.Models.EmployerAgreement
 {
-    public enum EmployerAgreementStatus : short
+    public enum EmployerAgreementStatus : byte
     {
         [Description("Not signed")]
         Pending = 1,
