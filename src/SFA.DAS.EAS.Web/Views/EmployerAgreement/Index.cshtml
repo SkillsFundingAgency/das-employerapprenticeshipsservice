@@ -40,8 +40,7 @@
             <thead>
                 <tr>
                     <th scope="col">Organisation</th>
-                    <th scope="col">Agreement</th>
-                    <th scope="col">Spending status</th>
+                    <th scope="col">Agreement status</th>
                     <th scope="col"><span class="vh">Action</span></th>
                 </tr>
             </thead>
@@ -52,7 +51,20 @@
                     <tr>
                         <td>@employerAgreement.LegalEntityName</td>
                         <td>
-                            @if (employerAgreement.Status == EmployerAgreementStatus.Signed)
+                            @if (employerAgreement.HasPendingAgreement)
+                            {
+                                if (employerAgreement.HasSignedAgreement)
+                                {
+                                    @: Updated agreement available
+                                    <span class="secondary-text">Agreement needs to be signed</span>
+                                }
+                                else
+                                {
+                                    @: Agreement not signed
+                                    <span class="secondary-text">Agreement needs to be signed</span>
+                                }
+                            }
+                            else
                             {
                                 @: Signed by @employerAgreement.SignedByName
                                 if (employerAgreement.SignedDate.HasValue)
@@ -60,23 +72,18 @@
                                     <span class="secondary-text">Signed on: @employerAgreement.SignedDate.Value.ToString("dd/MM/yyyy")</span>
                                 }
                             }
-                            else
-                            {
-                                @: Agreement not signed
-                                <span class="secondary-text">Agreement needs to be signed</span>
-                            }
                         </td>
-                        <td>
-                            @(employerAgreement.Status == EmployerAgreementStatus.Signed ? "Spending enabled" : "Spending disabled")
-                        </td>
+
                         <td class="link-right">
-                            @if (employerAgreement.Status == EmployerAgreementStatus.Signed)
-                            {
-                                <a href="@Url.Action("Details", "EmployerAgreement", new {agreementid = employerAgreement.HashedAgreementId})" title="View agreement for @employerAgreement.LegalEntityName">View <span class="vh">agreement for @employerAgreement.LegalEntityName</span></a>
-                            }
+                            @if (employerAgreement.HasPendingAgreement)
+                            { 
+                                <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", 
+                                             new {agreementid = employerAgreement.PendingHashedAgreementId})" title="View agreement for @employerAgreement.LegalEntityName">Sign agreement</a>
+}
                             else
                             {
-                                <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new {agreementid = employerAgreement.HashedAgreementId})" title="View agreement for @employerAgreement.LegalEntityName">View agreement <span class="vh">for @employerAgreement.LegalEntityName</span></a>
+                                <a href="@Url.Action("Details", "EmployerAgreement", new {agreementid = employerAgreement.SignedHashedAgreementId})" title="View agreement">View agreement</a>
+
                             }
                         </td>
                     </tr>

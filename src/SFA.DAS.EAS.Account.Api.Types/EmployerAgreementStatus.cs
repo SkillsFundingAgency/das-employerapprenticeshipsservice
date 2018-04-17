@@ -2,7 +2,7 @@ using System.ComponentModel;
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public enum EmployerAgreementStatus
+    public enum EmployerAgreementStatus : byte
     {
         [Description("Not signed")]
         Pending = 1,

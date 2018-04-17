@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters
         {
             Name = input.CompanyName;
             Code = null;
-            CompanyStatus = input.Status;
+            Status = input.Status;
             DateOfIncorporation = input.CompanyDateOfIncorporation;
             Id = 0L;
             PublicSectorDataSource = input.PublicSectorDataSource;

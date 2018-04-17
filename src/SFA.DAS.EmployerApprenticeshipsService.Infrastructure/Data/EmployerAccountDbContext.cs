@@ -18,7 +18,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public virtual DbSet<Membership> Memberships { get; set; }
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<User> Users { get; set; }
-
+        public virtual DbSet<EmployerAgreement> Agreements { get; set; }
+        public virtual DbSet<AgreementTemplate> AgreementTemplates { get; set;}
         public Guid Id { get; set; }
 
         static EmployerAccountDbContext()
@@ -57,6 +58,14 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             modelBuilder.Entity<Account>()
                 .HasMany(a => a.SentTransferConnectionInvitations)
                 .WithRequired(i => i.SenderAccount);
+
+            modelBuilder.Entity<AgreementTemplate>()
+                .ToTable("EmployerAgreementTemplate");
+
+            modelBuilder.Entity<EmployerAgreement>()
+                .HasRequired(t => t.Template)
+                .WithMany(at => at.Agreements)
+                .HasForeignKey<long>(ea => ea.TemplateId);
 
             modelBuilder.Entity<Membership>()
                 .HasKey(m => new { m.AccountId, m.UserId })

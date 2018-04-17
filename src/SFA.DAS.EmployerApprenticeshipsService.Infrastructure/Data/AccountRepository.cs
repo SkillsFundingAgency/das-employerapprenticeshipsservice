@@ -103,7 +103,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@CompanyDateOfIncorporation", legalEntity.DateOfIncorporation, DbType.DateTime);
                 parameters.Add("@legalEntityId", null, DbType.Int64, ParameterDirection.Output);
                 parameters.Add("@employerAgreementId", null, DbType.Int64, ParameterDirection.Output);
-                parameters.Add("@status", legalEntity.CompanyStatus, DbType.String);
+                parameters.Add("@status", legalEntity.Status, DbType.String);
                 parameters.Add("@source", legalEntity.Source, DbType.Int16);
                 parameters.Add("@publicSectorDataSource", legalEntity.PublicSectorDataSource, DbType.Int16);
                 parameters.Add("@sector", legalEntity.Sector, DbType.String);
@@ -152,6 +152,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
+        [Obsolete("This is replaced by an EF query")]
         public async Task<List<EmployerAgreementView>> GetEmployerAgreementsLinkedToAccount(long accountId)
         {
             var result = await WithConnection(async c =>

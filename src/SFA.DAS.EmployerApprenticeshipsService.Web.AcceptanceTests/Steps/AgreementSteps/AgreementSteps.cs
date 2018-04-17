@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AgreementSteps
 
             var agreement = employerAgreementOrchestrator.Get(hashedId, userId).Result.Data.EmployerAgreements.FirstOrDefault();
 
-            employerAgreementOrchestrator.SignAgreement(agreement.HashedAgreementId, hashedId, userId, DateTime.Today,"company name").Wait();
+            employerAgreementOrchestrator.SignAgreement(agreement.PendingHashedAgreementId, hashedId, userId, DateTime.Today,"company name").Wait();
 
         }
 
@@ -66,9 +66,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AgreementSteps
             var agreement = employerAgreementOrchestrator.Get(hashedId, userId).Result.Data.EmployerAgreements.FirstOrDefault();
 
             Assert.IsNotNull(agreement);
-            Assert.AreEqual(status,agreement.Status.ToString());
+            Assert.IsTrue(agreement.HasSignedAgreement);
         }
-
-
     }
 }

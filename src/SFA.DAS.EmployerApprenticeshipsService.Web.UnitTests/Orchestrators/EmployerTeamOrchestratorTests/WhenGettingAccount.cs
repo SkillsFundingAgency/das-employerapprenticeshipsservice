@@ -79,11 +79,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == HashedAccountId)))
                      .ReturnsAsync(new GetAccountEmployerAgreementsResponse
                      {
-                         EmployerAgreements = new List<Domain.Models.EmployerAgreement.EmployerAgreementView>
+                         EmployerAgreements = new List<Domain.Models.EmployerAgreement.EmployerAgreementStatusView>
                          {
-                             new Domain.Models.EmployerAgreement.EmployerAgreementView
+                             new Domain.Models.EmployerAgreement.EmployerAgreementStatusView
                              {
-                                 Status = Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending
+                                 PendingAgreementId = 123
                              }
                          }
                      });

@@ -75,12 +75,12 @@ namespace SFA.DAS.EAS.Web.Controllers
             var agreements = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             var unsignedAgreements = agreements?.Data?.EmployerAgreements
-                .Where(x => x.Status == EmployerAgreementStatus.Pending).ToArray();
+                .Where(x => x.HasPendingAgreement).Take(2).ToArray();
 
             if (unsignedAgreements?.Length != 1)
                 return RedirectToAction("Index");
 
-            var hashedAgreementId = unsignedAgreements.Single().HashedAgreementId;
+            var hashedAgreementId = unsignedAgreements.Single().PendingHashedAgreementId;
 
             return RedirectToAction("AboutYourAgreement", new { agreementId = hashedAgreementId });
         }

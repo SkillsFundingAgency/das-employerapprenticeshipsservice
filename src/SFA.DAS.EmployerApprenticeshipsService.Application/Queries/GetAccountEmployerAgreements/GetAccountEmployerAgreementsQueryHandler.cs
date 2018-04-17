@@ -1,27 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.HashingService;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 {
-    //TODO tests need adding and validator
+    public static class HashingServiceExtensions
+    {
+        public static string HashIdIfNotNull(this IHashingService hashingService, long? id)
+        {
+            return id.HasValue ? hashingService.HashValue(id.Value) : null;
+        }
+    }
+
     public class GetAccountEmployerAgreementsQueryHandler : IAsyncRequestHandler<GetAccountEmployerAgreementsRequest, GetAccountEmployerAgreementsResponse>
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly EmployerAccountDbContext _db;
         private readonly IHashingService _hashingService;
         private readonly IValidator<GetAccountEmployerAgreementsRequest> _validator;
 
-        public GetAccountEmployerAgreementsQueryHandler(IAccountRepository accountRepository, IHashingService hashingService, IValidator<GetAccountEmployerAgreementsRequest> validator)
+        public GetAccountEmployerAgreementsQueryHandler(EmployerAccountDbContext db, IHashingService hashingService, IValidator<GetAccountEmployerAgreementsRequest> validator)
         {
-            _accountRepository = accountRepository;
+            _db = db;
             _hashingService = hashingService;
             _validator = validator;
         }
@@ -39,11 +44,72 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
                 throw new UnauthorizedAccessException();
             }
 
-            var agreements = await _accountRepository.GetEmployerAgreementsLinkedToAccount(_hashingService.DecodeValue(message.HashedAccountId));
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
+            var agreements =
+                _db.Agreements
+                    // only consider legal entities with either a signed or pending agreement
+                    .Where(ag => ag.AccountId == accountId
+                                 && (ag.StatusId == EmployerAgreementStatus.Signed ||
+                                     ag.StatusId == EmployerAgreementStatus.Pending))
+                    // get the highest-version of signed and pending agreement for each legal entity
+                    .GroupBy(ag => new {ag.LegalEntity, ag.StatusId})
+                    .Select(grp => new
+                    {
+                        grp.Key.LegalEntity,
+                        Status = grp.Key.StatusId,
+                        Agreement = grp
+                            .OrderByDescending(ag => ag.Template.VersionNumber)
+                            .FirstOrDefault()
+                    })
+                    // get a single result for each legal entity which contains the highest version signed and pending agreements
+                    .GroupBy(grp => grp.LegalEntity)
+                    .Select(grp => new
+                    {
+                        LegalEntity = grp.Key,
+                        Signed = grp.FirstOrDefault(ag => ag.Status == EmployerAgreementStatus.Signed),
+                        Pending = grp.FirstOrDefault(ag => ag.Status == EmployerAgreementStatus.Pending)
+                    })
+                    // project into the required shape
+                    .Select(ag => new EmployerAgreementStatusView
+                    {
+                        AccountId = accountId,
+                        HashedAccountId = message.HashedAccountId,
+                        LegalEntityId = ag.LegalEntity.Id,
+                        LegalEntityName = ag.LegalEntity.Name,
+                        LegalEntityCode = ag.LegalEntity.Code,
+                        LegalEntityAddress = ag.LegalEntity.RegisteredAddress,
+                        LegalEntityInceptionDate = ag.LegalEntity.DateOfIncorporation,
+                        LegalEntityStatus = ag.LegalEntity.Status,
+                        SignedByName = ag.Signed.Agreement.SignedByName,
+                        SignedDate = ag.Signed.Agreement.SignedDate,
+                        SignedExpiredDate = ag.Signed.Agreement.ExpiredDate,
+
+                        SignedAgreementId = ag.Signed.Agreement.Id,
+                        SignedTemplateId = ag.Signed.Agreement.TemplateId,
+                        SignedTemplatePartialViewName = ag.Signed.Agreement.Template.PartialViewName,
+                        SignedVersion = ag.Signed.Agreement.Template.VersionNumber,
+
+                        PendingAgreementId = ag.Pending.Agreement.Id,
+                        PendingTemplateId = ag.Pending.Agreement.TemplateId,
+                        PendingTemplatePartialViewName = ag.Pending.Agreement.Template.PartialViewName,
+                        PendingVersion = ag.Pending.Agreement.Template.VersionNumber
+                    })
+                    .ToList();
+                                                    
             foreach (var agreement in agreements)
             {
-                agreement.HashedAgreementId = _hashingService.HashValue(agreement.Id);
+                agreement.SignedHashedAgreementId = _hashingService.HashIdIfNotNull(agreement.SignedAgreementId);
+                agreement.PendingHashedAgreementId = _hashingService.HashIdIfNotNull(agreement.PendingAgreementId);
+
+                // A signed version deprecates any early unsigned agreement.
+                if (agreement.HasPendingAgreement && agreement.HasSignedAgreement &&
+                    agreement.SignedVersion > agreement.PendingVersion)
+                {
+                    agreement.PendingVersion = null;
+                    agreement.PendingAgreementId = null;
+                    agreement.PendingHashedAgreementId = null;
+                }
             }
 
             return new GetAccountEmployerAgreementsResponse
