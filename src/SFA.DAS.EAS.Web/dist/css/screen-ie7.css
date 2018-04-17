@@ -3287,222 +3287,6 @@ table th, table td {
   vertical-align: top;
 }
 
-tr.total th {
-  border: none;
-}
-
-tr.total td {
-  border-bottom: 2px solid #0b0c0c;
-  font-weight: 700;
-}
-
-.nowrap,
-.no-wrap {
-  white-space: nowrap;
-}
-
-.description {
-  font-size: 90%;
-  display: inline-block;
-  line-height: 1.3;
-}
-
-.force-word-wrap {
-  max-width: 300px;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  -ms-word-break: break-all;
-  word-break: break-all;
-  word-break: break-word;
-}
-
-.table-address {
-  max-width: 300px;
-  display: inline-block;
-}
-
-table.organisations td {
-  width: 30%;
-}
-
-table.organisations td + td + td {
-  width: 20%;
-}
-
-table.edited-changes td.changed-item {
-  font-weight: 700;
-  font-size: 105%;
-}
-
-table.details-list {
-  border-top: 1px solid #bfc1c3;
-}
-
-table.details-list th {
-  width: 55%;
-  font-weight: normal;
-}
-
-td.highlight, th.highlight {
-  background: #dee0e2;
-}
-
-table.responsive thead {
-  display: none;
-}
-
-table.responsive tr {
-  border: 1px solid #bfc1c3;
-  margin-bottom: 10px;
-  display: block;
-  float: left;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-table.responsive tr td {
-  display: block;
-  text-align: right;
-  clear: left;
-  float: left;
-  width: 100%;
-  padding: 10px 10px 8px;
-  box-sizing: border-box;
-  border-bottom: 1px dotted #bfc1c3;
-}
-
-table.responsive tr td:before {
-  content: attr(data-label);
-  float: left;
-  font-weight: bold;
-  padding-right: 10px;
-}
-
-table.responsive tr td:last-child {
-  border-bottom: none;
-}
-
-table.responsive tr td:empty {
-  display: none;
-}
-
-table.responsive tr.total {
-  border: 2px solid #000;
-}
-
-table.responsive thead {
-  display: table-header-group;
-}
-
-table.responsive tr {
-  display: table-row;
-  border: none;
-  float: none;
-  margin: 0;
-}
-
-table.responsive tr th, table.responsive tr td {
-  display: table-cell;
-  text-align: left;
-  float: none;
-  clear: none;
-  padding: 0.6em 1em 0.5em;
-  border-bottom-style: solid;
-  width: auto;
-}
-
-table.responsive tr th:first-child, table.responsive tr td:first-child {
-  padding-left: 0;
-}
-
-table.responsive tr th:last-child, table.responsive tr td:last-child {
-  padding-right: 0;
-}
-
-table.responsive tr th:before, table.responsive tr td:before {
-  display: none;
-}
-
-table.responsive tr th.numeric, table.responsive tr td.numeric {
-  text-align: right;
-}
-
-table.responsive tr th.colgroup, table.responsive tr td.colgroup {
-  text-align: center;
-}
-
-table.responsive tr th:last-child, table.responsive tr td:last-child {
-  border-bottom: 1px solid #bfc1c3;
-}
-
-table.responsive tr.total {
-  border: none;
-}
-
-table.responsive tr.total td {
-  border-bottom: none;
-}
-
-table.responsive tr.total td.total {
-  border-bottom: 2px solid #000;
-}
-
-table.responsive tr th.tw-5 {
-  width: 5%;
-}
-
-table.responsive tr th.tw-10 {
-  width: 10%;
-}
-
-table.responsive tr th.tw-15 {
-  width: 15%;
-}
-
-table.responsive tr th.tw-20 {
-  width: 20%;
-}
-
-table.responsive tr th.tw-25 {
-  width: 25%;
-}
-
-table.responsive tr th.tw-30 {
-  width: 30%;
-}
-
-table.responsive tr th.tw-35 {
-  width: 35%;
-}
-
-table.responsive tr th.tw-40 {
-  width: 40%;
-}
-
-table.responsive tr th.tw-45 {
-  width: 45%;
-}
-
-table.responsive tr th.tw-50 {
-  width: 50%;
-}
-
-table.responsive tr th.tw-55 {
-  width: 55%;
-}
-
-table.responsive tr th.tw-60 {
-  width: 60%;
-}
-
-table.responsive tr th.tw-65 {
-  width: 65%;
-}
-
-table.responsive tr th.tw-70 {
-  width: 70%;
-}
-
 .js-enabled ul.js-tabs {
   list-style: none;
   margin: 20px 0 0;
@@ -5524,6 +5308,241 @@ h2 .float-right {
 
 .govuk-box-highlight.govuk-box-highlight__bottom-margin {
   margin-bottom: 2em;
+}
+
+details.transfers-status {
+  margin: 30px 0;
+}
+
+.panel-border-none {
+  border-color: #fff;
+}
+
+/* Organisations and agreements */
+.panel ul.list-bullet {
+  margin-bottom: 5px;
+}
+
+tr.total th {
+  border: none;
+}
+
+tr.total td {
+  border-bottom: 2px solid #0b0c0c;
+  font-weight: 700;
+}
+
+.nowrap,
+.no-wrap {
+  white-space: nowrap;
+}
+
+.description {
+  font-size: 90%;
+  display: inline-block;
+  line-height: 1.3;
+}
+
+.force-word-wrap {
+  max-width: 300px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+}
+
+.table-address {
+  max-width: 300px;
+  display: inline-block;
+}
+
+table.organisations {
+  margin-bottom: 2.5em;
+}
+
+table.organisations td {
+  width: 30%;
+}
+
+table.organisations td + td + td {
+  width: 10%;
+  white-space: nowrap;
+  padding-right: 0;
+}
+
+table.edited-changes td.changed-item {
+  font-weight: 700;
+  font-size: 105%;
+}
+
+table.details-list {
+  border-top: 1px solid #bfc1c3;
+}
+
+table.details-list th {
+  width: 55%;
+  font-weight: normal;
+}
+
+td.highlight, th.highlight {
+  background: #dee0e2;
+}
+
+table.responsive thead {
+  display: none;
+}
+
+table.responsive tr {
+  border: 1px solid #bfc1c3;
+  margin-bottom: 10px;
+  display: block;
+  float: left;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+table.responsive tr td {
+  display: block;
+  text-align: right;
+  clear: left;
+  float: left;
+  width: 100%;
+  padding: 10px 10px 8px;
+  box-sizing: border-box;
+  border-bottom: 1px dotted #bfc1c3;
+}
+
+table.responsive tr td:before {
+  content: attr(data-label);
+  float: left;
+  font-weight: bold;
+  padding-right: 10px;
+}
+
+table.responsive tr td:last-child {
+  border-bottom: none;
+}
+
+table.responsive tr td:empty {
+  display: none;
+}
+
+table.responsive tr.total {
+  border: 2px solid #000;
+}
+
+table.responsive thead {
+  display: table-header-group;
+}
+
+table.responsive tr {
+  display: table-row;
+  border: none;
+  float: none;
+  margin: 0;
+}
+
+table.responsive tr th, table.responsive tr td {
+  display: table-cell;
+  text-align: left;
+  float: none;
+  clear: none;
+  padding: 0.6em 1em 0.5em;
+  border-bottom-style: solid;
+  width: auto;
+}
+
+table.responsive tr th:first-child, table.responsive tr td:first-child {
+  padding-left: 0;
+}
+
+table.responsive tr th:last-child, table.responsive tr td:last-child {
+  padding-right: 0;
+}
+
+table.responsive tr th:before, table.responsive tr td:before {
+  display: none;
+}
+
+table.responsive tr th.numeric, table.responsive tr td.numeric {
+  text-align: right;
+}
+
+table.responsive tr th.colgroup, table.responsive tr td.colgroup {
+  text-align: center;
+}
+
+table.responsive tr th:last-child, table.responsive tr td:last-child {
+  border-bottom: 1px solid #bfc1c3;
+}
+
+table.responsive tr.total {
+  border: none;
+}
+
+table.responsive tr.total td {
+  border-bottom: none;
+}
+
+table.responsive tr.total td.total {
+  border-bottom: 2px solid #000;
+}
+
+table.responsive tr th.tw-5 {
+  width: 5%;
+}
+
+table.responsive tr th.tw-10 {
+  width: 10%;
+}
+
+table.responsive tr th.tw-15 {
+  width: 15%;
+}
+
+table.responsive tr th.tw-20 {
+  width: 20%;
+}
+
+table.responsive tr th.tw-25 {
+  width: 25%;
+}
+
+table.responsive tr th.tw-30 {
+  width: 30%;
+}
+
+table.responsive tr th.tw-35 {
+  width: 35%;
+}
+
+table.responsive tr th.tw-40 {
+  width: 40%;
+}
+
+table.responsive tr th.tw-45 {
+  width: 45%;
+}
+
+table.responsive tr th.tw-50 {
+  width: 50%;
+}
+
+table.responsive tr th.tw-55 {
+  width: 55%;
+}
+
+table.responsive tr th.tw-60 {
+  width: 60%;
+}
+
+table.responsive tr th.tw-65 {
+  width: 65%;
+}
+
+table.responsive tr th.tw-70 {
+  width: 70%;
 }
 
 /*See all activity*/
