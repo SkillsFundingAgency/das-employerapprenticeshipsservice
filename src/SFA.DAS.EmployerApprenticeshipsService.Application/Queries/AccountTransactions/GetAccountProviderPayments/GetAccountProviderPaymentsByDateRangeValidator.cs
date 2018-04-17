@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProvider
            throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetAccountProviderPaymentsByDateRangeQuery item)
+        public Task<ValidationResult> ValidateAsync(GetAccountProviderPaymentsByDateRangeQuery item)
         {
             var validationResult = new ValidationResult();
 
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProvider
                 validationResult.AddError(nameof(item.ToDate), "To date has not been supplied");
             }
 
-            return validationResult;
+            return Task.FromResult(validationResult);
         }
     }
 }

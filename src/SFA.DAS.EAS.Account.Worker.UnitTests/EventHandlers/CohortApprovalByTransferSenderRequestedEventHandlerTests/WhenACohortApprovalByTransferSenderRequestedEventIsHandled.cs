@@ -21,7 +21,6 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.EventHandlers.CohortApprovalByTra
 
         private CohortApprovalByTransferSenderRequestedEventHandler _handler;
         private CohortApprovalByTransferSenderRequested _event;
-        private long? _id;
         private Mock<IEmployerAccountRepository> _employerAccountRepository;
         private Mock<IHashingService> _hashingService;
         private Mock<IMessageSubscriberFactory> _messageSubscriberFactory;

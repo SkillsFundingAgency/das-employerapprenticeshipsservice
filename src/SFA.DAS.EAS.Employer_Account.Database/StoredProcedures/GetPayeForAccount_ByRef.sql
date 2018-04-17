@@ -9,6 +9,6 @@ Select TOP 1
 	ah.RemovedDate
 from employer_account.Paye paye
 INNER JOIN employer_account.AccountHistory ah ON ah.PayeRef = paye.Ref
-INNER JOIN employer_account.account a ON a.Id = ah.AccountId
+INNER JOIN employer_account.Account a ON a.Id = ah.AccountId
 WHERE a.HashedId = @HashedAccountId AND paye.Ref = @Ref
 ORDER BY ah.Id DESC

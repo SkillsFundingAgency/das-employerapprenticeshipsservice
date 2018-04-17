@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetPreviousTransac
            throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetPreviousTransactionsCountRequest request)
+        public Task<ValidationResult> ValidateAsync(GetPreviousTransactionsCountRequest request)
         {
             var validationResult = new ValidationResult();
 
@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetPreviousTransac
                 validationResult.AddError(nameof(request.FromDate));
             }
 
-            return validationResult;
+            return Task.FromResult(validationResult);
         }
     }
 }

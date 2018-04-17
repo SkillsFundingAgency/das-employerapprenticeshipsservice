@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetAccountBalance_ByAccountIds]
-	@accountIds [employer_financial].[AccountIds] Readonly,
+	@AccountIds [employer_financial].[AccountIds] Readonly,
 	@allowancePercentage FLOAT = 0
 AS
 	SELECT
@@ -12,7 +12,7 @@ AS
 			WHEN HasDeclaredLevy = 1 AND AmountLevyDeclared = 0 THEN 1 -- this needs to go back to 0 after month 1
 			ELSE 1
 		END IsLevyPayer
-	FROM @accountIds acc
+	FROM @AccountIds acc
 	OUTER APPLY
 	(
 		SELECT TOP 1 IsLevyPayer

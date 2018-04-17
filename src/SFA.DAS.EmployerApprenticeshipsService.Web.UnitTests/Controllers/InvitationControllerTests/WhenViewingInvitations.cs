@@ -81,7 +81,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             
 
             //Act
-            var actual = await _controller.View("123");
+            var actual = await _controller.Details("123");
 
             //Assert
             _invitationOrchestrator.Verify(x => x.GetInvitation(It.Is<string>(i => i == "123")));
