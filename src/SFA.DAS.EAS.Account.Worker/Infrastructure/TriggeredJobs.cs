@@ -32,25 +32,28 @@ namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 
 		private void RunJob(Type jobtype, TextWriter logger)
 		{
-			var thisContainer = ServiceLocator.CreateChildContainer();
-			ServiceLocator.Register<TextWriter>(thisContainer, logger);
-			IJob job;
-			logger.WriteLine($"found job type {jobtype.FullName}... resolving from IoC...");
-			try
-			{
-				job = (IJob)thisContainer.GetInstance(jobtype);
-				JobLogger.WriteLine(logger, $"Obtained instance of type {jobtype.FullName} from IoC");
-			}
-			catch (Exception e)
-			{
-				JobLogger.WriteLine(logger, $"Failed to fetch instance of type {jobtype.FullName} from IoC - error: {e.GetType()} - {e.Message}");
-				throw;
-			}
+		    using (var thisContainer = ServiceLocator.CreateNestedContainer())
+		    {
+		        ServiceLocator.Register<TextWriter>(thisContainer, logger);
+		        IJob job;
+		        logger.WriteLine($"found job type {jobtype.FullName}... resolving from IoC...");
+		        try
+		        {
+		            job = (IJob) thisContainer.GetInstance(jobtype);
+		            JobLogger.WriteLine(logger, $"Obtained instance of type {jobtype.FullName} from IoC");
+		        }
+		        catch (Exception e)
+		        {
+		            JobLogger.WriteLine(logger,
+		                $"Failed to fetch instance of type {jobtype.FullName} from IoC - error: {e.GetType()} - {e.Message}");
+		            throw;
+		        }
 
-			job.Run().ContinueWith(task =>
-			{
-				JobLogger.WriteLine(logger, $"Job has ended. Canceled?:{task.IsCanceled} Faulted?:{task.IsFaulted}");
-			});
+		        job.Run().ContinueWith(task =>
+		        {
+		            JobLogger.WriteLine(logger, $"Job has ended. Canceled?:{task.IsCanceled} Faulted?:{task.IsFaulted}");
+		        });
+		    }
 		}
 
 		private IEnumerable<Type> GetAllPossibleJobs()
@@ -60,7 +63,7 @@ namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 
 		private void ScheduleJob<TJob>() where TJob : IJob
 		{
-			var azureRepo = ServiceLocator.Get<IAzureContainerRepository>();
+			var azureRepo = ServiceLocator.Get<IAzureQueueClient>();
 			azureRepo.QueueMessage(Constants.AzureQueueNames.AdHocJobQueue, new AdHocJobParams {JobName = typeof(TJob).Name });
 		}
 	}

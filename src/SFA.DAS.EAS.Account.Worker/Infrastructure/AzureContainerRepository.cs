@@ -7,7 +7,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 {
-	public class AzureContainerRepository : IAzureContainerRepository
+	public class AzureQueueClient : IAzureQueueClient
 	{
 		private readonly IWebJobConfiguration _webJobConfiguration;
 
@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 
 		protected CloudQueueClient QueueClient => _queueClient.Value;
 
-		public AzureContainerRepository(IWebJobConfiguration webJobConfiguration)
+		public AzureQueueClient(IWebJobConfiguration webJobConfiguration)
 		{
 			_webJobConfiguration = webJobConfiguration;
 			_queueClient = new Lazy<CloudQueueClient>(Initialise);

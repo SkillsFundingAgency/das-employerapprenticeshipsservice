@@ -6,13 +6,13 @@ namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 	public class AzureWebJobHelper : IAzureWebJobHelper
 	{
 		private readonly ITriggeredJobRepository _triggeredJobRepository;
-		private readonly IAzureContainerRepository _azureContainerRepository;
+		private readonly IAzureQueueClient _azureQueueClient;
 		private readonly ILog _logger;
 
-		public AzureWebJobHelper(ITriggeredJobRepository triggeredJobRepository, IAzureContainerRepository azureContainerRepository, ILog logger)
+		public AzureWebJobHelper(ITriggeredJobRepository triggeredJobRepository, IAzureQueueClient azureQueueClient, ILog logger)
 		{
 			_triggeredJobRepository = triggeredJobRepository;
-			_azureContainerRepository = azureContainerRepository;
+			_azureQueueClient = azureQueueClient;
 			_logger = logger;
 		}
 
@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 		{
 			foreach (var triggeredJob in _triggeredJobRepository.GetQueuedTriggeredJobs())
 			{
-				_azureContainerRepository.EnsureQueueExistsAsync(triggeredJob.Trigger.QueueName);	
+				_azureQueueClient.EnsureQueueExistsAsync(triggeredJob.Trigger.QueueName);	
 			}
 		}
 	}

@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.Infrastructure
 		public AzureWebJobHelperTestFixtures()
 		{
 			TriggeredJobRepositoryMock = new Mock<ITriggeredJobRepository>();
-			AzureContainerRepositoryMock = new Mock<IAzureContainerRepository>();
+			AzureContainerRepositoryMock = new Mock<IAzureQueueClient>();
 			LoggerMock = new Mock<ILog>();
 			TriggeredJobs = new List<TriggeredJob<QueueTriggerAttribute>>();
 			TriggeredJobRepositoryMock.Setup(tjr => tjr.GetQueuedTriggeredJobs()).Returns(TriggeredJobs);
@@ -85,8 +85,8 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.Infrastructure
 		public Mock<ITriggeredJobRepository> TriggeredJobRepositoryMock { get; set; }
 		public ITriggeredJobRepository TriggeredJobRepository => TriggeredJobRepositoryMock.Object;
 
-		public Mock<IAzureContainerRepository> AzureContainerRepositoryMock { get; set; }
-		public IAzureContainerRepository AzureContainerRepository => AzureContainerRepositoryMock.Object;
+		public Mock<IAzureQueueClient> AzureContainerRepositoryMock { get; set; }
+		public IAzureQueueClient AzureQueueClient => AzureContainerRepositoryMock.Object;
 
 		public Mock<ILog> LoggerMock { get; set; }
 		public ILog Logger => LoggerMock.Object;
@@ -109,7 +109,7 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.Infrastructure
 
 		public AzureWebJobHelper CreateAzureWebJobHelper()
 		{
-			return new AzureWebJobHelper(TriggeredJobRepository,  AzureContainerRepository, Logger);
+			return new AzureWebJobHelper(TriggeredJobRepository,  AzureQueueClient, Logger);
 		}
 	}
 }

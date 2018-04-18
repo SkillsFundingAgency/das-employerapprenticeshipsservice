@@ -3,9 +3,9 @@
 namespace SFA.DAS.EAS.Account.Worker.Infrastructure.Interfaces
 {
 	/// <summary>
-	///		Represents a service for managing the existence of Azure storage account contains such as queues.
+	///		Represents a service for managing the existence of Azure queues.
 	/// </summary>
-	public interface IAzureContainerRepository
+	public interface IAzureQueueClient
 	{
 		Task EnsureQueueExistsAsync(string queueName);
 

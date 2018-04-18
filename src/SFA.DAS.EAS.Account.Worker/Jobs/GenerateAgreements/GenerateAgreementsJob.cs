@@ -12,9 +12,9 @@ namespace SFA.DAS.EAS.Account.Worker.Jobs.GenerateAgreements
         private readonly ILog _log;
 
         public GenerateAgreementsJob(
-            IIdBroker idIdBroker, 
-            IProcessor accountProcessor, 
-            IIdProvider accountIdProvider,
+            IIdBroker idIdBroker,
+            GenerateAgreementsIdProcessor accountProcessor,
+            GenerateAgreementsIdProvider accountIdProvider,
             ILog log)
         {
             _idIdBroker = idIdBroker;
