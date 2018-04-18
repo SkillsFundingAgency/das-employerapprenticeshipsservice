@@ -2,77 +2,140 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Util;
-using MediatR;
 using Moq;
-using Nest;
 using NUnit.Framework;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
-using SFA.DAS.EAS.Application.Queries.GetApprovedTransferConnectionInvitation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
-using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.TestCommon;
+using EmployerAgreementStatus = SFA.DAS.EAS.Domain.Models.EmployerAgreement.EmployerAgreementStatus;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementTests
 {
     [TestFixture]
-    public class GetAccountEmployerAgreementTests
+    public class GetAccountEmployerAgreementTests : FluentTest<GetAccountEmployerAgreementTestFixtures>
     {
         [Test]
-        public async Task Handle_WithAnyRequest_ShouldCallValidator()
+        public Task Handle_WithAnyRequest_ShouldCallValidator()
         {
-            // Arrange
-            var fixtures = new GetAccountEmployerAgreementTestFixtures()
-                                .WithRequestedAccount(123, "ABC123");
-            var request = fixtures.CreateRequest();
-            var queryHandler = fixtures.CreateQueryHandler();
-
-            //Act
-            await queryHandler.Handle(request);
-
-            //Assert
-            fixtures.ValidatorMock.Verify(v => v.Validate(request), Times.Once);
+            return base.RunAsync(
+                arrange: fixtures => fixtures
+                                    .WithRequestedAccount(123, "ABC123"),
+                act: fixtures => fixtures.Handle(),
+                assert: fixtures => fixtures.ValidatorMock.Verify(v => v.ValidateAsync(fixtures.Request), Times.Once));
         }
 
         [Test]
         public void Handle_WithUnauthorisedRequest_ShouldThrowUnauthorizedAccessException()
         {
-            // Arrange
-            var fixtures = new GetAccountEmployerAgreementTestFixtures()
+            Assert.ThrowsAsync<UnauthorizedAccessException>(() => base.RunAsync(
+                arrange: fixtures => fixtures
                                     .WithUnauthorisedRequest()
-                                    .WithRequestedAccount(123, "ABC123");
-            var request = fixtures.CreateRequest();
-
-            var queryHandler = fixtures.CreateQueryHandler();
-
-            //Act
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await queryHandler.Handle(request));
+                                    .WithRequestedAccount(123, "ABC123"),
+                act: fixtures => fixtures.Handle(),
+                assert: fixtures => Assert.IsNotNull(fixtures.Response)));
         }
 
         [Test]
-        public async Task Handle_WithAccountThatHasOneSignedAgreement_ShouldReturnSignedAgreement()
+        public Task Handle_WithAccountThatHasOneSignedAgreement_ShouldReturnSignedAgreementAndNoPendingAgreement()
         {
-            //Act
-            var fixtures = new GetAccountEmployerAgreementTestFixtures()
-                .WithUnauthorisedRequest()
-                .WithRequestedAccount(123, "ABC123");
+            return base.RunAsync(
+                arrange: fixtures => fixtures
+                                        .WithRequestedAccount(123, "ABC123")
+                                        .WithLegalEntityId(456)
+                                        .WithSignedAgreement(123, 456, 1),
+                act: fixtures => fixtures.Handle(),
+                assert: fixtures => TestAgreementVersions(fixtures, 456, 1, null));
+        }
 
-            var request = fixtures.CreateRequest();
-            var queryHandler = fixtures.CreateQueryHandler();
+        [Test]
+        public Task Handle_WithAccountThatHasTwoSignedAgreements_ShouldReturnHighestVersionSignedAgreementAndNoPendingAgreement()
+        {
+            return base.RunAsync(
+                arrange: fixtures => fixtures
+                                        .WithRequestedAccount(123, "ABC123")
+                                        .WithLegalEntityId(456)
+                                        .WithSignedAgreement(123, 456, 1)
+                                        .WithSignedAgreement(123, 456, 2),
+                act : fixtures => fixtures.Handle(), 
+                assert: fixtures => TestAgreementVersions(fixtures, 456, 2, null));
+        }
 
-            //Act
-            var response = await queryHandler.Handle(request);
+        [Test]
+        public Task Handle_WithAccountThatHasOnePendingAgreement_ShouldReturnPendingAgreementAndNoSignedAgreement()
+        {
+            return base.RunAsync(
+                arrange: fixtures => fixtures
+                    .WithRequestedAccount(123, "ABC123")
+                    .WithLegalEntityId(456)
+                    .WithPendingAgreement(123, 456, 1),
+                act: fixtures => fixtures.Handle(),
+                assert: fixtures => TestAgreementVersions(fixtures, 456, null, 1));
+        }
 
-            //Assert
-            Assert.IsNotNull(response);
+        [Test]
+        public Task Handle_WithAccountThatHasTwoPendingAgreements_ShouldReturnHighestVersionPendingAgreementAndNoSignedAgreement()
+        {
+            return base.RunAsync(
+                arrange: fixtures => fixtures
+                    .WithRequestedAccount(123, "ABC123")
+                    .WithLegalEntityId(456)
+                    .WithPendingAgreement(123, 456, 1)
+                    .WithPendingAgreement(123, 456, 2),
+                act: fixtures => fixtures.Handle(),
+                assert: fixtures => TestAgreementVersions(fixtures, 456, null, 2));
+        }
+
+        [Test]
+        public Task Handle_WithAccountThatHasOneSignedAndAnEarlierPendingAgreement_ShouldReturnSignedAndNoPendingAgreement()
+        {
+            return base.RunAsync(
+                arrange: fixtures => fixtures
+                    .WithRequestedAccount(123, "ABC123")
+                    .WithLegalEntityId(456)
+                    .WithPendingAgreement(123, 456, 1)
+                    .WithSignedAgreement(123, 456, 2),
+                act: fixtures => fixtures.Handle(),
+                assert: fixtures => TestAgreementVersions(fixtures, 456, 2, null));
+        }
+
+
+        [Test]
+        public Task Handle_WithAccountThatHasOneSignedAndALaterPendingAgreement_ShouldReturnSignedAndPendingAgreement()
+        {
+            return base.RunAsync(
+                arrange: fixtures => fixtures
+                    .WithRequestedAccount(123, "ABC123")
+                    .WithLegalEntityId(456)
+                    .WithPendingAgreement(123, 456, 3)
+                    .WithSignedAgreement(123, 456, 2),
+                act: fixtures => fixtures.Handle(),
+                assert: fixtures => TestAgreementVersions(fixtures, 456, 2, 3));
+        }
+
+        private void TestAgreementVersions(
+            GetAccountEmployerAgreementTestFixtures fixtures, 
+            int legalEntityId,
+            int? expectedSignedVersion,
+            int? expectedPendingVersion)
+        {
+
+            var response = fixtures.Response;
+            Assert.IsNotNull(response,"The query handler did not return an object - returned null");
+            var agreementStatus = response.EmployerAgreements.SingleOrDefault(ea => ea.LegalEntityId == legalEntityId);
+            Assert.IsNotNull(agreementStatus, "Did not receive an agreement for the expected legal entity");
+            Assert.AreEqual(expectedSignedVersion, agreementStatus.SignedVersion, "The signed version number is not correct");
+            Assert.AreEqual(expectedPendingVersion, agreementStatus.PendingVersion, "The pending version number is not correct");
+
+            Assert.AreEqual(expectedSignedVersion.HasValue, agreementStatus.HasSignedAgreement, "The agreement summary has a signed agreement but one was not expected");
+            Assert.AreEqual(expectedPendingVersion.HasValue, agreementStatus.HasPendingAgreement, "The agreement summary has a pending agreement but one was not expected");
         }
     }
 
-    class GetAccountEmployerAgreementTestFixtures
+    public class GetAccountEmployerAgreementTestFixtures
     {
         public GetAccountEmployerAgreementTestFixtures()
         {
@@ -85,6 +148,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
             LegalEntities = new List<LegalEntity>();
 
             ValidatorMock = new Mock<IValidator<GetAccountEmployerAgreementsRequest>>();
+            ValidationResult = new ValidationResult();
         }
 
         public Mock<IHashingService> HashingServiceMock { get; }
@@ -103,11 +167,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
 
         public string RequestHashedAccountId { get; set; }
 
+        public ValidationResult ValidationResult { get; }
+
         public GetAccountEmployerAgreementTestFixtures WithUnauthorisedRequest()
         {
-            ValidatorMock
-                .Setup(x => x.ValidateAsync(It.IsAny<GetAccountEmployerAgreementsRequest>()))
-                .ReturnsAsync(new ValidationResult { IsUnauthorized = true });
+            ValidationResult.IsUnauthorized = true;
 
             return this;
         }
@@ -131,30 +195,52 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
             return this;
         }
 
-        public GetAccountEmployerAgreementTestFixtures WithLegalEntityId(long legalEntityId, string name)
+        public GetAccountEmployerAgreementTestFixtures WithLegalEntityId(long legalEntityId)
         {
             LegalEntities.Add(new LegalEntity
             {
                 Id = legalEntityId,
-                Name = name
+                Name = $"{legalEntityId}"
             });
 
             return this;
         }
 
-        public GetAccountEmployerAgreementTestFixtures WithAgreement(long accountId, long legalEntityId, int agreementVersion)
+        public GetAccountEmployerAgreementTestFixtures WithSignedAgreement(long accountId, long legalEntityId, int agreementVersion)
+        {
+            return WithAgreement(accountId, legalEntityId, agreementVersion, EmployerAgreementStatus.Signed);
+        }
+
+        public GetAccountEmployerAgreementTestFixtures WithPendingAgreement(long accountId, long legalEntityId, int agreementVersion)
+        {
+            return WithAgreement(accountId, legalEntityId, agreementVersion, EmployerAgreementStatus.Pending);
+        }
+
+        public GetAccountEmployerAgreementTestFixtures WithAgreement(long accountId, long legalEntityId, int agreementVersion, SFA.DAS.EAS.Domain.Models.EmployerAgreement.EmployerAgreementStatus status)
         {
             var account = Accounts.Single(ac => ac.Id == accountId);
             var legalEntity = LegalEntities.Single(le => le.Id == legalEntityId);
-            var template = AgreementTemplates.Single(ag => ag.VersionNumber == agreementVersion);
+            var template = AgreementTemplates.FirstOrDefault(ag => ag.VersionNumber == agreementVersion);
+            if (template == null)
+            {
+                AgreementTemplates.Add(template = new AgreementTemplate {VersionNumber = agreementVersion});
+            }
 
-            EmployerAgreements.Add(new EmployerAgreement
+            var employerAgreement = new EmployerAgreement
             {
                 Id = accountId,
                 Account = account,
+                AccountId = account.Id,
                 LegalEntity = legalEntity,
+                LegalEntityId = legalEntity.Id,
                 Template = template,
-            });
+                TemplateId = template.Id,
+                StatusId = status
+            };
+
+            EmployerAgreements.Add(employerAgreement);
+
+            template.Agreements.Add(employerAgreement);
 
             return this;
         }
@@ -176,12 +262,32 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
             DbSetStub<EmployerAgreement> agreementsDbSet = new DbSetStub<EmployerAgreement>(EmployerAgreements);
             DbSetStub<LegalEntity> legalEntityDbSet = new DbSetStub<LegalEntity>(LegalEntities);
 
-            EmployerAccountDbContextMock.Setup(db => db.Accounts).Returns(accountsDbSet);
-            EmployerAccountDbContextMock.Setup(db => db.Agreements).Returns(agreementsDbSet);
+            EmployerAccountDbContextMock
+                .Setup(db => db.Accounts)
+                .Returns(accountsDbSet);
+
+            EmployerAccountDbContextMock
+                .Setup(db => db.Agreements)
+                .Returns(agreementsDbSet);
+
+            ValidatorMock
+                .Setup(x => x.ValidateAsync(Request))
+                .ReturnsAsync(ValidationResult);
 
             var queryHandler = new GetAccountEmployerAgreementsQueryHandler(EmployerAccountDbContext, HashingService, Validator);
 
             return queryHandler;
+        }
+
+        public GetAccountEmployerAgreementsRequest Request { get; private set; }
+
+        public GetAccountEmployerAgreementsResponse Response { get; private set; }
+
+        public async Task Handle()
+        {
+            Request = CreateRequest();
+            var queryHandler = CreateQueryHandler();
+            Response = await queryHandler.Handle(Request);
         }
     }
 }

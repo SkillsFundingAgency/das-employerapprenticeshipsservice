@@ -56,21 +56,15 @@
                                 if (employerAgreement.HasSignedAgreement)
                                 {
                                     @: Updated agreement available
-                                    <span class="secondary-text">Agreement needs to be signed</span>
                                 }
                                 else
                                 {
                                     @: Agreement not signed
-                                    <span class="secondary-text">Agreement needs to be signed</span>
                                 }
                             }
                             else
                             {
                                 @: Signed by @employerAgreement.SignedByName
-                                if (employerAgreement.SignedDate.HasValue)
-                                {
-                                    <span class="secondary-text">Signed on: @employerAgreement.SignedDate.Value.ToString("dd/MM/yyyy")</span>
-                                }
                             }
                         </td>
 
