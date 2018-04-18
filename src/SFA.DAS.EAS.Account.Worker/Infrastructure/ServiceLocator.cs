@@ -22,9 +22,9 @@ namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 			return _container.GetInstance(type) as T;
 		}
 
-		public static IContainer CreateChildContainer()
+		public static IContainer CreateNestedContainer()
 		{
-			return _container.CreateChildContainer();
+			return _container.GetNestedContainer();
 		}
 
 		public static void Register<T>(IContainer container, object instance) where T : class
