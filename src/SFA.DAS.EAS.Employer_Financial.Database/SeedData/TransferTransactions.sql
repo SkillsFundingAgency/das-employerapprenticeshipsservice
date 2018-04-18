@@ -1,37 +1,37 @@
 ﻿-- DELETE THE TEMP STORED PROCEDURES IF THEY EXIST
 IF OBJECT_ID('tempdb..#createPayment') IS NOT NULL
 BEGIN
-    DROP PROC #createPayment
+	DROP PROC #createPayment
 END
 GO
 
 IF OBJECT_ID('tempdb..#createCoursePaymentsForAccount') IS NOT NULL
 BEGIN
-    DROP PROC #createCoursePaymentsForAccount
+	DROP PROC #createCoursePaymentsForAccount
 END
 GO
 
 IF OBJECT_ID('tempdb..#createTransfer') IS NOT NULL
 BEGIN
-    DROP PROC #createTransfer
+	DROP PROC #createTransfer
 END
 GO
 
 IF OBJECT_ID('tempdb..#createAccountTransfers') IS NOT NULL
 BEGIN
-    DROP PROC #createAccountTransfers
+	DROP PROC #createAccountTransfers
 END
 GO
 
 IF OBJECT_ID('tempdb..#CreateAccountTransferTransaction') IS NOT NULL
 BEGIN
-    DROP PROC #CreateAccountTransferTransaction
+	DROP PROC #CreateAccountTransferTransaction
 END
 GO
 -- Add period end if its not already there
 IF NOT EXISTS
 (
-	select 1 FROM [employer_financial]‌.[periodend] 
+	select 1 FROM [employer_financial].[periodend] 
 	WHERE periodendid = '1718-R06'
 )
 BEGIN        
@@ -45,8 +45,8 @@ GO
 CREATE PROCEDURE #createPayment
 (     
 	@accountId BIGINT,
-    @providerName NVARCHAR(MAX),
-    @apprenticeshipCourseName NVARCHAR(MAX),   
+	@providerName NVARCHAR(MAX),
+	@apprenticeshipCourseName NVARCHAR(MAX),   
 	@apprenticeshipCourseLevel INT,
 	@apprenticeName VARCHAR(MAX), 	
 	@ukprn BIGINT,
@@ -88,9 +88,9 @@ CREATE PROCEDURE #createTransfer
 )
 AS
 BEGIN
-	INSERT INTO [employer_financial]‌.[AccountTransfers] 
+	INSERT INTO [employer_financial].[AccountTransfers]
 	(
-		SenderAccountId, 
+		SenderAccountId,
 		SenderAccountName,
 		ReceiverAccountId, 
 		ReceiverAccountName,
@@ -100,7 +100,7 @@ BEGIN
 		Amount, 
 		Type, 
 		TransferDate, 
-		CreatedDate
+		CreatedDate	
 	)
 	VALUES
 	(
@@ -116,6 +116,7 @@ BEGIN
 		@transferDate,
 		GETDATE()
 	)
+	
 END;
 GO
 
@@ -132,7 +133,7 @@ CREATE PROCEDURE #CreateAccountTransferTransaction
 AS	
 BEGIN
 	--Create transfer sender transaction
-	INSERT INTO [employer_financial]‌.[TransactionLine]
+	INSERT INTO [employer_financial].[TransactionLine]
 	(
 		AccountId
 		,DateCreated 		
@@ -173,7 +174,7 @@ BEGIN
 	-- Levy Funded only
 	EXEC #createPayment @accountId, @providerName, @apprenticeshipCourseName, 2, 'Bob Green', @ukprn, 1001, 1111, 1, 100		
 	
-    -- Levy with SFA & employer co-funding
+	-- Levy with SFA & employer co-funding
 	EXEC #createPayment @accountId, @providerName, @apprenticeshipCourseName, 2, 'Jane Doe', @ukprn, 1002, 2222, 1, 200
 	EXEC #createPayment @accountId, @providerName, @apprenticeshipCourseName, 2, 'Jane Doe', @ukprn, 1002, 2222, 2, 450
 	EXEC #createPayment @accountId, @providerName, @apprenticeshipCourseName, 2, 'Jane Doe', @ukprn, 1002, 2222, 3, 50
@@ -194,7 +195,7 @@ BEGIN
 	EXEC #createPayment @accountId, @providerName, @apprenticeshipCourseName, 2, 'Mary Green', @ukprn, 2001, 5555, 1, 100
 	EXEC #createPayment @accountId, @providerName, @apprenticeshipCourseName, 2, 'Mary Green', @ukprn, 2001, 5555, 1, -50	
 	
-    -- Levy with SFA & employer co-funding with refunds
+	-- Levy with SFA & employer co-funding with refunds
 	EXEC #createPayment @accountId, @providerName, @apprenticeshipCourseName, 2, 'John Doe', @ukprn, 2002, 6666, 1, 200
 	EXEC #createPayment @accountId, @providerName, @apprenticeshipCourseName, 2, 'John Doe', @ukprn, 2002, 6666, 1, -100
 	EXEC #createPayment @accountId, @providerName, @apprenticeshipCourseName, 2, 'John Doe', @ukprn, 2002, 6666, 2, 450
