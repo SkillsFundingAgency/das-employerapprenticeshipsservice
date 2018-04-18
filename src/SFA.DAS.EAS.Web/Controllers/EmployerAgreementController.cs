@@ -74,8 +74,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var agreements = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
-            var unsignedAgreements = agreements?.Data?.EmployerAgreements
-                .Where(x => x.HasPendingAgreement).Take(2).ToArray();
+            var unsignedAgreements = agreements.Data
+                                        .EmployerAgreements
+                                        .Where(x => x.HasPendingAgreement)
+                                        .Take(2)
+                                        .ToArray();
 
             if (unsignedAgreements?.Length != 1)
                 return RedirectToAction("Index");
@@ -86,7 +89,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("agreements/{agreementId}/about-your-agreement")]
+        [Route("agreements/{agreementId} /about-your-agreement")]
         public async Task<ActionResult> AboutYourAgreement(string agreementid, string hashedAccountId)
         {
             var agreement = await _orchestrator.GetById(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));

@@ -58,8 +58,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
                     {
                         EmployerAgreements = new List<EmployerAgreementStatusView>
                         {
-                            new EmployerAgreementStatusView{ PendingHashedAgreementId = hashedAgreementId},
-                            new EmployerAgreementStatusView{ SignedHashedAgreementId = "JH4545"}
+                            new EmployerAgreementStatusView{ PendingHashedAgreementId = hashedAgreementId, PendingAgreementId = 123},
+                            new EmployerAgreementStatusView{ SignedHashedAgreementId = "JH4545", PendingAgreementId = null}
                         }
                     }
                 });
