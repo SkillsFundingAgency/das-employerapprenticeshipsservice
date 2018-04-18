@@ -70,6 +70,20 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
                         Signed = grp.FirstOrDefault(ag => ag.Status == EmployerAgreementStatus.Signed),
                         Pending = grp.FirstOrDefault(ag => ag.Status == EmployerAgreementStatus.Pending)
                     })
+
+                    // HACK: the following list is needed for the unit test, not for the production code, although it does not break the code. 
+                    //      The dbset mocks that are used in the unit tests do not generate SQL (like EF prod does) but instead converts the expressions
+                    //      into anonymous delegates. This introduces a subtle change in behaviour; in SQL the properties cannot be null (as they 
+                    //      - are actually tuples from nested queries) where as in .net land they can be. So for example, in the expression
+                    //      ag.Signed.Agreement signed will never be null in SQL (because it is a projection from a sub query) whereas it will
+                    //      be null when operating in .net land. The normal way of dealing with this using null safe propagation cannot be used
+                    //      to resolve this because it results in a .net expression which cannot be translated into SQL (or at least isn't translated).
+                    //      What to do, what to do??....
+                    //      By coercing the expression so far into a list the IQueryable expression is sent to the DB and the projection after the
+                    //      ToList() is run purely in .net and so can use the null propagation operator.
+                    //      Obviously, adapting prod code to suit the tests is not ideal :-(
+                    .ToList()
+
                     // project into the required shape
                     .Select(ag => new EmployerAgreementStatusView
                     {
@@ -81,19 +95,19 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
                         LegalEntityAddress = ag.LegalEntity.RegisteredAddress,
                         LegalEntityInceptionDate = ag.LegalEntity.DateOfIncorporation,
                         LegalEntityStatus = ag.LegalEntity.Status,
-                        SignedByName = ag.Signed.Agreement.SignedByName,
-                        SignedDate = ag.Signed.Agreement.SignedDate,
-                        SignedExpiredDate = ag.Signed.Agreement.ExpiredDate,
+                        SignedByName = ag.Signed?.Agreement.SignedByName,
+                        SignedDate = ag.Signed?.Agreement.SignedDate,
+                        SignedExpiredDate = ag.Signed?.Agreement.ExpiredDate,
 
-                        SignedAgreementId = ag.Signed.Agreement.Id,
-                        SignedTemplateId = ag.Signed.Agreement.TemplateId,
-                        SignedTemplatePartialViewName = ag.Signed.Agreement.Template.PartialViewName,
-                        SignedVersion = ag.Signed.Agreement.Template.VersionNumber,
+                        SignedAgreementId = ag.Signed?.Agreement.Id,
+                        SignedTemplateId = ag.Signed?.Agreement.TemplateId,
+                        SignedTemplatePartialViewName = ag.Signed?.Agreement.Template.PartialViewName,
+                        SignedVersion = ag.Signed?.Agreement.Template.VersionNumber,
 
-                        PendingAgreementId = ag.Pending.Agreement.Id,
-                        PendingTemplateId = ag.Pending.Agreement.TemplateId,
-                        PendingTemplatePartialViewName = ag.Pending.Agreement.Template.PartialViewName,
-                        PendingVersion = ag.Pending.Agreement.Template.VersionNumber
+                        PendingAgreementId = ag.Pending?.Agreement.Id,                                  // <-- we can not use ?. in expressions on IQueryable, so these have to be ienumerable
+                        PendingTemplateId = ag.Pending?.Agreement.TemplateId,
+                        PendingTemplatePartialViewName = ag.Pending?.Agreement.Template.PartialViewName,
+                        PendingVersion = ag.Pending?.Agreement.Template.VersionNumber
                     })
                     .ToList();
                                                     
