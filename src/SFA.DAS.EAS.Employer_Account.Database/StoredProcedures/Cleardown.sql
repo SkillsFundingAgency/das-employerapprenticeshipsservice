@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [employer_account].[Cleardown]
 	@INCLUDEUSERTABLE TINYINT = 0
 AS
+	DELETE FROM [employer_account].[TransferRequest];
 	DELETE FROM [employer_account].[TransferConnectionInvitationChange];
 	DELETE FROM [employer_account].[TransferConnectionInvitation];
 	DELETE FROM [employer_account].[UserAccountSettings];
