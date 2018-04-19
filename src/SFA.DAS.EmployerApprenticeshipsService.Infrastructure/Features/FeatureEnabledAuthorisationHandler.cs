@@ -7,9 +7,11 @@ namespace SFA.DAS.EAS.Infrastructure.Features
 {
     public class FeatureEnabledAuthorisationHandler : IAuthorizationHandler
     {
-        public Task<bool> CanAccessAsync(IAuthorizationContext authorizationContext, Feature feature)
+        public Task<AuthorizationResult> CanAccessAsync(IAuthorizationContext authorizationContext, Feature feature)
         {
-            return feature.Enabled ? FeatureHandlerResults.FeatureEnabledTask : FeatureHandlerResults.FeatureDisabledTask;
+            return feature.Enabled
+                ? Task.FromResult(AuthorizationResult.Ok)
+                : Task.FromResult(AuthorizationResult.FeatureDisabled);
         }
     }
 }

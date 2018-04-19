@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestPendingReceivedTran
         }
     }
 
-    public class LatestPendingTransferConnectionInvitationFixture
+    public class LatestPendingTransferConnectionInvitationFixture : FluentTestFixture
     {
         public GetLatestPendingReceivedTransferConnectionInvitationResponse Response { get; set; }
         public GetLatestPendingReceivedTransferConnectionInvitationQueryHandler Handler { get; set; }

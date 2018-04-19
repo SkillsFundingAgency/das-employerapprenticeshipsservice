@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
+using SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation;
 
 namespace SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations
 {
-    public class StartTransferConnectionInvitationViewModel : ViewModel<GetTransferConnectionInvitationAccountQuery>
+    public class StartTransferConnectionInvitationViewModel : ViewModel<SendTransferConnectionInvitationQuery>
     {
         [Required]
-        public GetTransferConnectionInvitationAccountQuery GetTransferConnectionInvitationAccountQuery { get; set; }
+        public SendTransferConnectionInvitationQuery SendTransferConnectionInvitationQuery { get; set; }
 
-        public override void Map(GetTransferConnectionInvitationAccountQuery message)
+        public override void Map(SendTransferConnectionInvitationQuery message)
         {
-            GetTransferConnectionInvitationAccountQuery = message;
+            SendTransferConnectionInvitationQuery = message;
         }
     }
 }

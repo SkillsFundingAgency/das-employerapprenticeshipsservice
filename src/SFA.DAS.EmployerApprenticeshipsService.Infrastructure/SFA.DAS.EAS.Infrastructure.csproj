@@ -235,6 +235,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\IAuthenticationService.cs" />
+    <Compile Include="Authorization\AuthorizationResult.cs" />
     <Compile Include="Authorization\IAuthorizationContextCache.cs" />
     <Compile Include="Authorization\IAuthorizationService.cs" />
     <Compile Include="Caching\Constants.cs" />
@@ -279,7 +280,7 @@
     <Compile Include="ExecutionPolicies\RequiredPolicyAttribute.cs" />
     <Compile Include="Extensions\EmployerFinancialDbContextExtensions.cs" />
     <Compile Include="Extensions\HashingServiceExtensions.cs" />
-    <Compile Include="Features\FeatureHandlerResults.cs" />
+    <Compile Include="Extensions\QueryFutureEnumerableExtensions.cs" />
     <Compile Include="Features\IFeatureService.cs" />
     <Compile Include="Mapping\Profiles\PaymentMappings.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringAttribute.cs" />

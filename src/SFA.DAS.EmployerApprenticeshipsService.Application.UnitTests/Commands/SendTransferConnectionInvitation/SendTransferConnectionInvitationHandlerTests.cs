@@ -1,10 +1,11 @@
-﻿ using System;
+﻿using System;
 using System.Threading.Tasks;
- using Moq;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon;
@@ -22,17 +23,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
         }
     }
 
-    public class SendTransferConnectionInvitationHandlerTestsFixture
+    public class SendTransferConnectionInvitationHandlerTestsFixture : FluentTestFixture
     {
         public SendTransferConnectionInvitationCommandHandler Handler { get; set; }
         public SendTransferConnectionInvitationCommand Command { get; set; }
         public Mock<IEmployerAccountRepository> EmployerAccountRepository { get; set; }
         public Mock<IPublicHashingService> PublicHashingService { get; set; }
+        public Mock<ITransferAllowanceService> TransferAllowanceService { get; set; }
         public Mock<ITransferConnectionInvitationRepository> TransferConnectionInvitationRepository { get; set; }
         public Mock<IUserRepository> UserRepository { get; set; }
         public Domain.Data.Entities.Account.Account ReceiverAccount { get; set; }
         public long? Result { get; set; }
         public Domain.Data.Entities.Account.Account SenderAccount { get; set; }
+        public decimal SenderAccountTransferAllowance { get; set; }
         public User SenderUser { get; set; }
         public TransferConnectionInvitation TransferConnectionInvitation { get; set; }
 
@@ -40,17 +43,20 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
         {
             EmployerAccountRepository = new Mock<IEmployerAccountRepository>();
             PublicHashingService = new Mock<IPublicHashingService>();
+            TransferAllowanceService = new Mock<ITransferAllowanceService>();
             TransferConnectionInvitationRepository = new Mock<ITransferConnectionInvitationRepository>();
             UserRepository = new Mock<IUserRepository>();
-
+            
             SetSenderAccount()
                 .SetReceiverAccount()
-                .SetSenderUser();
+                .SetSenderUser()
+                .SetSenderAccountTransferAllowance(1);
 
             Handler = new SendTransferConnectionInvitationCommandHandler
             (
                 EmployerAccountRepository.Object,
                 PublicHashingService.Object,
+                TransferAllowanceService.Object,
                 TransferConnectionInvitationRepository.Object,
                 UserRepository.Object
             );
@@ -61,52 +67,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
                 UserId = SenderUser.Id,
                 ReceiverAccountPublicHashedId = ReceiverAccount.PublicHashedId
             };
-        }
-
-        public async Task Handle()
-        {
-            Result = await Handler.Handle(Command);
-        }
-
-        public SendTransferConnectionInvitationHandlerTestsFixture SetSenderUser()
-        {
-            SenderUser = new User
-            {
-                ExternalId = Guid.NewGuid(),
-                Id = 123456,
-                FirstName = "John",
-                LastName = "Doe"
-            };
-
-            UserRepository
-                .Setup(r => r.GetUserById(SenderUser.Id))
-                .ReturnsAsync(SenderUser);
-
-            return this;
-        }
-
-        public SendTransferConnectionInvitationHandlerTestsFixture SetSenderAccount()
-        {
-            SenderAccount = new Domain.Data.Entities.Account.Account
-            {
-                Id = 333333,
-                PublicHashedId = "ABC123",
-                Name = "Sender"
-            };
-
-            return AddAccount(SenderAccount);
-        }
-
-        public SendTransferConnectionInvitationHandlerTestsFixture SetReceiverAccount()
-        {
-            ReceiverAccount = new Domain.Data.Entities.Account.Account
-            {
-                Id = 222222,
-                PublicHashedId = "XYZ987",
-                Name = "Receiver"
-            };
-
-            return AddAccount(ReceiverAccount);
         }
 
         public SendTransferConnectionInvitationHandlerTestsFixture AddAccount(Domain.Data.Entities.Account.Account account)
@@ -124,6 +84,59 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
                     .WithReceiverAccount(ReceiverAccount)
                     .WithStatus(status)
                     .Build());
+
+            return this;
+        }
+
+        public async Task Handle()
+        {
+            Result = await Handler.Handle(Command);
+        }
+
+        public SendTransferConnectionInvitationHandlerTestsFixture SetReceiverAccount()
+        {
+            ReceiverAccount = new Domain.Data.Entities.Account.Account
+            {
+                Id = 222222,
+                PublicHashedId = "XYZ987",
+                Name = "Receiver"
+            };
+
+            return AddAccount(ReceiverAccount);
+        }
+
+        public SendTransferConnectionInvitationHandlerTestsFixture SetSenderAccount()
+        {
+            SenderAccount = new Domain.Data.Entities.Account.Account
+            {
+                Id = 333333,
+                PublicHashedId = "ABC123",
+                Name = "Sender"
+            };
+
+            return AddAccount(SenderAccount);
+        }
+
+        public SendTransferConnectionInvitationHandlerTestsFixture SetSenderAccountTransferAllowance(decimal transferAllowance)
+        {
+            TransferAllowanceService.Setup(s => s.GetTransferAllowance(SenderAccount.Id)).ReturnsAsync(transferAllowance);
+
+            return this;
+        }
+
+        public SendTransferConnectionInvitationHandlerTestsFixture SetSenderUser()
+        {
+            SenderUser = new User
+            {
+                ExternalId = Guid.NewGuid(),
+                Id = 123456,
+                FirstName = "John",
+                LastName = "Doe"
+            };
+
+            UserRepository
+                .Setup(r => r.GetUserById(SenderUser.Id))
+                .ReturnsAsync(SenderUser);
 
             return this;
         }

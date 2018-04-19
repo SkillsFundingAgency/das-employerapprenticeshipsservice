@@ -276,6 +276,7 @@
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheSentTransferConnectionInvitationPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheSendTransferConnectionInvitationPage.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsControllerTests\WhenIViewTheCreateTransferConnectionPage.cs" />
+    <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransferConnectionInvitationAuthorizationComponent.cs" />
     <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransferAllowanceComponent.cs" />
     <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransferRequestsComponent.cs" />
     <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransfersPage.cs" />

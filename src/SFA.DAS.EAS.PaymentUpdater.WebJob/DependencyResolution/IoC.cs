@@ -4,7 +4,7 @@ using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
-using Constants = SFA.DAS.EAS.Application.Constants;
+using Constants = SFA.DAS.EAS.Domain.Constants;
 
 namespace SFA.DAS.EAS.PaymentUpdater.WebJob.DependencyResolution
 {

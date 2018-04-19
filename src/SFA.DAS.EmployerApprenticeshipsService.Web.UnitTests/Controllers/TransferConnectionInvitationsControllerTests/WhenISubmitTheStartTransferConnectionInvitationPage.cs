@@ -3,7 +3,7 @@ using System.Web.Mvc;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
+using SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 
@@ -21,13 +21,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         [SetUp]
         public void Arrange()
         {
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetTransferConnectionInvitationAccountQuery>())).ReturnsAsync(new GetTransferConnectionInvitationAccountResponse());
+            _mediator.Setup(m => m.SendAsync(It.IsAny<SendTransferConnectionInvitationQuery>())).ReturnsAsync(new SendTransferConnectionInvitationResponse());
 
             _controller = new TransferConnectionInvitationsController(null, _mediator.Object);
 
             _viewModel = new StartTransferConnectionInvitationViewModel
             {
-                GetTransferConnectionInvitationAccountQuery = new GetTransferConnectionInvitationAccountQuery
+                SendTransferConnectionInvitationQuery = new SendTransferConnectionInvitationQuery
                 {
                     ReceiverAccountPublicHashedId = ReceiverAccountPublicHashedId
                 }
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         {
             await _controller.Start(_viewModel);
 
-            _mediator.Verify(m => m.SendAsync(_viewModel.GetTransferConnectionInvitationAccountQuery), Times.Once);
+            _mediator.Verify(m => m.SendAsync(_viewModel.SendTransferConnectionInvitationQuery), Times.Once);
         }
 
         [Test]

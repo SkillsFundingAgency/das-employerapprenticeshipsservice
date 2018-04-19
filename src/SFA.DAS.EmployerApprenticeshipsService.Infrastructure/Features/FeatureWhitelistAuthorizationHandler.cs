@@ -9,24 +9,24 @@ namespace SFA.DAS.EAS.Infrastructure.Features
 {
     public class FeatureWhitelistAuthorizationHandler : IAuthorizationHandler
     {
-        public Task<bool> CanAccessAsync(IAuthorizationContext authorizationContext, Feature feature)
+        public Task<AuthorizationResult> CanAccessAsync(IAuthorizationContext authorizationContext, Feature feature)
         {
             if (feature?.Whitelist == null)
             {
-                return FeatureHandlerResults.FeatureEnabledTask;
+                return Task.FromResult(AuthorizationResult.Ok);
             }
 
             if (string.IsNullOrWhiteSpace(authorizationContext.UserContext?.Email))
             {
-                return FeatureHandlerResults.FeatureDisabledTask;
+                return Task.FromResult(AuthorizationResult.FeatureUserNotWhitelisted);
             }
 
             if (feature.Whitelist.Any(email => Regex.IsMatch(authorizationContext.UserContext.Email, email, RegexOptions.IgnoreCase)))
             {
-                return FeatureHandlerResults.FeatureEnabledTask;
+                return Task.FromResult(AuthorizationResult.Ok);
             }
 
-            return FeatureHandlerResults.FeatureDisabledTask;
+            return Task.FromResult(AuthorizationResult.FeatureUserNotWhitelisted);
         }
     }
 }

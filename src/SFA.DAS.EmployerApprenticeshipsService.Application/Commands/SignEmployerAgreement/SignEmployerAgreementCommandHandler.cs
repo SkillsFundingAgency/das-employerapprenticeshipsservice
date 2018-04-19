@@ -102,10 +102,10 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             var commitments = await _commitmentService.GetEmployerCommitments(accountId);
 
             var accountHasCommitments = commitments?.Any() ?? false;
+            
+            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId, accountHasCommitments, owner.FullName(), owner.UserRef);
 
             await _accountAgreementService.RemoveFromCacheAsync(accountId);
-
-            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId, accountHasCommitments, owner.FullName(), owner.UserRef);
         }
 
         private async Task PublishAgreementSignedMessage(long accountId, long legalEntityId, string legalEntityName, long agreementId,

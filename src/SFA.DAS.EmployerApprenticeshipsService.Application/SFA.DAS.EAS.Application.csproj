@@ -290,6 +290,9 @@
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQuery.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceResponse.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationQuery.cs" />
+    <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationResponse.cs" />
     <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQuery.cs" />
     <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsResponse.cs" />
@@ -399,7 +402,6 @@
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommand.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandHandler.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandValidator.cs" />
-    <Compile Include="Constants.cs" />
     <Compile Include="Dtos\AccountDto.cs" />
     <Compile Include="Dtos\TransferConnectionInvitationChangeDto.cs" />
     <Compile Include="Dtos\TransferConnectionInvitationDto.cs" />
@@ -677,9 +679,9 @@
     <Compile Include="Queries\GetTransferConnectionRoles\GetTransferConnectionRolesQuery.cs" />
     <Compile Include="Queries\GetTransferConnectionRoles\GetTransferConnectionRolesQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnectionRoles\GetTransferConnectionRolesResponse.cs" />
-    <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountQuery.cs" />
-    <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountQueryHandler.cs" />
-    <Compile Include="Queries\GetTransferConnectionInvitationAccount\GetTransferConnectionInvitationAccountResponse.cs" />
+    <Compile Include="Queries\SendTransferConnectionInvitation\SendTransferConnectionInvitationQuery.cs" />
+    <Compile Include="Queries\SendTransferConnectionInvitation\SendTransferConnectionInvitationQueryHandler.cs" />
+    <Compile Include="Queries\SendTransferConnectionInvitation\SendTransferConnectionInvitationResponse.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitations\GetTransferConnectionInvitationsQuery.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitations\GetTransferConnectionInvitationsQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitations\GetTransferConnectionInvitationsResponse.cs" />
@@ -722,6 +724,7 @@
     <Compile Include="Services\DasAccountService.cs" />
     <Compile Include="Services\DasLevyService.cs" />
     <Compile Include="Services\RefreshEmployerLevyService.cs" />
+    <Compile Include="Services\TransferAllowanceService.cs" />
     <Compile Include="Validation\IValidator.cs" />
     <Compile Include="Messages\MonthYear.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
