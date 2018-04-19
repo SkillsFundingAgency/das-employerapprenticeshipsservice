@@ -560,10 +560,9 @@
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequestValidator.cs" />
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdResponse.cs" />
     <Compile Include="Queries\GetEmployerAgreement\GetEmployerAgreementQueryValidator.cs" />
-    <Compile Include="Queries\GetLatestOutstandingTransferInvitation\GetLatestOutstandingTransferInvitationValidator.cs" />
-    <Compile Include="Queries\GetLatestOutstandingTransferInvitation\GetLatestOutstandingTransferInvitationQuery.cs" />
-    <Compile Include="Queries\GetLatestOutstandingTransferInvitation\GetLatestOutstandingTransferInvitationHandler.cs" />
-    <Compile Include="Queries\GetLatestOutstandingTransferInvitation\GetLatestOutstandingTransferInvitationResponse.cs" />
+    <Compile Include="Queries\GetLatestPendingReceivedTransferConnectionInvitation\GetLatestPendingReceivedTransferConnectionInvitationQuery.cs" />
+    <Compile Include="Queries\GetLatestPendingReceivedTransferConnectionInvitation\GetLatestPendingReceivedTransferConnectionInvitationQueryHandler.cs" />
+    <Compile Include="Queries\GetLatestPendingReceivedTransferConnectionInvitation\GetLatestPendingReceivedTransferConnectionInvitationResponse.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodQueryHandler.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodRequest.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodResponse.cs" />
