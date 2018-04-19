@@ -12,10 +12,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters
             Status = input.Status;
             DateOfIncorporation = input.CompanyDateOfIncorporation;
             Id = 0L;
-            PublicSectorDataSource = input.PublicSectorDataSource;
+            PublicSectorDataSource = (byte) input.PublicSectorDataSource;
             RegisteredAddress = input.CompanyAddress;
             Sector = input.Sector;
-            Source = input.Source;
+            Source = (byte) input.Source;
         }
     }
 }

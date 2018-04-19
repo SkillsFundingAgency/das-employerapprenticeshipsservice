@@ -49,7 +49,7 @@
                 @foreach (var employerAgreement in Model.Data.EmployerAgreements)
                 {
                     <tr>
-                        <td>@employerAgreement.LegalEntityName</td>
+                        <td>@employerAgreement.LegalEntity.Name</td>
                         <td>
                             @if (employerAgreement.HasPendingAgreement)
                             {
@@ -64,7 +64,7 @@
                             }
                             else
                             {
-                                @: Signed by @employerAgreement.SignedByName
+                                @: Signed by @employerAgreement.Signed.SignedByName
                             }
                         </td>
 
@@ -72,11 +72,11 @@
                             @if (employerAgreement.HasPendingAgreement)
                             { 
                                 <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", 
-                                             new {agreementid = employerAgreement.PendingHashedAgreementId})" title="View agreement for @employerAgreement.LegalEntityName">Sign agreement</a>
+                                             new {agreementid = employerAgreement.Pending.HashedAgreementId})" title="View agreement for @employerAgreement.LegalEntity.Name">Sign agreement</a>
 }
                             else
                             {
-                                <a href="@Url.Action("Details", "EmployerAgreement", new {agreementid = employerAgreement.SignedHashedAgreementId})" title="View agreement">View agreement</a>
+                                <a href="@Url.Action("Details", "EmployerAgreement", new {agreementid = employerAgreement.Signed.HashedAgreementId})" title="View agreement">View agreement</a>
 
                             }
                         </td>

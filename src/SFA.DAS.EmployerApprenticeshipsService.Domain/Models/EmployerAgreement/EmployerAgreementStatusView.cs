@@ -1,38 +1,36 @@
 ﻿using System;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 
 namespace SFA.DAS.EAS.Domain.Models.EmployerAgreement
 {
+    public class EmployerAgreementDetails
+    {
+        public long? Id { get; set; }
+        public int? TemplateId { get; set; }
+        public string PartialViewName { get; set; }
+        public string HashedAgreementId { get; set; }
+        public int? VersionNumber { get; set; }
+    }
+
+    public class SignedEmployerAgreementDetails : EmployerAgreementDetails
+    {
+        public string SignedByName { get; set; }
+        public DateTime? SignedDate { get; set; }
+        public DateTime? ExpiredDate { get; set; }
+    }
+
+    public class PendingEmployerAgreementDetails : EmployerAgreementDetails
+    {
+    }
+
     public class EmployerAgreementStatusView
     {
         public long AccountId { get; set; }
         public string HashedAccountId { get; set; }
-        public long LegalEntityId { get; set; }
-        public string LegalEntityName { get; set; }
-        public string LegalEntityCode { get; set; }
-        public string LegalEntityAddress { get; set; }
-        public DateTime? LegalEntityInceptionDate { get; set; }
-
-        public string SignedByName { get; set; }
-        public DateTime? SignedDate { get; set; }
-        public DateTime? SignedExpiredDate { get; set; }
-
-        public long? SignedAgreementId { get; set; }
-        public int? SignedTemplateId { get; set; }
-        public string SignedTemplatePartialViewName { get; set; }
-        public string SignedHashedAgreementId { get; set; }
-        public int? SignedVersion{ get; set; }
-
-
-        public long? PendingAgreementId { get; set; }
-        public int? PendingTemplateId { get; set; }
-        public string PendingTemplatePartialViewName { get; set; }
-        public string PendingHashedAgreementId { get; set; }
-        public int? PendingVersion { get; set; }
-
-        public string LegalEntityStatus { get; set; }
-        public string Sector { get; set; }
-
-        public bool HasPendingAgreement => PendingAgreementId.HasValue;
-        public bool HasSignedAgreement => SignedAgreementId.HasValue;
+        public LegalEntity LegalEntity { get; set; }
+        public SignedEmployerAgreementDetails Signed { get; set; }
+        public PendingEmployerAgreementDetails Pending { get; set; }
+        public bool HasPendingAgreement => Pending != null && Pending.Id.HasValue;
+        public bool HasSignedAgreement => Signed!= null && Signed.Id.HasValue;
     }
 }

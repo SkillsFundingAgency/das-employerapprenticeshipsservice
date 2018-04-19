@@ -14,8 +14,8 @@ namespace SFA.DAS.EAS.Domain.Models.Account
 
         public DateTime? DateOfIncorporation { get; set; }
         public string Status { get; set; }
-        public short Source { get; set; }
-        public short? PublicSectorDataSource { get; set; }
+        public byte Source { get; set; }
+        public byte? PublicSectorDataSource { get; set; }
         public string Sector { get; set; }
     }
 }

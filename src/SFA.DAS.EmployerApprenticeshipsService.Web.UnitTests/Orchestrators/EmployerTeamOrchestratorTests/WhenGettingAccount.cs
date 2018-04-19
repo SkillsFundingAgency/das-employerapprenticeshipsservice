@@ -14,6 +14,8 @@ using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.TestCommon.Builders;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
@@ -83,7 +85,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                          {
                              new Domain.Models.EmployerAgreement.EmployerAgreementStatusView
                              {
-                                 PendingAgreementId = 123
+                                 Pending = new PendingEmployerAgreementDetails { Id = 123 }
                              }
                          }
                      });

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -7,6 +8,9 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 {
@@ -18,17 +22,32 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
         }
     }
 
+    public class GetAccountEmployerAgreementsQueryHandlerProjection
+    {
+        public LegalEntity LegalEntity { get; set; }
+        public EmployerAgreement Signed { get; set; }
+        public EmployerAgreement Pending { get; set; }
+    }
+
     public class GetAccountEmployerAgreementsQueryHandler : IAsyncRequestHandler<GetAccountEmployerAgreementsRequest, GetAccountEmployerAgreementsResponse>
     {
         private readonly EmployerAccountDbContext _db;
         private readonly IHashingService _hashingService;
         private readonly IValidator<GetAccountEmployerAgreementsRequest> _validator;
+        private readonly IConfigurationProvider _configurationProvider;
 
-        public GetAccountEmployerAgreementsQueryHandler(EmployerAccountDbContext db, IHashingService hashingService, IValidator<GetAccountEmployerAgreementsRequest> validator)
+
+        public GetAccountEmployerAgreementsQueryHandler(
+            EmployerAccountDbContext db, 
+            IHashingService hashingService, 
+            IValidator<GetAccountEmployerAgreementsRequest> validator,
+            IConfigurationProvider configurationProvider
+            )
         {
             _db = db;
             _hashingService = hashingService;
             _validator = validator;
+            _configurationProvider = configurationProvider;
         }
 
         public async Task<GetAccountEmployerAgreementsResponse> Handle(GetAccountEmployerAgreementsRequest message)
@@ -47,82 +66,45 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
             var agreements =
-                _db.Agreements
-                    // only consider legal entities with either a signed or pending agreement
+                await _db.Agreements
                     .Where(ag => ag.AccountId == accountId
                                  && (ag.StatusId == EmployerAgreementStatus.Signed ||
                                      ag.StatusId == EmployerAgreementStatus.Pending))
-                    // get the highest-version of signed and pending agreement for each legal entity
-                    .GroupBy(ag => new {ag.LegalEntity, ag.StatusId})
-                    .Select(grp => new
-                    {
-                        grp.Key.LegalEntity,
-                        Status = grp.Key.StatusId,
-                        Agreement = grp
-                            .OrderByDescending(ag => ag.Template.VersionNumber)
-                            .FirstOrDefault()
-                    })
-                    // get a single result for each legal entity which contains the highest version signed and pending agreements
                     .GroupBy(grp => grp.LegalEntity)
-                    .Select(grp => new
+                    .Select(grp => new GetAccountEmployerAgreementsQueryHandlerProjection
                     {
                         LegalEntity = grp.Key,
-                        Signed = grp.FirstOrDefault(ag => ag.Status == EmployerAgreementStatus.Signed),
-                        Pending = grp.FirstOrDefault(ag => ag.Status == EmployerAgreementStatus.Pending)
+                        Signed = grp
+                            .OrderByDescending(ag => ag.Template.VersionNumber)
+                            .FirstOrDefault(ag => ag.StatusId == EmployerAgreementStatus.Signed),
+                        Pending = grp
+                            .OrderByDescending(ag => ag.Template.VersionNumber)
+                            .FirstOrDefault(ag => ag.StatusId == EmployerAgreementStatus.Pending),
                     })
-
-                    // HACK: the following list is needed for the unit test, not for the production code, although it does not break the code. 
-                    //      The dbset mocks that are used in the unit tests do not generate SQL (like EF prod does) but instead converts the expressions
-                    //      into anonymous delegates. This introduces a subtle change in behaviour; in SQL the properties cannot be null (as they 
-                    //      - are actually tuples from nested queries) where as in .net land they can be. So for example, in the expression
-                    //      ag.Signed.Agreement signed will never be null in SQL (because it is a projection from a sub query) whereas it will
-                    //      be null when operating in .net land. The normal way of dealing with this using null safe propagation cannot be used
-                    //      to resolve this because it results in a .net expression which cannot be translated into SQL (or at least isn't translated).
-                    //      What to do, what to do??....
-                    //      By coercing the expression so far into a list the IQueryable expression is sent to the DB and the projection after the
-                    //      ToList() is run purely in .net and so can use the null propagation operator.
-                    //      Obviously, adapting prod code to suit the tests is not ideal :-(
-                    .ToList()
-
-                    // project into the required shape
-                    .Select(ag => new EmployerAgreementStatusView
-                    {
-                        AccountId = accountId,
-                        HashedAccountId = message.HashedAccountId,
-                        LegalEntityId = ag.LegalEntity.Id,
-                        LegalEntityName = ag.LegalEntity.Name,
-                        LegalEntityCode = ag.LegalEntity.Code,
-                        LegalEntityAddress = ag.LegalEntity.RegisteredAddress,
-                        LegalEntityInceptionDate = ag.LegalEntity.DateOfIncorporation,
-                        LegalEntityStatus = ag.LegalEntity.Status,
-                        SignedByName = ag.Signed?.Agreement.SignedByName,
-                        SignedDate = ag.Signed?.Agreement.SignedDate,
-                        SignedExpiredDate = ag.Signed?.Agreement.ExpiredDate,
-
-                        SignedAgreementId = ag.Signed?.Agreement.Id,
-                        SignedTemplateId = ag.Signed?.Agreement.TemplateId,
-                        SignedTemplatePartialViewName = ag.Signed?.Agreement.Template.PartialViewName,
-                        SignedVersion = ag.Signed?.Agreement.Template.VersionNumber,
-
-                        PendingAgreementId = ag.Pending?.Agreement.Id,                                  // <-- we can not use ?. in expressions on IQueryable, so these have to be ienumerable
-                        PendingTemplateId = ag.Pending?.Agreement.TemplateId,
-                        PendingTemplatePartialViewName = ag.Pending?.Agreement.Template.PartialViewName,
-                        PendingVersion = ag.Pending?.Agreement.Template.VersionNumber
-                    })
-                    .ToList();
+                    .ProjectTo<EmployerAgreementStatusView>(_configurationProvider)
+                    .ToListAsync();
                                                     
             foreach (var agreement in agreements)
             {
-                agreement.SignedHashedAgreementId = _hashingService.HashIdIfNotNull(agreement.SignedAgreementId);
-                agreement.PendingHashedAgreementId = _hashingService.HashIdIfNotNull(agreement.PendingAgreementId);
+                agreement.AccountId = accountId;
+                agreement.HashedAccountId = message.HashedAccountId;
 
-                // A signed version deprecates any early unsigned agreement.
-                if (agreement.HasPendingAgreement && agreement.HasSignedAgreement &&
-                    agreement.SignedVersion > agreement.PendingVersion)
+                if (agreement.HasSignedAgreement)
                 {
-                    agreement.PendingVersion = null;
-                    agreement.PendingAgreementId = null;
-                    agreement.PendingHashedAgreementId = null;
+                    agreement.Signed.HashedAgreementId = _hashingService.HashIdIfNotNull(agreement.Signed.Id);
+                }
+
+                if (agreement.HasPendingAgreement)
+                {
+                    if (agreement.HasSignedAgreement && agreement.Signed.VersionNumber > agreement.Pending.VersionNumber)
+                    {
+                        agreement.Pending = null;
+                    }
+                    else
+                    {
+                        agreement.Pending.HashedAgreementId =
+                            _hashingService.HashIdIfNotNull(agreement.Pending.Id);
+                    }
                 }
             }
 
