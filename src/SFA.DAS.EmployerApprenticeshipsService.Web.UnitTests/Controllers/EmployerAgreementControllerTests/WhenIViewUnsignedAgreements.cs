@@ -58,8 +58,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
                     {
                         EmployerAgreements = new List<EmployerAgreementStatusView>
                         {
-                            new EmployerAgreementStatusView{ PendingHashedAgreementId = hashedAgreementId, PendingAgreementId = 123},
-                            new EmployerAgreementStatusView{ SignedHashedAgreementId = "JH4545", PendingAgreementId = null}
+                            new EmployerAgreementStatusView{ Pending = new PendingEmployerAgreementDetails { HashedAgreementId = hashedAgreementId, Id = 123}},
+                            new EmployerAgreementStatusView{ Signed = new SignedEmployerAgreementDetails { HashedAgreementId = "JH4545", Id = null}}
                         }
                     }
                 });
@@ -86,8 +86,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
                     {
                         EmployerAgreements = new List<EmployerAgreementStatusView>
                         {
-                            new EmployerAgreementStatusView{ PendingHashedAgreementId = "GHJ356" },
-                            new EmployerAgreementStatusView{ PendingHashedAgreementId = "JH4545" }
+                            new EmployerAgreementStatusView{ Pending = new PendingEmployerAgreementDetails { HashedAgreementId = "GHJ356" }},
+                            new EmployerAgreementStatusView{ Pending = new PendingEmployerAgreementDetails { HashedAgreementId = "JH4545" }}
                         }
                     }
                 });

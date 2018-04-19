@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Validation;
@@ -125,10 +127,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
 
             var response = fixtures.Response;
             Assert.IsNotNull(response,"The query handler did not return an object - returned null");
-            var agreementStatus = response.EmployerAgreements.SingleOrDefault(ea => ea.LegalEntityId == legalEntityId);
+            var agreementStatus = response.EmployerAgreements.SingleOrDefault(ea => ea.LegalEntity.Id == legalEntityId);
             Assert.IsNotNull(agreementStatus, "Did not receive an agreement for the expected legal entity");
-            Assert.AreEqual(expectedSignedVersion, agreementStatus.SignedVersion, "The signed version number is not correct");
-            Assert.AreEqual(expectedPendingVersion, agreementStatus.PendingVersion, "The pending version number is not correct");
+            Assert.AreEqual(expectedSignedVersion, agreementStatus.Signed?.VersionNumber, "The signed version number is not correct");
+            Assert.AreEqual(expectedPendingVersion, agreementStatus.Pending?.VersionNumber, "The pending version number is not correct");
 
             Assert.AreEqual(expectedSignedVersion.HasValue, agreementStatus.HasSignedAgreement, "The agreement summary has a signed agreement but one was not expected");
             Assert.AreEqual(expectedPendingVersion.HasValue, agreementStatus.HasPendingAgreement, "The agreement summary has a pending agreement but one was not expected");
@@ -149,6 +151,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
 
             ValidatorMock = new Mock<IValidator<GetAccountEmployerAgreementsRequest>>();
             ValidationResult = new ValidationResult();
+
+            ConfigurationProvider = new MapperConfiguration(c =>
+            {
+                c.AddProfile<EmploymentAgreementStatusMappings>();
+            });
         }
 
         public Mock<IHashingService> HashingServiceMock { get; }
@@ -164,6 +171,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
 
         public Mock<IValidator<GetAccountEmployerAgreementsRequest>> ValidatorMock { get; }
         public IValidator<GetAccountEmployerAgreementsRequest> Validator => ValidatorMock.Object;
+
+        public IConfigurationProvider ConfigurationProvider { get; }
 
         public string RequestHashedAccountId { get; set; }
 
@@ -274,7 +283,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
                 .Setup(x => x.ValidateAsync(Request))
                 .ReturnsAsync(ValidationResult);
 
-            var queryHandler = new GetAccountEmployerAgreementsQueryHandler(EmployerAccountDbContext, HashingService, Validator);
+            var queryHandler = new GetAccountEmployerAgreementsQueryHandler(EmployerAccountDbContext, HashingService, Validator, ConfigurationProvider);
 
             return queryHandler;
         }

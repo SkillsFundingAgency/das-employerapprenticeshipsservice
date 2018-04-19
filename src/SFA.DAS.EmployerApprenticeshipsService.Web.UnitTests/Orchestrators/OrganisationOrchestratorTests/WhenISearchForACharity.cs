@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                         new LegalEntity
                         {
                             Code="12345",
-                            Source = (short)OrganisationType.Charities
+                            Source = (byte)OrganisationType.Charities
                         }
                     } }
                 });

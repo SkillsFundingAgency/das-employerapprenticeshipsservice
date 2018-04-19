@@ -83,13 +83,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (unsignedAgreements?.Length != 1)
                 return RedirectToAction("Index");
 
-            var hashedAgreementId = unsignedAgreements.Single().PendingHashedAgreementId;
+            var hashedAgreementId = unsignedAgreements[0].Pending.HashedAgreementId;
 
             return RedirectToAction("AboutYourAgreement", new { agreementId = hashedAgreementId });
         }
 
         [HttpGet]
-        [Route("agreements/{agreementId} /about-your-agreement")]
+        [Route("agreements/{agreementId}/about-your-agreement")]
         public async Task<ActionResult> AboutYourAgreement(string agreementid, string hashedAccountId)
         {
             var agreement = await _orchestrator.GetById(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));

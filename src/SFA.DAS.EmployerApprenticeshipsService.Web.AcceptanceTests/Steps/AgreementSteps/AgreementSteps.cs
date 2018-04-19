@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AgreementSteps
 
             var agreement = employerAgreementOrchestrator.Get(hashedId, userId).Result.Data.EmployerAgreements.FirstOrDefault();
 
-            employerAgreementOrchestrator.SignAgreement(agreement.PendingHashedAgreementId, hashedId, userId, DateTime.Today,"company name").Wait();
+            employerAgreementOrchestrator.SignAgreement(agreement.Pending.HashedAgreementId, hashedId, userId, DateTime.Today,"company name").Wait();
 
         }
 

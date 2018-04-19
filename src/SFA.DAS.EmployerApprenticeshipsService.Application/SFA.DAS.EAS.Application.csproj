@@ -284,6 +284,8 @@
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
     <Compile Include="Dtos\TransferRequestDto.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
+    <Compile Include="Mappings\EmploymentAgreementStatusMappings.cs" />
+    <Compile Include="Mappings\TransferRequestMappings.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQuery.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceResponse.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQueryHandler.cs" />
