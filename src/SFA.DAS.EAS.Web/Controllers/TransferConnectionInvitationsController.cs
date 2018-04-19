@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetApprovedTransferConnectionInvitation;
-using SFA.DAS.EAS.Application.Queries.GetLatestOutstandingTransferInvitation;
+using SFA.DAS.EAS.Application.Queries.GetLatestPendingReceivedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetReceivedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetRejectedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation;
@@ -259,18 +259,13 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("outstanding")]
-        public async Task<ActionResult> Outstanding(string hashedAccountId)
+        public async Task<ActionResult> Outstanding(GetLatestPendingReceivedTransferConnectionInvitationQuery query)
         {
-            var latestOutstandingTransferInvitation = 
-                await _mediator.SendAsync(new GetLatestOutstandingTransferInvitationQuery { ReceiverAccountHashedId = hashedAccountId });
+            var response = await _mediator.SendAsync(query);
 
-            if (latestOutstandingTransferInvitation.TransferConnectionInvitation != null)
-                return RedirectToAction("Receive", new
-                {
-                    transferConnectionInvitationId = latestOutstandingTransferInvitation.TransferConnectionInvitation.Id
-                });
-
-            return RedirectToAction("Index", "Transfers");
+            return response.TransferConnectionInvitation == null
+                ? RedirectToAction("Index", "Transfers")
+                : RedirectToAction("Receive", new { transferConnectionInvitationId = response.TransferConnectionInvitation.Id });
         }
     }
 }

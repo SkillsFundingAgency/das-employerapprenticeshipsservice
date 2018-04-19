@@ -9,14 +9,11 @@ using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountStats;
 using SFA.DAS.EAS.Application.Queries.GetAccountTasks;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EAS.Application.Queries.GetLatestOutstandingTransferInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
-using SFA.DAS.EAS.Domain.Models.TransferConnections;
-using SFA.DAS.EAS.TestCommon.Builders;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
@@ -33,7 +30,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         private Mock<ICurrentDateTime> _currentDateTime;
  		private List<AccountTask> _tasks;
         private AccountTask _testTask;
-        private GetLatestOutstandingTransferInvitationResponse _getLatestOutstandingTransferInvitationResponse;
         [SetUp]
         public void Arrange()
         {
@@ -44,8 +40,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                 PayeSchemeCount = 4,
                 TeamMemberCount = 8
             };
-
-            _getLatestOutstandingTransferInvitationResponse = new GetLatestOutstandingTransferInvitationResponse();
 
             _testTask = new AccountTask
             {
@@ -99,10 +93,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountStatsQuery>()))
                      .ReturnsAsync(new GetAccountStatsResponse {Stats = _accountStats});
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetLatestOutstandingTransferInvitationQuery>()))
-                     .ReturnsAsync(_getLatestOutstandingTransferInvitationResponse);
-
+            
             _currentDateTime = new Mock<ICurrentDateTime>();
 
             _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object);
@@ -175,17 +166,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         [Test]
         public async Task ThenShouldSetAccountHashId()
         {
-            // Arrange
-            _tasks.Clear();
-            _tasks.Add(new AccountTask { Type = "ReviewConnectionRequest", ItemsDueCount = 1 });
-            var expectedLatestTransfer = new TransferConnectionInvitationBuilder()
-                .WithId(new Random().Next(int.MaxValue))
-                .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
-                .WithSenderAccount(new Domain.Data.Entities.Account.Account())
-                .Build();
-
-            _getLatestOutstandingTransferInvitationResponse.TransferConnectionInvitation = expectedLatestTransfer;
-
             //Act
             var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
 
