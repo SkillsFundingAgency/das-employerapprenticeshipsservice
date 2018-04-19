@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Notifications.Api.Client;
+using System;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Commands.SendNotification
 {
@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendNotification
 
         public SendNotificationCommandHandler(
             IValidator<SendNotificationCommand> validator,
-            ILog logger, 
+            ILog logger,
             INotificationsApi notificationsApi)
         {
             _validator = validator;
@@ -35,14 +35,13 @@ namespace SFA.DAS.EAS.Application.Commands.SendNotification
             }
             try
             {
-                //_logger.Info($"---- === ||| -->     {message.Email.RecipientsAddress}    <-- ||| === ----");
                 await _notificationsApi.SendEmail(message.Email);
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error sending email to notifications api");
             }
-            
+
         }
     }
 }
