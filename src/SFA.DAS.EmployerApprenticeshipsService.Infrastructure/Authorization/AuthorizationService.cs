@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.EAS.Infrastructure.Features;
 using Z.EntityFramework.Plus;
 
@@ -40,6 +41,11 @@ namespace SFA.DAS.EAS.Infrastructure.Authorization
 
         public IAuthorizationContext GetAuthorizationContext()
         {
+            return GetAuthorizationContextAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task<IAuthorizationContext> GetAuthorizationContextAsync()
+        {
             IAuthorizationContext cachedAuthorizationContext;
 
             if ((cachedAuthorizationContext = _authorizationContextCache.GetAuthorizationContext()) != null)
@@ -64,27 +70,52 @@ namespace SFA.DAS.EAS.Infrastructure.Authorization
                 .ProjectTo<MembershipContext>(_configurationProvider)
                 .Future();
 
-            var accountContext = accountContextQuery?.SingleOrDefault();
-            var userContext = userContextQuery?.SingleOrDefault();
-            var membershipContext = membershipContextQuery?.SingleOrDefault();
+            var authorizationContext = new AuthorizationContext();
 
-            var authorizationContext = new AuthorizationContext
+            if (accountContextQuery != null)
             {
-                AccountContext = accountContext,
-                UserContext = userContext,
-                MembershipContext = membershipContext
-            };
+                authorizationContext.AccountContext = await accountContextQuery.SingleOrDefaultAsync().ConfigureAwait(false) ?? throw new UnauthorizedAccessException();
+            }
+
+            if (userContextQuery != null)
+            {
+                authorizationContext.UserContext = await userContextQuery.SingleOrDefaultAsync() ?? throw new UnauthorizedAccessException();
+            }
+
+            if (membershipContextQuery != null)
+            {
+                authorizationContext.MembershipContext = await membershipContextQuery.SingleOrDefaultAsync() ?? throw new UnauthorizedAccessException();
+            }
 
             _authorizationContextCache.SetAuthorizationContext(authorizationContext);
 
             return authorizationContext;
         }
 
+        public AuthorizationResult GetAuthorizationResult(FeatureType featureType)
+        {
+            return GetAuthorizationResultAsync(featureType).GetAwaiter().GetResult();
+        }
+
+        public async Task<AuthorizationResult> GetAuthorizationResultAsync(FeatureType featureType)
+        {
+            var authorisationContext = await GetAuthorizationContextAsync().ConfigureAwait(false);
+            var feature = _featureService.GetFeature(featureType);
+            var authorizationResults = await Task.WhenAll(_handlers.Select(h => h.CanAccessAsync(authorisationContext, feature)));
+            var authorizationResult = authorizationResults.FirstOrDefault(r => r != AuthorizationResult.Ok);
+
+            return authorizationResult;
+        }
+
         public bool IsAuthorized(FeatureType featureType)
         {
-            var authorisationContext = GetAuthorizationContext();
-            var feature = _featureService.GetFeature(featureType);
-            var isAuthorized = _handlers.All(h => Task.Run(async () => await h.CanAccessAsync(authorisationContext, feature)).Result);
+            return IsAuthorizedAsync(featureType).GetAwaiter().GetResult();
+        }
+
+        public async Task<bool> IsAuthorizedAsync(FeatureType featureType)
+        {
+            var authorizationResult = await GetAuthorizationResultAsync(featureType).ConfigureAwait(false);
+            var isAuthorized = authorizationResult == AuthorizationResult.Ok;
 
             return isAuthorized;
         }

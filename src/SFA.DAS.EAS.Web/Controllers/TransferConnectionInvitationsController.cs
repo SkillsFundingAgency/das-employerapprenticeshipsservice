@@ -9,8 +9,8 @@ using SFA.DAS.EAS.Application.Queries.GetReceivedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetRejectedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
-using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionRoles;
+using SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Infrastructure.Features;
 using SFA.DAS.EAS.Web.Attributes;
@@ -20,7 +20,7 @@ using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [Feature(FeatureType.Transfers)]
+    [Feature(FeatureType.TransferConnectionRequests)]
     [ValidateMembership]
     [RoutePrefix("accounts/{HashedAccountId}/transfers/connections/invitations")]
     public class TransferConnectionInvitationsController : Controller
@@ -56,14 +56,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("start")]
         public async Task<ActionResult> Start(StartTransferConnectionInvitationViewModel model)
         {
-            await _mediator.SendAsync(model.GetTransferConnectionInvitationAccountQuery);
-            return RedirectToAction("Send", new { receiverAccountPublicHashedId = model.GetTransferConnectionInvitationAccountQuery.ReceiverAccountPublicHashedId });
+            await _mediator.SendAsync(model.SendTransferConnectionInvitationQuery);
+            return RedirectToAction("Send", new { receiverAccountPublicHashedId = model.SendTransferConnectionInvitationQuery.ReceiverAccountPublicHashedId });
         }
 
         [HttpNotFoundForNullModel]
         [ImportModelStateFromTempData]
         [Route("send")]
-        public async Task<ActionResult> Send(GetTransferConnectionInvitationAccountQuery query)
+        public async Task<ActionResult> Send(SendTransferConnectionInvitationQuery query)
         {
             var response = await _mediator.SendAsync(query);
             var model = _mapper.Map<SendTransferConnectionInvitationViewModel>(response);

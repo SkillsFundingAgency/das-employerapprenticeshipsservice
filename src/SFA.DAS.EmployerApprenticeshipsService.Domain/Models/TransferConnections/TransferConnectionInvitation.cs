@@ -175,19 +175,19 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
         private void RequiresApproverAccountIsTheReceiverAccount(Data.Entities.Account.Account approverAccount)
         {
             if (approverAccount.Id != ReceiverAccount.Id)
-                throw new Exception("Requires approver account is the receiver account.");
+                throw new Exception("Requires approver account is the receiver account");
         }
 
         private void RequiresDeleterAccountIsTheSenderAccount(Data.Entities.Account.Account deleterAccount)
         {
             if (deleterAccount.Id != SenderAccount.Id)
-                throw new Exception("Requires deleter account is the sender account.");
+                throw new Exception("Requires deleter account is the sender account");
         }
 
         private void RequiresDeleterAccountIsTheReceiverAccount(Data.Entities.Account.Account deleterAccount)
         {
             if (deleterAccount.Id != ReceiverAccount.Id)
-                throw new Exception("Requires deleter account is the receiver account.");
+                throw new Exception("Requires deleter account is the receiver account");
         }
 
         private void RequiresDeleterIsEitherSenderOrReceiver(Data.Entities.Account.Account deleterAccount)
@@ -201,31 +201,31 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
         private void RequiresNotAlreadyDeletedBySender()
         {
             if (DeletedBySender)
-                throw new Exception("Requires not already deleted by sender.");
+                throw new Exception("Requires not already deleted by sender");
         }
 
         private void RequiresNotAlreadyDeletedByReceiver()
         {
             if (DeletedByReceiver)
-                throw new Exception("Requires not already deleted by receiver.");
+                throw new Exception("Requires not already deleted by receiver");
         }
 
         private void RequiresRejectorAccountIsTheReceiverAccount(Data.Entities.Account.Account rejectorAccount)
         {
             if (rejectorAccount.Id != ReceiverAccount.Id)
-                throw new Exception("Requires rejector account is the receiver account.");
+                throw new Exception("Requires rejector account is the receiver account");
         }
 
         private void RequiresTransferConnectionInvitationIsPending()
         {
             if (Status != TransferConnectionInvitationStatus.Pending)
-                throw new Exception("Requires transfer connection invitation is pending.");
+                throw new Exception("Requires transfer connection invitation is pending");
         }
 
         private void RequiresTransferConnectionInvitationIsRejected()
         {
             if (Status != TransferConnectionInvitationStatus.Rejected)
-                throw new Exception("Requires transfer connection invitation is rejected.");
+                throw new Exception("Requires transfer connection invitation is rejected");
         }
     }
 }

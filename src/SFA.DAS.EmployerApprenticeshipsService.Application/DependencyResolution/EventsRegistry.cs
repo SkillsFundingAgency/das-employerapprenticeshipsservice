@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Domain.Configuration;
+﻿using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Events.Api.Client.Configuration;

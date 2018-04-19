@@ -9,10 +9,11 @@ using SFA.DAS.EAS.Application.Queries.GetRejectedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
-using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
+using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthorization;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
 using SFA.DAS.EAS.Application.Queries.GetTransferRequests;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionRoles;
+using SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 using SFA.DAS.EAS.Web.ViewModels.Transfers;
 
@@ -38,9 +39,7 @@ namespace SFA.DAS.EAS.Web.Mappings
 
             CreateMap<GetTransferAllowanceResponse, TransferAllowanceViewModel>();
 
-            CreateMap<GetTransferConnectionInvitationAccountResponse, SendTransferConnectionInvitationViewModel>()
-                .ForMember(m => m.Choice, o => o.Ignore())
-                .ForMember(m => m.SendTransferConnectionInvitationCommand, o => o.Ignore());
+            CreateMap<GetTransferConnectionInvitationAuthorizationResponse, TransferConnectionInvitationAuthorizationViewModel>();
 
             CreateMap<GetTransferConnectionInvitationResponse, TransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore())
@@ -51,9 +50,14 @@ namespace SFA.DAS.EAS.Web.Mappings
             CreateMap<GetTransferRequestsResponse, TransferRequestsViewModel>();
             CreateMap<ReceiveTransferConnectionInvitationViewModel, ApproveTransferConnectionInvitationCommand>();
             CreateMap<ReceiveTransferConnectionInvitationViewModel, RejectTransferConnectionInvitationCommand>();
+            
+            CreateMap<SendTransferConnectionInvitationResponse, SendTransferConnectionInvitationViewModel>()
+                .ForMember(m => m.Choice, o => o.Ignore())
+                .ForMember(m => m.SendTransferConnectionInvitationCommand, o => o.Ignore());
+
             CreateMap<SendTransferConnectionInvitationViewModel, SendTransferConnectionInvitationCommand>();
 
-            CreateMap<StartTransferConnectionInvitationViewModel, GetTransferConnectionInvitationAccountQuery>()
+            CreateMap<StartTransferConnectionInvitationViewModel, SendTransferConnectionInvitationQuery>()
                 .ForMember(m => m.ReceiverAccountPublicHashedId, o => o.Ignore());
 
             CreateMap<TransferConnectionInvitationViewModel, DeleteTransferConnectionInvitationCommand>();

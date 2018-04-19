@@ -194,6 +194,7 @@
     <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />
     <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Data\IUnitOfWork.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
     <Compile Include="Data\Repositories\ITransferConnectionInvitationRepository.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="Interfaces\IMultiVariantTestingService.cs" />
     <Compile Include="Interfaces\IRefreshEmployerLevyService.cs" />
     <Compile Include="Interfaces\ITaskService.cs" />
+    <Compile Include="Interfaces\ITransferAllowanceService.cs" />
     <Compile Include="Models\Account\AccountHistoryEntry.cs" />
     <Compile Include="Models\Account\AccountStats.cs" />
     <Compile Include="Models\Account\AccountTask.cs" />

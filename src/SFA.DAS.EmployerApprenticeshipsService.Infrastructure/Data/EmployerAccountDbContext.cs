@@ -50,7 +50,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             modelBuilder.Entity<Domain.Data.Entities.Account.Account>()
                 .Ignore(a => a.RoleId)
-                .Ignore(a => a.RoleName)
+                .Ignore(a => a.RoleName);
+
+            modelBuilder.Entity<Domain.Data.Entities.Account.Account>()
+                .HasMany(a => a.ReceivedTransferConnectionInvitations)
+                .WithRequired(i => i.ReceiverAccount);
+
+            modelBuilder.Entity<Domain.Data.Entities.Account.Account>()
                 .HasMany(a => a.SentTransferConnectionInvitations)
                 .WithRequired(i => i.SenderAccount);
 

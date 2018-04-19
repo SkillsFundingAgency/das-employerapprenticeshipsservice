@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Domain.Configuration;
+﻿using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;

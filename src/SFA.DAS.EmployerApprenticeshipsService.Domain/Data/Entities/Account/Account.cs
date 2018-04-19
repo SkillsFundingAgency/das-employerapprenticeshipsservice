@@ -15,17 +15,26 @@ namespace SFA.DAS.EAS.Domain.Data.Entities.Account
         public virtual DateTime? ModifiedDate { get; set; }
         public virtual string Name { get; set; }
         public virtual string PublicHashedId { get; set; }
+        public virtual ICollection<TransferConnectionInvitation> ReceivedTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
         public virtual int RoleId { get; set; }
         public string RoleName => ((Role)RoleId).ToString();
         public virtual ICollection<TransferConnectionInvitation> SentTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
-        public virtual ICollection<TransferConnectionInvitation> ReceivedTransferConnectionInvitation { get; set; } = new List<TransferConnectionInvitation>();
-        public bool IsSender => SentTransferConnectionInvitations.Any(i =>i.Status != TransferConnectionInvitationStatus.Rejected);
 
-        public TransferConnectionInvitation SendTransferConnectionInvitation(Account receiverAccount, User senderUser)
+        public bool IsTransferConnectionInvitationSender()
         {
-            RequiresReceiverAccountIsNotAlreadyASender(receiverAccount);
-            RequiresReceiverAccountIsNotTheSenderAccount(receiverAccount);
-            RequiresTransferConnectionInvitationDoesNotAlreadyExist(receiverAccount);
+            return SentTransferConnectionInvitations.Any(i =>
+                i.Status == TransferConnectionInvitationStatus.Pending ||
+                i.Status == TransferConnectionInvitationStatus.Approved);
+        }
+
+        public TransferConnectionInvitation SendTransferConnectionInvitation(Account receiverAccount, User senderUser, decimal senderAccountTransferAllowance)
+        {
+            RequiresTransferConnectionInvitationSenderIsNotTheReceiver(receiverAccount);
+            RequiresMinTransferAllowanceIsAvailable(senderAccountTransferAllowance);
+            RequiresTransferConnectionInvitationSenderIsNotAReceiver();
+            RequiresMaxTransferConnectionInvitationsHaveNotBeenSent();
+            RequiresTransferConnectionInvitationReceiverIsNotASender(receiverAccount);
+            RequiresTransferConnectionInvitationDoesNotExist(receiverAccount);
 
             var transferConnectionInvitation = new TransferConnectionInvitation(this, receiverAccount, senderUser);
 
@@ -33,32 +42,64 @@ namespace SFA.DAS.EAS.Domain.Data.Entities.Account
 
             return transferConnectionInvitation;
         }
-        
+
         public TransferRequest SentTransferRequest(Account senderAccount, long commitmentId, string commitmentHashedId, decimal transferCost)
         {
             return new TransferRequest(commitmentId, commitmentHashedId, this, senderAccount, transferCost);
         }
 
-        private void RequiresReceiverAccountIsNotAlreadyASender(Account receiverAccount)
+        private void RequiresMaxTransferConnectionInvitationsHaveNotBeenSent()
         {
-            if (receiverAccount.IsSender)
-                throw new Exception("Requires receiver account is not already a sender.");
+            var sentCount = SentTransferConnectionInvitations.Count(i =>
+                i.Status == TransferConnectionInvitationStatus.Pending ||
+                i.Status == TransferConnectionInvitationStatus.Approved);
+
+            if (sentCount >= Constants.TransferConnectionInvitations.SenderMaxTransferConnectionInvitations)
+                throw new Exception("Requires max transfer connection invitations have not been sent");
         }
 
-        private void RequiresReceiverAccountIsNotTheSenderAccount(Account receiverAccount)
+        private void RequiresMinTransferAllowanceIsAvailable(decimal senderAccountTransferAllowance)
+        {
+            if (senderAccountTransferAllowance < Constants.TransferConnectionInvitations.SenderMinTransferAllowance)
+                throw new Exception("Requires min transfer allowance is available");
+        }
+
+        private void RequiresTransferConnectionInvitationDoesNotExist(Account receiverAccount)
+        {
+            var anyReceivedTransferConnectionInvitations = ReceivedTransferConnectionInvitations.Any(i =>
+                i.SenderAccount.Id == receiverAccount.Id && (
+                i.Status == TransferConnectionInvitationStatus.Pending ||
+                i.Status == TransferConnectionInvitationStatus.Approved));
+
+            var anySentTransferConnectionInvitations = SentTransferConnectionInvitations.Any(i =>
+                i.ReceiverAccount.Id == receiverAccount.Id && (
+                i.Status == TransferConnectionInvitationStatus.Pending ||
+                i.Status == TransferConnectionInvitationStatus.Approved));
+
+            if (anyReceivedTransferConnectionInvitations || anySentTransferConnectionInvitations)
+                throw new Exception("Requires transfer connection invitation does not exist");
+        }
+
+        private void RequiresTransferConnectionInvitationReceiverIsNotASender(Account receiverAccount)
+        {
+            if (receiverAccount.IsTransferConnectionInvitationSender())
+                throw new Exception("Requires transfer connection invitation receiver is not a sender");
+        }
+
+        private void RequiresTransferConnectionInvitationSenderIsNotTheReceiver(Account receiverAccount)
         {
             if (receiverAccount.Id == Id)
-                throw new Exception("Requires receiver account is not the sender account.");
+                throw new Exception("Requires transfer connection invitation sender is not the receiver");
         }
 
-        private void RequiresTransferConnectionInvitationDoesNotAlreadyExist(Account receiverAccount)
+        private void RequiresTransferConnectionInvitationSenderIsNotAReceiver()
         {
-            var anyTransferConnectionInvitations = SentTransferConnectionInvitations.Any(i =>
-                i.ReceiverAccount.Id == receiverAccount.Id &&
-                i.Status != TransferConnectionInvitationStatus.Rejected);
+            var isReceiver = ReceivedTransferConnectionInvitations.Any(i =>
+                i.Status == TransferConnectionInvitationStatus.Pending ||
+                i.Status == TransferConnectionInvitationStatus.Approved);
 
-            if (anyTransferConnectionInvitations)
-                throw new Exception("Requires transfer connection invitation does not already exist.");
+            if (isReceiver)
+                throw new Exception("Requires transfer connection invitation sender is not a receiver");
         }
     }
 }

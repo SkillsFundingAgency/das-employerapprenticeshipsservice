@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution

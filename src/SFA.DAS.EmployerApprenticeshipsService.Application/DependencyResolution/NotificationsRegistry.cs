@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
