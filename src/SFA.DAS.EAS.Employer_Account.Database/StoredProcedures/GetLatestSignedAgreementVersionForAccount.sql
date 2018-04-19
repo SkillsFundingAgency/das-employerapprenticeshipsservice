@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [employer_account].[GetLatestSignedAgreementVersionForAccount]
-	@accountId BIGINT
+	@AccountId BIGINT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -10,7 +10,7 @@ BEGIN
 			FROM	employer_account.EmployerAgreement as EA
 					JOIN employer_account.EmployerAgreementTemplate AS EAT 
 						ON EAT.Id = EA.TemplateId 
-			WHERE	EA.AccountId = @accountId
+			WHERE	EA.AccountId = @AccountId
 					and EA.StatusId = 2
 			GROUP BY EA.LegalEntityId, EA.AccountId) AS T1
 END

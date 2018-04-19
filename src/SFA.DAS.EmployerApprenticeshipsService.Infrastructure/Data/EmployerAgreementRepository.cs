@@ -162,7 +162,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 return await c.QueryFirstAsync<int?>(
                     sql: "[employer_account].[GetLatestSignedAgreementVersionForAccount]",
                     param: parameters,
-                    commandType: CommandType.Text);
+                    commandType: CommandType.StoredProcedure);
             });
 
             return result;
