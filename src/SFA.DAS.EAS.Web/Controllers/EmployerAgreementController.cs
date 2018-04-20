@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
+using HtmlTags.Reflection;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Infrastructure.Authentication;
@@ -37,7 +38,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements")]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        public async Task<ActionResult> Index(string hashedAccountId, bool agreementSigned=false)
         {
             var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
@@ -46,6 +47,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 model.FlashMessage = flashMessage;
             }
+
+            ViewBag.ShowConfirmation = agreementSigned && model.Data.EmployerAgreementsData.HasPendingAgreements;
 
             return View(model);
         }
@@ -74,16 +77,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var agreements = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
-            var unsignedAgreements = agreements.Data
-                                        .EmployerAgreements
-                                        .Where(x => x.HasPendingAgreement)
-                                        .Take(2)
-                                        .ToArray();
+            var unsignedAgreements = agreements.Data.EmployerAgreementsData.TryGetSinglePendingAgreement();
 
-            if (unsignedAgreements?.Length != 1)
+            if (unsignedAgreements == null)
                 return RedirectToAction("Index");
 
-            var hashedAgreementId = unsignedAgreements[0].Pending.HashedAgreementId;
+            var hashedAgreementId = unsignedAgreements.Pending.HashedAgreementId;
 
             return RedirectToAction("AboutYourAgreement", new { agreementId = hashedAgreementId });
         }
@@ -117,14 +116,29 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (response.Status == HttpStatusCode.OK)
             {
-                var flashMessage = new FlashMessageViewModel
+                FlashMessageViewModel flashMessage = new FlashMessageViewModel
                 {
                     Headline = "Agreement signed",
                     Severity = FlashMessageSeverityLevel.Success
                 };
+
+                ActionResult result;
+
+                if (response.Data.HasFurtherPendingAgreements)
+                {
+                    flashMessage.Message =
+                        "You've successfully signed an organisation agreement. There are outstanding agreements to be signed. Review the list below to sign all remaining agreements.";
+
+                    result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId, agreementSigned = true });
+                }
+                else
+                {
+                    result = RedirectToAction(ControllerConstants.NextStepsActionName);
+                }
+
                 AddFlashMessageToCookie(flashMessage);
 
-                return RedirectToAction(ControllerConstants.NextStepsActionName, new { hashedAccountId });
+                return result;
             }
 
             

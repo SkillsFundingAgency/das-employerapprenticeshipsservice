@@ -17,7 +17,6 @@
     ViewBag.GaData.Vpv = "/accounts/agreements/organisations-agreements-home";
 }
 
-
 <div class="grid-row header-index">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Your organisations and agreements</h1>
@@ -46,7 +45,7 @@
             </thead>
             <tbody>
 
-                @foreach (var employerAgreement in Model.Data.EmployerAgreements)
+                @foreach (var employerAgreement in Model.Data.EmployerAgreementsData.EmployerAgreements)
                 {
                     <tr>
                         <td>@employerAgreement.LegalEntity.Name</td>
