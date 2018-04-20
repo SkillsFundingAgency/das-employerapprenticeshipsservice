@@ -22,9 +22,9 @@ namespace SFA.DAS.EAS.Infrastructure.Features
                 return true;
             }
 
-            var latestAgreementForAccount = await _accountAgreementService.GetLatestAgreementSignedByAccountAsync(authorizationContext.AccountContext.Id);
+            var latestSignedAgreementVersion = await _accountAgreementService.GetLatestSignedAgreementVersionAsync(authorizationContext.AccountContext.Id);
 
-            return latestAgreementForAccount >= feature.EnabledByAgreementVersion.Value;
+            return latestSignedAgreementVersion >= feature.EnabledByAgreementVersion.Value;
         }
     }
 }

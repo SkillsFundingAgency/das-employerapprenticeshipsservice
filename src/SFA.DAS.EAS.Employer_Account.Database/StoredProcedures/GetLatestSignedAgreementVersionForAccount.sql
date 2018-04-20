@@ -1,17 +1,20 @@
 ﻿CREATE PROCEDURE [employer_account].[GetLatestSignedAgreementVersionForAccount]
-	@AccountId BIGINT
+	@accountId BIGINT
 AS
-BEGIN
-	SET NOCOUNT ON;
-
-	SELECT MIN(VersionNumber) AS LatestAgreement
-	FROM	( 
-			SELECT	ea.LegalEntityId, ea.AccountId, MAX(EAT.VersionNumber) AS VersionNumber
-			FROM	employer_account.EmployerAgreement as EA
-					JOIN employer_account.EmployerAgreementTemplate AS EAT 
-						ON EAT.Id = EA.TemplateId 
-			WHERE	EA.AccountId = @AccountId
-					and EA.StatusId = 2
-			GROUP BY EA.LegalEntityId, EA.AccountId) AS T1
-END
-
+	SELECT
+		CASE
+			WHEN MIN(v.VersionNumber) = 0 THEN NULL
+			ELSE MIN(v.VersionNumber)
+		END AS LatestSignedAgreementVersionNumber
+	FROM (
+		SELECT
+			CASE
+				WHEN a.StatusId = 1 THEN 0
+				WHEN a.StatusId IN (2, 4) THEN MAX(t.VersionNumber)
+			END AS VersionNumber
+		FROM employer_account.EmployerAgreement as a
+		JOIN employer_account.EmployerAgreementTemplate AS t ON t.Id = a.TemplateId 
+		WHERE a.AccountId = @accountId
+		AND a.StatusId IN (1, 2, 4)
+		GROUP BY a.AccountId, a.LegalEntityId, a.StatusId
+	) AS v

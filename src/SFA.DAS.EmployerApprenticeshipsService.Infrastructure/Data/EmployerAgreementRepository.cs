@@ -157,7 +157,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@AccountId", accountId, DbType.Int64);
+                parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryFirstAsync<int?>(
                     sql: "[employer_account].[GetLatestSignedAgreementVersionForAccount]",

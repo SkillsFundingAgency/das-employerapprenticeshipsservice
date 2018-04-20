@@ -18,16 +18,16 @@ namespace SFA.DAS.EAS.Infrastructure.Features
             _employerAgreementRepository = employerAgreementRepository;
         }
 
-        public async Task<int?> GetLatestAgreementSignedByAccountAsync(long accountId)
+        public async Task<int?> GetLatestSignedAgreementVersionAsync(long accountId)
         {
-            var latestAgreementId = await _cache.GetOrAddAsync(GetCacheKeyForAccount(accountId), k => FetchLatestAgreementNumberFromStoreAsync(accountId));
+            var version = await _cache.GetOrAddAsync(GetCacheKeyForAccount(accountId), k => FetchLatestAgreementNumberFromStoreAsync(accountId));
 
-            if (latestAgreementId == StoredValueThatMeansNull)
+            if (version == StoredValueThatMeansNull)
             {
                 return null;
             }
 
-            return latestAgreementId;
+            return version;
         }
 
         public Task RemoveFromCacheAsync(long accountId)
@@ -35,14 +35,14 @@ namespace SFA.DAS.EAS.Infrastructure.Features
             return _cache.RemoveFromCache(GetCacheKeyForAccount(accountId));
         }
 
-        private string GetCacheKeyForAccount(long accountId)
-        {
-            return "Account:" + accountId.ToString(CultureInfo.InvariantCulture);
-        }
-
         private async Task<int> FetchLatestAgreementNumberFromStoreAsync(long accountId)
         {
             return await _employerAgreementRepository.GetLatestSignedAgreementVersion(accountId) ?? StoredValueThatMeansNull;
+        }
+
+        private string GetCacheKeyForAccount(long accountId)
+        {
+            return "Account:" + accountId.ToString(CultureInfo.InvariantCulture);
         }
     }
 }
