@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -101,7 +102,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new EmployerAgreementListViewModel
                     {
                         HashedAccountId = hashedId,
-                        EmployerAgreements = response.EmployerAgreements
+                        EmployerAgreementsData = response
                     }
                 };
             }
@@ -170,7 +171,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse> SignAgreement(string agreementid, string hashedId, string externalUserId,
+        public async Task<OrchestratorResponse<SignAgreementViewModel>> SignAgreement(string agreementid, string hashedId, string externalUserId,
             DateTime signedDate, string companyName)
         {
             try
@@ -184,13 +185,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     OrganisationName = companyName
                 });
 
-                return new OrchestratorResponse
+                var agreements = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
                 {
+                    ExternalUserId = externalUserId,
+                    HashedAccountId = hashedId
+                });
+
+                return new OrchestratorResponse<SignAgreementViewModel>
+                {
+                    Data = new SignAgreementViewModel
+                    {
+                        HasFurtherPendingAgreements = agreements.HasPendingAgreements
+                    }
                 };
             }
             catch (InvalidRequestException ex)
             {
-                return new OrchestratorResponse
+                return new OrchestratorResponse<SignAgreementViewModel>
                 {
                     Exception = ex,
                     Status = HttpStatusCode.BadRequest
@@ -198,13 +209,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (UnauthorizedAccessException)
             {
-                return new OrchestratorResponse
+                return new OrchestratorResponse<SignAgreementViewModel>
                 {
                     Status = HttpStatusCode.Unauthorized
                 };
             }
         }
-
        
         public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(string hashedAccountId, string externalUserId)
         {

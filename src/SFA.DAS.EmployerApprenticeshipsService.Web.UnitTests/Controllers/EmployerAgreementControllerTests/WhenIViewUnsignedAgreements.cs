@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Infrastructure.Authentication;
@@ -56,10 +57,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
                 {
                     Data = new EmployerAgreementListViewModel
                     {
-                        EmployerAgreements = new List<EmployerAgreementStatusView>
-                        {
-                            new EmployerAgreementStatusView{ Pending = new PendingEmployerAgreementDetails { HashedAgreementId = hashedAgreementId, Id = 123}},
-                            new EmployerAgreementStatusView{ Signed = new SignedEmployerAgreementDetails { HashedAgreementId = "JH4545", Id = null}}
+                        EmployerAgreementsData = new GetAccountEmployerAgreementsResponse {
+                            EmployerAgreements = new List<EmployerAgreementStatusView>
+                                {
+                                    new EmployerAgreementStatusView{ Pending = new PendingEmployerAgreementDetails { HashedAgreementId = hashedAgreementId, Id = 123}},
+                                    new EmployerAgreementStatusView{ Signed = new SignedEmployerAgreementDetails { HashedAgreementId = "JH4545", Id = null}}
+                                }
                         }
                     }
                 });
@@ -84,11 +87,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
                 {
                     Data = new EmployerAgreementListViewModel
                     {
-                        EmployerAgreements = new List<EmployerAgreementStatusView>
-                        {
-                            new EmployerAgreementStatusView{ Pending = new PendingEmployerAgreementDetails { HashedAgreementId = "GHJ356" }},
-                            new EmployerAgreementStatusView{ Pending = new PendingEmployerAgreementDetails { HashedAgreementId = "JH4545" }}
-                        }
+                        EmployerAgreementsData =
+                            new GetAccountEmployerAgreementsResponse { 
+                                EmployerAgreements = new List<EmployerAgreementStatusView>
+                                    {
+                                        new EmployerAgreementStatusView{ Pending = new PendingEmployerAgreementDetails { HashedAgreementId = "GHJ356" }},
+                                        new EmployerAgreementStatusView{ Pending = new PendingEmployerAgreementDetails { HashedAgreementId = "JH4545" }}
+                                    }
+                            }
                     }
                 });
 
