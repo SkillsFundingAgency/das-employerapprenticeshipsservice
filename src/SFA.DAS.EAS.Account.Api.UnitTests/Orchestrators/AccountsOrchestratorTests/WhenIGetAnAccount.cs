@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Castle.Core.Internal;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransferAllowance;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
-using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
@@ -52,17 +52,17 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
                 .Verifiable("Get account was not called"); ;
 
             _mediator
-                .Setup(x => x.SendAsync(It.IsAny<GetAccountTransferAllowanceRequest>()))
-                .ReturnsAsync(new GetAccountTransferAllowanceResponse {TransferAllowance = TransferAllowance})
+                .Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceQuery>()))
+                .ReturnsAsync(new GetTransferAllowanceResponse { TransferAllowance = TransferAllowance })
                 .Verifiable("Get transfer balance was not called");
 
             _mediator
                 .Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>()))
                 .ReturnsAsync(new GetAccountBalancesResponse
                 {
-                    Accounts = new List<AccountBalance> {new AccountBalance {Balance = AccountBalance}}
+                    Accounts = new List<AccountBalance> { new AccountBalance { Balance = AccountBalance } }
                 })
-                .Verifiable("Get account balance was not called"); 
+                .Verifiable("Get account balance was not called");
         }
 
         [Test]

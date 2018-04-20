@@ -2,7 +2,6 @@
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferAllowance
@@ -22,17 +21,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferAllowance
         {
             var transferAllowance = await _db.GetTransferAllowance(message.AccountId.Value, _configuration.TransferAllowancePercentage);
 
-            var sentTransfers = await _db.GetTransfersSentInCurrentFinancialYear(message.AccountId.Value);
-
-            var totalAllowanceUsed = sentTransfers.Sum(t => t.Amount);
-
-            var currentTransferAllowance = transferAllowance - totalAllowanceUsed;
-
-            currentTransferAllowance = currentTransferAllowance < 0 ? 0 : currentTransferAllowance;
+            transferAllowance = transferAllowance < 0 ? 0 : transferAllowance;
 
             return new GetTransferAllowanceResponse
             {
-                TransferAllowance = currentTransferAllowance
+                TransferAllowance = transferAllowance
             };
         }
     }

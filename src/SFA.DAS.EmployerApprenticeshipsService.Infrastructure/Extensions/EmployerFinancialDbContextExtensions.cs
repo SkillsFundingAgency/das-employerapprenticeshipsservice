@@ -29,16 +29,6 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
 
             return transfers;
         }
-
-        public static async Task<IEnumerable<AccountTransfer>> GetTransfersSentInCurrentFinancialYear(
-            this EmployerFinancialDbContext db, long accountId)
-        {
-            var transfers = await db.SqlQueryAsync<AccountTransfer>(
-                "[employer_financial].[GetSenderAccountTransactionsInCurrentFinancialYear] @senderAccountId = {0}",
-                accountId);
-
-            return transfers;
-        }
     }
 }
 

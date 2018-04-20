@@ -7,7 +7,6 @@ using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.TestCommon;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
@@ -42,19 +41,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
         public async Task Handle_WhenMakingAValidCall_ShouldReturnAllowanceMinusPayments()
         {
             await RunAsync(
-                f => f.WithTransferAllowance(f.TransferAllowance)
-                      .WithTransferPayments(),
+                f => f.WithTransferAllowance(f.TransferAllowance),
                 f => f.Handle(f.SenderAccountId),
                 f => Assert.That(f.Response.TransferAllowance,
-                     Is.EqualTo(f.TransferAllowance - f.SenderAccountTransfers.Sum(t => t.Amount))));
+                     Is.EqualTo(f.TransferAllowance)));
         }
 
         [Test]
         public async Task Handle_WhenMakingAValidCall_ShouldReturnZeroIfAllowanceIsBelowZero()
         {
             await RunAsync(
-                f => f.WithTransferAllowance(10)
-                    .WithTransferPayments(),
+                f => f.WithTransferAllowance(-10),
                 f => f.Handle(f.SenderAccountId),
                 f => Assert.That(f.Response.TransferAllowance,
                     Is.EqualTo(0)));
@@ -139,16 +136,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
             return this;
         }
 
-        public GetTransferAllowanceTestFixtures WithTransferPayments()
-        {
-            FinancialDatabaseMock.Setup(d => d.SqlQueryAsync<AccountTransfer>
-                    (
-                        It.Is<string>(s => s.StartsWith("[employer_financial].[GetSenderAccountTransactionsInCurrentFinancialYear]")),
-                        It.IsAny<long>())
-                ).ReturnsAsync(SenderAccountTransfers.ToList());
-
-            return this;
-        }
 
         public GetTransferAllowanceTestFixtures WithNoTransferPayments()
         {

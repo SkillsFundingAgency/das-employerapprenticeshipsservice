@@ -4,12 +4,13 @@
 AS
 	SET NOCOUNT ON
 
-	SELECT	SUM(Amount) * @allowancePercentage 
+	SELECT	(SUM(lines.Amount) * @allowancePercentage) - SUM(transfers.Amount)
 	FROM		[employer_financial].[TransactionLine] as lines
+			INNER JOIN [employer_financial].[AccountTransfers] transfers ON lines.AccountId = transfers.SenderAccountId
 			CROSS JOIN employer_financial.GetPreviousFinancialYearDates(DEFAULT) as previousFinancialYear
-	WHERE	TransactionDate >= previousFinancialYear.YearStart
-			AND TransactionDate < previousFinancialYear.YearEnd
-			AND TransactionType = 1
-			AND AccountId = @AccountId
-
+	WHERE	lines.TransactionDate >= previousFinancialYear.YearStart
+			AND lines.TransactionDate < previousFinancialYear.YearEnd
+			AND lines.TransactionType = 1			
+			AND lines.AccountId = @AccountId
+			AND transfers.TransferDate >= previousFinancialYear.YearEnd
 GO
