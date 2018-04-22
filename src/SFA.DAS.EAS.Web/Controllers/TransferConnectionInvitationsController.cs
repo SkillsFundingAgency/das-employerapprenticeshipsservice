@@ -9,7 +9,6 @@ using SFA.DAS.EAS.Application.Queries.GetReceivedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetRejectedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
-using SFA.DAS.EAS.Application.Queries.GetTransferConnectionRoles;
 using SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Infrastructure.Features;
@@ -35,12 +34,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [Route]
-        public async Task<ActionResult> Index(GetTransferConnectionRolesQuery query)
+        public ActionResult Index()
         {
-            var response = await _mediator.SendAsync(query);
-            var model = _mapper.Map<TransferConnectionRolesViewModel>(response);
-
-            return View(model);
+            return View();
         }
         
         [ImportModelStateFromTempData]
