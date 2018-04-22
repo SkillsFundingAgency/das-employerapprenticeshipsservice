@@ -12,7 +12,6 @@ using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthorization;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
 using SFA.DAS.EAS.Application.Queries.GetTransferRequests;
-using SFA.DAS.EAS.Application.Queries.GetTransferConnectionRoles;
 using SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 using SFA.DAS.EAS.Web.ViewModels.Transfers;
@@ -46,7 +45,6 @@ namespace SFA.DAS.EAS.Web.Mappings
                 .ForMember(m => m.DeleteTransferConnectionInvitationCommand, o => o.Ignore());
             
             CreateMap<GetTransferConnectionInvitationsResponse, TransferConnectionInvitationsViewModel>();
-            CreateMap<GetTransferConnectionRolesResponse, TransferConnectionRolesViewModel>();
             CreateMap<GetTransferRequestsResponse, TransferRequestsViewModel>();
             CreateMap<ReceiveTransferConnectionInvitationViewModel, ApproveTransferConnectionInvitationCommand>();
             CreateMap<ReceiveTransferConnectionInvitationViewModel, RejectTransferConnectionInvitationCommand>();
