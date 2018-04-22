@@ -1,6 +1,6 @@
 ﻿using System;
 using Moq;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 
 namespace SFA.DAS.EAS.TestCommon.Builders

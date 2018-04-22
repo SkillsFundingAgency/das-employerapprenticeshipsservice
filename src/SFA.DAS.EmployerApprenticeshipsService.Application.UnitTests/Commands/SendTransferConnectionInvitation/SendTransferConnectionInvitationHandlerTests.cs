@@ -32,9 +32,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
         public Mock<ITransferAllowanceService> TransferAllowanceService { get; set; }
         public Mock<ITransferConnectionInvitationRepository> TransferConnectionInvitationRepository { get; set; }
         public Mock<IUserRepository> UserRepository { get; set; }
-        public Domain.Data.Entities.Account.Account ReceiverAccount { get; set; }
+        public Domain.Models.Account.Account ReceiverAccount { get; set; }
         public long? Result { get; set; }
-        public Domain.Data.Entities.Account.Account SenderAccount { get; set; }
+        public Domain.Models.Account.Account SenderAccount { get; set; }
         public decimal SenderAccountTransferAllowance { get; set; }
         public User SenderUser { get; set; }
         public TransferConnectionInvitation TransferConnectionInvitation { get; set; }
@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
             };
         }
 
-        public SendTransferConnectionInvitationHandlerTestsFixture AddAccount(Domain.Data.Entities.Account.Account account)
+        public SendTransferConnectionInvitationHandlerTestsFixture AddAccount(Domain.Models.Account.Account account)
         {
             EmployerAccountRepository.Setup(r => r.GetAccountById(account.Id)).ReturnsAsync(account);
             PublicHashingService.Setup(h => h.DecodeValue(account.PublicHashedId)).Returns(account.Id);
@@ -95,7 +95,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
 
         public SendTransferConnectionInvitationHandlerTestsFixture SetReceiverAccount()
         {
-            ReceiverAccount = new Domain.Data.Entities.Account.Account
+            ReceiverAccount = new Domain.Models.Account.Account
             {
                 Id = 222222,
                 PublicHashedId = "XYZ987",
@@ -107,7 +107,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
 
         public SendTransferConnectionInvitationHandlerTestsFixture SetSenderAccount()
         {
-            SenderAccount = new Domain.Data.Entities.Account.Account
+            SenderAccount = new Domain.Models.Account.Account
             {
                 Id = 333333,
                 PublicHashedId = "ABC123",

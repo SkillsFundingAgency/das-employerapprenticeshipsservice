@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.TransferRequests;
@@ -15,7 +16,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     [DbConfigurationType(typeof(SqlAzureDbConfiguration))]
     public class EmployerAccountDbContext : DbContext
     {
-        public virtual DbSet<Domain.Data.Entities.Account.Account> Accounts { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Membership> Memberships { get; set; }
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<TransferRequest> TransferRequests { get; set; }
@@ -48,15 +49,15 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema("employer_account");
 
-            modelBuilder.Entity<Domain.Data.Entities.Account.Account>()
+            modelBuilder.Entity<Account>()
                 .Ignore(a => a.RoleId)
                 .Ignore(a => a.RoleName);
 
-            modelBuilder.Entity<Domain.Data.Entities.Account.Account>()
+            modelBuilder.Entity<Account>()
                 .HasMany(a => a.ReceivedTransferConnectionInvitations)
                 .WithRequired(i => i.ReceiverAccount);
 
-            modelBuilder.Entity<Domain.Data.Entities.Account.Account>()
+            modelBuilder.Entity<Account>()
                 .HasMany(a => a.SentTransferConnectionInvitations)
                 .WithRequired(i => i.SenderAccount);
 

@@ -41,8 +41,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestPendingReceivedTran
         public TransferConnectionInvitation PendingReceivedTransferConnectionInvitation1 { get; set; }
         public TransferConnectionInvitation PendingReceivedTransferConnectionInvitation2 { get; set; }
         public TransferConnectionInvitation ApprovedReceivedTransferConnectionInvitation { get; set; }
-        public Domain.Data.Entities.Account.Account SenderAccount { get; set; }
-        public Domain.Data.Entities.Account.Account ReceiverAccount { get; set; }
+        public Domain.Models.Account.Account SenderAccount { get; set; }
+        public Domain.Models.Account.Account ReceiverAccount { get; set; }
 
         public LatestPendingTransferConnectionInvitationFixture()
         {
@@ -55,13 +55,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestPendingReceivedTran
 
             Db = new Mock<EmployerAccountDbContext>();
 
-            SenderAccount = new Domain.Data.Entities.Account.Account
+            SenderAccount = new Domain.Models.Account.Account
             {
                 Id = 1,
                 Name = "Sender"
             };
 
-            ReceiverAccount = new Domain.Data.Entities.Account.Account
+            ReceiverAccount = new Domain.Models.Account.Account
             {
                 Id = 2,
                 Name = "Receiver"
@@ -94,8 +94,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestPendingReceivedTran
                 PendingReceivedTransferConnectionInvitation1,
                 ApprovedReceivedTransferConnectionInvitation,
                 new TransferConnectionInvitationBuilder()
-                    .WithSenderAccount(new Domain.Data.Entities.Account.Account())
-                    .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                    .WithSenderAccount(new Domain.Models.Account.Account())
+                    .WithReceiverAccount(new Domain.Models.Account.Account())
                     .WithStatus(TransferConnectionInvitationStatus.Pending)
                     .Build()
             };

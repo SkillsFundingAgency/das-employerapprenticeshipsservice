@@ -1,7 +1,7 @@
 ﻿using System;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
-namespace SFA.DAS.EAS.Domain.Data.Entities.Account
+namespace SFA.DAS.EAS.Domain.Models.Account
 {
     public class LegalEntityView
     {

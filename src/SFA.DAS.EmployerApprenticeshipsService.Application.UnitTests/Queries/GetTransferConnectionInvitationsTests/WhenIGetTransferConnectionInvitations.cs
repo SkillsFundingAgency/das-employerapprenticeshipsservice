@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
         private List<TransferConnectionInvitation> _transferConnectionInvitations;
         private TransferConnectionInvitation _sentTransferConnectionInvitation;
         private TransferConnectionInvitation _receivedTransferConnectionInvitation;
-        private Domain.Data.Entities.Account.Account _account;
+        private Domain.Models.Account.Account _account;
         private IConfigurationProvider _configurationProvider;
 
         [SetUp]
@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
         {
             _db = new Mock<EmployerAccountDbContext>();
 
-            _account = new Domain.Data.Entities.Account.Account
+            _account = new Domain.Models.Account.Account
             {
                 Id = 333333,
                 HashedId = "ABC123",
@@ -43,13 +43,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
             _sentTransferConnectionInvitation = new TransferConnectionInvitationBuilder()
                 .WithId(222222)
                 .WithSenderAccount(_account)
-                .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                .WithReceiverAccount(new Domain.Models.Account.Account())
                 .WithCreatedDate(DateTime.UtcNow)
                 .Build();
 
             _receivedTransferConnectionInvitation = new TransferConnectionInvitationBuilder()
                 .WithId(111111)
-                .WithSenderAccount(new Domain.Data.Entities.Account.Account())
+                .WithSenderAccount(new Domain.Models.Account.Account())
                 .WithReceiverAccount(_account)
                 .WithCreatedDate(DateTime.UtcNow.AddDays(-1))
                 .Build();
@@ -59,8 +59,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
                 _sentTransferConnectionInvitation,
                 _receivedTransferConnectionInvitation,
                 new TransferConnectionInvitationBuilder()
-                    .WithSenderAccount(new Domain.Data.Entities.Account.Account())
-                    .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                    .WithSenderAccount(new Domain.Models.Account.Account())
+                    .WithReceiverAccount(new Domain.Models.Account.Account())
                     .WithCreatedDate(DateTime.UtcNow.AddDays(-2))
                     .Build()
             };

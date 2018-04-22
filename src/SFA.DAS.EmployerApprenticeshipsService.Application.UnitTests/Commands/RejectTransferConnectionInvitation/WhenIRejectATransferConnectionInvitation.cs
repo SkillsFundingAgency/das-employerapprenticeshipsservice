@@ -25,8 +25,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
         private Mock<IUserRepository> _userRepository;
         private TransferConnectionInvitation _transferConnectionInvitation;
         private IEntity _entity;
-        private Domain.Data.Entities.Account.Account _senderAccount;
-        private Domain.Data.Entities.Account.Account _receiverAccount;
+        private Domain.Models.Account.Account _senderAccount;
+        private Domain.Models.Account.Account _receiverAccount;
         private User _receiverUser;
 
         [SetUp]
@@ -45,13 +45,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
                 LastName = "Doe"
             };
 
-            _senderAccount = new Domain.Data.Entities.Account.Account
+            _senderAccount = new Domain.Models.Account.Account
             {
                 Id = 333333,
                 Name = "Sender"
             };
 
-            _receiverAccount = new Domain.Data.Entities.Account.Account
+            _receiverAccount = new Domain.Models.Account.Account
             {
                 Id = 222222,
                 Name = "Receiver"
