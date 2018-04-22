@@ -9,60 +9,82 @@
     ViewBag.GaData.Vpv = "/accounts/agreements/sign-your-agreement/agreement-sign";
 }
 
-<div class="grid-row" id="publication-banner">
-    <div class="column-third">
-        <div class="sfa-logo">
-            <h1>
-                <span class="organisation-logo">
-                    <span>Education &amp; Skills <br>
-                        Funding Agency</span>
-                </span>
-            </h1>
+        <div class="grid-row">
+            <div class="column-full">
+                <div class="panel panel-border-wide panel-filled-purple panel-top-margin">
+                    <span class="font-small bold">What’s in your updated agreement?</span>
+                    <p>Your agreement was updated on 30 April 2018 to include information on:</p>
+                    <ul class="list list-bullet">
+                        <li>sending and receiving transfers to fun apprenticeship training (clause 7)</li>
+                        <li>using this service as a non-levy paying employer</li>
+                    </ul>
+                    <p>A previous version of this agreement was signed by Jo Bloggs on behalf of Nice Employer Ltd on 28 March 2017.</p>
+
+                    @*
+                    'View previous version' link below currently goes nowhere.
+                    *@
+                    <p><a href="#">View previous version</a> (PDF)</p>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="column-two-thirds">
-        <a href="@Url.Action("GetPdfAgreement","EmployerAgreement")" target="_blank" class="download">Save this agreement as a PDF</a>
-    </div>
-</div>
 
-@Html.Partial("_Agreement_v1")
 
-<hr />
+        <div class="grid-row" id="publication-banner">
+            <div class="column-third">
+                <div class="sfa-logo">
+                    <h1>
+                        <span class="organisation-logo">
+                            <span>
+                                Education &amp; Skills <br>
+                                Funding Agency
+                            </span>
+                        </span>
+                    </h1>
+                </div>
+            </div>
+            <div class="column-two-thirds">
+                <a href="@Url.Action("GetPdfAgreement","EmployerAgreement")" target="_blank" class="download">Save this agreement as a PDF</a>
+            </div>
+        </div>
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h2 class="heading-large">Sign this agreement</h2>
-        <table>
-            <tr>
-                <th scope="row" class="no-wrap">Signed by:</th>
-                <td>@Model.Data.EmployerAgreement.SignedByName</td>
-            </tr>
-            <tr>
-                <th scope="row">On behalf of:</th>
-                <td>@Model.Data.EmployerAgreement.LegalEntityName</td>
-            </tr>
-            <tr>
-                <th scope="row">Address:</th>
-                <td>@Model.Data.EmployerAgreement.LegalEntityAddress</td>
-            </tr>
-            <tr>
-                <th scope="row" class="no-wrap">Signed on:</th>
-                <td>@DateTime.Today.ToString("dd/MM/yyyy")</td>
-            </tr>
+        @Html.Partial("_Agreement_v1")
 
-        </table>
-        <form method="post" action="@Url.Action("Sign","EmployerAgreement")">
-            @Html.AntiForgeryToken()
-            <input class="button" type="submit" value="Sign now" />
-        </form>
-        <p class="legal-warning"><span class="icon"></span>This agreement is legally binding. You must have authority from your organisation to sign it.</p>
-    </div>
-</div>
+        <hr />
 
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
-        </ol>
-    </div>
-}
+        <div class="grid-row">
+            <div class="column-two-thirds">
+                <h2 class="heading-large">Sign this agreement</h2>
+                <table>
+                    <tr>
+                        <th scope="row" class="no-wrap">Signed by:</th>
+                        <td>@Model.Data.EmployerAgreement.SignedByName</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">On behalf of:</th>
+                        <td>@Model.Data.EmployerAgreement.LegalEntityName</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Address:</th>
+                        <td>@Model.Data.EmployerAgreement.LegalEntityAddress</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="no-wrap">Signed on:</th>
+                        <td>@DateTime.Today.ToString("dd/MM/yyyy")</td>
+                    </tr>
+
+                </table>
+                <form method="post" action="@Url.Action("Sign","EmployerAgreement")">
+                    @Html.AntiForgeryToken()
+                    <input class="button" type="submit" value="Sign now" />
+                </form>
+                <p class="legal-warning"><span class="icon"></span>This agreement is legally binding. You must have authority from your organisation to sign it.</p>
+            </div>
+        </div>
+
+        @section breadcrumb {
+            <div class="breadcrumbs">
+                <ol role="navigation">
+                    <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
+                </ol>
+            </div>
+        }
