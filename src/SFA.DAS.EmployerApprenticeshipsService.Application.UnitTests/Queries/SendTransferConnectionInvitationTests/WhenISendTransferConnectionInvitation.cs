@@ -21,12 +21,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvita
         private SendTransferConnectionInvitationQuery _query;
         private SendTransferConnectionInvitationResponse _response;
         private Mock<EmployerAccountDbContext> _db;
-        private DbSetStub<Domain.Data.Entities.Account.Account> _accountsDbSet;
-        private List<Domain.Data.Entities.Account.Account> _accounts;
+        private DbSetStub<Domain.Models.Account.Account> _accountsDbSet;
+        private List<Domain.Models.Account.Account> _accounts;
         private DbSetStub<TransferConnectionInvitation> _transferConnectionInvitationsDbSet;
         private List<TransferConnectionInvitation> _transferConnectionInvitations;
-        private Domain.Data.Entities.Account.Account _receiverAccount;
-        private Domain.Data.Entities.Account.Account _senderAccount;
+        private Domain.Models.Account.Account _receiverAccount;
+        private Domain.Models.Account.Account _senderAccount;
         private IConfigurationProvider _configurationProvider;
         private Mock<IPublicHashingService> _publicHashingService;
 
@@ -35,20 +35,20 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvita
         {
             _db = new Mock<EmployerAccountDbContext>();
 
-            _receiverAccount = new Domain.Data.Entities.Account.Account
+            _receiverAccount = new Domain.Models.Account.Account
             {
                 Id = 111111,
                 PublicHashedId = "ABC123"
             };
 
-            _senderAccount = new Domain.Data.Entities.Account.Account
+            _senderAccount = new Domain.Models.Account.Account
             {
                 Id = 222222,
                 PublicHashedId = "XYZ987"
             };
 
-            _accounts = new List<Domain.Data.Entities.Account.Account>{ _receiverAccount, _senderAccount };
-            _accountsDbSet = new DbSetStub<Domain.Data.Entities.Account.Account>(_accounts);
+            _accounts = new List<Domain.Models.Account.Account>{ _receiverAccount, _senderAccount };
+            _accountsDbSet = new DbSetStub<Domain.Models.Account.Account>(_accounts);
             _transferConnectionInvitations = new List<TransferConnectionInvitation>();
             _transferConnectionInvitationsDbSet = new DbSetStub<TransferConnectionInvitation>(_transferConnectionInvitations);
             _configurationProvider = new MapperConfiguration(c => c.AddProfile<AccountMappings>());

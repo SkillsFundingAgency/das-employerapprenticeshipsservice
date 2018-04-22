@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Setup(m => m.SendAsync(It.Is<GetEmployerAccountHashedQuery>(q => q.HashedAccountId == HashedAccountId)))
                 .ReturnsAsync(new GetEmployerAccountResponse
                 {
-                    Account = new Domain.Data.Entities.Account.Account
+                    Account = new Account
                     {
                         HashedId = HashedAccountId,
                         Id = AccountId,

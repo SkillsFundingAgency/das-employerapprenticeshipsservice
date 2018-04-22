@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionRolesTe
     public class WhenIGetTransferConnectionRoles
     {
         private List<TransferConnectionInvitation> _transferConnectionInvitations;
-        private Dictionary<long, Domain.Data.Entities.Account.Account> _accounts;
+        private Dictionary<long, Domain.Models.Account.Account> _accounts;
         private GetTransferConnectionRolesQueryHandler _handler;
         private int _senderAccountId = 100;
 
@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionRolesTe
         public void Arrange()
         {
             _transferConnectionInvitations = new List<TransferConnectionInvitation>();
-            _accounts = new Dictionary<long, Domain.Data.Entities.Account.Account>();
+            _accounts = new Dictionary<long, Domain.Models.Account.Account>();
 
             var transferConnectionInvitationsDbSet = new DbSetStub<TransferConnectionInvitation>(_transferConnectionInvitations);
             var db = new Mock<EmployerAccountDbContext>();
@@ -84,11 +84,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionRolesTe
             };
         }
 
-        private Domain.Data.Entities.Account.Account EnsureAccount(long accountId)
+        private Domain.Models.Account.Account EnsureAccount(long accountId)
         {
             if (!_accounts.TryGetValue(accountId, out var account))
             {
-                account = new Domain.Data.Entities.Account.Account
+                account = new Domain.Models.Account.Account
                 {
                     Id = accountId,
                     HashedId = $"ABC{_accounts.Count:D3}",

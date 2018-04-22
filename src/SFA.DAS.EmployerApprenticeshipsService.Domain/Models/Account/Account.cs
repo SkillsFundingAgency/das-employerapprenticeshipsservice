@@ -5,7 +5,7 @@ using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.TransferRequests;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
-namespace SFA.DAS.EAS.Domain.Data.Entities.Account
+namespace SFA.DAS.EAS.Domain.Models.Account
 {
     public class Account
     {

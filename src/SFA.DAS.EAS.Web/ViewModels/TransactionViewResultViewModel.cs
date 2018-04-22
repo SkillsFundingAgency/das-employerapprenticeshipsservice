@@ -1,5 +1,5 @@
 ﻿using System;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Web.ViewModels
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EAS.Domain.Data.Entities.Account
+namespace SFA.DAS.EAS.Domain.Models.Account
 {
     public class PayeSchemeView
     {

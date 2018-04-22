@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
 
             _repository = new Mock<IEmployerAccountRepository>();
             _repository.Setup(x => x.GetAccountById(It.IsAny<long>()))
-                .ReturnsAsync(new Domain.Data.Entities.Account.Account
+                .ReturnsAsync(new Domain.Models.Account.Account
                 {
                     Id = AccountId,
                     HashedId = HashedAccountId,

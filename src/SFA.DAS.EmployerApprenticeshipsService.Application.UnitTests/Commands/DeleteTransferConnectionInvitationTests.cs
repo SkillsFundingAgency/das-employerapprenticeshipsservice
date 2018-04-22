@@ -181,15 +181,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands
         public Mock<IUserRepository> UserRepositoryMock;
         public IUserRepository UserRepository => UserRepositoryMock.Object;
 
-        public Domain.Data.Entities.Account.Account SenderAccount { get; private set; }
-        public Domain.Data.Entities.Account.Account ReceiverAccount { get; private set; }
+        public Domain.Models.Account.Account SenderAccount { get; private set; }
+        public Domain.Models.Account.Account ReceiverAccount { get; private set; }
         public User DeleterUser { get; private set; }
         public TransferConnectionInvitation TransferConnectionInvitation { get; private set; }
         public IEntity Entity { get; private set; }
 
         public DeleteTransferConnectionInvitationTestFixture WithSenderAccount(long senderAccountId)
         {
-            SenderAccount = new Domain.Data.Entities.Account.Account
+            SenderAccount = new Domain.Models.Account.Account
             {
                 Id = senderAccountId,
                 HashedId = "ABC123",
@@ -205,7 +205,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands
 
         public DeleteTransferConnectionInvitationTestFixture WithReceiverAccount(long receiverAccountId)
         {
-            ReceiverAccount = new Domain.Data.Entities.Account.Account
+            ReceiverAccount = new Domain.Models.Account.Account
             {
                 Id = receiverAccountId,
                 HashedId = "ABC123",

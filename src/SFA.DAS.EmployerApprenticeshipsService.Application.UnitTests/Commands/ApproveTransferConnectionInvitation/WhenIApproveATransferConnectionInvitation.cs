@@ -24,8 +24,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
         private TransferConnectionInvitation _transferConnectionInvitation;
         private IEntity _entity;
         private User _receiverUser;
-        private Domain.Data.Entities.Account.Account _senderAccount;
-        private Domain.Data.Entities.Account.Account _receiverAccount;
+        private Domain.Models.Account.Account _senderAccount;
+        private Domain.Models.Account.Account _receiverAccount;
 
         [SetUp]
         public void Arrange()
@@ -42,14 +42,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
                 LastName = "Doe"
             };
 
-            _senderAccount = new Domain.Data.Entities.Account.Account
+            _senderAccount = new Domain.Models.Account.Account
             {
                 Id = 333333,
                 HashedId = "ABC123",
                 Name = "Sender"
             };
 
-            _receiverAccount = new Domain.Data.Entities.Account.Account
+            _receiverAccount = new Domain.Models.Account.Account
             {
                 Id = 222222,
                 HashedId = "XYZ987",

@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTeamMembers
     {
         private Mock<IAccountTeamRepository> _accountTeamMembersRepository;
         private List<TeamMember> _teamMembers;
-        private Domain.Data.Entities.Account.Account _account;
+        private Domain.Models.Account.Account _account;
         private TeamMember _teamMember;
         public override GetAccountTeamMembersQuery Query { get; set; }
         public override GetAccountTeamMembersHandler RequestHandler { get; set; }
@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTeamMembers
         {
             SetUp();
             _accountTeamMembersRepository = new Mock<IAccountTeamRepository>();
-            _account = new Domain.Data.Entities.Account.Account {Name = "Test", Id = 1};
+            _account = new Domain.Models.Account.Account {Name = "Test", Id = 1};
             _teamMember = new TeamMember
             {
                 Id = 1,
