@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     parameters.Add("@transfers", transferDataTable.AsTableValuedParameter("[employer_financial].[AccountTransferTable]"));
 
                     await connection.ExecuteAsync(
-                        sql: "[employer_financial].[CreateAccountTransfer]",
+                        sql: "[employer_financial].[CreateAccountTransfers]",
                         param: parameters,
                         transaction: transaction,
                         commandType: CommandType.StoredProcedure);
