@@ -121,7 +121,7 @@
     <Build Include="Functions\GetPreviousFinancialYearDates.sql" />
     <Build Include="StoredProcedures\GetAllPeriodEnds.sql" />
     <Build Include="Tables\AccountTransfers.sql" />
-    <Build Include="StoredProcedures\CreateAccountTransfer.sql" />
+    <Build Include="StoredProcedures\CreateAccountTransfers.sql" />
     <Build Include="StoredProcedures\GetTransferPaymentDetails.sql" />
     <Build Include="StoredProcedures\CreateAccountTransferTransactions.sql" />
     <Build Include="StoredProcedures\GetAccountTransfersByPeriodEnd.sql" />

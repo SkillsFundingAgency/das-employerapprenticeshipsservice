@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [employer_financial].[CreateAccountTransfer]
+﻿CREATE PROCEDURE [employer_financial].[CreateAccountTransfers]
 	@transfers [employer_financial].[AccountTransferTable] READONLY
 AS
 	INSERT INTO [employer_financial].[AccountTransfers] 

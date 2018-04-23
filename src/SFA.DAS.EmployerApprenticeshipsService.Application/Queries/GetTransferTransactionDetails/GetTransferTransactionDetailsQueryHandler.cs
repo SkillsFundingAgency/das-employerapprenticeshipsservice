@@ -5,6 +5,7 @@ using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,7 +32,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
                                     targetAccountId,
                                     query.PeriodEnd);
 
-            var transfers = result as AccountTransfer[] ?? result.ToArray();
+            var transfers = result as List<AccountTransfer> ?? result.ToList();
 
             var firstTransfer = transfers.First();
 
