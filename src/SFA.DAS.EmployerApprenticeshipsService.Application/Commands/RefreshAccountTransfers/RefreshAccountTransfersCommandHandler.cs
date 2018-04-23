@@ -58,8 +58,6 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
 
                 var transferReceiverAccountName = await _accountRepository.GetAccountName(message.ReceiverAccountId);
 
-                //TODO: Check for transfers that already exist in database
-
                 foreach (var transfer in transfers)
                 {
                     transfer.PeriodEnd = message.PeriodEnd;
