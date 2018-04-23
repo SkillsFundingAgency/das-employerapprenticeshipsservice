@@ -33,7 +33,7 @@
                             <td>
                                 @if (Model.AccountId == transferRequest.SenderAccount.Id)
                                 {
-                                    <a href="@Url.EmployerCommitmentsAction($"transfers/{transferRequest.CommitmentHashedId}")">Details</a>
+                                    <a href="@Url.CommitmentsAction($"transfers/{transferRequest.CommitmentHashedId}")">Details</a>
                                 }
                             </td>
                         </tr>

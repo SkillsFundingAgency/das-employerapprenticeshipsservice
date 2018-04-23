@@ -43,6 +43,13 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [ChildActionOnly]
+        [Feature(FeatureType.TransferConnectionRequests)]
+        public ActionResult TransferConnectionInvitationAuthorization()
+        {
+            return PartialView();
+        }
+
+        [ChildActionOnly]
         public ActionResult TransferConnectionInvitations(GetTransferConnectionInvitationsQuery query)
         {
             var response = Task.Run(async () => await _mediator.SendAsync(query)).Result;

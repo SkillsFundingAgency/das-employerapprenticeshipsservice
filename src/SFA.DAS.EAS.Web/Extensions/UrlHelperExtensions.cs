@@ -6,22 +6,22 @@ namespace SFA.DAS.EAS.Web.Extensions
 {
     public static class UrlHelperExtensions
     {
-        public static string EmployerCommitmentsAction(this UrlHelper helper, string path)
+        public static string CommitmentsAction(this UrlHelper helper, string path)
         {
-            return EmployerAction(helper, path, ControllerConstants.EmployerCommitmentsBaseUrlKeyName);
+            return Action(helper, path, ControllerConstants.CommitmentsBaseUrlKeyName);
         }
 
-        public static string EmployerRecruitAction(this UrlHelper helper)
+        public static string ProjectionsAction(this UrlHelper helper, string path)
         {
-            return EmployerAction(helper, string.Empty, ControllerConstants.EmployerRecruitBaseUrlKeyName);
+            return Action(helper, path, ControllerConstants.ProjectionsBaseUrlKeyName);
         }
 
-        public static string EmployerProjectionsAction(this UrlHelper helper, string path)
+        public static string RecruitmentsAction(this UrlHelper helper)
         {
-            return EmployerAction(helper, path, ControllerConstants.EmployerProjectionsBaseUrlKeyName);
+            return Action(helper, string.Empty, ControllerConstants.RecruitmentsBaseUrlKeyName);
         }
 
-        private static string EmployerAction(UrlHelper helper, string path, string baseUrlKeyName)
+        private static string Action(UrlHelper helper, string path, string baseUrlKeyName)
         {
             var baseUrl = CloudConfigurationManager.GetSetting(baseUrlKeyName)?.TrimEnd('/');
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
