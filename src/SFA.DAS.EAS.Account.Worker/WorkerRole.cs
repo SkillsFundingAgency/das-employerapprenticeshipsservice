@@ -7,6 +7,7 @@ using Microsoft.WindowsAzure.ServiceRuntime;
 using NLog;
 using SFA.DAS.EAS.Account.Worker.DependencyResolution;
 using SFA.DAS.EAS.Application.DependencyResolution;
+using SFA.DAS.EAS.Application.Extensions;
 using SFA.DAS.Messaging.Interfaces;
 using StructureMap;
 
@@ -46,7 +47,7 @@ namespace SFA.DAS.EAS.Account.Worker
             }
             catch (Exception ex)
             {
-                Logger.Fatal(ex);
+                Logger.Fatal(ex, ex.GetMessage());
                 throw;
             }
             finally
