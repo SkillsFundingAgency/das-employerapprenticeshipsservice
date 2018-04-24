@@ -1,4 +1,6 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿using System.Diagnostics;
+using Microsoft.Azure.WebJobs;
+using SFA.DAS.EAS.Account.Worker.Infrastructure;
 using SFA.DAS.EAS.Account.Worker.Infrastructure.Interfaces;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EAS.Application.Hashing;
@@ -28,6 +30,8 @@ namespace SFA.DAS.EAS.Account.Worker.DependencyResolution
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<ValidationRegistry>();
+
+                c.ForConcreteType<DasWebJobTraceWriter>().Configure.Ctor<TraceLevel>().Is(TraceLevel.Verbose);
             });
         }
     }
