@@ -10,10 +10,12 @@ namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 	public class JobHostFactory : IJobHostFactory
 	{
 		private readonly IWebJobConfiguration _webJobConfiguration;
+	    private readonly DasWebJobTraceWriter _traceWriter;
 
-		public JobHostFactory(IWebJobConfiguration webJobConfiguration)
+        public JobHostFactory(IWebJobConfiguration webJobConfiguration, DasWebJobTraceWriter traceWriter)
 		{
 			_webJobConfiguration = webJobConfiguration;
+		    _traceWriter = traceWriter;
 		}
 
 		public JobHost CreateJobHost()
@@ -24,7 +26,7 @@ namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 				StorageConnectionString = _webJobConfiguration.StorageConnectionString
             };
 
-            config.Tracing.Tracers.Add(ServiceLocator.Get<DasWebJobTraceWriter>());
+            config.Tracing.Tracers.Add(_traceWriter);
 			JobHost host = new JobHost(config);
 
 			return host;

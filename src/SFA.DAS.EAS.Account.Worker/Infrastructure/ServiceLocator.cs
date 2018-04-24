@@ -26,10 +26,5 @@ namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 		{
 			return _container.GetNestedContainer();
 		}
-
-		public static void Register<T>(IContainer container, object instance) where T : class
-		{
-			_container.Configure(ce => ce.For<T>().Use((T) instance));
-		}
 	}
 }

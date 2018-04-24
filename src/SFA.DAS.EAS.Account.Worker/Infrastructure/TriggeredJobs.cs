@@ -35,24 +35,22 @@ namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 		{
 		    using (var thisContainer = ServiceLocator.CreateNestedContainer())
 		    {
-		        ServiceLocator.Register<TraceWriter>(thisContainer, logger);
-		        IJob job;
 		        logger.Info($"found job type {jobtype.FullName}");
 		        try
 		        {
-		            job = (IJob) thisContainer.GetInstance(jobtype);
+		            var job = (IJob) thisContainer.GetInstance(jobtype);
 		            logger.Verbose($"Obtained instance of type {jobtype.FullName} from IoC");
+
+		            job.Run().ContinueWith(task =>
+		            {
+		                logger.Info($"Job has ended. Canceled?:{task.IsCanceled} Faulted?:{task.IsFaulted}");
+		            });
 		        }
-		        catch (Exception e)
+                catch (Exception e)
 		        {
-		            logger.Error($"Failed to fetch instance of type {jobtype.FullName} from IoC - error: {e.GetType()} - {e.Message}");
+		            logger.Error($"Failed to fetch and execute instance of type {jobtype.FullName} from IoC - error: {e.GetType()} - {e.Message}");
 		            throw;
 		        }
-
-		        job.Run().ContinueWith(task =>
-		        {
-		            logger.Info($"Job has ended. Canceled?:{task.IsCanceled} Faulted?:{task.IsFaulted}");
-		        });
 		    }
 		}
 
