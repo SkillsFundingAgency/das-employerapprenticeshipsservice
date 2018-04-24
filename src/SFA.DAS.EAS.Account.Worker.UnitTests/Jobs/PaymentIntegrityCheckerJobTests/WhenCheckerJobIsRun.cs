@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.Jobs.PaymentIntegrityCheckerJobTe
 
 
             _employerAccountRepository.Setup(x => x.GetAllAccounts())
-                .ReturnsAsync(new List<Domain.Data.Entities.Account.Account> { new Domain.Data.Entities.Account.Account() { Id = AccountId } });
+                .ReturnsAsync(new List<Domain.Models.Account.Account> { new Domain.Models.Account.Account() { Id = AccountId } });
 
 
             _periodEnd = new PeriodEnd { Id = "1718-R01" };
