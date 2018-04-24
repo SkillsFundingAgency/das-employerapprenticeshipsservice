@@ -12,6 +12,7 @@
         public const string AddOrganisationViewName = "AddOrganisation";
         public const string AddOtherOrganisationDetailsViewName = "AddOtherOrganisationDetails";
         public const string CodeKeyName = "code";
+        public const string CommitmentsBaseUrlKeyName = "EmployerCommitmentsBaseUrl";
         public const string ControllerKeyName = "Controller";
         public const string ConfirmOrganisationDetailsViewName = "../OrganisationShared/ConfirmOrganisationDetails";
         public const string ConfirmPayeSchemeActionName = "ConfirmPayeScheme";
@@ -25,11 +26,8 @@
         public const string EmployerAccountPayeControllerName = "EmployerAccountPaye";
         public const string EmployerAgreementControllerName = "EmployerAgreement";
         public const string EmployerCommitmentsControllerName = "EmployerCommitments";
-        public const string EmployerCommitmentsBaseUrlKeyName = "EmployerCommitmentsBaseUrl";
         public const string EmployerTeamActionName = "EmployerTeam";
         public const string EmployerTeamControllerName = "EmployerTeam";
-        public const string EmployerRecruitBaseUrlKeyName = "EmployerRecruitBaseUrl";
-        public const string  EmployerProjectionsBaseUrlKeyName = "EmployerProjectionsBaseUrl";
         public const string ErrorControllerName = "Error";
         public const string FeatureNotEnabledViewName = "FeatureNotEnabled";
         public const string FindAddressViewName = "../OrganisationShared/FindAddress";
@@ -54,7 +52,9 @@
         public const string OrganisationAddedNextStepsSearchActionName = "OrganisationAddedNextStepsSearch";
         public const string OrganisationControllerName = "Organisation";
         public const string OrganisationSharedControllerName = "OrganisationShared";
+        public const string ProjectionsBaseUrlKeyName = "EmployerProjectionsBaseUrl";
         public const string ProviderPaymentSummaryViewName = "ProviderPaymentSummary";
+        public const string RecruitmentsBaseUrlKeyName = "EmployerRecruitBaseUrl";
         public const string PdfContentTypeName = "application/pdf";
         public const string RegisterUserActionName = "RegisterUser";
         public const string RemoveViewName = "Remove";

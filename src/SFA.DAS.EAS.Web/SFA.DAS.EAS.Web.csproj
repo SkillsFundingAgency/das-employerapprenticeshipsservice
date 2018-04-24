@@ -646,6 +646,7 @@
     <Content Include="Views\Transfers\TransferAllowance.cshtml" />
     <Content Include="Views\Transfers\TransferRequests.cshtml" />
     <Content Include="Views\TransferConnectionInvitations\Deleted.cshtml" />
+    <Content Include="Views\Transfers\TransferConnectionInvitationAuthorization.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />

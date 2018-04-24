@@ -1,26 +1,48 @@
-﻿@{
+﻿@using SFA.DAS.EAS.Domain.Models.Features
+@using SFA.DAS.EAS.Web.Extensions
+
+@{
     ViewBag.Title = "Transfers";
     ViewBag.Section = "finance";
     ViewBag.PageID = "page-transfers";
     ViewBag.GaData.Vpv = "/accounts/transfers";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Transfers</h1>
-        <p>Employers who pay the apprenticeship levy can transfer up to 10% of their previous year’s levy to other employers with an apprenticeship service account.</p>
-        <p>Employers who want to transfer funds must first connect with a receiving employer through the apprenticeship service. Once a connection is made, a receiving employer can request transfer funds from a sending employer.</p>
-        <p>Before getting started, make sure you understand the <a href="">rules for sending and receiving transfers</a>.</p>
+@if (Html.IsAuthorized(FeatureType.TransferConnectionRequests))
+{
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <h1 class="heading-xlarge">Transfers</h1>
+            <p>Employers who pay the apprenticeship levy can transfer up to 10% of their previous year’s levy to other employers with an apprenticeship service account.</p>
+            <p>Employers who want to transfer funds must first connect with a receiving employer through the apprenticeship service. Once a connection is made, a receiving employer can request transfer funds from a sending employer.</p>
+            <p>Before getting started, make sure you understand the <a href="">rules for sending and receiving transfers</a>.</p>
+        </div>
     </div>
-</div>
-@Html.Action("TransferAllowance")
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <a class="button" href="@Url.Action("Index", "TransferConnectionInvitations")">Connect with employer</a>
+    @Html.Action("TransferAllowance")
+    @Html.Action("TransferConnectionInvitationAuthorization")
+    @Html.Action("TransferConnectionInvitations")
+    @Html.Action("TransferRequests")
+}
+else
+{
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <h1 class="heading-xlarge">Transfers</h1>
+        </div>
     </div>
-</div>
-@Html.Action("TransferConnectionInvitations")
-@Html.Action("TransferRequests")
+    @Html.Action("TransferAllowance")
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <p><a href="@Url.ProjectionsAction("forecasting/estimations/start-transfer")">Estimate</a> the number of apprentices you can fund with your transfer allowance.</p>
+            <p>Employers who pay the apprenticeship levy will soon be able to connect with other employers and transfer up to 10% of their previous year's annual funds.</p>
+            <p>Before connecting to another employer, both employers will need to:</p>
+            <ul class="list list-bullet">
+                <li>read and understand the <a href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">rules for sending and receiving transfers</a></li>
+                <li>sign the updated ESFA organisation agreement once it's available. View <a href="https://www.gov.uk/government/publications/apprenticeship-funding-legal-agreement-to-enable-spending/guidance-note-on-the-employer-agreement">guidance on the updated agreement</a> to find out what's changed.</li>
+            </ul>
+        </div>
+    </div>
+}
 
 @section breadcrumb {
     <div class="breadcrumbs">

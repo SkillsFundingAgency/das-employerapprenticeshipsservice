@@ -167,7 +167,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             switch (model.Choice)
             {
                 case "GoToApprenticesPage":
-                    return Redirect(Url.EmployerCommitmentsAction("apprentices/home"));
+                    return Redirect(Url.CommitmentsAction("apprentices/home"));
                 case "GoToHomepage":
                     return RedirectToAction("Index", "EmployerTeam");
                 default:
