@@ -13,27 +13,30 @@ namespace SFA.DAS.EAS.Application.Mappings
     {
         public EmploymentAgreementStatusMappings()
         {
-            CreateMap<GetAccountEmployerAgreementsQueryHandlerProjection, EmployerAgreementStatusDto>();
-
             CreateMap<EmployerAgreement, SignedEmployerAgreementDetailsDto>()
+                .ForMember(ead => ead.HashedAgreementId, o => o.Ignore())
                 .ForMember(ead => ead.PartialViewName, conf => conf.MapFrom(ol => ol.Template.PartialViewName))
                 .ForMember(ead => ead.TemplateId, conf => conf.MapFrom(ol => ol.Template.Id))
                 .ForMember(ead => ead.VersionNumber, conf => conf.MapFrom(ol => ol.Template.VersionNumber));
 
             CreateMap<LegalEntity, LegalEntityDto>();
 
-            CreateMap<EmployerAgreement, PendingEmployerAgreementDetailsDto>().ForMember(ead => ead.PartialViewName, conf => conf.MapFrom(ol => ol.Template.PartialViewName))
+            CreateMap<EmployerAgreement, PendingEmployerAgreementDetailsDto>()
+                .ForMember(ead => ead.HashedAgreementId, o => o.Ignore())
+                .ForMember(ead => ead.PartialViewName, conf => conf.MapFrom(ol => ol.Template.PartialViewName))
                 .ForMember(ead => ead.TemplateId, conf => conf.MapFrom(ol => ol.Template.Id))
                 .ForMember(ead => ead.VersionNumber, conf => conf.MapFrom(ol => ol.Template.VersionNumber));
 
             CreateMap<IGrouping<LegalEntity, EmployerAgreement>, EmployerAgreementStatusDto>()
                 .ForMember(d => d.LegalEntity, o => o.MapFrom(g => g.Key))
-                .ForMember(d => d.Pending, o => o.MapFrom(g => g
-                    .OrderByDescending(a => a.Template.VersionNumber)
-                    .FirstOrDefault(a => a.StatusId == EmployerAgreementStatus.Pending)))
+                .ForMember(d => d.AccountId, o => o.Ignore())
+                .ForMember(d => d.HashedAccountId, o => o.Ignore())
                 .ForMember(d => d.Signed, o => o.MapFrom(g => g
                     .OrderByDescending(a => a.Template.VersionNumber)
-                    .FirstOrDefault(a => a.StatusId == EmployerAgreementStatus.Signed)));
+                    .FirstOrDefault(a => a.StatusId == EmployerAgreementStatus.Signed)))
+                .ForMember(d => d.Pending, o => o.MapFrom(g => g
+                    .OrderByDescending(a => a.Template.VersionNumber)
+                    .FirstOrDefault(a => a.StatusId == EmployerAgreementStatus.Pending)));
         }
     }
 }
