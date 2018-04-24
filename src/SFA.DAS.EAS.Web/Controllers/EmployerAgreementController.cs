@@ -9,11 +9,16 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.Authorization;
-using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -23,16 +28,16 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly EmployerAgreementOrchestrator _orchestrator;
 
-        public EmployerAgreementController(IAuthenticationService owinWrapper, EmployerAgreementOrchestrator orchestrator, 
-            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService, 
-            ICookieStorageService<FlashMessageViewModel> flashMessage) 
+        public EmployerAgreementController(IAuthenticationService owinWrapper, EmployerAgreementOrchestrator orchestrator,
+            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService,
+            ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));
             if (orchestrator == null)
                 throw new ArgumentNullException(nameof(orchestrator));
-          
+
             _orchestrator = orchestrator;
         }
 
@@ -43,7 +48,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
-            if (flashMessage!=null)
+            if (flashMessage != null)
             {
                 model.FlashMessage = flashMessage;
             }
@@ -63,11 +68,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-		[Route("agreements/{agreementId}/view")]
+        [Route("agreements/{agreementId}/view")]
         public async Task<ActionResult> View(string agreementId, string hashedAccountId, FlashMessageViewModel flashMessage)
         {
             var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
-            
+
             return View(agreement);
         }
 
@@ -141,7 +146,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return result;
             }
 
-            
+
             agreement.Exception = response.Exception;
             agreement.Status = response.Status;
 
@@ -158,7 +163,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel>
             {
-                FlashMessage = GetFlashMessageViewModelFromCookie(), Data = new EmployerAgreementNextStepsViewModel { UserShownWizard = userShownWizard}
+                FlashMessage = GetFlashMessageViewModelFromCookie(),
+                Data = new EmployerAgreementNextStepsViewModel { UserShownWizard = userShownWizard }
             };
 
             return View(model);
@@ -178,7 +184,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 case 1: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName);
                 case 2: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAccountTransactionsControllerName);
                 case 3: return RedirectToAction(ControllerConstants.InformActionName, ControllerConstants.EmployerCommitmentsControllerName);
-                case 4: return RedirectToAction(ControllerConstants.IndexActionName,   ControllerConstants.EmployerTeamControllerName);
+                case 4: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
                 default:
                     var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel>
                     {
@@ -198,7 +204,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
         {
 
-            var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId,agreementId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId, agreementId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             if (stream.Data.PdfStream == null)
             {
@@ -214,7 +220,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
         {
 
-            var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId,agreementId,OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId, agreementId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             if (stream.Data.PdfStream == null)
             {
@@ -266,7 +272,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (response.Status == HttpStatusCode.BadRequest)
             {
                 AddFlashMessageToCookie(response.FlashMessage);
-                return RedirectToAction(ControllerConstants.ConfirmRemoveOrganisationActionName, new {hashedAccountId, agreementId});
+                return RedirectToAction(ControllerConstants.ConfirmRemoveOrganisationActionName, new { hashedAccountId, agreementId });
             }
 
             return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
