@@ -2,8 +2,9 @@
 using System.Web.Http.Controllers;
 using System.Web.Http.ModelBinding;
 using System.Web.Http.ValueProviders;
-using SFA.DAS.EAS.Account.Api.Authorization;
 using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using WebApi.StructureMap;
 
 namespace SFA.DAS.EAS.Account.Api.Binders

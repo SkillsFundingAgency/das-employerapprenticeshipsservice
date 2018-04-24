@@ -1,11 +1,12 @@
 ﻿using Moq;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.TestCommon.MockPolicy;
-using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging.Interfaces;
 using StructureMap;
@@ -33,6 +34,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
                 c.Policies.Add(new ConfigurationPolicy<AuditApiClientConfiguration>(AuditApiClientConfigurationName));
                 c.Policies.Add<CurrentDatePolicy>();
                 c.Policies.Add(new MockMessagePublisherPolicy(messagePublisher));
+                c.AddRegistry<CachesRegistry>();
                 c.AddRegistry(new DefaultRegistry(owinWrapper, cookieService, eventsApi, commitmentApi));
             });
         }
@@ -51,6 +53,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
                 c.Policies.Add(new ConfigurationPolicy<AuditApiClientConfiguration>(AuditApiClientConfigurationName));
                 c.Policies.Add<CurrentDatePolicy>();
                 c.Policies.Add(new MockMessagePublisherPolicy(messagePublisher));
+                c.AddRegistry<CachesRegistry>();
                 c.AddRegistry(new DefaultRegistry(owinWrapper, cookieService, eventsApi, commitmentApi));
             });
 

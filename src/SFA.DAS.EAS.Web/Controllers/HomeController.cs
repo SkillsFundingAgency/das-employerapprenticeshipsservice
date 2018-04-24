@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
+using IAuthenticationService = SFA.DAS.EAS.Infrastructure.Authentication.IAuthenticationService;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -19,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
         public HomeController(IAuthenticationService owinWrapper, HomeOrchestrator homeOrchestrator,
-            EmployerApprenticeshipsServiceConfiguration configuration, IFeatureToggleService featureToggle, 
+            EmployerApprenticeshipsServiceConfiguration configuration, IAuthorizationService authorization, 
             IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
@@ -210,8 +212,15 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("signOut")]
         public ActionResult SignOut()
         {
-            return OwinWrapper.SignOutUser();
-        }
+            OwinWrapper.SignOutUser();
+
+            var owinContext = HttpContext.GetOwinContext();
+            var authenticationManager = owinContext.Authentication;
+            var idToken = authenticationManager.User.FindFirst("id_token")?.Value;
+            var constants = new Constants(_configuration.Identity);
+
+            return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken, owinContext.Request.Uri.Scheme, owinContext.Request.Uri.Authority));
+         }
 
         [HttpGet]
         [Route("privacy")]

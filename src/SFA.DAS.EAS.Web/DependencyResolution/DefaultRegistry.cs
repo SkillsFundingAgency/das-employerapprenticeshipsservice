@@ -10,14 +10,17 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 {
     public class DefaultRegistry : Registry
     {
+        private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
+        private const string ServiceNamespace = "SFA.DAS";
+
         public DefaultRegistry()
         {
             Scan(s =>
             {
-                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
+                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
-            
+
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));

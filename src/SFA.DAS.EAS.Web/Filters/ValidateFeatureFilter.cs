@@ -1,32 +1,34 @@
 ﻿using System;
+using System.Net;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Authorization;
-using SFA.DAS.EAS.Web.Helpers;
+using SFA.DAS.EAS.Infrastructure.Authorization;
+using SFA.DAS.EAS.Infrastructure.Features;
+using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Filters
 {
     public class ValidateFeatureFilter : ActionFilterAttribute
     {
-        private readonly Func<IFeatureToggleService> _featureToggleService;
         private readonly Func<IAuthorizationService> _authorizationService;
 
-        public ValidateFeatureFilter(Func<IFeatureToggleService> featureToggleService, Func<IAuthorizationService> authorizationService)
+        public ValidateFeatureFilter(Func<IAuthorizationService> authorizationService)
         {
-            _featureToggleService = featureToggleService;
             _authorizationService = authorizationService;
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var controllerName = filterContext.RouteData.Values[ControllerConstants.ControllerKeyName].ToString();
-            var actionName = filterContext.RouteData.Values[ControllerConstants.ActionKeyName].ToString();
-            var authorizationContext = _authorizationService().GetAuthorizationContext();
-            var isFeatureEnabled = _featureToggleService().IsFeatureEnabled(controllerName, actionName, authorizationContext);
+            var featureAttribute = filterContext.ActionDescriptor.GetCustomAttribute<FeatureAttribute>();
 
-            if (!isFeatureEnabled)
+            if (featureAttribute != null)
             {
-                filterContext.Result = new ViewResult { ViewName = ControllerConstants.FeatureNotEnabledViewName };
+                var featureType = featureAttribute.FeatureType;
+                var isAuthorized = _authorizationService().IsAuthorized(featureType);
+
+                if (!isAuthorized)
+                {
+                    filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
             }
         }
     }

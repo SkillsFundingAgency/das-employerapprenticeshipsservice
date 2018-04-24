@@ -22,17 +22,24 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly IHttpClientWrapper _httpClientWrapper;
         private readonly ITokenServiceApiClient _tokenServiceApiClient;
         private readonly ExecutionPolicy _executionPolicy;
-        private readonly ICacheProvider _cacheProvider;
+        private readonly IInProcessCache _inProcessCache;
         private readonly IAzureAdAuthenticationService _azureAdAuthenticationService;
 
 
-        public HmrcService(EmployerApprenticeshipsServiceConfiguration configuration, IHttpClientWrapper httpClientWrapper, ITokenServiceApiClient tokenServiceApiClient, [RequiredPolicy(HmrcExecutionPolicy.Name)] ExecutionPolicy executionPolicy, ICacheProvider cacheProvider, IAzureAdAuthenticationService azureAdAuthenticationService)
+        public HmrcService(
+            EmployerApprenticeshipsServiceConfiguration configuration, 
+            IHttpClientWrapper httpClientWrapper, 
+            ITokenServiceApiClient tokenServiceApiClient, 
+            [RequiredPolicy(HmrcExecutionPolicy.Name)]
+            ExecutionPolicy executionPolicy,
+            IInProcessCache inProcessCache, 
+            IAzureAdAuthenticationService azureAdAuthenticationService)
         {
             _configuration = configuration;
             _httpClientWrapper = httpClientWrapper;
             _tokenServiceApiClient = tokenServiceApiClient;
             _executionPolicy = executionPolicy;
-            _cacheProvider = cacheProvider;
+            _inProcessCache = inProcessCache;
             _azureAdAuthenticationService = azureAdAuthenticationService;
 
             _httpClientWrapper.BaseUrl = _configuration.Hmrc.BaseUrl;
@@ -151,7 +158,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<DateTime> GetLastEnglishFractionUpdate()
         {
-            var hmrcLatestUpdateDate = _cacheProvider.Get<DateTime?>("HmrcFractionLastCalculatedDate");
+            var hmrcLatestUpdateDate = _inProcessCache.Get<DateTime?>("HmrcFractionLastCalculatedDate");
             if (hmrcLatestUpdateDate == null)
             {
                 return await _executionPolicy.ExecuteAsync(async () =>
@@ -163,7 +170,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                     if (hmrcLatestUpdateDate != null)
                     {
-                        _cacheProvider.Set("HmrcFractionLastCalculatedDate", hmrcLatestUpdateDate.Value,new TimeSpan(0,0,30,0));
+                        _inProcessCache.Set("HmrcFractionLastCalculatedDate", hmrcLatestUpdateDate.Value,new TimeSpan(0,0,30,0));
                     }
 
                     return hmrcLatestUpdateDate.Value;

@@ -3,6 +3,8 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.ViewModels;
 using Microsoft.Azure;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Helpers;
 
 namespace SFA.DAS.EAS.Web.Controllers
@@ -12,7 +14,7 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class EmployerCommitmentsController : BaseController
     {
         public EmployerCommitmentsController(IAuthenticationService owinWrapper,
-            IFeatureToggleService featureToggle, IMultiVariantTestingService multiVariantTestingService,
+            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {

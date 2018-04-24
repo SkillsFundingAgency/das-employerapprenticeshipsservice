@@ -1,120 +1,111 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StructureMapDependencyScope.cs" company="Web Advanced">
-// Copyright 2012 Web Advanced (www.webadvanced.com)
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.Practices.ServiceLocation;
+using NLog;
 using StructureMap;
 
-namespace SFA.DAS.EAS.Web.DependencyResolution {
-    /// <summary>
-    /// The structure map dependency scope.
-    /// </summary>
-    public class StructureMapDependencyScope : ServiceLocatorImplBase {
-        #region Constants and Fields
-
-        private const string NestedContainerKey = "Nested.Container.Key";
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        public StructureMapDependencyScope(IContainer container) {
-            if (container == null) {
-                throw new ArgumentNullException("container");
-            }
-            Container = container;
-        }
-
-        #endregion
-
-        #region Public Properties
-
+namespace SFA.DAS.EAS.Web.DependencyResolution
+{
+    public class StructureMapDependencyScope : ServiceLocatorImplBase
+    {
         public IContainer Container { get; set; }
 
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private const string NestedContainerKey = "Nested.Container.Key";
+
         public IContainer CurrentNestedContainer {
-            get {
+            get
+            {
                 return (IContainer)HttpContext.Items[NestedContainerKey];
             }
-            set {
+
+            set
+            {
                 HttpContext.Items[NestedContainerKey] = value;
             }
         }
 
-        #endregion
-
-        #region Properties
-
-        private HttpContextBase HttpContext {
-            get {
+        private HttpContextBase HttpContext
+        {
+            get
+            {
                 var ctx = Container.TryGetInstance<HttpContextBase>();
                 return ctx ?? new HttpContextWrapper(System.Web.HttpContext.Current);
             }
         }
 
-        #endregion
+        public StructureMapDependencyScope(IContainer container)
+        {
+            if (container == null)
+            {
+                throw new ArgumentNullException("container");
+            }
 
-        #region Public Methods and Operators
+            Container = container;
+        }
 
-        public void CreateNestedContainer() {
-            if (CurrentNestedContainer != null) {
+        public void CreateNestedContainer()
+        {
+            if (CurrentNestedContainer != null)
+            {
                 return;
             }
+
             CurrentNestedContainer = Container.GetNestedContainer();
         }
 
-        public void Dispose() {
+        public void Dispose()
+        {
             DisposeNestedContainer();
             Container.Dispose();
         }
 
-        public void DisposeNestedContainer() {
-            if (CurrentNestedContainer != null) {
+        public void DisposeNestedContainer()
+        {
+            if (CurrentNestedContainer != null)
+            {
                 CurrentNestedContainer.Dispose();
 				CurrentNestedContainer = null;
             }
         }
 
-        public IEnumerable<object> GetServices(Type serviceType) {
+        public IEnumerable<object> GetServices(Type serviceType)
+        {
             return DoGetAllInstances(serviceType);
         }
 
-        #endregion
+        protected override IEnumerable<object> DoGetAllInstances(Type serviceType)
+        {
+            Logger.Trace($"Getting all instances of type '{serviceType.Name}' from container");
 
-        #region Methods
-
-        protected override IEnumerable<object> DoGetAllInstances(Type serviceType) {
             return (CurrentNestedContainer ?? Container).GetAllInstances(serviceType).Cast<object>();
         }
 
-        protected override object DoGetInstance(Type serviceType, string key) {
-            IContainer container = (CurrentNestedContainer ?? Container);
+        protected override object DoGetInstance(Type serviceType, string key)
+        {
+            Logger.Trace($"Getting instance of type '{serviceType.Name}' from container");
 
-            if (string.IsNullOrEmpty(key)) {
-                return serviceType.IsAbstract || serviceType.IsInterface
-                    ? container.TryGetInstance(serviceType)
-                    : container.GetInstance(serviceType);
+            try
+            {
+                IContainer container = (CurrentNestedContainer ?? Container);
+
+                if (string.IsNullOrEmpty(key))
+                {
+                    return serviceType.IsAbstract || serviceType.IsInterface
+                        ? container.TryGetInstance(serviceType)
+                        : container.GetInstance(serviceType);
+                }
+
+                return container.GetInstance(serviceType, key);
             }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
 
-            return container.GetInstance(serviceType, key);
+                throw;
+            }
         }
-
-        #endregion
     }
 }

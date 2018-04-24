@@ -8,9 +8,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public AuditRegistry()
         {
-            var environmentName = ConfigurationHelper.GetEnvironmentName();
-
-            if (environmentName == "LOCAL")
+            if (ConfigurationHelper.IsAnyOf(Environment.Local))
             {
                 For<IAuditApiClient>().Use<StubAuditApiClient>();
             }

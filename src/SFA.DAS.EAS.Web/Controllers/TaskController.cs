@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -21,7 +23,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public TaskController(
             IAuthenticationService owinWrapper, 
             TaskOrchestrator taskOrchestrator,
-            IFeatureToggleService featureToggle, 
+            IAuthorizationService authorization, 
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage, 
             ILog logger) : base(owinWrapper, multiVariantTestingService, flashMessage)

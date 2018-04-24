@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.Activities.Client
 @using SFA.DAS.EAS.Domain.Models.Account
+@using SFA.DAS.EAS.Domain.Models.Features
 @using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.Helpers
@@ -26,10 +27,10 @@
 }
 else
 {
-<h1 class="heading-xlarge heading-dashboard" id="company-Name">
-    @Model.Data.Account.Name
-    <span class="heading-secondary">Account ID: @Model.Data.Account.PublicHashedId</span>
-</h1>
+    <h1 class="heading-xlarge heading-dashboard" id="company-Name">
+        @Model.Data.Account.Name
+        <span class="heading-secondary">Account ID: @Model.Data.Account.PublicHashedId</span>
+    </h1>
     <div class="grid-row page-dashboard">
         <div class="column-two-thirds">
             <div class="grid-row">
@@ -42,7 +43,6 @@ else
                         <a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a>
                     </h2>
                     <p>Add your organisations that will make contracts with training providers.</p>
-
                     <h2 class="heading-medium">
                         <a href="@Url.EmployerCommitmentsAction("apprentices/home")">Apprentices</a>
                     </h2>
@@ -57,13 +57,11 @@ else
                         <a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a>
                     </h2>
                     <p>Add or remove <abbr title="Pay as your earn">PAYE</abbr> schemes.</p>
-
                     <h2 class="heading-medium">
                         <a href="https://findapprenticeshiptraining.sfa.bis.gov.uk/" target="_blank" rel="external">Find apprenticeship training</a>
                     </h2>
                     <p>Search for apprenticeships and see details of approved providers who can deliver the training.</p>
-
-                    @if (Html.IsFeatureEnabled("Recruit", "Index"))
+                    @if (Html.IsAuthorized(FeatureType.Recruitments))
                     {
                         <h2 class="heading-medium">
                             <a href="@Url.EmployerRecruitAction()">Apprenticeship recruitment</a>
@@ -87,7 +85,7 @@ else
                 <nav>
                     <ul class="js-tabs" role="tablist">
                         <li role="tab" id="tab-tasks" aria-controls="pane-tasks"><a href="#pane-tasks">Tasks</a></li>
-                        @if (Html.IsFeatureEnabled("Activities", "Latest"))
+                        @if (Html.IsAuthorized(FeatureType.Activities))
                         {
                             <li role="tab" id="tab-activity" aria-controls="pane-activity"><a href="#pane-activity">Activity</a></li>
                         }
@@ -108,7 +106,6 @@ else
                                         @switch (task.Type)
                                         {
                                             case "LevyDeclarationDue":
-
                                                 <p>
                                                     Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
                                                 </p>
@@ -171,7 +168,7 @@ else
                             <p>You do not have any tasks</p>
                         }
                     </div>
-                    @if (Html.IsFeatureEnabled("Activities", "Latest"))
+                    @if (Html.IsAuthorized(FeatureType.Activities))
                     {
                         <div class="js-tab-pane" id="pane-activity" role="tabpanel">
                             @Html.Action("Latest", "Activities")

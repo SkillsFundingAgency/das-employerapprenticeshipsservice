@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -21,7 +23,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
         public InvitationController(InvitationOrchestrator invitationOrchestrator, IAuthenticationService owinWrapper, 
-            IFeatureToggleService featureToggle, IMultiVariantTestingService multiVariantTestingService, 
+            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService, 
             EmployerApprenticeshipsServiceConfiguration configuration, 
             ICookieStorageService<FlashMessageViewModel> flashMessage) 
             : base(owinWrapper,multiVariantTestingService, flashMessage)
