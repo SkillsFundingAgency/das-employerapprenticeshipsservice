@@ -26,6 +26,14 @@ namespace SFA.DAS.EAS.Web.Extensions
             return isAuthorized;
         }
 
+        public static AuthorizationResult GetAuthorizationResult(this HtmlHelper htmlHelper, FeatureType featureType)
+        {
+            var authorisationService = DependencyResolver.Current.GetService<IAuthorizationService>();
+            var authorizationResult = authorisationService.GetAuthorizationResult(featureType);
+
+            return authorizationResult;
+        }
+
         public static bool IsValid<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
         {
             var partialFieldName = ExpressionHelper.GetExpressionText(expression);
