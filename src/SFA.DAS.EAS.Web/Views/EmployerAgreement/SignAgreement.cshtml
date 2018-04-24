@@ -9,6 +9,10 @@
     ViewBag.GaData.Vpv = "/accounts/agreements/sign-your-agreement/agreement-sign";
 }
 
+<div>
+    @Html.Partial(@Model.Data.EmployerAgreement.TemplatePartialViewName + "_changes")
+</div>
+
 <div class="grid-row" id="publication-banner">
     <div class="column-third">
         <div class="sfa-logo">
@@ -25,7 +29,7 @@
     </div>
 </div>
 
-@Html.Partial("_Agreement_v1")
+@Html.Partial(@Model.Data.EmployerAgreement.TemplatePartialViewName)
 
 <hr />
 
