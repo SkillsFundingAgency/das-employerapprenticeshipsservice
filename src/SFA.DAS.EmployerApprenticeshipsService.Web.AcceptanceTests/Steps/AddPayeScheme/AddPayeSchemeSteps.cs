@@ -22,7 +22,6 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
     public class AddPayeSchemeSteps
     {
         private static IContainer _container;
-        private static bool _newLegalEntity;
         private static int _exceptionCount;
         private static int _unauthorizedCount;
 
@@ -50,7 +49,6 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         {
             _exceptionCount = 0;
             _unauthorizedCount = 0;
-            _newLegalEntity = false;
         }
 
         [When(@"I remove a scheme")]
@@ -81,7 +79,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
                     _unauthorizedCount++;
                 }
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 _exceptionCount++;
             }
@@ -130,7 +128,6 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
 
-            _newLegalEntity = true;
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
 
             var confirmNewPayeScheme = new ConfirmNewPayeSchemeViewModel
@@ -148,7 +145,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
                     _exceptionCount++;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _exceptionCount++;
             }

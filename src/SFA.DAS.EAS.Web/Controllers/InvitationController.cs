@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         [Authorize]
         [Route("view")]
-        public async Task<ActionResult> View(string invitationId)
+        public async Task<ActionResult> Details(string invitationId)
         {
             if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
             {

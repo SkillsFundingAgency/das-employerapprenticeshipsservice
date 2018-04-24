@@ -1,3 +1,4 @@
+using System;
 using MediatR;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
 using SFA.DAS.EAS.Application.Exceptions;
@@ -73,7 +74,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             _logger.Info($"GetAccountPaymentIds for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
             var existingPaymentIds = await _dasLevyRepository.GetAccountPaymentIds(message.AccountId);
 
-            var newPayments = payments.Where(p => !existingPaymentIds.Any(x => x.ToString().Equals(p.Id))).ToArray();
+            var newPayments = payments.Where(p => !existingPaymentIds.Any(x => x.Equals(Guid.Parse(p.Id)))).ToArray();
 
             if (!newPayments.Any())
             {

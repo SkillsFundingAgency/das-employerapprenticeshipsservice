@@ -29,7 +29,9 @@ namespace SFA.DAS.EAS.Web
     public class MvcApplication : HttpApplication
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+#pragma warning disable 169
         private static readonly RedisTarget RedisTarget; // Required to ensure assembly is copied to output.
+#pragma warning restore 169
 
         protected void Application_Start()
         {

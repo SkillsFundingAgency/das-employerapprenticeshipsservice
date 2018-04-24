@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
@@ -47,21 +45,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return null;
         }
 
-        public async Task<User> GetUserByExternalId(Guid externalId)
+        public Task<User> GetUserByExternalId(Guid externalId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task Create(User registerUser)
+        public Task Create(User registerUser)
         {
             throw new NotImplementedException();
         }
-        public async Task Update(User user)
+        public Task Update(User user)
         {
             throw new NotImplementedException();
 
         }
-        public async Task Upsert(User user)
+        public Task Upsert(User user)
         {
             throw new NotImplementedException();
 

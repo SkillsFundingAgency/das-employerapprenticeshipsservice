@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTran
             throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetAccountLevyTransactionsQuery item)
+        public Task<ValidationResult> ValidateAsync(GetAccountLevyTransactionsQuery item)
         {
             var validationResult = new ValidationResult();
 
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTran
                 validationResult.AddError(nameof(item.ToDate), "To date has not been supplied");
             }
 
-            return validationResult;
+            return Task.FromResult(validationResult);
         }
     }
 }

@@ -27,7 +27,6 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.RemoveLegalEntity
         private static IContainer _container;
         private static Mock<IMessagePublisher> _messagePublisher;
         private static Mock<IAuthenticationService> _owinWrapper;
-        private string _hashedAccountId;
         private static Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private static Mock<IEventsApi> _eventsApi;
         private Mock<IEmployerCommitmentApi> _commitmentsApi;

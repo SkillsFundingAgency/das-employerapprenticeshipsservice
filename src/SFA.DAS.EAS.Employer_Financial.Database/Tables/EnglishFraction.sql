@@ -9,4 +9,4 @@
 
 GO
 
-CREATE INDEX [IX_EnglishFraction_Empref_DateCalculated] ON [employer_financial].[EnglishFraction] ([EmpRef], [DateCalculated]) WITH (ONLINE = ON)
+CREATE INDEX [IX_EnglishFraction_EmpRef_DateCalculated] ON [employer_financial].[EnglishFraction] ([EmpRef], [DateCalculated]) WITH (ONLINE = ON)

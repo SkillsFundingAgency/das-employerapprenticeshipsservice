@@ -3,7 +3,6 @@ using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -21,8 +20,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         private Mock<IFeatureToggleService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
-        private EmployerAccountData _accountData;
-        private OrchestratorResponse<EmployerAgreementViewModel> _response;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private const string HashedId = "ABC123";
 

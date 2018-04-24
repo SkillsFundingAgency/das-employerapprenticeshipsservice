@@ -73,8 +73,6 @@
     <Build Include="StoredProcedures\CreateAccount.sql" />
     <Build Include="Views\GetInvitations.sql" />
     <Build Include="Views\GetTeamMembers.sql" />
-    <Build Include="StoredProcedures\CreateNotification.sql" />
-    <Build Include="StoredProcedures\GetNotification.sql" />
     <Build Include="StoredProcedures\SeedDataForRoles.sql" />
     <Build Include="Views\MembershipView.sql" />
     <Build Include="StoredProcedures\AcceptInvitation.sql" />

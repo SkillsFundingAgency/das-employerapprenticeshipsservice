@@ -5,4 +5,4 @@ AS
 	
 	Update employer_account.Paye 
 	set Name = @RefName 
-	where ref=@Ref
+	where Ref=@Ref
