@@ -23,8 +23,8 @@ AS
 	-- Get total transfer allowance spent this year
 	SELECT @transferSpent = SUM(transfers.Amount) FROM [employer_financial].[AccountTransfers] transfers
 	CROSS JOIN employer_financial.GetPreviousFinancialYearDates(DEFAULT) as previousFinancialYear
-	WHERE transfers.TransferDate >= previousFinancialYear.YearEnd
-	AND transfers.SenderAccountId = @AccountId	
+	WHERE transfers.SenderAccountId = @AccountId	
+	AND transfers.TransferDate >= previousFinancialYear.YearEnd
 
 	-- Return the current available transfer allowance	
 	SELECT @transferAllowance - @transferSpent
