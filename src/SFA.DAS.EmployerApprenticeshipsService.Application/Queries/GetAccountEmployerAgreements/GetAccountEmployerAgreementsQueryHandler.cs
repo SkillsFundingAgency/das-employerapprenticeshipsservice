@@ -10,18 +10,12 @@ using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using SFA.DAS.EAS.Application.Dtos;
+using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 {
-    public static class HashingServiceExtensions
-    {
-        public static string HashIdIfNotNull(this IHashingService hashingService, long? id)
-        {
-            return id.HasValue ? hashingService.HashValue(id.Value) : null;
-        }
-    }
-
     public class GetAccountEmployerAgreementsQueryHandlerProjection
     {
         public LegalEntity LegalEntity { get; set; }
@@ -71,17 +65,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
                                  && (ag.StatusId == EmployerAgreementStatus.Signed ||
                                      ag.StatusId == EmployerAgreementStatus.Pending))
                     .GroupBy(grp => grp.LegalEntity)
-                    .Select(grp => new GetAccountEmployerAgreementsQueryHandlerProjection
-                    {
-                        LegalEntity = grp.Key,
-                        Signed = grp
-                            .OrderByDescending(ag => ag.Template.VersionNumber)
-                            .FirstOrDefault(ag => ag.StatusId == EmployerAgreementStatus.Signed),
-                        Pending = grp
-                            .OrderByDescending(ag => ag.Template.VersionNumber)
-                            .FirstOrDefault(ag => ag.StatusId == EmployerAgreementStatus.Pending),
-                    })
-                    .ProjectTo<EmployerAgreementStatusView>(_configurationProvider)
+                    .ProjectTo<EmployerAgreementStatusDto>(_configurationProvider)
                     .ToListAsync();
                                                     
             foreach (var agreement in agreements)
@@ -91,7 +75,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 
                 if (agreement.HasSignedAgreement)
                 {
-                    agreement.Signed.HashedAgreementId = _hashingService.HashIdIfNotNull(agreement.Signed.Id);
+                    agreement.Signed.HashedAgreementId = _hashingService.HashValue(agreement.Signed.Id);
                 }
 
                 if (agreement.HasPendingAgreement)
@@ -102,8 +86,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
                     }
                     else
                     {
-                        agreement.Pending.HashedAgreementId =
-                            _hashingService.HashIdIfNotNull(agreement.Pending.Id);
+                        agreement.Pending.HashedAgreementId = _hashingService.HashValue(agreement.Pending.Id);
                     }
                 }
             }

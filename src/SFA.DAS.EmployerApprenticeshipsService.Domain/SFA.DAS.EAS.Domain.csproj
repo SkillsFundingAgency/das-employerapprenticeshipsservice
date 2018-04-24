@@ -248,7 +248,6 @@
     <Compile Include="Models\Commitment\Commitment.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementStatus.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementTemplate.cs" />
-    <Compile Include="Models\EmployerAgreement\EmployerAgreementStatusView.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementView.cs" />
     <Compile Include="Models\EmployerAgreement\RemoveEmployerAgreementView.cs" />
     <Compile Include="Models\EmployerAgreement\SignEmployerAgreement.cs" />

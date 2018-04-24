@@ -282,6 +282,11 @@
     <Compile Include="DependencyResolution\ServicesRegistry.cs" />
     <Compile Include="DependencyResolution\TasksRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
+    <Compile Include="Dtos\EmployerAgreement\EmployerAgreementDetails.cs" />
+    <Compile Include="Dtos\EmployerAgreement\EmployerAgreementStatusDto.cs" />
+    <Compile Include="Dtos\EmployerAgreement\PendingEmployerAgreementDetailsDto.cs" />
+    <Compile Include="Dtos\EmployerAgreement\SignedEmployerAgreementDetailsDto.cs" />
+    <Compile Include="Dtos\LegalEntityDto.cs" />
     <Compile Include="Dtos\TransferRequestDto.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\EmploymentAgreementStatusMappings.cs" />
