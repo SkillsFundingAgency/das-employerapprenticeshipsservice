@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Dtos;
+using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
@@ -150,22 +152,22 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
                             {
                                 EmployerAgreementsData = new GetAccountEmployerAgreementsResponse
                                 {
-                                    EmployerAgreements = new List<EmployerAgreementStatusView>
+                                    EmployerAgreements = new List<EmployerAgreementStatusDto>
                                     {
-                                        new EmployerAgreementStatusView
+                                        new EmployerAgreementStatusDto
                                         {
-                                            Pending = new PendingEmployerAgreementDetails
+                                            Pending = new PendingEmployerAgreementDetailsDto
                                             {
                                                 HashedAgreementId = fixtures.HashedAgreementId,
                                                 Id = 123
                                             }
                                         },
-                                        new EmployerAgreementStatusView
+                                        new EmployerAgreementStatusDto
                                         {
-                                            Signed = new SignedEmployerAgreementDetails
+                                            Signed = new SignedEmployerAgreementDetailsDto
                                             {
                                                 HashedAgreementId = "JH4545",
-                                                Id = null
+                                                Id = 456
                                             }
                                         }
                                     }
@@ -197,18 +199,18 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
                                 EmployerAgreementsData =
                                     new GetAccountEmployerAgreementsResponse
                                     {
-                                        EmployerAgreements = new List<EmployerAgreementStatusView>
+                                        EmployerAgreements = new List<EmployerAgreementStatusDto>
                                         {
-                                            new EmployerAgreementStatusView
+                                            new EmployerAgreementStatusDto
                                             {
-                                                Pending = new PendingEmployerAgreementDetails
+                                                Pending = new PendingEmployerAgreementDetailsDto
                                                 {
                                                     HashedAgreementId = "GHJ356"
                                                 }
                                             },
-                                            new EmployerAgreementStatusView
+                                            new EmployerAgreementStatusDto
                                             {
-                                                Pending = new PendingEmployerAgreementDetails
+                                                Pending = new PendingEmployerAgreementDetailsDto
                                                 {
                                                     HashedAgreementId = "JH4545"
                                                 }
