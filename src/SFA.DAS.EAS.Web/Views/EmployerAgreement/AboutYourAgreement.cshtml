@@ -15,9 +15,9 @@
             About your agreement
         </h1>
 
-        <p>This agreement creates a legal contract between <b>@Model.Data.EmployerAgreement.LegalEntityName</b> and the <b>Education and Skills Funding Agency (ESFA)</b>. It allows ESFA to pay your training providers for apprenticeships.</p>
-        <p>You need to make sure you have authority from your organisation before you sign this agreement.</p>
-        
+        <p>This agreement creates a legal contract between <span class="bold">@Model.Data.EmployerAgreement.LegalEntityName</span> and the <span class="bold">Education and Skills Funding Agency (ESFA)</span>. It allows you to transfer funds to other employers and pay training providers for apprenticeships.</p> 
+        <p>You need to ensure you have the authority from your organisation before you sign this agreement.</p> 
+              
         <form method="get" action="@Url.Action("SignAgreement","EmployerAgreement")">
             @Html.AntiForgeryToken()
             <input class="button" type="submit" value="Continue to your agreement" />
