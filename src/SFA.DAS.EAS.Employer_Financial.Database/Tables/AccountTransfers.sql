@@ -15,6 +15,14 @@
 )
 GO
 
+CREATE INDEX [IX_AccountTransferSenderAccountId]
+ON [employer_financial].[AccountTransfers]([SenderAccountId] ASC)
+GO
+
+CREATE INDEX [IX_AccountTransferReceiverTransfers]
+ON [employer_financial].[AccountTransfers]([ReceiverAccountId] ASC, [PeriodEnd] ASC)
+GO
+
 CREATE UNIQUE INDEX [IX_PeriodEndAccountTransfer]
 ON [employer_financial].[AccountTransfers]([ApprenticeshipId] ASC, [PeriodEnd] ASC)
 GO
