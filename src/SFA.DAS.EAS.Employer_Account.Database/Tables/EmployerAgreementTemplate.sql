@@ -7,10 +7,6 @@
 )
 GO
 
-CREATE INDEX [IX_TemplateId]
-ON [employer_account].[EmployerAgreementTemplate] (Id ASC)
-GO
-
 CREATE UNIQUE INDEX [IX_VersionNumber]
 ON [employer_account].[EmployerAgreementTemplate] ([VersionNumber] DESC)
 GO
