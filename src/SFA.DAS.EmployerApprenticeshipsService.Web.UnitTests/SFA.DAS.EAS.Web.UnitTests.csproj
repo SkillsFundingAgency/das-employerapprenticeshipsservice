@@ -218,8 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ValidateMembershipAttributeTests\WhenIViewAPage.cs" />
-    <Compile Include="Authorization\AuthorizationServiceTests\WhenIGetAuthorizationContext.cs" />
-    <Compile Include="Authorization\AuthorizationServiceTests\WhenIValidateMembership.cs" />
+    <Compile Include="Authorization\AuthorizationServiceTests.cs" />
     <Compile Include="Binders\DefaultBinderTests\WhenIBindAViewModel.cs" />
     <Compile Include="Controllers\ActivitiesControllerTests\WhenIViewTheLatestActivitiesPage.cs" />
     <Compile Include="Controllers\ActivitiesControllerTests\WhenIViewTheActivitiesPage.cs" />
@@ -281,7 +280,7 @@
     <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransferRequestsComponent.cs" />
     <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransfersPage.cs" />
     <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransferConnectionInvitationsComponent.cs" />
-    <Compile Include="Filters\EnsureFeatureIsEnabledFilterTests\WhenIViewAPage.cs" />
+    <Compile Include="Filters\ValidateFeatureFilterTests\WhenIViewAPage.cs" />
     <Compile Include="Filters\UnitOfWorkManagerFilterTests\WhenIViewAPage.cs" />
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />

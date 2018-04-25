@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 
             if (string.IsNullOrEmpty(messageQueueConnectionString))
             {
-                var groupFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/EAS_Queues/";
+                var groupFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "/EAS_Queues/";
                 var factory = new FileSystemMessageSubscriberFactory(groupFolder);
 
                 instance.Dependencies.AddForConstructorParameter(subscriberFactory, factory);
@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 
         private static string GetEnvironmentName()
         {
-            var environment = Environment.GetEnvironmentVariable("DASENV");
+            var environment = System.Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
                 environment = CloudConfigurationManager.GetSetting("EnvironmentName");

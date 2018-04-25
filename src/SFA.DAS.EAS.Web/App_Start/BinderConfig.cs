@@ -1,5 +1,5 @@
 ﻿using System.Web.Mvc;
-using SFA.DAS.EAS.Web.Authorization;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Binders;
 
 namespace SFA.DAS.EAS.Web

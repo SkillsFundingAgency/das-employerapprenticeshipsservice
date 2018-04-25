@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -21,7 +23,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAgreementOrchestrator _orchestrator;
 
         public EmployerAgreementController(IAuthenticationService owinWrapper, EmployerAgreementOrchestrator orchestrator, 
-            IFeatureToggleService featureToggle, IMultiVariantTestingService multiVariantTestingService, 
+            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService, 
             ICookieStorageService<FlashMessageViewModel> flashMessage) 
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {

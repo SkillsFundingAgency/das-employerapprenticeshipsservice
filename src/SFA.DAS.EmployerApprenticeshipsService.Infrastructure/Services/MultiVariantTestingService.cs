@@ -10,26 +10,26 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class MultiVariantTestingService : AzureServiceBase<MultiVariantViewLookup>, IMultiVariantTestingService
     {
-        private readonly ICacheProvider _cacheProvider;
+        private readonly IInProcessCache _inProcessCache;
         public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.MultiVariantTesting";
         public sealed override ILog Logger { get; set; }
 
-        public MultiVariantTestingService(ICacheProvider cacheProvider, ILog logger)
+        public MultiVariantTestingService(IInProcessCache inProcessCache, ILog logger)
         {
-            _cacheProvider = cacheProvider;
+            _inProcessCache = inProcessCache;
             Logger = logger;
         }
 
         public MultiVariantViewLookup GetMultiVariantViews()
         {
-            var views = _cacheProvider.Get<MultiVariantViewLookup>(nameof(MultiVariantViewLookup));
+            var views = _inProcessCache.Get<MultiVariantViewLookup>(nameof(MultiVariantViewLookup));
 
             if (views == null)
             {
                 views = GetDataFromTableStorage();
                 if (views.Data != null && views.Data.Any())
                 {
-                    _cacheProvider.Set(nameof(MultiVariantViewLookup),views,new TimeSpan(0,30,0));
+                    _inProcessCache.Set(nameof(MultiVariantViewLookup),views,new TimeSpan(0,30,0));
                 }
             }
 

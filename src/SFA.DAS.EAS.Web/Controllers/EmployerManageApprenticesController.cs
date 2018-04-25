@@ -5,6 +5,8 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.ViewModels;
 using Microsoft.Azure;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Helpers;
 
 namespace SFA.DAS.EAS.Web.Controllers
@@ -16,7 +18,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public EmployerManageApprenticesController(
             IAuthenticationService owinWrapper,
-            IFeatureToggleService featureToggle,
+            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
                 : base(owinWrapper, multiVariantTestingService, flashMessage)
@@ -77,9 +79,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private RedirectResult RedirectPermanentCommitmentsUrl()
         {
-            var baseUrl = CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName).EndsWith("/")
-                ? CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName)
-                : CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName) + "/";
+            var baseUrl = CloudConfigurationManager.GetSetting(ControllerConstants.CommitmentsBaseUrlKeyName).EndsWith("/")
+                ? CloudConfigurationManager.GetSetting(ControllerConstants.CommitmentsBaseUrlKeyName)
+                : CloudConfigurationManager.GetSetting(ControllerConstants.CommitmentsBaseUrlKeyName) + "/";
 
             var path = Request.Url.AbsolutePath;
 

@@ -3,7 +3,7 @@
     public interface IAuthorizationContext
     {
         IAccountContext AccountContext { get; }
-        IUserContext UserContext { get; }
         IMembershipContext MembershipContext { get; }
+        IUserContext UserContext { get; }
     }
 }

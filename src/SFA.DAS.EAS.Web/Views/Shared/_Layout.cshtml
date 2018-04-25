@@ -1,5 +1,6 @@
 ﻿
 @using Microsoft.ApplicationInsights.Extensibility
+@using SFA.DAS.EAS.Domain.Models.Features
 @using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.Models
@@ -179,11 +180,11 @@
                     <ul role="menubar" id="global-nav-links">
                         <li><a href="@Url.Action("Index", "EmployerTeam")" class="@(ViewBag.Section == "home" ? "selected" : "")" role="menuitem">Home</a></li>
                         <li><a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
-                        @if (Html.IsFeatureEnabled("Recruit", "Index"))
+                        @if (Html.IsAuthorized(FeatureType.Recruitments))
                         {
-                            <li><a href="@Url.EmployerRecruitAction()" role="menuitem">Recruit</a></li>
+                            <li><a href="@Url.RecruitmentsAction()" role="menuitem">Recruit</a></li>
                         }
-                        <li><a href="@Url.EmployerCommitmentsAction("apprentices/home")" class="@(controllerString == "EmployerCommitments" ? "selected" : "")" role="menuitem">Apprentices</a></li>
+                        <li><a href="@Url.CommitmentsAction("apprentices/home")" class="@(controllerString == "EmployerCommitments" ? "selected" : "")" role="menuitem">Apprentices</a></li>
                         <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Your team</a></li>
                         <li><a href="@Url.Action("Index", "EmployerAgreement")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Your organisations and agreements</a></li>
                         <li><a href="@Url.Action("Index", "EmployerAccountPaye")" class="@(ViewBag.Section == "paye" ? "selected" : "")" role="menuitem">PAYE schemes</a></li>

@@ -4,6 +4,8 @@ using System.Web.Mvc;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
@@ -21,7 +23,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
         private readonly IMediator _mediator;
 
-        public EmployerAccountTransactionsController(IAuthenticationService owinWrapper, IFeatureToggleService featureToggle,
+        public EmployerAccountTransactionsController(IAuthenticationService owinWrapper, IAuthorizationService authorization,
             IHashingService hashingService,
             IMediator mediator,
             EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService,

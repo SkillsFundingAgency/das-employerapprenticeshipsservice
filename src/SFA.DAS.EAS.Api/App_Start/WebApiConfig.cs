@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Account.Api.DependencyResolution;
 using SFA.DAS.EAS.Account.Api.ExceptionLoggers;
 using SFA.DAS.EAS.Account.Api.Filters;
 using SFA.DAS.EAS.Application.DependencyResolution;
+using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using WebApi.StructureMap;
 
 namespace SFA.DAS.EAS.Account.Api
@@ -26,6 +27,7 @@ namespace SFA.DAS.EAS.Account.Api
             config.UseStructureMap(c =>
             {
                 c.AddRegistry<AuditRegistry>();
+                c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();

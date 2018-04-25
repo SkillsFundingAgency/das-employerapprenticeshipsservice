@@ -135,6 +135,7 @@
     <None Include="Scripts\PreDeployment\TransferConnectionInvitationDataMigration.sql" />
     <None Include="Scripts\PostDeployment\SeedDevData.sql" />
     <Build Include="Tables\TransferRequest.sql" />
+    <Build Include="StoredProcedures\GetLatestSignedAgreementVersionForAccount.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
