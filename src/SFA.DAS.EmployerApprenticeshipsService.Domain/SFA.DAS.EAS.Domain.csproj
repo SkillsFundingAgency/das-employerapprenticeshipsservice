@@ -192,8 +192,8 @@
     <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />
     <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
-    <Compile Include="Data\Entities\Account\AgreementTemplate.cs" />
-    <Compile Include="Data\Entities\Account\EmployerAgreement.cs" />
+    <Compile Include="Models\Account\AgreementTemplate.cs" />
+    <Compile Include="Models\Account\EmployerAgreement.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Data\IUnitOfWork.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
@@ -378,6 +378,7 @@
       <Name>SFA.DAS.EmployerAccounts.Events</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

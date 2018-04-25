@@ -232,7 +232,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
         }
     }
 
-    public class EmployerAgreementControllerTestFixtures
+    public class EmployerAgreementControllerTestFixtures : FluentTestFixture
     {
         public Mock<EmployerAgreementOrchestrator> Orchestrator;
         public Mock<IAuthenticationService> OwinWrapper;

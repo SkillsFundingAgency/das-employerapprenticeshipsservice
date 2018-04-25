@@ -290,7 +290,6 @@
     <Compile Include="Dtos\TransferRequestDto.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\EmploymentAgreementStatusMappings.cs" />
-    <Compile Include="Mappings\TransferRequestMappings.cs" />
     <Compile Include="Queries\Extensions\EmployerAgreementsStatusDtoExtensions.cs" />
     <Compile Include="Queries\Extensions\QueryExtensions.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQuery.cs" />
