@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using AutoMapper;
+using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Infrastructure.Authentication;
@@ -17,6 +15,10 @@ using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers
 {
@@ -126,13 +128,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
         public Task NextSteps_WhenIViewNextSteps_ThenShouldShowIfUserCanSeeWizardWhenSelectingIncorrectChoiceForNextSteps()
         {
             return RunAsync(
-                arrange: fixtures => {
+                arrange: fixtures =>
+                {
                     fixtures.OwinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(fixtures.UserId);
                     fixtures.Orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
                         .ReturnsAsync(true);
                 },
                 act: fixtures => fixtures.NextSteps(),
-                assert: (fixtures, actualResult) => {
+                assert: (fixtures, actualResult) =>
+                {
                     Assert.IsNotNull(actualResult);
                     Assert.IsTrue(actualResult.Data.UserShownWizard);
                     fixtures.Orchestrator.Verify(x => x.UserShownWizard(fixtures.UserId, fixtures.HashedAccountId), Times.Once);
@@ -176,7 +180,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
                         });
                 },
                 act: fixtures => fixtures.ViewUnsignedAgreements(),
-                assert: (fixtures, result) => {
+                assert: (fixtures, result) =>
+                {
                     fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
                     fixtures.Orchestrator.Verify(x => x.Get(fixtures.HashedAccountId, fixtures.UserId));
                     Assert.IsNotNull(result);
@@ -230,6 +235,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
                 }
             );
         }
+
+        [Test]
+        public Task ViewAgreementToSign_ShouldReturnAgreements()
+        {
+            return RunAsync(arrange: fixtures => fixtures.WithUnsignedEmployerAgreement(),
+                act: fixtures => fixtures.SignedAgreement(),
+                assert: fixtures =>
+                    Assert.AreEqual(fixtures.GetAgreementToSignViewModel, fixtures.ViewResult.Model));
+        }
     }
 
     public class EmployerAgreementControllerTestFixtures : FluentTestFixture
@@ -239,6 +253,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
         public Mock<IAuthorizationService> FeatureToggle;
         public Mock<IMultiVariantTestingService> UserViewTestingService;
         public Mock<ICookieStorageService<FlashMessageViewModel>> FlashMessage;
+        public Mock<IMediator> Mediator;
+        public Mock<IMapper> Mapper;
 
         public EmployerAgreementControllerTestFixtures()
         {
@@ -248,6 +264,21 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
             UserViewTestingService = new Mock<IMultiVariantTestingService>();
             FlashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             OwinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(Constants.UserId);
+            Mediator = new Mock<IMediator>();
+            Mapper = new Mock<IMapper>();
+
+            GetAgreementRequest = new GetEmployerAgreementRequest
+            {
+                ExternalUserId = UserId,
+                HashedAccountId = HashedAccountId,
+                HashedAgreementId = HashedAgreementId
+            };
+
+            GetAgreementToSignViewModel = new EmployerAgreementViewModel
+            {
+                EmployerAgreement = new EmployerAgreementView(),
+                PreviouslySignedEmployerAgreement = new EmployerAgreementView()
+            };
         }
 
         public static class Constants
@@ -261,14 +292,38 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
         public string UserId => EmployerAgreementControllerTestFixtures.Constants.UserId;
         public string HashedAgreementId => EmployerAgreementControllerTestFixtures.Constants.HashedAgreementId;
 
+        public GetEmployerAgreementRequest GetAgreementRequest { get; }
+
+        public EmployerAgreementViewModel GetAgreementToSignViewModel { get; }
+
+        public ViewResult ViewResult { get; set; }
+
+        public EmployerAgreementControllerTestFixtures WithUnsignedEmployerAgreement()
+        {
+            var response = new GetEmployerAgreementResponse
+            {
+                EmployerAgreement = new EmployerAgreementView()
+            };
+
+            Mediator.Setup(x => x.SendAsync(GetAgreementRequest))
+                    .ReturnsAsync(response);
+
+            Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(response))
+                .Returns(GetAgreementToSignViewModel);
+
+            return this;
+        }
+
         public EmployerAgreementController CreateController()
         {
             var controller = new EmployerAgreementController(
-                OwinWrapper.Object, 
-                Orchestrator.Object, 
-                FeatureToggle.Object, 
+                OwinWrapper.Object,
+                Orchestrator.Object,
+                FeatureToggle.Object,
                 UserViewTestingService.Object,
-                FlashMessage.Object);
+                FlashMessage.Object,
+                Mediator.Object,
+                Mapper.Object);
 
             return controller;
         }
@@ -290,7 +345,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
             var controller = CreateController();
             return controller.RemoveOrganisation(HashedAgreementId, HashedAccountId, new ConfirmLegalAgreementToRemoveViewModel
             {
-                
+
             });
         }
 
@@ -307,6 +362,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
             var controller = CreateController();
             var result = await controller.ViewUnsignedAgreements(HashedAccountId) as RedirectToRouteResult;
             return result;
+        }
+
+        public async Task<ViewResult> SignedAgreement()
+        {
+            var controller = CreateController();
+            ViewResult = await controller.SignAgreement(GetAgreementRequest) as ViewResult;
+            return ViewResult;
         }
     }
 }

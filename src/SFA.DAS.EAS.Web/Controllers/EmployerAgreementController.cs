@@ -1,12 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using System.Web.Routing;
-using HtmlTags.Reflection;
+﻿using AutoMapper;
+using MediatR;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Helpers;
@@ -14,7 +9,6 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using System;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -27,10 +21,16 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class EmployerAgreementController : BaseController
     {
         private readonly EmployerAgreementOrchestrator _orchestrator;
+        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public EmployerAgreementController(IAuthenticationService owinWrapper, EmployerAgreementOrchestrator orchestrator,
-            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
+        public EmployerAgreementController(IAuthenticationService owinWrapper,
+            EmployerAgreementOrchestrator orchestrator,
+            IAuthorizationService authorization,
+            IMultiVariantTestingService multiVariantTestingService,
+            ICookieStorageService<FlashMessageViewModel> flashMessage,
+            IMediator mediator,
+            IMapper mapper)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             if (owinWrapper == null)
@@ -39,11 +39,13 @@ namespace SFA.DAS.EAS.Web.Controllers
                 throw new ArgumentNullException(nameof(orchestrator));
 
             _orchestrator = orchestrator;
+            _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpGet]
         [Route("agreements")]
-        public async Task<ActionResult> Index(string hashedAccountId, bool agreementSigned=false)
+        public async Task<ActionResult> Index(string hashedAccountId, bool agreementSigned = false)
         {
             var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
@@ -103,11 +105,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements/{agreementId}/sign-your-agreement")]
-        public async Task<ActionResult> SignAgreement(string agreementId, string hashedAccountId)
+        public async Task<ActionResult> SignAgreement(GetEmployerAgreementRequest request)
         {
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var response = await _mediator.SendAsync(request);
+            var viewModel = _mapper.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(response);
 
-            return View(agreement);
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -115,42 +118,44 @@ namespace SFA.DAS.EAS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Sign(string agreementId, string hashedAccountId)
         {
-            var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, userInfo);
-            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow, agreement.Data.EmployerAgreement.LegalEntityName);
 
-            if (response.Status == HttpStatusCode.OK)
-            {
-                FlashMessageViewModel flashMessage = new FlashMessageViewModel
-                {
-                    Headline = "Agreement signed",
-                    Severity = FlashMessageSeverityLevel.Success
-                };
+            throw new NotImplementedException();
+            //var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            //var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, userInfo);
+            //var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow, agreement.Data.EmployerAgreement.LegalEntityName);
 
-                ActionResult result;
+            //if (response.Status == HttpStatusCode.OK)
+            //{
+            //    FlashMessageViewModel flashMessage = new FlashMessageViewModel
+            //    {
+            //        Headline = "Agreement signed",
+            //        Severity = FlashMessageSeverityLevel.Success
+            //    };
 
-                if (response.Data.HasFurtherPendingAgreements)
-                {
-                    flashMessage.Message =
-                        "You've successfully signed an organisation agreement. There are outstanding agreements to be signed. Review the list below to sign all remaining agreements.";
+            //    ActionResult result;
 
-                    result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId, agreementSigned = true });
-                }
-                else
-                {
-                    result = RedirectToAction(ControllerConstants.NextStepsActionName);
-                }
+            //    if (response.Data.HasFurtherPendingAgreements)
+            //    {
+            //        flashMessage.Message =
+            //            "You've successfully signed an organisation agreement. There are outstanding agreements to be signed. Review the list below to sign all remaining agreements.";
 
-                AddFlashMessageToCookie(flashMessage);
+            //        result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId, agreementSigned = true });
+            //    }
+            //    else
+            //    {
+            //        result = RedirectToAction(ControllerConstants.NextStepsActionName);
+            //    }
 
-                return result;
-            }
+            //    AddFlashMessageToCookie(flashMessage);
+
+            //    return result;
+            //}
 
 
-            agreement.Exception = response.Exception;
-            agreement.Status = response.Status;
+            //agreement.Exception = response.Exception;
+            //agreement.Status = response.Status;
 
-            return View(ControllerConstants.SignAgreementViewName, agreement);
+            //return View(ControllerConstants.SignAgreementViewName, agreement);
         }
 
         [HttpGet]
