@@ -1,6 +1,4 @@
-﻿using SFA.DAS.EAS.Domain.Data.Entities.Account;
-
-namespace SFA.DAS.EAS.Application.Dtos.EmployerAgreement
+﻿namespace SFA.DAS.EAS.Application.Dtos.EmployerAgreement
 {
     public class EmployerAgreementStatusDto
     {

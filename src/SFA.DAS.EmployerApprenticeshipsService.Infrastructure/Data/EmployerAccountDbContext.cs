@@ -15,11 +15,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     public class EmployerAccountDbContext : DbContext
     {
         public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<EmployerAgreement> Agreements { get; set; }
+        public virtual DbSet<AgreementTemplate> AgreementTemplates { get; set; }
         public virtual DbSet<Membership> Memberships { get; set; }
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<EmployerAgreement> Agreements { get; set; }
-        public virtual DbSet<AgreementTemplate> AgreementTemplates { get; set;}
         public Guid Id { get; set; }
 
         static EmployerAccountDbContext()

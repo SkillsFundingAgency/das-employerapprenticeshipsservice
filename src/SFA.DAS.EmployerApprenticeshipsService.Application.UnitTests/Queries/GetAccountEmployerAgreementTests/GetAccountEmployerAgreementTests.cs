@@ -10,7 +10,7 @@ using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.TestCommon;
 using EmployerAgreementStatus = SFA.DAS.EAS.Domain.Models.EmployerAgreement.EmployerAgreementStatus;
@@ -137,14 +137,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
         }
     }
 
-    public class GetAccountEmployerAgreementTestFixtures
+    public class GetAccountEmployerAgreementTestFixtures : FluentTestFixture
     {
         public GetAccountEmployerAgreementTestFixtures()
         {
             HashingServiceMock = new Mock<IHashingService>();
             EmployerAccountDbContextMock = new Mock<EmployerAccountDbContext>();
 
-            Accounts = new List<Domain.Data.Entities.Account.Account>();
+            Accounts = new List<Domain.Models.Account.Account>();
             AgreementTemplates = new List<AgreementTemplate>();
             EmployerAgreements = new List<EmployerAgreement>();
             LegalEntities = new List<LegalEntity>();
@@ -164,7 +164,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
         public Mock<EmployerAccountDbContext> EmployerAccountDbContextMock { get; set; }
         public EmployerAccountDbContext EmployerAccountDbContext => EmployerAccountDbContextMock.Object;
 
-        public List<Domain.Data.Entities.Account.Account> Accounts { get; }
+        public List<Domain.Models.Account.Account> Accounts { get; }
         public List<AgreementTemplate> AgreementTemplates { get; set; }
         public List<EmployerAgreement> EmployerAgreements { get; }
         public List<LegalEntity> LegalEntities { get; }
@@ -193,7 +193,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
 
         public GetAccountEmployerAgreementTestFixtures WithAccount(long accountId, string hashedId)
         {
-            Accounts.Add(new Domain.Data.Entities.Account.Account
+            Accounts.Add(new Domain.Models.Account.Account
             {
                 Id =  accountId,
             });
@@ -267,7 +267,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
 
         public GetAccountEmployerAgreementsQueryHandler CreateQueryHandler()
         {
-            DbSetStub<Domain.Data.Entities.Account.Account> accountsDbSet = new DbSetStub<Domain.Data.Entities.Account.Account>(Accounts);
+            DbSetStub<Domain.Models.Account.Account> accountsDbSet = new DbSetStub<Domain.Models.Account.Account>(Accounts);
             DbSetStub<EmployerAgreement> agreementsDbSet = new DbSetStub<EmployerAgreement>(EmployerAgreements);
             DbSetStub<LegalEntity> legalEntityDbSet = new DbSetStub<LegalEntity>(LegalEntities);
 
