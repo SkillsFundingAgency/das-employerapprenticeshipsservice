@@ -121,7 +121,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
-                RoleId = (int)Role.Owner,
+                Role = Role.Owner,
                 UserId = userId,
                 AccountId = ExpectedAccountId
             });
@@ -162,7 +162,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
-                RoleId = (int)Role.Owner,
+                Role = Role.Owner,
                 UserId = userId,
                 AccountId = ExpectedAccountId
             });

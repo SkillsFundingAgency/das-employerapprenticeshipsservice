@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
             {
                 AccountId = ExpectedAccountId,
                 UserId = 2,
-                RoleId = (int)Role.Owner,
+                Role = Role.Owner,
                 HashedAccountId = ExpectedHashedId
             };
             _userRepository = new Mock<IUserRepository>();

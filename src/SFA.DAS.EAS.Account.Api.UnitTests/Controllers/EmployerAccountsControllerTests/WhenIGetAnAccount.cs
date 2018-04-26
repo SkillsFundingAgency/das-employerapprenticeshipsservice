@@ -55,7 +55,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
 
             model?.Content.Should().NotBeNull();
             
-            model.Content.DasAccountId.Should().Be(hashedAccountId);
             model.Content.HashedAccountId.Should().Be(hashedAccountId);
             model.Content.AccountId.Should().Be(accountResponse.Account.AccountId);
             model.Content.DasAccountName.Should().Be(accountResponse.Account.Name);

@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
 
             var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
 
-            if (member == null || !member.RoleId.Equals((short)Role.Owner))
+            if (member == null || !member.Role.Equals(Role.Owner))
             {
                 validationResult.IsUnauthorized = true;
                 return validationResult;

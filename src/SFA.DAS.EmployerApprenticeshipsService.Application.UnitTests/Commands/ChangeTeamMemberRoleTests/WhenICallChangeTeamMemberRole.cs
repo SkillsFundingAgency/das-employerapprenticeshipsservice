@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 AccountId = ExpectedAccountId,
                 UserId = 1,
-                RoleId = (int)Role.Owner
+                Role = Role.Owner
             };
 
             _userMembership = new TeamMember
@@ -97,7 +97,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 AccountId = ExpectedAccountId,
                 UserId = 1,
-                RoleId = (int)Role.Viewer
+                Role = Role.Viewer
             };
 
             _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
@@ -123,7 +123,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 AccountId = ExpectedAccountId,
                 UserId = 1,
-                RoleId = (int)Role.Owner
+                Role = Role.Owner
             };
 
             _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
@@ -150,14 +150,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 AccountId = ExpectedAccountId,
                 UserId = 1,
-                RoleId = (int)Role.Owner
+                Role = Role.Owner
             };
 
             var userMembership = new TeamMember
             {
                 AccountId = callerMembership.AccountId,
                 Id = callerMembership.UserId,
-                Role = (Role)callerMembership.RoleId
+                Role = callerMembership.Role
             };
 
             _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
