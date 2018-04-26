@@ -36,7 +36,11 @@
                                 {
                                     if (Model.AccountId == transferRequest.SenderAccount.Id)
                                     {
-                                        <a href="@Url.CommitmentsAction($"transfers/{transferRequest.TransferRequestHashedId}")">Details</a>
+                                        <a href="@Url.CommitmentsAction($"sender/transfers/{transferRequest.TransferRequestHashedId}")">Details</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.CommitmentsAction($"receiver/transfers/{transferRequest.TransferRequestHashedId}")">Details</a>
                                     }
                                 }
                             </td>
