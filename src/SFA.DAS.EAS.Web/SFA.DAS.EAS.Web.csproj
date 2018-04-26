@@ -439,6 +439,7 @@
     <Compile Include="Extensions\RouteValueDictionaryExtensions.cs" />
     <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
     <Compile Include="Extensions\TransferConnectionInvitationDtoExtensions.cs" />
+    <Compile Include="Mappings\AgreementMappings.cs" />
     <Compile Include="Validation\SerializableModelStateDictionary.cs" />
     <Compile Include="Validation\SerializableModelState.cs" />
     <Compile Include="Extensions\SerializableModelStateDictionaryExtensions.cs" />
