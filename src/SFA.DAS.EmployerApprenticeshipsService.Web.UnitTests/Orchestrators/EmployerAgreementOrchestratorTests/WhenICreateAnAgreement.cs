@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -8,6 +7,8 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
@@ -24,9 +25,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
 
-            _configuration = new EmployerApprenticeshipsServiceConfiguration(); 
+            _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, _configuration);
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, Mock.Of<IMapper>(), _configuration);
         }
 
         [Test]
@@ -52,7 +53,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
                 {
                     Template = latestTemplate
                 });
-            
+
             //Act
             var response = await _orchestrator.Create(hashedId, userId, entityName, entityRef, entityAddress, incorporatedDate);
 
