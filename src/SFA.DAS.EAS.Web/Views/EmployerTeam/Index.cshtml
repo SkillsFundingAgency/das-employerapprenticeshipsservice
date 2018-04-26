@@ -19,6 +19,8 @@
     {
         ViewBag.PageID = $"page-employer-account-created-{Model.Data.EmployerAccountType}";
     }
+
+    var isTransfersFeatureAuthorized = Html.IsAuthorized(FeatureType.Transfers);
 }
 
 @if (Model.Data.ShowWizard)
@@ -122,9 +124,12 @@ else
                                                 </form>
                                                 break;
                                             case "AgreementToSign":
-                                                <p>
-                                                    @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")">View agreements</a>
-                                                </p>
+                                                if (isTransfersFeatureAuthorized)
+                                                {
+                                                    <p>
+                                                        @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")">View agreements</a>
+                                                    </p>
+                                                }
                                                 break;
                                             case "AddApprentices":
                                                 <p>
