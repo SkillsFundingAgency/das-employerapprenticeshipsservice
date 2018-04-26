@@ -13,9 +13,9 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
     public class WhenGettingAnEmployerAgreement : ApiClientTestBase
     {
         private string _uri;
-        private string _hashedAccountId;
-        private string _hashedlegalEntityId;
-        private string _hashedAgreementId;
+        private string _hashedAccountId = "AA";
+        private string _hashedlegalEntityId = "BB";
+        private string _hashedAgreementId = "CC";
 
         public override void HttpClientSetup()
         {

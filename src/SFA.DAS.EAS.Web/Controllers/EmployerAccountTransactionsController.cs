@@ -91,6 +91,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(ControllerConstants.LevyDeclarationDetailViewName, viewModel);
         }
 
+        [HttpNotFoundForNullModel]
         [Route("finance/provider/summary")]
         [Route("balance/provider/summary")]
         public async Task<ActionResult> ProviderPaymentSummary(string hashedAccountId, long ukprn, DateTime fromDate, DateTime toDate)
@@ -100,6 +101,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(ControllerConstants.ProviderPaymentSummaryViewName, viewModel);
         }
 
+        [HttpNotFoundForNullModel]
         [Route("finance/course/standard/summary")]
         [Route("balance/course/standard/summary")]
         public async Task<ActionResult> CourseStandardPaymentSummary(string hashedAccountId, long ukprn, string courseName,
@@ -108,6 +110,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return await CourseFrameworkPaymentSummary(hashedAccountId, ukprn, courseName, courseLevel, null, fromDate, toDate);
         }
 
+        [HttpNotFoundForNullModel]
         [Route("finance/course/framework/summary")]
         [Route("balance/course/framework/summary")]
         public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName, 

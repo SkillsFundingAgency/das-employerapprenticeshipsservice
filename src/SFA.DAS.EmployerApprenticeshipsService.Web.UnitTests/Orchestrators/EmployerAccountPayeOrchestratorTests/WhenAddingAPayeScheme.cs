@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         public async Task ThenIfTheSchemeExistsAConflictIsReturnedAndTheValuesAreCleared()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ThrowsAsync(new ConstraintException());
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ReturnsAsync(new GetHmrcEmployerInformationResponse{ Empref = "" });
             
             //Act
             var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel("1", "1", "", null);

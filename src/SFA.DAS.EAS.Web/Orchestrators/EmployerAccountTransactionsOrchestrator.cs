@@ -88,6 +88,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ExternalUserId = externalUserId,
                 });
 
+                if (data == null)
+                    return null;
+
                 var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.PathwayName, x.CourseStartDate });
 
                 var coursePaymentSummaries = courseGroups.Select(x =>
@@ -126,14 +129,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     }
                 };
             }
-            catch (NotFoundException e)
-            {
-                return new OrchestratorResponse<ProviderPaymentsSummaryViewModel>
-                {
-                    Status = HttpStatusCode.NotFound,
-                    Exception = e
-                };
-            }
             catch (InvalidRequestException e)
             {
                 return new OrchestratorResponse<ProviderPaymentsSummaryViewModel>
@@ -166,6 +161,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
+                if (data == null)
+                    return null;
+
                 var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.CourseStartDate });
 
                 var coursePaymentGroups = courseGroups.Select(x => new ApprenticeshipPaymentGroup
@@ -188,14 +186,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         SubTransactions = data.Transactions,
                         CoursePaymentGroups = coursePaymentGroups
                     }
-                };
-            }
-            catch (NotFoundException e)
-            {
-                return new OrchestratorResponse<PaymentTransactionViewModel>
-                {
-                    Status = HttpStatusCode.NotFound,
-                    Exception = e
                 };
             }
             catch (InvalidRequestException e)
@@ -334,6 +324,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
+                if (data == null)
+                    return null;
+
                 var apprenticePaymentGroups = data.Transactions.GroupBy(x => new { x.ApprenticeName, x.ApprenticeNINumber });
 
                 var paymentSummaries = apprenticePaymentGroups.Select(pg =>
@@ -366,14 +359,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         EmployerCoInvestmentTotal = apprenticePayments.Sum(p => p.EmployerCoInvestmentAmount),
                         ApprenticePayments = apprenticePayments
                     }
-                };
-            }
-            catch (NotFoundException e)
-            {
-                return new OrchestratorResponse<CoursePaymentDetailsViewModel>
-                {
-                    Status = HttpStatusCode.NotFound,
-                    Exception = e
                 };
             }
             catch (InvalidRequestException e)

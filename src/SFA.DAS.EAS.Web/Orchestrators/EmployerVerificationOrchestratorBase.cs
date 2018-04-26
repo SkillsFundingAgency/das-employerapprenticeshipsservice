@@ -96,25 +96,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<GetHmrcEmployerInformationResponse> GetHmrcEmployerInformation(string authToken, string email)
         {
-            var response = new GetHmrcEmployerInformationResponse();
-            try
+            return await Mediator.SendAsync(new GetHmrcEmployerInformationQuery
             {
-                response = await Mediator.SendAsync(new GetHmrcEmployerInformationQuery
-                {
-                    AuthToken = authToken
-                });
-            }
-            catch (ConstraintException)
-            {
-                response.Empref = "";
-            }
-            catch (NotFoundException)
-            {
-                response.Empref = "";
-                response.EmprefNotFound = true;
-            }
-            
-            return response;
+                AuthToken = authToken
+            });
         }
 
         public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCompanyDetails(SelectEmployerViewModel viewModel)

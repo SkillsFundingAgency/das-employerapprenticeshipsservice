@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments
 
             if (!transactions.Any())
             {
-                throw new NotFoundException("No transactions found.");
+                return null;
             }
 
             var firstTransaction = transactions.First();
