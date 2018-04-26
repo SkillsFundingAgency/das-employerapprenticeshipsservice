@@ -4,13 +4,12 @@ using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetApprovedTransferConnectionInvitation;
-using SFA.DAS.EAS.Application.Queries.GetLatestOutstandingTransferInvitation;
+using SFA.DAS.EAS.Application.Queries.GetLatestPendingReceivedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetReceivedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetRejectedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
-using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
-using SFA.DAS.EAS.Application.Queries.GetTransferConnectionRoles;
+using SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Infrastructure.Features;
 using SFA.DAS.EAS.Web.Attributes;
@@ -20,7 +19,7 @@ using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [Feature(FeatureType.Transfers)]
+    [Feature(FeatureType.TransferConnectionRequests)]
     [ValidateMembership]
     [RoutePrefix("accounts/{HashedAccountId}/transfers/connections/invitations")]
     public class TransferConnectionInvitationsController : Controller
@@ -35,12 +34,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [Route]
-        public async Task<ActionResult> Index(GetTransferConnectionRolesQuery query)
+        public ActionResult Index()
         {
-            var response = await _mediator.SendAsync(query);
-            var model = _mapper.Map<TransferConnectionRolesViewModel>(response);
-
-            return View(model);
+            return View();
         }
         
         [ImportModelStateFromTempData]
@@ -56,14 +52,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("start")]
         public async Task<ActionResult> Start(StartTransferConnectionInvitationViewModel model)
         {
-            await _mediator.SendAsync(model.GetTransferConnectionInvitationAccountQuery);
-            return RedirectToAction("Send", new { receiverAccountPublicHashedId = model.GetTransferConnectionInvitationAccountQuery.ReceiverAccountPublicHashedId });
+            await _mediator.SendAsync(model.SendTransferConnectionInvitationQuery);
+            return RedirectToAction("Send", new { receiverAccountPublicHashedId = model.SendTransferConnectionInvitationQuery.ReceiverAccountPublicHashedId });
         }
 
         [HttpNotFoundForNullModel]
         [ImportModelStateFromTempData]
         [Route("send")]
-        public async Task<ActionResult> Send(GetTransferConnectionInvitationAccountQuery query)
+        public async Task<ActionResult> Send(SendTransferConnectionInvitationQuery query)
         {
             var response = await _mediator.SendAsync(query);
             var model = _mapper.Map<SendTransferConnectionInvitationViewModel>(response);
@@ -259,18 +255,13 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("outstanding")]
-        public async Task<ActionResult> Outstanding(string hashedAccountId)
+        public async Task<ActionResult> Outstanding(GetLatestPendingReceivedTransferConnectionInvitationQuery query)
         {
-            var latestOutstandingTransferInvitation = 
-                await _mediator.SendAsync(new GetLatestOutstandingTransferInvitationQuery { ReceiverAccountHashedId = hashedAccountId });
+            var response = await _mediator.SendAsync(query);
 
-            if (latestOutstandingTransferInvitation.TransferConnectionInvitation != null)
-                return RedirectToAction("Receive", new
-                {
-                    transferConnectionInvitationId = latestOutstandingTransferInvitation.TransferConnectionInvitation.Id
-                });
-
-            return RedirectToAction("Index", "Transfers");
+            return response.TransferConnectionInvitation == null
+                ? RedirectToAction("Index", "Transfers")
+                : RedirectToAction("Receive", new { transferConnectionInvitationId = response.TransferConnectionInvitation.Id });
         }
     }
 }

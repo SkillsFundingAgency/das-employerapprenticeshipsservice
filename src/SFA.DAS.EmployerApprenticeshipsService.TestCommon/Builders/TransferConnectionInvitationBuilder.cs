@@ -1,6 +1,6 @@
 ﻿using System;
 using Moq;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 
 namespace SFA.DAS.EAS.TestCommon.Builders
@@ -12,12 +12,14 @@ namespace SFA.DAS.EAS.TestCommon.Builders
         public TransferConnectionInvitationBuilder WithCreatedDate(DateTime createdDate)
         {
             _transferConnectionInvitation.SetupProperty(i => i.CreatedDate, createdDate);
+
             return this;
         }
 
         public TransferConnectionInvitationBuilder WithId(int id)
         {
             _transferConnectionInvitation.SetupProperty(i => i.Id, id);
+
             return this;
         }
 
@@ -25,6 +27,7 @@ namespace SFA.DAS.EAS.TestCommon.Builders
         {
             _transferConnectionInvitation.SetupProperty(i => i.ReceiverAccount, receiverAccount);
             _transferConnectionInvitation.SetupProperty(i => i.ReceiverAccountId, receiverAccount.Id);
+
             return this;
         }
 
@@ -32,12 +35,14 @@ namespace SFA.DAS.EAS.TestCommon.Builders
         {
             _transferConnectionInvitation.SetupProperty(i => i.SenderAccount, senderAccount);
             _transferConnectionInvitation.SetupProperty(i => i.SenderAccountId, senderAccount.Id);
+
             return this;
         }
 
         public TransferConnectionInvitationBuilder WithStatus(TransferConnectionInvitationStatus status)
         {
             _transferConnectionInvitation.SetupProperty(i => i.Status, status);
+
             return this;
         }
 

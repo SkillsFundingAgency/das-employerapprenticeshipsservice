@@ -16,13 +16,13 @@
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
-            <div class="form-group @(Html.IsValid(m => m.GetTransferConnectionInvitationAccountQuery.ReceiverAccountPublicHashedId) ? "" : "error")">
-                <label for="@Html.IdFor(m => m.GetTransferConnectionInvitationAccountQuery.ReceiverAccountPublicHashedId)">
+            <div class="form-group @(Html.IsValid(m => m.SendTransferConnectionInvitationQuery.ReceiverAccountPublicHashedId) ? "" : "error")">
+                <label for="@Html.IdFor(m => m.SendTransferConnectionInvitationQuery.ReceiverAccountPublicHashedId)">
                     <span class="form-label-bold">Enter the employer's apprenticeship account ID</span>
                     <span class="form-hint">You need to request this directly from the employer. Account IDs can be found under the account name on the apprenticeship service homepage.</span>
-                    @Html.ValidationMessageFor(m => m.GetTransferConnectionInvitationAccountQuery.ReceiverAccountPublicHashedId)
+                    @Html.ValidationMessageFor(m => m.SendTransferConnectionInvitationQuery.ReceiverAccountPublicHashedId)
                 </label>
-                @Html.TextBoxFor(m => m.GetTransferConnectionInvitationAccountQuery.ReceiverAccountPublicHashedId, new { aria_required = true, @class = "form-control form-control-3-4" })
+                @Html.TextBoxFor(m => m.SendTransferConnectionInvitationQuery.ReceiverAccountPublicHashedId, new { aria_required = true, @class = "form-control form-control-3-4" })
             </div>
             <button class="button" type="submit">Continue</button>
         }

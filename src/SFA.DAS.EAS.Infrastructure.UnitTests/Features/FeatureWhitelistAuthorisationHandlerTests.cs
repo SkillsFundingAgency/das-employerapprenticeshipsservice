@@ -3,6 +3,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.Features;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Infrastructure.Features;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
@@ -10,11 +11,11 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
     [TestFixture]
     public class FeatureWhitelistAuthorisationHandlerTests
     {
-        [TestCase(true, "fredflintstone@bedrock.com", "fredflintstone@bedrock.com")]
-        [TestCase(false, "fredflintstone@bedrock.com", "barneyrubble@bedrock.com")]
-        [TestCase(false, "fredflintstone@bedrock.com")]
-        [TestCase(true, "fredflintstone@bedrock.com", FeatureToggleAuthorisationHandlerTestsFixtures.Nullstring)]
-        public async Task TestEmailAssessment(bool expectedIsEnabled, string userEmail, params string[] whitelist)
+        [TestCase(AuthorizationResult.Ok, "fredflintstone@bedrock.com", "fredflintstone@bedrock.com")]
+        [TestCase(AuthorizationResult.FeatureUserNotWhitelisted, "fredflintstone@bedrock.com", "barneyrubble@bedrock.com")]
+        [TestCase(AuthorizationResult.FeatureUserNotWhitelisted, "fredflintstone@bedrock.com")]
+        [TestCase(AuthorizationResult.Ok, "fredflintstone@bedrock.com", FeatureToggleAuthorisationHandlerTestsFixtures.Nullstring)]
+        public async Task TestEmailAssessment(AuthorizationResult expectedIsEnabled, string userEmail, params string[] whitelist)
         {
             // Arrange
             var fixtures = new FeatureToggleAuthorisationHandlerTestsFixtures()

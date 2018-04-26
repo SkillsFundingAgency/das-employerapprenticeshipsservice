@@ -29,19 +29,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 .Include(i => i.ReceiverAccount)
                 .Include(i => i.SenderAccount)
                 .Where(i => i.Id == transferConnectionInvitationId)
-                .SingleAsync();
-        }
-
-        public Task<TransferConnectionInvitation> GetLatestOutstandingTransferConnectionInvitation(long receiverAccountId)
-        {
-            return _db.TransferConnectionInvitations
-                .Include(i => i.Changes)
-                .Include(i => i.SenderAccount)
-                .Include(i => i.ReceiverAccount)
-                .OrderByDescending(i => i.CreatedDate)
-                .FirstOrDefaultAsync(i =>
-                    i.ReceiverAccountId == receiverAccountId && i.Status == TransferConnectionInvitationStatus.Pending);
-
+                .SingleOrDefaultAsync();
         }
     }
 }

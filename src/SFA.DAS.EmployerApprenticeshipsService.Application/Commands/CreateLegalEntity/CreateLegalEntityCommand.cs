@@ -1,6 +1,6 @@
 ﻿using System;
 using MediatR;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 {

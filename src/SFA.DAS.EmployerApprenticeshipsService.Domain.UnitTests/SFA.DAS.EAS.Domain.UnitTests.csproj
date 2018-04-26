@@ -45,7 +45,6 @@
     </Reference>
     <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,8 +56,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Entities\AccountTests\WhenISendTransferConnection.cs" />
     <Compile Include="Extensions\WhenIGetAnEmploymentStatusAgreementDescription.cs" />
+    <Compile Include="Models\AccountTests.cs" />
     <Compile Include="Models\TransferConnectionInvitationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Account.Api.Mappings
     {
         public AccountMappings()
         {
-            CreateMap<Domain.Data.Entities.Account.Account, AccountDetailViewModel>()
+            CreateMap<Domain.Models.Account.Account, AccountDetailViewModel>()
                 .ForMember(target => target.HashedAccountId, opt => opt.MapFrom(src => src.HashedId))
                 .ForMember(target => target.DasAccountName, opt => opt.MapFrom(src => src.Name));
             CreateMap<LevyDeclarationView, LevyDeclarationViewModel>()

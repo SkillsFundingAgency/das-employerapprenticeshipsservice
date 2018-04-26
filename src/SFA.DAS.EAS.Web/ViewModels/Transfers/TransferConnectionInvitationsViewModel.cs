@@ -3,9 +3,8 @@ using SFA.DAS.EAS.Application.Dtos;
 
 namespace SFA.DAS.EAS.Web.ViewModels.Transfers
 {
-    public class TransferConnectionInvitationsViewModel
+    public class TransferConnectionInvitationsViewModel : AccountViewModel
     {
-        public long AccountId { get; set; }
         public IEnumerable<TransferConnectionInvitationDto> TransferConnectionInvitations { get; set; }
     }
 }

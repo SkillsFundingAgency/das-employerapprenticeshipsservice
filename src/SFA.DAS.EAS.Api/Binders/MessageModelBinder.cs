@@ -26,6 +26,19 @@ namespace SFA.DAS.EAS.Account.Api.Binders
                 return true;
             }
 
+            if (typeof(IAccountMessage).IsAssignableFrom(bindingContext.ModelMetadata.ContainerType) && bindingContext.ModelMetadata.PropertyName == nameof(IAccountMessage.AccountHashedId))
+            {
+                var authorizationContext = actionContext.GetService<IAuthorizationService>().GetAuthorizationContext();
+                var key = bindingContext.ModelName;
+                var value = authorizationContext.AccountContext?.HashedId;
+                var valueProviderResult = new ValueProviderResult(value, value, CultureInfo.InvariantCulture);
+
+                bindingContext.Model = value;
+                bindingContext.ModelState.SetModelValue(key, valueProviderResult);
+
+                return true;
+            }
+
             return false;
         }
     }

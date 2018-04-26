@@ -3,6 +3,7 @@ using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
+using Constants = SFA.DAS.EAS.Domain.Constants;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution
 {

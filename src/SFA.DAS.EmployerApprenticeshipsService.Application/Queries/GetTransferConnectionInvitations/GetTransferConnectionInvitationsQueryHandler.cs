@@ -24,13 +24,13 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations
         {
             var transferConnectionInvitations = await _db.TransferConnectionInvitations
                 .Where(i => i.SenderAccount.Id == message.AccountId.Value && !i.DeletedBySender || i.ReceiverAccount.Id == message.AccountId.Value && !i.DeletedByReceiver)
-                .OrderBy(i => i.CreatedDate)
+                .OrderBy(i => i.ReceiverAccount.Id == message.AccountId.Value ? i.SenderAccount.Name : i.ReceiverAccount.Name)
+                .ThenBy(i => i.CreatedDate)
                 .ProjectTo<TransferConnectionInvitationDto>(_configurationProvider)
                 .ToListAsync();
 
             return new GetTransferConnectionInvitationsResponse
             {
-                AccountId = message.AccountId.Value,
                 TransferConnectionInvitations = transferConnectionInvitations
             };
         }

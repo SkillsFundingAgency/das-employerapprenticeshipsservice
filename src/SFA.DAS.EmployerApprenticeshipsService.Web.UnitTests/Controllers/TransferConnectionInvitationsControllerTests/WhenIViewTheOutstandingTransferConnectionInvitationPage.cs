@@ -5,9 +5,8 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetLatestOutstandingTransferInvitation;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
-using SFA.DAS.EAS.TestCommon.Builders;
+using SFA.DAS.EAS.Application.Dtos;
+using SFA.DAS.EAS.Application.Queries.GetLatestPendingReceivedTransferConnectionInvitation;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Mappings;
 
@@ -33,17 +32,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         [Test]
         public async Task ThenShouldRedirectWhenHasOutstandingTransfer()
         {
-            _mediator
-                .Setup(m => m.SendAsync(It.IsAny<IAsyncRequest<GetLatestOutstandingTransferInvitationResponse>>()))
-                .ReturnsAsync(new GetLatestOutstandingTransferInvitationResponse
+            _mediator.Setup(m => m.SendAsync(It.IsAny<IAsyncRequest<GetLatestPendingReceivedTransferConnectionInvitationResponse>>()))
+                .ReturnsAsync(new GetLatestPendingReceivedTransferConnectionInvitationResponse
                 {
-                    TransferConnectionInvitation = new TransferConnectionInvitationBuilder()
-                                                                .WithReceiverAccount(new Account())
-                                                                .WithSenderAccount(new Account())
-                                                                .Build()
+                    TransferConnectionInvitation = new TransferConnectionInvitationDto()
                 });
 
-            var actionResult = await _controller.Outstanding("ABC123");
+            var actionResult = await _controller.Outstanding(new GetLatestPendingReceivedTransferConnectionInvitationQuery());
 
             Assert.AreEqual(typeof(RedirectToRouteResult), actionResult.GetType());
         }
@@ -51,17 +46,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         [Test]
         public async Task ThenShouldRedirectToExpectedRouteWhenHasOutstandingTransfer()
         {
-            _mediator
-                .Setup(m => m.SendAsync(It.IsAny<IAsyncRequest<GetLatestOutstandingTransferInvitationResponse>>()))
-                .ReturnsAsync(new GetLatestOutstandingTransferInvitationResponse
+            _mediator.Setup(m => m.SendAsync(It.IsAny<IAsyncRequest<GetLatestPendingReceivedTransferConnectionInvitationResponse>>()))
+                .ReturnsAsync(new GetLatestPendingReceivedTransferConnectionInvitationResponse
                 {
-                    TransferConnectionInvitation = new TransferConnectionInvitationBuilder()
-                        .WithReceiverAccount(new Account())
-                        .WithSenderAccount(new Account())
-                        .Build()
+                    TransferConnectionInvitation = new TransferConnectionInvitationDto()
                 });
 
-            var actionResult = await _controller.Outstanding("ABC123") as RedirectToRouteResult;
+            var actionResult = await _controller.Outstanding(new GetLatestPendingReceivedTransferConnectionInvitationQuery()) as RedirectToRouteResult;
 
             CheckRoute(
                 null,
@@ -72,14 +63,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         [Test]
         public async Task ThenShouldRedirectWhenDoesNotHaveOutstandingTransfer()
         {
-            _mediator
-                .Setup(m => m.SendAsync(It.IsAny<IAsyncRequest<GetLatestOutstandingTransferInvitationResponse>>()))
-                .ReturnsAsync(new GetLatestOutstandingTransferInvitationResponse
+            _mediator.Setup(m => m.SendAsync(It.IsAny<IAsyncRequest<GetLatestPendingReceivedTransferConnectionInvitationResponse>>()))
+                .ReturnsAsync(new GetLatestPendingReceivedTransferConnectionInvitationResponse
                 {
                     TransferConnectionInvitation = null
                 });
 
-            var actionResult = await _controller.Outstanding("ABC123");
+            var actionResult = await _controller.Outstanding(new GetLatestPendingReceivedTransferConnectionInvitationQuery());
 
             Assert.AreEqual(typeof(RedirectToRouteResult), actionResult.GetType());
         }
@@ -87,14 +77,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         [Test]
         public async Task ThenShouldRedirectToExpectedRouteWhenDoesNotHaveOutstandingTransfer()
         {
-            _mediator
-                .Setup(m => m.SendAsync(It.IsAny<IAsyncRequest<GetLatestOutstandingTransferInvitationResponse>>()))
-                .ReturnsAsync(new GetLatestOutstandingTransferInvitationResponse
+            _mediator.Setup(m => m.SendAsync(It.IsAny<IAsyncRequest<GetLatestPendingReceivedTransferConnectionInvitationResponse>>()))
+                .ReturnsAsync(new GetLatestPendingReceivedTransferConnectionInvitationResponse
                 {
                     TransferConnectionInvitation = null
                 });
 
-            var actionResult = await _controller.Outstanding("ABC123") as RedirectToRouteResult;
+            var actionResult = await _controller.Outstanding(new GetLatestPendingReceivedTransferConnectionInvitationQuery()) as RedirectToRouteResult;
 
             CheckRoute(
                 nameof(TransfersController), 
@@ -102,16 +91,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
                 actionResult);
         }
 
-
-        private void CheckRoute(
-            string expectedControllerName,
-            string expectedActionName, 
-            RedirectToRouteResult actualRoute)
+        private void CheckRoute(string expectedControllerName, string expectedActionName, RedirectToRouteResult actualRoute)
         {
             if (!string.IsNullOrWhiteSpace(expectedControllerName) && expectedControllerName.EndsWith("Controller", StringComparison.InvariantCultureIgnoreCase))
             {
-                expectedControllerName =
-                    expectedControllerName.Substring(0, expectedControllerName.Length - "Controller".Length);
+                expectedControllerName = expectedControllerName.Substring(0, expectedControllerName.Length - "Controller".Length);
             }
 
             Assert.AreEqual(expectedControllerName, actualRoute.RouteValues["Controller"]);

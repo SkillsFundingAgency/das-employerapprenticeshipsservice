@@ -5,7 +5,7 @@ using SFA.DAS.EAS.Application.Dtos;
 
 namespace SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations
 {
-    public class ReceiveTransferConnectionInvitationViewModel : ViewModel<ApproveTransferConnectionInvitationCommand, RejectTransferConnectionInvitationCommand>
+    public class ReceiveTransferConnectionInvitationViewModel
     {
         [Required]
         public ApproveTransferConnectionInvitationCommand ApproveTransferConnectionInvitationCommand { get; set; }
@@ -18,11 +18,5 @@ namespace SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations
         public string Choice { get; set; }
 
         public TransferConnectionInvitationDto TransferConnectionInvitation { get; set; }
-
-        public override void Map(ApproveTransferConnectionInvitationCommand approveTransferConnectionInvitationCommand, RejectTransferConnectionInvitationCommand rejectTransferConnectionInvitationCommand)
-        {
-            ApproveTransferConnectionInvitationCommand = approveTransferConnectionInvitationCommand;
-            RejectTransferConnectionInvitationCommand = rejectTransferConnectionInvitationCommand;
-        }
     }
 }

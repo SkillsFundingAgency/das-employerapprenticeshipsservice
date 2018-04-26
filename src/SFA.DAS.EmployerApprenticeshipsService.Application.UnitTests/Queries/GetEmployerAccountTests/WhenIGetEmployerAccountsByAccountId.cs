@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
@@ -27,7 +26,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
 
             _employerAccountRepository = new Mock<IEmployerAccountRepository>();
 
-            _employerAccountRepository.Setup(x => x.GetAccountById(ExpectedAccountId)).ReturnsAsync(new Domain.Data.Entities.Account.Account {HashedId = "123"});
+            _employerAccountRepository.Setup(x => x.GetAccountById(ExpectedAccountId)).ReturnsAsync(new Domain.Models.Account.Account {HashedId = "123"});
 
             RequestHandler = new GetEmployerAccountHandler(_employerAccountRepository.Object, RequestValidator.Object);
             Query = new GetEmployerAccountQuery();

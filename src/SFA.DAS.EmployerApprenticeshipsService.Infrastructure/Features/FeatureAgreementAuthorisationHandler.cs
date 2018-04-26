@@ -15,16 +15,19 @@ namespace SFA.DAS.EAS.Infrastructure.Features
             _accountAgreementService = accountAgreementService;
         }
 
-        public async Task<bool> CanAccessAsync(IAuthorizationContext authorizationContext, Feature feature)
+        public async Task<AuthorizationResult> CanAccessAsync(IAuthorizationContext authorizationContext, Feature feature)
         {
             if (authorizationContext.AccountContext == null || feature.EnabledByAgreementVersion == null)
             {
-                return true;
+                return AuthorizationResult.Ok;
             }
 
             var latestSignedAgreementVersion = await _accountAgreementService.GetLatestSignedAgreementVersionAsync(authorizationContext.AccountContext.Id);
+			var isFeatureAgreementSigned = latestSignedAgreementVersion >= feature.EnabledByAgreementVersion.Value;
 
-            return latestSignedAgreementVersion >= feature.EnabledByAgreementVersion.Value;
+            return isFeatureAgreementSigned
+                ? AuthorizationResult.Ok
+                : AuthorizationResult.FeatureAgreementNotSigned;
         }
     }
 }

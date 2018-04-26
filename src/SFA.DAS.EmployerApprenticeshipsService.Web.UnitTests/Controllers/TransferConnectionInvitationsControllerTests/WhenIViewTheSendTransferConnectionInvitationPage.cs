@@ -4,7 +4,7 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
+using SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Mappings;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
@@ -18,8 +18,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         private IConfigurationProvider _configurationProvider;
         private IMapper _mapper;
         private Mock<IMediator> _mediator;
-        private readonly GetTransferConnectionInvitationAccountQuery _query = new GetTransferConnectionInvitationAccountQuery();
-        private readonly GetTransferConnectionInvitationAccountResponse _response = new GetTransferConnectionInvitationAccountResponse();
+        private readonly SendTransferConnectionInvitationQuery _query = new SendTransferConnectionInvitationQuery();
+        private readonly SendTransferConnectionInvitationResponse _response = new SendTransferConnectionInvitationResponse();
 
         [SetUp]
         public void Arrange()

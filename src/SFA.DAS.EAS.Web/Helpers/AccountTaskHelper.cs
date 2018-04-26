@@ -1,5 +1,4 @@
-﻿using System;
-using SFA.DAS.EAS.Domain.Models.Account;
+﻿using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Web.Helpers
 {
@@ -15,6 +14,7 @@ namespace SFA.DAS.EAS.Web.Helpers
                 case "ApprenticeChangesToReview": return 4;
                 case "CohortRequestReadyForApproval": return 5;
                 case "IncompleteApprenticeshipDetails": return 6;
+                case "ReviewConnectionRequest": return 7;
 
                 default: return int.MaxValue; //if its an usupported type we place it last
             }

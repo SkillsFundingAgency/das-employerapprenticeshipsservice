@@ -11,6 +11,10 @@ namespace SFA.DAS.EAS.Application.Messages
 
         [IgnoreMap]
         [Required]
+        public string AccountHashedId { get; set; }
+
+        [IgnoreMap]
+        [Required]
         public long? UserId { get; set; }
     }
 }

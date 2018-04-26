@@ -8,8 +8,8 @@ namespace SFA.DAS.EAS.Application.Mappings
     {
         public AccountMappings()
         {
-            CreateMap<Domain.Data.Entities.Account.Account, AccountContext>();
-            CreateMap<Domain.Data.Entities.Account.Account, AccountDto>();
+            CreateMap<Domain.Models.Account.Account, AccountContext>();
+            CreateMap<Domain.Models.Account.Account, AccountDto>();
         }
     }
 }
