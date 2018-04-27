@@ -9,6 +9,7 @@ namespace SFA.DAS.EAS.Application.Mappings
         public AgreementMappings()
         {
             CreateMap<EmployerAgreement, EmployerAgreementDto>();
+
             CreateMap<AgreementTemplate, AgreementTemplateDto>();
         }
     }

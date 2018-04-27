@@ -11,9 +11,14 @@ namespace SFA.DAS.EAS.Web.Mappings
         public AgreementMappings()
         {
             CreateMap<EmployerAgreementDto, EmployerAgreementView>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.StatusId))
+                .ForMember(dest => dest.LegalEntityAddress, opt => opt.MapFrom(src => src.LegalEntity.RegisteredAddress))
+                .ForMember(dest => dest.LegalEntityInceptionDate, opt => opt.MapFrom(src => src.LegalEntity.DateOfIncorporation))
+                .ForMember(dest => dest.Sector, opt => opt.MapFrom(src => src.LegalEntity.Sector))
                 .ForMember(dest => dest.TemplatePartialViewName, opt => opt.MapFrom(src => src.Template.PartialViewName));
 
-            CreateMap<GetEmployerAgreementResponse, EmployerAgreementViewModel>();
+            CreateMap<GetEmployerAgreementResponse, EmployerAgreementViewModel>()
+                .ForMember(dest => dest.PreviouslySignedEmployerAgreement, opt => opt.MapFrom(src => src.LastSignedAgreement));
         }
     }
 }
