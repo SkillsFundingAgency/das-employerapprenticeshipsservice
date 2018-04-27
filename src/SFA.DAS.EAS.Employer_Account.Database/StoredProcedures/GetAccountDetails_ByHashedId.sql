@@ -1,26 +1,27 @@
 ﻿CREATE PROCEDURE employer_account.GetAccountDetails_ByHashedId
-	@HashedId VARCHAR(100)
+	@hashedAccountId NVARCHAR(100)
 AS
-Select 
-	acc.Id AS AccountId,
-	acc.HashedId,
-	acc.PublicHashedId,
-	acc.Name,
-	acc.CreatedDate,
-	t.Email as OwnerEmail,
-	ach.PayeRef as PayeSchemeId,
-	ea.LegalEntityId
-from employer_account.Account acc
-inner join employer_account.AccountEmployerAgreement aea on aea.AccountId = acc.Id
-inner join employer_account.EmployerAgreement ea on ea.Id = aea.EmployerAgreementId
-inner join employer_account.AccountHistory ach on ach.AccountId = acc.Id
-OUTER APPLY
-(
-	SELECT TOP 1 u.Email
-	FROM employer_account.Membership m
-	inner join employer_account.[User] u on u.Id = m.UserId
-	where m.RoleId = 1 and m.AccountId = acc.Id
-	ORDER BY m.CreatedDate desc
-) t
-WHERE acc.HashedId = @HashedId AND
-ea.StatusId in (1,2,3)
+	SET NOCOUNT ON
+
+	SELECT
+		a.Id AS AccountId,
+		a.HashedId,
+		a.PublicHashedId,
+		a.Name,
+		a.CreatedDate,
+		u.Email AS OwnerEmail,
+		ah.PayeRef AS PayeSchemeId,
+		ea.LegalEntityId
+	FROM employer_account.Account a
+	INNER JOIN [employer_account].[EmployerAgreement] ea ON ea.AccountId = a.Id
+	INNER JOIN [employer_account].[AccountHistory] ah ON ah.AccountId = a.Id
+	OUTER APPLY
+	(
+		SELECT TOP 1 u.Email
+		FROM [employer_account].[Membership] m
+		INNER JOIN [employer_account].[User] u ON u.Id = m.UserId
+		WHERE m.RoleId = 1 and m.AccountId = a.Id
+		ORDER BY m.CreatedDate DESC
+	) u
+	WHERE a.HashedId = @hashedAccountId AND
+	ea.StatusId IN (1, 2)

@@ -152,24 +152,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        [Obsolete("This is replaced by an EF query")]
-        public async Task<List<EmployerAgreementView>> GetEmployerAgreementsLinkedToAccount(long accountId)
-        {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-
-                parameters.Add("@accountId", accountId, DbType.Int64);
-
-                return await c.QueryAsync<EmployerAgreementView>(
-                    sql: "[employer_account].[GetEmployerAgreementsLinkedToAccount]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
-
-            return result.ToList();
-        }
-
         public async Task<List<PayeView>> GetPayeSchemesByAccountId(long accountId)
         {
             var result = await WithConnection(async c =>
