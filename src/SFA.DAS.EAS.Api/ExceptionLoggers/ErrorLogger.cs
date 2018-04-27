@@ -3,6 +3,7 @@ using System.Web.Http.ExceptionHandling;
 using Microsoft.ApplicationInsights;
 using NLog;
 using SFA.DAS.EAS.Application.Extensions;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 
 namespace SFA.DAS.EAS.Account.Api.ExceptionLoggers
 {

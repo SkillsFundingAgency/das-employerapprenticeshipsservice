@@ -454,7 +454,6 @@
     <Compile Include="Events\ProcessDeclaration\ProcessDeclarationsEventHandler.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEvent.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEventHandler.cs" />
-    <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Factories\LevyEventFactory.cs" />
     <Compile Include="Factories\AccountEventFactory.cs" />
     <Compile Include="Factories\EmployerAgreementEventFactory.cs" />
@@ -783,7 +782,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

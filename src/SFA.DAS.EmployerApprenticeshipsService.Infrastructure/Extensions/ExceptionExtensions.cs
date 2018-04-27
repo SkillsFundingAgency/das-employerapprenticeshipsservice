@@ -1,56 +1,39 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
+using System.Web;
 
-namespace SFA.DAS.EAS.Application.Extensions
+namespace SFA.DAS.EAS.Infrastructure.Extensions
 {
     public static class ExceptionExtensions
     {
-        #region original method
-
-        public static string GetMessage(this Exception ex)
+        public class ExceptionTypeFormatter 
         {
-            var newlines = Environment.NewLine.ToArray();
-            var messageBuilder = new StringBuilder(ex.Message.Trim(newlines));
-
-            while (ex.InnerException != null)
+            public ExceptionTypeFormatter(Type exceptionType, Action<Exception, StringBuilder> build)
             {
-                messageBuilder.AppendLine();
-                messageBuilder.Append(ex.InnerException.Message.Trim(newlines));
-
-                ex = ex.InnerException;
+                Build = build;
+                SupportedException = exceptionType;
             }
 
-            return messageBuilder.ToString();
-        }
-
-        #endregion Begin region         
-
-        #region new code
-
-        private class ExceptionTypeFormatter
-        {
-            public ExceptionTypeFormatter(Type supportedException, Action<Exception, StringBuilder> builder)
-            {
-                SupportedException = supportedException;
-                Build = builder;
-            }
-
-            public Type SupportedException { get;  }
+            public Type SupportedException { get; }
             public Action<Exception, StringBuilder> Build { get; }
         }
 
+        private static readonly ConcurrentDictionary<Type, ExceptionTypeFormatter> ExceptionTypeFormatterCache = new ConcurrentDictionary<Type, ExceptionTypeFormatter>();
+
         private static readonly ExceptionTypeFormatter LastChanceFormatter = new ExceptionTypeFormatter(typeof(Exception), BuildLastChanceMessage);
 
-        private static readonly ExceptionTypeFormatter[] ExceptionFormatters = new[]
+        private static readonly ExceptionTypeFormatter[] ExceptionFormatters = new ExceptionTypeFormatter[]
         {
             // This will catch all exceptions
             new ExceptionTypeFormatter(typeof(Exception), BuildExceptionMessage),
-            new ExceptionTypeFormatter(typeof(AggregateException), BuildAggregateExceptionMessage)
+            new ExceptionTypeFormatter(typeof(AggregateException), BuildAggregateExceptionMessage),
+            new ExceptionTypeFormatter(typeof(HttpException), BuildHttpExceptionMessage) 
         };
 
 
-        public static string GetDetailedExceptionMessage(Exception exception)
+        public static string GetMessage(this Exception exception)
         {
             const int reasonableInitialMessageSize = 200;
             var messageBuilder = new StringBuilder(reasonableInitialMessageSize);
@@ -67,13 +50,14 @@ namespace SFA.DAS.EAS.Application.Extensions
                 return;
             }
 
-            var handler = GetAppropriateExceptionFormatter(exception);
+            var handler = ExceptionTypeFormatterCache.GetOrAdd(exception.GetType(), GetAppropriateExceptionFormatter(exception));
+
             handler.Build(exception, messageBuilder);
 
-            BuildAggregateExceptionMessage(exception.InnerException, messageBuilder);
+            BuildDetailedExceptionMessage(exception.InnerException, messageBuilder);
         }
 
-        private static ExceptionTypeFormatter GetAppropriateExceptionFormatter(Exception exception)
+        public static ExceptionTypeFormatter GetAppropriateExceptionFormatter(Exception exception)
         {
             ExceptionTypeFormatter result = null;
 
@@ -88,7 +72,7 @@ namespace SFA.DAS.EAS.Application.Extensions
                 while (result == null)
                 {
                     // convert to dictionary
-                    result = ExceptionFormatters.First(ef => ef.SupportedException == exceptionType);
+                    result = ExceptionFormatters.FirstOrDefault(ef => ef.SupportedException == exceptionType);
                     if (result == null)
                     {
                         if (exceptionType.BaseType == null)
@@ -134,13 +118,23 @@ namespace SFA.DAS.EAS.Application.Extensions
             messageBuilder.AppendLine($"Aggregate exception has {exceptions.InnerExceptions.Count} inner exception.");
             for (int i = 0; i < exceptions.InnerExceptions.Count; i++)
             {
-                messageBuilder.Append("exception ");
+                messageBuilder.Append("Exception:");
                 messageBuilder.Append(i);
-                messageBuilder.Append(':');
                 BuildDetailedExceptionMessage(exceptions.InnerExceptions[i], messageBuilder);
             }
         }
 
-        #endregion Begin region         
+        private static void BuildHttpExceptionMessage(Exception exception, StringBuilder messageBuilder)
+        {
+            var ex = (HttpException) exception;
+            messageBuilder.Append("Exception: ");
+            messageBuilder.Append(ex.GetType().Name);
+            messageBuilder.Append(" Message: ");
+            messageBuilder.Append(ex.Message);
+            messageBuilder.Append(" HTTP-StatusCode:");
+            messageBuilder.Append(ex.GetHttpCode());
+            messageBuilder.Append(" HTTP-Message:");
+            messageBuilder.Append(ex.GetHtmlErrorMessage());
+        }  
     }
 }

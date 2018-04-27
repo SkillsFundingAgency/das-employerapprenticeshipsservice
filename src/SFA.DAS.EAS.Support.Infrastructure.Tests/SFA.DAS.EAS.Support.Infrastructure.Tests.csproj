@@ -78,6 +78,7 @@
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
@@ -98,6 +99,7 @@
     <Compile Include="AccountRepository\WhenCallingGetWithAccountFieldsSelectionFinance.cs" />
     <Compile Include="AccountRepository\WhenCallingGetWithAccountFieldsSelectionOrganisations.cs" />
     <Compile Include="AccountRepository\WhenCallingGetWithAccountFieldsSelectionTeamMembers.cs" />
+    <Compile Include="Extensions\ExceptionExtensionTests.cs" />
     <Compile Include="LevySubmissionsRepository\WhenTestingLevySubmissionsRepository.cs" />
     <Compile Include="AccountRepository\WhenTestingAccountRepository.cs" />
     <Compile Include="ChallengeRepository\WhenTestingChallengeRepository.cs" />
@@ -127,6 +129,10 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Support.Infrastructure\SFA.DAS.EAS.Support.Infrastructure.csproj">
       <Project>{9A31DB97-209C-48EF-AE2A-B4A4F761F670}</Project>
       <Name>SFA.DAS.EAS.Support.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
+      <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
+      <Name>SFA.DAS.EAS.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
