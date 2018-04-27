@@ -107,6 +107,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/{agreementId}/sign-your-agreement")]
         public async Task<ActionResult> SignAgreement(GetEmployerAgreementRequest request)
         {
+            request.ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+
             var response = await _mediator.SendAsync(request);
             var viewModel = _mapper.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(response);
 

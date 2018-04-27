@@ -1,18 +1,22 @@
-﻿using Moq;
+﻿using AutoMapper;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.HashingService;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using Membership = SFA.DAS.EAS.Domain.Models.AccountTeam.Membership;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTests
 {
@@ -97,8 +101,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
                 arrange: fixtures => fixtures.WithAgreement(latestAgreement)
                                              .WithAgreement(expectedAgreement),
                 act: fixtures => fixtures.Handle(),
-                assert: fixtures =>
-                    Assert.AreEqual(expectedAgreement, fixtures.Response.EmployerAgreement));
+                assert: fixtures => expectedAgreement.Should().NotBeNull().And
+                                                     .Match<EmployerAgreement>(a =>
+                        a.AccountId == fixtures.Response.EmployerAgreement.AccountId &&
+                        a.LegalEntityId == fixtures.Response.EmployerAgreement.LegalEntityId &&
+                        a.Template.VersionNumber.Equals(fixtures.Response.EmployerAgreement.Template.VersionNumber) &&
+                        a.StatusId.Equals(fixtures.Response.EmployerAgreement.StatusId)));
         }
 
         [Test]
@@ -137,11 +145,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
 
             return RunAsync(
                 arrange: fixtures => fixtures.WithAgreement(latestAgreement)
-                                             .WithAgreement(signedAgreement)
-                                             .WithAgreement(olderSignedAgreement),
+                    .WithAgreement(signedAgreement)
+                    .WithAgreement(olderSignedAgreement),
                 act: fixtures => fixtures.Handle(),
-                assert: fixtures =>
-                    Assert.AreEqual(signedAgreement, fixtures.Response.LastSignedAgreement));
+                assert: fixtures => signedAgreement.Should().NotBeNull()
+                    .And.Match<EmployerAgreement>(a =>
+                        a.AccountId == fixtures.Response.LastSignedAgreement.AccountId &&
+                        a.LegalEntityId == fixtures.Response.LastSignedAgreement.LegalEntityId &&
+                        a.SignedByName.Equals(fixtures.Response.LastSignedAgreement.SignedByName) &&
+                        a.SignedDate.Equals(fixtures.Response.LastSignedAgreement.SignedDate) &&
+                        a.Template.VersionNumber.Equals(fixtures.Response.LastSignedAgreement.Template.VersionNumber) &&
+                        a.StatusId.Equals(fixtures.Response.LastSignedAgreement.StatusId)));
         }
 
         [Test]
@@ -225,6 +239,25 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
                 assert: fixtures =>
                     Assert.IsNull(fixtures.Response.LastSignedAgreement));
         }
+
+        [Test]
+        public Task GetAgreementToSign_IfAgreementHasNotBeenSigned_ShouldAddCurrentUserAsSigner()
+        {
+            var latestAgreement = new EmployerAgreement
+            {
+                Id = GetEmployerAgreementTestFixtures.AgreementId,
+                AccountId = GetEmployerAgreementTestFixtures.AccountId,
+                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                TemplateId = 5,
+                Template = new AgreementTemplate { Id = 5, VersionNumber = 2 },
+                StatusId = EmployerAgreementStatus.Pending
+            };
+
+            return RunAsync(
+                arrange: fixtures => fixtures.WithAgreement(latestAgreement),
+                act: fixtures => fixtures.Handle(),
+                assert: fixtures => Assert.AreEqual(fixtures.CurrentUser.FullName, fixtures.Response.EmployerAgreement.SignedByName));
+        }
     }
 
     internal class GetEmployerAgreementTestFixtures : FluentTestFixture
@@ -234,31 +267,50 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
         public const long LegalEntityId = 54;
         public const long AccountId = 2;
         public const long AgreementId = 20;
-        public const string UserId = "ABC123";
+
 
         public Mock<EmployerAccountDbContext> Database { get; }
         public Mock<IHashingService> HashingService { get; }
         public Mock<IValidator<GetEmployerAgreementRequest>> Validator { get; }
+        public IConfigurationProvider ConfigurationProvider { get; }
+
         public GetEmployerAgreementQueryHandler Handler { get; }
         public GetEmployerAgreementRequest Request { get; }
         public GetEmployerAgreementResponse Response { get; private set; }
+
         public ICollection<EmployerAgreement> Agreements { get; set; }
+        public ICollection<Membership> Memberships { get; private set; }
+        public ICollection<User> Users { get; private set; }
+        public User CurrentUser { get; private set; }
+
         public Exception Exception { get; private set; }
+
 
         public GetEmployerAgreementTestFixtures()
         {
             Database = new Mock<EmployerAccountDbContext>();
             HashingService = new Mock<IHashingService>();
             Validator = new Mock<IValidator<GetEmployerAgreementRequest>>();
-            Handler = new GetEmployerAgreementQueryHandler(Database.Object, HashingService.Object, Validator.Object);
+
+            Agreements = new List<EmployerAgreement>();
+
+            CreateUserAccountMembership();
+
+            ConfigurationProvider = new MapperConfiguration(c =>
+            {
+                c.AddProfile<AccountMappings>();
+                c.AddProfile<EmploymentAgreementStatusMappings>();
+                c.AddProfile<AgreementMappings>();
+
+            });
+
+            Handler = new GetEmployerAgreementQueryHandler(Database.Object, HashingService.Object, Validator.Object, ConfigurationProvider);
             Request = new GetEmployerAgreementRequest
             {
                 HashedAccountId = HashedAccountId,
-                HashedAgreementId = HashedAgreementId,
-                ExternalUserId = UserId
+                AgreementId = HashedAgreementId,
+                ExternalUserId = CurrentUser.ExternalId.ToString()
             };
-
-            Agreements = new List<EmployerAgreement>();
 
             HashingService.Setup(x => x.DecodeValue(HashedAccountId)).Returns(AccountId);
             HashingService.Setup(x => x.DecodeValue(HashedAgreementId)).Returns(AgreementId);
@@ -269,7 +321,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
 
         public async Task Handle()
         {
-            MockAgreementDbSet();
+            MockDbContextDbSets();
 
             try
             {
@@ -315,18 +367,45 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             return this;
         }
 
-
-        private void MockAgreementDbSet()
+        private void CreateUserAccountMembership()
         {
-            var agreementData = Agreements.AsQueryable();
+            CurrentUser = new User
+            {
+                ExternalId = Guid.NewGuid(),
+                Id = 2,
+                Email = "test@test.com",
+                FirstName = "Test",
+                LastName = "Person"
+            };
 
-            var mockSet = new Mock<DbSet<EmployerAgreement>>();
-            mockSet.As<IQueryable<EmployerAgreement>>().Setup(m => m.Provider).Returns(agreementData.Provider);
-            mockSet.As<IQueryable<EmployerAgreement>>().Setup(m => m.Expression).Returns(agreementData.Expression);
-            mockSet.As<IQueryable<EmployerAgreement>>().Setup(m => m.ElementType).Returns(agreementData.ElementType);
-            mockSet.As<IQueryable<EmployerAgreement>>().Setup(m => m.GetEnumerator()).Returns(() => agreementData.GetEnumerator());
+            Users = new List<User>
+            {
+                CurrentUser
+            };
 
-            Database.Setup(x => x.Agreements).Returns(mockSet.Object);
+            Memberships = new List<Membership>
+            {
+                new Membership
+                {
+                    UserId = CurrentUser.Id,
+                    User = CurrentUser,
+                    AccountId = AccountId,
+                    Account = new Domain.Models.Account.Account {Id = AccountId}
+                }
+            };
         }
+
+        private void MockDbContextDbSets()
+        {
+            Database.Setup(x => x.Agreements)
+                    .Returns(new DbSetStub<EmployerAgreement>(Agreements.AsEnumerable()));
+
+            Database.Setup(x => x.Memberships)
+                .Returns(new DbSetStub<Membership>(Memberships.AsEnumerable()));
+
+            Database.Setup(x => x.Users)
+                .Returns(new DbSetStub<User>(Users.AsEnumerable()));
+        }
+
     }
 }
