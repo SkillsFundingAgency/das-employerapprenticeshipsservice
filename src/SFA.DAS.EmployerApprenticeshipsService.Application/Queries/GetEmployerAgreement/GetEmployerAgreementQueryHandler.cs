@@ -79,6 +79,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
                 employerAgreement.SignedByName = currentUser.FullName;
             }
 
+            employerAgreement.HashedAccountId = _hashingService.HashValue(employerAgreement.AccountId);
+            employerAgreement.HashedAgreementId = _hashingService.HashValue(employerAgreement.Id);
+
+            if (lastSignedAgreement != null)
+            {
+                lastSignedAgreement.HashedAccountId = _hashingService.HashValue(lastSignedAgreement.AccountId);
+                lastSignedAgreement.HashedAgreementId = _hashingService.HashValue(lastSignedAgreement.Id);
+            }
 
             return new GetEmployerAgreementResponse
             {
