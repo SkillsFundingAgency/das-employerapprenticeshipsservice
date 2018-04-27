@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using SFA.DAS.EAS.Domain.Models.Features
 @using SFA.DAS.EAS.Web.Extensions
 
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.FinanceDashboardViewModel>
@@ -56,34 +57,31 @@
         </h2>
         <p>View payments made into and out of your apprenticeship service account. </p>
     </div>
-    @if (Html.IsFeatureEnabled("EmployerAccountTransactions", "TransactionsDownload"))
+    <div class="column-half">
+        <h2 class="heading-medium">
+            <a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.Account.HashedId })">
+                Download transactions
+            </a>
+        </h2>
+        <p>Download your financial transactions within a specific date range. </p>
+    </div>
+    @if (Html.IsAuthorized(FeatureType.Projections))
     {
         <div class="column-half">
             <h2 class="heading-medium">
-                <a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.Account.HashedId })">
-                    Download transactions
-                </a>
-            </h2>
-            <p>Download your financial transactions within a specific date range. </p>
-        </div>
-    }
-    @if (Html.IsFeatureEnabled("EmployerProjections", "Index"))
-    {
-        <div class="column-half">
-            <h2 class="heading-medium">
-                <a title="Funding projection" href="@Url.EmployerProjectionsAction("forecasting/projections")">
+                <a title="Funding projection" href="@Url.ProjectionsAction("forecasting/projections")">
                     Funding projection
                 </a>
             </h2>
             <p>View funding projection to plan your future spending. </p>
         </div>
     }
-    @if (Html.IsFeatureEnabled("Transfers", "Index"))
+    @if (Html.IsAuthorized(FeatureType.Transfers))
     {
         <div class="column-half">
             <h2 class="heading-medium">
                 <a title="Manage transfers" href="@Url.Action("Index", "Transfers")">
-                    Manage transfers
+                    Transfers
                 </a>
             </h2>
             <p>Connect with other employers and send or receive transfer funds. </p>

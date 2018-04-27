@@ -9,6 +9,7 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Commitment;
+using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -27,7 +28,6 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.RemoveLegalEntity
         private static IContainer _container;
         private static Mock<IMessagePublisher> _messagePublisher;
         private static Mock<IAuthenticationService> _owinWrapper;
-        private string _hashedAccountId;
         private static Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private static Mock<IEventsApi> _eventsApi;
         private Mock<IEmployerCommitmentApi> _commitmentsApi;

@@ -412,7 +412,6 @@
     <Compile Include="Events\ProcessPayment\ProcessPaymentEvent.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEventHandler.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
-    <Compile Include="Extensions\HashingServiceExtensions.cs" />
     <Compile Include="Factories\LevyEventFactory.cs" />
     <Compile Include="Factories\AccountEventFactory.cs" />
     <Compile Include="Factories\EmployerAgreementEventFactory.cs" />

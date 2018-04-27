@@ -3,6 +3,8 @@ using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -17,7 +19,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         private OrganisationController _controller;
         private Mock<OrganisationOrchestrator> _orchestrator;
         private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IFeatureToggleService> _featureToggle;
+        private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<IMapper> _mapper;
         private Mock<ILog> _logger;
@@ -28,7 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         {
             _orchestrator = new Mock<OrganisationOrchestrator>();
             _owinWrapper = new Mock<IAuthenticationService>();
-            _featureToggle = new Mock<IFeatureToggleService>();
+            _featureToggle = new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _mapper = new Mock<IMapper>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();

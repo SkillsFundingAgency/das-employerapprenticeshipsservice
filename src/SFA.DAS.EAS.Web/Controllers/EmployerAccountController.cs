@@ -4,13 +4,14 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
+using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EAS.Web.Helpers;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -22,7 +23,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly ILog _logger;
 
         public EmployerAccountController(IAuthenticationService owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator,
-            IFeatureToggleService featureToggle, IMultiVariantTestingService multiVariantTestingService, ILog logger, 
+            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService, ILog logger, 
             ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper,multiVariantTestingService,flashMessage)
         {

@@ -151,5 +151,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return result.ToList();
         }
+
+        public async Task<int?> GetLatestSignedAgreementVersion(long accountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+
+                return await c.QueryFirstAsync<int?>(
+                    sql: "[employer_account].[GetLatestSignedAgreementVersionForAccount]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result;
+        }
     }
 }

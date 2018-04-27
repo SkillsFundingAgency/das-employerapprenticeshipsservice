@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using AutoMapper;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -26,7 +28,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public OrganisationController(
             IAuthenticationService owinWrapper, 
             OrganisationOrchestrator orchestrator,
-            IFeatureToggleService featureToggle,
+            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             IMapper mapper,
             ILog logger,

@@ -2,7 +2,7 @@
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
 	[AccountId] BIGINT NOT NULL DEFAULT 0,
-    [empRef] NVARCHAR(50) NOT NULL, 
+    [EmpRef] NVARCHAR(50) NOT NULL, 
     [LevyDueYTD] DECIMAL(18, 4) NULL DEFAULT 0, 
     [LevyAllowanceForYear] DECIMAL(18, 4) NULL DEFAULT 0, 
     [SubmissionDate] DATETIME NULL, 
@@ -21,10 +21,10 @@
 
 GO
 
-CREATE INDEX [IX_LevyDeclaration_submissionid] ON [employer_financial].[LevyDeclaration] (submissionId)
+CREATE INDEX [IX_LevyDeclaration_SubmissionId] ON [employer_financial].[LevyDeclaration] (SubmissionId)
 GO
 
-CREATE INDEX [IX_LevyDeclaration_Empref] ON [employer_financial].[LevyDeclaration] (empref,payrollyear,payrollmonth,EndofYearAdjustment) 
+CREATE INDEX [IX_LevyDeclaration_EmpRef] ON [employer_financial].[LevyDeclaration] (EmpRef,PayrollYear,PayrollMonth,EndOfYearAdjustment) 
 GO
 
 CREATE INDEX [IX_LevyDeclaration_Account_Payroll] ON [employer_financial].[LevyDeclaration] (AccountId,PayrollMonth,PayrollYear)

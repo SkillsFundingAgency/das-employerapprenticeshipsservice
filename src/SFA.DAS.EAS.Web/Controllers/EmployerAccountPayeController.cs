@@ -3,6 +3,8 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Helpers;
@@ -19,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
 
         public EmployerAccountPayeController(IAuthenticationService owinWrapper,EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator, 
-            IFeatureToggleService featureToggle, IMultiVariantTestingService multiVariantTestingService, 
+            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService, 
             ICookieStorageService<FlashMessageViewModel> flashMessage) 
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {

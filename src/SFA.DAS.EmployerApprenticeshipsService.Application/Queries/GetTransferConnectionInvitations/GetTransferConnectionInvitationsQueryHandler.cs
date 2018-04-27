@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations
         public async Task<GetTransferConnectionInvitationsResponse> Handle(GetTransferConnectionInvitationsQuery message)
         {
             var transferConnectionInvitations = await _db.TransferConnectionInvitations
-                .Where(i => i.SenderAccount.Id == message.AccountId.Value && !i.DeletedBySender || i.ReceiverAccount.Id == message.AccountId.Value)
+                .Where(i => i.SenderAccount.Id == message.AccountId.Value && !i.DeletedBySender || i.ReceiverAccount.Id == message.AccountId.Value && !i.DeletedByReceiver)
                 .OrderBy(i => i.CreatedDate)
                 .ProjectTo<TransferConnectionInvitationDto>(_configurationProvider)
                 .ToListAsync();

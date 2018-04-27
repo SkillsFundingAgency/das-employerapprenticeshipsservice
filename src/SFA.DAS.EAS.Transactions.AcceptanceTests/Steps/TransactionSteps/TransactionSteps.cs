@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.TestCommon.DbCleanup;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
@@ -28,7 +29,6 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
         private static IContainer _container;
         private static Mock<IMessagePublisher> _messagePublisher;
         private static Mock<IAuthenticationService> _owinWrapper;
-        private string _hashedAccountId;
         private static Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private static Mock<IEventsApi> _eventsApi;
         private static Mock<IEmployerCommitmentApi> _commitmentsApi;

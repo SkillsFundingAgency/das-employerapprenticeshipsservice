@@ -103,7 +103,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authorization\AuthorizationServiceTests\WhenIGetAuthorizationContext.cs" />
     <Compile Include="Controllers\AccountLegalEntitiesControllerTests\AccountLegalEntitiesControllerTests.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\AccountLevyControllerTests.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetAllLevyForAnAccount.cs" />

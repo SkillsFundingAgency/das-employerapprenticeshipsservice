@@ -1,4 +1,5 @@
-﻿using StructureMap;
+﻿using SFA.DAS.EAS.Application.DependencyResolution;
+using StructureMap;
 
 namespace SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution
 {
@@ -8,6 +9,7 @@ namespace SFA.DAS.EAS.DbMaintenance.WebJob.DependencyResolution
         {
             return new Container(c =>
             {
+                c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

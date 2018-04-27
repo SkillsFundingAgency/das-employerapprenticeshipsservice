@@ -152,8 +152,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             //Arrange
             _paymentDetails = new List<PaymentDetails>
             {
-                new PaymentDetails { Id = _existingPaymentIds[0].ToString()},
-                new PaymentDetails { Id = _existingPaymentIds[1].ToString()}
+                new PaymentDetails { Id = _existingPaymentIds[0].ToString().ToLower()},
+                new PaymentDetails { Id = _existingPaymentIds[1].ToString().ToUpper()}
             };
 
             _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))

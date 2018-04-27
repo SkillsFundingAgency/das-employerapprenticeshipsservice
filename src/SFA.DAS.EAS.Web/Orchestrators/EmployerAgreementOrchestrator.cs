@@ -143,7 +143,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Exception = ex
                 };
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
@@ -233,7 +233,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel {PdfStream = result.FileStream};
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
                 pdfEmployerAgreement.Status = HttpStatusCode.Unauthorized;
@@ -280,7 +280,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Severity = FlashMessageSeverityLevel.Error
                 };
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
                 signedPdfEmployerAgreement.Status = HttpStatusCode.Unauthorized;

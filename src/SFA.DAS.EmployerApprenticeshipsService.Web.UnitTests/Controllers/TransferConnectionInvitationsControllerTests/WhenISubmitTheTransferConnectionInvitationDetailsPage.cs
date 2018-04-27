@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         }
 
         [Test]
-        public async Task ThenIShouldBeRedirectedToTransfersPageIfIChoseOption1()
+        public async Task ThenIShouldBeRedirectedToDeleteConfirmedPageIfIChoseOption1()
         {
             _viewModel.Choice = "Confirm";
 
@@ -50,9 +50,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.RouteValues.TryGetValue("action", out var actionName), Is.True);
-            Assert.That(actionName, Is.EqualTo("Index"));
-            Assert.That(result.RouteValues.TryGetValue("controller", out var controllerName), Is.True);
-            Assert.That(controllerName, Is.EqualTo("Transfers"));
+            Assert.That(actionName, Is.EqualTo("Deleted"));
+            Assert.That(result.RouteValues.TryGetValue("controller", out var controllerName), Is.False);
         }
 
         [Test]

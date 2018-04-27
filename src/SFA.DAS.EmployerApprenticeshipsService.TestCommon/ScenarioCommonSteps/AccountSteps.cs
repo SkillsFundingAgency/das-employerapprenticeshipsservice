@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -27,7 +28,6 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         private Mock<IAuthenticationService> _owinWrapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
-        private string _externalUserId;
         private Mock<IValidator<GetAccountPayeSchemesQuery>> _validator;
         private Mock<IEventsApi> _eventsApi;
         private Mock<IEmployerCommitmentApi> _employerCommitmentsApi;

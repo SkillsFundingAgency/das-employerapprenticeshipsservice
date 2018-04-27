@@ -11,6 +11,8 @@ using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAccount;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionRoles;
+using SFA.DAS.EAS.Domain.Models.Features;
+using SFA.DAS.EAS.Infrastructure.Features;
 using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
@@ -18,6 +20,7 @@ using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
+    [Feature(FeatureType.Transfers)]
     [ValidateMembership]
     [RoutePrefix("accounts/{HashedAccountId}/transfers/connections/invitations")]
     public class TransferConnectionInvitationsController : Controller
@@ -164,7 +167,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             switch (model.Choice)
             {
                 case "GoToApprenticesPage":
-                    return Redirect(Url.EmployerCommitmentsAction("apprentices/home"));
+                    return Redirect(Url.CommitmentsAction("apprentices/home"));
                 case "GoToHomepage":
                     return RedirectToAction("Index", "EmployerTeam");
                 default:
@@ -220,9 +223,35 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 case "Confirm":
                     await _mediator.SendAsync(model.DeleteTransferConnectionInvitationCommand);
-                    return RedirectToAction("Index", "Transfers");
+                    return RedirectToAction("Deleted");
                 case "GoToTransfersPage":
                     return RedirectToAction("Index", "Transfers");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(model.Choice));
+            }
+        }
+
+        [ImportModelStateFromTempData]
+        [Route("{transferConnectionInvitationId}/deleted")]
+        public ActionResult Deleted()
+        {
+            var model = new DeletedTransferConnectionInvitationViewModel();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateModelState]
+        [Route("{transferConnectionInvitationId}/deleted")]
+        public ActionResult Deleted(DeletedTransferConnectionInvitationViewModel model)
+        {
+            switch (model.Choice)
+            {
+                case "GoToTransferDashboard":
+                    return RedirectToAction("Index", "Transfers");
+                case "GoToHomepage":
+                    return RedirectToAction("Index", "EmployerTeam");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model.Choice));
             }

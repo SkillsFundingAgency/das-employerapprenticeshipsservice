@@ -8,6 +8,8 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -21,7 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         private EmployerAccountController _employerAccountController;
         private Mock<EmployerAccountOrchestrator> _orchestrator;
         private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IFeatureToggleService> _featureToggle;
+        private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
         private EmployerAccountData _accountData;
@@ -37,7 +39,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
             _owinWrapper = new Mock<IAuthenticationService>();
-            _featureToggle = new Mock<IFeatureToggleService>();
+            _featureToggle = new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             var logger = new Mock<ILog>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();

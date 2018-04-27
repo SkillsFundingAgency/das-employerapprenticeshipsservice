@@ -8,4 +8,4 @@ Select TOP 1
 from 
 	employer_account.Paye paye
 WHERE
-	paye.ref = @Ref
+	paye.Ref = @Ref

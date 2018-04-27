@@ -33,6 +33,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
         private readonly IMediator _mediator;
         private readonly IMessagePublisher _messagePublisher;
         private readonly ICommitmentService _commitmentService;
+        private readonly IAccountAgreementService _accountAgreementService;
 
 
         public SignEmployerAgreementCommandHandler(
@@ -44,7 +45,8 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             IGenericEventFactory genericEventFactory,
             IMediator mediator, 
             IMessagePublisher messagePublisher,
-            ICommitmentService commitmentService)
+            ICommitmentService commitmentService,
+            IAccountAgreementService accountAgreementService)
         {
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
@@ -55,6 +57,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             _mediator = mediator;
             _messagePublisher = messagePublisher;
             _commitmentService = commitmentService;
+            _accountAgreementService = accountAgreementService;
         }
 
         protected override async Task HandleCore(SignEmployerAgreementCommand message)
@@ -99,6 +102,8 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             var commitments = await _commitmentService.GetEmployerCommitments(accountId);
 
             var accountHasCommitments = commitments?.Any() ?? false;
+
+            await _accountAgreementService.RemoveFromCacheAsync(accountId);
 
             await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId, accountHasCommitments, owner.FullName(), owner.UserRef);
         }

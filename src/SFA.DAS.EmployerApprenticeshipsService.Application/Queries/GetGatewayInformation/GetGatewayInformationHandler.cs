@@ -14,11 +14,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetGatewayInformation
         }
 
 
-        public async Task<GetGatewayInformationResponse> Handle(GetGatewayInformationQuery message)
+        public Task<GetGatewayInformationResponse> Handle(GetGatewayInformationQuery message)
         {
             var returnUrl = _hmrcService.GenerateAuthRedirectUrl(message.ReturnUrl);
 
-            return new GetGatewayInformationResponse {Url = returnUrl};
+            return Task.FromResult(new GetGatewayInformationResponse {Url = returnUrl});
         }
     }
 }

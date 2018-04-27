@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         }
 
         [Test]
-        public async Task ThenTheSummaryViewRetrievesCookieData()
+        public void ThenTheSummaryViewRetrievesCookieData()
         {
             //Arrange
             var employerAccountData = new EmployerAccountData

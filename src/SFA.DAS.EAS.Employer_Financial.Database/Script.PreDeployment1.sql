@@ -14,7 +14,7 @@
 IF EXISTS(select 1 from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = 'EnglishFraction' and COLUMN_NAME = 'Amount' and NUMERIC_SCALE = 4)
 BEGIN
 	ALTER TABLE [employer_financial].[EnglishFraction] 
-	ALTER COLUMN AMOUNT DECIMAL(18,5) NULL
+	ALTER COLUMN Amount DECIMAL(18,5) NULL
 END
 IF EXISTS(select 1  from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = 'EnglishFraction' and COLUMN_NAME='EmpRef' AND DATA_TYPE = 'nchar')
 BEGIN

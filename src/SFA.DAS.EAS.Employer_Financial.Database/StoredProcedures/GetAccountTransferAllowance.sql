@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetAccountTransferAllowance]
-	@accountId BIGINT = 0,
+	@AccountId BIGINT = 0,
 	@allowancePercentage DECIMAL(3,2) = 0
 AS
 	SET NOCOUNT ON
@@ -10,6 +10,6 @@ AS
 	WHERE	TransactionDate >= previousFinancialYear.YearStart
 			AND TransactionDate < previousFinancialYear.YearEnd
 			AND TransactionType = 1
-			AND AccountId = @accountId
+			AND AccountId = @AccountId
 
 GO

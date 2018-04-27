@@ -5,6 +5,8 @@ using System.Web.Mvc;
 using AutoMapper;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Helpers;
@@ -19,11 +21,10 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly OrganisationOrchestrator _orchestrator;
         private readonly IMapper _mapper;
-        private readonly ILog _logger;
 
         public OrganisationSharedController(IAuthenticationService owinWrapper,
             OrganisationOrchestrator orchestrator,
-            IFeatureToggleService featureToggle,
+            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             IMapper mapper,
             ILog logger,

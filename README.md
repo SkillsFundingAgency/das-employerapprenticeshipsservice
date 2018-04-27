@@ -84,20 +84,6 @@ The configuration is loaded from azure table storage.
 > The two repos above are private. If the links appear to be dead make sure you are logged into github with an account that has access to these (i.e. that you are part of the Skills Funding Agency Team organization).
 
   
-### Feature Toggles
-
-You can enable or disable controller actions by using feature toggles e.g. To disable the `EmployerTeamController.Invite` action for all users except user with email address `john.doe@ma.local`, find the `SFA.DAS.EmployerApprenticeshipsService.Features_1.0` key in Azure table storage and update it's value to:
-
-```JavaScript
-{
-    "Data": [{
-        "Controller": "EmployerTeam",
-        "Action": "Invite",
-        "Whitelist": ["john.doe@ma.local"]
-    }]
-}
-```
-
 Using `"Action": "*"` can also be used to disable all actions on the controller.
 
 [Azure Storage Explorer]: http://storageexplorer.com/
@@ -108,5 +94,6 @@ Using `"Action": "*"` can also be used to disable all actions on the controller.
 [SQL Server Management Studio]: https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms
 [Visual Studio]: https://www.visualstudio.com
 
-##See Also
+## See Also
 [Integration Tests](IntegrationTesting.md)
+[Authorization Pipeline](Authorization Pipeline.md)

@@ -50,7 +50,7 @@ FROM [employer_financial].TransactionLine tl
 LEFT JOIN [employer_financial].[TransactionLineTypes] tlt ON tlt.TransactionType = IIF(Amount >= 0, 1, 2)
 INNER JOIN [employer_financial].LevyDeclarationTopup ldt ON ldt.SubmissionId = tl.SubmissionId
 INNER JOIN [employer_financial].LevyDeclaration ld ON ld.SubmissionId = tl.SubmissionId
-WHERE tl.AccountId = @accountId 
+WHERE tl.AccountId = @AccountId 
 AND tl.TransactionType IN (1, 2) 
 AND DateCreated >= @FromDate 
 AND DateCreated < @ToDate
@@ -85,25 +85,25 @@ SELECT MAX(transLine.DateCreated) AS DateCreated,
 FROM [employer_financial].[Payment] p
   INNER JOIN [employer_financial].[PaymentTransactionTypes] ptt ON ptt.TransactionType =  p.TransactionType
   INNER JOIN [employer_financial].[PaymentMetaData] meta ON p.PaymentMetaDataId = meta.Id
-  INNER JOIN (SELECT PeriodEnd,AccountId,ukprn, EmpRef, TransactionDate, DateCreated, LevyDeclared, EnglishFraction FROM employer_financial.TransactionLine WHERE DateCreated >= @FromDate AND 
+  INNER JOIN (SELECT PeriodEnd,AccountId,Ukprn, EmpRef, TransactionDate, DateCreated, LevyDeclared, EnglishFraction FROM employer_financial.TransactionLine WHERE DateCreated >= @FromDate AND 
         DateCreated <= @ToDate) transLine ON transLine.AccountId = p.AccountId AND transLine.PeriodEnd = p.PeriodEnd AND transLine.Ukprn = p.Ukprn
   LEFT JOIN [employer_financial].[Payment] pays1 
 	ON pays1.AccountId = p.AccountId 
 		AND pays1.Ukprn = p.Ukprn 
 		AND pays1.FundingSource = 1 
-		AND pays1.PaymentMetaDataId = meta.id
+		AND pays1.PaymentMetaDataId = meta.Id
   LEFT JOIN [employer_financial].[Payment] pays2 
 	ON pays2.AccountId = p.AccountId 
 	AND pays2.Ukprn = p.Ukprn 
 	AND pays2.FundingSource = 2 
-	AND pays2.PaymentMetaDataId = meta.id
+	AND pays2.PaymentMetaDataId = meta.Id
   LEFT JOIN [employer_financial].[Payment] pays3 
 	ON pays3.AccountId = p.AccountId 
 	AND pays3.Ukprn = p.Ukprn 
 	AND pays3.FundingSource = 3 
-	AND pays3.PaymentMetaDataId = meta.id
+	AND pays3.PaymentMetaDataId = meta.Id
   WHERE 
-	  p.AccountId = @accountid AND
+	  p.AccountId = @AccountId AND
 	  p.FundingSource IN (1,2,3)  
   GROUP BY p.AccountId, 
 	  p.Ukprn, 
