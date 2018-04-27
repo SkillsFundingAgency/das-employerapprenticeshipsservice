@@ -73,7 +73,6 @@
     <Build Include="StoredProcedures\CreateAccount.sql" />
     <Build Include="Views\GetInvitations.sql" />
     <Build Include="Views\GetTeamMembers.sql" />
-    <Build Include="StoredProcedures\SeedDataForRoles.sql" />
     <Build Include="Views\MembershipView.sql" />
     <Build Include="StoredProcedures\AcceptInvitation.sql" />
     <Build Include="StoredProcedures\GetAccounts_ByUserRef.sql" />
@@ -83,13 +82,9 @@
     <Build Include="StoredProcedures\CreatePaye.sql" />
     <Build Include="Tables\EmployerAgreementTemplate.sql" />
     <Build Include="Tables\EmployerAgreement.sql" />
-    <Build Include="Tables\AccountEmployerAgreement.sql" />
-    <Build Include="StoredProcedures\GetLegalEntitiesLinkedToAccount.sql" />
     <Build Include="StoredProcedures\AddPayeToAccount.sql" />
     <Build Include="StoredProcedures\CreateLegalEntity.sql" />
     <Build Include="StoredProcedures\CreateEmployerAgreement.sql" />
-    <Build Include="StoredProcedures\CreateAccountEmployerAgreement.sql" />
-    <Build Include="StoredProcedures\GetEmployerAgreementsLinkedToAccount.sql" />
     <Build Include="StoredProcedures\CreateEmployerAgreementTemplate.sql" />
     <Build Include="StoredProcedures\GetEmployerAgreement.sql" />
     <Build Include="StoredProcedures\SignEmployerAgreement.sql" />
@@ -136,6 +131,7 @@
     <None Include="Scripts\PostDeployment\SeedDevData.sql" />
     <Build Include="Tables\TransferRequest.sql" />
     <Build Include="StoredProcedures\GetLatestSignedAgreementVersionForAccount.sql" />
+    <Build Include="Tables\AccountEmployerAgreement.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />

@@ -13,7 +13,6 @@ using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
-using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -151,24 +150,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Status = HttpStatusCode.Unauthorized
                 };
             }
-        }
-
-        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetByLegalEntityCode(
-            long accountId, string legalEntityCode, string externalUserId)
-        {
-            var response = await _mediator.SendAsync(new GetLegalEntityAgreementRequest
-            {
-                AccountId = accountId,
-                LegalEntityCode = legalEntityCode
-            });
-
-            return new OrchestratorResponse<EmployerAgreementViewModel>
-            {
-                Data = new EmployerAgreementViewModel
-                {
-                    EmployerAgreement = response.EmployerAgreement
-                }
-            };
         }
 
         public async Task<OrchestratorResponse<SignAgreementViewModel>> SignAgreement(string agreementid, string hashedId, string externalUserId,

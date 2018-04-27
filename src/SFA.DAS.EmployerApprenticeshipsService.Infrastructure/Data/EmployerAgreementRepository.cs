@@ -24,16 +24,27 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int64);
 
-                var sql = "SELECT le.* FROM[employer_account].[LegalEntity] le INNER JOIN[employer_account].[EmployerAgreement] ea ON ea.LegalEntityId = le.Id INNER JOIN[employer_account].[AccountEmployerAgreement] aea ON aea.EmployerAgreementId = ea.Id WHERE aea.AccountId = @accountId";
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                
+                var sql = @"
+                    SELECT le.*
+                    FROM [employer_account].[LegalEntity] le
+                    WHERE le.Id IN (
+	                    SELECT LegalEntityId
+	                    FROM [employer_account].[EmployerAgreement] ea
+	                    WHERE ea.AccountId = @accountId";
 
                 if (signedOnly)
+                {
                     sql += " AND ea.StatusId = 2";
+                }
                 else
                 {
-                    sql += " AND ea.StatusId <> 5";
+                    sql += " AND ea.StatusId IN (1, 2)";
                 }
+
+                sql += ")";
 
                 return await c.QueryAsync<LegalEntity>(
                     sql: sql,
@@ -126,6 +137,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
+
                 parameters.Add("@employerAgreementId", agreementId, DbType.Int64);
 
                 return await c.ExecuteAsync(
@@ -141,7 +153,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@AccountId", accountId, DbType.Int64);
+
+                parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<RemoveEmployerAgreementView>(
                     sql: "[employer_account].[GetEmployerAgreementsToRemove_ByAccountId]",
@@ -157,6 +170,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
+
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryFirstAsync<int?>(

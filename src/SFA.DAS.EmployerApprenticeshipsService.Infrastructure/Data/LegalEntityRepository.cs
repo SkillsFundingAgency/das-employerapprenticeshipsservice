@@ -12,7 +12,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class LegalEntityRepository : BaseRepository, ILegalEntityRepository
     {
-        public LegalEntityRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger) : base(configuration.DatabaseConnectionString, logger)
+        public LegalEntityRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+            : base(configuration.DatabaseConnectionString, logger)
         {
         }
 
@@ -21,8 +22,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@AccountId", accontId, DbType.Int64);
-                parameters.Add("@Id", id, DbType.Int64);
+
+                parameters.Add("@accountId", accontId, DbType.Int64);
+                parameters.Add("@legalEntityId", id, DbType.Int64);
 
                 return await c.QueryAsync<LegalEntityView>(
                     sql: "[employer_account].[GetLegalEntity_ById]",

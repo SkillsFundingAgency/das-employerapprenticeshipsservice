@@ -31,7 +31,6 @@
 			EXEC [employer_account].[CreateLegalEntity] @legalEntityCode, @legalEntityName, @legalEntityRegisteredAddress, @legalEntityDateOfIncorporation, @legalEntityStatus, @legalEntitySource, NULL, NULL, @legalEntityId OUTPUT
 			EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
 			EXEC [employer_account].[SignEmployerAgreement] @employerAgreementId, @userId, ''Test User'', @now
-			EXEC [employer_account].[CreateAccountEmployerAgreement] @accountId, @employerAgreementId		
 			EXEC [employer_account].[CreatePaye] @payeRef, ''accessToken'', ''refreshToken'', @payeName
 			EXEC [employer_account].[CreateAccountHistory] @accountId, @payeRef, @now
 		END
