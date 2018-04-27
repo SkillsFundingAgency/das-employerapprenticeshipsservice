@@ -6,7 +6,6 @@ using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.Authorization;
@@ -272,7 +271,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
             {
                 ExternalUserId = UserId,
                 HashedAccountId = HashedAccountId,
-                HashedAgreementId = HashedAgreementId
+                AgreementId = HashedAgreementId
             };
 
             GetAgreementToSignViewModel = new EmployerAgreementViewModel
@@ -303,7 +302,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
         {
             var response = new GetEmployerAgreementResponse
             {
-                EmployerAgreement = new EmployerAgreement()
+                EmployerAgreement = new EmployerAgreementDto()
             };
 
             Mediator.Setup(x => x.SendAsync(GetAgreementRequest))

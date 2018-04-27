@@ -1,9 +1,9 @@
-﻿using System;
+﻿using SFA.DAS.EAS.Domain.Models.Features;
+using SFA.DAS.EAS.Infrastructure.Authorization;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Domain.Models.Features;
-using SFA.DAS.EAS.Infrastructure.Authorization;
 
 namespace SFA.DAS.EAS.Web.Extensions
 {
@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Web.Extensions
     {
         public static MvcHtmlString CommaSeperatedAddressToHtml(this HtmlHelper htmlHelper, string commaSeperatedAddress)
         {
-            var htmlAddress = commaSeperatedAddress.Split(new [] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+            var htmlAddress = commaSeperatedAddress.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => $"{line.Trim()}<br/>")
                 .Aggregate("", (x, y) => x + y);
 
@@ -43,6 +43,14 @@ namespace SFA.DAS.EAS.Web.Extensions
             }
 
             return true;
+        }
+
+        public static bool ViewExists(this HtmlHelper html, string viewName)
+        {
+            var controllerContext = html.ViewContext.Controller.ControllerContext;
+            var result = ViewEngines.Engines.FindView(controllerContext, viewName, null);
+
+            return result.View != null;
         }
     }
 }

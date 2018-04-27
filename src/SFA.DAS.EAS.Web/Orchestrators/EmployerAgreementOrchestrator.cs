@@ -2,6 +2,7 @@
 using MediatR;
 using SFA.DAS.EAS.Application.Commands.RemoveLegalEntity;
 using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
+using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
@@ -12,7 +13,6 @@ using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -128,13 +128,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var response = await _mediator.SendAsync(new GetEmployerAgreementRequest
                 {
-                    HashedAgreementId = agreementid,
+                    AgreementId = agreementid,
                     HashedAccountId = hashedId,
                     ExternalUserId = externalUserId
                 });
 
                 var employerAgreementView =
-                    _mapper.Map<EmployerAgreement, EmployerAgreementView>(response.EmployerAgreement);
+                    _mapper.Map<EmployerAgreementDto, EmployerAgreementView>(response.EmployerAgreement);
 
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {

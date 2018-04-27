@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.EAS.Web.ViewModels.EmployerAgreementViewModel
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.ViewModels.EmployerAgreementViewModel
 @{
     ViewBag.PageID = "agreement-sign";
     ViewBag.Title = "Agreement";
@@ -7,7 +8,10 @@
 }  
 
 <div>
-    @Html.Partial(@Model.EmployerAgreement.TemplatePartialViewName + "_changes")
+    @if (Html.ViewExists(Model.EmployerAgreement.TemplatePartialViewName + "_changes"))
+    {
+        @Html.Partial(@Model.EmployerAgreement.TemplatePartialViewName + "_changes");
+    }
 </div>
 
 <div class="grid-row" id="publication-banner">
