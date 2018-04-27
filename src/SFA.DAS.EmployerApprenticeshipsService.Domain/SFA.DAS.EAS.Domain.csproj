@@ -194,9 +194,11 @@
     <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />
     <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
-    <Compile Include="Data\Entities\Statistics.cs" />
+    <Compile Include="Data\Entities\Statistics\StatisticsAccounts.cs" />
+    <Compile Include="Data\Entities\Statistics\StatisticsFinancial.cs" />
     <Compile Include="Data\IUnitOfWork.cs" />
-    <Compile Include="Data\Repositories\IStatisticsRepository.cs" />
+    <Compile Include="Data\Repositories\IStatisticsAccountsRepository.cs" />
+    <Compile Include="Data\Repositories\IStatisticsFinancialRepository.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
     <Compile Include="Data\Repositories\ITransferConnectionInvitationRepository.cs" />
     <Compile Include="Data\Repositories\ITransferRequestRepository.cs" />

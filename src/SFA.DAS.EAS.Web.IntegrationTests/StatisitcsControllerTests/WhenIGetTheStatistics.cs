@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisitcsControllerTests
                 .AllowStatusCodes(HttpStatusCode.OK);
 
             var apiTestResolver = new ApiIntegrationTester();
-            var item = apiTestResolver.Resolve<IStatisticsRepository>();
+            var item = apiTestResolver.Resolve<IStatisticsAccountsRepository>();
 
 
 

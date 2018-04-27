@@ -9,7 +9,8 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         public RepositoriesRegistry()
         {
             For<IUserRepository>().Use<UserRepository>();
-            For<IStatisticsRepository>().Use<StatisticsRepository>();
+            For<IStatisticsAccountsRepository>().Use<StatisticsAccountsRepository>();
+            For<IStatisticsFinancialRepository>().Use<StatisticsFinancialRepository>();
         }
     }
 }

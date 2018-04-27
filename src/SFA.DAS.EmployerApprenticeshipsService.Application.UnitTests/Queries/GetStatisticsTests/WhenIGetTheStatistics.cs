@@ -2,7 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetStatistics;
-using SFA.DAS.EAS.Domain.Data.Entities;
+using SFA.DAS.EAS.Domain.Data.Entities.Statistics;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
@@ -11,13 +11,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
     public class WhenIGetTheStatistics
     {
         private GetStatisticsHandler _handler;
-        private Mock<IStatisticsRepository> _repository;
+        private Mock<IStatisticsAccountsRepository> _repositoryAccounts;
+        private Mock<IStatisticsFinancialRepository> _repositoryFinancial;
 
         [SetUp]
         public void Setup()
         {
-            _repository = new Mock<IStatisticsRepository>();
-            _handler = new GetStatisticsHandler(_repository.Object);
+            _repositoryAccounts = new Mock<IStatisticsAccountsRepository>();
+            _repositoryFinancial = new Mock<IStatisticsFinancialRepository>();
+            _handler = new GetStatisticsHandler(_repositoryAccounts.Object, _repositoryFinancial.Object);
         }
 
         [Test]
@@ -26,7 +28,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
             SetupTheRepositoryToReturnData(true);
             await _handler.Handle(new GetStatisticsRequest());
 
-            _repository.Verify(o => o.GetStatistics(), Times.Once);
+            _repositoryAccounts.Verify(o => o.GetStatistics(), Times.Once);
+            _repositoryFinancial.Verify(rf => rf.GetStatistics(), Times.Once);
         }
 
         [Test]
@@ -61,15 +64,21 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
 
         private void SetupTheRepositoryToReturnData(bool returnInstantiatedObject)
         {
-            _repository.Setup(o => o.GetStatistics())
-                .ReturnsAsync(returnInstantiatedObject ? new Statistics()
+            _repositoryAccounts.Setup(o => o.GetStatistics())
+                .ReturnsAsync(returnInstantiatedObject ? new StatisticsAccounts()
                 {
                     TotalAccounts = 1,
-                    TotalPayments = 2,
                     TotalLegalEntities = 3,
                     TotalAgreements = 4,
                     TotalPAYESchemes = 5
                 } : null);
+
+            _repositoryFinancial.Setup(rf => rf.GetStatistics()).ReturnsAsync(returnInstantiatedObject
+                ? new StatisticsFinancial()
+                {
+                    TotalPayments = 2
+                }
+                : null);
         }
     }
 }

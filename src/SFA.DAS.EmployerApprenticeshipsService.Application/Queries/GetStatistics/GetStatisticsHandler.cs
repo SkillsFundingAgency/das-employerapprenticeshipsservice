@@ -2,24 +2,29 @@
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using StructureMap.Query;
 
 namespace SFA.DAS.EAS.Application.Queries.GetStatistics
 {
     public class GetStatisticsHandler : IAsyncRequestHandler<GetStatisticsRequest, GetStatisticsResponse>
     {
-        private readonly IStatisticsRepository _repository;
+        private readonly IStatisticsAccountsRepository _repositoryAccounts;
+        private readonly IStatisticsFinancialRepository _repositoryFinancial;
 
-        public GetStatisticsHandler(IStatisticsRepository repository)
+        public GetStatisticsHandler(IStatisticsAccountsRepository repositoryAccounts, IStatisticsFinancialRepository repositoryFinancial)
         {
-            _repository = repository;
+            _repositoryAccounts = repositoryAccounts;
+            _repositoryFinancial = repositoryFinancial;
         }
 
         public async Task<GetStatisticsResponse> Handle(GetStatisticsRequest message)
         {
-            var model = await _repository.GetStatistics();
+            var modelAccounts = await _repositoryAccounts.GetStatistics();
+            var modelFinancial = await _repositoryFinancial.GetStatistics();
+
             StatisticsViewModel viewModel;
 
-            if (model == null)
+            if (modelAccounts == null || modelFinancial == null )
             {
                 viewModel = new StatisticsViewModel();
             }
@@ -27,11 +32,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetStatistics
             {
                 viewModel = new StatisticsViewModel
                 {
-                    TotalAccounts = model.TotalAccounts,
-                    TotalSignedAgreements = model.TotalAgreements,
-                    TotalActiveLegalEntities = model.TotalLegalEntities,
-                    TotalPAYESchemes = model.TotalPAYESchemes,
-                    TotalPaymentsThisYear = model.TotalPayments
+                    TotalAccounts = modelAccounts.TotalAccounts,
+                    TotalSignedAgreements = modelAccounts.TotalAgreements,
+                    TotalActiveLegalEntities = modelAccounts.TotalLegalEntities,
+                    TotalPAYESchemes = modelAccounts.TotalPAYESchemes,
+                    TotalPaymentsThisYear = modelFinancial.TotalPayments
                 };
             }
             return new GetStatisticsResponse
