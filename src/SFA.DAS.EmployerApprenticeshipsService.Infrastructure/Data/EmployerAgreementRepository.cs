@@ -80,7 +80,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
                 parameters.Add("@accountId", accountId, DbType.Int64);
-                //#BUG: stored proc will always create against latest agreement, which is probably okay but is not the required behaviour - we want to control this.
                 parameters.Add("@templateId", templateId, DbType.Int32);
                 parameters.Add("@employerAgreementId", templateId, DbType.Int64,ParameterDirection.InputOutput);
 
@@ -150,7 +149,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public async Task<EmployerAgreementTemplate> GetLatestAgreementTemplate()
         {
             var result = await WithConnection(async c => await c.QueryAsync<EmployerAgreementTemplate>(
-                sql: "SELECT TOP(1) * FROM [employer_account].[EmployerAgreementTemplate] ORDER BY CreatedDate DESC;",
+                sql: "SELECT TOP(1) * FROM [employer_account].[EmployerAgreementTemplate] ORDER BY VersionNumber DESC;",
                 commandType: CommandType.Text));
 
             return result.FirstOrDefault();
