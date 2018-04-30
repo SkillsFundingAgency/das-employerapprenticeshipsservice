@@ -101,7 +101,7 @@ namespace SFA.DAS.EAS.Infrastructure.Authorization
         {
             var authorisationContext = await GetAuthorizationContextAsync().ConfigureAwait(false);
             var feature = _featureService.GetFeature(featureType);
-            var authorizationResults = await Task.WhenAll(_handlers.Select(h => h.CanAccessAsync(authorisationContext, feature)));
+            var authorizationResults = await Task.WhenAll(_handlers.Select(h => h.CanAccessAsync(authorisationContext, feature))).ConfigureAwait(false);
             var authorizationResult = authorizationResults.FirstOrDefault(r => r != AuthorizationResult.Ok);
 
             return authorizationResult;

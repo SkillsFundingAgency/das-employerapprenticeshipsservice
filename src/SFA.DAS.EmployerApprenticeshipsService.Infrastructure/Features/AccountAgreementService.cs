@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Infrastructure.Features
 
         public async Task<int?> GetLatestSignedAgreementVersionAsync(long accountId)
         {
-            var version = await _cache.GetOrAddAsync(GetCacheKeyForAccount(accountId), k => FetchLatestAgreementNumberFromStoreAsync(accountId));
+            var version = await _cache.GetOrAddAsync(GetCacheKeyForAccount(accountId), k => FetchLatestAgreementNumberFromStoreAsync(accountId)).ConfigureAwait(false);
 
             if (version == StoredValueThatMeansNull)
             {
@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Infrastructure.Features
 
         private async Task<int> FetchLatestAgreementNumberFromStoreAsync(long accountId)
         {
-            return await _employerAgreementRepository.GetLatestSignedAgreementVersion(accountId) ?? StoredValueThatMeansNull;
+            return await _employerAgreementRepository.GetLatestSignedAgreementVersion(accountId).ConfigureAwait(false) ?? StoredValueThatMeansNull;
         }
 
         private string GetCacheKeyForAccount(long accountId)

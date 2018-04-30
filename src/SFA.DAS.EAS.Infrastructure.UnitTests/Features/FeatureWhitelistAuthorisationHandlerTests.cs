@@ -5,6 +5,7 @@ using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Infrastructure.Features;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
 {
@@ -24,7 +25,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
 
             var authorizationContext = fixtures.CreateAuthorizationContext();
             var feature = fixtures.CreateFeature();
-            var handler = new FeatureWhitelistAuthorizationHandler();
+            var handler = new FeatureWhitelistAuthorizationHandler(Mock.Of<ILog>());
 
             // Act
             var isEnabled = await handler.CanAccessAsync(authorizationContext, feature);

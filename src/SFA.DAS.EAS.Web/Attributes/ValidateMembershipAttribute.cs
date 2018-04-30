@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 
 namespace SFA.DAS.EAS.Web.Attributes
