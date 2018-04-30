@@ -29,7 +29,7 @@
 			VALUES (@accountId, @userId, 1)
 
 			EXEC [employer_account].[CreateLegalEntity] @legalEntityCode, @legalEntityName, @legalEntityRegisteredAddress, @legalEntityDateOfIncorporation, @legalEntityStatus, @legalEntitySource, NULL, NULL, @legalEntityId OUTPUT
-			EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
+			EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, null, @employerAgreementId OUTPUT
 			EXEC [employer_account].[SignEmployerAgreement] @employerAgreementId, @userId, ''Test User'', @now
 			EXEC [employer_account].[CreatePaye] @payeRef, ''accessToken'', ''refreshToken'', @payeName
 			EXEC [employer_account].[CreateAccountHistory] @accountId, @payeRef, @now
@@ -37,7 +37,6 @@
 	END'
 
 EXEC sp_executesql @sqlStatement
-
 
 DECLARE @userRef UNIQUEIDENTIFIER = '87df36f4-78ad-47c7-84d7-900ef4c39920'
 
