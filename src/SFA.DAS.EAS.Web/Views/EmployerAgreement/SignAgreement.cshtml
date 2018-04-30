@@ -7,12 +7,10 @@
     ViewBag.GaData.Vpv = "/accounts/agreements/sign-your-agreement/agreement-sign";
 }  
 
-<div>
-    @if (Html.ViewExists(Model.EmployerAgreement.TemplatePartialViewName + "_changes"))
-    {
-        @Html.Partial(@Model.EmployerAgreement.TemplatePartialViewName + "_changes");
-    }
-</div>
+@if (Html.ViewExists(Model.EmployerAgreement.TemplatePartialViewName + "_changes"))
+{
+    @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName + "_changes");
+}
 
 <div class="grid-row" id="publication-banner">
     <div class="column-third">
