@@ -1,20 +1,10 @@
-﻿using System;
-using System.Linq;
-using AutoMapper;
-using MediatR;
+﻿using Microsoft.Azure;
 using Microsoft.Azure.WebJobs;
-using SFA.DAS.EAS.Account.Worker.IdProcessor;
-using SFA.DAS.EAS.Account.Worker.Infrastructure;
 using SFA.DAS.EAS.Account.Worker.Infrastructure.Interfaces;
-using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Caching;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
-using SFA.DAS.NLog.Logger;
 using StructureMap;
-using StructureMap.TypeRules;
 
 namespace SFA.DAS.EAS.Account.Worker.DependencyResolution
 {
@@ -24,10 +14,6 @@ namespace SFA.DAS.EAS.Account.Worker.DependencyResolution
 
         public DefaultRegistry()
         {
-            var employerApprenticeshipsServiceConfig =
-                ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(
-                    "SFA.DAS.EmployerApprenticeshipsService");
-
             Scan(s =>
             {
                 s.AssembliesAndExecutablesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
@@ -35,7 +21,12 @@ namespace SFA.DAS.EAS.Account.Worker.DependencyResolution
                 s.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(c => c.Singleton());
             });
 
-            For<IWebJobConfiguration>().Use(employerApprenticeshipsServiceConfig.WebJobConfig);
+            For<IWebJobConfiguration>().Use(new WebJobConfig
+            {
+                DashboardConnectionString = CloudConfigurationManager.GetSetting("DashboardConnectionString"),
+                StorageConnectionString = CloudConfigurationManager.GetSetting("StorageConnectionString")
+            });
+
             For<JobHost>().Use(ctx => ctx.GetInstance<IJobHostFactory>().CreateJobHost());
         }
     }

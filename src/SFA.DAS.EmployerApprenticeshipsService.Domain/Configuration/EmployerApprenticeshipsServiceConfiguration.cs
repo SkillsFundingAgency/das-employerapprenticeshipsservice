@@ -21,6 +21,5 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string PublicAllowedHashstringCharacters { get; set; }
         public string PublicHashstring { get; set; }
         public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
-		public WebJobConfig WebJobConfig { get; set; }
 	}
 }

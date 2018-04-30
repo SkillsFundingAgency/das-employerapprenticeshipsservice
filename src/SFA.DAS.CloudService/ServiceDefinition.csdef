@@ -81,6 +81,7 @@
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="DashboardConnectionString" />
       <Setting name="EnvironmentName" />
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
