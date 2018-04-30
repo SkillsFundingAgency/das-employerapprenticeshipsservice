@@ -14,6 +14,13 @@ namespace SFA.DAS.EAS.Domain.Models.AccountTeam
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public Role Role { get; set; }
+
+        public int RoleId
+        {
+            get => (int)Role;
+            set => Role = (Role)Enum.Parse(typeof(Role), value.ToString());
+        }
+
         public DateTime CreatedDate { get; set; }
         public bool ShowWizard { get; set; }
         public string FullName() => $"{FirstName} {LastName}";
