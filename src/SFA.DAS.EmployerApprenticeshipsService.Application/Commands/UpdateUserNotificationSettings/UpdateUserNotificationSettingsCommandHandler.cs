@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateUserNotificationSettings
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            await _accountRepository.UpdateUserAccountSettings(message.UserRef, message.Settings);
+            await _accountRepository.UpdateUserAccountSettings(message.ExternalUserId, message.Settings);
 
             foreach (var setting in message.Settings)
             {

@@ -11,12 +11,12 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public string ProviderName { get; protected set; }
 
         public PaymentCreatedMessage() 
-            : base(0, string.Empty, string.Empty)
+            : base(0, string.Empty, Guid.Empty)
         {}
 
         public PaymentCreatedMessage(
-            string providerName, decimal amount, long accountId, string creatorName, string creatorUserRef) 
-            : base(accountId, creatorName, creatorUserRef)
+            string providerName, decimal amount, long accountId, string creatorName, Guid externalUserId) 
+            : base(accountId, creatorName, externalUserId)
         {
             ProviderName = providerName;
             Amount = amount;

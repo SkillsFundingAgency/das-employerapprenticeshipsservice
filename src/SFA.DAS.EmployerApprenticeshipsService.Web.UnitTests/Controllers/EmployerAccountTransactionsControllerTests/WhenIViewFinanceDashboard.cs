@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
@@ -41,7 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _hashingService = new Mock<IHashingService>();
             _mediator = new Mock<IMediator>();
 
-            _orchestrator.Setup(x => x.GetFinanceDashboardViewModel(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()))
+            _orchestrator.Setup(x => x.GetFinanceDashboardViewModel(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Guid>()))
                 .ReturnsAsync(new OrchestratorResponse<FinanceDashboardViewModel>
                 {
                     Data = new FinanceDashboardViewModel
@@ -66,7 +67,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             //Assert
             _orchestrator.Verify(
                 x => x.GetFinanceDashboardViewModel(It.Is<string>(s => s == "HashedAccountId"), It.Is<int>(m => m == 0),
-                    It.Is<int>(m => m == 0), It.IsAny<string>()), Times.Once);
+                    It.Is<int>(m => m == 0), It.IsAny<Guid>()), Times.Once);
 
             Assert.IsNotNull(result as ViewResultBase);
         }

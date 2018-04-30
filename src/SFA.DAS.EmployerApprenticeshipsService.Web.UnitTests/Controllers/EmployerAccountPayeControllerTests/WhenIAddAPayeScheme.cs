@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -20,7 +21,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private const string ExpectedAccountId = "AFD123";
-        private const string ExpectedUserId = "456TGF3";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
 
         [SetUp]
         public void Arrange()
@@ -28,7 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
             _employerAccountPayeOrchestrator = new Mock<Web.Orchestrators.EmployerAccountPayeOrchestrator>();
             
             _owinWrapper = new Mock<IAuthenticationService>();
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId.ToString);
             _featureToggle = new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
@@ -45,7 +46,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
             var expectedAddNewPayeScheme = new AddNewPayeSchemeViewModel {AccessToken = "123DFG",HashedAccountId = ExpectedAccountId,PayeName = "123/ABC",RefreshToken = "987TGH"};
 
             _employerAccountPayeOrchestrator.Setup(
-                x => x.AddPayeSchemeToAccount(It.IsAny<AddNewPayeSchemeViewModel>(), It.IsAny<string>()))
+                x => x.AddPayeSchemeToAccount(It.IsAny<AddNewPayeSchemeViewModel>(), It.IsAny<Guid>()))
                 .ReturnsAsync(new OrchestratorResponse<AddNewPayeSchemeViewModel>
                 {
                     Status = HttpStatusCode.OK
@@ -68,7 +69,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         {
             //Arrange
             _employerAccountPayeOrchestrator.Setup(
-                x => x.AddPayeSchemeToAccount(It.IsAny<AddNewPayeSchemeViewModel>(), It.IsAny<string>()))
+                x => x.AddPayeSchemeToAccount(It.IsAny<AddNewPayeSchemeViewModel>(), It.IsAny<Guid>()))
                 .ReturnsAsync(new OrchestratorResponse<AddNewPayeSchemeViewModel>
                 {
                     Status = HttpStatusCode.OK

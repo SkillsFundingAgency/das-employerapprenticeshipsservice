@@ -19,12 +19,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task SaveIdentityAttributes(string userRef, string email, string firstName, string lastName)
+        public async Task SaveIdentityAttributes(Guid externalUserId, string email, string firstName, string lastName)
         {
             await _mediator.SendAsync(new UpsertRegisteredUserCommand
             {
                 EmailAddress = email,
-                UserRef = userRef,
+                ExternalUserId = externalUserId,
                 LastName = lastName,
                 FirstName = firstName
             });

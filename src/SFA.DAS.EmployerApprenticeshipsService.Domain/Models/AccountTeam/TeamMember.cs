@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Domain.Models.AccountTeam
         public string HashedAccountId { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }
-        public string UserRef { get; set; }
+        public Guid ExternalUserId { get; set; }
         public Role Role { get; set; }
         public InvitationStatus Status { get; set; }
         public DateTime ExpiryDate { get; set; }

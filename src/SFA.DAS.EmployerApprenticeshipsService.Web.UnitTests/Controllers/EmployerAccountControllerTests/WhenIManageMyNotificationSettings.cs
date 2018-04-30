@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -27,6 +28,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
 
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
+
         [SetUp]
         public void Arrange()
         {
@@ -39,7 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
-            _orchestrator.Setup(x => x.GetNotificationSettingsViewModel(It.IsAny<string>()))
+            _orchestrator.Setup(x => x.GetNotificationSettingsViewModel(It.IsAny<Guid>()))
                 .ReturnsAsync(new OrchestratorResponse<NotificationSettingsViewModel>
                 {
                     Status = HttpStatusCode.OK,
@@ -47,7 +50,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 });
 
             _orchestrator.Setup(x => x.UpdateNotificationSettings(
-                It.IsAny<string>(),
+                It.IsAny<Guid>(),
                 It.IsAny<List<UserNotificationSetting>>()))
                 .Returns(() => Task.FromResult(new Unit()));
 
@@ -63,14 +66,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         public async Task ThenMySettingsAreRetrieved()
         {
             //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId.ToString);
 
             //Act
             await _controller.NotificationSettings();
 
             //Assert
             _orchestrator.Verify(x => x.GetNotificationSettingsViewModel(
-                It.Is<string>(userRef => userRef == "TEST")
+                It.Is<Guid>(userRef => userRef.Equals(ExpectedUserId))
             ), Times.Once);
         }
 
@@ -78,7 +81,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         public async Task TheMySettingsAreUpdated()
         {
             //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId.ToString);
 
             var payload = new NotificationSettingsViewModel();
 
@@ -87,7 +90,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             //Assert
             _orchestrator.Verify(x => x.UpdateNotificationSettings(
-                It.Is<string>(userRef => userRef == "TEST"),
+                It.Is<Guid>(userRef => userRef.Equals(ExpectedUserId)),
                 It.IsAny<List<UserNotificationSetting>>()),
                 Times.Once);
         }

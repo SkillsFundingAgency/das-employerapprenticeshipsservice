@@ -28,9 +28,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory
             {
                 validationResult.AddError(nameof(item.EmpRef));
             }
-            if (string.IsNullOrEmpty(item.UserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
-                validationResult.AddError(nameof(item.UserId));
+                validationResult.AddError(nameof(item.ExternalUserId));
             }
             if (string.IsNullOrEmpty(item.HashedAccountId))
             {
@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory
                 return validationResult;
             }
 
-            var result = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
+            var result = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
 
             validationResult.IsUnauthorized = result == null;
 

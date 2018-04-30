@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task<OrchestratorResponse> DismissMonthlyReminderTask(string hashedAccountId, string externalUserId, string taskTypeName)
+        public async Task<OrchestratorResponse> DismissMonthlyReminderTask(string hashedAccountId, Guid externalUserId, string taskTypeName)
         {
             try
             {

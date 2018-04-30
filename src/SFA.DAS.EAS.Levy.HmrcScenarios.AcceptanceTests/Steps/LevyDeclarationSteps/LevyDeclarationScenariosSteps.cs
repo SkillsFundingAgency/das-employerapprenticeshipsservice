@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.LevyDeclarationS
         {
             var employerAccountTransactionsOrchestrator = _container.GetInstance<EmployerAccountTransactionsOrchestrator>();
             var hashedAccountId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
+            var userId = Guid.Parse(ScenarioContext.Current["AccountOwnerUserRef"].ToString());
 
             var actual = employerAccountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, year, month, userId).Result;
             
@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.LevyDeclarationS
         {
             var employerAccountTransactionsOrchestrator = _container.GetInstance<EmployerAccountTransactionsOrchestrator>();
             var hashedAccountId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
+            var userId = Guid.Parse(ScenarioContext.Current["AccountOwnerUserRef"].ToString());
 
             var actual = employerAccountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, year, month, userId).Result;
 
@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.LevyDeclarationS
         {
             var employerAccountTransactionsOrchestrator = _container.GetInstance<EmployerAccountTransactionsOrchestrator>();
             var hashedAccountId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
+            var userId = Guid.Parse(ScenarioContext.Current["AccountOwnerUserRef"].ToString());
 
             var actual = employerAccountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(hashedAccountId,
                 new DateTime(year, month, 1), new DateTime(year, month, DateTime.DaysInMonth(year, month)), userId).Result;

@@ -27,11 +27,11 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             _mapper = mapper;
         }
 
-        public async Task<OrchestratorResponse<ICollection<AccountDetailViewModel>>> GetUserAccounts(string userRef)
+        public async Task<OrchestratorResponse<ICollection<AccountDetailViewModel>>> GetUserAccounts(Guid externalUserId)
         {
-            _logger.Info($"Requesting user's accounts for user Ref  {userRef}");
+            _logger.Info($"Requesting user's accounts for user Ref  {externalUserId}");
 
-            var accounts = await _mediator.SendAsync(new GetUserAccountsQuery {UserRef = userRef});
+            var accounts = await _mediator.SendAsync(new GetUserAccountsQuery {ExternalUserId = externalUserId});
 
             var viewModels = accounts.Accounts.AccountList.Select(x => _mapper.Map<AccountDetailViewModel>(x)).ToList();
 

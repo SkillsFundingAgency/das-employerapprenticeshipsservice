@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Net;
@@ -135,7 +136,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public virtual async Task<GetUserAccountRoleResponse> GetUserAccountRole(string hashedAccountId, string externalUserId)
+        public virtual async Task<GetUserAccountRoleResponse> GetUserAccountRole(string hashedAccountId, Guid externalUserId)
         {
             return await Mediator.SendAsync(new GetUserAccountRoleQuery
             {

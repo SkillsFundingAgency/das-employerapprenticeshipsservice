@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public AgreementSignedMessage()
         {   }
 
-        public AgreementSignedMessage(long accountId, long agreementId, string organisationName, long legalEntityId, bool cohortCreated, string creatorName, string creatorUserRef) : base(accountId, creatorName, creatorUserRef)
+        public AgreementSignedMessage(long accountId, long agreementId, string organisationName, long legalEntityId, bool cohortCreated, string creatorName, Guid externalUserId) : base(accountId, creatorName, externalUserId)
         {
             AgreementId = agreementId;
             LegalEntityId = legalEntityId;

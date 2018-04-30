@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 
@@ -18,7 +19,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
         public void ThenTrueIsReturnedWhenAllFieldsArePopulated()
         {
             //Act
-            var actual = _validator.Validate(new GetUserAccountRoleQuery {HashedAccountId = "12587", ExternalUserId = "123"});
+            var actual = _validator.Validate(new GetUserAccountRoleQuery {HashedAccountId = "12587", ExternalUserId = Guid.NewGuid(),});
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -28,7 +29,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
         public void ThenFalseIsReturnedWhenTheFieldsArentPopulated()
         {
             //Act
-            var actual = _validator.Validate(new GetUserAccountRoleQuery { HashedAccountId = string.Empty, ExternalUserId = string.Empty});
+            var actual = _validator.Validate(new GetUserAccountRoleQuery { HashedAccountId = string.Empty, ExternalUserId = Guid.Empty});
 
             //Assert
             Assert.IsFalse(actual.IsValid());

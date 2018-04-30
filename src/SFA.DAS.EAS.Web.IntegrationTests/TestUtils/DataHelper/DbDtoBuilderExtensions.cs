@@ -27,11 +27,11 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 
         public static UserInput BuildUserInput(this DbBuilder dbBuilder)
         {
-            var userRef = Guid.NewGuid().ToString();
+            var userRef = Guid.NewGuid();
             return new UserInput
             {
-                UserRef = userRef,
-                Email = userRef.Substring(0,6)+".madeupdomain.co.uk"
+                ExternalId = userRef,
+                Email = userRef.ToString().Substring(0,6)+".madeupdomain.co.uk"
             };
         }
     }

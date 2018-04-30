@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
-                ExternalUserId = Guid.NewGuid().ToString(),
+                ExternalUserId = Guid.NewGuid(),
 
             };
 
@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
-                ExternalUserId = Guid.NewGuid().ToString()
+                ExternalUserId = Guid.NewGuid()
             };
 
             _membershipRepository.Setup(x => x.GetCaller(command.HashedAccountId, command.ExternalUserId)).ReturnsAsync(null);
@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
-                ExternalUserId = Guid.NewGuid().ToString()
+                ExternalUserId = Guid.NewGuid()
             };
 
             var callerMembership = new MembershipView
@@ -116,7 +116,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
-                ExternalUserId = Guid.NewGuid().ToString()
+                ExternalUserId = Guid.NewGuid()
             };
 
             var callerMembership = new MembershipView
@@ -143,7 +143,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
-                ExternalUserId = Guid.NewGuid().ToString()
+                ExternalUserId = Guid.NewGuid()
             };
 
             var callerMembership = new MembershipView

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
@@ -29,7 +30,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes
                 validationResult.ValidationDictionary.Add(nameof(query.HashedAccountId), "Hashed account ID has not been supplied");
             }
 
-            if (string.IsNullOrEmpty(query.ExternalUserId))
+            if (query.ExternalUserId.Equals(Guid.Empty))
             {
                 validationResult.ValidationDictionary.Add(nameof(query.ExternalUserId), "User ID has not been supplied");
             }

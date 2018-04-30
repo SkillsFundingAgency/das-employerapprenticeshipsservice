@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -15,18 +16,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
         private Mock<IMembershipRepository> _membershipRepository;
 
         private const string ExpectedHashedAccountId = "123ASQ";
-        private const string ExpectedUserId = "123ASQ";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
 
         [SetUp]
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<Guid>()))
                 .ReturnsAsync(new MembershipView
                 {
                     Role = Role.Transactor
                 });
-            _membershipRepository.Setup(x => x.GetCaller(ExpectedUserId, ExpectedHashedAccountId))
+            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedAccountId, ExpectedUserId))
                 .ReturnsAsync(new MembershipView
                 {
                     Role = Role.Owner
@@ -41,7 +42,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
             //Act
             var actual = await _validator.ValidateAsync(new GetSignedEmployerAgreementPdfRequest {
                 HashedAccountId = ExpectedHashedAccountId,
-                UserId = ExpectedUserId,
+                ExternalUserId = ExpectedUserId,
                 HashedLegalAgreementId = "1234RFV"
             });
 
@@ -60,15 +61,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("HashedLegalAgreementId", "HashedLegalAgreementId has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string>("UserId","UserId has not been supplied"), actual.ValidationDictionary);
-            _membershipRepository.Verify(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            Assert.Contains(new KeyValuePair<string,string>("ExternalUserId","ExternalUserId has not been supplied"), actual.ValidationDictionary);
+            _membershipRepository.Verify(x => x.GetCaller(It.IsAny<string>(), It.IsAny<Guid>()), Times.Never);
         }
 
         [Test]
         public async Task ThenIfTheUserIsNotAnOwnerThenTheUnAuhtorizedFlagIsSet()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetSignedEmployerAgreementPdfRequest {HashedAccountId = "123", UserId = "123", HashedLegalAgreementId="123RFV"});
+            var actual = await _validator.ValidateAsync(new GetSignedEmployerAgreementPdfRequest {HashedAccountId = "123", ExternalUserId = Guid.NewGuid(), HashedLegalAgreementId="123RFV"});
 
             //Assert
             Assert.IsTrue(actual.IsUnauthorized);

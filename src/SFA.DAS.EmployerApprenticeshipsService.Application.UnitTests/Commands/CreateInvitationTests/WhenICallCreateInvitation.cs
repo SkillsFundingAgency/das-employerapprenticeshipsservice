@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
         private const long ExpectedAccountId = 545641561;
         private const long ExpectedUserId = 521465;
         private const long ExpectedInvitationId = 1231234;
-        private const string ExpectedExternalUserId = "someid";
+        private readonly Guid _expectedExternalUserId = Guid.NewGuid();
         private const string ExpectedHashedId = "aaa415ss1";
         private const string ExpectedCallerEmail = "test.user@test.local";
         private const string ExpectedExistingUserEmail = "registered@test.local";
@@ -47,10 +47,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             _invitationRepository.Setup(x => x.Create(It.IsAny<Invitation>())).ReturnsAsync(ExpectedInvitationId);
 
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, ExpectedExternalUserId)).ReturnsAsync(new MembershipView { AccountId = ExpectedAccountId, UserId = ExpectedUserId });
+            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, _expectedExternalUserId)).ReturnsAsync(new MembershipView { AccountId = ExpectedAccountId, UserId = ExpectedUserId });
 
             _userRepository = new Mock<IUserRepository>();
-            _userRepository.Setup(x => x.GetByEmailAddress(ExpectedExistingUserEmail)).ReturnsAsync(new User {Email = ExpectedExistingUserEmail, UserRef = Guid.NewGuid().ToString()});
+            _userRepository.Setup(x => x.GetByEmailAddress(ExpectedExistingUserEmail)).ReturnsAsync(new User {Email = ExpectedExistingUserEmail, ExternalId = Guid.NewGuid()});
 
             _messagePublisher=new Mock<IMessagePublisher>();
 
@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
                 EmailOfPersonBeingInvited = ExpectedCallerEmail,
                 NameOfPersonBeingInvited = "Test User",
                 RoleIdOfPersonBeingInvited = Role.Owner,
-                ExternalUserId = ExpectedExternalUserId
+                ExternalUserId = _expectedExternalUserId
             };
             DateTimeProvider.Current = new FakeTimeProvider(DateTime.UtcNow);
         }

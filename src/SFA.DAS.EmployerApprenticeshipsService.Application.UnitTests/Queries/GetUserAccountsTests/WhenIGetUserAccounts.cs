@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
@@ -17,13 +18,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountsTests
         private List<Domain.Data.Entities.Account.Account> _accounts;
         private Domain.Data.Entities.Account.Account _account;
 
+        private readonly Guid _externalUserId = Guid.NewGuid();
+
         [SetUp]
         public void Arrange()
         {
             _userAccountRepository = new Mock<IUserAccountRepository>();
             _account = new Domain.Data.Entities.Account.Account {Name = "Test", Role = Role.Owner};
             _accounts = new List<Domain.Data.Entities.Account.Account> {_account};
-            _userAccountRepository.Setup(repository => repository.GetAccountsByUserRef("1")).ReturnsAsync(new Accounts<Domain.Data.Entities.Account.Account> { AccountList = _accounts});
+            _userAccountRepository.Setup(repository => repository.GetAccountsByUserRef(_externalUserId)).ReturnsAsync(new Accounts<Domain.Data.Entities.Account.Account> { AccountList = _accounts});
             _getUserAccountsQueryHandler = new GetUserAccountsQueryHandler(_userAccountRepository.Object);
 
         }
@@ -32,17 +35,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountsTests
         public async Task ThenTheUserRepositoryIsCalledToGetAllUsers()
         {
             //Act
-             await _getUserAccountsQueryHandler.Handle(new GetUserAccountsQuery {UserRef = "1"});
+             await _getUserAccountsQueryHandler.Handle(new GetUserAccountsQuery {ExternalUserId = _externalUserId });
 
             //Assert
-            _userAccountRepository.Verify(x => x.GetAccountsByUserRef("1"), Times.Once);
+            _userAccountRepository.Verify(x => x.GetAccountsByUserRef(_externalUserId), Times.Once);
         }
 
         [Test]
         public async Task ThenTheRoleNameIsCorrectlMapped()
         {
             //Act
-            var actual = await _getUserAccountsQueryHandler.Handle(new GetUserAccountsQuery { UserRef = "1" });
+            var actual = await _getUserAccountsQueryHandler.Handle(new GetUserAccountsQuery { ExternalUserId = _externalUserId });
 
             //Assert
             var account = actual.Accounts.AccountList.FirstOrDefault();

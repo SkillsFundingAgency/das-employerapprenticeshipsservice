@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 
 namespace SFA.DAS.EAS.Application.Commands.DeleteInvitation
@@ -15,7 +16,7 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteInvitation
             if (string.IsNullOrEmpty(item.HashedAccountId))
                 validationResult.AddError("HashedId", "No HashedId supplied");
 
-            if (string.IsNullOrWhiteSpace(item.ExternalUserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
                 validationResult.AddError("ExternalUserId", "No ExternalUserId supplied");
 
             return validationResult;

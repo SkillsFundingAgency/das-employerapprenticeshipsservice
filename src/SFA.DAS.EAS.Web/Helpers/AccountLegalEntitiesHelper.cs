@@ -19,12 +19,12 @@ namespace SFA.DAS.EAS.Web.Helpers
             _mediator = mediator;
         }
 
-        internal async Task<List<LegalEntity>> GetAccountLegalEntities(string hashedLegalEntityId, string userIdClaim)
+        internal async Task<List<LegalEntity>> GetAccountLegalEntities(string hashedLegalEntityId, Guid userIdClaim)
         {
             var accountEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
                 HashedLegalEntityId = hashedLegalEntityId,
-                UserId = userIdClaim
+                ExternalUserId = userIdClaim
             });
             return accountEntities.Entites.LegalEntityList;
         }

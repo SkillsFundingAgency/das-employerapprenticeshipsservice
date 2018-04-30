@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 
 namespace SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole
@@ -18,7 +19,7 @@ namespace SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole
             if (item.RoleId == 0)
                 validationResult.AddError("RoleId", "No RoleId supplied");
 
-            if (string.IsNullOrWhiteSpace(item.ExternalUserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
                 validationResult.AddError("ExternalUserId", "No ExternalUserId supplied");
 
             return validationResult;

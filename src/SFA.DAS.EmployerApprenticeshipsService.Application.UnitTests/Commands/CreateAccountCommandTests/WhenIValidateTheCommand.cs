@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
@@ -23,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _createAccountCommand = new CreateAccountCommand
             {
                 OrganisationType = OrganisationType.CompaniesHouse,
-                ExternalUserId = "123ADF",
+                ExternalUserId = Guid.NewGuid(),
                 OrganisationReferenceNumber = "ABV123",
                 OrganisationName = "Test Company",
                 PayeReference = "980/EEE",

@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserInvitations
 
         public async Task<GetUserInvitationsResponse> Handle(GetUserInvitationsRequest message)
         {
-            var invitations = await _invitationRepository.Get(message.UserId);
+            var invitations = await _invitationRepository.Get(message.ExternalUserId);
 
             foreach (var invitation in invitations)
             {

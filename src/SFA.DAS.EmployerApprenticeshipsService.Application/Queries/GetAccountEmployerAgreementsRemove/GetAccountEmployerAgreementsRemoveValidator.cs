@@ -29,9 +29,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
                 validationResult.AddError(nameof(item.HashedAccountId));
             }
 
-            if (string.IsNullOrEmpty(item.UserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
-                validationResult.AddError(nameof(item.UserId));
+                validationResult.AddError(nameof(item.ExternalUserId));
             }
 
             if (!validationResult.IsValid())
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
                 return validationResult;
             }
 
-            var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
+            var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
 
             if (member == null || member.Role != Role.Owner)
             {

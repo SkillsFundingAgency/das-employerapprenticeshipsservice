@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -32,7 +33,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("notifications")]
         public async Task<ActionResult> NotificationSettings()
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userIdClaim = GetUserId();
             var vm = await _userSettingsOrchestrator.GetNotificationSettingsViewModel(userIdClaim);
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
@@ -46,7 +47,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("notifications")]
         public async Task<ActionResult> NotificationSettings(NotificationSettingsViewModel vm)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userIdClaim = GetUserId();
 
             await _userSettingsOrchestrator.UpdateNotificationSettings(userIdClaim,
                 vm.NotificationSettings);
@@ -66,12 +67,18 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("notifications/unsubscribe/{hashedAccountId}")]
         public async Task<ActionResult> NotificationUnsubscribe(string hashedAccountId)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
-            
+            var userIdClaim = GetUserId();
+
             var url = Url.Action(ControllerConstants.NotificationSettingsActionName);
             var model = await _userSettingsOrchestrator.Unsubscribe(userIdClaim, hashedAccountId, url);
 
             return View(model);
+        }
+        private Guid GetUserId()
+        {
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+
+            return Guid.TryParse(userIdClaim, out var userIdGuid) ? userIdGuid : Guid.Empty;
         }
     }
 }

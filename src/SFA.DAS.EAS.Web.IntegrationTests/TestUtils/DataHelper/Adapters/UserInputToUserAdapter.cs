@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters
             Email = input.Email;
             FirstName = input.FirstName;
             LastName = input.LastName;
-            UserRef = input.UserRef;
+            ExternalId = input.ExternalId;
         }
     }
 }

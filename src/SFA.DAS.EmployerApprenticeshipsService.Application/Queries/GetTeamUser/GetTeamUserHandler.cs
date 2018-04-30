@@ -19,8 +19,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetTeamUser
 
         public async Task<GetTeamMemberResponse> Handle(GetTeamMemberQuery message)
         {
-            _logger.Debug($"Getting team member for account hashed ID {message.HashedAccountId} and team member ID {message.TeamMemberId}");
-            var member = await _repository.GetCaller(message.HashedAccountId, message.TeamMemberId);
+            _logger.Debug($"Getting team member for account hashed ID {message.HashedAccountId} and team member ID {message.ExternalUserId}");
+            var member = await _repository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
             return new GetTeamMemberResponse
             {

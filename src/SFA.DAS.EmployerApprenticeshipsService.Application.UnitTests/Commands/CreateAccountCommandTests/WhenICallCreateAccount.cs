@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _messagePublisher = new Mock<IMessagePublisher>();
             _mediator = new Mock<IMediator>();
 
-            _user = new User { Id = 33, UserRef = "ABC123"};
+            _user = new User { Id = 33, ExternalId = Guid.NewGuid()};
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserByRefQuery>()))
                 .ReturnsAsync(new GetUserByRefResponse {User = _user});
@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 
             _refreshEmployerLevyService = new Mock<IRefreshEmployerLevyService>();
             _mockMembershipRepository=new Mock<IMembershipRepository>();
-            _mockMembershipRepository.Setup(r => r.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
+            _mockMembershipRepository.Setup(r => r.GetCaller(It.IsAny<long>(), It.IsAny<Guid>()))
                 .Returns(Task.FromResult(new MembershipView() { FirstName = "Caller", LastName = "Full Name" }));
 
             _handler = new CreateAccountCommandHandler(
@@ -167,7 +167,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 
             var cmd = new CreateAccountCommand
             {
-                ExternalUserId = Guid.NewGuid().ToString(),
+                ExternalUserId = Guid.NewGuid(),
                 OrganisationReferenceNumber = "QWERTY",
                 OrganisationName = "Qwerty Corp",
                 OrganisationAddress = "Innovation Centre, Coventry, CV1 2TT",
@@ -207,7 +207,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 OrganisationType = OrganisationType.CompaniesHouse,
                 OrganisationName = "OrgName",
                 EmployerRefName = "123AB",
-                ExternalUserId = "4566",
+                ExternalUserId = Guid.NewGuid(),
                 OrganisationAddress = "Address",
                 OrganisationDateOfInception = new DateTime(2017, 01, 30),
                 OrganisationReferenceNumber = "TYG56",
@@ -247,7 +247,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             //Arrange
             var  expectedPayeRef = "123/abc";
            
-            var createAccountCommand = new CreateAccountCommand { PayeReference = expectedPayeRef, AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.UserRef };
+            var createAccountCommand = new CreateAccountCommand { PayeReference = expectedPayeRef, AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.ExternalId };
 
             //Act
             await _handler.Handle(createAccountCommand);
@@ -256,7 +256,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<PayeSchemeAddedMessage>(
                 c => c.PayeScheme.Equals(expectedPayeRef) &&
                 c.AccountId.Equals(ExpectedAccountId) &&
-                c.CreatorUserRef.Equals(_user.UserRef)
+                c.CreatorExternalId.Equals(_user.ExternalId)
                 )), Times.Once());
         }
 

@@ -50,8 +50,8 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         }
         public static void SetAccountIdForUser(IMediator mediator, ScenarioContext scenarioContext)
         {
-            var accountOwnerId = scenarioContext["AccountOwnerUserRef"].ToString();
-            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { UserRef = accountOwnerId }).Result;
+            var accountOwnerId = Guid.Parse(scenarioContext["AccountOwnerUserRef"].ToString());
+            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { ExternalUserId = accountOwnerId }).Result;
 
             var account = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault();
             scenarioContext["AccountId"] = account.Id;
@@ -60,13 +60,13 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
 
         public void CreateAccountWithOwner(EmployerAccountOrchestrator orchestrator, IMediator mediator, Mock<IAuthenticationService> owinWrapper, HomeOrchestrator homeOrchestrator)
         {
-            var accountOwnerUserId = Guid.NewGuid().ToString();
+            var accountOwnerUserId = Guid.NewGuid();
 
             ScenarioContext.Current["AccountOwnerUserRef"] = accountOwnerUserId;
 
             var signInUserModel = new UserViewModel
             {
-                UserRef = accountOwnerUserId,
+                ExternalUserId = accountOwnerUserId,
                 Email = "accountowner@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
                 FirstName = "Test",
                 LastName = "Tester"
@@ -88,7 +88,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
 
             orchestrator.CreateAccount(new CreateAccountViewModel
             {
-                UserId = userView.UserRef,
+                ExternalUserId = userView.ExternalUserId,
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
                 OrganisationDateOfInception = new DateTime(2016, 01, 01),

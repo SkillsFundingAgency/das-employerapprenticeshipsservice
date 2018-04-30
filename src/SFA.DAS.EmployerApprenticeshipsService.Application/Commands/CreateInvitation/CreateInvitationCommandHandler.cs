@@ -34,12 +34,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
             EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration, IValidator<CreateInvitationCommand> validator,
             IUserRepository userRepository, IMessagePublisher messagePublisher)
         {
-            if (invitationRepository == null)
-                throw new ArgumentNullException(nameof(invitationRepository));
-            if (membershipRepository == null)
-                throw new ArgumentNullException(nameof(membershipRepository));
-            _invitationRepository = invitationRepository;
-            _membershipRepository = membershipRepository;
+            _invitationRepository = invitationRepository ?? throw new ArgumentNullException(nameof(invitationRepository));
+            _membershipRepository = membershipRepository ?? throw new ArgumentNullException(nameof(membershipRepository));
             _mediator = mediator;
             _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
             _validator = validator;
@@ -121,7 +117,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 Email = new Email
                 {
                     RecipientsAddress = message.EmailOfPersonBeingInvited,
-                    TemplateId = existingUser?.UserRef != null ? "InvitationExistingUser" : "InvitationNewUser",
+                    TemplateId = existingUser?.ExternalId != null ? "InvitationExistingUser" : "InvitationNewUser",
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",
@@ -135,12 +131,12 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 }
             });
 
-            await PublishAccountCreatedMessage(caller.AccountId, caller.FullName(), message.NameOfPersonBeingInvited, caller.UserRef);
+            await PublishAccountCreatedMessage(caller.AccountId, caller.FullName(), message.NameOfPersonBeingInvited, caller.ExternalUserId);
         }
 
-        private async Task PublishAccountCreatedMessage(long accountId, string signedByName, string personInvited, string userRef)
+        private async Task PublishAccountCreatedMessage(long accountId, string signedByName, string personInvited, Guid externalUserId)
         {
-            await _messagePublisher.PublishAsync(new UserInvitedMessage(personInvited, accountId, signedByName, userRef));
+            await _messagePublisher.PublishAsync(new UserInvitedMessage(personInvited, accountId, signedByName, externalUserId));
         }
     }
 }

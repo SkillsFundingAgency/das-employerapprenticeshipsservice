@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreements
         public override GetAccountEmployerAgreementsRemoveQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountEmployerAgreementsRemoveRequest>> RequestValidator { get; set; }
 
-        private const string ExpectedUserId = "456TGFD";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
         private const string ExpectedHashedAccountId = "456TGFD";
         private const string ExpectedLegalEntityCode = "98TYG123";
         private const long ExpectedAccountId = 98172938;
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreements
         {
             SetUp();
 
-            Query = new GetAccountEmployerAgreementsRemoveRequest {HashedAccountId = ExpectedHashedAccountId, UserId = ExpectedUserId};
+            Query = new GetAccountEmployerAgreementsRemoveRequest {HashedAccountId = ExpectedHashedAccountId, ExternalUserId = ExpectedUserId};
 
             _repository = new Mock<IEmployerAgreementRepository>();
             _repository.Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))

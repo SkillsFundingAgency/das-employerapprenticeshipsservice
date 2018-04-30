@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             {
                 HashedAccountId = "1AVCFD",
                 HashedAgreementId = "2EQWE34",
-                ExternalUserId = Guid.NewGuid().ToString(),
+                ExternalUserId = Guid.NewGuid(),
                 SignedDate = DateTime.Now
             };
 

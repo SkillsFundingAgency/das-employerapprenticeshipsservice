@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
 
             if (validationResult.IsUnauthorized)
             {
-                _logger.Info($"User {message.UserId} tried to remove {message.HashedLegalAgreementId} from Account {message.HashedAccountId}");
+                _logger.Info($"User {message.ExternalUserId} tried to remove {message.HashedLegalAgreementId} from Account {message.HashedAccountId}");
                 throw new UnauthorizedAccessException();
             }
 
@@ -81,14 +81,14 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             if (agreement != null)
             {
                 await PublishLegalEntityRemovedMessage(accountId, legalAgreementId,
-                    agreement.Status, agreement.SignedByName, agreement.LegalEntityId, agreement.LegalEntityName, message.UserId);
+                    agreement.Status, agreement.SignedByName, agreement.LegalEntityId, agreement.LegalEntityName, message.ExternalUserId);
             }
         }
 
         private async Task PublishLegalEntityRemovedMessage(long accountId, 
-            long agreementId, EmployerAgreementStatus status, string createdBy, long legalEntityId, string organisationName, string userRef)
+            long agreementId, EmployerAgreementStatus status, string createdBy, long legalEntityId, string organisationName, Guid externalUserId)
         {
-            await _messagePublisher.PublishAsync(new LegalEntityRemovedMessage(accountId, agreementId, status == EmployerAgreementStatus.Signed, legalEntityId, organisationName, createdBy, userRef));
+            await _messagePublisher.PublishAsync(new LegalEntityRemovedMessage(accountId, agreementId, status == EmployerAgreementStatus.Signed, legalEntityId, organisationName, createdBy, externalUserId));
         }
 
         private async Task AddAuditEntry(long accountId, string employerAgreementId)

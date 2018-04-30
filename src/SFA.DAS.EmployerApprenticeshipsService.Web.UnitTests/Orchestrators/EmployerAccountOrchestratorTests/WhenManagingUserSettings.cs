@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -45,28 +46,30 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         [Test]
         public async Task ThenTheMediatorIsCalledToRetrieveSettings()
         {
+            var externalUserId = Guid.NewGuid();    
             //Act
-            await _orchestrator.GetNotificationSettingsViewModel("USERREF");
+            await _orchestrator.GetNotificationSettingsViewModel(externalUserId);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(
-                It.Is<GetUserNotificationSettingsQuery>(s => s.UserRef == "USERREF")),
+                It.Is<GetUserNotificationSettingsQuery>(s => s.ExternalUserId.Equals(externalUserId))),
                 Times.Once);
         }
 
         [Test]
         public async Task ThenTheMediatorIsCalledToUpdateSettings()
         {
+            var testGuid = Guid.NewGuid();
             //Arrange
             var settings = new List<UserNotificationSetting>();
 
             //Act
-            await _orchestrator.UpdateNotificationSettings("USERREF", settings);
+            await _orchestrator.UpdateNotificationSettings(testGuid, settings);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(
                 It.Is<UpdateUserNotificationSettingsCommand>(
-                    s => s.UserRef == "USERREF"
+                    s => s.ExternalUserId.Equals(testGuid)
                     && s.Settings == settings)
                 ), Times.Once);
 

@@ -20,12 +20,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<Accounts<Account>> GetAccountsByUserRef(string userRef)
+        public async Task<Accounts<Account>> GetAccountsByUserRef(Guid userRef)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@userRef", Guid.Parse(userRef), DbType.Guid);
+                parameters.Add("@userRef", userRef, DbType.Guid);
 
                 return await c.QueryAsync<Account>(
                     sql: @"[employer_account].[GetAccounts_ByUserRef]",

@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserByRefTests
@@ -17,7 +18,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserByRefTests
         public void ThenIShouldPassIfIHaveAValudUserRef()
         {
             //Act
-            var result = _queryValidator.Validate(new GetUserByRefQuery {UserRef = "123"});
+            var result = _queryValidator.Validate(new GetUserByRefQuery {ExternalUserId = Guid.NewGuid()});
 
             //Assert
             Assert.IsTrue(result.IsValid());

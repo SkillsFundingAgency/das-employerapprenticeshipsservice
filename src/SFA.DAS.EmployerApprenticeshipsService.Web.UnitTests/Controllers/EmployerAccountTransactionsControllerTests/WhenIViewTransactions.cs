@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _hashingService = new Mock<IHashingService>();
             _mediator = new Mock<IMediator>();
 
-            _orchestrator.Setup(x => x.GetAccountTransactions(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()))
+            _orchestrator.Setup(x => x.GetAccountTransactions(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Guid>()))
                 .ReturnsAsync(new OrchestratorResponse<TransactionViewResultViewModel>
                 {
                     Data = new TransactionViewResultViewModel(DateTime.Now)
@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             var result = await _controller.TransactionsView("TEST", 2017, 1);
 
             //Assert
-            _orchestrator.Verify(x=> x.GetAccountTransactions(It.Is<string>(s => s=="TEST"), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Once);
+            _orchestrator.Verify(x=> x.GetAccountTransactions(It.Is<string>(s => s=="TEST"), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Guid>()), Times.Once);
             Assert.IsNotNull(result as ViewResult);
         }
 

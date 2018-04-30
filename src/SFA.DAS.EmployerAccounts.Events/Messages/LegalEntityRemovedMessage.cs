@@ -16,8 +16,8 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public LegalEntityRemovedMessage()
         { }
 
-        public LegalEntityRemovedMessage(long accountId,  long aggreementId, bool agreementSigned, long legalEntityId, string organisationName, string creatorName, string creatorUserRef) 
-            : base(accountId, creatorName, creatorUserRef)
+        public LegalEntityRemovedMessage(long accountId,  long aggreementId, bool agreementSigned, long legalEntityId, string organisationName, string creatorName, Guid externalUserId) 
+            : base(accountId, creatorName, externalUserId)
         {
             AgreementId = aggreementId;
             AgreementSigned = agreementSigned;

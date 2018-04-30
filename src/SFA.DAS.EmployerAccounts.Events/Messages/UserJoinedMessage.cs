@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public UserJoinedMessage()
         { }
 
-        public UserJoinedMessage(long accountId, string creatorName, string creatorUserRef) : base(accountId, creatorName, creatorUserRef)
+        public UserJoinedMessage(long accountId, string creatorName, Guid externalUserId) : base(accountId, creatorName, externalUserId)
         {
            
         }

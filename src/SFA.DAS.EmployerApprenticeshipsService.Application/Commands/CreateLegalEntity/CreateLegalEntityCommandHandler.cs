@@ -69,10 +69,10 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
             await PublishLegalEntityAddedMessage(accountId,
-                agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
+                agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId, owner.ExternalUserId);
 
             await PublishAgreementCreatedMessage(accountId,
-                agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
+                agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId, owner.ExternalUserId);
 
             return new CreateLegalEntityCommandResponse
             {
@@ -80,14 +80,14 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             };
         }
 
-        private async Task PublishLegalEntityAddedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, string userRef)
+        private async Task PublishLegalEntityAddedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, Guid externalUserId)
         {
-            await _messagePublisher.PublishAsync(new LegalEntityAddedMessage(accountId, agreementId, organisationName, legalEntityId, createdByName, userRef));
+            await _messagePublisher.PublishAsync(new LegalEntityAddedMessage(accountId, agreementId, organisationName, legalEntityId, createdByName, externalUserId));
         }
 
-        private async Task PublishAgreementCreatedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, string userRef)
+        private async Task PublishAgreementCreatedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, Guid externalUserId)
         {
-            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, agreementId, organisationName, legalEntityId, createdByName, userRef));
+            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, agreementId, organisationName, legalEntityId, createdByName, externalUserId));
         }
 
         private async Task NotifyLegalEntityCreated(string hashedAccountId, long legalEntityId)

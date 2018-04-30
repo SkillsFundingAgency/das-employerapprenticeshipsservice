@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
                 validationResult.AddError(nameof(item.HashedAgreementId));
             }
 
-            if (string.IsNullOrEmpty(item.ExternalUserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
                 validationResult.AddError(nameof(item.ExternalUserId));
             }

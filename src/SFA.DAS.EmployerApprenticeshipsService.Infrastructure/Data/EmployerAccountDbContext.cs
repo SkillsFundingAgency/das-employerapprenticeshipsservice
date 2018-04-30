@@ -64,9 +64,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 .Property(t => t.CommitmentId).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             modelBuilder.Entity<User>()
-                .Ignore(u => u.FullName)
-                .Ignore(u => u.UserRef)
-                .Property(u => u.ExternalId).HasColumnName(nameof(User.UserRef));
+                .Ignore(u => u.FullName);
+                //.Ignore(u => u.UserRef)
+                //.Property(u => u.ExternalId).HasColumnName(nameof(User.UserRef));
         }
     }
 }

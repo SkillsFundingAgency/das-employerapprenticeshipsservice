@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 .ReturnsAsync(expected);
             
             //Act
-            var actual = await _orchestrator.GetLimitedCompanyByRegistrationNumber(string.Empty, string.Empty, string.Empty);
+            var actual = await _orchestrator.GetLimitedCompanyByRegistrationNumber(string.Empty, string.Empty, Guid.Empty);
 
             //Assert
             Assert.IsNotNull(actual);
@@ -92,7 +92,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 .ReturnsAsync(expected);
 
             //Act
-            var actual = await _orchestrator.GetLimitedCompanyByRegistrationNumber(string.Empty, string.Empty, string.Empty);
+            var actual = await _orchestrator.GetLimitedCompanyByRegistrationNumber(string.Empty, string.Empty, Guid.Empty);
 
             //Assert
           
@@ -120,7 +120,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 });
 
             //Act
-            var actual = await _orchestrator.GetLimitedCompanyByRegistrationNumber("test", "362546752", string.Empty);
+            var actual = await _orchestrator.GetLimitedCompanyByRegistrationNumber("test", "362546752", Guid.Empty);
 
 
             //Assert
@@ -166,7 +166,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 
 
             //Act
-            var actual = await _orchestrator.FindPublicSectorOrganisation("test", "362546752", string.Empty);
+            var actual = await _orchestrator.FindPublicSectorOrganisation("test", "362546752", Guid.Empty);
             
             //Assert
             Assert.IsNotNull(actual?.Data?.Results?.Data);
@@ -199,7 +199,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 
 
             //Act
-            var actual = await _orchestrator.FindPublicSectorOrganisation("test", string.Empty, string.Empty);
+            var actual = await _orchestrator.FindPublicSectorOrganisation("test", string.Empty, Guid.Empty);
 
             //Assert
             Assert.IsNotNull(actual?.Data?.Results?.Data);
@@ -228,7 +228,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 });
 
             //Act
-            var actual = await _orchestrator.GetLimitedCompanyByRegistrationNumber(" 12345 ", "123", string.Empty);
+            var actual = await _orchestrator.GetLimitedCompanyByRegistrationNumber(" 12345 ", "123", Guid.Empty);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Conflict, actual.Status);

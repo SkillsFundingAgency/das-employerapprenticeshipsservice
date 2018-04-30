@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
         {
             var validationResult = new ValidationResult();
 
-            if (string.IsNullOrEmpty(item.ExternalUserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
                 validationResult.AddError(nameof(item.ExternalUserId),"ExternalUserId has not been supplied");
             }

@@ -8,6 +8,6 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTran
         public string HashedAccountId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-        public string ExternalUserId { get; set; }
+        public Guid ExternalUserId { get; set; }
     }
 }

@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
             {
                 Email = "test.user@test.local",
                 AccountId = ExpectedHashedId,
-                ExternalUserId = Guid.NewGuid().ToString(),
+                ExternalUserId = Guid.NewGuid()
             };
             
             var owner = new MembershipView
@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
                 HashedAccountId = ExpectedHashedId
             };
             _userRepository = new Mock<IUserRepository>();
-            _userRepository.Setup(x => x.GetByEmailAddress(ExpectedExistingUserEmail)).ReturnsAsync(new User { Email = ExpectedExistingUserEmail, UserRef = Guid.NewGuid().ToString() });
+            _userRepository.Setup(x => x.GetByEmailAddress(ExpectedExistingUserEmail)).ReturnsAsync(new User { Email = ExpectedExistingUserEmail, ExternalId = Guid.NewGuid() });
 
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository.Setup(x => x.GetCaller(owner.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(owner);

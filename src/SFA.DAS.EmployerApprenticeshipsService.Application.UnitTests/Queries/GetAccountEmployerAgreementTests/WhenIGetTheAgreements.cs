@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
         public override GetAccountEmployerAgreementsQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountEmployerAgreementsRequest>> RequestValidator { get; set; }
 
-        private const string ExpectedExternalUserId = "ABF456";
+        private readonly Guid ExpectedExternalUserId = Guid.NewGuid();
         private const string ExpectedHashedId = "789RRR";
         private const long ExpectedAccountId = 5456456465;
 

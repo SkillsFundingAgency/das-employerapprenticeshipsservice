@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Exceptions;
@@ -28,9 +29,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserByRefTests
 
             _repository = new Mock<IUserRepository>();
 
-            _repository.Setup(x => x.GetUserByRef(It.IsAny<string>())).ReturnsAsync(_user);
+            _repository.Setup(x => x.GetUserByRef(It.IsAny<Guid>())).ReturnsAsync(_user);
 
-            Query = new GetUserByRefQuery { UserRef = "ABC123" };
+            Query = new GetUserByRefQuery { ExternalUserId = Guid.NewGuid()};
             RequestHandler = new GetUserByRefQueryHandler(_repository.Object, RequestValidator.Object, Mock.Of<ILog>());
         }
 
@@ -38,7 +39,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserByRefTests
         public void ThenIShouldThrowExceptionIfTheUserCannotBeFound()
         {
             //Assign
-            _repository.Setup(x => x.GetUserByRef(It.IsAny<string>())).ReturnsAsync(null);
+            _repository.Setup(x => x.GetUserByRef(It.IsAny<Guid>())).ReturnsAsync(null);
 
             //Act
             Assert.ThrowsAsync<InvalidRequestException>(async () =>
@@ -54,7 +55,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserByRefTests
             await RequestHandler.Handle(Query);
 
             //Assert
-            _repository.Verify(x => x.GetUserByRef(Query.UserRef), Times.Once);
+            _repository.Verify(x => x.GetUserByRef(Query.ExternalUserId), Times.Once);
         }
 
         [Test]
@@ -66,7 +67,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserByRefTests
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(_user, result.User);
-            _repository.Verify(x => x.GetUserByRef(Query.UserRef), Times.Once);
+            _repository.Verify(x => x.GetUserByRef(Query.ExternalUserId), Times.Once);
         }
     }
 }

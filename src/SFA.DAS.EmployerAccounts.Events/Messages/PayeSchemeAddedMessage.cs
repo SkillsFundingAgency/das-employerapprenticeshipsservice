@@ -13,8 +13,8 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public PayeSchemeAddedMessage()
         { }
 
-        public PayeSchemeAddedMessage(string payeScheme, long accountId, string creatorName, string creatorUserRef) 
-            : base(accountId, creatorName, creatorUserRef)
+        public PayeSchemeAddedMessage(string payeScheme, long accountId, string creatorName, Guid creatorExternalId) 
+            : base(accountId, creatorName, creatorExternalId)
         {
             PayeScheme = payeScheme;
         }

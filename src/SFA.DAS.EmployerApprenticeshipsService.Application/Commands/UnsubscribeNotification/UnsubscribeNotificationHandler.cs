@@ -40,19 +40,19 @@ namespace SFA.DAS.EAS.Application.Commands.UnsubscribeNotification
         {
             _validator.Validate(command);
             
-            var settings = await _accountRepository.GetUserAccountSettings(command.UserRef);
+            var settings = await _accountRepository.GetUserAccountSettings(command.ExternalUserId);
             var setting = settings.SingleOrDefault(m => m.AccountId == command.AccountId);
             if (setting == null)
-                throw new Exception($"Missing settings for account {command.AccountId} and user with ref {command.UserRef}");
+                throw new Exception($"Missing settings for account {command.AccountId} and user with ref {command.ExternalUserId}");
             if(!setting.ReceiveNotifications)
                 throw new Exception($"Trying to unsubscribe from an already unsubscribed account, {command.AccountId}");
 
             setting.ReceiveNotifications = false;
-            await _accountRepository.UpdateUserAccountSettings(command.UserRef, settings);
+            await _accountRepository.UpdateUserAccountSettings(command.ExternalUserId, settings);
 
             try
             {
-                var user = _userRepository.GetUserByRef(command.UserRef);
+                var user = _userRepository.GetUserByRef(command.ExternalUserId);
                 await Task.WhenAll(user);
                _logger.Info($"Sending email to unsubscriber: {user.Result.Id}");
                 var email = CreateEmail(user.Result, setting.Name, command.NotificationSettingUrl);

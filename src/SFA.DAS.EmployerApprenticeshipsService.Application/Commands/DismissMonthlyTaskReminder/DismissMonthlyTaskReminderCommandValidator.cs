@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Application.Commands.DismissMonthlyTaskReminder
                 validationResult.AddError(nameof(command.HashedAccountId), "Hashed account Id cannot be null or empty");
             }
 
-            if (string.IsNullOrEmpty(command.ExternalUserId))
+            if (command.ExternalUserId.Equals(Guid.Empty))
             {
                 validationResult.AddError(nameof(command.ExternalUserId), "Hashed user Id cannot be null or empty");
             }

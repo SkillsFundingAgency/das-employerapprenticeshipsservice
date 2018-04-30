@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         {
             await ValidateMessage(message);
 
-            var userResponse = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = message.ExternalUserId });
+            var userResponse = await _mediator.SendAsync(new GetUserByRefQuery { ExternalUserId = message.ExternalUserId });
 
             if (string.IsNullOrEmpty(message.OrganisationReferenceNumber))
             {
@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
 
             var createdByName = caller.FullName();
-            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.UserRef);
+            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.ExternalId);
 
             await PublishAccountCreatedMessage(createAccountResult.AccountId, createdByName, message.ExternalUserId);
 
@@ -104,12 +104,12 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             };
         }
 
-        private async Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, string userRef)
+        private async Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, Guid userRef)
         {
             await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, employerAgreementId, organisationName, legalEntityId, userName, userRef));
         }
 
-        private async Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, string userRef)
+        private async Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, Guid userRef)
         {
             await _messagePublisher.PublishAsync(new LegalEntityAddedMessage(accountId, employerAgreementId, organisationName, legalEntityId, userName, userRef));
         }
@@ -128,14 +128,14 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             await _refreshEmployerLevyService.QueueRefreshLevyMessage(returnValue.AccountId, empref);
         }
 
-        private async Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, string userRef)
+        private async Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, Guid externalUserId)
         {
-                await _messagePublisher.PublishAsync(new PayeSchemeAddedMessage(empref, accountId, createdByName, userRef));
+                await _messagePublisher.PublishAsync(new PayeSchemeAddedMessage(empref, accountId, createdByName, externalUserId));
         }
 
-        private async Task PublishAccountCreatedMessage(long accountId, string createdByName, string userRef)
+        private async Task PublishAccountCreatedMessage(long accountId, string createdByName, Guid externalUserId)
         {
-            await _messagePublisher.PublishAsync(new AccountCreatedMessage(accountId, createdByName, userRef));
+            await _messagePublisher.PublishAsync(new AccountCreatedMessage(accountId, createdByName, externalUserId));
         }
 
         private async Task ValidateMessage(CreateAccountCommand message)
@@ -263,7 +263,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                     ChangedProperties = new List<PropertyUpdate>
                     {
                         PropertyUpdate.FromLong("AccountId", returnValue.AccountId),
-                        PropertyUpdate.FromString("UserId", message.ExternalUserId),
+                        PropertyUpdate.FromString("ExternalUserId", message.ExternalUserId.ToString()),
                         PropertyUpdate.FromString("RoleId", Role.Owner.ToString()),
                         PropertyUpdate.FromDateTime("CreatedDate", DateTime.UtcNow)
                     },
@@ -272,7 +272,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                         new Entity { Id = returnValue.AccountId.ToString(), Type = "Account" },
                         new Entity { Id = user.Id.ToString(), Type = "User" }
                     },
-                    AffectedEntity = new Entity { Type = "Membership", Id = message.ExternalUserId }
+                    AffectedEntity = new Entity { Type = "Membership", Id = message.ExternalUserId.ToString() }
                 }
             });
         }

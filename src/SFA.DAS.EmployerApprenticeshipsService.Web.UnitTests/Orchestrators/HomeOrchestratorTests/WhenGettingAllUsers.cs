@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HomeOrchestratorTests
                 Email = "test@local.com",
                 FirstName = "test",
                 LastName = "tester",
-                UserRef = Guid.NewGuid().ToString()
+                ExternalId = Guid.NewGuid()
             };
             
             _mediator = new Mock<IMediator>();
@@ -73,7 +73,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HomeOrchestratorTests
 
             //Assert
             Assert.AreEqual(1, actual.AvailableUsers.Count);
-            Assert.IsTrue(actual.AvailableUsers.Any(x => x.UserRef.Equals(_user.UserRef) && x.Email.Equals(_user.Email) && x.FirstName.Equals(_user.FirstName) && x.LastName.Equals(_user.LastName)));
+            Assert.IsTrue(actual.AvailableUsers.Any(x => x.ExternalUserId.Equals(_user.ExternalId) && x.Email.Equals(_user.Email) && x.FirstName.Equals(_user.FirstName) && x.LastName.Equals(_user.LastName)));
 
         }
     }

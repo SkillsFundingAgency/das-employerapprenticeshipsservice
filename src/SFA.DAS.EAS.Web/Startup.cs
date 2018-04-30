@@ -109,19 +109,26 @@ namespace SFA.DAS.EAS.Web
         {
             Logger.Info("Retrieving claims from OIDC server.");
 
-            var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
+            var externalUserId = GetExternalUserId(identity, constants);
             var email = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Email())?.Value;
             var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.GivenName())?.Value;
             var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.FamilyName())?.Value;
 
-            Logger.Info($"Retrieved claims from OIDC server for user with external ID '{userRef}'.");
+            Logger.Info($"Retrieved claims from OIDC server for user with external ID '{externalUserId}'.");
 
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, identity.Claims.First(c => c.Type == constants.Id()).Value));
             identity.AddClaim(new Claim(ClaimTypes.Name, identity.Claims.First(c => c.Type == constants.DisplayName()).Value));
             identity.AddClaim(new Claim("sub", identity.Claims.First(c => c.Type == constants.Id()).Value));
             identity.AddClaim(new Claim("email", identity.Claims.First(c => c.Type == constants.Email()).Value));
 
-            Task.Run(async () => await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName)).Wait();
+            Task.Run(async () => await authenticationOrchestrator.SaveIdentityAttributes(externalUserId, email, firstName, lastName)).Wait();
+        }
+
+        private static Guid GetExternalUserId(ClaimsIdentity identity, Constants constants)
+        {
+            var userIdClaim = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
+
+            return Guid.TryParse(userIdClaim, out var userIdGuid) ? userIdGuid : Guid.Empty;
         }
     }
 

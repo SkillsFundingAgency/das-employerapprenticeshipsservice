@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -74,7 +75,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             {
                 FirstName = "Bob",
                 LastName = "Green",
-                UserRef = "123"
+                ExternalId = Guid.NewGuid()
             };
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserByRefQuery>()))
@@ -100,7 +101,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         public async Task ThenTheRepositoryIsCalledIfTheCommandIsValid()
         {
             //Arrange
-            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(Guid.NewGuid());
 
             //Act
             await _addPayeToAccountCommandHandler.Handle(command);
@@ -114,7 +115,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         public async Task ThenAMessageIsQueuedForTheRefreshEmployerLevyService()
         {
             //Arrange
-            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(Guid.NewGuid());
 
             //Act
             await _addPayeToAccountCommandHandler.Handle(command);
@@ -127,7 +128,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         public async Task ThenAMessageIsQueuedForTheAddPayeSchemeQueue()
         {
             //Arrange
-            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(Guid.NewGuid());
 
             //Act
             await _addPayeToAccountCommandHandler.Handle(command);
@@ -137,14 +138,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
                         c.PayeScheme.Equals(command.Empref) &&
                         c.AccountId.Equals(ExpectedAccountId) &&
                         c.CreatorName.Equals(_user.FullName) &&
-                        c.CreatorUserRef.Equals(_user.UserRef))));
+                        c.CreatorExternalId.Equals(_user.ExternalId))));
         }
 
         [Test]
         public async Task ThenAnEventIsPublishedToNofifyThePayeSchemeHasBeenAdded()
         {
             //Arrange
-            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(Guid.NewGuid());
 
             //Act
             await _addPayeToAccountCommandHandler.Handle(command);
@@ -160,7 +161,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         public async Task ThenTheAuditCommandIsCalledWhenTheCreateInvitationCommandIsValid()
         {
             //Arrange
-            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(Guid.NewGuid());
 
             //Act
             await _addPayeToAccountCommandHandler.Handle(command);

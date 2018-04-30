@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
             {
                 UserId = _teamMember.UserId,
                 HashedAccountId = "123a",
-                ExternalUserId = Guid.NewGuid().ToString()
+                ExternalUserId = Guid.NewGuid()
             };
 
             _validator = new Mock<IValidator<RemoveTeamMemberCommand>>();
@@ -89,7 +89,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
             {
                 UserId = membership.UserId,
                 HashedAccountId = "as123",
-                ExternalUserId = Guid.NewGuid().ToString()
+                ExternalUserId = Guid.NewGuid()
             };
 
             _membershipRepository.Setup(x => x.Get(membership.UserId, membership.AccountId)).ReturnsAsync(null);
@@ -110,7 +110,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
             var ownerUser = new User
             {
                 Id = 2,
-                UserRef = Guid.NewGuid().ToString()
+                ExternalId = Guid.NewGuid()
             };
 
             var membership = new Membership
@@ -131,7 +131,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
             {
                 UserId = membership.UserId,
                 HashedAccountId = "",
-                ExternalUserId = ownerUser.UserRef
+                ExternalUserId = ownerUser.ExternalId
             };
 
             _membershipRepository.Setup(x => x.Get(membership.UserId, membership.AccountId)).ReturnsAsync(membership);
@@ -153,7 +153,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
             var ownerUser = new User
             {
                 Id = 2,
-                UserRef = Guid.NewGuid().ToString()
+                ExternalId = Guid.NewGuid()
             };
 
             var membership = new Membership
@@ -174,7 +174,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
             {
                 UserId = membership.UserId,
                 HashedAccountId = "",
-                ExternalUserId = ownerUser.UserRef
+                ExternalUserId = ownerUser.ExternalId
             };
 
             _membershipRepository.Setup(x => x.Get(membership.UserId, membership.AccountId)).ReturnsAsync(membership);
@@ -197,7 +197,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(_owner.AccountId.ToString())) != null &&
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("UserId") && y.NewValue.Equals(_teamMember.UserId.ToString())) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("ExternalUserId") && y.NewValue.Equals(_teamMember.UserId.ToString())) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Role") && y.NewValue.Equals(_teamMember.Role.ToString())) != null
                 )));
 

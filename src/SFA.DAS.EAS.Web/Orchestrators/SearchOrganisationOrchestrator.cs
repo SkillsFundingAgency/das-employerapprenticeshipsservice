@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
@@ -26,7 +27,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _cookieService = cookieService;
         }
 
-        public async Task<OrchestratorResponse<SearchOrganisationResultsViewModel>> SearchOrganisation(string searchTerm, int pageNumber, OrganisationType? organisationType, string hashedAccountId, string userId)
+        public async Task<OrchestratorResponse<SearchOrganisationResultsViewModel>> SearchOrganisation(string searchTerm, int pageNumber, OrganisationType? organisationType, string hashedAccountId, Guid userId)
         {
             var response = new OrchestratorResponse<SearchOrganisationResultsViewModel>();
 
@@ -55,7 +56,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        private async Task SetAlreadySelectedOrganisations(string hashedAccountId, string userId, PagedResponse<OrganisationDetailsViewModel> searchResults)
+        private async Task SetAlreadySelectedOrganisations(string hashedAccountId, Guid userId, PagedResponse<OrganisationDetailsViewModel> searchResults)
         {
             var accountLegalEntitiesHelper = new AccountLegalEntitiesHelper(Mediator);
             var accountLegalEntities = await accountLegalEntitiesHelper.GetAccountLegalEntities(hashedAccountId, userId);

@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserInvitations
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
-            var repositoryValue = await _invitationRepository.GetNumberOfInvites(message.UserId);
+            var repositoryValue = await _invitationRepository.GetNumberOfInvites(message.ExternalUserId);
 
 
             return new GetNumberOfUserInvitationsResponse { NumberOfInvites = repositoryValue };

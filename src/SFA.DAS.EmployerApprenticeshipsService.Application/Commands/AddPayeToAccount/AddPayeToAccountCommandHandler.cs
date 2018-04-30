@@ -70,13 +70,13 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                     }
                 );
 
-            var userResponse = await _mediator.SendAsync(new GetUserByRefQuery{UserRef = message.ExternalUserId});
+            var userResponse = await _mediator.SendAsync(new GetUserByRefQuery{ExternalUserId = message.ExternalUserId});
 
             await AddAuditEntry(message, accountId);
 
             await RefreshLevy(accountId, message.Empref);
 
-            await AddPayeScheme(message.Empref, accountId, userResponse.User.FullName, userResponse.User.UserRef);
+            await AddPayeScheme(message.Empref, accountId, userResponse.User.FullName, userResponse.User.ExternalId);
 
             await NotifyPayeSchemeAdded(message.HashedAccountId, message.Empref);
         }
@@ -110,9 +110,9 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             await _refreshEmployerLevyService.QueueRefreshLevyMessage(accountId, payeRef);
         }
 
-        private async Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef)
+        private async Task AddPayeScheme(string payeRef, long accountId, string userName, Guid externalUserId)
         {
-            await _messagePublisher.PublishAsync(new PayeSchemeAddedMessage(payeRef, accountId, userName, userRef));
+            await _messagePublisher.PublishAsync(new PayeSchemeAddedMessage(payeRef, accountId, userName, externalUserId));
         }
 
         private async Task AddAuditEntry(AddPayeToAccountCommand message, long accountId)

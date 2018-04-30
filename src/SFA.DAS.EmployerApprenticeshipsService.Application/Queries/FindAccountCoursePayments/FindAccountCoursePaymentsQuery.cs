@@ -12,6 +12,6 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments
         public int? PathwayCode { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-        public string ExternalUserId { get; set; }
+        public Guid ExternalUserId { get; set; }
     }
 }

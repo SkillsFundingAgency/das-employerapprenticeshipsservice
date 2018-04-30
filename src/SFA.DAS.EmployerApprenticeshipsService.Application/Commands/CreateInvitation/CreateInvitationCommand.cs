@@ -1,11 +1,12 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
 {
     public class CreateInvitationCommand : IAsyncRequest
     {
-        public string ExternalUserId { get; set; }
+        public Guid ExternalUserId { get; set; }
 
         public string HashedAccountId { get; set; }
 

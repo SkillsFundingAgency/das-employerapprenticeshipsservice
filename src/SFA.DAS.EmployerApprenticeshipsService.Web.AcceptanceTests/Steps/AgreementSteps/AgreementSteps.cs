@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AgreementSteps
         {
             
             var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["ExternalUserId"].ToString();
+            var userId = Guid.Parse(ScenarioContext.Current["ExternalUserId"].ToString());
 
             var employerAgreementOrchestrator = _container.GetInstance<EmployerAgreementOrchestrator>();
 
@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AgreementSteps
         public void ThenAgreementStatusIs(string status)
         {
             var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["ExternalUserId"].ToString();
+            var userId = Guid.Parse(ScenarioContext.Current["ExternalUserId"].ToString());
 
             var employerAgreementOrchestrator = _container.GetInstance<EmployerAgreementOrchestrator>();
             var agreement = employerAgreementOrchestrator.Get(hashedId, userId).Result.Data.EmployerAgreements.FirstOrDefault();

@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.FindEmployerAccountLevyDecla
         private DateTime _toDate;
         private long _accountId;
         private string _hashedAccountId;
-        private string _externalUserId;
+        private Guid _externalUserId;
         public override FindEmployerAccountLevyDeclarationTransactionsQuery Query { get; set; }
         public override FindEmployerAccountLevyDeclarationTransactionsHandler RequestHandler { get; set; }
         public override Mock<IValidator<FindEmployerAccountLevyDeclarationTransactionsQuery>> RequestValidator { get; set; }
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.FindEmployerAccountLevyDecla
             _toDate = DateTime.Now.AddDays(-2);
             _accountId = 1;
             _hashedAccountId = "123ABC";
-            _externalUserId = "test";
+            _externalUserId = Guid.NewGuid();
 
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(_accountId);

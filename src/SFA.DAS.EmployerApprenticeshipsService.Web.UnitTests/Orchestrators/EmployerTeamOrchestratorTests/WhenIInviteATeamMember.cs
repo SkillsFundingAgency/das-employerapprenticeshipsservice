@@ -21,6 +21,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
 
+        private readonly Guid _externalUserId = Guid.NewGuid();
+
         [SetUp]
         public void Arrange()
         {
@@ -41,7 +43,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>())).ReturnsAsync(response);
 
             //Act
-            var result = await _orchestrator.InviteTeamMember(request, "37648");
+            var result = await _orchestrator.InviteTeamMember(request, _externalUserId);
 
             //Assert
             Assert.IsNotNull(result);
@@ -64,7 +66,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()));
 
             //Act
-            var result = await _orchestrator.InviteTeamMember(request, "37648");
+            var result = await _orchestrator.InviteTeamMember(request, _externalUserId);
 
             //Assert
             Assert.IsNotNull(result);
@@ -87,7 +89,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()));
 
             //Act
-            var result = await _orchestrator.InviteTeamMember(request, "37648");
+            var result = await _orchestrator.InviteTeamMember(request, _externalUserId);
 
             //Assert
             Assert.IsNotNull(result);
@@ -102,7 +104,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         {
             //Arrange
             const string hashAccountId = "123ABC";
-            const string externalUserId = "1234";
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
                      .ReturnsAsync(new GetUserAccountRoleResponse
@@ -111,7 +112,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                      });
 
             //Act
-            var result = await _orchestrator.GetNewInvitation(hashAccountId, externalUserId);
+            var result = await _orchestrator.GetNewInvitation(hashAccountId, _externalUserId);
 
             //Assert
             Assert.AreEqual(status, result.Status);

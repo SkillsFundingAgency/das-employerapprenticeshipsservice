@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         {
             var accountId = (long)ScenarioContext.Current["AccountId"];
             var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["ExternalUserId"].ToString();
+            var userId = Guid.Parse(ScenarioContext.Current["ExternalUserId"].ToString());
 
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
             var legalEntities = employerPayeOrchestrator.Get(hashedId, userId).Result;
@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             {
                 HashedAccountId = hashedId,
                 RemoveScheme = 2,
-                UserId = userId,
+                ExternalUserId = userId,
                 AccountName = "",
                 PayeRef = scheme.Ref
             };
@@ -91,7 +91,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         {
             var accountId = (long)ScenarioContext.Current["AccountId"];
             var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["ExternalUserId"].ToString();
+            var userId = Guid.Parse(ScenarioContext.Current["ExternalUserId"].ToString());
 
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
             var payeSchemes = employerPayeOrchestrator.Get(hashedId, userId).Result;
@@ -114,7 +114,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         {
             var accountId = (long)ScenarioContext.Current["AccountId"];
             var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["ExternalUserId"].ToString();
+            var userId = Guid.Parse(ScenarioContext.Current["ExternalUserId"].ToString());
 
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
             var legalEntities = employerPayeOrchestrator.Get(hashedId, userId).Result;
@@ -127,7 +127,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         public void WhenIAddANewPAYEScheme()
         {
             var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["ExternalUserId"].ToString();
+            var userId = Guid.Parse(ScenarioContext.Current["ExternalUserId"].ToString());
 
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
 
@@ -158,7 +158,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         {
          
             var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["ExternalUserId"].ToString();
+            var userId = Guid.Parse(ScenarioContext.Current["ExternalUserId"].ToString());
 
             //Get the PAYE schemes
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();

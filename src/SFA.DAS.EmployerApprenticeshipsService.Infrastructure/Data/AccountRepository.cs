@@ -187,13 +187,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToList();
         }
 
-        public async Task<List<UserNotificationSetting>> GetUserAccountSettings(string userRef)
+        public async Task<List<UserNotificationSetting>> GetUserAccountSettings(Guid  userRef)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
 
-                parameters.Add("@UserRef", Guid.Parse(userRef), DbType.Guid);
+                parameters.Add("@UserRef", userRef, DbType.Guid);
 
                 return await c.QueryAsync<UserNotificationSetting>(
                     sql: "[employer_account].[GetUserAccountSettings]",
@@ -242,7 +242,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings)
+        public async Task UpdateUserAccountSettings(Guid externalUserId, List<UserNotificationSetting> settings)
         {
             var settingsDataTable = new DataTable();
 
@@ -258,7 +258,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
 
-                parameters.Add("@UserRef", Guid.Parse(userRef), DbType.Guid);
+                parameters.Add("@UserRef", externalUserId, DbType.Guid);
                 parameters.Add("@NotificationSettings", settingsDataTable.AsTableValuedParameter("employer_account.UserNotificationSettingsTable"));
 
                 return await c.ExecuteAsync(

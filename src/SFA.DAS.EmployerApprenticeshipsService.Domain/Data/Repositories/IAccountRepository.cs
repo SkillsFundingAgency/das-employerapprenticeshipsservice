@@ -17,9 +17,9 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<AccountStats> GetAccountStats(long accountId);
         Task<List<EmployerAgreementView>> GetEmployerAgreementsLinkedToAccount(long accountId);
         Task<List<PayeView>> GetPayeSchemesByAccountId(long accountId);
-        Task<List<UserNotificationSetting>> GetUserAccountSettings(string userRef);
+        Task<List<UserNotificationSetting>> GetUserAccountSettings(Guid userRef);
         Task RemovePayeFromAccount(long accountId, string payeRef);
         Task UpdateAccountHashedIds(long accountId, string hashedId, string publicHashedId);
-        Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings);
+        Task UpdateUserAccountSettings(Guid externalUserId, List<UserNotificationSetting> settings);
     }
 }

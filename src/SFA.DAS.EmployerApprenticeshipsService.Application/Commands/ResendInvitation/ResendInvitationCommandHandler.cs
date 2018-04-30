@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
                 Email = new Email
                 {
                     RecipientsAddress = message.Email,
-                    TemplateId = existingUser?.UserRef != null ? "InvitationExistingUser" : "InvitationNewUser",
+                    TemplateId = existingUser?.ExternalId != null ? "InvitationExistingUser" : "InvitationNewUser",
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",

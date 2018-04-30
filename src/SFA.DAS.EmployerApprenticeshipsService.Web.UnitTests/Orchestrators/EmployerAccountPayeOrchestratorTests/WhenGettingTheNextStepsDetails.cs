@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -41,14 +42,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         public async Task ThenTheUserIsReadFromTheQuery()
         {
             //Arrange
-            var expectedUserId = "AFGV1234";
+            var expectedUserId = Guid.NewGuid();
             var expectedAccountId = "789GBT";
 
             //Act
             await _orchestrator.GetNextStepsViewModel(expectedUserId, expectedAccountId);
             
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetTeamMemberQuery>(c=>c.TeamMemberId.Equals(expectedUserId) && c.HashedAccountId.Equals(expectedAccountId))));
+            _mediator.Verify(x=>x.SendAsync(It.Is<GetTeamMemberQuery>(c=>c.ExternalUserId.Equals(expectedUserId) && c.HashedAccountId.Equals(expectedAccountId))));
 
         }
 
@@ -56,7 +57,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         public async Task ThenTheModelIsPopulatedWithTheResponse()
         {
             //Arrange
-            var expectedUserId = "AFGV1234";
+            var expectedUserId = Guid.NewGuid();
             var expectedAccountId = "789GBT";
 
             //Act
@@ -74,7 +75,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         {
             //Arrange
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetTeamMemberQuery>())).ReturnsAsync(new GetTeamMemberResponse { User = new MembershipView { ShowWizard = true, Role = Role.Transactor } });
-            var expectedUserId = "AFGV1234";
+            var expectedUserId = Guid.NewGuid();
             var expectedAccountId = "789GBT";
 
             //Act

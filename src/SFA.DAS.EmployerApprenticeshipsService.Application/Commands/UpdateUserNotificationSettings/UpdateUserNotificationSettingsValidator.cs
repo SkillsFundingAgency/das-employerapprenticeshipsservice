@@ -10,8 +10,8 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateUserNotificationSettings
         {
             var validationResult = new ValidationResult();
 
-            if (string.IsNullOrWhiteSpace(item.UserRef))
-                validationResult.AddError(nameof(item.UserRef));
+            if (item.ExternalUserId.Equals(Guid.Empty))
+                validationResult.AddError(nameof(item.ExternalUserId));
 
             if (item.Settings == null)
                 validationResult.AddError(nameof(item.Settings));

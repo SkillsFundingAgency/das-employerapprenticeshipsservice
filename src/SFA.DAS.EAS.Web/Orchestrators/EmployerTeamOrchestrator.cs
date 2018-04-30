@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _currentDateTime = currentDateTime;
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedAccountId, Guid externalUserId)
         {
             var response = await GetTeamMembers(hashedAccountId, externalUserId);
 
@@ -83,7 +83,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> ChangeRole(string hashedId, string email, short role, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> ChangeRole(string hashedId, string email, short role, Guid externalUserId)
         {
             try
             {
@@ -128,14 +128,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string accountId, string externalUserId)
+        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string accountId, Guid externalUserId)
         {
             try
             {
                 var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
                     HashedAccountId = accountId,
-                    UserId = externalUserId
+                    ExternalUserId = externalUserId
                 });
 
                 var userRoleResponseTask = GetUserAccountRole(accountId, externalUserId);
@@ -143,7 +143,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var userResponseTask = _mediator.SendAsync(new GetTeamMemberQuery
                 {
                     HashedAccountId = accountId,
-                    TeamMemberId = externalUserId
+                    ExternalUserId = externalUserId
                 });
 
                 var accountStatsResponseTask = _mediator.SendAsync(new GetAccountStatsQuery
@@ -175,7 +175,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Account = accountResponse.Account,
                     UserRole = userRoleResponse.UserRole,
-                    HashedUserId = externalUserId,
+                    ExternalUserId = externalUserId,
                     UserFirstName = userResponse.User.FirstName,
                     OrgainsationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
                     PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
@@ -225,7 +225,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<InviteTeamMemberViewModel>> GetNewInvitation(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<InviteTeamMemberViewModel>> GetNewInvitation(string hashedAccountId, Guid externalUserId)
         {
             var response = await GetUserAccountRole(hashedAccountId, externalUserId);
 
@@ -240,7 +240,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<TeamMember>> GetTeamMember(string hashedAccountId, string email, string externalUserId)
+        public async Task<OrchestratorResponse<TeamMember>> GetTeamMember(string hashedAccountId, string email, Guid externalUserId)
         {
             var userRoleResponse = await GetUserAccountRole(hashedAccountId, externalUserId);
 
@@ -264,7 +264,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(string hashedId, string userId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(string hashedId, Guid externalUserId)
         {
             try
             {
@@ -272,7 +272,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     _mediator.SendAsync(new GetAccountTeamMembersQuery
                     {
                         HashedAccountId = hashedId,
-                        ExternalUserId = userId
+                        ExternalUserId = externalUserId
                     });
 
                 return new OrchestratorResponse<EmployerTeamMembersViewModel>
@@ -303,7 +303,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public async Task HideWizard(string hashedAccountId, string externalUserId)
+        public async Task HideWizard(string hashedAccountId, Guid externalUserId)
         {
             await _mediator.SendAsync(new UpdateShowAccountWizardCommand
             {
@@ -313,7 +313,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> InviteTeamMember(InviteTeamMemberViewModel model, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> InviteTeamMember(InviteTeamMemberViewModel model, Guid externalUserId)
         {
             try
             {
@@ -353,7 +353,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return new OrchestratorResponse<EmployerTeamMembersViewModel>();
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Remove(long userId, string accountId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Remove(long userId, string accountId, Guid externalUserId)
         {
             var response = await GetTeamMembers(accountId, externalUserId);
 
@@ -430,7 +430,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Resend(string email, string hashedId, string externalUserId, string name)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Resend(string email, string hashedId, Guid externalUserId, string name)
         {
             var response = await GetTeamMembers(hashedId, externalUserId);
 
@@ -488,9 +488,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
+        public virtual async Task<bool> UserShownWizard(Guid externalUserId, string hashedAccountId)
         {
-            var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
+            var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, ExternalUserId = externalUserId });
             return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
         }
 

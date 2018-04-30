@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveTeamMember
                     ChangedProperties = new List<PropertyUpdate>
                     {
                         new PropertyUpdate {PropertyName = "AccountId", NewValue = owner.AccountId.ToString()},
-                        new PropertyUpdate {PropertyName = "UserId", NewValue = teamMember.UserId.ToString()},
+                        new PropertyUpdate {PropertyName = "ExternalUserId", NewValue = teamMember.UserId.ToString()},
                         new PropertyUpdate {PropertyName = "Role", NewValue = teamMember.Role.ToString()}
                     },
                     RelatedEntities = new List<Entity> { new Entity { Id = owner.AccountId.ToString(), Type = "Account" } },

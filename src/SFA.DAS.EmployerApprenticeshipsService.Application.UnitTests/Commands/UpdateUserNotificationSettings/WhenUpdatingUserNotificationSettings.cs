@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -16,6 +17,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
         private UpdateUserNotificationSettingsCommandHandler _handler;
         private Mock<IAccountRepository> _repository;
         private Mock<IValidator<UpdateUserNotificationSettingsCommand>> _validator;
+        private Guid _externalUserId = Guid.NewGuid();
 
         [SetUp]
         public void Arrange()
@@ -26,7 +28,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
 
             _repository = new Mock<IAccountRepository>();
             _repository.Setup(x => x.UpdateUserAccountSettings(
-                It.IsAny<string>(),
+                It.IsAny<Guid>(),
                 It.IsAny<List<UserNotificationSetting>>()
             )).Returns(() => Task.FromResult(new Unit()));
 
@@ -39,7 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
             //Arrange
             var command = new UpdateUserNotificationSettingsCommand
             {
-                UserRef = "REF",
+                ExternalUserId = Guid.NewGuid(),
                 Settings = new List<UserNotificationSetting>()
             };
 
@@ -56,7 +58,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
             //Arrange
             var command = new UpdateUserNotificationSettingsCommand
             {
-                UserRef = "REF",
+                ExternalUserId = _externalUserId,
                 Settings = new List<UserNotificationSetting>()
             };
 
@@ -65,9 +67,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
 
             //Assert
             _repository.Verify(x => x.UpdateUserAccountSettings(
-                It.Is<string>(s => s == "REF"),
+                It.Is<Guid>(s => s == _externalUserId),
                 It.IsAny<List<UserNotificationSetting>>()
-                ), Times.Once);
+            ), Times.Once);
         }
     }
 }

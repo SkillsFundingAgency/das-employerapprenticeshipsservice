@@ -1,9 +1,11 @@
-﻿namespace SFA.DAS.EAS.Web.ViewModels
+﻿using System;
+
+namespace SFA.DAS.EAS.Web.ViewModels
 {
     public class UserViewModel
     {
         public long Id { get; set; }
-        public string UserRef { get; set; }
+        public Guid ExternalUserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

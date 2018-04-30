@@ -14,8 +14,8 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public PayeSchemeDeletedMessage()
         { }
 
-        public PayeSchemeDeletedMessage(string payeScheme, string organisationName, long accountId, string creatorName, string creatorUserRef) 
-            : base(accountId, creatorName, creatorUserRef)
+        public PayeSchemeDeletedMessage(string payeScheme, string organisationName, long accountId, string creatorName, Guid externalUserId) 
+            : base(accountId, creatorName, externalUserId)
         {
             PayeScheme = payeScheme;
             OrganisationName = organisationName;

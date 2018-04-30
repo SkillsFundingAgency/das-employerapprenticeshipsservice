@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -24,7 +25,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserNotificationSettings
                 .Returns(() => new ValidationResult());
 
             _repository = new Mock<IAccountRepository>();
-            _repository.Setup(x => x.GetUserAccountSettings(It.IsAny<string>()))
+            _repository.Setup(x => x.GetUserAccountSettings(It.IsAny<Guid>()))
                 .ReturnsAsync(new List<UserNotificationSetting>());
 
             _handler = new GetUserNotificationSettingsQueryHandler(_repository.Object, _validator.Object);
@@ -46,10 +47,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserNotificationSettings
         [Test]
         public async Task ThenTheRepositoryIsCalledToRetrieveSettings()
         {
+            var userGuid = Guid.NewGuid();
+
             //Arrange
             var query = new GetUserNotificationSettingsQuery
             {
-                UserRef = "REF"
+                ExternalUserId = userGuid
             };
 
             //Act
@@ -57,7 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserNotificationSettings
 
             //Assert
             _repository.Verify(x => x.GetUserAccountSettings(
-                It.Is<string>(s => s == "REF")));
+                It.Is<Guid>(s => s.Equals(userGuid))));
         }
     }
 }

@@ -45,7 +45,13 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
             for (var index = 1; index <= totalPages; index++)
             {
-                var payments = await GetPaymentsPage(employerAccountId, periodEnd, index);
+                try
+                {
+                    //PageOfResults<Payment> payments = null;
+                    //var payments =
+                    //    await _paymentsEventsApiClient.GetPayments(periodEnd, employerAccountId.ToString(), index);
+
+                    var payments = await GetPaymentsPage(employerAccountId, periodEnd, index);
 
                 if (payments == null) continue;
 
@@ -63,6 +69,12 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 }
 
                 populatedPayments.AddRange(paymentDetails);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
 
             return populatedPayments;

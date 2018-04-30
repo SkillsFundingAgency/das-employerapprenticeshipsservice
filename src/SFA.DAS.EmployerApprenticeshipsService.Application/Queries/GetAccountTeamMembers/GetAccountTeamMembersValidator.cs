@@ -23,9 +23,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers
         public async Task<ValidationResult> ValidateAsync(GetAccountTeamMembersQuery item)
         {
             var validationResult = new ValidationResult();
-            if (string.IsNullOrEmpty(item.ExternalUserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
-                validationResult.AddError(nameof(item.ExternalUserId), "UserId has not been supplied");
+                validationResult.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
             }
             if (string.IsNullOrEmpty(item.HashedAccountId))
             {

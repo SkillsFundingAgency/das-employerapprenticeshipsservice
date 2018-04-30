@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 
 namespace SFA.DAS.EAS.Application.Commands.DeleteInvitation
 {
@@ -6,6 +7,6 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteInvitation
     {
         public string Email { get; set; }
         public string HashedAccountId { get; set; }
-        public string ExternalUserId { get; set; }
+        public Guid ExternalUserId { get; set; }
     }
 }

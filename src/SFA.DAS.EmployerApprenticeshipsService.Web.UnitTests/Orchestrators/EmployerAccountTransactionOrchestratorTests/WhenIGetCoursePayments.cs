@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
     {
         private const string HashedAccountId = "123ABC";
         private const long AccountId = 1234;
-        private const string ExternalUser = "Test user";
+        private readonly Guid ExternalUser =Guid.NewGuid();
         private const long ExpectedUkPrn = 46789465;
         private readonly DateTime _fromDate = DateTime.Now.AddDays(-20);
         private readonly DateTime _toDate = DateTime.Now.AddDays(-20);

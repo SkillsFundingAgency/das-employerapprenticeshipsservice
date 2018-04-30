@@ -124,7 +124,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             return new CreateAccountViewModel
             {
                 OrganisationName = "test",
-                UserId = Guid.NewGuid().ToString(),
+                ExternalUserId = Guid.NewGuid(),
                 PayeReference = "123ADFC",
                 OrganisationReferenceNumber = "12345",
                 OrganisationDateOfInception = new DateTime(2016, 10, 30),

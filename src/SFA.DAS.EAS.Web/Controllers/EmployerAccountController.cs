@@ -157,7 +157,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var request = new CreateAccountViewModel
             {
-                UserId = GetUserId(),
+                ExternalUserId = GetUserId(),
                 OrganisationType = enteredData.OrganisationType,
                 OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
                 OrganisationName = enteredData.OrganisationName,
@@ -188,8 +188,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(string hashedAccountId)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
-            var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
+            var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, GetUserId());
             return View(vm);
         }
 
@@ -198,8 +197,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
-            var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, userIdClaim);
+            var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, GetUserId());
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -229,12 +227,11 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(errorResponse);
         }
 
-        private string GetUserId()
+        private Guid GetUserId()
         {
             var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
-            return userIdClaim ?? "";
-        }
 
-      
+            return Guid.TryParse(userIdClaim, out var userIdGuid) ? userIdGuid : Guid.Empty;
+        }
     }
 }

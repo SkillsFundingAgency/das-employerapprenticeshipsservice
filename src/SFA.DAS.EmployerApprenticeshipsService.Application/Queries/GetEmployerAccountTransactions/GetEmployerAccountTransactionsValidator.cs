@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -28,7 +29,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 result.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
             }
 
-            if (result.IsValid() && !string.IsNullOrEmpty(item.ExternalUserId))
+            if (result.IsValid() && !item.ExternalUserId.Equals(Guid.Empty))
             {
                 var caller = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
                 if (caller == null)

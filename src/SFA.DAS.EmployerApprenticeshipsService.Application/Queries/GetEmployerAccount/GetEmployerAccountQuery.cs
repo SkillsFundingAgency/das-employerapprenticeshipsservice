@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using MediatR;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccount
@@ -8,6 +9,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccount
         [Required]
         public long AccountId { get; set; }
 
-        public string ExternalUserId { get; set; }
+        public Guid ExternalUserId { get; set; }
     }
 }

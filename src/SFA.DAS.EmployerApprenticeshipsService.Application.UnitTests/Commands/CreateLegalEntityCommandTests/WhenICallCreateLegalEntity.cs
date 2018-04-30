@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 LegalEntity = new LegalEntity(),
                 SignAgreement = true,
                 SignedDate = DateTime.Now.AddDays(-10),
-                ExternalUserId = "12345"
+                ExternalUserId = Guid.NewGuid()
             };
 
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))

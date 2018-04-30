@@ -10,19 +10,19 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserInvitations
         {
             var result = new ValidationResult();
 
-            if (string.IsNullOrEmpty(item.UserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
-                result.AddError(nameof(item.UserId), "UserId has not been supplied");
+                result.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
             }
-            else
-            {
-                Guid value;
-                var guidResult = Guid.TryParse(item.UserId, out value);
-                if (!guidResult)
-                {
-                    result.AddError(nameof(item.UserId), "UserId is not in the correct format");
-                }
-            }
+            //else
+            //{
+            //    Guid value;
+            //    var guidResult = Guid.TryParse(item.ExternalUserId, out value);
+            //    if (!guidResult)
+            //    {
+            //        result.AddError(nameof(item.ExternalUserId), "ExternalUserId is not in the correct format");
+            //    }
+            //}
 
             return result;
         }

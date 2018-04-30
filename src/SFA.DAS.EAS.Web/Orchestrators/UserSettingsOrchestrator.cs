@@ -37,41 +37,41 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public virtual async Task<OrchestratorResponse<NotificationSettingsViewModel>> GetNotificationSettingsViewModel(
-            string userRef)
+            Guid externalUserId)
         {
-            _logger.Info($"Getting user notification settings for user {userRef}");
+            _logger.Info($"Getting user notification settings for user {externalUserId}");
 
             var response = await _mediator.SendAsync(new GetUserNotificationSettingsQuery
             {
-                UserRef = userRef
+                ExternalUserId = externalUserId
             });
 
             return new OrchestratorResponse<NotificationSettingsViewModel>
             {
                 Data = new NotificationSettingsViewModel
                 {
-                    HashedId = userRef,
+                    HashedId = externalUserId.ToString(),
                     NotificationSettings = response.NotificationSettings
                 },
             };
         }
 
         public virtual async Task UpdateNotificationSettings(
-            string userRef, List<UserNotificationSetting> settings)
+            Guid externalUserId, List<UserNotificationSetting> settings)
         {
-            _logger.Info($"Updating user notification settings for user {userRef}");
+            _logger.Info($"Updating user notification settings for user {externalUserId}");
 
             DecodeAccountIds(settings);
 
             await _mediator.SendAsync(new UpdateUserNotificationSettingsCommand
             {
-                UserRef = userRef,
+                ExternalUserId = externalUserId,
                 Settings = settings
             });
         }
 
         public async Task<OrchestratorResponse<SummaryUnsubscribeViewModel>> Unsubscribe(
-            string userRef, 
+            Guid externalUserId, 
             string hashedAccountId, 
             string settingUrl)
         {
@@ -81,29 +81,29 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         var accountId = _hashingService.DecodeValue(hashedAccountId);
                         var settings = await _mediator.SendAsync(new GetUserNotificationSettingsQuery
                         {
-                            UserRef = userRef
+                            ExternalUserId = externalUserId
                         });
                         
                         var userNotificationSettings = settings.NotificationSettings.SingleOrDefault(m => m.AccountId == accountId);
 
                         if (userNotificationSettings == null)
-                            throw new InvalidStateException($"Cannot find user settings for user {userRef} in account {accountId}");
+                            throw new InvalidStateException($"Cannot find user settings for user {externalUserId} in account {accountId}");
 
                         if (userNotificationSettings.ReceiveNotifications)
                         {
                             await _mediator.SendAsync(
                                 new UnsubscribeNotificationCommand
                                 {
-                                    UserRef = userRef,
+                                    ExternalUserId = externalUserId,
                                     AccountId = accountId,
                                     NotificationSettingUrl = settingUrl
                                 });
 
-                            _logger.Info("Unsubscribed from alerts for user {userRef} in account {accountId}");
+                            _logger.Info("Unsubscribed from alerts for user {externalUserId} in account {accountId}");
                         }
                         else {
 
-                            _logger.Info("Already unsubscribed from alerts for user {userRef} in account {accountId}");
+                            _logger.Info("Already unsubscribed from alerts for user {externalUserId} in account {accountId}");
                         }
 
                         return new OrchestratorResponse<SummaryUnsubscribeViewModel>
@@ -114,7 +114,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                 AccountName = userNotificationSettings.Name
                             }
                         };
-                    }, hashedAccountId, userRef);
+                    }, hashedAccountId, externalUserId);
         }
 
         private void DecodeAccountIds(List<UserNotificationSetting> source)
@@ -125,14 +125,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        protected async Task<OrchestratorResponse<T>> CheckUserAuthorization<T>(Func<Task<OrchestratorResponse<T>>> code, string hashedAccountId, string externalUserId) where T : class
+        protected async Task<OrchestratorResponse<T>> CheckUserAuthorization<T>(Func<Task<OrchestratorResponse<T>>> code, string hashedAccountId, Guid externalUserId) where T : class
         {
             try
             {
                 await _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
                     HashedAccountId = hashedAccountId,
-                    UserId = externalUserId
+                    ExternalUserId = externalUserId
                 });
 
                 return await code.Invoke();
@@ -140,7 +140,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             catch (UnauthorizedAccessException exception)
             {
                 var accountId = _hashingService.DecodeValue(hashedAccountId);
-                _logger.Warn($"User not associated to account. UserId:{externalUserId} AccountId:{accountId}");
+                _logger.Warn($"User not associated to account. ExternalUserId:{externalUserId} AccountId:{accountId}");
 
                 return new OrchestratorResponse<T>
                 {

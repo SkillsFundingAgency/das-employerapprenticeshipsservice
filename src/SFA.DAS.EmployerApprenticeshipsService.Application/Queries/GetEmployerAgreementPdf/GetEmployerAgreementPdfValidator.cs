@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -34,9 +35,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf
                 validationResult.AddError(nameof(item.HashedLegalAgreementId));
             }
 
-            if (string.IsNullOrEmpty(item.UserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
-                validationResult.AddError(nameof(item.UserId));
+                validationResult.AddError(nameof(item.ExternalUserId));
             }
 
             if (!validationResult.IsValid())
@@ -44,7 +45,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf
                 return validationResult;
             }
 
-            var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
+            var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
 
             if (member == null || member.Role != Role.Owner)
             {

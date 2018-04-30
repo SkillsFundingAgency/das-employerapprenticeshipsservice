@@ -19,12 +19,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<List<InvitationView>> Get(string userId)
+        public async Task<List<InvitationView>> Get(Guid userId)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@userId", Guid.Parse(userId), DbType.Guid);
+                parameters.Add("@userId", userId, DbType.Guid);
 
                 return await c.QueryAsync<InvitationView>(
                     sql: "SELECT * FROM [employer_account].[GetInvitations] WHERE ExternalUserId = @userId AND Status = 1;",
@@ -155,12 +155,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task<int> GetNumberOfInvites(string userId)
+        public async Task<int> GetNumberOfInvites(Guid userId)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@ref", Guid.Parse(userId), DbType.Guid);
+                parameters.Add("@ref", userId, DbType.Guid);
 
                 return await c.QueryAsync<int>(
                     sql: "[employer_account].[GetNumberOfInvitations_ByUserRef]",

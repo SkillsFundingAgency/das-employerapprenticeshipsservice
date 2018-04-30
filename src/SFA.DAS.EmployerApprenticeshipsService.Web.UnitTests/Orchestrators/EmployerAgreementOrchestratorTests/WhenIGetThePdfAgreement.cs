@@ -22,6 +22,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
         private EmployerAgreementOrchestrator _orchestrator;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
 
+        private readonly Guid _externalUserId = Guid.NewGuid();
+
         [SetUp]
         public void Arrange()
         {
@@ -41,11 +43,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
         public async Task ThenWhenIGetTheAgreementTheMediatorIsCalledWithTheCorrectParameters()
         {
             //Act
-            await _orchestrator.GetPdfEmployerAgreement("ACC456","AGB123","User1");
+            await _orchestrator.GetPdfEmployerAgreement("ACC456","AGB123",_externalUserId);
 
             //Assert
             _mediator.Verify(
-                x => x.SendAsync(It.Is<GetEmployerAgreementPdfRequest>(c => c.HashedAccountId.Equals("ACC456") && c.UserId.Equals("User1") && c.HashedLegalAgreementId.Equals("AGB123"))));
+                x => x.SendAsync(It.Is<GetEmployerAgreementPdfRequest>(c => c.HashedAccountId.Equals("ACC456") 
+                                                                            && c.ExternalUserId.Equals(_externalUserId) 
+                                                                            && c.HashedLegalAgreementId.Equals("AGB123"))));
         }
 
         [Test]
@@ -54,7 +58,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             //Arrange
             var expectedHashedAccountId = "123RDF";
             var expectedHashedAgreementId = "567TGB";
-            var expectedUserId = "123AVC";
+            var expectedUserId = Guid.NewGuid();
 
             //Act
             await
@@ -63,7 +67,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<GetSignedEmployerAgreementPdfRequest>(c =>
-                c.HashedAccountId.Equals(expectedHashedAccountId) && c.UserId.Equals(expectedUserId) &&
+                c.HashedAccountId.Equals(expectedHashedAccountId) && c.ExternalUserId.Equals(expectedUserId) &&
                 c.HashedLegalAgreementId.Equals(expectedHashedAgreementId))));
         }
 
@@ -75,7 +79,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
                 .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string> { { "", "" } }));
 
             //Act
-            var actual = await _orchestrator.GetSignedPdfEmployerAgreement("", "", "");
+            var actual = await _orchestrator.GetSignedPdfEmployerAgreement("", "", _externalUserId);
 
             //Assert
             Assert.IsNotEmpty(actual.FlashMessage.ErrorMessages);
@@ -90,7 +94,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
                 .ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
-            var actual = await _orchestrator.GetSignedPdfEmployerAgreement("", "", "");
+            var actual = await _orchestrator.GetSignedPdfEmployerAgreement("", "", _externalUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
@@ -105,7 +109,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
                 .ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
-            var actual = await _orchestrator.GetPdfEmployerAgreement("","","");
+            var actual = await _orchestrator.GetPdfEmployerAgreement("", "", _externalUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);

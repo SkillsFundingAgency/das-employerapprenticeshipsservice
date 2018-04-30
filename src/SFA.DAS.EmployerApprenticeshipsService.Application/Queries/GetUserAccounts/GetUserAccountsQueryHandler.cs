@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserAccounts
         public async Task<GetUserAccountsQueryResponse> Handle(GetUserAccountsQuery message)
         {
             //TODO add validator.
-            var userRef = message.UserRef;
+            var userRef = message.ExternalUserId;
 
             var accounts = await _userAccountsRepository.GetAccountsByUserRef(userRef);
             return new GetUserAccountsQueryResponse {Accounts = accounts};

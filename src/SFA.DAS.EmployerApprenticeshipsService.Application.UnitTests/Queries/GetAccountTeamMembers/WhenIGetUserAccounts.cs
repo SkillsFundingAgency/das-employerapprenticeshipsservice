@@ -21,6 +21,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTeamMembers
         public override GetAccountTeamMembersHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountTeamMembersQuery>> RequestValidator { get; set; }
 
+        private readonly Guid _externalUserId = Guid.NewGuid();
+
         [SetUp]
         public void Arrange()
         {
@@ -33,12 +35,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTeamMembers
                 Email = "floyd@price.com",
                 AccountId = _account.Id,
                 Role = Role.Owner,
-                UserRef = "kaka-kakah"
+                ExternalUserId = _externalUserId
             };
             _teamMembers = new List<TeamMember> { _teamMember };
-            _accountTeamMembersRepository.Setup(repository => repository.GetAccountTeamMembersForUserId("1", _teamMember.UserRef)).ReturnsAsync(new List<TeamMember>( _teamMembers));
+            _accountTeamMembersRepository.Setup(repository => repository.GetAccountTeamMembersForUserId("1", _teamMember.ExternalUserId)).ReturnsAsync(new List<TeamMember>( _teamMembers));
             RequestHandler = new GetAccountTeamMembersHandler(RequestValidator.Object,_accountTeamMembersRepository.Object);
-            Query = new GetAccountTeamMembersQuery {ExternalUserId = "kaka-kakah", HashedAccountId = "1"};
+            Query = new GetAccountTeamMembersQuery {ExternalUserId = _externalUserId, HashedAccountId = "1"};
         }
         
         [Test]
@@ -48,7 +50,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTeamMembers
             await RequestHandler.Handle(Query);
 
             //Assert
-            _accountTeamMembersRepository.Verify(x => x.GetAccountTeamMembersForUserId("1", "kaka-kakah"), Times.Once);
+            _accountTeamMembersRepository.Verify(x => x.GetAccountTeamMembersForUserId("1", _externalUserId), Times.Once);
         }
 
         [Test]

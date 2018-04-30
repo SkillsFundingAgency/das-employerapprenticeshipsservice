@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements")]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
-            var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var model = await _orchestrator.Get(hashedAccountId, GetUserId());
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
             if (flashMessage!=null)
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/{agreementId}/details")]
         public async Task<ActionResult> Details(string agreementId, string hashedAccountId, FlashMessageViewModel flashMessage)
         {
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, GetUserId());
 
             return View(agreement);
         }
@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 		[Route("agreements/{agreementId}/view")]
         public async Task<ActionResult> View(string agreementId, string hashedAccountId, FlashMessageViewModel flashMessage)
         {
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, GetUserId());
             
             return View(agreement);
         }
@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/unsigned/view")]
         public async Task<ActionResult> ViewUnsignedAgreements(string hashedAccountId)
         {
-            var agreements = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var agreements = await _orchestrator.Get(hashedAccountId, GetUserId());
 
             var unsignedAgreements = agreements?.Data?.EmployerAgreements
                 .Where(x => x.Status == EmployerAgreementStatus.Pending).ToArray();
@@ -89,7 +89,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/{agreementId}/about-your-agreement")]
         public async Task<ActionResult> AboutYourAgreement(string agreementid, string hashedAccountId)
         {
-            var agreement = await _orchestrator.GetById(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var agreement = await _orchestrator.GetById(agreementid, hashedAccountId, GetUserId());
 
             return View(agreement);
         }
@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/{agreementId}/sign-your-agreement")]
         public async Task<ActionResult> SignAgreement(string agreementId, string hashedAccountId)
         {
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, GetUserId());
 
             return View(agreement);
         }
@@ -108,7 +108,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Sign(string agreementId, string hashedAccountId)
         {
-            var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userInfo = GetUserId();
             var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, userInfo);
             var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow, agreement.Data.EmployerAgreement.LegalEntityName);
 
@@ -135,9 +135,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/{agreementId}/next")]
         public async Task<ActionResult> NextSteps(string hashedAccountId)
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
-
-            var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
+           var userShownWizard = await _orchestrator.UserShownWizard(GetUserId(), hashedAccountId);
 
             var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel>
             {
@@ -152,7 +150,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/{agreementId}/next")]
         public async Task<ActionResult> NextSteps(int? choice, string hashedAccountId)
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userId = GetUserId();
 
             var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
 
@@ -181,7 +179,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
         {
 
-            var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId,agreementId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId,agreementId, GetUserId());
 
             if (stream.Data.PdfStream == null)
             {
@@ -197,7 +195,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
         {
 
-            var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId,agreementId,OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId,agreementId,GetUserId());
 
             if (stream.Data.PdfStream == null)
             {
@@ -212,7 +210,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/remove")]
         public async Task<ActionResult> GetOrganisationsToRemove(string hashedAccountId)
         {
-            var model = await _orchestrator.GetLegalAgreementsToRemove(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var model = await _orchestrator.GetLegalAgreementsToRemove(hashedAccountId, GetUserId());
 
             return View(model);
         }
@@ -221,7 +219,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/remove/{agreementId}")]
         public async Task<ActionResult> ConfirmRemoveOrganisation(string agreementId, string hashedAccountId)
         {
-            var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(agreementId, hashedAccountId, GetUserId());
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
             if (flashMessage != null)
@@ -238,7 +236,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveOrganisation(string hashedAccountId, string agreementId, ConfirmLegalAgreementToRemoveViewModel model)
         {
-            var response = await _orchestrator.RemoveLegalAgreement(model, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var response = await _orchestrator.RemoveLegalAgreement(model, GetUserId());
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -255,5 +253,11 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
         }
 
+        private Guid GetUserId()
+        {
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+
+            return Guid.TryParse(userIdClaim, out var userIdGuid) ? userIdGuid : Guid.Empty;
+        }
     }
 }

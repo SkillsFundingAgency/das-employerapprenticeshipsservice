@@ -114,8 +114,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             var output = new UserOutput();
 
             await DependentRepositories.UserRepository.Upsert(new UserInputToUserAdapter(input));
-            var user = await DependentRepositories.UserRepository.GetUserByRef(input.UserRef);
-            output.UserRef = input.UserRef;
+            var user = await DependentRepositories.UserRepository.GetUserByRef(input.ExternalId);
+            output.ExternalUserId = input.ExternalId;
             output.UserId = user.Id;
             Context.ActiveUser = output;
             return this;

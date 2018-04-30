@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.UpdateShowWizard;
@@ -29,7 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateShowAccountWizardTest
             _command = new UpdateShowAccountWizardCommand
             {
                 HashedAccountId = "123ABC",
-                ExternalUserId = "HJKJH",
+                ExternalUserId = Guid.NewGuid(),
                 ShowWizard = true
             };
         }
@@ -63,7 +64,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateShowAccountWizardTest
 
             //Assert
             _memberRepository.Verify(x => x.SetShowAccountWizard(It.IsAny<string>(), 
-                It.IsAny<string>(), It.IsAny<bool>()), Times.Never);
+                It.IsAny<Guid>(), It.IsAny<bool>()), Times.Never);
         }
     }
 }

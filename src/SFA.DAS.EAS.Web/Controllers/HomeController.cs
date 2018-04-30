@@ -34,8 +34,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Index")]
         public async Task<ActionResult> Index()
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
-            if (!string.IsNullOrWhiteSpace(userId))
+            var userId = GetUserId();
+            if (!userId.Equals(Guid.Empty))
             {
 
                 var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> ViewAccounts()
         {
 
-            var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue("sub"));
+            var accounts = await _homeOrchestrator.GetUserAccounts(GetClaimAsGuId("sub"));
 
             return View(ControllerConstants.IndexActionName, accounts);
         }
@@ -192,7 +192,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 await OwinWrapper.UpdateClaims();
 
-                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+                var userRef = GetUserId();
                 var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
                 var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
                 var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
@@ -254,5 +254,17 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(ControllerConstants.LegalAgreementViewName, showSubFields);
         }
 #endif
+
+        private Guid GetUserId()
+        {
+           return GetClaimAsGuId(ControllerConstants.UserExternalIdClaimKeyName);
+        }
+
+        private Guid GetClaimAsGuId(string key)
+        {
+            var userIdClaim = OwinWrapper.GetClaimValue(key);
+
+            return Guid.TryParse(userIdClaim, out var userIdGuid) ? userIdGuid : Guid.Empty;
+        }
     }
 }

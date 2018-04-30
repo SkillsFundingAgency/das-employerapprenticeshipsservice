@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserNotificationSettings
 
             //Assert
             Assert.IsFalse(result.IsValid());
-            Assert.IsTrue(result.ValidationDictionary.ContainsKey(nameof(query.UserRef)));
+            Assert.IsTrue(result.ValidationDictionary.ContainsKey(nameof(query.ExternalUserId)));
         }
     }
 }

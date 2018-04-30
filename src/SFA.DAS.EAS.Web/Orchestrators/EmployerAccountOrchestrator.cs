@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var result = await Mediator.SendAsync(new CreateAccountCommand
                 {
-                    ExternalUserId = viewModel.UserId,
+                    ExternalUserId = viewModel.ExternalUserId,
                     OrganisationType = viewModel.OrganisationType,
                     OrganisationName = viewModel.OrganisationName,
                     OrganisationReferenceNumber = viewModel.OrganisationReferenceNumber,
@@ -179,12 +179,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> GetRenameEmployerAccountViewModel(string hashedAccountId, string userId)
+        public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> GetRenameEmployerAccountViewModel(string hashedAccountId, Guid externalUserId)
         {
             var response = await Mediator.SendAsync(new GetEmployerAccountHashedQuery
             {
                 HashedAccountId = hashedAccountId,
-                UserId = userId
+                ExternalUserId = externalUserId
             });
 
             return new OrchestratorResponse<RenameEmployerAccountViewModel>
@@ -198,7 +198,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> RenameEmployerAccount(RenameEmployerAccountViewModel model, string userId)
+        public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> RenameEmployerAccount(RenameEmployerAccountViewModel model, Guid userId)
         {
             var response = new OrchestratorResponse<RenameEmployerAccountViewModel> { Data = model };
 

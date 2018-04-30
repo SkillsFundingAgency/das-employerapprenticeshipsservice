@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -46,7 +47,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
         public async Task ThenTheInvitationIsAccepted()
         {
             //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(Guid.NewGuid().ToString);
 
             var invitationId = 12345L;
             var invitation = new UserInvitationsViewModel
@@ -61,7 +62,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
                 }
             };
 
-            _invitationOrchestrator.Setup(x => x.AcceptInvitation(It.IsAny<long>(), It.IsAny<string>()))
+            _invitationOrchestrator.Setup(x => x.AcceptInvitation(It.IsAny<long>(), It.IsAny<Guid>()))
                 .Returns(Task.FromResult<object>(null));
 
             _controller = new InvitationController(_invitationOrchestrator.Object, _owinWrapper.Object, 
@@ -71,7 +72,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             await _controller.Accept(invitationId, invitation);
 
             //Assert
-            _invitationOrchestrator.Verify(x=> x.AcceptInvitation(It.Is<long>(l => l==12345L), It.IsAny<string>()), Times.Once);
+            _invitationOrchestrator.Verify(x=> x.AcceptInvitation(It.Is<long>(l => l==12345L), It.IsAny<Guid>()), Times.Once);
         }
 
     }

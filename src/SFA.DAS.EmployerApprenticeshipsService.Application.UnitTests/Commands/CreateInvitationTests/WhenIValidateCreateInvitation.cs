@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -14,6 +15,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
         private CreateInvitationCommandValidator _validator;
         private CreateInvitationCommand _createInvitationCommand;
         private Mock<IMembershipRepository> _membershipRepository;
+
         
         [SetUp]
         public void Arrange()
@@ -21,14 +23,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             _createInvitationCommand = new CreateInvitationCommand
             {
                 EmailOfPersonBeingInvited = "so'me@email.com",
-                ExternalUserId = "123",
+                ExternalUserId = Guid.Empty,
                 HashedAccountId = "123dfg",
                 NameOfPersonBeingInvited = "Test",
                 RoleIdOfPersonBeingInvited = Role.Owner
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {Role = Role.Owner});
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(new MembershipView {Role = Role.Owner});
             _membershipRepository.Setup(x => x.Get(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new TeamMember { IsUser = false });
 
             _validator = new CreateInvitationCommandValidator(_membershipRepository.Object);
@@ -67,7 +69,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             var result = await _validator.ValidateAsync(new CreateInvitationCommand
             {
                 EmailOfPersonBeingInvited = email,
-                ExternalUserId = "123",
+                ExternalUserId = Guid.NewGuid(),
                 HashedAccountId = "123dfg",
                 NameOfPersonBeingInvited = "Test",
                 RoleIdOfPersonBeingInvited = Role.Owner
@@ -82,7 +84,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
         public async Task ThenTheUserIsCheckedToSeeIfTheyAreAssocaitedWithTheAccountAndTheResultIsNotValidIfTheyArent()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(null);
 
             //Act
             var result = await _validator.ValidateAsync(_createInvitationCommand);
@@ -97,7 +99,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
         public async Task ThenTheUserIsCheckedToSeeIfTheyAreAnOwnerAndFalseIsReturnedIfTheyArent()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {Role = Role.Transactor});
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(new MembershipView {Role = Role.Transactor});
 
             //Act
             var result = await _validator.ValidateAsync(_createInvitationCommand);

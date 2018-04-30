@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 
 namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
@@ -15,7 +16,7 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
             if (string.IsNullOrEmpty(item.AccountId))
                 validationResult.AddError("HashedId", "No HashedId supplied");
 
-            if (string.IsNullOrWhiteSpace(item.ExternalUserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
                 validationResult.AddError("ExternalUserId", "No ExternalUserId supplied");
 
             return validationResult;

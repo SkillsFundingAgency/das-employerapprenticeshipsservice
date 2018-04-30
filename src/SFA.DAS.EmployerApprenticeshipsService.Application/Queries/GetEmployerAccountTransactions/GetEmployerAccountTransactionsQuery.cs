@@ -8,6 +8,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
         public string HashedAccountId { get; set; }
         public int Year { get; set; }
         public int Month { get; set; }
-        public string ExternalUserId { get; set; }
+        public Guid ExternalUserId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
@@ -28,8 +29,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTasksTests
             Query = new GetAccountTasksQuery
             {
                 AccountId = 2,
-                ExternalUserId = "ABC123"
-                
+                ExternalUserId = Guid.NewGuid(),
+
             };
 
             RequestHandler = new GetAccountTasksQueryHandler(_taskService.Object, RequestValidator.Object);
@@ -42,7 +43,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTasksTests
             await RequestHandler.Handle(Query);
 
             //Assert
-            _taskService.Verify(x => x.GetAccountTasks(Query.AccountId, Query.ExternalUserId), Times.Once);
+            _taskService.Verify(x => x.GetAccountTasks(Query.AccountId, Query.ExternalUserId.ToString()), Times.Once);
         }
 
         [Test]

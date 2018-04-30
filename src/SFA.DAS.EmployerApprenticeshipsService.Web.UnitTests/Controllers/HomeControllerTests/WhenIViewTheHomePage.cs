@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -24,7 +25,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         private HomeController _homeController;
         private Mock<HomeOrchestrator> _homeOrchestrator;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
-        private string ExpectedUserId = "123ABC";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
         private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
@@ -77,7 +78,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             await _homeController.Index();
 
             //Assert
-            _homeOrchestrator.Verify(x=>x.GetUserAccounts(It.IsAny<string>()),Times.Never);
+            _homeOrchestrator.Verify(x=>x.GetUserAccounts(It.IsAny<Guid>()),Times.Never);
         }
 
         [Test]
@@ -89,7 +90,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
                 {
                     Identity = new IdentityServerConfiguration { BaseAddress = "http://test.local/identity" ,AccountActivationUrl = "/confirm"}
                 });
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId.ToString());
             _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.RequiresVerification)).Returns("true");
 
             //Act
@@ -106,7 +107,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         public async Task ThenTheAccountsAreReturnedForThatUserWhenAuthenticated()
         {
             //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId.ToString());
 
             //Act
             await _homeController.Index();
@@ -152,7 +153,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         public async Task ThenIfIHaveOneAccountIAmRedirectedToTheEmployerTeamsIndexPage()
         {
             //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId.ToString());
 
             //Act
             var actual = await _homeController.Index();
@@ -170,7 +171,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         public async Task ThenIfIHaveMoreThanOneAccountIAmRedirectedToTheAccountsIndexPage()
         {
             //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId.ToString());
             _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId)).ReturnsAsync(
                 new OrchestratorResponse<UserAccountsViewModel>
                 {

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -41,7 +42,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteInvitationTests
             {
                 Email = _invitation.Email,
                 HashedAccountId = "1",
-                ExternalUserId = "EXT_USER"
+                ExternalUserId = Guid.NewGuid()
             };
         }
 
@@ -50,7 +51,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteInvitationTests
         {
             _invitation.Status = InvitationStatus.Pending;
             _invitationRepository.Setup(x => x.Get(_invitation.AccountId, _invitation.Email)).ReturnsAsync(_invitation);
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(new MembershipView
             {
                 Role = Role.Owner,
                 AccountId = _invitation.AccountId
@@ -90,7 +91,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteInvitationTests
         {
             _invitation.Status = InvitationStatus.Pending;
             _invitationRepository.Setup(x => x.Get(_invitation.AccountId, _invitation.Email)).ReturnsAsync(_invitation);
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(new MembershipView
             {
                 Role = Role.Owner,
                 AccountId = _invitation.AccountId

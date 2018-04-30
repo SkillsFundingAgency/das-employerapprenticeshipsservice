@@ -6,7 +6,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 {
     public class CreateAccountCommand : IAsyncRequest<CreateAccountCommandResponse>
     {
-        public string ExternalUserId { get; set; }
+        public Guid ExternalUserId { get; set; }
         public OrganisationType OrganisationType { get; set; }
         public short? PublicSectorDataSource { get; set; }
         public string OrganisationName { get; set; }

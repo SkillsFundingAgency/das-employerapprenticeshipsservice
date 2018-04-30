@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -32,7 +33,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DismissMonthlyTaskReminderT
             _command = new DismissMonthlyTaskReminderCommand
             {
                 HashedAccountId = "ABC123",
-                ExternalUserId = " DEF456",
+                ExternalUserId = Guid.NewGuid(),
                 TaskType = TaskType.LevyDeclarationDue
             };
 
@@ -53,7 +54,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DismissMonthlyTaskReminderT
 
             //Assert
             _taskService.Verify(
-                x => x.DismissMonthlyTaskReminder(AccountId, _command.ExternalUserId, _command.TaskType), Times.Once);
+                x => x.DismissMonthlyTaskReminder(AccountId, _command.ExternalUserId.ToString(), _command.TaskType), Times.Once);
         }
 
         [Test]

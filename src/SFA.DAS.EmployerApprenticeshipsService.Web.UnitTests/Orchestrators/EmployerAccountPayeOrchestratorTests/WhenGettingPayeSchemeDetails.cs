@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         private const string SchemeName = "Test Scheme";
         private const string EmpRef = "123/AGB";
         private const string AccountId = "123aBB";
-        private const string UserId = "45AGB22";
+        private readonly Guid ExternalUserId = Guid.NewGuid();
 
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<ILog> _logger;
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         public async Task ThenTheMediatorIsCalledToGetThePayeScheme()
         {
             //Act
-            await _orchestrator.GetPayeDetails(EmpRef, AccountId, UserId);
+            await _orchestrator.GetPayeDetails(EmpRef, AccountId, ExternalUserId);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetPayeSchemeByRefQuery>()), Times.Once);
@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         public async Task ShouldReturnPayeSchemeName()
         {
             //Act
-            var result = await _orchestrator.GetPayeDetails(EmpRef, AccountId, UserId);
+            var result = await _orchestrator.GetPayeDetails(EmpRef, AccountId, ExternalUserId);
 
             //Assert
             Assert.AreEqual(SchemeName, result.Data.PayeSchemeName);
@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             _payeScheme.Name = null;
 
             //Act
-            var result = await _orchestrator.GetPayeDetails(EmpRef, AccountId, UserId);
+            var result = await _orchestrator.GetPayeDetails(EmpRef, AccountId, ExternalUserId);
 
             //Assert
             Assert.IsEmpty(result.Data.PayeSchemeName);

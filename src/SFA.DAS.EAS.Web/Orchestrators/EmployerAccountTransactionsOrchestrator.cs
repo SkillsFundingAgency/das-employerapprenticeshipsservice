@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Data.Edm.Library.Values;
 using SFA.DAS.EAS.Application.Exceptions;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -41,7 +42,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>>
             FindAccountLevyDeclarationTransactions(
-                string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
+                string hashedId, DateTime fromDate, DateTime toDate, Guid externalUserId)
         {
             var data = await _mediator.SendAsync(new FindEmployerAccountLevyDeclarationTransactionsQuery
             {
@@ -75,7 +76,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<ProviderPaymentsSummaryViewModel>> GetProviderPaymentSummary(
-            string hashedId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
+            string hashedId, long ukprn, DateTime fromDate, DateTime toDate, Guid externalUserId)
         {
             try
             {
@@ -148,7 +149,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<PaymentTransactionViewModel>> FindAccountPaymentTransactions(
-            string hashedId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
+            string hashedId, long ukprn, DateTime fromDate, DateTime toDate, Guid externalUserId)
         {
             try
             {
@@ -207,12 +208,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public virtual async Task<OrchestratorResponse<FinanceDashboardViewModel>> GetFinanceDashboardViewModel(
-            string hashedId, int year, int month, string externalUserId)
+            string hashedId, int year, int month, Guid externalUserId)
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
             {
                 HashedAccountId = hashedId,
-                UserId = externalUserId
+                ExternalUserId = externalUserId
             });
 
             if (employerAccountResult.Account == null)
@@ -248,12 +249,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
 
-        public virtual async Task<OrchestratorResponse<TransactionViewResultViewModel>> GetAccountTransactions(string hashedId, int year, int month, string externalUserId)
+        public virtual async Task<OrchestratorResponse<TransactionViewResultViewModel>> GetAccountTransactions(string hashedId, int year, int month, Guid externalUserId)
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
             {
                 HashedAccountId = hashedId,
-                UserId = externalUserId
+                ExternalUserId = externalUserId
             });
 
             if (employerAccountResult.Account == null)
@@ -308,7 +309,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<CoursePaymentDetailsViewModel>> GetCoursePaymentSummary(
             string hashedAccountId, long ukprn, string courseName, int courseLevel, int? pathwayCode,
-            DateTime fromDate, DateTime toDate, string externalUserId)
+            DateTime fromDate, DateTime toDate, Guid externalUserId)
         {
             try
             {

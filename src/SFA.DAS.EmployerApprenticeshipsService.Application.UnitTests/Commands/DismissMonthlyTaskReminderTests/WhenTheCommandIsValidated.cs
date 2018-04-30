@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.DismissMonthlyTaskReminder;
 using SFA.DAS.Tasks.API.Types.Enums;
 
@@ -21,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DismissMonthlyTaskReminderT
             var command = new DismissMonthlyTaskReminderCommand
             {
                 HashedAccountId = "ABC123",
-                ExternalUserId = "DEF456",
+                ExternalUserId = Guid.NewGuid(),
                 TaskType = TaskType.LevyDeclarationDue
             };
             

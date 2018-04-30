@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Security.Principal;
+using System.Web.Mvc;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -46,11 +48,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerTeamControllerTests
         public void ThenIShouldBeToldIfTheUserCanStillSeeTheUserWizard()
         {
             //Arrange
-            const string userId = "123";
+            Guid userId = Guid.NewGuid();
             const string hashedAccountId = "ABC123";
 
-            _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId);
-            _orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
+            _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId.ToString);
+            _orchestrator.Setup(x => x.UserShownWizard(It.IsAny<Guid>(), It.IsAny<string>()))
                 .ReturnsAsync(true);
 
             //Act
@@ -67,11 +69,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerTeamControllerTests
         public void ThenIShouldBeToldIfTheUserCanStillSeeTheUserWizardWhenIMakeAnIncorrectStepSelection()
         {
             //Arrange
-            const string userId = "123";
+           var userId =Guid.NewGuid();
+
             const string hashedAccountId = "ABC123";
 
-            _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId);
-            _orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
+            _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId.ToString);
+            _orchestrator.Setup(x => x.UserShownWizard(It.IsAny<Guid>(), It.IsAny<string>()))
                          .ReturnsAsync(true);
 
             //Act
