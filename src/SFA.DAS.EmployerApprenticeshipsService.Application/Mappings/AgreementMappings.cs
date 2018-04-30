@@ -8,7 +8,9 @@ namespace SFA.DAS.EAS.Application.Mappings
     {
         public AgreementMappings()
         {
-            CreateMap<EmployerAgreement, EmployerAgreementDto>();
+            CreateMap<EmployerAgreement, EmployerAgreementDto>()
+                .ForMember(dest => dest.HashedAccountId, opt => opt.Ignore())
+                .ForMember(dest => dest.HashedAgreementId, opt => opt.Ignore());
 
             CreateMap<AgreementTemplate, AgreementTemplateDto>();
         }
