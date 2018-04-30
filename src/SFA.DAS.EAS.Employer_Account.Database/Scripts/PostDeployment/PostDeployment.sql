@@ -11,10 +11,9 @@ Post-Deployment Script Template
 */
 
 :r .\CreateAgreementTemplates.sql
+:r .\TransferConnectionInvitationDataMigration.sql
 
 IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%')
 BEGIN
     :r .\SeedDevData.sql
 END
-
-:r .\TransferConnectionInvitationDataMigration.sql
