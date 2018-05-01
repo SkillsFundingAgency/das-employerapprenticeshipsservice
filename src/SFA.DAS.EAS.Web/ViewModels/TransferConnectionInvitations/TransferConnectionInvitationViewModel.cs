@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Application.Dtos;
 
 namespace SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations
 {
-    public class TransferConnectionInvitationViewModel : ViewModel<DeleteTransferConnectionInvitationCommand>
+    public class TransferConnectionInvitationViewModel
     {
         public long AccountId { get; set; }
 
@@ -16,10 +16,5 @@ namespace SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations
         public DeleteTransferConnectionInvitationCommand DeleteTransferConnectionInvitationCommand { get; set; }
 
         public TransferConnectionInvitationDto TransferConnectionInvitation { get; set; }
-
-        public override void Map(DeleteTransferConnectionInvitationCommand message)
-        {
-            DeleteTransferConnectionInvitationCommand = message;
-        }
     }
 }

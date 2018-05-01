@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using MediatR;
 using Moq;
@@ -9,6 +10,7 @@ using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Application.Queries.GetTransferRequests;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Mappings;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
 {
@@ -18,6 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
         private TransfersController _controller;
         private GetTransferRequestsQuery _query;
         private GetTransferRequestsResponse _response;
+        private Mock<ILog> _logger;
         private IConfigurationProvider _mapperConfig;
         private IMapper _mapper;
         private Mock<IMediator> _mediator;
@@ -29,16 +32,16 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
 
             _response = new GetTransferRequestsResponse
             {
-                AccountId = 111111,
                 TransferRequests = new List<TransferRequestDto>()
             };
 
+            _logger = new Mock<ILog>();
             _mapperConfig = new MapperConfiguration(c => c.AddProfile<TransferMappings>());
             _mapper = _mapperConfig.CreateMapper();
             _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
 
-            _controller = new TransfersController(_mapper, _mediator.Object);
+            _controller = new TransfersController(_logger.Object, _mapper, _mediator.Object);
         }
 
         [Test]
@@ -58,8 +61,19 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
             Assert.That(result, Is.Not.Null);
             Assert.That(result.ViewName, Is.EqualTo(""));
             Assert.That(model, Is.Not.Null);
-            Assert.That(model.AccountId, Is.EqualTo(_response.AccountId));
             Assert.That(model.TransferRequests, Is.EqualTo(_response.TransferRequests));
+        }
+
+        [Test]
+        public void ThenExceptionShouldBeLoggedWhenExceptionIsThrown()
+        {
+            _mediator.Setup(m => m.SendAsync(_query)).Throws<Exception>();
+            
+            var result = _controller.TransferRequests(_query) as EmptyResult;
+
+            Assert.That(result, Is.Not.Null);
+
+            _logger.Verify(l => l.Warn(It.IsAny<Exception>(), "Failed to get transfer requests"), Times.Once);
         }
     }
 }

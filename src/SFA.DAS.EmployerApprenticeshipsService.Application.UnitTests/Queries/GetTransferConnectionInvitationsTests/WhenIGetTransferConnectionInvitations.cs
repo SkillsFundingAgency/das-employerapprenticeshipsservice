@@ -90,7 +90,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
             _response = await _handler.Handle(_query);
 
             Assert.That(_response, Is.Not.Null);
-            Assert.That(_response.AccountId, Is.EqualTo(_account.Id));
             Assert.That(_response.TransferConnectionInvitations.Count(), Is.EqualTo(2));
             Assert.That(_response.TransferConnectionInvitations.ElementAt(0), Is.Not.Null);
             Assert.That(_response.TransferConnectionInvitations.ElementAt(0).Id, Is.EqualTo(_receivedTransferConnectionInvitation.Id));

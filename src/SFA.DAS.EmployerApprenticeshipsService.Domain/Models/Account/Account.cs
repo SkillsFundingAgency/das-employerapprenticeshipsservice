@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
-using SFA.DAS.EAS.Domain.Models.TransferRequests;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Domain.Models.Account
@@ -41,11 +40,6 @@ namespace SFA.DAS.EAS.Domain.Models.Account
             SentTransferConnectionInvitations.Add(transferConnectionInvitation);
 
             return transferConnectionInvitation;
-        }
-
-        public TransferRequest SentTransferRequest(Account senderAccount, long commitmentId, string commitmentHashedId, decimal transferCost)
-        {
-            return new TransferRequest(commitmentId, commitmentHashedId, this, senderAccount, transferCost);
         }
 
         private void RequiresMaxTransferConnectionInvitationsHaveNotBeenSent()

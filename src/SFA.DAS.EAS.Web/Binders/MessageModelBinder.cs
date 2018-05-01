@@ -33,6 +33,20 @@ namespace SFA.DAS.EAS.Web.Binders
                 return;
             }
 
+            if (typeof(IAccountMessage).IsAssignableFrom(bindingContext.ModelType) & propertyDescriptor.Name == nameof(IAccountMessage.AccountHashedId))
+            {
+                var authorizationContext = _authorizationService().GetAuthorizationContext();
+                var key = CreateSubPropertyName(bindingContext.ModelName, propertyDescriptor.Name);
+                var value = authorizationContext.AccountContext?.HashedId;
+                var valueProviderResult = new ValueProviderResult(value, value, CultureInfo.InvariantCulture);
+                var model = (IAccountMessage)bindingContext.Model;
+
+                model.AccountHashedId = value;
+                bindingContext.ModelState.SetModelValue(key, valueProviderResult);
+
+                return;
+            }
+
             if (typeof(IUserMessage).IsAssignableFrom(bindingContext.ModelType) && propertyDescriptor.Name == nameof(IUserMessage.UserId))
             {
                 var authorizationContext = _authorizationService().GetAuthorizationContext();
