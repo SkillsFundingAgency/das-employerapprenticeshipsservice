@@ -25,7 +25,7 @@ BEGIN
 		@companyDateOfIncorporation, @status, @source, @publicSectorDataSource,@sector, @legalEntityId OUTPUT	
 	END
 
-	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
+	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, NULL, @employerAgreementId OUTPUT
 
 	INSERT INTO [employer_account].[UserAccountSettings] (UserId, AccountId, ReceiveNotifications)
 	select m.UserId, @accountId, 1
