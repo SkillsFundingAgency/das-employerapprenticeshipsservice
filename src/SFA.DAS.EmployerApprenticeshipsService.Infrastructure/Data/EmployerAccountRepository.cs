@@ -64,7 +64,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@HashedId", hashedAccountId, DbType.String);
+
+                parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
 
                 return await c.QueryAsync<AccountDetail, string, long, AccountDetail>(
                     sql: "[employer_account].[GetAccountDetails_ByHashedId]",

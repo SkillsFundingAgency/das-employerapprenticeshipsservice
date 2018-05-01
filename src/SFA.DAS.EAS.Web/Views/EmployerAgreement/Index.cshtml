@@ -17,7 +17,6 @@
     ViewBag.GaData.Vpv = "/accounts/agreements/organisations-agreements-home";
 }
 
-
 <div class="grid-row header-index">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Your organisations and agreements</h1>
@@ -40,43 +39,44 @@
             <thead>
                 <tr>
                     <th scope="col">Organisation</th>
-                    <th scope="col">Agreement</th>
-                    <th scope="col">Spending status</th>
-                    <th scope="col"><span class="vh">Action</span></th>
+                    <th scope="col">Agreement status</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
 
-                @foreach (var employerAgreement in Model.Data.EmployerAgreements)
+                @foreach (var employerAgreement in Model.Data.EmployerAgreementsData.EmployerAgreements)
                 {
                     <tr>
-                        <td>@employerAgreement.LegalEntityName</td>
+                        <td>@employerAgreement.LegalEntity.Name</td>
                         <td>
-                            @if (employerAgreement.Status == EmployerAgreementStatus.Signed)
+                            @if (employerAgreement.HasPendingAgreement)
                             {
-                                @: Signed by @employerAgreement.SignedByName
-                                if (employerAgreement.SignedDate.HasValue)
+                                if (employerAgreement.HasSignedAgreement)
                                 {
-                                    <span class="secondary-text">Signed on: @employerAgreement.SignedDate.Value.ToString("dd/MM/yyyy")</span>
+                                    @: Updated agreement available
+                                }
+                                else
+                                {
+                                    @: Agreement not signed
                                 }
                             }
                             else
                             {
-                                @: Agreement not signed
-                                <span class="secondary-text">Agreement needs to be signed</span>
+                                @: Signed by @employerAgreement.Signed.SignedByName
                             }
                         </td>
-                        <td>
-                            @(employerAgreement.Status == EmployerAgreementStatus.Signed ? "Spending enabled" : "Spending disabled")
-                        </td>
+
                         <td class="link-right">
-                            @if (employerAgreement.Status == EmployerAgreementStatus.Signed)
-                            {
-                                <a href="@Url.Action("Details", "EmployerAgreement", new {agreementid = employerAgreement.HashedAgreementId})" title="View agreement for @employerAgreement.LegalEntityName">View <span class="vh">agreement for @employerAgreement.LegalEntityName</span></a>
-                            }
+                            @if (employerAgreement.HasPendingAgreement)
+                            { 
+                                <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", 
+                                             new {agreementid = employerAgreement.Pending.HashedAgreementId})" title="View agreement for @employerAgreement.LegalEntity.Name">Sign agreement</a>
+}
                             else
                             {
-                                <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new {agreementid = employerAgreement.HashedAgreementId})" title="View agreement for @employerAgreement.LegalEntityName">View agreement <span class="vh">for @employerAgreement.LegalEntityName</span></a>
+                                <a href="@Url.Action("Details", "EmployerAgreement", new {agreementid = employerAgreement.Signed.HashedAgreementId})" title="View agreement">View</a>
+
                             }
                         </td>
                     </tr>

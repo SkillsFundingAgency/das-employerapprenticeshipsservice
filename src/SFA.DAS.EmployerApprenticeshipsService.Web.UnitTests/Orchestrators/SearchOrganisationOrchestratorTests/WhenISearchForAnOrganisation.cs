@@ -93,7 +93,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             var pageNumber = 2;
             var expectedLegalEntitiesResponse = new GetAccountLegalEntitiesResponse
             {
-                Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (short)OrganisationType.CompaniesHouse, Code = "zzz999" } } }
+                Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (byte)OrganisationType.CompaniesHouse, Code = "zzz999" } } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
@@ -120,7 +120,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             var pageNumber = 2;
             var expectedLegalEntitiesResponse = new GetAccountLegalEntitiesResponse
             {
-                Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (short)OrganisationType.CompaniesHouse, Code = companyCode } } }
+                Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (byte)OrganisationType.CompaniesHouse, Code = companyCode } } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
@@ -147,7 +147,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             var pageNumber = 2;
             var expectedLegalEntitiesResponse = new GetAccountLegalEntitiesResponse
             {
-                Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (short)OrganisationType.Charities, Code = charityCode } } }
+                Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (byte)OrganisationType.Charities, Code = charityCode } } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
@@ -174,7 +174,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             var pageNumber = 2;
             var expectedLegalEntitiesResponse = new GetAccountLegalEntitiesResponse
             {
-                Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (short)OrganisationType.PublicBodies, Name = organisationName } } }
+                Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (byte)OrganisationType.PublicBodies, Name = organisationName } } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
@@ -201,7 +201,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             var pageNumber = 2;
             var expectedLegalEntitiesResponse = new GetAccountLegalEntitiesResponse
             {
-                Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (short)OrganisationType.Other, Name = organisationName } } }
+                Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (byte)OrganisationType.Other, Name = organisationName } } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse

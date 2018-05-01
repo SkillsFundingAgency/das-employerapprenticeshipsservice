@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("confirm")]
         public async Task<ActionResult> Confirm(
             string hashedAccountId, string name, string code, string address, DateTime? incorporated,
-            string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, string sector, bool newSearch)
+            string legalEntityStatus, OrganisationType organisationType, byte? publicSectorDataSource, string sector, bool newSearch)
         {
             var request = new CreateNewLegalEntityViewModel
             {
@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 IncorporatedDate = incorporated,
                 ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName),
                 LegalEntityStatus = string.IsNullOrWhiteSpace(legalEntityStatus) ? null : legalEntityStatus,
-                Source = (short)organisationType,
+                Source = (byte)organisationType,
                 PublicSectorDataSource = publicSectorDataSource,
                 Sector = sector
             };

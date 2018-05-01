@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Dtos;
+using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountStats;
 using SFA.DAS.EAS.Application.Queries.GetAccountTasks;
@@ -14,6 +16,8 @@ using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.TestCommon.Builders;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
@@ -79,11 +83,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == HashedAccountId)))
                      .ReturnsAsync(new GetAccountEmployerAgreementsResponse
                      {
-                         EmployerAgreements = new List<Domain.Models.EmployerAgreement.EmployerAgreementView>
+                         EmployerAgreements = new List<EmployerAgreementStatusDto>
                          {
-                             new Domain.Models.EmployerAgreement.EmployerAgreementView
+                             new EmployerAgreementStatusDto
                              {
-                                 Status = Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending
+                                 Pending = new PendingEmployerAgreementDetailsDto { Id = 123 }
                              }
                          }
                      });

@@ -1,12 +1,15 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementViewModel>
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.ViewModels.EmployerAgreementViewModel
 @{
     ViewBag.PageID = "agreement-sign";
     ViewBag.Title = "Agreement";
     ViewBag.Section = "organisations";
+    ViewBag.GaData.Vpv = "/accounts/agreements/sign-your-agreement/agreement-sign";
 }  
 
-@{
-    ViewBag.GaData.Vpv = "/accounts/agreements/sign-your-agreement/agreement-sign";
+@if (Html.ViewExists(Model.EmployerAgreement.TemplatePartialViewName + "_changes"))
+{
+    @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName + "_changes");
 }
 
 <div class="grid-row" id="publication-banner">
@@ -25,7 +28,7 @@
     </div>
 </div>
 
-@Html.Partial("_Agreement_v1")
+@Html.Partial(@Model.EmployerAgreement.TemplatePartialViewName)
 
 <hr />
 
@@ -35,15 +38,15 @@
         <table>
             <tr>
                 <th scope="row" class="no-wrap">Signed by:</th>
-                <td>@Model.Data.EmployerAgreement.SignedByName</td>
+                <td>@Model.EmployerAgreement.SignedByName</td>
             </tr>
             <tr>
                 <th scope="row">On behalf of:</th>
-                <td>@Model.Data.EmployerAgreement.LegalEntityName</td>
+                <td>@Model.EmployerAgreement.LegalEntityName</td>
             </tr>
             <tr>
                 <th scope="row">Address:</th>
-                <td>@Model.Data.EmployerAgreement.LegalEntityAddress</td>
+                <td>@Model.EmployerAgreement.LegalEntityAddress</td>
             </tr>
             <tr>
                 <th scope="row" class="no-wrap">Signed on:</th>

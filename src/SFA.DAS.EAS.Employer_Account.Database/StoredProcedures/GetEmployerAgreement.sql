@@ -5,7 +5,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT ea.Id,
-		aea.AccountId,
+		ea.AccountId,
 		acc.HashedId as HashedAccountId,
 		ea.StatusId AS [Status],
 		ea.LegalEntityId, 
@@ -20,11 +20,9 @@ BEGIN
 	FROM [employer_account].[LegalEntity] le
 		JOIN [employer_account].[EmployerAgreement] ea
 			ON ea.LegalEntityId = le.Id
-		JOIN [employer_account].[AccountEmployerAgreement] aea
-			ON aea.[EmployerAgreementId] = ea.Id
 		JOIN [employer_account].[EmployerAgreementTemplate] eat
 			ON eat.Id = ea.TemplateId
 		join [employer_account].Account acc
-			on	acc.Id = aea.AccountId
+			on	acc.Id = ea.AccountId
 	WHERE ea.Id = @agreementId
 END
