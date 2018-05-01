@@ -1,29 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.HashingService;
+using AutoMapper;
+using SFA.DAS.EAS.Application.Dtos;
+using SFA.DAS.EAS.Application.Queries.Extensions;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 {
-    //TODO tests need adding and validator
-    public class GetAccountEmployerAgreementsQueryHandler : IAsyncRequestHandler<GetAccountEmployerAgreementsRequest, GetAccountEmployerAgreementsResponse>
+    public class GetAccountEmployerAgreementsQueryHandler : IAsyncRequestHandler<GetAccountEmployerAgreementsRequest,
+        GetAccountEmployerAgreementsResponse>
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly EmployerAccountDbContext _db;
         private readonly IHashingService _hashingService;
         private readonly IValidator<GetAccountEmployerAgreementsRequest> _validator;
+        private readonly IConfigurationProvider _configurationProvider;
 
-        public GetAccountEmployerAgreementsQueryHandler(IAccountRepository accountRepository, IHashingService hashingService, IValidator<GetAccountEmployerAgreementsRequest> validator)
+
+        public GetAccountEmployerAgreementsQueryHandler(
+            EmployerAccountDbContext db,
+            IHashingService hashingService,
+            IValidator<GetAccountEmployerAgreementsRequest> validator,
+            IConfigurationProvider configurationProvider
+        )
         {
-            _accountRepository = accountRepository;
+            _db = db;
             _hashingService = hashingService;
             _validator = validator;
+            _configurationProvider = configurationProvider;
         }
 
         public async Task<GetAccountEmployerAgreementsResponse> Handle(GetAccountEmployerAgreementsRequest message)
@@ -34,17 +43,19 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
             {
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
+
             if (validationResult.IsUnauthorized)
             {
                 throw new UnauthorizedAccessException();
             }
 
-            var agreements = await _accountRepository.GetEmployerAgreementsLinkedToAccount(_hashingService.DecodeValue(message.HashedAccountId));
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
-            foreach (var agreement in agreements)
-            {
-                agreement.HashedAgreementId = _hashingService.HashValue(agreement.Id);
-            }
+            var agreements = await _db.Agreements
+                .GetAgreementStatus(_configurationProvider, ea => ea.AccountId == accountId)
+                .ToListAsync();
+
+            agreements = agreements.PostFixEmployerAgreementStatusDto(_hashingService, accountId).ToList();
 
             return new GetAccountEmployerAgreementsResponse
             {

@@ -50,9 +50,9 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AgreementSteps
 
             var employerAgreementOrchestrator = _container.GetInstance<EmployerAgreementOrchestrator>();
 
-            var agreement = employerAgreementOrchestrator.Get(hashedId, userId).Result.Data.EmployerAgreements.FirstOrDefault();
+            var agreement = employerAgreementOrchestrator.Get(hashedId, userId).Result.Data.EmployerAgreementsData.EmployerAgreements.FirstOrDefault();
 
-            employerAgreementOrchestrator.SignAgreement(agreement.HashedAgreementId, hashedId, userId, DateTime.Today,"company name").Wait();
+            employerAgreementOrchestrator.SignAgreement(agreement.Pending.HashedAgreementId, hashedId, userId, DateTime.Today,"company name").Wait();
 
         }
 
@@ -63,12 +63,10 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AgreementSteps
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
 
             var employerAgreementOrchestrator = _container.GetInstance<EmployerAgreementOrchestrator>();
-            var agreement = employerAgreementOrchestrator.Get(hashedId, userId).Result.Data.EmployerAgreements.FirstOrDefault();
+            var agreement = employerAgreementOrchestrator.Get(hashedId, userId).Result.Data.EmployerAgreementsData.EmployerAgreements.FirstOrDefault();
 
             Assert.IsNotNull(agreement);
-            Assert.AreEqual(status,agreement.Status.ToString());
+            Assert.IsTrue(agreement.HasSignedAgreement);
         }
-
-
     }
 }

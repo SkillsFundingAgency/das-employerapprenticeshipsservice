@@ -3,13 +3,17 @@
 	@accountId BIGINT,
 	@employerAgreementId BIGINT OUTPUT
 AS
-BEGIN	
+BEGIN
+	SET NOCOUNT ON
+
 	DECLARE @templateId INT
 	
-	SELECT TOP 1 @templateId = Id FROM [employer_account].[EmployerAgreementTemplate] ORDER BY Id ASC;
+	SELECT TOP 1 @templateId = Id
+	FROM [employer_account].[EmployerAgreementTemplate]
+	ORDER BY VersionNumber DESC
 
 	INSERT INTO [employer_account].[EmployerAgreement] (LegalEntityId, AccountId, TemplateId, StatusId) 
 	VALUES (@legalEntityId, @accountId, @templateId, 1)
 
-	SELECT @employerAgreementId = SCOPE_IDENTITY();
+	SELECT @employerAgreementId = SCOPE_IDENTITY()
 END

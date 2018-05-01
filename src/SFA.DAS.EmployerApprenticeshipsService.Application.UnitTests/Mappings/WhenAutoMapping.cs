@@ -16,6 +16,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Mappings
                 c.AddProfile<MembershipMappings>();
                 c.AddProfile<TransferConnectionInvitationMappings>();
                 c.AddProfile<UserMappings>();
+                c.AddProfile<EmploymentAgreementStatusMappings>();
             });
 
             config.AssertConfigurationIsValid();

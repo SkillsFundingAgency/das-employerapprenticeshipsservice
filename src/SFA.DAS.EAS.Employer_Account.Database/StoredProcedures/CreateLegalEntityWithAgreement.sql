@@ -27,8 +27,6 @@ BEGIN
 
 	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
 
-	EXEC [employer_account].[CreateAccountEmployerAgreement] @accountId, @employerAgreementId	
-
 	INSERT INTO [employer_account].[UserAccountSettings] (UserId, AccountId, ReceiveNotifications)
 	select m.UserId, @accountId, 1
 	from [employer_account].[EmployerAgreement] a

@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Web.Extensions
         {
             var htmlAddress = commaSeperatedAddress.Split(new [] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => $"{line.Trim()}<br/>")
-                .Aggregate((x, y) => x + y);
+                .Aggregate("", (x, y) => x + y);
 
             return new MvcHtmlString(htmlAddress);
         }
