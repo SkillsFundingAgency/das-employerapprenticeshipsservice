@@ -103,7 +103,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@CompanyDateOfIncorporation", legalEntity.DateOfIncorporation, DbType.DateTime);
                 parameters.Add("@legalEntityId", null, DbType.Int64, ParameterDirection.Output);
                 parameters.Add("@employerAgreementId", null, DbType.Int64, ParameterDirection.Output);
-                parameters.Add("@status", legalEntity.CompanyStatus, DbType.String);
+                parameters.Add("@status", legalEntity.Status, DbType.String);
                 parameters.Add("@source", legalEntity.Source, DbType.Int16);
                 parameters.Add("@publicSectorDataSource", legalEntity.PublicSectorDataSource, DbType.Int16);
                 parameters.Add("@sector", legalEntity.Sector, DbType.String);
@@ -150,23 +150,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
 
             return result.SingleOrDefault();
-        }
-
-        public async Task<List<EmployerAgreementView>> GetEmployerAgreementsLinkedToAccount(long accountId)
-        {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-
-                parameters.Add("@accountId", accountId, DbType.Int64);
-
-                return await c.QueryAsync<EmployerAgreementView>(
-                    sql: "[employer_account].[GetEmployerAgreementsLinkedToAccount]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
-
-            return result.ToList();
         }
 
         public async Task<List<PayeView>> GetPayeSchemesByAccountId(long accountId)

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Application.Commands.RemoveLegalEntity;
 using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
+using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
@@ -12,7 +10,6 @@ using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
-using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -21,12 +18,17 @@ using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly ILog _logger;
+        private readonly IMapper _mapper;
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private readonly IMediator _mediator;
 
@@ -34,7 +36,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
         }
 
-        public EmployerAgreementOrchestrator(IMediator mediator, ILog logger, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator)
+        public EmployerAgreementOrchestrator(
+            IMediator mediator,
+            ILog logger,
+            IMapper mapper,
+            EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -42,6 +48,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 throw new ArgumentNullException(nameof(logger));
             _mediator = mediator;
             _logger = logger;
+            _mapper = mapper;
             _configuration = configuration;
         }
 
@@ -101,7 +108,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new EmployerAgreementListViewModel
                     {
                         HashedAccountId = hashedId,
-                        EmployerAgreements = response.EmployerAgreements
+                        EmployerAgreementsData = response
                     }
                 };
             }
@@ -121,16 +128,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var response = await _mediator.SendAsync(new GetEmployerAgreementRequest
                 {
-                    HashedAgreementId = agreementid,
+                    AgreementId = agreementid,
                     HashedAccountId = hashedId,
                     ExternalUserId = externalUserId
                 });
+
+                var employerAgreementView =
+                    _mapper.Map<EmployerAgreementDto, EmployerAgreementView>(response.EmployerAgreement);
 
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
                     Data = new EmployerAgreementViewModel
                     {
-                        EmployerAgreement = response.EmployerAgreement
+                        EmployerAgreement = employerAgreementView
                     }
                 };
             }
@@ -152,25 +162,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetByLegalEntityCode(
-            long accountId, string legalEntityCode, string externalUserId)
-        {
-            var response = await _mediator.SendAsync(new GetLegalEntityAgreementRequest
-            {
-                AccountId = accountId,
-                LegalEntityCode = legalEntityCode
-            });
-
-            return new OrchestratorResponse<EmployerAgreementViewModel>
-            {
-                Data = new EmployerAgreementViewModel
-                {
-                    EmployerAgreement = response.EmployerAgreement
-                }
-            };
-        }
-
-        public async Task<OrchestratorResponse> SignAgreement(string agreementid, string hashedId, string externalUserId,
+        public async Task<OrchestratorResponse<SignAgreementViewModel>> SignAgreement(string agreementid, string hashedId, string externalUserId,
             DateTime signedDate, string companyName)
         {
             try
@@ -184,13 +176,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     OrganisationName = companyName
                 });
 
-                return new OrchestratorResponse
+                var agreements = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
                 {
+                    ExternalUserId = externalUserId,
+                    HashedAccountId = hashedId
+                });
+
+                return new OrchestratorResponse<SignAgreementViewModel>
+                {
+                    Data = new SignAgreementViewModel
+                    {
+                        HasFurtherPendingAgreements = agreements.HasPendingAgreements
+                    }
                 };
             }
             catch (InvalidRequestException ex)
             {
-                return new OrchestratorResponse
+                return new OrchestratorResponse<SignAgreementViewModel>
                 {
                     Exception = ex,
                     Status = HttpStatusCode.BadRequest
@@ -198,14 +200,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (UnauthorizedAccessException)
             {
-                return new OrchestratorResponse
+                return new OrchestratorResponse<SignAgreementViewModel>
                 {
                     Status = HttpStatusCode.Unauthorized
                 };
             }
         }
 
-       
         public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(string hashedAccountId, string externalUserId)
         {
             var userRole = await GetUserAccountRole(hashedAccountId, externalUserId);
@@ -231,7 +232,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     UserId = userId
                 });
 
-                pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel {PdfStream = result.FileStream};
+                pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel { PdfStream = result.FileStream };
             }
             catch (UnauthorizedAccessException)
             {
@@ -244,11 +245,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
                 pdfEmployerAgreement.Status = HttpStatusCode.NotFound;
             }
-            
+
             return pdfEmployerAgreement;
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>>  GetSignedPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
+        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetSignedPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
         {
 
             var signedPdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
@@ -264,7 +265,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             UserId = userId
                         });
 
-                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel {PdfStream = result.FileStream};
+                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel { PdfStream = result.FileStream };
 
                 return signedPdfEmployerAgreement;
             }
@@ -296,7 +297,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
-        public virtual async  Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, string userId)
+        public virtual async Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, string userId)
         {
             var response = new OrchestratorResponse<LegalAgreementsToRemoveViewModel>();
             try
@@ -373,7 +374,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<bool>>  RemoveLegalAgreement(ConfirmLegalAgreementToRemoveViewModel model, string userId)
+        public virtual async Task<OrchestratorResponse<bool>> RemoveLegalAgreement(ConfirmLegalAgreementToRemoveViewModel model, string userId)
         {
             var response = new OrchestratorResponse<bool>();
             try
@@ -411,7 +412,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (InvalidRequestException ex)
             {
-                
+
                 response.Status = HttpStatusCode.BadRequest;
                 response.FlashMessage = FlashMessageViewModel.CreateErrorFlashMessageViewModel(ex.ErrorMessages);
                 response.Exception = ex;

@@ -11,8 +11,8 @@ namespace SFA.DAS.EAS.Web.ViewModels.Organisation
         public DateTime? IncorporatedDate { get; set; }
         public string ExternalUserId { get; set; }
         public string LegalEntityStatus { get; set; }
-        public short Source { get; set; }
-        public short? PublicSectorDataSource { get; set; }
+        public byte Source { get; set; }
+        public byte? PublicSectorDataSource { get; set; }
         public string Sector { get; set; }
     }
 }
