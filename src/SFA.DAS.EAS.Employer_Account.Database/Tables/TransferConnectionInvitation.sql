@@ -7,10 +7,12 @@
 	[DeletedBySender] BIT NOT NULL,
 	[DeletedByReceiver] BIT NOT NULL,
 	[CreatedDate] DATETIME NOT NULL,
-	[ConnectionHash] AS (CASE	
-							WHEN ReceiverAccountId > SenderAccountId THEN CONVERT(VARCHAR(10),SenderAccountId) + '/' + CONVERT(VARCHAR(10),ReceiverAccountId) 
-							ELSE CONVERT(VARCHAR(10),ReceiverAccountId) + '/' + CONVERT(VARCHAR(10),SenderAccountId)
-						  END),
+	[ConnectionHash] AS (
+		CASE
+			WHEN ReceiverAccountId > SenderAccountId THEN CONVERT(VARCHAR(10), SenderAccountId) + '/' + CONVERT(VARCHAR(10), ReceiverAccountId)
+			ELSE CONVERT(VARCHAR(10), ReceiverAccountId) + '/' + CONVERT(VARCHAR(10), SenderAccountId)
+		END
+	),
 	CONSTRAINT [FK_TransferConnectionInvitation_SenderAccountId] FOREIGN KEY ([SenderAccountId]) REFERENCES [employer_account].[Account] ([Id]),
 	CONSTRAINT [FK_TransferConnectionInvitation_ReceiverAccountId] FOREIGN KEY ([ReceiverAccountId]) REFERENCES [employer_account].[Account] ([Id])
 )
@@ -20,17 +22,12 @@ CREATE INDEX [IX_TransferConnectionInvitation_SenderAccountId_ReceiverAccountId_
 ON [employer_account].[TransferConnectionInvitation]([SenderAccountId] ASC, [ReceiverAccountId] ASC, [Status] ASC)
 GO
 
-CREATE UNIQUE INDEX [IX_PendingTransferConnectionInvitation]
-ON [employer_account].[TransferConnectionInvitation]([SenderAccountId] ASC, [ReceiverAccountId] ASC)
+CREATE UNIQUE INDEX [IX_PendingTransferConnectionInvitation_Hash] 
+ON [employer_account].[TransferConnectionInvitation] (ConnectionHash)
 WHERE [Status] = 1
 GO
 
-CREATE UNIQUE INDEX [IX_ApprovedTransferConnectionInvitation]
-ON [employer_account].[TransferConnectionInvitation]([SenderAccountId] ASC, [ReceiverAccountId] ASC)
-WHERE [Status] = 2
-GO
-
-CREATE UNIQUE INDEX [IX_TransferConnectionInvitation_Hash] 
+CREATE UNIQUE INDEX [IX_ApprovedTransferConnectionInvitation_Hash] 
 ON [employer_account].[TransferConnectionInvitation] (ConnectionHash)
-WHERE [Status] != 3
+WHERE [Status] = 2
 GO

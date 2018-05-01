@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferRequestsTests
         private List<TransferRequest> _transferRequests;
         private TransferRequest _sentTransferRequest;
         private TransferRequest _receivedTransferRequest;
-        private Domain.Data.Entities.Account.Account _account;
+        private Domain.Models.Account.Account _account;
         private IConfigurationProvider _configurationProvider;
 
         [SetUp]
@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferRequestsTests
         {
             _db = new Mock<EmployerAccountDbContext>();
 
-            _account = new Domain.Data.Entities.Account.Account
+            _account = new Domain.Models.Account.Account
             {
                 Id = 333333,
                 HashedId = "ABC123",
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferRequestsTests
                 .WithCommitmentId(111111)
                 .WithCommitmentHashedId("DEF456")
                 .WithSenderAccount(_account)
-                .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                .WithReceiverAccount(new Domain.Models.Account.Account())
                 .WithTransferCost(123.456m)
                 .WithCreatedDate(DateTime.UtcNow)
                 .Build();
@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferRequestsTests
             _receivedTransferRequest = new TransferRequestBuilder()
                 .WithCommitmentId(222222)
                 .WithCommitmentHashedId("GHI789")
-                .WithSenderAccount(new Domain.Data.Entities.Account.Account())
+                .WithSenderAccount(new Domain.Models.Account.Account())
                 .WithReceiverAccount(_account)
                 .WithTransferCost(789.012m)
                 .WithCreatedDate(DateTime.UtcNow.AddDays(-1))
@@ -63,8 +63,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferRequestsTests
                 _sentTransferRequest,
                 _receivedTransferRequest,
                 new TransferRequestBuilder()
-                    .WithSenderAccount(new Domain.Data.Entities.Account.Account())
-                    .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                    .WithSenderAccount(new Domain.Models.Account.Account())
+                    .WithReceiverAccount(new Domain.Models.Account.Account())
                     .WithCreatedDate(DateTime.UtcNow.AddDays(-2))
                     .Build()
             };

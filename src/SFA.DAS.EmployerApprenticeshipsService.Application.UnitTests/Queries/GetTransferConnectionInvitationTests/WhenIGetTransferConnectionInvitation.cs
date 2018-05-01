@@ -21,8 +21,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
         private DbSetStub<TransferConnectionInvitation> _transferConnectionInvitationsDbSet;
         private List<TransferConnectionInvitation> _transferConnectionInvitations;
         private TransferConnectionInvitation _transferConnectionInvitation;
-        private Domain.Data.Entities.Account.Account _senderAccount;
-        private Domain.Data.Entities.Account.Account _receiverAccount;
+        private Domain.Models.Account.Account _senderAccount;
+        private Domain.Models.Account.Account _receiverAccount;
         private IConfigurationProvider _configurationProvider;
 
         [SetUp]
@@ -30,14 +30,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
         {
             _db = new Mock<EmployerAccountDbContext>();
 
-            _senderAccount = new Domain.Data.Entities.Account.Account
+            _senderAccount = new Domain.Models.Account.Account
             {
                 Id = 333333,
                 HashedId = "ABC123",
                 Name = "Sender"
             };
 
-            _receiverAccount = new Domain.Data.Entities.Account.Account
+            _receiverAccount = new Domain.Models.Account.Account
             {
                 Id = 222222,
                 HashedId = "XYZ987",

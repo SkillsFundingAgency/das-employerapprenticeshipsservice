@@ -6,9 +6,11 @@ using SFA.DAS.EAS.Web.ViewModels.Transfers;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
+using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthorization;
 using SFA.DAS.EAS.Application.Queries.GetTransferRequests;
 using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Infrastructure.Features;
+using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -36,23 +38,25 @@ namespace SFA.DAS.EAS.Web.Controllers
         [ChildActionOnly]
         public ActionResult TransferAllowance(GetTransferAllowanceQuery query)
         {
-            var response = Task.Run(async () => await _mediator.SendAsync(query)).Result;
+            var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
             var model = _mapper.Map<TransferAllowanceViewModel>(response);
 
             return PartialView(model);
         }
 
         [ChildActionOnly]
-        [Feature(FeatureType.TransferConnectionRequests)]
-        public ActionResult TransferConnectionInvitationAuthorization()
+        public ActionResult TransferConnectionInvitationAuthorization(GetTransferConnectionInvitationAuthorizationQuery query)
         {
-            return PartialView();
+            var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
+            var model = _mapper.Map<TransferConnectionInvitationAuthorizationViewModel>(response);
+
+            return PartialView(model);
         }
 
         [ChildActionOnly]
         public ActionResult TransferConnectionInvitations(GetTransferConnectionInvitationsQuery query)
         {
-            var response = Task.Run(async () => await _mediator.SendAsync(query)).Result;
+            var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
             var model = _mapper.Map<TransferConnectionInvitationsViewModel>(response);
 
             return PartialView(model);
@@ -61,7 +65,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [ChildActionOnly]
         public ActionResult TransferRequests(GetTransferRequestsQuery query)
         {
-            var response = Task.Run(async () => await _mediator.SendAsync(query)).Result;
+            var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
             var model = _mapper.Map<TransferRequestsViewModel>(response);
 
             return PartialView(model);

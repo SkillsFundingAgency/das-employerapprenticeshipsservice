@@ -215,8 +215,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builders\AccountBuilder.cs" />
     <Compile Include="Builders\TransferRequestBuilder.cs" />
     <Compile Include="Builders\TransferConnectionInvitationBuilder.cs" />
+    <Compile Include="Builders\UserBuilder.cs" />
     <Compile Include="DbAsyncEnumerableStub.cs" />
     <Compile Include="DbAsyncEnumeratorStub.cs" />
     <Compile Include="DbAsyncQueryProviderStub.cs" />
@@ -233,6 +235,7 @@
     <Compile Include="Extensions\DateTimeExtention.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="FluentTestFixture.cs" />
     <Compile Include="MockModels\MockMessage.cs" />
     <Compile Include="MockPolicy\MockMessageSubscriberPolicy.cs" />
     <Compile Include="MockPolicy\MockMessagePublisherPolicy.cs" />

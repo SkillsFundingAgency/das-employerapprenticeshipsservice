@@ -2,8 +2,8 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon;
@@ -19,19 +19,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
         public void SendTransferConnectionInvitation_WhenISendATransferConnection_ThenShouldCreateTransferConnectionInvitation()
         {
             Run(f => f.SendTransferConnectionInvitation(), f => f.TransferConnectionInvitation.Should().NotBeNull());
-        }
-
-        [TestCase(TransferConnectionInvitationStatus.Pending)]
-        [TestCase(TransferConnectionInvitationStatus.Approved)]
-        public void SendTransferConnectionInvitation_WhenTransferConnectionInvitationAlreadyExists_ThenShouldThrowException(TransferConnectionInvitationStatus invitationStatus)
-        {
-            Assert.Throws<Exception>(() => Run(f => f.AddInvitationFromSenderToReceiver(invitationStatus), f => f.SendTransferConnectionInvitation(), null), "Requires transfer connection invitation does not already exist.");
-        }
-
-        [Test]
-        public void SendTransferConnectionInvitation_WhenRejectedTransferConnectionInvitationAlreadyExists_ThenShouldNotThrowException()
-        {
-            Run(f => f.SendTransferConnectionInvitation(), f => f.AddInvitationFromSenderToReceiver(TransferConnectionInvitationStatus.Rejected), null);
         }
 
         [Test]
@@ -62,25 +49,48 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
         }
     }
 
-    public class TransferConnectionInvitationTestsFixture
+    public class TransferConnectionInvitationTestsFixture : FluentTestFixture
     {
         public TransferConnectionInvitation TransferConnectionInvitation { get; set; }
         public IEntity Entity { get; set; }
         public Account ReceiverAccount { get; set; }
         public long? Result { get; set; }
         public Account SenderAccount { get; set; }
+        public decimal SenderAccountTransferAllowance { get; set; }
         public User SenderUser { get; set; }
 
         public TransferConnectionInvitationTestsFixture()
         {
             SetSenderAccount()
                 .SetReceiverAccount()
-                .SetSenderUser();
+                .SetSenderUser()
+                .SetSenderAccountTransferAllowance(1);
+        }
+
+        public TransferConnectionInvitationTestsFixture AddInvitationFromSenderToReceiver(TransferConnectionInvitationStatus status)
+        {
+            SenderAccount.SentTransferConnectionInvitations.Add(
+                new TransferConnectionInvitationBuilder()
+                    .WithReceiverAccount(ReceiverAccount)
+                    .WithStatus(status)
+                    .Build());
+
+            return this;
+        }
+
+        public TransferConnectionInvitationChange GetChange(int index)
+        {
+            return TransferConnectionInvitation.Changes.ElementAt(index);
+        }
+
+        public T GetEvent<T>()
+        {
+            return Entity.GetEvents().OfType<T>().SingleOrDefault();
         }
 
         public void SendTransferConnectionInvitation()
         {
-            Entity = TransferConnectionInvitation = SenderAccount.SendTransferConnectionInvitation(ReceiverAccount, SenderUser);
+            Entity = TransferConnectionInvitation = SenderAccount.SendTransferConnectionInvitation(ReceiverAccount, SenderUser, SenderAccountTransferAllowance);
         }
 
         public TransferConnectionInvitationTestsFixture SetSenderUser()
@@ -120,25 +130,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
             return this;
         }
 
-        public TransferConnectionInvitationTestsFixture AddInvitationFromSenderToReceiver(TransferConnectionInvitationStatus status)
+        public TransferConnectionInvitationTestsFixture SetSenderAccountTransferAllowance(decimal transferAllowance)
         {
-            SenderAccount.SentTransferConnectionInvitations.Add(
-                new TransferConnectionInvitationBuilder()
-                    .WithReceiverAccount(ReceiverAccount)
-                    .WithStatus(status)
-                    .Build());
+            SenderAccountTransferAllowance = transferAllowance;
 
             return this;
-        }
-
-        public TransferConnectionInvitationChange GetChange(int index)
-        {
-            return TransferConnectionInvitation.Changes.ElementAt(index);
-        }
-
-        public T GetEvent<T>()
-        {
-            return Entity.GetEvents().OfType<T>().SingleOrDefault();
         }
     }
 }

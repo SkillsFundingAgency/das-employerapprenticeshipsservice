@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Domain.Configuration;
+﻿using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Messaging;
 using SFA.DAS.Messaging.Interfaces;
 using StructureMap;

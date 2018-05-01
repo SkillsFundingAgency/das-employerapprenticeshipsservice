@@ -11,14 +11,14 @@ namespace SFA.DAS.EAS.Infrastructure.Caching
     {
         private readonly Lazy<IDatabase> _cache = new Lazy<IDatabase>(InitialiseRedis);
 
-        public async Task<bool> ExistsAsync(string key)
+        public Task<bool> ExistsAsync(string key)
         {
-            return await _cache.Value.KeyExistsAsync(key);
+            return _cache.Value.KeyExistsAsync(key);
         }
 
         public async Task<T> GetCustomValueAsync<T>(string key)
         {
-            var redisValue = await _cache.Value.StringGetAsync(key);
+            var redisValue = await _cache.Value.StringGetAsync(key).ConfigureAwait(false);
 
             return JsonConvert.DeserializeObject<T>(redisValue);
         }
@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Infrastructure.Caching
         {
             T result;
 
-            var existingValue = await _cache.Value.StringGetAsync(key);
+            var existingValue = await _cache.Value.StringGetAsync(key).ConfigureAwait(false);
 
             if (existingValue.IsNull)
             {

@@ -17,12 +17,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
     public class AuthorisationServiceTests
     {
         [TestCase(true)]
-        [TestCase(true, true)]
-        [TestCase(true, true, true)]
-        [TestCase(false, false)]
-        [TestCase(false, true, false)]
-        [TestCase(false, true, false, true)]
-        public void IsOperationAuthorized_WhenICheckIfOperationIsAuthorized_ThenShouldReturnExpectedResult(bool expectedResult, params bool[] handlerResults)
+        [TestCase(true, AuthorizationResult.Ok)]
+        [TestCase(true, AuthorizationResult.Ok, AuthorizationResult.Ok)]
+        [TestCase(false, AuthorizationResult.FeatureDisabled)]
+        [TestCase(false, AuthorizationResult.Ok, AuthorizationResult.FeatureAgreementNotSigned)]
+        [TestCase(false, AuthorizationResult.Ok, AuthorizationResult.FeatureUserNotWhitelisted, AuthorizationResult.Ok)]
+        public void IsOperationAuthorized_WhenICheckIfOperationIsAuthorized_ThenShouldReturnExpectedResult(bool expectedResult, params AuthorizationResult[] handlerResults)
         {
             // Arrange
             var fixture = new OperationAuthorisationServiceTestFixture();
@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
 				FeatureService);
         }
 
-        public OperationAuthorisationServiceTestFixture WithHandlerResults(params bool[] handlerResults)
+        public OperationAuthorisationServiceTestFixture WithHandlerResults(params AuthorizationResult[] handlerResults)
         {
             foreach (var handlerResult in handlerResults)
             {

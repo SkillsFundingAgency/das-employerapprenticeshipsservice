@@ -1,6 +1,4 @@
-﻿@model SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations.TransferConnectionRolesViewModel
-
-@{
+﻿@{
     ViewBag.Title = "Transfer connection invitations";
     ViewBag.Section = "finance";
     ViewBag.PageID = "page-transfer-connection-invitations";
@@ -10,30 +8,14 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Connect with an employer</h1>
-
-        @if (Model.IsReceiver)
-        {
-            if (Model.IsApprovedReceiver)
-            {
-                <p>You can’t send connection requests because you have already approved a connection request from another employer.</p>
-            }
-            else
-            {
-                <p>You can’t send connection requests because you have a pending connection request from another employer.</p>
-                <p>If you want to send a connection request, you’ll need to reject any pending connection requests first.</p>
-            }
-        }
-        else
-        {
-            <p>To connect with an employer you want to transfer funds to, you'll need to:</p>
-            <ol class="list list-number">
-                <li>agree the apprentices, training and costs that the transfer funds will cover</li>
-                <li>ensure the employer has registered on the apprenticeship service</li>
-                <li>request the employer's apprenticeship account ID. This can be found under the account name on the apprenticeship service homepage.</li>
-            </ol>
-            <p>You won't be able to complete the next step until you've received the employer's account ID.</p>
-            <a class="button" href="@Url.Action("Start", "TransferConnectionInvitations")">Continue</a>
-        }
+        <p>To connect with an employer you want to transfer funds to, you'll need to:</p>
+        <ol class="list list-number">
+            <li>agree the apprentices, training and costs that the transfer funds will cover</li>
+            <li>ensure the employer has registered on the apprenticeship service</li>
+            <li>request the employer's apprenticeship account ID. This can be found under the account name on the apprenticeship service homepage.</li>
+        </ol>
+        <p>You won't be able to complete the next step until you've received the employer's account ID.</p>
+        <a class="button" href="@Url.Action("Start", "TransferConnectionInvitations")">Continue</a>
     </div>
 </div>
 

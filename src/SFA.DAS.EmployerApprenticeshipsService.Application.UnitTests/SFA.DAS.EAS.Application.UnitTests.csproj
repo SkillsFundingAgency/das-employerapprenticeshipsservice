@@ -251,14 +251,13 @@
     <Compile Include="Commands\RejectTransferConnectionInvitation\WhenIRejectATransferConnectionInvitation.cs" />
     <Compile Include="Commands\SendTransferConnectionInvitation\SendTransferConnectionInvitationHandlerTests.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
-    <Compile Include="Queries\GetTransferConnectionRolesTests\WhenIGetTransferConnectionRoles.cs" />
     <Compile Include="Queries\GetApprovedTransferConnectionInvitationTests\WhenIGetApprovedTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetReceivedTransferConnectionInvitationTests\WhenIGetReceivedTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetRejectedTransferConnectionInvitationTests\WhenIGetRejectedTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetSentTransferConnectionInvitationTests\WhenIGetSentTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetTransferAllowanceTests\WhenIGetTransferAllowance.cs" />
-    <Compile Include="Queries\GetTransferConnectionInvitationAccountTests\WhenIGetTransferConnectionInvitationAccount.cs" />
-    <Compile Include="Queries\GetLatestOutstandingTransferInvitationTests\WhenIGetTheLatestTransfer.cs" />
+    <Compile Include="Queries\SendTransferConnectionInvitationTests\WhenISendTransferConnectionInvitation.cs" />
+    <Compile Include="Queries\GetLatestPendingReceivedTransferConnectionInvitationTests\WhenIGetLatestPendingReceivedTransferConnectionInvitation.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminderTests\WhenIDismissATaskReminder.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminderTests\WhenTheCommandIsValidated.cs" />
     <Compile Include="Commands\RemoveLegalEntityTests\WhenIRemoveALegalEntity.cs" />

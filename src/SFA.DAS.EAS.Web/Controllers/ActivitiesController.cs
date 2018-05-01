@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             try
             {
-                var response = Task.Run(async () => await _mediator.SendAsync(query)).Result;
+                var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
                 var model = _mapper.Map<LatestActivitiesViewModel>(response);
 
                 return PartialView(model);

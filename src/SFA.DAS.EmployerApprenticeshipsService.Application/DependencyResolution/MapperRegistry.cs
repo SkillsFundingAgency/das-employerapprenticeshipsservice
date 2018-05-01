@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
+using SFA.DAS.EAS.Domain;
 using StructureMap;
 using StructureMap.TypeRules;
 

@@ -18,7 +18,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransferAllowance;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {

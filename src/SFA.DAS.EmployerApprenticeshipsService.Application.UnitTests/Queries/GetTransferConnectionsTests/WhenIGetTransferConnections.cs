@@ -26,9 +26,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionsTests
         private TransferConnectionInvitation _receivedTransferConnectionInvitation1;
         private TransferConnectionInvitation _receivedTransferConnectionInvitation2;
         private TransferConnectionInvitation _receivedTransferConnectionInvitation3;
-        private Domain.Data.Entities.Account.Account _senderAccount1;
-        private Domain.Data.Entities.Account.Account _senderAccount2;
-        private Domain.Data.Entities.Account.Account _receiverAccount;
+        private Domain.Models.Account.Account _senderAccount1;
+        private Domain.Models.Account.Account _senderAccount2;
+        private Domain.Models.Account.Account _receiverAccount;
         private IConfigurationProvider _configurationProvider;
 
         [SetUp]
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionsTests
         {
             _db = new Mock<EmployerAccountDbContext>();
 
-            _senderAccount1 = new Domain.Data.Entities.Account.Account
+            _senderAccount1 = new Domain.Models.Account.Account
             {
                 Id = 111111,
                 HashedId = "ABC123",
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionsTests
                 Name = "Sender 1"
             };
 
-            _senderAccount2 = new Domain.Data.Entities.Account.Account
+            _senderAccount2 = new Domain.Models.Account.Account
             {
                 Id = 222222,
                 HashedId = "DEF456",
@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionsTests
                 Name = "Sender 2"
             };
 
-            _receiverAccount = new Domain.Data.Entities.Account.Account
+            _receiverAccount = new Domain.Models.Account.Account
             {
                 Id = 333333,
                 HashedId = "GHI789",
@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionsTests
             _sentTransferConnectionInvitation = new TransferConnectionInvitationBuilder()
                 .WithId(111111)
                 .WithSenderAccount(_receiverAccount)
-                .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                .WithReceiverAccount(new Domain.Models.Account.Account())
                 .WithStatus(TransferConnectionInvitationStatus.Approved)
                 .Build();
 
@@ -95,8 +95,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionsTests
                 _receivedTransferConnectionInvitation2,
                 _receivedTransferConnectionInvitation1,
                 new TransferConnectionInvitationBuilder()
-                    .WithSenderAccount(new Domain.Data.Entities.Account.Account())
-                    .WithReceiverAccount(new Domain.Data.Entities.Account.Account())
+                    .WithSenderAccount(new Domain.Models.Account.Account())
+                    .WithReceiverAccount(new Domain.Models.Account.Account())
                     .WithStatus(TransferConnectionInvitationStatus.Approved)
                     .Build()
             };

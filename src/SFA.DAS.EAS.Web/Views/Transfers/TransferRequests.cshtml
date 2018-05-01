@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using SFA.DAS.EAS.Domain.Models.Features
 @using SFA.DAS.EAS.Web.Extensions
 
 @model SFA.DAS.EAS.Web.ViewModels.Transfers.TransferRequestsViewModel
@@ -31,9 +32,12 @@
                             <td data-label="Status">@transferRequest.Status.ToString()</td>
                             <td data-label="Total cost">@transferRequest.TransferCost.ToString("C0", culture)</td>
                             <td>
-                                @if (Model.AccountId == transferRequest.SenderAccount.Id)
+                                @if (Html.IsAuthorized(FeatureType.TransferConnectionRequests))
                                 {
-                                    <a href="@Url.CommitmentsAction($"transfers/{transferRequest.CommitmentHashedId}")">Details</a>
+                                    if (Model.AccountId == transferRequest.SenderAccount.Id)
+                                    {
+                                        <a href="@Url.CommitmentsAction($"transfers/{transferRequest.CommitmentHashedId}")">Details</a>
+                                    }
                                 }
                             </td>
                         </tr>

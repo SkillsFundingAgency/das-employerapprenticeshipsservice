@@ -6,6 +6,6 @@ namespace SFA.DAS.EAS.Infrastructure.Authorization
 {
     public interface IAuthorizationHandler
     {
-        Task<bool> CanAccessAsync(IAuthorizationContext authorizationContext, Feature feature);
+        Task<AuthorizationResult> CanAccessAsync(IAuthorizationContext authorizationContext, Feature feature);
     }
 }

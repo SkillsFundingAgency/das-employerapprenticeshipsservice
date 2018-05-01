@@ -26,8 +26,8 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.EventHandlers.CohortRejectedByTra
         private CancellationTokenSource _cancellationTokenSource;
         private Mock<ITransferRequestRepository> _transferRequestRepository;
         private TransferRequest _transferRequest;
-        private Domain.Data.Entities.Account.Account _senderAccount;
-        private Domain.Data.Entities.Account.Account _receiverAccount;
+        private Domain.Models.Account.Account _senderAccount;
+        private Domain.Models.Account.Account _receiverAccount;
         private Mock<IUnitOfWorkManager> _unitOfWorkManager;
 
         [SetUp]
@@ -41,13 +41,13 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.EventHandlers.CohortRejectedByTra
             _transferRequestRepository = new Mock<ITransferRequestRepository>();
             _unitOfWorkManager = new Mock<IUnitOfWorkManager>();
 
-            _senderAccount = new Domain.Data.Entities.Account.Account
+            _senderAccount = new Domain.Models.Account.Account
             {
                 Id = 111111,
                 HashedId = "ABC123"
             };
 
-            _receiverAccount = new Domain.Data.Entities.Account.Account
+            _receiverAccount = new Domain.Models.Account.Account
             {
                 Id = 222222,
                 HashedId = "XYZ987"
