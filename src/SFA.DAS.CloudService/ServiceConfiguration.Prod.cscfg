@@ -53,7 +53,7 @@
     </ConfigurationSettings>
   </Role>
   <Role name="SFA.DAS.EAS.Account.Worker">
-    <Instances count="3" />
+    <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
