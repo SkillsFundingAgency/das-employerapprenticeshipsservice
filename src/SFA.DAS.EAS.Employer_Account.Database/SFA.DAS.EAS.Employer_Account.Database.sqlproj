@@ -127,9 +127,7 @@
     <Build Include="StoredProcedures\GetAccountsLinkedToLegalEntity.sql" />
     <Build Include="Tables\TransferConnectionInvitationChange.sql" />
     <PostDeploy Include="Scripts\PostDeployment\PostDeployment.sql" />
-    <None Include="Scripts\PostDeployment\TransferConnectionInvitationDataMigration.sql" />
     <PreDeploy Include="Scripts\PreDeployment\PreDeployment.sql" />
-    <None Include="Scripts\PreDeployment\TransferConnectionInvitationDataMigration.sql" />
     <None Include="Scripts\PostDeployment\SeedDevData.sql" />
     <Build Include="Tables\TransferRequest.sql" />
     <Build Include="StoredProcedures\GetLatestSignedAgreementVersionForAccount.sql" />

@@ -18,8 +18,3 @@ GO
 CREATE INDEX [IX_EmployerAgreement_AccountId_StatusId]
 ON [employer_account].[EmployerAgreement] ([AccountId], [StatusId])
 GO
-
-CREATE UNIQUE INDEX [IX_EmployerAgreement_LegalEntityId_AccountId_TemplateId]
-ON [employer_account].[EmployerAgreement] ([LegalEntityId], [AccountId], [TemplateId])
-WHERE [StatusId] <> 5
-GO
