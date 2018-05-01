@@ -1,23 +1,12 @@
 ﻿using System.Diagnostics;
-using Microsoft.Azure.WebJobs;
 using SFA.DAS.EAS.Account.Worker.Infrastructure;
-using SFA.DAS.EAS.Account.Worker.Infrastructure.Interfaces;
 using SFA.DAS.EAS.Application.DependencyResolution;
-using SFA.DAS.EAS.Application.Hashing;
-using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Caching;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
-using SFA.DAS.NLog.Logger;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Account.Worker.DependencyResolution
 {
     public static class IoC
     {
-        private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
-
         public static IContainer Initialize()
         {
             return new Container(c =>
@@ -29,8 +18,8 @@ namespace SFA.DAS.EAS.Account.Worker.DependencyResolution
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();
+                c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<ValidationRegistry>();
-
                 c.ForConcreteType<DasWebJobTraceWriter>().Configure.Ctor<TraceLevel>().Is(TraceLevel.Verbose);
             });
         }
