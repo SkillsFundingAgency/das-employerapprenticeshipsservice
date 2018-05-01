@@ -40,7 +40,7 @@
                 <tr>
                     <th scope="col">Organisation</th>
                     <th scope="col">Agreement status</th>
-                    <th scope="col"><span class="vh">Action</span></th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -75,7 +75,7 @@
 }
                             else
                             {
-                                <a href="@Url.Action("Details", "EmployerAgreement", new {agreementid = employerAgreement.Signed.HashedAgreementId})" title="View agreement">View agreement</a>
+                                <a href="@Url.Action("Details", "EmployerAgreement", new {agreementid = employerAgreement.Signed.HashedAgreementId})" title="View agreement">View</a>
 
                             }
                         </td>
