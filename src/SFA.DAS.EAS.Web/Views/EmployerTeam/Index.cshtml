@@ -120,7 +120,6 @@ else
                                                     <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
                                                     <button class="button-link" type="submit">Dismiss this message</button>
                                                 </form>
-
                                                 break;
                                             case "AgreementToSign":
                                                 <p>
@@ -144,25 +143,7 @@ else
                                                 break;
                                             case "ReviewConnectionRequest":
                                                 <p>
-                                                    @{
-                                                        var message = "";
-                                                        var action = "";
-                                                        var linkText = "";
-                                                        if (task.ItemsDueCount == 1)
-                                                        {
-                                                            message = "1 connection request to review";
-                                                            action = Url.Action("Outstanding", "TransferConnectionInvitations");
-                                                            linkText = "View details";
-                                                        }
-                                                        else
-                                                        {
-                                                            message = $"{task.ItemsDueCount} connection requests to review";
-                                                            action = Url.Action("Index", "Transfers");
-                                                            linkText = "View transfer dashboard";
-                                                        }
-                                                    }
-                                                    <p>@message</p>
-                                                    <a href="@action" > @linkText</a >
+                                                    @task.ItemsDueCount connection request@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.Action("Index", "Transfers")">View details</a>
                                                 </p>
                                                 break;
                                        }
