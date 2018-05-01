@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -15,7 +16,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserInvitations
         private GetNumberOfUserInvitationsHandler _getUserInvitationsCountHandler;
         private Mock<IValidator<GetNumberOfUserInvitationsQuery>> _validator;
         private Mock<IInvitationRepository> _invitationRepository;
-        private string ExpectedEmployerId = "1234dfe";
+        private readonly Guid ExpectedEmployerId = Guid.NewGuid();
 
         [SetUp]
         public void Arrange()
@@ -47,24 +48,24 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserInvitations
 
             //Act
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _getUserInvitationsCountHandler.Handle(new GetNumberOfUserInvitationsQuery()));
-            _invitationRepository.Verify(x => x.GetNumberOfInvites(It.IsAny<string>()), Times.Never);
+            _invitationRepository.Verify(x => x.GetNumberOfInvites(It.IsAny<Guid>()), Times.Never);
         }
 
         [Test]
         public async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Arrange
-            await _getUserInvitationsCountHandler.Handle(new GetNumberOfUserInvitationsQuery { UserId = ExpectedEmployerId });
+            await _getUserInvitationsCountHandler.Handle(new GetNumberOfUserInvitationsQuery { ExternalUserId = ExpectedEmployerId });
 
             //Act
-            _invitationRepository.Verify(x => x.GetNumberOfInvites(It.Is<string>(c => c.Equals(ExpectedEmployerId))), Times.Once);
+            _invitationRepository.Verify(x => x.GetNumberOfInvites(It.Is<Guid>(c => c.Equals(ExpectedEmployerId))), Times.Once);
         }
 
         [Test]
         public async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Arrange
-            var actual = await _getUserInvitationsCountHandler.Handle(new GetNumberOfUserInvitationsQuery { UserId = ExpectedEmployerId });
+            var actual = await _getUserInvitationsCountHandler.Handle(new GetNumberOfUserInvitationsQuery { ExternalUserId = ExpectedEmployerId });
 
             //Assert
             Assert.AreEqual(1,actual.NumberOfInvites);

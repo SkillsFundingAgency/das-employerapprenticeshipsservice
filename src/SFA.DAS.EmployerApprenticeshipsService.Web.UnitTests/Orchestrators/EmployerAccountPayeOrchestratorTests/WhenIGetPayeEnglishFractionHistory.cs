@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         private EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
         private const string EmpRef = "123/AGB";
         private const string AccountId = "123aBB";
-        private const string UserId = "45AGB22";
+        private readonly Guid UserId = Guid.NewGuid();
 
         [SetUp]
         public void Arrange()

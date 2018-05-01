@@ -23,6 +23,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
         private Mock<ILog> _logger;
         private InvitationOrchestrator _invitationOrchestrator;
 
+        private readonly Guid expectedUserId = Guid.NewGuid();
+
         [SetUp]
         public void Arrange()
         {
@@ -41,14 +43,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
         [Test]
         public async Task ThenTheMediatorIsCalledToRetrieveTheInvitations()
         {
-            //Arrange
-            var userId = "123abc";
-
             //Act
-            var actual = await _invitationOrchestrator.GetAllInvitationsForUser(userId);
+            var actual = await _invitationOrchestrator.GetAllInvitationsForUser(expectedUserId);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetUserInvitationsRequest>(c=>c.UserId.Equals(userId))), Times.Once);
+            _mediator.Verify(x=>x.SendAsync(It.Is<GetUserInvitationsRequest>(c=>c.ExternalUserId.Equals(expectedUserId))), Times.Once);
             Assert.IsAssignableFrom<UserInvitationsViewModel>(actual.Data);
         }
 
@@ -67,7 +66,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
             });
 
             //Act
-            var actual = await _invitationOrchestrator.GetAllInvitationsForUser("123abc");
+            var actual = await _invitationOrchestrator.GetAllInvitationsForUser(expectedUserId);
 
             //Assert
             Assert.AreEqual(expectedValue, actual.Data.Invitations.FirstOrDefault().ExpiryDays());
@@ -80,7 +79,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserInvitationsRequest>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //act
-            var actual = await _invitationOrchestrator.GetAllInvitationsForUser("test");
+            var actual = await _invitationOrchestrator.GetAllInvitationsForUser(expectedUserId);
 
             //Assert
             Assert.IsNull(actual.Data);
@@ -90,14 +89,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
         [Test]
         public async Task ThenICheckToSeeWhatAccountsIHaveAccessTo()
         {
-            //Arrange
-            var expectedUserId = "123FVD";
-
             //Act
             await _invitationOrchestrator.GetAllInvitationsForUser(expectedUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetUserAccountsQuery>(c => c.UserRef.Equals(expectedUserId))), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.Is<GetUserAccountsQuery>(c => c.ExternalUserId.Equals(expectedUserId))), Times.Once);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
@@ -99,11 +100,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         {
             //Arrange
             var expectedEmail = "test@test.com";
-            var expectedId = "123456";
+            var expectedId = Guid.NewGuid();
             var expectedFirstName = "Test";
             var expectedLastName = "tester";
             _owinWrapper.Setup(x => x.GetClaimValue("email")).Returns(expectedEmail);
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(expectedId);
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(expectedId.ToString());
             _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.GivenName)).Returns(expectedFirstName);
             _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.FamilyName)).Returns(expectedLastName);
 

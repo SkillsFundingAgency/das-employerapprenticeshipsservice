@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -15,6 +16,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
     {
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
+
+        private readonly Guid _externalUserId = Guid.NewGuid();
 
         [SetUp]
         public void Arrange()
@@ -34,7 +37,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         public async Task ThenTheTeamMembersArePopulatedToTheResponse()
         {
             //Act
-            var actual = await _orchestrator.GetTeamMembers("ABF45", "123");
+            var actual = await _orchestrator.GetTeamMembers("ABF45", _externalUserId);
 
             //Assert
             Assert.IsNotEmpty(actual.Data.TeamMembers);

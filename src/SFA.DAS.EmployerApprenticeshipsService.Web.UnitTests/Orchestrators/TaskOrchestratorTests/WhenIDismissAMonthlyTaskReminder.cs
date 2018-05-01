@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.TaskOrchestratorTests
         {
             //Arrange
             const string hashedAccountId = "ABC123";
-            const string hashedUserId = "DEF456";
+            Guid hashedUserId = Guid.NewGuid();
             const TaskType taskType = TaskType.LevyDeclarationDue;
 
             var taskTypeString = Enum.GetName(typeof(TaskType), taskType);
@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.TaskOrchestratorTests
                 }));
 
             //Act
-            var result = await _orchestrator.DismissMonthlyReminderTask("ABC123", "DEF123", "LevyDeclarationDue");
+            var result = await _orchestrator.DismissMonthlyReminderTask("ABC123", Guid.NewGuid(), "LevyDeclarationDue");
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.TaskOrchestratorTests
                 }));
 
             //Act
-            var result = await _orchestrator.DismissMonthlyReminderTask("ABC123", "DEF123", "this is not a task");
+            var result = await _orchestrator.DismissMonthlyReminderTask("ABC123", Guid.NewGuid(), "this is not a task");
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.TaskOrchestratorTests
                 .ThrowsAsync(new Exception());
 
             //Act
-            var result = await _orchestrator.DismissMonthlyReminderTask("ABC123", "DEF123", "LevyDeclarationDue");
+            var result = await _orchestrator.DismissMonthlyReminderTask("ABC123", Guid.NewGuid(), "LevyDeclarationDue");
 
             //Assert
             Assert.AreEqual(HttpStatusCode.InternalServerError, result.Status);

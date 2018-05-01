@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
@@ -26,8 +27,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         {
             var validationResult = new ValidationResult();
 
-            if (string.IsNullOrWhiteSpace(item.ExternalUserId))
-                validationResult.AddError("UserId", "No UserId supplied");
+            if (item.ExternalUserId.Equals(Guid.Empty))
+                validationResult.AddError("ExternalUserId", "No ExternalUserId supplied");
 
             if ((item.OrganisationType == OrganisationType.CompaniesHouse || item.OrganisationType == OrganisationType.Charities) &&
                 string.IsNullOrWhiteSpace(item.OrganisationReferenceNumber))

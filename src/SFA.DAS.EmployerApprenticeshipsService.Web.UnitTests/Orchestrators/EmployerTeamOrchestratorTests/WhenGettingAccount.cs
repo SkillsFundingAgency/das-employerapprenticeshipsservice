@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
     {
         private const string HashedAccountId = "ABC123";
         private const long AccountId = 123;
-        private const string UserId = "USER1";
+        private readonly Guid _externalUserId = Guid.NewGuid();
 
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                     Tasks = _tasks
                 });
 
-            _mediator.Setup(m => m.SendAsync(It.Is<GetUserAccountRoleQuery>(q => q.ExternalUserId == UserId)))
+            _mediator.Setup(m => m.SendAsync(It.Is<GetUserAccountRoleQuery>(q => q.ExternalUserId == _externalUserId)))
                      .ReturnsAsync(new GetUserAccountRoleResponse
                      {
                          UserRole = Domain.Models.UserProfile.Role.Owner
@@ -112,7 +112,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         public async Task ThenShouldGetAccountStats()
         {
             // Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+            var actual = await _orchestrator.GetAccount(HashedAccountId, _externalUserId);
 
             //Assert
             Assert.IsNotNull(actual.Data);
@@ -125,7 +125,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         public async Task ThenShouldReturnTasks()
         {
             // Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+            var actual = await _orchestrator.GetAccount(HashedAccountId, _externalUserId);
 
             //Assert
             Assert.IsNotNull(actual.Data);
@@ -139,7 +139,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _testTask.ItemsDueCount = 0;
 
             // Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+            var actual = await _orchestrator.GetAccount(HashedAccountId, _externalUserId);
 
             //Assert
             Assert.IsNotNull(actual.Data);
@@ -154,7 +154,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                 .ReturnsAsync(null);
 
             // Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+            var actual = await _orchestrator.GetAccount(HashedAccountId, _externalUserId);
 
             //Assert
             Assert.IsNotNull(actual.Data);
@@ -165,7 +165,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         public async Task ThenShouldReturnAccountsTasks()
         {
             //Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+            var actual = await _orchestrator.GetAccount(HashedAccountId, _externalUserId);
 
             //Assert
             Assert.AreEqual(_tasks, actual.Data.Tasks);
@@ -187,7 +187,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _getLatestOutstandingTransferInvitationResponse.TransferConnectionInvitation = expectedLatestTransfer;
 
             //Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+            var actual = await _orchestrator.GetAccount(HashedAccountId, _externalUserId);
 
             //Assert
             Assert.AreEqual(HashedAccountId, actual.Data.HashedAccountId);
@@ -202,7 +202,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _currentDateTime.Setup(x => x.Now).Returns(now);
 
             //Act
-            var model = await _orchestrator.GetAccount(HashedAccountId, UserId);
+            var model = await _orchestrator.GetAccount(HashedAccountId, _externalUserId);
 
             //Assert
             Assert.AreEqual(expectShowBanner, model.Data.ShowAcademicYearBanner);

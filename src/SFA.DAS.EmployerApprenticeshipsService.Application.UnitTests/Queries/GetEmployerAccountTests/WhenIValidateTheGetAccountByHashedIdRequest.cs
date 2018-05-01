@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -16,7 +17,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
         private Mock<IMembershipRepository> _membershipRepository;
 
         private const string ExpectedHashedId = "4567";
-        private const string ExpectedUserId = "asdf4660";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
 
         [SetUp]
         public void Arrange()
@@ -31,7 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
         public async Task ThenTheResultIsValidWhenAllFieldsArePopulatedAndTheUserIsPartOfTheAccount()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountHashedQuery { HashedAccountId = ExpectedHashedId, UserId = ExpectedUserId });
+            var result = await _validator.ValidateAsync(new GetEmployerAccountHashedQuery { HashedAccountId = ExpectedHashedId, ExternalUserId = ExpectedUserId });
 
             //Assert
             Assert.IsTrue(result.IsValid());
@@ -56,9 +57,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
 
             //Assert
             Assert.IsFalse(result.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("UserId", "UserId has not been supplied"), result.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("ExternalUserId", "ExternalUserId has not been supplied"), result.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string, string>("HashedAccountId", "HashedAccountId has not been supplied"), result.ValidationDictionary);
-            _membershipRepository.Verify(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>()), Times.Never);
+            _membershipRepository.Verify(x => x.GetCaller(It.IsAny<long>(), It.IsAny<Guid>()), Times.Never);
         }
 
     }

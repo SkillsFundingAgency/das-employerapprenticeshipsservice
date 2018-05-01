@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments
                 validationResult.AddError(nameof(item.CourseName), "Course name has not been supplied");
             }
 
-            if (string.IsNullOrEmpty(item.ExternalUserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
                 validationResult.AddError(nameof(item.ExternalUserId), "External user ID has not been supplied");
             }

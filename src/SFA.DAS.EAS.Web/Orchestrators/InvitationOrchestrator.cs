@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return result;
         }
 
-        public virtual async Task AcceptInvitation(long invitationId, string externalUserId)
+        public virtual async Task AcceptInvitation(long invitationId, Guid externalUserId)
         {
             await _mediator.SendAsync(new AcceptInvitationCommand
             {
@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
         }
 
-        public async Task CreateInvitation(InviteTeamMemberViewModel model, string externalUserId)
+        public async Task CreateInvitation(InviteTeamMemberViewModel model, Guid externalUserId)
         {
             try
             {
@@ -75,18 +75,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             
         }
 
-        public async Task<OrchestratorResponse<UserInvitationsViewModel>> GetAllInvitationsForUser(string externalUserId)
+        public async Task<OrchestratorResponse<UserInvitationsViewModel>> GetAllInvitationsForUser(Guid externalUserId)
         {
             try
             {
                 var response = await _mediator.SendAsync(new GetUserInvitationsRequest
                 {
-                    UserId = externalUserId
+                    ExternalUserId = externalUserId
                 });
 
                 var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery
                 {
-                    UserRef = externalUserId
+                    ExternalUserId = externalUserId
                 });
 
                 var result = new OrchestratorResponse<UserInvitationsViewModel>

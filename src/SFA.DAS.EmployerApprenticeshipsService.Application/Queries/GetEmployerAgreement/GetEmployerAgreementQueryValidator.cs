@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
                 validationResult.AddError(nameof(item.HashedAgreementId));
             }
 
-            if (string.IsNullOrEmpty(item.ExternalUserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
                 validationResult.AddError(nameof(item.ExternalUserId));
             }
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
                 return validationResult;
             }
 
-            if (agreement.HashedAccountId != item.HashedAccountId || (agreement.Status != EmployerAgreementStatus.Signed && caller.RoleId != (int)Role.Owner))
+            if (agreement.HashedAccountId != item.HashedAccountId || (agreement.Status != EmployerAgreementStatus.Signed && caller.Role != Role.Owner))
             {
                 validationResult.IsUnauthorized = true;
             }    

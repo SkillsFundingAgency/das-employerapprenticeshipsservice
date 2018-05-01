@@ -10,9 +10,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserNotificationSettings
         {
             var result = new ValidationResult();
 
-            if(string.IsNullOrWhiteSpace(item.UserRef))
+            if(item.ExternalUserId.Equals(Guid.Empty))
             {
-                result.AddError(nameof(item.UserRef));
+                result.AddError(nameof(item.ExternalUserId));
             }
 
             return result;

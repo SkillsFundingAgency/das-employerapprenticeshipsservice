@@ -78,14 +78,14 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
             await NotifyAccountRenamed(message.HashedAccountId);
 
             await PublishAccountRenamedMessage(accountId, accountPreviousName, message.NewName, 
-                owner.FullName(), owner.UserRef);
+                owner.FullName(), owner.ExternalUserId);
         }
 
         private async Task PublishAccountRenamedMessage(
-            long accountId, string previousName, string currentName, string creatorName, string creatorUserRef)
+            long accountId, string previousName, string currentName, string creatorName, Guid externalUserId)
         {
             await _messagePublisher.PublishAsync(
-                new AccountNameChangedMessage(previousName,currentName,accountId,creatorName, creatorUserRef));
+                new AccountNameChangedMessage(previousName,currentName,accountId,creatorName, externalUserId));
         }
 
         private async Task NotifyAccountRenamed(string hashedAccountId)

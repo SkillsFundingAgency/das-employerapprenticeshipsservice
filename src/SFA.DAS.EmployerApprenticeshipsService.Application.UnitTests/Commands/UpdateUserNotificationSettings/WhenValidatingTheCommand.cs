@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Castle.Components.DictionaryAdapter;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.UpdateUserNotificationSettings;
@@ -31,7 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
 
             //Assert
             Assert.IsFalse(result.IsValid());
-            Assert.IsTrue(result.ValidationDictionary.ContainsKey(nameof(command.UserRef)));
+            Assert.IsTrue(result.ValidationDictionary.ContainsKey(nameof(command.ExternalUserId)));
         }
 
         [Test]
@@ -40,7 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateUserNotificationSetti
             //Arrange
             var command = new UpdateUserNotificationSettingsCommand
             {
-                UserRef = "REF",
+                ExternalUserId = Guid.NewGuid(),
                 Settings = null
             };
 

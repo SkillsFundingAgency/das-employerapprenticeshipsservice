@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.FindEmployerAccountLevyDecla
             //Act
             var actual = await _validator.ValidateAsync(new FindEmployerAccountLevyDeclarationTransactionsQuery
                 {
-                    ExternalUserId = "test",
+                    ExternalUserId = Guid.NewGuid(),
                     HashedAccountId = "test",
                     FromDate = DateTime.Now.AddDays(-10),
                     ToDate = DateTime.Now.AddDays(-2)
@@ -55,12 +55,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.FindEmployerAccountLevyDecla
         public async Task ThenTheUnauthorizedFlagIsSetWhenTheUserDoesNotValidateAgainstTheAccount()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(null);
 
             //Act
             var actual = await _validator.ValidateAsync(new FindEmployerAccountLevyDeclarationTransactionsQuery
             {
-                ExternalUserId = "test",
+                ExternalUserId = Guid.NewGuid(),
                 HashedAccountId = "test",
                 FromDate = DateTime.Now.AddDays(-10),
                 ToDate = DateTime.Now.AddDays(-2)

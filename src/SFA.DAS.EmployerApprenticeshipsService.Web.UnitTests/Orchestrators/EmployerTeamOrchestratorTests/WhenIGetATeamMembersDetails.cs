@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -15,7 +16,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 {
     class WhenIGetATeamMembersDetails
     {
-        private const string ExternalUserId = "123ABC";
+        private readonly Guid _externalUserId = Guid.NewGuid();
         private const string TeamMemberEmail = "test@test.com";
         private const string HashedAccountId = "ABC123";
 
@@ -52,12 +53,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                 .ReturnsAsync(new GetUserAccountRoleResponse {UserRole = userRole});
 
             //Act
-            var result = await _orchestrator.GetTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
+            var result = await _orchestrator.GetTeamMember(HashedAccountId, TeamMemberEmail, _externalUserId);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<GetUserAccountRoleQuery>(q => 
                         q.HashedAccountId.Equals(HashedAccountId) && 
-                        q.ExternalUserId.Equals(ExternalUserId))), Times.Once);
+                        q.ExternalUserId.Equals(_externalUserId))), Times.Once);
 
             Assert.AreEqual(status, result.Status);
         }
@@ -70,7 +71,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                 .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = Role.Owner });
 
             //Act
-            var result = await _orchestrator.GetTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
+            var result = await _orchestrator.GetTeamMember(HashedAccountId, TeamMemberEmail, _externalUserId);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<GetMemberRequest>(r => 
@@ -89,7 +90,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                 .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = userRole });
 
             //Act
-            await _orchestrator.GetTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
+            await _orchestrator.GetTeamMember(HashedAccountId, TeamMemberEmail, _externalUserId);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetMemberRequest>()), Times.Never);

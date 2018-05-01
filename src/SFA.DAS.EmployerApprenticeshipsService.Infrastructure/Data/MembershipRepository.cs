@@ -82,13 +82,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task<MembershipView> GetCaller(long accountId, string externalUserId)
+        public async Task<MembershipView> GetCaller(long accountId, Guid externalUserId)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@AccountId", accountId, DbType.Int64);
-                parameters.Add("@externalUserId", externalUserId, DbType.String);
+                parameters.Add("@externalUserId", externalUserId, DbType.Guid);
 
                 return await c.QueryAsync<MembershipView>(
                     sql: "SELECT * FROM [employer_account].[MembershipView] m inner join [employer_account].account a on a.id=m.accountid WHERE a.Id = @AccountId AND UserRef = @externalUserId;",
@@ -99,13 +99,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<MembershipView> GetCaller(string hashedAccountId, string externalUserId)
+        public async Task<MembershipView> GetCaller(string hashedAccountId, Guid externalUserId)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
-                parameters.Add("@externalUserId", externalUserId, DbType.String);
+                parameters.Add("@externalUserId", externalUserId, DbType.Guid);
 
                 return await c.QueryAsync<MembershipView>(
                     sql: "[employer_account].[GetTeamMember]",
@@ -133,12 +133,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task SetShowAccountWizard(string hashedAccountId, string externalUserId, bool showWizard)
+        public async Task SetShowAccountWizard(string hashedAccountId, Guid externalUserId, bool showWizard)
         {
            await WithConnection(async c =>
            {
                var parameters = new DynamicParameters();
-               parameters.Add("@externalUserId", Guid.Parse(externalUserId), DbType.Guid);
+               parameters.Add("@externalUserId", externalUserId, DbType.Guid);
                parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
                parameters.Add("@showWizard", showWizard, DbType.Boolean);
 

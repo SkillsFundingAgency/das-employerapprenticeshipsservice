@@ -23,6 +23,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.UserSettingsOrchestrator
         private Mock<IMediator> _mediator;
         private Mock<IHashingService> _hashingService;
 
+        private readonly Guid _externalUserId = Guid.NewGuid();
+
         [SetUp]
         public void SetUp()
         {
@@ -63,15 +65,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.UserSettingsOrchestrator
         [Test]
         public void CantFindSettingsForAccount()
         {
-            Func<Task> act = async () => await _sut.Unsubscribe("REF", "ABBA777", "URL/to/Settings");
+            Func<Task> act = async () => await _sut.Unsubscribe(_externalUserId, "ABBA777", "URL/to/Settings");
             act.ShouldThrow<Exception>()
-                .Where(m => m.Message == "Cannot find user settings for user REF in account 777");
+                .Where(m => m.Message == $"Cannot find user settings for user {_externalUserId} in account 777");
         }
 
         [Test]
         public async Task WhenUserAlreadyUnsubscribe()
         {
-            var result = await _sut.Unsubscribe("REF", "ABBA888", "URL/to/Settings");
+            var result = await _sut.Unsubscribe(_externalUserId, "ABBA888", "URL/to/Settings");
             result.Data.AccountName.Should().Be("Super Account 888");
             result.Data.AlreadyUnsubscribed.Should().BeTrue();
         }
@@ -79,7 +81,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.UserSettingsOrchestrator
         [Test]
         public async Task WhenUserUnsubscribe()
         {
-            var result = await _sut.Unsubscribe("REF", "ABBA999", "URL/to/Settings");
+            var result = await _sut.Unsubscribe(_externalUserId, "ABBA999", "URL/to/Settings");
             result.Data.AccountName.Should().Be("Super Account 999");
             result.Data.AlreadyUnsubscribed.Should().BeFalse();
         }

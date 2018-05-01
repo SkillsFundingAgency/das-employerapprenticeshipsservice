@@ -21,6 +21,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
 
+        private readonly Guid _externalUserId = Guid.NewGuid();
+
         [SetUp]
         public void Arrange()
         {
@@ -50,7 +52,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).ReturnsAsync(Unit.Value);
 
             //Act
-            var result = await _orchestrator.Remove(2, "3242", "32342");
+            var result = await _orchestrator.Remove(2, "3242", _externalUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, result.Status);
@@ -66,7 +68,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).ReturnsAsync(Unit.Value);
 
             //Act
-            var result = await _orchestrator.Remove(2, "3242", "32342");
+            var result = await _orchestrator.Remove(2, "3242", _externalUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.NotFound, result.Status);
@@ -80,7 +82,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).Throws(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
-            var result = await _orchestrator.Remove(2, "3242", "32342");
+            var result = await _orchestrator.Remove(2, "3242", _externalUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
@@ -94,7 +96,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).Throws<UnauthorizedAccessException>();
 
             //Act
-            var result = await _orchestrator.Remove(2, "3242", "32342");
+            var result = await _orchestrator.Remove(2, "3242", _externalUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, result.Status);

@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
         private long _accountId;
         private long _ukprn;
         private string _hashedAccountId;
-        private string _externalUserId;
+        private Guid _externalUserId;
       
         private Mock<IApprenticeshipInfoServiceWrapper> _apprenticeshipInfoService;
         public override FindAccountProviderPaymentsQuery Query { get; set; }
@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
             _accountId = 1;
             _ukprn = 10;
             _hashedAccountId = "123ABC";
-            _externalUserId = "test";
+            _externalUserId =Guid.NewGuid();
 
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(_accountId);
@@ -143,15 +143,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
         }
 
         [Test]
-        public void ThenANotFoundExceptionShouldBeThrowIfNoTransactionsAreFound()
+        public async Task ThenANotFoundExceptionShouldBeThrowIfNoTransactionsAreFound()
         {
             //Arrange
             _dasLevyService.Setup(x => x.GetAccountProviderPaymentsByDateRange<PaymentTransactionLine>
                     (It.IsAny<long>(), It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(new List<PaymentTransactionLine>());
 
+            var result = await RequestHandler.Handle(Query);
+
             //Act
-            Assert.ThrowsAsync<NotFoundException>(async () => await RequestHandler.Handle(Query));
+            Assert.IsNull(result);
         }
     }
 }

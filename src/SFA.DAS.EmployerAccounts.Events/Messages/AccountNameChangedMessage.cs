@@ -10,10 +10,10 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public string PreviousName { get; protected set; }
         public string CurrentName { get; protected set; }
 
-        public AccountNameChangedMessage() : base(0, string.Empty, string.Empty)
+        public AccountNameChangedMessage() : base(0, string.Empty, Guid.Empty)
         {}
 
-        public AccountNameChangedMessage(string previousName, string currentName, long accountId, string creatorName, string creatorUserRef) : base(accountId, creatorName, creatorUserRef)
+        public AccountNameChangedMessage(string previousName, string currentName, long accountId, string creatorName, Guid externalUserId) : base(accountId, creatorName, externalUserId)
         {
             PreviousName = previousName;
             CurrentName = currentName;

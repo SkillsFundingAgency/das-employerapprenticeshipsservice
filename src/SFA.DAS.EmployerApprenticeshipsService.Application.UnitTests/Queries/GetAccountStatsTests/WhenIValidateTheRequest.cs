@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -30,19 +31,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountStatsTests
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("ExternalUserId", "UserId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("ExternalUserId", "ExternalUserId has not been supplied"), actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string, string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
-            _membershipRepository.Verify(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>()),Times.Never);
+            _membershipRepository.Verify(x => x.GetCaller(It.IsAny<long>(), It.IsAny<Guid>()),Times.Never);
         }
 
         [Test]
         public async Task ThenTheRequestIsMarkedAsInvalidIfTheUserDoesNotExist()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(null);
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountStatsQuery { ExternalUserId = "123ABC", HashedAccountId = "1" });
+            var actual = await _validator.ValidateAsync(new GetAccountStatsQuery { ExternalUserId = Guid.NewGuid(), HashedAccountId = "1" });
 
             //Assert
             Assert.IsFalse(actual.IsValid());
@@ -54,10 +55,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountStatsTests
         public async Task ThenTheRequestIsValidIfTheUserIsAnOwnerOfTheAccount()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { RoleId = (short)Role.Owner });
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(new MembershipView { Role = Role.Owner });
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountStatsQuery { ExternalUserId = "123ABC", HashedAccountId = "1" });
+            var actual = await _validator.ValidateAsync(new GetAccountStatsQuery { ExternalUserId = Guid.NewGuid(), HashedAccountId = "1" });
 
             //Assert
             Assert.IsTrue(actual.IsValid());

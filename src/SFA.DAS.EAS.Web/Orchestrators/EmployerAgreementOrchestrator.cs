@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> Create(
-            string hashedId, string externalUserId, string name, string code, string address, DateTime incorporatedDate)
+            string hashedId, Guid externalUserId, string name, string code, string address, DateTime incorporatedDate)
         {
             var response = new OrchestratorResponse<EmployerAgreementViewModel>();
 
@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var request = new GetLatestEmployerAgreementTemplateRequest
                 {
                     HashedAccountId = hashedId,
-                    UserId = externalUserId
+                    ExternalUserId = externalUserId
                 };
 
                 var templateResponse = await _mediator.SendAsync(request);
@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(string hashedId,
-            string externalUserId)
+            Guid externalUserId)
         {
             try
             {
@@ -115,7 +115,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetById(
-            string agreementid, string hashedId, string externalUserId)
+            string agreementid, string hashedId, Guid externalUserId)
         {
             try
             {
@@ -170,7 +170,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse> SignAgreement(string agreementid, string hashedId, string externalUserId,
+        public async Task<OrchestratorResponse> SignAgreement(string agreementid, string hashedId, Guid externalUserId,
             DateTime signedDate, string companyName)
         {
             try
@@ -206,7 +206,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
        
-        public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(string hashedAccountId, Guid externalUserId)
         {
             var userRole = await GetUserAccountRole(hashedAccountId, externalUserId);
 
@@ -218,7 +218,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
+        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(string hashedAccountId, string agreementId, Guid externalUserId)
         {
             var pdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
 
@@ -228,7 +228,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     HashedAccountId = hashedAccountId,
                     HashedLegalAgreementId = agreementId,
-                    UserId = userId
+                    ExternalUserId = externalUserId
                 });
 
                 pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel {PdfStream = result.FileStream};
@@ -248,7 +248,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return pdfEmployerAgreement;
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>>  GetSignedPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
+        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>>  GetSignedPdfEmployerAgreement(string hashedAccountId, string agreementId, Guid userId)
         {
 
             var signedPdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
@@ -261,7 +261,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         {
                             HashedAccountId = hashedAccountId,
                             HashedLegalAgreementId = agreementId,
-                            UserId = userId
+                            ExternalUserId = userId
                         });
 
                 signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel {PdfStream = result.FileStream};
@@ -296,7 +296,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
-        public virtual async  Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, string userId)
+        public virtual async  Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, Guid userId)
         {
             var response = new OrchestratorResponse<LegalAgreementsToRemoveViewModel>();
             try
@@ -304,7 +304,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var result = await _mediator.SendAsync(new GetAccountEmployerAgreementsRemoveRequest
                 {
                     HashedAccountId = hashedAccountId,
-                    UserId = userId
+                    ExternalUserId = userId
                 });
 
                 response.Data = new LegalAgreementsToRemoveViewModel
@@ -332,7 +332,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string agreementId, string hashedAccountId, string userId)
+        public virtual async Task<OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string agreementId, string hashedAccountId, Guid userId)
         {
             var response = new OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>();
             try
@@ -340,7 +340,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var result = await _mediator.SendAsync(new GetAccountEmployerAgreementRemoveRequest
                 {
                     HashedAccountId = hashedAccountId,
-                    UserId = userId,
+                    ExternalUserId = userId,
                     HashedAgreementId = agreementId
                 });
                 response.Data = new ConfirmLegalAgreementToRemoveViewModel
@@ -373,7 +373,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<bool>>  RemoveLegalAgreement(ConfirmLegalAgreementToRemoveViewModel model, string userId)
+        public virtual async Task<OrchestratorResponse<bool>>  RemoveLegalAgreement(ConfirmLegalAgreementToRemoveViewModel model, Guid userId)
         {
             var response = new OrchestratorResponse<bool>();
             try
@@ -398,7 +398,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new RemoveLegalEntityCommand
                 {
                     HashedAccountId = model.HashedAccountId,
-                    UserId = userId,
+                    ExternalUserId = userId,
                     HashedLegalAgreementId = model.HashedAgreementId
                 });
 
@@ -425,10 +425,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
+        public virtual async Task<bool> UserShownWizard(Guid externalUserId, string hashedAccountId)
         {
-            var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
-            return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
+            var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, ExternalUserId = externalUserId });
+            return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
         }
     }
 }

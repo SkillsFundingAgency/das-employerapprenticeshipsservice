@@ -29,13 +29,13 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserByRef
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            _logger.Debug($"Getting user with ref {message.UserRef}");
+            _logger.Debug($"Getting user with ref {message.ExternalUserId}");
 
-            var user = await _repository.GetUserByRef(message.UserRef);
+            var user = await _repository.GetUserByRef(message.ExternalUserId);
 
             if (user == null)
             {
-                validationResult.AddError(nameof(message.UserRef), "User does not exist");
+                validationResult.AddError(nameof(message.ExternalUserId), "User does not exist");
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 

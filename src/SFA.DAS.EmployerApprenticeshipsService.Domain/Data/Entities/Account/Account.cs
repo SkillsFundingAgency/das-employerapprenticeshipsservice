@@ -15,8 +15,7 @@ namespace SFA.DAS.EAS.Domain.Data.Entities.Account
         public virtual DateTime? ModifiedDate { get; set; }
         public virtual string Name { get; set; }
         public virtual string PublicHashedId { get; set; }
-        public virtual int RoleId { get; set; }
-        public string RoleName => ((Role)RoleId).ToString();
+        public virtual Role Role { get; set; }
         public virtual ICollection<TransferConnectionInvitation> SentTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
         public virtual ICollection<TransferConnectionInvitation> ReceivedTransferConnectionInvitation { get; set; } = new List<TransferConnectionInvitation>();
         public bool IsSender => SentTransferConnectionInvitations.Any(i =>i.Status != TransferConnectionInvitationStatus.Rejected);

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetAccountStats;
@@ -17,7 +18,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountStatsTests
         private AccountStats _accountStats;
         private Mock<IHashingService> _hashingService;
         private const string HashedAccountId = "123ABC";
-        private const string ExternalUserId = "456WER";
+        private readonly Guid ExternalUserId = Guid.NewGuid();
         public override GetAccountStatsQuery Query { get; set; }
         public override GetAccountStatsHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountStatsQuery>> RequestValidator { get; set; }

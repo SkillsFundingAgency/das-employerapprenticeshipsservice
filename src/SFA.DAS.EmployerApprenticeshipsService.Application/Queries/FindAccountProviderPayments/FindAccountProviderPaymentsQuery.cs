@@ -9,6 +9,6 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments
         public long UkPrn { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-        public string ExternalUserId { get; set; }
+        public Guid ExternalUserId { get; set; }
     }
 }

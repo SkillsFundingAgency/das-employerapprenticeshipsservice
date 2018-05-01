@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments
             {
                 result.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
             }
-            if (string.IsNullOrEmpty(item.ExternalUserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
                 result.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
             }

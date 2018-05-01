@@ -5,7 +5,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
 {
     public class CreateAccountViewModel
     {
-        public string UserId { get; set; }
+        public Guid ExternalUserId { get; set; }
         public OrganisationType OrganisationType { get; set; }
         public short? PublicSectorDataSource { get; set; }
         public string OrganisationName { get; set; }

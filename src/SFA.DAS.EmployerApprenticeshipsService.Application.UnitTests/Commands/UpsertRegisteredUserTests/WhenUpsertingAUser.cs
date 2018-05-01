@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpsertRegisteredUserTests
 
             _command = new UpsertRegisteredUserCommand
             {
-                UserRef = Guid.NewGuid().ToString(),
+                ExternalUserId = Guid.NewGuid(),
                 FirstName = "User",
                 LastName = "One",
                 EmailAddress = "user.one@unit.tests"
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpsertRegisteredUserTests
 
             // Assert
             _userRepository.Verify(r => r.Upsert(It.Is<User>(u => u.Email == _command.EmailAddress
-                                                               && u.UserRef == _command.UserRef
+                                                               && u.ExternalId == _command.ExternalUserId
                                                                && u.FirstName == _command.FirstName
                                                                && u.LastName == _command.LastName)), Times.Once);
         }

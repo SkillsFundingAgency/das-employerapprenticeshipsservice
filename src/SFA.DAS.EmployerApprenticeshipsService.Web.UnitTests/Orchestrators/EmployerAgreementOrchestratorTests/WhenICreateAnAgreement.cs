@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
         {
             //Assign
             const string hashedId = "2";
-            const string userId = "user";
+            var userId = Guid.NewGuid();
             const string entityName = "Test Corp";
             const string entityRef = "1234ABC";
             const string entityAddress = "Test Street";

@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
         private Mock<IAuthenticationService> _owinWrapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
-        private string _externalUserId;
+        private Guid _externalUserId = Guid.NewGuid();
         private Mock<IValidator<GetAccountPayeSchemesQuery>> _validator;
         private Mock<IEventsApi> _eventsApi;
         private Mock<IEmployerCommitmentApi> _commitmentsApi;
@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
 
             //Create a new user with passed in role
 
-            _externalUserId = Guid.NewGuid().ToString();
+            _externalUserId = Guid.NewGuid();
             ScenarioContext.Current["ExternalUserId"] = _externalUserId;
 
             CreateUserWithRole(accountRole);
@@ -79,7 +79,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
 
             orchestrator.CreateAccount(new CreateAccountViewModel
             {
-                UserId = userView.UserRef,
+                ExternalUserId = userView.ExternalUserId,
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
                 OrganisationDateOfInception = new DateTime(2016, 01, 01),
@@ -102,7 +102,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
                 Email = "test@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
                 FirstName = "test",
                 LastName = "tester",
-                UserRef = _externalUserId
+                ExternalUserId = _externalUserId
             };
             var userCreation = new UserSteps();
             userCreation.UpsertUser(signInModel);
@@ -113,19 +113,19 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
                     Email = signInModel.Email,
                     FirstName = signInModel.FirstName,
                     LastName = signInModel.LastName,
-                    UserRef = _externalUserId
+                    ExternalId = _externalUserId
                 }, roleOut, accountId);
         }
 
         private void CreateAccountWithOwner()
         {
-            var accountOwnerUserId = Guid.NewGuid().ToString();
+            var accountOwnerUserId = Guid.NewGuid();
 
             ScenarioContext.Current["AccountOwnerUserRef"] = accountOwnerUserId;
 
             var signInUserModel = new UserViewModel
             {
-                UserRef = accountOwnerUserId,
+                ExternalUserId = accountOwnerUserId,
                 Email = "accountowner@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
                 FirstName = "Test",
                 LastName = "Tester"
@@ -144,9 +144,9 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
 
         private void SetAccountIdForUser()
         {
-            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
+            var accountOwnerId = Guid.Parse(ScenarioContext.Current["AccountOwnerUserRef"].ToString());
             var mediator = _container.GetInstance<IMediator>();
-            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { UserRef = accountOwnerId }).Result;
+            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { ExternalUserId = accountOwnerId }).Result;
 
             var account = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault();
             ScenarioContext.Current["AccountId"] = account.Id;

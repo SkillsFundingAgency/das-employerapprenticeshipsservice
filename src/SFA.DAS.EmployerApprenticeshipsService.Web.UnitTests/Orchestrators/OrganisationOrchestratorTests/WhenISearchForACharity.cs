@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -65,7 +66,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         public async Task ThenTheCharityDetailsAreMappedToTheModel()
         {
            //Act
-            var actual = await _orchestrator.GetCharityByRegistrationNumber(string.Empty, string.Empty, string.Empty);
+            var actual = await _orchestrator.GetCharityByRegistrationNumber(string.Empty, string.Empty, Guid.Empty);
 
             //Assert
             Assert.IsNotNull(actual);
@@ -94,7 +95,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 });
 
             //Act
-            var actual = await _orchestrator.GetCharityByRegistrationNumber(" 12345 ", "123", string.Empty);
+            var actual = await _orchestrator.GetCharityByRegistrationNumber(" 12345 ", "123", Guid.Empty);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Conflict,actual.Status);

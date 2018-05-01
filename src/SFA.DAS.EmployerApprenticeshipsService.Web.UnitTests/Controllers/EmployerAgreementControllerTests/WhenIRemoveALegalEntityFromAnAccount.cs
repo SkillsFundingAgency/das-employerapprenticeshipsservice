@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
@@ -23,7 +24,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
-        public const string ExpectedUserId = "AFV456TGF";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
         public const string ExpectedHashedAccountId = "FFRE45";
         public const string ExpectedHashedAgreementId = "789UHY";
 
@@ -36,7 +37,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId.ToString());
 
             _controller = new EmployerAgreementController(
                 _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, 

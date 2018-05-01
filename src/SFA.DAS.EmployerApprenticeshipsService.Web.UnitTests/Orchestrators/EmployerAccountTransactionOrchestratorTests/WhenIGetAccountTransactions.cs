@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
     public class WhenIGetAccountTransactions
     {
         private const string HashedAccountId = "123ABC";
-        private const string ExternalUser = "Test user";
+        private readonly Guid ExternalUser = Guid.NewGuid();
         private const long AccountId = 1234;
 
         private Mock<IMediator> _mediator;

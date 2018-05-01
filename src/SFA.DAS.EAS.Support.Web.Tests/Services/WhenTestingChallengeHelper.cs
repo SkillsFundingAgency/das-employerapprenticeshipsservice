@@ -12,8 +12,6 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Services
         {
         }
 
-        private ChallengeHelper _unit;
-
         [Test]
         public void ItShouldProvideTheChallengeMessageForCharacters0And1()
         {

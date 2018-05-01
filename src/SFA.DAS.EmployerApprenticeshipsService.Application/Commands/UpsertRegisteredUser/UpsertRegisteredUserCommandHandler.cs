@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser
 
             await _userRepository.Upsert(new User
             {
-                UserRef = message.UserRef,
+                ExternalId = message.ExternalUserId,
                 Email = message.EmailAddress,
                 FirstName = message.FirstName,
                 LastName = message.LastName

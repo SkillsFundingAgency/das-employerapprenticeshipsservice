@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<Guid>()))
                 .ReturnsAsync(_owner);
 
             _hashingService = new Mock<IHashingService>();

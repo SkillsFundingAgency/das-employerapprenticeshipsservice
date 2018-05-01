@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole
 
             if (caller == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You are not a member of this Account" } });
-            if (caller.RoleId != (int)Role.Owner)
+            if (caller.Role != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You must be an owner of this Account" } });
 
             var existing = await _membershipRepository.Get(caller.AccountId, message.Email);

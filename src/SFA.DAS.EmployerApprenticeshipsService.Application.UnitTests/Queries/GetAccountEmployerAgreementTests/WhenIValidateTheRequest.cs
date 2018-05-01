@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -12,7 +13,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
 {
     public class WhenIValidateTheRequest
     {
-        private const string ExpectedExternalUserId = "456";
+        private Guid ExpectedExternalUserId = Guid.NewGuid();
         private const string ExpectedHashedId = "456487";
         private GetAccountEmployerAgreementsValidator _validator;
         private Mock<IMembershipRepository> _membershipRepository;

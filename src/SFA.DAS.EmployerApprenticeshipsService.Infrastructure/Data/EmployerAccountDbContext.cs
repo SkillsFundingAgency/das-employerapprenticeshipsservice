@@ -49,24 +49,24 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             modelBuilder.HasDefaultSchema("employer_account");
 
             modelBuilder.Entity<Domain.Data.Entities.Account.Account>()
-                .Ignore(a => a.RoleId)
-                .Ignore(a => a.RoleName)
+                //.Ignore(a => a.RoleId)
+                //.Ignore(a => a.RoleName)
                 .HasMany(a => a.SentTransferConnectionInvitations)
                 .WithRequired(i => i.SenderAccount);
 
             modelBuilder.Entity<Membership>()
-                .HasKey(m => new { m.AccountId, m.UserId })
-                .Ignore(m => m.RoleId)
-                .Property(m => m.Role).HasColumnName(nameof(Membership.RoleId));
+                .HasKey(m => new { m.AccountId, m.UserId });
+                //.Ignore(m => m.RoleId)
+                //.Property(m => m.Role).HasColumnName(nameof(Membership.RoleId));
 
             modelBuilder.Entity<TransferRequest>()
                 .HasKey(r => r.CommitmentId)
                 .Property(t => t.CommitmentId).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             modelBuilder.Entity<User>()
-                .Ignore(u => u.FullName)
-                .Ignore(u => u.UserRef)
-                .Property(u => u.ExternalId).HasColumnName(nameof(User.UserRef));
+                .Ignore(u => u.FullName);
+                //.Ignore(u => u.UserRef)
+                //.Property(u => u.ExternalId).HasColumnName(nameof(User.UserRef));
         }
     }
 }

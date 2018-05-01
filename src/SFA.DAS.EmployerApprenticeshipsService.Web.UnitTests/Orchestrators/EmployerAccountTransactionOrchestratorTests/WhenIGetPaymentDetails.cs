@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
     class WhenIGetPaymentDetails
     {
         private const string HashedAccountId = "123ABC";
-        private const string ExternalUser = "Test user";
+        private readonly Guid ExternalUser =Guid.NewGuid();
         private const long AccountId = 1234;
         private readonly DateTime _fromDate = DateTime.Now.AddDays(-20);
         private readonly DateTime _toDate = DateTime.Now.AddDays(-20);
@@ -86,18 +86,18 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         }
 
         [Test]
-        public async Task ThenIfNoTransactionsAreFoundANotFoundStatusIsReturned()
+        public async Task ThenIfNoTransactionsAreFoundANullIsReturned()
         {
             //Arrange
             _mediator.Setup(x => x.SendAsync(It.IsAny<FindAccountProviderPaymentsQuery>()))
-                     .ThrowsAsync(new NotFoundException(string.Empty));
+                     .ReturnsAsync(null);
 
             //Act
             var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, 10, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert
-            Assert.AreEqual(HttpStatusCode.NotFound, result.Status);
+            Assert.IsNull(result);
         }
 
         [Test]

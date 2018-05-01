@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
 
         private const string ExpectedHahsedAccountId = "RT456";
         private const string ExpectedHashedAgreementId = "RRTE56";
-        private const string ExpectedUserId = "TYG68UY";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
         private const string ExpectedName = "Test Name";
 
         [SetUp]
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<GetAccountEmployerAgreementRemoveRequest>(
                 c => c.HashedAccountId.Equals(ExpectedHahsedAccountId)
-                     && c.UserId.Equals(ExpectedUserId)
+                     && c.ExternalUserId.Equals(ExpectedUserId)
                      && c.HashedAgreementId.Equals(ExpectedHashedAgreementId)
                 )), Times.Once);
         }

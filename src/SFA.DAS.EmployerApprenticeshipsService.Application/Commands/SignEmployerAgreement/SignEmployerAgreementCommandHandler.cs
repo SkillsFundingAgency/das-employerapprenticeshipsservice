@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
             var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
-            if (owner == null || (Role) owner.RoleId != Role.Owner)
+            if (owner == null || (Role) owner.Role != Role.Owner)
                 throw new UnauthorizedAccessException();
 
             var agreementId = _hashingService.DecodeValue(message.HashedAgreementId);
@@ -105,14 +105,14 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
             await _accountAgreementService.RemoveFromCacheAsync(accountId);
 
-            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId, accountHasCommitments, owner.FullName(), owner.UserRef);
+            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId, accountHasCommitments, owner.FullName(), owner.ExternalUserId);
         }
 
         private async Task PublishAgreementSignedMessage(long accountId, long legalEntityId, string legalEntityName, long agreementId,
-            bool cohortCreated, string currentUserName, string currentUserRef)
+            bool cohortCreated, string currentUserName, Guid externalUserId)
         {
             await _messagePublisher.PublishAsync(new AgreementSignedMessage(accountId, agreementId,
-                legalEntityName, legalEntityId, cohortCreated, currentUserName, currentUserRef));
+                legalEntityName, legalEntityId, cohortCreated, currentUserName, externalUserId));
         }
 
         private async Task AddAuditEntry(SignEmployerAgreementCommand message, long accountId, long agreementId)
@@ -125,7 +125,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
                     Description = $"Agreement {agreementId} added to account {accountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
-                        PropertyUpdate.FromString("UserId", message.ExternalUserId),
+                        PropertyUpdate.FromString("ExternalUserId", message.ExternalUserId.ToString()),
                         PropertyUpdate.FromString("SignedDate", message.SignedDate.ToString("U"))
                     },
                     RelatedEntities = new List<Entity> {new Entity {Id = accountId.ToString(), Type = "Account"}},

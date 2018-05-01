@@ -32,15 +32,15 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return _db.Users.SingleOrDefaultAsync(u => u.ExternalId == externalId);
         }
 
-        public async Task<User> GetUserByRef(string id)
+        public async Task<User> GetUserByRef(Guid id)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@userRef", new Guid(id), DbType.Guid);
+                parameters.Add("@userRef", id, DbType.Guid);
 
                 var res = await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE UserRef = @userRef",
+                    sql: "SELECT Id, UserRef as ExternalId, Email, FirstName, LastName FROM [employer_account].[User] WHERE UserRef = @userRef",
                     param: parameters,
                     commandType: CommandType.Text);
                 return res;
@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@email", emailAddress, DbType.String);
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Email = @email",
+                    sql: "SELECT Id, UserRef as ExternalId, Email, FirstName, LastName FROM [employer_account].[User] WHERE Email = @email",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
-                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
+                parameters.Add("@userRef", user.ExternalId, DbType.Guid);
                 parameters.Add("@firstName", user.FirstName, DbType.String);
                 parameters.Add("@lastName", user.LastName, DbType.String);
                 return await c.ExecuteAsync(
@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
-                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
+                parameters.Add("@userRef", user.ExternalId, DbType.Guid);
                 parameters.Add("@firstName", user.FirstName, DbType.String);
                 parameters.Add("@lastName", user.LastName, DbType.String);
                 return await c.ExecuteAsync(
@@ -101,7 +101,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
-                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
+                parameters.Add("@userRef", user.ExternalId, DbType.Guid);
                 parameters.Add("@firstName", user.FirstName, DbType.String);
                 parameters.Add("@lastName", user.LastName, DbType.String);
                 return await c.ExecuteAsync(
@@ -118,9 +118,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 var parameters = new DynamicParameters();
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User];",
+                    sql: "SELECT Id, UserRef as ExternalId, Email, FirstName, LastName FROM [employer_account].[User];",
                     param: parameters,
                     commandType: CommandType.Text);
+
             });
             return new Users
             {

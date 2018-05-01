@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 
 namespace SFA.DAS.EAS.Application.Commands.RemoveTeamMember
@@ -10,12 +11,12 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveTeamMember
             var validationResult = new ValidationResult();
 
             if (item.UserId == 0)
-                validationResult.AddError(nameof(item.UserId), "No UserId supplied");
+                validationResult.AddError(nameof(item.UserId), "No ExternalUserId supplied");
 
             if (string.IsNullOrEmpty(item.HashedAccountId))
                 validationResult.AddError(nameof(item.HashedAccountId), "No HashedAccountId supplied");
 
-            if (string.IsNullOrWhiteSpace(item.ExternalUserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
                 validationResult.AddError(nameof(item.ExternalUserId), "No ExternalUserId supplied");
 
             return validationResult;

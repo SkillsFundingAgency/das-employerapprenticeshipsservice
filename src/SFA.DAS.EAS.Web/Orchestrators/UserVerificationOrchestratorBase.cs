@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -19,7 +20,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             Mediator = mediator;
         }
 
-        public virtual async Task<GetUserAccountRoleResponse> GetUserAccountRole(string hashedAccountId, string externalUserId)
+        public virtual async Task<GetUserAccountRoleResponse> GetUserAccountRole(string hashedAccountId, Guid externalUserId)
         {
             return await Mediator.SendAsync(new GetUserAccountRoleQuery
             {

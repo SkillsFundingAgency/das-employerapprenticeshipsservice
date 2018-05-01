@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
         private const string ExpectedHashedAccountId = "34RFD";
         private const long ExpectedAccountId = 123455;
         private const long ExpectedLegalEntityId = 98854;
-        private const string ExpectedUserId = "LASDA234E";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
         private const long ExpectedEmployerAgreementId = 5533678;
         private const string ExpectedHashedEmployerAgreementId = "FGDFH45645";
 
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
             _genericEventHandler = new Mock<IGenericEventFactory>();
             _genericEventHandler.Setup(x => x.Create(It.Is<AgreementRemovedEvent>(c => c.HashedAgreementId.Equals(ExpectedHashedEmployerAgreementId)))).Returns(new GenericEvent {Payload = ExpectedHashedEmployerAgreementId});
 
-            _command = new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = ExpectedUserId,HashedLegalAgreementId = ExpectedHashedEmployerAgreementId };
+            _command = new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, ExternalUserId = ExpectedUserId,HashedLegalAgreementId = ExpectedHashedEmployerAgreementId };
             _handler = new RemoveLegalEntityCommandHandler(_validator.Object, _logger.Object, _repository.Object, _mediator.Object, _hashingService.Object, _genericEventHandler.Object, _employerAgreementEventFactory.Object, Mock.Of<IMessagePublisher>());
         }
 
@@ -95,7 +95,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
             //Assert
             _validator.Verify(x => x.ValidateAsync(It.Is<RemoveLegalEntityCommand>(c =>
                                                                           c.HashedAccountId.Equals(ExpectedHashedAccountId)
-                                                                          && c.UserId.Equals(ExpectedUserId))));
+                                                                          && c.ExternalUserId.Equals(ExpectedUserId))));
             _repository.Verify(x => x.RemoveLegalEntityFromAccount(ExpectedEmployerAgreementId));
         }
 

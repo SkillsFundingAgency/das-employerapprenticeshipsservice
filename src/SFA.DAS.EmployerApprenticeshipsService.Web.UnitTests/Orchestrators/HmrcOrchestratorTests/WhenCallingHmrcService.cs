@@ -88,7 +88,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HmrcOrchestratorTests
         public async Task ThenIfANotFoundExceptionIsThrownThePropertyIsSetOnTheResponse()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ThrowsAsync(new NotFoundException("Empref not found"));
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>()))
+                .ReturnsAsync(new GetHmrcEmployerInformationResponse {EmprefNotFound = true});
 
             //Act
             var result = await _employerAccountOrchestrator.GetHmrcEmployerInformation("123", "test@test.com");

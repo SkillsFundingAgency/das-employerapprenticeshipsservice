@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>>
             GetLimitedCompanyByRegistrationNumber(string companiesHouseNumber, string hashedLegalEntityId,
-                string userIdClaim)
+                Guid userIdClaim)
         {
             if (!string.IsNullOrEmpty(hashedLegalEntityId))
             {
@@ -119,7 +119,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public virtual async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>>
-            FindPublicSectorOrganisation(string searchTerm, string hashedAccountId, string userIdClaim)
+            FindPublicSectorOrganisation(string searchTerm, string hashedAccountId, Guid userIdClaim)
         {
             var searchResults = await _mediator.SendAsync(new GetPublicSectorOrganisationQuery
             {
@@ -198,7 +198,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCharityByRegistrationNumber(
-            string registrationNumber, string hashedLegalEntityId, string userIdClaim)
+            string registrationNumber, string hashedLegalEntityId, Guid userIdClaim)
         {
 
             if (!string.IsNullOrEmpty(hashedLegalEntityId))
@@ -282,7 +282,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public virtual async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(
-            string hashedAccountId, string externalUserId)
+            string hashedAccountId, Guid externalUserId)
         {
             var userRole = await GetUserAccountRole(hashedAccountId, externalUserId);
 
@@ -516,7 +516,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return addressBuilder.ToString();
         }
 
-        public async Task<OrchestratorResponse<OrganisationDetailsViewModel>> CheckLegalEntityIsNotAddedToAccount(string hashedLegalEntityId, string userIdClaim, string legalEntityCode, OrganisationType organisationType)
+        public async Task<OrchestratorResponse<OrganisationDetailsViewModel>> CheckLegalEntityIsNotAddedToAccount(string hashedLegalEntityId, Guid userIdClaim, string legalEntityCode, OrganisationType organisationType)
         {
             var accountLegalEntitiesHelper = new AccountLegalEntitiesHelper(_mediator);
             var accountEntities = await accountLegalEntitiesHelper.GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
@@ -575,19 +575,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public virtual Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
                 string organisationName,
-                string userId,
+                Guid externalUserId,
                 string hashedAccountId)
         {
-            return this.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, string.Empty);
+            return this.GetOrganisationAddedNextStepViewModel(organisationName, externalUserId, hashedAccountId, string.Empty);
         }
 
         public virtual async Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
-            string organisationName, 
-            string userId, 
+            string organisationName,
+            Guid externalUserId, 
             string hashedAccountId, 
             string hashedAgreementId)
         {
-            var showWizard = await UserShownWizard(userId, hashedAccountId);
+            var showWizard = await UserShownWizard(externalUserId, hashedAccountId);
 
             return new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
             {
@@ -595,10 +595,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
+        public virtual async Task<bool> UserShownWizard(Guid userId, string hashedAccountId)
         {
-            var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
-            return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
+            var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, ExternalUserId = userId });
+            return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
         }
     }
 }

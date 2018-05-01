@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -71,7 +72,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             var response = await _orchestrator.RenameEmployerAccount(new RenameEmployerAccountViewModel
             {
                 NewName = "New Account Name"
-            }, "ABC123");
+            }, Guid.NewGuid());
 
             //Assert
             Assert.IsInstanceOf<OrchestratorResponse<RenameEmployerAccountViewModel>>(response);

@@ -21,12 +21,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserInvitations
         private GetUserInvitationsQueryHandler _handler;
         private Mock<IHashingService> _hashingService;
 
+        private readonly Guid _externalUserId = Guid.NewGuid();
+
         [SetUp]
         public void Setup()
         {
             _invitationRepository = new Mock<IInvitationRepository>();
-            _invitationRepository.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(new List<InvitationView> {new InvitationView {Id = 3456776} });
-            _invitationRepository.Setup(x => x.Get("user1")).ReturnsAsync(new List<InvitationView> { });
+            _invitationRepository.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(new List<InvitationView> {new InvitationView {Id = 3456776} });
+            _invitationRepository.Setup(x => x.Get(_externalUserId)).ReturnsAsync(new List<InvitationView> { });
 
             _hashingService = new Mock<IHashingService>();
             _handler = new GetUserInvitationsQueryHandler(_invitationRepository.Object, _hashingService.Object);
@@ -47,7 +49,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserInvitations
         {
             var request = new GetUserInvitationsRequest
             {
-                UserId = "user1"
+                ExternalUserId = _externalUserId
             };
             
             var response = _handler.Handle(request);
@@ -58,12 +60,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserInvitations
         [Test]
         public void ThenIGetAnInvitation()
         {
-            const string userId = "user1";
+            var userId = Guid.NewGuid();
             const long invitationId = 1;
 
             var request = new GetUserInvitationsRequest
             {
-                UserId = userId
+                ExternalUserId = _externalUserId
             };
 
             var invitations = new List<InvitationView>
@@ -77,7 +79,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserInvitations
                 }
             };
 
-            _invitationRepository.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(invitations);
+            _invitationRepository.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(invitations);
 
             var response = _handler.Handle(request);
 
@@ -91,12 +93,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserInvitations
         [Test]
         public void ThenIGetSomeInvitations()
         {
-            const string userId = "user1";
+            //var userId = Guid.NewGuid();
             const long invitationId = 1;
 
             var request = new GetUserInvitationsRequest
             {
-                UserId = userId
+                ExternalUserId = _externalUserId
             };
 
             var invitations = new List<InvitationView>
@@ -117,7 +119,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserInvitations
                 }
             };
 
-            _invitationRepository.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(invitations);
+            _invitationRepository.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(invitations);
 
             var response = _handler.Handle(request);
 

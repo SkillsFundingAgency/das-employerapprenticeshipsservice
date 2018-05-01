@@ -35,7 +35,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         private const string ExpectedHashedId = "jgdfg786";
         private const string ExpectedEmpref = "123/DFDS";
         private const string ExpectedEmprefName = "Paye Scheme 1";
-        private const string ExpectedUserId = "someid";
+        private const string ExpectedEmail = "a@b.com";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
 
         [SetUp]
         public void Arrange()
@@ -90,7 +91,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         public async Task ThenIfTheSchemeExistsAConflictIsReturnedAndTheValuesAreCleared()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ThrowsAsync(new ConstraintException());
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ReturnsAsync(new GetHmrcEmployerInformationResponse{ Empref = "" });
             
             //Act
             var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel("1", "1", "", null);
@@ -106,7 +107,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         public async Task ThenTheLoggedInUserIsCheckedToMakeSureThatTheyAreAnOwner()
         {
             //Act
-            await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedHashedId, ExpectedUserId, "","");
+            await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedHashedId, ExpectedEmail, "","");
 
             //assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetMemberRequest>()), Times.Once);
@@ -119,7 +120,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetMemberRequest>())).ReturnsAsync(new GetMemberResponse {TeamMember = new TeamMember {Role=Role.Viewer} });
 
             //Act
-            var actual = await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedHashedId, ExpectedUserId,"","");
+            var actual = await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedHashedId, ExpectedEmail,"","");
 
             //act
             Assert.IsAssignableFrom<OrchestratorResponse<GatewayInformViewModel>>(actual);

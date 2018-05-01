@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.UpdateShowWizard;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateShowAccountWizardTests
@@ -21,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateShowAccountWizardTest
             var command = new UpdateShowAccountWizardCommand
             {
                 HashedAccountId = "123ABC",
-                ExternalUserId = "213FHG",
+                ExternalUserId = Guid.NewGuid(),
                 ShowWizard = true
             };
 

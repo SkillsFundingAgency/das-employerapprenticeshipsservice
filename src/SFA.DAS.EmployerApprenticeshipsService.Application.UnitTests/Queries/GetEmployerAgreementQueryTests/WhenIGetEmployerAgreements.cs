@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
 
             Query = new GetEmployerAgreementRequest
             {
-                ExternalUserId = "ABC123",
+                ExternalUserId = Guid.NewGuid(),
                 HashedAgreementId = "TYG678",
                 HashedAccountId = "DER123"
             };

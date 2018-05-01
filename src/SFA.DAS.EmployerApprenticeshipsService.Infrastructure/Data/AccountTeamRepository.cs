@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,13 +19,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<List<TeamMember>> GetAccountTeamMembersForUserId(string hashedAccountId, string externalUserId)
+        public async Task<List<TeamMember>> GetAccountTeamMembersForUserId(string hashedAccountId, Guid externalUserId)
         {
             var result = await WithConnection(async connection =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
-                parameters.Add("@externalUserId", externalUserId, DbType.String);
+                parameters.Add("@externalUserId", externalUserId, DbType.Guid);
 
                 const string sql = @"select tm.* from [employer_account].[GetTeamMembers] tm 
                             join [employer_account].[Membership] m on m.AccountId = tm.AccountId

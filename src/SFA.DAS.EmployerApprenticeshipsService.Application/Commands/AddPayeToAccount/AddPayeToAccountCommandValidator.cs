@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                 }
                 else
                 {
-                    if (member.RoleId != (short) Role.Owner)
+                    if (member.Role != Role.Owner)
                     {
                         validationResult.IsUnauthorized = true;
                     }
@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             {
                 validationResult.AddError(nameof(item.Empref), "Empref has not been supplied");
             }
-            if (string.IsNullOrEmpty(item.ExternalUserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
                 validationResult.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
             }

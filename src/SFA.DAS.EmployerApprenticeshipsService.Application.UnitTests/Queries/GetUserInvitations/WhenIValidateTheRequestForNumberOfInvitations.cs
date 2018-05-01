@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserInvitations
         public void ThenIfAllFieldsArePopulatedItIsValid()
         {
             //Act
-            var actual = _validator.Validate(new GetNumberOfUserInvitationsQuery {UserId = Guid.NewGuid().ToString()});
+            var actual = _validator.Validate(new GetNumberOfUserInvitationsQuery {ExternalUserId = Guid.NewGuid()});
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -27,25 +27,25 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserInvitations
         }
 
         [Test]
-        public void ThenIfTheUserIdIsNotAGuidItIsNotValid()
+        public void ThenIfTheUserIdIsAnEmptyGuidItIsNotValid()
         {
             //Act
-            var actual = _validator.Validate(new GetNumberOfUserInvitationsQuery { UserId = "someId" });
+            var actual = _validator.Validate(new GetNumberOfUserInvitationsQuery {ExternalUserId = Guid.Empty});
             
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("UserId", "UserId is not in the correct format"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("ExternalUserId", "ExternalUserId has not been supplied"), actual.ValidationDictionary);
         }
 
         [Test]
         public void ThenIfFieldsArentPopulatedTheErrorDictionaryIsPopulated()
         {
             //Act
-            var actual = _validator.Validate(new GetNumberOfUserInvitationsQuery { UserId = "" });
+            var actual = _validator.Validate(new GetNumberOfUserInvitationsQuery { ExternalUserId = Guid.Empty });
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("UserId", "UserId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("ExternalUserId", "ExternalUserId has not been supplied"), actual.ValidationDictionary);
         }
 
             

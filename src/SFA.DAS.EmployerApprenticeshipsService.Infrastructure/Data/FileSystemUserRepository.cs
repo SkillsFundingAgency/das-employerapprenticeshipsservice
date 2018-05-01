@@ -22,11 +22,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return users.UserList.SingleOrDefault(x => x.Id.Equals(id));
         }
 
-        public async Task<User> GetUserByRef(string id)
+        public async Task<User> GetUserByRef(Guid id)
         {
             var users = await ReadFileById<Users>(UserDataFileName);
 
-            return users.UserList.SingleOrDefault(x => x.UserRef.Equals(id, StringComparison.OrdinalIgnoreCase));
+            return users.UserList.SingleOrDefault(x => x.ExternalId.ToString().Equals(id.ToString(), StringComparison.OrdinalIgnoreCase));
         }
 
         public async Task<User> GetByEmailAddress(string emailAddress)

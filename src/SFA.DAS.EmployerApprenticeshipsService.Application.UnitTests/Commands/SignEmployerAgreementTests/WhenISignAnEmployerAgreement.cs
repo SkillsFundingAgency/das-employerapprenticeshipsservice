@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             {
                 HashedAccountId = "1AVCFD",
                 HashedAgreementId = "2EQWE34",
-                ExternalUserId = Guid.NewGuid().ToString(),
+                ExternalUserId = Guid.NewGuid(),
                 SignedDate = DateTime.Now
             };
 
@@ -117,7 +117,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             _owner = new MembershipView
             {
                 UserId = 1,
-                RoleId = (short) Role.Owner,
+                Role = Role.Owner,
                 FirstName = "Fred",
                 LastName = "Bloggs"
             };
@@ -152,7 +152,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         public void ThenIfTheUserIsNotAnOwnerThenAnUnauthorizedExceptionIsThrown(Role role)
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView {RoleId = (short)role});
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView {Role = role});
 
             //Act Assert
             Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(_command));

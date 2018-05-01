@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 
@@ -10,12 +11,12 @@ namespace SFA.DAS.EAS.EmployerAccount.Events.UnitTests
         private const long AccountId = 12345;
         private const long TestLongProperty = 54321;
         private const string CreatedBy = "TestUser";
-        public const string CreatorUserRef = "123";
+        public readonly Guid CreatorUserExternalId = Guid.NewGuid();
 
         [Test]
         public void WhenAMessageIsSerialisedThenItCanBeDeserialized()
         {
-            var testClass = new TestAccountMessageBase(AccountId, TestStringProperty, TestLongProperty, CreatedBy, CreatorUserRef);
+            var testClass = new TestAccountMessageBase(AccountId, TestStringProperty, TestLongProperty, CreatedBy, CreatorUserExternalId);
             var serialized = JsonConvert.SerializeObject(testClass);
             var deserialized = JsonConvert.DeserializeObject<TestAccountMessageBase>(serialized);
 
@@ -26,7 +27,7 @@ namespace SFA.DAS.EAS.EmployerAccount.Events.UnitTests
 
         public class TestAccountMessageBase : AccountMessageBase
         {
-            public TestAccountMessageBase(long accountId, string myTestStringProperty, long myTestLongProperty, string creatorName, string creatorUserRef) : base(accountId, creatorName, creatorUserRef)
+            public TestAccountMessageBase(long accountId, string myTestStringProperty, long myTestLongProperty, string creatorName, Guid externalUserId) : base(accountId, creatorName, externalUserId)
             {
                 MyTestStringProperty = myTestStringProperty;
                 MyTestLongProperty = myTestLongProperty;

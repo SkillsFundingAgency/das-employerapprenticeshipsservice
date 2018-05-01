@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
@@ -35,7 +36,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                                 new UserViewModel
                                                 {
                                                     Id = x.Id,
-                                                    UserRef = x.UserRef,
+                                                    ExternalUserId = x.ExternalId,
                                                     Email = x.Email,
                                                     FirstName = x.FirstName,
                                                     LastName = x.LastName,
@@ -43,15 +44,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public virtual async Task<OrchestratorResponse<UserAccountsViewModel>> GetUserAccounts(string userId)
+        public virtual async Task<OrchestratorResponse<UserAccountsViewModel>> GetUserAccounts(Guid externalUserId)
         {
             var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery
             {
-                UserRef = userId
+                ExternalUserId = externalUserId
             });
             var getUserInvitationsResponse = await _mediator.SendAsync(new GetNumberOfUserInvitationsQuery
             {
-                UserId = userId
+                ExternalUserId = externalUserId
             });
             return new OrchestratorResponse<UserAccountsViewModel>
             {
@@ -63,12 +64,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public virtual async Task SaveUpdatedIdentityAttributes(string userRef, string email, string firstName, string lastName)
+        public virtual async Task SaveUpdatedIdentityAttributes(Guid externalUserId, string email, string firstName, string lastName)
         {
             await _mediator.SendAsync(new UpsertRegisteredUserCommand
             {
                 EmailAddress = email,
-                UserRef = userRef,
+                ExternalUserId = externalUserId,
                 LastName = lastName,
                 FirstName = firstName
             });

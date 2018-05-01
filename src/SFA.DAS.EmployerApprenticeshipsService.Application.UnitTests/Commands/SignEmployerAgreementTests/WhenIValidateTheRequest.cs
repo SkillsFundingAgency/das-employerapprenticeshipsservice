@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand
             {
                 HashedAccountId = "GHT432",
-                ExternalUserId = "123asd",
+                ExternalUserId = Guid.NewGuid(),
                 SignedDate = new DateTime(2016, 01, 01),
                 HashedAgreementId = "123ASD",
                 OrganisationName = "compName"
@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand
             {
                 HashedAccountId = "GHT432",
-                ExternalUserId = "123asd",
+                ExternalUserId = Guid.NewGuid(),
                 SignedDate = new DateTime(2016, 01, 01),
                 HashedAgreementId = hashedAgreementId,
                 OrganisationName = "compName"

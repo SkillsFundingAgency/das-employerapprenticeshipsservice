@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 
 namespace SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate
 {
@@ -6,6 +7,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate
     {
         public string HashedAccountId { get; set; }
 
-        public string UserId { get; set; }
+        public Guid ExternalUserId { get; set; }
     }
 }

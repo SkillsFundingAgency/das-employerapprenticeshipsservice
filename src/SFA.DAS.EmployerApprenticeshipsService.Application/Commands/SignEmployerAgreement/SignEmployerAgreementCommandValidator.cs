@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             if (string.IsNullOrEmpty(item.HashedAccountId))
                 validationResult.AddError(nameof(item.HashedAccountId));
 
-            if (string.IsNullOrWhiteSpace(item.ExternalUserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
                 validationResult.AddError(nameof(item.ExternalUserId));
 
             if (string.IsNullOrWhiteSpace(item.OrganisationName))

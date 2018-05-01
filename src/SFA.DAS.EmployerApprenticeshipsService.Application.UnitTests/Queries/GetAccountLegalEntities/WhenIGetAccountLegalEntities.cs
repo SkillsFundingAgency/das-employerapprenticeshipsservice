@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities
 
         private const string ExpectedHashedId = "123";
         private const long ExpectedAccountId = 456;
-        private readonly string _expectedUserId = Guid.NewGuid().ToString();
+        private readonly Guid _expectedUserId = Guid.NewGuid();
         private List<LegalEntity> _legalEntities;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
@@ -41,12 +41,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities
             Query = new GetAccountLegalEntitiesRequest
             {
                 HashedLegalEntityId = ExpectedHashedId,
-                UserId = _expectedUserId
+                ExternalUserId = _expectedUserId
             };
 
             _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, _expectedUserId)).ReturnsAsync(new MembershipView
             {
-                RoleId = (short)Role.Owner,
+                Role = Role.Owner,
                 AccountId = ExpectedAccountId
             });
             _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId, false)).ReturnsAsync(_legalEntities);

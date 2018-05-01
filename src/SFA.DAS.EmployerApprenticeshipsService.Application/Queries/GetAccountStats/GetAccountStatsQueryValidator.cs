@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 
@@ -21,9 +22,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountStats
         public async Task<ValidationResult> ValidateAsync(GetAccountStatsQuery item)
         {
             var validationResult = new ValidationResult();
-            if (string.IsNullOrEmpty(item.ExternalUserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
-                validationResult.AddError(nameof(item.ExternalUserId), "UserId has not been supplied");
+                validationResult.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
             }
             if (string.IsNullOrEmpty(item.HashedAccountId))
             {

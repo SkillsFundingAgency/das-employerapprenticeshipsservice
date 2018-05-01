@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -73,7 +74,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
             else
             {
-                model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, hashedAccountId, GetClaimAsGuId(@"sub"));
             }
             model.Data.IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId);
 
@@ -132,6 +133,11 @@ namespace SFA.DAS.EAS.Web.Controllers
             model.FlashMessage = FlashMessageViewModel.CreateErrorFlashMessageViewModel(new Dictionary<string, string> { { "searchTerm", "Enter organisation name" } });
         }
 
-       
+        private Guid GetClaimAsGuId(string key)
+        {
+            var userIdClaim = OwinWrapper.GetClaimValue(key);
+
+            return Guid.TryParse(userIdClaim, out var userIdGuid) ? userIdGuid : Guid.Empty;
+        }
     }
 }

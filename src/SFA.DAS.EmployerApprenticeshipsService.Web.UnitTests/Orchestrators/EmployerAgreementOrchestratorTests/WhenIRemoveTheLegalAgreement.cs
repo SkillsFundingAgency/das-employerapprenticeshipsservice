@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
 
         private const string ExpectedHahsedAccountId = "RT456";
         private const string ExpectedHashedAgreementId = "RRTE56";
-        private const string ExpectedUserId = "TYG68UY";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
 
         [SetUp]
         public void Arrange()
@@ -99,7 +99,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             _mediator.Verify(x=>x.SendAsync(It.Is<RemoveLegalEntityCommand>(
                 c=>c.HashedAccountId.Equals(ExpectedHahsedAccountId) 
                 && c.HashedLegalAgreementId.Equals(ExpectedHashedAgreementId) 
-                && c.UserId.Equals(ExpectedUserId))),Times.Once);
+                && c.ExternalUserId.Equals(ExpectedUserId))),Times.Once);
             Assert.IsNotNull(actual);
             Assert.IsNotNull(actual.FlashMessage);
             Assert.AreEqual("You have removed TestName.", actual.FlashMessage.Headline);

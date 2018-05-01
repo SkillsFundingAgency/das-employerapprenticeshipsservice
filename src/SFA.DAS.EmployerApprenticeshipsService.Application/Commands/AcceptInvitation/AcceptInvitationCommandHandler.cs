@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
 
         private async Task CheckIfUserIsAlreadyAMember(Invitation invitation, User user)
         {
-            var membership = await _membershipRepository.GetCaller(invitation.AccountId, user.UserRef);
+            var membership = await _membershipRepository.GetCaller(invitation.AccountId, user.ExternalId);
 
             if (membership != null)
                 throw new InvalidOperationException("Invited user is already a member of the Account");
@@ -117,7 +117,7 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
 
         private async Task PublishUserJoinedMessage(long accountId, User user)
         {
-            await _messagePublisher.PublishAsync(new UserJoinedMessage(accountId, user.FullName, user.UserRef));
+            await _messagePublisher.PublishAsync(new UserJoinedMessage(accountId, user.FullName, user.ExternalId));
         }
     }
 }

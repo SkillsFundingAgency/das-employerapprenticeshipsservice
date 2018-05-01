@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -13,7 +14,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HomeOrchestratorTests
     {
         private HomeOrchestrator _homeOrchestrator;
         private Mock<IMediator> _mediator;
-        private readonly string ExpectedUserId = "12345ABC";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
 
         [SetUp]
         public void Arrange()
@@ -33,7 +34,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HomeOrchestratorTests
             await _homeOrchestrator.GetUserAccounts(ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetUserAccountsQuery>(c=>c.UserRef.Equals(ExpectedUserId))), Times.Once);
+            _mediator.Verify(x=>x.SendAsync(It.Is<GetUserAccountsQuery>(c=>c.ExternalUserId.Equals(ExpectedUserId))), Times.Once);
         }
 
         [Test]
@@ -43,7 +44,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HomeOrchestratorTests
             await _homeOrchestrator.GetUserAccounts(ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetNumberOfUserInvitationsQuery>(c => c.UserId.Equals(ExpectedUserId))), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.Is<GetNumberOfUserInvitationsQuery>(c => c.ExternalUserId.Equals(ExpectedUserId))), Times.Once);
         }
     }
 }

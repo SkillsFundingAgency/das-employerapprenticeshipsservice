@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 Code = "SD665734",
                 Address = "1, Test Street",
                 IncorporatedDate = DateTime.Now.AddYears(-20),
-                ExternalUserId = "2",
+                ExternalUserId = Guid.NewGuid(),
                 LegalEntityStatus = "active"
             };
 
@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>())).ReturnsAsync(new GetUserAccountRoleResponse { UserRole = userRole });
 
             //Act
-            var actual = await _orchestrator.GetAddLegalEntityViewModel("5454654", "ADSD123");
+            var actual = await _orchestrator.GetAddLegalEntityViewModel("5454654", Guid.NewGuid());
 
             //Assert
             Assert.AreEqual(expectedResponse, actual.Status);

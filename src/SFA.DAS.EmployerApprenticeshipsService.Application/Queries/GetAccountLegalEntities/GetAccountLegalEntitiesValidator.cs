@@ -14,18 +14,18 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities
             {
                 validationResult.AddError(nameof(item.HashedLegalEntityId), "HashedLegalEntityId has not been supplied");
             }
-            if (string.IsNullOrWhiteSpace(item.UserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
-                validationResult.AddError(nameof(item.UserId), "User Id has not been supplied");
+                validationResult.AddError(nameof(item.ExternalUserId), "User Id has not been supplied");
             }
-            else
-            {
-                Guid output;
-                if (!Guid.TryParse(item.UserId, out output))
-                {
-                    validationResult.AddError(nameof(item.UserId), "User Id has not been supplied in the correct format");
-                }
-            }
+            //else
+            //{
+            //    Guid output;
+            //    if (!Guid.TryParse(item.ExternalUserId, out output))
+            //    {
+            //        validationResult.AddError(nameof(item.ExternalUserId), "User Id has not been supplied in the correct format");
+            //    }
+            //}
 
             return validationResult;
         }

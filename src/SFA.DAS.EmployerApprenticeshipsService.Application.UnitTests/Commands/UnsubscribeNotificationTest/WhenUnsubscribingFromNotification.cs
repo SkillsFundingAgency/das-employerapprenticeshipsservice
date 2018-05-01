@@ -28,13 +28,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UnsubscribeNotificationTest
         private Mock<IUserRepository> _userRepo;
 
         private Mock<INotificationsApi> _notiApi;
+        private readonly Guid _externalUserId = Guid.NewGuid();
 
         [SetUp]
         public void SetUp()
         {
             _command = new UnsubscribeNotificationCommand
                            {
-                               UserRef = "ABBA12",
+                               ExternalUserId = _externalUserId,
                                AccountId = 123456
                            };
 
@@ -43,17 +44,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UnsubscribeNotificationTest
             _userRepo = new Mock<IUserRepository>();
             _accountRepository = new Mock<IAccountRepository>();
 
-            _userRepo.Setup(m => m.GetUserByRef(_command.UserRef))
+            _userRepo.Setup(m => m.GetUserByRef(_command.ExternalUserId))
                 .ReturnsAsync(new User
                                   {
                                       FirstName = "First name",
                                       LastName = "Last name",
                                       Email = "email@email.com",
                                       Id = 99L,
-                                      UserRef = _command.UserRef
-                                  });
+                                      ExternalId = _command.ExternalUserId
+                });
 
-            _accountRepository.Setup(m => m.GetUserAccountSettings(_command.UserRef))
+            _accountRepository.Setup(m => m.GetUserAccountSettings(_command.ExternalUserId))
                 .ReturnsAsync(new List<UserNotificationSetting>
                                   {
                                       new UserNotificationSetting
@@ -77,7 +78,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UnsubscribeNotificationTest
         [Test]
         public void ShouldThrowExceptionIfAccountIsAlreadyUnsubscribed()
         {
-            _accountRepository.Setup(m => m.GetUserAccountSettings(_command.UserRef))
+            _accountRepository.Setup(m => m.GetUserAccountSettings(_command.ExternalUserId))
                 .ReturnsAsync(new List<UserNotificationSetting>
                                   {
                                       new UserNotificationSetting
@@ -96,7 +97,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UnsubscribeNotificationTest
         [Test]
         public void ShouldThrowExceptionIfAccountIsMissingSettings()
         {
-            _accountRepository.Setup(m => m.GetUserAccountSettings(_command.UserRef))
+            _accountRepository.Setup(m => m.GetUserAccountSettings(_command.ExternalUserId))
                 .ReturnsAsync(new List<UserNotificationSetting>
                                   {
                                       new UserNotificationSetting
@@ -109,7 +110,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UnsubscribeNotificationTest
                                           }
                                   });
             Func<Task> act = async () => await _sut.Handle(_command);
-            act.ShouldThrow<Exception>().Where(m => m.Message.StartsWith("Missing settings for account 123456 and user with ref ABBA12"));
+            act.ShouldThrow<Exception>().Where(m => m.Message.StartsWith($"Missing settings for account 123456 and user with ref {_externalUserId.ToString()}"));
         }
 
         [Test]
@@ -124,9 +125,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UnsubscribeNotificationTest
         public async Task ShouldUnsubscribeFromOneAccount()
         {
             List<UserNotificationSetting>  list = null;
-            _accountRepository.Setup(m => m.UpdateUserAccountSettings(It.IsAny<string>(), It.IsAny<List<UserNotificationSetting>>()))
+            _accountRepository.Setup(m => m.UpdateUserAccountSettings(It.IsAny<Guid>(), It.IsAny<List<UserNotificationSetting>>()))
                 .Returns(Task.FromResult(1L))
-               .Callback<string, List<UserNotificationSetting>>((m, l) => list = l );
+               .Callback<Guid, List<UserNotificationSetting>>((m, l) => list = l );
 
             await _sut.Handle(_command);
 

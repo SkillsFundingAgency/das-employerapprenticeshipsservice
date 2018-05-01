@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUser
 
             if (item.UserId < 1)
             {
-                result.AddError(nameof(item.UserId), "UserId has not been supplied");
+                result.AddError(nameof(item.UserId), "ExternalUserId has not been supplied");
             }
 
             return result;

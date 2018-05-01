@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
             Query = new GetAccountPayeSchemesQuery()
             {
                 HashedAccountId = "123ABC",
-                ExternalUserId = "1234"
+                ExternalUserId = Guid.NewGuid()
             };
 
             _accountRepository = new Mock<IAccountRepository>();

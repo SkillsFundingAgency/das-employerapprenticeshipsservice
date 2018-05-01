@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -11,7 +12,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public Account Account { get; set; }
        
         public Role UserRole { get; set; }
-        public string HashedUserId { get; set; }
+        public Guid ExternalUserId { get; set; }
 
         public string EmployerAccountType { get; set; }
         public bool ShowWizard { get; set; }

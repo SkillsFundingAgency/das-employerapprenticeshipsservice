@@ -24,9 +24,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccount
         {
             var result = new ValidationResult();
 
-            if (string.IsNullOrEmpty(item.UserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
-                result.AddError(nameof(item.UserId), "UserId has not been supplied");
+                result.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
             }
             if (string.IsNullOrEmpty(item.HashedAccountId))
             {
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccount
 
             if (result.IsValid())
             {
-                var membership = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
+                var membership = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
 
                 if (membership == null)
                     result.IsUnauthorized = true;

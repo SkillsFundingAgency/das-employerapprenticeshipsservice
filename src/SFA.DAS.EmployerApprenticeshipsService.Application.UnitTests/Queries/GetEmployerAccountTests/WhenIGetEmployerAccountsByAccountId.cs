@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
         public override Mock<IValidator<GetEmployerAccountQuery>> RequestValidator { get; set; }
 
         private const long ExpectedAccountId = 4564878;
-        private const string ExpectedUserId = "123dfv";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
 
         [SetUp]
         public void Arrange()

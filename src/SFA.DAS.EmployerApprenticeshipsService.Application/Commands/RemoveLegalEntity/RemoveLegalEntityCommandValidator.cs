@@ -40,9 +40,9 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             {
                 validationResult.AddError(nameof(item.HashedAccountId));
             }
-            if (string.IsNullOrEmpty(item.UserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
-                validationResult.AddError(nameof(item.UserId));
+                validationResult.AddError(nameof(item.ExternalUserId));
             }
             if (string.IsNullOrEmpty(item.HashedLegalAgreementId))
             {
@@ -54,9 +54,9 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
                 return validationResult;
             }
 
-            var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
+            var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
 
-            if (member == null || !member.RoleId.Equals((short)Role.Owner))
+            if (member == null || !member.Role.Equals(Role.Owner))
             {
                 validationResult.IsUnauthorized = true;
                 return validationResult;

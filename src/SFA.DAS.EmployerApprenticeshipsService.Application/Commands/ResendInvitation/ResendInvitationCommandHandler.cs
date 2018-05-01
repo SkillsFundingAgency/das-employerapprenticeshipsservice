@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
 
             var owner = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
 
-            if (owner == null || (Role)owner.RoleId != Role.Owner)
+            if (owner == null || (Role)owner.Role != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not an Owner" } });
 
             var existing = await _invitationRepository.Get(owner.AccountId, message.Email);
@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
                 Email = new Email
                 {
                     RecipientsAddress = message.Email,
-                    TemplateId = existingUser?.UserRef != null ? "InvitationExistingUser" : "InvitationNewUser",
+                    TemplateId = existingUser?.ExternalId != null ? "InvitationExistingUser" : "InvitationNewUser",
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",

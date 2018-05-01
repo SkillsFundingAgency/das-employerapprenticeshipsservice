@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
@@ -37,6 +38,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         {
             _orchestrator = new Mock<OrganisationOrchestrator>();
             _owinWrapper = new Mock<IAuthenticationService>();
+            _owinWrapper.Setup(o => o.GetClaimValue(It.IsAny<string>())).Returns(Guid.NewGuid().ToString);
+
             _featureToggle = new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _mapper = new Mock<IMapper>();

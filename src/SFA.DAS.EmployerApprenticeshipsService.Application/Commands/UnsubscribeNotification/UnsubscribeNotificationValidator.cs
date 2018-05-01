@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 
 using SFA.DAS.EAS.Application.Validation;
@@ -10,9 +11,9 @@ namespace SFA.DAS.EAS.Application.Commands.UnsubscribeNotification
         {
             var validationResult = new ValidationResult();
 
-            if (string.IsNullOrEmpty(item.UserRef))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
-                validationResult.AddError(nameof(item.UserRef), "User id cannot be null");
+                validationResult.AddError(nameof(item.ExternalUserId), "External User Id cannot be null");
             }
 
             if (item.AccountId < 1)

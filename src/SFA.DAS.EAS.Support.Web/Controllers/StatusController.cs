@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
     {
         // GET: Status
         [System.Web.Mvc.AllowAnonymous]
-        public async Task<IHttpActionResult> Get()
+        public IHttpActionResult Get()
         {
             return Ok(new
             {
@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
             {
                 return Assembly.GetExecutingAssembly().Version();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return "Unknown";
             }

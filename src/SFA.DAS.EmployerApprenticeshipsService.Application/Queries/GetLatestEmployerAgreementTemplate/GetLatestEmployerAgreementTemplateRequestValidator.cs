@@ -32,15 +32,15 @@ namespace SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate
                 validationResult.AddError(nameof(item.HashedAccountId), "HashedId has not been supplied");
             }
 
-            if (string.IsNullOrWhiteSpace(item.UserId))
+            if (item.ExternalUserId.Equals(Guid.Empty))
             {
-                validationResult.AddError(nameof(item.UserId), "UserId has not been supplied");
+                validationResult.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
             }
 
             if (validationResult.IsValid())
             {
-                var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
-                if (member == null || member.RoleId != (short) Role.Owner)
+                var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
+                if (member == null || member.Role != Role.Owner)
                 {
                     validationResult.IsUnauthorized = true;
                 }

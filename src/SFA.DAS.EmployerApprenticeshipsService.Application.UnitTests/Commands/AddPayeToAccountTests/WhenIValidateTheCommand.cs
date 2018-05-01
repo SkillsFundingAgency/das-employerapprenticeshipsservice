@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -14,16 +15,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
     {
         private AddPayeToAccountCommandValidator _validator;
         private Mock<IMembershipRepository> _membershiprepository;
-        private const string ExpectedOwnerUserId = "123ABC";
-        private const string ExpectedNonOwnerUserId = "543FDC";
+        private readonly Guid ExpectedOwnerUserId = Guid.NewGuid();
+        private readonly Guid ExpectedNonOwnerUserId = Guid.NewGuid();
+
 
         [SetUp]
         public void Arrange()
         {
             _membershiprepository = new Mock<IMembershipRepository>();
-            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
-            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Owner});
-            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Viewer});
+            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<Guid>())).ReturnsAsync(null);
+            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedOwnerUserId)).ReturnsAsync(new MembershipView {Role = Role.Owner});
+            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView {Role = Role.Viewer});
 
             _validator = new AddPayeToAccountCommandValidator(_membershiprepository.Object);
         }
@@ -43,7 +45,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         public async Task ThenTheMembershipRepositoryIsCheckedToMakeSureTheUserIsAnAccountOwner()
         {
             //Arrange
-            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(Guid.NewGuid());
 
             //Act
             await _validator.ValidateAsync(command);
@@ -56,7 +58,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         public async Task ThenTheCommandIsInvalidIfTheUserIsNotPartOfTheAccount()
         {
             //Arrange
-            var command = AddPayeToNewLegalEntityCommandObjectMother.Create("ABC");
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(Guid.NewGuid());
 
             //Act
             var actual = await _validator.ValidateAsync(command);

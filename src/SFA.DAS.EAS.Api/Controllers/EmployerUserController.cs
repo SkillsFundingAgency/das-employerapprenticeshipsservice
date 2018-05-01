@@ -1,7 +1,9 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Attributes;
+using SFA.DAS.EAS.Account.Api.Helpers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
@@ -21,7 +23,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetUserAccounts(string userRef)
         {
-            var result = await _orchestrator.GetUserAccounts(userRef);
+            var result = await _orchestrator.GetUserAccounts(GetUserRefAsGuId(userRef));
 
             if (result.Status == HttpStatusCode.OK)
             {
@@ -30,6 +32,11 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             
             //TODO: Handle unhappy paths.
             return Conflict();
+        }
+
+        private Guid GetUserRefAsGuId(string userRef)
+        {
+            return Guid.TryParse(userRef, out var userIdGuid) ? userIdGuid : Guid.Empty;
         }
     }
 }

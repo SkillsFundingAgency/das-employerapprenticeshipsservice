@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public UserInvitedMessage()
         { }
 
-        public UserInvitedMessage(string personInvited, long accountId, string creatorName, string creatorUserRef) 
+        public UserInvitedMessage(string personInvited, long accountId, string creatorName, Guid creatorUserRef) 
             : base(accountId, creatorName, creatorUserRef)
         {
             PersonInvited = personInvited;

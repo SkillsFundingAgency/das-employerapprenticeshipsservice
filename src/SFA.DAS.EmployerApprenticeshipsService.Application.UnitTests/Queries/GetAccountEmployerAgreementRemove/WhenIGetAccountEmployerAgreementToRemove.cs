@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementR
         private const string ExpectedHashedAccountId = "345ASD";
         private const string ExpectedHashedAgreementId = "PHF78";
         private const long ExpectedAgreementId = 12345555;
-        private const string ExpectedUserId = "098GHY";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
         private const string ExpectedAgreementName = "Test Company";
 
         [SetUp]
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementR
         {
             SetUp();    
 
-            Query = new GetAccountEmployerAgreementRemoveRequest {HashedAccountId = ExpectedHashedAccountId, HashedAgreementId = ExpectedHashedAgreementId, UserId = ExpectedUserId};
+            Query = new GetAccountEmployerAgreementRemoveRequest {HashedAccountId = ExpectedHashedAccountId, HashedAgreementId = ExpectedHashedAgreementId, ExternalUserId = ExpectedUserId};
             
             _repository = new Mock<IEmployerAgreementRepository>();
             _repository.Setup(x => x.GetEmployerAgreement(ExpectedAgreementId))

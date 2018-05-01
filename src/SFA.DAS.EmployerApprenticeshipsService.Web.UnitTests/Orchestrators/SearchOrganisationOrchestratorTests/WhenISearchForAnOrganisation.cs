@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -48,7 +49,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             var organisationType = OrganisationType.Charities;
 
             //Act
-            await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, null, null);
+            await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, null, Guid.Empty);
 
 
             //Assert
@@ -64,7 +65,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             var organisationType = OrganisationType.CompaniesHouse;
 
             //Act
-            var actual = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, null, null);
+            var actual = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, null, Guid.Empty);
 
             //Assert
             Assert.IsAssignableFrom<OrchestratorResponse<SearchOrganisationResultsViewModel>>(actual);
@@ -78,7 +79,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
                 .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string> {{"", ""}}));
 
             //Act
-            var actual = await _orchestrator.SearchOrganisation("Test", 1, OrganisationType.Charities, null, null);
+            var actual = await _orchestrator.SearchOrganisation("Test", 1, OrganisationType.Charities, null, Guid.Empty);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest,actual.Status);
@@ -89,14 +90,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
         {
             //Arrange
             var hashedAccountId = "ABC123";
-            var userId = "test";
+            var userId = Guid.NewGuid();
             var searchTerm = "Test Org";
             var pageNumber = 2;
             var expectedLegalEntitiesResponse = new GetAccountLegalEntitiesResponse
             {
                 Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (short)OrganisationType.CompaniesHouse, Code = "zzz999" } } }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
+            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.ExternalUserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
                 Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.CompaniesHouse, Code = "123456789", Address = new Address() } } }
@@ -115,7 +116,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
         {
             //Arrange
             var hashedAccountId = "ABC123";
-            var userId = "test";
+            var userId = Guid.NewGuid();
             var companyCode = "zzz9435";
             var searchTerm = "Test Org";
             var pageNumber = 2;
@@ -123,7 +124,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             {
                 Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (short)OrganisationType.CompaniesHouse, Code = companyCode } } }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
+            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.ExternalUserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
                 Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.CompaniesHouse, Code = companyCode, Address = new Address() } } }
@@ -142,7 +143,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
         {
             //Arrange
             var hashedAccountId = "ABC123";
-            var userId = "test";
+            var userId = Guid.NewGuid();
             var charityCode = "zzz9435";
             var searchTerm = "Test Org";
             var pageNumber = 2;
@@ -150,7 +151,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             {
                 Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (short)OrganisationType.Charities, Code = charityCode } } }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
+            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.ExternalUserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
                 Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.Charities, Code = charityCode, Address = new Address() } } }
@@ -169,7 +170,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
         {
             //Arrange
             var hashedAccountId = "ABC123";
-            var userId = "test";
+            var userId = Guid.NewGuid();
             var organisationName = "Org Name";
             var searchTerm = "Test Org";
             var pageNumber = 2;
@@ -177,7 +178,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             {
                 Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (short)OrganisationType.PublicBodies, Name = organisationName } } }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
+            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.ExternalUserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
                 Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.PublicBodies, Name = organisationName, Address = new Address() } } }
@@ -196,7 +197,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
         {
             //Arrange
             var hashedAccountId = "ABC123";
-            var userId = "test";
+            var userId = Guid.NewGuid();
             var organisationName = "Org Name";
             var searchTerm = "Test Org";
             var pageNumber = 2;
@@ -204,7 +205,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
             {
                 Entites = new LegalEntities { LegalEntityList = new List<LegalEntity> { new LegalEntity { Source = (short)OrganisationType.Other, Name = organisationName } } }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
+            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.ExternalUserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
                 Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.Other, Name = organisationName, Address = new Address() } } }
@@ -222,7 +223,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestrator
         public async Task ThenIfThereIsNoDasAccountThenExistingOrganisationsArentChecked()
         {
             //Act
-            await _orchestrator.SearchOrganisation("Test Org", 1, null, null, null);
+            await _orchestrator.SearchOrganisation("Test Org", 1, null, null, Guid.Empty);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()), Times.Never);

@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string,string>("UserId", "No UserId supplied"),actual.ValidationDictionary );
+            Assert.Contains(new KeyValuePair<string,string>("ExternalUserId", "No ExternalUserId supplied"),actual.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "No HashedAccountId supplied"),actual.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("ExternalUserId", "No ExternalUserId supplied"),actual.ValidationDictionary );
             

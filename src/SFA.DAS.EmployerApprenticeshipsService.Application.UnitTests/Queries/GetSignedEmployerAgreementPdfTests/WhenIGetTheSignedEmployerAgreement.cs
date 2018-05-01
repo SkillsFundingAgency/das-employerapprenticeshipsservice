@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
             {
                 HashedAccountId = "1234RFV",
                 HashedLegalAgreementId = ExpectedHashedLegalAgreementId,
-                UserId = "12345RFV"
+                ExternalUserId = Guid.NewGuid(),
             };
 
             RequestHandler = new GetSignedEmployerAgreementPdfQueryHandler(RequestValidator.Object, _pdfService.Object, _employerAgreementRepository.Object, _hashingService.Object);

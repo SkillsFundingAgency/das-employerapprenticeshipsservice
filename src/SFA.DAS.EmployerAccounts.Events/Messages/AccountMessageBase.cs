@@ -9,17 +9,17 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public long AccountId { get; protected set; }
         public DateTime CreatedAt { get; protected set; }
         public string CreatorName { get; protected set; }
-        public string CreatorUserRef { get; protected set; }
+        public Guid CreatorExternalId { get; protected set; }
 
         protected AccountMessageBase()
         { }
 
-        protected AccountMessageBase(long accountId, string creatorName, string creatorUserRef)
+        protected AccountMessageBase(long accountId, string creatorName, Guid creatorExternalId)
         {
             AccountId = accountId;
             CreatedAt = DateTime.UtcNow;
             CreatorName = creatorName;
-            CreatorUserRef = creatorUserRef;
+            CreatorExternalId = creatorExternalId;
         }
     }
 }

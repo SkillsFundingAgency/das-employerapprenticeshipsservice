@@ -51,10 +51,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
 
             _validator.Setup(x => x.Validate(It.IsAny<AcceptInvitationCommand>())).Returns(new ValidationResult());
 
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<Guid>())).ReturnsAsync(null);
 
             _invitationRepository.Setup(x => x.Get(It.IsAny<long>())).ReturnsAsync(_invitation);
-            _userAccountRepository.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(new User { UserRef = Guid.NewGuid().ToString() });
+            _userAccountRepository.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(new User { ExternalId = Guid.NewGuid() });
 
             _handler = new AcceptInvitationCommandHandler(
                 _invitationRepository.Object,
@@ -105,7 +105,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
         public void ThenIfUserIsAlreadyATeamMember()
         {
             //Assign
-            _membershipRepository.Setup(a => a.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
+            _membershipRepository.Setup(a => a.GetCaller(It.IsAny<long>(), It.IsAny<Guid>()))
                                  .Returns(Task.FromResult(new MembershipView { FirstName = "Bob", LastName = "Green" }));
 
             //Act + Assert
@@ -163,7 +163,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
         public async Task ThenTheUserFullNameShouldBeUsed()
         {
             //Assign
-            var user = new User { FirstName = "Bill", LastName = "Green", UserRef = Guid.NewGuid().ToString() };
+            var user = new User { FirstName = "Bill", LastName = "Green", ExternalId = Guid.NewGuid() };
 
             _userAccountRepository.Setup(x => x.Get(_invitation.Email))
                                  .ReturnsAsync(user);

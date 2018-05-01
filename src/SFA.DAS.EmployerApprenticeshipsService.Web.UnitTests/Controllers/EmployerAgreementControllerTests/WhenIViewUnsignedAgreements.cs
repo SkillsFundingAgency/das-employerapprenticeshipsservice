@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
@@ -24,7 +25,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private string _hashedAccountId;
-        private string _externalUserId;
+        private Guid _externalUserId;
 
         [SetUp]
         public void Arrange()
@@ -36,9 +37,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _hashedAccountId = "ABC123";
-            _externalUserId = "23324";
+            _externalUserId = Guid.NewGuid();
 
-            _owinWrapper.Setup(x => x.GetClaimValue(It.IsAny<string>())).Returns(_externalUserId);
+            _owinWrapper.Setup(x => x.GetClaimValue(It.IsAny<string>())).Returns(_externalUserId.ToString());
 
             _controller = new EmployerAgreementController(
                 _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object,
@@ -51,7 +52,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
             //Arrange
             const string hashedAgreementId = "CCC223";
 
-            _orchestrator.Setup(x => x.Get(It.IsAny<string>(), It.IsAny<string>()))
+            _orchestrator.Setup(x => x.Get(It.IsAny<string>(), It.IsAny<Guid>()))
                 .ReturnsAsync(new OrchestratorResponse<EmployerAgreementListViewModel>
                 {
                     Data = new EmployerAgreementListViewModel
@@ -79,7 +80,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
         public async Task ThenIShouldSeeAllAgreementsIfIHaveMoreThanASingleUnsignedAgreement()
         {
             //Arrange
-            _orchestrator.Setup(x => x.Get(It.IsAny<string>(), It.IsAny<string>()))
+            _orchestrator.Setup(x => x.Get(It.IsAny<string>(), It.IsAny<Guid>()))
                 .ReturnsAsync(new OrchestratorResponse<EmployerAgreementListViewModel>
                 {
                     Data = new EmployerAgreementListViewModel

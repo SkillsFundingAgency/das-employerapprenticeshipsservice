@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
 
             mediator.SendAsync(new UpsertRegisteredUserCommand
             {
-                UserRef = userView.UserRef,
+                ExternalUserId = userView.ExternalUserId,
                 FirstName = userView.FirstName,
                 LastName = userView.LastName,
                 EmailAddress = userView.Email
@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         {
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ScenarioContext.Current["AccountOwnerUserRef"].ToString());
             var orchestrator = _container.GetInstance<HomeOrchestrator>();
-            var user = orchestrator.GetUsers().Result.AvailableUsers.FirstOrDefault(c => c.UserRef.Equals(ScenarioContext.Current["AccountOwnerUserRef"].ToString(), StringComparison.CurrentCultureIgnoreCase));
+            var user = orchestrator.GetUsers().Result.AvailableUsers.FirstOrDefault(c => c.ExternalUserId.ToString().Equals(ScenarioContext.Current["AccountOwnerUserRef"].ToString(), StringComparison.CurrentCultureIgnoreCase));
             return user;
         }
 
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         {
             var userRepository = _container.GetInstance<IUserRepository>();
             var membershipRepository = _container.GetInstance<IMembershipRepository>();
-            var userRecord = userRepository.GetUserByRef(user.UserRef).Result;
+            var userRecord = userRepository.GetUserByRef(user.ExternalId).Result;
 
             membershipRepository.Create(userRecord.Id, accountId, (short)role).Wait();
 

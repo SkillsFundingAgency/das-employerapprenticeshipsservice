@@ -58,13 +58,13 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
-            await AddAuditEntry(message.UserId, message.PayeRef, accountId.ToString());
+            await AddAuditEntry(message.ExternalUserId, message.PayeRef, accountId.ToString());
 
             await _accountRepository.RemovePayeFromAccount(accountId, message.PayeRef);
 
-            var loggedInPerson = await _membershipRepository.GetCaller(accountId, message.UserId);
+            var loggedInPerson = await _membershipRepository.GetCaller(accountId, message.ExternalUserId);
 
-            await QueuePayeRemovedMessage(message.PayeRef, accountId, message.CompanyName, loggedInPerson.FullName(), message.UserId);
+            await QueuePayeRemovedMessage(message.PayeRef, accountId, message.CompanyName, loggedInPerson.FullName(), message.ExternalUserId);
 
             await NotifyPayeSchemeRemoved(message.HashedAccountId, message.PayeRef);
         }
@@ -94,23 +94,23 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
         }
 
 
-        private async Task QueuePayeRemovedMessage(string payeRef, long accountId, string companyName, string deletedByName, string userRef)
+        private async Task QueuePayeRemovedMessage(string payeRef, long accountId, string companyName, string deletedByName, Guid externalUserId)
         {
-            await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage(payeRef, companyName, accountId, deletedByName, userRef));
+            await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage(payeRef, companyName, accountId, deletedByName, externalUserId));
         }
 
-        private async Task AddAuditEntry(string userId, string payeRef, string accountId)
+        private async Task AddAuditEntry(Guid externalUserId, string payeRef, string accountId)
         {
             await _mediator.SendAsync(new CreateAuditCommand
             {
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "DELETED",
-                    Description = $"User {userId} has removed PAYE schema {payeRef} from account {accountId}",
+                    Description = $"User {externalUserId} has removed PAYE schema {payeRef} from account {accountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
                         new PropertyUpdate {PropertyName = "AccountId", NewValue = accountId},
-                        new PropertyUpdate {PropertyName = "UserId", NewValue = userId},
+                        new PropertyUpdate {PropertyName = "ExternalUserId", NewValue = externalUserId.ToString()},
                         new PropertyUpdate {PropertyName = "PayeRef", NewValue = payeRef}
                     },
                     RelatedEntities = new List<Entity> { new Entity { Id = accountId, Type = "Account" } },

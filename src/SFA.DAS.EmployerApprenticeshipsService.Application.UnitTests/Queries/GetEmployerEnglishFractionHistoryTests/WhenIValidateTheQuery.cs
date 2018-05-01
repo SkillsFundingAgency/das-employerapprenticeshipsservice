@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -19,7 +20,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<Guid>()))
                 .ReturnsAsync(new MembershipView());
 
             _validator = new GetEmployerEnglishFractionValidator(_membershipRepository.Object);
@@ -34,7 +35,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
             {
                 EmpRef = "123ABC",
                 HashedAccountId = "12345",
-                UserId = "asdasd"
+                ExternalUserId = Guid.NewGuid()
             });
 
             //Assert
@@ -54,7 +55,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
                 actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string, string>("HashedAccountId", "HashedAccountId has not been supplied"),
                 actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string, string>("UserId", "UserId has not been supplied"),
+            Assert.Contains(new KeyValuePair<string, string>("ExternalUserId", "ExternalUserId has not been supplied"),
                 actual.ValidationDictionary);
         }
 
@@ -62,7 +63,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
         public async Task ThenTheUnauthorizedFlagIsSetWhenTheyAreNotPartOfTheAccount()
         {
             //Arrange
-            var expectedUserId = "123fds";
+            var expectedUserId = Guid.NewGuid();
             var expectedAccountId = "456TGH";
             _membershipRepository.Setup(x => x.GetCaller(expectedAccountId, expectedUserId)).ReturnsAsync(null);
 
@@ -71,7 +72,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
             {
                 EmpRef = "123ABC",
                 HashedAccountId = expectedAccountId,
-                UserId = expectedUserId
+                ExternalUserId = expectedUserId
             });
 
             //Assert

@@ -24,25 +24,25 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities
             //Assert
             Assert.IsFalse(result.IsValid());
             Assert.Contains(new KeyValuePair<string,string>("HashedLegalEntityId", "HashedLegalEntityId has not been supplied"),result.ValidationDictionary );
-            Assert.Contains(new KeyValuePair<string,string>("UserId","User Id has not been supplied"),result.ValidationDictionary );
+            Assert.Contains(new KeyValuePair<string,string>("ExternalUserId","User Id has not been supplied"),result.ValidationDictionary );
         }
 
-        [Test]
-        public void ThenFalseIsReturnedIfTheUserIdIsNotAGuid()
-        {
-            //Act
-            var result = _validator.Validate(new GetAccountLegalEntitiesRequest {HashedLegalEntityId="12345",UserId = "12345"});
+        //[Test]
+        //public void ThenFalseIsReturnedIfTheUserIdIsNotAGuid()
+        //{
+        //    //Act
+        //    var result = _validator.Validate(new GetAccountLegalEntitiesRequest {HashedLegalEntityId="12345",ExternalUserId = Guid.NewGuid()});
 
-            //Assert
-            Assert.IsFalse(result.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("UserId", "User Id has not been supplied in the correct format"), result.ValidationDictionary);
-        }
+        //    //Assert
+        //    Assert.IsFalse(result.IsValid());
+        //    Assert.Contains(new KeyValuePair<string, string>("ExternalUserId", "User Id has not been supplied in the correct format"), result.ValidationDictionary);
+        //}
 
         [Test]
         public void ThenTrueIsReturnedIfTheFieldsArePopulated()
         {
             //Act
-            var result = _validator.Validate(new GetAccountLegalEntitiesRequest { HashedLegalEntityId = "12345", UserId = Guid.NewGuid().ToString() });
+            var result = _validator.Validate(new GetAccountLegalEntitiesRequest { HashedLegalEntityId = "12345", ExternalUserId = Guid.NewGuid() });
 
             //Assert
             Assert.IsTrue(result.IsValid());

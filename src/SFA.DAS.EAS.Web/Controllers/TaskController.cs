@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -42,7 +43,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }
 
-            var externalUserId = OwinWrapper.GetClaimValue("sub");
+            var externalUserId = GetClaimAsGuId("sub");
 
             _logger.Debug($"Task dismiss requested for account id '{viewModel.HashedAccountId}', user id '{externalUserId}' and task '{viewModel.TaskType}'");
 
@@ -58,6 +59,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             return RedirectToAction("Index", "EmployerTeam");
+        }
+
+        private Guid GetClaimAsGuId(string key)
+        {
+            var userIdClaim = OwinWrapper.GetClaimValue(key);
+
+            return Guid.TryParse(userIdClaim, out var userIdGuid) ? userIdGuid : Guid.Empty;
         }
     }
 }

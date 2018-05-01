@@ -98,21 +98,23 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcEmployerInformationTe
         }
 
         [Test]
-        public void ThenTheSuccesfulResponseIsCheckedToSeeIfItIsAlreadyRegistered()
+        public async Task ThenTheSuccesfulResponseIsCheckedToSeeIfItIsAlreadyRegistered()
         {
             //Act
-            Assert.ThrowsAsync<ConstraintException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenInUse }));
+            await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenInUse });
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<GetPayeSchemeInUseQuery>(c => c.Empref.Equals(ExpectedEmprefInUse))));
         }
 
         [Test]
-        public void ThenTheMessageIsNotValidIfTheSchemeAlreadyExists()
+        public async Task ThenTheMessageIsNotValidIfTheSchemeAlreadyExists()
         {
             //Act
-            Assert.ThrowsAsync<ConstraintException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenInUse }));
+            var result = await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenInUse });
+
             _logger.Verify(x => x.Warn($"PAYE scheme {ExpectedEmprefInUse} already in use."), Times.Once);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(result.Empref));
         }
 
         [Test]
@@ -126,14 +128,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcEmployerInformationTe
 
             //Assert
             Assert.IsNotNull(actual);
-        }
-
-        [Test]
-        public void ThenAnNotFoundExceptionIsRetrunedIfTheEmprefIsEmpty()
-        {
-            //Act Assert
-            Assert.ThrowsAsync<NotFoundException>(async ()=> await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenNoScheme }));
-            
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
@@ -47,7 +48,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
         public void ThenTheUserIsShownTheIndexWhenNotAuthenticated()
         {
             //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("");
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(Guid.Empty.ToString);
 
             //Act
             var actual = _controller.Invite();
@@ -60,7 +61,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
         public void ThenTheUserIsRedirectedToTheServiceLandingPageWhenAuthenticated()
         {
             //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("my_user_id");
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(Guid.NewGuid().ToString);
             
             //Act
             var actual = _controller.Invite();
@@ -77,7 +78,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
         public async Task ThenTheCorrectInvitationIsRetrieved()
         {
             //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(Guid.NewGuid().ToString);
             _invitationOrchestrator.Setup(x => x.GetInvitation(It.Is<string>(i => i == "123")))
                 .ReturnsAsync(new OrchestratorResponse<InvitationView> { Data = new InvitationView()});
             

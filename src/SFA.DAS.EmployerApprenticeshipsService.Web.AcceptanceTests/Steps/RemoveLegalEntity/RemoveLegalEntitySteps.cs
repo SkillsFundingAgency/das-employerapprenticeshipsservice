@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.RemoveLegalEntity
         private static void CreateLegalEntityWithStatus(string agreementStatus, string legalEntityCode)
         {
             var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
+            var userId = Guid.Parse(ScenarioContext.Current["AccountOwnerUserRef"].ToString());
             ScenarioContext.Current["ExpectBadRequestResult"] = "false";
 
             var organisationOrchestrator = _container.GetInstance<OrganisationOrchestrator>();
@@ -128,8 +128,8 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.RemoveLegalEntity
         public void ThenIRemoveALegalEntity(string canRemove)
         {
             var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
-            var userId = ScenarioContext.Current["ExternalUserId"].ToString();
-            var ownerId = ScenarioContext.Current["AccountOwnerUserRef"].ToString();
+            var userId = Guid.Parse(ScenarioContext.Current["ExternalUserId"].ToString());
+            var ownerId = Guid.Parse(ScenarioContext.Current["AccountOwnerUserRef"].ToString());
             var expectBadRequestResult = ScenarioContext.Current["ExpectBadRequestResult"].ToString();
 
             var employerAgreementOrchestrator = _container.GetInstance<EmployerAgreementOrchestrator>();

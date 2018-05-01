@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -37,11 +38,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
         public void ShouldShowIfUserCanSeeWizardWhenViewingNextSteps()
         {
             //Arrange
-            const string userId = "123";
+            var userId = Guid.NewGuid();
             const string hashedAccountId = "ABC123";
 
-            _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId);
-            _orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
+            _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId.ToString());
+            _orchestrator.Setup(x => x.UserShownWizard(It.IsAny<Guid>(), It.IsAny<string>()))
                 .ReturnsAsync(true);
 
             //Act
@@ -58,11 +59,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
         public void ShouldShowIfUserCanSeeWizardWhenSelectingIncorrectChoiceForNextSteps()
         {
             //Arrange
-            const string userId = "123";
+            Guid userId = Guid.NewGuid();
             const string hashedAccountId = "ABC123";
 
-            _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId);
-            _orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
+            _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId.ToString());
+            _orchestrator.Setup(x => x.UserShownWizard(It.IsAny<Guid>(), It.IsAny<string>()))
                 .ReturnsAsync(true);
 
             //Act

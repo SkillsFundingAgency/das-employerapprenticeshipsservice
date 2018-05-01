@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                 var taskName = Enum.GetName(typeof(TaskType), taskType);
 
-                await _apiClient.AddUserReminderSupression(accountId.ToString(), externalUserId, taskName);
+                await _apiClient.AddUserReminderSupression(accountId.ToString(), externalUserId.ToString(), taskName);
             }
             catch (Exception ex)
             {

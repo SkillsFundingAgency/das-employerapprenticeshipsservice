@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 
 using NUnit.Framework;
 
@@ -17,11 +18,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UnsubscribeNotificationTest
             _sut = new UnsubscribeNotificationValidator();
         }
 
-        [TestCase("")]
-        [TestCase(null)]
-        public void ThenUserIdIsNull(string userId)
+        [TestCase]
+        public void ThenUserIdIsGuidEmpty()
         {
-            var command = new UnsubscribeNotificationCommand { UserRef = userId, AccountId = 123456 };
+            var command = new UnsubscribeNotificationCommand { ExternalUserId = Guid.Empty, AccountId = 123456 };
             var result = _sut.Validate(command);
 
             result.IsValid().Should().BeFalse();
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UnsubscribeNotificationTest
         [TestCase(-2)]
         public void AccountIdIsLessThan1(long accountId)
         {
-            var command = new UnsubscribeNotificationCommand { UserRef = "ABBA123", AccountId = accountId };
+            var command = new UnsubscribeNotificationCommand { ExternalUserId = Guid.NewGuid(), AccountId = accountId };
             var result = _sut.Validate(command);
 
             result.IsValid().Should().BeFalse();
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UnsubscribeNotificationTest
 
         public void CommandIsValid()
         {
-            var command = new UnsubscribeNotificationCommand { UserRef = "ABBA123", AccountId = 123456 };
+            var command = new UnsubscribeNotificationCommand { ExternalUserId = Guid.NewGuid(), AccountId = 123456 };
             var result = _sut.Validate(command);
 
             result.IsValid().Should().BeTrue();

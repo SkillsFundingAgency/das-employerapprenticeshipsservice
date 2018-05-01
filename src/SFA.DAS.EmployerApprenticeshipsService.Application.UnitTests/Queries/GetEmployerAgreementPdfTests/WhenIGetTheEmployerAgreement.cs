@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementPdfTests
         {
             SetUp();
 
-            Query = new GetEmployerAgreementPdfRequest {HashedAccountId = "123RED", HashedLegalAgreementId = "668YUT",UserId = "1234RFV"};
+            Query = new GetEmployerAgreementPdfRequest {HashedAccountId = "123RED", HashedLegalAgreementId = "668YUT",ExternalUserId = Guid.NewGuid() };
 
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
             _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedEmployerAgreementId))

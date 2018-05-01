@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
@@ -14,7 +15,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
     class WhenIGetAUserAccountRole: QueryBaseTest<GetUserAccountRoleHandler, GetUserAccountRoleQuery, GetUserAccountRoleResponse>
     {
         private const string HashedAccountId = "123ABC";
-        private const string ExternalUserId = "4";
+        private readonly Guid ExternalUserId = Guid.NewGuid();
 
         private Mock<IMembershipRepository> _membershipRepository;
         private MembershipView _membershipView;
@@ -31,11 +32,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
             _membershipView = new MembershipView
             {
                 AccountId = 2,
-                UserId = long.Parse(ExternalUserId)
+                ExternalUserId = ExternalUserId
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<Guid>()))
                                  .ReturnsAsync(_membershipView);
 
             Query = new GetUserAccountRoleQuery {HashedAccountId = HashedAccountId, ExternalUserId = ExternalUserId};
@@ -64,7 +65,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
         public async Task ThenIfTheUserIsNotInTheTeamTheRoleWillBeNone()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<Guid>()))
                                  .ReturnsAsync(null);
 
             //Act

@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserAccountRole
         {
             var result = new ValidationResult();
 
-            if (string.IsNullOrEmpty(query.ExternalUserId))
+            if (query.ExternalUserId.Equals(Guid.Empty))
             {
                 result.AddError(nameof(query.ExternalUserId), "ExternalUserId has not been supplied");
             }

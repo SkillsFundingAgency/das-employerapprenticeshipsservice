@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _request = new GetEmployerAccountTransactionsQuery
             {
                 HashedAccountId = "RTF34",
-                ExternalUserId = "3EFR"
+                ExternalUserId = Guid.NewGuid(),
             };
 
             _hashingService = new Mock<IHashingService>();

@@ -10,9 +10,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserByRef
         {
             var validationResult = new ValidationResult();
 
-            if (string.IsNullOrEmpty(query.UserRef))
+            if (query.ExternalUserId.Equals(Guid.Empty))
             {
-                validationResult.AddError(nameof(query.UserRef), "User ref must not be empty or null");
+                validationResult.AddError(nameof(query.ExternalUserId), "User ref must not be empty or null");
             }
 
             return validationResult;

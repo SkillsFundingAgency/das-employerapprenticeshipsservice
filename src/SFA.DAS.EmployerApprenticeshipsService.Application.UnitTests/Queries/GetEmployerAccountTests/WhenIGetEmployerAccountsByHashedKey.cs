@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
         public override GetEmployerAccountHashedQuery Query { get; set; }
         public override GetEmployerAccountHashedHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetEmployerAccountHashedQuery>> RequestValidator { get; set; }
-        private const string ExpectedUserId = "asdsa445";
+        private readonly Guid ExpectedUserId = Guid.NewGuid();
         private const string ExpectedHashedId = "jfjfdjf444";
 
         [SetUp]
@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
             _employerAccountRepository.Setup(x => x.GetAccountByHashedId(ExpectedHashedId)).ReturnsAsync(new Domain.Data.Entities.Account.Account());
 
             RequestHandler = new GetEmployerAccountHashedHandler(_employerAccountRepository.Object, RequestValidator.Object);
-            Query = new GetEmployerAccountHashedQuery {HashedAccountId = ExpectedHashedId, UserId = ExpectedUserId};
+            Query = new GetEmployerAccountHashedQuery {HashedAccountId = ExpectedHashedId, ExternalUserId = ExpectedUserId};
 
         }
 
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
             await RequestHandler.Handle(new GetEmployerAccountHashedQuery
             {
                 HashedAccountId = ExpectedHashedId,
-                UserId = ExpectedUserId
+                ExternalUserId = ExpectedUserId
             });
 
             //Assert
@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
             var result = await RequestHandler.Handle(new GetEmployerAccountHashedQuery
             {
                 HashedAccountId = ExpectedHashedId,
-                UserId = ExpectedUserId
+                ExternalUserId = ExpectedUserId
             });
 
             //Assert
