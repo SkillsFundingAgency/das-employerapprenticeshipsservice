@@ -1,5 +1,18 @@
-﻿<div class="grid-row">
-    <div class="column-two-thirds">
-        <a class="button" href="@Url.Action("Index", "TransferConnectionInvitations")">Connect with employer</a>
+﻿@using SFA.DAS.EAS.Infrastructure.Authorization
+
+@if (Model.AuthorizationResult == AuthorizationResult.Ok && Model.IsValidSender)
+{
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <a class="button" href="@Url.Action("Index", "TransferConnectionInvitations")">Connect with employer</a>
+        </div>
     </div>
-</div>
+}
+else if (Model.AuthorizationResult == AuthorizationResult.FeatureAgreementNotSigned)
+{
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <a class="button" href="@Url.Action("Index", "EmployerAgreement")">Sign agreements</a>
+        </div>
+    </div>
+}

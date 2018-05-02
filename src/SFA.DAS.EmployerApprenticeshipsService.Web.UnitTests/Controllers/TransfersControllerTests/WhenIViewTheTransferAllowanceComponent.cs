@@ -2,7 +2,6 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
 using SFA.DAS.EAS.Web.ViewModels.Transfers;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
@@ -31,7 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
             _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
 
-            _controller = new TransfersController(_mapper, _mediator.Object);
+            _controller = new TransfersController(null, _mapper, _mediator.Object);
         }
 
         [Test]

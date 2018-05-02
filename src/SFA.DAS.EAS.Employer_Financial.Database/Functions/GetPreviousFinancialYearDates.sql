@@ -11,7 +11,7 @@ BEGIN
 	DECLARE @asOfMonth INT = DATEPART(month, @asOfDate)
 	DECLARE @asOfDay INT = DATEPART(day, @asOfDate)
 
-	IF((@asOfMonth = 4 AND @asOfDay > 19) OR @asOfMonth > 4)
+	IF(@asOfMonth = 4 AND @asOfDay >= 20 OR @asOfMonth > 4)
 		INSERT INTO @t VALUES (DATEFROMPARTS(@asOfYear - 1, 4, 20), DATEFROMPARTS(@asOfYear, 4, 20))
 	ELSE
 		INSERT INTO @t VALUES (DATEFROMPARTS(@asOfYear - 2, 4, 20), DATEFROMPARTS(@asOfYear - 1, 4, 20))

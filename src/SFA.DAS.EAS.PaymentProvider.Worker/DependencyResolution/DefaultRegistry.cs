@@ -22,7 +22,6 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution
             });
 
             For<Domain.Interfaces.IConfiguration>().Use<PaymentProviderConfiguration>();
-            For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>();
 
             RegisterExecutionPolicies();
             RegisterMapper();

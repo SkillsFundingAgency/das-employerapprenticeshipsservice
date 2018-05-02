@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 

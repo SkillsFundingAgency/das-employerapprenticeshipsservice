@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Application.Dtos;
 
 namespace SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations
 {
-    public class SendTransferConnectionInvitationViewModel : ViewModel<SendTransferConnectionInvitationCommand>
+    public class SendTransferConnectionInvitationViewModel
     {
         [Required(ErrorMessage = "Option required")]
         [RegularExpression("Confirm|GoToTransfersPage", ErrorMessage = "Option required")]
@@ -14,10 +14,5 @@ namespace SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations
 
         [Required]
         public SendTransferConnectionInvitationCommand SendTransferConnectionInvitationCommand { get; set; }
-
-        public override void Map(SendTransferConnectionInvitationCommand message)
-        {
-            SendTransferConnectionInvitationCommand = message;
-        }
     }
 }

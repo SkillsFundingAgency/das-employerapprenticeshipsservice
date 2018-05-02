@@ -861,18 +861,18 @@ hr {
   box-shadow: 0 0 0 #00823b;
 }
 
-.button.disabled, .disabled.button-link, .button[disabled="disabled"], [disabled="disabled"].button-link, .button[disabled], [disabled].button-link {
+.button.disabled, .disabled.button-link, .button[disabled="disabled"], .button-link[disabled="disabled"], .button[disabled], .button-link[disabled] {
   zoom: 1;
   filter: alpha(opacity=50);
   opacity: 0.5;
 }
 
-.button.disabled:hover, .disabled.button-link:hover, .button[disabled="disabled"]:hover, [disabled="disabled"].button-link:hover, .button[disabled]:hover, [disabled].button-link:hover {
+.button.disabled:hover, .disabled.button-link:hover, .button[disabled="disabled"]:hover, .button-link[disabled="disabled"]:hover, .button[disabled]:hover, .button-link[disabled]:hover {
   cursor: default;
   background-color: #00823b;
 }
 
-.button.disabled:active, .disabled.button-link:active, .button[disabled="disabled"]:active, [disabled="disabled"].button-link:active, .button[disabled]:active, [disabled].button-link:active {
+.button.disabled:active, .disabled.button-link:active, .button[disabled="disabled"]:active, .button-link[disabled="disabled"]:active, .button[disabled]:active, .button-link[disabled]:active {
   top: 0;
   -webkit-box-shadow: 0 2px 0 #003618;
   -moz-box-shadow: 0 2px 0 #003618;
@@ -915,11 +915,11 @@ hr {
   outline: 3px solid #ffbf47;
 }
 
-.button[disabled="disabled"], [disabled="disabled"].button-link {
+.button[disabled="disabled"], .button-link[disabled="disabled"] {
   background: #00823b;
 }
 
-.button[disabled="disabled"]:focus, [disabled="disabled"].button-link:focus {
+.button[disabled="disabled"]:focus, .button-link[disabled="disabled"]:focus {
   outline: none;
 }
 
@@ -2930,7 +2930,7 @@ nav ul {
   height: 0;
   display: block;
   border-width: 4px 7px;
-  border-color: transparent;
+  border-color: rgba(0, 0, 0, 0);
   border-left-color: black;
   border-style: solid;
   left: 10px;
@@ -3037,7 +3037,7 @@ li.menu-link.sub-menu-open ul li a {
   height: 0;
   display: block;
   border-width: 4px 7px;
-  border-color: transparent;
+  border-color: rgba(0, 0, 0, 0);
   border-left-color: black;
   border-style: solid;
   left: 10px;
@@ -3072,7 +3072,7 @@ a#link-settings:before {
   height: 0;
   display: block;
   border-width: 4px 7px;
-  border-color: transparent;
+  border-color: rgba(0, 0, 0, 0);
   border-left-color: black;
   border-style: solid;
   left: 10px;
@@ -3802,7 +3802,8 @@ td.link-action {
   width: 10%;
 }
 
-table th, table td {
+table th,
+table td {
   vertical-align: top;
 }
 
@@ -4559,7 +4560,7 @@ table.responsive tr.total {
   height: 0;
   display: block;
   border-width: 4px 7px;
-  border-color: transparent;
+  border-color: rgba(0, 0, 0, 0);
   border-left-color: #005ea5;
   border-style: solid;
   left: 10px;

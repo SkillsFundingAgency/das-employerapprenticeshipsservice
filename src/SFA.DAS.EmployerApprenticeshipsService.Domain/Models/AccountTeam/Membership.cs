@@ -5,7 +5,7 @@ namespace SFA.DAS.EAS.Domain.Models.AccountTeam
 {
     public class Membership
     {
-        public virtual Data.Entities.Account.Account Account { get; set; }
+        public virtual Account.Account Account { get; set; }
         public virtual long AccountId { get; set; }
         public virtual User User { get; set; }
         public virtual long UserId { get; set; }

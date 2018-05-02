@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.NLog.Logger;
@@ -200,11 +200,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             var result = await WithConnection(async c =>
             {
-                var parameters = new AccountIdUserTableParam(accountIds);
+                var accountParametersTable = new AccountIdUserTableParam(accountIds);
+                accountParametersTable.Add("@allowancePercentage", _configuration.TransferAllowancePercentage, DbType.Decimal);
 
                 return await c.QueryAsync<AccountBalance>(
                  "[employer_financial].[GetAccountBalance_ByAccountIds]",
-                 parameters,
+                 accountParametersTable,
                  commandType: CommandType.StoredProcedure);
             });
 

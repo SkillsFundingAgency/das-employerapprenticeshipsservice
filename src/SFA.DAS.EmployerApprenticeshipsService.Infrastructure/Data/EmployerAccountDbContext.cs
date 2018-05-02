@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
-using SFA.DAS.EAS.Domain.Models.TransferRequests;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
@@ -15,10 +14,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     [DbConfigurationType(typeof(SqlAzureDbConfiguration))]
     public class EmployerAccountDbContext : DbContext
     {
-        public virtual DbSet<Domain.Data.Entities.Account.Account> Accounts { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Membership> Memberships { get; set; }
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
-        public virtual DbSet<TransferRequest> TransferRequests { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
         public Guid Id { get; set; }
@@ -48,9 +46,15 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema("employer_account");
 
-            modelBuilder.Entity<Domain.Data.Entities.Account.Account>()
+            modelBuilder.Entity<Account>()
                 .Ignore(a => a.RoleId)
-                .Ignore(a => a.RoleName)
+                .Ignore(a => a.RoleName);
+
+            modelBuilder.Entity<Account>()
+                .HasMany(a => a.ReceivedTransferConnectionInvitations)
+                .WithRequired(i => i.ReceiverAccount);
+
+            modelBuilder.Entity<Account>()
                 .HasMany(a => a.SentTransferConnectionInvitations)
                 .WithRequired(i => i.SenderAccount);
 
@@ -58,10 +62,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 .HasKey(m => new { m.AccountId, m.UserId })
                 .Ignore(m => m.RoleId)
                 .Property(m => m.Role).HasColumnName(nameof(Membership.RoleId));
-
-            modelBuilder.Entity<TransferRequest>()
-                .HasKey(r => r.CommitmentId)
-                .Property(t => t.CommitmentId).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             modelBuilder.Entity<User>()
                 .Ignore(u => u.FullName)

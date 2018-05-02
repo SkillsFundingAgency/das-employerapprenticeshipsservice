@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.EAS.Domain.Models.TransferConnections
+﻿@using SFA.DAS.EAS.Domain.Models.Features
+@using SFA.DAS.EAS.Domain.Models.TransferConnections
 @using SFA.DAS.EAS.Web.Extensions
 
 @model SFA.DAS.EAS.Web.ViewModels.Transfers.TransferConnectionInvitationsViewModel
@@ -25,13 +26,16 @@
                             <td data-label="Employer">@peerAccount.Name</td>
                             <td data-label="Status">@transferConnectionInvitation.Status.ToString()</td>
                             <td>
-                                @if (Model.AccountId == transferConnectionInvitation.ReceiverAccount.Id && transferConnectionInvitation.Status == TransferConnectionInvitationStatus.Pending)
+                                @if (Html.IsAuthorized(FeatureType.TransferConnectionRequests))
                                 {
-                                    <a href="@Url.Action("Receive", "TransferConnectionInvitations", new { transferConnectionInvitationId = transferConnectionInvitation.Id })">Details</a>
-                                }
-                                else
-                                {
-                                    <a href="@Url.Action("Details", "TransferConnectionInvitations", new { transferConnectionInvitationId = transferConnectionInvitation.Id })">Details</a>
+                                    if (Model.AccountId == transferConnectionInvitation.ReceiverAccount.Id && transferConnectionInvitation.Status == TransferConnectionInvitationStatus.Pending)
+                                    {
+                                        <a href="@Url.Action("Receive", "TransferConnectionInvitations", new {transferConnectionInvitationId = transferConnectionInvitation.Id})">Details</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Details", "TransferConnectionInvitations", new {transferConnectionInvitationId = transferConnectionInvitation.Id})">Details</a>
+                                    }
                                 }
                             </td>
                         </tr>

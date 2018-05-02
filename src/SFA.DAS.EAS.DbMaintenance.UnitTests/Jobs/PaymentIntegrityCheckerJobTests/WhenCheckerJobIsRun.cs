@@ -1,13 +1,13 @@
 ﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.DbMaintenance.WebJob.Jobs;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.NLog.Logger;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.DbMaintenance.UnitTests.Jobs.PaymentIntegrityCheckerJobTests
 {

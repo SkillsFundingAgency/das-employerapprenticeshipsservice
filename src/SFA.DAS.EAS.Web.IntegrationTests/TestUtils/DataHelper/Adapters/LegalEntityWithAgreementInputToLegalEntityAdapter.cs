@@ -1,5 +1,5 @@
 ﻿using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters
 {
