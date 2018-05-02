@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetAccountBalance_ByAccountIds]
 	@AccountIds [employer_financial].[AccountIds] Readonly,
-	@allowancePercentage FLOAT = 0
+	@allowancePercentage DECIMAL(8,5) = 0
 AS
 	SELECT
 		acc.AccountId,
