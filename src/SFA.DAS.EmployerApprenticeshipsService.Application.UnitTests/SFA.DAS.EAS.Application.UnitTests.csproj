@@ -248,7 +248,6 @@
     <Compile Include="Commands\SendTransferConnectionInvitation\SendTransferConnectionInvitationHandlerTests.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Queries\GetStatisticsTests\WhenIGetTheStatistics.cs" />
-    <Compile Include="Queries\GetTransferConnectionRolesTests\WhenIGetTransferConnectionRoles.cs" />
     <Compile Include="Queries\GetApprovedTransferConnectionInvitationTests\WhenIGetApprovedTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetReceivedTransferConnectionInvitationTests\WhenIGetReceivedTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetRejectedTransferConnectionInvitationTests\WhenIGetRejectedTransferConnectionInvitation.cs" />
