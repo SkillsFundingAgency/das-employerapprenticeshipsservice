@@ -3280,6 +3280,7 @@ table caption {
   text-align: left;
 }
 
+th.link-right,
 td.link-right {
   text-align: right;
   padding-right: 0;
