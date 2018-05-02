@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Application.Commands.PublishGenericEvent
         {
             _logger.Info($"Publishing Generic event of type {command.Event.Type}");
 
-            //await _eventsApi.CreateGenericEvent(command.Event);
+            await _eventsApi.CreateGenericEvent(command.Event);
 
             return new PublishGenericEventCommandResponse();
         }
