@@ -143,6 +143,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 }
                 else
                 {
+                    flashMessage.Headline = "All agreements signed";
+                    flashMessage.Message = "You've successfully signed all of your organisation agreements.";
                     result = RedirectToAction(ControllerConstants.NextStepsActionName);
                 }
 
