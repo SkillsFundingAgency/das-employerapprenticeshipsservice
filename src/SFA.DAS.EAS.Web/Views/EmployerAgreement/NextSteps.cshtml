@@ -24,22 +24,16 @@
                     </legend>
                     <label for="choice1" class="block-label">
                         <input id="choice1" type="radio" name="choice" value="1" />
-                        View all organisations
+                        Review organisation and agreements
                     </label>
-                    @if (!Model.Data.UserShownWizard)
-                    {
+                    
                     <label for="choice2" class="block-label">
                         <input id="choice2" type="radio" name="choice" value="2" />
-                        Check finances
+                        Go to transfers
                     </label>
-                    <label for="choice3" class="block-label">
-                        <input id="choice3" type="radio" name="choice" value="3" />
-                        Add apprentices
-                    </label>
-                    }
                     <label for="choice4" class="block-label">
-                        <input id="choice4" type="radio" name="choice" value="4" />
-                        @(Model.Data.UserShownWizard ? "Continue account setup" : "Return to homepage")
+                        <input id="choice4" type="radio" name="choice" value="3" />
+                        Go to the homepage
                     </label>
                 </fieldset>
             </div>

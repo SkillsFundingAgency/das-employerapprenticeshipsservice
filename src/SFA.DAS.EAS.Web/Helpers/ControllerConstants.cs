@@ -73,5 +73,6 @@
         public const string ViewTeamActionName = "ViewTeam";
         public const string ViewTeamViewName = "ViewTeam";
         public const string WhatYoullNeedActionName = "WhatYoullNeed";
+        public const string TransfersControllerName = "Transfers";
     }
 }
