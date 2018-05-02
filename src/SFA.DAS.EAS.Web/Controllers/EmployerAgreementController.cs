@@ -120,44 +120,42 @@ namespace SFA.DAS.EAS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Sign(string agreementId, string hashedAccountId)
         {
+            var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, userInfo);
+            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow, agreement.Data.EmployerAgreement.LegalEntityName);
 
-            throw new NotImplementedException();
-            //var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
-            //var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, userInfo);
-            //var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow, agreement.Data.EmployerAgreement.LegalEntityName);
+            if (response.Status == HttpStatusCode.OK)
+            {
+                FlashMessageViewModel flashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Agreement signed",
+                    Severity = FlashMessageSeverityLevel.Success
+                };
 
-            //if (response.Status == HttpStatusCode.OK)
-            //{
-            //    FlashMessageViewModel flashMessage = new FlashMessageViewModel
-            //    {
-            //        Headline = "Agreement signed",
-            //        Severity = FlashMessageSeverityLevel.Success
-            //    };
+                ActionResult result;
 
-            //    ActionResult result;
+                if (response.Data.HasFurtherPendingAgreements)
+                {
+                    flashMessage.Message =
+                        "You've successfully signed an organisation agreement. There are outstanding agreements to be signed. Review the list below to sign all remaining agreements.";
 
-            //    if (response.Data.HasFurtherPendingAgreements)
-            //    {
-            //        flashMessage.Message =
-            //            "You've successfully signed an organisation agreement. There are outstanding agreements to be signed. Review the list below to sign all remaining agreements.";
+                    result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId, agreementSigned = true });
+                }
+                else
+                {
+                    result = RedirectToAction(ControllerConstants.NextStepsActionName);
+                }
 
-            //        result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId, agreementSigned = true });
-            //    }
-            //    else
-            //    {
-            //        result = RedirectToAction(ControllerConstants.NextStepsActionName);
-            //    }
+                AddFlashMessageToCookie(flashMessage);
 
-            //    AddFlashMessageToCookie(flashMessage);
-
-            //    return result;
-            //}
+                return result;
+            }
 
 
-            //agreement.Exception = response.Exception;
-            //agreement.Status = response.Status;
+            agreement.Exception = response.Exception;
+            agreement.Status = response.Status;
 
-            //return View(ControllerConstants.SignAgreementViewName, agreement);
+            return View(ControllerConstants.SignAgreementViewName, agreement);
         }
 
         [HttpGet]
