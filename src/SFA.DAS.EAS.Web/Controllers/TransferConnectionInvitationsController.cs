@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Controllers
     [Authorize]
     [Feature(FeatureType.TransferConnectionRequests)]
     [ValidateMembership]
-    [RoutePrefix("accounts/{HashedAccountId}/transfers/connections/invitations")]
+    [RoutePrefix("accounts/{HashedAccountId}/transfers/connections/requests")]
     public class TransferConnectionInvitationsController : Controller
     {
         private readonly IMapper _mapper;
