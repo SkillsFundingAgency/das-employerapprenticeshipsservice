@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
 using SFA.DAS.EAS.Application.Commands.ResendInvitation;
 using SFA.DAS.EAS.Application.Commands.UpdateShowWizard;
 using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountStats;
 using SFA.DAS.EAS.Application.Queries.GetAccountTasks;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
@@ -150,14 +151,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = accountId,
                     ExternalUserId = externalUserId
                 });
+                
+                var agreementsResponseTask = _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
+                {
+                    HashedAccountId = accountId,
+                    ExternalUserId = externalUserId
+                });
 
-                await Task.WhenAll(accountStatsResponseTask, userRoleResponseTask, userResponseTask,
-                    accountStatsResponseTask).ConfigureAwait(false);
+                await Task.WhenAll(accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
                 var userResponse = userResponseTask.Result;
                 var accountStatsResponse = accountStatsResponseTask.Result;
+                var agreementsResponse = agreementsResponseTask.Result;
 
                 var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
                 {
@@ -165,9 +172,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
+                var requiresAgreementSigning = agreementsResponse.EmployerAgreements.Count(a => a.HasPendingAgreement);
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0 && t.Type != "AgreementToSign").ToList() ?? new List<AccountTask>();
-
-                //We only show account wizards to owners
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;              
 
                 var viewModel = new AccountDashboardViewModel
@@ -182,7 +188,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ShowWizard = showWizard,
                     ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
                     Tasks = tasks,
-                    HashedAccountId = accountId
+                    HashedAccountId = accountId,
+                    RequiresAgreementSigning = requiresAgreementSigning
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
