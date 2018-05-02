@@ -165,7 +165,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0).ToList() ?? new List<AccountTask>();
+                var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0 && t.Type != "AgreementToSign").ToList() ?? new List<AccountTask>();
 
                 //We only show account wizards to owners
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;              
