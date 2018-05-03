@@ -5515,6 +5515,14 @@ t .missingForApproval .form-label-bold {
   font-size: 19px;
 }
 
+.list-standard-margin {
+  margin-bottom: 20px;
+}
+
+.margin-bottom-small {
+  margin-bottom: 5px;
+}
+
 #apprentice-details .flash-alert {
   border-color: #28a197;
   background: #eaf6f5;
@@ -5651,19 +5659,22 @@ t .missingForApproval .form-label-bold {
 }
 
 @media (min-width: 641px) {
-  #cohorts-landing-page .block-one, #cohorts-landing-page .block-two {
+  #cohorts-landing-page .block-one,
+  #cohorts-landing-page .block-two {
     margin-bottom: 30px;
   }
 }
 
 @media (min-width: 641px) {
-  #cohorts-landing-page .block-one, #cohorts-landing-page .block-three {
+  #cohorts-landing-page .block-one,
+  #cohorts-landing-page .block-three {
     margin-right: 2%;
   }
 }
 
 @media (min-width: 641px) {
-  #cohorts-landing-page .block-two, #cohorts-landing-page .block-four {
+  #cohorts-landing-page .block-two,
+  #cohorts-landing-page .block-four {
     margin-left: 2%;
   }
 }
@@ -5721,7 +5732,7 @@ t .missingForApproval .form-label-bold {
   border-left: 25px solid transparent;
   border-right: 25px solid transparent;
   border-top: 25px solid #dee0e2;
-  content: "";
+  content: '';
   float: right;
   margin-right: 75px;
 }
@@ -5730,7 +5741,7 @@ t .missingForApproval .form-label-bold {
   border-left: 25px solid transparent;
   border-right: 25px solid transparent;
   border-top: 25px solid #dee0e2;
-  content: "";
+  content: '';
   float: right;
   margin-right: 180px;
 }
@@ -6051,7 +6062,7 @@ h2 .float-right {
 }
 
 #manage-all-apprentices .previous-next-navigation li {
-  font-family: "nta", Arial, sans-serif;
+  font-family: 'nta', Arial, sans-serif;
   font-size: 20px;
   line-height: 1.11111;
   font-weight: 400;
@@ -6073,7 +6084,7 @@ h2 .float-right {
 
 #manage-all-apprentices .previous-next-navigation li a span {
   display: block;
-  font-family: "nta", Arial, sans-serif;
+  font-family: 'nta', Arial, sans-serif;
   font-size: 12px;
   line-height: 1.25;
   font-weight: 400;
@@ -6109,7 +6120,7 @@ h2 .float-right {
   float: right;
   width: 30px;
   height: 38px;
-  content: " ";
+  content: ' ';
 }
 
 #manage-all-apprentices .previous-next-navigation li.previous a {
@@ -6123,7 +6134,7 @@ h2 .float-right {
   float: left;
   width: 30px;
   height: 38px;
-  content: " ";
+  content: ' ';
 }
 
 #stop-effective .panel {
@@ -6199,35 +6210,42 @@ h2 .float-right {
 }
 
 /*Finance dashboard UI new*/
-#page-transactions .column-half .data, #page-transfers .column-half .data {
+#page-transactions .column-half .data,
+#page-transfers .column-half .data {
   width: 100%;
 }
 
-#page-transactions .column-half .data dl, #page-transfers .column-half .data dl {
+#page-transactions .column-half .data dl,
+#page-transfers .column-half .data dl {
   position: relative;
   min-height: 170px;
   padding-bottom: 50px;
   background: #2e358b;
 }
 
-#page-transactions .column-half .data dl dt, #page-transfers .column-half .data dl dt {
+#page-transactions .column-half .data dl dt,
+#page-transfers .column-half .data dl dt {
   position: absolute;
   bottom: 10px;
 }
 
-#page-transactions .column-half .data dl dt a, #page-transfers .column-half .data dl dt a {
+#page-transactions .column-half .data dl dt a,
+#page-transfers .column-half .data dl dt a {
   color: #fff;
 }
 
-#page-transactions .column-half .data dl dd, #page-transfers .column-half .data dl dd {
+#page-transactions .column-half .data dl dd,
+#page-transfers .column-half .data dl dd {
   word-break: break-all;
 }
 
-#page-transactions .column-half .data dl.current-funds, #page-transfers .column-half .data dl.current-funds {
+#page-transactions .column-half .data dl.current-funds,
+#page-transfers .column-half .data dl.current-funds {
   background: #2e358b;
 }
 
-#page-transactions .column-half .data dl.current-transfer-funds, #page-transfers .column-half .data dl.current-transfer-funds {
+#page-transactions .column-half .data dl.current-transfer-funds,
+#page-transfers .column-half .data dl.current-transfer-funds {
   background: #df3034;
 }
 
@@ -6288,39 +6306,40 @@ h2 .float-right {
   #apprentice-details .finishEditingBtn {
     margin-bottom: 20px;
   }
-  .bubble-arrow, .overlap-arrow {
+  .bubble-arrow,
+  .overlap-arrow {
     display: none;
   }
   .manage-all-apprentices td:nth-of-type(1):before {
-    content: "Name";
+    content: 'Name';
     font-weight: normal;
     margin-top: 5px;
     min-height: 30px;
   }
   .manage-all-apprentices td:nth-of-type(2):before {
-    content: "Date of birth";
+    content: 'Date of birth';
     font-weight: normal;
     margin-top: 5px;
   }
   .manage-all-apprentices td:nth-of-type(3):before {
-    content: "Satus";
+    content: 'Satus';
     font-weight: normal;
     margin-top: 5px;
     word-wrap: break-word;
   }
   .to-be-sent-list td:nth-of-type(1):before {
-    content: "Employer";
+    content: 'Employer';
     font-weight: normal;
     margin-top: 5px;
     min-height: 30px;
   }
   .to-be-sent-list td:nth-of-type(2):before {
-    content: "Cohort reference";
+    content: 'Cohort reference';
     font-weight: normal;
     margin-top: 5px;
   }
   .to-be-sent-list td:nth-of-type(3):before {
-    content: "Last message";
+    content: 'Last message';
     font-weight: normal;
     margin-top: 5px;
     word-wrap: break-word;
@@ -6341,7 +6360,8 @@ h2 .float-right {
   color: #fff;
 }
 
-.flash-card h1:first-of-type, .flash-card h2:first-of-type {
+.flash-card h1:first-of-type,
+.flash-card h2:first-of-type {
   margin-top: 0;
 }
 
