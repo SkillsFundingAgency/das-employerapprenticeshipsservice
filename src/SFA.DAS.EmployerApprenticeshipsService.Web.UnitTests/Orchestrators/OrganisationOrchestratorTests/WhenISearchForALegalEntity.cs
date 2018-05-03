@@ -144,7 +144,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                             new LegalEntity
                             {
                                 Name = addedEntityName,
-                                Source = (short)OrganisationType.PublicBodies
+                                Source = (byte)OrganisationType.PublicBodies
                             }
                         }
                     }
@@ -220,7 +220,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                         new LegalEntity
                         {
                             Code="12345",
-                            Source = (short)OrganisationType.CompaniesHouse
+                            Source = (byte)OrganisationType.CompaniesHouse
                         }
                     }
                     }

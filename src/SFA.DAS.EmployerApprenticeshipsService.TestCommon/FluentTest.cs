@@ -67,6 +67,22 @@ namespace SFA.DAS.EAS.TestCommon
             assert?.Invoke(testFixture);
         }
 
+        public async Task RunAsync<TActionResult>(Action<T> arrange, Func<T, Task<TActionResult>> act, Action<T, TActionResult> assert)
+        {
+            var testFixture = new T();
+
+            arrange?.Invoke(testFixture);
+
+            var actionResult = default(TActionResult);
+
+            if (act != null)
+            {
+                actionResult = await act(testFixture);
+            }
+
+            assert?.Invoke(testFixture, actionResult);
+        }
+
         public Task RunAsync<TException>(Func<T, Func<Task>, ExceptionAssertions<TException>> assert) where TException : Exception
         {
             return RunAsync(null, null, assert);

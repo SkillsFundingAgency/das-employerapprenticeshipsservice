@@ -5,5 +5,6 @@ namespace SFA.DAS.EAS.Web.ViewModels
     public class EmployerAgreementViewModel
     {
         public EmployerAgreementView EmployerAgreement { get; set; }
+        public EmployerAgreementView PreviouslySignedEmployerAgreement { get; set; }
     }
 }

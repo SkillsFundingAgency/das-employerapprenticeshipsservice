@@ -29,23 +29,14 @@
 			VALUES (@accountId, @userId, 1)
 
 			EXEC [employer_account].[CreateLegalEntity] @legalEntityCode, @legalEntityName, @legalEntityRegisteredAddress, @legalEntityDateOfIncorporation, @legalEntityStatus, @legalEntitySource, NULL, NULL, @legalEntityId OUTPUT
-			EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
+			EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, null, @employerAgreementId OUTPUT
 			EXEC [employer_account].[SignEmployerAgreement] @employerAgreementId, @userId, ''Test User'', @now
-			EXEC [employer_account].[CreateAccountEmployerAgreement] @accountId, @employerAgreementId		
 			EXEC [employer_account].[CreatePaye] @payeRef, ''accessToken'', ''refreshToken'', @payeName
 			EXEC [employer_account].[CreateAccountHistory] @accountId, @payeRef, @now
 		END
 	END'
 
 EXEC sp_executesql @sqlStatement
-
-IF (NOT EXISTS (SELECT 1 FROM [employer_account].[EmployerAgreementTemplate] WHERE PartialViewName = '_Agreement_V1'))
-BEGIN 
-	SET IDENTITY_INSERT [employer_account].[EmployerAgreementTemplate] ON
-	INSERT INTO [employer_account].[EmployerAgreementTemplate] (Id, PartialViewName, CreatedDate)
-	VALUES (1, '_Agreement_V1', GETDATE()) 
-	SET IDENTITY_INSERT [employer_account].[EmployerAgreementTemplate] OFF
-END
 
 DECLARE @userRef UNIQUEIDENTIFIER = '87df36f4-78ad-47c7-84d7-900ef4c39920'
 

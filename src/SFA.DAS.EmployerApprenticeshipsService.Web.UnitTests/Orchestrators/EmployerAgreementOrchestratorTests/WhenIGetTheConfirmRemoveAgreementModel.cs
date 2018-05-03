@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -11,6 +8,10 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
@@ -41,14 +42,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
                         HashedAgreementId = ExpectedHashedAgreementId,
                         Id = 123444
                     }
-                    
+
                 });
 
             _logger = new Mock<ILog>();
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, _configuration);
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, Mock.Of<IMapper>(), _configuration);
         }
 
         [Test]
@@ -100,9 +101,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAgreementId, ExpectedHahsedAccountId, ExpectedUserId);
 
             //Assert
-            Assert.AreEqual(ExpectedHashedAgreementId,actual.Data.HashedAgreementId);
-            Assert.AreEqual(ExpectedHahsedAccountId,actual.Data.HashedAccountId);
-            Assert.AreEqual(ExpectedName,actual.Data.Name);
+            Assert.AreEqual(ExpectedHashedAgreementId, actual.Data.HashedAgreementId);
+            Assert.AreEqual(ExpectedHahsedAccountId, actual.Data.HashedAccountId);
+            Assert.AreEqual(ExpectedName, actual.Data.Name);
         }
 
     }

@@ -13,9 +13,9 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public string RegisteredAddress { get; set; }
 
         public DateTime? DateOfIncorporation { get; set; }
-        public string CompanyStatus { get; set; }
-        public short Source { get; set; }
-        public short? PublicSectorDataSource { get; set; }
+        public string Status { get; set; }
+        public byte Source { get; set; }
+        public byte? PublicSectorDataSource { get; set; }
         public string Sector { get; set; }
     }
 }

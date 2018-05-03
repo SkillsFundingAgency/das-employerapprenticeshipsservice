@@ -36,9 +36,7 @@ BEGIN
 		SELECT @legalEntityId = SCOPE_IDENTITY();	
 	END
 	
-	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
-	
-	INSERT INTO [employer_account].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId);
+	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, NULL, @employerAgreementId OUTPUT
 
 	IF EXISTS(select 1 from [employer_account].[Paye] where Ref = @employerRef)
 	BEGIN
