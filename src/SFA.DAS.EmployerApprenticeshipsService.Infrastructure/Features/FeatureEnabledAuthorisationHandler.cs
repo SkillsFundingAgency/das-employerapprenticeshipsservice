@@ -22,12 +22,12 @@ namespace SFA.DAS.EAS.Infrastructure.Features
             _logger.Debug($"Started running '{Type.Name}' for feature '{feature.FeatureType}'");
 
             var result = feature.Enabled
-                ? Task.FromResult(AuthorizationResult.Ok)
-                : Task.FromResult(AuthorizationResult.FeatureDisabled);
+                ? AuthorizationResult.Ok
+                : AuthorizationResult.FeatureDisabled;
 
             _logger.Debug($"Finished running '{Type.Name}' for feature '{feature.FeatureType}' with result '{result}'");
 
-            return result;
+            return Task.FromResult(result);
         }
     }
 }
