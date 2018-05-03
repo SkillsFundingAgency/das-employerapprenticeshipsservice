@@ -189,9 +189,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             switch (choice ?? 0)
             {
                 case 1: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName);
-                case 2: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAccountTransactionsControllerName);
-                case 3: return RedirectToAction(ControllerConstants.InformActionName, ControllerConstants.EmployerCommitmentsControllerName);
-                case 4: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
+                case 2: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.TransfersControllerName);
+                case 3: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
                 default:
                     var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel>
                     {
