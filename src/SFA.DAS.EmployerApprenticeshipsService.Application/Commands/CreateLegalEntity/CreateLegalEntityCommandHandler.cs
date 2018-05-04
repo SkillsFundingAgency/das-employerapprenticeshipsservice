@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Extensions;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
@@ -27,6 +28,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         private readonly ILegalEntityEventFactory _legalEntityEventFactory;
         private readonly IMessagePublisher _messagePublisher;
         private readonly IHashingService _hashingService;
+        private readonly IAccountAgreementService _accountAgreementService;
 
 
         public CreateLegalEntityCommandHandler(
@@ -36,7 +38,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             IGenericEventFactory genericEventFactory,
             ILegalEntityEventFactory legalEntityEventFactory,
             IMessagePublisher messagePublisher,
-            IHashingService hashingService)
+            IHashingService hashingService,
+            IAccountAgreementService accountAgreementService)
         {
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
@@ -45,6 +48,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             _legalEntityEventFactory = legalEntityEventFactory;
             _messagePublisher = messagePublisher;
             _hashingService = hashingService;
+            _accountAgreementService = accountAgreementService;
         }
 
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
@@ -68,11 +72,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
-            await PublishLegalEntityAddedMessage(accountId,
-                agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
+            await PublishLegalEntityAddedMessage(accountId, agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
 
-            await PublishAgreementCreatedMessage(accountId,
-                agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
+            await PublishAgreementCreatedMessage(accountId, agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
+
+            await _accountAgreementService.RemoveFromCacheAsync(accountId);
 
             return new CreateLegalEntityCommandResponse
             {
