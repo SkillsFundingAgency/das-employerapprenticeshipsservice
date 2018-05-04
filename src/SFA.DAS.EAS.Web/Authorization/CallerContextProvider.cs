@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Web;
-using SFA.DAS.EAS.Application.Extensions;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.HashingService;
 

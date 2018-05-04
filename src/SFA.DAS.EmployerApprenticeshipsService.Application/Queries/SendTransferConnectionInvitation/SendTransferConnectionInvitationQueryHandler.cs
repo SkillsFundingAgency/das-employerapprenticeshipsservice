@@ -5,9 +5,11 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.EAS.Application.Extensions;
 using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 
 namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
 {
@@ -29,8 +31,9 @@ namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
 
         public async Task<SendTransferConnectionInvitationResponse> Handle(SendTransferConnectionInvitationQuery message)
         {
-            var receiverAccountId = _publicHashingService.DecodeValue(message.ReceiverAccountPublicHashedId);
-            var receiverAccount = await _db.Accounts.ProjectTo<AccountDto>(_configurationProvider).SingleOrDefaultAsync(a => a.Id == receiverAccountId);
+            var receiverAccount = _publicHashingService.TryDecodeValue(message.ReceiverAccountPublicHashedId, out var receiverAccountId)
+                ? await _db.Accounts.ProjectTo<AccountDto>(_configurationProvider).SingleOrDefaultAsync(a => a.Id == receiverAccountId)
+                : null;
 
             if (receiverAccount == null || receiverAccount.Id == message.AccountId)
             {
