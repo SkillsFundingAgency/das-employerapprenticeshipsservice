@@ -52,14 +52,7 @@ else
                     <h2 class="heading-medium">
                         <a href="@Url.Action("Index", "EmployerAccountTransactions")">Finance</a>
                     </h2>
-                    @if (Html.IsAuthorized(FeatureType.Transfers))
-                    {
-                        <p>View your financial transactions, connect with other employers and send or receive transfer funds.</p>
-                    }
-                    else
-                    {
-                        <p>View your financial transactions.</p>
-                    }
+                    <p>View your financial transactions, connect with other employers and send or receive transfer funds.</p>
                     <h2 class="heading-medium">
                         <a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a>
                     </h2>

@@ -21,30 +21,30 @@ namespace SFA.DAS.EAS.Infrastructure.Features
 
         public Task<AuthorizationResult> CanAccessAsync(IAuthorizationContext authorizationContext, Feature feature)
         {
-            Task<AuthorizationResult> result;
+            AuthorizationResult result;
 
             _logger.Debug($"Started running '{Type.Name}' for feature '{feature.FeatureType}'");
             
             if (feature.Whitelist == null)
             {
-                result = Task.FromResult(AuthorizationResult.Ok);
+                result = AuthorizationResult.Ok;
             }
             else if (string.IsNullOrWhiteSpace(authorizationContext.UserContext?.Email))
             {
-                result = Task.FromResult(AuthorizationResult.FeatureUserNotWhitelisted);
+                result = AuthorizationResult.FeatureUserNotWhitelisted;
             }
             else if (feature.Whitelist.Any(email => Regex.IsMatch(authorizationContext.UserContext.Email, email, RegexOptions.IgnoreCase)))
             {
-                result = Task.FromResult(AuthorizationResult.Ok);
+                result = AuthorizationResult.Ok;
             }
             else
             {
-                result = Task.FromResult(AuthorizationResult.FeatureUserNotWhitelisted);
+                result = AuthorizationResult.FeatureUserNotWhitelisted;
             }
 
             _logger.Debug($"Finished running '{Type.Name}' for feature '{feature.FeatureType}' with result '{result}'");
 
-            return result;
+            return Task.FromResult(result);
         }
     }
 }

@@ -23,16 +23,23 @@ namespace SFA.DAS.EAS.Infrastructure.Features
 
         public async Task<AuthorizationResult> CanAccessAsync(IAuthorizationContext authorizationContext, Feature feature)
         {
+            AuthorizationResult result;
+
             _logger.Debug($"Started running '{Type.Name}' for feature '{feature.FeatureType}'");
 
             if (authorizationContext.AccountContext == null || feature.EnabledByAgreementVersion == null)
             {
-                return AuthorizationResult.Ok;
+                result = AuthorizationResult.Ok;
             }
-            
-            var latestSignedAgreementVersion = await _accountAgreementService.GetLatestSignedAgreementVersionAsync(authorizationContext.AccountContext.Id).ConfigureAwait(false);
-			var isFeatureAgreementSigned = latestSignedAgreementVersion >= feature.EnabledByAgreementVersion.Value;
-            var result = isFeatureAgreementSigned ? AuthorizationResult.Ok : AuthorizationResult.FeatureAgreementNotSigned;
+            else
+            {
+                var latestSignedAgreementVersion = await _accountAgreementService.GetLatestSignedAgreementVersionAsync(authorizationContext.AccountContext.Id).ConfigureAwait(false);
+                var isFeatureAgreementSigned = latestSignedAgreementVersion >= feature.EnabledByAgreementVersion.Value;
+
+                result = isFeatureAgreementSigned
+                    ? AuthorizationResult.Ok
+                    : AuthorizationResult.FeatureAgreementNotSigned;
+            }
 
             _logger.Debug($"Finished running '{Type.Name}' for feature '{feature.FeatureType}' with result '{result}'");
 

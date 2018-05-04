@@ -17,7 +17,6 @@ using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [Feature(FeatureType.Transfers)]
     [ValidateMembership]
     [RoutePrefix("accounts/{HashedAccountId}/transfers")]
     public class TransfersController : Controller
@@ -49,6 +48,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [ChildActionOnly]
+        [Feature(FeatureType.Transfers)]
         public ActionResult TransferConnectionInvitationAuthorization(GetTransferConnectionInvitationAuthorizationQuery query)
         {
             var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
@@ -58,6 +58,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [ChildActionOnly]
+        [Feature(FeatureType.Transfers)]
         public ActionResult TransferConnectionInvitations(GetTransferConnectionInvitationsQuery query)
         {
             var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
@@ -67,6 +68,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [ChildActionOnly]
+        [Feature(FeatureType.Transfers)]
         public ActionResult TransferRequests(GetTransferRequestsQuery query)
         {
             try
