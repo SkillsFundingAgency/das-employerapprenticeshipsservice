@@ -1,7 +1,7 @@
 ﻿using System;
 using SFA.DAS.HashingService;
 
-namespace SFA.DAS.EAS.Application.Extensions
+namespace SFA.DAS.EAS.Infrastructure.Extensions
 {
     public static class HashingServiceExtensions
     {

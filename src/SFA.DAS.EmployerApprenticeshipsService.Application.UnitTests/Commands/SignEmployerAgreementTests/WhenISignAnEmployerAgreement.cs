@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         private AgreementSignedEvent _agreementEvent;
         private Mock<ICommitmentService> _commintmentService;
         private Mock<IMessagePublisher> _messagePublisher;
-        private Mock<IAccountAgreementService> _accountAgreement;
+        private Mock<IAccountAgreementService> _agreementService;
 
         private const long AccountId = 223344;
         private const long AgreementId = 123433;
@@ -100,7 +100,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
 
             _messagePublisher = new Mock<IMessagePublisher>();
 
-            _accountAgreement = new Mock<IAccountAgreementService>();
+            _agreementService = new Mock<IAccountAgreementService>();
 
             _handler = new SignEmployerAgreementCommandHandler(
                 _membershipRepository.Object, 
@@ -112,7 +112,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
                 _mediator.Object,
                 _messagePublisher.Object,
                 _commintmentService.Object,
-                _accountAgreement.Object);
+                _agreementService.Object);
 
             _owner = new MembershipView
             {
@@ -221,6 +221,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             //Assert
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<AgreementSignedMessage>(
                 m => !m.CohortCreated && m.AccountId == AccountId && m.AgreementId == AgreementId && m.OrganisationName == OrganisationName && m.LegalEntityId == LegalEntityId)));
+        }
+
+        [Test]
+        public async Task TheShouldInvalidateAccountAgreementCache()
+        {
+            await _handler.Handle(_command);
+
+            _agreementService.Verify(s => s.RemoveFromCacheAsync(AccountId));
         }
     }
 }

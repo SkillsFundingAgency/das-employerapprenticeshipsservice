@@ -1,20 +1,20 @@
-﻿@using SFA.DAS.EAS.Domain.Models.EmployerAgreement
+﻿@using SFA.DAS.EAS.Domain.Models.Features
+@using SFA.DAS.EAS.Infrastructure.Authorization
 @using SFA.DAS.EAS.Web;
+@using SFA.DAS.EAS.Web.Extensions
 
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementListViewModel>
+
 @{
     ViewBag.PageID = "organisations-agreements-home";
     ViewBag.Title = "Organisations";
     ViewBag.Section = "organisations";
+    ViewBag.GaData.Vpv = "/accounts/agreements/organisations-agreements-home";
 
     if (!string.IsNullOrEmpty(Model.FlashMessage?.HiddenFlashMessageInformation))
     {
         ViewBag.PageID = Model.FlashMessage.HiddenFlashMessageInformation;
     }
-}
-
-@{
-    ViewBag.GaData.Vpv = "/accounts/agreements/organisations-agreements-home";
 }
 
 <div class="grid-row header-index">
@@ -34,6 +34,32 @@
     </div>
 </div>
 <div class="grid-row">
+    <div class="column-two-thirds">
+        <details class="transfers-status" role="group">
+            <summary role="button" aria-controls="transfers-status" aria-expanded="false">
+                <span class="summary">Transfers status: 
+                    <span class="bold">
+                        @switch (Html.GetAuthorizationResult(FeatureType.TransferConnectionRequests))
+                        {
+                            case AuthorizationResult.Ok:
+                                @:Enabled
+                                break;
+                            case AuthorizationResult.FeatureAgreementNotSigned:
+                                @:Disabled
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                            }
+                    </span>
+                </span>
+            </summary>
+            <div class="text panel" id="transfers-status" aria-hidden="true">
+                <p>You must sign the most up-to-date agreement for all organisations to use transfers functionality.</p>
+            </div>
+        </details>
+    </div>
+</div>
+<div class="grid-row">
     <div class="column-full">
         <table class="organisations">
             <thead>
@@ -44,9 +70,8 @@
                 </tr>
             </thead>
             <tbody>
-
                 @foreach (var employerAgreement in Model.Data.EmployerAgreementsData.EmployerAgreements)
-                {
+                        {
                     <tr>
                         <td>@employerAgreement.LegalEntity.Name</td>
                         <td>
@@ -54,36 +79,33 @@
                             {
                                 if (employerAgreement.HasSignedAgreement)
                                 {
-                                    @: Updated agreement available
+                                    @:Updated agreement available
                                 }
                                 else
                                 {
-                                    @: Agreement not signed
+                                    @:Agreement not signed
                                 }
                             }
                             else
                             {
-                                @: Signed by @employerAgreement.Signed.SignedByName
+                                @:Signed by @employerAgreement.Signed.SignedByName
                             }
                         </td>
-
                         <td class="link-right">
                             @if (employerAgreement.HasPendingAgreement)
-                            { 
-                                <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", 
-                                             new {agreementid = employerAgreement.Pending.HashedAgreementId})" title="View agreement for @employerAgreement.LegalEntity.Name">Sign agreement</a>
-}
+                            {
+                                <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new { agreementid = employerAgreement.Pending.HashedAgreementId })" title="View agreement for @employerAgreement.LegalEntity.Name">Sign agreement</a>
+                            }
                             else
                             {
-                                <a href="@Url.Action("Details", "EmployerAgreement", new {agreementid = employerAgreement.Signed.HashedAgreementId})" title="View agreement">View</a>
-
+                                <a href="@Url.Action("Details", "EmployerAgreement", new { agreementid = employerAgreement.Signed.HashedAgreementId })" title="View agreement">View</a>
                             }
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
-        <p class="font-xsmall"><a href="@Url.Action("GetOrganisationsToRemove", "EmployerAgreement", new { Model.Data.HashedAccountId})">Remove an organisation from your account</a></p>
+        <p class="font-xsmall"><a href="@Url.Action("GetOrganisationsToRemove", "EmployerAgreement", new { Model.Data.HashedAccountId })">Remove an organisation from your account</a></p>
     </div>
 </div>
 
