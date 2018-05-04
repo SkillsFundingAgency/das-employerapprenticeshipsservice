@@ -1,17 +1,17 @@
 ﻿@using SFA.DAS.EAS.Domain.Models.Features
 @using SFA.DAS.EAS.Web.Extensions
+
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementViewModel>
+
 @{
     ViewBag.PageID = "agreement-about";
     ViewBag.Title = "About your agreement";
     ViewBag.Section = "organisations";
-} 
-@{
     ViewBag.GaData.Vpv = "/accounts/agreements/about-your-agreement/agreement-about";
 }
+
 <div class="grid-row header-index">
     <div class="column-two-thirds">
-        
         <h1 class="heading-xlarge">
             <span class="heading-secondary">@Model.Data.EmployerAgreement.LegalEntityName</span>
             About your agreement
@@ -32,7 +32,7 @@
             @Html.AntiForgeryToken()
             <input class="button" type="submit" value="Continue to your agreement" />
         </form>
-</div>
+    </div>
 </div>
 
 @section breadcrumb {
