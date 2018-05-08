@@ -5,18 +5,21 @@ namespace SFA.DAS.EAS.Infrastructure.Exceptions.MessageFormatters
 {
     internal class ExceptionMessageFormatter : BaseExceptionMessageFormatter
     {
-        public override void AppendFormattedMessage(Exception exception, StringBuilder messageBuilder)
+        public ExceptionMessageFormatter(Func<Exception, IExceptionMessageFormatter> getFormatterCallback)
+            : base(getFormatterCallback)
+        {
+        }
+
+        protected override void CreateFormattedMessage(Exception exception, StringBuilder messageBuilder)
         {
             if (exception == null)
             {
-                messageBuilder.Append("Exception is null");
+                messageBuilder.AppendLine("Exception is null");
             }
             else
             {
-                messageBuilder.Append("Exception:");
-                messageBuilder.Append(exception.GetType().Name);
-                messageBuilder.Append(" Message:");
-                messageBuilder.Append(exception.Message);
+                messageBuilder.AppendLine($"Exception: {exception.GetType().Name}");
+                messageBuilder.AppendLine($"Message: {exception.Message}");
             }
         }
     }

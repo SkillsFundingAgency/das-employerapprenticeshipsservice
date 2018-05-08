@@ -12,11 +12,20 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
             const int reasonableInitialMessageSize = 200;
             var messageBuilder = new StringBuilder(reasonableInitialMessageSize);
 
-            var messageFormatter = ExceptionMessageFormatterFactory.GetFormatter(exception);
+            var currentException = exception;
 
-            messageFormatter.AppendFormattedMessage(exception, messageBuilder);
+            while (currentException != null)
+            {
+                var messageFormatter = ExceptionMessageFormatterFactory.GetFormatter(exception);
 
-            return messageBuilder.ToString();
+                messageFormatter.AppendFormattedMessage(exception, messageBuilder);
+
+                currentException = currentException.InnerException;
+            }
+
+            var message = messageBuilder.ToString();
+
+            return message;
         }
 
         public static IExceptionMessageFormatter GetAppropriateExceptionFormatter(Exception exception)
