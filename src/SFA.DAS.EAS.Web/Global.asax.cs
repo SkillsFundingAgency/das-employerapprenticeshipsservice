@@ -1,4 +1,19 @@
-﻿using System;
+﻿using FluentValidation.Mvc;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Azure;
+using NLog;
+using NLog.Targets;
+using SFA.DAS.Audit.Client;
+using SFA.DAS.Audit.Client.Web;
+using SFA.DAS.Audit.Types;
+using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Infrastructure.Extensions;
+using SFA.DAS.EAS.Infrastructure.Logging;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EmployerUsers.WebClientComponents;
+using SFA.DAS.Web.Policy;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
@@ -8,22 +23,6 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using FluentValidation.Mvc;
-using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Azure;
-using NLog;
-using NLog.Targets;
-using SFA.DAS.Audit.Client;
-using SFA.DAS.Audit.Client.Web;
-using SFA.DAS.Audit.Types;
-using SFA.DAS.EAS.Application.Extensions;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
-using SFA.DAS.EAS.Infrastructure.Extensions;
-using SFA.DAS.EAS.Infrastructure.Logging;
-using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EmployerUsers.WebClientComponents;
-using SFA.DAS.Web.Policy;
 using Environment = SFA.DAS.EAS.Infrastructure.DependencyResolution.Environment;
 
 namespace SFA.DAS.EAS.Web
@@ -81,7 +80,7 @@ namespace SFA.DAS.EAS.Web
             {
                 return;
             }
-            
+
             Dictionary<string, object> properties = null;
 
             try

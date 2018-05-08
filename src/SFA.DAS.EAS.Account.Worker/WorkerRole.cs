@@ -1,9 +1,16 @@
+using System;
 using Microsoft.Azure.WebJobs;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using SFA.DAS.EAS.Account.Worker.DependencyResolution;
 using SFA.DAS.EAS.Account.Worker.Infrastructure;
 using SFA.DAS.EAS.Account.Worker.Infrastructure.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 using StructureMap;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Account.Worker
 {
@@ -16,6 +23,7 @@ namespace SFA.DAS.EAS.Account.Worker
         {
             _container = IoC.Initialize();
             ServiceLocator.Initialise(_container);
+                Logger.Fatal(ex, ex.GetMessage());
 
             var webjobhelper = _container.GetInstance<IAzureWebJobHelper>();
             webjobhelper.EnsureAllQueuesForTriggeredJobs();
@@ -27,6 +35,7 @@ namespace SFA.DAS.EAS.Account.Worker
         public override void OnStop()
         {
             _container?.Dispose();
+            
         }
     }
 }
