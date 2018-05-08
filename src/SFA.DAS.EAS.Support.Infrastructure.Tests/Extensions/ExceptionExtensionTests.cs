@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using NUnit.Framework;
-using NUnit.Framework.Internal;
-using SFA.DAS.EAS.Application.Extensions;
+﻿using NUnit.Framework;
 using SFA.DAS.EAS.Infrastructure.Extensions;
+using System;
+using System.Globalization;
+using System.Net;
+using System.Web;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.Extensions
 {
@@ -122,7 +116,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.Extensions
         public void GetDetailedMessage_WhenCalledWithHttpExceptions_ContainsHttpErrorCode()
         {
             TestDetailedMessage(new HttpException((int)HttpStatusCode.Conflict, ""),
-                ((int) HttpStatusCode.Conflict).ToString(CultureInfo.InvariantCulture));
+                ((int)HttpStatusCode.Conflict).ToString(CultureInfo.InvariantCulture));
         }
 
         [Test]
@@ -142,7 +136,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.Extensions
 
         private void TestDetailedMessage(Exception exception, params string[] expectedMessageContents)
         {
-            var detailedMessage = ExceptionExtensions.GetMessage(exception);
+            var detailedMessage = exception.GetMessage();
 
             foreach (var part in expectedMessageContents)
             {

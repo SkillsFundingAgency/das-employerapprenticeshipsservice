@@ -280,6 +280,12 @@
     <Compile Include="DependencyResolution\CurrentDatePolicy.cs" />
     <Compile Include="DependencyResolution\Environment.cs" />
     <Compile Include="DependencyResolution\ExecutionPolicyPolicy.cs" />
+    <Compile Include="Exceptions\ExceptionMessageFormatterFactory.cs" />
+    <Compile Include="Exceptions\MessageFormatters\AggregateExceptionMessageFormatter.cs" />
+    <Compile Include="Exceptions\MessageFormatters\BaseExceptionMessageFormatter.cs" />
+    <Compile Include="Exceptions\MessageFormatters\ExceptionMessageFormatter.cs" />
+    <Compile Include="Exceptions\MessageFormatters\HttpExceptionMessageFormatter.cs" />
+    <Compile Include="Exceptions\MessageFormatters\IExceptionMessageFormatter.cs" />
     <Compile Include="ExecutionPolicies\CompaniesHouseExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\ExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\HmrcExecutionPolicy.cs" />
