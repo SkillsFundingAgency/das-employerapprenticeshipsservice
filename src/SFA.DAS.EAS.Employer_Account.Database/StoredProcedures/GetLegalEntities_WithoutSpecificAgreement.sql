@@ -10,7 +10,7 @@ BEGIN
 	SELECT	TOP(@count) LegalEntityId
 	FROM		(SELECT		DISTINCT EA.LegalEntityId
 				FROM		employer_account.EmployerAgreement AS EA
-				WHERE	EA.LegalEntityId > @firstId
+				WHERE	EA.LegalEntityId >= @firstId
 						AND EXISTS(	SELECT	1 
 									FROM		employer_account.EmployerAgreement 
 									WHERE	LegalEntityId = EA.LegalEntityId 

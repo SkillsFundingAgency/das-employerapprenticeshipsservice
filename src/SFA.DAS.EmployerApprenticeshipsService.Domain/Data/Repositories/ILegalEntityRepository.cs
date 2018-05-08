@@ -7,6 +7,8 @@ namespace SFA.DAS.EAS.Domain.Data
     {
         Task<long[]> GetAccountsLinkedToLegalEntity(long legalEntityId);
 
+        Task<long[]> GetAccountsLinkedToLegalEntityWithoutSpecificAgreement(long legalEntityId, int templateId);
+
         Task<LegalEntityView> GetLegalEntityById(long accountId, long id);
 
         Task<long[]> GetLegalEntitiesWithoutSpecificAgreement(long firstId, int count, int agreementId);
