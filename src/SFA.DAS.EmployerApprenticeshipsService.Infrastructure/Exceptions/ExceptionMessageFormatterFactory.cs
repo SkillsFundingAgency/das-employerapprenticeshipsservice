@@ -11,13 +11,13 @@ namespace SFA.DAS.EAS.Infrastructure.Exceptions
         private static readonly ConcurrentDictionary<Type, IExceptionMessageFormatter> ExceptionMessageFormatterCache =
             new ConcurrentDictionary<Type, IExceptionMessageFormatter>();
 
-        private static IExceptionMessageFormatter GeneralExceptionFormatter => new ExceptionMessageFormatter(GetFormatter);
+        private static IExceptionMessageFormatter GeneralExceptionFormatter => new ExceptionMessageFormatter();
 
         private static readonly IExceptionMessageFormatter[] ExceptionFormatters =
         {
-            new AggregateExceptionMessageFormatter(GetFormatter),
-            new HttpExceptionMessageFormatter(GetFormatter),
-            new ExceptionMessageFormatter(GetFormatter)
+            new AggregateExceptionMessageFormatter(),
+            new HttpExceptionMessageFormatter(),
+            new ExceptionMessageFormatter()
         };
 
         public static IExceptionMessageFormatter GetFormatter(Exception exception)

@@ -5,11 +5,6 @@ namespace SFA.DAS.EAS.Infrastructure.Exceptions.MessageFormatters
 {
     internal class ExceptionMessageFormatter : BaseExceptionMessageFormatter
     {
-        public ExceptionMessageFormatter(Func<Exception, IExceptionMessageFormatter> getFormatterCallback)
-            : base(getFormatterCallback)
-        {
-        }
-
         protected override void CreateFormattedMessage(Exception exception, StringBuilder messageBuilder)
         {
             if (exception == null)

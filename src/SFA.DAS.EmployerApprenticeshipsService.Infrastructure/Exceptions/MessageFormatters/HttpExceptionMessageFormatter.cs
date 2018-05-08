@@ -8,13 +8,9 @@ namespace SFA.DAS.EAS.Infrastructure.Exceptions.MessageFormatters
     {
         public override Type SupportedException => typeof(HttpException);
 
-        public HttpExceptionMessageFormatter(Func<Exception, IExceptionMessageFormatter> getFormatterCallback)
-        : base(getFormatterCallback)
-        { }
-
         protected override void CreateFormattedMessage(Exception exception, StringBuilder messageBuilder)
         {
-            var httpException = exception as HttpException;
+            var httpException = (HttpException)exception;
 
             messageBuilder.AppendLine($"Exception: {httpException.GetType().Name}");
             messageBuilder.AppendLine($"Message: {httpException.Message}");
