@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SFA.DAS.EAS.Infrastructure.Extensions;
+using System;
 using System.Text;
 using System.Web;
 
@@ -16,6 +17,8 @@ namespace SFA.DAS.EAS.Infrastructure.Exceptions.MessageFormatters
             messageBuilder.AppendLine($"Message: {httpException.Message}");
             messageBuilder.AppendLine($"HTTP-StatusCode: {httpException.GetHttpCode()}");
             messageBuilder.Append($"HTTP-Message: {httpException.GetHtmlErrorMessage()}");
+
+            exception.InnerException?.AppendMessage(messageBuilder);
         }
     }
 }

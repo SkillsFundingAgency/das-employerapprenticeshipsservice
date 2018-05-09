@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SFA.DAS.EAS.Infrastructure.Extensions;
+using System;
 using System.Text;
 
 namespace SFA.DAS.EAS.Infrastructure.Exceptions.MessageFormatters
@@ -15,6 +16,8 @@ namespace SFA.DAS.EAS.Infrastructure.Exceptions.MessageFormatters
             {
                 messageBuilder.AppendLine($"Exception: {exception.GetType().Name}");
                 messageBuilder.AppendLine($"Message: {exception.Message}");
+
+                exception.InnerException?.AppendMessage(messageBuilder);
             }
         }
     }
