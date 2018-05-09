@@ -61,9 +61,12 @@ namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
                 throw new ValidationException<SendTransferConnectionInvitationQuery>(q => q.ReceiverAccountPublicHashedId, "You can't connect with this employer because they already have a pending or accepted connection request");
             }
 
+            var senderAccount = await _db.Accounts.ProjectTo<AccountDto>(_configurationProvider).SingleOrDefaultAsync(a => a.Id == message.AccountId);
+
             return new SendTransferConnectionInvitationResponse
             {
-                ReceiverAccount = receiverAccount
+                ReceiverAccount = receiverAccount,
+                SenderAccount = senderAccount,
             };
         }
     }

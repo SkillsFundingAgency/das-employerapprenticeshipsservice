@@ -21,11 +21,15 @@
                 <table>
                     <tbody>
                         <tr>
-                            <th scope="row">Account name</th>
+                            <th scope="row" class="no-wrap">Sending employer</th>
+                            <td>@Model.SenderAccount.Name</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="no-wrap">Receiving employer</th>
                             <td>@Model.ReceiverAccount.Name</td>
                         </tr>
                         <tr>
-                            <th scope="row">Account ID</th>
+                            <th scope="row" class="no-wrap">Receiving account ID</th>
                             <td>@Model.ReceiverAccount.PublicHashedId</td>
                         </tr>
                     </tbody>
