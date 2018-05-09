@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Application.Services
         private readonly IInProcessCache _cache;
         private readonly string _apprenticeshipInfoServiceApiBase;
 
-        public ApprenticeshipInfoServiceWrapper(IInProcessCache cache, EmployerApprenticeshipsServiceConfiguration config))
+        public ApprenticeshipInfoServiceWrapper(IInProcessCache cache, EmployerApprenticeshipsServiceConfiguration config)
         {
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _apprenticeshipInfoServiceApiBase = config?.ApprenticeshipInfoService?.BaseUrl;

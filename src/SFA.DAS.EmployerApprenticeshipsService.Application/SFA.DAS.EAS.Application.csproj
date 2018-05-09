@@ -263,6 +263,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommand.cs" />
+    <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommandHandler.cs" />
+    <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommandValidator.cs" />
     <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommand.cs" />
     <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommandHandler.cs" />
     <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommandValidator.cs" />
@@ -305,7 +308,7 @@
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceResponse.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQueryHandler.cs" />
     <Compile Include="Messages\AccountTransfersCreatedQueueMessage.cs" />
-    <Compile Include="Messages\AccountTransfersProcessingCompletedMessage.cs" />     
+    <Compile Include="Messages\AccountTransfersProcessingCompletedMessage.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationQuery.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationResponse.cs" />

@@ -171,7 +171,6 @@
   <ItemGroup>
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\IPaymentDataProcessor.cs" />
     <Compile Include="Providers\PaymentDataProcessor.cs" />
     <Compile Include="Providers\TransferDataProcessor.cs" />
     <Compile Include="Providers\TransferTransactionProcessor.cs" />
