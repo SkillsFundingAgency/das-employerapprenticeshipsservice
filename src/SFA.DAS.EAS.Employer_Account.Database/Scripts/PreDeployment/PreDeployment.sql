@@ -10,4 +10,5 @@
 --------------------------------------------------------------------------------------
 */
 
+:r .\RemoveDuplicateAccountHistory.sql
 :r .\AML-2381-DeleteDuplicateUserAccountSettings.sql
