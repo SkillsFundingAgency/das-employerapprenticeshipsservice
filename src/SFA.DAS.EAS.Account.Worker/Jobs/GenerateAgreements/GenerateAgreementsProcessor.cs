@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Account.Worker.Jobs.GenerateAgreements
                 return false;
             }
 
-            var accountsLinkedToLegalEntity = await _legalEntityRepository.GetAccountsLinkedToLegalEntity(legalEntityId);
+            var accountsLinkedToLegalEntity = await _legalEntityRepository.GetAccountsLinkedToLegalEntityWithoutSpecificAgreement(legalEntityId, latestAgreementId);
 
             foreach (var accountId in accountsLinkedToLegalEntity)
             {

@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
-                parameters.Add("@withoutAgreement", templateId, DbType.Int32);
+                parameters.Add("@@withoutAgreementVersion", templateId, DbType.Int32);
 
                 return await c.QueryAsync<long>(
                     sql: "[employer_account].[GetAccountsLinkedToLegalEntity]",
