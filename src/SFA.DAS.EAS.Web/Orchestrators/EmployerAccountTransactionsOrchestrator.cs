@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments;
 using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
@@ -17,7 +18,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Application.Exceptions;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -317,7 +317,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
 
         public virtual async Task<OrchestratorResponse<CoursePaymentDetailsViewModel>> GetCoursePaymentSummary(
-            string hashedAccountId, long ukprn, string courseName, int courseLevel, int? pathwayCode,
+            string hashedAccountId, long ukprn, string courseName, int? courseLevel, int? pathwayCode,
             DateTime fromDate, DateTime toDate, string externalUserId)
         {
             try
