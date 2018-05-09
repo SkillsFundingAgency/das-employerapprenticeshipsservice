@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCoursePayments;
@@ -15,6 +11,10 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Services
 {
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Application.Services
         }
 
         public async Task<ICollection<T>> GetAccountCoursePaymentsByDateRange<T>(
-            long accountId, long ukprn, string courseName, int courseLevel, int? pathwayCode, DateTime fromDate,
+            long accountId, long ukprn, string courseName, int? courseLevel, int? pathwayCode, DateTime fromDate,
             DateTime toDate) where T : TransactionLine
         {
             var result = await _mediator.SendAsync(new GetAccountCoursePaymentsQuery
