@@ -68,5 +68,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return result.ToArray();
         }
+
+        public async Task<long[]> GetAccountsLinkedToLegalEntityWithoutSpecificAgreement(long legalEntityId, int templateId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
+                parameters.Add("@@withoutAgreementVersion", templateId, DbType.Int32);
+
+                return await c.QueryAsync<long>(
+                    sql: "[employer_account].[GetAccountsLinkedToLegalEntity]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.ToArray();
+        }
     }
 }
