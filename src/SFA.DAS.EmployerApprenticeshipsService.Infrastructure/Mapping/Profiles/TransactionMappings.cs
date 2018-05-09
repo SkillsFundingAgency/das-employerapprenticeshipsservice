@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SFA.DAS.EAS.Domain.Data.Entities.Transaction;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;

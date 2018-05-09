@@ -352,8 +352,6 @@
     <Compile Include="Models\TransferConnections\TransferConnectionInvitation.cs" />
     <Compile Include="Models\TransferConnections\TransferConnectionInvitationChange.cs" />
     <Compile Include="Models\TransferConnections\TransferConnectionInvitationStatus.cs" />
-    <Compile Include="Models\TransferRequests\TransferRequest.cs" />
-    <Compile Include="Models\TransferRequests\TransferRequestStatus.cs" />
     <Compile Include="Models\Transfers\AccountTransfer.cs" />
     <Compile Include="Models\Transfers\AccountTransferDetails.cs" />
     <Compile Include="Models\Transfers\TransferTransactionLine.cs" />
