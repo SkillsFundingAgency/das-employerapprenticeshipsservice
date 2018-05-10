@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Infrastructure.Caching
 
         public Task SetCustomValueAsync<T>(string key, T customType, TimeSpan cacheTime)
         {
-            DevCache.Value.Add(key, JsonConvert.SerializeObject(customType), new CacheItemPolicy {AbsoluteExpiration = DateTimeOffset.Now.Add(cacheTime)});
+            DevCache.Value.Add(key, JsonConvert.SerializeObject(customType), new CacheItemPolicy {AbsoluteExpiration = DateTimeOffset.UtcNow.Add(cacheTime)});
             return Task.CompletedTask;
         }
 

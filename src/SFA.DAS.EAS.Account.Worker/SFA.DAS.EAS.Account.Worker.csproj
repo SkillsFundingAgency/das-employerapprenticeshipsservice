@@ -247,7 +247,6 @@
     <Compile Include="Data\IAccountMaintenanceRepository.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
-    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="IdProcessor\CheckpointDummy.cs" />
     <Compile Include="IdProcessor\ICheckpoint.cs" />
     <Compile Include="IdProcessor\IdBroker.cs" />

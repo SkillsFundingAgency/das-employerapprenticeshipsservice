@@ -25,6 +25,32 @@ namespace SFA.DAS.EAS.TestCommon
             assert?.Invoke(testFixture);
         }
 
+        public void Run<TActionResult>(Action<T, TActionResult> assert)
+        {
+            Run(null, null, assert);
+        }
+
+        public void Run<TActionResult>(Func<T, TActionResult> act, Action<T, TActionResult> assert)
+        {
+            Run(null, act, assert);
+        }
+
+        public void Run<TActionResult>(Action<T> arrange, Func<T, TActionResult> act, Action<T, TActionResult> assert)
+        {
+            var testFixture = new T();
+
+            arrange?.Invoke(testFixture);
+
+            var actionResult = default(TActionResult);
+
+            if (act != null)
+            {
+                actionResult = act(testFixture);
+            }
+            
+            assert(testFixture, actionResult);
+        }
+
         public void Run<TException>(Func<T, Action, ExceptionAssertions<TException>> assert) where TException : Exception
         {
             Run(null, null, assert);

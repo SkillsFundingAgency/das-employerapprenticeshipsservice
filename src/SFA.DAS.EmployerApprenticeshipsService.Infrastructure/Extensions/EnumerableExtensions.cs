@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Account.Worker.Extensions
+namespace SFA.DAS.EAS.Infrastructure.Extensions
 {
     public static class EnumerableExtensions
     {
@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Account.Worker.Extensions
         {
             yield return source.Current;
 
-            for (var i = 1; i <= size && source.MoveNext(); i++)
+            for (var i = 1; i < size && source.MoveNext(); i++)
             {
                 yield return source.Current;
             }
