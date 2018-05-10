@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
             foreach (var payment in payments)
             {
                 paymentsDataTable.Rows.Add(
-                    payment.Id,
+                    Guid.Parse(payment.Id),
                     payment.Ukprn,
                     payment.ProviderName,
                     payment.Uln,
