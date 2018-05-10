@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Infrastructure.Caching
 
         public void Set(string key, object value)
         {
-            MemoryCache.Default.Set(key, value, new CacheItemPolicy { AbsoluteExpiration = new DateTimeOffset(DateTime.Now, Constants.DefaultCacheTime) });
+            MemoryCache.Default.Set(key, value, new CacheItemPolicy { AbsoluteExpiration = new DateTimeOffset(DateTime.UtcNow.Add(Constants.DefaultCacheTime))});
         }
 
         public void Set(string key, object value, TimeSpan slidingExpiration)

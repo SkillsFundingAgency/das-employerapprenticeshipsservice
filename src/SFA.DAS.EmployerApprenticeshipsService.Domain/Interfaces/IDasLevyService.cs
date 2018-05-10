@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Models.Account;
+﻿using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Domain.Interfaces
 {
@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Domain.Interfaces
             where T : TransactionLine;
 
         Task<ICollection<T>> GetAccountCoursePaymentsByDateRange<T>(
-            long accountId, long ukprn, string courseName, int courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
+            long accountId, long ukprn, string courseName, int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
             where T : TransactionLine;
 
         Task<ICollection<AccountBalance>> GetAllAccountBalances();

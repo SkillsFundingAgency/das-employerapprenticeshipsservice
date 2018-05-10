@@ -172,6 +172,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Caching\InProcessCacheTests.cs" />
     <Compile Include="ExecutionPoliciesTests\Hmrc\WhenIMakeABadRequest.cs" />
     <Compile Include="ExecutionPoliciesTests\CompanyHouse\WhenILookUpACompanyThatDoesNotExist.cs" />
     <Compile Include="Factories\WhenICreateARestClient.cs" />

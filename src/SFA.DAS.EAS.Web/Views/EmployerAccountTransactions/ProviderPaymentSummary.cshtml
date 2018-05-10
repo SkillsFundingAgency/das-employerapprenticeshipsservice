@@ -47,7 +47,15 @@
             @foreach (var coursePaymentSummary in Model.Data.CoursePayments)
             {
                 <tr>
-                    <td data-label="Course">@coursePaymentSummary.CourseName: @coursePaymentSummary.PathwayName <span class="no-wrap">level @coursePaymentSummary.CourseLevel</span></td>
+                    @if (string.IsNullOrEmpty(coursePaymentSummary.CourseName))
+                    {
+                        <td data-label="Course">(Course details not available)</td>
+                    }
+                    else
+                    {
+                        <td data-label="Course">@coursePaymentSummary.CourseName: @coursePaymentSummary.PathwayName <span class="no-wrap">level @coursePaymentSummary.CourseLevel</span></td>
+                    }
+
                     <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C2", culture)</td>
                     <td class="numeric highlight" data-label="Government contribution">@coursePaymentSummary.SFACoInvestmentAmount.ToString("C2", culture)</td>
                     <td class="numeric highlight" data-label="Your contribution">@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C2", culture)</td>

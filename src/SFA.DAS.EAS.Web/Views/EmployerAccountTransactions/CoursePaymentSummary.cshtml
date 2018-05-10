@@ -24,11 +24,20 @@
                 <dd>@Model.Data.ProviderName</dd>
                 <dt>Course</dt>
                 @{
-                    var courseTitle = $"{Model.Data.CourseName}: {Model.Data.PathwayName}";
+                    string courseTitle;
 
-                    if (Model.Data.CourseLevel.HasValue)
+                    if (string.IsNullOrEmpty(Model.Data.CourseName))
                     {
-                        courseTitle += $" level {Model.Data.CourseLevel.Value}";
+                        courseTitle = "(Course details are not available)";
+                    }
+                    else
+                    {
+                        courseTitle = $"{Model.Data.CourseName}: {Model.Data.PathwayName}";
+
+                        if (Model.Data.CourseLevel.HasValue)
+                        {
+                            courseTitle += $" level {Model.Data.CourseLevel.Value}";
+                        }
                     }
                 }
                 <dd>@courseTitle</dd>
