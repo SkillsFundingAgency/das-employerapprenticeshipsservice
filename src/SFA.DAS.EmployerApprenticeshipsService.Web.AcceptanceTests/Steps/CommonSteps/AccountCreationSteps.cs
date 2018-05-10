@@ -10,7 +10,6 @@ using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.TestCommon.ScenarioCommonSteps;
-using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
@@ -137,6 +136,8 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
             var user = userCreationSteps.GetExistingUserAccount();
 
             CreateDasAccount(user, _container.GetInstance<EmployerAccountOrchestrator>());
+
+            SetAccountIdForUser();
 
             ScenarioContext.Current["AccountOwnerUserId"] = user.Id;
         }
