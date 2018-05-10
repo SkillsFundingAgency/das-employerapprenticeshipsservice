@@ -1,16 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
 {
@@ -56,13 +55,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
             {
                 commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
             }
-            
 
-            if(result!= null)
+
+            if (result != null)
             {
                 foreach (var removeEmployerAgreementView in result)
                 {
                     removeEmployerAgreementView.HashedAgreementId = _hashingService.HashValue(removeEmployerAgreementView.Id);
+                    removeEmployerAgreementView.HashedAccountId = message.HashedAccountId;
 
                     if (result.Count != 1)
                     {
@@ -95,13 +95,13 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
                                 removeEmployerAgreementView.CanBeRemoved = false;
                                 break;
                         }
-                        
+
                     }
 
                 }
             }
-            
-            return new GetAccountEmployerAgreementsRemoveResponse {Agreements = result };
+
+            return new GetAccountEmployerAgreementsRemoveResponse { Agreements = result };
         }
     }
 }

@@ -18,7 +18,9 @@ namespace SFA.DAS.EAS.Web.Mappings
                 .ForMember(dest => dest.TownOrCity, opt => opt.MapFrom(src => src.TownOrCity))
                 .ForMember(dest => dest.County, opt => opt.MapFrom(src => src.County))
                 .ForMember(dest => dest.Postcode, opt => opt.MapFrom(src => src.PostCode))
-                .ForMember(dest => dest.ErrorDictionary, opt => opt.Ignore());
+                .ForMember(dest => dest.ErrorDictionary, opt => opt.Ignore())
+                .ForMember(dest => dest.UserId, opt => opt.Ignore())
+                .ForMember(dest => dest.PublicHashedAccountId, opt => opt.Ignore());
 
 
             CreateMap<FindOrganisationAddressViewModel, AddOrganisationAddressViewModel>()
