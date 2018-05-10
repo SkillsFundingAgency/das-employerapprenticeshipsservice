@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
         {
             yield return source.Current;
 
-            for (var i = 1; i <= size && source.MoveNext(); i++)
+            for (var i = 1; i < size && source.MoveNext(); i++)
             {
                 yield return source.Current;
             }
