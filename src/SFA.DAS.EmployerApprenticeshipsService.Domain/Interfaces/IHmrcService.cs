@@ -9,14 +9,14 @@ namespace SFA.DAS.EAS.Domain.Interfaces
         string GenerateAuthRedirectUrl(string redirectUrl);
 
         Task<HmrcTokenResponse> GetAuthenticationToken(string redirectUrl, string accessCode);
-        Task<EmpRefLevyInformation> GetEmprefInformation(string authToken, string empRef);
+        Task<HMRC.ESFA.Levy.Api.Types.EmpRefLevyInformation> GetEmprefInformation(string authToken, string empRef);
         Task<string> DiscoverEmpref(string authToken);
-        Task<LevyDeclarations> GetLevyDeclarations(string empRef);
-        Task<EnglishFractionDeclarations> GetEnglishFractions(string empRef);
+        Task<HMRC.ESFA.Levy.Api.Types.LevyDeclarations> GetLevyDeclarations(string empRef);
+        Task<HMRC.ESFA.Levy.Api.Types.EnglishFractionDeclarations> GetEnglishFractions(string empRef);
         Task<DateTime> GetLastEnglishFractionUpdate();
         Task<string> GetOgdAccessToken();
-        Task<LevyDeclarations> GetLevyDeclarations(string empRef,DateTime? fromDate);
-        Task<EnglishFractionDeclarations> GetEnglishFractions(string empRef, DateTime? fromDate);
-        Task<EmpRefLevyInformation> GetEmprefInformation(string empRef);
+        Task<HMRC.ESFA.Levy.Api.Types.LevyDeclarations> GetLevyDeclarations(string empRef,DateTime? fromDate);
+        Task<HMRC.ESFA.Levy.Api.Types.EnglishFractionDeclarations> GetEnglishFractions(string empRef, DateTime? fromDate);
+        Task<HMRC.ESFA.Levy.Api.Types.EmpRefLevyInformation> GetEmprefInformation(string empRef);
     }
 }

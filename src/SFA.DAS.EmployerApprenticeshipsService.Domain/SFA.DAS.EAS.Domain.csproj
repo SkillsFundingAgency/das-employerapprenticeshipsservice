@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HMRC.ESFA.Levy.Api.Types, Version=1.0.43.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HMRC.ESFA.Levy.Api.Types.1.0.43\lib\net452\HMRC.ESFA.Levy.Api.Types.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
       <Private>True</Private>

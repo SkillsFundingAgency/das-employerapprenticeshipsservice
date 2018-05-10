@@ -52,15 +52,6 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
             var hmrcFractions = fractionCalculations.FractionCalculations.SelectMany(calculations =>
             {
                 var fractions = new List<DasEnglishFraction>();
-                DateTime dateCalculated;
-
-                if (!DateTime.TryParse(calculations.CalculatedAt, out dateCalculated))
-                {
-                    var exception = new ArgumentException($"Could not convert HMRC API calculatedAt value { calculations.CalculatedAt } to a datetime for english fraction update for EmpRef { message.EmployerReference}", nameof(calculations.CalculatedAt));
-                    _logger.Error(exception, exception.Message);
-
-                    return fractions;
-                }
 
                 foreach (var fraction in calculations.Fractions)
                 {
@@ -72,7 +63,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
                             new DasEnglishFraction
                             {
                                 EmpRef = fractionCalculations.Empref,
-                                DateCalculated = DateTime.Parse(calculations.CalculatedAt),
+                                DateCalculated = calculations.CalculatedAt,
                                 Amount = decimal.Parse(fraction.Value)
                             });
                     }

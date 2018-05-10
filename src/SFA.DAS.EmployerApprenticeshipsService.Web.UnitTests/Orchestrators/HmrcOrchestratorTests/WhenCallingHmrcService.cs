@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using HMRC.ESFA.Levy.Api.Types;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -8,7 +9,6 @@ using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;

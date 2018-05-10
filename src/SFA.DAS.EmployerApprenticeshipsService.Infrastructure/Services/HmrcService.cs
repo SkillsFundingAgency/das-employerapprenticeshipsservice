@@ -4,11 +4,12 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
+using HMRC.ESFA.Levy.Api.Client;
+using HMRC.ESFA.Levy.Api.Types;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.HmrcEmployer;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.ExecutionPolicies;
@@ -20,6 +21,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     {
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private readonly IHttpClientWrapper _httpClientWrapper;
+        private readonly IApprenticeshipLevyApiClient _apprenticeshipLevyApiClient;
         private readonly ITokenServiceApiClient _tokenServiceApiClient;
         private readonly ExecutionPolicy _executionPolicy;
         private readonly IInProcessCache _inProcessCache;
@@ -28,7 +30,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public HmrcService(
             EmployerApprenticeshipsServiceConfiguration configuration, 
-            IHttpClientWrapper httpClientWrapper, 
+            IHttpClientWrapper httpClientWrapper,
+            IApprenticeshipLevyApiClient apprenticeshipLevyApiClient,
             ITokenServiceApiClient tokenServiceApiClient, 
             [RequiredPolicy(HmrcExecutionPolicy.Name)] ExecutionPolicy executionPolicy,
             IInProcessCache inProcessCache, 
@@ -36,6 +39,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             _configuration = configuration;
             _httpClientWrapper = httpClientWrapper;
+            _apprenticeshipLevyApiClient = apprenticeshipLevyApiClient;
             _tokenServiceApiClient = tokenServiceApiClient;
             _executionPolicy = executionPolicy;
             _inProcessCache = inProcessCache;
@@ -71,17 +75,12 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             });
         }
 
-        public async Task<EmpRefLevyInformation> GetEmprefInformation(string authToken, string empRef)
+        public async Task<HMRC.ESFA.Levy.Api.Types.EmpRefLevyInformation> GetEmprefInformation(string authToken, string empRef)
         {
-            return await _executionPolicy.ExecuteAsync(async () =>
-            {
-                var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}";
-
-                return await _httpClientWrapper.Get<EmpRefLevyInformation>(authToken, url);
-            });
+            return await _executionPolicy.ExecuteAsync(async () => await _apprenticeshipLevyApiClient.GetEmployerDetails(authToken, empRef));
         }
 
-        public async Task<EmpRefLevyInformation> GetEmprefInformation(string empRef)
+        public async Task<HMRC.ESFA.Levy.Api.Types.EmpRefLevyInformation> GetEmprefInformation(string empRef)
         {
             var accessToken =  await _executionPolicy.ExecuteAsync(async () => await GetOgdAccessToken());
 
@@ -92,66 +91,48 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             return await _executionPolicy.ExecuteAsync(async () =>
             {
-                var json = await _httpClientWrapper.Get<EmprefDiscovery>(authToken, "apprenticeship-levy/");
+                var response = await _apprenticeshipLevyApiClient.GetAllEmployers(authToken);
 
-                return json.Emprefs.SingleOrDefault();
+                if (response == null)
+                    return string.Empty;
+
+                return response.Emprefs.SingleOrDefault();
             });
         }
 
-        public async Task<LevyDeclarations> GetLevyDeclarations(string empRef)
+        public async Task<HMRC.ESFA.Levy.Api.Types.LevyDeclarations> GetLevyDeclarations(string empRef)
         {
             return await GetLevyDeclarations(empRef, null);
         }
 
-        public async Task<LevyDeclarations> GetLevyDeclarations(string empRef, DateTime? fromDate)
+        public async Task<HMRC.ESFA.Levy.Api.Types.LevyDeclarations> GetLevyDeclarations(string empRef, DateTime? fromDate)
         {
             return await _executionPolicy.ExecuteAsync(async () =>
             {
                 var accessToken = await GetOgdAccessToken();
 
-                var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/declarations?fromDate=";
-
-                var defaultFromDate = "2017-04-01";
-
-                if (fromDate.HasValue)
+                var earliestDate = new DateTime(2017, 04, 01);
+                if (!fromDate.HasValue || fromDate.Value < earliestDate)
                 {
-                    if (fromDate.Value >= new DateTime(2017, 04, 01))
-                    {
-                        url += $"{fromDate.Value.ToString("yyyy-MM-dd")}";
-                    }
-                    else
-                    {
-                        url += defaultFromDate;
-                    }
-                }
-                else
-                {
-                    url += defaultFromDate;
+                    fromDate = earliestDate;
                 }
 
-                return await _httpClientWrapper.Get<LevyDeclarations>(accessToken, url);
+                return await _apprenticeshipLevyApiClient.GetEmployerLevyDeclarations(accessToken, empRef, fromDate);
             });
         }
 
-        public async Task<EnglishFractionDeclarations> GetEnglishFractions(string empRef)
+        public async Task<HMRC.ESFA.Levy.Api.Types.EnglishFractionDeclarations> GetEnglishFractions(string empRef)
         {
             return await GetEnglishFractions(empRef, null);
         }
 
-        public async Task<EnglishFractionDeclarations> GetEnglishFractions(string empRef, DateTime? fromDate)
+        public async Task<HMRC.ESFA.Levy.Api.Types.EnglishFractionDeclarations> GetEnglishFractions(string empRef, DateTime? fromDate)
         {
             return await _executionPolicy.ExecuteAsync(async () =>
             {
                 var accessToken = await GetOgdAccessToken();
 
-                var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/fractions";
-
-                if (fromDate.HasValue)
-                {
-                    url += $"?fromDate={fromDate.Value.ToString("yyyy-MM-dd")}";
-                }
-
-                return await _httpClientWrapper.Get<EnglishFractionDeclarations>(accessToken, url);
+                return await _apprenticeshipLevyApiClient.GetEmployerFractionCalculations(accessToken, empRef, fromDate);
             });
         }
 
@@ -164,8 +145,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 {
                     var accessToken = await GetOgdAccessToken();
 
-                    const string url = "apprenticeship-levy/fraction-calculation-date";
-                    hmrcLatestUpdateDate = await _httpClientWrapper.Get<DateTime>(accessToken, url);
+                    hmrcLatestUpdateDate =  await _apprenticeshipLevyApiClient.GetLastEnglishFractionUpdate(accessToken);
 
                     if (hmrcLatestUpdateDate != null)
                     {

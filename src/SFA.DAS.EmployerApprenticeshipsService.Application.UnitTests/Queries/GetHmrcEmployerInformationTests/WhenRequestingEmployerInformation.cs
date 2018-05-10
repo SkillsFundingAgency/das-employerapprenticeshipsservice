@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using HMRC.ESFA.Levy.Api.Types;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -9,7 +10,6 @@ using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.NLog.Logger;
 
