@@ -65,10 +65,12 @@
     <Folder Include="Views" />
     <Folder Include="StoredProcedures" />
     <Folder Include="Schemas" />
-    <Folder Include="SeedData" />
     <Folder Include="Types" />
     <Folder Include="Functions" />
     <Folder Include="UserDefinedTypes" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\PostDeployment" />
+    <Folder Include="Scripts\PreDeployment" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\EnglishFraction.sql" />
@@ -119,18 +121,15 @@
     <Build Include="StoredProcedures\GetAllPeriodEnds.sql" />
     <Build Include="UserDefinedTypes\PaymentsTable.sql" />
     <Build Include="StoredProcedures\CreatePayments.sql" />
+    <None Include="Scripts\PostDeployment\SeedDevData.sql" />
+    <PostDeploy Include="Scripts\PostDeployment\PostDeployment.sql" />
+    <PreDeploy Include="Scripts\PreDeployment\PreDeployment.sql" />
+    <None Include="Scripts\PostDeployment\CreateTransactionLineTypes.sql" />
+    <None Include="Scripts\PostDeployment\CreatePaymentTransactionTypes.sql" />
+    <None Include="Scripts\PostDeployment\CreateTopUpPercentages.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SeedData\SeedData.sql" />
-    <None Include="SeedData\SeedProdData.sql" />
     <None Include="Database.publish.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <PostDeploy Include="SeedData\PostDeploymentRules.sql" />
-    <None Include="SeedData\EnglishFraction.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <PreDeploy Include="Script.PreDeployment1.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
