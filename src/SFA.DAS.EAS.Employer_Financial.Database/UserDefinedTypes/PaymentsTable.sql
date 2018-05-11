@@ -13,7 +13,7 @@
 	CollectionPeriodYear INT NOT NULL,
 	EvidenceSubmittedOn DATETIME NOT NULL,
 	EmployerAccountVersion VARCHAR(50) NOT NULL,
-	ApprenticeshipVersion VARCHAR(10) NOT NULL,
+	ApprenticeshipVersion VARCHAR(25) NOT NULL,
 	FundingSource VARCHAR(25) NOT NULL,
 	TransactionType VARCHAR(25) NOT NULL,
 	Amount DECIMAL(18,5) NOT NULL,
