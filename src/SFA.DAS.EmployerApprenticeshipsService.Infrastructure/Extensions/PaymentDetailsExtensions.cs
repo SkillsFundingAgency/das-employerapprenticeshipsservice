@@ -1,12 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Text;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Extensions
 {
     public static class PaymentDetailsExtensions
     {
+        public static void AssertValidPayment(this PaymentDetails payment)
+        {
+            /*
+                Possible truncations:
+                CollectionPeriodId          8
+                EmployerAccountVersion      50  
+                ApprenticeshipVersion       25
+                PeriodEnd                   25
+            */
+            StringBuilder errors = null;
+            var isOkay = CheckFieldLength(payment.CollectionPeriodId, nameof(payment.CollectionPeriodId), 8, false, ref errors) &&
+                         CheckFieldLength(payment.EmployerAccountVersion, nameof(payment.EmployerAccountVersion), 50, false, ref errors) &&
+                         CheckFieldLength(payment.ApprenticeshipVersion, nameof(payment.CollectionPeriodId), 25, false, ref errors) &&
+                         CheckFieldLength(payment.PeriodEnd, nameof(payment.PeriodEnd), 25, false, ref errors);
+
+            if (!isOkay)
+            {
+                throw new Exception($"The following errors were detected:{errors.ToString()}");
+            }
+        }
+
+        private static bool CheckFieldLength(this string field, string fieldName, int maxLength, bool isNullAllowed, ref StringBuilder errors)
+        {
+            if (field == null)
+            {
+                if (isNullAllowed)
+                {
+                    return true;
+                }
+
+                AddError($"Field:{fieldName} Error:null value is not allowed", ref errors);
+                return false;
+            }
+
+            if (field.Length > maxLength)
+            {
+                AddError($"Field:{fieldName} Error:field is {field.Length} but maximum length is {maxLength}", ref errors);
+                return false;
+            }
+
+            return true;
+        }
+
+        private static void AddError(string error, ref StringBuilder errors)
+        {
+            if (errors == null)
+            {
+                errors = new StringBuilder();
+            }
+
+            errors.AppendLine(error);
+        }
+
         public static DataTable ToPaymentsDataTable(this IEnumerable<PaymentDetails> payments)
         {
             var paymentsDataTable = new DataTable();
@@ -42,6 +97,8 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
 
             foreach (var payment in payments)
             {
+                AssertValidPayment(payment);
+
                 paymentsDataTable.Rows.Add(
                     Guid.Parse(payment.Id),
                     payment.Ukprn,
@@ -57,8 +114,8 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
                     payment.EvidenceSubmittedOn,
                     payment.EmployerAccountVersion,
                     payment.ApprenticeshipVersion,
-                    ((int)payment.FundingSource).ToString(),
-                    ((int)payment.TransactionType).ToString(),
+                    ((int) payment.FundingSource).ToString(),
+                    ((int) payment.TransactionType).ToString(),
                     payment.Amount,
                     payment.PeriodEnd,
                     payment.StandardCode,

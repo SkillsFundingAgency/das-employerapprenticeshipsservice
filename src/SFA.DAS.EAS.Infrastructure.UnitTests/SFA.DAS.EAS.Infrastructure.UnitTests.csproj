@@ -176,6 +176,7 @@
     <Compile Include="ExecutionPoliciesTests\Hmrc\WhenIMakeABadRequest.cs" />
     <Compile Include="ExecutionPoliciesTests\CompanyHouse\WhenILookUpACompanyThatDoesNotExist.cs" />
     <Compile Include="Extensions\EnumerableExtensionsTests.cs" />
+    <Compile Include="Extensions\PaymentDetailsExtensionsTests.cs" />
     <Compile Include="Factories\WhenICreateARestClient.cs" />
     <Compile Include="Mapping\PaymentMappingTests\WhenIMapAPaymentToPaymentDetails.cs" />
     <Compile Include="NoopExecutionPolicy.cs" />
