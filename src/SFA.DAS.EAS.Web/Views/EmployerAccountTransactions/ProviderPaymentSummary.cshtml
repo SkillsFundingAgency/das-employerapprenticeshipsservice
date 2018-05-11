@@ -64,7 +64,7 @@
                         @{
                             var courseDetailsLink = string.Empty;
 
-                            if (string.IsNullOrEmpty(coursePaymentSummary.PathwayName))
+                            if (!coursePaymentSummary.PathwayCode.HasValue)
                             {
                                 courseDetailsLink = Url.Action("CourseStandardPaymentSummary", "EmployerAccountTransactions",
                                     new
