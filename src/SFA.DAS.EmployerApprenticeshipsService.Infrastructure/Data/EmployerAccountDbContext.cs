@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
@@ -17,10 +16,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<EmployerAgreement> Agreements { get; set; }
         public virtual DbSet<AgreementTemplate> AgreementTemplates { get; set; }
+        public virtual DbSet<LegalEntity> LegalEntities { get; set; }
         public virtual DbSet<Membership> Memberships { get; set; }
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public Guid Id { get; set; }
 
         static EmployerAccountDbContext()
         {
@@ -30,7 +29,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public EmployerAccountDbContext(EmployerApprenticeshipsServiceConfiguration config)
             : base(config.DatabaseConnectionString)
         {
-            Id = Guid.NewGuid();
         }
 
         protected EmployerAccountDbContext()
@@ -45,37 +43,20 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Entity<Account>().Ignore(a => a.RoleId).Ignore(a => a.RoleName);
+            modelBuilder.Entity<Account>().HasMany(a => a.Agreements);
+            modelBuilder.Entity<Account>().HasMany(a => a.ReceivedTransferConnectionInvitations);
+            modelBuilder.Entity<Account>().HasMany(a => a.SentTransferConnectionInvitations);
+            modelBuilder.Entity<AgreementTemplate>().ToTable("EmployerAgreementTemplate").HasMany(t => t.Agreements);
+            modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Account);
+            modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.LegalEntity);
+            modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Template);
+            modelBuilder.Entity<LegalEntity>().HasMany(l => l.Agreements);
+            modelBuilder.Entity<Membership>().HasKey(m => new { m.AccountId, m.UserId }).Ignore(m => m.RoleId).Property(m => m.Role).HasColumnName(nameof(Membership.RoleId));
+            modelBuilder.Entity<User>().Ignore(u => u.FullName).Ignore(u => u.UserRef).Property(u => u.ExternalId).HasColumnName(nameof(User.UserRef));
+            modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.ReceiverAccount);
+            modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.SenderAccount);
             modelBuilder.HasDefaultSchema("employer_account");
-
-            modelBuilder.Entity<Account>()
-                .Ignore(a => a.RoleId)
-                .Ignore(a => a.RoleName);
-
-            modelBuilder.Entity<Account>()
-                .HasMany(a => a.ReceivedTransferConnectionInvitations)
-                .WithRequired(i => i.ReceiverAccount);
-
-            modelBuilder.Entity<Account>()
-                .HasMany(a => a.SentTransferConnectionInvitations)
-                .WithRequired(i => i.SenderAccount);
-
-            modelBuilder.Entity<AgreementTemplate>()
-                .ToTable("EmployerAgreementTemplate");
-
-            modelBuilder.Entity<EmployerAgreement>()
-                .HasRequired(t => t.Template)
-                .WithMany(at => at.Agreements)
-                .HasForeignKey<long>(ea => ea.TemplateId);
-
-            modelBuilder.Entity<Membership>()
-                .HasKey(m => new { m.AccountId, m.UserId })
-                .Ignore(m => m.RoleId)
-                .Property(m => m.Role).HasColumnName(nameof(Membership.RoleId));
-
-            modelBuilder.Entity<User>()
-                .Ignore(u => u.FullName)
-                .Ignore(u => u.UserRef)
-                .Property(u => u.ExternalId).HasColumnName(nameof(User.UserRef));
         }
     }
 }

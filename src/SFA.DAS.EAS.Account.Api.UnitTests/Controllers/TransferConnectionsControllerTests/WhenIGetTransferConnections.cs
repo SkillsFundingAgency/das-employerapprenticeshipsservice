@@ -26,6 +26,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.TransferConnectionsContr
             _query = new GetTransferConnectionsQuery();
             _transferConnections = new List<TransferConnectionViewModel>();
             _response = new GetTransferConnectionsResponse { TransferConnections = _transferConnections };
+
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
 
             _controller = new TransferConnectionsController(_mediator.Object);

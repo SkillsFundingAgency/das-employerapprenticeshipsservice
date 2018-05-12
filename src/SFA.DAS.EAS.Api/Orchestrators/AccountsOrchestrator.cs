@@ -8,13 +8,11 @@ using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
-using SFA.DAS.EAS.Application.Queries.GetLegalEntityById;
 using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
 using SFA.DAS.EAS.Application.Queries.GetLevyDeclarationsByAccountAndPeriod;
 using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EAS.Application.Queries.GetTeamMembers;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransferAllowance;
@@ -123,19 +121,6 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             return new OrchestratorResponse<AccountDetailViewModel> { Data = viewModel };
         }
 
-        public async Task<OrchestratorResponse<LegalEntityViewModel>> GetLegalEntity(string hashedAccountId, long legalEntityId)
-        {
-            _logger.Info($"Getting legal entity {legalEntityId} for account {hashedAccountId}");
-            var legalEntityResult = await _mediator.SendAsync(new GetLegalEntityByIdQuery { HashedAccountId = hashedAccountId, Id = legalEntityId });
-            if (legalEntityResult.LegalEntity == null)
-            {
-                return new OrchestratorResponse<LegalEntityViewModel> { Data = null };
-            }
-
-            var viewModel = ConvertLegalEntityToViewModel(hashedAccountId, legalEntityResult);
-            return new OrchestratorResponse<LegalEntityViewModel> { Data = viewModel };
-        }
-
         public async Task<OrchestratorResponse<PayeSchemeViewModel>> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
             _logger.Info($"Getting paye scheme {payeSchemeRef} for account {hashedAccountId}");
@@ -227,29 +212,6 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             };
 
             return payeSchemeViewModel;
-        }
-
-        private LegalEntityViewModel ConvertLegalEntityToViewModel(string hashedAccountId, GetLegalEntityByIdResponse legalEntityResult)
-        {
-            var legalEntityViewModel = new LegalEntityViewModel
-            {
-                DasAccountId = hashedAccountId,
-                DateOfInception = legalEntityResult.LegalEntity.DateOfInception,
-                LegalEntityId = legalEntityResult.LegalEntity.Id,
-                Name = legalEntityResult.LegalEntity.Name,
-                Source = legalEntityResult.LegalEntity.Source,
-                PublicSectorDataSource = legalEntityResult.LegalEntity.PublicSectorDataSource,
-                Address = legalEntityResult.LegalEntity.Address,
-                Code = legalEntityResult.LegalEntity.Code,
-                Status = legalEntityResult.LegalEntity.Status,
-                Sector = legalEntityResult.LegalEntity.Sector,
-                SourceNumeric = legalEntityResult.LegalEntity.SourceNumeric,
-                AgreementStatus = (EmployerAgreementStatus)((int)legalEntityResult.LegalEntity.AgreementStatus),
-                AgreementSignedByName = legalEntityResult.LegalEntity.AgreementSignedByName,
-                AgreementSignedDate = legalEntityResult.LegalEntity.AgreementSignedDate
-            };
-
-            return legalEntityViewModel;
         }
 
         private static AccountDetailViewModel ConvertAccountDetailToViewModel(GetEmployerAccountByHashedIdResponse accountResult)

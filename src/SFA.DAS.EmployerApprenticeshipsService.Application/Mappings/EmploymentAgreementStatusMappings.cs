@@ -1,10 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
-using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
-using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
 namespace SFA.DAS.EAS.Application.Mappings
@@ -14,18 +11,16 @@ namespace SFA.DAS.EAS.Application.Mappings
         public EmploymentAgreementStatusMappings()
         {
             CreateMap<EmployerAgreement, SignedEmployerAgreementDetailsDto>()
-                .ForMember(ead => ead.HashedAgreementId, o => o.Ignore())
-                .ForMember(ead => ead.PartialViewName, conf => conf.MapFrom(ol => ol.Template.PartialViewName))
-                .ForMember(ead => ead.TemplateId, conf => conf.MapFrom(ol => ol.Template.Id))
-                .ForMember(ead => ead.VersionNumber, conf => conf.MapFrom(ol => ol.Template.VersionNumber));
-
-            CreateMap<LegalEntity, LegalEntityDto>();
+                .ForMember(d => d.HashedAgreementId, o => o.Ignore())
+                .ForMember(d => d.PartialViewName, conf => conf.MapFrom(ol => ol.Template.PartialViewName))
+                .ForMember(d => d.TemplateId, conf => conf.MapFrom(ol => ol.Template.Id))
+                .ForMember(d => d.VersionNumber, conf => conf.MapFrom(ol => ol.Template.VersionNumber));
 
             CreateMap<EmployerAgreement, PendingEmployerAgreementDetailsDto>()
-                .ForMember(ead => ead.HashedAgreementId, o => o.Ignore())
-                .ForMember(ead => ead.PartialViewName, conf => conf.MapFrom(ol => ol.Template.PartialViewName))
-                .ForMember(ead => ead.TemplateId, conf => conf.MapFrom(ol => ol.Template.Id))
-                .ForMember(ead => ead.VersionNumber, conf => conf.MapFrom(ol => ol.Template.VersionNumber));
+                .ForMember(d => d.HashedAgreementId, o => o.Ignore())
+                .ForMember(d => d.PartialViewName, conf => conf.MapFrom(ol => ol.Template.PartialViewName))
+                .ForMember(d => d.TemplateId, conf => conf.MapFrom(ol => ol.Template.Id))
+                .ForMember(d => d.VersionNumber, conf => conf.MapFrom(ol => ol.Template.VersionNumber));
 
             CreateMap<IGrouping<LegalEntity, EmployerAgreement>, EmployerAgreementStatusDto>()
                 .ForMember(d => d.LegalEntity, o => o.MapFrom(g => g.Key))

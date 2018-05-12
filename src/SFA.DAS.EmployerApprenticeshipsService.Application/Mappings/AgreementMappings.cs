@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
+using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Application.Mappings
@@ -8,11 +9,14 @@ namespace SFA.DAS.EAS.Application.Mappings
     {
         public AgreementMappings()
         {
-            CreateMap<EmployerAgreement, EmployerAgreementDto>()
-                .ForMember(dest => dest.HashedAccountId, opt => opt.Ignore())
-                .ForMember(dest => dest.HashedAgreementId, opt => opt.Ignore());
-
             CreateMap<AgreementTemplate, AgreementTemplateDto>();
+
+            CreateMap<EmployerAgreement, AgreementDto>()
+                .ForMember(d => d.HashedAccountId, o => o.Ignore())
+                .ForMember(d => d.HashedAgreementId, o => o.Ignore());
+
+            CreateMap<EmployerAgreement, AgreementViewModel>()
+                .ForMember(v => v.Status, o => o.MapFrom(a => (EmployerAgreementStatus)(int)a.StatusId));
         }
     }
 }

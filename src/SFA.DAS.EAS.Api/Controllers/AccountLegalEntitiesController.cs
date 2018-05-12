@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Types;
+using MediatR;
 using SFA.DAS.EAS.Account.Api.Attributes;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
+using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
@@ -10,10 +11,12 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     public class AccountLegalEntitiesController : ApiController
     {
         private readonly AccountsOrchestrator _orchestrator;
+        private readonly IMediator _mediator;
 
-        public AccountLegalEntitiesController(AccountsOrchestrator orchestrator)
+        public AccountLegalEntitiesController(AccountsOrchestrator orchestrator, IMediator mediator)
         {
             _orchestrator = orchestrator;
+            _mediator = mediator;
         }
 
         [Route("", Name = "GetLegalEntities")]
@@ -27,29 +30,19 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             {
                 return NotFound();
             }
+            
+            result.Data.LegalEntities.ForEach(l => l.Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = l.Id }));
 
-            result.Data.LegalEntities.ForEach(x => CreateGetLegalEntityLink(hashedAccountId, x));
             return Ok(result.Data.LegalEntities);
         }
 
-        [Route("{legalentityid}", Name = "GetLegalEntity")]
+        [Route("{legalEntityId}", Name = "GetLegalEntity")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId)
+        [HttpNotFoundForNullModel]
+        public async Task<IHttpActionResult> GetLegalEntity([FromUri] GetLegalEntityQuery query)
         {
-            var result = await _orchestrator.GetLegalEntity(hashedAccountId, legalEntityId);
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(result.Data);
-        }
-
-        private void CreateGetLegalEntityLink(string hashedAccountId, ResourceViewModel legalEntity)
-        {
-            legalEntity.Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.Id });
+            var response = await _mediator.SendAsync(query);
+            return Ok(response.LegalEntity);
         }
     }
 }

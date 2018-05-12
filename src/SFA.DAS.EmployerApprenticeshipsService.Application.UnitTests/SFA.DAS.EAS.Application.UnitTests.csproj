@@ -250,6 +250,7 @@
     <Compile Include="Queries\GetAccountEmployerAgreementTests\GetAccountEmployerAgreementTests.cs" />
     <Compile Include="Queries\GetApprovedTransferConnectionInvitationTests\WhenIGetApprovedTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetEmployerAgreementQueryTests\GetEmployerAgreementTests.cs" />
+    <Compile Include="Queries\GetLegalEntityQueryTests\GetLegalEntityQueryTests.cs" />
     <Compile Include="Queries\GetReceivedTransferConnectionInvitationTests\WhenIGetReceivedTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetRejectedTransferConnectionInvitationTests\WhenIGetRejectedTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetSentTransferConnectionInvitationTests\WhenIGetSentTransferConnectionInvitation.cs" />
@@ -347,8 +348,6 @@
     <Compile Include="Queries\GetOrganisationTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetPayeSchemeByRefTests\WhenIGetAPayeScheme.cs" />
     <Compile Include="Queries\GetPayeSchemeByRefTests\WhenIValidateTheQuery.cs" />
-    <Compile Include="Queries\GetLegalEntityByIdTests\WhenIGetALegalEntity.cs" />
-    <Compile Include="Queries\GetLegalEntityByIdTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByAccountId.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByHashedKey.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByHashedIdRequest.cs" />

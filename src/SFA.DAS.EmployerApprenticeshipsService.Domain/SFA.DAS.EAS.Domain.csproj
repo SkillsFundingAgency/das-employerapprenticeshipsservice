@@ -290,7 +290,6 @@
     <Compile Include="Models\Transaction\TransactionEntity.cs" />
     <Compile Include="Data\Repositories\IPayeRepository.cs" />
     <Compile Include="Models\Account\AccountDetail.cs" />
-    <Compile Include="Models\Account\LegalEntityView.cs" />
     <Compile Include="Models\Account\PayeSchemeView.cs" />
     <Compile Include="Extensions\EmploymentStatusAgreementExtension.cs" />
     <Compile Include="Extensions\NullableDateTimeExtension.cs" />

@@ -299,8 +299,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             ConfigurationProvider = new MapperConfiguration(c =>
             {
                 c.AddProfile<AccountMappings>();
-                c.AddProfile<EmploymentAgreementStatusMappings>();
                 c.AddProfile<AgreementMappings>();
+                c.AddProfile<EmploymentAgreementStatusMappings>();
+                c.AddProfile<LegalEntityMappings>();
 
             });
 

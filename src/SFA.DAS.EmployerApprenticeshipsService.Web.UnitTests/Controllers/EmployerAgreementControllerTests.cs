@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EAS.Application.Dtos;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers
 {
@@ -302,7 +303,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
         {
             var response = new GetEmployerAgreementResponse
             {
-                EmployerAgreement = new EmployerAgreementDto()
+                EmployerAgreement = new AgreementDto()
             };
 
             Mediator.Setup(x => x.SendAsync(GetAgreementRequest))

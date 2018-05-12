@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Application.Dtos.EmployerAgreement
 {
-    public class SignedEmployerAgreementDetailsDto : EmployerAgreementDetails
+    public class SignedEmployerAgreementDetailsDto : EmployerAgreementDetailsDto
     {
         public string SignedByName { get; set; }
         public DateTime? SignedDate { get; set; }

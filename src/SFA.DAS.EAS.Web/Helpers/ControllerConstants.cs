@@ -5,6 +5,7 @@
         public const string AboutYourAgreement = "AboutYourAgreement";
         public const string AccessDeniedViewName = "AccessDenied";
         public const string AccessDeniedControllerName = "AccessDenied";
+        public const string AccountHashedIdRouteKeyName = "HashedAccountId";
         public const string ActionKeyName = "Action";
         public const string ActivitiesUnavailableMessage = "Activities are currently unavailable.";
         public const string AddOrganisationAddressViewName = "../OrganisationShared/AddOrganisationAddress";
@@ -36,7 +37,6 @@
         public const string GatewayViewName = "Gateway";
         public const string GateWayResponseActionName = "GateWayResponse";
         public const string GetGatewayActionName = "GetGateway";
-        public const string AccountHashedIdRouteKeyName = "HashedAccountId";
         public const string HomeControllerName = "Home";
         public const string IndexActionName = "Index";
         public const string InformActionName = "Inform";

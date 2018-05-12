@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLegalEntitiesCont
             Mapper = new Mock<IMapper>();
             HashingService = new Mock<IHashingService>();
             var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object);
-            Controller = new AccountLegalEntitiesController(orchestrator);
+            Controller = new AccountLegalEntitiesController(orchestrator, null);
 
             UrlHelper = new Mock<UrlHelper>();
             Controller.Url = UrlHelper.Object;
