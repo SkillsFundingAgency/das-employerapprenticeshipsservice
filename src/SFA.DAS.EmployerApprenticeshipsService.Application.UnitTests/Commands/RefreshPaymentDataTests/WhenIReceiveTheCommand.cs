@@ -135,7 +135,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             //Assert
             _dasLevyRepository.Verify(x => x.CreatePayments(_paymentDetails), Times.Once);
         }
-        
+
         [Test]
         public async Task ThenTheEventIsCalledToUpdateTheDeclarationDataWhenNewPaymentsHaveBeenCreated()
         {
@@ -215,7 +215,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.CreatePayments(It.Is<IEnumerable<PaymentDetails>>(s => 
+            _dasLevyRepository.Verify(x => x.CreatePayments(It.Is<IEnumerable<PaymentDetails>>(s =>
                 s.Any(p => p.Id.Equals(newPaymentGuid.ToString())) &&
                 s.Count() == 1)));
 
@@ -267,7 +267,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         public void ThenTheSystemShouldNotBeNotifiedIfAllPaymentsAreNotProcessed()
         {
             //Arrange
-            _dasLevyRepository.Setup(x => x.CreatePaymentData(It.IsAny<IEnumerable<PaymentDetails>>()))
+            _dasLevyRepository.Setup(x => x.CreatePayments(It.IsAny<IEnumerable<PaymentDetails>>()))
                 .Throws<Exception>();
 
             //Act + Assert

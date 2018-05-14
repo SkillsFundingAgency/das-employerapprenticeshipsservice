@@ -1,8 +1,8 @@
-﻿using System;
+﻿using SFA.DAS.EAS.Domain.Models.Payments;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Extensions
@@ -74,16 +74,16 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
             paymentsDataTable.Columns.Add("ApprenticeshipId", typeof(long));
             paymentsDataTable.Columns.Add("DeliveryPeriodMonth", typeof(int));
             paymentsDataTable.Columns.Add("DeliveryPeriodYear", typeof(int));
-            paymentsDataTable.Columns.Add("CollectionPeriodId", typeof(string));
+            paymentsDataTable.Columns.Add("CollectionPeriodId", typeof(string)).MaxLength = 20;
             paymentsDataTable.Columns.Add("CollectionPeriodMonth", typeof(int));
             paymentsDataTable.Columns.Add("CollectionPeriodYear", typeof(int));
             paymentsDataTable.Columns.Add("EvidenceSubmittedOn", typeof(DateTime));
-            paymentsDataTable.Columns.Add("EmployerAccountVersion", typeof(string));
-            paymentsDataTable.Columns.Add("ApprenticeshipVersion", typeof(string));
-            paymentsDataTable.Columns.Add("FundingSource", typeof(string));
-            paymentsDataTable.Columns.Add("TransactionType", typeof(string));
+            paymentsDataTable.Columns.Add("EmployerAccountVersion", typeof(string)).MaxLength = 50;
+            paymentsDataTable.Columns.Add("ApprenticeshipVersion", typeof(string)).MaxLength = 10;
+            paymentsDataTable.Columns.Add("FundingSource", typeof(string)).MaxLength = 25;
+            paymentsDataTable.Columns.Add("TransactionType", typeof(string)).MaxLength = 25;
             paymentsDataTable.Columns.Add("Amount", typeof(decimal));
-            paymentsDataTable.Columns.Add("PeriodEnd", typeof(string));
+            paymentsDataTable.Columns.Add("PeriodEnd", typeof(string)).MaxLength = 25;
             paymentsDataTable.Columns.Add("StandardCode", typeof(long));
             paymentsDataTable.Columns.Add("FrameworkCode", typeof(int));
             paymentsDataTable.Columns.Add("ProgrammeType", typeof(int));

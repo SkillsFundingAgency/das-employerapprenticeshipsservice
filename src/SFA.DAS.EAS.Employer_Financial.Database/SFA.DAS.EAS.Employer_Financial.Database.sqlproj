@@ -72,6 +72,7 @@
     <Folder Include="Scripts\PostDeployment" />
     <Folder Include="Scripts\PreDeployment" />
     <Folder Include="Scripts\Manual" />
+    <Folder Include="SeedData\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\EnglishFraction.sql" />
