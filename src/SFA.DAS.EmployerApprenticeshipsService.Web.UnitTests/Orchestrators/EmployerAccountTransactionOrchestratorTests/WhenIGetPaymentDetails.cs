@@ -86,18 +86,18 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         }
 
         [Test]
-        public async Task ThenIfNoTransactionsAreFoundANotFoundStatusIsReturned()
+        public async Task ThenIfNoTransactionsAreFoundANullIsReturned()
         {
             //Arrange
             _mediator.Setup(x => x.SendAsync(It.IsAny<FindAccountProviderPaymentsQuery>()))
-                     .ThrowsAsync(new NotFoundException(string.Empty));
+                .ReturnsAsync(null);
 
             //Act
             var result = await _orchestrator.FindAccountPaymentTransactions(HashedAccountId, 10, _fromDate, _toDate,
                 ExternalUser);
 
             //Assert
-            Assert.AreEqual(HttpStatusCode.NotFound, result.Status);
+            Assert.IsNull(result);
         }
 
         [Test]

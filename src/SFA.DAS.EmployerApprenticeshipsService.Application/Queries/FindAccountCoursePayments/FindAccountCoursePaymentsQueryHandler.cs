@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments
 
             if (!transactions.Any())
             {
-                throw new NotFoundException("No transactions found.");
+                return null;
             }
 
             var firstTransaction = transactions.First();
