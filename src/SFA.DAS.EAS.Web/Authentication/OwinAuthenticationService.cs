@@ -71,6 +71,18 @@ namespace SFA.DAS.EAS.Web.Authentication
                     identity.AddClaim(new Claim("email", claim.Item2));
                     identity.AddClaim(new Claim(DasClaimTypes.Email, claim.Item2));   
                 }
+
+                if (claim.Item1.Equals(DasClaimTypes.RequiresVerification))
+                {
+                    var requiresValidationClaim =
+                        identity.Claims.FirstOrDefault(c => c.Type == DasClaimTypes.RequiresVerification);
+
+                    if (requiresValidationClaim != null)
+                    {
+                        identity.RemoveClaim(requiresValidationClaim);
+                    }
+                    identity.AddClaim(new Claim(DasClaimTypes.RequiresVerification, claim.Item2));
+                }
             }
         }
     }
