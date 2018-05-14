@@ -82,28 +82,5 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AgreementSteps
             Assert.IsFalse(agreement.HasPendingAgreement);
 
         }
-
-        //[Then(@"Agreement has been signed ""(.*)""")]
-        //public void ThenAgreementStatusIs(string status)
-        //{
-        //    var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
-        //    var userId = ScenarioContext.Current["ExternalUserId"].ToString();
-
-        //    var employerAgreementOrchestrator = _container.GetInstance<EmployerAgreementOrchestrator>();
-        //    var agreement = employerAgreementOrchestrator.Get(hashedId, userId).Result.Data.EmployerAgreementsData.EmployerAgreements.FirstOrDefault();
-
-        //    Assert.IsNotNull(agreement);
-
-        //    if (status.Equals("Signed", StringComparison.CurrentCultureIgnoreCase))
-        //    {
-        //        Assert.IsTrue(agreement.HasSignedAgreement);
-        //        Assert.IsFalse(agreement.HasPendingAgreement);
-        //    }
-        //    else
-        //    {
-        //        Assert.IsFalse(agreement.HasSignedAgreement);
-        //        Assert.IsTrue(agreement.HasPendingAgreement);
-        //    }
-        //}
     }
 }

@@ -17,4 +17,3 @@ Scenario Outline: Non Owner Signs Agreement
 	| accountRole | status  |
 	| Transactor  | Pending |
 	| Viewer      | Pending |
-

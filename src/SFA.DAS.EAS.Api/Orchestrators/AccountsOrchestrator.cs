@@ -10,7 +10,7 @@ using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EAS.Application.Queries.GetTeamMembers;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System;
@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {

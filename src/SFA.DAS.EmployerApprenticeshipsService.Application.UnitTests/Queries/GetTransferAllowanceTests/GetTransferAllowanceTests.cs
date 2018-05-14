@@ -79,7 +79,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
         }
     }
 
-    public class GetTransferAllowanceTestFixtures
+    public class GetTransferAllowanceTestFixtures : FluentTestFixture
     {
         public long SenderAccountId => 111111;
         public long ReceiverAccountId => 222222;
