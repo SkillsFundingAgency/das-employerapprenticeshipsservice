@@ -21,6 +21,9 @@ namespace SFA.DAS.EAS.Application.Mappings
                     a.Account.Id == accountId && (
                     a.StatusId == EmployerAgreementStatus.Pending ||
                     a.StatusId == EmployerAgreementStatus.Signed))))
+                .ForMember(d => d.AgreementSignedByName, o => o.Ignore())
+                .ForMember(d => d.AgreementSignedDate, o => o.Ignore())
+                .ForMember(d => d.AgreementStatus, o => o.Ignore())
                 .ForMember(d => d.Address, o => o.MapFrom(l => l.RegisteredAddress))
                 .ForMember(d => d.DasAccountId, o => o.MapFrom(l => accountHashedId))
                 .ForMember(d => d.DateOfInception, o => o.MapFrom(l => l.DateOfIncorporation))

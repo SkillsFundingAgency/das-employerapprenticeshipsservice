@@ -25,7 +25,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
                     r2.LegalEntity.LegalEntityId == f.LegalEntity.Id &&
                     r2.LegalEntity.Agreements.Count == 2 &&
                     r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 1 && a.Status == Account.Api.Types.EmployerAgreementStatus.Signed) &&
-                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 2 && a.Status == Account.Api.Types.EmployerAgreementStatus.Pending)));
+                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 2 && a.Status == Account.Api.Types.EmployerAgreementStatus.Pending) &&
+                    r2.LegalEntity.AgreementStatus == Account.Api.Types.EmployerAgreementStatus.Pending));
         }
     }
 
@@ -46,13 +47,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
             LegalEntitiesDbSet = new DbSetStub<LegalEntity>(LegalEntities);
             Db = new Mock<EmployerAccountDbContext>();
 
-            Db.Setup(d => d.LegalEntities).Returns(LegalEntitiesDbSet);
-
             ConfigurationProvider = new MapperConfiguration(c =>
             {
                 c.AddProfile<AgreementMappings>();
                 c.AddProfile<LegalEntityMappings>();
             });
+
+            Db.Setup(d => d.LegalEntities).Returns(LegalEntitiesDbSet);
 
             Handler = new GetLegalEntityQueryHandler(Db.Object, ConfigurationProvider);
 

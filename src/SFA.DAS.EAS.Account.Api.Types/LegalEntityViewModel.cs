@@ -17,5 +17,14 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public string Source { get; set; }
         public byte SourceNumeric { get; set; }
         public string Status { get; set; }
+
+        [Obsolete]
+        public string AgreementSignedByName { get; set; }
+
+        [Obsolete]
+        public DateTime? AgreementSignedDate { get; set; }
+
+        [Obsolete]
+        public EmployerAgreementStatus AgreementStatus { get; set; }
     }
 }

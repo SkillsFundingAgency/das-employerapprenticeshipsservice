@@ -37,6 +37,17 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntity
                 })
                 .SingleOrDefaultAsync();
 
+            var latestAgreement = legalEntity?.Agreements
+                .OrderByDescending(a => a.TemplateVersionNumber)
+                .FirstOrDefault();
+
+            if (legalEntity != null && latestAgreement != null)
+            {
+                legalEntity.AgreementSignedByName = latestAgreement.SignedByName;
+                legalEntity.AgreementSignedDate = latestAgreement.SignedDate;
+                legalEntity.AgreementStatus = latestAgreement.Status;
+            }
+
             return new GetLegalEntityResponse
             {
                 LegalEntity = legalEntity
