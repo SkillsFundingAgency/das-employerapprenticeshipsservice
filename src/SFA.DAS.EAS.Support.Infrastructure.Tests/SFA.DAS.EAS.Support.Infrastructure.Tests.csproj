@@ -99,7 +99,6 @@
     <Compile Include="AccountRepository\WhenCallingGetWithAccountFieldsSelectionFinance.cs" />
     <Compile Include="AccountRepository\WhenCallingGetWithAccountFieldsSelectionOrganisations.cs" />
     <Compile Include="AccountRepository\WhenCallingGetWithAccountFieldsSelectionTeamMembers.cs" />
-    <Compile Include="Extensions\ExceptionExtensionTests.cs" />
     <Compile Include="LevySubmissionsRepository\WhenTestingLevySubmissionsRepository.cs" />
     <Compile Include="AccountRepository\WhenTestingAccountRepository.cs" />
     <Compile Include="ChallengeRepository\WhenTestingChallengeRepository.cs" />

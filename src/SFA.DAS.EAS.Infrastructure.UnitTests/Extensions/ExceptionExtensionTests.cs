@@ -1,11 +1,11 @@
-﻿using NUnit.Framework;
-using SFA.DAS.EAS.Infrastructure.Extensions;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Net;
 using System.Web;
+using NUnit.Framework;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 
-namespace SFA.DAS.EAS.Support.Infrastructure.Tests.Extensions
+namespace SFA.DAS.EAS.Infrastructure.UnitTests.Extensions
 {
     [TestFixture]
     public class ExceptionExtensionTests
