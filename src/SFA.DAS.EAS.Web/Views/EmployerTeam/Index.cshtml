@@ -32,19 +32,11 @@ else
         <span class="heading-secondary">Account ID: @Model.Data.Account.PublicHashedId</span>
     </h1>
     <div class="grid-row page-dashboard">
-        <div class="column-two-thirds">
-            <div id="Welcome" class="info-summary">
-                <h1 class="heading-medium">Information regarding ESFA agreements</h1>
-                <p>We are aware of an issue where all users when adding apprentice details are being
-                    asked to sign the updated ESFA agreement. </p>
-                <p>Only users taking part in transfers need to sign their updated ESFA agreement.
-                    We will update this page when the issue is fixed. If you need any assistance in the meantime, 
-                    contact the <a href="@Url.Action("Help", "Home")">help desk</a>.</p>
-            </div>
-        @*</div>
         
-        <div class="column-two-thirds">*@
-            @*<div class="grid-row">*@
+       
+        
+        <div class="column-two-thirds">
+            <div class="grid-row">
                 <div class="column-half">
                     <h2 class="heading-medium">
                         <a href="@Url.Action("ViewTeam")">Your team</a>
@@ -80,7 +72,7 @@ else
                         <p>Recruit an apprentice by creating a vacancy. This vacancy will be advertised on Find an apprentice.</p>
                     }
                 </div>
-            @*</div>*@
+            </div>
             <div class="grid-row">
                 <div class="column-full">
                     <div class="panel panel-filled">
