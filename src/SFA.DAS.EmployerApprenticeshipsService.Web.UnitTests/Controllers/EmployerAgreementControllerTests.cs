@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EAS.Application.Dtos;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers
 {
@@ -30,7 +31,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
         {
             return RunAsync(
                 act: fixtures => fixtures.GetOrganisationsToRemove(),
-                assert: fixtures => fixtures.Orchestrator.Verify(x => x.GetLegalAgreementsToRemove(fixtures.HashedAccountId, fixtures.UserId), Times.Once));
+                assert: (fixtures, result) => fixtures.Orchestrator.Verify(x => x.GetLegalAgreementsToRemove(fixtures.HashedAccountId, fixtures.UserId), Times.Once));
         }
 
         [Test]
@@ -38,7 +39,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
         {
             return RunAsync(
                 act: fixtures => fixtures.ConfirmRemoveOrganisation(),
-                assert: fixtures => fixtures.Orchestrator.Verify(
+                assert: (fixtures, result) => fixtures.Orchestrator.Verify(
                     x => x.GetConfirmRemoveOrganisationViewModel(fixtures.HashedAgreementId, fixtures.HashedAccountId, fixtures.UserId), Times.Once));
         }
 
@@ -79,7 +80,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
                                         .Setup(x => x.RemoveLegalAgreement(It.IsAny<ConfirmLegalAgreementToRemoveViewModel>(), fixtures.UserId))
                                         .ReturnsAsync(new OrchestratorResponse<bool> { Status = HttpStatusCode.OK, FlashMessage = new FlashMessageViewModel() }),
                 act: fixtures => fixtures.RemoveOrganisation(),
-                assert: fixtures => fixtures.Orchestrator
+                assert: (fixtures, result) => fixtures.Orchestrator
                         .Verify(x => x.RemoveLegalAgreement(It.IsAny<ConfirmLegalAgreementToRemoveViewModel>(), fixtures.UserId), Times.Once)
                 );
         }
@@ -241,7 +242,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
         {
             return RunAsync(arrange: fixtures => fixtures.WithUnsignedEmployerAgreement(),
                 act: fixtures => fixtures.SignedAgreement(),
-                assert: fixtures =>
+                assert: (fixtures, result) =>
                     Assert.AreEqual(fixtures.GetAgreementToSignViewModel, fixtures.ViewResult.Model));
         }
     }
@@ -302,7 +303,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
         {
             var response = new GetEmployerAgreementResponse
             {
-                EmployerAgreement = new EmployerAgreementDto()
+                EmployerAgreement = new AgreementDto()
             };
 
             Mediator.Setup(x => x.SendAsync(GetAgreementRequest))

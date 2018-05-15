@@ -1,10 +1,10 @@
-﻿using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
+﻿using SFA.DAS.EAS.Application.Dtos;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
 {
     public class GetEmployerAgreementResponse
     {
-        public EmployerAgreementDto EmployerAgreement { get; set; }
-        public EmployerAgreementDto LastSignedAgreement { get; set; }
+        public AgreementDto EmployerAgreement { get; set; }
+        public AgreementDto LastSignedAgreement { get; set; }
     }
 }

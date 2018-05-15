@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Application.Dtos.EmployerAgreement
 {
-    public class EmployerAgreementDetails
+    public class EmployerAgreementDetailsDto
     {
         public long Id { get; set; }
         public int TemplateId { get; set; }

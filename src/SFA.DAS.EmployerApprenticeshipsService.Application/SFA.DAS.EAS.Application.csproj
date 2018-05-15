@@ -282,9 +282,9 @@
     <Compile Include="DependencyResolution\ServicesRegistry.cs" />
     <Compile Include="DependencyResolution\TasksRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
-    <Compile Include="Dtos\EmployerAgreement\AgreementTemplateDto.cs" />
-    <Compile Include="Dtos\EmployerAgreement\EmployerAgreementDetails.cs" />
-    <Compile Include="Dtos\EmployerAgreement\EmployerAgreementDto.cs" />
+    <Compile Include="Dtos\AgreementTemplateDto.cs" />
+    <Compile Include="Dtos\EmployerAgreement\EmployerAgreementDetailsDto.cs" />
+    <Compile Include="Dtos\AgreementDto.cs" />
     <Compile Include="Dtos\EmployerAgreement\EmployerAgreementStatusDto.cs" />
     <Compile Include="Dtos\EmployerAgreement\PendingEmployerAgreementDetailsDto.cs" />
     <Compile Include="Dtos\EmployerAgreement\SignedEmployerAgreementDetailsDto.cs" />
@@ -293,8 +293,12 @@
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />
     <Compile Include="Mappings\EmploymentAgreementStatusMappings.cs" />
+    <Compile Include="Mappings\LegalEntityMappings.cs" />
     <Compile Include="Queries\Extensions\EmployerAgreementsStatusDtoExtensions.cs" />
     <Compile Include="Queries\Extensions\QueryExtensions.cs" />
+    <Compile Include="Queries\GetLegalEntity\GetLegalEntityQuery.cs" />
+    <Compile Include="Queries\GetLegalEntity\GetLegalEntityQueryHandler.cs" />
+    <Compile Include="Queries\GetLegalEntity\GetLegalEntityResponse.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQuery.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceResponse.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQueryHandler.cs" />
@@ -587,10 +591,6 @@
     <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefQuery.cs" />
     <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefResponse.cs" />
     <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefValidator.cs" />
-    <Compile Include="Queries\GetLegalEntityById\GetLegalEntityByIdHandler.cs" />
-    <Compile Include="Queries\GetLegalEntityById\GetLegalEntityByIdQuery.cs" />
-    <Compile Include="Queries\GetLegalEntityById\GetLegalEntityByIdResponse.cs" />
-    <Compile Include="Queries\GetLegalEntityById\GetLegalEntityByIdValidator.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdResponse.cs" />

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Account.Worker.IdProcessor;
 using SFA.DAS.EAS.Application.Commands.CreateEmployerAgreement;
-using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Account.Worker.Jobs.GenerateAgreements

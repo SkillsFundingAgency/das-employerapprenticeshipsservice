@@ -2,6 +2,6 @@
 {
     public class ControllerConstants
     {
-        public const string AccountHashedIdRouteKeyName = "accountHashedId";
+        public const string AccountHashedIdRouteKeyName = "hashedAccountId";
     }
 }

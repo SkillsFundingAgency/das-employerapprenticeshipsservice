@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Application.Dtos;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -134,7 +135,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 });
 
                 var employerAgreementView =
-                    _mapper.Map<EmployerAgreementDto, EmployerAgreementView>(response.EmployerAgreement);
+                    _mapper.Map<AgreementDto, EmployerAgreementView>(response.EmployerAgreement);
 
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {

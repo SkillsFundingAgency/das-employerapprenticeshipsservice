@@ -11,6 +11,7 @@ using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Application.Dtos;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
 {
@@ -50,19 +51,19 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             var agreementId = _hashingService.DecodeValue(message.AgreementId);
 
-            var employerAgreement = await _database.Agreements.ProjectTo<EmployerAgreementDto>(_configurationProvider)
+            var employerAgreement = await _database.Agreements.ProjectTo<AgreementDto>(_configurationProvider)
                                                               .SingleOrDefaultAsync(x => x.Id.Equals(agreementId));
 
             if (employerAgreement == null)
                 return new GetEmployerAgreementResponse();
 
-            EmployerAgreementDto lastSignedAgreement = null;
+            AgreementDto lastSignedAgreement = null;
 
             if (employerAgreement.StatusId == EmployerAgreementStatus.Pending)
             {
                 lastSignedAgreement = _database.Agreements
                                                .OrderByDescending(x => x.Template.VersionNumber)
-                                               .ProjectTo<EmployerAgreementDto>(_configurationProvider)
+                                               .ProjectTo<AgreementDto>(_configurationProvider)
                                                .FirstOrDefault(x => x.AccountId.Equals(accountId) &&
                                                                     x.LegalEntityId.Equals(employerAgreement.LegalEntityId) &&
                                                                     x.StatusId == EmployerAgreementStatus.Signed);
