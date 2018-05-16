@@ -1,18 +1,17 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Attributes;
-using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Transactions;
 using SFA.DAS.HashingService;
+using System;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -103,15 +102,15 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("finance/course/standard/summary")]
         [Route("balance/course/standard/summary")]
         public async Task<ActionResult> CourseStandardPaymentSummary(string hashedAccountId, long ukprn, string courseName,
-            int courseLevel, DateTime fromDate, DateTime toDate)
+            int? courseLevel, DateTime fromDate, DateTime toDate)
         {
             return await CourseFrameworkPaymentSummary(hashedAccountId, ukprn, courseName, courseLevel, null, fromDate, toDate);
         }
 
         [Route("finance/course/framework/summary")]
         [Route("balance/course/framework/summary")]
-        public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName, 
-            int courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
+        public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName,
+            int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
             var viewModel = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(
                                                                         hashedAccountId, ukprn, courseName, courseLevel, pathwayCode,

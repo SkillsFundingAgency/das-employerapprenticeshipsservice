@@ -10,9 +10,9 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%')
-BEGIN
-	:r .\SeedDevData.sql
-END
+:r .\CreateAgreementTemplates.sql
 
-:r .\TransferConnectionInvitationDataMigration.sql
+IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%' AND @@servername NOT LIKE '%mo%')
+BEGIN
+    :r .\SeedDevData.sql
+END

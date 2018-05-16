@@ -92,8 +92,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
             var hashedLegalEntityId = _hashingService.HashValue(agreement.LegalEntityId);
 
-            var agreementEvent = _agreementEventFactory.CreateSignedEvent(message.HashedAccountId, hashedLegalEntityId,
-                message.HashedAgreementId);
+            var agreementEvent = _agreementEventFactory.CreateSignedEvent(message.HashedAccountId, hashedLegalEntityId, message.HashedAgreementId);
 
             var genericEvent = _genericEventFactory.Create(agreementEvent);
 

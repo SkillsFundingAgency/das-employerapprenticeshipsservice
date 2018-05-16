@@ -7,7 +7,7 @@ using SFA.DAS.EAS.Application.Queries.GetTransferConnections;
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     [ApiAuthorize(Roles = "ReadUserAccounts")]
-    [RoutePrefix("api/accounts/{accountHashedId}/transfers/connections")]
+    [RoutePrefix("api/accounts/{hashedAccountId}/transfers/connections")]
     public class TransferConnectionsController : ApiController
     {
         private readonly IMediator _mediator;

@@ -32,6 +32,9 @@ else
         <span class="heading-secondary">Account ID: @Model.Data.Account.PublicHashedId</span>
     </h1>
     <div class="grid-row page-dashboard">
+        
+       
+        
         <div class="column-two-thirds">
             <div class="grid-row">
                 <div class="column-half">
@@ -52,14 +55,7 @@ else
                     <h2 class="heading-medium">
                         <a href="@Url.Action("Index", "EmployerAccountTransactions")">Finance</a>
                     </h2>
-                    @if (Html.IsAuthorized(FeatureType.Transfers))
-                    {
-                        <p>View your financial transactions, connect with other employers and send or receive transfer funds.</p>
-                    }
-                    else
-                    {
-                        <p>View your financial transactions.</p>
-                    }
+                    <p>View your financial transactions, connect with other employers and send or receive transfer funds.</p>
                     <h2 class="heading-medium">
                         <a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a>
                     </h2>
@@ -71,9 +67,9 @@ else
                     @if (Html.IsAuthorized(FeatureType.Recruitments))
                     {
                         <h2 class="heading-medium">
-                            <a href="@Url.RecruitmentsAction()">Apprenticeship recruitment</a>
+                            <a href="@Url.RecruitmentsAction()">Recruitment</a>
                         </h2>
-                        <p>Create vacancies to appear on Find an apprenticeship to attract candidates.</p>
+                        <p>Recruit an apprentice by creating a vacancy. This vacancy will be advertised on Find an apprentice.</p>
                     }
                 </div>
             </div>
@@ -117,7 +113,7 @@ else
                                                     Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
                                                 </p>
                                                 <form action="@Url.Action("DismissTask", "Task")" method="POST">
-                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
+                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)"/>
                                                     <button class="button-link" type="submit">Dismiss this message</button>
                                                 </form>
                                                 break;
@@ -146,7 +142,7 @@ else
                                                     @task.ItemsDueCount connection request@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.Action("Index", "Transfers")">View details</a>
                                                 </p>
                                                 break;
-                                       }
+                                        }
                                     </li>
                                 }
                             </ul>

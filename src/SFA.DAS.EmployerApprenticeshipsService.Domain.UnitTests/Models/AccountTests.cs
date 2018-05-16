@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
         [Test]
         public void SendTransferConnectionInvitation_WhenISendATransferConnectionInvitation_ThenShouldReturnTransferConnectionInvitation()
         {
-            Run(f => f.SendTransferConnectionInvitation(), f => f.TransferConnectionInvitation.Should().NotBeNull());
+            Run(f => f.SendTransferConnectionInvitation(), (f, i) => i.Should().NotBeNull());
         }
 
         [Test]
@@ -56,7 +56,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
 
     public class AccountTestsFixture : FluentTestFixture
     {
-        public TransferConnectionInvitation TransferConnectionInvitation { get; set; }
         public Account SenderAccount { get; set; }
         public Account ReceiverAccount { get; set; }
         public User SenderUser { get; set; }
@@ -70,9 +69,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
                 .SetSenderAccountTransferAllowance(1);
         }
 
-        public void SendTransferConnectionInvitation()
+        public TransferConnectionInvitation SendTransferConnectionInvitation()
         {
-            TransferConnectionInvitation = SenderAccount.SendTransferConnectionInvitation(ReceiverAccount, SenderUser, SenderAccountTransferAllowance);
+            return SenderAccount.SendTransferConnectionInvitation(ReceiverAccount, SenderUser, SenderAccountTransferAllowance);
         }
 
         public AccountTestsFixture SetReceiverAccount(Account account)

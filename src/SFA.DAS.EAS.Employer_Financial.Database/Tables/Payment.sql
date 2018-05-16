@@ -12,7 +12,7 @@
     [CollectionPeriodYear] int NOT NULL,
 	[EvidenceSubmittedOn] DATETIME NOT NULL,
     [EmployerAccountVersion] VARCHAR(50) NOT NULL,
-    [ApprenticeshipVersion] VARCHAR(10) NOT NULL,
+    [ApprenticeshipVersion] VARCHAR(25) NOT NULL,
     [FundingSource] VARCHAR(25) NOT NULL,
     [TransactionType] VARCHAR(25) NOT NULL,
     [Amount] decimal(18,5) not null default 0,

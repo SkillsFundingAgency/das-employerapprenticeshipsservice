@@ -22,7 +22,33 @@ namespace SFA.DAS.EAS.TestCommon
             
             arrange?.Invoke(testFixture);
             act?.Invoke(testFixture);
-            assert?.Invoke(testFixture);
+            assert(testFixture);
+        }
+
+        public void Run(Action<T, object> assert)
+        {
+            Run(null, null, assert);
+        }
+
+        public void Run<TResult>(Func<T, TResult> act, Action<T, TResult> assert)
+        {
+            Run(null, act, assert);
+        }
+
+        public void Run<TResult>(Action<T> arrange, Func<T, TResult> act, Action<T, TResult> assert)
+        {
+            var testFixture = new T();
+
+            arrange?.Invoke(testFixture);
+
+            var actionResult = default(TResult);
+
+            if (act != null)
+            {
+                actionResult = act(testFixture);
+            }
+            
+            assert(testFixture, actionResult);
         }
 
         public void Run<TException>(Func<T, Action, ExceptionAssertions<TException>> assert) where TException : Exception
@@ -64,7 +90,33 @@ namespace SFA.DAS.EAS.TestCommon
                 await act(testFixture);
             }
 
-            assert?.Invoke(testFixture);
+            assert(testFixture);
+        }
+
+        public Task RunAsync(Action<T, object> assert)
+        {
+            return RunAsync(null, null, assert);
+        }
+
+        public Task RunAsync<TResult>(Func<T, Task<TResult>> act, Action<T, TResult> assert)
+        {
+            return RunAsync(null, act, assert);
+        }
+
+        public async Task RunAsync<TResult>(Action<T> arrange, Func<T, Task<TResult>> act, Action<T, TResult> assert)
+        {
+            var testFixture = new T();
+
+            arrange?.Invoke(testFixture);
+
+            var actionResult = default(TResult);
+
+            if (act != null)
+            {
+                actionResult = await act(testFixture);
+            }
+
+            assert(testFixture, actionResult);
         }
 
         public Task RunAsync<TException>(Func<T, Func<Task>, ExceptionAssertions<TException>> assert) where TException : Exception

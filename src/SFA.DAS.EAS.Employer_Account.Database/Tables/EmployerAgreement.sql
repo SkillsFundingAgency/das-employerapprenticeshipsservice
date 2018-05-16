@@ -14,4 +14,7 @@
     CONSTRAINT [FK_EmployerAgreement_SignedBy] FOREIGN KEY ([SignedById]) REFERENCES [employer_account].[User]([Id]),
 )
 GO
-CREATE INDEX [IX_EmployerAgreement_AccountId_StatusId] ON [employer_account].[EmployerAgreement] ([AccountId], [StatusId])
+
+CREATE INDEX [IX_EmployerAgreement_AccountId_StatusId]
+ON [employer_account].[EmployerAgreement] ([AccountId], [StatusId])
+GO

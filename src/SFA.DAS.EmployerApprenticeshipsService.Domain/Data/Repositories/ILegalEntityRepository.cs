@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Models.Account;
 
-namespace SFA.DAS.EAS.Domain.Data
+namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
     public interface ILegalEntityRepository
     {
-        Task<LegalEntityView> GetLegalEntityById(long accountId, long id);
+        Task<long[]> GetAccountsLinkedToLegalEntity(long legalEntityId);
+        Task<long[]> GetAccountsLinkedToLegalEntityWithoutSpecificAgreement(long legalEntityId, int templateId);
+        Task<long[]> GetLegalEntitiesWithoutSpecificAgreement(long firstId, int count, int agreementId);
     }
 }

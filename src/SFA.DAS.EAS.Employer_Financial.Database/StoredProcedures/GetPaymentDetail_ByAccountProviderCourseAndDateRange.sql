@@ -35,8 +35,8 @@ SELECT
   where 
   p.AccountId = @AccountId AND
   p.Ukprn = @Ukprn AND
-  meta.ApprenticeshipCourseName = @courseName AND
-  meta.ApprenticeshipCourseLevel = @courseLevel AND
+  ((@courseName IS NULL AND meta.ApprenticeshipCourseName IS NULL) OR (meta.ApprenticeshipCourseName = @courseName)) AND
+  ((@courseLevel IS NULL AND meta.ApprenticeshipCourseLevel IS NULL) OR (meta.ApprenticeshipCourseLevel = @courseLevel)) AND
   ISNULL(meta.PathwayCode, -1) = ISNULL(@pathwayCode, -1) AND
   p.FundingSource IN (1,2,3)  
   group by p.AccountId, p.Ukprn, meta.ApprenticeshipCourseName, meta.ApprenticeshipCourseLevel, meta.PathwayName, meta.ApprenticeName

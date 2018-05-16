@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -12,6 +8,11 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
@@ -42,7 +43,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, _configuration);
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, Mock.Of<IMapper>(), _configuration);
         }
 
         [Test]
@@ -53,9 +54,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             await _orchestrator.GetLegalAgreementsToRemove(ExpectedHahsedAccountId, ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetAccountEmployerAgreementsRemoveRequest>(
-                                c=>c.HashedAccountId.Equals(ExpectedHahsedAccountId) 
-                                && c.UserId.Equals(ExpectedUserId))),Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.Is<GetAccountEmployerAgreementsRemoveRequest>(
+                                c => c.HashedAccountId.Equals(ExpectedHahsedAccountId)
+                                && c.UserId.Equals(ExpectedUserId))), Times.Once);
         }
 
 
@@ -94,6 +95,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             //Assert
             Assert.IsTrue(actual.Data.Agreements.Any());
         }
-        
+
     }
 }

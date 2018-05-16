@@ -182,7 +182,7 @@
                         <li><a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
                         @if (Html.IsAuthorized(FeatureType.Recruitments))
                         {
-                            <li><a href="@Url.RecruitmentsAction()" role="menuitem">Recruit</a></li>
+                            <li><a href="@Url.RecruitmentsAction()" role="menuitem">Recruitment</a></li>
                         }
                         <li><a href="@Url.CommitmentsAction("apprentices/home")" class="@(controllerString == "EmployerCommitments" ? "selected" : "")" role="menuitem">Apprentices</a></li>
                         <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Your team</a></li>

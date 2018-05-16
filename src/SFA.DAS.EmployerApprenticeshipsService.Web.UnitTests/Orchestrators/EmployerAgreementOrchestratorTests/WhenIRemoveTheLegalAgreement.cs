@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -11,6 +8,10 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
@@ -35,14 +36,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, _configuration);
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, Mock.Of<IMapper>(), _configuration);
         }
 
         [Test]
         public async Task ThenIfTheRemoveOrganisationConfirmCheckHasNotBeenSelectedTheFlashMessageIsPopulatedAndReturned()
         {
             //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel {}, ExpectedUserId);
+            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { }, ExpectedUserId);
 
             //Assert
             Assert.IsNotNull(actual);
@@ -55,7 +56,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
         public async Task ThenIfTheRemoveOrganisationCheckHasBeenSelectedAsNoThenNoChangesAreMade()
         {
             //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 1}, ExpectedUserId);
+            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 1 }, ExpectedUserId);
 
             //Assert
             Assert.IsNotNull(actual);
@@ -83,7 +84,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveLegalEntityCommand>())).ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 2, Name = "TestName"}, ExpectedUserId);
+            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 2, Name = "TestName" }, ExpectedUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
@@ -93,13 +94,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
         public async Task ThenIfTheCommandIsValidTheFlashMessageIsPopulated()
         {
             //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 2, Name = "TestName",HashedAccountId = ExpectedHahsedAccountId, HashedAgreementId = ExpectedHashedAgreementId}, ExpectedUserId);
+            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 2, Name = "TestName", HashedAccountId = ExpectedHahsedAccountId, HashedAgreementId = ExpectedHashedAgreementId }, ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<RemoveLegalEntityCommand>(
-                c=>c.HashedAccountId.Equals(ExpectedHahsedAccountId) 
-                && c.HashedLegalAgreementId.Equals(ExpectedHashedAgreementId) 
-                && c.UserId.Equals(ExpectedUserId))),Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.Is<RemoveLegalEntityCommand>(
+                c => c.HashedAccountId.Equals(ExpectedHahsedAccountId)
+                && c.HashedLegalAgreementId.Equals(ExpectedHashedAgreementId)
+                && c.UserId.Equals(ExpectedUserId))), Times.Once);
             Assert.IsNotNull(actual);
             Assert.IsNotNull(actual.FlashMessage);
             Assert.AreEqual("You have removed TestName.", actual.FlashMessage.Headline);

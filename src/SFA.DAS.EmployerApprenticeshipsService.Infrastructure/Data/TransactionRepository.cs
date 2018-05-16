@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         }
         
         public async Task<List<TransactionLine>> GetAccountCoursePaymentsByDateRange(
-            long accountId, long ukprn, string courseName, int courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
+            long accountId, long ukprn, string courseName, int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
             var result = await WithConnection(async c =>
             {

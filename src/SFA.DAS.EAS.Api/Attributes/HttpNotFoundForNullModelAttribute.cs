@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Account.Api.Attributes
     {
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
-            if (!actionExecutedContext.Response.TryGetContentValue(out object result) || result == null)
+            if (actionExecutedContext.Response != null && !actionExecutedContext.Response.TryGetContentValue(out object _))
             {
                 actionExecutedContext.Response = actionExecutedContext.Request.CreateResponse(HttpStatusCode.NotFound);
             }

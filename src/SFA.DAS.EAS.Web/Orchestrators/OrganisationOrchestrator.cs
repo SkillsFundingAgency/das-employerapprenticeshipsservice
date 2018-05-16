@@ -304,7 +304,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Code = request.Code,
                     RegisteredAddress = request.Address,
                     DateOfIncorporation = request.IncorporatedDate,
-                    CompanyStatus = request.LegalEntityStatus,
+                    Status = request.LegalEntityStatus,
                     Source = request.Source,
                     PublicSectorDataSource = request.PublicSectorDataSource,
                     Sector = request.Sector

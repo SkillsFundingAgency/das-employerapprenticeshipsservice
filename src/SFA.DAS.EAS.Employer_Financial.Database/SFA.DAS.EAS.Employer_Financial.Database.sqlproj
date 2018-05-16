@@ -65,9 +65,13 @@
     <Folder Include="Views" />
     <Folder Include="StoredProcedures" />
     <Folder Include="Schemas" />
-    <Folder Include="SeedData" />
     <Folder Include="Types" />
     <Folder Include="Functions" />
+    <Folder Include="UserDefinedTypes" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\PostDeployment" />
+    <Folder Include="Scripts\PreDeployment" />
+    <Folder Include="Scripts\Manual" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\EnglishFraction.sql" />
@@ -89,7 +93,6 @@
     <Build Include="StoredProcedures\GetLatestPeriodEnd.sql" />
     <Build Include="StoredProcedures\GetLevyDetail_ByAccountIdAndDateRange.sql" />
     <Build Include="Tables\Payment.sql" />
-    <Build Include="StoredProcedures\CreatePayment.sql" />
     <Build Include="StoredProcedures\GetPaymentData_ById.sql" />
     <Build Include="StoredProcedures\ProcessPaymentDataTransactions.sql" />
     <Build Include="Tables\LevyDeclarationTopup.sql" />
@@ -117,19 +120,19 @@
     <Build Include="StoredProcedures\GetAccountPaymentsByPeriodEnd.sql" />
     <Build Include="Functions\GetPreviousFinancialYearDates.sql" />
     <Build Include="StoredProcedures\GetAllPeriodEnds.sql" />
+    <Build Include="UserDefinedTypes\PaymentsTable.sql" />
+    <Build Include="StoredProcedures\CreatePayments.sql" />
+    <None Include="Scripts\PostDeployment\SeedDevData.sql" />
+    <PostDeploy Include="Scripts\PostDeployment\PostDeployment.sql" />
+    <PreDeploy Include="Scripts\PreDeployment\PreDeployment.sql" />
+    <None Include="Scripts\PostDeployment\CreateTransactionLineTypes.sql" />
+    <None Include="Scripts\PostDeployment\CreatePaymentTransactionTypes.sql" />
+    <None Include="Scripts\PostDeployment\CreateTopUpPercentages.sql" />
+    <None Include="Scripts\Manual\DropPayments1718-R09.sql" />
     <Build Include="StoredProcedures\GetStatistics.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SeedData\SeedData.sql" />
-    <None Include="SeedData\SeedProdData.sql" />
     <None Include="Database.publish.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <PostDeploy Include="SeedData\PostDeploymentRules.sql" />
-    <None Include="SeedData\EnglishFraction.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <PreDeploy Include="Script.PreDeployment1.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />

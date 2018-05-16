@@ -1,7 +1,7 @@
-using System;
-using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using System;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments
 {
@@ -33,10 +33,11 @@ namespace SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments
                 validationResult.AddError(nameof(item.UkPrn), "UkPrn has not been supplied");
             }
 
-            if (string.IsNullOrEmpty(item.CourseName))
-            {
-                validationResult.AddError(nameof(item.CourseName), "Course name has not been supplied");
-            }
+            //TODO: When we sort out how to handle null course names add this back
+            //if (string.IsNullOrEmpty(item.CourseName))
+            //{
+            //    validationResult.AddError(nameof(item.CourseName), "Course name has not been supplied");
+            //}
 
             if (string.IsNullOrEmpty(item.ExternalUserId))
             {
