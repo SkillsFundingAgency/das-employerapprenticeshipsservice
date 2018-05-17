@@ -9,7 +9,7 @@
     [SubmissionId] BIGINT NOT NULL DEFAULT 0,
 	[PayrollYear] NVARCHAR(10) NULL,
 	[PayrollMonth] TINYINT NULL,
-	[CreatedDate] DATETIME NOT NULL,
+	[CreatedDate] DATETIME NOT NULL DEFAULT GetDate(),
 	[EndOfYearAdjustment] BIT NOT NULL DEFAULT 0,
 	[EndOfYearAdjustmentAmount] DECIMAL(18,4) NULL,
 	[DateCeased] DATETIME NULL,
@@ -28,4 +28,7 @@ CREATE INDEX [IX_LevyDeclaration_EmpRef] ON [employer_financial].[LevyDeclaratio
 GO
 
 CREATE INDEX [IX_LevyDeclaration_Account_Payroll] ON [employer_financial].[LevyDeclaration] (AccountId,PayrollMonth,PayrollYear)
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [IDX_UNIQUE_LevyDeclaration_PayeSchemeRef_SubmissionId] ON [employer_financial].[LevyDeclaration] (empref, submissionId)
 GO
