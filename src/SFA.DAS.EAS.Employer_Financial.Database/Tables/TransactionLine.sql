@@ -29,3 +29,6 @@ GO
 
 CREATE NONCLUSTERED INDEX [IX_TransactionLine_AccountId_DateCreated] ON employer_financial.TransactionLine (AccountId, DateCreated) WITH (ONLINE = ON)
 GO
+
+CREATE NONCLUSTERED INDEX [IX_TransactionLine_Account_TransactionType] ON employer_financial.TransactionLine (AccountId, TransactionType) INCLUDE (DateCreated) WITH (ONLINE = ON)
+GO
