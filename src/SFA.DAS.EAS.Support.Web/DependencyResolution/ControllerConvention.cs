@@ -15,26 +15,27 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace SFA.DAS.EAS.Support.Web.DependencyResolution {
-    using System;
-    using System.Web.Mvc;
+using System.Linq;
+using WebGrease.Css.Extensions;
 
-    using StructureMap.Configuration.DSL;
+namespace SFA.DAS.EAS.Support.Web.DependencyResolution
+{
+    using StructureMap;
     using StructureMap.Graph;
+    using StructureMap.Graph.Scanning;
     using StructureMap.Pipeline;
     using StructureMap.TypeRules;
     using System.Diagnostics.CodeAnalysis;
+    using System.Web.Mvc;
 
     [ExcludeFromCodeCoverage]
-    public class ControllerConvention : IRegistrationConvention {
-        #region Public Methods and Operators
-
-        public void Process(Type type, Registry registry) {
-            if (type.CanBeCastTo<Controller>() && !type.IsAbstract) {
-                registry.For(type).LifecycleIs(new UniquePerRequestLifecycle());
-            }
+    public class ControllerConvention : IRegistrationConvention
+    {
+        public void ScanTypes(TypeSet types, Registry registry)
+        {
+            types.FindTypes(TypeClassification.Concretes | TypeClassification.Closed)
+                 .Where(t => t.CanBeCastTo<Controller>())
+                 .ForEach(t => registry.For(t).LifecycleIs(new UniquePerRequestLifecycle()));
         }
-
-        #endregion
     }
 }

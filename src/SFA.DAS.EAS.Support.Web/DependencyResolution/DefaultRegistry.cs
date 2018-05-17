@@ -15,7 +15,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Newtonsoft.Json;
 
 namespace SFA.DAS.EAS.Support.Web.DependencyResolution
 {
@@ -25,25 +24,23 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
     using SFA.DAS.EAS.Account.Api.Client;
     using SFA.DAS.EAS.Support.Web.Configuration;
     using SFA.DAS.Support.Shared.SiteConnection;
-    using SFA.DAS.TokenService.Api.Client;
-    using StructureMap.Configuration.DSL;
-    using StructureMap.Graph;
+    using StructureMap;
     using System.Diagnostics.CodeAnalysis;
 
     [ExcludeFromCodeCoverage]
-    public class DefaultRegistry : Registry {
-
+    public class DefaultRegistry : Registry
+    {
         private const string ServiceName = "SFA.DAS.Support.EAS";
         private const string Version = "1.0";
-      
-        #region Constructors and Destructors
 
-        public DefaultRegistry() {
+        public DefaultRegistry()
+        {
             Scan(
-                scan => {
+                scan =>
+                {
                     scan.TheCallingAssembly();
                     scan.WithDefaultConventions();
-					scan.With(new ControllerConvention());
+                    scan.With(new ControllerConvention());
                 });
 
             WebConfiguration configuration = GetConfiguration();
@@ -51,13 +48,11 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
             For<IWebConfiguration>().Use(configuration);
             For<IAccountApiConfiguration>().Use(configuration.AccountApi);
             For<ISiteValidatorSettings>().Use(configuration.SiteValidator);
-        
-
         }
 
         private WebConfiguration GetConfiguration()
         {
-            var environment = CloudConfigurationManager.GetSetting("EnvironmentName") ?? 
+            var environment = CloudConfigurationManager.GetSetting("EnvironmentName") ??
                               "local";
             var storageConnectionString = CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString") ??
                                           "UseDevelopmentStorage=true";
@@ -72,7 +67,5 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
 
             return webConfiguration;
         }
-
-        #endregion
     }
 }

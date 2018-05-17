@@ -1,9 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web;
-using HMRC.ESFA.Levy.Api.Client;
-using SFA.DAS.EAS.Account.Api.Client;
+﻿using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Support.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Support.Infrastructure.Services;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
@@ -11,7 +6,9 @@ using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.TokenService.Api.Client;
-using StructureMap.Configuration.DSL;
+using StructureMap;
+using System.Diagnostics.CodeAnalysis;
+using System.Web;
 
 namespace SFA.DAS.EAS.Support.Web.DependencyResolution
 {
@@ -59,10 +56,10 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
                 var hashServiceconfig = ctx.GetInstance<IWebConfiguration>().HashingService;
                 return new HashingService.HashingService(hashServiceconfig.AllowedCharacters, hashServiceconfig.Hashstring);
             });
-            
+
         }
 
-       
+
 
     }
 }

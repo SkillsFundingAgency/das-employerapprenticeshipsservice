@@ -4,6 +4,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 using System;
@@ -12,7 +13,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Infrastructure.Extensions;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -305,18 +305,29 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<ISet<Guid>> GetAccountPaymentIds(long accountId)
         {
-            var result = await WithConnection(async c =>
+            try
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int64);
 
-                return await c.QueryAsync<Guid>(
-                    sql: "[employer_financial].[GetAccountPaymentIds]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
 
-            return new HashSet<Guid>(result);
+
+                var result = await WithConnection(async c =>
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@accountId", accountId, DbType.Int64);
+
+                    return await c.QueryAsync<Guid>(
+                        sql: "[employer_financial].[GetAccountPaymentIds]",
+                        param: parameters,
+                        commandType: CommandType.StoredProcedure);
+                });
+
+                return new HashSet<Guid>(result);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public async Task ProcessPaymentData(long accountId)
