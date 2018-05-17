@@ -18,7 +18,8 @@
     [Amount] decimal(18,5) not null default 0,
 	[PeriodEnd] VARCHAR(25) not null, 
     [PaymentMetaDataId] BIGINT NOT NULL,     
-)
+    [DateImported] DATETIME NULL
+	)
 
 GO
 
