@@ -1,17 +1,20 @@
-using System.Diagnostics;
-using System.Net;
-using System.Threading;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution;
-using SFA.DAS.EAS.PaymentProvider.Worker.Providers;
 using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker
 {
@@ -19,18 +22,29 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
     {
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent _runCompleteEvent = new ManualResetEvent(false);
-        private IContainer _container;
+        protected IContainer Container;
 
         public override void Run()
         {
             LoggingConfig.ConfigureLogging();
             Trace.TraceInformation("SFA.DAS.EAS.PaymentProvider.Worker is running");
 
-            
             try
             {
-                var paymentDataProcessor = _container.GetInstance<IPaymentDataProcessor>();
-                paymentDataProcessor.RunAsync(_cancellationTokenSource.Token).Wait();
+                var processors = Container.GetAllInstances<IMessageProcessor>().ToArray();
+
+                var processorTasks = new Task[processors.Length];
+
+                for (var index = 0; index < processors.Length; index++)
+                {
+                    processorTasks[index] = processors[index].RunAsync(_cancellationTokenSource);
+                }
+
+                Task.WaitAll(processorTasks, _cancellationTokenSource.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                Trace.TraceInformation("SFA.DAS.EAS.PaymentProvider.Worker has been cancelled");
             }
             finally
             {
@@ -49,13 +63,14 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
             var result = base.OnStart();
 
             Trace.TraceInformation("SFA.DAS.EAS.PaymentProvider.Worker has been started");
-           
-            _container = new Container(c =>
+
+            Container = new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
                 c.Policies.Add(new ConfigurationPolicy<PaymentProviderConfiguration>("SFA.DAS.PaymentProvider"));
                 c.Policies.Add(new ConfigurationPolicy<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI"));
                 c.Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
+                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService", "1.0", new NLogLogger(typeof(TopicMessagePublisher))));
                 c.Policies.Add(new MessageSubscriberPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add(new ExecutionPolicyPolicy());

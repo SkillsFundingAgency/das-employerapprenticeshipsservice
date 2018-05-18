@@ -1,29 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Infrastructure.Services;
-using SFA.DAS.Sql.Client;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Sql.Client;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using SFA.DAS.EAS.Domain.Data.Entities.Transaction;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class TransactionRepository : BaseRepository, ITransactionRepository
     {
         private readonly IMapper _mapper;
+        private readonly ILog _logger;
 
         public TransactionRepository(LevyDeclarationProviderConfiguration configuration, IMapper mapper, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<List<TransactionLine>> GetAccountTransactionsByDateRange(
@@ -83,7 +87,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return MapTransactions(result);
         }
-        
+
         public async Task<List<TransactionLine>> GetAccountCoursePaymentsByDateRange(
             long accountId, long ukprn, string courseName, int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
@@ -130,7 +134,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@AccountId", accountId, DbType.Int64);
-                
+
                 return await c.QueryAsync<TransactionSummary>(
                     sql: "[employer_financial].[GetTransactionSummary_ByAccountId]",
                     param: parameters,
@@ -160,11 +164,41 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 if (!string.IsNullOrEmpty(res.PayrollYear) && res.PayrollMonth != 0)
                 {
-                    res.PeriodEnd = hmrcDateService.GetDateFromPayrollYearMonth(res.PayrollYear, res.PayrollMonth).ToString("MMM yyyy"); 
+                    res.PeriodEnd = hmrcDateService.GetDateFromPayrollYearMonth(res.PayrollYear, res.PayrollMonth).ToString("MMM yyyy");
                 }
             }
 
             return transactionDownloadLines.OrderByDescending(txn => txn.DateCreated).ToList();
+        }
+
+        public async Task CreateTransferTransactions(IEnumerable<TransferTransactionLine> transactions)
+        {
+            await WithTransaction(async (connection, dbTransaction) =>
+            {
+                try
+                {
+                    var transactionTable = CreateTransferTransactionDataTable(transactions);
+                    var parameters = new DynamicParameters();
+
+                    parameters.Add("@transferTransactions",
+                        transactionTable.AsTableValuedParameter("[employer_financial].[TransferTransactionsTable]"));
+
+                    var result = await connection.ExecuteAsync(
+                        sql: "[employer_financial].[CreateAccountTransferTransactions]",
+                        param: parameters,
+                        transaction: dbTransaction,
+                        commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex)
+                {
+                    dbTransaction.Rollback();
+
+                    _logger.Error(ex, "Failed to save transfer transactions to database");
+                    throw;
+                }
+
+                return true;
+            });
         }
 
         private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)
@@ -184,6 +218,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                         transactions.Add(_mapper.Map<PaymentTransactionLine>(entity));
                         break;
 
+                    case TransactionItemType.Transfer:
+                        transactions.Add(_mapper.Map<TransferTransactionLine>(entity));
+                        break;
+
                     case TransactionItemType.Unknown:
                         transactions.Add(_mapper.Map<TransactionLine>(entity));
                         break;
@@ -193,6 +231,42 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 }
             }
             return transactions;
+        }
+
+        private static DataTable CreateTransferTransactionDataTable(IEnumerable<TransferTransactionLine> transactions)
+        {
+            var table = new DataTable();
+
+            table.Columns.AddRange(new[]
+            {
+                new DataColumn("AccountId", typeof(long)),
+                new DataColumn("SenderAccountId", typeof(long)),
+                new DataColumn("SenderAccountName", typeof(string)),
+                new DataColumn("ReceiverAccountId", typeof(long)),
+                new DataColumn("ReceiverAccountName", typeof(string)),
+                new DataColumn("PeriodEnd", typeof(string)),
+                new DataColumn("Amount", typeof(decimal)),
+                new DataColumn("TransactionType", typeof(short)),
+                new DataColumn("TransactionDate", typeof(DateTime)),
+            });
+
+            foreach (var transaction in transactions)
+            {
+                table.Rows.Add(
+                    transaction.AccountId,
+                    transaction.SenderAccountId,
+                    transaction.SenderAccountName,
+                    transaction.ReceiverAccountId,
+                    transaction.ReceiverAccountName,
+                    transaction.PeriodEnd,
+                    transaction.Amount,
+                    (short)TransactionItemType.Transfer,
+                    transaction.TransactionDate);
+            }
+
+            table.AcceptChanges();
+
+            return table;
         }
     }
 }

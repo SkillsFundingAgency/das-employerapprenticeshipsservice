@@ -1,10 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
@@ -20,11 +16,13 @@ using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.TestCommon.Extensions;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.Events.Api.Client;
-using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
 using StructureMap;
+using System;
+using System.Linq;
+using System.Reflection;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
@@ -79,7 +77,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         {
             _container.Dispose();
         }
-        
+
         [Given(@"I have an apprenticeship")]
         public void GivenIHaveAnApprenticeship()
         {
@@ -111,27 +109,30 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         [When(@"I make a payment for the apprenticeship standard")]
         public void WhenIMakeAPaymentForTheApprenticeshipStandard()
         {
-            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1))
+            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1, null))
                 .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment> { Items = new[] { _testData.StandardPayment } });
         }
 
         [When(@"I make a payment for the apprenticeship framework")]
         public void WhenIMakeAPaymentForTheApprenticeshipFramework()
         {
-            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1))
+            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1, null))
                 .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment> { Items = new[] { _testData.FrameworkPayment } });
         }
-        
+
         [When(@"I make a co-investment payment for the apprenticeship")]
         public void WhenIMakeACo_InvestmentPaymentForTheApprenticeship()
         {
-            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1))
-                .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment> { Items = new[]
+            _paymentEventsApi.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 1, null))
+                .ReturnsAsync(new PageOfResults<Provider.Events.Api.Types.Payment>
+                {
+                    Items = new[]
                 {
                     _testData.StandardPayment,
                     _testData.StandardSFACoInvestmentPayment,
                     _testData.StandardEmployerCoInvestmentPayment
-                } });
+                }
+                });
         }
 
         [When(@"payment details are updated")]
@@ -195,7 +196,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
             var repository = _container.GetInstance<ITransactionRepository>();
             var transactions = repository.GetAccountTransactionByProviderAndDateRange(_testData.AccountId, _testData.StandardPayment.Ukprn, transactionMonthStart, transactionMonthEnd).Result;
-           
+
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
             var expectedStartDate = _testData.Apprenticeship.StartDate?.ToShortDateString() ?? "expectedDateNotFound";

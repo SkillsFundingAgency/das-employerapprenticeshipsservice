@@ -3,13 +3,18 @@
 	I want to be able to sign an ESFA agreement against a legal entity connected to my account
 
 @mytag
-Scenario Outline: Sign Agreements
+Scenario: Owner Signs Agreement
+	Given I am an account "Owner"
+	When  I sign Agreement
+	Then Agreement status is signed
+
+
+Scenario Outline: Non Owner Signs Agreement
 	Given I am an account "<accountRole>"
 	When  I sign Agreement
-	Then Agreement Status is "<status>"
-Examples: 
-| accountRole | status     |
-| Owner       | Signed     |
-| Transactor  | Pending	   |
-| Viewer      | Pending	   |
+	Then Agreement status is pending
+	Examples: 
+	| accountRole | status  |
+	| Transactor  | Pending |
+	| Viewer      | Pending |
 

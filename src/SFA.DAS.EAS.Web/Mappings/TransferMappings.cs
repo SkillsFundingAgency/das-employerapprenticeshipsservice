@@ -12,7 +12,9 @@ using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthorization;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
 using SFA.DAS.EAS.Application.Queries.GetTransferRequests;
+using SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails;
 using SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation;
+using SFA.DAS.EAS.Web.ViewModels.Transactions;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 using SFA.DAS.EAS.Web.ViewModels.Transfers;
 
@@ -47,7 +49,7 @@ namespace SFA.DAS.EAS.Web.Mappings
             CreateMap<GetTransferConnectionInvitationResponse, TransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore())
                 .ForMember(m => m.DeleteTransferConnectionInvitationCommand, o => o.MapFrom(r => r));
-            
+
             CreateMap<GetTransferConnectionInvitationsResponse, TransferConnectionInvitationsViewModel>();
             CreateMap<GetTransferRequestsResponse, TransferRequestsViewModel>();
             CreateMap<SendTransferConnectionInvitationResponse, SendTransferConnectionInvitationCommand>();
@@ -55,6 +57,8 @@ namespace SFA.DAS.EAS.Web.Mappings
             CreateMap<SendTransferConnectionInvitationResponse, SendTransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore())
                 .ForMember(m => m.SendTransferConnectionInvitationCommand, o => o.MapFrom(r => r));
+            CreateMap<GetTransferTransactionDetailsResponse, TransferTransactionDetailsViewModel>();
+
         }
     }
 }

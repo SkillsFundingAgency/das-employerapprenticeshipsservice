@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Web;
-using MediatR;
+﻿using MediatR;
 using Moq;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
@@ -13,13 +10,14 @@ using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.TestCommon.ScenarioCommonSteps;
-using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
-using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.Interfaces;
 using StructureMap;
+using System;
+using System.Linq;
+using System.Web;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
@@ -138,6 +136,8 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
             var user = userCreationSteps.GetExistingUserAccount();
 
             CreateDasAccount(user, _container.GetInstance<EmployerAccountOrchestrator>());
+
+            SetAccountIdForUser();
 
             ScenarioContext.Current["AccountOwnerUserId"] = user.Id;
         }
