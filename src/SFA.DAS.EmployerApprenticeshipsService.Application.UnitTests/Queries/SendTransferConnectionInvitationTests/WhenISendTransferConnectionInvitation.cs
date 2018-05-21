@@ -78,6 +78,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvita
         }
 
         [Test]
+        public async Task ThenSenderAccountShouldBePopulatedOnSendTransferConnectionInvitationResponse()
+        {
+            _response = await _handler.Handle(_query);
+
+            Assert.That(_response, Is.Not.Null);
+            Assert.That(_response.SenderAccount, Is.Not.Null);
+            Assert.That(_response.SenderAccount.Id, Is.EqualTo(_senderAccount.Id));
+        }
+        [Test]
         public void ThenShouldThrowValidationExceptionIfReceiverAccountIsNull()
         {
             _accounts.Remove(_receiverAccount);

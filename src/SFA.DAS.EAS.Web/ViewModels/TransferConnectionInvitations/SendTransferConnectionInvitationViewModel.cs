@@ -12,6 +12,8 @@ namespace SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations
         
         public AccountDto ReceiverAccount { get; set; }
 
+        public AccountDto SenderAccount { get; set; }
+
         [Required]
         public SendTransferConnectionInvitationCommand SendTransferConnectionInvitationCommand { get; set; }
     }
