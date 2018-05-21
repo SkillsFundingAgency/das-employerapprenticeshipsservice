@@ -4,7 +4,6 @@ using SFA.DAS.EAS.Domain.Extensions;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,10 +47,12 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
             {
                 CourseName = ct.First().CourseName,
                 PaymentTotal = ct.Sum(t => t.Amount),
-                ApprenticeCount = (uint)ct.DistinctBy(t => t.ApprenticeshipId).Count()
+                ApprenticeCount = (uint)ct.DistinctBy(t => t.CommitmentId).Count()
             }).ToArray();
 
-            var transferDate = transfers.FirstOrDefault()?.TransferDate ?? default(DateTime);
+            var periodEnd = _dbContext.PeriodEnds.Single(p => p.PeriodEndId.Equals(firstTransfer.PeriodEnd));
+
+            var transferDate = periodEnd.CompletionDateTime;
             var transfersPaymentTotal = transferDetails.Sum(t => t.PaymentTotal);
 
             var isCurrentAccountSender = query.AccountId.GetValueOrDefault() == firstTransfer.SenderAccountId;

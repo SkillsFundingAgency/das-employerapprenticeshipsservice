@@ -256,7 +256,6 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
             Assert.AreEqual(receiverAccountId, transfer.ReceiverAccountId);
             Assert.AreEqual(senderAccount.Name, transfer.SenderAccountName);
             Assert.AreEqual(_periodEnd.Id, transfer.PeriodEnd);
-            Assert.AreEqual(DateTime.Now.ToShortDateString(), transfer.TransferDate.ToShortDateString());
             Assert.AreEqual(TransferPaymentAmount, transfer.Amount);
             Assert.AreEqual(CourseName, transfer.CourseName);
         }

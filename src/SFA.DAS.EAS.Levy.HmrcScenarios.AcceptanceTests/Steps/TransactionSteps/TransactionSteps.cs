@@ -172,7 +172,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.TransactionSteps
                 CalendarPeriodMonth = 1,
                 CalendarPeriodYear = 2016,
                 CompletionDateTime = DateTime.Now,
-                Id = "1617-R12",
+                PeriodEndId = "1617-R12",
                 AccountDataValidAt = DateTime.Now,
                 CommitmentDataValidAt = DateTime.Now,
                 PaymentsForPeriod = string.Empty

@@ -59,9 +59,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
                 SenderAccountName = SenderAccountName,
                 ReceiverAccountId = ReceiverAccountId,
                 ReceiverAccountName = ReceiverAccountName,
-                ApprenticeshipId = 1245,
-                Amount = 1200,
-                TransferDate = DateTime.Now
+                CommitmentId = 1245,
+                Amount = 1200
             };
 
             _transfers = new List<AccountTransfer>

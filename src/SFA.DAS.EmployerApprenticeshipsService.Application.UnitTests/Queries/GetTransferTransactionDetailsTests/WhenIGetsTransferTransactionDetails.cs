@@ -2,8 +2,10 @@
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails;
+using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.TestCommon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,11 +35,24 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
         private Mock<EmployerFinancialDbContext> _db;
         private List<AccountTransfer> _transfers;
         private Mock<IPublicHashingService> _publicHashingService;
+        private PeriodEnd _periodEnd;
 
         [SetUp]
         public void Assign()
         {
             _db = new Mock<EmployerFinancialDbContext>();
+
+            _periodEnd = new PeriodEnd
+            {
+                Id = 1,
+                PeriodEndId = PeriodEnd,
+                AccountDataValidAt = DateTime.Now.AddDays(-2),
+                CalendarPeriodMonth = 2,
+                CalendarPeriodYear = 2018,
+                CommitmentDataValidAt = DateTime.Now.AddDays(-1),
+                CompletionDateTime = DateTime.Now,
+                PaymentsForPeriod = "Test"
+            };
 
             _publicHashingService = new Mock<IPublicHashingService>();
 
@@ -61,10 +76,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
                         SenderAccountName = SenderAccountName,
                         ReceiverAccountId = ReceiverAccountId,
                         ReceiverAccountName = ReceiverAccountName,
-                        ApprenticeshipId = 1,
+                        CommitmentId = 1,
                         CourseName = FirstCourseName,
                         Amount = 123.4567M,
-                        TransferDate = DateTime.Now
+                        PeriodEnd = PeriodEnd
+
                     },
                     new AccountTransfer
                     {
@@ -72,10 +88,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
                         SenderAccountName = SenderAccountName,
                         ReceiverAccountId = ReceiverAccountId,
                         ReceiverAccountName = ReceiverAccountName,
-                        ApprenticeshipId = 2,
+                        CommitmentId = 2,
                         CourseName = SecondCourseName,
                         Amount = 346.789M,
-                        TransferDate = DateTime.Now
+                        PeriodEnd = PeriodEnd
                     },
                     new AccountTransfer
                     {
@@ -83,10 +99,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
                         SenderAccountName = SenderAccountName,
                         ReceiverAccountId = ReceiverAccountId,
                         ReceiverAccountName = ReceiverAccountName,
-                        ApprenticeshipId = 3,
+                        CommitmentId = 3,
                         CourseName = SecondCourseName,
                         Amount = 234.56M,
-                        TransferDate = DateTime.Now
+                        PeriodEnd = PeriodEnd
                     }
                 };
 
@@ -97,6 +113,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             _db.Setup(d => d.SqlQueryAsync<AccountTransfer>(
                     It.IsAny<string>(), ReceiverAccountId, SenderAccountId, PeriodEnd))
                 .ReturnsAsync(_transfers);
+
+            _db.Setup(x => x.PeriodEnds).Returns(() => new DbSetStub<PeriodEnd>(_periodEnd));
 
             _publicHashingService.Setup(x => x.DecodeValue(SenderPublicHashedId))
                 .Returns(SenderAccountId);
@@ -210,9 +228,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             var result = await _handler.Handle(_query);
 
             //Assert
-            var expectedTransferDate = _transfers.First().TransferDate;
-
-            Assert.AreEqual(expectedTransferDate, result.DateCreated);
+            Assert.AreEqual(_periodEnd.CompletionDateTime, result.DateCreated);
         }
 
         [Test]

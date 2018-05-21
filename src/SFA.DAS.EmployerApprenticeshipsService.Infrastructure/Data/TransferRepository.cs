@@ -74,24 +74,24 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result ?? 0;
         }
 
-        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfersByPeriodEnd(long receiverAccountId, string periodEnd)
-        {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@receiverAccountId", receiverAccountId, DbType.Int64);
-                parameters.Add("@periodEnd", periodEnd, DbType.String);
+        //public async Task<IEnumerable<AccountTransfer>> GetAccountTransfersByPeriodEnd(long receiverAccountId, string periodEnd)
+        //{
+        //    var result = await WithConnection(async c =>
+        //    {
+        //        var parameters = new DynamicParameters();
+        //        parameters.Add("@receiverAccountId", receiverAccountId, DbType.Int64);
+        //        parameters.Add("@periodEnd", periodEnd, DbType.String);
 
-                return await c.QueryAsync<AccountTransfer>(
-                    sql: "[employer_financial].[GetAccountTransfersByPeriodEnd]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
+        //        return await c.QueryAsync<AccountTransfer>(
+        //            sql: "[employer_financial].[GetAccountTransfersByPeriodEnd]",
+        //            param: parameters,
+        //            commandType: CommandType.StoredProcedure);
+        //    });
 
-            return result;
+        //    return result;
 
 
-        }
+        //}
 
         public async Task<AccountTransferDetails> GetTransferPaymentDetails(AccountTransfer transfer)
         {
@@ -100,7 +100,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@receiverAccountId", transfer.ReceiverAccountId, DbType.Int64);
                 parameters.Add("@periodEnd", transfer.PeriodEnd, DbType.String);
-                parameters.Add("@apprenticeshipId", transfer.ApprenticeshipId, DbType.Int64);
+                parameters.Add("@apprenticeshipId", transfer.CommitmentId, DbType.Int64);
 
                 return await c.QuerySingleOrDefaultAsync<AccountTransferDetails>(
                     sql: "[employer_financial].[GetTransferPaymentDetails]",
@@ -142,7 +142,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 new DataColumn("CourseName", typeof(string)),
                 new DataColumn("Amount", typeof(decimal)),
                 new DataColumn("PeriodEnd", typeof(string)),
-                new DataColumn("Type", typeof(short)),
+                new DataColumn("Type", typeof(string)),
                 new DataColumn("TransferDateDate", typeof(DateTime)),
             });
 
@@ -153,12 +153,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     transfer.SenderAccountName,
                     transfer.ReceiverAccountId,
                     transfer.ReceiverAccountName,
-                    transfer.ApprenticeshipId,
+                    transfer.CommitmentId,
                     transfer.CourseName,
                     transfer.Amount,
                     transfer.PeriodEnd,
-                    transfer.Type,
-                    transfer.TransferDate);
+                    transfer.Type);
             }
 
             table.AcceptChanges();

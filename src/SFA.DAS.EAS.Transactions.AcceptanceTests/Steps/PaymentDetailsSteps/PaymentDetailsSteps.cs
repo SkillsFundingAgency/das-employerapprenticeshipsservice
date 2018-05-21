@@ -143,7 +143,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             mediator.SendAsync(new RefreshPaymentDataCommand
             {
                 AccountId = _testData.AccountId,
-                PeriodEnd = _testData.PeriodEnd.Id,
+                PeriodEnd = _testData.PeriodEnd.PeriodEndId,
                 PaymentUrl = "test"
             }).Wait();
         }

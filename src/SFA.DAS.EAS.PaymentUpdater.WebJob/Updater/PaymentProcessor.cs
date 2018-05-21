@@ -49,11 +49,11 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
             var periodEnds = await _paymentsEventsApiClient.GetPeriodEnds();
 
             var result = await _mediator.SendAsync(new GetCurrentPeriodEndRequest());//order by completion date
-            var periodFound = result.CurrentPeriodEnd?.Id == null;
+            var periodFound = result.CurrentPeriodEnd?.PeriodEndId == null;
             var periodsToProcess = new List<PeriodEnd>();
             if (!periodFound)
             {
-                var lastPeriodId = result.CurrentPeriodEnd.Id;
+                var lastPeriodId = result.CurrentPeriodEnd.PeriodEndId;
                 
                 foreach (var periodEnd in periodEnds)
                 {
@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
             {
                 var periodEnd = new Domain.Models.Payments.PeriodEnd
                 {
-                    Id = paymentsPeriodEnd.Id,
+                    PeriodEndId = paymentsPeriodEnd.Id,
                     CalendarPeriodMonth = paymentsPeriodEnd.CalendarPeriod?.Month ?? 0,
                     CalendarPeriodYear = paymentsPeriodEnd.CalendarPeriod?.Year ?? 0,
                     CompletionDateTime = paymentsPeriodEnd.CompletionDateTime,
@@ -93,7 +93,7 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
                     PaymentsForPeriod = paymentsPeriodEnd.Links?.PaymentsForPeriod ?? string.Empty
                 };
 
-                _logger.Info($"Creating period end {periodEnd.Id}");
+                _logger.Info($"Creating period end {periodEnd.PeriodEndId}");
                 await _mediator.SendAsync(new CreateNewPeriodEndCommand {NewPeriodEnd = periodEnd});
 
                 if (!periodEnd.AccountDataValidAt.HasValue || !periodEnd.CommitmentDataValidAt.HasValue)
@@ -103,13 +103,13 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
 
                 foreach (var account in response.Accounts)
                 {
-                    _logger.Info($"Createing payment queue message for accountId:{account.Id} periodEndId:{periodEnd.Id}");
+                    _logger.Info($"Createing payment queue message for accountId:{account.Id} periodEndId:{periodEnd.PeriodEndId}");
 
                     await _publisher.PublishAsync(new PaymentProcessorQueueMessage
                     {
                         AccountPaymentUrl = $"{periodEnd.PaymentsForPeriod}&employeraccountid={account.Id}",
                         AccountId = account.Id,
-                        PeriodEndId = periodEnd.Id
+                        PeriodEndId = periodEnd.PeriodEndId
                     });
                 }
 
