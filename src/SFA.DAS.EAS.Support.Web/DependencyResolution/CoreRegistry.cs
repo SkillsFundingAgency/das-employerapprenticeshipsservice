@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using SFA.DAS.EAS.Support.Core.Services;
+using StructureMap;
 using StructureMap.Configuration.DSL;
 
 namespace SFA.DAS.EAS.Support.Web.DependencyResolution

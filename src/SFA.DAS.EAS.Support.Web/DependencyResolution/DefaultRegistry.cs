@@ -26,6 +26,7 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
     using SFA.DAS.EAS.Support.Web.Configuration;
     using SFA.DAS.Support.Shared.SiteConnection;
     using SFA.DAS.TokenService.Api.Client;
+    using StructureMap;
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
     using System.Diagnostics.CodeAnalysis;

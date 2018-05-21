@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.TokenService.Api.Client;
+using StructureMap;
 using StructureMap.Configuration.DSL;
 
 namespace SFA.DAS.EAS.Support.Web.DependencyResolution
