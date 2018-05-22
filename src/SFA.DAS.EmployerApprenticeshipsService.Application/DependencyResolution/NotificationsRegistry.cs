@@ -13,14 +13,20 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public NotificationsRegistry()
         {
-            var config = ConfigurationHelper.GetConfiguration<Domain.Configuration.NotificationsApiClientConfiguration>($"{Constants.ServiceName}.Notifications");
+            For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(c => GetHttpClient(c));
+            For<INotificationsApiClientConfiguration>().Use(c => c.GetInstance<NotificationsApiClientConfiguration>());
+            For<NotificationsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<NotificationsApiClientConfiguration>($"{Constants.ServiceName}.Notifications")).Singleton();
+        }
+
+        private HttpClient GetHttpClient(IContext context)
+        {
+            var config = context.GetInstance<NotificationsApiClientConfiguration>();
 
             var httpClient = string.IsNullOrWhiteSpace(config.ClientId)
                 ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config)).Build()
                 : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config)).Build();
 
-            For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
-            For<INotificationsApiClientConfiguration>().Use(config);
+            return httpClient;
         }
     }
 }

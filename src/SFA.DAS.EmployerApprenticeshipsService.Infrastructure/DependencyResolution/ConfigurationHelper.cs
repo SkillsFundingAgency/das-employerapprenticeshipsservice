@@ -15,9 +15,10 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
                 switch (CurrentEnvironmentName)
                 {
                     case "LOCAL": return Environment.Local;
-                    case "AT": return Environment.AT;
+                    case "AT": return Environment.At;
                     case "TEST": return Environment.Test;
                     case "PROD": return Environment.Prod;
+                    case "MO": return Environment.Mo;
                     case "DEMO": return Environment.Demo;
                     default: return Environment.Unknown;
                 }
@@ -42,23 +43,16 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
         public static T GetConfiguration<T>(string serviceName)
         {
             var configurationService = CreateConfigurationService(serviceName);
-            var configuration = configurationService.Get<T>();
-
-            return configuration;
+            return configurationService.Get<T>();
         }
 
         public static Task<T> GetConfigurationAsync<T>(string serviceName)
         {
-            return Task.Run(async () =>
-            {
-                var configurationService = CreateConfigurationService(serviceName);
-                // HACK: The das config service continues on the sync context which deadlocks as ASP is waiting on the config load task to complete on the asp sync context
-                // There is a PR to fix this - when the updated nuget package is available the outer task can be removed leaving only the following line of code
-                return await configurationService.GetAsync<T>().ConfigureAwait(false);
-            });
+            var configurationService = CreateConfigurationService(serviceName);
+            return configurationService.GetAsync<T>();
         }
 
-        public static bool IsAnyOf(params Environment[] environment)
+        public static bool IsEnvironmentAnyOf(params Environment[] environment)
         {
             return environment.Contains(CurrentEnvironment);
         }

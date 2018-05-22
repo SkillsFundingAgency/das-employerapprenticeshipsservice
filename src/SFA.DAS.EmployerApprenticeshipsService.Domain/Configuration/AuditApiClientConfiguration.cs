@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.Audit.Client;
-using SFA.DAS.EAS.Domain.Interfaces;
+﻿using SFA.DAS.Audit.Client;
 
 namespace SFA.DAS.EAS.Domain.Configuration
 {
-    public class AuditApiClientConfiguration : IAuditApiConfiguration, IConfiguration
+    public class AuditApiClientConfiguration : IAuditApiConfiguration
     {
         public string ApiBaseUrl { get; set; }
         public string ClientId { get; set; }

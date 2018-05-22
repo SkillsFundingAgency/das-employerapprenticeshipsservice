@@ -30,8 +30,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             EmployerApprenticeshipsServiceConfiguration configuration, 
             IHttpClientWrapper httpClientWrapper, 
             ITokenServiceApiClient tokenServiceApiClient, 
-            [RequiredPolicy(HmrcExecutionPolicy.Name)]
-            ExecutionPolicy executionPolicy,
+            [RequiredPolicy(HmrcExecutionPolicy.Name)] ExecutionPolicy executionPolicy,
             IInProcessCache inProcessCache, 
             IAzureAdAuthenticationService azureAdAuthenticationService)
         {
