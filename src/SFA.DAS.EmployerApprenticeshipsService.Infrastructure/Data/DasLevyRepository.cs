@@ -305,29 +305,18 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<ISet<Guid>> GetAccountPaymentIds(long accountId)
         {
-            try
+            var result = await WithConnection(async c =>
             {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
 
+                return await c.QueryAsync<Guid>(
+                    sql: "[employer_financial].[GetAccountPaymentIds]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
 
-
-                var result = await WithConnection(async c =>
-                {
-                    var parameters = new DynamicParameters();
-                    parameters.Add("@accountId", accountId, DbType.Int64);
-
-                    return await c.QueryAsync<Guid>(
-                        sql: "[employer_financial].[GetAccountPaymentIds]",
-                        param: parameters,
-                        commandType: CommandType.StoredProcedure);
-                });
-
-                return new HashSet<Guid>(result);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
+            return new HashSet<Guid>(result);
         }
 
         public async Task ProcessPaymentData(long accountId)
