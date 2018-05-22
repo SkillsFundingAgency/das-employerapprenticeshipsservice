@@ -4,6 +4,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 using System;
@@ -12,7 +13,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Infrastructure.Extensions;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
