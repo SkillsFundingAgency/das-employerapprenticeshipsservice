@@ -1,4 +1,3 @@
-using SFA.DAS.EAS.Account.Api.Orchestrators;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Account.Api.DependencyResolution
@@ -12,8 +11,6 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
                 s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
-
-            For<IStatisticsOrchestrator>().Use<StatisticsOrchestrator>();
         }
     }
 }

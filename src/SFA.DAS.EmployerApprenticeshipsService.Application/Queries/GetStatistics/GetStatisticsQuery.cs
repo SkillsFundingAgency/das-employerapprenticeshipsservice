@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Application.Queries.GetStatistics
 {
-    public class GetStatisticsRequest : IAsyncRequest<GetStatisticsResponse>
+    public class GetStatisticsQuery : IAsyncRequest<GetStatisticsResponse>
     {
     }
 }

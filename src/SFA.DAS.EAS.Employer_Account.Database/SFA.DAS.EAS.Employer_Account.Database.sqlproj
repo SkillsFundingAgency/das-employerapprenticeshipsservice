@@ -129,7 +129,6 @@
     <PostDeploy Include="Scripts\PostDeployment\PostDeployment.sql" />
     <PreDeploy Include="Scripts\PreDeployment\PreDeployment.sql" />
     <None Include="Scripts\PostDeployment\SeedDevData.sql" />
-    <Build Include="StoredProcedures\GetStatistics.sql" />
     <Build Include="Tables\TransferRequest.sql" />
     <Build Include="StoredProcedures\GetLatestSignedAgreementVersionForAccount.sql" />
     <Build Include="Tables\AccountEmployerAgreement.sql" />

@@ -161,6 +161,7 @@
       <HintPath>..\packages\StructureMap.4.6.0\lib\net45\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -195,8 +196,6 @@
     <Compile Include="Data\Entities\Statistics\StatisticsFinancial.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Data\IUnitOfWork.cs" />
-    <Compile Include="Data\Repositories\IStatisticsAccountsRepository.cs" />
-    <Compile Include="Data\Repositories\IStatisticsFinancialRepository.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
     <Compile Include="Data\Repositories\ITransferConnectionInvitationRepository.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />

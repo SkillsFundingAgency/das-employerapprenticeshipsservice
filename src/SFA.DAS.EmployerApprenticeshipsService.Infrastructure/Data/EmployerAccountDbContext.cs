@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
@@ -20,6 +21,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public virtual DbSet<Membership> Memberships { get; set; }
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Paye> Payees { get; set; }
 
         static EmployerAccountDbContext()
         {
@@ -57,6 +59,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.ReceiverAccount);
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.SenderAccount);
             modelBuilder.HasDefaultSchema("employer_account");
+            modelBuilder.Entity<Paye>().Ignore(a => a.AccountId);
         }
     }
 }

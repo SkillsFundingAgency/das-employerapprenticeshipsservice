@@ -19,11 +19,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisitcsControllerTests
             var call = new CallRequirements("api/statistics")
                 .AllowStatusCodes(HttpStatusCode.OK);
 
-            var apiTestResolver = new ApiIntegrationTester();
-            var item = apiTestResolver.Resolve<IStatisticsAccountsRepository>();
-
-
-
             await ApiIntegrationTester.InvokeIsolatedGetAsync(call);
 
             // Assert

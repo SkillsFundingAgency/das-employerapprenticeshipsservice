@@ -271,8 +271,6 @@
     <Compile Include="Data\FileSystemUserRepository.cs" />
     <Compile Include="Data\InvitationRepository.cs" />
     <Compile Include="Data\MembershipRepository.cs" />
-    <Compile Include="Data\StatisticsFinancialRepository.cs" />
-    <Compile Include="Data\StatisticsAccountsRepository.cs" />
     <Compile Include="Data\TransferConnectionInvitationRepository.cs" />
     <Compile Include="Data\UnitOfWork.cs" />
     <Compile Include="Data\UnitOfWorkManager.cs" />

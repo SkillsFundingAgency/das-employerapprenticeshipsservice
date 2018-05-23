@@ -120,7 +120,6 @@
     <Compile Include="Filters\UnitOfWorkManagerFilterTests\WhenIRequestAResponse.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAnAccount.cs" />
     <Compile Include="Orchestrators\AgreementOrchestratorTests\WhenIGetAnAgreement.cs" />
-    <Compile Include="Orchestrators\StatisticsOrchestratorTests\WhenIGetTheStatistics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

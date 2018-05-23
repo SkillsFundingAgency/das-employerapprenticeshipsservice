@@ -129,7 +129,6 @@
     <None Include="Scripts\PostDeployment\CreatePaymentTransactionTypes.sql" />
     <None Include="Scripts\PostDeployment\CreateTopUpPercentages.sql" />
     <None Include="Scripts\Manual\DropPayments1718-R09.sql" />
-    <Build Include="StoredProcedures\GetStatistics.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />

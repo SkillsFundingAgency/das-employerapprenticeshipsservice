@@ -248,7 +248,7 @@
     <Compile Include="Commands\SendTransferConnectionInvitation\SendTransferConnectionInvitationHandlerTests.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementTests\GetAccountEmployerAgreementTests.cs" />
-    <Compile Include="Queries\GetStatisticsTests\WhenIGetTheStatistics.cs" />
+    <Compile Include="Queries\GetStatisticsTests\GetStatisticsQueryTests.cs" />
     <Compile Include="Queries\GetApprovedTransferConnectionInvitationTests\WhenIGetApprovedTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetEmployerAgreementQueryTests\GetEmployerAgreementTests.cs" />
     <Compile Include="Queries\GetLegalEntityQueryTests\GetLegalEntityQueryTests.cs" />
