@@ -59,25 +59,24 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         [Test]
         public async Task ThenASendTransferConnectionCommandShouldNotBeSentIfIChoseOption2()
         {
-            _viewModel.Choice = "GoToTransfersPage";
+            _viewModel.Choice = "ReEnterAccountId";
 
             await _controller.Send(_viewModel);
 
             _mediator.Verify(m => m.SendAsync(_viewModel.SendTransferConnectionInvitationCommand), Times.Never);
         }
-
+        
         [Test]
-        public async Task ThenIShouldBeRedirectedToTheTransfersPageIfIChoseOption2()
+        public async Task ThenIShouldBeRedirectedToStartPageIfIChoseOption2()
         {
-            _viewModel.Choice = "GoToTransfersPage";
+            _viewModel.Choice = "ReEnterAccountId";
 
             var result = await _controller.Send(_viewModel) as RedirectToRouteResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.RouteValues.TryGetValue("action", out var actionName), Is.True);
-            Assert.That(actionName, Is.EqualTo("Index"));
-            Assert.That(result.RouteValues.TryGetValue("controller", out var controllerName), Is.True);
-            Assert.That(controllerName, Is.EqualTo("Transfers"));
+            Assert.That(actionName, Is.EqualTo("Start"));
+            Assert.That(result.RouteValues.ContainsKey("controller"), Is.False);
         }
     }
 }

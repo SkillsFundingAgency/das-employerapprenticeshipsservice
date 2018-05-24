@@ -52,7 +52,8 @@ AS
 		TransactionType,
 		Amount,
 		PeriodEnd,
-		PaymentMetaDataId
+		PaymentMetaDataId,
+		DateImported
 	)
 	SELECT
 		p.PaymentId,
@@ -72,6 +73,7 @@ AS
 		p.TransactionType,
 		p.Amount,
 		p.PeriodEnd,
-		m.PaymentMetaDataId
+		m.PaymentMetaDataId,
+		GETUTCDATE()
 	FROM @payments p
 	INNER JOIN @paymentMetaDataIds m ON m.PaymentId = p.PaymentId

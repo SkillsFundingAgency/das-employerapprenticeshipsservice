@@ -47,8 +47,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Entity<Account>().Ignore(a => a.RoleId).Ignore(a => a.RoleName);
             modelBuilder.Entity<Account>().HasMany(a => a.Agreements);
-            modelBuilder.Entity<Account>().HasMany(a => a.ReceivedTransferConnectionInvitations);
-            modelBuilder.Entity<Account>().HasMany(a => a.SentTransferConnectionInvitations);
+            modelBuilder.Entity<Account>().HasMany(a => a.ReceivedTransferConnectionInvitations).WithRequired(i => i.ReceiverAccount);
+            modelBuilder.Entity<Account>().HasMany(a => a.SentTransferConnectionInvitations).WithRequired(i => i.SenderAccount);
             modelBuilder.Entity<AgreementTemplate>().ToTable("EmployerAgreementTemplate").HasMany(t => t.Agreements);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Account);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.LegalEntity);

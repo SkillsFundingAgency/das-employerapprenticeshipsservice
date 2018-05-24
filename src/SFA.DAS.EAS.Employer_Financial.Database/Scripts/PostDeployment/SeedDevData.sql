@@ -12,11 +12,11 @@
 
 EXEC sp_executesql @sqlStatement
 
-EXECUTE #CreateLevy 2, '222/AA00002', 500
-EXECUTE #CreateLevy 3, '123/SFAT029', 1000000
-EXECUTE #CreateLevy 4, '101/CUR00016', 0
-EXECUTE [employer_financial].[ProcessDeclarationsTransactions] 2, '222/AA00002'
-EXECUTE [employer_financial].[ProcessDeclarationsTransactions] 3, '123/SFAT029'
-EXECUTE [employer_financial].[ProcessDeclarationsTransactions] 4, '101/CUR00016'
+EXECUTE #CreateLevy 1, '222/AA00002', 500
+EXECUTE #CreateLevy 2, '123/SFAT029', 1000000
+EXECUTE #CreateLevy 3, '101/CUR00016', 0
+EXECUTE [employer_financial].[ProcessDeclarationsTransactions] 1, '222/AA00002'
+EXECUTE [employer_financial].[ProcessDeclarationsTransactions] 2, '123/SFAT029'
+EXECUTE [employer_financial].[ProcessDeclarationsTransactions] 3, '101/CUR00016'
 
 DROP PROCEDURE #CreateLevy

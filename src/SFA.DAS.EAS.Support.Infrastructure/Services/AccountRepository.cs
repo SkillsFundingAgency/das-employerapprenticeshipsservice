@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
             }
             catch (Exception e)
             {
-                _logger.Error(e,$"A general exception has been thrown while requesting employer account details");
+                _logger.Error(e, $"A general exception has been thrown while requesting employer account details");
             }
 
             return results;
@@ -162,8 +162,8 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
 
         private async Task<List<TransactionViewModel>> GetAccountTransactions(string accountId)
         {
-            var endDate = DateTime.Now;
-            var financialYearIterator = _datetimeService.GetBeginningFinancialYear(endDate);
+            var endDate = DateTime.Now.Date;
+            var financialYearIterator = _datetimeService.GetBeginningFinancialYear(new DateTime(2017, 4, 1));
             var response = new List<TransactionViewModel>();
 
             while (financialYearIterator <= endDate)
@@ -172,14 +172,13 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                 {
                     var transactions = await _accountApiClient.GetTransactions(accountId, financialYearIterator.Year,
                         financialYearIterator.Month);
-
                     response.AddRange(transactions);
-                    financialYearIterator = financialYearIterator.AddMonths(1);
                 }
                 catch (Exception e)
                 {
                     _logger.Error(e, $"Exception occured in Account API type of {nameof(TransactionsViewModel)} for period {financialYearIterator.Year}.{financialYearIterator.Month} id {accountId}");
                 }
+                financialYearIterator = financialYearIterator.AddMonths(1);
             }
 
             return GetFilteredTransactions(response);

@@ -78,8 +78,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 case "Confirm":
                     var transferConnectionInvitationId = await _mediator.SendAsync(model.SendTransferConnectionInvitationCommand);
                     return RedirectToAction("Sent", new { transferConnectionInvitationId });
-                case "GoToTransfersPage":
-                    return RedirectToAction("Index", "Transfers");
+                case "ReEnterAccountId":
+                    return RedirectToAction("Start");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model.Choice));
             }
