@@ -16,8 +16,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         {
             _mediator = mediator;
         }
-
-        [HttpGet]
+        
         [Route("")]
         public async Task<IHttpActionResult> GetStatistics()
         {
