@@ -292,6 +292,7 @@
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\PaymentDetailsExtensions.cs" />
     <Compile Include="Extensions\HashingServiceExtensions.cs" />
+    <Compile Include="Extensions\QueryableExtensions.cs" />
     <Compile Include="Extensions\QueryFutureEnumerableExtensions.cs" />
     <Compile Include="Features\IFeatureService.cs" />
     <Compile Include="Mapping\Profiles\PaymentMappings.cs" />
