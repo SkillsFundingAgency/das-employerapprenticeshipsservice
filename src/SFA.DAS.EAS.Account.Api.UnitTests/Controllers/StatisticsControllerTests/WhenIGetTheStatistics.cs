@@ -25,10 +25,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
             _statisticsViewModel = new StatisticsViewModel
             {
                 TotalAccounts = 1,
-                TotalPAYESchemes = 2,
-                TotalLegalEntities = 3,
-                TotalAgreements = 4,
-                TotalPayments = 5
+                TotalPayeSchemes = 2,
+                TotalActiveLegalEntities = 3,
+                TotalSignedAgreements = 4,
+                TotalPaymentsThisYear = 5
             };
             _response = new GetStatisticsResponse {Statistics = _statisticsViewModel};
         }

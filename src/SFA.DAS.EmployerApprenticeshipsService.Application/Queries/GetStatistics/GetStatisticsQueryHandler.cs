@@ -31,10 +31,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetStatistics
             var statistics = new StatisticsViewModel
             {
                 TotalAccounts = await accountsQuery.ValueAsync(),
-                TotalLegalEntities = await legalEntitiesQuery.ValueAsync(),
-                TotalPAYESchemes = await payeSchemesQuery.ValueAsync(),
-                TotalAgreements = await agreementsQuery.ValueAsync(),
-                TotalPayments = await paymentsQuery.ValueAsync()
+                TotalActiveLegalEntities = await legalEntitiesQuery.ValueAsync(),
+                TotalPayeSchemes = await payeSchemesQuery.ValueAsync(),
+                TotalSignedAgreements = await agreementsQuery.ValueAsync(),
+                TotalPaymentsThisYear = await paymentsQuery.ValueAsync()
             };
 
             return new GetStatisticsResponse
