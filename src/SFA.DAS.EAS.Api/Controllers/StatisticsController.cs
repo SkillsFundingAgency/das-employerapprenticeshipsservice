@@ -2,7 +2,6 @@
 using System.Web.Http;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.GetStatistics;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
@@ -23,12 +22,6 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         public async Task<IHttpActionResult> GetStatistics()
         {
             var response = await _mediator.SendAsync(new GetStatisticsQuery());
-
-            if (response.Statistics.IsEmpty())
-            {
-                return NotFound();
-            }
-
             return Ok(response.Statistics);
         }
     }

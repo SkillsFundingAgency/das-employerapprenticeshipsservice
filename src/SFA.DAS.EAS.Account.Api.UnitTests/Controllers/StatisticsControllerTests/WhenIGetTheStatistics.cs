@@ -12,17 +12,17 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
     [TestFixture]
     public class WhenICallTheStatisticsEndPoint
     {
-        private Mock<IMediator> _mediator;
         private StatisticsController _controller;
+        private Mock<IMediator> _mediator;
         private GetStatisticsResponse _response;
-        private StatisticsViewModel _statisticsViewModel;
-
+        private StatisticsViewModel _statistics;
 
         [SetUp]
         public void Setup()
         {
             _mediator = new Mock<IMediator>();
-            _statisticsViewModel = new StatisticsViewModel
+
+            _statistics = new StatisticsViewModel
             {
                 TotalAccounts = 1,
                 TotalPayeSchemes = 2,
@@ -30,25 +30,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
                 TotalSignedAgreements = 4,
                 TotalPaymentsThisYear = 5
             };
-            _response = new GetStatisticsResponse {Statistics = _statisticsViewModel};
-        }
 
-        [Test]
-        public async Task ThenTheStatisticsAreReturned()
-        {
-            SetupMediatorResponse(true);
-
-            var actual = await _controller.GetStatistics();
-            
-            Assert.IsNotNull(actual);
-        }
-
-        private void SetupMediatorResponse(bool withValidData)
-        {
-            if (!withValidData)
-            {
-                _response.Statistics = new StatisticsViewModel();
-            }
+            _response = new GetStatisticsResponse { Statistics = _statistics };
 
             _mediator.Setup(m => m.SendAsync(It.IsAny<GetStatisticsQuery>())).ReturnsAsync(_response);
 
@@ -56,13 +39,12 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
         }
 
         [Test]
-        public async Task ThenIfTheStatisticsAreNotAvailableReturnsNotFoundResult()
+        public async Task ThenShouldReturnStatistics()
         {
-            SetupMediatorResponse(false);
-            var actual = await _controller.GetStatistics();
-
-            Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<NotFoundResult>(actual);
+            var result = await _controller.GetStatistics() as OkNegotiatedContentResult<StatisticsViewModel>; ;
+            
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Content, Is.SameAs(_statistics));
         }
     }
 }
