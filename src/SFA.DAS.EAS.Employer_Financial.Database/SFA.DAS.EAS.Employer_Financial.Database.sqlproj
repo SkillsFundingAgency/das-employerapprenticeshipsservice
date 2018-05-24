@@ -142,6 +142,9 @@
     <None Include="Scripts\PostDeployment\CreateTopUpPercentages.sql" />
     <None Include="Scripts\Manual\DropPayments1718-R09.sql" />
     <Build Include="Types\AccountTransferTable.sql" />
+    <None Include="Scripts\Manual\AddNonTransferPayments.sql" />
+    <None Include="Scripts\Manual\AddTransferLevy.sql" />
+    <None Include="Scripts\Manual\CreateTransferPayments.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
