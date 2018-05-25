@@ -21,7 +21,7 @@ AS
 	SET @transferAllowance = @previousYearLevyTotal * @allowancePercentage
 
 	-- Get total transfer allowance spent this year
-	SELECT @transferSpent = SUM(transfers.Amount) FROM [employer_financial].[AccountTransfers] transfers
+	SELECT @transferSpent = ISNULL(SUM(transfers.Amount), 0) FROM [employer_financial].[AccountTransfers] transfers
 	CROSS JOIN employer_financial.GetPreviousFinancialYearDates(DEFAULT) as previousFinancialYear
 	WHERE transfers.SenderAccountId = @AccountId	
 	AND transfers.TransferDate >= previousFinancialYear.YearEnd
