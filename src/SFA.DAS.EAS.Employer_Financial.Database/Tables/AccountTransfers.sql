@@ -11,8 +11,10 @@
     [Amount] DECIMAL(18, 5) NOT NULL, 
     [Type] SMALLINT NOT NULL, 
     [TransferDate] DATETIME NOT NULL, 
-    [CreatedDate] DATETIME NOT NULL
-)
+    [CreatedDate] DATETIME NOT NULL, 
+    [PaymentId] UNIQUEIDENTIFIER NOT NULL,
+	CONSTRAINT [FK_AccountTransfers_PaymentId] FOREIGN KEY ([PaymentId]) REFERENCES [employer_financial].[Payment] ([PaymentId])
+	)
 GO
 
 CREATE INDEX [IX_AccountTransferSenderAccountId]
@@ -26,3 +28,4 @@ GO
 CREATE UNIQUE INDEX [IX_PeriodEndAccountTransfer]
 ON [employer_financial].[AccountTransfers]([ApprenticeshipId] ASC, [PeriodEnd] ASC)
 GO
+

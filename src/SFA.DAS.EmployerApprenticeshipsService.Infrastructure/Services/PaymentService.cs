@@ -83,7 +83,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                     PeriodEnd = periodEnd,
                     Amount = item.Amount,
                     CommitmentId = item.CommitmentId,
-                    Type = item.Type.ToString()
+                    Type = item.Type.ToString(),
+                    PaymentId = item.RequiredPaymentId
                 });
             }
 

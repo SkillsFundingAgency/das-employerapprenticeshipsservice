@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EAS.Domain.Models.Transfers
+﻿using System;
+
+namespace SFA.DAS.EAS.Domain.Models.Transfers
 {
     public class AccountTransfer
     {
@@ -12,5 +14,6 @@
         public string PeriodEnd { get; set; }
         public decimal Amount { get; set; }
         public string Type { get; set; }
+        public Guid PaymentId { get; set; }
     }
 }

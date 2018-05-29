@@ -74,25 +74,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result ?? 0;
         }
 
-        //public async Task<IEnumerable<AccountTransfer>> GetAccountTransfersByPeriodEnd(long receiverAccountId, string periodEnd)
-        //{
-        //    var result = await WithConnection(async c =>
-        //    {
-        //        var parameters = new DynamicParameters();
-        //        parameters.Add("@receiverAccountId", receiverAccountId, DbType.Int64);
-        //        parameters.Add("@periodEnd", periodEnd, DbType.String);
-
-        //        return await c.QueryAsync<AccountTransfer>(
-        //            sql: "[employer_financial].[GetAccountTransfersByPeriodEnd]",
-        //            param: parameters,
-        //            commandType: CommandType.StoredProcedure);
-        //    });
-
-        //    return result;
-
-
-        //}
-
         public async Task<AccountTransferDetails> GetTransferPaymentDetails(AccountTransfer transfer)
         {
             var result = await WithConnection(async c =>
@@ -144,6 +125,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 new DataColumn("PeriodEnd", typeof(string)),
                 new DataColumn("Type", typeof(string)),
                 new DataColumn("TransferDateDate", typeof(DateTime)),
+                new DataColumn("PaymentId", typeof(Guid)),
             });
 
             foreach (var transfer in transfers)
@@ -157,7 +139,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     transfer.CourseName,
                     transfer.Amount,
                     transfer.PeriodEnd,
-                    transfer.Type);
+                    transfer.Type,
+                    transfer.PaymentId);
             }
 
             table.AcceptChanges();
