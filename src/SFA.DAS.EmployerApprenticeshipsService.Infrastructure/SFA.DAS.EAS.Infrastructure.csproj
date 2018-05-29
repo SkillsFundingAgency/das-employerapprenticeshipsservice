@@ -116,7 +116,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.29\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.36\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Audit.Client, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Client.dll</HintPath>
@@ -172,11 +172,11 @@
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.56651, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.56651\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.2\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.1.30.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.30\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.2\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.1.30.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.30\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.33424, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.33424\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>

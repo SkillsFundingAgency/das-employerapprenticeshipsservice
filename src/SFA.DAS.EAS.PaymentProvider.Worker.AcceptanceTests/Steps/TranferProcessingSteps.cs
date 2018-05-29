@@ -24,10 +24,11 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
+using AccountTransfer = SFA.DAS.Provider.Events.Api.Types.AccountTransfer;
 using ITransferRepository = SFA.DAS.EAS.Domain.Data.Repositories.ITransferRepository;
 using Payment = SFA.DAS.Provider.Events.Api.Types.Payment;
 using PeriodEnd = SFA.DAS.Provider.Events.Api.Types.PeriodEnd;
-using Transfer = SFA.DAS.Provider.Events.Api.Types.Transfer;
+
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
 {
@@ -48,7 +49,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
         private string _messageBusConnectionString;
         private Task _workerTask;
         private List<Payment> _payments;
-        private List<Transfer> _transfers;
+        private List<AccountTransfer> _transfers;
         private List<StandardSummary> _standards;
         private ApprenticeshipInfoServiceApi _apprenticeshipInfoServiceApi;
         private ApprenticeshipInfoServiceApiMessageHandler _apprenticeshipInfoServiceApiHandler;
@@ -198,21 +199,21 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
             var receiverAccountId = (long)ScenarioContext.Current["AccountId"];
             var senderAccount = (TestAccount)ScenarioContext.Current["SenderAccount"];
 
-            _transfers = new List<Transfer>
+            _transfers = new List<AccountTransfer>
             {
-                new Transfer
+                new AccountTransfer
                 {
                     SenderAccountId = senderAccount.Id,
                     ReceiverAccountId = receiverAccountId,
                     CommitmentId = ApprenticeshipId,
+                    CollectionPeriodName = _periodEnd.Id,
                     Amount = TransferPaymentAmount,
                     Type = TransferType.None,
-                    TransferDate = DateTime.Now
                 }
             };
 
             _paymentServiceApiHandler.SetTransfers(HttpStatusCode.OK,
-                new PageOfResults<Transfer>
+                new PageOfResults<AccountTransfer>
                 {
                     Items = _transfers.ToArray(),
                     PageNumber = 1,

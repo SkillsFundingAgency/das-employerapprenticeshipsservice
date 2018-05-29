@@ -99,7 +99,7 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
                 AssertValidPayment(payment);
 
                 paymentsDataTable.Rows.Add(
-                    Guid.Parse(payment.Id),
+                    payment.Id,
                     payment.Ukprn,
                     payment.ProviderName,
                     payment.Uln,

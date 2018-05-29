@@ -5,7 +5,6 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
-using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
@@ -14,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AccountTransfer = SFA.DAS.EAS.Domain.Models.Transfers.AccountTransfer;
 using Payment = SFA.DAS.Provider.Events.Api.Types.Payment;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
@@ -70,8 +70,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long receiverAccountId)
         {
-            //TODO: Swap this call when API is updated
-            var pageOfTransfers = await _paymentsEventsApiClient.GetAccountTransfers(periodEnd, receiverAccountId);
+            var pageOfTransfers = await _paymentsEventsApiClient.GetTransfers(periodEnd, receiverAccountId);
 
             var transfers = new List<AccountTransfer>();
 

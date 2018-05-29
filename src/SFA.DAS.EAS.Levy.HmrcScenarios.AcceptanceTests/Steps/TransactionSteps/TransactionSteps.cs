@@ -132,7 +132,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.TransactionSteps
             {
                 var payment = new PaymentDetails
                 {
-                    Id = Guid.NewGuid().ToString(),
+                    Id = Guid.NewGuid(),
                     Amount = Convert.ToDecimal(tableRow["Payment_Amount"]),
                     TransactionType = TransactionType.Learning,
                     ProgrammeType = tableRow["Payment_Type"].ToLower().Equals("levy") ? 1 : 2,

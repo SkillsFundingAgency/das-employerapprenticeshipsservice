@@ -8,7 +8,6 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
-using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Client;
@@ -411,7 +410,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
 
             _standardPayment = new PaymentDetails
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid(),
                 EmployerAccountId = AccountId,
                 Ukprn = _provider.Ukprn,
                 ApprenticeshipId = _apprenticeship.Id,
@@ -421,7 +420,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
 
             _frameworkPayment = new PaymentDetails
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid(),
                 EmployerAccountId = AccountId,
                 Ukprn = _provider.Ukprn,
                 ApprenticeshipId = _apprenticeship.Id,

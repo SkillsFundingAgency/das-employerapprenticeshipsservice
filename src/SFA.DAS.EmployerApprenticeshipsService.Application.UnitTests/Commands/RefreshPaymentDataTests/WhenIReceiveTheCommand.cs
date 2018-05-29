@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 
             _paymentDetails = new List<PaymentDetails>{ new PaymentDetails
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid(),
                 Amount = 1234,
                 EmployerAccountId = 123,
                 ProviderName = "Test Learning Ltd"
@@ -152,8 +152,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             //Arrange
             _paymentDetails = new List<PaymentDetails>
             {
-                new PaymentDetails { Id = _existingPaymentIds[0].ToString().ToLower()},
-                new PaymentDetails { Id = _existingPaymentIds[1].ToString().ToUpper()}
+                new PaymentDetails { Id = _existingPaymentIds[0]},
+                new PaymentDetails { Id = _existingPaymentIds[1]}
             };
 
             _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
@@ -203,9 +203,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             var newPaymentGuid = Guid.NewGuid();
             _paymentDetails = new List<PaymentDetails>
             {
-                new PaymentDetails { Id = _existingPaymentIds[0].ToString()},
-                new PaymentDetails { Id = _existingPaymentIds[1].ToString()},
-                new PaymentDetails { Id = newPaymentGuid.ToString()}
+                new PaymentDetails { Id = _existingPaymentIds[0]},
+                new PaymentDetails { Id = _existingPaymentIds[1]},
+                new PaymentDetails { Id = newPaymentGuid}
             };
 
             _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
@@ -216,7 +216,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 
             //Assert
             _dasLevyRepository.Verify(x => x.CreatePayments(It.Is<IEnumerable<PaymentDetails>>(s =>
-                s.Any(p => p.Id.Equals(newPaymentGuid.ToString())) &&
+                s.Any(p => p.Id.Equals(newPaymentGuid)) &&
                 s.Count() == 1)));
 
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Once);
