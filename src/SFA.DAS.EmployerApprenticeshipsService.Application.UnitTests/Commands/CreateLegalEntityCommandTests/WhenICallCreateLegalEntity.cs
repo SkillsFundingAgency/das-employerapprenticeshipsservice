@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
         private EmployerAgreementView _agreementView;
         private Mock<ILegalEntityEventFactory> _legalEntityEventFactory;
         private Mock<IHashingService> _hashingService;
-        private Mock<IAccountAgreementService> _agreementService;
+        private Mock<IAgreementService> _agreementService;
 
         [SetUp]
         public void Arrange()
@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _legalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
             _hashingService = new Mock<IHashingService>();
-            _agreementService = new Mock<IAccountAgreementService>();
+            _agreementService = new Mock<IAgreementService>();
 
             _hashingService.Setup(hs => hs.HashValue(It.IsAny<long>())).Returns<long>(value => $"*{value}*");
             _hashingService.Setup(hs => hs.DecodeValue(_command.HashedAccountId)).Returns(_owner.AccountId);

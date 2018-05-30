@@ -197,7 +197,7 @@
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Http\InternalServerErrorException.cs" />
     <Compile Include="Http\RequestTimeOutException.cs" />
-    <Compile Include="Interfaces\IAccountAgreementService.cs" />
+    <Compile Include="Interfaces\IAgreementService.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\IAzureAdAuthenticationService.cs" />
     <Compile Include="Interfaces\ICallerContextProvider.cs" />

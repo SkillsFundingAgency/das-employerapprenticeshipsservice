@@ -2,9 +2,9 @@
 
 namespace SFA.DAS.EAS.Domain.Interfaces
 {
-    public interface IAccountAgreementService
+    public interface IAgreementService
     {
-        Task<int?> GetLatestSignedAgreementVersionAsync(long accountId);
+        Task<int?> GetAgreementVersionAsync(long accountId);
         Task RemoveFromCacheAsync(long accountId);
     }
 }

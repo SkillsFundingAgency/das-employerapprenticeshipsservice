@@ -318,7 +318,7 @@
     <Compile Include="Features\FeatureWhitelistAuthorizationHandler.cs" />
     <Compile Include="Authorization\AuthorizationService.cs" />
     <Compile Include="Authorization\IAuthorizationHandler.cs" />
-    <Compile Include="Features\AccountAgreementService.cs" />
+    <Compile Include="Features\AgreementService.cs" />
     <Compile Include="Features\FeatureService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AddressLookupService.cs" />
