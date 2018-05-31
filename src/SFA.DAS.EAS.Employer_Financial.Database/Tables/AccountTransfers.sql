@@ -9,7 +9,7 @@
     [CourseName] VARCHAR(MAX) NOT NULL, 
     [PeriodEnd] nvarchar(20) NOT NULL,
     [Amount] DECIMAL(18, 5) NOT NULL, 
-    [Type] SMALLINT NOT NULL,   
+    [Type] NVARCHAR(50) NOT NULL,   
     [CreatedDate] DATETIME NOT NULL, 
     [PaymentId] UNIQUEIDENTIFIER NOT NULL,
     CONSTRAINT [FK_AccountTransfers_PaymentId] FOREIGN KEY ([PaymentId]) REFERENCES [employer_financial].[Payment] ([PaymentId])
