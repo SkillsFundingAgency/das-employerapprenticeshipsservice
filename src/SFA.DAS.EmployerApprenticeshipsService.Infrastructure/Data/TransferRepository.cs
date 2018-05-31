@@ -124,7 +124,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 new DataColumn("Amount", typeof(decimal)),
                 new DataColumn("PeriodEnd", typeof(string)),
                 new DataColumn("Type", typeof(string)),
-                new DataColumn("TransferDate", typeof(DateTime)),
                 new DataColumn("PaymentId", typeof(Guid)),
             });
 

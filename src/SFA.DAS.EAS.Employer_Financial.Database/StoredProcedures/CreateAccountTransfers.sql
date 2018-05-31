@@ -11,8 +11,7 @@ AS
 		CourseName,	
 		PeriodEnd,
 		Amount, 
-		Type, 
-		TransferDate, 
+		Type, 		
 		CreatedDate,
 		PaymentId
 	)
@@ -25,8 +24,7 @@ AS
 		t.CourseName,
 		t.PeriodEnd,
 		t.Amount,
-		t.Type,
-		t.TransferDate,
+		t.Type,		
 		GETDATE(),
 		PaymentId
 	FROM @transfers t
