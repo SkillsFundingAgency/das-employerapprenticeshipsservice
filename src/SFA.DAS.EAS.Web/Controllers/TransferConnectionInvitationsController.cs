@@ -244,7 +244,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             switch (model.Choice)
             {
-                case "GoToTransferDashboard":
+                case "GoToTransfersPage":
                     return RedirectToAction("Index", "Transfers");
                 case "GoToHomepage":
                     return RedirectToAction("Index", "EmployerTeam");

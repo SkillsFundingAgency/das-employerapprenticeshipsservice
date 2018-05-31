@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
         [Test]
         public void ThenIShouldBeRedirectedToTransfersDashboardIfIChoseOption1()
         {
-            _viewModel.Choice = "GoToTransferDashboard";
+            _viewModel.Choice = "GoToTransfersPage";
 
             var result = _controller.Deleted(_viewModel) as RedirectToRouteResult;
 
