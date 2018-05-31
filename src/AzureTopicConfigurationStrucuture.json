@@ -80,11 +80,11 @@
     "subscription": [ "Activity_PaymentCreatedMessageProcessor" ]
   },
   {
-    "topicName": "account_payments_processing_finished",
+    "topicName": "account_payments_processing_completed",
     "subscription": [ "MA_TransferDataProcessor" ]
   },
   {
-    "topicName": "account_transfers_created",
+    "topicName": "transfers_processing_completed",
     "subscription": [ "MA_TransferTransactionProcessor" ]
   }
 ]
