@@ -926,41 +926,94 @@ tr.total td {
 }
 
 .flash-card {
-  margin-top: 1em;
-  padding: 30px;
-  background: $link-colour;
-  color: $page-colour;
-
-  h1,
-  h2 {
-    &:first-of-type {
-      margin-top: 0;
-    }
-  }
-
-  li {
-    p {
-      margin-left: 32px;
-    }
-  }
-
-  > p:last-of-type {
-    margin-bottom: 0;
-  }
-
-  a {
+    margin-top: 1em;
+    padding: 30px;
+    background: $link-colour;
     color: $page-colour;
-    &:visited,
-    &:hover,
-    &:active {
-      color: $page-colour;
+
+    h1,
+    h2 {
+        &:first-of-type {
+            margin-top: 0;
+        }
     }
-  }
+
+    li {
+        p {
+            margin-left: 32px;
+        }
+    }
+
+    > p:last-of-type {
+        margin-bottom: 0;
+    }
+
+    a {
+        color: $page-colour;
+
+        &:visited,
+        &:hover,
+        &:active {
+            color: $page-colour;
+        }
+    }
+
+    details {
+        // margin-bottom: 1em;
+        summary {
+            color: $page-colour;
+        }
+
+        .panel {
+            border-left-color: $page-colour;
+        }
+    }
+
+    .button {
+        color: $link-colour;
+        background-color: $page-colour;
+        box-shadow: none;
+        // Link styles
+        /*
+
+        a {
+            color: $link-colour;
+        }
+
+        */
+        &:visited {
+            color: $link-visited-colour;
+        }
+
+        &:hover {
+            color: $link-hover-colour;
+        }
+
+        &:active {
+            color: $link-active-colour;
+        }
+    }
+
+    .button-link {
+        background-color: $link-colour;
+        color: $page-colour;
+        box-shadow: none;
+
+        &:visited,
+        &:hover,
+        &:active {
+            color: $page-colour;
+        }
+    }
 }
 
 @include media(tablet) {
-  .flash-card {
-    margin-top: 1.25em;
-    padding: 35px 50px;
-  }
+    .flash-card {
+        margin-top: 1.25em;
+        padding: 35px 50px;
+
+        .button-link {
+            margin-left: 25px;
+        }
+    }
 }
