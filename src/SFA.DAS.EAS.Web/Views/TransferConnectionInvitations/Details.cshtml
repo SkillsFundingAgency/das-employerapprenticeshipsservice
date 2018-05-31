@@ -21,19 +21,31 @@
                 <table>
                     <tbody>
                         @{
-                            var peerAccount = Model.TransferConnectionInvitation.GetPeerAccount(Model.AccountId);
+                            var pendingChange = Model.TransferConnectionInvitation.GetPendingChange();
                         }
-                        <tr>
-                            <td>Account name</td>
-                            <td>@peerAccount.Name</td>
-                        </tr>
-                        <tr>
-                            <td>Account ID</td>
-                            <td>@peerAccount.PublicHashedId</td>
-                        </tr>
                         <tr>
                             <td>Status</td>
                             <td>@Model.TransferConnectionInvitation.Status.ToString()</td>
+                        </tr>
+                        <tr>
+                            <td>Sending employer</td>
+                            <td>@Model.TransferConnectionInvitation.SenderAccount.Name</td>
+                        </tr>
+                        <tr>
+                            <td>Sent by</td>
+                            <td>@pendingChange.User.FullName</td>
+                        </tr>
+                        <tr>
+                            <td>Sent on</td>
+                            <td>@pendingChange.CreatedDate.ToString("d MMMM yyyy")</td>
+                        </tr>
+                        <tr>
+                            <td>Receiving employer</td>
+                            <td>@Model.TransferConnectionInvitation.ReceiverAccount.Name</td>
+                        </tr>
+                        <tr>
+                            <td>Receiver account ID</td>
+                            <td>@Model.TransferConnectionInvitation.ReceiverAccount.PublicHashedId</td>
                         </tr>
                         @switch (Model.TransferConnectionInvitation.Status)
                         {
