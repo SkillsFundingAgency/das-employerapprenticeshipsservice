@@ -5,6 +5,7 @@ using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.AzureServiceBus.Attributes;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
+using System;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
@@ -34,6 +35,18 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
                 PeriodEnd = message.PeriodEndId,
                 PaymentUrl = message.AccountPaymentUrl
             });
+        }
+
+        protected override Task OnErrorAsync(IMessage<PaymentProcessorQueueMessage> message, Exception ex)
+        {
+            _logger.Error(ex, $"Could not process payment processor message for Account Id {message.Content.AccountId} & period end {message.Content.PeriodEndId}");
+            return Task.CompletedTask;
+        }
+
+        protected override Task OnFatalAsync(Exception ex)
+        {
+            _logger.Fatal(ex, "Failed to process payment processer message");
+            return Task.CompletedTask;
         }
     }
 }
