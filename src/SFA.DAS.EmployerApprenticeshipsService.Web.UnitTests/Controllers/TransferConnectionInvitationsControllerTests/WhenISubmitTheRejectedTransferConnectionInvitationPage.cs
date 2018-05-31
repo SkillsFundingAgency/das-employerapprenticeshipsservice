@@ -1,7 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Commands.DeleteSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 
@@ -11,40 +13,67 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransferConnectionInvitationsCon
     public class WhenISubmitTheRejectedTransferConnectionInvitationPage
     {
         private TransferConnectionInvitationsController _controller;
-        private readonly RejectedTransferConnectionInvitationViewModel _viewModel = new RejectedTransferConnectionInvitationViewModel();
+        private RejectedTransferConnectionInvitationViewModel _viewModel;
         private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
 
         [SetUp]
         public void Arrange()
-        {_controller = new TransferConnectionInvitationsController(null, _mediator.Object);
+        {
+            _mediator.Setup(m => m.SendAsync(It.IsAny<IAsyncRequest<long>>()));
+
+            _controller = new TransferConnectionInvitationsController(null, _mediator.Object);
+
+            _viewModel = new RejectedTransferConnectionInvitationViewModel
+            {
+                DeleteTransferConnectionInvitationCommand = new DeleteTransferConnectionInvitationCommand()
+            };
         }
 
         [Test]
-        public void ThenIShouldBeRedirectedToTheTransfersPageIfIChoseOption1()
+        public async Task ThenADeleteTransferConnectionInvitationCommandShouldBeSentIfIChoseOption1()
+        {
+            _viewModel.Choice = "Confirm";
+
+            await _controller.Rejected(_viewModel);
+
+            _mediator.Verify(m => m.SendAsync(_viewModel.DeleteTransferConnectionInvitationCommand), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIShouldBeRedirectedToDeleteConfirmedPageIfIChoseOption1()
+        {
+            _viewModel.Choice = "Confirm";
+
+            var result = await _controller.Rejected(_viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteValues.TryGetValue("action", out var actionName), Is.True);
+            Assert.That(actionName, Is.EqualTo("Deleted"));
+            Assert.That(result.RouteValues.TryGetValue("controller", out var controllerName), Is.False);
+        }
+
+        [Test]
+        public async Task ThenADeleteTransferConnectionInvitationCommandShouldNotBeSentIfIChoseOption2()
         {
             _viewModel.Choice = "GoToTransfersPage";
 
-            var result = _controller.Rejected(_viewModel) as RedirectToRouteResult;
+            await _controller.Rejected(_viewModel);
+
+            _mediator.Verify(m => m.SendAsync(_viewModel.DeleteTransferConnectionInvitationCommand), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenIShouldBeRedirectedToTheTransfersPageIfIChoseOption2()
+        {
+            _viewModel.Choice = "GoToTransfersPage";
+
+            var result = await _controller.Rejected(_viewModel) as RedirectToRouteResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.RouteValues.TryGetValue("action", out var actionName), Is.True);
             Assert.That(actionName, Is.EqualTo("Index"));
             Assert.That(result.RouteValues.TryGetValue("controller", out var controllerName), Is.True);
             Assert.That(controllerName, Is.EqualTo("Transfers"));
-        }
-
-        [Test]
-        public void ThenIShouldBeRedirectedToTheHomepageIfIChoseOption2()
-        {
-            _viewModel.Choice = "GoToHomepage";
-
-            var result = _controller.Rejected(_viewModel) as RedirectToRouteResult;
-
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.RouteValues.TryGetValue("action", out var actionName), Is.True);
-            Assert.That(actionName, Is.EqualTo("Index"));
-            Assert.That(result.RouteValues.TryGetValue("controller", out var controllerName), Is.True);
-            Assert.That(controllerName, Is.EqualTo("EmployerTeam"));
         }
     }
 }

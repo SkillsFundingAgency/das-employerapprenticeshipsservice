@@ -35,9 +35,11 @@ namespace SFA.DAS.EAS.Web.Mappings
                 .ForMember(m => m.RejectTransferConnectionInvitationCommand, o => o.MapFrom(r => r));
 
             CreateMap<GetReceivedTransferConnectionInvitationResponse, RejectTransferConnectionInvitationCommand>();
+            CreateMap<GetRejectedTransferConnectionInvitationResponse, DeleteTransferConnectionInvitationCommand>();
 
             CreateMap<GetRejectedTransferConnectionInvitationResponse, RejectedTransferConnectionInvitationViewModel>()
-                .ForMember(m => m.Choice, o => o.Ignore());
+                .ForMember(m => m.Choice, o => o.Ignore())
+                .ForMember(m => m.DeleteTransferConnectionInvitationCommand, o => o.MapFrom(r => r));
 
             CreateMap<GetSentTransferConnectionInvitationResponse, SentTransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore());
