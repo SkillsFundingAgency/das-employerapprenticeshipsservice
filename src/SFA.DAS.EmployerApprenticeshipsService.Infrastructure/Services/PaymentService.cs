@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long receiverAccountId)
         {
-            var pageOfTransfers = await _paymentsEventsApiClient.GetTransfers(periodEnd, null, receiverAccountId);
+            var pageOfTransfers = await _paymentsEventsApiClient.GetTransfers(periodEnd, receiverAccountId: receiverAccountId);
 
             var transfers = new List<AccountTransfer>();
 

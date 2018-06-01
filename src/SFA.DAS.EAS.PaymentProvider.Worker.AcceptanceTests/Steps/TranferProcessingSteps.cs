@@ -209,6 +209,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
                     CollectionPeriodName = _periodEnd.Id,
                     Amount = TransferPaymentAmount,
                     Type = TransferType.None,
+                    RequiredPaymentId = Guid.Parse(_payments.First().Id)
                 }
             };
 

@@ -35,3 +35,4 @@ And I have completed getting my payments for that account
 And I have finished getting transfers for that account
 When I process tranfers transactions for that account
 Then the transfer receiver transactions should be saved
+

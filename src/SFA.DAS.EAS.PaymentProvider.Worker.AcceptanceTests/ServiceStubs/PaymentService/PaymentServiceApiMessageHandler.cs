@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.ServiceStubs.Paymen
 
         public void SetTransfers(HttpStatusCode statusCode, PageOfResults<AccountTransfer> response)
         {
-            SetupGet($"/api/accountTransfers/{PeriodEnd}/{EmployerAccountId}", statusCode, response);
+            SetupGet($"/api/transfers?page=1&periodId={PeriodEnd}&receiverAccountId={EmployerAccountId}", statusCode, response);
         }
     }
 }
