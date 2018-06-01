@@ -33,5 +33,5 @@ SELECT
   where 
   p.AccountId = @AccountId AND
   p.Ukprn = @Ukprn  AND
-  p.FundingSource IN (1,2,3)   
+  p.FundingSource IN (1,2,3,5)   
   group by p.AccountId, p.Ukprn, meta.ApprenticeshipCourseName, meta.ApprenticeshipCourseLevel,meta.PathwayName
