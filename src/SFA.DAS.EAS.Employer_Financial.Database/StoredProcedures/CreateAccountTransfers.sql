@@ -13,7 +13,7 @@ AS
 		Amount, 
 		Type, 		
 		CreatedDate,
-		PaymentId
+		RequiredPaymentId
 	)
 	SELECT	
 		t.SenderAccountId,
@@ -26,5 +26,5 @@ AS
 		t.Amount,
 		t.Type,		
 		GETDATE(),
-		PaymentId
+		RequiredPaymentId
 	FROM @transfers t

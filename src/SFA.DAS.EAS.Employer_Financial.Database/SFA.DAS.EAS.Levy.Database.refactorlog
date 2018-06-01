@@ -42,4 +42,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="TransferReceiverAccountId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="6d5b2552-fc07-40d7-90de-419adbc33fd3" ChangeDateTime="06/01/2018 13:23:10">
+    <Property Name="ElementName" Value="[employer_financial].[AccountTransfers].[PaymentId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_financial].[AccountTransfers]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[RequiredPaymentId]" />
+  </Operation>
 </Operations>
