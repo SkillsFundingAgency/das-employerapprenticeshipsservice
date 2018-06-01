@@ -8,6 +8,5 @@
 	[PeriodEnd] NVARCHAR(50) NOT NULL,
 	[Amount] DECIMAL(18,4) NOT NULL,
 	[TransactionType] SMALLINT NOT NULL,
-	[TransactionDate] DATETIME NOT NULL,	
-	PRIMARY KEY ([AccountId] ASC)
+	[TransactionDate] DATETIME NOT NULL	
 )
