@@ -29,7 +29,7 @@ select mainUpdate.* from
 		inner join [employer_financial].[PeriodEnd] pe 
 				on pe.PeriodEndId = x.PeriodEnd
         left join [employer_financial].[Payment] p 
-				on p.PeriodEnd = pe.PeriodEndId and p.PaymentId = x.PaymentId and p.FundingSource = 1
+				on p.PeriodEnd = pe.PeriodEndId and p.PaymentId = x.PaymentId and p.FundingSource IN (1, 5)
         left join [employer_financial].[Payment] pco 
 				on pco.PeriodEnd = pe.PeriodEndId and pco.PaymentId = x.PaymentId and pco.FundingSource = x.FundingSource and pco.FundingSource = 2 
         left join [employer_financial].[Payment] pci 
