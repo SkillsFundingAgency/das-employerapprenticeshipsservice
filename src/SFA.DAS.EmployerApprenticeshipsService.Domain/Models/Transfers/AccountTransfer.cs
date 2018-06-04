@@ -10,6 +10,7 @@ namespace SFA.DAS.EAS.Domain.Models.Transfers
         public string ReceiverAccountName { get; set; }
         public long CommitmentId { get; set; }
         public string CourseName { get; set; }
+        public int? CourseLevel { get; set; }
         public uint ApprenticeCount { get; set; }
         public string PeriodEnd { get; set; }
         public decimal Amount { get; set; }

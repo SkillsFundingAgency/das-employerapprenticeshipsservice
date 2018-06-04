@@ -45,7 +45,9 @@
             {
                 <tr>
                     <td class="numeric">
-                        @transferDetail.CourseName
+                        @(@transferDetail.CourseLevel.HasValue ? 
+                              $"{transferDetail.CourseName}: level {transferDetail.CourseLevel}" : 
+                              transferDetail.CourseName)
                     </td>
                     <td class="numeric">
                         @transferDetail.ApprenticeCount

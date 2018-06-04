@@ -65,6 +65,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
                     var paymentDetails = await _transferRepository.GetTransferPaymentDetails(transfer);
 
                     transfer.CourseName = paymentDetails.CourseName ?? "Unknown Course";
+                    transfer.CourseLevel = paymentDetails.CourseLevel;
                     transfer.ApprenticeCount = paymentDetails.ApprenticeCount;
 
                     transfer.SenderAccountName = transferSenderAccountNames[transfer.SenderAccountId];

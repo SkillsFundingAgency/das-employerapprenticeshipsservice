@@ -5,6 +5,7 @@
 AS
 	SELECT 
 		meta.ApprenticeshipCourseName as CourseName
+		,meta.ApprenticeshipCourseLevel as CourseLevel
 		,COUNT(DISTINCT Uln) as ApprenticeCount
 		,SUM(p.Amount) as PaymentTotal		
 	FROM [employer_financial].[Payment] p
@@ -12,4 +13,4 @@ AS
 	WHERE p.AccountId = @receiverAccountId
 	AND PeriodEnd = @periodEnd
 	AND ApprenticeshipId = @apprenticeshipId
-	GROUP BY meta.ApprenticeshipCourseName
+	GROUP BY meta.ApprenticeshipCourseName, meta.ApprenticeshipCourseLevel

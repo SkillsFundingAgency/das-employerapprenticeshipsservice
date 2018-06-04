@@ -155,7 +155,8 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
                     PathwayCode = 1,
                     StandardCode = 1,
                     ProviderName = "Provider 1",
-                    CourseName = "Course 1",
+                    CourseName = "Course",
+                    CourseLevel = 2,
                     PeriodEnd = "1617-R12"
                 };
 

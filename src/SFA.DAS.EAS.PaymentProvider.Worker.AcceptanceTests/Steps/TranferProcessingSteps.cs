@@ -38,6 +38,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
         private const long ApprenticeshipId = 3;
         private const decimal TransferPaymentAmount = 321.5823M;
         private const string CourseName = "Training";
+        private const int CourseLevel = 2;
 
         private readonly AccountCreationSteps _accountCreationSteps;
         private PaymentsProviderWorkerRoleTestWrapper _worker;
@@ -162,7 +163,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
                 new StandardSummary
                 {
                     Id = standardCode.ToString(),
-                    Level = 1,
+                    Level = CourseLevel,
                     Duration = 10,
                     Title = CourseName
                 }
@@ -260,6 +261,8 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.Steps
             Assert.AreEqual(_periodEnd.Id, transfer.PeriodEnd);
             Assert.AreEqual(TransferPaymentAmount, transfer.Amount);
             Assert.AreEqual(CourseName, transfer.CourseName);
+            Assert.AreEqual(CourseLevel, transfer.CourseLevel);
+
         }
 
         [Then(@"the transfer senders transactions should be saved")]

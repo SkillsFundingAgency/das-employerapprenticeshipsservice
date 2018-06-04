@@ -48,7 +48,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
 
             _details = new AccountTransferDetails
             {
-                CourseName = "Testing Level 2",
+                CourseName = "Testing",
+                CourseLevel = 2,
                 ApprenticeCount = 3,
                 PaymentTotal = 1200
             };
@@ -268,6 +269,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
             _transferRepository.Verify(x => x.CreateAccountTransfers(It.Is<IEnumerable<AccountTransfer>>(
                 transfers =>
                     transfers.All(t => t.CourseName.Equals(_details.CourseName) &&
+                                       t.CourseLevel.Equals(_details.CourseLevel) &&
                                        t.ApprenticeCount.Equals(_details.ApprenticeCount)))), Times.Once);
         }
 

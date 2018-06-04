@@ -14,5 +14,6 @@ namespace SFA.DAS.EAS.Web.ViewModels.Transactions
         public List<AccountTransferDetails> TransferDetails { get; set; }
         public decimal TransferPaymentTotal { get; set; }
         public DateTime DateCreated { get; set; }
+
     }
 }
