@@ -37,6 +37,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             }
         }
 
+
         [Route("{hashedAccountId}", Name = "GetAccount")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
