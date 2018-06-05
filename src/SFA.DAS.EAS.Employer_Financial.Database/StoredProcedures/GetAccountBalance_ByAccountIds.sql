@@ -41,6 +41,11 @@ AS
 						AND TransactionDate < previousFinancialYear.YearEnd
 						AND TransactionType = 1 THEN Amount * @allowancePercentage
 					ELSE 0
+				END) +
+				SUM(CASE 
+					WHEN TransactionDate >= previousFinancialYear.YearEnd						
+						AND TransactionType = 4 THEN Amount
+					ELSE 0
 				END) AS TransferAllowance
 		FROM employer_financial.TransactionLine
 		CROSS JOIN employer_financial.GetPreviousFinancialYearDates(DEFAULT) as previousFinancialYear
