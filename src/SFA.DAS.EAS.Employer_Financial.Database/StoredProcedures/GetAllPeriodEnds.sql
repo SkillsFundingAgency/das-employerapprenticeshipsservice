@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetAllPeriodEnds]	
 AS
-	SELECT [PeriodEndId] AS Id
+	SELECT [PeriodEndId]
       ,[CalendarPeriodMonth]
       ,[CalendarPeriodYear]
       ,[AccountDataValidAt]

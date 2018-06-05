@@ -2,7 +2,7 @@
 	
 AS
 SELECT top 1 
-      [PeriodEndId] AS Id
+      [PeriodEndId] 
       ,[CalendarPeriodMonth]
       ,[CalendarPeriodYear]
       ,[AccountDataValidAt]

@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         private readonly ILegalEntityEventFactory _legalEntityEventFactory;
         private readonly IMessagePublisher _messagePublisher;
         private readonly IHashingService _hashingService;
-        private readonly IAccountAgreementService _accountAgreementService;
+        private readonly IAgreementService _agreementService;
 
 
         public CreateLegalEntityCommandHandler(
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             ILegalEntityEventFactory legalEntityEventFactory,
             IMessagePublisher messagePublisher,
             IHashingService hashingService,
-            IAccountAgreementService accountAgreementService)
+            IAgreementService agreementService)
         {
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             _legalEntityEventFactory = legalEntityEventFactory;
             _messagePublisher = messagePublisher;
             _hashingService = hashingService;
-            _accountAgreementService = accountAgreementService;
+            _agreementService = agreementService;
         }
 
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
             await PublishAgreementCreatedMessage(accountId, agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
 
-            await _accountAgreementService.RemoveFromCacheAsync(accountId);
+            await _agreementService.RemoveFromCacheAsync(accountId);
 
             return new CreateLegalEntityCommandResponse
             {

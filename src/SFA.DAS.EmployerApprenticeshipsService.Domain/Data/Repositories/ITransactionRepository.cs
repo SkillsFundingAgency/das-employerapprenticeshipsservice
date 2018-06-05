@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,5 +21,8 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<List<TransactionSummary>> GetAccountTransactionSummary(long accountId);
 
         Task<List<TransactionDownloadLine>> GetAllTransactionDetailsForAccountByDate(long accountId, DateTime fromDate, DateTime toDate);
+
+        Task CreateTransferTransactions(IEnumerable<TransferTransactionLine> transaction);
+
     }
 }

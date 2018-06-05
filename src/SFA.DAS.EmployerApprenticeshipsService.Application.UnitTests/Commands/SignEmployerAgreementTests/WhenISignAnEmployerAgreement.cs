@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         private AgreementSignedEvent _agreementEvent;
         private Mock<ICommitmentService> _commintmentService;
         private Mock<IMessagePublisher> _messagePublisher;
-        private Mock<IAccountAgreementService> _agreementService;
+        private Mock<IAgreementService> _agreementService;
 
         private const long AccountId = 223344;
         private const long AgreementId = 123433;
@@ -100,7 +100,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
 
             _messagePublisher = new Mock<IMessagePublisher>();
 
-            _agreementService = new Mock<IAccountAgreementService>();
+            _agreementService = new Mock<IAgreementService>();
 
             _handler = new SignEmployerAgreementCommandHandler(
                 _membershipRepository.Object, 

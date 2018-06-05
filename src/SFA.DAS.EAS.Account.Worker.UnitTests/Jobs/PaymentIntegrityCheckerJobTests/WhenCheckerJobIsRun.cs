@@ -38,13 +38,13 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.Jobs.PaymentIntegrityCheckerJobTe
                 .ReturnsAsync(new List<Domain.Models.Account.Account> { new Domain.Models.Account.Account() { Id = AccountId } });
 
 
-            _periodEnd = new PeriodEnd { Id = "1718-R01" };
+            _periodEnd = new PeriodEnd { PeriodEndId = "1718-R01" };
 
             _levyRepository.Setup(x => x.GetAllPeriodEnds()).ReturnsAsync(new List<PeriodEnd> { _periodEnd });
 
             var paymentServicePayments = new List<PaymentDetails>
             {
-                new PaymentDetails{CollectionPeriodId = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId}
+                new PaymentDetails{CollectionPeriodId = _periodEnd.PeriodEndId, Amount = 200, EmployerAccountId = AccountId}
             };
 
             _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.Jobs.PaymentIntegrityCheckerJobTe
 
             var repositoryPayments = new List<Payment>
             {
-                new Payment {CollectionPeriodId = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId}
+                new Payment {CollectionPeriodId = _periodEnd.PeriodEndId, Amount = 200, EmployerAccountId = AccountId}
             };
 
             _levyRepository.Setup(x => x.GetAccountPaymentsByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))
@@ -97,7 +97,7 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.Jobs.PaymentIntegrityCheckerJobTe
             await _job.Run();
 
             //Assert
-            _paymentService.Verify(x => x.GetAccountPayments(_periodEnd.Id, AccountId), Times.Once);
+            _paymentService.Verify(x => x.GetAccountPayments(_periodEnd.PeriodEndId, AccountId), Times.Once);
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.Jobs.PaymentIntegrityCheckerJobTe
             await _job.Run();
 
             //Assert
-            _levyRepository.Verify(x => x.GetAccountPaymentsByPeriodEnd(AccountId, _periodEnd.Id), Times.Once);
+            _levyRepository.Verify(x => x.GetAccountPaymentsByPeriodEnd(AccountId, _periodEnd.PeriodEndId), Times.Once);
         }
 
         [Test]
@@ -116,8 +116,8 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.Jobs.PaymentIntegrityCheckerJobTe
             //Assign
             var paymentServicePayments = new List<PaymentDetails>
             {
-                new PaymentDetails{PeriodEnd = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId},
-                new PaymentDetails{PeriodEnd = _periodEnd.Id, Amount = 400, EmployerAccountId = AccountId}
+                new PaymentDetails{PeriodEnd = _periodEnd.PeriodEndId, Amount = 200, EmployerAccountId = AccountId},
+                new PaymentDetails{PeriodEnd = _periodEnd.PeriodEndId, Amount = 400, EmployerAccountId = AccountId}
             };
 
             _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
@@ -137,8 +137,8 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.Jobs.PaymentIntegrityCheckerJobTe
             //Arrange
             var repositoryPayments = new List<Payment>
             {
-                new Payment {CollectionPeriodId = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId},
-                new Payment {CollectionPeriodId = _periodEnd.Id, Amount = 300, EmployerAccountId = AccountId}
+                new Payment {CollectionPeriodId = _periodEnd.PeriodEndId, Amount = 200, EmployerAccountId = AccountId},
+                new Payment {CollectionPeriodId = _periodEnd.PeriodEndId, Amount = 300, EmployerAccountId = AccountId}
             };
 
             _levyRepository.Setup(x => x.GetAccountPaymentsByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))
@@ -157,8 +157,8 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.Jobs.PaymentIntegrityCheckerJobTe
             //Assign
             var paymentServicePayments = new List<PaymentDetails>
             {
-                new PaymentDetails{PeriodEnd = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId, ApprenticeshipId = 1},
-                new PaymentDetails{PeriodEnd = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId, ApprenticeshipId = 2}
+                new PaymentDetails{PeriodEnd = _periodEnd.PeriodEndId, Amount = 200, EmployerAccountId = AccountId, ApprenticeshipId = 1},
+                new PaymentDetails{PeriodEnd = _periodEnd.PeriodEndId, Amount = 200, EmployerAccountId = AccountId, ApprenticeshipId = 2}
             };
 
             _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
@@ -166,8 +166,8 @@ namespace SFA.DAS.EAS.Account.Worker.UnitTests.Jobs.PaymentIntegrityCheckerJobTe
 
             var repositoryPayments = new List<Payment>
             {
-                new Payment {CollectionPeriodId = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId, ApprenticeshipId = 1},
-                new Payment {CollectionPeriodId = _periodEnd.Id, Amount = 200, EmployerAccountId = AccountId, ApprenticeshipId = 1}
+                new Payment {CollectionPeriodId = _periodEnd.PeriodEndId, Amount = 200, EmployerAccountId = AccountId, ApprenticeshipId = 1},
+                new Payment {CollectionPeriodId = _periodEnd.PeriodEndId, Amount = 200, EmployerAccountId = AccountId, ApprenticeshipId = 1}
             };
 
             _levyRepository.Setup(x => x.GetAccountPaymentsByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))
