@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
@@ -72,7 +73,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
             {
                 _logger.Error(e, $"A general exception has been thrown while requesting employer account details");
             }
-
+            _logger.Debug($"Account Details data Page ({pageNumber} Size {pagesize}) : {(JsonConvert.SerializeObject(results))}");
             return results;
         }
 
