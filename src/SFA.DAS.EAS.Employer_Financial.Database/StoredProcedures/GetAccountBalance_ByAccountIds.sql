@@ -44,7 +44,8 @@ AS
 				END) +
 				SUM(CASE 
 					WHEN TransactionDate >= previousFinancialYear.YearEnd						
-						AND TransactionType = 4 THEN Amount
+						AND TransactionType = 4
+						AND TransferSenderAccountId = AccountId THEN Amount
 					ELSE 0
 				END) AS TransferAllowance
 		FROM employer_financial.TransactionLine
