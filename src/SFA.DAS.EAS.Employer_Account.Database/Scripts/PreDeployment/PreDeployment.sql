@@ -9,3 +9,5 @@
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+
+:r .\AML-2381-DeleteDuplicateUserAccountSettings.sql
