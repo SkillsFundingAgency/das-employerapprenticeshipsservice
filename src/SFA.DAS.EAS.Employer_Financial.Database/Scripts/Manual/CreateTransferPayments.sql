@@ -98,9 +98,9 @@ BEGIN
 		CourseName,	
 		PeriodEnd,
 		Amount, 
-		Type, 
-		TransferDate, 
-		CreatedDate
+		Type, 		
+		CreatedDate,
+		RequiredPaymentId
 	)
 	VALUES
 	(
@@ -112,9 +112,9 @@ BEGIN
 		@courseName,		
 		@periodEnd,
 		@amount,
-		@type,
-		@transferDate,
-		GETDATE()
+		@type,		
+		GETDATE(),
+		NEWID()
 	)
 END;
 GO
@@ -207,13 +207,13 @@ BEGIN
     ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     ------ EDIT THE VALUES BELOW TO AFFECT THE TRANSFER PAYMENTS ---------------------------------------------------------------------------------------------------------------
     ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	SET @senderAccountId  = 1275
-	SET @senderAccountName  = 'Tesco Plc'
-	SET @senderPayeScheme = '555/AA00001'
+	SET @senderAccountId  = 0
+	SET @senderAccountName  = 'XXX'
+	SET @senderPayeScheme = 'XXX'
 
-    SET @receiverAccountId  = 1274
-	SET @receiverAccountName  = 'Nevolve'	
-	SET @receiverPayeScheme = '333/AA00001'
+    SET @receiverAccountId  = 0
+	SET @receiverAccountName  = 'XXX'	
+	SET @receiverPayeScheme = 'XXX'
 	
     SET @currentDate = GETDATE()
     SET @periodEnd = '1819-R01'
@@ -222,10 +222,10 @@ BEGIN
     ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     ------ END OF SCRIPT VARIABLES  --------------------------------------------------------------------------------------------------------------------------------------------
     ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	DECLARE @negativePaymentAmount DECIMAL(18,4) = @totalPaymentAmount * -1
 
 	EXEC #createAccountTransfers @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting',  @periodEnd, @totalPaymentAmount	
-	EXEC #CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, -@totalPaymentAmount, 4, @currentDate
+	EXEC #CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @negativePaymentAmount, 4, @currentDate
 	EXEC #CreateAccountTransferTransaction @receiverAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @totalPaymentAmount, 4, @currentDate
 
 	exec employer_financial.processdeclarationstransactions @senderAccountId, @senderPayeScheme
