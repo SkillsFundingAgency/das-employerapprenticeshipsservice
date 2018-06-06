@@ -71,12 +71,12 @@ CREATE PROCEDURE #createAccountPayments
     @ukprn BIGINT,
     @courseName NVARCHAR(MAX),
     @periodEnd NVARCHAR(25),
-    @totalAmount DECIMAL(18,4)
+    @totalAmount DECIMAL(18,5)
 )  
 AS  
 BEGIN  	
 
-    DECLARE @paymentAmount DECIMAL(18,4) = @totalAmount / 3
+    DECLARE @paymentAmount DECIMAL(18,5) = @totalAmount / 3
     DECLARE @currentDate DATETIME = GETDATE()	
 
     -- Create transfer payments
@@ -93,7 +93,7 @@ BEGIN TRANSACTION
     DECLARE @payeScheme NVARCHAR(16)
     DECLARE @currentDate DATETIME
     DECLARE @periodEnd VARCHAR(20)
-    DECLARE @totalPaymentAmount DECIMAL(18,4)	
+    DECLARE @totalPaymentAmount DECIMAL(18,5)	
 
     ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     ------ EDIT THE VALUES BELOW TO AFFECT THE TRANSFER PAYMENTS ---------------------------------------------------------------------------------------------------------------
