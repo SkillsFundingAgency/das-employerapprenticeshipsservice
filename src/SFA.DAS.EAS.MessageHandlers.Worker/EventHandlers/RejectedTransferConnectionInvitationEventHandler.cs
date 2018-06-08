@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.EventHandlers
                     { "account_name", accountName },
                     {
                         "link_notification_page",
-                        $"\"{_employerApprenticeshipsServiceConfiguration.DashboardUrl}{string.Format(UrlFormat, senderExternalId)}\""
+                        $"{_employerApprenticeshipsServiceConfiguration.DashboardUrl}{string.Format(UrlFormat, senderExternalId)}"
                     }
                 }
             };

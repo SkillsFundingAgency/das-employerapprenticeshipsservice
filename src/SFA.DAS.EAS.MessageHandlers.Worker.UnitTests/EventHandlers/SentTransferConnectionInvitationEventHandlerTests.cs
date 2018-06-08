@@ -52,8 +52,6 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
                         && e.ReplyToAddress == "noreply@sfa.gov.uk"
                         && e.TemplateId == "TransferConnectionInvitationSent"
                         && !string.IsNullOrWhiteSpace(e.Tokens["link_notification_page"])
-                        && e.Tokens["link_notification_page"].StartsWith("\"")
-                        && e.Tokens["link_notification_page"].EndsWith("\"")
                         && e.Tokens["account_name"] == SentTransferConnectionInvitationEventHandlerTestFixture.SenderAccountName)),
                     Times.Once));
         }
