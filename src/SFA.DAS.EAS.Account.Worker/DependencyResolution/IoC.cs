@@ -13,6 +13,7 @@ namespace SFA.DAS.EAS.Account.Worker.DependencyResolution
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
                 c.AddRegistry<LevyRegistry>();
                 c.AddRegistry<LoggerRegistry>();
@@ -20,6 +21,7 @@ namespace SFA.DAS.EAS.Account.Worker.DependencyResolution
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
+                c.AddRegistry<PaymentsRegistry>();
                 c.AddRegistry<ReferenceDataRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<ValidationRegistry>();
