@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Models.Payments;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
@@ -10,6 +12,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     [DbConfigurationType(typeof(SqlAzureDbConfiguration))]
     public class EmployerFinancialDbContext : DbContext
     {
+        public virtual DbSet<PeriodEnd> PeriodEnds { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
 
         static EmployerFinancialDbContext()

@@ -20,7 +20,7 @@
       <Setting name="EmployerProjectionsBaseUrl" value="http://localhost:50770/" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="WebSslCert" thumbprint="CE71D8AD4A859BD1803DBE03989801B56E5B6875" thumbprintAlgorithm="sha1" />
+      <Certificate name="WebSslCert" thumbprint="7E0C8989B70195C9AF040EBAD6F6E5012E07F050" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <Role name="SFA.DAS.EAS.LevyDeclarationProvider.Worker">

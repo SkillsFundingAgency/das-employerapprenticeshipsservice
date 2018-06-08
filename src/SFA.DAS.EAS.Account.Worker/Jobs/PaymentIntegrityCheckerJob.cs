@@ -35,10 +35,10 @@ namespace SFA.DAS.EAS.Account.Worker.Jobs
             {
                 foreach (var account in accounts)
                 {
-                    var expectedPayments = await _paymentService.GetAccountPayments(periodEnd.Id, account.Id);
+                    var expectedPayments = await _paymentService.GetAccountPayments(periodEnd.PeriodEndId, account.Id);
 
                     var actualPayments =
-                        (await _levyRepository.GetAccountPaymentsByPeriodEnd(account.Id, periodEnd.Id))
+                        (await _levyRepository.GetAccountPaymentsByPeriodEnd(account.Id, periodEnd.PeriodEndId))
                         .ToArray();
 
 
@@ -57,11 +57,11 @@ namespace SFA.DAS.EAS.Account.Worker.Jobs
                     if (paymentMissing)
                     {
                         _logger.Warn(
-                            $"Some payments for account ID {account.Id} for period end {periodEnd.Id} are missing");
+                            $"Some payments for account ID {account.Id} for period end {periodEnd.PeriodEndId} are missing");
                     }
                     else
                     {
-                        _logger.Info($"All payments for account ID {account.Id} for period end {periodEnd.Id} are correct");
+                        _logger.Info($"All payments for account ID {account.Id} for period end {periodEnd.PeriodEndId} are correct");
                     }
                 }
             }

@@ -6,7 +6,7 @@ namespace SFA.DAS.EAS.Domain.Models.Payments
 {
     public class Payment
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public long Ukprn { get; set; }
         public long Uln { get; set; }
         public long EmployerAccountId { get; set; }
@@ -34,12 +34,9 @@ namespace SFA.DAS.EAS.Domain.Models.Payments
 
             if (payment == null) return false;
 
-            if (Id != null || payment.Id != null)
+            if (!Id.Equals(payment.Id))
             {
-                if (!Id?.Equals(payment.Id) ?? false)
-                {
-                    return false;
-                }
+                return false;
             }
 
             if (Ukprn != payment.Ukprn) return false;

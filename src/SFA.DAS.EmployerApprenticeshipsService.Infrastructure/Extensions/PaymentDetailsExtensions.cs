@@ -1,9 +1,8 @@
-﻿using System;
+﻿using SFA.DAS.EAS.Domain.Models.Payments;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using SFA.DAS.EAS.Domain.Models.Payments;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Extensions
 {
@@ -13,15 +12,15 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
         {
             /*
                 Possible truncations:
-                CollectionPeriodId          8
+                CollectionPeriodId          20
                 EmployerAccountVersion      50  
                 ApprenticeshipVersion       25
                 PeriodEnd                   25
             */
             StringBuilder errors = null;
-            var isOkay = CheckFieldLength(payment.CollectionPeriodId, nameof(payment.CollectionPeriodId), 8, false, ref errors) &&
+            var isOkay = CheckFieldLength(payment.CollectionPeriodId, nameof(payment.CollectionPeriodId), 20, false, ref errors) &&
                          CheckFieldLength(payment.EmployerAccountVersion, nameof(payment.EmployerAccountVersion), 50, false, ref errors) &&
-                         CheckFieldLength(payment.ApprenticeshipVersion, nameof(payment.CollectionPeriodId), 25, false, ref errors) &&
+                         CheckFieldLength(payment.ApprenticeshipVersion, nameof(payment.ApprenticeshipVersion), 25, false, ref errors) &&
                          CheckFieldLength(payment.PeriodEnd, nameof(payment.PeriodEnd), 25, false, ref errors);
 
             if (!isOkay)
@@ -74,16 +73,16 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
             paymentsDataTable.Columns.Add("ApprenticeshipId", typeof(long));
             paymentsDataTable.Columns.Add("DeliveryPeriodMonth", typeof(int));
             paymentsDataTable.Columns.Add("DeliveryPeriodYear", typeof(int));
-            paymentsDataTable.Columns.Add("CollectionPeriodId", typeof(string));
+            paymentsDataTable.Columns.Add("CollectionPeriodId", typeof(string)).MaxLength = 20;
             paymentsDataTable.Columns.Add("CollectionPeriodMonth", typeof(int));
             paymentsDataTable.Columns.Add("CollectionPeriodYear", typeof(int));
             paymentsDataTable.Columns.Add("EvidenceSubmittedOn", typeof(DateTime));
-            paymentsDataTable.Columns.Add("EmployerAccountVersion", typeof(string));
-            paymentsDataTable.Columns.Add("ApprenticeshipVersion", typeof(string));
-            paymentsDataTable.Columns.Add("FundingSource", typeof(string));
-            paymentsDataTable.Columns.Add("TransactionType", typeof(string));
+            paymentsDataTable.Columns.Add("EmployerAccountVersion", typeof(string)).MaxLength = 50;
+            paymentsDataTable.Columns.Add("ApprenticeshipVersion", typeof(string)).MaxLength = 25;
+            paymentsDataTable.Columns.Add("FundingSource", typeof(string)).MaxLength = 25;
+            paymentsDataTable.Columns.Add("TransactionType", typeof(string)).MaxLength = 25;
             paymentsDataTable.Columns.Add("Amount", typeof(decimal));
-            paymentsDataTable.Columns.Add("PeriodEnd", typeof(string));
+            paymentsDataTable.Columns.Add("PeriodEnd", typeof(string)).MaxLength = 25;
             paymentsDataTable.Columns.Add("StandardCode", typeof(long));
             paymentsDataTable.Columns.Add("FrameworkCode", typeof(int));
             paymentsDataTable.Columns.Add("ProgrammeType", typeof(int));
@@ -100,7 +99,7 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
                 AssertValidPayment(payment);
 
                 paymentsDataTable.Rows.Add(
-                    Guid.Parse(payment.Id),
+                    payment.Id,
                     payment.Ukprn,
                     payment.ProviderName,
                     payment.Uln,
@@ -114,8 +113,8 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
                     payment.EvidenceSubmittedOn,
                     payment.EmployerAccountVersion,
                     payment.ApprenticeshipVersion,
-                    ((int) payment.FundingSource).ToString(),
-                    ((int) payment.TransactionType).ToString(),
+                    ((int)payment.FundingSource).ToString(),
+                    ((int)payment.TransactionType).ToString(),
                     payment.Amount,
                     payment.PeriodEnd,
                     payment.StandardCode,

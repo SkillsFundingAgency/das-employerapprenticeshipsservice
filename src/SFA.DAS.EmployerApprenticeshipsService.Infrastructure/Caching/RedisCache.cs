@@ -16,21 +16,15 @@ namespace SFA.DAS.EAS.Infrastructure.Caching
             return _cache.Value.KeyExistsAsync(key);
         }
 
+        public Task<T> GetOrAddAsync<T>(string key, Func<string, Task<T>> getter)
+        {
+            return GetOrAddAsync(key, getter, Constants.DefaultCacheTime);
+        }
+
         public async Task<T> GetCustomValueAsync<T>(string key)
         {
-            var redisValue = await _cache.Value.StringGetAsync(key).ConfigureAwait(false);
-
-            return JsonConvert.DeserializeObject<T>(redisValue);
-        }
-
-        public Task SetCustomValueAsync<T>(string key, T customType, TimeSpan cacheTime)
-        {
-            return _cache.Value.StringSetAsync(key, JsonConvert.SerializeObject(customType), cacheTime);
-        }
-
-        public Task SetCustomValueAsync<T>(string key, T customType)
-        {
-            return _cache.Value.StringSetAsync(key, JsonConvert.SerializeObject(customType), Constants.DefaultCacheTime);
+            var cachedValue = await _cache.Value.StringGetAsync(key).ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<T>(cachedValue);
         }
 
         public async Task<T> GetOrAddAsync<T>(string key, Func<string, Task<T>> getter, TimeSpan maxCacheTime)
@@ -52,20 +46,26 @@ namespace SFA.DAS.EAS.Infrastructure.Caching
             return result;
         }
 
-        public Task<T> GetOrAddAsync<T>(string key, Func<string, Task<T>> getter)
-        {
-            return GetOrAddAsync<T>(key, getter, Constants.DefaultCacheTime);
-        }
-
         public Task RemoveFromCache(string key)
         {
             return _cache.Value.KeyDeleteAsync(key);
+        }
+
+        public Task SetCustomValueAsync<T>(string key, T customType)
+        {
+            return _cache.Value.StringSetAsync(key, JsonConvert.SerializeObject(customType), Constants.DefaultCacheTime);
+        }
+
+        public Task SetCustomValueAsync<T>(string key, T customType, TimeSpan cacheTime)
+        {
+            return _cache.Value.StringSetAsync(key, JsonConvert.SerializeObject(customType), cacheTime);
         }
 
         private static IDatabase InitialiseRedis()
         {
             var connectionMultiplexer = ConnectionMultiplexer.Connect(CloudConfigurationManager.GetSetting("RedisConnection"));
             var cache = connectionMultiplexer.GetDatabase();
+
             return cache;
         }
     }

@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
     {
         public AuthorizationRegistry()
         {
-            For<IAccountAgreementService>().Use<AccountAgreementService>();
+            For<IAgreementService>().Use<AgreementService>();
 
             For<IEnumerable<IAuthorizationHandler>>().Use(c => new List<IAuthorizationHandler>
             {

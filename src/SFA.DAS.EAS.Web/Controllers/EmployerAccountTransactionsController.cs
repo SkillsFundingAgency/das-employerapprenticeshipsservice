@@ -1,5 +1,7 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
+using SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.Authorization;
@@ -20,17 +22,20 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class EmployerAccountTransactionsController : BaseController
     {
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
+        private readonly IMapper _mapper;
         private readonly IMediator _mediator;
 
         public EmployerAccountTransactionsController(IAuthenticationService owinWrapper, IAuthorizationService authorization,
             IHashingService hashingService,
             IMediator mediator,
             EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage, ITransactionFormatterFactory transactionsFormatterFactory)
+            ICookieStorageService<FlashMessageViewModel> flashMessage, ITransactionFormatterFactory transactionsFormatterFactory,
+            IMapper mapper)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _mediator = mediator;
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
+            _mapper = mapper;
         }
 
         [Route("finance")]
@@ -117,6 +122,17 @@ namespace SFA.DAS.EAS.Web.Controllers
                                                                         fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
             return View(ControllerConstants.CoursePaymentSummaryViewName, viewModel);
+        }
+
+        [Route("finance/transfer/details")]
+        [Route("balance/transfer/details")]
+        public async Task<ActionResult> TransferDetail(GetTransferTransactionDetailsQuery query)
+        {
+            var response = await _mediator.SendAsync(query);
+
+            var model = _mapper.Map<TransferTransactionDetailsViewModel>(response);
+
+            return View(ControllerConstants.TransferDetailsViewName, model);
         }
     }
 }

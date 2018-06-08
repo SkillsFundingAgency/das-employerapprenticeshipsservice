@@ -1,6 +1,3 @@
-using System.Diagnostics;
-using System.Net;
-using System.Threading;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
@@ -11,6 +8,9 @@ using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
+using System.Diagnostics;
+using System.Net;
+using System.Threading;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
 {

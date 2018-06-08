@@ -312,6 +312,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 response.Data = new LegalAgreementsToRemoveViewModel
                 {
                     Agreements = result.Agreements
+
                 };
             }
             catch (InvalidRequestException ex)

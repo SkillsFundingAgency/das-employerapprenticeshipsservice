@@ -79,12 +79,12 @@ namespace SFA.DAS.EAS.Infrastructure.Authorization
 
             if (userContextQuery != null)
             {
-                authorizationContext.UserContext = await userContextQuery.SingleOrDefaultAsync() ?? throw new UnauthorizedAccessException();
+                authorizationContext.UserContext = await userContextQuery.SingleOrDefaultAsync().ConfigureAwait(false) ?? throw new UnauthorizedAccessException();
             }
 
             if (membershipContextQuery != null)
             {
-                authorizationContext.MembershipContext = await membershipContextQuery.SingleOrDefaultAsync() ?? throw new UnauthorizedAccessException();
+                authorizationContext.MembershipContext = await membershipContextQuery.SingleOrDefaultAsync().ConfigureAwait(false) ?? throw new UnauthorizedAccessException();
             }
 
             _authorizationContextCache.SetAuthorizationContext(authorizationContext);

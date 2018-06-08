@@ -1,8 +1,8 @@
 ﻿using Dapper;
+using SFA.DAS.EAS.Domain.Data;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Data;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -11,7 +11,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         private readonly SqlConnection _connection;
         private readonly SqlTransaction _transaction;
         private bool _committed;
-        
+        private bool _rolledBack;
+
         public UnitOfWork(SqlConnection connection)
         {
             _connection = connection;
@@ -21,11 +22,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public void CommitChanges()
         {
             _committed = true;
+            _rolledBack = false;
             _transaction.Commit();
         }
         //Handle calling these twice
         public void RollbackChanges()
         {
+            _rolledBack = true;
             _transaction.Rollback();
         }
 
@@ -36,7 +39,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public void Dispose()
         {
-            if (!_committed)
+            if (!_committed && !_rolledBack)
             {
                 RollbackChanges();
             }

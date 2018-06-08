@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.Provider.Events.Api.Types;
 using StructureMap.TypeRules;
+using System;
+using System.Linq;
 using Payment = SFA.DAS.Provider.Events.Api.Types.Payment;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Mapping.PaymentMappingTests
@@ -38,12 +38,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Mapping.PaymentMappingTests
             //Arrange
             var payment = new Payment
             {
-                Id = "1",
+                Id = Guid.NewGuid().ToString(),
                 Ukprn = 321231,
                 Amount = 120.67m,
                 ApprenticeshipId = 123,
-                DeliveryPeriod = new CalendarPeriod { Month = 4, Year = 1956},
-                CollectionPeriod = new NamedCalendarPeriod { Id="564", Month = 6, Year = 2018},
+                DeliveryPeriod = new CalendarPeriod { Month = 4, Year = 1956 },
+                CollectionPeriod = new NamedCalendarPeriod { Id = "564", Month = 6, Year = 2018 },
                 TransactionType = TransactionType.Learning,
                 ApprenticeshipVersion = "1.1",
                 EmployerAccountVersion = "1.2",
@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Mapping.PaymentMappingTests
             var result = _mapper.Map<PaymentDetails>(payment);
 
             //Assert
-            Assert.AreEqual(payment.Id, result.Id);
+            Assert.AreEqual(Guid.Parse(payment.Id), result.Id);
             Assert.AreEqual(payment.Ukprn, result.Ukprn);
             Assert.AreEqual(payment.Amount, result.Amount);
             Assert.AreEqual(payment.ApprenticeshipId, result.ApprenticeshipId);
