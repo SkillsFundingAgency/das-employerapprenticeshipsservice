@@ -49,6 +49,10 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.EventHandlers
                 return;
             }
 
+            if (!users.Any())
+            {
+                _log.Info($"There are no users that receive notifications for SenderAccountId '{messageContent.SenderAccountId}'");
+            }
 
             foreach (var owner in users)
             {
