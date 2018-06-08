@@ -167,7 +167,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steps\TranferProcessingSteps.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Features\TranferProcessing.feature">
