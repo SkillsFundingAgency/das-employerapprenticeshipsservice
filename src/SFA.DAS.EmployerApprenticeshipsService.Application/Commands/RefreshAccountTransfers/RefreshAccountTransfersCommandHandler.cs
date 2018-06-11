@@ -1,6 +1,5 @@
 using MediatR;
 using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -76,12 +75,6 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
                 }
 
                 await _transferRepository.CreateAccountTransfers(transfers);
-
-                await _messagePublisher.PublishAsync(new AccountTransfersCreatedQueueMessage
-                {
-                    SenderAccountId = message.ReceiverAccountId,
-                    PeriodEnd = message.PeriodEnd
-                });
             }
             catch (Exception ex)
             {
