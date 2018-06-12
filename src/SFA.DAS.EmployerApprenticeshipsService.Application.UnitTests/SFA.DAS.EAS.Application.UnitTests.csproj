@@ -252,6 +252,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Z.EntityFramework.Plus.QueryFuture.EF6, Version=1.7.19.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Plus.QueryFuture.EF6.1.7.19\lib\net45\Z.EntityFramework.Plus.QueryFuture.EF6.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\AddPayeToAccountTests\WhenIAddPayeToAnAccount.cs" />
@@ -266,6 +269,7 @@
     <Compile Include="Commands\SendTransferConnectionInvitation\SendTransferConnectionInvitationHandlerTests.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementTests\GetAccountEmployerAgreementTests.cs" />
+    <Compile Include="Queries\GetStatisticsTests\GetStatisticsQueryTests.cs" />
     <Compile Include="Queries\GetApprovedTransferConnectionInvitationTests\WhenIGetApprovedTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetEmployerAgreementQueryTests\GetEmployerAgreementTests.cs" />
     <Compile Include="Queries\GetLegalEntityQueryTests\GetLegalEntityQueryTests.cs" />

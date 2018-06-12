@@ -1,7 +1,10 @@
-﻿namespace SFA.DAS.EAS.Domain.Models.PAYE
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SFA.DAS.EAS.Domain.Models.PAYE
 {
     public class Paye
     {
+        [Key]
         public string EmpRef { get; set; }
         public long AccountId { get; set; }  
 

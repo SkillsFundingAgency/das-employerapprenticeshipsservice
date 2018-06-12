@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.Levy;
 
@@ -28,24 +27,28 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                             Id = "1",
                             LevyDueYtd = 10,
                             SubmissionDate = DateTime.UtcNow.AddMonths(-3),
+                            SubmissionId = 1
                         },
                         new DasDeclaration
                         {
                             Id = "2",
                             LevyDueYtd = 70,
-                            SubmissionDate = DateTime.UtcNow.AddMonths(-2)
+                            SubmissionDate = DateTime.UtcNow.AddMonths(-2),
+                            SubmissionId = 2
                         },
                         new DasDeclaration
                         {
                             Id = "3",
                             NoPaymentForPeriod = true,
-                            SubmissionDate = DateTime.UtcNow.AddMonths(-1)
+                            SubmissionDate = DateTime.UtcNow.AddMonths(-1),
+                            SubmissionId = 3
                         },
                         new DasDeclaration
                         {
                             Id = "4",
                             LevyDueYtd = 80,
-                            SubmissionDate = DateTime.UtcNow
+                            SubmissionDate = DateTime.UtcNow,
+                            SubmissionId = 4
                         }
                     }
                 }
@@ -57,6 +60,51 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
 
             return refreshEmployerLevyDataCommand;
         }
+
+        public static RefreshEmployerLevyDataCommand CreateDuplicateHmrcSubmissions(string empRef, long accountId = 1)
+        {
+
+            var refreshEmployerLevyDataCommand = new RefreshEmployerLevyDataCommand
+            {
+                AccountId = accountId,
+                EmployerLevyData = new List<EmployerLevyData> {
+                    new EmployerLevyData
+                    {
+                        EmpRef = empRef,
+                        Declarations = new DasDeclarations
+                        {
+                            Declarations = new List<DasDeclaration>
+                            {
+                                new DasDeclaration
+                                {
+                                    Id = "1",
+                                    LevyDueYtd = 10,
+                                    SubmissionDate = DateTime.UtcNow.AddMonths(-3),
+                                    SubmissionId = 1234
+                                },
+                                new DasDeclaration
+                                {
+                                    Id = "1",
+                                    LevyDueYtd = 10,
+                                    SubmissionDate = DateTime.UtcNow.AddMonths(-3),
+                                    SubmissionId = 1234
+                                },
+                                new DasDeclaration
+                                {
+                                    Id = "1",
+                                    LevyDueYtd = 10,
+                                    SubmissionDate = DateTime.UtcNow.AddMonths(-3),
+                                    SubmissionId = 1234
+                                },
+                            }
+                        }
+                    }
+                }
+            };
+
+            return refreshEmployerLevyDataCommand;
+        }
+
 
         public static RefreshEmployerLevyDataCommand CreateLevyDataWithFutureSubmissions(string empRef, DateTime submissionStartDate, long accountId = 1)
         {
@@ -77,7 +125,8 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                             PayrollYear = GetPayrollYearFromDate(submissionStartDate.AddMonths(-3)),
                             PayrollMonth = GetPayrollMonthFromDate(submissionStartDate.AddMonths(-3)),
                             LevyDueYtd = 10,
-                            SubmissionDate = submissionStartDate.AddMonths(-3)
+                            SubmissionDate = submissionStartDate.AddMonths(-3),
+                            SubmissionId = 1
                         },
                         new DasDeclaration
                         {
@@ -85,7 +134,9 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                             LevyDueYtd = 70,
                             PayrollYear = GetPayrollYearFromDate(submissionStartDate.AddMonths(-2)),
                             PayrollMonth = GetPayrollMonthFromDate(submissionStartDate.AddMonths(-2)),
-                            SubmissionDate = submissionStartDate.AddMonths(-2)
+                            SubmissionDate = submissionStartDate.AddMonths(-2),
+                            SubmissionId = 2
+
                         },
                         new DasDeclaration
                         {
@@ -93,7 +144,9 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                             LevyDueYtd = 75,
                             PayrollYear = GetPayrollYearFromDate(submissionStartDate.AddMonths(-1)),
                             PayrollMonth = GetPayrollMonthFromDate(submissionStartDate.AddMonths(-1)),
-                            SubmissionDate = submissionStartDate.AddMonths(-1)
+                            SubmissionDate = submissionStartDate.AddMonths(-1),
+                            SubmissionId = 3
+
                         },
                         new DasDeclaration
                         {
@@ -101,7 +154,9 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                             LevyDueYtd = 80,
                             PayrollYear = GetPayrollYearFromDate(submissionStartDate),
                             PayrollMonth = GetPayrollMonthFromDate(submissionStartDate),
-                            SubmissionDate = submissionStartDate
+                            SubmissionDate = submissionStartDate,
+                            SubmissionId = 4
+
                         },
                         new DasDeclaration
                         {
@@ -109,7 +164,8 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                             LevyDueYtd = 90,
                             PayrollYear = GetPayrollYearFromDate(submissionStartDate.AddMonths(1)),
                             PayrollMonth = GetPayrollMonthFromDate(submissionStartDate.AddMonths(1)),
-                            SubmissionDate = submissionStartDate.AddMonths(1)
+                            SubmissionDate = submissionStartDate.AddMonths(1),
+                            SubmissionId = 5
                         },
 
                     }
@@ -128,30 +184,30 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
             var refreshEmployerLevyDataCommand = new RefreshEmployerLevyDataCommand
             {
                 AccountId = accountId,
-                EmployerLevyData = new List<EmployerLevyData> {
+                EmployerLevyData = new List<EmployerLevyData>
+                {
                     new EmployerLevyData
-                {
-                EmpRef = empRef,
-                Declarations = new DasDeclarations
-                {
-                    Declarations = new List<DasDeclaration>
                     {
-                        new DasDeclaration
+                        EmpRef = empRef,
+                        Declarations = new DasDeclarations
                         {
-                            Id = "1",
-                            LevyDueYtd = 10,
-                            PayrollYear = "16-17",
-                            PayrollMonth = 12,
-                            SubmissionDate = new DateTime(2017,05,01)
+                            Declarations = new List<DasDeclaration>
+                            {
+                                new DasDeclaration
+                                {
+                                    Id = "1",
+                                    LevyDueYtd = 10,
+                                    PayrollYear = "16-17",
+                                    PayrollMonth = 12,
+                                    SubmissionDate = new DateTime(2017, 05, 01),
+                                    SubmissionId = 1
+                                }
+                            }
                         }
-
                     }
                 }
-                }
-               }
 
             };
-
 
             return refreshEmployerLevyDataCommand;
         }
@@ -175,7 +231,8 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                                     PayrollYear = GetPayrollYearFromDate(submissionStartDate.AddMonths(1)),
                                     PayrollMonth = GetPayrollMonthFromDate(submissionStartDate.AddMonths(1)),
                                     LevyDueYtd = 10,
-                                    SubmissionDate = submissionStartDate.AddMonths(1)
+                                    SubmissionDate = submissionStartDate.AddMonths(1),
+                                    SubmissionId = 1
                                 },
                             }
                         }
@@ -192,7 +249,8 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                                     LevyDueYtd = 70,
                                     PayrollYear = GetPayrollYearFromDate(submissionStartDate.AddMonths(2)),
                                     PayrollMonth = GetPayrollMonthFromDate(submissionStartDate.AddMonths(2)),
-                                    SubmissionDate = submissionStartDate.AddMonths(2)
+                                    SubmissionDate = submissionStartDate.AddMonths(2),
+                                    SubmissionId = 2
                                 },
                                 new DasDeclaration
                                 {
@@ -200,7 +258,8 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                                     LevyDueYtd = 75,
                                     PayrollYear = GetPayrollYearFromDate(submissionStartDate.AddMonths(1)),
                                     PayrollMonth = GetPayrollMonthFromDate(submissionStartDate.AddMonths(1)),
-                                    SubmissionDate = submissionStartDate.AddMonths(1)
+                                    SubmissionDate = submissionStartDate.AddMonths(1),
+                                    SubmissionId = 3
                                 }
                             }
                         }

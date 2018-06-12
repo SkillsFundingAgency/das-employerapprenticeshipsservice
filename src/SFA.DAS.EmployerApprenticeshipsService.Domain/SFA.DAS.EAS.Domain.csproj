@@ -158,6 +158,7 @@
       <HintPath>..\packages\StructureMap.4.6.0\lib\net45\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -189,6 +190,8 @@
     <Compile Include="Configuration\WebJobConfig.cs" />
     <Compile Include="Models\Account\AgreementTemplate.cs" />
     <Compile Include="Models\Account\EmployerAgreement.cs" />
+    <Compile Include="Data\Entities\Statistics\StatisticsAccounts.cs" />
+    <Compile Include="Data\Entities\Statistics\StatisticsFinancial.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Data\IUnitOfWork.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
@@ -377,7 +380,9 @@
       <Name>SFA.DAS.EmployerAccounts.Events</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\Statistics\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

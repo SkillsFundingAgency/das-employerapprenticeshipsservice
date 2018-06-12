@@ -11,6 +11,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     public class EmployerFinancialDbContext : DbContext
     {
         public virtual DbSet<PeriodEnd> PeriodEnds { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
 
         static EmployerFinancialDbContext()
         {
@@ -34,6 +35,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Entity<Payment>().Ignore(a => a.StandardCode).Ignore(a => a.FrameworkCode)
+                .Ignore(a => a.ProgrammeType).Ignore(a => a.PathwayCode).Ignore(a => a.PathwayName);
+            modelBuilder.Entity<Payment>().Property(a => a.EmployerAccountId).HasColumnName("AccountId");
+            modelBuilder.Ignore<PaymentDetails>();
             modelBuilder.HasDefaultSchema("employer_financial");
         }
     }

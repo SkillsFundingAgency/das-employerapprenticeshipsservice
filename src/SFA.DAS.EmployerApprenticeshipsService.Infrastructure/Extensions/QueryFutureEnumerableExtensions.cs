@@ -30,5 +30,10 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
 
             throw new InvalidOperationException("Sequence contains more than one element");
         }
+
+        public static Task<T> ValueAsync<T>(this QueryFutureEnumerable<T> source) where T : struct
+        {
+            return source.SingleOrDefaultAsync();
+        }
     }
 }
