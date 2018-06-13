@@ -22,12 +22,7 @@ CREATE INDEX [IX_TransferConnectionInvitation_SenderAccountId_ReceiverAccountId_
 ON [employer_account].[TransferConnectionInvitation]([SenderAccountId] ASC, [ReceiverAccountId] ASC, [Status] ASC)
 GO
 
-CREATE UNIQUE INDEX [IX_PendingTransferConnectionInvitation_Hash] 
+CREATE UNIQUE INDEX [IX_TransferConnectionInvitation_ConnectionHash] 
 ON [employer_account].[TransferConnectionInvitation] (ConnectionHash)
-WHERE [Status] = 1
-GO
-
-CREATE UNIQUE INDEX [IX_ApprovedTransferConnectionInvitation_Hash] 
-ON [employer_account].[TransferConnectionInvitation] (ConnectionHash)
-WHERE [Status] = 2
+WHERE [Status] <> 3
 GO

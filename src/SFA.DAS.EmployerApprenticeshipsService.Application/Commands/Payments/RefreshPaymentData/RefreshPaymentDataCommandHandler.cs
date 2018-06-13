@@ -1,4 +1,3 @@
-using System;
 using MediatR;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
 using SFA.DAS.EAS.Application.Exceptions;
@@ -73,7 +72,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             _logger.Info($"GetAccountPaymentIds for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
 
             var existingPaymentIds = await _dasLevyRepository.GetAccountPaymentIds(message.AccountId);
-            var newPayments = payments.Where(p => !existingPaymentIds.Contains(Guid.Parse(p.Id))).ToArray();
+            var newPayments = payments.Where(p => !existingPaymentIds.Contains(p.Id)).ToArray();
 
             if (!newPayments.Any())
             {
@@ -94,6 +93,9 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             }
 
             _logger.Info($"Finished publishing ProcessPaymentEvent and PaymentCreatedMessage messages for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
+
+            await _messagePublisher.PublishAsync(new AccountPaymentsProcessingCompletedMessage(
+                        message.AccountId, message.PeriodEnd, string.Empty, string.Empty));
         }
     }
 }

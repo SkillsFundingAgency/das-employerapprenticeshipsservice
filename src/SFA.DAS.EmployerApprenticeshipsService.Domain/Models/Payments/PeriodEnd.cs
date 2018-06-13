@@ -4,8 +4,10 @@ namespace SFA.DAS.EAS.Domain.Models.Payments
 {
     public class PeriodEnd
     {
-        public string Id { get; set; }
-        
+        public int Id { get; set; }
+
+        public string PeriodEndId { get; set; }
+
         public int CalendarPeriodMonth { get; set; }
 
         public int CalendarPeriodYear { get; set; }

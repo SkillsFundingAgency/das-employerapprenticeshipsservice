@@ -1,6 +1,7 @@
 ﻿@using System.Globalization
 @using SFA.DAS.EAS.Domain.Models.Payments
 @using SFA.DAS.EAS.Domain.Models.Transaction
+@using SFA.DAS.EAS.Domain.Models.Transfers
 @using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.TransactionViewResultViewModel>
 @{
@@ -52,6 +53,7 @@
                 </div>
             </div>
         }
+
     </div>
 </div>
 <div class="grid-row">
@@ -86,7 +88,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th scope="col"><span class="no-wrap">Payment date</span></th>
+                        <th scope="col" class="no-wrap">Payment date</th>
                         <th scope="col" class="mobile-hide-cell">Description</th>
                         <th scope="col" class="numeric">Amount</th>
                         <th scope="col"><span class="vh">Action</span></th>
@@ -99,8 +101,8 @@
                         var toDate = new DateTime(aggregationLine.DateCreated.Year, aggregationLine.DateCreated.Month, aggregationLine.DateCreated.Day, 23, 59, 59);
 
                         <tr>
-                            <td>
-                                <span class="no-wrap">@{var date = aggregationLine.DateCreated.ToGdsFormat();} @date </span>
+                            <td class="no-wrap">
+                                @{var date = aggregationLine.DateCreated.ToGdsFormat();} @date
                             </td>
                             <td class="mobile-hide-cell">
                                 <span class="description">
@@ -123,11 +125,11 @@
                                 }
                             }
 
-                            <td class="numeric"> <span class="no-wrap"> @(transactionAmount.ToString("C2", culture)) </span> </td>
+                            <td class="numeric no-wrap">@(transactionAmount.ToString("C2", culture))</td>
 
                             <td class="link-right">
                                 @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
-aggregationLine.TransactionType == TransactionItemType.TopUp)
+                                     aggregationLine.TransactionType == TransactionItemType.TopUp)
                                 {
                                     <a title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
                                         Details <span class="vh"> for the transaction on @date</span>
@@ -142,6 +144,28 @@ aggregationLine.TransactionType == TransactionItemType.TopUp)
 
                                     </a>
                                 }
+                                else if (aggregationLine.TransactionType == TransactionItemType.Transfer)
+                                {
+                                    var transferTransaction = aggregationLine as TransferTransactionLine;
+
+                                    var targetAccountPublicHashedId = 
+                                        transferTransaction.TransactionAccountIsTransferSender ? 
+                                            transferTransaction?.ReceiverAccountPublicHashedId :
+                                            transferTransaction?.SenderAccountPublicHashedId;
+
+                                        <a title="View details for the transfer transaction on @date"
+                                           href="@Url.Action("TransferDetail", "EmployerAccountTransactions",
+                                                     new
+                                                     {
+                                                         HashedAccountId = Model.Data.Model.Data.HashedAccountId,
+                                                         TargetAccountPublicHashedId = targetAccountPublicHashedId,
+                                                         PeriodEnd = transferTransaction?.PeriodEnd
+                                                     })">
+                                            Details <span class="vh"> for the transfer transaction on @date</span>
+                                        </a>
+                                    
+                                }
+
                             </td>
                         </tr>
                     }

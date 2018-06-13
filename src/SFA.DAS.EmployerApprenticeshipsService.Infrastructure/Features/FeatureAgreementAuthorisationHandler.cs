@@ -12,12 +12,12 @@ namespace SFA.DAS.EAS.Infrastructure.Features
     {
         private static readonly Type Type = typeof(FeatureAgreementAuthorisationHandler);
         
-        private readonly IAccountAgreementService _accountAgreementService;
+        private readonly IAgreementService _agreementService;
         private readonly ILog _logger;
 
-        public FeatureAgreementAuthorisationHandler(IAccountAgreementService accountAgreementService, ILog logger)
+        public FeatureAgreementAuthorisationHandler(IAgreementService agreementService, ILog logger)
         {
-            _accountAgreementService = accountAgreementService;
+            _agreementService = agreementService;
             _logger = logger;
         }
 
@@ -33,8 +33,8 @@ namespace SFA.DAS.EAS.Infrastructure.Features
             }
             else
             {
-                var latestSignedAgreementVersion = await _accountAgreementService.GetLatestSignedAgreementVersionAsync(authorizationContext.AccountContext.Id).ConfigureAwait(false);
-                var isFeatureAgreementSigned = latestSignedAgreementVersion >= feature.EnabledByAgreementVersion.Value;
+                var agreementVersion = await _agreementService.GetAgreementVersionAsync(authorizationContext.AccountContext.Id).ConfigureAwait(false);
+                var isFeatureAgreementSigned = agreementVersion >= feature.EnabledByAgreementVersion.Value;
 
                 result = isFeatureAgreementSigned
                     ? AuthorizationResult.Ok

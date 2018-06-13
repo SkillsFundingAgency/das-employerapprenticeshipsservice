@@ -1,6 +1,7 @@
-﻿using System;
+﻿using SFA.DAS.EAS.Domain.Models.Transaction;
+using System;
 
-namespace SFA.DAS.EAS.Domain.Models.Transaction
+namespace SFA.DAS.EAS.Domain.Data.Entities.Transaction
 {
     public class TransactionEntity
     {
@@ -34,6 +35,12 @@ namespace SFA.DAS.EAS.Domain.Models.Transaction
         public string ApprenticeNINumber { get; set; }
         public decimal SfaCoInvestmentAmount { get; set; }
         public decimal EmployerCoInvestmentAmount { get; set; }
+
+        //Transfer fields
+        public long SenderAccountId { get; set; }
+        public string SenderAccountName { get; set; }
+        public long ReceiverAccountId { get; set; }
+        public string ReceiverAccountName { get; set; }
 
     }
 }

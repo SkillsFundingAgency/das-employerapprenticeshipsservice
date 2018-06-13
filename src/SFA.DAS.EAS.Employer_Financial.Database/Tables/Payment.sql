@@ -7,7 +7,7 @@
     [ApprenticeshipId] BIGINT NOT NULL,
     [DeliveryPeriodMonth] INT NOT NULL,
     [DeliveryPeriodYear] INT NOT NULL,
-    [CollectionPeriodId] char(8) NOT NULL,
+    [CollectionPeriodId] char(20) NOT NULL,
     [CollectionPeriodMonth] int NOT NULL,
     [CollectionPeriodYear] int NOT NULL,
 	[EvidenceSubmittedOn] DATETIME NOT NULL,

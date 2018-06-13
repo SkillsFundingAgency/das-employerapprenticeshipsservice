@@ -18,6 +18,5 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<EmployerAgreementTemplate> GetLatestAgreementTemplate();
         Task RemoveLegalEntityFromAccount(long agreementId);
         Task<List<RemoveEmployerAgreementView>> GetEmployerAgreementsToRemove(long accountId);
-        Task<int?> GetLatestSignedAgreementVersion(long accountId);
     }
 }

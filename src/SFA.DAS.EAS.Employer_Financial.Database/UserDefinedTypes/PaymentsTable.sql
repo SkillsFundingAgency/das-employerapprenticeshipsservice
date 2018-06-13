@@ -8,7 +8,7 @@
 	ApprenticeshipId BIGINT NOT NULL,
 	DeliveryPeriodMonth INT NOT NULL,
 	DeliveryPeriodYear INT NOT NULL,
-	CollectionPeriodId CHAR(8) NOT NULL,
+	CollectionPeriodId CHAR(20) NOT NULL,
 	CollectionPeriodMonth INT NOT NULL,
 	CollectionPeriodYear INT NOT NULL,
 	EvidenceSubmittedOn DATETIME NOT NULL,

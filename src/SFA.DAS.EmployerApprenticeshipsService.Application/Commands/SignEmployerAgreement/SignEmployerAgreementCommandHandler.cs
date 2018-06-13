@@ -8,7 +8,6 @@ using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Factories;
-
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -33,7 +32,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
         private readonly IMediator _mediator;
         private readonly IMessagePublisher _messagePublisher;
         private readonly ICommitmentService _commitmentService;
-        private readonly IAccountAgreementService _accountAgreementService;
+        private readonly IAgreementService _agreementService;
 
 
         public SignEmployerAgreementCommandHandler(
@@ -46,7 +45,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             IMediator mediator, 
             IMessagePublisher messagePublisher,
             ICommitmentService commitmentService,
-            IAccountAgreementService accountAgreementService)
+            IAgreementService agreementService)
         {
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
@@ -57,7 +56,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             _mediator = mediator;
             _messagePublisher = messagePublisher;
             _commitmentService = commitmentService;
-            _accountAgreementService = accountAgreementService;
+            _agreementService = agreementService;
         }
 
         protected override async Task HandleCore(SignEmployerAgreementCommand message)
@@ -104,7 +103,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             
             await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId, accountHasCommitments, owner.FullName(), owner.UserRef);
 
-            await _accountAgreementService.RemoveFromCacheAsync(accountId);
+            await _agreementService.RemoveFromCacheAsync(accountId);
         }
 
         private async Task PublishAgreementSignedMessage(long accountId, long legalEntityId, string legalEntityName, long agreementId,
