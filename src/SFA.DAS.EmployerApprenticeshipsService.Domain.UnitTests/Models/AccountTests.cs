@@ -40,13 +40,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
         }
 
         [Test]
-        public void SendTransferConnectionInvitation_WhenMaxInvitationsHaveBeenSent_ThenShouldThrowException()
-        {
-            Run(f => f.SetSenderAccountWithSentTransferConnection(), f => f.SendTransferConnectionInvitation(), (f, a) => a.ShouldThrow<Exception>()
-                .WithMessage("Requires max transfer connection invitations have not been sent"));
-        }
-
-        [Test]
         public void SendTransferConnectionInvitation_WhenReceiverIsASender_ThenShouldThrowException()
         {
             Run(f => f.SetReceiverAccountWithSentTransferConnection(), f => f.SendTransferConnectionInvitation(), (f, a) => a.ShouldThrow<Exception>()
