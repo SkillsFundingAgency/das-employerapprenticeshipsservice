@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                 }
                 else
                 {
-                    if (member.RoleId != (short) Role.Owner)
+                    if (member.Role != Role.Owner)
                     {
                         validationResult.IsUnauthorized = true;
                     }

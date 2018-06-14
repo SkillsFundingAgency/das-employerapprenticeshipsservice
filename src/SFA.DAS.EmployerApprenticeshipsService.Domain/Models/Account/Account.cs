@@ -16,8 +16,8 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public virtual string Name { get; set; }
         public virtual string PublicHashedId { get; set; }
         public virtual ICollection<TransferConnectionInvitation> ReceivedTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
-        public virtual int RoleId { get; set; }
-        public string RoleName => ((Role)RoleId).ToString();
+        public virtual Role Role { get; set; }
+
         public virtual ICollection<TransferConnectionInvitation> SentTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
 
         public bool IsTransferConnectionInvitationSender()

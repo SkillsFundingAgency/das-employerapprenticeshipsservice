@@ -12,18 +12,24 @@ namespace SFA.DAS.EAS.Domain.Models.AccountTeam
 
         public virtual Role Role
         {
-            get => _role ?? (Role)_roleId.Value;
+            get => _role ?? Role.None;
             set => _role = value;
         }
 
-        [Obsolete("Please use 'Role' instead.")]
-        public int RoleId
-        {
-            get => _roleId ?? (int)_role.Value;
-            set => _roleId = value;
-        }
+        //[Obsolete("Please use 'Role' instead.")]
+        //public int RoleId
+        //{
+        //    set
+        //    {
+        //        Role = Role.None;
+        //        if (Enum.TryParse(value.ToString(), out Role role))
+        //        {
+        //            Role = role;
+        //        }
+        //    }
+        //}
 
         private Role? _role;
-        private int? _roleId;
+        //private int? _roleId;
     }
 }

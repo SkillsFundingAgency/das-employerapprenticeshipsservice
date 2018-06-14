@@ -13,6 +13,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
 
         public string EmailOfPersonBeingInvited { get; set; }
 
-        public Role RoleIdOfPersonBeingInvited { get; set; }
+        public Role RoleOfPersonBeingInvited { get; set; }
     }
 }

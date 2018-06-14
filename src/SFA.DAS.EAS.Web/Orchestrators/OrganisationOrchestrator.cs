@@ -597,7 +597,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
         {
             var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
-            return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
+            return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
         }
     }
 }

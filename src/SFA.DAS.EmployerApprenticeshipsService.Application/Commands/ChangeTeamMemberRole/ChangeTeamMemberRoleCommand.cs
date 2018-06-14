@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole
 {
@@ -6,7 +7,7 @@ namespace SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole
     {
         public string HashedAccountId { get; set; }
         public string Email { get; set; }
-        public short RoleId { get; set; }
+        public Role Role { get; set; }
         public string ExternalUserId { get; set; }
     }
 }
