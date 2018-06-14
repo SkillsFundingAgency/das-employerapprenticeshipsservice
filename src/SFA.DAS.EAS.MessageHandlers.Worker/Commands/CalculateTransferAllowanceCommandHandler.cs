@@ -44,7 +44,8 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.Commands
             {
                 AccountId = messageContent.AccountId,
                 Year = _datetimeService.CurrentFinancialYear.EndYear,
-                SnapshotTime = DateTime.UtcNow
+                SnapshotTime = DateTime.UtcNow,
+                TransferAllowance = transferAllowanceResponse.Result.TransferAllowance
             };
             return Upsert(transfer);
         }

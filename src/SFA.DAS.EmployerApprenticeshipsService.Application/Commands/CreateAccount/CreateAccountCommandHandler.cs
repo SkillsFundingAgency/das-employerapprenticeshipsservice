@@ -19,6 +19,7 @@ using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateAccount
@@ -36,6 +37,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
         private readonly IMembershipRepository _membershipRepository;
+        private readonly ILog _logger;
 
         public CreateAccountCommandHandler(
             IAccountRepository accountRepository, 
@@ -47,7 +49,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IGenericEventFactory genericEventFactory, 
             IAccountEventFactory accountEventFactory, 
             IRefreshEmployerLevyService refreshEmployerLevyService,
-            IMembershipRepository membershipRepository)
+            IMembershipRepository membershipRepository,
+            ILog logger)
         {
             _accountRepository = accountRepository;
             _messagePublisher = messagePublisher;
@@ -60,6 +63,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _accountEventFactory = accountEventFactory;
             _refreshEmployerLevyService = refreshEmployerLevyService;
             _membershipRepository = membershipRepository;
+            _logger = logger;
         }
 
         public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
@@ -143,6 +147,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private Task SendCalculateTransferAllowanceSnapshotCommand(long accountId)
         {
+            _logger.Info($"Sending {nameof(CalculateTransferAllowanceSnapshotCommand)} to queue"); 
             return _messagePublisher.PublishAsync(new CalculateTransferAllowanceSnapshotCommand
             {
                 AccountId = accountId

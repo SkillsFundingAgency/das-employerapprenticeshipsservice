@@ -24,6 +24,7 @@ using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 {
@@ -40,6 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IAccountEventFactory> _accountEventFactory;
         private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
         private Mock<IMembershipRepository> _mockMembershipRepository;
+        private Mock<ILog> _mockLogger;
         
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
@@ -80,6 +82,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _mockMembershipRepository.Setup(r => r.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(new MembershipView() { FirstName = "Caller", LastName = "Full Name" }));
 
+            _mockLogger = new Mock<ILog>();
+
             _handler = new CreateAccountCommandHandler(
                 _accountRepository.Object, 
                 _messagePublisher.Object, 
@@ -90,7 +94,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 _genericEventFactory.Object,
                 _accountEventFactory.Object,
                 _refreshEmployerLevyService.Object,
-                _mockMembershipRepository.Object);
+                _mockMembershipRepository.Object,
+                _mockLogger.Object
+                );
         }
 
         [Test]
