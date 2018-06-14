@@ -16,7 +16,7 @@ using SFA.DAS.Notifications.Api.Types;
 
 namespace SFA.DAS.EAS.MessageHandlers.Worker.EventHandlers
 {
-    [TopicSubscription("Task_RejectedTransferConnectionInvitation")]
+    [TopicSubscription("MessHandler_RejectedTransferConnectionInvitation")]
     public class RejectedTransferConnectionInvitationEventHandler : MessageProcessor<RejectedTransferConnectionInvitationEvent>
     {
         private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
