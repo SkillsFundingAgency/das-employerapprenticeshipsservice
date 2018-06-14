@@ -11,6 +11,6 @@ namespace SFA.DAS.EAS.Domain.Models.AccountTeam
         public string Email { get; set; }
         public DateTime ExpiryDate { get; set; }
         public InvitationStatus Status { get; set; }
-        public Role RoleId { get; set; }
+        public Role Role { get; set; }
     }
 }

@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
                 Email = "test.user@test.local",
                 Status = InvitationStatus.Pending,
                 ExpiryDate = DateTimeProvider.Current.UtcNow.AddDays(2),
-                RoleId = Role.Owner,
+                Role = Role.Owner,
                 Name = "Bob Green"
             };
 
@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
             await _handler.Handle(new AcceptInvitationCommand());
 
             //Assert
-            _invitationRepository.Verify(x => x.Accept(_invitation.Email, _invitation.AccountId, (short)_invitation.RoleId), Times.Once);
+            _invitationRepository.Verify(x => x.Accept(_invitation.Email, _invitation.AccountId, _invitation.Role), Times.Once);
         }
 
         [Test]

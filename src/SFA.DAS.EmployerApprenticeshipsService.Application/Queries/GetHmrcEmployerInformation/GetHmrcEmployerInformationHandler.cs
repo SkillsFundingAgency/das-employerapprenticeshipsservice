@@ -37,7 +37,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation
 
             if (string.IsNullOrEmpty(empref))
             {
-                throw new NotFoundException($"{empref} no paye scheme exists");
+                return new GetHmrcEmployerInformationResponse
+                {
+                    Empref = "",
+                    EmprefNotFound = true
+                };
             }
 
             var emprefInformation = await _hmrcService.GetEmprefInformation(message.AuthToken, empref);
@@ -47,7 +51,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation
             if (schemeCheck.PayeScheme != null)
             {
                 _logger.Warn($"PAYE scheme {empref} already in use.");
-                throw new ConstraintException("PAYE scheme already in use");
+                return new GetHmrcEmployerInformationResponse
+                {
+                    Empref = "",
+                };
             }
             
             return new GetHmrcEmployerInformationResponse { EmployerLevyInformation = emprefInformation, Empref = empref };

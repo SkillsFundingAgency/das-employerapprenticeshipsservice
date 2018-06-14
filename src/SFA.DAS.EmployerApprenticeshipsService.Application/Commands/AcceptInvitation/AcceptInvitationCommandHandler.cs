@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
             if (invitation.ExpiryDate < DateTimeProvider.Current.UtcNow)
                 throw new InvalidOperationException("Invitation has expired");
 
-            await _invitationRepository.Accept(invitation.Email, invitation.AccountId, (short)invitation.RoleId);
+            await _invitationRepository.Accept(invitation.Email, invitation.AccountId, invitation.Role);
 
             await CreateAuditEntry(message, user, invitation);
 
@@ -102,7 +102,7 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
             {
                 Category = "UPDATED",
                 Description =
-                    $"Member {user.Email} has accepted and invitation to account {existing.AccountId} as {existing.RoleId}",
+                    $"Member {user.Email} has accepted and invitation to account {existing.AccountId} as {existing.Role}",
                 ChangedProperties = new List<PropertyUpdate>
                 {
                     PropertyUpdate.FromString("Status", InvitationStatus.Accepted.ToString())

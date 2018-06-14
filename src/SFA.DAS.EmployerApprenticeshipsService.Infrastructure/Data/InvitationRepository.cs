@@ -7,6 +7,7 @@ using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.Sql.Client;
 using SFA.DAS.NLog.Logger;
 
@@ -62,7 +63,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@email", invitation.Email, DbType.String);
                 parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
                 parameters.Add("@statusId", invitation.Status, DbType.Int16);
-                parameters.Add("@roleId", invitation.RoleId, DbType.Int16);
+                parameters.Add("@roleId", (short)invitation.Role, DbType.Int16);
                 parameters.Add("@invitationId", invitationId, DbType.Int64,ParameterDirection.Output);
 
                 await c.ExecuteAsync(
@@ -128,7 +129,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@id", invitation.Id, DbType.Int64);
                 parameters.Add("@name", invitation.Name, DbType.String);
-                parameters.Add("@roleId", invitation.RoleId, DbType.Int16);
+                parameters.Add("@roleId", (short)invitation.Role, DbType.Int16);
                 parameters.Add("@statusId", invitation.Status, DbType.Int16);
                 parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
 
@@ -139,14 +140,14 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task Accept(string email, long accountId, short roleId)
+        public async Task Accept(string email, long accountId, Role role)
         { 
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", email, DbType.String);
                 parameters.Add("@accountId", accountId, DbType.Int64);
-                parameters.Add("@roleId", roleId, DbType.Int16);
+                parameters.Add("@roleId", (short)role, DbType.Int16);
 
                 return await c.ExecuteAsync(
                     sql: "[employer_account].[AcceptInvitation]",

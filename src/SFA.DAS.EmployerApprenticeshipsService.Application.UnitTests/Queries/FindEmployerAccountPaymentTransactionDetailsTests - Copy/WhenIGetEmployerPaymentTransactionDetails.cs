@@ -143,15 +143,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
         }
 
         [Test]
-        public void ThenANotFoundExceptionShouldBeThrowIfNoTransactionsAreFound()
+        public async Task ThenResultShouldBeNullIfNoTransactionsAreFound()
         {
             //Arrange
             _dasLevyService.Setup(x => x.GetAccountProviderPaymentsByDateRange<PaymentTransactionLine>
                     (It.IsAny<long>(), It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(new List<PaymentTransactionLine>());
 
-            //Act
-            Assert.ThrowsAsync<NotFoundException>(async () => await RequestHandler.Handle(Query));
+            var result = await RequestHandler.Handle(Query);
+
+            Assert.IsNull(result);
         }
     }
 }

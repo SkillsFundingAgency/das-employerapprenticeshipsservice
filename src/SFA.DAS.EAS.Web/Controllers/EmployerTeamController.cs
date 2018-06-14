@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Authentication;
@@ -240,7 +241,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{email}/role/change")]
-        public async Task<ActionResult> ChangeRole(string hashedAccountId, string email, short role)
+        public async Task<ActionResult> ChangeRole(string hashedAccountId, string email, Role role)
         {
             var response = await _employerTeamOrchestrator.ChangeRole(hashedAccountId, email, role, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 

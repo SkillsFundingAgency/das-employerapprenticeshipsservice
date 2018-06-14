@@ -6,6 +6,7 @@ using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.Sql.Client;
 using SFA.DAS.NLog.Logger;
 
@@ -66,14 +67,14 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task ChangeRole(long userId, long accountId, short roleId)
+        public async Task ChangeRole(long userId, long accountId, Role role)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@userId", userId, DbType.Int64);
                 parameters.Add("@accountId", accountId, DbType.Int64);
-                parameters.Add("@roleId", roleId, DbType.Int16);
+                parameters.Add("@roleId", (short)role, DbType.Int16);
 
                 return await c.ExecuteAsync(
                     sql: "UPDATE [employer_account].[Membership] SET RoleId = @roleId WHERE AccountId = @accountId AND UserId = @userId;",
@@ -116,14 +117,14 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task Create(long userId, long accountId, short roleId)
+        public async Task Create(long userId, long accountId, Role role)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@userId", userId, DbType.Int64);
                 parameters.Add("@accountId", accountId, DbType.Int64);
-                parameters.Add("@roleId", roleId, DbType.Int16);
+                parameters.Add("@roleId", (short)role, DbType.Int16);
                 parameters.Add("@createdDate",DateTime.UtcNow, DbType.DateTime);
 
                 return await c.ExecuteAsync(

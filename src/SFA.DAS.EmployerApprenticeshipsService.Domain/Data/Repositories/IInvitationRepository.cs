@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
@@ -13,7 +14,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<Invitation> Get(long accountId, string email);
         Task ChangeStatus(Invitation invitation);
         Task Resend(Invitation invitation);
-        Task Accept(string email, long accountId, short roleId);
+        Task Accept(string email, long accountId, Role role);
         Task<int> GetNumberOfInvites(string userId);
     }
 }
