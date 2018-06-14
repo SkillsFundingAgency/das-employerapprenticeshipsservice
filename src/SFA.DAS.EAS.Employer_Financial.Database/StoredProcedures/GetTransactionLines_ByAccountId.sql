@@ -19,7 +19,7 @@ left join
       ,tl.TransactionType
 	  ,MAX(tl.TransactionDate) as TransactionDate
       ,Sum(tl.Amount) as Amount
-      ,tl.Ukprn
+      ,tl.UkPrn
       ,tl.DateCreated
 	  ,tl.SfaCoInvestmentAmount
 	  ,tl.EmployerCoInvestmentAmount
@@ -33,8 +33,8 @@ left join
   FROM [employer_financial].[TransactionLine] tl
   LEFT JOIN [employer_financial].LevyDeclaration ld on ld.submissionid = tl.submissionid
   WHERE tl.AccountId = @accountId AND tl.DateCreated >= @fromDate AND DateCreated <= @toDate
-  GROUP BY tl.DateCreated, tl.AccountId, tl.UKPRN, tl.SfaCoInvestmentAmount, tl.EmployerCoInvestmentAmount, 
+  GROUP BY tl.DateCreated, tl.AccountId, tl.UkPrn, tl.SfaCoInvestmentAmount, tl.EmployerCoInvestmentAmount, 
   tl.TransactionType, tl.PeriodEnd, ld.PayrollMonth, ld.PayrollYear, tl.TransferSenderAccountId, 
   tl.TransferSenderAccountName, tl.TransferReceiverAccountId, tl.TransferReceiverAccountName
 ) as main on main.AccountId = bal.AccountId
-order by DateCreated desc, TransactionType desc, ukprn desc
+order by DateCreated desc, TransactionType desc, UkPrn desc
