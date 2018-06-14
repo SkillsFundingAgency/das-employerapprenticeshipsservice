@@ -258,6 +258,7 @@
     <Compile Include="Models\Features\FeatureType.cs" />
     <Compile Include="Models\IEntity.cs" />
     <Compile Include="Models\Organisation\Address.cs" />
+    <Compile Include="Models\Payments\AccountTransferSnapshot.cs" />
     <Compile Include="Models\Payments\Payment.cs" />
     <Compile Include="Models\Payments\PeriodEnd.cs" />
     <Compile Include="Models\Settings\UserNotificationSetting.cs" />

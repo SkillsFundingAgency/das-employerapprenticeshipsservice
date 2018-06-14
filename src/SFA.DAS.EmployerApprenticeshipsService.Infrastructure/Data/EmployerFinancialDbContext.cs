@@ -12,6 +12,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     {
         public virtual DbSet<PeriodEnd> PeriodEnds { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
+        public virtual DbSet<AccountTransferAllowanceSnapshot> AccountTransferSnapshots { get; set; }
 
         static EmployerFinancialDbContext()
         {

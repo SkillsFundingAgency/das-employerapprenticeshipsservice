@@ -306,6 +306,14 @@
     <Compile Include="Extensions\QueryableExtensions.cs" />
     <Compile Include="Extensions\QueryFutureEnumerableExtensions.cs" />
     <Compile Include="Features\IFeatureService.cs" />
+    <Compile Include="Services\DateService.cs" />
+    <Compile Include="Models\FinancialYearCutoff.cs" />
+    <Compile Include="Services\FinancialYearDateCalculator.cs" />
+    <Compile Include="Models\FinancialYearDetails.cs" />
+    <Compile Include="Interfaces\IDateService.cs" />
+    <Compile Include="Interfaces\IFinancialYearDateCalculator.cs" />
+    <Compile Include="Interfaces\ISystemDateService.cs" />
+    <Compile Include="Services\SystemDateService.cs" />
     <Compile Include="Mapping\Profiles\PaymentMappings.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringAttribute.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringPolicy.cs" />

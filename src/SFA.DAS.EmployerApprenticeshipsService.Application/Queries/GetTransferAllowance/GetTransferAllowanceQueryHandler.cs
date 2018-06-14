@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferAllowance
 
             return new GetTransferAllowanceResponse
             {
-                TransferAllowance = transferAllowance
+                TransferAllowance = transferAllowance 
             };
         }
     }

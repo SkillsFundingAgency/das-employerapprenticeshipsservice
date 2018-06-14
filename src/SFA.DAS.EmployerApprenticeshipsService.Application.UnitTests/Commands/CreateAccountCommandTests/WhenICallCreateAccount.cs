@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Hashing;
+using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -258,6 +259,23 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 c.AccountId.Equals(ExpectedAccountId) &&
                 c.CreatorUserRef.Equals(_user.UserRef)
                 )), Times.Once());
+        }
+
+        [Test]
+        public async Task ThenTheCalculateTransferAllowanceSnapshotCommandIsPublished()
+        {
+            //Arrange
+            var expectedPayeRef = "123/abc";
+
+            var createAccountCommand = new CreateAccountCommand { PayeReference = expectedPayeRef, AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.UserRef };
+
+            //Act
+            await _handler.Handle(createAccountCommand);
+
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(
+                    It.Is<CalculateTransferAllowanceSnapshotCommand>(c => c.AccountId.Equals(ExpectedAccountId))),
+                    Times.Once());
         }
 
         [Test]

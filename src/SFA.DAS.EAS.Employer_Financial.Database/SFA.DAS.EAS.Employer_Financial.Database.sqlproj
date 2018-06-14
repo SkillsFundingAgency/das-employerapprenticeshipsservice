@@ -145,6 +145,7 @@
     <None Include="Scripts\Manual\AddTransferLevy.sql" />
     <None Include="Scripts\Manual\CreateTransferPayments.sql" />
     <None Include="Scripts\PreDeployment\RemoveDuplicateLevyDeclarations.sql" />
+    <Build Include="Tables\AccountTransferAllowanceSnapshot.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />

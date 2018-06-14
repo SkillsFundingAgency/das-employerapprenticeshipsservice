@@ -215,6 +215,8 @@
     <Compile Include="Authorization\AuthorizationServiceTests.cs" />
     <Compile Include="Features\FeatureWhitelistAuthorisationHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\DateServiceTests.cs" />
+    <Compile Include="Services\FinancialYearDateCalculatorTests.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveNoResponse.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveJsonResponse.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveAStringResponse.cs" />

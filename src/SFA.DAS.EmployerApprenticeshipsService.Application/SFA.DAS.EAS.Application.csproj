@@ -326,11 +326,16 @@
     <Compile Include="Mappings\AgreementMappings.cs" />
     <Compile Include="Mappings\EmploymentAgreementStatusMappings.cs" />
     <Compile Include="Mappings\LegalEntityMappings.cs" />
+    <Compile Include="Messages\CalculateTransferAllowanceSnapshotMessage.cs" />
+    <Compile Include="Messages\RunTransferAllowanceSnapshotJobCommand.cs" />
     <Compile Include="Queries\Extensions\EmployerAgreementsStatusDtoExtensions.cs" />
     <Compile Include="Queries\Extensions\QueryExtensions.cs" />
     <Compile Include="Queries\GetLegalEntity\GetLegalEntityQuery.cs" />
     <Compile Include="Queries\GetLegalEntity\GetLegalEntityQueryHandler.cs" />
     <Compile Include="Queries\GetLegalEntity\GetLegalEntityResponse.cs" />
+    <Compile Include="Queries\GetTransferAllowanceSnapshot\GetTransferAllowanceSnapshotQuery.cs" />
+    <Compile Include="Queries\GetTransferAllowanceSnapshot\GetTransferAllowanceSnaphotQueryHandler.cs" />
+    <Compile Include="Queries\GetTransferAllowanceSnapshot\GetTransferAllowanceSnapshotResponse.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQuery.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceResponse.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQueryHandler.cs" />
