@@ -16,7 +16,7 @@ using SFA.DAS.Notifications.Api.Types;
 
 namespace SFA.DAS.EAS.MessageHandlers.Worker.EventHandlers
 {
-    [TopicSubscription("MessHandler_SentTransferConnectionInvitiationProcessor")]
+    [TopicSubscription("MH_SentTransferConnectionInvitiationProcessor")]
     public class SentTransferConnectionInvitationEventHandler : MessageProcessor<SentTransferConnectionInvitationEvent>
     {
         private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
