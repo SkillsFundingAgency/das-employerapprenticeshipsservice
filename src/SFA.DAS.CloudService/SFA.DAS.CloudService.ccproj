@@ -46,12 +46,14 @@
   <ItemGroup>
     <Folder Include="Configuration" />
     <Folder Include="SFA.DAS.EAS.Account.WorkerContent\" />
+    <Folder Include="SFA.DAS.EAS.MessageHandlers.WorkerContent\" />
     <Folder Include="SFA.DAS.EAS.PaymentProvider.WorkerContent\" />
     <Folder Include="SFA.DAS.EAS.WebContent" />
     <Folder Include="SFA.DAS.EAS.LevyDeclarationProvider.WorkerContent" />
   </ItemGroup>
   <ItemGroup>
     <DiagnosticsConfiguration Include="SFA.DAS.EAS.Account.WorkerContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="SFA.DAS.EAS.MessageHandlers.WorkerContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.EAS.PaymentProvider.WorkerContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.EAS.WebContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.EAS.LevyDeclarationProvider.WorkerContent\diagnostics.wadcfgx" />
@@ -63,6 +65,14 @@
       <Private>True</Private>
       <RoleType>Worker</RoleType>
       <RoleName>SFA.DAS.EAS.Account.Worker</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EAS.MessageHandlers.Worker\SFA.DAS.EAS.MessageHandlers.Worker.csproj">
+      <Name>SFA.DAS.EAS.MessageHandlers.Worker</Name>
+      <Project>{b7e81c37-d160-48a9-9bcd-3296a480b739}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>SFA.DAS.EAS.MessageHandlers.Worker</RoleName>
       <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EAS.PaymentProvider.Worker\SFA.DAS.EAS.PaymentProvider.Worker.csproj">
