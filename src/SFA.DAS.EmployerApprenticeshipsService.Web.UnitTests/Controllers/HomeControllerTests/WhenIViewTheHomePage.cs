@@ -116,6 +116,19 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         }
 
         [Test]
+        public async Task ThenTheClaimsAreRefreshedForThatUserWhenAuthenticated()
+        {
+            //Arrange
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+
+            //Act
+            await _homeController.Index();
+
+            //Assert
+            _owinWrapper.Verify(x => x.UpdateClaims(), Times.Once);
+        }
+
+        [Test]
         public void ThenTheIndexDoesNotHaveTheAuthorizeAttribute()
         {
             var methods = typeof(HomeController).GetMethods().Where(m => m.Name.Equals("Index")).ToList();
