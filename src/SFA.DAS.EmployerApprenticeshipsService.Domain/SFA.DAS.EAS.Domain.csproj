@@ -185,7 +185,6 @@
     <Compile Include="Configuration\CommitmentsApiClientConfiguration.cs" />
     <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />
-    <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
     <Compile Include="Configuration\WebJobConfig.cs" />
     <Compile Include="Models\Account\AgreementTemplate.cs" />
     <Compile Include="Models\Account\EmployerAgreement.cs" />
@@ -297,7 +296,6 @@
     <Compile Include="Interfaces\IDistributedCache.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
     <Compile Include="Data\Repositories\ILegalEntityRepository.cs" />
-    <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IDasAccountService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />

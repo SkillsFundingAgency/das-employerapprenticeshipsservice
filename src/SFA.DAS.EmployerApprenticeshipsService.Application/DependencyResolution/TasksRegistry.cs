@@ -10,9 +10,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public TasksRegistry()
         {
-            var config = ConfigurationHelper.GetConfiguration<TaskApiConfiguration>("SFA.DAS.Tasks.Api");
-
-            For<ITaskApiConfiguration>().Use(config);
+            For<ITaskApiConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<TaskApiConfiguration>("SFA.DAS.Tasks.Api")).Singleton();
             For<ITaskService>().Use<TaskService>();
         }
     }

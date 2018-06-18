@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Web
                 };
             });
 
-            if(ConfigurationHelper.IsAnyOf(Environment.Local, Environment.AT, Environment.Test))
+            if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local, Environment.At, Environment.Test))
             {
                 SystemDetailsViewModel.EnvironmentName = ConfigurationHelper.CurrentEnvironmentName;
                 SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();

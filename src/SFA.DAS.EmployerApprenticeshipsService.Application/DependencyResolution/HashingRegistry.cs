@@ -1,7 +1,5 @@
 ﻿using SFA.DAS.EAS.Application.Hashing;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.HashingService;
 using StructureMap;
 
@@ -11,10 +9,24 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public HashingRegistry()
         {
-            var config = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(Constants.ServiceName);
+            For<IHashingService>().Use(c => GetHashingService(c));
+            For<IPublicHashingService>().Use(c => GetPublicHashingservice(c));
+        }
 
-            For<IHashingService>().Use(c => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
-            For<IPublicHashingService>().Use(c => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
+        private IHashingService GetHashingService(IContext context)
+        {
+            var config = context.GetInstance<EmployerApprenticeshipsServiceConfiguration>();
+            var hashingService = new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring);
+
+            return hashingService;
+        }
+
+        private IPublicHashingService GetPublicHashingservice(IContext context)
+        {
+            var config = context.GetInstance<EmployerApprenticeshipsServiceConfiguration>();
+            var publicHashingService = new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring);
+
+            return publicHashingService;
         }
     }
 }
