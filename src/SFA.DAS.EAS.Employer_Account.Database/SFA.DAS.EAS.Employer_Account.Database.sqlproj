@@ -131,6 +131,7 @@
     <None Include="Scripts\PostDeployment\SeedDevData.sql" />
     <Build Include="Tables\TransferRequest.sql" />
     <Build Include="Tables\AccountEmployerAgreement.sql" />
+    <None Include="Scripts\PreDeployment\AML-2381-DeleteDuplicateUserAccountSettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
