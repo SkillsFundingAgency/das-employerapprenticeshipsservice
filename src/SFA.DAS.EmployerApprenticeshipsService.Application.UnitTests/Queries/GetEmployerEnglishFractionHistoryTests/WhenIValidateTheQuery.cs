@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
             //Arrange
             var expectedUserId = "123fds";
             var expectedAccountId = "456TGH";
-            _membershipRepository.Setup(x => x.GetCaller(expectedAccountId, expectedUserId)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(expectedAccountId, expectedUserId)).ReturnsAsync(() => null);
 
             //Act
             var actual = await _validator.ValidateAsync(new GetEmployerEnglishFractionQuery

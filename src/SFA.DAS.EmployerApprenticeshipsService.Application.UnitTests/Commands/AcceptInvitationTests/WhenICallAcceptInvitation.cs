@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
 
             _validator.Setup(x => x.Validate(It.IsAny<AcceptInvitationCommand>())).Returns(new ValidationResult());
 
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(() => null);
 
             _invitationRepository.Setup(x => x.Get(It.IsAny<long>())).ReturnsAsync(_invitation);
             _userAccountRepository.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(new User { UserRef = Guid.NewGuid().ToString() });
@@ -95,7 +95,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
         public void ThenIfUserIsNotFound()
         {
             //Assign
-            _userAccountRepository.Setup(x => x.Get(_invitation.Email)).ReturnsAsync(null);
+            _userAccountRepository.Setup(x => x.Get(_invitation.Email)).ReturnsAsync(() => null);
 
             //Act + Assert
             Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(new AcceptInvitationCommand()));
@@ -116,7 +116,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
         public void ThenIfTheInvitationDoesNotExist()
         {
             //Assign
-            _invitationRepository.Setup(x => x.Get(It.IsAny<long>())).ReturnsAsync(null);
+            _invitationRepository.Setup(x => x.Get(It.IsAny<long>())).ReturnsAsync(() => null);
 
             //Act + Assert
 
@@ -153,7 +153,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
         public void ThenIfTheRequestIsInvalid()
         {
             //Assign
-            _invitationRepository.Setup(x => x.Get(It.IsAny<long>())).ReturnsAsync(null);
+            _invitationRepository.Setup(x => x.Get(It.IsAny<long>())).ReturnsAsync(() => null);
 
             //Act + Assert
             Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(new AcceptInvitationCommand()));

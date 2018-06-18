@@ -81,6 +81,8 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
 
         public Mock<IMessage<RejectedTransferConnectionInvitationEvent>> Message;
 
+        public Mock<IMessageContextProvider> MessageContextProvider { get; set; }
+
         public EmployerApprenticeshipsServiceConfiguration Configuration;
 
         public static User AccountOwner1 { get; set; }
@@ -112,6 +114,7 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
             EmployerAccountDbContext = new Mock<EmployerAccountDbContext>();
             NotificationsApi = new Mock<INotificationsApi>();
             MessageSubscriberFactory = new Mock<IMessageSubscriberFactory>();
+            MessageContextProvider = new Mock<IMessageContextProvider>();
             MessageSubscriber = new Mock<IMessageSubscriber<RejectedTransferConnectionInvitationEvent>>();
             Logger = new Mock<ILog>();
 
@@ -133,7 +136,7 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
                 .Returns(MessageSubscriber.Object);
 
             Handler = new RejectedTransferConnectionInvitationEventHandler(MessageSubscriberFactory.Object,
-                Logger.Object, EmployerAccountDbContext.Object, NotificationsApi.Object, Configuration);
+                Logger.Object, EmployerAccountDbContext.Object, NotificationsApi.Object, Configuration, MessageContextProvider.Object);
         }
 
         private RejectedTransferConnectionInvitationEventHandlerTestFixture SetMessage()

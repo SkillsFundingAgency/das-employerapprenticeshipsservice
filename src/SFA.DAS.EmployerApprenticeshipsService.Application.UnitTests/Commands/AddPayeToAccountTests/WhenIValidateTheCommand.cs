@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         public void Arrange()
         {
             _membershiprepository = new Mock<IMembershipRepository>();
-            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(() => null);
             _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Owner});
             _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Viewer});
 

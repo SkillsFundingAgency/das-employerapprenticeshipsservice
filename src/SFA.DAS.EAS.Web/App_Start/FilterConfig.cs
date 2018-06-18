@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Web
             filters.Add(new ValidateFeatureFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>()));
             filters.Add(new GoogleAnalyticsFilter());
             filters.Add(new ViewModelFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>()));
-            filters.Add(new UnitOfWorkManagerFilter(() => DependencyResolver.Current.GetService<IUnitOfWorkManager>()));
+            filters.Add(new UnitOfWorkManagerFilter(() => DependencyResolver.Current.GetService<IUnitOfWorkManagerAccount>()));
             filters.Add(new HandleErrorFilter());
         }
     }

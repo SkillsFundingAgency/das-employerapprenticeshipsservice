@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using NLog;
 using SFA.DAS.EAS.Application.DependencyResolution;
+using SFA.DAS.EAS.MessageHandlers.Worker.Commands;
 using SFA.DAS.EAS.MessageHandlers.Worker.DependencyResolution;
 using SFA.DAS.Messaging.Interfaces;
 using StructureMap;
@@ -40,7 +41,8 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker
                     c.AddRegistry<DefaultRegistry>();
                 });
 
-                var messageProcessors = container.GetAllInstances<IMessageProcessor>().ToList();
+                var messageProcessors = container.GetAllInstances<IMessageProcessor>()
+                    .ToList();
                 var tasks = messageProcessors.Select(p => p.RunAsync(_cancellationTokenSource)).ToArray();
 
                 Task.WaitAll(tasks);

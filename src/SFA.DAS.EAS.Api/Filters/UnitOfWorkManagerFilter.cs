@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Account.Api.Filters
         {
             if (actionExecutedContext.Exception == null)
             {
-                actionExecutedContext.GetService<IUnitOfWorkManager>().End();
+                actionExecutedContext.GetService<IUnitOfWorkManagerAccount>().End();
             }
         }
     }

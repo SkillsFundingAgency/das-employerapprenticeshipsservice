@@ -23,6 +23,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.TransferTransac
         private Mock<IMessageSubscriberFactory> _messageSubscriberFactory;
         private Mock<IMessageSubscriber<AccountTransfersProcessingCompletedMessage>> _messageSubscriber;
         private Mock<IMediator> _mediator;
+        private Mock<IMessageContextProvider> _messageContextProvider;
         private Mock<ILog> _logger;
         private CancellationTokenSource _cancellationTokenSource;
 
@@ -48,11 +49,13 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.TransferTransac
                     }
                     )).Callback(() => { _cancellationTokenSource.Cancel(); });
 
+            _messageContextProvider = new Mock<IMessageContextProvider>();
+
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
 
             _transferDataProcessor = new TransferTransactionProcessor(
-                _messageSubscriberFactory.Object, _mediator.Object, _logger.Object);
+                _messageSubscriberFactory.Object, _mediator.Object, _logger.Object, _messageContextProvider.Object);
         }
 
         [Test]

@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                 Name = "Test Charity DTO"
             });
 
-            _apiClient.Setup(x => x.GetCharity(It.Is<int>(y => y == 999))).ReturnsAsync(null);
+            _apiClient.Setup(x => x.GetCharity(It.Is<int>(y => y == 999))).ReturnsAsync(() => null);
 
             _mapper.Setup(x => x.Map<ReferenceData.Api.Client.Dto.Charity, Charity>(It.Is<ReferenceData.Api.Client.Dto.Charity>(c=> c!=null && c.RegistrationNumber == 12345)))
                 .Returns(new Charity { RegistrationNumber = 12345, Name = "Test Charity"});

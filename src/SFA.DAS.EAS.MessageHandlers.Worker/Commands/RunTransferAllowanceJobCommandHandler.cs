@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Linq;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Extensions;
@@ -23,7 +24,8 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.Commands
             IMessageSubscriberFactory subscriberFactory, 
             ILog log, 
             EmployerAccountDbContext dbContext, 
-            IMessagePublisher messagePublisher) : base(subscriberFactory, log)
+            IMessagePublisher messagePublisher,
+            IMessageContextProvider messageContextProvider) : base(subscriberFactory, log, messageContextProvider)
         {
             _db = dbContext;
             _log = log;
@@ -34,15 +36,19 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.Commands
         {
             var accountIdsToPublish = new BlockingCollection<long>();
             const int numberOfReaders = 4;
+            int accountsFound = 0;
+
             var queueProcessorTask = StartQueueProcessor(accountIdsToPublish, numberOfReaders);
 
             foreach (var accountId in _db.Accounts.Select(ac => ac.Id))
             {
                 accountIdsToPublish.Add(accountId);
+                accountsFound++;
             }
 
             accountIdsToPublish.CompleteAdding();
 
+            _log.Info($"Found {accountsFound} accounts and processing using {numberOfReaders} workers");
 
             return queueProcessorTask;
         }
@@ -67,9 +73,9 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.Commands
             {
                 _log.Debug($"Starting worker thread");
                 int processedCount = 0;
-                while (!accountIdsToPublish.IsAddingCompleted)
+                while (!accountIdsToPublish.IsCompleted)
                 {
-                    if (accountIdsToPublish.TryTake(out long accountId))
+                    if (accountIdsToPublish.TryTake(out long accountId, 100))
                     {
                         _messagePublisher.PublishAsync(
                             new CalculateTransferAllowanceSnapshotCommand { AccountId = accountId });

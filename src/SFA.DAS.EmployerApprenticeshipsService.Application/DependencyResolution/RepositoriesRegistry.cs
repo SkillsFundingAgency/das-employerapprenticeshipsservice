@@ -9,6 +9,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         public RepositoriesRegistry()
         {
             For<IUserRepository>().Use<UserRepository>();
+            For<ITransferAllowanceSnapshotRepository>().Use<TransferAllowanceSnapshotRepository>();
         }
     }
 }

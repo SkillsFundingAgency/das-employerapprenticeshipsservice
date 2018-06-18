@@ -17,8 +17,8 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
         private readonly IMediator _mediator;
         private readonly ILog _logger;
 
-        public PaymentDataProcessor(IMessageSubscriberFactory subscriberFactory, IMediator mediator, ILog logger)
-            : base(subscriberFactory, logger)
+        public PaymentDataProcessor(IMessageSubscriberFactory subscriberFactory, IMediator mediator, ILog logger, IMessageContextProvider messageContextProvider)
+            : base(subscriberFactory, logger, messageContextProvider)
         {
             _subscriberFactory = subscriberFactory;
             _mediator = mediator;

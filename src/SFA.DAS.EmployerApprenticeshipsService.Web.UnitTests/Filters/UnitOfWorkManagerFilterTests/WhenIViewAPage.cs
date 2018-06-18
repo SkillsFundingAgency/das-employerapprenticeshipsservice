@@ -14,12 +14,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters.UnitOfWorkManagerFilterTests
         private UnitOfWorkManagerFilter _filter;
         private ActionExecutedContext _filterContext;
         private RouteData _routeData;
-        private Mock<IUnitOfWorkManager> _unitOfWorkManager;
+        private Mock<IUnitOfWorkManagerAccount> _unitOfWorkManager;
 
         [SetUp]
         public void Arrange()
         {
-            _unitOfWorkManager = new Mock<IUnitOfWorkManager>();
+            _unitOfWorkManager = new Mock<IUnitOfWorkManagerAccount>();
             _routeData = new RouteData();
 
             _filterContext = new ActionExecutedContext

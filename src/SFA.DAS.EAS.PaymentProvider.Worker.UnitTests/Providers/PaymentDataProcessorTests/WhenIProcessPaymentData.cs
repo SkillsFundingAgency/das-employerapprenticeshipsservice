@@ -25,6 +25,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
         private Mock<IMessageSubscriber<PaymentProcessorQueueMessage>> _messageSubscriber;
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
+        public Mock<IMessageContextProvider> _messageContextProvider { get; set; }
         private CancellationTokenSource _cancellationTokenSource;
 
         [SetUp]
@@ -36,6 +37,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
             _messageSubscriberFactory = new Mock<IMessageSubscriberFactory>();
             _messageSubscriber = new Mock<IMessageSubscriber<PaymentProcessorQueueMessage>>();
             _mediator = new Mock<IMediator>();
+            _messageContextProvider = new Mock<IMessageContextProvider>();
 
             _messageSubscriberFactory.Setup(x => x.GetSubscriber<PaymentProcessorQueueMessage>())
                 .Returns(_messageSubscriber.Object);
@@ -51,7 +53,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
 
             _logger = new Mock<ILog>();
 
-            _paymentDataProcessor = new PaymentDataProcessor(_messageSubscriberFactory.Object, _mediator.Object, _logger.Object);
+            _paymentDataProcessor = new PaymentDataProcessor(_messageSubscriberFactory.Object, _mediator.Object, _logger.Object, _messageContextProvider.Object);
         }
 
         [Test]

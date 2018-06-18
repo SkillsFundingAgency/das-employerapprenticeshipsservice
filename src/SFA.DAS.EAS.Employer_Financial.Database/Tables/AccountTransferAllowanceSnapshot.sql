@@ -2,7 +2,7 @@
 (
     [Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [AccountId] BIGINT NOT NULL, 
-    [Year] SMALLINT NOT NULL, 
+    [Year] INT NOT NULL, 
     [TransferAllowance] DECIMAL(18, 5) NOT NULL, 
     [SnapshotTime] DATETIME NOT NULL 
     )

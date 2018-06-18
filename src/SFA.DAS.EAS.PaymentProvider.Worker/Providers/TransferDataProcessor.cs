@@ -23,8 +23,9 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
             IMessageSubscriberFactory subscriberFactory,
             IMessagePublisher messagePublisher,
             IMediator mediator,
-            ILog logger)
-            : base(subscriberFactory, logger)
+            ILog logger,
+            IMessageContextProvider messageContextProvider)
+            : base(subscriberFactory, logger, messageContextProvider)
         {
             _messagePublisher = messagePublisher;
             _logger = logger;
