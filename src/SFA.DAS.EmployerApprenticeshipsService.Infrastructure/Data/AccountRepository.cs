@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<CreateAccountResult> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector)
         {
-            return await WithConnection(async c =>
+            return await WithTransaction(async (c, t) =>
             {
                 var parameters = new DynamicParameters();
 
@@ -71,15 +71,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@source", source);
                 parameters.Add("@publicSectorDataSource", publicSectorDataSource);
                 parameters.Add("@sector", sector, DbType.String);
-
-                var trans = c.BeginTransaction();
-
+                
                 await c.ExecuteAsync(
                     sql: "[employer_account].[CreateAccount]",
                     param: parameters,
-                    commandType: CommandType.StoredProcedure, transaction: trans);
-
-                trans.Commit();
+                    transaction: t,
+                    commandType: CommandType.StoredProcedure);
 
                 return new CreateAccountResult
                 {
@@ -236,16 +233,17 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 settingsDataTable.Rows.Add(setting.AccountId, setting.ReceiveNotifications);
             }
 
-            await WithConnection(async c =>
+            await WithTransaction(async (c, t) =>
             {
                 var parameters = new DynamicParameters();
 
                 parameters.Add("@UserRef", Guid.Parse(userRef), DbType.Guid);
                 parameters.Add("@NotificationSettings", settingsDataTable.AsTableValuedParameter("employer_account.UserNotificationSettingsTable"));
 
-                return await c.ExecuteAsync(
+                await c.ExecuteAsync(
                     sql: "[employer_account].[UpdateUserAccountSettings]",
                     param: parameters,
+                    transaction: t,
                     commandType: CommandType.StoredProcedure);
             });
         }

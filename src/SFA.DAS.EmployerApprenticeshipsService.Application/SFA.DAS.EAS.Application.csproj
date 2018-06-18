@@ -282,6 +282,7 @@
     <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommandHandler.cs" />
     <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommandValidator.cs" />
     <Compile Include="DependencyResolution\AuditRegistry.cs" />
+    <Compile Include="DependencyResolution\AuthorizationRegistry.cs" />
     <Compile Include="DependencyResolution\CachesRegistry.cs" />
     <Compile Include="DependencyResolution\CommitmentsRegistry.cs" />
     <Compile Include="DependencyResolution\ConfigurationRegistry.cs" />
@@ -289,15 +290,19 @@
     <Compile Include="DependencyResolution\EventsRegistry.cs" />
     <Compile Include="DependencyResolution\ExecutionPoliciesRegistry.cs" />
     <Compile Include="DependencyResolution\HashingRegistry.cs" />
+    <Compile Include="DependencyResolution\LevyRegistry.cs" />
     <Compile Include="DependencyResolution\LoggerRegistry.cs" />
     <Compile Include="DependencyResolution\MapperRegistry.cs" />
     <Compile Include="DependencyResolution\MediatorRegistry.cs" />
     <Compile Include="DependencyResolution\MessagePublisherRegistry.cs" />
     <Compile Include="DependencyResolution\MessageSubscriberRegistry.cs" />
     <Compile Include="DependencyResolution\NotificationsRegistry.cs" />
+    <Compile Include="DependencyResolution\PaymentsRegistry.cs" />
+    <Compile Include="DependencyResolution\ReferenceDataRegistry.cs" />
     <Compile Include="DependencyResolution\RepositoriesRegistry.cs" />
     <Compile Include="DependencyResolution\ServicesRegistry.cs" />
     <Compile Include="DependencyResolution\TasksRegistry.cs" />
+    <Compile Include="DependencyResolution\TokenServiceRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
     <Compile Include="Dtos\AgreementTemplateDto.cs" />
     <Compile Include="Dtos\EmployerAgreement\EmployerAgreementDetailsDto.cs" />
@@ -322,7 +327,6 @@
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQuery.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceResponse.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQueryHandler.cs" />
-    <Compile Include="Messages\AccountTransfersCreatedQueueMessage.cs" />
     <Compile Include="Messages\AccountTransfersProcessingCompletedMessage.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationQuery.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationQueryHandler.cs" />

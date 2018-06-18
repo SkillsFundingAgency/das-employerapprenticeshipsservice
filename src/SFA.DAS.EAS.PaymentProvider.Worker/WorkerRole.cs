@@ -66,18 +66,20 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
 
             Container = new Container(c =>
             {
-                c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
-                c.Policies.Add(new ConfigurationPolicy<PaymentProviderConfiguration>("SFA.DAS.PaymentProvider"));
-                c.Policies.Add(new ConfigurationPolicy<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI"));
-                c.Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
-                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
-                c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService", "1.0", new NLogLogger(typeof(TopicMessagePublisher))));
-                c.Policies.Add(new MessageSubscriberPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
-                c.Policies.Add(new ExecutionPolicyPolicy());
-                c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<CachesRegistry>();
+                c.AddRegistry<CommitmentsRegistry>();
+                c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<ExecutionPoliciesRegistry>();
+                c.AddRegistry<LevyRegistry>();
+                c.AddRegistry<LoggerRegistry>();
+                c.AddRegistry<MapperRegistry>();
+                c.AddRegistry<MediatorRegistry>();
+                c.AddRegistry<MessagePublisherRegistry>();
+                c.AddRegistry<MessageSubscriberRegistry>();
+                c.AddRegistry<PaymentsRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
+
             return result;
         }
 

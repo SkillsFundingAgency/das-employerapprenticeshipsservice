@@ -186,8 +186,8 @@
     <Compile Include="Configuration\CommitmentsApiClientConfiguration.cs" />
     <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />
-    <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
     <Compile Include="Configuration\WebJobConfig.cs" />
+    <Compile Include="Extensions\UserExtension.cs" />
     <Compile Include="Models\Account\AgreementTemplate.cs" />
     <Compile Include="Models\Account\EmployerAgreement.cs" />
     <Compile Include="Data\Entities\Statistics\StatisticsAccounts.cs" />
@@ -257,7 +257,7 @@
     <Compile Include="Models\Organisation\Address.cs" />
     <Compile Include="Models\Payments\Payment.cs" />
     <Compile Include="Models\Payments\PeriodEnd.cs" />
-    <Compile Include="Models\Settings\UserLegalEntitySetting.cs" />
+    <Compile Include="Models\Settings\UserNotificationSetting.cs" />
     <Compile Include="Models\ReferenceData\Organisation.cs" />
     <Compile Include="Models\Transaction\AggregationData.cs" />
     <Compile Include="Configuration\AuditApiClientConfiguration.cs" />
@@ -300,7 +300,6 @@
     <Compile Include="Interfaces\IDistributedCache.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
     <Compile Include="Data\Repositories\ILegalEntityRepository.cs" />
-    <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IDasAccountService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
@@ -357,6 +356,7 @@
     <Compile Include="Models\Transfers\TransferTransactionLine.cs" />
     <Compile Include="Models\UserProfile\Role.cs" />
     <Compile Include="Models\UserProfile\User.cs" />
+    <Compile Include="Models\UserProfile\UserAccountSetting.cs" />
     <Compile Include="Models\UserProfile\Users.cs" />
     <Compile Include="Models\UserView\MultiVariantView.cs" />
     <Compile Include="Models\UserView\MultiVariantViewLookup.cs" />

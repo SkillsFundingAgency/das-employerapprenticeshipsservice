@@ -81,10 +81,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         }
 
         [Test]
-        public void ThenTheAccountCreatedActionCreatesARedirectToRouteResultToTheIndex()
+        public async Task ThenTheAccountCreatedActionCreatesARedirectToRouteResultToTheIndex()
         {
             //Act
-            var actual = _homeController.HandleNewRegistration();
+            var actual = await _homeController.HandleNewRegistration();
 
             //Assert
             Assert.IsNotNull(actual);

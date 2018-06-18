@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Authorization;
+using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -37,9 +38,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
             if (!string.IsNullOrWhiteSpace(userId))
             {
-
+                await OwinWrapper.UpdateClaims();
                 var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
-
                 if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
                     return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
@@ -153,8 +153,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Authorize]
         [HttpGet]
         [Route("register/new")]
-        public ActionResult HandleNewRegistration()
+        public async Task<ActionResult> HandleNewRegistration()
         {
+            await OwinWrapper.UpdateClaims();
             return RedirectToAction(ControllerConstants.IndexActionName);
         }
 

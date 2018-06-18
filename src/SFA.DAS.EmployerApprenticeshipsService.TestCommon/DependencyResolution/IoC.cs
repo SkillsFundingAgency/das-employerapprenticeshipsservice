@@ -6,7 +6,6 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
-using SFA.DAS.EAS.TestCommon.MockPolicy;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging.Interfaces;
 using StructureMap;
@@ -29,13 +28,15 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
         {
             return new Container(c =>
             {
-                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(EmployerApprenticeshipConfigurationName));
-                c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>(LevyAggregationProviderName));
-                c.Policies.Add(new ConfigurationPolicy<AuditApiClientConfiguration>(AuditApiClientConfigurationName));
                 c.Policies.Add<CurrentDatePolicy>();
-                c.Policies.Add(new MockMessagePublisherPolicy(messagePublisher));
+                c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<CachesRegistry>();
-                c.AddRegistry(new DefaultRegistry(owinWrapper, cookieService, eventsApi, commitmentApi));
+                c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<LevyRegistry>();
+                c.AddRegistry<MapperRegistry>();
+                c.AddRegistry<MediatorRegistry>();
+                c.AddRegistry<RepositoriesRegistry>();
+                c.AddRegistry(new DefaultRegistry(owinWrapper, cookieService, eventsApi, commitmentApi, messagePublisher));
             });
         }
 
@@ -49,12 +50,11 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
         {
             var container = new Container(c =>
             {
-                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(EmployerApprenticeshipConfigurationName));
-                c.Policies.Add(new ConfigurationPolicy<AuditApiClientConfiguration>(AuditApiClientConfigurationName));
-                c.Policies.Add<CurrentDatePolicy>();
-                c.Policies.Add(new MockMessagePublisherPolicy(messagePublisher));
+                c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<CachesRegistry>();
-                c.AddRegistry(new DefaultRegistry(owinWrapper, cookieService, eventsApi, commitmentApi));
+                c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<DateTimeRegistry>();
+                c.AddRegistry(new DefaultRegistry(owinWrapper, cookieService, eventsApi, commitmentApi, messagePublisher));
             });
 
             container.Inject(levyDeclarationProviderConfiguration);
@@ -70,13 +70,14 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
         {
             return new Container(c =>
             {
-                c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>(LevyAggregationProviderName));
-                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(EmployerApprenticeshipConfigurationName));
-                c.Policies.Add(new ConfigurationPolicy<TokenServiceApiClientConfiguration>(TokenServiceApiConfigurationName));
-                c.Policies.Add(new MockMessagePublisherPolicy(messagePublisher));
-                c.Policies.Add(new MockMessageSubscriberPolicy(messageSubscriberFactory));
-                c.Policies.Add(new ExecutionPolicyPolicy());
-                c.AddRegistry(new LevyWorkerDefaultRegistry(hmrcService, eventsApi));
+                c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<ExecutionPoliciesRegistry>();
+                c.AddRegistry<LevyRegistry>();
+                c.AddRegistry<MapperRegistry>();
+                c.AddRegistry<MediatorRegistry>();
+                c.AddRegistry<TokenServiceRegistry>();
+                c.AddRegistry<RepositoriesRegistry>();
+                c.AddRegistry(new LevyWorkerDefaultRegistry(hmrcService, messagePublisher, messageSubscriberFactory, eventsApi));
             });
         }
     }

@@ -280,8 +280,6 @@
     <Compile Include="DependencyResolution\CurrentDatePolicy.cs" />
     <Compile Include="DependencyResolution\Environment.cs" />
     <Compile Include="DependencyResolution\ExecutionPolicyPolicy.cs" />
-    <Compile Include="DependencyResolution\AuthorizationRegistry.cs" />
-    <Compile Include="DependencyResolution\MessageSubscriberPolicy.cs" />
     <Compile Include="ExecutionPolicies\CompaniesHouseExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\ExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\HmrcExecutionPolicy.cs" />
@@ -300,8 +298,6 @@
     <Compile Include="Messaging\ServiceBusConnectionStringPolicy.cs" />
     <Compile Include="Messaging\MessageSubscriberPolicy.cs" />
     <Compile Include="Models\UserResponse.cs" />
-    <Compile Include="DependencyResolution\ConfigurationPolicy.cs" />
-    <Compile Include="DependencyResolution\LoggingPolicy.cs" />
     <Compile Include="Entities\LevyAggregationEntity.cs" />
     <Compile Include="Interfaces\REST\IRestServiceFactory.cs" />
     <Compile Include="Factories\RestClientFactory.cs" />

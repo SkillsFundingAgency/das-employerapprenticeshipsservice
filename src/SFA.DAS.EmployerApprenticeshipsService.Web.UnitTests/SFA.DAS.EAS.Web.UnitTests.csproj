@@ -249,6 +249,7 @@
     <Compile Include="Controllers\EmployerAccountTransactionsControllerTests\WhenIViewTransactions.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests.cs" />
     <Compile Include="Controllers\EmployerTeamControllerTests\WhenIViewNextSteps.cs" />
+    <Compile Include="Controllers\HomeControllerTests\WhenIHandleNewRegistration.cs" />
     <Compile Include="Controllers\InvitationControllerTests\WhenIAcceptAnInvitation.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIConfirmAddOfOrganisation.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\OrganisationSharedControllerTestBase.cs" />

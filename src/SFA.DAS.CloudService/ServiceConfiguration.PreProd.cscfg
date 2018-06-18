@@ -67,6 +67,19 @@
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
     </ConfigurationSettings>
   </Role>
+  <Role name="SFA.DAS.EAS.MessageHandlers.Worker">
+    <Instances count="3" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
+      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
+      <Setting name="EnvironmentName" value="__EnvironmentName__" />
+      <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
+      <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
+      <Setting name="LogLevel" value="__loglevel__" />
+      <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
+      <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
+    </ConfigurationSettings>
+  </Role>
   <NetworkConfiguration>
     <Dns>
       <DnsServers>
@@ -92,6 +105,11 @@
         </Subnets>
       </InstanceAddress>
       <InstanceAddress roleName="SFA.DAS.EAS.Account.Worker">
+        <Subnets>
+          <Subnet name="__subnet__" />
+        </Subnets>
+      </InstanceAddress>
+      <InstanceAddress roleName="SFA.DAS.EAS.MessageHandlers.Worker">
         <Subnets>
           <Subnet name="__subnet__" />
         </Subnets>

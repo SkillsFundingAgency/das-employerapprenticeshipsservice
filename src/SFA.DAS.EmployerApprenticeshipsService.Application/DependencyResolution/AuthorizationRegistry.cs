@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Infrastructure.Features;
 using StructureMap;
 
-namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
+namespace SFA.DAS.EAS.Application.DependencyResolution
 {
     public class AuthorizationRegistry : Registry
     {

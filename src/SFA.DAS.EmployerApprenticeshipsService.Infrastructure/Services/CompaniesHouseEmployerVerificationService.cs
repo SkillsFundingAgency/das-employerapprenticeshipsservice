@@ -16,8 +16,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly IHttpClientWrapper _httpClientWrapper;
         private readonly ExecutionPolicy _executionPolicy;
 
-        public CompaniesHouseEmployerVerificationService(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, IHttpClientWrapper httpClientWrapper,
-            [RequiredPolicy(CompaniesHouseExecutionPolicy.Name)]ExecutionPolicy executionPolicy)
+        public CompaniesHouseEmployerVerificationService(
+            EmployerApprenticeshipsServiceConfiguration configuration,
+            ILog logger,
+            IHttpClientWrapper httpClientWrapper,
+            [RequiredPolicy(CompaniesHouseExecutionPolicy.Name)] ExecutionPolicy executionPolicy)
         {
             _configuration = configuration;
             _logger = logger;
