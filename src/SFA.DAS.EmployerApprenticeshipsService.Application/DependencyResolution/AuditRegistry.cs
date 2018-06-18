@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Audit.Client;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using StructureMap;
 
@@ -8,7 +9,9 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public AuditRegistry()
         {
-            if (ConfigurationHelper.IsAnyOf(Environment.Local))
+            For<AuditApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<AuditApiClientConfiguration>("SFA.DAS.AuditApiClient")).Singleton();
+
+            if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local))
             {
                 For<IAuditApiClient>().Use<StubAuditApiClient>();
             }
@@ -17,6 +20,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
                 For<IAuditApiClient>().Use<AuditApiClient>();
             }
 
+            For<IAuditApiConfiguration>().Use(c => c.GetInstance<AuditApiClientConfiguration>());
             For<IAuditMessageFactory>().Use<AuditMessageFactory>().Singleton();
         }
     }

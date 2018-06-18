@@ -1,9 +1,8 @@
-﻿using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.ReferenceData.Api.Client;
+﻿using SFA.DAS.ReferenceData.Api.Client;
 
 namespace SFA.DAS.EAS.Domain.Configuration
 {
-    public class ReferenceDataApiClientConfiguration : IReferenceDataApiConfiguration, IConfiguration
+    public class ReferenceDataApiClientConfiguration : IReferenceDataApiConfiguration
     {
         public string ApiBaseUrl { get; set; }
         public string ClientId { get; set; }

@@ -20,6 +20,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public virtual DbSet<Membership> Memberships { get; set; }
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserAccountSetting> UserAccountSettings { get; set; }
 
         static EmployerAccountDbContext()
         {
@@ -56,6 +57,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             modelBuilder.Entity<User>().Ignore(u => u.FullName).Ignore(u => u.UserRef).Property(u => u.ExternalId).HasColumnName(nameof(User.UserRef));
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.ReceiverAccount);
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.SenderAccount);
+            modelBuilder.Entity<UserAccountSetting>().HasRequired(u => u.Account);
+            modelBuilder.Entity<UserAccountSetting>().HasRequired(u => u.User);
+            modelBuilder.Entity<UserAccountSetting>().ToTable("UserAccountSettings");
             modelBuilder.HasDefaultSchema("employer_account");
         }
     }

@@ -12,15 +12,13 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
     {
         protected override void apply(Type pluginType, IConfiguredInstance instance)
         {
-            var currentDateTime = instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(ICurrentDateTime));
+            var currentDateTime = instance?.Constructor?.GetParameters().FirstOrDefault(p => p.ParameterType == typeof(ICurrentDateTime));
 
             if (currentDateTime != null)
             {
                 var cloudCurrentTime = CloudConfigurationManager.GetSetting("CurrentTime");
 
-                DateTime currentTime;
-
-                if (!DateTime.TryParse(cloudCurrentTime, out currentTime))
+                if (!DateTime.TryParse(cloudCurrentTime, out var currentTime))
                 {
                     currentTime = DateTime.Now;
                 }

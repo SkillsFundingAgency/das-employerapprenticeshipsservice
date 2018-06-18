@@ -14,9 +14,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class InvitationRepository : BaseRepository, IInvitationRepository
     {
+        private ILog _logger;
+
         public InvitationRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         {
+            _logger = logger;
         }
 
         public async Task<List<InvitationView>> Get(string userId)
@@ -141,16 +144,18 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task Accept(string email, long accountId, short roleId)
         { 
-            await WithConnection(async c =>
+            await WithTransaction(async (c, t) =>
             {
                 var parameters = new DynamicParameters();
+
                 parameters.Add("@email", email, DbType.String);
                 parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@roleId", roleId, DbType.Int16);
-
-                return await c.ExecuteAsync(
+                
+                await c.ExecuteAsync(
                     sql: "[employer_account].[AcceptInvitation]",
                     param: parameters,
+                    transaction: t,
                     commandType: CommandType.StoredProcedure);
             });
         }

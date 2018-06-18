@@ -51,21 +51,27 @@
   },
   {
     "topicName": "sent_transfer_connection_invitation",
-    "subscription": [ 
+    "subscription": [
       "Task_SentTransferConnectionInvitiationProcessor",
-      "RDS_SentTransferConnectionInvitiationProcessor" ]
+      "MH_SentTransferConnectionInvitiationProcessor",
+      "RDS_SentTransferConnectionInvitiationProcessor"
+    ]
   },
   {
     "topicName": "approved_transfer_connection_invitation",
-    "subscription": [ 
+    "subscription": [
       "Task_ApprovedTransferConnectionInvitation",
-      "RDS_ApprovedTransferConnectionInvitiationProcessor" ]
+      "MH_ApprovedTransferConnectionInvitation",
+      "RDS_ApprovedTransferConnectionInvitiationProcessor"
+    ]
   },
   {
     "topicName": "rejected_transfer_connection_invitation",
-    "subscription": [ 
+    "subscription": [
       "Task_RejectedTransferConnectionInvitation",
-      "RDS_RejectedTransferConnectionInvitiationProcessor" ]
+      "MH_RejectedTransferConnectionInvitation",
+      "RDS_RejectedTransferConnectionInvitiationProcessor"
+    ]
   },
   {
     "topicName": "user_invited",

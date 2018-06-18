@@ -1,5 +1,7 @@
-﻿using Microsoft.Azure;
+﻿using System.Diagnostics;
+using Microsoft.Azure;
 using Microsoft.Azure.WebJobs;
+using SFA.DAS.EAS.Account.Worker.Infrastructure;
 using SFA.DAS.EAS.Account.Worker.Infrastructure.Interfaces;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -28,6 +30,7 @@ namespace SFA.DAS.EAS.Account.Worker.DependencyResolution
             });
 
             For<JobHost>().Use(ctx => ctx.GetInstance<IJobHostFactory>().CreateJobHost());
+            ForConcreteType<DasWebJobTraceWriter>().Configure.Ctor<TraceLevel>().Is(TraceLevel.Verbose);
         }
     }
 }

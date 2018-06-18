@@ -1,4 +1,5 @@
 using Microsoft.WindowsAzure.ServiceRuntime;
+using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Infrastructure.Logging;
@@ -43,12 +44,18 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
 
             _container = new Container(c =>
             {
-                c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
-                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
-                c.Policies.Add(new ConfigurationPolicy<TokenServiceApiClientConfiguration>("SFA.DAS.TokenServiceApiClient"));
-                c.Policies.Add(new TopicMessagePublisherPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService", "1.0", new NLogLogger(typeof(TopicMessagePublisher))));
-                c.Policies.Add(new MessageSubscriberPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
-                c.Policies.Add(new ExecutionPolicyPolicy());
+                c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<EventsRegistry>();
+                c.AddRegistry<ExecutionPoliciesRegistry>();
+                c.AddRegistry<HashingRegistry>();
+                c.AddRegistry<LevyRegistry>();
+                c.AddRegistry<LoggerRegistry>();
+                c.AddRegistry<MapperRegistry>();
+                c.AddRegistry<MediatorRegistry>();
+                c.AddRegistry<MessagePublisherRegistry>();
+                c.AddRegistry<MessageSubscriberRegistry>();
+                c.AddRegistry<RepositoriesRegistry>();
+                c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
 

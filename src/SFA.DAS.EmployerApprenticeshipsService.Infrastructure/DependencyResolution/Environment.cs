@@ -4,9 +4,10 @@
     {
         Unknown,
         Local,
-        AT,
+        At,
         Test,
         Prod,
+        Mo,
         Demo
     }
 }

@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers;
 using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -230,18 +229,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshAccountTransfersTest
             Assert.ThrowsAsync<Exception>(() => _handler.Handle(_command));
 
             _logger.Verify(x => x.Error(exception, It.IsAny<string>()), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenATransferCreatedMessageShouldBeCreated()
-        {
-            //Act
-            await _handler.Handle(_command);
-
-            //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountTransfersCreatedQueueMessage>(
-                msg => msg.SenderAccountId.Equals(_command.ReceiverAccountId) &&
-                       msg.PeriodEnd.Equals(_command.PeriodEnd))), Times.Once());
         }
 
         [Test]
