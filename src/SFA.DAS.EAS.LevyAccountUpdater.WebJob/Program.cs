@@ -17,4 +17,5 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob
             updater.RunUpdate().Wait();
         }
     }
+
 }

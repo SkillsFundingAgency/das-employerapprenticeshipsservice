@@ -15,13 +15,13 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
         {
             return Ok(new
             {
-                ServiceName = AddServiceName(),
+                ServiceName = "SFA DAS Employer Apprenticeship Service Support Site",
                 ServiceVersion = AddServiceVersion(),
-                ServiceTime = AddServerTime(),
+                ServiceTime = DateTimeOffset.UtcNow,
                 Request = AddRequestContext()
             });
         }
-        
+
         private string AddServiceVersion()
         {
             try
@@ -45,21 +45,5 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
             }
         }
 
-        private DateTimeOffset AddServerTime()
-        {
-            return DateTimeOffset.UtcNow;
-        }
-
-        private string AddServiceName()
-        {
-            try
-            {
-                return "SFA DAS Employer Apprenticeship Service Support Site";
-            }
-            catch
-            {
-                return "Unknown";
-            }
-        }
     }
 }

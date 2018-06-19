@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
@@ -72,7 +73,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
             {
                 _logger.Error(e, $"A general exception has been thrown while requesting employer account details");
             }
-
+            _logger.Debug($"Account Details data Page ({pageNumber} Size {pagesize}) : {(JsonConvert.SerializeObject(results))}");
             return results;
         }
 
@@ -153,7 +154,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                     return result;
                 case AccountFieldsSelection.Finance:
                     result.PayeSchemes = await MapToDomainPayeSchemeAsync(response);
-                    result.Transactions = await GetAccountTransactions(response.HashedAccountId); ;
+                    result.Transactions = await GetAccountTransactions(response.HashedAccountId); 
                     return result;
             }
 
@@ -280,6 +281,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                 AccountId = accountDetailViewModel.AccountId,
                 DasAccountName = accountDetailViewModel.DasAccountName,
                 HashedAccountId = accountDetailViewModel.HashedAccountId,
+                PublicHashedAccountId = accountDetailViewModel.PublicHashedAccountId,
                 DateRegistered = accountDetailViewModel.DateRegistered,
                 OwnerEmail = accountDetailViewModel.OwnerEmail
             };
