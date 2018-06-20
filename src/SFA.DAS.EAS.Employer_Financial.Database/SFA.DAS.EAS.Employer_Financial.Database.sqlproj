@@ -72,6 +72,7 @@
     <Folder Include="Scripts\PostDeployment" />
     <Folder Include="Scripts\PreDeployment" />
     <Folder Include="Scripts\Manual" />
+    <Folder Include="SeedData\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\EnglishFraction.sql" />
@@ -147,6 +148,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
+    <None Include="SeedData\TransferTransactions.sql" />
+    <None Include="Scripts\Manual\FixPaymentTransactions_AML-2351.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
