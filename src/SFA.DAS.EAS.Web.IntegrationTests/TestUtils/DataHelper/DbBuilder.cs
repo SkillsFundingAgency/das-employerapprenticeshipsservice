@@ -88,7 +88,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
         {
             var output = new LegalEnityWithAgreementOutput();
 
-            var view = await DependentRepositories.AccountRepository.CreateLegalEntity(
+            var view = await DependentRepositories.AccountRepository.CreateLegalEntityWithAgreement(
                 input.AccountId,
                 new LegalEntityWithAgreementInputToLegalEntityAdapter(input));
 

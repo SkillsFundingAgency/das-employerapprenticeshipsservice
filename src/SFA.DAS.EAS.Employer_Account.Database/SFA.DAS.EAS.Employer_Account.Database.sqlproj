@@ -68,6 +68,7 @@
     <Folder Include="Scripts\PostDeployment" />
     <Folder Include="Scripts\PreDeployment" />
     <Folder Include="Scripts\Manual" />
+    <Folder Include="Functions" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="StoredProcedures\Cleardown.sql" />
@@ -131,6 +132,10 @@
     <None Include="Scripts\PostDeployment\SeedDevData.sql" />
     <Build Include="Tables\TransferRequest.sql" />
     <None Include="Scripts\PreDeployment\AML-2381-DeleteDuplicateUserAccountSettings.sql" />
+    <Build Include="Tables\AccountLegalEntity.sql" />
+    <None Include="Scripts\PostDeployment\AML-2119-RestoreAgreementDetails.sql" />
+    <Build Include="Functions\GetAccountLegalEntityId.sql" />
+    <Build Include="StoredProcedures\EnsureAccountLegalEntity.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
@@ -138,6 +143,7 @@
   <ItemGroup>
     <None Include="Database.publish.xml" />
     <None Include="Scripts\PostDeployment\CreateAgreementTemplates.sql" />
+    <None Include="Scripts\PreDeployment\AML-2119-BackupAgreementDetails.sql" />
     <None Include="Scripts\PreDeployment\AML-2312-RemoveDuplicateAccountLegalEntities.sql" />
     <None Include="Scripts\PreDeployment\AML-2239-DeleteDuplicateAccountHistory.sql" />
   </ItemGroup>

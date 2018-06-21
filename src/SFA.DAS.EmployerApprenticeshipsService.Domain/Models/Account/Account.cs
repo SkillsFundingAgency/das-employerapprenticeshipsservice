@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Domain.Models.Account
     public class Account
     {
         public virtual long Id { get; set; }
-        public virtual ICollection<EmployerAgreement> Agreements { get; set; } = new List<EmployerAgreement>();
+        public virtual ICollection<AccountLegalEntity> AccountLegalEntities { get; set; } = new List<AccountLegalEntity>();
         public virtual DateTime CreatedDate { get; set; }
         public virtual string HashedId { get; set; }
         public virtual DateTime? ModifiedDate { get; set; }
