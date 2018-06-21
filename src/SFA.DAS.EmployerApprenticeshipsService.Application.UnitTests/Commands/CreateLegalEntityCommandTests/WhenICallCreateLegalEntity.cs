@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
                                  .ReturnsAsync(_owner);
 
-            _accountRepository.Setup(x => x.CreateLegalEntity(_owner.AccountId, _command.LegalEntity))
+            _accountRepository.Setup(x => x.CreateLegalEntityWithAgreement(_owner.AccountId, _command.LegalEntity))
                               .ReturnsAsync(_agreementView);
 
             _genericEventFactory = new Mock<IGenericEventFactory>();
@@ -162,7 +162,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             await _commandHandler.Handle(_command);
 
             //Assert
-            _accountRepository.Verify(r => r.CreateLegalEntity(It.IsAny<long>(), It.Is<LegalEntity>(le => !string.IsNullOrEmpty(le.Code))), Times.Once);
+            _accountRepository.Verify(r => r.CreateLegalEntityWithAgreement(It.IsAny<long>(), It.Is<LegalEntity>(le => !string.IsNullOrEmpty(le.Code))), Times.Once);
         }
 
         [Test]

@@ -7,21 +7,10 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT	TOP(@count) LegalEntityId
-	FROM		(SELECT		DISTINCT EA.LegalEntityId
-				FROM		employer_account.EmployerAgreement AS EA
-				WHERE	EA.LegalEntityId >= @firstId
-						AND EXISTS(	SELECT	1 
-									FROM		employer_account.EmployerAgreement 
-									WHERE	LegalEntityId = EA.LegalEntityId 
-											AND AccountId = EA.AccountId 
-											AND StatusId != 5)
-						AND EXISTS(	SELECT	1 
-									FROM		employer_account.EmployerAgreement 
-									WHERE	LegalEntityId = EA.LegalEntityId 
-									GROUP BY AccountId 
-									HAVING MAX(TemplateId) < @agreementId)
-			) AS AffectedLegalEntities
-	ORDER BY AffectedLegalEntities.LegalEntityId 
+	SELECT	DISTINCT ale.LegalEntityId
+	FROM	AccountLegalEntity AS ale
+	WHERE	ale.LegalEntityId >= @firstId AND
+			NOT EXISTS(SELECT 1 FROM employer_account.EmployerAgreement AS ea WHERE ea.AccountLegalEntityId = ale.Id AND ea.TemplateId >= @agreementId AND ea.StatusId != 5)
+	ORDER BY ale.LegalEntityId ;
 
 END

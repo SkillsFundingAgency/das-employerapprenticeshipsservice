@@ -14,8 +14,8 @@ BEGIN
 		ORDER BY VersionNumber DESC
 	END
 
-	INSERT INTO [employer_account].[EmployerAgreement] (LegalEntityId, AccountId, TemplateId, StatusId) 
-	VALUES (@legalEntityId, @accountId, @templateId, 1)
+	INSERT INTO [employer_account].[EmployerAgreement] (AccountLegalEntityId, TemplateId, StatusId) 
+	VALUES (employer_account.GetAccountLegalEntityId(@accountId, @legalEntityId), @templateId, 1)
 
 	SELECT @employerAgreementId = SCOPE_IDENTITY()
 END
