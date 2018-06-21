@@ -113,7 +113,14 @@ namespace SFA.DAS.EAS.TestCommon
 
             if (act != null)
             {
-                actionResult = await act(testFixture);
+                try
+                {
+                    actionResult = await act(testFixture);
+                }
+                catch(Exception ex)
+                {
+                    throw;
+                }
             }
 
             assert(testFixture, actionResult);
