@@ -11,3 +11,4 @@ GO
 CREATE INDEX [IDX_AccountHistory_Account] on [employer_account].[AccountHistory] (AccountId, PayeRef)
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IDX_UNIQUE_AccountHistory_Account_Paye] on [employer_account].[AccountHistory] (AccountId, PayeRef)
+WHERE RemovedDate IS NULL
