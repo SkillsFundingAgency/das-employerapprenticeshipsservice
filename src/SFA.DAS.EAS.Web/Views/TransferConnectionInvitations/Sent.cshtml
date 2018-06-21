@@ -14,7 +14,7 @@
     <div class="column-two-thirds">
         <div class="success-summary">
             <h1 class="bold-large">Request sent</h1>
-            <p><i class="icon-green-tick"></i> A request to connect has been sent to @Model.TransferConnectionInvitation.ReceiverAccount.Name with account ID @Model.TransferConnectionInvitation.ReceiverAccount.PublicHashedId</p>
+            <p><i class="icon-green-tick"></i> You've sent a connection request to @Model.TransferConnectionInvitation.ReceiverAccount.Name with account ID @Model.TransferConnectionInvitation.ReceiverAccount.PublicHashedId from @Model.TransferConnectionInvitation.SenderAccount.Name</p>
         </div>
         <h2 class="heading-xlarge">What next?</h2>
         @using (Html.BeginForm())
@@ -28,7 +28,7 @@
                     </legend>
                     <label class="block-label selection-button-radio">
                         @Html.RadioButtonFor(m => m.Choice, "GoToTransfersPage")
-                        Go to the transfers dashboard
+                        Go to transfers
                     </label>
                     <label class="block-label selection-button-radio">
                         @Html.RadioButtonFor(m => m.Choice, "GoToHomepage")

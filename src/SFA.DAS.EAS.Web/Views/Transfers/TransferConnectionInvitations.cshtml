@@ -21,7 +21,6 @@
                     @foreach (var transferConnectionInvitation in Model.TransferConnectionInvitations)
                     {
                         var peerAccount = transferConnectionInvitation.GetPeerAccount(Model.AccountId);
-
                         <tr>
                             <td data-label="Employer">@peerAccount.Name</td>
                             <td data-label="Status">@transferConnectionInvitation.Status.ToString()</td>

@@ -115,7 +115,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpNotFoundForNullModel]
         [ImportModelStateFromTempData]
-        [Route("receive")]
+        [Route("{transferConnectionInvitationId}/receive")]
         public async Task<ActionResult> Receive(GetReceivedTransferConnectionInvitationQuery query)
         {
             var response = await _mediator.SendAsync(query);
@@ -127,7 +127,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateModelState]
-        [Route("receive")]
+        [Route("{transferConnectionInvitationId}/receive")]
         public async Task<ActionResult> Receive(ReceiveTransferConnectionInvitationViewModel model)
         {
             switch (model.Choice)
@@ -186,14 +186,15 @@ namespace SFA.DAS.EAS.Web.Controllers
         [ValidateAntiForgeryToken]
         [ValidateModelState]
         [Route("{transferConnectionInvitationId}/rejected")]
-        public ActionResult Rejected(RejectedTransferConnectionInvitationViewModel model)
+        public async Task<ActionResult> Rejected(RejectedTransferConnectionInvitationViewModel model)
         {
             switch (model.Choice)
             {
+                case "Confirm":
+                    await _mediator.SendAsync(model.DeleteTransferConnectionInvitationCommand);
+                    return RedirectToAction("Deleted");
                 case "GoToTransfersPage":
                     return RedirectToAction("Index", "Transfers");
-                case "GoToHomepage":
-                    return RedirectToAction("Index", "EmployerTeam");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model.Choice));
             }
@@ -244,7 +245,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             switch (model.Choice)
             {
-                case "GoToTransferDashboard":
+                case "GoToTransfersPage":
                     return RedirectToAction("Index", "Transfers");
                 case "GoToHomepage":
                     return RedirectToAction("Index", "EmployerTeam");

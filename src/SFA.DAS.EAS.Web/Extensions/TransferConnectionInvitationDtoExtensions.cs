@@ -18,6 +18,11 @@ namespace SFA.DAS.EAS.Web.Extensions
                 : transferConnectionInvitation.SenderAccount;
         }
 
+        public static TransferConnectionInvitationChangeDto GetPendingChange(this TransferConnectionInvitationDto transferConnectionInvitation)
+        {
+            return transferConnectionInvitation.Changes.Single(c => c.Status == TransferConnectionInvitationStatus.Pending);
+        }
+
         public static TransferConnectionInvitationChangeDto GetRejectedChange(this TransferConnectionInvitationDto transferConnectionInvitation)
         {
             return transferConnectionInvitation.Changes.Single(c => c.Status == TransferConnectionInvitationStatus.Rejected);

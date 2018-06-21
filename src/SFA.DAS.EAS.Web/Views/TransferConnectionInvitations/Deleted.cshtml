@@ -14,9 +14,8 @@
     <div class="column-two-thirds">
         <div class="success-summary">
             <h1 class="bold-large">Connection request deleted</h1>
-            <p><i class="icon-green-tick"></i> You have successfully deleted this connection request.</p>
+            <p><i class="icon-green-tick"></i> You've successfully deleted this connection request</p>
         </div>
-
         <h2 class="heading-xlarge">What next?</h2>
         @using (Html.BeginForm())
         {
@@ -28,8 +27,8 @@
                         @Html.ValidationMessageFor(m => m.Choice)
                     </legend>
                     <label class="block-label selection-button-radio">
-                        @Html.RadioButtonFor(m => m.Choice, "GoToTransferDashboard")
-                        Go to the transfers dashboard
+                        @Html.RadioButtonFor(m => m.Choice, "GoToTransfersPage")
+                        Go to transfers
                     </label>
                     <label class="block-label selection-button-radio">
                         @Html.RadioButtonFor(m => m.Choice, "GoToHomepage")

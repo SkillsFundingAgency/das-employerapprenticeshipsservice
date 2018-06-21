@@ -5689,7 +5689,54 @@ tr.total td:last-child {
   color: #fff;
 }
 
+.flash-card details summary {
+  color: #fff;
+}
+
+.flash-card details .panel {
+  border-left-color: #fff;
+}
+
+.flash-card .button, .flash-card .button-link {
+  color: #005ea5;
+  background-color: #fff;
+  box-shadow: none;
+  /*
+
+        a {
+            color: $link-colour;
+        }
+
+        */
+}
+
+.flash-card .button:visited, .flash-card .button-link:visited {
+  color: #4c2c92;
+}
+
+.flash-card .button:hover, .flash-card .button-link:hover {
+  color: #2b8cc4;
+}
+
+.flash-card .button:active, .flash-card .button-link:active {
+  color: #2b8cc4;
+}
+
+.flash-card .button-link {
+  background-color: #005ea5;
+  color: #fff;
+  box-shadow: none;
+}
+
+.flash-card .button-link:visited, .flash-card .button-link:hover, .flash-card .button-link:active {
+  color: #fff;
+}
+
 .flash-card {
   margin-top: 1.25em;
   padding: 35px 50px;
+}
+
+.flash-card .button-link {
+  margin-left: 25px;
 }
