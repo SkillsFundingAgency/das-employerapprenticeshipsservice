@@ -71,6 +71,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             };
 
             var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);
+            var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(
 
             agreementView.HashedAgreementId = _hashingService.HashValue(agreementView.Id);
 
