@@ -139,7 +139,7 @@
   <ItemGroup>
     <None Include="Database.publish.xml" />
     <None Include="Scripts\PostDeployment\CreateAgreementTemplates.sql" />
-    <None Include="Scripts\PreDeployment\RemoveDuplicateAccountHistory.sql" />
+    <None Include="Scripts\PreDeployment\AML-2239-DeleteDuplicateAccountHistory.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Invitation.sql" />
