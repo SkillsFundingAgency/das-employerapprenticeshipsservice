@@ -139,7 +139,7 @@
     <None Include="Scripts\PostDeployment\CreateTransactionLineTypes.sql" />
     <None Include="Scripts\PostDeployment\CreatePaymentTransactionTypes.sql" />
     <None Include="Scripts\PostDeployment\CreateTopUpPercentages.sql" />
-    <None Include="Scripts\Manual\DropPayments1718-R09.sql" />
+    <None Include="Scripts\Manual\DropPayments1819-R01.sql" />
     <Build Include="Types\AccountTransferTable.sql" />
     <None Include="Scripts\Manual\AddNonTransferPayments.sql" />
     <None Include="Scripts\Manual\AddTransferLevy.sql" />
