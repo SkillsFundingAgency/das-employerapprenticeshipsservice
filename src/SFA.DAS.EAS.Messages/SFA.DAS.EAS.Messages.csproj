@@ -48,10 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\IImportLevyDeclarationsCommand.cs" />
+    <Compile Include="Commands\IImportAccountLevyDeclarationsCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\" />
     <Folder Include="Events\" />
   </ItemGroup>
   <ItemGroup>
