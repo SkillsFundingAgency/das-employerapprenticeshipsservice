@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.MessageHandlers.CommandHandlers
 {
-    public class ImportLevyDeclarationsCommandHandler : IHandleMessages<IImportLevyDeclarationsCommand>
+    public class ImportLevyDeclarationsCommandHandler : IHandleMessages<ImportLevyDeclarationsCommand>
     {
         private readonly IEmployerAccountRepository _accountRepository;
         private readonly ILog _logger;
@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.MessageHandlers.CommandHandlers
             _employerSchemesRepository = employerSchemesRepository;
         }
 
-        public async Task Handle(IImportLevyDeclarationsCommand message, IMessageHandlerContext context)
+        public async Task Handle(ImportLevyDeclarationsCommand message, IMessageHandlerContext context)
         {
             var employerAccounts = await _accountRepository.GetAllAccounts();
 
@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.MessageHandlers.CommandHandlers
                 {
                     _logger.Debug($"Creating update levy account message for account {account.Name} (ID: {account.Id}) scheme {scheme.Ref}");
 
-                    tasks.Add(context.SendLocal<IImportAccountLevyDeclarationsCommand>(c =>
+                    tasks.Add(context.SendLocal<ImportAccountLevyDeclarationsCommand>(c =>
                     {
                         c.AccountId = account.Id;
                         c.PayeRef = scheme.Ref;

@@ -1,9 +1,7 @@
 ﻿using Moq;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
-using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.HashingService;
 using SFA.DAS.Messaging.Interfaces;
 using StructureMap;
@@ -19,7 +17,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
     public class LevyWorkerSteps : IDisposable
     {
         private readonly IContainer _container;
-        private readonly Mock<IMessageSubscriber<EmployerRefreshLevyQueueMessage>> _messageSubscriber;
+        //private readonly Mock<IMessageSubscriber<EmployerRefreshLevyQueueMessage>> _messageSubscriber;
         private readonly Mock<IHmrcService> _hmrcService;
 
         public LevyWorkerSteps()
@@ -27,13 +25,13 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
             //Used to set is processing of declarations should occur
             WebConfigurationManager.AppSettings["DeclarationsEnabled"] = "both";
 
-            _messageSubscriber = new Mock<IMessageSubscriber<EmployerRefreshLevyQueueMessage>>();
+            // _messageSubscriber = new Mock<IMessageSubscriber<EmployerRefreshLevyQueueMessage>>();
             _hmrcService = new Mock<IHmrcService>();
 
             var messageSubscriberFactory = new Mock<IMessageSubscriberFactory>();
 
-            messageSubscriberFactory.Setup(x => x.GetSubscriber<EmployerRefreshLevyQueueMessage>())
-                .Returns(_messageSubscriber.Object);
+            //messageSubscriberFactory.Setup(x => x.GetSubscriber<EmployerRefreshLevyQueueMessage>())
+            //    .Returns(_messageSubscriber.Object);
 
             _container = IoC.CreateLevyWorkerContainer(new Mock<IMessagePublisher>(), messageSubscriberFactory, _hmrcService.Object);
         }
@@ -72,20 +70,20 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         private void SetupRefreshLevyMockMessageQueue(IEnumerable<string> payeSchemes, long accountId,
             CancellationTokenSource cancellationTokenSource)
         {
-            var setupSequence = _messageSubscriber.SetupSequence(x => x.ReceiveAsAsync());
+            //var setupSequence = _messageSubscriber.SetupSequence(x => x.ReceiveAsAsync());
 
-            foreach (var scheme in payeSchemes)
-            {
-                var queueMessage = new EmployerRefreshLevyQueueMessage
-                {
-                    AccountId = accountId,
-                    PayeRef = scheme
-                };
+            //foreach (var scheme in payeSchemes)
+            //{
+            //    var queueMessage = new EmployerRefreshLevyQueueMessage
+            //    {
+            //        AccountId = accountId,
+            //        PayeRef = scheme
+            //    };
 
-                var mockMessage = MessageObjectMother.Create(queueMessage, cancellationTokenSource.Cancel, null);
+            //    var mockMessage = MessageObjectMother.Create(queueMessage, cancellationTokenSource.Cancel, null);
 
-                setupSequence = setupSequence.ReturnsAsync(mockMessage);
-            }
+            //    setupSequence = setupSequence.ReturnsAsync(mockMessage);
+            //}
         }
 
         public void Dispose()

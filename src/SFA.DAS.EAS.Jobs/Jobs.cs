@@ -12,14 +12,14 @@ namespace SFA.DAS.EAS.Jobs
         {
             var endpoint = ServiceLocator.Get<IEndpointInstance>();
 
-            endpoint.Send<IImportLevyDeclarationsCommand>(c => { });
+            endpoint.Send<ImportLevyDeclarationsCommand>(c => { });
         }
 
         public void ImportPayments([TimerTrigger("0 0 * * * *")] TimerInfo timer, TraceWriter logger)
         {
             var endpoint = ServiceLocator.Get<IEndpointInstance>();
 
-            endpoint.Send<IImportPaymentsCommand>(c => { });
+            endpoint.Send<ImportPaymentsCommand>(c => { });
         }
     }
 }

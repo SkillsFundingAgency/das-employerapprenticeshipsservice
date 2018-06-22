@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
+using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -10,17 +8,19 @@ using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Audit;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.HashingService;
-using SFA.DAS.Messaging.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Entity = SFA.DAS.Audit.Types.Entity;
+using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
 {
     public class RenameEmployerAccountCommandHandler : AsyncRequestHandler<RenameEmployerAccountCommand>
     {
-        private readonly IMessagePublisher _messagePublisher;
+        private readonly IEndpointInstance _endpoint;
         private readonly IEmployerAccountRepository _accountRepository;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IValidator<RenameEmployerAccountCommand> _validator;
@@ -30,16 +30,16 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
         private readonly IAccountEventFactory _accountEventFactory;
 
         public RenameEmployerAccountCommandHandler(
-            IMessagePublisher messagePublisher,
-            IEmployerAccountRepository accountRepository, 
-            IMembershipRepository membershipRepository, 
-            IValidator<RenameEmployerAccountCommand> validator, 
-            IHashingService hashingService, 
-            IMediator mediator, 
+            IEndpointInstance endpoint,
+            IEmployerAccountRepository accountRepository,
+            IMembershipRepository membershipRepository,
+            IValidator<RenameEmployerAccountCommand> validator,
+            IHashingService hashingService,
+            IMediator mediator,
             IGenericEventFactory genericEventFactory,
             IAccountEventFactory accountEventFactory)
         {
-            _messagePublisher = messagePublisher;
+            _endpoint = endpoint;
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
             _validator = validator;
@@ -77,15 +77,22 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
 
             await NotifyAccountRenamed(message.HashedAccountId);
 
-            await PublishAccountRenamedMessage(accountId, accountPreviousName, message.NewName, 
-                owner.FullName(), owner.UserRef);
+            await PublishAccountRenamedMessage(
+                accountId, accountPreviousName, message.NewName, owner.FullName(), owner.UserRef);
         }
 
-        private async Task PublishAccountRenamedMessage(
+        private Task PublishAccountRenamedMessage(
             long accountId, string previousName, string currentName, string creatorName, string creatorUserRef)
         {
-            await _messagePublisher.PublishAsync(
-                new AccountNameChangedMessage(previousName,currentName,accountId,creatorName, creatorUserRef));
+            return _endpoint.Publish<ChangedAccountNameEvent>(e =>
+            {
+                e.PreviousName = previousName;
+                e.CurrentName = currentName;
+                e.AccountId = accountId;
+                e.Created = DateTime.UtcNow;
+                e.UserName = creatorName;
+                e.UserRef = Guid.Parse(creatorUserRef);
+            });
         }
 
         private async Task NotifyAccountRenamed(string hashedAccountId)

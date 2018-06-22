@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Moq;
+using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
@@ -13,8 +11,9 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
-using SFA.DAS.Messaging;
-using SFA.DAS.Messaging.Interfaces;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTests
@@ -46,7 +45,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 UserId = 9876,
                 Email = "test@test.com",
                 FirstName = "Bob",
-                LastName = "Green"
+                LastName = "Green",
+                UserRef = Guid.NewGuid().ToString()
             };
 
             _agreementView = new EmployerAgreementView
@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 LegalEntity = new LegalEntity(),
                 SignAgreement = true,
                 SignedDate = DateTime.Now.AddDays(-10),
-                ExternalUserId = "12345"
+                ExternalUserId = _owner.UserRef
             };
 
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
@@ -86,12 +86,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _hashingService.Setup(hs => hs.DecodeValue(_command.HashedAccountId)).Returns(_owner.AccountId);
 
             _commandHandler = new CreateLegalEntityCommandHandler(
-                _accountRepository.Object, 
-                _membershipRepository.Object, 
-                _mediator.Object, 
+                _accountRepository.Object,
+                _membershipRepository.Object,
+                _mediator.Object,
                 _genericEventFactory.Object,
-                _legalEntityEventFactory.Object, 
-                Mock.Of<IMessagePublisher>(),
+                _legalEntityEventFactory.Object,
+                Mock.Of<IEndpointInstance>(),
                 _hashingService.Object,
                 _agreementService.Object);
         }

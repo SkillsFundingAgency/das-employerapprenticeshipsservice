@@ -31,10 +31,6 @@
     "subscription": [ "Activity_PayeSchemeDeletedMessageProcessor" ]
   },
   {
-    "topicName": "get_employer_levy2",
-    "subscription": [ "MA_LevyDeclaration" ]
-  },
-  {
     "topicName": "legal_entity_removed",
     "subscription": [
       "Task_LegalEntityRemovedProcessor",
@@ -44,10 +40,6 @@
   {
     "topicName": "legal_entity_added",
     "subscription": [ "Activity_LegalEntityAddedMessageProcessor" ]
-  },
-  {
-    "topicName": "refresh_payments2",
-    "subscription": [ "MA_PaymentDataProcessor" ]
   },
   {
     "topicName": "sent_transfer_connection_invitation",
@@ -84,13 +76,5 @@
   {
     "topicName": "payment_created",
     "subscription": [ "Activity_PaymentCreatedMessageProcessor" ]
-  },
-  {
-    "topicName": "account_payments_processing_completed",
-    "subscription": [ "MA_TransferDataProcessor" ]
-  },
-  {
-    "topicName": "transfers_processing_completed",
-    "subscription": [ "MA_TransferTransactionProcessor" ]
   }
 ]

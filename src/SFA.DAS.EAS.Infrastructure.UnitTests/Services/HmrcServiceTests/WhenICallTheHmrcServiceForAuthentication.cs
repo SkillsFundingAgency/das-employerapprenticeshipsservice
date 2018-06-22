@@ -10,6 +10,8 @@ using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
@@ -41,7 +43,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
                     ClientSecret = ExpectedClientSecret
                 }
             };
-            
+
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
             _httpClientWrapper.Setup(x => x.SendMessage(It.IsAny<object>(), It.IsAny<string>())).ReturnsAsync(JsonConvert.SerializeObject(new HmrcTokenResponse()));
 
@@ -77,13 +79,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 
 
             //Act
-            var actual = await _hmrcService.GetAuthenticationToken(redirectUrl,code);
+            var actual = await _hmrcService.GetAuthenticationToken(redirectUrl, code);
 
             //Assert
             _httpClientWrapper.Verify(x => x.SendMessage(It.IsAny<object>(), "oauth/token"), Times.Once);
             Assert.IsAssignableFrom<HmrcTokenResponse>(actual);
 
         }
-        
+
     }
 }
