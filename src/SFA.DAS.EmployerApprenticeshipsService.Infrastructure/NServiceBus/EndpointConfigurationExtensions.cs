@@ -2,6 +2,7 @@
 using NServiceBus.InMemory.Outbox;
 using NServiceBus.Persistence.Sql;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Messages.Events;
 using StructureMap;
 using System;
 using System.Data.SqlClient;
@@ -18,6 +19,9 @@ namespace SFA.DAS.EAS.Infrastructure.NServiceBus
             transport.ConnectionString(connectionString);
             transport.UseForwardingTopology();
             transport.Transactions(TransportTransactionMode.ReceiveOnly);
+
+            var routing = transport.Routing();
+            routing.RouteToEndpoint(typeof(ICreatedAccountEvent).Assembly, "Commands", "MessageHandlers");
 
             return config;
         }
