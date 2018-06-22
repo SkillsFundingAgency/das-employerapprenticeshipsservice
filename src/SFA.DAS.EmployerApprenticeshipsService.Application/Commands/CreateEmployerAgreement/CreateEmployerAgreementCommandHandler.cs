@@ -1,29 +1,27 @@
-﻿using System;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
+using NServiceBus;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.EAS.Messages.Events;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreement
 {
     public class CreateEmployerAgreementCommandHandler : AsyncRequestHandler<CreateEmployerAgreementCommand>
     {
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
-        private readonly IMessagePublisher _messagePublisher;
+        private readonly IEndpointInstance _endpoint;
         private readonly IValidator<CreateEmployerAgreementCommand> _validator;
 
         public CreateEmployerAgreementCommandHandler(
             IEmployerAgreementRepository employerAgreementRepository,
-            IMessagePublisher messagePublisher,
-            IValidator<CreateEmployerAgreementCommand> validator
-            )
+            IEndpointInstance endpoint,
+            IValidator<CreateEmployerAgreementCommand> validator)
         {
-            _employerAgreementRepository = employerAgreementRepository ?? throw new ArgumentNullException(nameof(employerAgreementRepository));
-            _messagePublisher = messagePublisher ?? throw new ArgumentNullException(nameof(messagePublisher));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _employerAgreementRepository = employerAgreementRepository;
+            _endpoint = endpoint;
+            _validator = validator;
         }
 
         protected override async Task HandleCore(CreateEmployerAgreementCommand message)
@@ -34,19 +32,16 @@ namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreement
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
             var newAgreementId = await _employerAgreementRepository.CreateEmployerAgreeement(
-                                message.LatestTemplateId, 
-                                message.AccountId, 
+                                message.LatestTemplateId,
+                                message.AccountId,
                                 message.LegalEntityId);
 
-            var publishMessage = new AgreementCreatedMessage(
-                message.AccountId, 
-                newAgreementId, 
-                null,
-                message.LegalEntityId, 
-                null, 
-                null);
-
-            await _messagePublisher.PublishAsync(publishMessage);
+            await _endpoint.Publish<CreatedAgreementEvent>(c =>
+            {
+                c.AccountId = message.AccountId;
+                c.AgreementId = newAgreementId;
+                c.LegalEntityId = message.LegalEntityId;
+            });
         }
     }
 }

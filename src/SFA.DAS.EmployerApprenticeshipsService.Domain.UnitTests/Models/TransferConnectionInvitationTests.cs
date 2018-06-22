@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.TestCommon.Builders;
 using SFA.DAS.EmployerAccounts.Events.Messages;
@@ -34,8 +35,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
         [Test]
         public void SendTransferConnectionInvitation_WhenISendATransferConnection_ThenShouldPublishSentTransferConnectionInvitationEvent()
         {
-            Run(f => f.SendTransferConnectionInvitation(), f => f.GetEvent<SentTransferConnectionInvitationEvent>().Should().NotBeNull()
-                .And.Match<SentTransferConnectionInvitationEvent>(e =>
+            Run(f => f.SendTransferConnectionInvitation(), f => f.GetEvent<SentTransferConnectionInviteEvent>().Should().NotBeNull()
+                .And.Match<SentTransferConnectionInviteEvent>(e =>
                     e.ReceiverAccountHashedId == f.ReceiverAccount.HashedId &&
                     e.ReceiverAccountId == f.ReceiverAccount.Id &&
                     e.ReceiverAccountName == f.ReceiverAccount.Name &&

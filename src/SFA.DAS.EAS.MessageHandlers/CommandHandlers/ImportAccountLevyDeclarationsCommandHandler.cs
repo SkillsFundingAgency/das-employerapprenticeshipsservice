@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.MessageHandlers.CommandHandlers
 {
-    public class ImportAccountLevyDeclarationsCommandHandler : IHandleMessages<IImportAccountLevyDeclarationsCommand>
+    public class ImportAccountLevyDeclarationsCommandHandler : IHandleMessages<ImportAccountLevyDeclarationsCommand>
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.MessageHandlers.CommandHandlers
             _dasAccountService = dasAccountService;
         }
 
-        public async Task Handle(IImportAccountLevyDeclarationsCommand message, IMessageHandlerContext context)
+        public async Task Handle(ImportAccountLevyDeclarationsCommand message, IMessageHandlerContext context)
         {
             var employerAccountId = message.AccountId;
             var payeRef = message.PayeRef;

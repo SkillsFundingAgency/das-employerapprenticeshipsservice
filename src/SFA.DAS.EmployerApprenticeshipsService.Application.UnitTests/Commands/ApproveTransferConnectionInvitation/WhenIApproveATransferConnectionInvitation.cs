@@ -1,15 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.ApproveTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.EAS.TestCommon.Builders;
-using SFA.DAS.EmployerAccounts.Events.Messages;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionInvitation
 {
@@ -112,7 +112,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
             var now = DateTime.UtcNow;
 
             await _handler.Handle(_command);
-            
+
             Assert.That(_transferConnectionInvitation.Status, Is.EqualTo(TransferConnectionInvitationStatus.Approved));
             Assert.That(_transferConnectionInvitation.Changes.Count, Is.EqualTo(1));
 
@@ -134,7 +134,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
             await _handler.Handle(_command);
 
             var messages = _entity.GetEvents().ToList();
-            var message = messages.OfType<ApprovedTransferConnectionInvitationEvent>().FirstOrDefault();
+            var message = messages.OfType<ApprovedTransferConnectionInviteEvent>().FirstOrDefault();
 
             Assert.That(messages.Count, Is.EqualTo(1));
             Assert.That(message, Is.Not.Null);
