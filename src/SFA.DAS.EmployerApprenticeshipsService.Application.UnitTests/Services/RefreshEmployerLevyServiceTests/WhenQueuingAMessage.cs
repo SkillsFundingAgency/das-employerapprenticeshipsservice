@@ -1,23 +1,23 @@
-﻿using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
+using NServiceBus;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Services;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.EAS.Messages.Commands;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Services.RefreshEmployerLevyServiceTests
 {
     public class WhenQueuingAMessage
     {
         private RefreshEmployerLevyService _refreshEmployerLevyService;
-        private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<IEndpointInstance> _endpoint;
 
         [SetUp]
         public void Arrange()
         {
-            _messagePublisher = new Mock<IMessagePublisher>();
+            _endpoint = new Mock<IEndpointInstance>();
 
-            _refreshEmployerLevyService = new RefreshEmployerLevyService(_messagePublisher.Object);
+            _refreshEmployerLevyService = new RefreshEmployerLevyService(_endpoint.Object);
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Services.RefreshEmployerLevyServiceT
             await _refreshEmployerLevyService.QueueRefreshLevyMessage(expectedAccountId, expectedPayeRef);
 
             //Assert
-            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c=>c.AccountId.Equals(expectedAccountId) && c.PayeRef.Equals(expectedPayeRef))));
+            _endpoint.Verify(x => x.Send(It.Is<IImportAccountLevyDeclarationsCommand>(c => c.AccountId.Equals(expectedAccountId) && c.PayeRef.Equals(expectedPayeRef))));
         }
     }
 }

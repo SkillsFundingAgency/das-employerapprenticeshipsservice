@@ -250,33 +250,5 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             //Assert
             _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<PaymentCreatedMessage>()), Times.Never());
         }
-
-        [Test]
-        public async Task ThenTheSystemIsNotifiedWhenAllPaymentsAreProcessed()
-        {
-            //Act
-            await _handler.Handle(_command);
-
-            //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountPaymentsProcessingCompletedMessage>
-            (m => m.AccountId.Equals(_command.AccountId) &&
-                  m.PeriodEnd.Equals(_command.PeriodEnd))), Times.Once);
-        }
-
-        [Test]
-        public void ThenTheSystemShouldNotBeNotifiedIfAllPaymentsAreNotProcessed()
-        {
-            //Arrange
-            _dasLevyRepository.Setup(x => x.CreatePayments(It.IsAny<IEnumerable<PaymentDetails>>()))
-                .Throws<Exception>();
-
-            //Act + Assert
-            Assert.ThrowsAsync<Exception>(() => _handler.Handle(_command));
-
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountPaymentsProcessingCompletedMessage>
-            (m => m.AccountId.Equals(_command.AccountId) &&
-                  m.PeriodEnd.Equals(_command.PeriodEnd))), Times.Never);
-        }
-
     }
 }
