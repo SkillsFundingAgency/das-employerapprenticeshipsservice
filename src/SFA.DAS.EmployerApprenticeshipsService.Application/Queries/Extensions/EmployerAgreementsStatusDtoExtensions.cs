@@ -34,17 +34,5 @@ namespace SFA.DAS.EAS.Application.Queries.Extensions
                 ag => DoIf(ag, ag.HasSignedAgreement && ag.HasPendingAgreement && ag.Signed.VersionNumber > ag.Pending.VersionNumber, () => ag.Pending = null)
             );
         }
-
-        public static IQueryable<EmployerAgreementStatusDto> GetAgreementStatus(
-            this IQueryable<EmployerAgreement> query,
-            IConfigurationProvider configurationProvider,
-            Expression<Func<EmployerAgreement, bool>> predicate)
-        {
-            return query.Where(predicate)
-                .Where(ag => ag.StatusId == EmployerAgreementStatus.Signed ||
-                             ag.StatusId == EmployerAgreementStatus.Pending)
-                .GroupBy(grp => grp.LegalEntity)
-                .ProjectTo<EmployerAgreementStatusDto>(configurationProvider);
-        }
     }
 }

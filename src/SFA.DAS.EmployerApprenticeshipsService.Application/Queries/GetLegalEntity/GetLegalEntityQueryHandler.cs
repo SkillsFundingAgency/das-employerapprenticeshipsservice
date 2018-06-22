@@ -23,13 +23,12 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntity
 
         public async Task<GetLegalEntityResponse> Handle(GetLegalEntityQuery message)
         {
-            var legalEntity = await _db.LegalEntities
+            var legalEntity = await _db.AccountLegalEntity
                 .Where(l =>
-                    l.Id == message.LegalEntityId.Value &&
-                    l.Agreements.Any(a =>
-                        a.Account.Id == message.AccountId.Value && (
-                        a.StatusId == EmployerAgreementStatus.Pending ||
-                        a.StatusId == EmployerAgreementStatus.Signed)))
+                    l.LegalEntityId == message.LegalEntityId.Value &&
+                    l.AccountId == message.AccountId.Value && 
+                    (l.PendingAgreementId != null || l.SignedAgreementId != null))
+                .Select(ale => ale.LegalEntity)
                 .ProjectTo<LegalEntityViewModel>(_configurationProvider, new
                 {
                     accountId = message.AccountId.Value,

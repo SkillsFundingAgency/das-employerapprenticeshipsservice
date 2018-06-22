@@ -14,23 +14,33 @@ AS
 BEGIN	
 	DECLARE @firstName NVARCHAR(MAX)	
 	DECLARE @lastName NVARCHAR(MAX)
-	DECLARE @signedByName NVARCHAR(100)	
+	DECLARE @signedByName NVARCHAR(100)
+	DECLARE @accountLegalEntityId BIGINT;
 
 	SELECT @legalEntityId = Id FROM [employer_account].[LegalEntity] WHERE Code = @companyNumber AND Source = @source
 
 	IF(@legalEntityId IS NULL)
 	BEGIN
 		EXEC [employer_account].[CreateLegalEntity] 
-			@companyNumber,
-			@companyName,
-			@companyAddress,
-			@companyDateOfIncorporation,
-			@status,
-			@source,
-			@publicSectorDataSource,
-			@sector,
-			@legalEntityId OUTPUT	
+			@code=@companyNumber,
+			@dateOfIncorporation=@companyDateOfIncorporation,
+			@status=@status,
+			@source=@source,
+			@publicSectorDataSource=@publicSectorDataSource,
+			@sector=@sector,
+			@legalEntityId=@legalEntityId OUTPUT	
 	END
 
-	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, NULL, @employerAgreementId OUTPUT
+	EXEC [employer_account].[CreateAccountLegalEntity]
+			@accountId = @accountId,
+			@legalEntityId = @legalEntityId,
+			@employerName = @companyName,
+			@employerRegisteredAddress = @companyAddress,
+			@accountLegalEntityId = @accountLegalEntityId OUTPUT
+
+
+	EXEC [employer_account].[CreateEmployerAgreement] 
+			@accountLegalEntityId = @accountLegalEntityId, 
+			@templateId = NULL, 
+			@employerAgreementId = @employerAgreementId OUTPUT
 END

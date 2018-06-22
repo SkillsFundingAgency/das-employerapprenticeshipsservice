@@ -56,4 +56,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Created" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="b09bdc29-764f-42d5-9f57-41b9495ebc7c" ChangeDateTime="06/21/2018 14:35:31">
+    <Property Name="ElementName" Value="[employer_account].[AccountLegalEntity].[CurrentSignedAgreement]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_account].[AccountLegalEntity]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SignedAgreementVersion" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="dc9e3e47-2cd7-4727-b4fa-ef9c8de6b16c" ChangeDateTime="06/21/2018 14:35:44">
+    <Property Name="ElementName" Value="[employer_account].[AccountLegalEntity].[CurrentPendingAgreement]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_account].[AccountLegalEntity]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PendingAgreementVersion" />
+  </Operation>
 </Operations>

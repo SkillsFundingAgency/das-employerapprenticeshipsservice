@@ -25,19 +25,18 @@ BEGIN
 	INSERT INTO [employer_account].[Account](Name, CreatedDate) VALUES (@employerName, @addedDate);
 	SELECT @accountId = SCOPE_IDENTITY();
 
-	if(@employerNumber is not null)
-	BEGIN
-		SELECT @legalEntityId = Id FROM [employer_account].[LegalEntity] WHERE Code = @employerNumber and Source = @source
-	END
-
-	IF (@legalEntityId IS NULL)
-	BEGIN
-		INSERT INTO [employer_account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation, [Status], [Source], [PublicSectorDataSource],[Sector]) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation,@status, @source, @publicSectorDataSource,@sector);
-		SELECT @legalEntityId = SCOPE_IDENTITY();	
-	END
-	
-	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, NULL, @employerAgreementId OUTPUT
-
+	EXEC [employer_account].[CreateLegalEntityWithAgreement]
+		@accountId = @accountId,
+		@companyNumber = @employerNumber,
+		@companyName = @employerName,
+		@companyAddress = @employerRegisteredAddress,
+		@companyDateOfIncorporation = @employerDateOfIncorporation,
+		@status = @status,
+		@source = @source,
+		@publicSectorDataSource = @publicSectorDataSource,
+		@legalEntityId = @legalEntityId OUTPUT,
+		@employerAgreementId = @employerAgreementId OUTPUT
+		
 	IF EXISTS(select 1 from [employer_account].[Paye] where Ref = @employerRef)
 	BEGIN
 		EXEC [employer_account].[UpdatePaye] @employerRef,@accessToken, @refreshToken,@employerRefName

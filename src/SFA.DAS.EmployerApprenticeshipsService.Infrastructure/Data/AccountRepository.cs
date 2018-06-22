@@ -10,19 +10,13 @@ using SFA.DAS.Sql.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
-    public interface IAccountRepository
-    {
-        Task CreateLegalEntity(LegalEntity legalEntity);
-        Task EnsureLegalEntityLinkedToAccount(long legalEntityId, long accountId);
-        Task CreateAgreementForLegalEntity(long legalEntityId, long accountId);
-    }
-
-    public class AccountRepository : BaseRepository, IAccountRepository, IAccountRepository
+    public class AccountRepository : BaseRepository, IAccountRepository
     {
         private readonly EmployerAccountDbContext _employerAccountDbContext;
 
@@ -102,17 +96,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                /*
-                 *
-                 *  The problem we have here is that this is called to create a legal entity, but what we actually
-                 *  get is a LE and an agreement. This work is all done by the SP....
-                 *  What we would like is:
-                 *      1.  Create the LE
-                 *      2.  Link the LE to an account
-                 *      3.  Create an agreement for the new relationship
-                 *
-                 *  We need to separate the messages and commands out, add a new command for the link step.
-                 */
                 parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@companyNumber", legalEntity.Code, DbType.String);
                 parameters.Add("@companyName", legalEntity.Name, DbType.String);
@@ -150,23 +133,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     Status = EmployerAgreementStatus.Pending,
                 };
             });
-        }
-
-        public Task CreateLegalEntity(LegalEntity legalEntity)
-        {
-            _employerAccountDbContext.LegalEntities.Add(legalEntity);
-            return _employerAccountDbContext.SaveChangesAsync();
-        }
-
-        public Task EnsureLegalEntityLinkedToAccount(long legalEntityId, long accountId)
-        {
-            _employerAccountDbContext.LegalEntities
-            return Task.CompletedTask;
-        }
-
-        public Task CreateAgreementForLegalEntity(long legalEntityId, long accountId)
-        {
-            return Task.CompletedTask;
         }
 
         public async Task<AccountStats> GetAccountStats(long accountId)
