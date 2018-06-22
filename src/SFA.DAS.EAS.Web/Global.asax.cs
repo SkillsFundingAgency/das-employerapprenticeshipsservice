@@ -1,4 +1,21 @@
-﻿using System;
+﻿using FluentValidation.Mvc;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Azure;
+using NLog;
+using NLog.Targets;
+using NServiceBus;
+using SFA.DAS.Audit.Client;
+using SFA.DAS.Audit.Client.Web;
+using SFA.DAS.Audit.Types;
+using SFA.DAS.EAS.Application.Extensions;
+using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Infrastructure.Logging;
+using SFA.DAS.EAS.Infrastructure.NServiceBus;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EmployerUsers.WebClientComponents;
+using SFA.DAS.Web.Policy;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
@@ -8,21 +25,6 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using FluentValidation.Mvc;
-using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Azure;
-using NLog;
-using NLog.Targets;
-using SFA.DAS.Audit.Client;
-using SFA.DAS.Audit.Client.Web;
-using SFA.DAS.Audit.Types;
-using SFA.DAS.EAS.Application.Extensions;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
-using SFA.DAS.EAS.Infrastructure.Logging;
-using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EmployerUsers.WebClientComponents;
-using SFA.DAS.Web.Policy;
 using Environment = SFA.DAS.EAS.Infrastructure.DependencyResolution.Environment;
 
 namespace SFA.DAS.EAS.Web
@@ -33,6 +35,8 @@ namespace SFA.DAS.EAS.Web
 #pragma warning disable 169
         private static readonly RedisTarget RedisTarget; // Required to ensure assembly is copied to output.
 #pragma warning restore 169
+
+        private IEndpointInstance _endpointInstance;
 
         protected void Application_Start()
         {
@@ -64,6 +68,8 @@ namespace SFA.DAS.EAS.Web
                 SystemDetailsViewModel.EnvironmentName = ConfigurationHelper.CurrentEnvironmentName;
                 SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
+
+            StartServiceBusEndpoint();
         }
 
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
@@ -80,7 +86,7 @@ namespace SFA.DAS.EAS.Web
             {
                 return;
             }
-            
+
             Dictionary<string, object> properties = null;
 
             try
@@ -103,6 +109,26 @@ namespace SFA.DAS.EAS.Web
 
             Logger.Error(exception, message, properties);
             telemetryClient.TrackException(exception);
+        }
+
+        protected void Application_End()
+        {
+            StopServiceBusEndpoint();
+        }
+
+        private void StartServiceBusEndpoint()
+        {
+            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
+            var container = StructuremapMvc.StructureMapDependencyScope.Container;
+            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Web");
+            endpointConfiguration.Setup(container, isDevelopment);
+
+            _endpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+        }
+
+        private void StopServiceBusEndpoint()
+        {
+            _endpointInstance?.Stop().GetAwaiter().GetResult();
         }
     }
 }
