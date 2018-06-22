@@ -1,5 +1,5 @@
-﻿using System;
-using SFA.DAS.Messaging.Attributes;
+﻿using SFA.DAS.Messaging.Attributes;
+using System;
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
@@ -10,9 +10,10 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public UserJoinedMessage()
         { }
 
-        public UserJoinedMessage(long accountId, string creatorName, string creatorUserRef) : base(accountId, creatorName, creatorUserRef)
+        public UserJoinedMessage(long accountId, string creatorName, string creatorUserRef)
+            : base(accountId, creatorName, creatorUserRef)
         {
-           
+
         }
     }
 }

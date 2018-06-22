@@ -384,6 +384,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EAS.Messages\SFA.DAS.EAS.Messages.csproj">
+      <Project>{22490d92-7dcf-49e8-82b3-8f1edd9f74e6}</Project>
+      <Name>SFA.DAS.EAS.Messages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj">
       <Project>{0e46510c-0d06-4b63-8e17-b9037db7c7ed}</Project>
       <Name>SFA.DAS.EmployerAccounts.Events</Name>

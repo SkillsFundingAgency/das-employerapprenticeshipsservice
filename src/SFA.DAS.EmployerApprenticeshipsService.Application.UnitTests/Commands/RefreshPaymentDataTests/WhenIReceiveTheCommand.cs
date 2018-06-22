@@ -1,5 +1,7 @@
-﻿using MediatR;
+﻿using FluentAssertions;
+using MediatR;
 using Moq;
+using NServiceBus.Testing;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
@@ -8,8 +10,7 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Types;
 using System;
@@ -22,6 +23,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 {
     public class WhenIReceiveTheCommand
     {
+        private const long AccountId = 10;
+        private const decimal Amount = 145.67M;
+        private const string ProviderName = "Test Learning Ltd";
+
+
         private RefreshPaymentDataCommandHandler _handler;
         private Mock<IValidator<RefreshPaymentDataCommand>> _validator;
         private Mock<IPaymentService> _paymentService;
@@ -31,14 +37,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         private Mock<ILog> _logger;
         private List<PaymentDetails> _paymentDetails;
         private List<Guid> _existingPaymentIds;
-        private Mock<IMessagePublisher> _messagePublisher;
+        private TestableEndpointInstance _endpoint;
 
         [SetUp]
         public void Arrange()
         {
             _command = new RefreshPaymentDataCommand
             {
-                AccountId = 546578,
+                AccountId = AccountId,
                 PeriodEnd = "R12-13",
                 PaymentUrl = "http://someurl"
             };
@@ -61,9 +67,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             _paymentDetails = new List<PaymentDetails>{ new PaymentDetails
             {
                 Id = Guid.NewGuid(),
-                Amount = 1234,
-                EmployerAccountId = 123,
-                ProviderName = "Test Learning Ltd"
+                Amount = Amount,
+                EmployerAccountId = AccountId,
+                ProviderName = ProviderName
             }};
 
             _paymentService = new Mock<IPaymentService>();
@@ -72,10 +78,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
-            _messagePublisher = new Mock<IMessagePublisher>();
+            _endpoint = new TestableEndpointInstance();
 
             _handler = new RefreshPaymentDataCommandHandler(
-                _messagePublisher.Object,
+                _endpoint,
                 _validator.Object,
                 _paymentService.Object,
                 _dasLevyRepository.Object,
@@ -184,7 +190,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Never);
 
             _logger.Verify(x => x.Error(It.IsAny<WebException>(),
-                $"Unable to get payment information for AccountId = '{_command.AccountId}' and PeriodEnd = '{_command.PeriodEnd}'"));
+                $"Unable to get payment information for AccountId = '{AccountId}' and PeriodEnd = '{_command.PeriodEnd}'"));
         }
 
         [Test]
@@ -194,7 +200,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.GetAccountPaymentIds(_command.AccountId), Times.Once);
+            _dasLevyRepository.Verify(x => x.GetAccountPaymentIds(AccountId), Times.Once);
         }
 
         [Test]
@@ -259,9 +265,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(new RefreshPaymentDataCommand());
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<PaymentCreatedMessage>
-                (m => m.Amount.Equals(expectedPayment.Amount) &&
-                m.ProviderName.Equals(expectedPayment.ProviderName))), Times.Once);
+            _endpoint.PublishedMessages.Should().HaveCount(1);
+
+            var message = _endpoint.PublishedMessages.Select(x => x.Message)
+                                                     .OfType<CreatedPaymentEvent>()
+                                                     .Single();
+            message.AccountId.Should().Be(AccountId);
+            message.Amount.Should().Be(Amount);
+            message.ProviderName.Should().Be(ProviderName);
         }
 
         [Test]
@@ -275,35 +286,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             Assert.ThrowsAsync<Exception>(() => _handler.Handle(new RefreshPaymentDataCommand()));
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<PaymentCreatedMessage>()), Times.Never());
+            _endpoint.PublishedMessages.Should().BeEmpty();
         }
-
-        [Test]
-        public async Task ThenTheSystemIsNotifiedWhenAllPaymentsAreProcessed()
-        {
-            //Act
-            await _handler.Handle(_command);
-
-            //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountPaymentsProcessingCompletedMessage>
-            (m => m.AccountId.Equals(_command.AccountId) &&
-                  m.PeriodEnd.Equals(_command.PeriodEnd))), Times.Once);
-        }
-
-        [Test]
-        public void ThenTheSystemShouldNotBeNotifiedIfAllPaymentsAreNotProcessed()
-        {
-            //Arrange
-            _dasLevyRepository.Setup(x => x.CreatePayments(It.IsAny<IEnumerable<PaymentDetails>>()))
-                .Throws<Exception>();
-
-            //Act + Assert
-            Assert.ThrowsAsync<Exception>(() => _handler.Handle(_command));
-
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AccountPaymentsProcessingCompletedMessage>
-            (m => m.AccountId.Equals(_command.AccountId) &&
-                  m.PeriodEnd.Equals(_command.PeriodEnd))), Times.Never);
-        }
-
     }
 }

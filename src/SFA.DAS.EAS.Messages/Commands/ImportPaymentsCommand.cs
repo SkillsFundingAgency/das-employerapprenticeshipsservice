@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Messages.Commands
 {
-    public interface IImportPaymentsCommand : ICommand
+    public class ImportPaymentsCommand : ICommand
     {
     }
 }

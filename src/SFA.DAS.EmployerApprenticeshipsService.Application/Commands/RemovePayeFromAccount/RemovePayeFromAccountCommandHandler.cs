@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
+using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -10,13 +8,14 @@ using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging.Interfaces;
-using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.HashingService;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Entity = SFA.DAS.Audit.Types.Entity;
+using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 {
@@ -28,18 +27,18 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
         private readonly IHashingService _hashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
-        private readonly IMessagePublisher _messagePublisher;
+        private readonly IEndpointInstance _endpoint;
         private readonly IMembershipRepository _membershipRepository;
 
         [ServiceBusConnectionKey("employer_shared")]
         public RemovePayeFromAccountCommandHandler(
-            IMediator mediator, 
-            IValidator<RemovePayeFromAccountCommand> validator, 
-            IAccountRepository accountRepository, 
-            IHashingService hashingService, 
-            IGenericEventFactory genericEventFactory, 
-            IPayeSchemeEventFactory payeSchemeEventFactory, 
-            IMessagePublisher messagePublisher,
+            IMediator mediator,
+            IValidator<RemovePayeFromAccountCommand> validator,
+            IAccountRepository accountRepository,
+            IHashingService hashingService,
+            IGenericEventFactory genericEventFactory,
+            IPayeSchemeEventFactory payeSchemeEventFactory,
+            IEndpointInstance endpoint,
             IMembershipRepository membershipRepository)
         {
             _mediator = mediator;
@@ -48,7 +47,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             _hashingService = hashingService;
             _genericEventFactory = genericEventFactory;
             _payeSchemeEventFactory = payeSchemeEventFactory;
-            _messagePublisher = messagePublisher;
+            _endpoint = endpoint;
             _membershipRepository = membershipRepository;
         }
 
@@ -64,7 +63,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 
             var loggedInPerson = await _membershipRepository.GetCaller(accountId, message.UserId);
 
-            await QueuePayeRemovedMessage(message.PayeRef, accountId, message.CompanyName, loggedInPerson.FullName(), message.UserId);
+            await QueuePayeRemovedMessage(message.PayeRef, accountId, message.CompanyName, loggedInPerson.FullName(), loggedInPerson.UserRef);
 
             await NotifyPayeSchemeRemoved(message.HashedAccountId, message.PayeRef);
         }
@@ -94,9 +93,16 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
         }
 
 
-        private async Task QueuePayeRemovedMessage(string payeRef, long accountId, string companyName, string deletedByName, string userRef)
+        private Task QueuePayeRemovedMessage(string payeRef, long accountId, string organisationName, string userName, string userRef)
         {
-            await _messagePublisher.PublishAsync(new PayeSchemeDeletedMessage(payeRef, companyName, accountId, deletedByName, userRef));
+            return _endpoint.Publish(new DeletedPayeSchemeEvent
+            {
+                AccountId = accountId,
+                PayeRef = payeRef,
+                OrganisationName = organisationName,
+                UserName = userName,
+                UserRef = Guid.Parse(userRef)
+            });
         }
 
         private async Task AddAuditEntry(string userId, string payeRef, string accountId)

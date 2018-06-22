@@ -33,6 +33,8 @@ namespace SFA.DAS.EAS.MessageHandlers
 
             endpointConfiguration.Setup(container, isDevelopment);
 
+            NServiceBus.Logging.LogManager.Use<NLogFactory>();
+
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             while (!cancellationToken.IsCancellationRequested)
