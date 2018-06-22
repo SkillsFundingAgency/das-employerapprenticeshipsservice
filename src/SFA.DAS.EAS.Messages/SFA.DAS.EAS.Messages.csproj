@@ -52,11 +52,10 @@
     <Compile Include="Commands\IImportPaymentsCommand.cs" />
     <Compile Include="Commands\IImportLevyDeclarationsCommand.cs" />
     <Compile Include="Commands\IImportAccountLevyDeclarationsCommand.cs" />
+    <Compile Include="Events\ICreatedAccountEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
