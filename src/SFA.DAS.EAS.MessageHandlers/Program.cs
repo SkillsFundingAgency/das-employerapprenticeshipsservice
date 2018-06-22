@@ -30,6 +30,7 @@ namespace SFA.DAS.EAS.MessageHandlers
         {
             var container = IoC.Initialize();
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.MessageHandlers");
+
             endpointConfiguration.Setup(container, isDevelopment);
 
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
