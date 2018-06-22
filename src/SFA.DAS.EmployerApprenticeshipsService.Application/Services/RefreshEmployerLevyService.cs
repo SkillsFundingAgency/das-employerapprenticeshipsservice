@@ -1,25 +1,26 @@
-﻿using System.Threading.Tasks;
-using SFA.DAS.EAS.Application.Messages;
+﻿using NServiceBus;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.EAS.Messages.Commands;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Services
 {
     public class RefreshEmployerLevyService : IRefreshEmployerLevyService
     {
-        private readonly IMessagePublisher _messagePublisher;
+        private readonly IEndpointInstance _endpoint;
 
-        public RefreshEmployerLevyService(IMessagePublisher messagePublisher)
+
+        public RefreshEmployerLevyService(IEndpointInstance endpoint)
         {
-            _messagePublisher = messagePublisher;
+            _endpoint = endpoint;
         }
 
-        public async Task QueueRefreshLevyMessage(long accountId, string payeRef)
+        public Task QueueRefreshLevyMessage(long accountId, string payeRef)
         {
-            await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage
+            return _endpoint.Send<ImportAccountLevyDeclarationsCommand>(c =>
             {
-                AccountId = accountId,
-                PayeRef = payeRef
+                c.AccountId = accountId;
+                c.PayeRef = payeRef;
             });
         }
     }

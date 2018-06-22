@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.MessageHandlers.CommandHandlers
 {
-    public class ImportPaymentsCommandHandler : IHandleMessages<IImportPaymentsCommand>
+    public class ImportPaymentsCommandHandler : IHandleMessages<ImportPaymentsCommand>
     {
         private readonly IPaymentsEventsApiClient _paymentsEventsApiClient;
         private readonly IMediator _mediator;
@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.MessageHandlers.CommandHandlers
             _configuration = configuration;
         }
 
-        public async Task Handle(IImportPaymentsCommand message, IMessageHandlerContext context)
+        public async Task Handle(ImportPaymentsCommand message, IMessageHandlerContext context)
         {
             _logger.Info($"Calling Payments API");
 
@@ -104,7 +104,7 @@ namespace SFA.DAS.EAS.MessageHandlers.CommandHandlers
                 {
                     _logger.Info($"Creating payment queue message for account ID: '{account.Id}' period end ref: '{periodEnd.PeriodEndId}'");
 
-                    tasks.Add(context.SendLocal<IImportAccountPaymentsCommand>(c =>
+                    tasks.Add(context.SendLocal<ImportAccountPaymentsCommand>(c =>
                     {
                         c.AccountId = account.Id;
                         c.PeriodEndRef = periodEnd.PeriodEndId;
