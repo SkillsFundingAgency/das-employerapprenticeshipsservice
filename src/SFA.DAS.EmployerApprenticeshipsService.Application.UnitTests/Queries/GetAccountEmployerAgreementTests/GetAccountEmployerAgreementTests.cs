@@ -167,6 +167,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
 
         public List<Domain.Models.Account.Account> Accounts { get; }
         public List<AgreementTemplate> AgreementTemplates { get; set; }
+        public List<AccountLegalEntity> AccountLegalEntities { get; set; }
         public List<EmployerAgreement> EmployerAgreements { get; }
         public List<LegalEntity> LegalEntities { get; }
 
@@ -226,23 +227,38 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
             return WithAgreement(accountId, legalEntityId, agreementVersion, EmployerAgreementStatus.Pending);
         }
 
-        public GetAccountEmployerAgreementTestFixtures WithAgreement(long accountId, long legalEntityId, int agreementVersion, SFA.DAS.EAS.Domain.Models.EmployerAgreement.EmployerAgreementStatus status)
+        private AgreementTemplate EnsureTemplate(int agreementVersion)
         {
-            var account = Accounts.Single(ac => ac.Id == accountId);
-            var legalEntity = LegalEntities.Single(le => le.Id == legalEntityId);
             var template = AgreementTemplates.FirstOrDefault(ag => ag.VersionNumber == agreementVersion);
             if (template == null)
             {
-                AgreementTemplates.Add(template = new AgreementTemplate {VersionNumber = agreementVersion});
+                AgreementTemplates.Add(template = new AgreementTemplate { VersionNumber = agreementVersion });
             }
+
+            return template;
+        }
+
+        private AccountLegalEntity EnsureAccountLegalEntity(long accountId, long legalEntityId)
+        {
+            var accountLegalEntity = AccountLegalEntities.FirstOrDefault(ale => ale.AccountId == accountId && ale.LegalEntityId == legalEntityId);
+
+            if (accountLegalEntity == null)
+            {
+                AccountLegalEntities.Add(accountLegalEntity = new AccountLegalEntity { AccountId = accountId, LegalEntityId = legalEntityId});
+            }
+
+            return accountLegalEntity;
+        }
+
+        public GetAccountEmployerAgreementTestFixtures WithAgreement(long accountId, long legalEntityId, int agreementVersion, SFA.DAS.EAS.Domain.Models.EmployerAgreement.EmployerAgreementStatus status)
+        {
+            var template = EnsureTemplate(agreementVersion);
+            var accountLegalEntity = EnsureAccountLegalEntity(accountId, legalEntityId);
 
             var employerAgreement = new EmployerAgreement
             {
                 Id = accountId,
-                Account = account,
-                AccountId = account.Id,
-                LegalEntity = legalEntity,
-                LegalEntityId = legalEntity.Id,
+                AccountLegalEntity = accountLegalEntity,
                 Template = template,
                 TemplateId = template.Id,
                 StatusId = status

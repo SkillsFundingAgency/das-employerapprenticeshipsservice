@@ -28,8 +28,19 @@
 			INSERT INTO [employer_account].[Membership] (AccountId, UserId, RoleId)
 			VALUES (@accountId, @userId, 1)
 
-			EXEC [employer_account].[CreateLegalEntity] @legalEntityCode, @legalEntityName, @legalEntityRegisteredAddress, @legalEntityDateOfIncorporation, @legalEntityStatus, @legalEntitySource, NULL, NULL, @legalEntityId OUTPUT
-			EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, null, @employerAgreementId OUTPUT
+			EXEC [employer_account].[CreateLegalEntityWithAgreement] 
+					@accountId=@accountId,
+					@companyNumber=@legalEntityCode, 
+					@companyName=@legalEntityName, 
+					@companyAddress=@legalEntityRegisteredAddress, 
+					@companyDateOfIncorporation=@legalEntityDateOfIncorporation, 
+					@Status=@legalEntityStatus, 
+					@source=@legalEntitySource, 
+					@publicSectorDataSource=NULL, 
+					@legalEntityId=@legalEntityId OUTPUT, 
+					@employerAgreementId=@employerAgreementId OUTPUT,
+					@sector=null
+
 			EXEC [employer_account].[SignEmployerAgreement] @employerAgreementId, @userId, ''Test User'', @now
 			EXEC [employer_account].[CreatePaye] @payeRef, ''accessToken'', ''refreshToken'', @payeName
 			EXEC [employer_account].[CreateAccountHistory] @accountId, @payeRef, @now

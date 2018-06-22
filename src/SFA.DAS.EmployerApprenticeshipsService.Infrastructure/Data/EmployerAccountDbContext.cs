@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public virtual DbSet<EmployerAgreement> Agreements { get; set; }
         public virtual DbSet<AgreementTemplate> AgreementTemplates { get; set; }
         public virtual DbSet<LegalEntity> LegalEntities { get; set; }
-        public virtual DbSet<AccountLegalEntity> LegalEntities { get; set; }
+        public virtual DbSet<AccountLegalEntity> AccountLegalEntity { get; set; }
         public virtual DbSet<Membership> Memberships { get; set; }
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -48,14 +48,17 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Entity<Account>().Ignore(a => a.RoleId).Ignore(a => a.RoleName);
-            modelBuilder.Entity<Account>().HasMany(a => a.Agreements);
+            modelBuilder.Entity<Account>().HasMany(a => a.AccountLegalEntities);
             modelBuilder.Entity<Account>().HasMany(a => a.ReceivedTransferConnectionInvitations).WithRequired(i => i.ReceiverAccount);
             modelBuilder.Entity<Account>().HasMany(a => a.SentTransferConnectionInvitations).WithRequired(i => i.SenderAccount);
             modelBuilder.Entity<AgreementTemplate>().ToTable("EmployerAgreementTemplate").HasMany(t => t.Agreements);
-            modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Account);
-            modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.LegalEntity);
+            modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.AccountLegalEntity);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Template);
-            modelBuilder.Entity<LegalEntity>().HasMany(l => l.Agreements);
+
+            modelBuilder.Entity<AccountLegalEntity>().HasMany<EmployerAgreement>(ale => ale.Agreements);
+            modelBuilder.Entity<AccountLegalEntity>().HasRequired(ale => ale.Account);
+            modelBuilder.Entity<AccountLegalEntity>().HasRequired(ale => ale.LegalEntity);
+            modelBuilder.Entity<LegalEntity>().HasMany(l => l.AccountLegalEntities);
             modelBuilder.Entity<Membership>().HasKey(m => new { m.AccountId, m.UserId }).Ignore(m => m.RoleId).Property(m => m.Role).HasColumnName(nameof(Membership.RoleId));
             modelBuilder.Entity<User>().Ignore(u => u.FullName).Ignore(u => u.UserRef).Property(u => u.ExternalId).HasColumnName(nameof(User.UserRef));
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.ReceiverAccount);

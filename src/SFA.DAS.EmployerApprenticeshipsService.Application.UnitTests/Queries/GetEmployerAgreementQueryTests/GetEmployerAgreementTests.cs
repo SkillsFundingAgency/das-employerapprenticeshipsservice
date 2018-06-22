@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Membership = SFA.DAS.EAS.Domain.Models.AccountTeam.Membership;
+using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTests
 {
@@ -29,8 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var latestAgreement = new EmployerAgreement
             {
                 Id = GetEmployerAgreementTestFixtures.AgreementId,
-                AccountId = GetEmployerAgreementTestFixtures.AccountId,
-                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                AccountLegalEntity = GetEmployerAgreementTestFixtures.AccountLegalEntity,
                 Template = new AgreementTemplate { VersionNumber = 1 },
                 StatusId = EmployerAgreementStatus.Pending
             };
@@ -49,8 +49,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var latestAgreement = new EmployerAgreement
             {
                 Id = GetEmployerAgreementTestFixtures.AgreementId,
-                AccountId = GetEmployerAgreementTestFixtures.AccountId,
-                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                AccountLegalEntity = GetEmployerAgreementTestFixtures.AccountLegalEntity,
                 Template = new AgreementTemplate { VersionNumber = 1 },
                 StatusId = EmployerAgreementStatus.Pending
             };
@@ -82,8 +81,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var latestAgreement = new EmployerAgreement
             {
                 Id = GetEmployerAgreementTestFixtures.AgreementId + 1,
-                AccountId = GetEmployerAgreementTestFixtures.AccountId,
-                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                AccountLegalEntity = GetEmployerAgreementTestFixtures.AccountLegalEntity,
                 Template = new AgreementTemplate { VersionNumber = 2 },
                 StatusId = EmployerAgreementStatus.Pending
             };
@@ -91,8 +89,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var expectedAgreement = new EmployerAgreement
             {
                 Id = GetEmployerAgreementTestFixtures.AgreementId,
-                AccountId = GetEmployerAgreementTestFixtures.AccountId,
-                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                AccountLegalEntity = GetEmployerAgreementTestFixtures.AccountLegalEntity,
                 Template = new AgreementTemplate { VersionNumber = 1 },
                 StatusId = EmployerAgreementStatus.Pending
             };
@@ -103,8 +100,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
                 act: fixtures => fixtures.Handle(),
                 assert: fixtures => expectedAgreement.Should().NotBeNull().And
                                                      .Match<EmployerAgreement>(a =>
-                        a.AccountId == fixtures.Response.EmployerAgreement.AccountId &&
-                        a.LegalEntityId == fixtures.Response.EmployerAgreement.LegalEntityId &&
+                        a.AccountLegalEntity == GetEmployerAgreementTestFixtures.AccountLegalEntity &&
                         a.Template.VersionNumber.Equals(fixtures.Response.EmployerAgreement.Template.VersionNumber) &&
                         a.StatusId.Equals(fixtures.Response.EmployerAgreement.StatusId)));
         }
@@ -115,8 +111,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var latestAgreement = new EmployerAgreement
             {
                 Id = GetEmployerAgreementTestFixtures.AgreementId,
-                AccountId = GetEmployerAgreementTestFixtures.AccountId,
-                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                AccountLegalEntity = GetEmployerAgreementTestFixtures.AccountLegalEntity,
                 Template = new AgreementTemplate { VersionNumber = 3 },
                 StatusId = EmployerAgreementStatus.Pending
             };
@@ -124,8 +119,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var signedAgreement = new EmployerAgreement
             {
                 Id = GetEmployerAgreementTestFixtures.AgreementId - 1,
-                AccountId = GetEmployerAgreementTestFixtures.AccountId,
-                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                AccountLegalEntity = GetEmployerAgreementTestFixtures.AccountLegalEntity,
                 Template = new AgreementTemplate { VersionNumber = 2 },
                 SignedByName = "Test User",
                 SignedDate = DateTime.Now.AddDays(-30),
@@ -135,8 +129,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var olderSignedAgreement = new EmployerAgreement
             {
                 Id = GetEmployerAgreementTestFixtures.AgreementId - 2,
-                AccountId = GetEmployerAgreementTestFixtures.AccountId,
-                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                AccountLegalEntity = GetEmployerAgreementTestFixtures.AccountLegalEntity,
                 Template = new AgreementTemplate { VersionNumber = 1 },
                 SignedByName = "Test User",
                 SignedDate = DateTime.Now.AddDays(-60),
@@ -150,8 +143,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
                 act: fixtures => fixtures.Handle(),
                 assert: fixtures => signedAgreement.Should().NotBeNull()
                     .And.Match<EmployerAgreement>(a =>
-                        a.AccountId == fixtures.Response.LastSignedAgreement.AccountId &&
-                        a.LegalEntityId == fixtures.Response.LastSignedAgreement.LegalEntityId &&
+                        a.AccountLegalEntity == GetEmployerAgreementTestFixtures.AccountLegalEntity &&
                         a.SignedByName.Equals(fixtures.Response.LastSignedAgreement.SignedByName) &&
                         a.SignedDate.Equals(fixtures.Response.LastSignedAgreement.SignedDate) &&
                         a.Template.VersionNumber.Equals(fixtures.Response.LastSignedAgreement.Template.VersionNumber) &&
@@ -164,8 +156,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var latestAgreement = new EmployerAgreement
             {
                 Id = GetEmployerAgreementTestFixtures.AgreementId,
-                AccountId = GetEmployerAgreementTestFixtures.AccountId,
-                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                AccountLegalEntity = GetEmployerAgreementTestFixtures.AccountLegalEntity,
                 Template = new AgreementTemplate { VersionNumber = 3 },
                 StatusId = EmployerAgreementStatus.Pending
             };
@@ -183,8 +174,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var latestAgreement = new EmployerAgreement
             {
                 Id = GetEmployerAgreementTestFixtures.AgreementId,
-                AccountId = GetEmployerAgreementTestFixtures.AccountId,
-                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                AccountLegalEntity = GetEmployerAgreementTestFixtures.AccountLegalEntity,
                 Template = new AgreementTemplate { VersionNumber = 3 },
                 StatusId = EmployerAgreementStatus.Pending
             };
@@ -192,8 +182,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var signedAgreement = new EmployerAgreement
             {
                 Id = GetEmployerAgreementTestFixtures.AgreementId - 1,
-                AccountId = GetEmployerAgreementTestFixtures.AccountId + 1,
-                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                AccountLegalEntity = GetEmployerAgreementTestFixtures.AccountLegalEntity,
                 Template = new AgreementTemplate { VersionNumber = 2 },
                 SignedByName = "Test User",
                 SignedDate = DateTime.Now.AddDays(-30),
@@ -215,8 +204,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var latestAgreement = new EmployerAgreement
             {
                 Id = GetEmployerAgreementTestFixtures.AgreementId,
-                AccountId = GetEmployerAgreementTestFixtures.AccountId,
-                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                AccountLegalEntity = GetEmployerAgreementTestFixtures.AccountLegalEntity,
                 Template = new AgreementTemplate { VersionNumber = 3 },
                 StatusId = EmployerAgreementStatus.Signed
             };
@@ -224,8 +212,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var signedAgreement = new EmployerAgreement
             {
                 Id = GetEmployerAgreementTestFixtures.AgreementId - 1,
-                AccountId = GetEmployerAgreementTestFixtures.AccountId,
-                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                AccountLegalEntity = GetEmployerAgreementTestFixtures.AccountLegalEntity,
                 Template = new AgreementTemplate { VersionNumber = 2 },
                 SignedByName = "Test User",
                 SignedDate = DateTime.Now.AddDays(-30),
@@ -246,8 +233,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var latestAgreement = new EmployerAgreement
             {
                 Id = GetEmployerAgreementTestFixtures.AgreementId,
-                AccountId = GetEmployerAgreementTestFixtures.AccountId,
-                LegalEntityId = GetEmployerAgreementTestFixtures.LegalEntityId,
+                AccountLegalEntity = GetEmployerAgreementTestFixtures.AccountLegalEntity,
                 TemplateId = 5,
                 Template = new AgreementTemplate { Id = 5, VersionNumber = 2 },
                 StatusId = EmployerAgreementStatus.Pending
@@ -285,6 +271,22 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
 
         public Exception Exception { get; private set; }
 
+        public static Domain.Models.Account.Account Account { get; set; }
+        public static LegalEntity LegalEntity { get; set; }
+        public static AccountLegalEntity AccountLegalEntity { get; set; }
+
+        static GetEmployerAgreementTestFixtures()
+        {
+            Account = new Domain.Models.Account.Account {Id = AccountId};
+            LegalEntity = new LegalEntity {Id = LegalEntityId};
+            AccountLegalEntity = new AccountLegalEntity
+            {
+                Account = Account,
+                AccountId = Account.Id,
+                LegalEntity = LegalEntity,
+                LegalEntityId = LegalEntityId
+            };
+        }
 
         public GetEmployerAgreementTestFixtures()
         {

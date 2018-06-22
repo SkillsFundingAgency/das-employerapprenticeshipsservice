@@ -35,19 +35,12 @@ namespace SFA.DAS.EAS.Infrastructure.Features
 
         private async Task<int> GetMinAgreementVersionAsync(long accountId)
         {
-            var versionNumber = await _db.Agreements
-                .Where(a => a.Account.Id == accountId && (a.StatusId == EmployerAgreementStatus.Pending || a.StatusId == EmployerAgreementStatus.Signed))
-                .Select(a => new
-                {
-                    LegalEntityId = a.LegalEntity.Id,
-                    TemplateVersion = a.StatusId == EmployerAgreementStatus.Signed ? a.Template.VersionNumber : 0
-                })
-                .GroupBy(x => x.LegalEntityId)
-                .Select(g => g.Max(x => x.TemplateVersion))
-                .MinAsync()
-                .ConfigureAwait(false);
+            var versionNumber = await _db.AccountLegalEntity
+                                        .Where(ale => ale.AccountId == accountId)
+                                        .MinAsync(ale => ale.SignedAgreementVersion)
+                                        .ConfigureAwait(false);
 
-            return versionNumber == 0 ? NullCacheValue : versionNumber;
+            return versionNumber ?? NullCacheValue;
         }
 
         public Task RemoveFromCacheAsync(long accountId)

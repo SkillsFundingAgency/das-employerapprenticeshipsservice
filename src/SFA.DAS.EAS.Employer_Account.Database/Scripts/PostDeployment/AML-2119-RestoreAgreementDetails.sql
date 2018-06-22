@@ -19,29 +19,40 @@ BEGIN
 		BEGIN TRAN;
 
 			INSERT 
-				INTO employer_account.AccountLegalEntity (Name, Address, CurrentSignedAgreement, CurrentPendingAgreement, AccountId, LegalEntityId, Created)
+				INTO employer_account.AccountLegalEntity (Name, Address, SignedAgreementVersion, SignedAgreementId, PendingAgreementVersion, PendingAgreementId, AccountId, LegalEntityId, Created)
 
-				SELECT	LE.Name, 
-						LE.RegisteredAddress, 
-						(	SELECT	MAX(Id) AS AgreementId
-									FROM	employer_account.EmployerAgreement_Backup AS sa 
-									WHERE	sa.AccountId = bak.AccountId
-											AND sa.LegalEntityId = bak.AccountId
-											AND sa.StatusId = 2 ), 
-						(	SELECT	MAX(Id) AS AgreementId
-									FROM	employer_account.EmployerAgreement_Backup AS pa 
-									WHERE	pa.AccountId = bak.AccountId
-											AND pa.LegalEntityId = bak.AccountId
-											AND pa.StatusId = 1 ),
+				SELECT	bak.Name, 
+						bak.RegisteredAddress, 
+						Signed.VersionNumber,
+						Signed.AgreementId, 
+						Pending.VersionNumber,
+						Pending.AgreementId, 
 						bak.AccountId, 
 						bak.LegalEntityId, 
 						GetDate()
-				FROM	(SELECT Distinct AccountId, LegalEntityId FROM employer_account.EmployerAgreement_Backup) AS bak
+				FROM	(SELECT Distinct AccountId, LegalEntityId, Name, RegisteredAddress FROM employer_account.EmployerAgreement_Backup) AS bak
 						JOIN employer_account.LegalEntity AS LE
 							ON LE.Id = bak.LegalEntityId
 						JOIN employer_account.Account AS AC
-							ON AC.Id = bak.AccountId;
+							ON AC.Id = bak.AccountId
 
+						OUTER APPLY (SELECT	TOP 1 sa.Id AS AgreementId, sa.AccountId, sa.LegalEntityId, et.VersionNumber
+									FROM	employer_account.EmployerAgreement_Backup AS sa 
+											JOIN employer_account.EmployerAgreementTemplate as ET
+												ON ET.Id = sa.TemplateId
+									WHERE	sa.AccountId = bak.AccountId
+											AND sa.LegalEntityId = bak.LegalEntityId
+											AND sa.StatusId = 2
+									ORDER BY ET.VersionNumber DESC) AS Signed
+
+						OUTER APPLY (SELECT	TOP 1 pa.Id AS AgreementId, pa.AccountId, pa.LegalEntityId, et.VersionNumber
+									FROM	employer_account.EmployerAgreement_Backup AS pa 
+											JOIN employer_account.EmployerAgreementTemplate as ET
+												ON ET.Id = pa.TemplateId
+									WHERE	pa.AccountId = bak.AccountId
+											AND pa.LegalEntityId = bak.LegalEntityId
+											AND pa.StatusId = 1 
+									ORDER BY ET.VersionNumber DESC) AS Pending
 				
 				SET IDENTITY_INSERT employer_account.EmployerAgreement ON;
 

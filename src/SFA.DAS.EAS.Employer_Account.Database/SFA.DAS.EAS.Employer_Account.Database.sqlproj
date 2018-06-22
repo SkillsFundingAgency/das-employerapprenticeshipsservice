@@ -135,7 +135,7 @@
     <Build Include="Tables\AccountLegalEntity.sql" />
     <None Include="Scripts\PostDeployment\AML-2119-RestoreAgreementDetails.sql" />
     <Build Include="Functions\GetAccountLegalEntityId.sql" />
-    <Build Include="StoredProcedures\EnsureAccountLegalEntity.sql" />
+    <Build Include="StoredProcedures\CreateAccountLegalEntity.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />

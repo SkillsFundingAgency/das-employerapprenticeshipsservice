@@ -60,7 +60,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
                 message.LegalEntity.Code = Guid.NewGuid().ToString();
             }
 
-            _accountRepository.Cre
             var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(
                 owner.AccountId,
                 message.LegalEntity);

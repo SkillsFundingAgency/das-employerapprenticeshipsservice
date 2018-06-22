@@ -6,7 +6,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT	ISNULL(Signed.Id, Pending.Id) AS Id,
-			le.Name, 
+			ALE.Name, 
 			ISNULL(Signed.StatusId, Pending.StatusId) AS Status, 
 			a.HashedId, 
 			le.Code

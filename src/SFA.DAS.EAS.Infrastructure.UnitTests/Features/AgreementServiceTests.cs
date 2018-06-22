@@ -145,6 +145,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
         public Mock<IDistributedCache> DistributedCache { get; set; }
         public List<Account> Accounts { get; }
         public List<EmployerAgreement> Agreements { get; }
+        public List<AccountLegalEntity> AccountLegalEntities { get; }
         public List<LegalEntity> LegalEntities { get; }
         public List<AgreementTemplate> Templates { get; set; }
 
@@ -156,6 +157,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
             DistributedCache = new Mock<IDistributedCache>();
             Accounts = new List<Account>();
             Agreements = new List<EmployerAgreement>();
+            AccountLegalEntities = new List<AccountLegalEntity>();
             LegalEntities = new List<LegalEntity>();
             Templates = new List<AgreementTemplate>();
 
@@ -171,14 +173,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
 
         public AgreementServiceTestsFixture AddAgreement(long accountId, long legalEntityId, int templateVersionNumber, EmployerAgreementStatus status)
         {
-            var account = EnsureAccount(accountId);
-            var legalEntity = EnsureLegalEntity(legalEntityId);
+            var accountLegalEntity = EnsureAccountLegalEntity(accountId, legalEntityId);
             var template = EnsureTemplate(templateVersionNumber);
 
             Agreements.Add(new EmployerAgreement
             {
-                Account = account,
-                LegalEntity = legalEntity,
+                AccountLegalEntity = accountLegalEntity,
                 Template = template,
                 StatusId = status
             });
@@ -242,6 +242,31 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
             }
 
             return existingLegalEntity;
+        }
+
+        private AccountLegalEntity EnsureAccountLegalEntity(long accountId, long legalEntityId)
+        {
+            var account = EnsureAccount(accountId);
+
+            var legalEntity = EnsureLegalEntity(legalEntityId);
+
+            var existingAccountLegalEntity = AccountLegalEntities.SingleOrDefault(ale => ale.AccountId == accountId && ale.LegalEntityId == legalEntityId);
+
+            if (existingAccountLegalEntity == null)
+            {
+                existingAccountLegalEntity = new AccountLegalEntity
+                {
+                    Id = AccountLegalEntities.Count+1,
+                    AccountId = accountId,
+                    LegalEntityId = legalEntityId,
+                    Account = account,
+                    LegalEntity = legalEntity
+                };
+
+                AccountLegalEntities.Add(existingAccountLegalEntity);
+            }
+
+            return existingAccountLegalEntity;
         }
 
         private AgreementTemplate EnsureTemplate(int templateVersionNumber)

@@ -100,15 +100,24 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
 
         private GetLegalEntityQueryTestsFixture AddLegalEntityAgreement(int versionNumber, EmployerAgreementStatus status)
         {
-            LegalEntity.Agreements.Add(new EmployerAgreement
+            var newAgreement = new EmployerAgreement
             {
-                Account = Account,
                 Template = new AgreementTemplate
                 {
                     VersionNumber = versionNumber
                 },
                 StatusId = status
-            });
+            };
+
+            var newAccountLegalEntity = new AccountLegalEntity
+            {
+                Account = Account,
+                LegalEntity = LegalEntity
+            };
+
+            newAccountLegalEntity.Agreements.Add(newAgreement);
+
+            LegalEntity.AccountLegalEntities.Add(newAccountLegalEntity);
 
             return this;
         }

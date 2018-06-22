@@ -32,9 +32,11 @@ BEGIN
 			DROP TABLE employer_account.EmployerAgreement_Backup;
 		END
 		
-		SELECT *
-		  INTO employer_account.EmployerAgreement_Backup
-		  FROM employer_account.EmployerAgreement;
+		SELECT EA.*, LE.Name, LE.RegisteredAddress
+		  INTO employer_account.EmployerAgreement_Backup 
+		  FROM employer_account.EmployerAgreement AS EA
+				JOIN employer_account.LegalEntity AS LE
+					ON LE.Id = EA.LegalEntityId;
 
 		PRINT 'Created backup of EmployerAgreements';
 

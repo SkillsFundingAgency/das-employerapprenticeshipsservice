@@ -13,8 +13,8 @@ BEGIN
 		ea.SignedByName,
 		ea.SignedDate,
 		ea.ExpiredDate,
-		le.Name AS LegalEntityName,
-		le.RegisteredAddress AS LegalEntityAddress,
+		ale.Name AS LegalEntityName,
+		ale.Address AS LegalEntityAddress,
 		le.Code AS LegalEntityCode,
 		ea.TemplateId,
 		eat.PartialViewName AS TemplatePartialViewName
