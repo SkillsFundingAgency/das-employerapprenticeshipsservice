@@ -90,6 +90,12 @@
     <Reference Include="NServiceBus.Persistence.Sql, Version=4.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\packages\NServiceBus.Persistence.Sql.4.1.1\lib\net452\NServiceBus.Persistence.Sql.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.1.30.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.30\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.1.30.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.30\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.6.1\lib\net45\StructureMap.dll</HintPath>
     </Reference>
@@ -115,7 +121,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandlers\ImportAccountLevyDeclarationsCommandHandler.cs" />
+    <Compile Include="CommandHandlers\ImportAccountPaymentsCommandHandler.cs" />
     <Compile Include="CommandHandlers\ImportLevyDeclarationsCommandHandler.cs" />
+    <Compile Include="CommandHandlers\ImportPaymentsCommandHandler.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="Program.cs" />
