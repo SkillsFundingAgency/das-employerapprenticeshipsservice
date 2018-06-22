@@ -23,87 +23,10 @@
       <Certificate name="WebSslCert" thumbprint="7A1BC8263B7CBAA2B355934D0BB8031B469C1AE1" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.EAS.LevyDeclarationProvider.Worker">
-    <Instances count="3" />
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
-      <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
-      <Setting name="EnvironmentName" value="__EnvironmentName__" />
-      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
-      <Setting name="LogLevel" value="__loglevel__" />
-      <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
-      <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
-      <Setting name="DeclarationsEnabled" value="__DeclarationsEnabled__" />
-      <Setting name="TokenServiceCertificateThumbprint" value="__TokenServiceCertificateThumbprint__" />
-    </ConfigurationSettings>
-    <Certificates>
-    </Certificates>
-  </Role>
-  <Role name="SFA.DAS.EAS.PaymentProvider.Worker">
-    <Instances count="3" />
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
-      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
-      <Setting name="EnvironmentName" value="__EnvironmentName__" />
-      <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
-      <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
-      <Setting name="LogLevel" value="__loglevel__" />
-      <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
-      <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
-      <Setting name="ProcessPayments" value="false" />
-    </ConfigurationSettings>
-  </Role>
-  <Role name="SFA.DAS.EAS.Account.Worker">
-    <Instances count="1" />
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
-      <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
-      <Setting name="DashboardConnectionString" value="__StorageConnectionString__" />
-      <Setting name="EnvironmentName" value="__EnvironmentName__" />
-      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
-      <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
-      <Setting name="LogLevel" value="__loglevel__" />
-      <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
-      <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
-    </ConfigurationSettings>
-  </Role>
-  <Role name="SFA.DAS.EAS.MessageHandlers.Worker">
-    <Instances count="3" />
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
-      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
-      <Setting name="EnvironmentName" value="__EnvironmentName__" />
-      <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
-      <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
-      <Setting name="LogLevel" value="__loglevel__" />
-      <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
-      <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
-    </ConfigurationSettings>
-  </Role>
   <NetworkConfiguration>
     <VirtualNetworkSite name="__vnet__" />
     <AddressAssignments>
       <InstanceAddress roleName="SFA.DAS.EAS.Web">
-        <Subnets>
-          <Subnet name="__subnet__" />
-        </Subnets>
-      </InstanceAddress>
-      <InstanceAddress roleName="SFA.DAS.EAS.LevyDeclarationProvider.Worker">
-        <Subnets>
-          <Subnet name="__subnet__" />
-        </Subnets>
-      </InstanceAddress>
-      <InstanceAddress roleName="SFA.DAS.EAS.PaymentProvider.Worker">
-        <Subnets>
-          <Subnet name="__subnet__" />
-        </Subnets>
-      </InstanceAddress>
-      <InstanceAddress roleName="SFA.DAS.EAS.Account.Worker">
-        <Subnets>
-          <Subnet name="__subnet__" />
-        </Subnets>
-      </InstanceAddress>
-      <InstanceAddress roleName="SFA.DAS.EAS.MessageHandlers.Worker">
         <Subnets>
           <Subnet name="__subnet__" />
         </Subnets>
