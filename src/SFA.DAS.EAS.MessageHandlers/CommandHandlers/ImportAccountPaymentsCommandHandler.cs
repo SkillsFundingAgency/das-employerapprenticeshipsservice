@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.MessageHandlers.CommandHandlers
 {
-    public class ImportAccountPaymentsCommandHandler : IHandleMessages<IImportAccountPaymentsCommand>
+    public class ImportAccountPaymentsCommandHandler : IHandleMessages<ImportAccountPaymentsCommand>
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;
@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.MessageHandlers.CommandHandlers
             _logger = logger;
         }
 
-        public async Task Handle(IImportAccountPaymentsCommand message, IMessageHandlerContext context)
+        public async Task Handle(ImportAccountPaymentsCommand message, IMessageHandlerContext context)
         {
             _logger.Info($"Processing refresh payment command for Account ID: {message.AccountId} PeriodEnd: {message.PeriodEndRef}");
 

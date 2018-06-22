@@ -106,6 +106,9 @@
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.5.0\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="NServiceBus.Core, Version=7.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.7.0.1\lib\net452\NServiceBus.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Polly, Version=5.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.7.0\lib\net45\Polly.dll</HintPath>
     </Reference>
@@ -360,7 +363,6 @@
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQuery.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceResponse.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQueryHandler.cs" />
-    <Compile Include="Messages\AccountTransfersProcessingCompletedMessage.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationQuery.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationQueryHandler.cs" />
     <Compile Include="Queries\GetTransferConnectionInvitationAuthorization\GetTransferConnectionInvitationAuthorizationResponse.cs" />
@@ -508,10 +510,8 @@
     <Compile Include="Messages\AccountMessage.cs" />
     <Compile Include="Messages\MembershipMessage.cs" />
     <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
-    <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
     <Compile Include="Messages\IAccountMessage.cs" />
     <Compile Include="Messages\IUserMessage.cs" />
-    <Compile Include="Messages\PaymentProcessorQueueMessage.cs" />
     <Compile Include="Messages\UserMessage.cs" />
     <Compile Include="Exceptions\NotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -791,6 +791,10 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
       <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EAS.Messages\SFA.DAS.EAS.Messages.csproj">
+      <Project>{22490D92-7DCF-49E8-82B3-8F1EDD9F74E6}</Project>
+      <Name>SFA.DAS.EAS.Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj">
       <Project>{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}</Project>

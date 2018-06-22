@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
+using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
@@ -12,10 +9,12 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.TimeProvider;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
@@ -28,11 +27,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
         private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
         private readonly IValidator<CreateInvitationCommand> _validator;
         private readonly IUserRepository _userRepository;
-        private readonly IMessagePublisher _messagePublisher;
+        private readonly IEndpointInstance _endpoint;
 
-        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, 
+        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator,
             EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration, IValidator<CreateInvitationCommand> validator,
-            IUserRepository userRepository, IMessagePublisher messagePublisher)
+            IUserRepository userRepository, IEndpointInstance endpoint)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
@@ -44,7 +43,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
             _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
             _validator = validator;
             _userRepository = userRepository;
-            _messagePublisher = messagePublisher;
+            _endpoint = endpoint;
         }
 
         protected override async Task HandleCore(CreateInvitationCommand message)
@@ -103,7 +102,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                     Description = $"Member {message.EmailOfPersonBeingInvited} added to account {caller.AccountId} as {message.RoleIdOfPersonBeingInvited}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
-                        
+
                         PropertyUpdate.FromString("AccountId",caller.AccountId.ToString()),
                         PropertyUpdate.FromString("Email",message.EmailOfPersonBeingInvited),
                         PropertyUpdate.FromString("Name",message.NameOfPersonBeingInvited),
@@ -135,12 +134,21 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 }
             });
 
-            await PublishAccountCreatedMessage(caller.AccountId, caller.FullName(), message.NameOfPersonBeingInvited, caller.UserRef);
+            var callerExternalUserId = Guid.Parse(caller.UserRef);
+
+            await PublishUserInvitedEvent(caller.AccountId, caller.FullName(), message.NameOfPersonBeingInvited, callerExternalUserId);
         }
 
-        private async Task PublishAccountCreatedMessage(long accountId, string signedByName, string personInvited, string userRef)
+        private Task PublishUserInvitedEvent(long accountId, string personInvited, string invitedByUserName, Guid invitedByUserRef)
         {
-            await _messagePublisher.PublishAsync(new UserInvitedMessage(personInvited, accountId, signedByName, userRef));
+            return _endpoint.Publish(new InvitedUserEvent
+            {
+                AccountId = accountId,
+                PersonInvited = personInvited,
+                UserName = invitedByUserName,
+                UserRef = invitedByUserRef,
+                Created = DateTime.UtcNow
+            });
         }
     }
 }
