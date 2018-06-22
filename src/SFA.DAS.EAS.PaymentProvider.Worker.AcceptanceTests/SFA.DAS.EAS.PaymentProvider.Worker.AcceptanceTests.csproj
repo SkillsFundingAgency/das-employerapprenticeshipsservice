@@ -181,10 +181,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.PaymentProvider.Worker\SFA.DAS.EAS.PaymentProvider.Worker.csproj">
-      <Project>{52069b5e-6a8d-413e-b4bd-a7c7c4fd2ccf}</Project>
-      <Name>SFA.DAS.EAS.PaymentProvider.Worker</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EAS.Transactions.AcceptanceTests\SFA.DAS.EAS.Transactions.AcceptanceTests.csproj">
       <Project>{dcdffdb0-8f7f-4cc7-ac40-0b78d52cd16b}</Project>
       <Name>SFA.DAS.EAS.Transactions.AcceptanceTests</Name>

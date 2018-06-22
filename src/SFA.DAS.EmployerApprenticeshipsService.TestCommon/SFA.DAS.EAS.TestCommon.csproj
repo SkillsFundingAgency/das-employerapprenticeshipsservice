@@ -324,10 +324,6 @@
       <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.EAS.LevyDeclarationProvider.Worker.csproj">
-      <Project>{386ADB6F-CE56-4AFD-B762-DE93E74AFD41}</Project>
-      <Name>SFA.DAS.EAS.LevyDeclarationProvider.Worker</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
