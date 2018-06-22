@@ -135,6 +135,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.MessageHandlers
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests", "SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests\SFA.DAS.EAS.PaymentProvider.Worker.AcceptanceTests.csproj", "{609F01BA-B167-4B0E-9266-9721AB850389}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Host", "SFA.DAS.EAS.Host\SFA.DAS.EAS.Host.csproj", "{FA61679B-C46B-41FB-A999-113963BC1B6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.MessageHandlers", "SFA.DAS.EAS.MessageHandlers\SFA.DAS.EAS.MessageHandlers.csproj", "{546DF13E-28F3-4E7F-AED0-8DCF9579BB4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Jobs", "SFA.DAS.EAS.Jobs\SFA.DAS.EAS.Jobs.csproj", "{B2F1D034-62A0-43FF-A52A-083628F7ED7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Messages", "SFA.DAS.EAS.Messages\SFA.DAS.EAS.Messages.csproj", "{22490D92-7DCF-49E8-82B3-8F1EDD9F74E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -342,6 +350,22 @@ Global
 		{609F01BA-B167-4B0E-9266-9721AB850389}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{609F01BA-B167-4B0E-9266-9721AB850389}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{609F01BA-B167-4B0E-9266-9721AB850389}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA61679B-C46B-41FB-A999-113963BC1B6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA61679B-C46B-41FB-A999-113963BC1B6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA61679B-C46B-41FB-A999-113963BC1B6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA61679B-C46B-41FB-A999-113963BC1B6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{546DF13E-28F3-4E7F-AED0-8DCF9579BB4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{546DF13E-28F3-4E7F-AED0-8DCF9579BB4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{546DF13E-28F3-4E7F-AED0-8DCF9579BB4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{546DF13E-28F3-4E7F-AED0-8DCF9579BB4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2F1D034-62A0-43FF-A52A-083628F7ED7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2F1D034-62A0-43FF-A52A-083628F7ED7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2F1D034-62A0-43FF-A52A-083628F7ED7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2F1D034-62A0-43FF-A52A-083628F7ED7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22490D92-7DCF-49E8-82B3-8F1EDD9F74E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22490D92-7DCF-49E8-82B3-8F1EDD9F74E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22490D92-7DCF-49E8-82B3-8F1EDD9F74E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22490D92-7DCF-49E8-82B3-8F1EDD9F74E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
