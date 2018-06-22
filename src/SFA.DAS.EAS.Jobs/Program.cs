@@ -33,6 +33,9 @@ namespace SFA.DAS.EAS.Jobs
         public static async Task AsyncMain(CancellationToken cancellationToken, bool isDevelopment)
         {
             var container = IoC.Initialize();
+
+            ServiceLocator.Initialize(container);
+
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Jobs");
             endpointConfiguration.Setup(container, isDevelopment);
 
