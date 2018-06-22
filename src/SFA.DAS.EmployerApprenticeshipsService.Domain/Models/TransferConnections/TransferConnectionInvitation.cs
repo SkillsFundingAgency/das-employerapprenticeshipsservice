@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Messages.Events;
+using System;
 using System.Collections.Generic;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EmployerAccounts.Events.Messages;
 
 namespace SFA.DAS.EAS.Domain.Models.TransferConnections
 {
@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
             ReceiverAccount = receiverAccount;
             Status = TransferConnectionInvitationStatus.Pending;
             CreatedDate = now;
-            
+
             Changes.Add(new TransferConnectionInvitationChange
             {
                 SenderAccount = SenderAccount,
@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 CreatedDate = now
             });
 
-            Publish<SentTransferConnectionInvitationEvent>(e =>
+            Publish<SentTransferConnectionInviteEvent>(e =>
             {
                 e.CreatedAt = now;
                 e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
             RequiresTransferConnectionInvitationIsPending();
 
             var now = DateTime.UtcNow;
-            
+
             Status = TransferConnectionInvitationStatus.Approved;
 
             Changes.Add(new TransferConnectionInvitationChange
@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 CreatedDate = now
             });
 
-            Publish<ApprovedTransferConnectionInvitationEvent>(e =>
+            Publish<ApprovedTransferConnectionInviteEvent>(e =>
             {
                 e.ApprovedByUserExternalId = approverUser.ExternalId;
                 e.ApprovedByUserId = approverUser.Id;
@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
             RequiresDeleterIsEitherSenderOrReceiver(deleterAccount);
 
             var now = DateTime.UtcNow;
-        
+
             bool? deletedBySender = null;
             bool? deletedByReceiver = null;
 
@@ -107,7 +107,7 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 DeletedByReceiver = true;
                 deletedByReceiver = true;
             }
-            else 
+            else
             {
                 RequiresDeleterAccountIsTheSenderAccount(deleterAccount);
                 RequiresNotAlreadyDeletedBySender();
@@ -117,13 +117,13 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
 
             Changes.Add(new TransferConnectionInvitationChange
             {
-                DeletedBySender =  deletedBySender,
+                DeletedBySender = deletedBySender,
                 DeletedByReceiver = deletedByReceiver,
                 User = deleterUser,
                 CreatedDate = now
             });
 
-            Publish<DeletedTransferConnectionInvitationEvent>(e =>
+            Publish<DeletedTransferConnectionInviteEvent>(e =>
             {
                 e.CreatedAt = now;
                 e.DeletedByAccountId = deleterAccount.Id;
@@ -148,7 +148,7 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
             var now = DateTime.UtcNow;
 
             Status = TransferConnectionInvitationStatus.Rejected;
-            
+
             Changes.Add(new TransferConnectionInvitationChange
             {
                 Status = Status,
@@ -156,7 +156,7 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 CreatedDate = now
             });
 
-            Publish<RejectedTransferConnectionInvitationEvent>(e =>
+            Publish<RejectedTransferConnectionInviteEvent>(e =>
             {
                 e.CreatedAt = now;
                 e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
