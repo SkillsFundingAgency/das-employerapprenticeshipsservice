@@ -39,6 +39,8 @@ namespace SFA.DAS.EAS.Jobs
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Jobs");
             endpointConfiguration.Setup(container, isDevelopment);
 
+            NServiceBus.Logging.LogManager.Use<NLogFactory>();
+
             _endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
         }
     }
