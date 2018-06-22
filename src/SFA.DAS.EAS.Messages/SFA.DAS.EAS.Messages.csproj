@@ -48,14 +48,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\IImportAccountPaymentsCommand.cs" />
-    <Compile Include="Commands\IImportPaymentsCommand.cs" />
-    <Compile Include="Commands\IImportLevyDeclarationsCommand.cs" />
-    <Compile Include="Commands\IImportAccountLevyDeclarationsCommand.cs" />
+    <Compile Include="Commands\ImportAccountPaymentsCommand.cs" />
+    <Compile Include="Commands\ImportPaymentsCommand.cs" />
+    <Compile Include="Commands\ImportLevyDeclarationsCommand.cs" />
+    <Compile Include="Commands\ImportAccountLevyDeclarationsCommand.cs" />
+    <Compile Include="Events\AddedLegalEntityEvent.cs" />
+    <Compile Include="Events\AddedPayeSchemeEvent.cs" />
+    <Compile Include="Events\ChangedAccountNameEvent.cs" />
+    <Compile Include="Events\ApprovedTransferConnectionInviteEvent.cs" />
+    <Compile Include="Events\CreatedAccountEvent.cs" />
+    <Compile Include="Events\CreatedAgreementEvent.cs" />
+    <Compile Include="Events\CreatedPaymentEvent.cs" />
+    <Compile Include="Events\DeletedPayeSchemeEvent.cs" />
+    <Compile Include="Events\DeletedTransferConnectionInviteEvent.cs" />
+    <Compile Include="Events\InvitedUserEvent.cs" />
+    <Compile Include="Events\RejectedTransferConnectionInviteEvent.cs" />
+    <Compile Include="Events\RemovedLegalEntityEvent.cs" />
+    <Compile Include="Events\SentTransferConnectionInviteEvent.cs" />
+    <Compile Include="Events\SignedAgreementEvent.cs" />
+    <Compile Include="Events\UserJoinedEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Events\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

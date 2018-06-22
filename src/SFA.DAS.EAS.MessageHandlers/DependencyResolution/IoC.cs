@@ -19,6 +19,7 @@ namespace SFA.DAS.EAS.MessageHandlers.DependencyResolution
                 c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();
+                c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<PaymentsRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
