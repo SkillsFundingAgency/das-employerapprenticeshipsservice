@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\IImportAccountPaymentsCommand.cs" />
+    <Compile Include="Commands\IImportPaymentsCommand.cs" />
     <Compile Include="Commands\IImportLevyDeclarationsCommand.cs" />
     <Compile Include="Commands\IImportAccountLevyDeclarationsCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
