@@ -16,6 +16,7 @@ using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.HashingService;
+using SFA.DAS.Messaging.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -27,6 +28,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
     public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>
     {
         private readonly IAccountRepository _accountRepository;
+        private readonly IMessagePublisher _messagePublisher;
         private readonly IEndpointInstance _endpoint;
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAccountCommand> _validator;
@@ -39,7 +41,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         public CreateAccountCommandHandler(
             IAccountRepository accountRepository,
-            IEndpointInstance endpoint,
+            IMessagePublisher messagePublisher,
             IMediator mediator,
             IValidator<CreateAccountCommand> validator,
             IHashingService hashingService,
@@ -47,9 +49,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IGenericEventFactory genericEventFactory,
             IAccountEventFactory accountEventFactory,
             IRefreshEmployerLevyService refreshEmployerLevyService,
-            IMembershipRepository membershipRepository)
+            IMembershipRepository membershipRepository,
+            IEndpointInstance endpoint)
         {
             _accountRepository = accountRepository;
+            _messagePublisher = messagePublisher;
             _endpoint = endpoint;
 
 

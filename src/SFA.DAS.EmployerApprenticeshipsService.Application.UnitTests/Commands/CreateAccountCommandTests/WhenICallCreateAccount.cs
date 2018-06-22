@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
+using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
@@ -89,7 +90,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 _genericEventFactory.Object,
                 _accountEventFactory.Object,
                 _refreshEmployerLevyService.Object,
-                _mockMembershipRepository.Object);
+                _mockMembershipRepository.Object,
+                Mock.Of<IEndpointInstance>());
         }
 
         [Test]
