@@ -9,6 +9,8 @@ namespace SFA.DAS.EAS.MessageHandlers.DependencyResolution
         {
             return new Container(c =>
             {
+                c.AddRegistry<CachesRegistry>();
+                c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
@@ -18,6 +20,7 @@ namespace SFA.DAS.EAS.MessageHandlers.DependencyResolution
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
+                c.AddRegistry<PaymentsRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
