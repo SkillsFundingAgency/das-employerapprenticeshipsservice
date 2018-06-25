@@ -139,7 +139,7 @@
     <None Include="Scripts\PostDeployment\CreateTransactionLineTypes.sql" />
     <None Include="Scripts\PostDeployment\CreatePaymentTransactionTypes.sql" />
     <None Include="Scripts\PostDeployment\CreateTopUpPercentages.sql" />
-    <None Include="Scripts\Manual\DropPayments1718-R09.sql" />
+    <None Include="Scripts\Manual\AML-2261-DropPayments1718-R09.sql" />
     <Build Include="Types\AccountTransferTable.sql" />
     <None Include="Scripts\Manual\AddNonTransferPayments.sql" />
     <None Include="Scripts\Manual\AddTransferLevy.sql" />
@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
+    <None Include="Scripts\Manual\AML-2244-UpdateTransactionLines1718-R08.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
