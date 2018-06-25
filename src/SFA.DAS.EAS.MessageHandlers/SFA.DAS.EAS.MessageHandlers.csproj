@@ -135,6 +135,7 @@
     <Compile Include="EventHandlers\AddedPayeSchemeEventHandler.cs" />
     <Compile Include="EventHandlers\ChangedAccountNameEventHandler.cs" />
     <Compile Include="EventHandlers\CreatedAccountEventHandler.cs" />
+    <Compile Include="EventHandlers\CreatedAgreementEventHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

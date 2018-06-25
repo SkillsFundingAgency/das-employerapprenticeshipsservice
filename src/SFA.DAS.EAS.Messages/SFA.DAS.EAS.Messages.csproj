@@ -55,6 +55,7 @@
     <Compile Include="Events\IAddedPayeSchemeEvent.cs" />
     <Compile Include="Events\IChangedAccountNameEvent.cs" />
     <Compile Include="Events\ICreatedAccountEvent.cs" />
+    <Compile Include="Events\ICreatedAgreementEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

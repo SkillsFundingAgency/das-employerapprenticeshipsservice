@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
+using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
@@ -92,6 +93,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 _genericEventFactory.Object,
                 _legalEntityEventFactory.Object, 
                 Mock.Of<IMessagePublisher>(),
+                Mock.Of<IEndpointInstance>(),
                 _hashingService.Object,
                 _agreementService.Object);
         }
