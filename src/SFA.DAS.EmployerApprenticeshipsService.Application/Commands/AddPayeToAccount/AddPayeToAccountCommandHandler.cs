@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
+using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -13,11 +11,13 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.PAYE;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging.Interfaces;
-using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.HashingService;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Entity = SFA.DAS.Audit.Types.Entity;
+using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 {
@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
         private readonly IValidator<AddPayeToAccountCommand> _validator;
         private readonly IAccountRepository _accountRepository;
-        private readonly IMessagePublisher _messagePublisher;
+        private readonly IEndpointInstance _endpoint;
         private readonly IHashingService _hashingService;
         private readonly IMediator _mediator;
         private readonly IGenericEventFactory _genericEventFactory;
@@ -34,18 +34,18 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
 
         public AddPayeToAccountCommandHandler(
-            IValidator<AddPayeToAccountCommand> validator, 
-            IAccountRepository accountRepository, 
-            IMessagePublisher messagePublisher, 
-            IHashingService hashingService, 
-            IMediator mediator, 
-            IGenericEventFactory genericEventFactory, 
-            IPayeSchemeEventFactory payeSchemeEventFactory, 
+            IValidator<AddPayeToAccountCommand> validator,
+            IAccountRepository accountRepository,
+            IEndpointInstance endpoint,
+            IHashingService hashingService,
+            IMediator mediator,
+            IGenericEventFactory genericEventFactory,
+            IPayeSchemeEventFactory payeSchemeEventFactory,
             IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _validator = validator;
             _accountRepository = accountRepository;
-            _messagePublisher = messagePublisher;
+            _endpoint = endpoint;
             _hashingService = hashingService;
             _mediator = mediator;
             _genericEventFactory = genericEventFactory;
@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                     }
                 );
 
-            var userResponse = await _mediator.SendAsync(new GetUserByRefQuery{UserRef = message.ExternalUserId});
+            var userResponse = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = message.ExternalUserId });
 
             await AddAuditEntry(message, accountId);
 
@@ -102,7 +102,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
             var genericEvent = _genericEventFactory.Create(payeEvent);
 
-            await _mediator.SendAsync(new PublishGenericEventCommand {Event = genericEvent});
+            await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
         private async Task RefreshLevy(long accountId, string payeRef)
@@ -110,9 +110,16 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             await _refreshEmployerLevyService.QueueRefreshLevyMessage(accountId, payeRef);
         }
 
-        private async Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef)
+        private Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef)
         {
-            await _messagePublisher.PublishAsync(new PayeSchemeAddedMessage(payeRef, accountId, userName, userRef));
+            return _endpoint.Publish<IAddedPayeSchemeEvent>(e =>
+            {
+                e.PayeRef = payeRef;
+                e.AccountId = accountId;
+                e.UserName = userName;
+                e.UserRef = Guid.Parse(userRef);
+                e.Created = DateTime.Now;
+            });
         }
 
         private async Task AddAuditEntry(AddPayeToAccountCommand message, long accountId)

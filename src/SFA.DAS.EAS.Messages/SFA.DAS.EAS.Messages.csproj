@@ -52,6 +52,7 @@
     <Compile Include="Commands\IImportPaymentsCommand.cs" />
     <Compile Include="Commands\IImportLevyDeclarationsCommand.cs" />
     <Compile Include="Commands\IImportAccountLevyDeclarationsCommand.cs" />
+    <Compile Include="Events\IAddedPayeSchemeEvent.cs" />
     <Compile Include="Events\IChangedAccountNameEvent.cs" />
     <Compile Include="Events\ICreatedAccountEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

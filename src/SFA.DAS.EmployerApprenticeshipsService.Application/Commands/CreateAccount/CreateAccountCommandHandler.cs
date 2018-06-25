@@ -71,6 +71,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         {
             await ValidateMessage(message);
 
+            var externalUserId = Guid.Parse(message.ExternalUserId);
+
             var userResponse = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = message.ExternalUserId });
 
             if (string.IsNullOrEmpty(message.OrganisationReferenceNumber))
@@ -90,9 +92,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
 
             var createdByName = caller.FullName();
-            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.UserRef);
+            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.ExternalId);
 
-            await PublishAccountCreatedMessage(createAccountResult.AccountId, createdByName, message.ExternalUserId);
+            await PublishAccountCreatedMessage(createAccountResult.AccountId, createdByName, externalUserId);
 
             await NotifyAccountCreated(hashedAccountId);
 
@@ -134,18 +136,25 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             await _refreshEmployerLevyService.QueueRefreshLevyMessage(returnValue.AccountId, empref);
         }
 
-        private async Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, string userRef)
+        private Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, Guid userRef)
         {
-            await _messagePublisher.PublishAsync(new PayeSchemeAddedMessage(empref, accountId, createdByName, userRef));
+            return _endpoint.Publish<IAddedPayeSchemeEvent>(c =>
+            {
+                c.PayeRef = empref;
+                c.AccountId = accountId;
+                c.UserName = createdByName;
+                c.UserRef = userRef;
+                c.Created = DateTime.UtcNow;
+            });
         }
 
-        private Task PublishAccountCreatedMessage(long accountId, string createdByName, string userRef)
+        private Task PublishAccountCreatedMessage(long accountId, string createdByName, Guid userRef)
         {
             return _endpoint.Publish<ICreatedAccountEvent>(c =>
             {
                 c.AccountId = accountId;
                 c.UserName = createdByName;
-                c.UserRef = Guid.Parse(userRef);
+                c.UserRef = userRef;
                 c.Created = DateTime.UtcNow;
             });
         }

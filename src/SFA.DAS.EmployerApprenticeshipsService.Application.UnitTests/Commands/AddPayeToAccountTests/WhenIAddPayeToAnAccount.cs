@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FluentAssertions;
 using MediatR;
 using Moq;
+using NServiceBus.Testing;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types.Events.PayeScheme;
 using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
@@ -10,18 +9,20 @@ using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Factories;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging.Interfaces;
-using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 using SFA.DAS.HashingService;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
 {
@@ -30,13 +31,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         private AddPayeToAccountCommandHandler _addPayeToAccountCommandHandler;
         private Mock<IValidator<AddPayeToAccountCommand>> _validator;
         private Mock<IAccountRepository> _accountRepository;
-        private Mock<IMessagePublisher> _messagePublisher;
+        private TestableEndpointInstance _endpointInstance;
         private Mock<IHashingService> _hashingService;
         private Mock<IMediator> _mediator;
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
         private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
-       
+
         private const long ExpectedAccountId = 54564;
         private const string ExpectedPayeName = "Paye Scheme 1";
         private User _user;
@@ -44,10 +45,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         [SetUp]
         public void Arrange()
         {
-            _messagePublisher = new Mock<IMessagePublisher>();
+            _endpointInstance = new TestableEndpointInstance();
 
             _accountRepository = new Mock<IAccountRepository>();
-            
+
             _validator = new Mock<IValidator<AddPayeToAccountCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<AddPayeToAccountCommand>())).ReturnsAsync(new ValidationResult());
 
@@ -63,7 +64,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             _addPayeToAccountCommandHandler = new AddPayeToAccountCommandHandler(
                 _validator.Object,
                 _accountRepository.Object,
-                _messagePublisher.Object,
+                _endpointInstance,
                 _hashingService.Object,
                 _mediator.Object,
                 _genericEventFactory.Object,
@@ -74,18 +75,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             {
                 FirstName = "Bob",
                 LastName = "Green",
-                UserRef = "123"
+                ExternalId = Guid.NewGuid()
             };
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserByRefQuery>()))
-                .ReturnsAsync(new GetUserByRefResponse {User = _user});
+                .ReturnsAsync(new GetUserByRefResponse { User = _user });
         }
 
         [Test]
         public void ThenTheValidatorIsCalled()
         {
             //Arrange
-            _validator.Setup(x => x.ValidateAsync(It.IsAny<AddPayeToAccountCommand>())).ReturnsAsync(new ValidationResult {ValidationDictionary = new Dictionary<string, string> { { "",""} }});
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<AddPayeToAccountCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _addPayeToAccountCommandHandler.Handle(new AddPayeToAccountCommand()));
@@ -119,11 +120,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             await _addPayeToAccountCommandHandler.Handle(command);
 
             //Assert
-            _refreshEmployerLevyService.Verify(x=>x.QueueRefreshLevyMessage(ExpectedAccountId, command.Empref));
+            _refreshEmployerLevyService.Verify(x => x.QueueRefreshLevyMessage(ExpectedAccountId, command.Empref));
         }
 
         [Test]
-        public async Task ThenAMessageIsQueuedForTheAddPayeSchemeQueue()
+        public async Task ThenAPaymentSchemeAddedEventIsPublished()
         {
             //Arrange
             var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
@@ -132,11 +133,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             await _addPayeToAccountCommandHandler.Handle(command);
 
             //Assert
-            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<PayeSchemeAddedMessage>(c=> 
-                        c.PayeScheme.Equals(command.Empref) &&
-                        c.AccountId.Equals(ExpectedAccountId) &&
-                        c.CreatorName.Equals(_user.FullName) &&
-                        c.CreatorUserRef.Equals(_user.UserRef))));
+            _endpointInstance.PublishedMessages.Length.Should().Be(1);
+
+            var message = _endpointInstance.PublishedMessages.First().Message.As<IAddedPayeSchemeEvent>();
+            message.PayeRef.Should().Be(command.Empref);
+            message.AccountId.Should().Be(ExpectedAccountId);
+            message.UserName.Should().Be(_user.FullName);
+            message.UserRef.Should().Be(_user.ExternalId);
         }
 
         [Test]
@@ -185,7 +188,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         private static Paye AssertPayeScheme(AddPayeToAccountCommand command)
         {
             return It.Is<Paye>(
-                c=>c.AccessToken.Equals(command.AccessToken)  &&
+                c => c.AccessToken.Equals(command.AccessToken) &&
                    c.RefreshToken.Equals(command.RefreshToken) &&
                    c.EmpRef.Equals(command.Empref) &&
                    c.AccountId.Equals(ExpectedAccountId) &&
