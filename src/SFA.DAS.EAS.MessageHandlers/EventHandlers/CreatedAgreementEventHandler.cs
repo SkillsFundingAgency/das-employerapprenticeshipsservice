@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
 {
-    public class CreatedAgreementEventHandler : IHandleMessages<ICreatedAgreementEvent>
+    public class CreatedAgreementEventHandler : IHandleMessages<CreatedAgreementEvent>
     {
         private readonly IMessagePublisher _messagePublisher;
 
@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
         {
             _messagePublisher = messagePublisher;
         }
-        public async Task Handle(ICreatedAgreementEvent message, IMessageHandlerContext context)
+        public async Task Handle(CreatedAgreementEvent message, IMessageHandlerContext context)
         {
             await _messagePublisher.PublishAsync(new AgreementCreatedMessage(
                 message.AccountId,

@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
         private Task PublishAgreementCreatedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, string userRef)
         {
-            return _endpoint.Publish<ICreatedAgreementEvent>(c =>
+            return _endpoint.Publish<CreatedAgreementEvent>(c =>
             {
                 c.AgreementId = agreementId;
                 c.LegalEntityId = legalEntityId;

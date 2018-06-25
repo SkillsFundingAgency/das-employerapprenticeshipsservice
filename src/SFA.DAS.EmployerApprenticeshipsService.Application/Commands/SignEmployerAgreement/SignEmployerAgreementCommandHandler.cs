@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
+using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -13,11 +10,14 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging.Interfaces;
-using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.HashingService;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Entity = SFA.DAS.Audit.Types.Entity;
+using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 {
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
         private readonly IEmployerAgreementEventFactory _agreementEventFactory;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IMediator _mediator;
-        private readonly IMessagePublisher _messagePublisher;
+        private readonly IEndpointInstance _endpoint;
         private readonly ICommitmentService _commitmentService;
         private readonly IAgreementService _agreementService;
 
@@ -42,8 +42,8 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             IValidator<SignEmployerAgreementCommand> validator,
             IEmployerAgreementEventFactory agreementEventFactory,
             IGenericEventFactory genericEventFactory,
-            IMediator mediator, 
-            IMessagePublisher messagePublisher,
+            IMediator mediator,
+            IEndpointInstance endpoint,
             ICommitmentService commitmentService,
             IAgreementService agreementService)
         {
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             _agreementEventFactory = agreementEventFactory;
             _genericEventFactory = genericEventFactory;
             _mediator = mediator;
-            _messagePublisher = messagePublisher;
+            _endpoint = endpoint;
             _commitmentService = commitmentService;
             _agreementService = agreementService;
         }
@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
             var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
-            if (owner == null || (Role) owner.RoleId != Role.Owner)
+            if (owner == null || (Role)owner.RoleId != Role.Owner)
                 throw new UnauthorizedAccessException();
 
             var agreementId = _hashingService.DecodeValue(message.HashedAgreementId);
@@ -95,22 +95,32 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
             var genericEvent = _genericEventFactory.Create(agreementEvent);
 
-            await _mediator.SendAsync(new PublishGenericEventCommand {Event = genericEvent});
+            await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
 
             var commitments = await _commitmentService.GetEmployerCommitments(accountId);
 
             var accountHasCommitments = commitments?.Any() ?? false;
-            
+
             await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId, accountHasCommitments, owner.FullName(), owner.UserRef);
 
             await _agreementService.RemoveFromCacheAsync(accountId);
         }
 
-        private async Task PublishAgreementSignedMessage(long accountId, long legalEntityId, string legalEntityName, long agreementId,
+        private Task PublishAgreementSignedMessage(
+            long accountId, long legalEntityId, string legalEntityName, long agreementId,
             bool cohortCreated, string currentUserName, string currentUserRef)
         {
-            await _messagePublisher.PublishAsync(new AgreementSignedMessage(accountId, agreementId,
-                legalEntityName, legalEntityId, cohortCreated, currentUserName, currentUserRef));
+            return _endpoint.Publish(new SignedAgreementEvent
+            {
+                AccountId = accountId,
+                AgreementId = agreementId,
+                LegalEntityId = legalEntityId,
+                OrganisationName = legalEntityName,
+                CohortCreated = cohortCreated,
+                Created = DateTime.Now,
+                UserName = currentUserName,
+                UserRef = Guid.Parse(currentUserRef)
+            });
         }
 
         private async Task AddAuditEntry(SignEmployerAgreementCommand message, long accountId, long agreementId)
@@ -126,8 +136,8 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
                         PropertyUpdate.FromString("UserId", message.ExternalUserId),
                         PropertyUpdate.FromString("SignedDate", message.SignedDate.ToString("U"))
                     },
-                    RelatedEntities = new List<Entity> {new Entity {Id = accountId.ToString(), Type = "Account"}},
-                    AffectedEntity = new Entity {Type = "Agreement", Id = agreementId.ToString()}
+                    RelatedEntities = new List<Entity> { new Entity { Id = accountId.ToString(), Type = "Account" } },
+                    AffectedEntity = new Entity { Type = "Agreement", Id = agreementId.ToString() }
                 }
             });
         }

@@ -135,7 +135,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             //Assert
             _endpointInstance.PublishedMessages.Length.Should().Be(1);
 
-            var message = _endpointInstance.PublishedMessages.First().Message.As<IAddedPayeSchemeEvent>();
+            var message = _endpointInstance.PublishedMessages.Select(x => x.Message)
+                                                             .OfType<AddedPayeSchemeEvent>()
+                                                             .Single();
+
             message.PayeRef.Should().Be(command.Empref);
             message.AccountId.Should().Be(ExpectedAccountId);
             message.UserName.Should().Be(_user.FullName);

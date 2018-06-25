@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Application.Services
 
         public Task QueueRefreshLevyMessage(long accountId, string payeRef)
         {
-            return _endpoint.Send<IImportAccountLevyDeclarationsCommand>(c =>
+            return _endpoint.Send<ImportAccountLevyDeclarationsCommand>(c =>
             {
                 c.AccountId = accountId;
                 c.PayeRef = payeRef;

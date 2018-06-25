@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreement
                                 message.AccountId,
                                 message.LegalEntityId);
 
-            await _endpoint.Publish<ICreatedAgreementEvent>(c =>
+            await _endpoint.Publish<CreatedAgreementEvent>(c =>
             {
                 c.AccountId = message.AccountId;
                 c.AgreementId = newAgreementId;

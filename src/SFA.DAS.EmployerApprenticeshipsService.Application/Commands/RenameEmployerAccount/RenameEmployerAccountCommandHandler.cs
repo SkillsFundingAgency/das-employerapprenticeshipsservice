@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
         private Task PublishAccountRenamedMessage(
             long accountId, string previousName, string currentName, string creatorName, string creatorUserRef)
         {
-            return _endpoint.Publish<IChangedAccountNameEvent>(e =>
+            return _endpoint.Publish<ChangedAccountNameEvent>(e =>
             {
                 e.PreviousName = previousName;
                 e.CurrentName = currentName;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
 {
-    public class CreatedAccountEventHandler : IHandleMessages<ICreatedAccountEvent>
+    public class CreatedAccountEventHandler : IHandleMessages<CreatedAccountEvent>
     {
         private readonly IMessagePublisher _messagePublisher;
 
@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
             _messagePublisher = messagePublisher;
         }
 
-        public async Task Handle(ICreatedAccountEvent message, IMessageHandlerContext context)
+        public async Task Handle(CreatedAccountEvent message, IMessageHandlerContext context)
         {
             await _messagePublisher.PublishAsync(new AccountCreatedMessage(message.AccountId, message.UserName, message.UserRef.ToString()));
         }

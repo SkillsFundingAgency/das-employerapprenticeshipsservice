@@ -258,7 +258,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            var payeAddedEvent = _endpoint.PublishedMessages.Select(m => m.Message.As<IAddedPayeSchemeEvent>()).Single(m => m != null);
+            var payeAddedEvent = _endpoint.PublishedMessages.Select(m => m.Message)
+                                                            .OfType<AddedPayeSchemeEvent>()
+                                                            .Single();
 
             payeAddedEvent.PayeRef.Should().Be(expectedPayeRef);
             payeAddedEvent.AccountId.Should().Be(ExpectedAccountId);
@@ -276,7 +278,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            var createdAccountEvent = _endpoint.PublishedMessages.Select(m => m.Message.As<ICreatedAccountEvent>()).Single(m => m != null);
+            var createdAccountEvent = _endpoint.PublishedMessages.Select(m => m.Message)
+                                                                 .OfType<CreatedAccountEvent>()
+                                                                 .Single();
 
             createdAccountEvent.AccountId.Should().Be(ExpectedAccountId);
             createdAccountEvent.UserName.Should().Be(_user.FullName);

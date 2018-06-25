@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
 {
-    public class AddedPayeSchemeEventHandler : IHandleMessages<IAddedPayeSchemeEvent>
+    public class AddedPayeSchemeEventHandler : IHandleMessages<AddedPayeSchemeEvent>
     {
         private readonly IMessagePublisher _messagePublisher;
 
@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
             _messagePublisher = messagePublisher;
         }
 
-        public async Task Handle(IAddedPayeSchemeEvent message, IMessageHandlerContext context)
+        public async Task Handle(AddedPayeSchemeEvent message, IMessageHandlerContext context)
         {
             await _messagePublisher.PublishAsync(new PayeSchemeAddedMessage(message.PayeRef, message.AccountId, message.UserName, message.UserRef.ToString()));
         }

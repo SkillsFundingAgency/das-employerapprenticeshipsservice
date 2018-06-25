@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Infrastructure.NServiceBus
             transport.Transactions(TransportTransactionMode.ReceiveOnly);
 
             var routing = transport.Routing();
-            routing.RouteToEndpoint(typeof(ICreatedAccountEvent).Assembly, "Commands", "MessageHandlers");
+            routing.RouteToEndpoint(typeof(CreatedAccountEvent).Assembly, "Commands", "MessageHandlers");
 
             return config;
         }

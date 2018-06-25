@@ -133,7 +133,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
             //Assert
             var publishedMessages = _endpoint.PublishedMessages;
             publishedMessages.Length.Should().Be(1);
-            publishedMessages.First().Message.Should().BeAssignableTo<IChangedAccountNameEvent>();
+            publishedMessages.First().Message.Should().BeOfType<ChangedAccountNameEvent>();
         }
 
         [Test]

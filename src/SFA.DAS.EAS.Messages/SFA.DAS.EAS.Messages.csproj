@@ -48,14 +48,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\IImportAccountPaymentsCommand.cs" />
-    <Compile Include="Commands\IImportPaymentsCommand.cs" />
-    <Compile Include="Commands\IImportLevyDeclarationsCommand.cs" />
-    <Compile Include="Commands\IImportAccountLevyDeclarationsCommand.cs" />
-    <Compile Include="Events\IAddedPayeSchemeEvent.cs" />
-    <Compile Include="Events\IChangedAccountNameEvent.cs" />
-    <Compile Include="Events\ICreatedAccountEvent.cs" />
-    <Compile Include="Events\ICreatedAgreementEvent.cs" />
+    <Compile Include="Commands\ImportAccountPaymentsCommand.cs" />
+    <Compile Include="Commands\ImportPaymentsCommand.cs" />
+    <Compile Include="Commands\ImportLevyDeclarationsCommand.cs" />
+    <Compile Include="Commands\ImportAccountLevyDeclarationsCommand.cs" />
+    <Compile Include="Events\AddedPayeSchemeEvent.cs" />
+    <Compile Include="Events\ChangedAccountNameEvent.cs" />
+    <Compile Include="Events\CreatedAccountEvent.cs" />
+    <Compile Include="Events\CreatedAgreementEvent.cs" />
+    <Compile Include="Events\SignedAgreementEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -114,7 +114,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, Guid userRef)
         {
-            return _endpoint.Publish<ICreatedAgreementEvent>(c =>
+            return _endpoint.Publish<CreatedAgreementEvent>(c =>
             {
                 c.AgreementId = employerAgreementId;
                 c.LegalEntityId = legalEntityId;
@@ -147,7 +147,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, Guid userRef)
         {
-            return _endpoint.Publish<IAddedPayeSchemeEvent>(c =>
+            return _endpoint.Publish<AddedPayeSchemeEvent>(c =>
             {
                 c.PayeRef = empref;
                 c.AccountId = accountId;
@@ -159,7 +159,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private Task PublishAccountCreatedMessage(long accountId, string createdByName, Guid userRef)
         {
-            return _endpoint.Publish<ICreatedAccountEvent>(c =>
+            return _endpoint.Publish<CreatedAccountEvent>(c =>
             {
                 c.AccountId = accountId;
                 c.UserName = createdByName;
