@@ -1,14 +1,10 @@
 using Microsoft.WindowsAzure.ServiceRuntime;
+using NLog;
 using SFA.DAS.EAS.Application.DependencyResolution;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution;
 using SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers;
-using SFA.DAS.Messaging.AzureServiceBus;
-using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
-using SFA.DAS.NLog.Logger;
 using StructureMap;
 using System;
 using System.Diagnostics;
