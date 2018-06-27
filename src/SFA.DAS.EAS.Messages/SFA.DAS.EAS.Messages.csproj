@@ -57,10 +57,16 @@
     <Compile Include="Events\CreatedAccountEvent.cs" />
     <Compile Include="Events\CreatedAgreementEvent.cs" />
     <Compile Include="Events\DeletedPayeSchemeEvent.cs" />
+    <Compile Include="Events\RemovedLegalEntityEvent.cs" />
     <Compile Include="Events\SignedAgreementEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
+      <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
+      <Name>SFA.DAS.EAS.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

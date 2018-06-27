@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
+using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -9,18 +7,19 @@ using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging.Interfaces;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
 {
-  
+
     public class RemoveLegalEntityCommandHandler : AsyncRequestHandler<RemoveLegalEntityCommand>
     {
         private readonly IValidator<RemoveLegalEntityCommand> _validator;
@@ -30,8 +29,8 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
         private readonly IHashingService _hashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
-        private readonly IMessagePublisher _messagePublisher;
-        
+        private readonly IEndpointInstance _endpoint;
+
         public RemoveLegalEntityCommandHandler(
             IValidator<RemoveLegalEntityCommand> validator,
             ILog logger,
@@ -40,7 +39,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             IHashingService hashingService,
             IGenericEventFactory genericEventFactory,
             IEmployerAgreementEventFactory employerAgreementEventFactory,
-            IMessagePublisher messagePublisher)
+            IEndpointInstance endpoint)
         {
             _validator = validator;
             _logger = logger;
@@ -49,7 +48,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             _hashingService = hashingService;
             _genericEventFactory = genericEventFactory;
             _employerAgreementEventFactory = employerAgreementEventFactory;
-            _messagePublisher = messagePublisher;
+            _endpoint = endpoint;
         }
 
         protected override async Task HandleCore(RemoveLegalEntityCommand message)
@@ -80,15 +79,28 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
 
             if (agreement != null)
             {
+                var agreementSigned = agreement.Status == EmployerAgreementStatus.Signed;
+
                 await PublishLegalEntityRemovedMessage(accountId, legalAgreementId,
-                    agreement.Status, agreement.SignedByName, agreement.LegalEntityId, agreement.LegalEntityName, message.UserId);
+                    agreementSigned, agreement.SignedByName, agreement.LegalEntityId, agreement.LegalEntityName, message.UserId);
             }
         }
 
-        private async Task PublishLegalEntityRemovedMessage(long accountId, 
-            long agreementId, EmployerAgreementStatus status, string createdBy, long legalEntityId, string organisationName, string userRef)
+        private Task PublishLegalEntityRemovedMessage(
+            long accountId, long agreementId, bool agreementSigned, string createdBy,
+            long legalEntityId, string organisationName, string userRef)
         {
-            await _messagePublisher.PublishAsync(new LegalEntityRemovedMessage(accountId, agreementId, status == EmployerAgreementStatus.Signed, legalEntityId, organisationName, createdBy, userRef));
+            return _endpoint.Publish(new RemovedLegalEntityEvent
+            {
+                AccountId = accountId,
+                AgreementId = agreementId,
+                LegalEntityId = legalEntityId,
+                AgreementSigned = agreementSigned,
+                OrganisationName = organisationName,
+                Created = DateTime.Now,
+                UserName = createdBy,
+                UserRef = Guid.Parse(userRef)
+            });
         }
 
         private async Task AddAuditEntry(long accountId, string employerAgreementId)
