@@ -37,10 +37,10 @@ namespace SFA.DAS.EAS.Infrastructure.Features
         {
             var versionNumber = await _db.AccountLegalEntity
                                         .Where(ale => ale.AccountId == accountId)
-                                        .MinAsync(ale => ale.SignedAgreementVersion)
+                                        .MinAsync(ale => ale.SignedAgreementId == null ? 0 : (int) ale.SignedAgreementVersion)
                                         .ConfigureAwait(false);
 
-            return versionNumber ?? NullCacheValue;
+            return versionNumber > 0 ? versionNumber : NullCacheValue;
         }
 
         public Task RemoveFromCacheAsync(long accountId)

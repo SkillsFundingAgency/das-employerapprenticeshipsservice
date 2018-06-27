@@ -10,6 +10,7 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public virtual long? SignedById { get; set; }
         public virtual string SignedByName { get; set; }
         public virtual DateTime? SignedDate { get; set; }
+        public virtual long AccountLegalEntityId { get; set; }
         public virtual AccountLegalEntity AccountLegalEntity { get; set; }
         public virtual EmployerAgreementStatus StatusId { get; set; }
         public virtual AgreementTemplate Template { get; set; }
