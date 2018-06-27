@@ -65,6 +65,7 @@
     <Compile Include="Events\RemovedLegalEntityEvent.cs" />
     <Compile Include="Events\SentTransferConnectionInviteEvent.cs" />
     <Compile Include="Events\SignedAgreementEvent.cs" />
+    <Compile Include="Events\UserJoinedEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

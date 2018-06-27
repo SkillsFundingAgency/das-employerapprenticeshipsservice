@@ -1,18 +1,18 @@
 using MediatR;
+using NServiceBus;
 using SFA.DAS.Audit.Types;
+using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.TimeProvider;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Application.Exceptions;
 
 namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
 {
@@ -23,20 +23,20 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
         private readonly IUserAccountRepository _userAccountRepository;
         private readonly IAuditService _auditService;
         private readonly IValidator<AcceptInvitationCommand> _validator;
-        private readonly IMessagePublisher _messagePublisher;
+        private readonly IEndpointInstance _endpoint;
 
         public AcceptInvitationCommandHandler(IInvitationRepository invitationRepository,
             IMembershipRepository membershipRepository,
             IUserAccountRepository userAccountRepository,
             IAuditService auditService,
-            IMessagePublisher messagePublisher,
+            IEndpointInstance endpoint,
             IValidator<AcceptInvitationCommand> validator)
         {
             _invitationRepository = invitationRepository;
             _membershipRepository = membershipRepository;
             _userAccountRepository = userAccountRepository;
             _auditService = auditService;
-            _messagePublisher = messagePublisher;
+            _endpoint = endpoint;
             _validator = validator;
         }
 
@@ -115,9 +115,16 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
             });
         }
 
-        private async Task PublishUserJoinedMessage(long accountId, User user)
+        private Task PublishUserJoinedMessage(long accountId, User user)
         {
-            await _messagePublisher.PublishAsync(new UserJoinedMessage(accountId, user.FullName, user.UserRef));
+            return _endpoint.Publish(new UserJoinedEvent
+            {
+                AccountId = accountId,
+                UserName = user.FullName,
+                UserRef = user.ExternalId,
+                CreatedAt = DateTime.UtcNow
+
+            });
         }
     }
 }

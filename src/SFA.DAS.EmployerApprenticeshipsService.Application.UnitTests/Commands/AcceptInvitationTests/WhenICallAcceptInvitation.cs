@@ -1,18 +1,20 @@
+using FluentAssertions;
 using Moq;
+using NServiceBus.Testing;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AcceptInvitation;
+using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.TimeProvider;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Application.Exceptions;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
 {
@@ -25,7 +27,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IUserAccountRepository> _userAccountRepository;
         private Mock<IAuditService> _auditService;
-        private Mock<IMessagePublisher> _messagePublisher;
+        private TestableEndpointInstance _endpoint;
         private Mock<IValidator<AcceptInvitationCommand>> _validator;
 
         [SetUp]
@@ -46,7 +48,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
             _membershipRepository = new Mock<IMembershipRepository>();
             _userAccountRepository = new Mock<IUserAccountRepository>();
             _auditService = new Mock<IAuditService>();
-            _messagePublisher = new Mock<IMessagePublisher>();
+            _endpoint = new TestableEndpointInstance();
             _validator = new Mock<IValidator<AcceptInvitationCommand>>();
 
             _validator.Setup(x => x.Validate(It.IsAny<AcceptInvitationCommand>())).Returns(new ValidationResult());
@@ -61,7 +63,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
                 _membershipRepository.Object,
                 _userAccountRepository.Object,
                 _auditService.Object,
-                _messagePublisher.Object,
+                _endpoint,
                 _validator.Object);
         }
 
@@ -172,8 +174,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
             await _handler.Handle(new AcceptInvitationCommand());
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<UserJoinedMessage>(
-                                          m => m.CreatorName.Equals(user.FullName))), Times.Once);
+            _endpoint.PublishedMessages.Should().HaveCount(1);
+
+            var message = _endpoint.PublishedMessages.Select(x => x.Message)
+                                                     .OfType<UserJoinedEvent>()
+                                                     .Single();
+
+            message.UserName.Should().Be(user.FullName);
         }
     }
 }

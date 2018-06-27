@@ -145,6 +145,7 @@
     <Compile Include="EventHandlers\RemovedLegalEntityEventHandler.cs" />
     <Compile Include="EventHandlers\SentTransferConnectionInviteEventHandler.cs" />
     <Compile Include="EventHandlers\SignedAgreementEventHandler.cs" />
+    <Compile Include="EventHandlers\UserJoinedEventHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
