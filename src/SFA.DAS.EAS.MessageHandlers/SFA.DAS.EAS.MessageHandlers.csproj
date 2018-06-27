@@ -132,6 +132,7 @@
     <Compile Include="CommandHandlers\ImportPaymentsCommandHandler.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
+    <Compile Include="EventHandlers\AddedLegalEntityEventHandler.cs" />
     <Compile Include="EventHandlers\AddedPayeSchemeEventHandler.cs" />
     <Compile Include="EventHandlers\ChangedAccountNameEventHandler.cs" />
     <Compile Include="EventHandlers\CreatedAccountEventHandler.cs" />

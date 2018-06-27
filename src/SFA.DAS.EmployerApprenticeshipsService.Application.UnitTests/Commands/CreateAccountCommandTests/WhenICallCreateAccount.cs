@@ -85,7 +85,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 
             _handler = new CreateAccountCommandHandler(
                 _accountRepository.Object,
-                _messagePublisher.Object,
                 _mediator.Object,
                 _validator.Object,
                 _hashingService.Object,
