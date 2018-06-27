@@ -284,6 +284,7 @@
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\LevyWorkerDefaultRegistry.cs" />
+    <Compile Include="EmployerAgreementBuilder.cs" />
     <Compile Include="Extensions\DateTimeExtention.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />

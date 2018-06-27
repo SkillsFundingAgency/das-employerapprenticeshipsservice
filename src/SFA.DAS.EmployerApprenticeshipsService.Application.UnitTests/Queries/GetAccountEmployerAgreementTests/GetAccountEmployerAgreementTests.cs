@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
-using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.TestCommon;
-using EmployerAgreementStatus = SFA.DAS.EAS.Domain.Models.EmployerAgreement.EmployerAgreementStatus;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementTests
 {
@@ -46,9 +42,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
         {
             return base.RunAsync(
                 arrange: fixtures => fixtures
-                                        .WithRequestedAccount(123, "ABC123")
-                                        .WithLegalEntityId(456)
-                                        .WithSignedAgreement(123, 456, 1),
+                    .WithRequestedAccount(123, "ABC123")
+                    .WithLegalEntityId(456)
+                    .WithSignedAgreement(123, 456, 1),
                 act: fixtures => fixtures.Handle(),
                 assert: fixtures => TestAgreementVersions(fixtures, 456, 1, null));
         }
@@ -58,10 +54,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
         {
             return base.RunAsync(
                 arrange: fixtures => fixtures
-                                        .WithRequestedAccount(123, "ABC123")
-                                        .WithLegalEntityId(456)
-                                        .WithSignedAgreement(123, 456, 1)
-                                        .WithSignedAgreement(123, 456, 2),
+                    .WithRequestedAccount(123, "ABC123")
+                    .WithLegalEntityId(456)
+                    .WithSignedAgreement(123, 456, 1)
+                    .WithSignedAgreement(123, 456, 2),
                 act : fixtures => fixtures.Handle(), 
                 assert: fixtures => TestAgreementVersions(fixtures, 456, 2, null));
         }
@@ -104,7 +100,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
                 assert: fixtures => TestAgreementVersions(fixtures, 456, 2, null));
         }
 
-
         [Test]
         public Task Handle_WithAccountThatHasOneSignedAndALaterPendingAgreement_ShouldReturnSignedAndPendingAgreement()
         {
@@ -141,14 +136,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
     {
         public GetAccountEmployerAgreementTestFixtures()
         {
-            HashingServiceMock = new Mock<IHashingService>();
-            EmployerAccountDbContextMock = new Mock<EmployerAccountDbContext>();
-
-            Accounts = new List<Domain.Models.Account.Account>();
-            AgreementTemplates = new List<AgreementTemplate>();
-            EmployerAgreements = new List<EmployerAgreement>();
-            LegalEntities = new List<LegalEntity>();
-
             ValidatorMock = new Mock<IValidator<GetAccountEmployerAgreementsRequest>>();
             ValidationResult = new ValidationResult();
 
@@ -157,19 +144,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
                 c.AddProfile<EmploymentAgreementStatusMappings>();
                 c.AddProfile<LegalEntityMappings>();
             });
+            EmployerAgreementBuilder = new EmployerAgreementBuilder();
         }
-
-        public Mock<IHashingService> HashingServiceMock { get; }
-        public IHashingService HashingService => HashingServiceMock.Object;
-
-        public Mock<EmployerAccountDbContext> EmployerAccountDbContextMock { get; set; }
-        public EmployerAccountDbContext EmployerAccountDbContext => EmployerAccountDbContextMock.Object;
-
-        public List<Domain.Models.Account.Account> Accounts { get; }
-        public List<AgreementTemplate> AgreementTemplates { get; set; }
-        public List<AccountLegalEntity> AccountLegalEntities { get; set; }
-        public List<EmployerAgreement> EmployerAgreements { get; }
-        public List<LegalEntity> LegalEntities { get; }
 
         public Mock<IValidator<GetAccountEmployerAgreementsRequest>> ValidatorMock { get; }
         public IValidator<GetAccountEmployerAgreementsRequest> Validator => ValidatorMock.Object;
@@ -179,6 +155,36 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
         public string RequestHashedAccountId { get; set; }
 
         public ValidationResult ValidationResult { get; }
+
+        public GetAccountEmployerAgreementTestFixtures WithLegalEntityId(long legalEntityId)
+        {
+            EmployerAgreementBuilder.WithLegalEntityId(legalEntityId);
+            return this;
+        }
+
+        public GetAccountEmployerAgreementTestFixtures WithPendingAgreement(long accountId, long legalEntityId, int agreementVersion)
+        {
+            EmployerAgreementBuilder.WithPendingAgreement(accountId, legalEntityId, agreementVersion);
+            return this;
+        }
+
+        public GetAccountEmployerAgreementTestFixtures WithSignedAgreement(long accountId, long legalEntityId, int agreementVersion)
+        {
+            EmployerAgreementBuilder.WithSignedAgreement(accountId, legalEntityId, agreementVersion, DateTime.Now.AddDays(-20), out _);
+            return this;
+        }
+
+        public GetAccountEmployerAgreementTestFixtures WithSignedAgreement(long accountId, long legalEntityId, int agreementVersion, DateTime signedDateTime, out EmployerAgreement employerAgreement)
+        {
+            EmployerAgreementBuilder.WithSignedAgreement(accountId, legalEntityId, agreementVersion, signedDateTime, out employerAgreement);
+            return this;
+        }
+
+        public GetAccountEmployerAgreementTestFixtures EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities()
+        {
+            EmployerAgreementBuilder.EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities();
+            return this;
+        }
 
         public GetAccountEmployerAgreementTestFixtures WithUnauthorisedRequest()
         {
@@ -190,84 +196,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
         public GetAccountEmployerAgreementTestFixtures WithRequestedAccount(long accountId, string hashedAccountId)
         {
             RequestHashedAccountId = hashedAccountId;
-            return WithAccount(accountId, hashedAccountId);
-        }
-
-        public GetAccountEmployerAgreementTestFixtures WithAccount(long accountId, string hashedId)
-        {
-            Accounts.Add(new Domain.Models.Account.Account
-            {
-                Id =  accountId,
-            });
-
-            HashingServiceMock.Setup(c => c.DecodeValue(hashedId)).Returns(accountId);
-            HashingServiceMock.Setup(c => c.HashValue(accountId)).Returns(hashedId);
-
-            return this;
-        }
-
-        public GetAccountEmployerAgreementTestFixtures WithLegalEntityId(long legalEntityId)
-        {
-            LegalEntities.Add(new LegalEntity
-            {
-                Id = legalEntityId,
-                Name = $"{legalEntityId}"
-            });
-
-            return this;
-        }
-
-        public GetAccountEmployerAgreementTestFixtures WithSignedAgreement(long accountId, long legalEntityId, int agreementVersion)
-        {
-            return WithAgreement(accountId, legalEntityId, agreementVersion, EmployerAgreementStatus.Signed);
-        }
-
-        public GetAccountEmployerAgreementTestFixtures WithPendingAgreement(long accountId, long legalEntityId, int agreementVersion)
-        {
-            return WithAgreement(accountId, legalEntityId, agreementVersion, EmployerAgreementStatus.Pending);
-        }
-
-        private AgreementTemplate EnsureTemplate(int agreementVersion)
-        {
-            var template = AgreementTemplates.FirstOrDefault(ag => ag.VersionNumber == agreementVersion);
-            if (template == null)
-            {
-                AgreementTemplates.Add(template = new AgreementTemplate { VersionNumber = agreementVersion });
-            }
-
-            return template;
-        }
-
-        private AccountLegalEntity EnsureAccountLegalEntity(long accountId, long legalEntityId)
-        {
-            var accountLegalEntity = AccountLegalEntities.FirstOrDefault(ale => ale.AccountId == accountId && ale.LegalEntityId == legalEntityId);
-
-            if (accountLegalEntity == null)
-            {
-                AccountLegalEntities.Add(accountLegalEntity = new AccountLegalEntity { AccountId = accountId, LegalEntityId = legalEntityId});
-            }
-
-            return accountLegalEntity;
-        }
-
-        public GetAccountEmployerAgreementTestFixtures WithAgreement(long accountId, long legalEntityId, int agreementVersion, SFA.DAS.EAS.Domain.Models.EmployerAgreement.EmployerAgreementStatus status)
-        {
-            var template = EnsureTemplate(agreementVersion);
-            var accountLegalEntity = EnsureAccountLegalEntity(accountId, legalEntityId);
-
-            var employerAgreement = new EmployerAgreement
-            {
-                Id = accountId,
-                AccountLegalEntity = accountLegalEntity,
-                Template = template,
-                TemplateId = template.Id,
-                StatusId = status
-            };
-
-            EmployerAgreements.Add(employerAgreement);
-
-            template.Agreements.Add(employerAgreement);
-
+            EmployerAgreementBuilder.WithAccount(accountId, hashedAccountId);
             return this;
         }
 
@@ -284,23 +213,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
 
         public GetAccountEmployerAgreementsQueryHandler CreateQueryHandler()
         {
-            DbSetStub<Domain.Models.Account.Account> accountsDbSet = new DbSetStub<Domain.Models.Account.Account>(Accounts);
-            DbSetStub<EmployerAgreement> agreementsDbSet = new DbSetStub<EmployerAgreement>(EmployerAgreements);
-            DbSetStub<LegalEntity> legalEntityDbSet = new DbSetStub<LegalEntity>(LegalEntities);
-
-            EmployerAccountDbContextMock
-                .Setup(db => db.Accounts)
-                .Returns(accountsDbSet);
-
-            EmployerAccountDbContextMock
-                .Setup(db => db.Agreements)
-                .Returns(agreementsDbSet);
-
             ValidatorMock
                 .Setup(x => x.ValidateAsync(Request))
                 .ReturnsAsync(ValidationResult);
 
-            var queryHandler = new GetAccountEmployerAgreementsQueryHandler(EmployerAccountDbContext, HashingService, Validator, ConfigurationProvider);
+            var queryHandler = new GetAccountEmployerAgreementsQueryHandler(
+                EmployerAgreementBuilder.EmployerAccountDbContext, 
+                EmployerAgreementBuilder.HashingService, 
+                Validator, ConfigurationProvider);
 
             return queryHandler;
         }
@@ -309,8 +229,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
 
         public GetAccountEmployerAgreementsResponse Response { get; private set; }
 
+        private EmployerAgreementBuilder EmployerAgreementBuilder { get; }
+
         public async Task Handle()
         {
+            EmployerAgreementBuilder.EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities();
+            EmployerAgreementBuilder.SetupMockDbContext();
             Request = CreateRequest();
             var queryHandler = CreateQueryHandler();
             Response = await queryHandler.Handle(Request);

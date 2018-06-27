@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
             }
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            var agreementId = _hashingService.DecodeValue(message.AgreementId);
+            var agreementId = _hashingService.DecodeValue(message.HashedAgreementId);
 
             var employerAgreement = await _database.Agreements.ProjectTo<AgreementDto>(_configurationProvider)
                                                               .SingleOrDefaultAsync(x => x.Id.Equals(agreementId));
@@ -71,13 +71,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
 
             if (employerAgreement.StatusId != EmployerAgreementStatus.Signed)
             {
-                var currentUser = (from user in _database.Users
-                                   join member in _database.Memberships on user.Id equals member.UserId
-                                   where user.ExternalId.ToString().Equals(message.ExternalUserId) &&
-                                         member.AccountId.Equals(accountId)
-                                   select user).Single();
-
-                employerAgreement.SignedByName = currentUser.FullName;
+                employerAgreement.SignedByName = _database.Memberships
+                    .Where(m => m.AccountId == accountId && m.User.ExternalId.ToString() == message.ExternalUserId)
+                    .Select(m => m.User.FullName)
+                    .Single();
             }
 
             employerAgreement.HashedAccountId = _hashingService.HashValue(employerAgreement.AccountId);
