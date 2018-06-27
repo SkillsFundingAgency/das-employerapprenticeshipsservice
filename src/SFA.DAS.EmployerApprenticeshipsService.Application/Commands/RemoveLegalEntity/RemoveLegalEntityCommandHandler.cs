@@ -97,7 +97,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
                 LegalEntityId = legalEntityId,
                 AgreementSigned = agreementSigned,
                 OrganisationName = organisationName,
-                Created = DateTime.Now,
+                Created = DateTime.UtcNow,
                 UserName = createdBy,
                 UserRef = Guid.Parse(userRef)
             });

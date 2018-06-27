@@ -117,7 +117,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
                 LegalEntityId = legalEntityId,
                 OrganisationName = legalEntityName,
                 CohortCreated = cohortCreated,
-                Created = DateTime.Now,
+                Created = DateTime.UtcNow,
                 UserName = currentUserName,
                 UserRef = Guid.Parse(currentUserRef)
             });

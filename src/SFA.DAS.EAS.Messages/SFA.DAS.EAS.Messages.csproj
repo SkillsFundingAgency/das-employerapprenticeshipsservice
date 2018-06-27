@@ -60,6 +60,7 @@
     <Compile Include="Events\CreatedAgreementEvent.cs" />
     <Compile Include="Events\DeletedPayeSchemeEvent.cs" />
     <Compile Include="Events\DeletedTransferConnectionInviteEvent.cs" />
+    <Compile Include="Events\InvitedUserEvent.cs" />
     <Compile Include="Events\RejectedTransferConnectionInviteEvent.cs" />
     <Compile Include="Events\RemovedLegalEntityEvent.cs" />
     <Compile Include="Events\SentTransferConnectionInviteEvent.cs" />

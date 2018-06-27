@@ -140,6 +140,7 @@
     <Compile Include="EventHandlers\CreatedAgreementEventHandler.cs" />
     <Compile Include="EventHandlers\DeletedPayeSchemeEventHandler.cs" />
     <Compile Include="EventHandlers\DeletedTransferConnectionInviteEventHandler.cs" />
+    <Compile Include="EventHandlers\InvitedUserEventHandler.cs" />
     <Compile Include="EventHandlers\RejectedTransferConnectionInviteEventHandler.cs" />
     <Compile Include="EventHandlers\RemovedLegalEntityEventHandler.cs" />
     <Compile Include="EventHandlers\SentTransferConnectionInviteEventHandler.cs" />

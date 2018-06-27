@@ -89,7 +89,7 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
                 e.PreviousName = previousName;
                 e.CurrentName = currentName;
                 e.AccountId = accountId;
-                e.Created = DateTime.Now;
+                e.Created = DateTime.UtcNow;
                 e.UserName = creatorName;
                 e.UserRef = Guid.Parse(creatorUserRef);
             });

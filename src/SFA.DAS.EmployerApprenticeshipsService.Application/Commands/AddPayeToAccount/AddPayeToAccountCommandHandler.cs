@@ -118,7 +118,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                 e.AccountId = accountId;
                 e.UserName = userName;
                 e.UserRef = Guid.Parse(userRef);
-                e.Created = DateTime.Now;
+                e.Created = DateTime.UtcNow;
             });
         }
 
