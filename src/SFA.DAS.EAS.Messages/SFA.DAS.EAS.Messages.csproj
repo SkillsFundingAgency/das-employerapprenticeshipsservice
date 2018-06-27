@@ -55,18 +55,16 @@
     <Compile Include="Events\AddedLegalEntityEvent.cs" />
     <Compile Include="Events\AddedPayeSchemeEvent.cs" />
     <Compile Include="Events\ChangedAccountNameEvent.cs" />
+    <Compile Include="Events\ApprovedTransferConnectionInviteEvent.cs" />
     <Compile Include="Events\CreatedAccountEvent.cs" />
     <Compile Include="Events\CreatedAgreementEvent.cs" />
     <Compile Include="Events\DeletedPayeSchemeEvent.cs" />
+    <Compile Include="Events\DeletedTransferConnectionInviteEvent.cs" />
+    <Compile Include="Events\RejectedTransferConnectionInviteEvent.cs" />
     <Compile Include="Events\RemovedLegalEntityEvent.cs" />
+    <Compile Include="Events\SentTransferConnectionInviteEvent.cs" />
     <Compile Include="Events\SignedAgreementEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
-      <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
-      <Name>SFA.DAS.EAS.Domain</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,16 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.RejectTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.EAS.TestCommon.Builders;
-using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.HashingService;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInvitation
 {
@@ -137,7 +137,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
             await _handler.Handle(_command);
 
             var messages = _entity.GetEvents().ToList();
-            var message = messages.OfType<RejectedTransferConnectionInvitationEvent>().FirstOrDefault();
+            var message = messages.OfType<RejectedTransferConnectionInviteEvent>().FirstOrDefault();
 
             Assert.That(messages.Count, Is.EqualTo(1));
             Assert.That(message, Is.Not.Null);

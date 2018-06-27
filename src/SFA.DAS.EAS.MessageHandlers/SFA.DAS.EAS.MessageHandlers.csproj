@@ -134,11 +134,15 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="EventHandlers\AddedLegalEntityEventHandler.cs" />
     <Compile Include="EventHandlers\AddedPayeSchemeEventHandler.cs" />
+    <Compile Include="EventHandlers\ApprovedTransferConnectionInviteEventHandler.cs" />
     <Compile Include="EventHandlers\ChangedAccountNameEventHandler.cs" />
     <Compile Include="EventHandlers\CreatedAccountEventHandler.cs" />
     <Compile Include="EventHandlers\CreatedAgreementEventHandler.cs" />
     <Compile Include="EventHandlers\DeletedPayeSchemeEventHandler.cs" />
+    <Compile Include="EventHandlers\DeletedTransferConnectionInviteEventHandler.cs" />
+    <Compile Include="EventHandlers\RejectedTransferConnectionInviteEventHandler.cs" />
     <Compile Include="EventHandlers\RemovedLegalEntityEventHandler.cs" />
+    <Compile Include="EventHandlers\SentTransferConnectionInviteEventHandler.cs" />
     <Compile Include="EventHandlers\SignedAgreementEventHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
