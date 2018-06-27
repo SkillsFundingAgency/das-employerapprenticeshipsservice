@@ -1,13 +1,14 @@
 using MediatR;
+using NServiceBus;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.NLog.Logger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -17,7 +18,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 {
     public class RefreshPaymentDataCommandHandler : AsyncRequestHandler<RefreshPaymentDataCommand>
     {
-        private readonly IMessagePublisher _messagePublisher;
+        private readonly IEndpointInstance _endpoint;
         private readonly IValidator<RefreshPaymentDataCommand> _validator;
         private readonly IPaymentService _paymentService;
         private readonly IDasLevyRepository _dasLevyRepository;
@@ -25,14 +26,14 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
         private readonly ILog _logger;
 
         public RefreshPaymentDataCommandHandler(
-            IMessagePublisher messagePublisher,
+            IEndpointInstance endpoint,
             IValidator<RefreshPaymentDataCommand> validator,
             IPaymentService paymentService,
             IDasLevyRepository dasLevyRepository,
             IMediator mediator,
             ILog logger)
         {
-            _messagePublisher = messagePublisher;
+            _endpoint = endpoint;
             _validator = validator;
             _paymentService = paymentService;
             _dasLevyRepository = dasLevyRepository;
@@ -86,11 +87,22 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             await _dasLevyRepository.CreatePayments(newPayments);
             await _mediator.PublishAsync(new ProcessPaymentEvent { AccountId = message.AccountId });
 
-            foreach (var payment in newPayments)
+            var paymentEventTasks = new Task[newPayments.Length];
+
+            for (var index = 0; index < newPayments.Length; index++)
             {
-                await _messagePublisher.PublishAsync(new PaymentCreatedMessage(
-                    payment.ProviderName, payment.Amount, payment.EmployerAccountId, string.Empty, string.Empty));
+                var payment = newPayments[index];
+
+                paymentEventTasks[index] = _endpoint.Publish(new CreatedPaymentEvent
+                {
+                    AccountId = payment.EmployerAccountId,
+                    ProviderName = payment.ProviderName,
+                    Amount = payment.Amount,
+                    CreatedAt = DateTime.UtcNow
+                });
             }
+
+            Task.WaitAll(paymentEventTasks);
 
             _logger.Info($"Finished publishing ProcessPaymentEvent and PaymentCreatedMessage messages for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
         }

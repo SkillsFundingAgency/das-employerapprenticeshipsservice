@@ -58,6 +58,7 @@
     <Compile Include="Events\ApprovedTransferConnectionInviteEvent.cs" />
     <Compile Include="Events\CreatedAccountEvent.cs" />
     <Compile Include="Events\CreatedAgreementEvent.cs" />
+    <Compile Include="Events\CreatedPaymentEvent.cs" />
     <Compile Include="Events\DeletedPayeSchemeEvent.cs" />
     <Compile Include="Events\DeletedTransferConnectionInviteEvent.cs" />
     <Compile Include="Events\InvitedUserEvent.cs" />
