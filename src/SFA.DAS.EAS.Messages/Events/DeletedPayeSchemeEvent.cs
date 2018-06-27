@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Messages.Events
         public DateTime Created { get; set; }
         public string UserName { get; set; }
         public Guid UserRef { get; set; }
-        public string PayeScheme { get; set; }
+        public string PayeRef { get; set; }
         public string OrganisationName { get; set; }
     }
 }

@@ -17,7 +17,10 @@ namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
         public async Task Handle(UserJoinedEvent message, IMessageHandlerContext context)
         {
             await _messagePublisher.PublishAsync(
-                new UserJoinedMessage(message.AccountId, message.UserName, message.UserRef.ToString()));
+                new UserJoinedMessage(
+                    message.AccountId,
+                    message.UserName,
+                    message.UserRef.ToString()));
         }
     }
 }

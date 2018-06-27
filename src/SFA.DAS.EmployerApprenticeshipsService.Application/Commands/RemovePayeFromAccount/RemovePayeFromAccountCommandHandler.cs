@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             return _endpoint.Publish(new DeletedPayeSchemeEvent
             {
                 AccountId = accountId,
-                PayeScheme = payeRef,
+                PayeRef = payeRef,
                 OrganisationName = organisationName,
                 UserName = userName,
                 UserRef = Guid.Parse(userRef)

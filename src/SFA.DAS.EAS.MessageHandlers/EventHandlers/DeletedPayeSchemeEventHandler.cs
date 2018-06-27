@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
         {
             return _messagePublisher.PublishAsync(
                 new PayeSchemeDeletedMessage(
-                    message.PayeScheme,
+                    message.PayeRef,
                     message.OrganisationName,
                     message.AccountId,
                     message.UserName,

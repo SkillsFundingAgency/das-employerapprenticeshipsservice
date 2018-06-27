@@ -180,7 +180,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
 
             message.AccountId.Should().Be(AccountId);
             message.OrganisationName.Should().Be(OrganisationName);
-            message.PayeScheme.Should().Be(PayeScheme);
+            message.PayeRef.Should().Be(PayeScheme);
             message.UserName.Should().Be(UserName);
             message.UserRef.Should().Be(UserRef);
         }

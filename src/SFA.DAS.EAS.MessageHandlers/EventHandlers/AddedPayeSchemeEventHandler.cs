@@ -17,7 +17,12 @@ namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
 
         public async Task Handle(AddedPayeSchemeEvent message, IMessageHandlerContext context)
         {
-            await _messagePublisher.PublishAsync(new PayeSchemeAddedMessage(message.PayeRef, message.AccountId, message.UserName, message.UserRef.ToString()));
+            await _messagePublisher.PublishAsync(
+                new PayeSchemeAddedMessage(
+                    message.PayeRef,
+                    message.AccountId,
+                    message.UserName,
+                    message.UserRef.ToString()));
         }
     }
 }
