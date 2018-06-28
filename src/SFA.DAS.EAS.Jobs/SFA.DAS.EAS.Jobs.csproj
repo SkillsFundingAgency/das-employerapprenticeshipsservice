@@ -204,15 +204,12 @@
   <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
-      <TransformOnBuild>true</TransformOnBuild>
     </None>
-    <None Include="app.debug.config">
+    <None Include="app.Debug.config">
       <DependentUpon>app.config</DependentUpon>
-      <IsTransformFile>True</IsTransformFile>
     </None>
-    <None Include="app.release.config">
+    <None Include="app.Release.config">
       <DependentUpon>app.config</DependentUpon>
-      <IsTransformFile>True</IsTransformFile>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\webjob-publish-settings.json" />
@@ -234,6 +231,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.NServiceBus\SFA.DAS.NServiceBus.csproj">
+      <Project>{CBDFA38E-CD77-49BC-B6F4-A07F6E11DFFC}</Project>
+      <Name>SFA.DAS.NServiceBus</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

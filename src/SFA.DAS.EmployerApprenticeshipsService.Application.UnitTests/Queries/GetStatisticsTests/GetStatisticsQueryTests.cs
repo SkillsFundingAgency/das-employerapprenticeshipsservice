@@ -93,7 +93,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
             AccountsDb.Setup(d => d.Agreements).Returns(new DbSetStub<EmployerAgreement>(Agreements));
             FinancialDb.Setup(d => d.Payments).Returns(new DbSetStub<Payment>(Payments));
 
-            Handler = new GetStatisticsQueryHandler(AccountsDb.Object, FinancialDb.Object);
+            Handler = new GetStatisticsQueryHandler(new Lazy<EmployerAccountDbContext>(() => AccountsDb.Object), FinancialDb.Object);
             Query = new GetStatisticsQuery();
 
             QueryFutureManager.AllowQueryBatch = false;
