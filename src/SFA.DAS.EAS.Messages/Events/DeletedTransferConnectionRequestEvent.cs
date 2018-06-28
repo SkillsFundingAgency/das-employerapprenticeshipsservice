@@ -1,20 +1,20 @@
-﻿using NServiceBus;
-using System;
+﻿using System;
+using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EAS.Messages.Events
 {
-    public class SentTransferConnectionInviteEvent : IEvent
+    public class DeletedTransferConnectionRequestEvent : Event
     {
-        public DateTime CreatedAt { get; set; }
+        public long DeletedByAccountId { get; set; }
+        public Guid DeletedByUserExternalId { get; set; }
+        public long DeletedByUserId { get; set; }
+        public string DeletedByUserName { get; set; }
         public string ReceiverAccountHashedId { get; set; }
         public long ReceiverAccountId { get; set; }
         public string ReceiverAccountName { get; set; }
         public string SenderAccountHashedId { get; set; }
         public long SenderAccountId { get; set; }
         public string SenderAccountName { get; set; }
-        public Guid SentByUserExternalId { get; set; }
-        public long SentByUserId { get; set; }
-        public string SentByUserName { get; set; }
-        public int TransferConnectionInvitationId { get; set; }
+        public int TransferConnectionRequestId { get; set; }
     }
 }

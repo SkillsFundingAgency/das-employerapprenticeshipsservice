@@ -140,8 +140,12 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
             MessageSubscriberFactory.Setup(s => s.GetSubscriber<SentTransferConnectionInvitationEvent>())
                 .Returns(MessageSubscriber.Object);
 
-            Handler = new SentTransferConnectionInvitationEventHandler(MessageSubscriberFactory.Object,
-                Logger.Object, EmployerAccountDbContext.Object, NotificationsApi.Object, Configuration);
+            Handler = new SentTransferConnectionInvitationEventHandler(
+                MessageSubscriberFactory.Object,
+                Logger.Object,
+                new Lazy<EmployerAccountDbContext>(() => EmployerAccountDbContext.Object),
+                NotificationsApi.Object,
+                Configuration);
         }
 
         private SentTransferConnectionInvitationEventHandlerTestFixture SetMessage()

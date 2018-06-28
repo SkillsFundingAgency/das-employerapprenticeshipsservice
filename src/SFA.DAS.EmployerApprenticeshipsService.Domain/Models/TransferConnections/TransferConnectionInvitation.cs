@@ -38,9 +38,9 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 CreatedDate = now
             });
 
-            Publish<SentTransferConnectionInviteEvent>(e =>
+            Publish<SentTransferConnectionRequestEvent>(e =>
             {
-                e.CreatedAt = now;
+                e.Created = now;
                 e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
                 e.ReceiverAccountId = ReceiverAccount.Id;
                 e.ReceiverAccountName = ReceiverAccount.Name;
@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 e.SentByUserExternalId = senderUser.ExternalId;
                 e.SentByUserId = senderUser.Id;
                 e.SentByUserName = senderUser.FullName;
-                e.TransferConnectionInvitationId = Id;
+                e.TransferConnectionRequestId = Id;
             });
         }
 
@@ -74,19 +74,19 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 CreatedDate = now
             });
 
-            Publish<ApprovedTransferConnectionInviteEvent>(e =>
+            Publish<ApprovedTransferConnectionRequestEvent>(e =>
             {
                 e.ApprovedByUserExternalId = approverUser.ExternalId;
                 e.ApprovedByUserId = approverUser.Id;
                 e.ApprovedByUserName = approverUser.FullName;
-                e.CreatedAt = now;
+                e.Created = now;
                 e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
                 e.ReceiverAccountId = ReceiverAccount.Id;
                 e.ReceiverAccountName = ReceiverAccount.Name;
                 e.SenderAccountHashedId = SenderAccount.HashedId;
                 e.SenderAccountId = SenderAccount.Id;
                 e.SenderAccountName = SenderAccount.Name;
-                e.TransferConnectionInvitationId = Id;
+                e.TransferConnectionRequestId = Id;
             });
         }
 
@@ -123,9 +123,9 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 CreatedDate = now
             });
 
-            Publish<DeletedTransferConnectionInviteEvent>(e =>
+            Publish<DeletedTransferConnectionRequestEvent>(e =>
             {
-                e.CreatedAt = now;
+                e.Created = now;
                 e.DeletedByAccountId = deleterAccount.Id;
                 e.DeletedByUserExternalId = deleterUser.ExternalId;
                 e.DeletedByUserId = deleterUser.Id;
@@ -136,7 +136,7 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 e.SenderAccountHashedId = SenderAccount.HashedId;
                 e.SenderAccountId = SenderAccount.Id;
                 e.SenderAccountName = SenderAccount.Name;
-                e.TransferConnectionInvitationId = Id;
+                e.TransferConnectionRequestId = Id;
             });
         }
 
@@ -156,9 +156,9 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 CreatedDate = now
             });
 
-            Publish<RejectedTransferConnectionInviteEvent>(e =>
+            Publish<RejectedTransferConnectionRequestEvent>(e =>
             {
-                e.CreatedAt = now;
+                e.Created = now;
                 e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
                 e.ReceiverAccountId = ReceiverAccount.Id;
                 e.ReceiverAccountName = ReceiverAccount.Name;
@@ -168,7 +168,7 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 e.SenderAccountHashedId = SenderAccount.HashedId;
                 e.SenderAccountId = SenderAccount.Id;
                 e.SenderAccountName = SenderAccount.Name;
-                e.TransferConnectionInvitationId = Id;
+                e.TransferConnectionRequestId = Id;
             });
         }
 

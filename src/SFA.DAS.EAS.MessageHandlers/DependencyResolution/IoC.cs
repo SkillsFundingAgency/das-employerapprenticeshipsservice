@@ -12,6 +12,7 @@ namespace SFA.DAS.EAS.MessageHandlers.DependencyResolution
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<DataRegistry>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
@@ -20,6 +21,7 @@ namespace SFA.DAS.EAS.MessageHandlers.DependencyResolution
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
+                c.AddRegistry<NServiceBusRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<PaymentsRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
