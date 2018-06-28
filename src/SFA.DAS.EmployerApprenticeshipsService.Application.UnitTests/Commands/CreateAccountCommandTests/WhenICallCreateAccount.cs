@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using MediatR;
 using Moq;
-using NServiceBus.Testing;
 using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
@@ -24,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.NServiceBus.Testing;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IMembershipRepository> _mockMembershipRepository;
         private Mock<IHashingService> _mockAccountLegalEntityHashingService;
         private Mock<IEmployerAgreementRepository> _mockEmployerAgreementRepository;
-        private TestableEndpointInstance _endpoint;
+        private TestableEventPublisher _eventPublisher;
         
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _accountRepository.Setup(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<short?>(), It.IsAny<string>())).ReturnsAsync(new CreateAccountResult { AccountId = ExpectedAccountId, LegalEntityId = 0L, EmployerAgreementId = 0L });
 
             _messagePublisher = new Mock<IMessagePublisher>();
-            _endpoint = new TestableEndpointInstance();
+            _eventPublisher = new TestableEventPublisher();
             _mediator = new Mock<IMediator>();
 
             _user = new User { Id = 33, FirstName = "Bob", LastName = "Green", ExternalId = Guid.NewGuid() };
@@ -101,7 +101,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 _mockMembershipRepository.Object,
                 _mockAccountLegalEntityHashingService.Object,
                 _mockEmployerAgreementRepository.Object,
-                _endpoint);
+                _eventPublisher);
         }
 
         [Test]
@@ -265,9 +265,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            var payeAddedEvent = _endpoint.PublishedMessages.Select(m => m.Message)
-                                                            .OfType<AddedPayeSchemeEvent>()
-                                                            .Single();
+            var payeAddedEvent = _eventPublisher.Events.OfType<AddedPayeSchemeEvent>().Single();
 
             payeAddedEvent.PayeRef.Should().Be(expectedPayeRef);
             payeAddedEvent.AccountId.Should().Be(ExpectedAccountId);
@@ -285,9 +283,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            var createdAccountEvent = _endpoint.PublishedMessages.Select(m => m.Message)
-                                                                 .OfType<CreatedAccountEvent>()
-                                                                 .Single();
+            var createdAccountEvent = _eventPublisher.Events.OfType<CreatedAccountEvent>().Single();
 
             createdAccountEvent.AccountId.Should().Be(ExpectedAccountId);
             createdAccountEvent.UserName.Should().Be(_user.FullName);

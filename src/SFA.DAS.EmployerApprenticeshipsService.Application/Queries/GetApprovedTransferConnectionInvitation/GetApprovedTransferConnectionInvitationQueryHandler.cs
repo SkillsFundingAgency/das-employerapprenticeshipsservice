@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,10 +13,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprovedTransferConnectionInvitatio
 {
     public class GetApprovedTransferConnectionInvitationQueryHandler : IAsyncRequestHandler<GetApprovedTransferConnectionInvitationQuery, GetApprovedTransferConnectionInvitationResponse>
     {
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountDbContext> _db;
         private readonly IConfigurationProvider _configurationProvider;
 
-        public GetApprovedTransferConnectionInvitationQueryHandler(EmployerAccountDbContext db, IConfigurationProvider configurationProvider)
+        public GetApprovedTransferConnectionInvitationQueryHandler(Lazy<EmployerAccountDbContext> db, IConfigurationProvider configurationProvider)
         {
             _db = db;
             _configurationProvider = configurationProvider;
@@ -23,7 +24,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprovedTransferConnectionInvitatio
 
         public async Task<GetApprovedTransferConnectionInvitationResponse> Handle(GetApprovedTransferConnectionInvitationQuery message)
         {
-            var transferConnectionInvitation = await _db.TransferConnectionInvitations
+            var transferConnectionInvitation = await _db.Value.TransferConnectionInvitations
                 .Where(i => 
                     i.Id == message.TransferConnectionInvitationId.Value &&
                     i.ReceiverAccount.Id == message.AccountId &&

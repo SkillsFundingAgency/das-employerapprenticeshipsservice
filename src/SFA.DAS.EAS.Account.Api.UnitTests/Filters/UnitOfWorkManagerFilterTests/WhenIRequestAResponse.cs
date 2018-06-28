@@ -6,8 +6,8 @@ using System.Web.Http.Filters;
 using System.Web.Http.Hosting;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Filters;
-using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.EntityFramework.WebApi;
 using StructureMap;
 using StructureMap.Pipeline;
 
@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Filters.UnitOfWorkManagerFilterTests
         {
             _filter.OnActionExecuted(_actionExecutedContext);
 
-            _unitOfWorkManager.Verify(m => m.End(), Times.Once);
+            _unitOfWorkManager.Verify(m => m.End(null), Times.Once);
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Filters.UnitOfWorkManagerFilterTests
 
             _filter.OnActionExecuted(_actionExecutedContext);
 
-            _unitOfWorkManager.Verify(m => m.End(), Times.Never);
+            _unitOfWorkManager.Verify(m => m.End(null), Times.Never);
         }
     }
 }

@@ -168,6 +168,10 @@
       <Project>{05D7C094-E2C9-4CCD-B0D7-85D263254B26}</Project>
       <Name>SFA.DAS.EAS.TestCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.NServiceBus\SFA.DAS.NServiceBus.csproj">
+      <Project>{CBDFA38E-CD77-49BC-B6F4-A07F6E11DFFC}</Project>
+      <Name>SFA.DAS.NServiceBus</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

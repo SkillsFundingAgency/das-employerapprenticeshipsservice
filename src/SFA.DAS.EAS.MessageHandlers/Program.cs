@@ -1,10 +1,19 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿using System.Data.Common;
+using Microsoft.Azure.WebJobs;
 using NServiceBus;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
-using SFA.DAS.EAS.Infrastructure.NServiceBus;
 using SFA.DAS.EAS.MessageHandlers.DependencyResolution;
 using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Infrastructure.NServiceBus;
+using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.EntityFramework;
+using SFA.DAS.NServiceBus.MsSqlServer;
+using SFA.DAS.NServiceBus.NewtonsoftSerializer;
+using SFA.DAS.NServiceBus.NLog;
+using SFA.DAS.NServiceBus.StructureMap;
 
 namespace SFA.DAS.EAS.MessageHandlers
 {
@@ -21,7 +30,8 @@ namespace SFA.DAS.EAS.MessageHandlers
             }
 
             var host = new JobHost(config);
-            host.Call(typeof(Program).GetMethod(nameof(Program.AsyncMain)), new { isDevelopment });
+
+            host.Call(typeof(Program).GetMethod(nameof(AsyncMain)), new { isDevelopment });
             host.RunAndBlock();
         }
 
@@ -31,19 +41,26 @@ namespace SFA.DAS.EAS.MessageHandlers
             var container = IoC.Initialize();
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.MessageHandlers");
 
-            endpointConfiguration.Setup(container, isDevelopment);
+            endpointConfiguration
+                .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
+                .SetupEntityFrameworkBehavior<EmployerAccountDbContext>()
+                .SetupErrorQueue()
+                .SetupInstallers()
+                .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
+                .SetupNewtonsoftSerializer()
+                .SetupNLogFactory()
+                .SetupOutbox()
+                .SetupStructureMapBuilder(container);
 
-            NServiceBus.Logging.LogManager.Use<NLogFactory>();
-
-            var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
+            var endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                await Task.Delay(3000, cancellationToken)
-                    .ConfigureAwait(false);
+                await Task.Delay(3000, cancellationToken).ConfigureAwait(false);
             }
 
-            await endpointInstance.Stop().ConfigureAwait(false);
+            await endpoint.Stop().ConfigureAwait(false);
+            container.Dispose();
         }
     }
 }

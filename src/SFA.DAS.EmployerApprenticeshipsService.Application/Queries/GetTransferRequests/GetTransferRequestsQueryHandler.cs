@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -13,13 +14,13 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferRequests
 {
     public class GetTransferRequestsQueryHandler : IAsyncRequestHandler<GetTransferRequestsQuery, GetTransferRequestsResponse>
     {
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountDbContext> _db;
         private readonly IConfigurationProvider _configurationProvider;
         private readonly IEmployerCommitmentApi _employerCommitmentApi;
         private readonly IHashingService _hashingService;
 
         public GetTransferRequestsQueryHandler(
-            EmployerAccountDbContext db,
+            Lazy<EmployerAccountDbContext> db,
             IConfigurationProvider configurationProvider,
             IEmployerCommitmentApi employerCommitmentApi,
             IHashingService hashingService)
@@ -39,7 +40,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferRequests
                 .Select(h => _hashingService.DecodeValue(h))
                 .ToList();
 
-            var accounts = await _db.Accounts
+            var accounts = await _db.Value.Accounts
                 .Where(a => accountIds.Contains(a.Id))
                 .ProjectTo<AccountDto>(_configurationProvider)
                 .ToDictionaryAsync(a => a.HashedId);
