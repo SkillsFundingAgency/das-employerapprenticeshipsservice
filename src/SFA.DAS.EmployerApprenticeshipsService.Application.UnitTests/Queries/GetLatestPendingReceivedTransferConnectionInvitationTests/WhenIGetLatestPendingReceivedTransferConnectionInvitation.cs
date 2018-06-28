@@ -102,7 +102,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestPendingReceivedTran
 
             Db.Setup(d => d.TransferConnectionInvitations).Returns(new DbSetStub<TransferConnectionInvitation>(TransferConnectionInvitations));
 
-            Handler = new GetLatestPendingReceivedTransferConnectionInvitationQueryHandler(Db.Object, configurationProvider);
+            Handler = new GetLatestPendingReceivedTransferConnectionInvitationQueryHandler(new Lazy<EmployerAccountDbContext>(() => Db.Object), configurationProvider);
             Query = new GetLatestPendingReceivedTransferConnectionInvitationQuery { AccountId = ReceiverAccount.Id };
         }
 

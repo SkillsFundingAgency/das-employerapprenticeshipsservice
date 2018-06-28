@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
 
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
 
-            _handler = new GetTransferConnectionInvitationsQueryHandler(_db.Object, _configurationProvider);
+            _handler = new GetTransferConnectionInvitationsQueryHandler(new Lazy<EmployerAccountDbContext>(() => _db.Object), _configurationProvider);
 
             _query = new GetTransferConnectionInvitationsQuery
             {

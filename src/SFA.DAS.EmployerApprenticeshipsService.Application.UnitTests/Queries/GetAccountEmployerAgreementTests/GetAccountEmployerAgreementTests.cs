@@ -284,7 +284,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
                 .Setup(x => x.ValidateAsync(Request))
                 .ReturnsAsync(ValidationResult);
 
-            var queryHandler = new GetAccountEmployerAgreementsQueryHandler(EmployerAccountDbContext, HashingService, Validator, ConfigurationProvider);
+            var queryHandler = new GetAccountEmployerAgreementsQueryHandler(new Lazy<EmployerAccountDbContext>(() => EmployerAccountDbContext), HashingService, Validator, ConfigurationProvider);
 
             return queryHandler;
         }

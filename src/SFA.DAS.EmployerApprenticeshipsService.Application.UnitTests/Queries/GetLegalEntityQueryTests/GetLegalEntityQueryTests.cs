@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -55,7 +56,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
 
             Db.Setup(d => d.LegalEntities).Returns(LegalEntitiesDbSet);
 
-            Handler = new GetLegalEntityQueryHandler(Db.Object, ConfigurationProvider);
+            Handler = new GetLegalEntityQueryHandler(new Lazy<EmployerAccountDbContext>(() => Db.Object), ConfigurationProvider);
 
             SetAccount()
                 .SetLegalEntity()
