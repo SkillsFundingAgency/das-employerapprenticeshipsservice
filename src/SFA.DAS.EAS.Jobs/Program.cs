@@ -1,17 +1,20 @@
 ﻿using Microsoft.Azure.WebJobs;
 using NServiceBus;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
-using SFA.DAS.EAS.Infrastructure.NServiceBus;
 using SFA.DAS.EAS.Jobs.DependencyResolution;
 using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.NServiceBus;
+using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.NewtonsoftSerializer;
+using SFA.DAS.NServiceBus.NLog;
+using SFA.DAS.NServiceBus.StructureMap;
 
 namespace SFA.DAS.EAS.Jobs
 {
     public class Program
     {
-        private static IEndpointInstance _endpointInstance;
-
         public static void Main()
         {
             var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
@@ -23,25 +26,42 @@ namespace SFA.DAS.EAS.Jobs
             }
 
             var host = new JobHost(config);
-            host.Call(typeof(Program).GetMethod(nameof(Program.AsyncMain)), new { isDevelopment });
-            host.RunAndBlock();
 
-            _endpointInstance?.Stop().GetAwaiter().GetResult();
+            host.Call(typeof(Program).GetMethod(nameof(AsyncMain)));
+            host.RunAndBlock();
         }
 
         [NoAutomaticTrigger]
-        public static async Task AsyncMain(CancellationToken cancellationToken, bool isDevelopment)
+        public static async Task AsyncMain(CancellationToken cancellationToken)
         {
             var container = IoC.Initialize();
-
+            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Jobs");
+            
             ServiceLocator.Initialize(container);
 
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Jobs");
-            endpointConfiguration.Setup(container, isDevelopment);
+            endpointConfiguration
+                .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
+                .SetupErrorQueue()
+                .SetupInstallers()
+                .SetupNewtonsoftSerializer()
+                .SetupNLogFactory()
+                .SetupSendOnly()
+                .SetupStructureMapBuilder(container);
 
-            NServiceBus.Logging.LogManager.Use<NLogFactory>();
+            var endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
-            _endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
+            container.Configure(c =>
+            {
+                c.For<IMessageSession>().Use(endpoint);
+            });
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(3000, cancellationToken).ConfigureAwait(false);
+            }
+
+            await endpoint.Stop().ConfigureAwait(false);
+            container.Dispose();
         }
     }
 }

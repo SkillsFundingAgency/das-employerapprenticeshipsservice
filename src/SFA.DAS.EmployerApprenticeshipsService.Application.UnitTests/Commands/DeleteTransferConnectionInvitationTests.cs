@@ -5,12 +5,12 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.DeleteSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.TestCommon.Builders;
-using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands
 {
@@ -94,7 +94,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands
         public void Handle_WhenDeleting_ThenSingleEventShouldBeCreated(long deletingAccountId)
         {
             RunAsync(act: f => f.Handle(TransferConnectionInvitationStatus.Rejected, deletingAccountId),
-                assert: f => Assert.That(f.Entity.GetEvents().OfType<DeletedTransferConnectionInvitationEvent>().Count(), Is.EqualTo(1)));
+                assert: f => Assert.That(f.UnitOfWorkContext.GetEvents().OfType<DeletedTransferConnectionRequestEvent>().Count(), Is.EqualTo(1)));
         }
 
         [TestCase(DeleteTransferConnectionInvitationTestFixture.Constants.TestSenderAccountId)]
@@ -104,22 +104,20 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands
             RunAsync(act: f => f.Handle(TransferConnectionInvitationStatus.Rejected, deletingAccountId),
                 assert: f =>
                 {
-                    var message = f.Entity.GetEvents().OfType<DeletedTransferConnectionInvitationEvent>().Single();
+                    var message = f.UnitOfWorkContext.GetEvents().OfType<DeletedTransferConnectionRequestEvent>().Single();
                     Assert.That(message, Is.Not.Null);
                     Assert.That(message.DeletedByAccountId, Is.EqualTo(deletingAccountId));
                     Assert.That(message.DeletedByUserExternalId, Is.EqualTo(f.DeleterUser.ExternalId));
                     Assert.That(message.DeletedByUserId, Is.EqualTo(f.DeleterUser.Id));
                     Assert.That(message.DeletedByUserName, Is.EqualTo(f.DeleterUser.FullName));
-                    Assert.That(message.CreatedAt,
-                        Is.EqualTo(f.TransferConnectionInvitation.Changes.Select(c => c.CreatedDate).Cast<DateTime?>()
-                            .SingleOrDefault()));
+                    Assert.That(message.Created, Is.EqualTo(f.TransferConnectionInvitation.Changes.Select(c => c.CreatedDate).Cast<DateTime?>().SingleOrDefault()));
                     Assert.That(message.ReceiverAccountHashedId, Is.EqualTo(f.ReceiverAccount.HashedId));
                     Assert.That(message.ReceiverAccountId, Is.EqualTo(f.ReceiverAccount.Id));
                     Assert.That(message.ReceiverAccountName, Is.EqualTo(f.ReceiverAccount.Name));
                     Assert.That(message.SenderAccountHashedId, Is.EqualTo(f.SenderAccount.HashedId));
                     Assert.That(message.SenderAccountId, Is.EqualTo(f.SenderAccount.Id));
                     Assert.That(message.SenderAccountName, Is.EqualTo(f.SenderAccount.Name));
-                    Assert.That(message.TransferConnectionInvitationId, Is.EqualTo(f.TransferConnectionInvitation.Id));
+                    Assert.That(message.TransferConnectionRequestId, Is.EqualTo(f.TransferConnectionInvitation.Id));
                 });
         }
 
@@ -170,6 +168,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands
             EmployerAccountRepositoryMock = new Mock<IEmployerAccountRepository>();
             TransferConnectionInvitationRepositoryMock = new Mock<ITransferConnectionInvitationRepository>();
             UserRepositoryMock = new Mock<IUserRepository>();
+            UnitOfWorkContext = new UnitOfWorkContext();
         }
 
         public Mock<IEmployerAccountRepository> EmployerAccountRepositoryMock;
@@ -185,7 +184,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands
         public Domain.Models.Account.Account ReceiverAccount { get; private set; }
         public User DeleterUser { get; private set; }
         public TransferConnectionInvitation TransferConnectionInvitation { get; private set; }
-        public IEntity Entity { get; private set; }
+        public IUnitOfWorkContext UnitOfWorkContext { get; }
 
         public DeleteTransferConnectionInvitationTestFixture WithSenderAccount(long senderAccountId)
         {
@@ -239,7 +238,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands
         public DeleteTransferConnectionInvitationTestFixture WithTransferConnection(
             TransferConnectionInvitationStatus status)
         {
-            Entity = TransferConnectionInvitation = new TransferConnectionInvitationBuilder()
+            TransferConnectionInvitation = new TransferConnectionInvitationBuilder()
                 .WithId(111111)
                 .WithSenderAccount(SenderAccount)
                 .WithReceiverAccount(ReceiverAccount)

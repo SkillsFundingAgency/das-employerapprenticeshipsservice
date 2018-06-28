@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.TestCommon;
@@ -110,7 +111,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionsTests
 
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
 
-            _handler = new GetTransferConnectionsQueryHandler(_db.Object, _configurationProvider);
+            _handler = new GetTransferConnectionsQueryHandler(new Lazy<EmployerAccountDbContext>(() => _db.Object), _configurationProvider);
 
             _query = new GetTransferConnectionsQuery
             {

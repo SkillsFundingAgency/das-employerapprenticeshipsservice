@@ -1,20 +1,19 @@
-﻿using NServiceBus;
-using System;
+﻿using System;
+using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EAS.Messages.Events
 {
-    public class ApprovedTransferConnectionInviteEvent : IEvent
+    public class RejectedTransferConnectionRequestEvent : Event
     {
-        public Guid ApprovedByUserExternalId { get; set; }
-        public long ApprovedByUserId { get; set; }
-        public string ApprovedByUserName { get; set; }
-        public DateTime CreatedAt { get; set; }
         public string ReceiverAccountHashedId { get; set; }
         public long ReceiverAccountId { get; set; }
         public string ReceiverAccountName { get; set; }
+        public Guid RejectorUserExternalId { get; set; }
+        public long RejectorUserId { get; set; }
+        public string RejectorUserName { get; set; }
         public string SenderAccountHashedId { get; set; }
         public long SenderAccountId { get; set; }
         public string SenderAccountName { get; set; }
-        public int TransferConnectionInvitationId { get; set; }
+        public int TransferConnectionRequestId { get; set; }
     }
 }

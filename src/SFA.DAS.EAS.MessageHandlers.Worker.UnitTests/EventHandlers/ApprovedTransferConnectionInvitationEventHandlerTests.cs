@@ -141,7 +141,7 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
                 .Returns(MessageSubscriber.Object);
 
             Handler = new ApprovedTransferConnectionInvitationEventHandler(MessageSubscriberFactory.Object,
-                Logger.Object, EmployerAccountDbContext.Object, NotificationsApi.Object, Configuration);
+                Logger.Object, new Lazy<EmployerAccountDbContext>(() => EmployerAccountDbContext.Object), NotificationsApi.Object, Configuration);
         }
 
         private ApprovedTransferConnectionInvitationEventHandlerTestFixture SetMessage()

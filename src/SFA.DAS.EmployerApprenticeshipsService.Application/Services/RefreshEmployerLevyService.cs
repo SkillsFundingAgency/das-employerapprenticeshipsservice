@@ -7,17 +7,16 @@ namespace SFA.DAS.EAS.Application.Services
 {
     public class RefreshEmployerLevyService : IRefreshEmployerLevyService
     {
-        private readonly IEndpointInstance _endpoint;
+        private readonly IMessageSession _messageSession;
 
-
-        public RefreshEmployerLevyService(IEndpointInstance endpoint)
+        public RefreshEmployerLevyService(IMessageSession messageSession)
         {
-            _endpoint = endpoint;
+            _messageSession = messageSession;
         }
 
         public Task QueueRefreshLevyMessage(long accountId, string payeRef)
         {
-            return _endpoint.Send<ImportAccountLevyDeclarationsCommand>(c =>
+            return _messageSession.Send<ImportAccountLevyDeclarationsCommand>(c =>
             {
                 c.AccountId = accountId;
                 c.PayeRef = payeRef;
