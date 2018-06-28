@@ -1,4 +1,5 @@
-﻿using AutoMapper.QueryableExtensions;
+﻿using System;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using SFA.DAS.EAS.Application.Dtos;
 using System.Data.Entity;
@@ -11,10 +12,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations
 {
     public class GetTransferConnectionInvitationsQueryHandler : IAsyncRequestHandler<GetTransferConnectionInvitationsQuery, GetTransferConnectionInvitationsResponse>
     {
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountDbContext> _db;
         private readonly IConfigurationProvider _configurationProvider;
 
-        public GetTransferConnectionInvitationsQueryHandler(EmployerAccountDbContext db, IConfigurationProvider configurationProvider)
+        public GetTransferConnectionInvitationsQueryHandler(Lazy<EmployerAccountDbContext> db, IConfigurationProvider configurationProvider)
         {
             _db = db;
             _configurationProvider = configurationProvider;
@@ -22,7 +23,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations
 
         public async Task<GetTransferConnectionInvitationsResponse> Handle(GetTransferConnectionInvitationsQuery message)
         {
-            var transferConnectionInvitations = await _db.TransferConnectionInvitations
+            var transferConnectionInvitations = await _db.Value.TransferConnectionInvitations
                 .Where(i => i.SenderAccount.Id == message.AccountId.Value && !i.DeletedBySender || i.ReceiverAccount.Id == message.AccountId.Value && !i.DeletedByReceiver)
                 .OrderBy(i => i.ReceiverAccount.Id == message.AccountId.Value ? i.SenderAccount.Name : i.ReceiverAccount.Name)
                 .ThenBy(i => i.CreatedDate)

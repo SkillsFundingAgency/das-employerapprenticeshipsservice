@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementTests;
+using SFA.DAS.EAS.Infrastructure.Data;
 using Membership = SFA.DAS.EAS.Domain.Models.AccountTeam.Membership;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTests
@@ -208,7 +209,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var request = BuildRequest(hashedAccountId, agreementId, externalUserId);
 
             var handler = new GetEmployerAgreementQueryHandler(
-                EmployerAgreementBuilder.EmployerAccountDbContext,
+                new Lazy<EmployerAccountDbContext>(() => EmployerAgreementBuilder.EmployerAccountDbContext),
                 EmployerAgreementBuilder.HashingService,
                 Validator.Object,
                 ConfigurationProvider);

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -17,6 +16,7 @@ using SFA.DAS.HashingService;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SFA.DAS.NServiceBus;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateAccount
@@ -25,7 +25,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
     public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>
     {
         private readonly IAccountRepository _accountRepository;
-        private readonly IEndpointInstance _endpoint;
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAccountCommand> _validator;
         private readonly IHashingService _hashingService;
@@ -35,10 +34,10 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
+        private readonly IEventPublisher _eventPublisher;
 
         public CreateAccountCommandHandler(
             IAccountRepository accountRepository,
-
             IMediator mediator,
             IValidator<CreateAccountCommand> validator,
             IHashingService hashingService,
@@ -48,12 +47,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IRefreshEmployerLevyService refreshEmployerLevyService,
             IMembershipRepository membershipRepository,
             IEmployerAgreementRepository employerAgreementRepository,
-            IEndpointInstance endpoint)
+            IEventPublisher eventPublisher)
         {
             _accountRepository = accountRepository;
-            _endpoint = endpoint;
-
-
             _mediator = mediator;
             _validator = validator;
             _hashingService = hashingService;
@@ -63,6 +59,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _refreshEmployerLevyService = refreshEmployerLevyService;
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
+            _eventPublisher = eventPublisher;
         }
 
         public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
@@ -121,7 +118,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, Guid userRef)
         {
-            return _endpoint.Publish<CreatedAgreementEvent>(c =>
+            return _eventPublisher.Publish<CreatedAgreementEvent>(c =>
             {
                 c.AgreementId = employerAgreementId;
                 c.LegalEntityId = legalEntityId;
@@ -135,7 +132,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, Guid userRef)
         {
-            return _endpoint.Publish<AddedLegalEntityEvent>(c =>
+            return _eventPublisher.Publish<AddedLegalEntityEvent>(c =>
             {
                 c.AgreementId = employerAgreementId;
                 c.LegalEntityId = legalEntityId;
@@ -163,7 +160,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, Guid userRef)
         {
-            return _endpoint.Publish<AddedPayeSchemeEvent>(c =>
+            return _eventPublisher.Publish<AddedPayeSchemeEvent>(c =>
             {
                 c.PayeRef = empref;
                 c.AccountId = accountId;
@@ -175,7 +172,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private Task PublishAccountCreatedMessage(long accountId, string createdByName, Guid userRef)
         {
-            return _endpoint.Publish<CreatedAccountEvent>(c =>
+            return _eventPublisher.Publish<CreatedAccountEvent>(c =>
             {
                 c.AccountId = accountId;
                 c.UserName = createdByName;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -14,9 +15,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class EmployerAccountRepository : BaseRepository, IEmployerAccountRepository
     {
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountDbContext> _db;
 
-        public EmployerAccountRepository(EmployerAccountDbContext db, EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+        public EmployerAccountRepository(Lazy<EmployerAccountDbContext> db, EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
@@ -24,7 +25,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public Task<Account> GetAccountById(long id)
         {
-            return _db.Accounts.SingleOrDefaultAsync(a => a.Id == id);
+            return _db.Value.Accounts.SingleOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<Account> GetAccountByHashedId(string hashedAccountId)

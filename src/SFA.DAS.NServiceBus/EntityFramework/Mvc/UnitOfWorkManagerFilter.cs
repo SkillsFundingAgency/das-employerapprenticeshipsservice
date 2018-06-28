@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Infrastructure.Data;
 
-namespace SFA.DAS.EAS.Web.Filters
+namespace SFA.DAS.NServiceBus.EntityFramework.Mvc
 {
     public class UnitOfWorkManagerFilter : ActionFilterAttribute
     {
@@ -13,11 +12,19 @@ namespace SFA.DAS.EAS.Web.Filters
             _unitOfWorkManager = unitOfWorkManager;
         }
 
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (!filterContext.IsChildAction)
+            {
+                _unitOfWorkManager().Begin();
+            }
+        }
+
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            if (!filterContext.IsChildAction && filterContext.Exception == null)
+            if (!filterContext.IsChildAction)
             {
-                _unitOfWorkManager().End();
+                _unitOfWorkManager().End(filterContext.Exception);
             }
         }
     }

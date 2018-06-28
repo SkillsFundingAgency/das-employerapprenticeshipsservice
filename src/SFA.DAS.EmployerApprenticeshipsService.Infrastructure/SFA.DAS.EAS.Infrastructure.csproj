@@ -110,7 +110,7 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.0\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.5.3\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus.Azure.Transports.WindowsAzureServiceBus, Version=8.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\packages\NServiceBus.Azure.Transports.WindowsAzureServiceBus.8.0.0\lib\net452\NServiceBus.Azure.Transports.WindowsAzureServiceBus.dll</HintPath>
@@ -129,6 +129,9 @@
     </Reference>
     <Reference Include="NServiceBus.Newtonsoft.Json, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\packages\NServiceBus.Newtonsoft.Json.2.1.0\lib\net452\NServiceBus.Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.NLog, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.NLog.3.0.0\lib\net452\NServiceBus.NLog.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus.ObjectBuilder.StructureMap, Version=7.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NServiceBus.StructureMap.7.0.0\lib\net452\NServiceBus.ObjectBuilder.StructureMap.dll</HintPath>
@@ -291,7 +294,6 @@
     <Compile Include="Data\SqlAzureDbConfiguration.cs" />
     <Compile Include="Data\EmployerFinancialDbContext.cs" />
     <Compile Include="Data\EmployerAccountDbContext.cs" />
-    <Compile Include="Data\IUnitOfWorkManager.cs" />
     <Compile Include="Data\PayeRepository.cs" />
     <Compile Include="Data\LegalEntityRepository.cs" />
     <Compile Include="Data\AccountRepository.cs" />
@@ -308,7 +310,6 @@
     <Compile Include="Data\TransferConnectionInvitationRepository.cs" />
     <Compile Include="Data\TransferRepository.cs" />
     <Compile Include="Data\UnitOfWork.cs" />
-    <Compile Include="Data\UnitOfWorkManager.cs" />
     <Compile Include="Data\UserAccountRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
     <Compile Include="DependencyResolution\ConfigurationHelper.cs" />
@@ -398,6 +399,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EAS.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.NServiceBus\SFA.DAS.NServiceBus.csproj">
+      <Project>{CBDFA38E-CD77-49BC-B6F4-A07F6E11DFFC}</Project>
+      <Name>SFA.DAS.NServiceBus</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

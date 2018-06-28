@@ -1,18 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.EntityFramework;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     [DbConfigurationType(typeof(SqlAzureDbConfiguration))]
-    public class EmployerAccountDbContext : DbContext
+    public class EmployerAccountDbContext : DbContext, IOutboxDbContext
     {
         public virtual DbSet<AccountLegalEntity> AccountLegalEntities { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
@@ -20,6 +22,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public virtual DbSet<AgreementTemplate> AgreementTemplates { get; set; }
         public virtual DbSet<LegalEntity> LegalEntities { get; set; }
         public virtual DbSet<Membership> Memberships { get; set; }
+        public virtual DbSet<OutboxMessage> OutboxMessages { get; set; }
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAccountSetting> UserAccountSettings { get; set; }
@@ -30,9 +33,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             Database.SetInitializer<EmployerAccountDbContext>(null);
         }
 
-        public EmployerAccountDbContext(EmployerApprenticeshipsServiceConfiguration config)
-            : base(config.DatabaseConnectionString)
+        public EmployerAccountDbContext(IUnitOfWorkContext connectionContext)
+            : base(connectionContext.Get<DbConnection>(), false)
         {
+            Database.UseTransaction(connectionContext.Get<DbTransaction>());
         }
 
         protected EmployerAccountDbContext()

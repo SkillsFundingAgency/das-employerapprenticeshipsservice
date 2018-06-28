@@ -68,7 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="web.config" />
+    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,11 +76,11 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Properties\webjobs-list.json" />
-    <None Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
     </None>
-    <None Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
   <PropertyGroup>
@@ -94,7 +94,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>49965</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

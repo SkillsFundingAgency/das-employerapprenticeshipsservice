@@ -115,6 +115,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Jobs", "SFA.DAS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Messages", "SFA.DAS.EAS.Messages\SFA.DAS.EAS.Messages.csproj", "{22490D92-7DCF-49E8-82B3-8F1EDD9F74E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.NServiceBus", "SFA.DAS.NServiceBus\SFA.DAS.NServiceBus.csproj", "{CBDFA38E-CD77-49BC-B6F4-A07F6E11DFFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -282,6 +284,10 @@ Global
 		{22490D92-7DCF-49E8-82B3-8F1EDD9F74E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22490D92-7DCF-49E8-82B3-8F1EDD9F74E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22490D92-7DCF-49E8-82B3-8F1EDD9F74E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBDFA38E-CD77-49BC-B6F4-A07F6E11DFFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBDFA38E-CD77-49BC-B6F4-A07F6E11DFFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBDFA38E-CD77-49BC-B6F4-A07F6E11DFFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBDFA38E-CD77-49BC-B6F4-A07F6E11DFFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

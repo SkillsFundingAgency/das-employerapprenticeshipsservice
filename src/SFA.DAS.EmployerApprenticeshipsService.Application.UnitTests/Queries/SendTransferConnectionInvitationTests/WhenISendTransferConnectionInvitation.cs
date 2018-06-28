@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -59,7 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvita
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
             _publicHashingService.Setup(h => h.DecodeValue(_receiverAccount.PublicHashedId)).Returns(_receiverAccount.Id);
 
-            _handler = new SendTransferConnectionInvitationQueryHandler(_db.Object, _configurationProvider, _publicHashingService.Object);
+            _handler = new SendTransferConnectionInvitationQueryHandler(new Lazy<EmployerAccountDbContext>(() => _db.Object), _configurationProvider, _publicHashingService.Object);
 
             _query = new SendTransferConnectionInvitationQuery
             {
