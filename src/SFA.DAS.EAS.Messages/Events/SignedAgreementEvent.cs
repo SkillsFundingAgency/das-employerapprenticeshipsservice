@@ -1,9 +1,9 @@
-﻿using NServiceBus;
-using System;
+﻿using System;
+using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EAS.Messages.Events
 {
-    public class SignedAgreementEvent : IEvent
+    public class SignedAgreementEvent : Event
     {
         public long AccountId { get; set; }
         public DateTime Created { get; set; }

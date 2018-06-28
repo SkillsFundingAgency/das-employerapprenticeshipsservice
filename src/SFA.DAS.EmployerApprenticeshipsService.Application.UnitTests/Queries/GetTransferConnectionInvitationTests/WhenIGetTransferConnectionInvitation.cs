@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Moq;
@@ -62,7 +63,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionInvitat
 
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
 
-            _handler = new GetTransferConnectionInvitationQueryHandler(_db.Object, _configurationProvider);
+            _handler = new GetTransferConnectionInvitationQueryHandler(new Lazy<EmployerAccountDbContext>(() => _db.Object), _configurationProvider);
 
             _query = new GetTransferConnectionInvitationQuery
             {

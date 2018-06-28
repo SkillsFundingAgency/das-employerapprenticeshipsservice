@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.TestCommon;
 using System.Collections.Generic;
@@ -93,7 +94,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferRequestsTests
             _hashingService.Setup(h => h.DecodeValue(_account1.HashedId)).Returns(_account1.Id);
             _hashingService.Setup(h => h.DecodeValue(_account2.HashedId)).Returns(_account2.Id);
 
-            _handler = new GetTransferRequestsQueryHandler(_db.Object, _configurationProvider, _employerCommitmentApi.Object, _hashingService.Object);
+            _handler = new GetTransferRequestsQueryHandler(new Lazy<EmployerAccountDbContext>(() => _db.Object), _configurationProvider, _employerCommitmentApi.Object, _hashingService.Object);
 
             _query = new GetTransferRequestsQuery
             {

@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using System;
+using System.Data.Entity;
+using System.Threading.Tasks;
+using MediatR;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.Features;
@@ -13,13 +16,13 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthori
 {
     public class GetTransferConnectionInvitationAuthorizationQueryHandler : IAsyncRequestHandler<GetTransferConnectionInvitationAuthorizationQuery, GetTransferConnectionInvitationAuthorizationResponse>
     {
-        private readonly EmployerAccountDbContext _accountDb;
+        private readonly Lazy<EmployerAccountDbContext> _accountDb;
         private readonly EmployerFinancialDbContext _financialDb;
         private readonly LevyDeclarationProviderConfiguration _configuration;
         private readonly IAuthorizationService _authorizationService;
 
         public GetTransferConnectionInvitationAuthorizationQueryHandler(
-            EmployerAccountDbContext accountDb,
+            Lazy<EmployerAccountDbContext> accountDb,
             EmployerFinancialDbContext financialDb,
             LevyDeclarationProviderConfiguration configuration,
             IAuthorizationService authorizationService)
@@ -35,7 +38,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthori
             var authorizationResult = await _authorizationService.GetAuthorizationResultAsync(FeatureType.TransferConnectionRequests);
             var transferAllowance = await _financialDb.GetTransferAllowance(message.AccountId.Value, _configuration.TransferAllowancePercentage);
 
-            var isReceiver = await _accountDb.TransferConnectionInvitations.AnyAsync(i =>
+            var isReceiver = await _accountDb.Value.TransferConnectionInvitations.AnyAsync(i =>
                 i.ReceiverAccount.Id == message.AccountId && (
                 i.Status == TransferConnectionInvitationStatus.Pending ||
                 i.Status == TransferConnectionInvitationStatus.Approved));
