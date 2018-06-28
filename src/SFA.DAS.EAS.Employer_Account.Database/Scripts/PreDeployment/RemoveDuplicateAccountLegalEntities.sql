@@ -1,4 +1,28 @@
-﻿-- Store the original data 
+﻿
+IF(EXISTS(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS 
+    WHERE CONSTRAINT_NAME ='FK_AccountEmployerAgreement_EmployerAgreement'))
+	BEGIN 
+		ALTER TABLE [employer_account].[AccountEmployerAgreement] DROP CONSTRAINT [FK_AccountEmployerAgreement_EmployerAgreement]
+	END
+GO
+
+IF(EXISTS(SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS 
+    WHERE CONSTRAINT_NAME ='FK_AccountEmployerAgreement_Account'))
+	BEGIN 
+		ALTER TABLE [employer_account].[AccountEmployerAgreement] DROP CONSTRAINT [FK_AccountEmployerAgreement_Account]
+	END
+GO
+
+IF (EXISTS (SELECT *  
+					FROM INFORMATION_SCHEMA.TABLES  
+					WHERE TABLE_SCHEMA = 'employer_account'  
+					AND  TABLE_NAME = '[AccountEmployerAgreement]')) 
+BEGIN
+	DROP TABLE [employer_account].[AccountEmployerAgreement]
+END
+GO
+
+-- Store the original data 
 IF (NOT EXISTS (SELECT *  
 					FROM INFORMATION_SCHEMA.TABLES  
 					WHERE TABLE_SCHEMA = 'employer_account'  
@@ -14,19 +38,6 @@ BEGIN
 		GROUP BY Code
 		HAVING COUNT(1) > 1)
 	ORDER BY le.Name, Code, le.RegisteredAddress
-END
-GO
-
-IF (EXISTS (SELECT *  
-					FROM INFORMATION_SCHEMA.TABLES  
-					WHERE TABLE_SCHEMA = 'employer_account'  
-					AND  TABLE_NAME = '[AccountEmployerAgreement]')) 
-BEGIN
-	ALTER TABLE [employer_account].[AccountEmployerAgreement] DROP CONSTRAINT [FK_AccountEmployerAgreement_EmployerAgreement]
-	ALTER TABLE [employer_account].[AccountEmployerAgreement] DROP CONSTRAINT [FK_AccountEmployerAgreement_Account]
-	DROP TABLE [employer_account].[AccountEmployerAgreement]
-END
-GO
 
 	-- Update duplicate LegalEntityId's in EmployerAgreement table
 
@@ -79,4 +90,6 @@ GO
 		 WHERE rn > 1
 		 AND StatusId <> 5
 	 )
+END
+GO
 
