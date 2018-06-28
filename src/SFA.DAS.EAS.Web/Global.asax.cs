@@ -11,12 +11,12 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Extensions;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Infrastructure.Logging;
-using SFA.DAS.EAS.Infrastructure.NServiceBus;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.Web.Policy;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Net;
 using System.Reflection;
 using System.Security.Claims;
@@ -25,7 +25,16 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Infrastructure.NServiceBus;
+using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.MsSqlServer;
+using SFA.DAS.NServiceBus.NewtonsoftSerializer;
+using SFA.DAS.NServiceBus.NLog;
+using SFA.DAS.NServiceBus.StructureMap;
 using Environment = SFA.DAS.EAS.Infrastructure.DependencyResolution.Environment;
+using SFA.DAS.NServiceBus.EntityFramework.Mvc;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -36,7 +45,7 @@ namespace SFA.DAS.EAS.Web
         private static readonly RedisTarget RedisTarget; // Required to ensure assembly is copied to output.
 #pragma warning restore 169
 
-        private IEndpointInstance _endpointInstance;
+        private IEndpointInstance _endpoint;
 
         protected void Application_Start()
         {
@@ -118,17 +127,31 @@ namespace SFA.DAS.EAS.Web
 
         private void StartServiceBusEndpoint()
         {
-            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
             var container = StructuremapMvc.StructureMapDependencyScope.Container;
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Web");
-            endpointConfiguration.Setup(container, isDevelopment);
 
-            _endpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+            endpointConfiguration
+                .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
+                .SetupEntityFrameworkBehavior<EmployerAccountDbContext>(GlobalFilters.Filters)
+                .SetupErrorQueue()
+                .SetupInstallers()
+                .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
+                .SetupNewtonsoftSerializer()
+                .SetupNLogFactory()
+                .SetupOutbox()
+                .SetupStructureMapBuilder(container);
+
+            _endpoint = Endpoint.Start(endpointConfiguration).SetupOutboxSchedule().GetAwaiter().GetResult();
+
+            container.Configure(c =>
+            {
+                c.For<IMessageSession>().Use(_endpoint);
+            });
         }
 
         private void StopServiceBusEndpoint()
         {
-            _endpointInstance?.Stop().GetAwaiter().GetResult();
+            _endpoint?.Stop().GetAwaiter().GetResult();
         }
     }
 }

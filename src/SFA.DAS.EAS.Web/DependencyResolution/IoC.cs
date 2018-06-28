@@ -16,6 +16,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<DataRegistry>();
                 c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
@@ -26,6 +27,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
+                c.AddRegistry<NServiceBusRegistry>();
                 c.AddRegistry<ReferenceDataRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<ServicesRegistry>();

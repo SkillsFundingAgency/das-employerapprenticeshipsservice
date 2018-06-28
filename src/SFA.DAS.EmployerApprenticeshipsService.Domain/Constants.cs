@@ -10,7 +10,7 @@
         public struct TransferConnectionInvitations
         {
             public const int SenderMaxTransferConnectionInvitations = 1;
-            public const decimal SenderMinTransferAllowance = 1;
+            public const decimal SenderMinTransferAllowance = 0;
         }
     }
 }

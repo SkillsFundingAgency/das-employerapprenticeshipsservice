@@ -305,7 +305,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
 
             });
 
-            Handler = new GetEmployerAgreementQueryHandler(Database.Object, HashingService.Object, Validator.Object, ConfigurationProvider);
+            Handler = new GetEmployerAgreementQueryHandler(new Lazy<EmployerAccountDbContext>(() => Database.Object), HashingService.Object, Validator.Object, ConfigurationProvider);
             Request = new GetEmployerAgreementRequest
             {
                 HashedAccountId = HashedAccountId,

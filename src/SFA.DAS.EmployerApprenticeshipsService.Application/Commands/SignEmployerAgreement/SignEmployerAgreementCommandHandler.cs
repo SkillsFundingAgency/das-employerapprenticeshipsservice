@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -16,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.NServiceBus;
 using Entity = SFA.DAS.Audit.Types.Entity;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
         private readonly IEmployerAgreementEventFactory _agreementEventFactory;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IMediator _mediator;
-        private readonly IEndpointInstance _endpoint;
+        private readonly IEventPublisher _eventPublisher;
         private readonly ICommitmentService _commitmentService;
         private readonly IAgreementService _agreementService;
 
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             IEmployerAgreementEventFactory agreementEventFactory,
             IGenericEventFactory genericEventFactory,
             IMediator mediator,
-            IEndpointInstance endpoint,
+            IEventPublisher eventPublisher,
             ICommitmentService commitmentService,
             IAgreementService agreementService)
         {
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             _agreementEventFactory = agreementEventFactory;
             _genericEventFactory = genericEventFactory;
             _mediator = mediator;
-            _endpoint = endpoint;
+            _eventPublisher = eventPublisher;
             _commitmentService = commitmentService;
             _agreementService = agreementService;
         }
@@ -110,16 +110,16 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             long accountId, long legalEntityId, string legalEntityName, long agreementId,
             bool cohortCreated, string currentUserName, string currentUserRef)
         {
-            return _endpoint.Publish(new SignedAgreementEvent
+            return _eventPublisher.Publish<SignedAgreementEvent>(e =>
             {
-                AccountId = accountId,
-                AgreementId = agreementId,
-                LegalEntityId = legalEntityId,
-                OrganisationName = legalEntityName,
-                CohortCreated = cohortCreated,
-                Created = DateTime.UtcNow,
-                UserName = currentUserName,
-                UserRef = Guid.Parse(currentUserRef)
+                e.AccountId = accountId;
+                e.AgreementId = agreementId;
+                e.LegalEntityId = legalEntityId;
+                e.OrganisationName = legalEntityName;
+                e.CohortCreated = cohortCreated;
+                e.Created = DateTime.UtcNow;
+                e.UserName = currentUserName;
+                e.UserRef = Guid.Parse(currentUserRef);
             });
         }
 
