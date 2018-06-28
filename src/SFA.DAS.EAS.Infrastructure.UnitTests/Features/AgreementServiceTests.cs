@@ -161,7 +161,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
 
             Db.Setup(d => d.Agreements).Returns(new DbSetStub<EmployerAgreement>(Agreements));
 
-            _service = new AgreementService(Db.Object, DistributedCache.Object);
+            _service = new AgreementService(new Lazy<EmployerAccountDbContext>(() => Db.Object), DistributedCache.Object);
         }
 
         public Task<int?> GetLowestSignedAgreementVersionNumberAsync(long accountId)

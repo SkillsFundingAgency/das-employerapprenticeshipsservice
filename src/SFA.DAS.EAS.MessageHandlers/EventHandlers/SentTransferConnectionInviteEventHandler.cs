@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
 {
-    public class SentTransferConnectionInviteEventHandler : IHandleMessages<SentTransferConnectionInviteEvent>
+    public class SentTransferConnectionInviteEventHandler : IHandleMessages<SentTransferConnectionRequestEvent>
     {
         private readonly IMessagePublisher _messagePublisher;
 
@@ -14,11 +14,11 @@ namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
         {
             _messagePublisher = messagePublisher;
         }
-        public async Task Handle(SentTransferConnectionInviteEvent message, IMessageHandlerContext context)
+        public async Task Handle(SentTransferConnectionRequestEvent message, IMessageHandlerContext context)
         {
             await _messagePublisher.PublishAsync(new SentTransferConnectionInvitationEvent
             {
-                TransferConnectionInvitationId = message.TransferConnectionInvitationId,
+                TransferConnectionInvitationId = message.TransferConnectionRequestId,
                 SenderAccountId = message.SenderAccountId,
                 SenderAccountHashedId = message.SenderAccountHashedId,
                 SenderAccountName = message.SenderAccountName,
@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
                 SentByUserId = message.SentByUserId,
                 SentByUserExternalId = message.SentByUserExternalId,
                 SentByUserName = message.SentByUserName,
-                CreatedAt = message.CreatedAt
+                CreatedAt = message.Created
             });
         }
     }

@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.RejectTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Messages.Events;
@@ -11,6 +10,7 @@ using SFA.DAS.HashingService;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInvitation
 {
@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
         private Mock<ITransferConnectionInvitationRepository> _transferConnectionInvitationRepository;
         private Mock<IUserRepository> _userRepository;
         private TransferConnectionInvitation _transferConnectionInvitation;
-        private IEntity _entity;
+        private UnitOfWorkContext _unitOfWorkContext;
         private Domain.Models.Account.Account _senderAccount;
         private Domain.Models.Account.Account _receiverAccount;
         private User _receiverUser;
@@ -57,7 +57,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
                 Name = "Receiver"
             };
 
-            _entity = _transferConnectionInvitation = new TransferConnectionInvitationBuilder()
+            _unitOfWorkContext = new UnitOfWorkContext();
+
+            _transferConnectionInvitation = new TransferConnectionInvitationBuilder()
                 .WithId(111111)
                 .WithSenderAccount(_senderAccount)
                 .WithReceiverAccount(_receiverAccount)
@@ -136,12 +138,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
         {
             await _handler.Handle(_command);
 
-            var messages = _entity.GetEvents().ToList();
-            var message = messages.OfType<RejectedTransferConnectionInviteEvent>().FirstOrDefault();
+            var messages = _unitOfWorkContext.GetEvents().ToList();
+            var message = messages.OfType<RejectedTransferConnectionRequestEvent>().FirstOrDefault();
 
             Assert.That(messages.Count, Is.EqualTo(1));
             Assert.That(message, Is.Not.Null);
-            Assert.That(message.CreatedAt, Is.EqualTo(_transferConnectionInvitation.Changes.Select(c => c.CreatedDate).Cast<DateTime?>().SingleOrDefault()));
+            Assert.That(message.Created, Is.EqualTo(_transferConnectionInvitation.Changes.Select(c => c.CreatedDate).Cast<DateTime?>().SingleOrDefault()));
             Assert.That(message.ReceiverAccountHashedId, Is.EqualTo(_receiverAccount.HashedId));
             Assert.That(message.ReceiverAccountId, Is.EqualTo(_receiverAccount.Id));
             Assert.That(message.ReceiverAccountName, Is.EqualTo(_receiverAccount.Name));
@@ -151,7 +153,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
             Assert.That(message.SenderAccountHashedId, Is.EqualTo(_senderAccount.HashedId));
             Assert.That(message.SenderAccountId, Is.EqualTo(_senderAccount.Id));
             Assert.That(message.SenderAccountName, Is.EqualTo(_senderAccount.Name));
-            Assert.That(message.TransferConnectionInvitationId, Is.EqualTo(_transferConnectionInvitation.Id));
+            Assert.That(message.TransferConnectionRequestId, Is.EqualTo(_transferConnectionInvitation.Id));
         }
 
         [Test]

@@ -298,6 +298,7 @@
     <Compile Include="DependencyResolution\CachesRegistry.cs" />
     <Compile Include="DependencyResolution\CommitmentsRegistry.cs" />
     <Compile Include="DependencyResolution\ConfigurationRegistry.cs" />
+    <Compile Include="DependencyResolution\DataRegistry.cs" />
     <Compile Include="DependencyResolution\DateTimeRegistry.cs" />
     <Compile Include="DependencyResolution\EventsRegistry.cs" />
     <Compile Include="DependencyResolution\ExecutionPoliciesRegistry.cs" />
@@ -309,6 +310,7 @@
     <Compile Include="DependencyResolution\MessagePublisherRegistry.cs" />
     <Compile Include="DependencyResolution\MessageSubscriberRegistry.cs" />
     <Compile Include="DependencyResolution\NotificationsRegistry.cs" />
+    <Compile Include="DependencyResolution\NServiceBusRegistry.cs" />
     <Compile Include="DependencyResolution\PaymentsRegistry.cs" />
     <Compile Include="DependencyResolution\ReferenceDataRegistry.cs" />
     <Compile Include="DependencyResolution\RepositoriesRegistry.cs" />
@@ -789,6 +791,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01ac2bc2-ac01-400f-ab8f-548dd5c0ee74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.NServiceBus\SFA.DAS.NServiceBus.csproj">
+      <Project>{CBDFA38E-CD77-49BC-B6F4-A07F6E11DFFC}</Project>
+      <Name>SFA.DAS.NServiceBus</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

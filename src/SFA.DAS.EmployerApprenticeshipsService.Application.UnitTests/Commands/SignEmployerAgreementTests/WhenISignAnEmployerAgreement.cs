@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using MediatR;
 using Moq;
-using NServiceBus.Testing;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types.Events.Agreement;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -21,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.NServiceBus.Testing;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
 {
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         private EmployerAgreementView _agreement;
         private AgreementSignedEvent _agreementEvent;
         private Mock<ICommitmentService> _commintmentService;
-        private TestableEndpointInstance _endpoint;
+        private TestableEventPublisher _eventPublisher;
         private Mock<IAgreementService> _agreementService;
 
         private const long AccountId = 223344;
@@ -99,7 +99,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             _commintmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>()))
                 .ReturnsAsync(new List<Cohort>());
 
-            _endpoint = new TestableEndpointInstance();
+            _eventPublisher = new TestableEventPublisher();
 
             _agreementService = new Mock<IAgreementService>();
 
@@ -111,7 +111,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
                 _agreementEventFactory.Object,
                 _genericEventFactory.Object,
                 _mediator.Object,
-                _endpoint,
+                _eventPublisher,
                 _commintmentService.Object,
                 _agreementService.Object);
 
@@ -206,9 +206,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             await _handler.Handle(_command);
 
             //Assert
-            _endpoint.PublishedMessages.Should().HaveCount(1);
+            _eventPublisher.Events.Should().HaveCount(1);
 
-            var message = _endpoint.PublishedMessages.First().Message.As<SignedAgreementEvent>();
+            var message = _eventPublisher.Events.First().As<SignedAgreementEvent>();
 
             message.AccountId.Should().Be(AccountId);
             message.AgreementId.Should().Be(AgreementId);
@@ -230,9 +230,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             await _handler.Handle(_command);
 
             //Assert
-            _endpoint.PublishedMessages.Should().HaveCount(1);
+            _eventPublisher.Events.Should().HaveCount(1);
 
-            var message = _endpoint.PublishedMessages.First().Message.As<SignedAgreementEvent>();
+            var message = _eventPublisher.Events.First().As<SignedAgreementEvent>();
 
             message.AccountId.Should().Be(AccountId);
             message.AgreementId.Should().Be(AgreementId);

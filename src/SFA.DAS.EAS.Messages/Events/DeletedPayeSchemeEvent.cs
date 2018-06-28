@@ -1,9 +1,9 @@
-﻿using NServiceBus;
-using System;
+﻿using System;
+using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EAS.Messages.Events
 {
-    public class DeletedPayeSchemeEvent : IEvent
+    public class DeletedPayeSchemeEvent : Event
     {
         public long AccountId { get; set; }
         public DateTime Created { get; set; }

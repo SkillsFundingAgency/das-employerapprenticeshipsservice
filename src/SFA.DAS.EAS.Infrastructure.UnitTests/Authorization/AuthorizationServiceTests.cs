@@ -144,26 +144,24 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
 
         public IAuthorizationContext GetAuthorizationContext()
         {
-            var authorizationService = new AuthorizationService(
-                Db.Object,
-                AuthorizationContextCache.Object,
+            var authorizationService = new AuthorizationService(AuthorizationContextCache.Object,
                 Handlers,
                 CallerContextProvider.Object,
                 ConfigurationProvider,
-                FeatureService.Object);
+                FeatureService.Object,
+                new Lazy<EmployerAccountDbContext>(() => Db.Object));
 
             return authorizationService.GetAuthorizationContext();
         }
 
         public bool IsAuthorized()
         {
-            var authorizationService = new AuthorizationService(
-                Db.Object,
-                AuthorizationContextCache.Object,
+            var authorizationService = new AuthorizationService(AuthorizationContextCache.Object,
                 Handlers,
                 CallerContextProvider.Object,
                 ConfigurationProvider,
-                FeatureService.Object);
+                FeatureService.Object,
+                new Lazy<EmployerAccountDbContext>(() => Db.Object));
 
             return authorizationService.IsAuthorized(Feature.FeatureType);
         }
@@ -215,13 +213,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
 
         public void ValidateMembership()
         {
-            var authorizationService = new AuthorizationService(
-                Db.Object,
-                AuthorizationContextCache.Object,
+            var authorizationService = new AuthorizationService(AuthorizationContextCache.Object,
                 Handlers,
                 CallerContextProvider.Object,
                 ConfigurationProvider,
-                FeatureService.Object);
+                FeatureService.Object,
+                new Lazy<EmployerAccountDbContext>(() => Db.Object));
 
             authorizationService.ValidateMembership();
         }

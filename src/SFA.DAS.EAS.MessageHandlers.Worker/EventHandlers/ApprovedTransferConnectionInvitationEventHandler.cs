@@ -23,11 +23,11 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.EventHandlers
 
         public const string UrlFormat = "/accounts/{0}/transfers";
 
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountDbContext> _db;
         private readonly ILog _log;
         private readonly INotificationsApi _notificationsApi;
 
-        public ApprovedTransferConnectionInvitationEventHandler(IMessageSubscriberFactory subscriberFactory, ILog log, EmployerAccountDbContext dbContext, INotificationsApi notificationsApi, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration) : base(subscriberFactory, log)
+        public ApprovedTransferConnectionInvitationEventHandler(IMessageSubscriberFactory subscriberFactory, ILog log, Lazy<EmployerAccountDbContext> dbContext, INotificationsApi notificationsApi, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration) : base(subscriberFactory, log)
         {
             _db = dbContext;
             _notificationsApi = notificationsApi;
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.EventHandlers
             IQueryable<User> users;
             try
             {
-                users = _db.Users.UsersThatReceiveNotifications(messageContent.SenderAccountId);
+                users = _db.Value.Users.UsersThatReceiveNotifications(messageContent.SenderAccountId);
             }
             catch (Exception ex)
             {

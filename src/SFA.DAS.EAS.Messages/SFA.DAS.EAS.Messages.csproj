@@ -55,22 +55,29 @@
     <Compile Include="Events\AddedLegalEntityEvent.cs" />
     <Compile Include="Events\AddedPayeSchemeEvent.cs" />
     <Compile Include="Events\ChangedAccountNameEvent.cs" />
-    <Compile Include="Events\ApprovedTransferConnectionInviteEvent.cs" />
+    <Compile Include="Events\ApprovedTransferConnectionRequestEvent.cs" />
     <Compile Include="Events\CreatedAccountEvent.cs" />
     <Compile Include="Events\CreatedAgreementEvent.cs" />
     <Compile Include="Events\CreatedPaymentEvent.cs" />
     <Compile Include="Events\DeletedPayeSchemeEvent.cs" />
-    <Compile Include="Events\DeletedTransferConnectionInviteEvent.cs" />
+    <Compile Include="Events\DeletedTransferConnectionRequestEvent.cs" />
     <Compile Include="Events\InvitedUserEvent.cs" />
-    <Compile Include="Events\RejectedTransferConnectionInviteEvent.cs" />
+    <Compile Include="Events\RejectedTransferConnectionRequestEvent.cs" />
     <Compile Include="Events\RemovedLegalEntityEvent.cs" />
-    <Compile Include="Events\SentTransferConnectionInviteEvent.cs" />
+    <Compile Include="Events\SentTransferConnectionRequestEvent.cs" />
     <Compile Include="Events\SignedAgreementEvent.cs" />
     <Compile Include="Events\UserJoinedEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.NServiceBus\SFA.DAS.NServiceBus.csproj">
+      <Project>{CBDFA38E-CD77-49BC-B6F4-A07F6E11DFFC}</Project>
+      <Name>SFA.DAS.NServiceBus</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

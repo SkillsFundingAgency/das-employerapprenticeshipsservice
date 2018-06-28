@@ -14,9 +14,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class UserRepository : BaseRepository, IUserRepository
     {
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountDbContext> _db;
 
-        public UserRepository(EmployerApprenticeshipsServiceConfiguration configuration, EmployerAccountDbContext db, ILog logger)
+        public UserRepository(EmployerApprenticeshipsServiceConfiguration configuration, Lazy<EmployerAccountDbContext> db, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
@@ -24,12 +24,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public Task<User> GetUserById(long id)
         {
-            return _db.Users.SingleOrDefaultAsync(u => u.Id == id);
+            return _db.Value.Users.SingleOrDefaultAsync(u => u.Id == id);
         }
 
         public Task<User> GetUserByExternalId(Guid externalId)
         {
-            return _db.Users.SingleOrDefaultAsync(u => u.ExternalId == externalId);
+            return _db.Value.Users.SingleOrDefaultAsync(u => u.ExternalId == externalId);
         }
 
         public async Task<User> GetUserByRef(string id)

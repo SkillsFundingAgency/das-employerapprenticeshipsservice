@@ -3,8 +3,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.Web.Filters;
+using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.EntityFramework.Mvc;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Filters.UnitOfWorkManagerFilterTests
 {
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters.UnitOfWorkManagerFilterTests
         {
             _filter.OnActionExecuted(_filterContext);
 
-            _unitOfWorkManager.Verify(m => m.End(), Times.Once);
+            _unitOfWorkManager.Verify(m => m.End(null), Times.Once);
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters.UnitOfWorkManagerFilterTests
 
             _filter.OnActionExecuted(_filterContext);
 
-            _unitOfWorkManager.Verify(m => m.End(), Times.Never);
+            _unitOfWorkManager.Verify(m => m.End(null), Times.Never);
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Filters.UnitOfWorkManagerFilterTests
 
             _filter.OnActionExecuted(_filterContext);
 
-            _unitOfWorkManager.Verify(m => m.End(), Times.Never);
+            _unitOfWorkManager.Verify(m => m.End(null), Times.Never);
         }
     }
 }

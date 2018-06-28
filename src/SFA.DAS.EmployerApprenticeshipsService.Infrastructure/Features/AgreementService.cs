@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,10 +13,10 @@ namespace SFA.DAS.EAS.Infrastructure.Features
     {
         private const int NullCacheValue = -1;
 
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountDbContext> _db;
         private readonly IDistributedCache _cache;
 
-        public AgreementService(EmployerAccountDbContext db, IDistributedCache cache)
+        public AgreementService(Lazy<EmployerAccountDbContext> db, IDistributedCache cache)
         {
             _db = db;
             _cache = cache;
@@ -35,7 +36,7 @@ namespace SFA.DAS.EAS.Infrastructure.Features
 
         private async Task<int> GetMinAgreementVersionAsync(long accountId)
         {
-            var versionNumber = await _db.Agreements
+            var versionNumber = await _db.Value.Agreements
                 .Where(a => a.Account.Id == accountId && (a.StatusId == EmployerAgreementStatus.Pending || a.StatusId == EmployerAgreementStatus.Signed))
                 .Select(a => new
                 {

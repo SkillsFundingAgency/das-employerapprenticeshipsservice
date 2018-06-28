@@ -11,10 +11,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetStatistics
 {
     public class GetStatisticsQueryHandler : IAsyncRequestHandler<GetStatisticsQuery, GetStatisticsResponse>
     {
-        private readonly EmployerAccountDbContext _accountDb;
+        private readonly Lazy<EmployerAccountDbContext> _accountDb;
         private readonly EmployerFinancialDbContext _financialDb;
 
-        public GetStatisticsQueryHandler(EmployerAccountDbContext accountDb, EmployerFinancialDbContext financialDb)
+        public GetStatisticsQueryHandler(Lazy<EmployerAccountDbContext> accountDb, EmployerFinancialDbContext financialDb)
         {
             _accountDb = accountDb;
             _financialDb = financialDb;
@@ -22,11 +22,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetStatistics
 
         public async Task<GetStatisticsResponse> Handle(GetStatisticsQuery message)
         {
-            var accountsQuery = _accountDb.Accounts.FutureCount();
-            var legalEntitiesQuery = _accountDb.LegalEntities.FutureCount();
-            var payeSchemesQuery = _accountDb.Payees.FutureCount();
-            var agreementsQuery = _accountDb.Agreements.Where(a => a.StatusId == EmployerAgreementStatus.Signed).FutureCount();
-            var paymentsQuery = _financialDb.Payments.FutureCount();
+            var accountsQuery = _accountDb.Value.Accounts.FutureCount();
+            var legalEntitiesQuery = _accountDb.Value.LegalEntities.FutureCount();
+            var payeSchemesQuery = _accountDb.Value.Payees.FutureCount();
+            var agreementsQuery = _accountDb.Value.Agreements.Where(a => a.StatusId == EmployerAgreementStatus.Signed).FutureCount();
+            var paymentsQuery = _financialDb.Value.Payments.FutureCount();
 
             var statistics = new StatisticsViewModel
             {
