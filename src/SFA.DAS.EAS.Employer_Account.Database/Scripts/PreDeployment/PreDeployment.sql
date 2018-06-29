@@ -10,5 +10,3 @@
 --------------------------------------------------------------------------------------
 */
 
-:r .\AML-2239-DeleteDuplicateAccountHistory.sql
-:r .\AML-2381-DeleteDuplicateUserAccountSettings.sql
