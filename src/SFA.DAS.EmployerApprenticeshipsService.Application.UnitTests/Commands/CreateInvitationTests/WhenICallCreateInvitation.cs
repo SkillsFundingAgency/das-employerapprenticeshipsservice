@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Moq;
-using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateInvitation;
@@ -11,6 +10,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.NServiceBus;
 using SFA.DAS.TimeProvider;
 using System;
 using System.Linq;
@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IValidator<CreateInvitationCommand>> _validator;
         private Mock<IUserRepository> _userRepository;
-        private Mock<IEndpointInstance> _endpoint;
+        private Mock<IEventPublisher> _endpoint;
         private const long ExpectedAccountId = 545641561;
         private const long ExpectedUserId = 521465;
         private const long ExpectedInvitationId = 1231234;
@@ -48,17 +48,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, ExpectedExternalUserId))
-                                 .ReturnsAsync(new MembershipView 
-                                    { 
-                                        AccountId = ExpectedAccountId, 
-                                        UserId = ExpectedUserId,
-                                        UserRef = ExpectedExternalUserId
-                                    });
+                                 .ReturnsAsync(new MembershipView
+                                 {
+                                     AccountId = ExpectedAccountId,
+                                     UserId = ExpectedUserId,
+                                     UserRef = ExpectedExternalUserId
+                                 });
 
             _userRepository = new Mock<IUserRepository>();
             _userRepository.Setup(x => x.GetByEmailAddress(ExpectedExistingUserEmail)).ReturnsAsync(new User { Email = ExpectedExistingUserEmail, UserRef = Guid.NewGuid().ToString() });
 
-            _endpoint = new Mock<IEndpointInstance>();
+            _endpoint = new Mock<IEventPublisher>();
 
             _mediator = new Mock<IMediator>();
 
@@ -169,12 +169,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
                 .ReturnsAsync(new MembershipView
-            {
-                RoleId = (int)Role.Owner,
-                UserId = userId,
-                UserRef = ExpectedExternalUserId,
-                AccountId = ExpectedAccountId
-            });
+                {
+                    RoleId = (int)Role.Owner,
+                    UserId = userId,
+                    UserRef = ExpectedExternalUserId,
+                    AccountId = ExpectedAccountId
+                });
 
             //Act
             await _handler.Handle(_command);

@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.HashingService;
+using SFA.DAS.NServiceBus.Testing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         private Mock<IMediator> _mediator;
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
-        private TestableEndpointInstance _endpoint;
+        private TestableEventPublisher _eventPublisher;
         private Mock<IMembershipRepository> _mockMembershipRepository;
 
         [SetUp]
@@ -58,7 +59,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _payeSchemeEventFactory = new Mock<IPayeSchemeEventFactory>();
 
-            _endpoint = new TestableEndpointInstance();
+            _eventPublisher = new TestableEventPublisher();
             _mockMembershipRepository = new Mock<IMembershipRepository>();
 
             _mockMembershipRepository.Setup(a => a.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
@@ -71,7 +72,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
                 _hashingService.Object,
                 _genericEventFactory.Object,
                 _payeSchemeEventFactory.Object,
-                _endpoint,
+                _eventPublisher,
                 _mockMembershipRepository.Object);
         }
 
@@ -174,9 +175,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             await _handler.Handle(command);
 
             //Assert
-            _endpoint.PublishedMessages.Should().HaveCount(1);
+            _eventPublisher.Events.Should().HaveCount(1);
 
-            var message = _endpoint.PublishedMessages.Select(x => x.Message).OfType<DeletedPayeSchemeEvent>().Single();
+            var message = _eventPublisher.Events.OfType<DeletedPayeSchemeEvent>().Single();
 
             message.AccountId.Should().Be(AccountId);
             message.OrganisationName.Should().Be(OrganisationName);

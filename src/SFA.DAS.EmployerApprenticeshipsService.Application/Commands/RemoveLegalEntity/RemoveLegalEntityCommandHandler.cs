@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -12,6 +11,7 @@ using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.NServiceBus;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
         private readonly IAgreementService _agreementService;
         private readonly IMembershipRepository _membershipRepository;
-        private readonly IEndpointInstance _endpoint;
+        private readonly IEventPublisher _eventPublisher;
 
         public RemoveLegalEntityCommandHandler(
             IValidator<RemoveLegalEntityCommand> validator,
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             IEmployerAgreementEventFactory employerAgreementEventFactory,
             IAgreementService agreementService,
             IMembershipRepository membershipRepository,
-            IEndpointInstance endpoint)
+            IEventPublisher eventPublisher)
         {
             _validator = validator;
             _logger = logger;
@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             _employerAgreementEventFactory = employerAgreementEventFactory;
             _agreementService = agreementService;
             _membershipRepository = membershipRepository;
-            _endpoint = endpoint;
+            _eventPublisher = eventPublisher;
         }
 
         protected override async Task HandleCore(RemoveLegalEntityCommand message)
@@ -107,16 +107,16 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             long accountId, long agreementId, bool agreementSigned, string createdBy,
             long legalEntityId, string organisationName, string userRef)
         {
-            return _endpoint.Publish(new RemovedLegalEntityEvent
+            return _eventPublisher.Publish<RemovedLegalEntityEvent>(e =>
             {
-                AccountId = accountId,
-                AgreementId = agreementId,
-                LegalEntityId = legalEntityId,
-                AgreementSigned = agreementSigned,
-                OrganisationName = organisationName,
-                Created = DateTime.UtcNow,
-                UserName = createdBy,
-                UserRef = Guid.Parse(userRef)
+                e.AccountId = accountId;
+                e.AgreementId = agreementId;
+                e.LegalEntityId = legalEntityId;
+                e.AgreementSigned = agreementSigned;
+                e.OrganisationName = organisationName;
+                e.Created = DateTime.UtcNow;
+                e.UserName = createdBy;
+                e.UserRef = Guid.Parse(userRef);
             });
         }
 
