@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.HashingService;
+using SFA.DAS.NServiceBus.Testing;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
         private RenameEmployerAccountCommand _command;
         private MembershipView _owner;
         private Mock<IAccountEventFactory> _accountEventFactory;
-        private TestableEndpointInstance _endpoint;
+        private TestableEventPublisher _eventPublisher;
 
         [SetUp]
         public void Arrange()
@@ -79,10 +80,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
             _mediator = new Mock<IMediator>();
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _accountEventFactory = new Mock<IAccountEventFactory>();
-            _endpoint = new TestableEndpointInstance();
+            _eventPublisher = new TestableEventPublisher();
 
             _commandHandler = new RenameEmployerAccountCommandHandler(
-                _endpoint,
+                _eventPublisher,
                 _repository.Object,
                 _membershipRepository.Object,
                 _validator.Object,
@@ -131,9 +132,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
             await _commandHandler.Handle(_command);
 
             //Assert
-            var publishedMessages = _endpoint.PublishedMessages;
-            publishedMessages.Length.Should().Be(1);
-            publishedMessages.First().Message.Should().BeOfType<ChangedAccountNameEvent>();
+
+            _eventPublisher.Events.Should().HaveCount(1);
+            _eventPublisher.Events.First().Should().BeOfType<ChangedAccountNameEvent>();
         }
 
         [Test]
@@ -146,7 +147,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
             Assert.ThrowsAsync<Exception>(() => _commandHandler.Handle(_command));
 
             //Assert
-            _endpoint.SentMessages.Should().BeEmpty();
+            _eventPublisher.Events.Should().BeEmpty();
         }
     }
 }

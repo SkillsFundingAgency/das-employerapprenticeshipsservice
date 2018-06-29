@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Moq;
-using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
@@ -11,6 +10,7 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
+using SFA.DAS.NServiceBus;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -91,7 +91,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 _mediator.Object,
                 _genericEventFactory.Object,
                 _legalEntityEventFactory.Object,
-                Mock.Of<IEndpointInstance>(),
+                Mock.Of<IEventPublisher>(),
                 _hashingService.Object,
                 _agreementService.Object);
         }
