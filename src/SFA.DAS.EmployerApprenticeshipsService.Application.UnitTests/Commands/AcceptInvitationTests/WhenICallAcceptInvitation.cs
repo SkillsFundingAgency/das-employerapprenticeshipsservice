@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Messages.Events;
+using SFA.DAS.NServiceBus.Testing;
 using SFA.DAS.TimeProvider;
 using System;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IUserAccountRepository> _userAccountRepository;
         private Mock<IAuditService> _auditService;
-        private TestableEndpointInstance _endpoint;
+        private TestableEventPublisher _eventPublisher;
         private Mock<IValidator<AcceptInvitationCommand>> _validator;
 
         [SetUp]
@@ -48,7 +49,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
             _membershipRepository = new Mock<IMembershipRepository>();
             _userAccountRepository = new Mock<IUserAccountRepository>();
             _auditService = new Mock<IAuditService>();
-            _endpoint = new TestableEndpointInstance();
+            _eventPublisher = new TestableEventPublisher();
             _validator = new Mock<IValidator<AcceptInvitationCommand>>();
 
             _validator.Setup(x => x.Validate(It.IsAny<AcceptInvitationCommand>())).Returns(new ValidationResult());
@@ -63,7 +64,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
                 _membershipRepository.Object,
                 _userAccountRepository.Object,
                 _auditService.Object,
-                _endpoint,
+                _eventPublisher,
                 _validator.Object);
         }
 
@@ -174,11 +175,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
             await _handler.Handle(new AcceptInvitationCommand());
 
             //Assert
-            _endpoint.PublishedMessages.Should().HaveCount(1);
+            _eventPublisher.Events.Should().HaveCount(1);
 
-            var message = _endpoint.PublishedMessages.Select(x => x.Message)
-                                                     .OfType<UserJoinedEvent>()
-                                                     .Single();
+            var message = _eventPublisher.Events.OfType<UserJoinedEvent>().Single();
 
             message.UserName.Should().Be(user.FullName);
         }

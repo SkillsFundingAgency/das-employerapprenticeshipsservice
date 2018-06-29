@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using NServiceBus;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Messages.Events;
+using SFA.DAS.NServiceBus;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreement
@@ -11,16 +11,16 @@ namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreement
     public class CreateEmployerAgreementCommandHandler : AsyncRequestHandler<CreateEmployerAgreementCommand>
     {
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
-        private readonly IEndpointInstance _endpoint;
+        private readonly IEventPublisher _eventPublisher;
         private readonly IValidator<CreateEmployerAgreementCommand> _validator;
 
         public CreateEmployerAgreementCommandHandler(
             IEmployerAgreementRepository employerAgreementRepository,
-            IEndpointInstance endpoint,
+            IEventPublisher eventPublisher,
             IValidator<CreateEmployerAgreementCommand> validator)
         {
             _employerAgreementRepository = employerAgreementRepository;
-            _endpoint = endpoint;
+            _eventPublisher = eventPublisher;
             _validator = validator;
         }
 
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreement
                                 message.AccountId,
                                 message.LegalEntityId);
 
-            await _endpoint.Publish<CreatedAgreementEvent>(c =>
+            await _eventPublisher.Publish<CreatedAgreementEvent>(c =>
             {
                 c.AccountId = message.AccountId;
                 c.AgreementId = newAgreementId;
