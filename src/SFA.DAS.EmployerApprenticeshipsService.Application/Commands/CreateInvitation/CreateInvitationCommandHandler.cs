@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
@@ -11,6 +10,7 @@ using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.Notifications.Api.Types;
+using SFA.DAS.NServiceBus;
 using SFA.DAS.TimeProvider;
 using System;
 using System.Collections.Generic;
@@ -27,23 +27,19 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
         private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
         private readonly IValidator<CreateInvitationCommand> _validator;
         private readonly IUserRepository _userRepository;
-        private readonly IEndpointInstance _endpoint;
+        private readonly IEventPublisher _eventPublisher;
 
         public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator,
             EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration, IValidator<CreateInvitationCommand> validator,
-            IUserRepository userRepository, IEndpointInstance endpoint)
+            IUserRepository userRepository, IEventPublisher eventPublisher)
         {
-            if (invitationRepository == null)
-                throw new ArgumentNullException(nameof(invitationRepository));
-            if (membershipRepository == null)
-                throw new ArgumentNullException(nameof(membershipRepository));
             _invitationRepository = invitationRepository;
             _membershipRepository = membershipRepository;
             _mediator = mediator;
             _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
             _validator = validator;
             _userRepository = userRepository;
-            _endpoint = endpoint;
+            _eventPublisher = eventPublisher;
         }
 
         protected override async Task HandleCore(CreateInvitationCommand message)
@@ -141,13 +137,13 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
 
         private Task PublishUserInvitedEvent(long accountId, string personInvited, string invitedByUserName, Guid invitedByUserRef)
         {
-            return _endpoint.Publish(new InvitedUserEvent
+            return _eventPublisher.Publish<InvitedUserEvent>(e =>
             {
-                AccountId = accountId,
-                PersonInvited = personInvited,
-                UserName = invitedByUserName,
-                UserRef = invitedByUserRef,
-                Created = DateTime.UtcNow
+                e.AccountId = accountId;
+                e.PersonInvited = personInvited;
+                e.UserName = invitedByUserName;
+                e.UserRef = invitedByUserRef;
+                e.Created = DateTime.UtcNow;
             });
         }
     }
