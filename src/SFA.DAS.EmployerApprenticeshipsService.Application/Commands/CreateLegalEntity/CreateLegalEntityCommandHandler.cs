@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -13,6 +12,7 @@ using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.HashingService;
+using SFA.DAS.NServiceBus;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly ILegalEntityEventFactory _legalEntityEventFactory;
 
-        private readonly IEndpointInstance _endpoint;
+        private readonly IEventPublisher _eventPublisher;
         private readonly IHashingService _hashingService;
         private readonly IAgreementService _agreementService;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             IMediator mediator,
             IGenericEventFactory genericEventFactory,
             ILegalEntityEventFactory legalEntityEventFactory,
-            IEndpointInstance endpoint,
+            IEventPublisher eventPublisher,
             IHashingService hashingService,
             IAgreementService agreementService,
             IEmployerAgreementRepository employerAgreementRepository)
@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             _mediator = mediator;
             _genericEventFactory = genericEventFactory;
             _legalEntityEventFactory = legalEntityEventFactory;
-            _endpoint = endpoint;
+            _eventPublisher = eventPublisher;
             _hashingService = hashingService;
             _agreementService = agreementService;
             _employerAgreementRepository = employerAgreementRepository;
@@ -100,7 +100,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
         private Task PublishLegalEntityAddedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, Guid userRef)
         {
-            return _endpoint.Publish<AddedLegalEntityEvent>(c =>
+            return _eventPublisher.Publish<AddedLegalEntityEvent>(c =>
             {
                 c.AccountId = accountId;
                 c.AgreementId = agreementId;
@@ -114,7 +114,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
         private Task PublishAgreementCreatedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, Guid userRef)
         {
-            return _endpoint.Publish<CreatedAgreementEvent>(c =>
+            return _eventPublisher.Publish<CreatedAgreementEvent>(c =>
             {
                 c.AgreementId = agreementId;
                 c.LegalEntityId = legalEntityId;

@@ -1,5 +1,4 @@
 using MediatR;
-using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
@@ -9,6 +8,7 @@ using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Messages.Events;
+using SFA.DAS.NServiceBus;
 using SFA.DAS.TimeProvider;
 using System;
 using System.Collections.Generic;
@@ -24,14 +24,14 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
         private readonly IUserAccountRepository _userAccountRepository;
         private readonly IAuditService _auditService;
         private readonly IValidator<AcceptInvitationCommand> _validator;
-        private readonly IEndpointInstance _endpoint;
+        private readonly IEventPublisher _eventPublisher;
         private readonly ILog _logger;
 
         public AcceptInvitationCommandHandler(IInvitationRepository invitationRepository,
             IMembershipRepository membershipRepository,
             IUserAccountRepository userAccountRepository,
             IAuditService auditService,
-            IEndpointInstance endpoint,
+            IEventPublisher eventPublisher,
             IValidator<AcceptInvitationCommand> validator,
             ILog logger)
         {
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
             _membershipRepository = membershipRepository;
             _userAccountRepository = userAccountRepository;
             _auditService = auditService;
-            _endpoint = endpoint;
+            _eventPublisher = eventPublisher;
             _validator = validator;
             _logger = logger;
         }
@@ -123,13 +123,12 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
 
         private Task PublishUserJoinedMessage(long accountId, User user)
         {
-            return _endpoint.Publish(new UserJoinedEvent
+            return _eventPublisher.Publish<UserJoinedEvent>(e =>
             {
-                AccountId = accountId,
-                UserName = user.FullName,
-                UserRef = user.ExternalId,
-                CreatedAt = DateTime.UtcNow
-
+                e.AccountId = accountId;
+                e.UserName = user.FullName;
+                e.UserRef = user.ExternalId;
+                e.CreatedAt = DateTime.UtcNow;
             });
         }
     }
