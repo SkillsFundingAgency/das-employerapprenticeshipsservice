@@ -1,5 +1,4 @@
 using MediatR;
-using NServiceBus;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
@@ -8,6 +7,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.NServiceBus;
 using System;
 using SFA.DAS.Provider.Events.Api.Types;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 {
     public class RefreshPaymentDataCommandHandler : AsyncRequestHandler<RefreshPaymentDataCommand>
     {
-        private readonly IEndpointInstance _endpoint;
+        private readonly IEventPublisher _eventPublisher;
         private readonly IValidator<RefreshPaymentDataCommand> _validator;
         private readonly IPaymentService _paymentService;
         private readonly IDasLevyRepository _dasLevyRepository;
@@ -27,14 +27,14 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
         private readonly ILog _logger;
 
         public RefreshPaymentDataCommandHandler(
-            IEndpointInstance endpoint,
+            IEventPublisher eventPublisher,
             IValidator<RefreshPaymentDataCommand> validator,
             IPaymentService paymentService,
             IDasLevyRepository dasLevyRepository,
             IMediator mediator,
             ILog logger)
         {
-            _endpoint = endpoint;
+            _eventPublisher = eventPublisher;
             _validator = validator;
             _paymentService = paymentService;
             _dasLevyRepository = dasLevyRepository;
@@ -96,12 +96,12 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             {
                 var payment = newPayments[index];
 
-                paymentEventTasks[index] = _endpoint.Publish(new CreatedPaymentEvent
+                paymentEventTasks[index] = _eventPublisher.Publish<CreatedPaymentEvent>(e =>
                 {
-                    AccountId = payment.EmployerAccountId,
-                    ProviderName = payment.ProviderName,
-                    Amount = payment.Amount,
-                    CreatedAt = DateTime.UtcNow
+                    e.AccountId = payment.EmployerAccountId;
+                    e.ProviderName = payment.ProviderName;
+                    e.Amount = payment.Amount;
+                    e.CreatedAt = DateTime.UtcNow;
                 });
             }
 

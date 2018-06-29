@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -10,6 +9,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.HashingService;
+using SFA.DAS.NServiceBus;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
 {
     public class RenameEmployerAccountCommandHandler : AsyncRequestHandler<RenameEmployerAccountCommand>
     {
-        private readonly IEndpointInstance _endpoint;
+        private readonly IEventPublisher _eventPublisher;
         private readonly IEmployerAccountRepository _accountRepository;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IValidator<RenameEmployerAccountCommand> _validator;
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
         private readonly IAccountEventFactory _accountEventFactory;
 
         public RenameEmployerAccountCommandHandler(
-            IEndpointInstance endpoint,
+            IEventPublisher eventPublisher,
             IEmployerAccountRepository accountRepository,
             IMembershipRepository membershipRepository,
             IValidator<RenameEmployerAccountCommand> validator,
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
             IGenericEventFactory genericEventFactory,
             IAccountEventFactory accountEventFactory)
         {
-            _endpoint = endpoint;
+            _eventPublisher = eventPublisher;
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
             _validator = validator;
@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
         private Task PublishAccountRenamedMessage(
             long accountId, string previousName, string currentName, string creatorName, string creatorUserRef)
         {
-            return _endpoint.Publish<ChangedAccountNameEvent>(e =>
+            return _eventPublisher.Publish<ChangedAccountNameEvent>(e =>
             {
                 e.PreviousName = previousName;
                 e.CurrentName = currentName;
