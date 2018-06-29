@@ -18,6 +18,7 @@ using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.HashingService;
+using SFA.DAS.NServiceBus.Testing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         private AddPayeToAccountCommandHandler _addPayeToAccountCommandHandler;
         private Mock<IValidator<AddPayeToAccountCommand>> _validator;
         private Mock<IAccountRepository> _accountRepository;
-        private TestableEndpointInstance _endpointInstance;
+        private TestableEventPublisher _eventPublisher;
         private Mock<IHashingService> _hashingService;
         private Mock<IMediator> _mediator;
         private Mock<IGenericEventFactory> _genericEventFactory;
@@ -45,7 +46,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         [SetUp]
         public void Arrange()
         {
-            _endpointInstance = new TestableEndpointInstance();
+            _eventPublisher = new TestableEventPublisher();
 
             _accountRepository = new Mock<IAccountRepository>();
 
@@ -64,7 +65,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             _addPayeToAccountCommandHandler = new AddPayeToAccountCommandHandler(
                 _validator.Object,
                 _accountRepository.Object,
-                _endpointInstance,
+                _eventPublisher,
                 _hashingService.Object,
                 _mediator.Object,
                 _genericEventFactory.Object,
@@ -133,11 +134,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             await _addPayeToAccountCommandHandler.Handle(command);
 
             //Assert
-            _endpointInstance.PublishedMessages.Length.Should().Be(1);
+            _eventPublisher.Events.Should().HaveCount(1);
 
-            var message = _endpointInstance.PublishedMessages.Select(x => x.Message)
-                                                             .OfType<AddedPayeSchemeEvent>()
-                                                             .Single();
+            var message = _eventPublisher.Events.OfType<AddedPayeSchemeEvent>().Single();
 
             message.PayeRef.Should().Be(command.Empref);
             message.AccountId.Should().Be(ExpectedAccountId);

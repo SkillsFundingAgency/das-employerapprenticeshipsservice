@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.NServiceBus.Testing;
 using SFA.DAS.Provider.Events.Api.Types;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         private Mock<ILog> _logger;
         private List<PaymentDetails> _paymentDetails;
         private List<Guid> _existingPaymentIds;
-        private TestableEndpointInstance _endpoint;
+        private TestableEventPublisher _eventPublisher;
 
         [SetUp]
         public void Arrange()
@@ -78,10 +79,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
-            _endpoint = new TestableEndpointInstance();
+            _eventPublisher = new TestableEventPublisher();
 
             _handler = new RefreshPaymentDataCommandHandler(
-                _endpoint,
+                _eventPublisher,
                 _validator.Object,
                 _paymentService.Object,
                 _dasLevyRepository.Object,
@@ -265,11 +266,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(new RefreshPaymentDataCommand());
 
             //Assert
-            _endpoint.PublishedMessages.Should().HaveCount(1);
+            _eventPublisher.Events.Should().HaveCount(1);
 
-            var message = _endpoint.PublishedMessages.Select(x => x.Message)
-                                                     .OfType<CreatedPaymentEvent>()
-                                                     .Single();
+            var message = _eventPublisher.Events.OfType<CreatedPaymentEvent>().Single();
+
             message.AccountId.Should().Be(AccountId);
             message.Amount.Should().Be(Amount);
             message.ProviderName.Should().Be(ProviderName);
@@ -286,7 +286,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             Assert.ThrowsAsync<Exception>(() => _handler.Handle(new RefreshPaymentDataCommand()));
 
             //Assert
-            _endpoint.PublishedMessages.Should().BeEmpty();
+            _eventPublisher.Events.Should().BeEmpty();
         }
     }
 }

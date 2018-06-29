@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Moq;
-using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types.Events.Agreement;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
@@ -16,6 +15,7 @@ using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.Events.Api.Types;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.NServiceBus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,7 +83,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
                 _employerAgreementEventFactory.Object,
                 _agreementService.Object,
                 _membershipRepository.Object,
-                Mock.Of<IEndpointInstance>());
+                Mock.Of<IEventPublisher>());
         }
 
         [Test]
