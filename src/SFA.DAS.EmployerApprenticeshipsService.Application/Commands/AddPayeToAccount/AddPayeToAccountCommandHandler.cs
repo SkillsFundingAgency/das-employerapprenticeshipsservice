@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -13,6 +12,7 @@ using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.HashingService;
+using SFA.DAS.NServiceBus;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
         private readonly IValidator<AddPayeToAccountCommand> _validator;
         private readonly IAccountRepository _accountRepository;
-        private readonly IEndpointInstance _endpoint;
+        private readonly IEventPublisher _eventPublisher;
         private readonly IHashingService _hashingService;
         private readonly IMediator _mediator;
         private readonly IGenericEventFactory _genericEventFactory;
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         public AddPayeToAccountCommandHandler(
             IValidator<AddPayeToAccountCommand> validator,
             IAccountRepository accountRepository,
-            IEndpointInstance endpoint,
+            IEventPublisher eventPublisher,
             IHashingService hashingService,
             IMediator mediator,
             IGenericEventFactory genericEventFactory,
@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         {
             _validator = validator;
             _accountRepository = accountRepository;
-            _endpoint = endpoint;
+            _eventPublisher = eventPublisher;
             _hashingService = hashingService;
             _mediator = mediator;
             _genericEventFactory = genericEventFactory;
@@ -112,7 +112,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
         private Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef)
         {
-            return _endpoint.Publish<AddedPayeSchemeEvent>(e =>
+            return _eventPublisher.Publish<AddedPayeSchemeEvent>(e =>
             {
                 e.PayeRef = payeRef;
                 e.AccountId = accountId;

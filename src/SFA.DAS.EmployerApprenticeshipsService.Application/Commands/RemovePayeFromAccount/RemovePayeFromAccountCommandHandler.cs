@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using NServiceBus;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -11,6 +10,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.HashingService;
+using SFA.DAS.NServiceBus;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
         private readonly IHashingService _hashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
-        private readonly IEndpointInstance _endpoint;
+        private readonly IEventPublisher _eventPublisher;
         private readonly IMembershipRepository _membershipRepository;
 
         [ServiceBusConnectionKey("employer_shared")]
@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             IHashingService hashingService,
             IGenericEventFactory genericEventFactory,
             IPayeSchemeEventFactory payeSchemeEventFactory,
-            IEndpointInstance endpoint,
+            IEventPublisher eventPublisher,
             IMembershipRepository membershipRepository)
         {
             _mediator = mediator;
@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             _hashingService = hashingService;
             _genericEventFactory = genericEventFactory;
             _payeSchemeEventFactory = payeSchemeEventFactory;
-            _endpoint = endpoint;
+            _eventPublisher = eventPublisher;
             _membershipRepository = membershipRepository;
         }
 
@@ -95,13 +95,13 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 
         private Task QueuePayeRemovedMessage(string payeRef, long accountId, string organisationName, string userName, string userRef)
         {
-            return _endpoint.Publish(new DeletedPayeSchemeEvent
+            return _eventPublisher.Publish<DeletedPayeSchemeEvent>(e =>
             {
-                AccountId = accountId,
-                PayeRef = payeRef,
-                OrganisationName = organisationName,
-                UserName = userName,
-                UserRef = Guid.Parse(userRef)
+                e.AccountId = accountId;
+                e.PayeRef = payeRef;
+                e.OrganisationName = organisationName;
+                e.UserName = userName;
+                e.UserRef = Guid.Parse(userRef);
             });
         }
 
