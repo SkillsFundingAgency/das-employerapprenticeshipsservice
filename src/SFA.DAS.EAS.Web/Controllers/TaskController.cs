@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("dismissTask", Name = "DismissTask")]
         public async Task<ActionResult> DismissTask(DismissTaskViewModel viewModel)
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
             {
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }

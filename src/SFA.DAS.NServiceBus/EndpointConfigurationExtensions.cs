@@ -25,6 +25,13 @@ namespace SFA.DAS.NServiceBus
             return config;
         }
 
+        public static EndpointConfiguration SetupPurgeOnStartup(this EndpointConfiguration config)
+        {
+            config.PurgeOnStartup(true);
+
+            return config;
+        }
+
         public static EndpointConfiguration SetupRouting(this EndpointConfiguration config)
         {
 

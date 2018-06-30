@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
             {
                 var currentUser = (from user in _database.Value.Users
                                    join member in _database.Value.Memberships on user.Id equals member.UserId
-                                   where user.ExternalId.ToString().Equals(message.ExternalUserId) &&
+                                   where user.Ref.ToString().Equals(message.ExternalUserId) &&
                                          member.AccountId.Equals(accountId)
                                    select user).Single();
 

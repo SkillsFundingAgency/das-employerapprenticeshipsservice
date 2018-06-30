@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
                 ReceiverAccountHashedId = message.ReceiverAccountHashedId,
                 ReceiverAccountName = message.ReceiverAccountName,
                 ApprovedByUserId = message.ApprovedByUserId,
-                ApprovedByUserExternalId = message.ApprovedByUserExternalId,
+                ApprovedByUserExternalId = message.ApprovedByUserRef,
                 ApprovedByUserName = message.ApprovedByUserName,
                 CreatedAt = message.Created
             });

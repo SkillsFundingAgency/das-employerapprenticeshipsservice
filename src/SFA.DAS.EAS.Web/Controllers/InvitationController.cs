@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("invite")]
         public ActionResult Invite()
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
             {
                 return View();
             }
@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route]
         public async Task<ActionResult> All()
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
             {
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("view")]
         public async Task<ActionResult> Details(string invitationId)
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
             {
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }
@@ -82,7 +82,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("accept")]
         public async Task<ActionResult> Accept(long invitation, UserInvitationsViewModel model)
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
             {
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }
@@ -94,7 +94,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }
 
-            await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
             
             var flashMessage = new FlashMessageViewModel
             {
@@ -114,12 +114,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("create")]
         public async Task<ActionResult> Create(InviteTeamMemberViewModel model)
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
             {
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);     
             }
 
-            await _invitationOrchestrator.CreateInvitation(model, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            await _invitationOrchestrator.CreateInvitation(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }

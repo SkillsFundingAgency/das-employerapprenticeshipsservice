@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Application.Commands.ApproveTransferConnectionInvitation
         protected override async Task HandleCore(ApproveTransferConnectionInvitationCommand message)
         {
             var approverAccount = await _employerAccountRepository.GetAccountById(message.AccountId.Value);
-            var approverUser = await _userRepository.GetUserById(message.UserId.Value);
+            var approverUser = await _userRepository.GetUserByRef(message.UserRef.Value);
             var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetTransferConnectionInvitationById(message.TransferConnectionInvitationId.Value);
 
             transferConnectionInvitation.Approve(approverAccount, approverUser);

@@ -147,7 +147,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.36\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.39\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Audit.Client, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Client.dll</HintPath>
@@ -281,9 +281,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\IAuthenticationService.cs" />
+    <Compile Include="Authorization\AccountContext.cs" />
+    <Compile Include="Authorization\AuthorizationContext.cs" />
     <Compile Include="Authorization\AuthorizationResult.cs" />
+    <Compile Include="Authorization\CallerContext.cs" />
+    <Compile Include="Authorization\IAccountContext.cs" />
+    <Compile Include="Authorization\IAuthorizationContext.cs" />
     <Compile Include="Authorization\IAuthorizationContextCache.cs" />
     <Compile Include="Authorization\IAuthorizationService.cs" />
+    <Compile Include="Authorization\ICallerContext.cs" />
+    <Compile Include="Authorization\ICallerContextProvider.cs" />
+    <Compile Include="Authorization\IMembershipContext.cs" />
+    <Compile Include="Authorization\IUserContext.cs" />
+    <Compile Include="Authorization\MembershipContext.cs" />
+    <Compile Include="Authorization\UserContext.cs" />
     <Compile Include="Caching\Constants.cs" />
     <Compile Include="Caching\InProcessCache.cs" />
     <Compile Include="Caching\LocalDevCache.cs" />
