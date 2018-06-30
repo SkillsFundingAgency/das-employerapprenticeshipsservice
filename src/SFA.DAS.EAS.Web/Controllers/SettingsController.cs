@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("notifications")]
         public async Task<ActionResult> NotificationSettings()
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var vm = await _userSettingsOrchestrator.GetNotificationSettingsViewModel(userIdClaim);
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("notifications")]
         public async Task<ActionResult> NotificationSettings(NotificationSettingsViewModel vm)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
             await _userSettingsOrchestrator.UpdateNotificationSettings(userIdClaim,
                 vm.NotificationSettings);
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("notifications/unsubscribe/{hashedAccountId}")]
         public async Task<ActionResult> NotificationUnsubscribe(string hashedAccountId)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             
             var url = Url.Action(ControllerConstants.NotificationSettingsActionName);
             var model = await _userSettingsOrchestrator.Unsubscribe(userIdClaim, hashedAccountId, url);

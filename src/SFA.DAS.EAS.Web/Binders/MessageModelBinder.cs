@@ -9,34 +9,20 @@ namespace SFA.DAS.EAS.Web.Binders
 {
     public class MessageModelBinder : DefaultModelBinder
     {
-        private readonly Func<IAuthorizationService> _authorizationService;
+        private readonly Func<ICallerContextProvider> _callContextProvider;
 
-        public MessageModelBinder(Func<IAuthorizationService> authorizationService)
+        public MessageModelBinder(Func<ICallerContextProvider> callContextProvider)
         {
-            _authorizationService = authorizationService;
+            _callContextProvider = callContextProvider;
         }
 
         protected override void BindProperty(ControllerContext controllerContext, ModelBindingContext bindingContext, PropertyDescriptor propertyDescriptor)
         {
-            if (typeof(IAccountMessage).IsAssignableFrom(bindingContext.ModelType) & propertyDescriptor.Name == nameof(IAccountMessage.AccountId))
-            {
-                var authorizationContext = _authorizationService().GetAuthorizationContext();
-                var key = CreateSubPropertyName(bindingContext.ModelName, propertyDescriptor.Name);
-                var value = authorizationContext.AccountContext?.Id;
-                var valueProviderResult = new ValueProviderResult(value, value?.ToString(), CultureInfo.InvariantCulture);
-                var model = (IAccountMessage)bindingContext.Model;
-
-                model.AccountId = value;
-                bindingContext.ModelState.SetModelValue(key, valueProviderResult);
-
-                return;
-            }
-
             if (typeof(IAccountMessage).IsAssignableFrom(bindingContext.ModelType) & propertyDescriptor.Name == nameof(IAccountMessage.AccountHashedId))
             {
-                var authorizationContext = _authorizationService().GetAuthorizationContext();
+                var requestContext = _callContextProvider().GetCallerContext();
                 var key = CreateSubPropertyName(bindingContext.ModelName, propertyDescriptor.Name);
-                var value = authorizationContext.AccountContext?.HashedId;
+                var value = requestContext.AccountHashedId;
                 var valueProviderResult = new ValueProviderResult(value, value, CultureInfo.InvariantCulture);
                 var model = (IAccountMessage)bindingContext.Model;
 
@@ -46,15 +32,29 @@ namespace SFA.DAS.EAS.Web.Binders
                 return;
             }
 
-            if (typeof(IUserMessage).IsAssignableFrom(bindingContext.ModelType) && propertyDescriptor.Name == nameof(IUserMessage.UserId))
+            if (typeof(IAccountMessage).IsAssignableFrom(bindingContext.ModelType) & propertyDescriptor.Name == nameof(IAccountMessage.AccountId))
             {
-                var authorizationContext = _authorizationService().GetAuthorizationContext();
+                var requestContext = _callContextProvider().GetCallerContext();
                 var key = CreateSubPropertyName(bindingContext.ModelName, propertyDescriptor.Name);
-                var value = authorizationContext.UserContext?.Id;
+                var value = requestContext.AccountId;
+                var valueProviderResult = new ValueProviderResult(value, value?.ToString(), CultureInfo.InvariantCulture);
+                var model = (IAccountMessage)bindingContext.Model;
+
+                model.AccountId = value;
+                bindingContext.ModelState.SetModelValue(key, valueProviderResult);
+
+                return;
+            }
+
+            if (typeof(IUserMessage).IsAssignableFrom(bindingContext.ModelType) && propertyDescriptor.Name == nameof(IUserMessage.UserRef))
+            {
+                var requestContext = _callContextProvider().GetCallerContext();
+                var key = CreateSubPropertyName(bindingContext.ModelName, propertyDescriptor.Name);
+                var value = requestContext.UserRef;
                 var valueProviderResult = new ValueProviderResult(value, value?.ToString(), CultureInfo.InvariantCulture);
                 var model = (IUserMessage)bindingContext.Model;
 
-                model.UserId = value;
+                model.UserRef = value;
                 bindingContext.ModelState.SetModelValue(key, valueProviderResult);
 
                 return;

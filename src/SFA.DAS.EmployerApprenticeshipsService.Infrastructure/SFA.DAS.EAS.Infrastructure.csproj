@@ -283,9 +283,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\IAuthenticationService.cs" />
+    <Compile Include="Authorization\AccountContext.cs" />
+    <Compile Include="Authorization\AuthorizationContext.cs" />
     <Compile Include="Authorization\AuthorizationResult.cs" />
+    <Compile Include="Authorization\CallerContext.cs" />
+    <Compile Include="Authorization\IAccountContext.cs" />
+    <Compile Include="Authorization\IAuthorizationContext.cs" />
     <Compile Include="Authorization\IAuthorizationContextCache.cs" />
     <Compile Include="Authorization\IAuthorizationService.cs" />
+    <Compile Include="Authorization\ICallerContext.cs" />
+    <Compile Include="Authorization\ICallerContextProvider.cs" />
+    <Compile Include="Authorization\IMembershipContext.cs" />
+    <Compile Include="Authorization\IUserContext.cs" />
+    <Compile Include="Authorization\MembershipContext.cs" />
+    <Compile Include="Authorization\UserContext.cs" />
     <Compile Include="Caching\Constants.cs" />
     <Compile Include="Caching\InProcessCache.cs" />
     <Compile Include="Caching\LocalDevCache.cs" />

@@ -183,7 +183,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
                 act: fixtures => fixtures.ViewUnsignedAgreements(),
                 assert: (fixtures, result) =>
                 {
-                    fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+                    fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
                     fixtures.Orchestrator.Verify(x => x.Get(fixtures.HashedAccountId, fixtures.UserId));
                     Assert.IsNotNull(result);
                     Assert.AreEqual(result.RouteValues["action"], "AboutYourAgreement");
@@ -229,7 +229,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
                 act: fixtures => fixtures.ViewUnsignedAgreements(),
                 assert: (fixtures, actualResult) =>
                 {
-                    fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+                    fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
                     fixtures.Orchestrator.Verify(x => x.Get(fixtures.HashedAccountId, fixtures.UserId));
                     Assert.IsNotNull(actualResult);
                     Assert.AreEqual(actualResult.RouteValues["action"], "Index");

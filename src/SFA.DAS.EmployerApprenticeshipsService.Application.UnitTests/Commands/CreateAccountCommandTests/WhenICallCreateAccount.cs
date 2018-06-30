@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _eventPublisher = new TestableEventPublisher();
             _mediator = new Mock<IMediator>();
 
-            _user = new User { Id = 33, FirstName = "Bob", LastName = "Green", ExternalId = Guid.NewGuid() };
+            _user = new User { Id = 33, FirstName = "Bob", LastName = "Green", Ref = Guid.NewGuid() };
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserByRefQuery>()))
                 .ReturnsAsync(new GetUserByRefResponse { User = _user });
@@ -103,7 +103,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         public async Task ThenTheIdHashingServiceIsCalledAfterTheAccountIsCreated()
         {
             //Arrange
-            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.ExternalId.ToString() };
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.Ref.ToString() };
 
             //Act
             await _handler.Handle(createAccountCommand);
@@ -116,7 +116,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         public async Task ThenTheIdPublicHashingServiceIsCalledAfterTheAccountIsCreated()
         {
             //Arrange
-            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.ExternalId.ToString() };
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.Ref.ToString() };
 
             //Act
             await _handler.Handle(createAccountCommand);
@@ -131,7 +131,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         public async Task ThenTheAccountIsUpdatedWithTheHashes()
         {
             //Arrange
-            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.ExternalId.ToString() };
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.Ref.ToString() };
 
             //Act
             await _handler.Handle(createAccountCommand);
@@ -144,7 +144,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         public async Task ThenTheHashedIdIsReturnedInTheResponse()
         {
             //Arrange
-            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.ExternalId.ToString() };
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.Ref.ToString() };
 
             //Act
             var actual = await _handler.Handle(createAccountCommand);
@@ -174,7 +174,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 
             var cmd = new CreateAccountCommand
             {
-                ExternalUserId = _user.ExternalId.ToString(),
+                ExternalUserId = _user.Ref.ToString(),
                 OrganisationReferenceNumber = "QWERTY",
                 OrganisationName = "Qwerty Corp",
                 OrganisationAddress = "Innovation Centre, Coventry, CV1 2TT",
@@ -214,7 +214,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 OrganisationType = OrganisationType.CompaniesHouse,
                 OrganisationName = "OrgName",
                 EmployerRefName = "123AB",
-                ExternalUserId = _user.ExternalId.ToString(),
+                ExternalUserId = _user.Ref.ToString(),
                 OrganisationAddress = "Address",
                 OrganisationDateOfInception = new DateTime(2017, 01, 30),
                 OrganisationReferenceNumber = "TYG56",
@@ -238,7 +238,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         public async Task ThenAnOrganisationCodeIsGeneratedIfOneIsNotSupplied()
         {
             //Arrange
-            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.ExternalId.ToString() };
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.Ref.ToString() };
 
             //Act
             await _handler.Handle(createAccountCommand);
@@ -254,7 +254,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             //Arrange
             var expectedPayeRef = "123/abc";
 
-            var createAccountCommand = new CreateAccountCommand { PayeReference = expectedPayeRef, AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.ExternalId.ToString() };
+            var createAccountCommand = new CreateAccountCommand { PayeReference = expectedPayeRef, AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.Ref.ToString() };
 
             //Act
             await _handler.Handle(createAccountCommand);
@@ -265,14 +265,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             payeAddedEvent.PayeRef.Should().Be(expectedPayeRef);
             payeAddedEvent.AccountId.Should().Be(ExpectedAccountId);
             payeAddedEvent.UserName.Should().Be(_user.FullName);
-            payeAddedEvent.UserRef.Should().Be(_user.ExternalId);
+            payeAddedEvent.UserRef.Should().Be(_user.Ref);
         }
 
         [Test]
         public async Task ThenACreatedAccountEventIsPublished()
         {
             //Arrange
-            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.ExternalId.ToString() };
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.Ref.ToString() };
 
             //Act
             await _handler.Handle(createAccountCommand);
@@ -282,7 +282,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 
             createdAccountEvent.AccountId.Should().Be(ExpectedAccountId);
             createdAccountEvent.UserName.Should().Be(_user.FullName);
-            createdAccountEvent.UserRef.Should().Be(_user.ExternalId);
+            createdAccountEvent.UserRef.Should().Be(_user.Ref);
         }
     }
 }

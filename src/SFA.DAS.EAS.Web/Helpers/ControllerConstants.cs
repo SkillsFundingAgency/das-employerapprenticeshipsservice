@@ -71,12 +71,12 @@
         public const string SetupAccountViewName = "SetupAccount";
         public const string SignAgreementViewName = "SignAgreement";
         public const string SignInActionName = "SignIn";
-        public const string UserExternalIdClaimKeyName = "sub";
         public const string SummaryActionName = "Summary";
         public const string ViewTeamActionName = "ViewTeam";
         public const string ViewTeamViewName = "ViewTeam";
         public const string WhatYoullNeedActionName = "WhatYoullNeed";
         public const string TransfersControllerName = "Transfers";
         public const string TransferDetailsViewName = "TransferDetails";
+        public const string UserRefClaimKeyName = "sub";
     }
 }

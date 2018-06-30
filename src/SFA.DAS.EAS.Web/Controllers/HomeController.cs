@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Index")]
         public async Task<ActionResult> Index()
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 await OwinWrapper.UpdateClaims();
@@ -198,7 +198,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 await OwinWrapper.UpdateClaims();
 
-                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
                 var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
                 var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
                 var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);

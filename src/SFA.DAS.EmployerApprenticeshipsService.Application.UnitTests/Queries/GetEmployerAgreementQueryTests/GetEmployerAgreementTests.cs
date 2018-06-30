@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
                     .WithSignedAgreement(AccountId, LegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
                     .WithUser(AccountId, "Buck", "Rogers", out user)
                     .WithCallerAsUnauthorizedUser(),
-                act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.ExternalId),
+                act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.Ref),
                 assert: (fixturesf, r) => r.ShouldThrowExactly<UnauthorizedAccessException>());
         }
 
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
                     .WithSignedAgreement(AccountId, LegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
                     .WithUser(AccountId, "Buck", "Rogers", out user)
                     .WithInvalidRequest(),
-                act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.ExternalId),
+                act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.Ref),
                 assert: (f, r) => r.ShouldThrowExactly<InvalidRequestException>());
         }
 
@@ -83,7 +83,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
                                         .WithAgreement(AccountId, LegalEntityId, 1, EmployerAgreementStatus.Pending, out expectedAgreement)
                                         .WithAgreement(AccountId, LegalEntityId, 2, EmployerAgreementStatus.Pending, out _)
                                         .WithUser(AccountId, "Buck", "Rogers", out user),
-                act: fixtures => fixtures.Handle(HashedAccountId, expectedAgreement.Id, user.ExternalId),
+                act: fixtures => fixtures.Handle(HashedAccountId, expectedAgreement.Id, user.Ref),
                 assert: fixtures => Assert.AreEqual(expectedAgreement.Id, fixtures.Response.EmployerAgreement.Id));
         }
 
@@ -101,7 +101,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
                                         .WithSignedAgreement(AccountId, LegalEntityId, 2, DateTime.Now.AddDays(-30), out latestSignedAgreement)
                                         .WithPendingAgreement(AccountId, LegalEntityId, 3, out pendingAgreement)
                                         .WithUser(AccountId, "Buck", "Rogers", out user),
-                act: fixtures => fixtures.Handle(HashedAccountId, pendingAgreement.Id, user.ExternalId),
+                act: fixtures => fixtures.Handle(HashedAccountId, pendingAgreement.Id, user.Ref),
                 assert: fixtures =>
                 {
                     Assert.AreEqual(pendingAgreement.Id, fixtures.Response.EmployerAgreement.Id);
@@ -120,7 +120,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
                                         .WithAccount(AccountId, HashedAccountId)
                                         .WithPendingAgreement(AccountId, LegalEntityId, 3, out pendingAgreement)
                                         .WithUser(AccountId, "Buck", "Rogers", out user),
-                act: fixtures => fixtures.Handle(HashedAccountId, pendingAgreement.Id, user.ExternalId),
+                act: fixtures => fixtures.Handle(HashedAccountId, pendingAgreement.Id, user.Ref),
                 assert: fixtures =>
                     Assert.IsNull(fixtures.Response.LastSignedAgreement));
         }
@@ -138,7 +138,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
                                         .WithPendingAgreement(AccountId, LegalEntityId, 3, out latestAgreement)
                                         .WithSignedAgreement(AccountId + 1, LegalEntityId, 2, DateTime.Now.AddDays(-30), out _)
                                         .WithUser(AccountId, "Buck", "Rogers", out user),
-                act: fixtures => fixtures.Handle(HashedAccountId, latestAgreement.Id, user.ExternalId),
+                act: fixtures => fixtures.Handle(HashedAccountId, latestAgreement.Id, user.Ref),
                 assert: fixtures =>
                     Assert.IsNull(fixtures.Response.LastSignedAgreement));
         }
@@ -155,7 +155,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
                                         .WithSignedAgreement(AccountId, LegalEntityId, 3, DateTime.Now.AddDays(-10), out latestAgreement)
                                         .WithSignedAgreement(AccountId, LegalEntityId, 2, DateTime.Now.AddDays(-20), out _)
                                         .WithUser(AccountId, "Buck", "Rogers", out user),
-                act: fixtures => fixtures.Handle(HashedAccountId, latestAgreement.Id, user.ExternalId),
+                act: fixtures => fixtures.Handle(HashedAccountId, latestAgreement.Id, user.Ref),
                 assert: fixtures =>
                     Assert.IsNull(fixtures.Response.LastSignedAgreement));
         }
@@ -171,7 +171,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
                                         .WithAccount(AccountId, HashedAccountId)
                                         .WithPendingAgreement(AccountId, LegalEntityId, 2, out latestAgreement)
                                         .WithUser(AccountId, "Buck", "Rogers", out user),
-                act: fixtures => fixtures.Handle(HashedAccountId, latestAgreement.Id, user.ExternalId),
+                act: fixtures => fixtures.Handle(HashedAccountId, latestAgreement.Id, user.Ref),
                 assert: fixtures => Assert.AreEqual(user.FullName, fixtures.Response.EmployerAgreement.SignedByName));
         }
     }

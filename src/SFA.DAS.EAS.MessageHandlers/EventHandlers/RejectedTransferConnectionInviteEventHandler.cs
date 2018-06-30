@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
                 ReceiverAccountHashedId = message.ReceiverAccountHashedId,
                 ReceiverAccountName = message.ReceiverAccountName,
                 RejectorUserId = message.RejectorUserId,
-                RejectorUserExternalId = message.RejectorUserExternalId,
+                RejectorUserExternalId = message.RejectorUserRef,
                 RejectorUserName = message.RejectorUserName,
                 CreatedAt = message.Created
             });

@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
             Command = new SendTransferConnectionInvitationCommand
             {
                 AccountId = SenderAccount.Id,
-                UserId = SenderUser.Id,
+                UserRef = SenderUser.Ref,
                 ReceiverAccountPublicHashedId = ReceiverAccount.PublicHashedId
             };
         }
@@ -129,7 +129,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
         {
             SenderUser = new User
             {
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 Id = 123456,
                 FirstName = "John",
                 LastName = "Doe"

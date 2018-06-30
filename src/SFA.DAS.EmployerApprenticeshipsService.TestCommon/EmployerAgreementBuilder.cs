@@ -209,7 +209,7 @@ namespace SFA.DAS.EAS.TestCommon
 
             user = new User
             {
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 Id = Users.Count+1,
                 Email = $"{firstName}.{lastName}@test.com",
                 FirstName = firstName,
