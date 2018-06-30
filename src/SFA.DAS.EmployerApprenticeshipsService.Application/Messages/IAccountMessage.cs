@@ -2,7 +2,7 @@
 {
     public interface IAccountMessage
     {
-        long? AccountId { get; set; }
         string AccountHashedId { get; set; }
+        long? AccountId { get; set; }
     }
 }

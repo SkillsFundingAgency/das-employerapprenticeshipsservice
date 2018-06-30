@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;
@@ -60,13 +58,13 @@ namespace SFA.DAS.EAS.Infrastructure.Authorization
                 .ProjectTo<AccountContext>(_configurationProvider)
                 .Future();
 
-            var userContextQuery = callerContext.UserExternalId == null ? null : _db.Value.Users
-                .Where(u => u.ExternalId == callerContext.UserExternalId.Value)
+            var userContextQuery = callerContext.UserRef == null ? null : _db.Value.Users
+                .Where(u => u.Ref == callerContext.UserRef.Value)
                 .ProjectTo<UserContext>(_configurationProvider)
                 .Future();
 
-            var membershipContextQuery = callerContext.AccountId == null || callerContext.UserExternalId == null ? null : _db.Value.Memberships
-                .Where(m => m.Account.Id == callerContext.AccountId.Value && m.User.ExternalId == callerContext.UserExternalId.Value)
+            var membershipContextQuery = callerContext.AccountId == null || callerContext.UserRef == null ? null : _db.Value.Memberships
+                .Where(m => m.Account.Id == callerContext.AccountId.Value && m.User.Ref == callerContext.UserRef.Value)
                 .ProjectTo<MembershipContext>(_configurationProvider)
                 .Future();
 

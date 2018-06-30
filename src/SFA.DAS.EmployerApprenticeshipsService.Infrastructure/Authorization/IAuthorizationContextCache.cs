@@ -1,6 +1,4 @@
-﻿using SFA.DAS.EAS.Domain.Models.Authorization;
-
-namespace SFA.DAS.EAS.Infrastructure.Authorization
+﻿namespace SFA.DAS.EAS.Infrastructure.Authorization
 {
     public interface IAuthorizationContextCache
     {

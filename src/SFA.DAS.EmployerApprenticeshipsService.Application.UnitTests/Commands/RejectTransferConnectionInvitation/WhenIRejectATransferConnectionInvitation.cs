@@ -20,7 +20,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
         private RejectTransferConnectionInvitationCommandHandler _handler;
         private RejectTransferConnectionInvitationCommand _command;
         private Mock<IEmployerAccountRepository> _employerAccountRepository;
-        private Mock<IHashingService> _hashingService;
         private Mock<ITransferConnectionInvitationRepository> _transferConnectionInvitationRepository;
         private Mock<IUserRepository> _userRepository;
         private TransferConnectionInvitation _transferConnectionInvitation;
@@ -33,14 +32,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
         public void Arrange()
         {
             _employerAccountRepository = new Mock<IEmployerAccountRepository>();
-            _hashingService = new Mock<IHashingService>();
             _transferConnectionInvitationRepository = new Mock<ITransferConnectionInvitationRepository>();
             _userRepository = new Mock<IUserRepository>();
 
             _receiverUser = new User
             {
-                ExternalId = Guid.NewGuid(),
                 Id = 123456,
+                Ref = Guid.NewGuid(),
                 FirstName = "John",
                 LastName = "Doe"
             };
@@ -65,10 +63,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
                 .WithReceiverAccount(_receiverAccount)
                 .WithStatus(TransferConnectionInvitationStatus.Pending)
                 .Build();
-
-            _hashingService.Setup(h => h.DecodeValue(_receiverAccount.HashedId)).Returns(_receiverAccount.Id);
-            _hashingService.Setup(h => h.DecodeValue(_senderAccount.HashedId)).Returns(_senderAccount.Id);
-            _userRepository.Setup(r => r.GetUserById(_receiverUser.Id)).ReturnsAsync(_receiverUser);
+            
+            _userRepository.Setup(r => r.GetUserByRef(_receiverUser.Ref)).ReturnsAsync(_receiverUser);
             _employerAccountRepository.Setup(r => r.GetAccountById(_senderAccount.Id)).ReturnsAsync(_senderAccount);
             _employerAccountRepository.Setup(r => r.GetAccountById(_receiverAccount.Id)).ReturnsAsync(_receiverAccount);
             _transferConnectionInvitationRepository.Setup(r => r.GetTransferConnectionInvitationById(_transferConnectionInvitation.Id)).ReturnsAsync(_transferConnectionInvitation);
@@ -82,33 +78,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
             _command = new RejectTransferConnectionInvitationCommand
             {
                 AccountId = _receiverAccount.Id,
-                UserId = _receiverUser.Id,
+                UserRef = _receiverUser.Ref,
                 TransferConnectionInvitationId = _transferConnectionInvitation.Id
             };
-        }
-
-        [Test]
-        public async Task ThenShouldGetReceiversAccount()
-        {
-            await _handler.Handle(_command);
-
-            _employerAccountRepository.Verify(r => r.GetAccountById(_receiverAccount.Id), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenShouldGetUser()
-        {
-            await _handler.Handle(_command);
-
-            _userRepository.Verify(r => r.GetUserById(_receiverUser.Id), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenShouldGetTransferConnectionInvitation()
-        {
-            await _handler.Handle(_command);
-
-            _transferConnectionInvitationRepository.Verify(r => r.GetTransferConnectionInvitationById(_transferConnectionInvitation.Id), Times.Once);
         }
 
         [Test]
@@ -147,7 +119,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInv
             Assert.That(message.ReceiverAccountHashedId, Is.EqualTo(_receiverAccount.HashedId));
             Assert.That(message.ReceiverAccountId, Is.EqualTo(_receiverAccount.Id));
             Assert.That(message.ReceiverAccountName, Is.EqualTo(_receiverAccount.Name));
-            Assert.That(message.RejectorUserExternalId, Is.EqualTo(_receiverUser.ExternalId));
+            Assert.That(message.RejectorUserRef, Is.EqualTo(_receiverUser.Ref));
             Assert.That(message.RejectorUserId, Is.EqualTo(_receiverUser.Id));
             Assert.That(message.RejectorUserName, Is.EqualTo(_receiverUser.FullName));
             Assert.That(message.SenderAccountHashedId, Is.EqualTo(_senderAccount.HashedId));

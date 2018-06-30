@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
             _receiverUser = new User
             {
                 Id = 123456,
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 FirstName = "John",
                 LastName = "Doe"
             };
@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
                 .WithStatus(TransferConnectionInvitationStatus.Pending)
                 .Build();
 
-            _userRepository.Setup(r => r.GetUserById(_receiverUser.Id)).ReturnsAsync(_receiverUser);
+            _userRepository.Setup(r => r.GetUserByRef(_receiverUser.Ref)).ReturnsAsync(_receiverUser);
             _employerAccountRepository.Setup(r => r.GetAccountById(_senderAccount.Id)).ReturnsAsync(_senderAccount);
             _employerAccountRepository.Setup(r => r.GetAccountById(_receiverAccount.Id)).ReturnsAsync(_receiverAccount);
             _transferConnectionInvitationRepository.Setup(r => r.GetTransferConnectionInvitationById(_transferConnectionInvitation.Id)).ReturnsAsync(_transferConnectionInvitation);
@@ -79,33 +79,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
             _command = new ApproveTransferConnectionInvitationCommand
             {
                 AccountId = _receiverAccount.Id,
-                UserId = _receiverUser.Id,
+                UserRef = _receiverUser.Ref,
                 TransferConnectionInvitationId = _transferConnectionInvitation.Id
             };
-        }
-
-        [Test]
-        public async Task ThenShouldGetReceiversAccount()
-        {
-            await _handler.Handle(_command);
-
-            _employerAccountRepository.Verify(r => r.GetAccountById(_receiverAccount.Id), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenShouldGetUser()
-        {
-            await _handler.Handle(_command);
-
-            _userRepository.Verify(r => r.GetUserById(_receiverUser.Id), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenShouldGetTransferConnectionInvitation()
-        {
-            await _handler.Handle(_command);
-
-            _transferConnectionInvitationRepository.Verify(r => r.GetTransferConnectionInvitationById(_transferConnectionInvitation.Id), Times.Once);
         }
 
         [Test]
@@ -131,7 +107,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
         }
 
         [Test]
-        public async Task ThenShouldPublishApprovedTransferConnectionInvitationEvent()
+        public async Task ThenShouldPublishApprovedTransferConnectionRequestEvent()
         {
             await _handler.Handle(_command);
 
@@ -140,7 +116,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
 
             Assert.That(messages.Count, Is.EqualTo(1));
             Assert.That(message, Is.Not.Null);
-            Assert.That(message.ApprovedByUserExternalId, Is.EqualTo(_receiverUser.ExternalId));
+            Assert.That(message.ApprovedByUserRef, Is.EqualTo(_receiverUser.Ref));
             Assert.That(message.ApprovedByUserId, Is.EqualTo(_receiverUser.Id));
             Assert.That(message.ApprovedByUserName, Is.EqualTo(_receiverUser.FullName));
             Assert.That(message.Created, Is.EqualTo(_transferConnectionInvitation.Changes.Select(c => c.CreatedDate).Cast<DateTime?>().SingleOrDefault()));

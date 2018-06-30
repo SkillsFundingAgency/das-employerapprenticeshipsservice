@@ -27,9 +27,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return _db.Value.Users.SingleOrDefaultAsync(u => u.Id == id);
         }
 
-        public Task<User> GetUserByExternalId(Guid externalId)
+        public Task<User> GetUserByRef(Guid @ref)
         {
-            return _db.Value.Users.SingleOrDefaultAsync(u => u.ExternalId == externalId);
+            return _db.Value.Users.SingleOrDefaultAsync(u => u.Ref == @ref);
         }
 
         public async Task<User> GetUserByRef(string id)

@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.NServiceBus
 {
-    public class Command : ICommand
+    public abstract class Command : ICommand
     {
     }
 }
