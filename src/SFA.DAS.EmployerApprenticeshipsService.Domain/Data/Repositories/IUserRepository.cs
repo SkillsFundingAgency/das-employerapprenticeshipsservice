@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Domain.Data.Repositories
@@ -6,6 +7,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
     public interface IUserRepository
     {
         Task<User> GetUserById(long id);
+        Task<User> GetUserByRef(Guid @ref);
         Task<User> GetUserByRef(string id);
         Task<User> GetByEmailAddress(string emailAddress);
         Task Create(User registerUser);

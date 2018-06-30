@@ -1,4 +1,6 @@
-﻿using StructureMap;
+﻿using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Data;
+using StructureMap;
 
 namespace SFA.DAS.EAS.Jobs.DependencyResolution
 {
@@ -11,6 +13,8 @@ namespace SFA.DAS.EAS.Jobs.DependencyResolution
                 s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
+
+            For<EmployerAccountDbContext>().Use(c => new EmployerAccountDbContext(c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
         }
     }
 }

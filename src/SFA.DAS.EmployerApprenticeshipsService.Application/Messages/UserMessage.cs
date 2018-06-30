@@ -1,12 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 
 namespace SFA.DAS.EAS.Application.Messages
 {
-    public class UserMessage
+    public class UserMessage : IUserMessage
     {
         [IgnoreMap]
         [Required]
-        public long? UserId { get; set; }
+        public Guid? UserRef { get; set; }
     }
 }

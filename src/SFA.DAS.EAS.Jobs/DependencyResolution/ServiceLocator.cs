@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Jobs.DependencyResolution
             _container = container;
         }
 
-        public static T Get<T>()
+        public static T GetInstance<T>()
         {
             return _container.GetInstance<T>();
         }

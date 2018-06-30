@@ -1,0 +1,13 @@
+{
+  "NServiceBus.MessageId": "39ba8e28-c045-419a-8eac-a90f00f49272",
+  "NServiceBus.MessageIntent": "Send",
+  "NServiceBus.ConversationId": "afca8cab-d877-4c9a-90d2-a90f01295df3",
+  "NServiceBus.CorrelationId": "39ba8e28-c045-419a-8eac-a90f00f49272",
+  "NServiceBus.OriginatingMachine": "ELLIOTS-MACBOOK",
+  "NServiceBus.OriginatingEndpoint": "SFA.DAS.EAS.Jobs",
+  "$.diagnostics.originating.hostid": "f0907f1b979de2a6b469328003f4531a",
+  "NServiceBus.ContentType": "application\/json",
+  "NServiceBus.EnclosedMessageTypes": "SFA.DAS.NServiceBus.ProcessOutboxMessageCommand, SFA.DAS.NServiceBus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;SFA.DAS.NServiceBus.Command, SFA.DAS.NServiceBus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+  "NServiceBus.Version": "7.0.1",
+  "NServiceBus.TimeSent": "2018-06-30 18:02:40:831854 Z"
+}
