@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
                 ReceiverAccountHashedId = message.ReceiverAccountHashedId,
                 ReceiverAccountName = message.ReceiverAccountName,
                 DeletedByUserId = message.DeletedByUserId,
-                DeletedByUserExternalId = message.DeletedByUserExternalId,
+                DeletedByUserExternalId = message.DeletedByUserRef,
                 DeletedByUserName = message.DeletedByUserName,
                 DeletedByAccountId = message.DeletedByAccountId,
                 CreatedAt = message.Created

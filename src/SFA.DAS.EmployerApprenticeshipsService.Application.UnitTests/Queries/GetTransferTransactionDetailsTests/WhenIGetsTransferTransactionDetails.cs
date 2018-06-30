@@ -22,8 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
         private const long ReceiverAccountId = 2;
         private const string ReceiverAccountName = "Test Receiver";
         private const string ReceiverPublicHashedId = "DEF456";
-
-        private const long UserId = 45;
+        
         private const string PeriodEnd = "1718-R01";
 
         private const string FirstCourseName = "Course 1";
@@ -60,8 +59,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             {
                 AccountId = ReceiverAccountId,
                 TargetAccountPublicHashedId = SenderPublicHashedId,
-                PeriodEnd = PeriodEnd,
-                UserId = UserId
+                PeriodEnd = PeriodEnd
             };
 
             _response = new GetTransferTransactionDetailsResponse();
@@ -249,8 +247,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
             {
                 AccountId = SenderAccountId,
                 TargetAccountPublicHashedId = ReceiverPublicHashedId,
-                PeriodEnd = PeriodEnd,
-                UserId = UserId
+                PeriodEnd = PeriodEnd
             };
 
             //Act

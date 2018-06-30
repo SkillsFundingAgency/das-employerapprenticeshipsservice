@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Infrastructure.Features;

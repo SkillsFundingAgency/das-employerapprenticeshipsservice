@@ -310,7 +310,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             {
                 HashedAccountId = HashedAccountId,
                 AgreementId = HashedAgreementId,
-                ExternalUserId = CurrentUser.ExternalId.ToString()
+                ExternalUserId = CurrentUser.Ref.ToString()
             };
 
             HashingService.Setup(x => x.DecodeValue(HashedAccountId)).Returns(AccountId);
@@ -372,7 +372,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
         {
             CurrentUser = new User
             {
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 Id = 2,
                 Email = "test@test.com",
                 FirstName = "Test",

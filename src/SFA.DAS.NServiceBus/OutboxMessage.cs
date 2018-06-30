@@ -7,14 +7,14 @@ namespace SFA.DAS.NServiceBus
     public class OutboxMessage
     {
         public virtual string Id { get; protected set; }
-        public virtual DateTime Created { get; protected set; }
-        public virtual DateTime? Dispatched { get; protected set; }
+        public virtual DateTime Sent { get; protected set; }
+        public virtual DateTime? Published { get; protected set; }
         public virtual string Data { get; protected set; }
 
         public OutboxMessage(IEnumerable<Event> events)
         {
             Id = GuidComb.NewGuidComb().ToString();
-            Created = DateTime.UtcNow;
+            Sent = DateTime.UtcNow;
             Data = JsonConvert.SerializeObject(events, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
         }
 
@@ -22,16 +22,19 @@ namespace SFA.DAS.NServiceBus
         {
         }
 
-        public IEnumerable<Event> Dispatch()
+        public IEnumerable<Event> Publish()
         {
-            if (Dispatched != null)
-            {
-                return new List<Event>();
-            }
+            RequiresNotAlreadyPublished();
 
-            Dispatched = DateTime.UtcNow;
+            Published = DateTime.UtcNow;
 
             return JsonConvert.DeserializeObject<List<Event>>(Data, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+        }
+
+        private void RequiresNotAlreadyPublished()
+        {
+            if (Published != null)
+                throw new Exception("Requires not already published");
         }
     }
 }

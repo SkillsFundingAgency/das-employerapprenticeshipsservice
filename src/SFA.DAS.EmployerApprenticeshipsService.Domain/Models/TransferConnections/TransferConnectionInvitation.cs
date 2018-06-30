@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 e.SenderAccountHashedId = SenderAccount.HashedId;
                 e.SenderAccountId = SenderAccount.Id;
                 e.SenderAccountName = SenderAccount.Name;
-                e.SentByUserExternalId = senderUser.ExternalId;
+                e.SentByUserExternalId = senderUser.Ref;
                 e.SentByUserId = senderUser.Id;
                 e.SentByUserName = senderUser.FullName;
                 e.TransferConnectionRequestId = Id;
@@ -76,9 +76,9 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
 
             Publish<ApprovedTransferConnectionRequestEvent>(e =>
             {
-                e.ApprovedByUserExternalId = approverUser.ExternalId;
                 e.ApprovedByUserId = approverUser.Id;
                 e.ApprovedByUserName = approverUser.FullName;
+                e.ApprovedByUserRef = approverUser.Ref;
                 e.Created = now;
                 e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
                 e.ReceiverAccountId = ReceiverAccount.Id;
@@ -127,9 +127,9 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
             {
                 e.Created = now;
                 e.DeletedByAccountId = deleterAccount.Id;
-                e.DeletedByUserExternalId = deleterUser.ExternalId;
                 e.DeletedByUserId = deleterUser.Id;
                 e.DeletedByUserName = deleterUser.FullName;
+                e.DeletedByUserRef = deleterUser.Ref;
                 e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
                 e.ReceiverAccountId = ReceiverAccount.Id;
                 e.ReceiverAccountName = ReceiverAccount.Name;
@@ -162,9 +162,9 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
                 e.ReceiverAccountId = ReceiverAccount.Id;
                 e.ReceiverAccountName = ReceiverAccount.Name;
-                e.RejectorUserExternalId = rejectorUser.ExternalId;
                 e.RejectorUserId = rejectorUser.Id;
                 e.RejectorUserName = rejectorUser.FullName;
+                e.RejectorUserRef = rejectorUser.Ref;
                 e.SenderAccountHashedId = SenderAccount.HashedId;
                 e.SenderAccountId = SenderAccount.Id;
                 e.SenderAccountName = SenderAccount.Name;

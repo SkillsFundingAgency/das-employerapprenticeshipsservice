@@ -189,7 +189,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(string hashedAccountId)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
             return View(vm);
         }
@@ -199,7 +199,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, userIdClaim);
 
             if (response.Status == HttpStatusCode.OK)
@@ -232,7 +232,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private string GetUserId()
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             return userIdClaim ?? "";
         }
 

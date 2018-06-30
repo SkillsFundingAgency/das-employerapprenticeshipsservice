@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Account.Api
 
             endpointConfiguration
                 .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
-                .SetupEntityFrameworkBehavior<EmployerAccountDbContext>(GlobalConfiguration.Configuration.Filters)
+                .SetupEntityFrameworkBehavior(GlobalConfiguration.Configuration.Filters)
                 .SetupErrorQueue()
                 .SetupInstallers()
                 .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Account.Api
                 .SetupNLogFactory()
                 .SetupStructureMapBuilder(container);
 
-            _endpoint = Endpoint.Start(endpointConfiguration).SetupOutboxSchedule().GetAwaiter().GetResult();
+            _endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
             container.Configure(c =>
             {

@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             {
                 FirstName = "Bob",
                 LastName = "Green",
-                ExternalId = Guid.NewGuid()
+                Ref = Guid.NewGuid()
             };
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserByRefQuery>()))
@@ -141,7 +141,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             message.PayeRef.Should().Be(command.Empref);
             message.AccountId.Should().Be(ExpectedAccountId);
             message.UserName.Should().Be(_user.FullName);
-            message.UserRef.Should().Be(_user.ExternalId);
+            message.UserRef.Should().Be(_user.Ref);
         }
 
         [Test]
