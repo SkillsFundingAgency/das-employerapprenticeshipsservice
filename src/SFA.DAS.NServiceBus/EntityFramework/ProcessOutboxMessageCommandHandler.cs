@@ -18,7 +18,7 @@ namespace SFA.DAS.NServiceBus.EntityFramework
         public async Task Handle(ProcessOutboxMessageCommand message, IMessageHandlerContext context)
         {
             var outboxMessage = await _db.Value.OutboxMessages.SingleAsync(m => m.Id == context.MessageId);
-            var events = outboxMessage.Dispatch();
+            var events = outboxMessage.Publish();
             var tasks = events.Select(context.Publish);
 
             await Task.WhenAll(tasks);

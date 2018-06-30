@@ -1,14 +1,13 @@
-﻿using System.Data.Entity;
-using System.Web.Http.Filters;
+﻿using System.Web.Http.Filters;
 using NServiceBus;
 
 namespace SFA.DAS.NServiceBus.EntityFramework.WebApi
 {
     public static class EndpointConfigurationExtensions
     {
-        public static EndpointConfiguration SetupEntityFrameworkBehavior<T>(this EndpointConfiguration config, HttpFilterCollection filters) where T : DbContext, IOutboxDbContext
+        public static EndpointConfiguration SetupEntityFrameworkBehavior(this EndpointConfiguration config, HttpFilterCollection filters)
         {
-            config.SetupEntityFrameworkBehavior<T>();
+            config.SetupEntityFrameworkBehavior();
 
             filters.Add(new UnitOfWorkManagerFilter());
 

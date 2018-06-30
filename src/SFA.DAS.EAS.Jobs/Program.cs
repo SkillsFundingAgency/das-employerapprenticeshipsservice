@@ -24,6 +24,8 @@ namespace SFA.DAS.EAS.Jobs
             {
                 config.UseDevelopmentSettings();
             }
+            
+            config.UseTimers();
 
             var host = new JobHost(config);
 
@@ -54,14 +56,6 @@ namespace SFA.DAS.EAS.Jobs
             {
                 c.For<IMessageSession>().Use(endpoint);
             });
-
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                await Task.Delay(3000, cancellationToken).ConfigureAwait(false);
-            }
-
-            await endpoint.Stop().ConfigureAwait(false);
-            container.Dispose();
         }
     }
 }

@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Data.Common;
-using System.Data.Entity;
 using System.Linq;
 using NServiceBus;
 
 namespace SFA.DAS.NServiceBus.EntityFramework
 {
-    public class UnitOfWorkManager<T> : IUnitOfWorkManager where T : DbContext, IOutboxDbContext
+    public class UnitOfWorkManager : IUnitOfWorkManager
     {
         private readonly IMessageSession _messageSession;
         private readonly IUnitOfWorkContext _unitOfWorkContext;
         private readonly Lazy<DbConnection> _connection;
-        private readonly Lazy<T> _db;
+        private readonly Lazy<IOutboxDbContext> _db;
         private DbTransaction _transaction;
 
         public UnitOfWorkManager(
             IMessageSession messageSession,
             IUnitOfWorkContext unitOfWorkContext,
             Lazy<DbConnection> connection,
-            Lazy<T> db)
+            Lazy<IOutboxDbContext> db)
         {
             _messageSession = messageSession;
             _unitOfWorkContext = unitOfWorkContext;
@@ -28,10 +27,9 @@ namespace SFA.DAS.NServiceBus.EntityFramework
 
         public void Begin()
         {
-            _connection.Value.TryOpenAsync().GetAwaiter().GetResult();
-            _transaction = _connection.Value.BeginTransaction();
-            _unitOfWorkContext.Set(_connection.Value);
-            _unitOfWorkContext.Set(_transaction);
+            OpenConnection();
+            BeginTransaction();
+            SetUnitOfWorkContext();
         }
 
         public void End(Exception ex = null)
@@ -48,14 +46,32 @@ namespace SFA.DAS.NServiceBus.EntityFramework
             }
         }
 
+        private void BeginTransaction()
+        {
+            _transaction = _connection.Value.BeginTransaction();
+        }
+
         private void CommitTransaction()
         {
             _transaction.Commit();
         }
 
+        private void OpenConnection()
+        {
+            try
+            {
+                _connection.Value.Open();
+            }
+            catch
+            {
+                _connection.Value.Dispose();
+                throw;
+            }
+        }
+
         private void SaveChanges()
         {
-            _db.Value.SaveChanges();
+            _db.Value.SaveChangesAsync().GetAwaiter().GetResult();
         }
 
         private void SaveOutboxMessage()
@@ -64,25 +80,31 @@ namespace SFA.DAS.NServiceBus.EntityFramework
 
             if (events.Any())
             {
-                var message = new OutboxMessage(events);
+                var outboxMessage = new OutboxMessage(events);
 
-                _db.Value.OutboxMessages.Add(message);
-                _db.Value.SaveChanges();
+                _db.Value.OutboxMessages.Add(outboxMessage);
+                _db.Value.SaveChangesAsync().GetAwaiter().GetResult();
             }
         }
 
         private void SendProcessOutboxMessageCommand()
         {
-            var outboxMessage = _db.Value.ChangeTracker.Entries<OutboxMessage>().Select(e => e.Entity).SingleOrDefault();
+            var outboxMessage = _db.Value.OutboxMessages.Local.SingleOrDefault();
 
             if (outboxMessage != null)
             {
-                var command = new ProcessOutboxMessageCommand();
                 var options = new SendOptions();
-
+                
                 options.SetMessageId(outboxMessage.Id);
-                _messageSession.Send(command, options).GetAwaiter().GetResult();
+
+                _messageSession.Send(new ProcessOutboxMessageCommand(), options).GetAwaiter().GetResult();
             }
+        }
+
+        private void SetUnitOfWorkContext()
+        {
+            _unitOfWorkContext.Set(_connection.Value);
+            _unitOfWorkContext.Set(_transaction);
         }
     }
 }

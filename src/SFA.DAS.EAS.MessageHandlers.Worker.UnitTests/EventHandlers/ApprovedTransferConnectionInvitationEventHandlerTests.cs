@@ -197,7 +197,7 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
         {
             AccountOwner1 = new User
             {
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 Id = 1,
                 FirstName = "John",
                 LastName = "Doe",
@@ -211,7 +211,7 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
         {
             AccountOwner2 = new User
             {
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 Id = 2,
                 FirstName = "John2",
                 LastName = "Doe2",
@@ -226,7 +226,7 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
         {
             AccountOwner3NonNotify = new User
             {
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 Id = 3,
                 FirstName = "John3",
                 LastName = "Doe3",
@@ -240,7 +240,7 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
         {
             AccountOwner4NonOwner = new User
             {
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 Id = 4,
                 FirstName = "John3",
                 LastName = "Doe3",
@@ -254,7 +254,7 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
         {
             ReceiverAccountOwner = new User
             {
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 Id = 99,
                 FirstName = "Johnreceiver",
                 LastName = "Doereceiver",

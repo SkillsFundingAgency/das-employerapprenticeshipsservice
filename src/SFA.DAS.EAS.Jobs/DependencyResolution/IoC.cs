@@ -9,6 +9,7 @@ namespace SFA.DAS.EAS.Jobs.DependencyResolution
         {
             return new Container(c =>
             {
+                c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
                 c.AddRegistry<NServiceBusRegistry>();
                 c.AddRegistry<DefaultRegistry>();

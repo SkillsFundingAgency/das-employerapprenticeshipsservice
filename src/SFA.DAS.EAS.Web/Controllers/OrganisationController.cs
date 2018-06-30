@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Code = code,
                 Address = address,
                 IncorporatedDate = incorporated,
-                ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName),
+                ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName),
                 LegalEntityStatus = string.IsNullOrWhiteSpace(legalEntityStatus) ? null : legalEntityStatus,
                 Source = organisationType,
                 PublicSectorDataSource = publicSectorDataSource,
@@ -95,7 +95,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("nextStep")]
         public async Task<ActionResult> OrganisationAddedNextSteps(string organisationName, string hashedAccountId)
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
             var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId);
 
@@ -108,7 +108,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("nextStepSearch")]
         public async Task<ActionResult> OrganisationAddedNextStepsSearch(string organisationName, string hashedAccountId, string hashedAgreementId)
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
             var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, hashedAgreementId);
 
@@ -122,7 +122,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("nextStep")]
         public async Task<ActionResult> GoToNextStep(string nextStep, string hashedAccountId, string organisationName, string hashedAgreementId)
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
             var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
 

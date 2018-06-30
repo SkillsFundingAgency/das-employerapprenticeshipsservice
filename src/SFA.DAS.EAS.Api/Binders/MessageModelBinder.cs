@@ -12,12 +12,12 @@ namespace SFA.DAS.EAS.Account.Api.Binders
     {
         public bool BindModel(HttpActionContext actionContext, ModelBindingContext bindingContext)
         {
-            if (typeof(IAccountMessage).IsAssignableFrom(bindingContext.ModelMetadata.ContainerType) && bindingContext.ModelMetadata.PropertyName == nameof(IAccountMessage.AccountId))
+            if (typeof(IAccountMessage).IsAssignableFrom(bindingContext.ModelMetadata.ContainerType) && bindingContext.ModelMetadata.PropertyName == nameof(IAccountMessage.AccountHashedId))
             {
-                var authorizationContext = actionContext.GetService<IAuthorizationService>().GetAuthorizationContext();
+                var requestContext = actionContext.GetService<ICallerContextProvider>().GetCallerContext();
                 var key = bindingContext.ModelName;
-                var value = authorizationContext.AccountContext?.Id;
-                var valueProviderResult = new ValueProviderResult(value, value?.ToString(), CultureInfo.InvariantCulture);
+                var value = requestContext.AccountHashedId;
+                var valueProviderResult = new ValueProviderResult(value, value, CultureInfo.InvariantCulture);
 
                 bindingContext.Model = value;
                 bindingContext.ModelState.SetModelValue(key, valueProviderResult);
@@ -25,12 +25,12 @@ namespace SFA.DAS.EAS.Account.Api.Binders
                 return true;
             }
 
-            if (typeof(IAccountMessage).IsAssignableFrom(bindingContext.ModelMetadata.ContainerType) && bindingContext.ModelMetadata.PropertyName == nameof(IAccountMessage.AccountHashedId))
+            if (typeof(IAccountMessage).IsAssignableFrom(bindingContext.ModelMetadata.ContainerType) && bindingContext.ModelMetadata.PropertyName == nameof(IAccountMessage.AccountId))
             {
-                var authorizationContext = actionContext.GetService<IAuthorizationService>().GetAuthorizationContext();
+                var requestContext = actionContext.GetService<ICallerContextProvider>().GetCallerContext();
                 var key = bindingContext.ModelName;
-                var value = authorizationContext.AccountContext?.HashedId;
-                var valueProviderResult = new ValueProviderResult(value, value, CultureInfo.InvariantCulture);
+                var value = requestContext.AccountId;
+                var valueProviderResult = new ValueProviderResult(value, value?.ToString(), CultureInfo.InvariantCulture);
 
                 bindingContext.Model = value;
                 bindingContext.ModelState.SetModelValue(key, valueProviderResult);

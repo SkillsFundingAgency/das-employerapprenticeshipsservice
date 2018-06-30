@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
 {
-    public class GetTransferTransactionDetailsQuery : MembershipMessage, IAsyncRequest<GetTransferTransactionDetailsResponse>
+    public class GetTransferTransactionDetailsQuery : AccountMessage, IAsyncRequest<GetTransferTransactionDetailsResponse>
     {
 
         [Required]

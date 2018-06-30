@@ -1,5 +1,4 @@
 ﻿using System.Net.Http;
-using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 
 namespace SFA.DAS.EAS.Account.Api.Authorization
