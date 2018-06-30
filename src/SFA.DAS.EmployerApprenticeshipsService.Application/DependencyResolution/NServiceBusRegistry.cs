@@ -10,9 +10,10 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         public NServiceBusRegistry()
         {
             For<IEventPublisher>().Use<EventPublisher>();
-            For<IOutboxDbContext>().Use<EmployerAccountDbContext>();
+            For<IOutboxDbContext>().Use(c => c.GetInstance<EmployerAccountDbContext>());
+            For<IProcessOutboxMessagesJob>().Use<ProcessOutboxMessagesJob>();
             For<IUnitOfWorkContext>().Use<UnitOfWorkContext>();
-            For<IUnitOfWorkManager>().Use<UnitOfWorkManager<EmployerAccountDbContext>>();
+            For<IUnitOfWorkManager>().Use<UnitOfWorkManager>();
         }
     }
 }

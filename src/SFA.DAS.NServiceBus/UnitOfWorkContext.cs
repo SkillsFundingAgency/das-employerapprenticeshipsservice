@@ -34,14 +34,14 @@ namespace SFA.DAS.NServiceBus
             return (T)_data[typeof(T).FullName];
         }
 
-        public void Set<T>(T value)
-        {
-            _data[typeof(T).FullName] = value;
-        }
-
         public IEnumerable<Event> GetEvents()
         {
             return Events.Value.Select(e => e());
+        }
+
+        public void Set<T>(T value)
+        {
+            _data[typeof(T).FullName] = value;
         }
     }
 }

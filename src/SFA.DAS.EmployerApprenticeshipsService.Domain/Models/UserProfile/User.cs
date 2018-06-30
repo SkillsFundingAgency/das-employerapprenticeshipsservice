@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 
@@ -9,16 +8,16 @@ namespace SFA.DAS.EAS.Domain.Models.UserProfile
     {
         public virtual long Id { get; set; }
 
-        public virtual Guid ExternalId
+        public virtual Guid Ref
         {
-            get => _externalId ?? Guid.Parse(_userRef);
-            set => _externalId = value;
+            get => _ref ?? Guid.Parse(_userRef);
+            set => _ref = value;
         }
 
-        [Obsolete("Please use 'ExternalId' instead.")]
+        [Obsolete("Please use 'Ref' instead.")]
         public string UserRef
         {
-            get => _userRef ?? _externalId.Value.ToString();
+            get => _userRef ?? _ref.Value.ToString();
             set => _userRef = value;
         }
 
@@ -26,12 +25,10 @@ namespace SFA.DAS.EAS.Domain.Models.UserProfile
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName}";
-
-        public virtual ICollection<UserAccountSetting> UserAccountSettings { get;  protected set; } = new List<UserAccountSetting>();
-
         public virtual ICollection<Membership> Memberships { get; protected set; } = new List<Membership>();
-
-        private Guid? _externalId;
+        public virtual ICollection<UserAccountSetting> UserAccountSettings { get;  protected set; } = new List<UserAccountSetting>();
+        
+        private Guid? _ref;
         private string _userRef;
     }
 }

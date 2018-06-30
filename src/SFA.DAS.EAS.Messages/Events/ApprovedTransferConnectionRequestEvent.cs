@@ -5,9 +5,9 @@ namespace SFA.DAS.EAS.Messages.Events
 {
     public class ApprovedTransferConnectionRequestEvent : Event
     {
-        public Guid ApprovedByUserExternalId { get; set; }
         public long ApprovedByUserId { get; set; }
         public string ApprovedByUserName { get; set; }
+        public Guid ApprovedByUserRef { get; set; }
         public string ReceiverAccountHashedId { get; set; }
         public long ReceiverAccountId { get; set; }
         public string ReceiverAccountName { get; set; }

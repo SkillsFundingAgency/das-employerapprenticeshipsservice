@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
                     e.SenderAccountHashedId == f.SenderAccount.HashedId &&
                     e.SenderAccountId == f.SenderAccount.Id &&
                     e.SenderAccountName == f.SenderAccount.Name &&
-                    e.SentByUserExternalId == f.SenderUser.ExternalId &&
+                    e.SentByUserExternalId == f.SenderUser.Ref &&
                     e.SentByUserId == f.SenderUser.Id &&
                     e.SentByUserName == f.SenderUser.FullName &&
                     e.TransferConnectionRequestId == f.TransferConnectionInvitation.Id));
@@ -99,7 +99,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
         {
             SenderUser = new User
             {
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 Id = 123456,
                 FirstName = "John",
                 LastName = "Doe"
