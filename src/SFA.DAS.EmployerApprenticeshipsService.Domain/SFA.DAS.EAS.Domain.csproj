@@ -58,7 +58,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAzure.ServiceBus.3.3.2\lib\net45-full\Microsoft.ServiceBus.dll</HintPath>
+      <HintPath>..\packages\WindowsAzure.ServiceBus.4.1.0\lib\net45-full\Microsoft.ServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
@@ -66,13 +66,11 @@
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=8.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.Storage.8.7.0\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\NLog.4.5.3\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus.Core, Version=7.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\packages\NServiceBus.7.0.1\lib\net452\NServiceBus.Core.dll</HintPath>
@@ -169,6 +167,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -216,7 +215,6 @@
     <Compile Include="Interfaces\IAgreementService.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\IAzureAdAuthenticationService.cs" />
-    <Compile Include="Interfaces\ICallerContextProvider.cs" />
     <Compile Include="Interfaces\ICommitmentService.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
     <Compile Include="Interfaces\ICurrentDateTime.cs" />
@@ -248,16 +246,6 @@
     <Compile Include="Models\ApprenticeshipProvider\Provider.cs" />
     <Compile Include="Models\ApprenticeshipProvider\Providers.cs" />
     <Compile Include="Models\ApprenticeshipProvider\ProvidersView.cs" />
-    <Compile Include="Models\Authorization\AccountContext.cs" />
-    <Compile Include="Models\Authorization\CallerContext.cs" />
-    <Compile Include="Models\Authorization\IAccountContext.cs" />
-    <Compile Include="Models\Authorization\IAuthorizationContext.cs" />
-    <Compile Include="Models\Authorization\ICallerContext.cs" />
-    <Compile Include="Models\Authorization\IMembershipContext.cs" />
-    <Compile Include="Models\Authorization\IUserContext.cs" />
-    <Compile Include="Models\Authorization\AuthorizationContext.cs" />
-    <Compile Include="Models\Authorization\MembershipContext.cs" />
-    <Compile Include="Models\Authorization\UserContext.cs" />
     <Compile Include="Models\Commitment\Commitment.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementStatus.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementTemplate.cs" />

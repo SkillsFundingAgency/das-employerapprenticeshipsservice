@@ -9,7 +9,6 @@ using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
-using SFA.DAS.EAS.Domain.Models.Authorization;
 using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Authorization;
@@ -205,7 +204,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
             CallerContextProvider.Setup(p => p.GetCallerContext()).Returns(new CallerContext
             {
                 AccountId = account?.Id,
-                UserExternalId = user.ExternalId
+                UserRef = user.Ref
             });
 
             return this;
@@ -249,7 +248,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
                 existingUser = new User
                 {
                     Id = userId,
-                    ExternalId = Guid.NewGuid()
+                    Ref = Guid.NewGuid()
                 };
 
                 Users.Add(existingUser);

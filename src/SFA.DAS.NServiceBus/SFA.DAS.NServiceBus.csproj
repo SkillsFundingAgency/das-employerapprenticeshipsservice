@@ -75,8 +75,8 @@
     <Reference Include="NServiceBus.Persistence.Sql, Version=4.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\packages\NServiceBus.Persistence.Sql.4.1.1\lib\net452\NServiceBus.Persistence.Sql.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap, Version=4.3.0.442, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StructureMap.4.3.0\lib\net45\StructureMap.dll</HintPath>
+    <Reference Include="StructureMap, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StructureMap.4.6.1\lib\net45\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -94,28 +94,28 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.Helpers.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.6\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.WebPages.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -130,19 +130,18 @@
   <ItemGroup>
     <Compile Include="AzureServiceBus\EndpointConfigurationExtensions.cs" />
     <Compile Include="EntityFramework\Mvc\EndpointConfigurationExtensions.cs" />
-    <Compile Include="EntityFramework\Mvc\IEndpointInstanceTaskExtensions.cs" />
     <Compile Include="EntityFramework\Mvc\UnitOfWorkManagerFilter.cs" />
+    <Compile Include="EntityFramework\ProcessOutboxMessagesJob.cs" />
     <Compile Include="EntityFramework\WebApi\EndpointConfigurationExtensions.cs" />
     <Compile Include="EntityFramework\WebApi\UnitOfWorkManagerFilter.cs" />
     <Compile Include="EventPublisher.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="EndpointConfigurationExtensions.cs" />
-    <Compile Include="EntityFramework\DbConnectionExtensions.cs" />
     <Compile Include="EntityFramework\EndpointConfigurationExtensions.cs" />
     <Compile Include="EntityFramework\IOutboxDbContext.cs" />
+    <Compile Include="IProcessOutboxMessagesJob.cs" />
     <Compile Include="IUnitOfWorkManager.cs" />
     <Compile Include="EntityFramework\ProcessOutboxMessageCommandHandler.cs" />
-    <Compile Include="EntityFramework\ProcessOutboxMessagesCommandHandler.cs" />
     <Compile Include="EntityFramework\UnitOfWorkBehavior.cs" />
     <Compile Include="EntityFramework\UnitOfWorkContextBehavior.cs" />
     <Compile Include="EntityFramework\UnitOfWorkManager.cs" />
@@ -155,14 +154,13 @@
     <Compile Include="NLog\EndpointConfigurationExtensions.cs" />
     <Compile Include="OutboxMessage.cs" />
     <Compile Include="ProcessOutboxMessageCommand.cs" />
-    <Compile Include="ProcessOutboxMessagesCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StructureMap\EndpointConfigurationExtensions.cs" />
     <Compile Include="Testing\TestableEventPublisher.cs" />
     <Compile Include="UnitOfWorkContext.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using SFA.DAS.EAS.Account.Api.Helpers;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Authorization;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.HashingService;
 
@@ -10,6 +9,8 @@ namespace SFA.DAS.EAS.Account.Api.Authorization
 {
     public class CallerContextProvider : ICallerContextProvider
     {
+        private static readonly string Key = typeof(CallerContext).FullName;
+
         private readonly HttpRequestMessage _httpRequestMessage;
         private readonly IHashingService _hashingService;
 
@@ -21,23 +22,39 @@ namespace SFA.DAS.EAS.Account.Api.Authorization
 
         public ICallerContext GetCallerContext()
         {
-            var accountId = GetAccountId();
-
-            return new CallerContext
+            if (_httpRequestMessage.Properties.ContainsKey(Key))
             {
+                return (CallerContext)_httpRequestMessage.Properties[Key];
+            }
+
+            var accountHashedId = GetAccountHashedId();
+            var accountId = GetAccountId(accountHashedId);
+
+            var requestContext = new CallerContext
+            {
+                AccountHashedId = accountHashedId,
                 AccountId = accountId,
-                UserExternalId = null
+                UserRef = null
             };
+
+            _httpRequestMessage.Properties[Key] = requestContext;
+
+            return requestContext;
         }
 
-        private long? GetAccountId()
+        private string GetAccountHashedId()
         {
             if (!_httpRequestMessage.GetRouteData().Values.TryGetValue(ControllerConstants.AccountHashedIdRouteKeyName, out var accountHashedId))
             {
                 return null;
             }
 
-            if (!_hashingService.TryDecodeValue(accountHashedId.ToString(), out var accountId))
+            return (string)accountHashedId;
+        }
+
+        private long? GetAccountId(string accountHashedId)
+        {
+            if (!_hashingService.TryDecodeValue(accountHashedId, out var accountId))
             {
                 throw new UnauthorizedAccessException();
             }

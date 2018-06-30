@@ -95,7 +95,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
 
             var createdByName = caller.FullName();
-            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.ExternalId);
+            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.Ref);
 
             await PublishAccountCreatedMessage(createAccountResult.AccountId, createdByName, externalUserId);
 

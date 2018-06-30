@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
             if (employerAgreement.StatusId != EmployerAgreementStatus.Signed)
             {
                 employerAgreement.SignedByName = _database.Value.Memberships
-                    .Where(m => m.AccountId == accountId && m.User.ExternalId.ToString() == message.ExternalUserId)
+                    .Where(m => m.AccountId == accountId && m.User.Ref.ToString() == message.ExternalUserId)
                     .AsEnumerable()
                     .Select(m => m.User.FullName)
                     .Single();

@@ -14,6 +14,7 @@ using SFA.DAS.NServiceBus.MsSqlServer;
 using SFA.DAS.NServiceBus.NewtonsoftSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
+using Environment = SFA.DAS.EAS.Infrastructure.DependencyResolution.Environment;
 
 namespace SFA.DAS.EAS.MessageHandlers
 {
@@ -43,7 +44,7 @@ namespace SFA.DAS.EAS.MessageHandlers
 
             endpointConfiguration
                 .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
-                .SetupEntityFrameworkBehavior<EmployerAccountDbContext>()
+                .SetupEntityFrameworkBehavior()
                 .SetupErrorQueue()
                 .SetupInstallers()
                 .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())

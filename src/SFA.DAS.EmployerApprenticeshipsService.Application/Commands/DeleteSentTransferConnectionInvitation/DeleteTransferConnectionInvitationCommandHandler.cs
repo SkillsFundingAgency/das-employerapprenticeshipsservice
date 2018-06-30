@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteSentTransferConnectionInvitatio
         protected override async Task HandleCore(DeleteTransferConnectionInvitationCommand message)
         {
             var deleterAccount = await _employerAccountRepository.GetAccountById(message.AccountId.Value);
-            var deleterUser = await _userRepository.GetUserById(message.UserId.Value);
+            var deleterUser = await _userRepository.GetUserByRef(message.UserRef.Value);
             var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetTransferConnectionInvitationById(message.TransferConnectionInvitationId.Value);
 
             transferConnectionInvitation.Delete(deleterAccount, deleterUser);

@@ -107,7 +107,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands
                     var message = f.UnitOfWorkContext.GetEvents().OfType<DeletedTransferConnectionRequestEvent>().Single();
                     Assert.That(message, Is.Not.Null);
                     Assert.That(message.DeletedByAccountId, Is.EqualTo(deletingAccountId));
-                    Assert.That(message.DeletedByUserExternalId, Is.EqualTo(f.DeleterUser.ExternalId));
+                    Assert.That(message.DeletedByUserRef, Is.EqualTo(f.DeleterUser.Ref));
                     Assert.That(message.DeletedByUserId, Is.EqualTo(f.DeleterUser.Id));
                     Assert.That(message.DeletedByUserName, Is.EqualTo(f.DeleterUser.FullName));
                     Assert.That(message.Created, Is.EqualTo(f.TransferConnectionInvitation.Changes.Select(c => c.CreatedDate).Cast<DateTime?>().SingleOrDefault()));
@@ -223,7 +223,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands
             DeleterUser = new User
             {
                 Id = deletedUserId,
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 FirstName = "John",
                 LastName = "Doe"
             };
@@ -275,7 +275,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands
             var command = new DeleteTransferConnectionInvitationCommand
             {
                 AccountId = deletingAccountId,
-                UserId = DeleterUser.Id,
+                UserRef = DeleterUser.Ref,
                 TransferConnectionInvitationId = TransferConnectionInvitation.Id
             };
 
