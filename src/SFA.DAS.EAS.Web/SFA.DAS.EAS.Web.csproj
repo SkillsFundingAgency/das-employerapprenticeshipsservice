@@ -18,13 +18,13 @@
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <IISExpressSSLPort>443</IISExpressSSLPort>
+    <IISExpressSSLPort>44355</IISExpressSSLPort>
     <TargetFrameworkProfile />
     <Use64BitIISExpress />
   </PropertyGroup>
@@ -343,7 +343,6 @@
     </Reference>
     <Reference Include="StructureMap.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\structuremap.web.4.0.0.315\lib\net40\StructureMap.Web.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -461,12 +460,18 @@
     <Compile Include="App_Start\BinderConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Attributes\ImportModelStateFromTempDataAttribute.cs" />
     <Compile Include="Attributes\ValidateMembershipAttribute.cs" />
     <Compile Include="Authorization\AuthorizationContextCache.cs" />
     <Compile Include="Authorization\CallerContextProvider.cs" />
     <Compile Include="Binders\MessageModelBinder.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
+    <Compile Include="DependencyResolution\ControllerConvention.cs" />
+    <Compile Include="DependencyResolution\DefaultRegistry.cs" />
+    <Compile Include="DependencyResolution\IoC.cs" />
+    <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
+    <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Extensions\ActionDescriptorExtensions.cs" />
     <Compile Include="Extensions\RouteValueDictionaryExtensions.cs" />
     <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
@@ -480,7 +485,6 @@
     <Compile Include="Mappings\ActivityMappings.cs" />
     <Compile Include="Filters\HandleErrorFilter.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Attributes\HttpNotFoundForNullModelAttribute.cs" />
     <Compile Include="Attributes\ValidateModelStateAttribute.cs" />
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
@@ -540,10 +544,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
-    <Compile Include="DependencyResolution\DefaultRegistry.cs" />
-    <Compile Include="DependencyResolution\IoC.cs" />
-    <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
-    <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\DecimalExtensions.cs" />
@@ -1191,11 +1191,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>57196</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/</IISUrl>
+          <IISUrl>https://localhost:44355/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
