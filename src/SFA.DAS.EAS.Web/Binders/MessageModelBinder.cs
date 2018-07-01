@@ -9,18 +9,18 @@ namespace SFA.DAS.EAS.Web.Binders
 {
     public class MessageModelBinder : DefaultModelBinder
     {
-        private readonly Func<ICallerContextProvider> _callContextProvider;
+        private readonly Func<ICallerContextProvider> _callerContextProvider;
 
-        public MessageModelBinder(Func<ICallerContextProvider> callContextProvider)
+        public MessageModelBinder(Func<ICallerContextProvider> callerContextProvider)
         {
-            _callContextProvider = callContextProvider;
+            _callerContextProvider = callerContextProvider;
         }
 
         protected override void BindProperty(ControllerContext controllerContext, ModelBindingContext bindingContext, PropertyDescriptor propertyDescriptor)
         {
             if (typeof(IAccountMessage).IsAssignableFrom(bindingContext.ModelType) & propertyDescriptor.Name == nameof(IAccountMessage.AccountHashedId))
             {
-                var requestContext = _callContextProvider().GetCallerContext();
+                var requestContext = _callerContextProvider().GetCallerContext();
                 var key = CreateSubPropertyName(bindingContext.ModelName, propertyDescriptor.Name);
                 var value = requestContext.AccountHashedId;
                 var valueProviderResult = new ValueProviderResult(value, value, CultureInfo.InvariantCulture);
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Web.Binders
 
             if (typeof(IAccountMessage).IsAssignableFrom(bindingContext.ModelType) & propertyDescriptor.Name == nameof(IAccountMessage.AccountId))
             {
-                var requestContext = _callContextProvider().GetCallerContext();
+                var requestContext = _callerContextProvider().GetCallerContext();
                 var key = CreateSubPropertyName(bindingContext.ModelName, propertyDescriptor.Name);
                 var value = requestContext.AccountId;
                 var valueProviderResult = new ValueProviderResult(value, value?.ToString(), CultureInfo.InvariantCulture);
@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Web.Binders
 
             if (typeof(IUserMessage).IsAssignableFrom(bindingContext.ModelType) && propertyDescriptor.Name == nameof(IUserMessage.UserRef))
             {
-                var requestContext = _callContextProvider().GetCallerContext();
+                var requestContext = _callerContextProvider().GetCallerContext();
                 var key = CreateSubPropertyName(bindingContext.ModelName, propertyDescriptor.Name);
                 var value = requestContext.UserRef;
                 var valueProviderResult = new ValueProviderResult(value, value?.ToString(), CultureInfo.InvariantCulture);

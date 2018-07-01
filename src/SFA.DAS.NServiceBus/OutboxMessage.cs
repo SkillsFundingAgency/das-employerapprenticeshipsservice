@@ -6,14 +6,14 @@ namespace SFA.DAS.NServiceBus
 {
     public class OutboxMessage
     {
-        public virtual string Id { get; protected set; }
+        public virtual Guid Id { get; protected set; }
         public virtual DateTime Sent { get; protected set; }
         public virtual DateTime? Published { get; protected set; }
         public virtual string Data { get; protected set; }
 
         public OutboxMessage(IEnumerable<Event> events)
         {
-            Id = GuidComb.NewGuidComb().ToString();
+            Id = GuidComb.NewGuidComb();
             Sent = DateTime.UtcNow;
             Data = JsonConvert.SerializeObject(events, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
         }
