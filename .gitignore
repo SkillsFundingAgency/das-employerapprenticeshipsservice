@@ -264,6 +264,6 @@ src/Tools/PhantomJS/tools/phantomjs/ChangeLog
 /src/SFA.DAS.EmployerApprenticeshipsService.Infrastructure/Services/ReferenceDataService.cs.LOCAL
 /src/SFA.DAS.EmployerApprenticeshipsService.Domain/Interfaces/IReferenceDataService.cs.REMOTE
 
-# Other
-
-App_Data/
+# NServiceBus
+.learningtransport/
+App_Data/.diagnostics

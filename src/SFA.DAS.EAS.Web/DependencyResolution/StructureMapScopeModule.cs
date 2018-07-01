@@ -1,31 +1,24 @@
-using System.Web;
-using NLog;
-using StructureMap.Web.Pipeline;
+namespace SFA.DAS.EAS.Web.DependencyResolution {
+    using System.Web;
 
-namespace SFA.DAS.EAS.Web.DependencyResolution
-{
-    public class StructureMapScopeModule : IHttpModule
-    {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+    using SFA.DAS.EAS.Web.App_Start;
 
-        public void Dispose()
-        {
+    using StructureMap.Web.Pipeline;
+
+    public class StructureMapScopeModule : IHttpModule {
+        #region Public Methods and Operators
+
+        public void Dispose() {
         }
 
-        public void Init(HttpApplication context)
-        {
-            context.BeginRequest += (sender, e) =>
-            {
-                Logger.Trace("Creating nested container");
-                StructuremapMvc.StructureMapDependencyScope.CreateNestedContainer();
-            };
-
-            context.EndRequest += (sender, e) =>
-            {
-                Logger.Trace("Disposing nested container");
+        public void Init(HttpApplication context) {
+            context.BeginRequest += (sender, e) => StructuremapMvc.StructureMapDependencyScope.CreateNestedContainer();
+            context.EndRequest += (sender, e) => {
                 HttpContextLifecycle.DisposeAndClearAll();
                 StructuremapMvc.StructureMapDependencyScope.DisposeNestedContainer();
             };
         }
+
+        #endregion
     }
 }
