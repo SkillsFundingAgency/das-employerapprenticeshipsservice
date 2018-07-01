@@ -15,6 +15,7 @@ using Owin;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Web;
+using SFA.DAS.EAS.Web.App_Start;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
