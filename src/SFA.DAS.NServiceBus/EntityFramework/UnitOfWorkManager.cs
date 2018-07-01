@@ -95,7 +95,7 @@ namespace SFA.DAS.NServiceBus.EntityFramework
             {
                 var options = new SendOptions();
                 
-                options.SetMessageId(outboxMessage.Id);
+                options.SetMessageId(outboxMessage.Id.ToString());
 
                 _messageSession.Send(new ProcessOutboxMessageCommand(), options).GetAwaiter().GetResult();
             }
