@@ -30,7 +30,7 @@ namespace SFA.DAS.NServiceBus.EntityFramework
             {
                 var options = new SendOptions();
                 
-                options.SetMessageId(i);
+                options.SetMessageId(i.ToString());
 
                 return _messageSession.Send(new ProcessOutboxMessageCommand(), options);
             });
