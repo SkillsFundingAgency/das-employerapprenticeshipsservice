@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
     {
         public RejectedTransferConnectionRequestEventNotificationHandler Handler { get; set; }
         public EmployerApprenticeshipsServiceConfiguration Configuration { get; set; }
-        public Mock<EmployerAccountDbContext> Db { get; set; }
+        public Mock<EmployerAccountsDbContext> Db { get; set; }
         public Mock<ILog> Logger { get; set; }
         public Mock<INotificationsApi> NotificationsApiClient { get; set; }
         public RejectedTransferConnectionRequestEvent Event { get; set; }
@@ -68,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
         public RejectedTransferConnectionRequestEventNotificationHandlerTestFixture()
         {
             Configuration = new EmployerApprenticeshipsServiceConfiguration();
-            Db = new Mock<EmployerAccountDbContext>();
+            Db = new Mock<EmployerAccountsDbContext>();
             Logger = new Mock<ILog>();
             NotificationsApiClient = new Mock<INotificationsApi>();
 
@@ -87,7 +87,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
                 Configuration,
                 Logger.Object,
                 NotificationsApiClient.Object,
-                new Lazy<EmployerAccountDbContext>(() => Db.Object));
+                new Lazy<EmployerAccountsDbContext>(() => Db.Object));
         }
 
         public Task Handle()

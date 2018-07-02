@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.EAS.Application.DependencyResolution;
+using SFA.DAS.NServiceBus.StructureMap;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution

@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities.Api
         public GetAccountLegalEntitiesQueryHandler Handler { get; set; }
         public GetAccountLegalEntitiesQuery Query { get; set; }
         public IConfigurationProvider ConfigurationProvider { get; set; }
-        public Mock<EmployerAccountDbContext> Db { get; set; }
+        public Mock<EmployerAccountsDbContext> Db { get; set; }
         public List<AccountLegalEntity> AccountLegalEntities { get; set; }
 
         public GetAccountLegalEntitiesQueryHandlerTestsFixture()
@@ -90,12 +90,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities.Api
                 c.AddProfile<LegalEntityMappings>();
             });
 
-            Db = new Mock<EmployerAccountDbContext>();
+            Db = new Mock<EmployerAccountsDbContext>();
             AccountLegalEntities = new List<AccountLegalEntity>();
 
             Db.Setup(d => d.AccountLegalEntities).Returns(new DbSetStub<AccountLegalEntity>(AccountLegalEntities));
 
-            Handler = new GetAccountLegalEntitiesQueryHandler(ConfigurationProvider, new Lazy<EmployerAccountDbContext>(() => Db.Object));
+            Handler = new GetAccountLegalEntitiesQueryHandler(ConfigurationProvider, new Lazy<EmployerAccountsDbContext>(() => Db.Object));
 
             QueryFutureManager.AllowQueryBatch = false;
         }

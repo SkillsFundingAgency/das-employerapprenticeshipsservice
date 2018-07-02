@@ -209,7 +209,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var request = BuildRequest(hashedAccountId, agreementId, externalUserId);
 
             var handler = new GetEmployerAgreementQueryHandler(
-                new Lazy<EmployerAccountDbContext>(() => EmployerAgreementBuilder.EmployerAccountDbContext),
+                new Lazy<EmployerAccountsDbContext>(() => EmployerAgreementBuilder.EmployerAccountDbContext),
                 EmployerAgreementBuilder.HashingService,
                 Validator.Object,
                 ConfigurationProvider);

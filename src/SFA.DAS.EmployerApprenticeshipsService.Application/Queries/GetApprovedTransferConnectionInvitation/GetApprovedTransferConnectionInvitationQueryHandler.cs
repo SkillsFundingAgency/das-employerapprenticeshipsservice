@@ -13,10 +13,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprovedTransferConnectionInvitatio
 {
     public class GetApprovedTransferConnectionInvitationQueryHandler : IAsyncRequestHandler<GetApprovedTransferConnectionInvitationQuery, GetApprovedTransferConnectionInvitationResponse>
     {
-        private readonly Lazy<EmployerAccountDbContext> _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IConfigurationProvider _configurationProvider;
 
-        public GetApprovedTransferConnectionInvitationQueryHandler(Lazy<EmployerAccountDbContext> db, IConfigurationProvider configurationProvider)
+        public GetApprovedTransferConnectionInvitationQueryHandler(Lazy<EmployerAccountsDbContext> db, IConfigurationProvider configurationProvider)
         {
             _db = db;
             _configurationProvider = configurationProvider;
