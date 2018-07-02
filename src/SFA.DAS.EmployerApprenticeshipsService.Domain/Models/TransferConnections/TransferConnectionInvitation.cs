@@ -47,9 +47,9 @@ namespace SFA.DAS.EAS.Domain.Models.TransferConnections
                 e.SenderAccountHashedId = SenderAccount.HashedId;
                 e.SenderAccountId = SenderAccount.Id;
                 e.SenderAccountName = SenderAccount.Name;
-                e.SentByUserExternalId = senderUser.Ref;
                 e.SentByUserId = senderUser.Id;
                 e.SentByUserName = senderUser.FullName;
+                e.SentByUserRef = senderUser.Ref;
                 e.TransferConnectionRequestId = Id;
             });
         }

@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
 {
-    public class DeletedTransferConnectionInviteEventHandler : IHandleMessages<DeletedTransferConnectionRequestEvent>
+    public class RejectedTransferConnectionRequestEventHandler : IHandleMessages<RejectedTransferConnectionRequestEvent>
     {
         private readonly IMessagePublisher _messagePublisher;
 
-        public DeletedTransferConnectionInviteEventHandler(IMessagePublisher messagePublisher)
+        public RejectedTransferConnectionRequestEventHandler(IMessagePublisher messagePublisher)
         {
             _messagePublisher = messagePublisher;
         }
 
-        public async Task Handle(DeletedTransferConnectionRequestEvent message, IMessageHandlerContext context)
+        public async Task Handle(RejectedTransferConnectionRequestEvent message, IMessageHandlerContext context)
         {
-            await _messagePublisher.PublishAsync(new DeletedTransferConnectionInvitationEvent
+            await _messagePublisher.PublishAsync(new RejectedTransferConnectionInvitationEvent
             {
                 TransferConnectionInvitationId = message.TransferConnectionRequestId,
                 SenderAccountId = message.SenderAccountId,
@@ -26,10 +26,9 @@ namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
                 ReceiverAccountId = message.ReceiverAccountId,
                 ReceiverAccountHashedId = message.ReceiverAccountHashedId,
                 ReceiverAccountName = message.ReceiverAccountName,
-                DeletedByUserId = message.DeletedByUserId,
-                DeletedByUserExternalId = message.DeletedByUserRef,
-                DeletedByUserName = message.DeletedByUserName,
-                DeletedByAccountId = message.DeletedByAccountId,
+                RejectorUserId = message.RejectorUserId,
+                RejectorUserExternalId = message.RejectorUserRef,
+                RejectorUserName = message.RejectorUserName,
                 CreatedAt = message.Created
             });
         }

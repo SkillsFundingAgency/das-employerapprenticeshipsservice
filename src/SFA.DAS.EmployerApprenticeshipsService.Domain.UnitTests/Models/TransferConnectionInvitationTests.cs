@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
                     e.SenderAccountHashedId == f.SenderAccount.HashedId &&
                     e.SenderAccountId == f.SenderAccount.Id &&
                     e.SenderAccountName == f.SenderAccount.Name &&
-                    e.SentByUserExternalId == f.SenderUser.Ref &&
+                    e.SentByUserRef == f.SenderUser.Ref &&
                     e.SentByUserId == f.SenderUser.Id &&
                     e.SentByUserName == f.SenderUser.FullName &&
                     e.TransferConnectionRequestId == f.TransferConnectionInvitation.Id));

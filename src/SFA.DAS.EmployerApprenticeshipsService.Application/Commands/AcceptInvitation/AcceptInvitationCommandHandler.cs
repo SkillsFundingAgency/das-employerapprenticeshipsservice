@@ -122,7 +122,7 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
                 e.AccountId = accountId;
                 e.UserName = user.FullName;
                 e.UserRef = user.Ref;
-                e.CreatedAt = DateTime.UtcNow;
+                e.Created = DateTime.UtcNow;
             });
         }
     }
