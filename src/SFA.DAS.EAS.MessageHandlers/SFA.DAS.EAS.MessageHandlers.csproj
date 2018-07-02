@@ -66,6 +66,12 @@
     <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.1.1.1\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.13.8.999, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.Platform, Version=3.13.8.999, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.ServiceBus.4.1.0\lib\net45-full\Microsoft.ServiceBus.dll</HintPath>
     </Reference>
@@ -105,11 +111,20 @@
     <Reference Include="SFA.DAS.Configuration.FileStorage, Version=1.0.0.49931, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.FileStorage.1.0.0.49931\lib\net45\SFA.DAS.Configuration.FileStorage.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Http, Version=1.0.0.35471, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Http.1.0.0.35471\lib\net45\SFA.DAS.Http.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.63765\lib\net45\SFA.DAS.Messaging.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.56651, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.56651\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Notifications.Api.Types, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.1.30.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.30\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
@@ -227,17 +242,20 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="EventHandlers\AddedLegalEntityEventHandler.cs" />
     <Compile Include="EventHandlers\AddedPayeSchemeEventHandler.cs" />
-    <Compile Include="EventHandlers\ApprovedTransferConnectionInviteEventHandler.cs" />
+    <Compile Include="EventHandlers\ApprovedTransferConnectionRequestEventNotificationHandler.cs" />
+    <Compile Include="EventHandlers\ApprovedTransferConnectionRequestEventHandler.cs" />
     <Compile Include="EventHandlers\ChangedAccountNameEventHandler.cs" />
     <Compile Include="EventHandlers\CreatedAccountEventHandler.cs" />
     <Compile Include="EventHandlers\CreatedAgreementEventHandler.cs" />
     <Compile Include="EventHandlers\CreatedPaymentEventHandler.cs" />
     <Compile Include="EventHandlers\DeletedPayeSchemeEventHandler.cs" />
-    <Compile Include="EventHandlers\DeletedTransferConnectionInviteEventHandler.cs" />
+    <Compile Include="EventHandlers\DeletedTransferConnectionRequestEventHandler.cs" />
     <Compile Include="EventHandlers\InvitedUserEventHandler.cs" />
-    <Compile Include="EventHandlers\RejectedTransferConnectionInviteEventHandler.cs" />
+    <Compile Include="EventHandlers\RejectedTransferConnectionRequestEventNotificationHandler.cs" />
+    <Compile Include="EventHandlers\RejectedTransferConnectionRequestEventHandler.cs" />
     <Compile Include="EventHandlers\RemovedLegalEntityEventHandler.cs" />
-    <Compile Include="EventHandlers\SentTransferConnectionInviteEventHandler.cs" />
+    <Compile Include="EventHandlers\SentTransferConnectionRequestEventNotificationHandler.cs" />
+    <Compile Include="EventHandlers\SentTransferConnectionRequestEventHandler.cs" />
     <Compile Include="EventHandlers\SignedAgreementEventHandler.cs" />
     <Compile Include="EventHandlers\UserJoinedEventHandler.cs" />
     <Compile Include="Program.cs" />
