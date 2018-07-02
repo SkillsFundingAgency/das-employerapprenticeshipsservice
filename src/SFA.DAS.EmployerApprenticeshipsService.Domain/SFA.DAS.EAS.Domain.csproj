@@ -194,7 +194,7 @@
     <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />
     <Compile Include="Configuration\WebJobConfig.cs" />
-    <Compile Include="Extensions\UserExtension.cs" />
+    <Compile Include="Extensions\IQueryableUserExtensions.cs" />
     <Compile Include="Models\Account\AgreementTemplate.cs" />
     <Compile Include="Models\Account\EmployerAgreement.cs" />
     <Compile Include="Data\Entities\Statistics\StatisticsAccounts.cs" />
