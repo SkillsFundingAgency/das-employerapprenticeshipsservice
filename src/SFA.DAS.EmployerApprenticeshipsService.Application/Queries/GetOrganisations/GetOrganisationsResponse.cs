@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EAS.Domain.Models.ReferenceData;
+﻿using SFA.DAS.EAS.Domain.Models.ReferenceData;
 
 namespace SFA.DAS.EAS.Application.Queries.GetOrganisations
 {
