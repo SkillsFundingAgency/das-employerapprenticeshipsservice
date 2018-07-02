@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using MediatR;
 using Moq;
-using NServiceBus.Testing;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types.Events.PayeScheme;
 using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
@@ -15,7 +14,6 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Testing;
@@ -23,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests

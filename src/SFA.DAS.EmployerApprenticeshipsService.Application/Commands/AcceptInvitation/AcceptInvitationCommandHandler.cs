@@ -7,12 +7,12 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.TimeProvider;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation

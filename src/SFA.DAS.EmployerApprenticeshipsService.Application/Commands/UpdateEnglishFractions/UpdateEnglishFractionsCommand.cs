@@ -1,5 +1,4 @@
-﻿using System;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired;
 
 namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions

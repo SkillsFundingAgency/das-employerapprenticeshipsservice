@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetEnglishFrationDetail;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEnglishFrationDetail
 {

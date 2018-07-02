@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.UserView;
-using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
