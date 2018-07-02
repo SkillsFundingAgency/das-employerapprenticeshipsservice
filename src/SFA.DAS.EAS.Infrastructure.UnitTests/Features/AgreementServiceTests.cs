@@ -141,7 +141,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
 
     public class AgreementServiceTestsFixture : FluentTestFixture
     {
-        public Mock<EmployerAccountDbContext> Db { get; set; }
+        public Mock<EmployerAccountsDbContext> Db { get; set; }
         public Mock<IDistributedCache> DistributedCache { get; set; }
         public List<Account> Accounts { get; }
         public List<EmployerAgreement> Agreements { get; }
@@ -152,7 +152,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
 
         public AgreementServiceTestsFixture()
         {
-            Db = new Mock<EmployerAccountDbContext>();
+            Db = new Mock<EmployerAccountsDbContext>();
             DistributedCache = new Mock<IDistributedCache>();
             Accounts = new List<Account>();
             Agreements = new List<EmployerAgreement>();
@@ -161,7 +161,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
 
             Db.Setup(d => d.Agreements).Returns(new DbSetStub<EmployerAgreement>(Agreements));
 
-            _service = new AgreementService(new Lazy<EmployerAccountDbContext>(() => Db.Object), DistributedCache.Object);
+            _service = new AgreementService(new Lazy<EmployerAccountsDbContext>(() => Db.Object), DistributedCache.Object);
         }
 
         public Task<int?> GetLowestSignedAgreementVersionNumberAsync(long accountId)

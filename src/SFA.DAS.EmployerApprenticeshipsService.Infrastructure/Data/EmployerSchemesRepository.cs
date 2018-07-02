@@ -13,9 +13,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class EmployerSchemesRepository : BaseRepository, IEmployerSchemesRepository
     {
-        private readonly Lazy<EmployerAccountDbContext> _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
 
-        public EmployerSchemesRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, Lazy<EmployerAccountDbContext> db)
+        public EmployerSchemesRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;

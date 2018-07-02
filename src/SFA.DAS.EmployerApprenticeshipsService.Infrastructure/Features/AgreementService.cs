@@ -13,10 +13,10 @@ namespace SFA.DAS.EAS.Infrastructure.Features
     {
         private const int NullCacheValue = -1;
 
-        private readonly Lazy<EmployerAccountDbContext> _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IDistributedCache _cache;
 
-        public AgreementService(Lazy<EmployerAccountDbContext> db, IDistributedCache cache)
+        public AgreementService(Lazy<EmployerAccountsDbContext> db, IDistributedCache cache)
         {
             _db = db;
             _cache = cache;

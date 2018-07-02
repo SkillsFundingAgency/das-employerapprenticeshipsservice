@@ -12,10 +12,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
 {
     public class GetTransferTransactionDetailsQueryHandler : IAsyncRequestHandler<GetTransferTransactionDetailsQuery, GetTransferTransactionDetailsResponse>
     {
-        private readonly EmployerFinancialDbContext _dbContext;
+        private readonly EmployerFinanceDbContext _dbContext;
         private readonly IPublicHashingService _publicHashingService;
 
-        public GetTransferTransactionDetailsQueryHandler(EmployerFinancialDbContext dbContext,
+        public GetTransferTransactionDetailsQueryHandler(EmployerFinanceDbContext dbContext,
             IPublicHashingService publicHashingService)
         {
             _dbContext = dbContext;

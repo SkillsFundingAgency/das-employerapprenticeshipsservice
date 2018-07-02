@@ -141,7 +141,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
         public GetAccountEmployerAgreementTestFixtures()
         {
             HashingServiceMock = new Mock<IHashingService>();
-            EmployerAccountDbContextMock = new Mock<EmployerAccountDbContext>();
+            EmployerAccountsDbContextMock = new Mock<EmployerAccountsDbContext>();
 
             Accounts = new List<Domain.Models.Account.Account>();
             AgreementTemplates = new List<AgreementTemplate>();
@@ -161,8 +161,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
         public Mock<IHashingService> HashingServiceMock { get; }
         public IHashingService HashingService => HashingServiceMock.Object;
 
-        public Mock<EmployerAccountDbContext> EmployerAccountDbContextMock { get; set; }
-        public EmployerAccountDbContext EmployerAccountDbContext => EmployerAccountDbContextMock.Object;
+        public Mock<EmployerAccountsDbContext> EmployerAccountsDbContextMock { get; set; }
+        public EmployerAccountsDbContext EmployerAccountsDbContext => EmployerAccountsDbContextMock.Object;
 
         public List<Domain.Models.Account.Account> Accounts { get; }
         public List<AgreementTemplate> AgreementTemplates { get; set; }
@@ -271,11 +271,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
             DbSetStub<EmployerAgreement> agreementsDbSet = new DbSetStub<EmployerAgreement>(EmployerAgreements);
             DbSetStub<LegalEntity> legalEntityDbSet = new DbSetStub<LegalEntity>(LegalEntities);
 
-            EmployerAccountDbContextMock
+            EmployerAccountsDbContextMock
                 .Setup(db => db.Accounts)
                 .Returns(accountsDbSet);
 
-            EmployerAccountDbContextMock
+            EmployerAccountsDbContextMock
                 .Setup(db => db.Agreements)
                 .Returns(agreementsDbSet);
 
@@ -283,7 +283,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
                 .Setup(x => x.ValidateAsync(Request))
                 .ReturnsAsync(ValidationResult);
 
-            var queryHandler = new GetAccountEmployerAgreementsQueryHandler(new Lazy<EmployerAccountDbContext>(() => EmployerAccountDbContext), HashingService, Validator, ConfigurationProvider);
+            var queryHandler = new GetAccountEmployerAgreementsQueryHandler(new Lazy<EmployerAccountsDbContext>(() => EmployerAccountsDbContext), HashingService, Validator, ConfigurationProvider);
 
             return queryHandler;
         }
