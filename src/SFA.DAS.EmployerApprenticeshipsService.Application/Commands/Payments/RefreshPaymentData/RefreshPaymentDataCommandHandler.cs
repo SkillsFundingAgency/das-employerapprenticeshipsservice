@@ -101,7 +101,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
                     e.AccountId = payment.EmployerAccountId;
                     e.ProviderName = payment.ProviderName;
                     e.Amount = payment.Amount;
-                    e.CreatedAt = DateTime.UtcNow;
+                    e.Created = DateTime.UtcNow;
                 });
             }
 
