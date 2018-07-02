@@ -2,9 +2,9 @@
 using NServiceBus.Testing;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Services;
-using SFA.DAS.EAS.Messages.Commands;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Messages.Commands;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Services.RefreshEmployerLevyServiceTests
 {

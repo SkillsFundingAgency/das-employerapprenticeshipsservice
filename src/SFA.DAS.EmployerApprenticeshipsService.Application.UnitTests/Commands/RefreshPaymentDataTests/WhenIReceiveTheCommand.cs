@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using MediatR;
 using Moq;
-using NServiceBus.Testing;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
@@ -10,7 +9,6 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
-using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.Testing;
 using SFA.DAS.Provider.Events.Api.Types;
@@ -19,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Messages.Events;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 {
