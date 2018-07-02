@@ -2923,10 +2923,6 @@ a#link-settings:focus {
   color: #4c2c92;
 }
 
-.header-organisation ul li.menu-link > a {
-  top: auto;
-}
-
 .floating-menu nav#user-nav #settings-menu a.sub-menu-item {
   color: #fff;
   color: #4c2c92 !important;
