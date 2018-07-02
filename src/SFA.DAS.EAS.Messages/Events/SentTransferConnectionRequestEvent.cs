@@ -11,9 +11,9 @@ namespace SFA.DAS.EAS.Messages.Events
         public string SenderAccountHashedId { get; set; }
         public long SenderAccountId { get; set; }
         public string SenderAccountName { get; set; }
-        public Guid SentByUserExternalId { get; set; }
         public long SentByUserId { get; set; }
         public string SentByUserName { get; set; }
+        public Guid SentByUserRef { get; set; }
         public int TransferConnectionRequestId { get; set; }
     }
 }
