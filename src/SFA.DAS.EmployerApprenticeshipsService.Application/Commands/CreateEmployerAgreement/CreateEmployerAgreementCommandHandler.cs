@@ -2,9 +2,9 @@
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.NServiceBus;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreement
 {
