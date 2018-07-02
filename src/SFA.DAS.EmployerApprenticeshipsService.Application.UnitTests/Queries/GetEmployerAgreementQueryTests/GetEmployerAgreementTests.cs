@@ -269,7 +269,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
         public const long AgreementId = 20;
 
 
-        public Mock<EmployerAccountDbContext> Database { get; }
+        public Mock<EmployerAccountsDbContext> Database { get; }
         public Mock<IHashingService> HashingService { get; }
         public Mock<IValidator<GetEmployerAgreementRequest>> Validator { get; }
         public IConfigurationProvider ConfigurationProvider { get; }
@@ -288,7 +288,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
 
         public GetEmployerAgreementTestFixtures()
         {
-            Database = new Mock<EmployerAccountDbContext>();
+            Database = new Mock<EmployerAccountsDbContext>();
             HashingService = new Mock<IHashingService>();
             Validator = new Mock<IValidator<GetEmployerAgreementRequest>>();
 
@@ -305,7 +305,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
 
             });
 
-            Handler = new GetEmployerAgreementQueryHandler(new Lazy<EmployerAccountDbContext>(() => Database.Object), HashingService.Object, Validator.Object, ConfigurationProvider);
+            Handler = new GetEmployerAgreementQueryHandler(new Lazy<EmployerAccountsDbContext>(() => Database.Object), HashingService.Object, Validator.Object, ConfigurationProvider);
             Request = new GetEmployerAgreementRequest
             {
                 HashedAccountId = HashedAccountId,

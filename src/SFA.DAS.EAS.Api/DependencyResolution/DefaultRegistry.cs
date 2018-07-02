@@ -1,3 +1,5 @@
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Data;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Account.Api.DependencyResolution
@@ -11,6 +13,8 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
                 s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
+
+            For<EmployerFinanceDbContext>().Use(c => new EmployerFinanceDbContext(c.GetInstance<LevyDeclarationProviderConfiguration>().DatabaseConnectionString));
         }
     }
 }

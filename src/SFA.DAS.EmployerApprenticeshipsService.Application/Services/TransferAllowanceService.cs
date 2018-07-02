@@ -8,10 +8,10 @@ namespace SFA.DAS.EAS.Application.Services
 {
     public class TransferAllowanceService : ITransferAllowanceService
     {
-        private readonly EmployerFinancialDbContext _db;
+        private readonly EmployerFinanceDbContext _db;
         private readonly LevyDeclarationProviderConfiguration _configuration;
 
-        public TransferAllowanceService(EmployerFinancialDbContext db, LevyDeclarationProviderConfiguration configuration)
+        public TransferAllowanceService(EmployerFinanceDbContext db, LevyDeclarationProviderConfiguration configuration)
         {
             _db = db;
             _configuration = configuration;

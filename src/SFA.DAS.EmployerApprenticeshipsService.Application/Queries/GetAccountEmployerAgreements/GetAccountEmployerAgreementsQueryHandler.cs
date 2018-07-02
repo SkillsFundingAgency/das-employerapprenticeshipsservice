@@ -15,14 +15,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
     public class GetAccountEmployerAgreementsQueryHandler : IAsyncRequestHandler<GetAccountEmployerAgreementsRequest,
         GetAccountEmployerAgreementsResponse>
     {
-        private readonly Lazy<EmployerAccountDbContext> _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IHashingService _hashingService;
         private readonly IValidator<GetAccountEmployerAgreementsRequest> _validator;
         private readonly IConfigurationProvider _configurationProvider;
 
 
         public GetAccountEmployerAgreementsQueryHandler(
-            Lazy<EmployerAccountDbContext> db,
+            Lazy<EmployerAccountsDbContext> db,
             IHashingService hashingService,
             IValidator<GetAccountEmployerAgreementsRequest> validator,
             IConfigurationProvider configurationProvider

@@ -35,9 +35,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
     public class GetStatisticsQueryTestsFixtures : FluentTestFixture
     {
         public List<Domain.Models.Account.Account> Accounts { get; }
-        public Mock<EmployerAccountDbContext> AccountsDb { get; }
+        public Mock<EmployerAccountsDbContext> AccountsDb { get; }
         public List<EmployerAgreement> Agreements { get; set; }
-        public Mock<EmployerFinancialDbContext> FinancialDb { get; }
+        public Mock<EmployerFinanceDbContext> FinancialDb { get; }
         public GetStatisticsQueryHandler Handler { get; }
         public List<LegalEntity> LegalEntities { get; }
         public List<Paye> PayeSchemes { get; }
@@ -84,8 +84,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
                 new Payment()
             };
 
-            AccountsDb = new Mock<EmployerAccountDbContext>();
-            FinancialDb = new Mock<EmployerFinancialDbContext>();
+            AccountsDb = new Mock<EmployerAccountsDbContext>();
+            FinancialDb = new Mock<EmployerFinanceDbContext>();
 
             AccountsDb.Setup(d => d.Accounts).Returns(new DbSetStub<Domain.Models.Account.Account>(Accounts));
             AccountsDb.Setup(d => d.LegalEntities).Returns(new DbSetStub<LegalEntity>(LegalEntities));
@@ -93,7 +93,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
             AccountsDb.Setup(d => d.Agreements).Returns(new DbSetStub<EmployerAgreement>(Agreements));
             FinancialDb.Setup(d => d.Payments).Returns(new DbSetStub<Payment>(Payments));
 
-            Handler = new GetStatisticsQueryHandler(new Lazy<EmployerAccountDbContext>(() => AccountsDb.Object), FinancialDb.Object);
+            Handler = new GetStatisticsQueryHandler(new Lazy<EmployerAccountsDbContext>(() => AccountsDb.Object), FinancialDb.Object);
             Query = new GetStatisticsQuery();
 
             QueryFutureManager.AllowQueryBatch = false;
