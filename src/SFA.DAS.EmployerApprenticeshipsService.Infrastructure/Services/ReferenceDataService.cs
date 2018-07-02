@@ -7,7 +7,6 @@ using AutoMapper;
 using DocumentFormat.OpenXml.Wordprocessing;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
-using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.ReferenceData.Api.Client;
 using SFA.DAS.ReferenceData.Types.DTO;
