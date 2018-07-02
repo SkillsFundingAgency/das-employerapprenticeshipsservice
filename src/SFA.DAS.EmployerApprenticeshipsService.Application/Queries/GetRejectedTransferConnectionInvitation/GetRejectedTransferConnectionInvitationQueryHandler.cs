@@ -13,10 +13,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetRejectedTransferConnectionInvitatio
 {
     public class GetRejectedTransferConnectionInvitationQueryHandler : IAsyncRequestHandler<GetRejectedTransferConnectionInvitationQuery, GetRejectedTransferConnectionInvitationResponse>
     {
-        private readonly Lazy<EmployerAccountDbContext> _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IConfigurationProvider _configurationProvider;
 
-        public GetRejectedTransferConnectionInvitationQueryHandler(Lazy<EmployerAccountDbContext> db, IConfigurationProvider configurationProvider)
+        public GetRejectedTransferConnectionInvitationQueryHandler(Lazy<EmployerAccountsDbContext> db, IConfigurationProvider configurationProvider)
         {
             _db = db;
             _configurationProvider = configurationProvider;

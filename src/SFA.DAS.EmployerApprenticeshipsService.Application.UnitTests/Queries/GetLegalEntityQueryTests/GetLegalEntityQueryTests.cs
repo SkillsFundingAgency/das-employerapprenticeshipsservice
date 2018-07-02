@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
     public class GetLegalEntityQueryTestsFixture : FluentTestFixture
     {
         public GetLegalEntityQueryHandler Handler { get; set; }
-        public Mock<EmployerAccountDbContext> Db { get; set; }
+        public Mock<EmployerAccountsDbContext> Db { get; set; }
         public IConfigurationProvider ConfigurationProvider { get; set; }
         public Domain.Models.Account.Account Account { get; private set; }
         public LegalEntity LegalEntity { get; set; }
@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
         {
             LegalEntities = new List<LegalEntity>();
             LegalEntitiesDbSet = new DbSetStub<LegalEntity>(LegalEntities);
-            Db = new Mock<EmployerAccountDbContext>();
+            Db = new Mock<EmployerAccountsDbContext>();
 
             ConfigurationProvider = new MapperConfiguration(c =>
             {
@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
 
             Db.Setup(d => d.LegalEntities).Returns(LegalEntitiesDbSet);
 
-            Handler = new GetLegalEntityQueryHandler(new Lazy<EmployerAccountDbContext>(() => Db.Object), ConfigurationProvider);
+            Handler = new GetLegalEntityQueryHandler(new Lazy<EmployerAccountsDbContext>(() => Db.Object), ConfigurationProvider);
 
             SetAccount()
                 .SetLegalEntity()

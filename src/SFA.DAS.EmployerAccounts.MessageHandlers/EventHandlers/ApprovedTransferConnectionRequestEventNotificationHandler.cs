@@ -21,13 +21,13 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
         private readonly EmployerApprenticeshipsServiceConfiguration _config;
         private readonly ILog _logger;
         private readonly INotificationsApi _notificationsApi;
-        private readonly Lazy<EmployerAccountDbContext> _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
 
         public ApprovedTransferConnectionRequestEventNotificationHandler(
             EmployerApprenticeshipsServiceConfiguration config,
             ILog logger,
             INotificationsApi notificationsApi,
-            Lazy<EmployerAccountDbContext> db)
+            Lazy<EmployerAccountsDbContext> db)
         {
             _config = config;
             _logger = logger;

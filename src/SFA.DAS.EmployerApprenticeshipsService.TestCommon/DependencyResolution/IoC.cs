@@ -32,7 +32,6 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
                 c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
-                c.AddRegistry<LevyRegistry>();
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
@@ -72,7 +71,6 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
             {
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
-                c.AddRegistry<LevyRegistry>();
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();

@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetReceivedTransferConnectio
     {
         private GetReceivedTransferConnectionInvitationQueryHandler _handler;
         private GetReceivedTransferConnectionInvitationQuery _query;
-        private Mock<EmployerAccountDbContext> _db;
+        private Mock<EmployerAccountsDbContext> _db;
         private DbSetStub<TransferConnectionInvitation> _transferConnectionInvitationsDbSet;
         private List<TransferConnectionInvitation> _transferConnectionInvitations;
         private TransferConnectionInvitation _receivedTransferConnectionInvitation;
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetReceivedTransferConnectio
         [SetUp]
         public void Arrange()
         {
-            _db = new Mock<EmployerAccountDbContext>();
+            _db = new Mock<EmployerAccountsDbContext>();
 
             _senderAccount = new Domain.Models.Account.Account
             {
@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetReceivedTransferConnectio
 
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
 
-            _handler = new GetReceivedTransferConnectionInvitationQueryHandler(new Lazy<EmployerAccountDbContext>(() => _db.Object), _configurationProvider);
+            _handler = new GetReceivedTransferConnectionInvitationQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _configurationProvider);
 
             _query = new GetReceivedTransferConnectionInvitationQuery
             {
