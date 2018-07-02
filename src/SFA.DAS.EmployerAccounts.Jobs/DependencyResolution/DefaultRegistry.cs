@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
 
-            For<EmployerAccountDbContext>().Use(c => new EmployerAccountDbContext(c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
+            For<EmployerAccountsDbContext>().Use(c => new EmployerAccountsDbContext(c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
         }
     }
 }

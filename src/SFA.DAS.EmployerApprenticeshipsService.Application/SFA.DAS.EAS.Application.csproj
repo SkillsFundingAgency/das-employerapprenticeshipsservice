@@ -304,14 +304,12 @@
     <Compile Include="DependencyResolution\EventsRegistry.cs" />
     <Compile Include="DependencyResolution\ExecutionPoliciesRegistry.cs" />
     <Compile Include="DependencyResolution\HashingRegistry.cs" />
-    <Compile Include="DependencyResolution\LevyRegistry.cs" />
     <Compile Include="DependencyResolution\LoggerRegistry.cs" />
     <Compile Include="DependencyResolution\MapperRegistry.cs" />
     <Compile Include="DependencyResolution\MediatorRegistry.cs" />
     <Compile Include="DependencyResolution\MessagePublisherRegistry.cs" />
     <Compile Include="DependencyResolution\MessageSubscriberRegistry.cs" />
     <Compile Include="DependencyResolution\NotificationsRegistry.cs" />
-    <Compile Include="DependencyResolution\NServiceBusRegistry.cs" />
     <Compile Include="DependencyResolution\PaymentsRegistry.cs" />
     <Compile Include="DependencyResolution\ReferenceDataRegistry.cs" />
     <Compile Include="DependencyResolution\RepositoriesRegistry.cs" />

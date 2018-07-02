@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
         private GetTransferTransactionDetailsQueryHandler _handler;
         private GetTransferTransactionDetailsQuery _query;
         private GetTransferTransactionDetailsResponse _response;
-        private Mock<EmployerFinancialDbContext> _db;
+        private Mock<EmployerFinanceDbContext> _db;
         private List<AccountTransfer> _transfers;
         private Mock<IPublicHashingService> _publicHashingService;
         private PeriodEnd _periodEnd;
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetail
         [SetUp]
         public void Assign()
         {
-            _db = new Mock<EmployerFinancialDbContext>();
+            _db = new Mock<EmployerFinanceDbContext>();
 
             _periodEnd = new PeriodEnd
             {

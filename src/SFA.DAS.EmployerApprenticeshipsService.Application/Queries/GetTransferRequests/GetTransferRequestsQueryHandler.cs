@@ -14,13 +14,13 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferRequests
 {
     public class GetTransferRequestsQueryHandler : IAsyncRequestHandler<GetTransferRequestsQuery, GetTransferRequestsResponse>
     {
-        private readonly Lazy<EmployerAccountDbContext> _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IConfigurationProvider _configurationProvider;
         private readonly IEmployerCommitmentApi _employerCommitmentApi;
         private readonly IHashingService _hashingService;
 
         public GetTransferRequestsQueryHandler(
-            Lazy<EmployerAccountDbContext> db,
+            Lazy<EmployerAccountsDbContext> db,
             IConfigurationProvider configurationProvider,
             IEmployerCommitmentApi employerCommitmentApi,
             IHashingService hashingService)
