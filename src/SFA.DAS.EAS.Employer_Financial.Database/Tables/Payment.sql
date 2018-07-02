@@ -24,7 +24,6 @@
 GO
 
 CREATE INDEX [IX_Payment_AccountId] ON [employer_financial].[Payment] (AccountId) INCLUDE (Ukprn,PeriodEnd,FundingSource)
-
 GO
 
 CREATE INDEX [IX_Payment_PaymentMetaDataId] ON [employer_financial].[Payment] ([PaymentMetaDataId])
@@ -32,10 +31,16 @@ CREATE INDEX [IX_Payment_PaymentMetaDataId] ON [employer_financial].[Payment] ([
 GO
 
 CREATE INDEX [IX_Payment_FundingComp] ON [employer_financial].[Payment] (AccountId, Ukprn, FundingSource, PaymentMetaDataId)
-
 GO
 
-CREATE NONCLUSTERED INDEX [IX_Payment_AccountIdUkprnPeriodEndUln] ON [employer_financial].[Payment] ([AccountId], [Ukprn], [PeriodEnd], [Uln]) INCLUDE ([FundingSource], [PaymentMetaDataId]) WITH (ONLINE = ON)
+CREATE NONCLUSTERED INDEX [IX_Payment_ULN] ON employer_financial.Payment (Uln) WITH (ONLINE = ON)
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Payment_AccountId_Amount_ApprenticeshipId] ON employer_financial.Payment (PeriodEnd) 
+INCLUDE (AccountId, Amount, ApprenticeshipId, ApprenticeshipVersion, CollectionPeriodId, CollectionPeriodMonth, 
+CollectionPeriodYear, DeliveryPeriodMonth, DeliveryPeriodYear, EmployerAccountVersion, EvidenceSubmittedOn, 
+FundingSource, PaymentMetaDataId, TransactionType, Ukprn, Uln) WITH (ONLINE = ON)
+GOCREATE NONCLUSTERED INDEX [IX_Payment_AccountIdUkprnPeriodEndUln] ON [employer_financial].[Payment] ([AccountId], [Ukprn], [PeriodEnd], [Uln]) INCLUDE ([FundingSource], [PaymentMetaDataId]) WITH (ONLINE = ON)
 
 GO
 
