@@ -7,9 +7,9 @@ using SFA.DAS.EAS.Application.Commands.DeleteSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.TestCommon.Builders;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands

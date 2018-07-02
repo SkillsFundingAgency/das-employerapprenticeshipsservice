@@ -1,7 +1,7 @@
 ﻿using NServiceBus;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Messages.Commands;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Messages.Commands;
 
 namespace SFA.DAS.EAS.Application.Services
 {

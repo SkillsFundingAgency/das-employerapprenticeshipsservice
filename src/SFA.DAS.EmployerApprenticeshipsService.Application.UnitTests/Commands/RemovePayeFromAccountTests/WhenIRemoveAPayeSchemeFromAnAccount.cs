@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using MediatR;
 using Moq;
-using NServiceBus.Testing;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types.Events.PayeScheme;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
@@ -12,13 +11,13 @@ using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
-using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Testing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests

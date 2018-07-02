@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Extensions;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
