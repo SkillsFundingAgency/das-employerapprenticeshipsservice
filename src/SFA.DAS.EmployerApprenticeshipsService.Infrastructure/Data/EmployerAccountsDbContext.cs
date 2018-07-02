@@ -14,7 +14,7 @@ using SFA.DAS.NServiceBus.EntityFramework;
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     [DbConfigurationType(typeof(SqlAzureDbConfiguration))]
-    public class EmployerAccountDbContext : DbContext, IOutboxDbContext
+    public class EmployerAccountsDbContext : DbContext, IOutboxDbContext
     {
         public virtual DbSet<AccountLegalEntity> AccountLegalEntities { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
@@ -28,23 +28,23 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public virtual DbSet<UserAccountSetting> UserAccountSettings { get; set; }
         public virtual DbSet<Paye> Payees { get; set; }
 
-        static EmployerAccountDbContext()
+        static EmployerAccountsDbContext()
         {
-            Database.SetInitializer<EmployerAccountDbContext>(null);
+            Database.SetInitializer<EmployerAccountsDbContext>(null);
         }
 
-        public EmployerAccountDbContext(IUnitOfWorkContext connectionContext)
+        public EmployerAccountsDbContext(string nameOrConnectionString)
+            : base(nameOrConnectionString)
+        {
+        }
+
+        public EmployerAccountsDbContext(IUnitOfWorkContext connectionContext)
             : base(connectionContext.Get<DbConnection>(), false)
         {
             Database.UseTransaction(connectionContext.Get<DbTransaction>());
         }
 
-        public EmployerAccountDbContext(string nameOrConnectionString)
-            : base(nameOrConnectionString)
-        {
-        }
-
-        protected EmployerAccountDbContext()
+        protected EmployerAccountsDbContext()
         {
         }
 

@@ -173,7 +173,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
         {
             DistributedCache = new Mock<IDistributedCache>();
             _employerAgreementBuilder = new EmployerAgreementBuilder();
-            _service = new AgreementService(new Lazy<EmployerAccountDbContext>(() => _employerAgreementBuilder.EmployerAccountDbContext), DistributedCache.Object);
+            _service = new AgreementService(new Lazy<EmployerAccountsDbContext>(() => _employerAgreementBuilder.EmployerAccountDbContext), DistributedCache.Object);
         }
 
         public Task<int?> GetLowestSignedAgreementVersionNumberAsync(long accountId)

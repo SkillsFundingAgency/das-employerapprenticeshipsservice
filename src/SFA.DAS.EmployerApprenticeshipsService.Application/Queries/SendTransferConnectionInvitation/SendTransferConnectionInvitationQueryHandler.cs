@@ -16,12 +16,12 @@ namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
 {
     public class SendTransferConnectionInvitationQueryHandler : IAsyncRequestHandler<SendTransferConnectionInvitationQuery, SendTransferConnectionInvitationResponse>
     {
-        private readonly Lazy<EmployerAccountDbContext> _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IConfigurationProvider _configurationProvider;
         private readonly IPublicHashingService _publicHashingService;
 
         public SendTransferConnectionInvitationQueryHandler(
-            Lazy<EmployerAccountDbContext> db,
+            Lazy<EmployerAccountsDbContext> db,
             IConfigurationProvider configurationProvider,
             IPublicHashingService publicHashingService)
         {

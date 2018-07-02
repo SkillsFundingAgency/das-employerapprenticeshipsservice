@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvita
         private SendTransferConnectionInvitationQueryHandler _handler;
         private SendTransferConnectionInvitationQuery _query;
         private SendTransferConnectionInvitationResponse _response;
-        private Mock<EmployerAccountDbContext> _db;
+        private Mock<EmployerAccountsDbContext> _db;
         private DbSetStub<Domain.Models.Account.Account> _accountsDbSet;
         private List<Domain.Models.Account.Account> _accounts;
         private DbSetStub<TransferConnectionInvitation> _transferConnectionInvitationsDbSet;
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvita
         [SetUp]
         public void Arrange()
         {
-            _db = new Mock<EmployerAccountDbContext>();
+            _db = new Mock<EmployerAccountsDbContext>();
 
             _receiverAccount = new Domain.Models.Account.Account
             {
@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvita
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
             _publicHashingService.Setup(h => h.DecodeValue(_receiverAccount.PublicHashedId)).Returns(_receiverAccount.Id);
 
-            _handler = new SendTransferConnectionInvitationQueryHandler(new Lazy<EmployerAccountDbContext>(() => _db.Object), _configurationProvider, _publicHashingService.Object);
+            _handler = new SendTransferConnectionInvitationQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _configurationProvider, _publicHashingService.Object);
 
             _query = new SendTransferConnectionInvitationQuery
             {

@@ -306,8 +306,8 @@
     <Compile Include="Caching\RedisCache.cs" />
     <Compile Include="Data\AccountIdUserTableParam.cs" />
     <Compile Include="Data\SqlAzureDbConfiguration.cs" />
-    <Compile Include="Data\EmployerFinancialDbContext.cs" />
-    <Compile Include="Data\EmployerAccountDbContext.cs" />
+    <Compile Include="Data\EmployerFinanceDbContext.cs" />
+    <Compile Include="Data\EmployerAccountsDbContext.cs" />
     <Compile Include="Data\PayeRepository.cs" />
     <Compile Include="Data\LegalEntityRepository.cs" />
     <Compile Include="Data\AccountRepository.cs" />

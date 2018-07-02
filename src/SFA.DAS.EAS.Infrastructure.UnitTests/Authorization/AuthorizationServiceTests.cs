@@ -100,7 +100,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
         public Mock<IAuthorizationContextCache> AuthorizationContextCache { get; }
         public Mock<ICallerContextProvider> CallerContextProvider { get; }
         public IConfigurationProvider ConfigurationProvider { get; }
-        public Mock<EmployerAccountDbContext> Db { get; }
+        public Mock<EmployerAccountsDbContext> Db { get; }
         public Feature Feature { get; }
         public Mock<IFeatureService> FeatureService { get; }
         public List<IAuthorizationHandler> Handlers { get; }
@@ -112,7 +112,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
         public AuthorizationServiceTestFixture()
         {
             Feature = new Feature { Enabled = true, FeatureType = FeatureType.Test1 };
-            Db = new Mock<EmployerAccountDbContext>();
+            Db = new Mock<EmployerAccountsDbContext>();
             AuthorizationContextCache = new Mock<IAuthorizationContextCache>();
             Handlers = new List<IAuthorizationHandler>();
             CallerContextProvider = new Mock<ICallerContextProvider>();
@@ -148,7 +148,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
                 CallerContextProvider.Object,
                 ConfigurationProvider,
                 FeatureService.Object,
-                new Lazy<EmployerAccountDbContext>(() => Db.Object));
+                new Lazy<EmployerAccountsDbContext>(() => Db.Object));
 
             return authorizationService.GetAuthorizationContext();
         }
@@ -160,7 +160,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
                 CallerContextProvider.Object,
                 ConfigurationProvider,
                 FeatureService.Object,
-                new Lazy<EmployerAccountDbContext>(() => Db.Object));
+                new Lazy<EmployerAccountsDbContext>(() => Db.Object));
 
             return authorizationService.IsAuthorized(Feature.FeatureType);
         }
@@ -217,7 +217,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
                 CallerContextProvider.Object,
                 ConfigurationProvider,
                 FeatureService.Object,
-                new Lazy<EmployerAccountDbContext>(() => Db.Object));
+                new Lazy<EmployerAccountsDbContext>(() => Db.Object));
 
             authorizationService.ValidateMembership();
         }

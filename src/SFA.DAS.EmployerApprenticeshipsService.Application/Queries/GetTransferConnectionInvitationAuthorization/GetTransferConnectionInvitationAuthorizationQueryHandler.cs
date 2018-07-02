@@ -14,19 +14,19 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthori
 {
     public class GetTransferConnectionInvitationAuthorizationQueryHandler : IAsyncRequestHandler<GetTransferConnectionInvitationAuthorizationQuery, GetTransferConnectionInvitationAuthorizationResponse>
     {
-        private readonly Lazy<EmployerAccountDbContext> _accountDb;
-        private readonly EmployerFinancialDbContext _financialDb;
+        private readonly Lazy<EmployerAccountsDbContext> _accountDb;
+        private readonly EmployerFinanceDbContext _financeDb;
         private readonly LevyDeclarationProviderConfiguration _configuration;
         private readonly IAuthorizationService _authorizationService;
 
         public GetTransferConnectionInvitationAuthorizationQueryHandler(
-            Lazy<EmployerAccountDbContext> accountDb,
-            EmployerFinancialDbContext financialDb,
+            Lazy<EmployerAccountsDbContext> accountDb,
+            EmployerFinanceDbContext financeDb,
             LevyDeclarationProviderConfiguration configuration,
             IAuthorizationService authorizationService)
         {
             _accountDb = accountDb;
-            _financialDb = financialDb;
+            _financeDb = financeDb;
             _configuration = configuration;
             _authorizationService = authorizationService;
         }
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthori
         public async Task<GetTransferConnectionInvitationAuthorizationResponse> Handle(GetTransferConnectionInvitationAuthorizationQuery message)
         {
             var authorizationResult = await _authorizationService.GetAuthorizationResultAsync(FeatureType.TransferConnectionRequests);
-            var transferAllowance = await _financialDb.GetTransferAllowance(message.AccountId.Value, _configuration.TransferAllowancePercentage);
+            var transferAllowance = await _financeDb.GetTransferAllowance(message.AccountId.Value, _configuration.TransferAllowancePercentage);
 
             var isReceiver = await _accountDb.Value.TransferConnectionInvitations.AnyAsync(i =>
                 i.ReceiverAccount.Id == message.AccountId && (

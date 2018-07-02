@@ -20,10 +20,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class AccountRepository : BaseRepository, IAccountRepository
     {
-        private readonly Lazy<EmployerAccountDbContext> _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
 
-        public AccountRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, Lazy<EmployerAccountDbContext> db, IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
+        public AccountRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db, IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
