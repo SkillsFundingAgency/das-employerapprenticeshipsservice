@@ -1,0 +1,33 @@
+﻿using SFA.DAS.EAS.Application.DependencyResolution;
+using StructureMap;
+
+namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
+{
+    public static class IoC
+    {
+        public static IContainer Initialize()
+        {
+            return new Container(c =>
+            {
+                c.AddRegistry<CachesRegistry>();
+                c.AddRegistry<CommitmentsRegistry>();
+                c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<DataRegistry>();
+                c.AddRegistry<EventsRegistry>();
+                c.AddRegistry<ExecutionPoliciesRegistry>();
+                c.AddRegistry<HashingRegistry>();
+                c.AddRegistry<LevyRegistry>();
+                c.AddRegistry<LoggerRegistry>();
+                c.AddRegistry<MapperRegistry>();
+                c.AddRegistry<MediatorRegistry>();
+                c.AddRegistry<MessagePublisherRegistry>();
+                c.AddRegistry<NotificationsRegistry>();
+                c.AddRegistry<NServiceBusRegistry>();
+                c.AddRegistry<RepositoriesRegistry>();
+                c.AddRegistry<PaymentsRegistry>();
+                c.AddRegistry<TokenServiceRegistry>();
+                c.AddRegistry<DefaultRegistry>();
+            });
+        }
+    }
+}
