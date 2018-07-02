@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.TestCommon
             Users = new List<User>();
             Memberships = new List<Membership>();
             LegalEntities = new List<LegalEntity>();
-            EmployerAccountDbContextMock = new Mock<EmployerAccountDbContext>();
+            EmployerAccountDbContextMock = new Mock<EmployerAccountsDbContext>();
         }
 
         public Mock<IHashingService> HashingServiceMock { get; }
@@ -163,9 +163,9 @@ namespace SFA.DAS.EAS.TestCommon
             return this;
         }
 
-        public Mock<EmployerAccountDbContext> EmployerAccountDbContextMock { get; set; }
+        public Mock<EmployerAccountsDbContext> EmployerAccountDbContextMock { get; set; }
 
-        public EmployerAccountDbContext EmployerAccountDbContext => EmployerAccountDbContextMock.Object;
+        public EmployerAccountsDbContext EmployerAccountDbContext => EmployerAccountDbContextMock.Object;
 
         public EmployerAgreementBuilder SetupMockDbContext()
         {

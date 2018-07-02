@@ -218,7 +218,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
                 .ReturnsAsync(ValidationResult);
 
             var queryHandler = new GetAccountEmployerAgreementsQueryHandler(
-                new Lazy<EmployerAccountDbContext>(() => EmployerAgreementBuilder.EmployerAccountDbContext), 
+                new Lazy<EmployerAccountsDbContext>(() => EmployerAgreementBuilder.EmployerAccountDbContext), 
                 EmployerAgreementBuilder.HashingService,
                 Validator, ConfigurationProvider);
 

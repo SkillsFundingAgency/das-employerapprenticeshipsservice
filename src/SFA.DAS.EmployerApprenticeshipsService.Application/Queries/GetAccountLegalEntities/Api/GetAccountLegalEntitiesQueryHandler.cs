@@ -14,9 +14,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api
     public class GetAccountLegalEntitiesQueryHandler : IAsyncRequestHandler<GetAccountLegalEntitiesQuery, GetAccountLegalEntitiesResponse>
     {
         private readonly IConfigurationProvider _configurationProvider;
-        private readonly Lazy<EmployerAccountDbContext> _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
 
-        public GetAccountLegalEntitiesQueryHandler(IConfigurationProvider configurationProvider, Lazy<EmployerAccountDbContext> db)
+        public GetAccountLegalEntitiesQueryHandler(IConfigurationProvider configurationProvider, Lazy<EmployerAccountsDbContext> db)
         {
             _configurationProvider = configurationProvider;
             _db = db;

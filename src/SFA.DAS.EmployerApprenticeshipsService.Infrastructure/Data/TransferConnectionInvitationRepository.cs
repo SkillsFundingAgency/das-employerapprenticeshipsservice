@@ -9,9 +9,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class TransferConnectionInvitationRepository : ITransferConnectionInvitationRepository
     {
-        private readonly Lazy<EmployerAccountDbContext> _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
 
-        public TransferConnectionInvitationRepository(Lazy<EmployerAccountDbContext> db)
+        public TransferConnectionInvitationRepository(Lazy<EmployerAccountsDbContext> db)
         {
             _db = db;
         }

@@ -156,6 +156,7 @@
     <Compile Include="ProcessOutboxMessageCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StructureMap\EndpointConfigurationExtensions.cs" />
+    <Compile Include="StructureMap\NServiceBusRegistry.cs" />
     <Compile Include="Testing\TestableEventPublisher.cs" />
     <Compile Include="UnitOfWorkContext.cs" />
   </ItemGroup>
