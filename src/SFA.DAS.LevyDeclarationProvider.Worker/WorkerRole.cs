@@ -1,14 +1,12 @@
 using Microsoft.WindowsAzure.ServiceRuntime;
+using NLog;
 using SFA.DAS.EAS.Application.DependencyResolution;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution;
 using SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers;
-using SFA.DAS.Messaging.AzureServiceBus;
-using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
-using SFA.DAS.NLog.Logger;
 using StructureMap;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
@@ -17,6 +15,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
 {
     public class WorkerRole : RoleEntryPoint
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent _runCompleteEvent = new ManualResetEvent(false);
         private IContainer _container;
@@ -31,6 +31,11 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
             {
                 var levyDeclaration = _container.GetInstance<ILevyDeclaration>();
                 levyDeclaration.RunAsync(_cancellationTokenSource.Token).Wait();
+            }
+            catch (Exception ex)
+            {
+                Logger.Fatal(ex, ex.GetMessage());
+                throw;
             }
             finally
             {

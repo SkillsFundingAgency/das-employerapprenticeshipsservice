@@ -1,7 +1,9 @@
 using Microsoft.WindowsAzure.ServiceRuntime;
+using NLog;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution;
 using SFA.DAS.Messaging.AzureServiceBus;
@@ -20,6 +22,8 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
 {
     public class WorkerRole : RoleEntryPoint
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent _runCompleteEvent = new ManualResetEvent(false);
         protected IContainer Container;
@@ -27,6 +31,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
         public override void Run()
         {
             LoggingConfig.ConfigureLogging();
+
             Trace.TraceInformation("SFA.DAS.EAS.PaymentProvider.Worker is running");
 
             try
@@ -42,9 +47,14 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
 
                 Task.WaitAll(processorTasks, _cancellationTokenSource.Token);
             }
-            catch (OperationCanceledException)
+			catch (OperationCanceledException)
             {
                 Trace.TraceInformation("SFA.DAS.EAS.PaymentProvider.Worker has been cancelled");
+            }
+            catch (Exception ex)
+            {
+                Logger.Fatal(ex, ex.GetMessage());
+                throw;
             }
             finally
             {
