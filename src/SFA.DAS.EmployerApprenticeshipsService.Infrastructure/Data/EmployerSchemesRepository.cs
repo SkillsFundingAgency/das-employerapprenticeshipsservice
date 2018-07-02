@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -12,23 +13,25 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class EmployerSchemesRepository : BaseRepository, IEmployerSchemesRepository
     {
-        public EmployerSchemesRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+        private readonly Lazy<EmployerAccountDbContext> _db;
+
+        public EmployerSchemesRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, Lazy<EmployerAccountDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
+            _db = db;
         }
 
         public async Task<PayeSchemes> GetSchemesByEmployerId(long employerId)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@accountId", employerId, DbType.Int64);
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<PayeScheme>(
-                    sql: "[employer_account].[GetPayeSchemes_ByAccountId]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
+            parameters.Add("@accountId", employerId, DbType.Int64);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<PayeScheme>(
+                sql: "[employer_account].[GetPayeSchemes_ByAccountId]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
 
             return new PayeSchemes
             {
@@ -38,19 +41,17 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<PayeScheme> GetSchemeByRef(string empref)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@payeRef", empref, DbType.String);
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<PayeScheme>(
-                    sql: "[employer_account].[GetPayeSchemesInUse]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
+            parameters.Add("@payeRef", empref, DbType.String);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<PayeScheme>(
+                sql: "[employer_account].[GetPayeSchemesInUse]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
 
             return result.SingleOrDefault();
-
         }
     }
 }
