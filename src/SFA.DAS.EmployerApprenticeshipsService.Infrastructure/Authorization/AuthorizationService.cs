@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Infrastructure.Authorization
         private readonly ICallerContextProvider _callerContextProvider;
         private readonly IConfigurationProvider _configurationProvider;
         private readonly IFeatureService _featureService;
-        private readonly Lazy<EmployerAccountDbContext> _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
 
         public AuthorizationService(
             IAuthorizationContextCache authorizationContextCache,
@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Infrastructure.Authorization
             ICallerContextProvider callerContextProvider,
             IConfigurationProvider configurationProvider,
             IFeatureService featureService,
-            Lazy<EmployerAccountDbContext> db)
+            Lazy<EmployerAccountsDbContext> db)
         {
             _authorizationContextCache = authorizationContextCache;
             _handlers = handlers;

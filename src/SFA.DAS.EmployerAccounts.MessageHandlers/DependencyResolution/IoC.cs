@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.EAS.Application.DependencyResolution;
+using SFA.DAS.NServiceBus.StructureMap;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
@@ -16,7 +17,6 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
-                c.AddRegistry<LevyRegistry>();
                 c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();

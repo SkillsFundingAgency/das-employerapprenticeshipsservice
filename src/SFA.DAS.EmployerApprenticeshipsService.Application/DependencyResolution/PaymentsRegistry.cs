@@ -11,7 +11,6 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         {
             For<IPaymentsEventsApiConfiguration>().Use(c => c.GetInstance<PaymentsApiClientConfiguration>());
             For<PaymentsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI")).Singleton();
-            For<PaymentProviderConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<PaymentProviderConfiguration>("SFA.DAS.PaymentProvider")).Singleton();
         }
     }
 }

@@ -8,10 +8,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferAllowance
 {
     public class GetTransferAllowanceQueryHandler : IAsyncRequestHandler<GetTransferAllowanceQuery, GetTransferAllowanceResponse>
     {
-        private readonly EmployerFinancialDbContext _db;
+        private readonly EmployerFinanceDbContext _db;
         private readonly LevyDeclarationProviderConfiguration _configuration;
 
-        public GetTransferAllowanceQueryHandler(EmployerFinancialDbContext db, LevyDeclarationProviderConfiguration configuration)
+        public GetTransferAllowanceQueryHandler(EmployerFinanceDbContext db, LevyDeclarationProviderConfiguration configuration)
         {
             _db = db;
             _configuration = configuration;
