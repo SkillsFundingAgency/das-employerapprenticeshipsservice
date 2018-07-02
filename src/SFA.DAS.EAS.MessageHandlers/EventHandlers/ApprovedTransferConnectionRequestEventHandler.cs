@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
 {
-    public class SentTransferConnectionInviteEventHandler : IHandleMessages<SentTransferConnectionRequestEvent>
+    public class ApprovedTransferConnectionRequestEventHandler : IHandleMessages<ApprovedTransferConnectionRequestEvent>
     {
         private readonly IMessagePublisher _messagePublisher;
 
-        public SentTransferConnectionInviteEventHandler(IMessagePublisher messagePublisher)
+        public ApprovedTransferConnectionRequestEventHandler(IMessagePublisher messagePublisher)
         {
             _messagePublisher = messagePublisher;
         }
-        public async Task Handle(SentTransferConnectionRequestEvent message, IMessageHandlerContext context)
+
+        public async Task Handle(ApprovedTransferConnectionRequestEvent message, IMessageHandlerContext context)
         {
-            await _messagePublisher.PublishAsync(new SentTransferConnectionInvitationEvent
+            await _messagePublisher.PublishAsync(new ApprovedTransferConnectionInvitationEvent
             {
                 TransferConnectionInvitationId = message.TransferConnectionRequestId,
                 SenderAccountId = message.SenderAccountId,
@@ -25,9 +26,9 @@ namespace SFA.DAS.EAS.MessageHandlers.EventHandlers
                 ReceiverAccountId = message.ReceiverAccountId,
                 ReceiverAccountHashedId = message.ReceiverAccountHashedId,
                 ReceiverAccountName = message.ReceiverAccountName,
-                SentByUserId = message.SentByUserId,
-                SentByUserExternalId = message.SentByUserExternalId,
-                SentByUserName = message.SentByUserName,
+                ApprovedByUserId = message.ApprovedByUserId,
+                ApprovedByUserExternalId = message.ApprovedByUserRef,
+                ApprovedByUserName = message.ApprovedByUserName,
                 CreatedAt = message.Created
             });
         }
