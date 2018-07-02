@@ -1,6 +1,5 @@
 using FluentAssertions;
 using Moq;
-using NServiceBus.Testing;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AcceptInvitation;
 using SFA.DAS.EAS.Application.Exceptions;
@@ -10,12 +9,12 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.Messages.Events;
 using SFA.DAS.NServiceBus.Testing;
 using SFA.DAS.TimeProvider;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
 {
