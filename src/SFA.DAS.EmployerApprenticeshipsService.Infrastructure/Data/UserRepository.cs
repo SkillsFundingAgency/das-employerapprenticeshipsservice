@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     {
         private readonly Lazy<EmployerAccountDbContext> _db;
 
-        public UserRepository(EmployerApprenticeshipsServiceConfiguration configuration, Lazy<EmployerAccountDbContext> db, ILog logger)
+        public UserRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, Lazy<EmployerAccountDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
@@ -34,94 +34,92 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<User> GetUserByRef(string id)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@userRef", new Guid(id), DbType.Guid);
+            var parameters = new DynamicParameters();
 
-                var res = await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE UserRef = @userRef",
-                    param: parameters,
-                    commandType: CommandType.Text);
-                return res;
-            });
+            parameters.Add("@userRef", new Guid(id), DbType.Guid);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<User>(
+                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE UserRef = @userRef",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
+
             return result.SingleOrDefault();
         }
 
         public async Task<User> GetByEmailAddress(string emailAddress)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@email", emailAddress, DbType.String);
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Email = @email",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
+            parameters.Add("@email", emailAddress, DbType.String);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<User>(
+                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Email = @email",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
+
             return result.SingleOrDefault();
         }
 
-        public async Task Create(User user)
+        public Task Create(User user)
         {
-            await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@email", user.Email, DbType.String);
-                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
-                parameters.Add("@firstName", user.FirstName, DbType.String);
-                parameters.Add("@lastName", user.LastName, DbType.String);
-                return await c.ExecuteAsync(
-                    sql: "INSERT INTO [employer_account].[User] (UserRef, Email, FirstName, LastName) VALUES (@userRef, @email, @firstName, @lastName)",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@email", user.Email, DbType.String);
+            parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
+            parameters.Add("@firstName", user.FirstName, DbType.String);
+            parameters.Add("@lastName", user.LastName, DbType.String);
+
+            return _db.Value.Database.Connection.ExecuteAsync(
+                sql: "INSERT INTO [employer_account].[User] (UserRef, Email, FirstName, LastName) VALUES (@userRef, @email, @firstName, @lastName)",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
         }
 
-        public async Task Update(User user)
+        public Task Update(User user)
         {
-            await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@email", user.Email, DbType.String);
-                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
-                parameters.Add("@firstName", user.FirstName, DbType.String);
-                parameters.Add("@lastName", user.LastName, DbType.String);
-                return await c.ExecuteAsync(
-                    sql: "UPDATE [employer_account].[User] set Email = @email, FirstName = @firstName, LastName = @lastName where UserRef = @userRef",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@email", user.Email, DbType.String);
+            parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
+            parameters.Add("@firstName", user.FirstName, DbType.String);
+            parameters.Add("@lastName", user.LastName, DbType.String);
+
+            return _db.Value.Database.Connection.ExecuteAsync(
+                sql: "UPDATE [employer_account].[User] set Email = @email, FirstName = @firstName, LastName = @lastName where UserRef = @userRef",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
         }
 
-        public async Task Upsert(User user)
+        public Task Upsert(User user)
         {
-            await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@email", user.Email, DbType.String);
-                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
-                parameters.Add("@firstName", user.FirstName, DbType.String);
-                parameters.Add("@lastName", user.LastName, DbType.String);
-                return await c.ExecuteAsync(
-                    sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@email", user.Email, DbType.String);
+            parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
+            parameters.Add("@firstName", user.FirstName, DbType.String);
+            parameters.Add("@lastName", user.LastName, DbType.String);
+
+            return _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
         }
 
         public async Task<Users> GetAllUsers()
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User];",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
+            var result = await _db.Value.Database.Connection.QueryAsync<User>(
+                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User];",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
+
             return new Users
             {
                 UserList = result.ToList()

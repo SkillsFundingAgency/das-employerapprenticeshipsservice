@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -11,59 +12,58 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class LegalEntityRepository : BaseRepository, ILegalEntityRepository
     {
-        public LegalEntityRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+        private readonly Lazy<EmployerAccountDbContext> _db;
+
+        public LegalEntityRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, Lazy<EmployerAccountDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
+            _db = db;
         }
 
         public async Task<long[]> GetLegalEntitiesWithoutSpecificAgreement(long firstId, int count, int agreementId)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@firstId", firstId, DbType.Int64);
-                parameters.Add("@count", count, DbType.Int32);
-                parameters.Add("@agreementId", agreementId, DbType.Int64);
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<long>(
-                    sql: "[employer_account].[GetLegalEntities_WithoutSpecificAgreement]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
+            parameters.Add("@firstId", firstId, DbType.Int64);
+            parameters.Add("@count", count, DbType.Int32);
+            parameters.Add("@agreementId", agreementId, DbType.Int64);
 
-            });
+            var result = await _db.Value.Database.Connection.QueryAsync<long>(
+                sql: "[employer_account].[GetLegalEntities_WithoutSpecificAgreement]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
 
             return result.ToArray();
         }
 
         public async Task<long[]> GetAccountsLinkedToLegalEntity(long legalEntityId)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<long>(
-                    sql: "[employer_account].[GetAccountsLinkedToLegalEntity]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
+            parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<long>(
+                sql: "[employer_account].[GetAccountsLinkedToLegalEntity]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
 
             return result.ToArray();
         }
 
         public async Task<long[]> GetAccountsLinkedToLegalEntityWithoutSpecificAgreement(long legalEntityId, int templateId)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
-                parameters.Add("@@withoutAgreementVersion", templateId, DbType.Int32);
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<long>(
-                    sql: "[employer_account].[GetAccountsLinkedToLegalEntity]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
+            parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
+            parameters.Add("@withoutAgreementVersion", templateId, DbType.Int32);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<long>(
+                sql: "[employer_account].[GetAccountsLinkedToLegalEntity]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
 
             return result.ToArray();
         }
