@@ -25,10 +25,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
                 .And.Match<GetStatisticsResponse>(r2 =>
                     r2.Statistics != null &&
                     r2.Statistics.TotalAccounts == 2 &&
-                    r2.Statistics.TotalActiveLegalEntities == 3 &&
+                    r2.Statistics.TotalLegalEntities == 4 &&
                     r2.Statistics.TotalPayeSchemes == 4 &&
-                    r2.Statistics.TotalSignedAgreements == 5 &&
-                    r2.Statistics.TotalPaymentsThisYear == 2));
+                    r2.Statistics.TotalAgreements == 5 &&
+                    r2.Statistics.TotalPayments == 2));
         }
     }
 
@@ -55,9 +55,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
             LegalEntities = new List<LegalEntity>
             {
                 new LegalEntity(),
-                new LegalEntity { Status = "active" },
-                new LegalEntity { Status = "active" },
-                new LegalEntity { Status = "active" }
+                new LegalEntity(),
+                new LegalEntity(),
+                new LegalEntity(),
             };
 
             PayeSchemes = new List<Paye>
@@ -80,9 +80,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
 
             Payments = new List<Payment>
             {
-                new Payment(),
-                new Payment { CollectionPeriodYear = DateTime.Now.Year },
-                new Payment { CollectionPeriodYear = DateTime.Now.Year }
+                new Payment(), 
+                new Payment()
             };
 
             AccountsDb = new Mock<EmployerAccountDbContext>();
