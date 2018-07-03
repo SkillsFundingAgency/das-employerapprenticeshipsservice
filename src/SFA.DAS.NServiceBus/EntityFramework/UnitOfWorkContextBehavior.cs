@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NServiceBus;
 using NServiceBus.Pipeline;
+using SFA.DAS.NServiceBus.MsSqlServer;
 
 namespace SFA.DAS.NServiceBus.EntityFramework
 {
@@ -16,7 +16,7 @@ namespace SFA.DAS.NServiceBus.EntityFramework
         private void SetUnitOfWorkContext(IInvokeHandlerContext context)
         {
             var unitOfWorkContext = context.Builder.Build<IUnitOfWorkContext>();
-            var sqlStorageSession = context.SynchronizedStorageSession.SqlPersistenceSession();
+            var sqlStorageSession = context.SynchronizedStorageSession.GetSqlStorageSession();
 
             unitOfWorkContext.Set(sqlStorageSession.Connection);
             unitOfWorkContext.Set(sqlStorageSession.Transaction);
