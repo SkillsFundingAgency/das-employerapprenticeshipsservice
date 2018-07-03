@@ -150,6 +150,7 @@
     <Compile Include="IEventPublisher.cs" />
     <Compile Include="IUnitOfWorkContext.cs" />
     <Compile Include="MsSqlServer\EndpointConfigurationExtensions.cs" />
+    <Compile Include="MsSqlServer\SynchronizedStorageSessionExtensions.cs" />
     <Compile Include="NewtonsoftSerializer\EndpointConfigurationExtensions.cs" />
     <Compile Include="NLog\EndpointConfigurationExtensions.cs" />
     <Compile Include="OutboxMessage.cs" />
