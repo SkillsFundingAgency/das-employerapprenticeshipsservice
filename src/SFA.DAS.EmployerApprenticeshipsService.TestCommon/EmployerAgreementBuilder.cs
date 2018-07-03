@@ -62,8 +62,7 @@ namespace SFA.DAS.EAS.TestCommon
         {
             LegalEntities.Add(new LegalEntity
             {
-                Id = legalEntityId,
-                Name = $"{legalEntityId}"
+                Id = legalEntityId
             });
 
             return this;

@@ -34,6 +34,7 @@ BEGIN
 		@status = @status,
 		@source = @source,
 		@publicSectorDataSource = @publicSectorDataSource,
+		@sector = @sector,
 		@legalEntityId = @legalEntityId OUTPUT,
 		@employerAgreementId = @employerAgreementId OUTPUT
 		

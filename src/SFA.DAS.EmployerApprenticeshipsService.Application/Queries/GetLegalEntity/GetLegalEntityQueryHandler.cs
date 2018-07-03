@@ -28,7 +28,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntity
                     l.LegalEntityId == message.LegalEntityId.Value &&
                     l.AccountId == message.AccountId.Value && 
                     (l.PendingAgreementId != null || l.SignedAgreementId != null))
-                .Select(ale => ale.LegalEntity)
                 .ProjectTo<LegalEntityViewModel>(_configurationProvider, new
                 {
                     accountId = message.AccountId.Value,

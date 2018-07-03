@@ -298,17 +298,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var createLegalEntityResponse = await _mediator.SendAsync(new CreateLegalEntityCommand
             {
                 HashedAccountId = request.HashedAccountId,
-                LegalEntity = new LegalEntity
-                {
-                    Name = request.Name,
-                    Code = request.Code,
-                    RegisteredAddress = request.Address,
-                    DateOfIncorporation = request.IncorporatedDate,
-                    Status = request.LegalEntityStatus,
-                    Source = request.Source,
-                    PublicSectorDataSource = request.PublicSectorDataSource,
-                    Sector = request.Sector
-                },
+                Code = request.Code,
+                DateOfIncorporation = request.IncorporatedDate,
+                Status = request.LegalEntityStatus,
+                Source = request.Source,
+                PublicSectorDataSource = request.PublicSectorDataSource,
+                Sector = request.Sector,
+                Name = request.Name,
+                Address = request.Address,
                 ExternalUserId = request.ExternalUserId
             });
 

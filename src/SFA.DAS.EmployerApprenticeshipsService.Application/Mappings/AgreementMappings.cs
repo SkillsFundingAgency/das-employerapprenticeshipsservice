@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Application.Mappings
                 .ForMember(d => d.AccountId, conf => conf.MapFrom(d => d.AccountLegalEntity.AccountId))
                 .ForMember(d => d.Account, conf => conf.MapFrom(d => d.AccountLegalEntity.Account))
                 .ForMember(d => d.LegalEntityId, conf => conf.MapFrom(d => d.AccountLegalEntity.LegalEntityId))
-                .ForMember(d => d.LegalEntity, conf => conf.MapFrom(d => d.AccountLegalEntity.LegalEntity))
+                .ForMember(d => d.LegalEntity, conf => conf.MapFrom(d => d.AccountLegalEntity))
                 .ForMember(d => d.HashedAccountId, o => o.Ignore())
                 .ForMember(d => d.HashedAgreementId, o => o.Ignore());
 

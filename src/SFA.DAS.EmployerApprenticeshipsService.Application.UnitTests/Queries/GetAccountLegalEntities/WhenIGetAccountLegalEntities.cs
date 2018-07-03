@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities
         private const string ExpectedHashedId = "123";
         private const long ExpectedAccountId = 456;
         private readonly string _expectedUserId = Guid.NewGuid().ToString();
-        private List<LegalEntity> _legalEntities;
+        private List<AccountSpecificLegalEntity> _legalEntities;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
 
@@ -70,27 +70,27 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities
             var response = await RequestHandler.Handle(Query);
 
             //Assert
-            Assert.That(response.Entites.LegalEntityList.Count, Is.EqualTo(2));
+            Assert.That(response.Entites.Count, Is.EqualTo(2));
 
             foreach (var legalEntity in _legalEntities)
             {
-                var returned = response.Entites.LegalEntityList.SingleOrDefault(x => x.Id == legalEntity.Id);
+                var returned = response.Entites.SingleOrDefault(x => x.Id == legalEntity.Id);
 
                 Assert.That(returned.Name, Is.EqualTo(legalEntity.Name));
             }
         }
 
-        private List<LegalEntity> GetListOfLegalEntities()
+        private List<AccountSpecificLegalEntity> GetListOfLegalEntities()
         {
-            return new List<LegalEntity>
+            return new List<AccountSpecificLegalEntity>
             {
-                new LegalEntity
+                new AccountSpecificLegalEntity()
                 {
                     Id = 1,
                     Name = "LegalEntity1"
                     
                 },
-                new LegalEntity
+                new AccountSpecificLegalEntity()
                 {
                     Id = 2,
                     Name = "LegalEntity2"

@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
                 .ReturnsAsync(new GetAccountLegalEntitiesResponse
                 {
-                    Entites = new LegalEntities {LegalEntityList = new List<LegalEntity>()}
+                    Entites = new List<AccountSpecificLegalEntity>()
                 });
 
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
@@ -82,14 +82,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
                 .ReturnsAsync(new GetAccountLegalEntitiesResponse
                 {
-                    Entites = new LegalEntities { LegalEntityList = new List<LegalEntity>
+                    Entites = new List<AccountSpecificLegalEntity>
                     {
-                        new LegalEntity
+                        new AccountSpecificLegalEntity
                         {
                             Code="12345",
                             Source = (byte)OrganisationType.Charities
                         }
-                    } }
+                    } 
                 });
 
             //Act

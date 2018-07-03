@@ -123,8 +123,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
         {
             LegalEntity = new LegalEntity
             {
-                Id = 222222,
-                Name = "Acme"
+                Id = 222222
             };
 
             LegalEntities.Add(LegalEntity);

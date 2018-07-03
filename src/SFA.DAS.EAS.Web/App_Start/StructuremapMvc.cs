@@ -19,13 +19,13 @@ namespace SFA.DAS.EAS.Web
 
         public static void End()
         {
-            Logger.Debug("Disposing dependecy scope");
+            Logger.Debug("Disposing dependency scope");
             StructureMapDependencyScope.Dispose();
         }
 		
         public static void Start()
         {
-            Logger.Debug("Creating dependecy scope");
+            Logger.Debug("Creating dependency scope");
             IContainer container = IoC.Initialize();
             StructureMapDependencyScope = new StructureMapDependencyScope(container);
             DependencyResolver.SetResolver(StructureMapDependencyScope);

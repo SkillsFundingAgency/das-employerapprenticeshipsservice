@@ -7,9 +7,9 @@
     [LegalEntityId] BIGINT NOT NULL, 
     [Created] DATETIME NOT NULL, 
     [Modified] DATETIME NULL, 
-    [SignedAgreementVersion] BIGINT NULL, 
+    [SignedAgreementVersion] INT NULL, 
     [SignedAgreementId] BIGINT NULL, 
-    [PendingAgreementVersion] BIGINT NULL, 
+    [PendingAgreementVersion] INT NULL, 
     [PendingAgreementId] BIGINT NULL, 
     CONSTRAINT [FK_AccountLegalEntity_Account] FOREIGN KEY ([AccountId]) REFERENCES [Employer_Account].[Account]([Id]),
     CONSTRAINT [FK_AccountLegalEntity_LegalEntity] FOREIGN KEY ([LegalEntityId]) REFERENCES [Employer_Account].[LegalEntity]([Id])

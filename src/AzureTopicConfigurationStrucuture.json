@@ -16,14 +16,16 @@
     "topicName": "agreement_created",
     "subscription": [
       "Task_CreatedEmployerAgreementProcessor",
-      "Activity_AgreementCreatedMessageProcessor"
+      "Activity_AgreementCreatedMessageProcessor",
+      "MH_AgreementCreated"
     ]
   },
   {
     "topicName": "agreement_signed",
     "subscription": [
       "Task_SignedEmployerAgreementProcessor",
-      "Activity_AgreementSignedMessageProcessor"
+      "Activity_AgreementSignedMessageProcessor",
+      "MH_AgreementSigned"
     ]
   },
   {
@@ -43,7 +45,9 @@
   },
   {
     "topicName": "legal_entity_added",
-    "subscription": [ "Activity_LegalEntityAddedMessageProcessor" ]
+    "subscription": [
+      "Activity_LegalEntityAddedMessageProcessor"
+    ]
   },
   {
     "topicName": "refresh_payments2",

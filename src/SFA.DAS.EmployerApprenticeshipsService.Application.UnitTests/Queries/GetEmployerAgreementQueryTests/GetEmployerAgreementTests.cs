@@ -12,6 +12,7 @@ using SFA.DAS.EAS.TestCommon;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentAssertions;
 using SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementTests;
 using Membership = SFA.DAS.EAS.Domain.Models.AccountTeam.Membership;
 
@@ -32,13 +33,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
 
             return RunAsync(
                 arrange: fixtures => fixtures
-                                        .WithAccount(AccountId, HashedAccountId)
-                                        .WithSignedAgreement(AccountId, LegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
-                                        .WithUser(AccountId, "Buck", "Rogers", out user)
-                                        .WithCallerAsUnauthorizedUser(),
+                    .WithAccount(AccountId, HashedAccountId)
+                    .WithSignedAgreement(AccountId, LegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
+                    .WithUser(AccountId, "Buck", "Rogers", out user)
+                    .WithCallerAsUnauthorizedUser(),
                 act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.ExternalId),
-                assert: fixtures =>
-                    Assert.IsInstanceOf<UnauthorizedAccessException>(fixtures.Exception));
+                assert: (fixturesf, r) => r.ShouldThrowExactly<UnauthorizedAccessException>());
         }
 
         [Test]
@@ -49,13 +49,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
 
             return RunAsync(
                 arrange: fixtures => fixtures
-                                        .WithAccount(AccountId, HashedAccountId)
-                                        .WithSignedAgreement(AccountId, LegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
-                                        .WithUser(AccountId, "Buck", "Rogers", out user)
-                                        .WithInvalidRequest(),
+                    .WithAccount(AccountId, HashedAccountId)
+                    .WithSignedAgreement(AccountId, LegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
+                    .WithUser(AccountId, "Buck", "Rogers", out user)
+                    .WithInvalidRequest(),
                 act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.ExternalId),
-                assert: fixtures =>
-                    Assert.IsInstanceOf<InvalidRequestException>(fixtures.Exception));
+                assert: (f, r) => r.ShouldThrowExactly<InvalidRequestException>());
         }
 
         [Test]
@@ -183,8 +182,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
 
         public GetEmployerAgreementResponse Response { get; private set; }
 
-        public Exception Exception { get; private set; }
-
         public GetEmployerAgreementTestFixtures()
         {
             EmployerAgreementBuilder = new EmployerAgreementBuilder();
@@ -210,20 +207,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             EmployerAgreementBuilder.SetupMockDbContext();
             var request = BuildRequest(hashedAccountId, agreementId, externalUserId);
 
-            try
-            {
-                var handler = new GetEmployerAgreementQueryHandler(
-                    EmployerAgreementBuilder.EmployerAccountDbContext,
-                    EmployerAgreementBuilder.HashingService,
-                    Validator.Object,
-                    ConfigurationProvider);
+            var handler = new GetEmployerAgreementQueryHandler(
+                EmployerAgreementBuilder.EmployerAccountDbContext,
+                EmployerAgreementBuilder.HashingService,
+                Validator.Object,
+                ConfigurationProvider);
 
-                Response = await handler.Handle(request);
-            }
-            catch (Exception e)
-            {
-                Exception = e;
-            }
+            Response = await handler.Handle(request);
         }
 
         public GetEmployerAgreementRequest BuildRequest(string hashedAccountId, long agreementId, Guid externalUserId)

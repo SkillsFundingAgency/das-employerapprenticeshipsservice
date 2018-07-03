@@ -91,22 +91,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task<EmployerAgreementView> CreateLegalEntityWithAgreement(long accountId, LegalEntity legalEntity)
+        public async Task<EmployerAgreementView> CreateLegalEntityWithAgreement(CreateLegalEntityWithAgreementParams createParams)
         {
             return await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int64);
-                parameters.Add("@companyNumber", legalEntity.Code, DbType.String);
-                parameters.Add("@companyName", legalEntity.Name, DbType.String);
-                parameters.Add("@CompanyAddress", legalEntity.RegisteredAddress, DbType.String);
-                parameters.Add("@CompanyDateOfIncorporation", legalEntity.DateOfIncorporation, DbType.DateTime);
+                parameters.Add("@accountId", createParams.AccountId, DbType.Int64);
+                parameters.Add("@companyNumber", createParams.Code, DbType.String);
+                parameters.Add("@companyName", createParams.Name, DbType.String);
+                parameters.Add("@CompanyAddress", createParams.Address, DbType.String);
+                parameters.Add("@CompanyDateOfIncorporation", createParams.DateOfIncorporation, DbType.DateTime);
                 parameters.Add("@legalEntityId", null, DbType.Int64, ParameterDirection.Output);
                 parameters.Add("@employerAgreementId", null, DbType.Int64, ParameterDirection.Output);
-                parameters.Add("@status", legalEntity.Status, DbType.String);
-                parameters.Add("@source", legalEntity.Source, DbType.Int16);
-                parameters.Add("@publicSectorDataSource", legalEntity.PublicSectorDataSource, DbType.Int16);
-                parameters.Add("@sector", legalEntity.Sector, DbType.String);
+                parameters.Add("@status", createParams.Status, DbType.String);
+                parameters.Add("@source", createParams.Source, DbType.Int16);
+                parameters.Add("@publicSectorDataSource", createParams.PublicSectorDataSource, DbType.Int16);
+                parameters.Add("@sector", createParams.Sector, DbType.String);
 
                 var trans = c.BeginTransaction();
 
@@ -123,13 +123,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 return new EmployerAgreementView
                 {
                     Id = agreementId,
-                    AccountId = accountId,
+                    AccountId = createParams.AccountId,
                     LegalEntityId = legalEntityId,
-                    LegalEntityName = legalEntity.Name,
-                    LegalEntityCode = legalEntity.Code,
-                    LegalEntityAddress = legalEntity.RegisteredAddress,
-                    LegalEntityInceptionDate = legalEntity.DateOfIncorporation,
-                    Sector = legalEntity.Sector,
+                    LegalEntityName = createParams.Name,
+                    LegalEntityCode = createParams.Code,
+                    LegalEntityAddress = createParams.Address,
+                    LegalEntityInceptionDate = createParams.DateOfIncorporation,
+                    Sector = createParams.Sector,
                     Status = EmployerAgreementStatus.Pending,
                 };
             });
