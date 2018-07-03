@@ -1,4 +1,6 @@
-﻿-- Store the original data 
+﻿DELETE FROM  [employer_account].[AccountEmployerAgreement]
+
+-- Store the original data 
 IF (NOT EXISTS (SELECT *  
 					FROM INFORMATION_SCHEMA.TABLES  
 					WHERE TABLE_SCHEMA = 'employer_account'  
