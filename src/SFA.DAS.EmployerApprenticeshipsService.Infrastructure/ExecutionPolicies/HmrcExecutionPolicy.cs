@@ -1,4 +1,5 @@
 ﻿using System;
+using HMRC.ESFA.Levy.Api.Types.Exceptions;
 using Polly;
 using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.NLog.Logger;
@@ -35,10 +36,15 @@ namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
                 return default(T);
             }
 
-            if (ex is HMRC.ESFA.Levy.Api.Types.Exceptions.ApiHttpException)
+            if (ex is ApiHttpException exception)
             {
                 _logger.Info($"ApiHttpException - {ex.Message}");
-                return default(T);
+
+                switch (exception.HttpCode)
+                {
+                    case 404:
+                        return default(T);
+                }
             }
 
             _logger.Error(ex, $"Exceeded retry limit - {ex.Message}");
