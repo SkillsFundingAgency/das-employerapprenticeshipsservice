@@ -125,6 +125,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Me
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.MessageHandlers.UnitTests", "SFA.DAS.EmployerFinance.MessageHandlers.UnitTests\SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.csproj", "{349D11C1-B5E1-49D3-B1E6-EA6DA3510863}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.NServiceBus.UnitTests", "SFA.DAS.NServiceBus.UnitTests\SFA.DAS.NServiceBus.UnitTests.csproj", "{1C8B6432-FF98-4FB4-B053-9E8250B06061}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -296,6 +298,10 @@ Global
 		{349D11C1-B5E1-49D3-B1E6-EA6DA3510863}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{349D11C1-B5E1-49D3-B1E6-EA6DA3510863}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{349D11C1-B5E1-49D3-B1E6-EA6DA3510863}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C8B6432-FF98-4FB4-B053-9E8250B06061}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C8B6432-FF98-4FB4-B053-9E8250B06061}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C8B6432-FF98-4FB4-B053-9E8250B06061}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C8B6432-FF98-4FB4-B053-9E8250B06061}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -29,6 +29,11 @@ namespace SFA.DAS.NServiceBus
             });
         }
 
+        void IUnitOfWorkContext.AddEvent<T>(Action<T> action)
+        {
+            AddEvent(action);
+        }
+
         public T Get<T>()
         {
             return (T)_data[typeof(T).FullName];
