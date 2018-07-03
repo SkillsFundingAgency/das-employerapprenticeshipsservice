@@ -145,6 +145,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
+    <Compile Include="EventHandlers\AgreementSignedEventHandler.cs" />
+    <Compile Include="EventHandlers\AgreementCreatedEventHandler.cs" />
     <Compile Include="EventHandlers\ApprovedTransferConnectionInvitationEventHandler.cs" />
     <Compile Include="EventHandlers\RejectedTransferConnectionInvitationEventHandler.cs" />
     <Compile Include="EventHandlers\SentTransferConnectionInvitationEventHandler.cs" />

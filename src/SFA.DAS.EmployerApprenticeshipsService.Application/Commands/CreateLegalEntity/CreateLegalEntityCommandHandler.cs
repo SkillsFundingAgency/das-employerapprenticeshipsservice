@@ -71,7 +71,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             };
 
             var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);
-            var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(
 
             agreementView.HashedAgreementId = _hashingService.HashValue(agreementView.Id);
 
@@ -83,7 +82,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
             await EvaluateEmployerLegalEntityAgreementStatus(owner.AccountId, agreementView.LegalEntityId);
 
-            await PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
+            await PublishAgreementCreatedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
 
             await PublishAgreementCreatedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
 
