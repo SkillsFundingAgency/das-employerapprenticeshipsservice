@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Common;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus;

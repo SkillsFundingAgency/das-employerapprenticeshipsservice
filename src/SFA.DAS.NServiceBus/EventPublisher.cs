@@ -5,9 +5,16 @@ namespace SFA.DAS.NServiceBus
 {
     public class EventPublisher : IEventPublisher
     {
+        private readonly IUnitOfWorkContext _unitOfWorkContext;
+
+        public EventPublisher(IUnitOfWorkContext unitOfWorkContext)
+        {
+            _unitOfWorkContext = unitOfWorkContext;
+        }
+
         public Task Publish<T>(Action<T> action) where T : Event, new()
         {
-            UnitOfWorkContext.AddEvent(action);
+            _unitOfWorkContext.AddEvent(action);
 
             return Task.CompletedTask;
         }
