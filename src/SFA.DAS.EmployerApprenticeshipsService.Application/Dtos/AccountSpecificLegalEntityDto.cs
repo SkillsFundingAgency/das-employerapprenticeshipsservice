@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Application.Dtos
 {
-    public class LegalEntityDto
+    public class AccountSpecificLegalEntityDto
     {
         public long Id { get; set; }
         public string Code { get; set; }

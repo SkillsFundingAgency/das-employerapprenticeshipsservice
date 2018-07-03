@@ -65,7 +65,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _command = new CreateLegalEntityCommand
             {
                 HashedAccountId = "ABC123",
-                LegalEntity = new LegalEntity(),
                 SignAgreement = true,
                 SignedDate = DateTime.Now.AddDays(-10),
                 ExternalUserId = "12345"
@@ -74,8 +73,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
                                  .ReturnsAsync(_owner);
 
-            _accountRepository.Setup(x => x.CreateLegalEntityWithAgreement(_owner.AccountId, _command.LegalEntity))
-                              .ReturnsAsync(_agreementView);
+            _accountRepository
+                .Setup(x => x.CreateLegalEntityWithAgreement(It.Is<CreateLegalEntityWithAgreementParams>(
+                    createParams => createParams.AccountId == _owner.AccountId)))
+                .ReturnsAsync(_agreementView);
 
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _legalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
@@ -162,7 +163,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             await _commandHandler.Handle(_command);
 
             //Assert
-            _accountRepository.Verify(r => r.CreateLegalEntityWithAgreement(It.IsAny<long>(), It.Is<LegalEntity>(le => !string.IsNullOrEmpty(le.Code))), Times.Once);
+            _accountRepository.Verify(r => r.CreateLegalEntityWithAgreement(It.Is<CreateLegalEntityWithAgreementParams>(cp => !string.IsNullOrEmpty(cp.Code))), Times.Once);
         }
 
         [Test]

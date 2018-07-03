@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Extensions;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
@@ -55,14 +56,20 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         {
             var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
-            if (string.IsNullOrEmpty(message.LegalEntity.Code))
+            var createParams = new CreateLegalEntityWithAgreementParams
             {
-                message.LegalEntity.Code = Guid.NewGuid().ToString();
-            }
+                AccountId = owner.AccountId,
+                Name = message.Name,
+                Status = message.Status,
+                Code = string.IsNullOrEmpty(message.Code) ? Guid.NewGuid().ToString() : message.Code,
+                DateOfIncorporation = message.DateOfIncorporation,
+                PublicSectorDataSource = message.PublicSectorDataSource,
+                Source = message.Source,
+                Address = message.Address,
+                Sector = message.Sector
+            };
 
-            var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(
-                owner.AccountId,
-                message.LegalEntity);
+            var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);
 
             agreementView.HashedAgreementId = _hashingService.HashValue(agreementView.Id);
 
@@ -72,9 +79,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
-            await PublishLegalEntityAddedMessage(accountId, agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
+            await PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
 
-            await PublishAgreementCreatedMessage(accountId, agreementView.Id, message.LegalEntity.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
+            await PublishAgreementCreatedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
 
             await _agreementService.RemoveFromCacheAsync(accountId);
 

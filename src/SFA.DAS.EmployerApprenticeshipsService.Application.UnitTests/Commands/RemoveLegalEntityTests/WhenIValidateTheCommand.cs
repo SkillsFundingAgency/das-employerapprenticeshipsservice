@@ -52,10 +52,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
                 x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(new EmployerAgreementView { Status = EmployerAgreementStatus.Pending, AccountId = ExpectedAccountId, LegalEntityId = ExpectedLegalEntityId});
             _employerAgreementRepository.Setup(
                 x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId, false))
-                .ReturnsAsync(new List<LegalEntity>
+                .ReturnsAsync(new List<AccountSpecificLegalEntity>
                 {
-                    new LegalEntity {Id = 432244},
-                    new LegalEntity {Id = ExpectedLegalEntityId}
+                    new AccountSpecificLegalEntity {Id = 432244},
+                    new AccountSpecificLegalEntity {Id = ExpectedLegalEntityId}
                 });
 
             _removeLegalEntityCommandValidator = new RemoveLegalEntityCommandValidator(_membershipRepository.Object, _employerAgreementRepository.Object, _hashingService.Object, _commitmentsApi.Object);
@@ -144,9 +144,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
             //Arrange
             _employerAgreementRepository.Setup(
                 x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId, false))
-                .ReturnsAsync(new List<LegalEntity>
+                .ReturnsAsync(new List<AccountSpecificLegalEntity>
                 {
-                    new LegalEntity {Id = ExpectedLegalEntityId}
+                    new AccountSpecificLegalEntity {Id = ExpectedLegalEntityId}
                 });
 
             //Act

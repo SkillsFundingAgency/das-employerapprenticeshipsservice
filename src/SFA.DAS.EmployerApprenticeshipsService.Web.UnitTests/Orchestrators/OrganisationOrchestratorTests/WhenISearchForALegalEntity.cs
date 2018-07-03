@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mapper = new Mock<IMapper>();
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
-                .ReturnsAsync(new GetAccountLegalEntitiesResponse {Entites = new LegalEntities {LegalEntityList = new List<LegalEntity>()} });
+                .ReturnsAsync(new GetAccountLegalEntitiesResponse {Entites = new List<AccountSpecificLegalEntity>() });
 
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
@@ -137,17 +137,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
                 .ReturnsAsync(new GetAccountLegalEntitiesResponse
                 {
-                    Entites = new LegalEntities
-                    {
-                        LegalEntityList = new List<LegalEntity>
+                    Entites = new List<AccountSpecificLegalEntity>
                         {
-                            new LegalEntity
+                            new AccountSpecificLegalEntity
                             {
                                 Name = addedEntityName,
                                 Source = (byte)OrganisationType.PublicBodies
                             }
                         }
-                    }
                 });
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetPublicSectorOrganisationQuery>()))
@@ -181,7 +178,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
                 .ReturnsAsync(new GetAccountLegalEntitiesResponse
                 {
-                    Entites = new LegalEntities()
+                    Entites = new List<AccountSpecificLegalEntity>()
                 });
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetPublicSectorOrganisationQuery>()))
@@ -213,16 +210,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
                 .ReturnsAsync(new GetAccountLegalEntitiesResponse
                 {
-                    Entites = new LegalEntities
+                    Entites = new List<AccountSpecificLegalEntity>
                     {
-                        LegalEntityList = new List<LegalEntity>
-                    {
-                        new LegalEntity
+                        new AccountSpecificLegalEntity
                         {
                             Code="12345",
                             Source = (byte)OrganisationType.CompaniesHouse
                         }
-                    }
                     }
                 });
 

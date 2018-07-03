@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
     public interface IEmployerAgreementRepository
     {
         [Obsolete("This method has been replaced by the GetAccountEmployerAgreementsQueryHandler query")]
-        Task<List<LegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId, bool signedOnly);
+        Task<List<AccountSpecificLegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId, bool signedOnly);
         Task<EmployerAgreementView> GetEmployerAgreement(long agreementId);
         Task SignAgreement(SignEmployerAgreement agreement);
         Task CreateEmployerAgreementTemplate(string templateRef, string text);
@@ -18,5 +18,6 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<EmployerAgreementTemplate> GetLatestAgreementTemplate();
         Task RemoveLegalEntityFromAccount(long agreementId);
         Task<List<RemoveEmployerAgreementView>> GetEmployerAgreementsToRemove(long accountId);
+        Task EvaluateEmployerLegalEntityAgreementStatus(long accountId, long legalEntityId);
     }
 }

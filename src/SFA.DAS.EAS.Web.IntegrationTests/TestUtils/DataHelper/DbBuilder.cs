@@ -89,8 +89,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             var output = new LegalEnityWithAgreementOutput();
 
             var view = await DependentRepositories.AccountRepository.CreateLegalEntityWithAgreement(
-                input.AccountId,
-                new LegalEntityWithAgreementInputToLegalEntityAdapter(input));
+               new LegalEntityWithAgreementInputAdapter(input));
 
             output.EmployerAgreementId = view.Id;
             output.LegalEntityId = view.LegalEntityId;
@@ -162,7 +161,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             if (action.IsCanceled)
             {
                 failMessage.AppendLine(
-                    $"A DB task has been cancelled, possibly because it has timed out. Timeout value is: {TestConstants.DbTimeout}");
+                    $"A DB task has been canceled, possibly because it has timed out. Timeout value is: {TestConstants.DbTimeout}");
             }
         }
     }

@@ -32,11 +32,17 @@ BEGIN
 			DROP TABLE employer_account.EmployerAgreement_Backup;
 		END
 		
+
+		DECLARE @SQL AS NVARCHAR(4000);
+
+		SELECT @SQL = '
 		SELECT EA.*, LE.Name, LE.RegisteredAddress
 		  INTO employer_account.EmployerAgreement_Backup 
 		  FROM employer_account.EmployerAgreement AS EA
 				JOIN employer_account.LegalEntity AS LE
-					ON LE.Id = EA.LegalEntityId;
+					ON LE.Id = EA.LegalEntityId;';
+
+		EXEC @SQL;
 
 		PRINT 'Created backup of EmployerAgreements';
 
@@ -82,4 +88,5 @@ BEGIN
 	END CATCH;
 END;
 
+GO
 

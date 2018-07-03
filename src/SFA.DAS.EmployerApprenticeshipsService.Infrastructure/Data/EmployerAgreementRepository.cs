@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<List<LegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId, bool signedOnly)
+        public async Task<List<AccountSpecificLegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId, bool signedOnly)
         {
             var result = await WithConnection(async c =>
             {
@@ -28,25 +28,19 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
                 
                 var sql = @"
-                    SELECT le.*
-                    FROM [employer_account].[LegalEntity] le
-                    WHERE le.Id IN (
-	                    SELECT LegalEntityId
-	                    FROM [employer_account].[EmployerAgreement] ea
-	                    WHERE ea.AccountId = @accountId";
+                        SELECT	le.Id, le.Code, le.DateOfIncorporation, le.PublicSectorDataSource, le.Sector, le.Source, le.Status,
+		                        ale.Name, ale.Address, ale.SignedAgreementVersion, ale.SignedAgreementId, ale.PendingAgreementVersion, ale.PendingAgreementId
+                        FROM	[employer_account].[AccountLegalEntity] AS ale
+		                        JOIN [employer_account].[LegalEntity] AS le
+			                        ON le.Id = ale.LegalEntityId
+                        WHERE	ale.AccountId = @accountId";
 
                 if (signedOnly)
                 {
-                    sql += " AND ea.StatusId = 2";
-                }
-                else
-                {
-                    sql += " AND ea.StatusId IN (1, 2)";
+                    sql += " AND ale.SignedAgreementId IS NOT NULL";
                 }
 
-                sql += ")";
-
-                return await c.QueryAsync<LegalEntity>(
+                return await c.QueryAsync<AccountSpecificLegalEntity>(
                     sql: sql,
                     param: parameters,
                     commandType: CommandType.Text);
@@ -186,6 +180,56 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
 
             return result.ToList();
+        }
+
+        public Task EvaluateEmployerLegalEntityAgreementStatus(long accountId, long legalEntityId)
+        {
+            return WithConnection(async connection =>
+            {
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
+
+                /*
+                 *  The inner most SQL finds the highest versioned agreement for the account/legal entity for pending and signed status (values 0 and 1).
+                 *  The next SQL out then aggregates these (at most two rows) into a single row with separate fields for pending and signed agreement details
+                 *  The outer SQL (the update) uses the two pending and two signed fields to update the relevant account / legal entity row.
+                 */
+                var sql = @"
+                    UPDATE	T1
+                    SET		T1.PendingAgreementId = T2.PendingAgreementId,
+		                    T1.PendingAgreementVersion = T2.PendingAgreementVersion,
+		                    T1.SignedAgreementId = T2.SignedAgreementId,
+		                    T1.SignedAgreementVersion = T2.SignedAgreementVersion 
+                    FROM	employer_account.AccountLegalEntity AS T1
+		                    LEFT JOIN (
+			                    SELECT	AccountLegalEntityId,
+					                    MAX(CASE WHEN StatusId = 1 THEN AgreementId ELSE NULL END) AS PendingAgreementId,
+					                    MAX(CASE WHEN StatusId = 1 THEN VersionNumber ELSE NULL END) AS PendingAgreementVersion,
+					                    MAX(CASE WHEN StatusId = 2 THEN AgreementId ELSE NULL END) AS SignedAgreementId,
+					                    MAX(CASE WHEN StatusId = 2 THEN VersionNumber ELSE NULL END) AS SignedAgreementVersion
+			                    FROM	(
+						                    SELECT	EA.StatusId, ROW_NUMBER() OVER(PARTITION BY StatusId order by VersionNumber desc) AS RowNumber, VersionNumber, EA.Id as AgreementId, ALE.Id as AccountLegalEntityId
+						                    FROM	employer_account.AccountLegalEntity AS ALE
+								                    JOIN employer_account.EmployerAgreement AS EA
+									                    ON EA.AccountLegalEntityId = ALE.Id
+								                    JOIN employer_account.EmployerAgreementTemplate AS EAT
+									                    ON EAT.Id = EA.TemplateId
+						                    WHERE	EA.StatusId IN (1, 2)
+					                    ) AS T1
+			                    WHERE T1.RowNumber = 1
+			                    GROUP BY AccountLegalEntityId
+		                    ) AS T2
+			                    ON T2.AccountLegalEntityId = T1.ID
+                    WHERE	t1.AccountId = @accountId
+		                    AND t1.LegalEntityId = @legalEntityId";
+
+                return await connection.QueryAsync<LegalEntity>(
+                    sql: sql,
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
         }
     }
 }

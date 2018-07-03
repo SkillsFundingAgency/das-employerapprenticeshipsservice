@@ -27,7 +27,8 @@ namespace SFA.DAS.EAS.Application.Mappings
                 .ForMember(d => d.AccountId, o => o.Ignore())
                 .ForMember(d => d.HashedAccountId, o => o.Ignore())
                 .ForMember(d => d.Signed, o => o.MapFrom(g => g.SignedAgreement))
-                .ForMember(d => d.Pending, o => o.MapFrom(g => g.PendingAgreement));
+                .ForMember(d => d.Pending, o => o.MapFrom(g => g.PendingAgreement))
+                .ForMember(d => d.LegalEntity, o => o.MapFrom(l => l));
         }
     }
 }

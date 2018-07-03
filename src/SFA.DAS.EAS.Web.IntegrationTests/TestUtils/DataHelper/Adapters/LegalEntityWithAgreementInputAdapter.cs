@@ -3,19 +3,19 @@ using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters
 {
-    public class LegalEntityWithAgreementInputToLegalEntityAdapter : LegalEntity
+    public class LegalEntityWithAgreementInputAdapter : CreateLegalEntityWithAgreementParams
     {
-        public LegalEntityWithAgreementInputToLegalEntityAdapter(LegalEntityWithAgreementInput input)
+        public LegalEntityWithAgreementInputAdapter(LegalEntityWithAgreementInput input)
         {
-            Name = input.CompanyName;
+            AccountId = input.AccountId;
+            Address = input.CompanyAddress;
             Code = null;
-            Status = input.Status;
             DateOfIncorporation = input.CompanyDateOfIncorporation;
-            Id = 0L;
+            Name = input.CompanyName;
             PublicSectorDataSource = (byte) input.PublicSectorDataSource;
-            RegisteredAddress = input.CompanyAddress;
             Sector = input.Sector;
             Source = (byte) input.Source;
+            Status = input.Status;
         }
     }
 }

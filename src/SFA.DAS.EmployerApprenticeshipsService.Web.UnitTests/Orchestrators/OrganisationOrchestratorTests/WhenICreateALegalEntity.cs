@@ -74,11 +74,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<CreateLegalEntityCommand>(command =>
-            command.LegalEntity.Name.Equals(request.Name) &&
-            command.LegalEntity.Code.Equals(request.Code) &&
-            command.LegalEntity.RegisteredAddress.Equals(request.Address) &&
-            command.LegalEntity.DateOfIncorporation.Equals(request.IncorporatedDate) &&
-            command.LegalEntity.Status.Equals(request.LegalEntityStatus))));
+            command.Name.Equals(request.Name) &&
+            command.Address.Equals(request.Address) &&
+            command.Code.Equals(request.Code) &&
+            command.DateOfIncorporation.Equals(request.IncorporatedDate) &&
+            command.Status.Equals(request.LegalEntityStatus))));
         }
 
         [TestCase(Role.Owner, HttpStatusCode.OK)]

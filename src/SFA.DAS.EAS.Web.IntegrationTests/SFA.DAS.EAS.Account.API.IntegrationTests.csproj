@@ -215,7 +215,7 @@
     <Compile Include="TestUtils\DataHelper\Dtos\EmployerAccountOutput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\LegalEnityWithAgreementOutput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\LegalEntityWithAgreementInput.cs" />
-    <Compile Include="TestUtils\DataHelper\Adapters\LegalEntityWithAgreementInputToLegalEntityAdapter.cs" />
+    <Compile Include="TestUtils\DataHelper\Adapters\LegalEntityWithAgreementInputAdapter.cs" />
     <Compile Include="TestUtils\DataHelper\TestConstants.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\UserInput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\UserOutput.cs" />
