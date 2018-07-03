@@ -35,6 +35,12 @@ namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
                 return default(T);
             }
 
+            if (ex is HMRC.ESFA.Levy.Api.Types.Exceptions.ApiHttpException)
+            {
+                _logger.Info($"ApiHttpException - {ex.Message}");
+                return default(T);
+            }
+
             _logger.Error(ex, $"Exceeded retry limit - {ex.Message}");
             throw ex;
         }
