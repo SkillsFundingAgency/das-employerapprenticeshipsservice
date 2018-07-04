@@ -2,7 +2,7 @@
 using System.Web.Http.Filters;
 using WebApi.StructureMap;
 
-namespace SFA.DAS.NServiceBus.EntityFramework.WebApi
+namespace SFA.DAS.NServiceBus.WebApi
 {
     public class UnitOfWorkManagerFilter : ActionFilterAttribute
     {

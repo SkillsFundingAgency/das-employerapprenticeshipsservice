@@ -7,6 +7,7 @@ namespace SFA.DAS.NServiceBus.StructureMap
     {
         public static EndpointConfiguration SetupStructureMapBuilder(this EndpointConfiguration config, IContainer container)
         {
+            container.Configure(c => c.AddRegistry<NServiceBusRegistry>());
             config.UseContainer<StructureMapBuilder>(c => c.ExistingContainer(container));
 
             return config;
