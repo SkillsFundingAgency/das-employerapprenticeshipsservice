@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.EAS.Application.DependencyResolution;
-using SFA.DAS.NServiceBus.StructureMap;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
@@ -22,7 +21,6 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
-                c.AddRegistry<NServiceBusRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<PaymentsRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
