@@ -303,6 +303,7 @@
     <Compile Include="Caching\LocalDevCache.cs" />
     <Compile Include="Caching\RedisCache.cs" />
     <Compile Include="Data\AccountIdUserTableParam.cs" />
+    <Compile Include="Data\IUnitOfWorkManager.cs" />
     <Compile Include="Data\SqlAzureDbConfiguration.cs" />
     <Compile Include="Data\EmployerFinanceDbContext.cs" />
     <Compile Include="Data\EmployerAccountsDbContext.cs" />
@@ -322,6 +323,7 @@
     <Compile Include="Data\TransferConnectionInvitationRepository.cs" />
     <Compile Include="Data\TransferRepository.cs" />
     <Compile Include="Data\UnitOfWork.cs" />
+    <Compile Include="Data\UnitOfWorkManager.cs" />
     <Compile Include="Data\UserAccountRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
     <Compile Include="DependencyResolution\ConfigurationHelper.cs" />
