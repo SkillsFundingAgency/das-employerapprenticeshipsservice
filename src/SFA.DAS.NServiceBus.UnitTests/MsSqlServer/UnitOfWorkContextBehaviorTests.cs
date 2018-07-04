@@ -6,9 +6,9 @@ using NServiceBus.Persistence;
 using NServiceBus.Persistence.Sql;
 using NServiceBus.Testing;
 using NUnit.Framework;
-using SFA.DAS.NServiceBus.EntityFramework;
+using SFA.DAS.NServiceBus.MsSqlServer;
 
-namespace SFA.DAS.NServiceBus.UnitTests.EntityFramework
+namespace SFA.DAS.NServiceBus.UnitTests.MsSqlServer
 {
     [TestFixture]
     public class UnitOfWorkContextBehaviorTests : FluentTest<UnitOfWorkContextBehaviorTestsFixture>
