@@ -266,4 +266,4 @@ src/Tools/PhantomJS/tools/phantomjs/ChangeLog
 
 # Other
 .learningtransport/
-App_Data/.diagnostics
+App_Data/
