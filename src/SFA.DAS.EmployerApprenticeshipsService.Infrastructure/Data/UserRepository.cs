@@ -96,18 +96,20 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public Task Upsert(User user)
         {
-            var parameters = new DynamicParameters();
+            return WithConnection(c =>
+            {
+                var parameters = new DynamicParameters();
 
-            parameters.Add("@email", user.Email, DbType.String);
-            parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
-            parameters.Add("@firstName", user.FirstName, DbType.String);
-            parameters.Add("@lastName", user.LastName, DbType.String);
+                parameters.Add("@email", user.Email, DbType.String);
+                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
+                parameters.Add("@firstName", user.FirstName, DbType.String);
+                parameters.Add("@lastName", user.LastName, DbType.String);
 
-            return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName",
-                param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.Text);
+                return c.ExecuteAsync(
+                    sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
         }
 
         public async Task<Users> GetAllUsers()
