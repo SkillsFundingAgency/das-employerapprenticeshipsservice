@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="SFA.DAS.CloudService.Api" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="5" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="SFA.DAS.EAS.Account.Api">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="EnvironmentName" value="LOCAL" />
+      <Setting name="idaAudience" value="https://citizenazuresfabisgov.onmicrosoft.com/eas-api" />
+      <Setting name="idaTenant" value="citizenazuresfabisgov.onmicrosoft.com" />
+      <Setting name="InstrumentationKey" value="" />
+      <Setting name="LoggingRedisKey" value="" />
+      <Setting name="LoggingRedisConnectionString" value="" />
+      <Setting name="LogLevel" value="Debug" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="WebSslCert" thumbprint="CE71D8AD4A859BD1803DBE03989801B56E5B6875" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+</ServiceConfiguration>

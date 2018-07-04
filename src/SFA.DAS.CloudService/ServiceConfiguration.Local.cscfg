@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="5" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="SFA.DAS.EAS.Web">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="CurrentTime" value="" />
+      <Setting name="EmployerCommitmentsBaseUrl" value="" />
+      <Setting name="EmployerRecruitBaseUrl" value="http://localhost:5020/" />
+      <Setting name="EmployerProjectionsBaseUrl" value="http://localhost:50770/" />
+      <Setting name="EnvironmentName" value="LOCAL" />
+      <Setting name="InstrumentationKey" value="" />
+      <Setting name="LoggingRedisConnectionString" value="" />
+      <Setting name="LoggingRedisKey" value="" />
+      <Setting name="LogLevel" value="Debug" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="RedisConnection" value="localhost" />
+      <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="TokenCertificateThumbprint" value="6B7ACC520305BFDB4F7252DAEB2177CC091FAAE1" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="WebSslCert" thumbprint="7E0C8989B70195C9AF040EBAD6F6E5012E07F050" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+</ServiceConfiguration>
