@@ -17,6 +17,7 @@ namespace SFA.DAS.EAS.Account.Api
         public static void Register(HttpConfiguration config)
         {
             config.Filters.Add(new ValidateModelStateFilter());
+            config.Filters.Add(new UnitOfWorkManagerFilter());
             config.Filters.Add(new HandleErrorFilter());
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             config.MapHttpAttributeRoutes();
