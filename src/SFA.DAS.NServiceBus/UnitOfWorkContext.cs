@@ -36,7 +36,14 @@ namespace SFA.DAS.NServiceBus
 
         public T Get<T>()
         {
-            return (T)_data[typeof(T).FullName];
+            var key = typeof(T).FullName;
+
+            if (_data.TryGetValue(key, out var value))
+            {
+                return (T)value;
+            }
+
+            throw new KeyNotFoundException($"The key '{key}' was not present in the dictionary");
         }
 
         public IEnumerable<Event> GetEvents()
