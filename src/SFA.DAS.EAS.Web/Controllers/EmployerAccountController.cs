@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
         }
-        
+
         // Not sure if this is used anymore, leaving here for now to see if it breaks when the automated tests are run
         // the redirect won't go anywhere so if it is called from somewhere we should expect a 404
         [HttpGet]
@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     BreadcrumbDescription = "Back to Your User Profile",
                     ConfirmUrl = Url.Action(ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName),
                 },
-             
+
             };
 
             var flashMessageViewModel = GetFlashMessageViewModelFromCookie();
@@ -93,13 +93,14 @@ namespace SFA.DAS.EAS.Web.Controllers
                     response.Status = HttpStatusCode.OK;
 
                     AddFlashMessageToCookie(response.FlashMessage);
-                    
+
                     return RedirectToAction(ControllerConstants.GatewayInformActionName);
                 }
 
-                var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
-                _logger.Info($"Gateway response is for user {email}");
+                var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+                _logger.Info($"Gateway response is for user identity ID {externalUserId}");
 
+                var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
                 var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
                 _logger.Info($"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
 
@@ -121,7 +122,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 throw;
             }
         }
-        
+
         [HttpGet]
         [Route("summary")]
         public ViewResult Summary()
@@ -211,7 +212,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 };
 
                 AddFlashMessageToCookie(flashmessage);
-                
+
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName);
             }
 
@@ -235,6 +236,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return userIdClaim ?? "";
         }
 
-      
+
     }
 }
