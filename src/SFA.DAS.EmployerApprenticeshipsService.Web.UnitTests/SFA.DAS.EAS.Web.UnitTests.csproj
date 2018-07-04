@@ -290,7 +290,6 @@
     <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransfersPage.cs" />
     <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransferConnectionInvitationsComponent.cs" />
     <Compile Include="Filters\ValidateFeatureFilterTests\WhenIViewAPage.cs" />
-    <Compile Include="Filters\UnitOfWorkManagerFilterTests\WhenIViewAPage.cs" />
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
