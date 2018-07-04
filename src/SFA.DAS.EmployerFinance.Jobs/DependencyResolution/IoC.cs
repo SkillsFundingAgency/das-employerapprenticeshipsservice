@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.EAS.Application.DependencyResolution;
-using SFA.DAS.NServiceBus.StructureMap;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
@@ -12,7 +11,6 @@ namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
             {
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
-                c.AddRegistry<NServiceBusRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

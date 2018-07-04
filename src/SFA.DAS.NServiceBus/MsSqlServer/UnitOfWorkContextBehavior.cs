@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NServiceBus.Pipeline;
-using SFA.DAS.NServiceBus.MsSqlServer;
 
-namespace SFA.DAS.NServiceBus.EntityFramework
+namespace SFA.DAS.NServiceBus.MsSqlServer
 {
     public class UnitOfWorkContextBehavior : Behavior<IInvokeHandlerContext>
     {

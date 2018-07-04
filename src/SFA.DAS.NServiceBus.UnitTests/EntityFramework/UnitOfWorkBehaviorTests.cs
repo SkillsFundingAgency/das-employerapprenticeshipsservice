@@ -41,20 +41,20 @@ namespace SFA.DAS.NServiceBus.UnitTests.EntityFramework
 
     public class UnitOfWorkBehaviorTestsFixture : FluentTestFixture
     {
-        public UnitOfWorkBehavior Behavior { get; set; }
+        public UnitOfWorkBehavior<DbContextFake> Behavior { get; set; }
         public TestableIncomingLogicalMessageContext Context { get; set; }
         public FakeBuilder Builder { get; set; }
         public Mock<IUnitOfWorkContext> UnitOfWorkContext { get; set; }
-        public Mock<IOutboxDbContext> Db { get; set; }
+        public Mock<DbContextFake> Db { get; set; }
         public List<Event> Events { get; set; }
         public bool NextTaskInvoked { get; set; }
 
         public UnitOfWorkBehaviorTestsFixture()
         {
-            Behavior = new UnitOfWorkBehavior();
+            Behavior = new UnitOfWorkBehavior<DbContextFake>();
             Builder = new FakeBuilder();
             UnitOfWorkContext = new Mock<IUnitOfWorkContext>();
-            Db = new Mock<IOutboxDbContext>();
+            Db = new Mock<DbContextFake>();
 
             Context = new TestableIncomingLogicalMessageContext
             {

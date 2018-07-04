@@ -5,6 +5,7 @@ using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.NServiceBus;
 using SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution;
 using SFA.DAS.NServiceBus;
@@ -43,7 +44,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
 
             endpointConfiguration
                 .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
-                .SetupEntityFrameworkBehavior()
+                .SetupEntityFrameworkBehavior<EmployerFinanceDbContext>()
                 .SetupErrorQueue()
                 .SetupInstallers()
                 .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
