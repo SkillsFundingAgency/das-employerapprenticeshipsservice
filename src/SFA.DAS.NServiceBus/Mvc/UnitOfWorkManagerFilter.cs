@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 
-namespace SFA.DAS.NServiceBus.EntityFramework.Mvc
+namespace SFA.DAS.NServiceBus.Mvc
 {
     public class UnitOfWorkManagerFilter : ActionFilterAttribute
     {

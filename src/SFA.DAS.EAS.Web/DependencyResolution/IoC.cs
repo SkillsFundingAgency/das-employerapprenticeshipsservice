@@ -1,6 +1,5 @@
 using SFA.DAS.Activities.Client;
 using SFA.DAS.EAS.Application.DependencyResolution;
-using SFA.DAS.NServiceBus.StructureMap;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
@@ -28,7 +27,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
-                c.AddRegistry<NServiceBusRegistry>();
                 c.AddRegistry<ReferenceDataRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<ServicesRegistry>();

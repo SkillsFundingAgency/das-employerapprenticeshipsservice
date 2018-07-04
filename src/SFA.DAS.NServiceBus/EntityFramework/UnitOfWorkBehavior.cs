@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus;
@@ -7,7 +8,7 @@ using NServiceBus.Pipeline;
 
 namespace SFA.DAS.NServiceBus.EntityFramework
 {
-    public class UnitOfWorkBehavior : Behavior<IIncomingLogicalMessageContext>
+    public class UnitOfWorkBehavior<T> : Behavior<IIncomingLogicalMessageContext> where T : DbContext
     {
         public override async Task Invoke(IIncomingLogicalMessageContext context, Func<Task> next)
         {
@@ -28,7 +29,7 @@ namespace SFA.DAS.NServiceBus.EntityFramework
 
         private Task SaveChanges(IIncomingLogicalMessageContext context)
         {
-            var db = context.Builder.Build<IOutboxDbContext>();
+            var db = context.Builder.Build<T>();
             return db.SaveChangesAsync();
         }
 

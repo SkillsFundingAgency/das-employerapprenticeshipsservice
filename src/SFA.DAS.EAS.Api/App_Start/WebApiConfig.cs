@@ -7,7 +7,6 @@ using SFA.DAS.EAS.Account.Api.DependencyResolution;
 using SFA.DAS.EAS.Account.Api.ExceptionLoggers;
 using SFA.DAS.EAS.Account.Api.Filters;
 using SFA.DAS.EAS.Application.DependencyResolution;
-using SFA.DAS.NServiceBus.StructureMap;
 using WebApi.StructureMap;
 
 namespace SFA.DAS.EAS.Account.Api
@@ -41,7 +40,6 @@ namespace SFA.DAS.EAS.Account.Api
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
-                c.AddRegistry<NServiceBusRegistry>();
                 c.AddRegistry<ReferenceDataRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<ServicesRegistry>();
