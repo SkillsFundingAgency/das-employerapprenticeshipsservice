@@ -18,6 +18,7 @@ using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.Events.Api.Types;
 using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTests
 {
@@ -31,6 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
         private Mock<ILevyEventFactory> _levyEventFactory;
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IHashingService> _hashingService;
+        private Mock<ILog> _logger;
         private const string ExpectedEmpRef = "123456";
         private const long ExpectedAccountId = 44321;
 
@@ -51,9 +53,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             _levyEventFactory = new Mock<ILevyEventFactory>();
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _hashingService = new Mock<IHashingService>();
+            _logger = new Mock<ILog>();
 
             _refreshEmployerLevyDataCommandHandler = new RefreshEmployerLevyDataCommandHandler(_validator.Object, _levyRepository.Object, _mediator.Object, _hmrcDateService.Object,
-                _levyEventFactory.Object, _genericEventFactory.Object, _hashingService.Object);
+                _levyEventFactory.Object, _genericEventFactory.Object, _hashingService.Object, _logger.Object);
         }
 
         [Test]
@@ -74,6 +77,40 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
 
             //Act
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _refreshEmployerLevyDataCommandHandler.Handle(new RefreshEmployerLevyDataCommand()));
+        }
+
+        [Test]
+        public async Task ThenAnyDuplicateSubmissionIdsFromHmrcAreFiltered()
+        {
+            //Arrange 
+            var refreshEmployerLevyDataCommand =
+                RefreshEmployerLevyDataCommandObjectMother.CreateDuplicateHmrcSubmissions(ExpectedEmpRef,
+                    ExpectedAccountId);
+
+            //Act 
+            await _refreshEmployerLevyDataCommandHandler.Handle(refreshEmployerLevyDataCommand);
+
+            //Assert 
+            _levyRepository.Verify(x => x.CreateEmployerDeclarations(
+                It.Is<IEnumerable<DasDeclaration>>(d => d.Count() == 1),
+                It.Is<string>(s => s == ExpectedEmpRef),
+                It.Is<long>(a => a == ExpectedAccountId)
+            ), Times.Once());
+        }
+
+        [Test]
+        public async Task ThenAnyDuplicateSubmissionIdsFromHmrcThatAreFilteredAreLogged()
+        {
+            //Arrange 
+            var refreshEmployerLevyDataCommand =
+                RefreshEmployerLevyDataCommandObjectMother.CreateDuplicateHmrcSubmissions(ExpectedEmpRef,
+                    ExpectedAccountId);
+            
+            //Act 
+            await _refreshEmployerLevyDataCommandHandler.Handle(refreshEmployerLevyDataCommand);
+
+            ////Assert 
+            _logger.Verify(x => x.Info(It.IsAny<string>()), Times.Once());
         }
 
         [Test]
