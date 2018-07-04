@@ -354,6 +354,7 @@
     <Compile Include="Controllers\AccountLegalEntitiesController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Filters\HandleErrorFilter.cs" />
+    <Compile Include="Filters\UnitOfWorkManagerFilter.cs" />
     <Compile Include="Filters\ValidateModelStateFilter.cs" />
     <Compile Include="Binders\MessageModelBinder.cs" />
     <Compile Include="Binders\MessageModelBinderProvider.cs" />

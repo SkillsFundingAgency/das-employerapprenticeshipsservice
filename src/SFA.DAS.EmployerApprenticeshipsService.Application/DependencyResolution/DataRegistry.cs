@@ -13,6 +13,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         {
             For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
             For<IOutboxDbContext>().Use(c => c.GetInstance<EmployerAccountsDbContext>());
+            For<SFA.DAS.EAS.Infrastructure.Data.IUnitOfWorkManager>().Use<SFA.DAS.EAS.Infrastructure.Data.UnitOfWorkManager>();
         }
     }
 }
