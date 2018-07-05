@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
         public void Setup()
         {
             _invitationRepository = new Mock<IInvitationRepository>();
-            _invitationRepository.Setup(x => x.Get(ExpectedAccountId, ExpectedCallerEmail)).ReturnsAsync(null);
+            _invitationRepository.Setup(x => x.Get(ExpectedAccountId, ExpectedCallerEmail)).ReturnsAsync(() => null);
             _invitationRepository.Setup(x => x.Create(It.IsAny<Invitation>())).ReturnsAsync(ExpectedInvitationId);
 
             _membershipRepository = new Mock<IMembershipRepository>();

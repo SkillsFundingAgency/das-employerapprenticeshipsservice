@@ -17,7 +17,8 @@ namespace SFA.DAS.EAS.Application.Mappings
                 .ForMember(d => d.LegalEntityId, conf => conf.MapFrom(d => d.AccountLegalEntity.LegalEntityId))
                 .ForMember(d => d.LegalEntity, conf => conf.MapFrom(d => d.AccountLegalEntity))
                 .ForMember(d => d.HashedAccountId, o => o.Ignore())
-                .ForMember(d => d.HashedAgreementId, o => o.Ignore());
+                .ForMember(d => d.HashedAgreementId, o => o.Ignore())
+                .ForMember(d => d.HashedLegalEntityId, o => o.Ignore());
 
             CreateMap<EmployerAgreement, AgreementViewModel>()
                 .ForMember(v => v.Status, o => o.MapFrom(a => (EmployerAgreementStatus)(int)a.StatusId))

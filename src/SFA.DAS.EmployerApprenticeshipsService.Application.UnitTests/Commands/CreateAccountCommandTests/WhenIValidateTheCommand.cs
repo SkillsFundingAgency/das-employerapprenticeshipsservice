@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             };
 
             _employerSchemesRepository = new Mock<IEmployerSchemesRepository>();
-            _employerSchemesRepository.Setup(x => x.GetSchemeByRef(_createAccountCommand.PayeReference)).ReturnsAsync(null);
+            _employerSchemesRepository.Setup(x => x.GetSchemeByRef(_createAccountCommand.PayeReference)).ReturnsAsync(() => null);
             _createCommandValidator = new CreateAccountCommandValidator(_employerSchemesRepository.Object);
 
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Application.Commands.SetAccountLegalEntityAgreementStatus;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -11,16 +12,19 @@ namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreement
 {
     public class CreateEmployerAgreementCommandHandler : AsyncRequestHandler<CreateEmployerAgreementCommand>
     {
+        private readonly IMediator _mediator;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
         private readonly IMessagePublisher _messagePublisher;
         private readonly IValidator<CreateEmployerAgreementCommand> _validator;
 
         public CreateEmployerAgreementCommandHandler(
+            IMediator mediator,
             IEmployerAgreementRepository employerAgreementRepository,
             IMessagePublisher messagePublisher,
             IValidator<CreateEmployerAgreementCommand> validator
             )
         {
+            _mediator = mediator;
             _employerAgreementRepository = employerAgreementRepository ?? throw new ArgumentNullException(nameof(employerAgreementRepository));
             _messagePublisher = messagePublisher ?? throw new ArgumentNullException(nameof(messagePublisher));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,6 +36,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreement
 
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
+
+            await SetAccountLegalEntityAgreementStatus(message.AccountId, message.LegalEntityId);
 
             var newAgreementId = await _employerAgreementRepository.CreateEmployerAgreeement(
                                 message.LatestTemplateId, 
@@ -47,6 +53,15 @@ namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreement
                 null);
 
             await _messagePublisher.PublishAsync(publishMessage);
+        }
+
+        private Task SetAccountLegalEntityAgreementStatus(long accountId, long legalEntityId)
+        {
+            return _mediator.SendAsync(new SetAccountLegalEntityAgreementStatusCommand
+            {
+                AccountId = accountId,
+                LegalEntityId = legalEntityId
+            });
         }
     }
 }

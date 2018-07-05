@@ -31,9 +31,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
         {
             var validationResult = new ValidationResult();
 
-            if (string.IsNullOrEmpty(item.HashedAgreementId))
+            if (string.IsNullOrEmpty(item.AgreementId))
             {
-                validationResult.AddError(nameof(item.HashedAgreementId));
+                validationResult.AddError(nameof(item.AgreementId));
             }
 
             if (string.IsNullOrEmpty(item.ExternalUserId))
@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
                 return validationResult;
             }
 
-            var agreement = await _employerAgreementRepository.GetEmployerAgreement(_hashingService.DecodeValue(item.HashedAgreementId));
+            var agreement = await _employerAgreementRepository.GetEmployerAgreement(_hashingService.DecodeValue(item.AgreementId));
 
             if (agreement == null)
             {

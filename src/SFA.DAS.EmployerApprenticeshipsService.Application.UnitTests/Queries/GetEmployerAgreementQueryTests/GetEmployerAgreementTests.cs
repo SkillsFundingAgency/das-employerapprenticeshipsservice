@@ -222,7 +222,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             var request = new GetEmployerAgreementRequest
             {
                 HashedAccountId = hashedAccountId,
-                HashedAgreementId = agreementHashId,
+                AgreementId = agreementHashId,
                 ExternalUserId = externalUserId.ToString()
             };
 

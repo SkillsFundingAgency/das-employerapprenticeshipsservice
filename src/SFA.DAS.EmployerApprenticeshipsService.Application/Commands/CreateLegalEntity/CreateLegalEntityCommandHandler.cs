@@ -5,6 +5,7 @@ using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
+using SFA.DAS.EAS.Application.Commands.SetAccountLegalEntityAgreementStatus;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Extensions;
@@ -72,12 +73,15 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);
 
             agreementView.HashedAgreementId = _hashingService.HashValue(agreementView.Id);
+            agreementView.HashedLegalEntityId = _hashingService.HashValue(agreementView.LegalEntityId);
 
             await CreateAuditEntries(owner, agreementView);
 
             await NotifyLegalEntityCreated(message.HashedAccountId, agreementView.LegalEntityId);
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+
+            await EvaluateEmployerLegalEntityAgreementStatus(owner.AccountId, agreementView.LegalEntityId);
 
             await PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
 
@@ -91,24 +95,33 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             };
         }
 
-        private async Task PublishLegalEntityAddedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, string userRef)
+        private Task PublishLegalEntityAddedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, string userRef)
         {
-            await _messagePublisher.PublishAsync(new LegalEntityAddedMessage(accountId, agreementId, organisationName, legalEntityId, createdByName, userRef));
+            return _messagePublisher.PublishAsync(new LegalEntityAddedMessage(accountId, agreementId, organisationName, legalEntityId, createdByName, userRef));
         }
 
-        private async Task PublishAgreementCreatedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, string userRef)
+        private Task PublishAgreementCreatedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, string userRef)
         {
-            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, agreementId, organisationName, legalEntityId, createdByName, userRef));
+            return _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, agreementId, organisationName, legalEntityId, createdByName, userRef));
         }
 
-        private async Task NotifyLegalEntityCreated(string hashedAccountId, long legalEntityId)
+        private Task NotifyLegalEntityCreated(string hashedAccountId, long legalEntityId)
         {
             var legalEntityEvent = _legalEntityEventFactory.CreateLegalEntityCreatedEvent(
                                             hashedAccountId, legalEntityId);
 
             var genericEvent = _genericEventFactory.Create(legalEntityEvent);
 
-            await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+            return _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+        }
+
+        private Task EvaluateEmployerLegalEntityAgreementStatus(long accountId, long legalEntityId)
+        {
+            return _mediator.SendAsync(new SetAccountLegalEntityAgreementStatusCommand
+            {
+                AccountId = accountId,
+                LegalEntityId = legalEntityId
+            });
         }
 
         private async Task CreateAuditEntries(MembershipView owner, EmployerAgreementView agreementView)

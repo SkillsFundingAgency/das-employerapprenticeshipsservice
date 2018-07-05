@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
         public async Task ThenTheUnauthorizedFlagIsSetWhenTheUserDoesNotValidateAgainstTheAccount()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(() => null);
 
             //Act
             var actual = await _validator.ValidateAsync(new FindEmployerAccountLevyDeclarationTransactionsQuery

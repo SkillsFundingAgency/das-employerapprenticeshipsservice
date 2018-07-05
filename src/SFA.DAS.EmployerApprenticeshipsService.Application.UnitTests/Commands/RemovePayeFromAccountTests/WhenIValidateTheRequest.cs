@@ -73,7 +73,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         public async Task ThenTheUserIsCheckedToSeeIfTheyArePartOfTheAccount()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(() => null);
 
             //Act
             var result = await _validator.ValidateAsync(new RemovePayeFromAccountCommand("12345", "123RFD", "123edds", true, "companyName"));

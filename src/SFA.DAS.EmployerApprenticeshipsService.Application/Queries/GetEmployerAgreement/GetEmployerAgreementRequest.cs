@@ -6,7 +6,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
     {
         public string HashedAccountId { get; set; }
 
-        public string HashedAgreementId { get; set; }
+        public string AgreementId { get; set; }
 
         public string ExternalUserId { get; set; }
     }

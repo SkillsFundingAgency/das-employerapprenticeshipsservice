@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
             }
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            var agreementId = _hashingService.DecodeValue(message.HashedAgreementId);
+            var agreementId = _hashingService.DecodeValue(message.AgreementId);
 
             var employerAgreement = await _database.Agreements.ProjectTo<AgreementDto>(_configurationProvider)
                                                               .SingleOrDefaultAsync(x => x.Id.Equals(agreementId));
@@ -73,17 +73,20 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
             {
                 employerAgreement.SignedByName = _database.Memberships
                     .Where(m => m.AccountId == accountId && m.User.ExternalId.ToString() == message.ExternalUserId)
+                    .AsEnumerable()
                     .Select(m => m.User.FullName)
                     .Single();
             }
 
             employerAgreement.HashedAccountId = _hashingService.HashValue(employerAgreement.AccountId);
             employerAgreement.HashedAgreementId = _hashingService.HashValue(employerAgreement.Id);
+            employerAgreement.HashedLegalEntityId = _hashingService.HashValue(employerAgreement.LegalEntityId);
 
             if (lastSignedAgreement != null)
             {
                 lastSignedAgreement.HashedAccountId = _hashingService.HashValue(lastSignedAgreement.AccountId);
                 lastSignedAgreement.HashedAgreementId = _hashingService.HashValue(lastSignedAgreement.Id);
+                lastSignedAgreement.HashedLegalEntityId = _hashingService.HashValue(lastSignedAgreement.LegalEntityId);
             }
 
             return new GetEmployerAgreementResponse

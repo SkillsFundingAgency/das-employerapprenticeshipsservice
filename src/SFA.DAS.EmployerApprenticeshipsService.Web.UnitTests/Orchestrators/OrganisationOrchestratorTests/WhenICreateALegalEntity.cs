@@ -13,6 +13,7 @@ using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
@@ -23,6 +24,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
         private Mock<IMapper> _mapper;
+        private Mock<IHashingService> _hashingService;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
         [SetUp]
@@ -31,9 +33,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
             _mapper = new Mock<IMapper>();
+            _hashingService = new Mock<IHashingService>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
-            _orchestrator = new OrganisationOrchestrator(_mediator.Object, _logger.Object, _mapper.Object, _cookieService.Object);
+            _orchestrator = new OrganisationOrchestrator(
+                _mediator.Object, 
+                _logger.Object, 
+                _mapper.Object,
+                _cookieService.Object, 
+                _hashingService.Object);
         }
 
         [Test]
@@ -79,21 +87,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             command.Code.Equals(request.Code) &&
             command.DateOfIncorporation.Equals(request.IncorporatedDate) &&
             command.Status.Equals(request.LegalEntityStatus))));
-        }
-
-        [TestCase(Role.Owner, HttpStatusCode.OK)]
-        [TestCase(Role.Viewer, HttpStatusCode.Unauthorized)]
-        [TestCase(Role.Transactor, HttpStatusCode.Unauthorized)]
-        public async Task ThenOnlyOwnersCanSearchAndAddNewLegalEntities(Role userRole, HttpStatusCode expectedResponse)
-        {
-            //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>())).ReturnsAsync(new GetUserAccountRoleResponse { UserRole = userRole });
-
-            //Act
-            var actual = await _orchestrator.GetAddLegalEntityViewModel("5454654", "ADSD123");
-
-            //Assert
-            Assert.AreEqual(expectedResponse, actual.Status);
         }
     }
 }

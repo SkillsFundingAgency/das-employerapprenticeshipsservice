@@ -495,6 +495,8 @@
     <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Organisation\OrganisationUpdatedNextStepsViewModel.cs" />
+    <Compile Include="ViewModels\Organisation\UpdateOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\SignAgreementViewModel.cs" />
     <Compile Include="ViewModels\IAccountViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\DeletedTransferConnectionInvitationViewModel.cs" />
@@ -637,7 +639,7 @@
     <Compile Include="WebRole.cs" />
     <Content Include="Views\EmployerTeam\Index.cshtml" />
     <Content Include="Views\Organisation\AddOrganisation.cshtml" />
-    <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
+    <Content Include="Views\Organisation\OrganisationUpdatedNextSteps.cshtml" />
     <Content Include="Views\SearchOrganisation\FindAddress.cshtml" />
     <Content Include="Views\Activities\Index.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
@@ -661,6 +663,8 @@
     <Content Include="Views\Shared\_Agreement_v2_changes.cshtml" />
     <Content Include="Views\Transfers\TransferConnectionInvitationAuthorization.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\TransferDetails.cshtml" />
+    <Content Include="Views\Organisation\Review.cshtml" />
+    <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />

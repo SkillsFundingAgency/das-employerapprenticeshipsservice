@@ -22,7 +22,7 @@ BEGIN
 		JOIN [employer_account].[AccountLegalEntity] ale
 			ON ale.Id = ea.AccountLegalEntityId
 		JOIN [employer_account].[LegalEntity] le
-			ON le.Id = le.Id
+			ON le.Id = ale.LegalEntityId
 		JOIN [employer_account].[EmployerAgreementTemplate] eat
 			ON eat.Id = ea.TemplateId
 		join [employer_account].Account acc

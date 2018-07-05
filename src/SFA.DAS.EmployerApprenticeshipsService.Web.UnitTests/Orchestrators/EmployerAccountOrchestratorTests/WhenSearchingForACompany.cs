@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
                 EmployerRef = "251643"
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerInformationRequest>())).ReturnsAsync(null);
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerInformationRequest>())).ReturnsAsync(() => null);
 
             //Act
             var response = await _employerAccountOrchestrator.GetCompanyDetails(request);
