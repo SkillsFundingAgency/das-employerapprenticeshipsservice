@@ -24,8 +24,10 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Web.Validation;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -35,261 +37,27 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly ILog _logger;
         private readonly IMapper _mapper;
         private readonly ICookieStorageService<EmployerAccountData> _cookieService;
+        private readonly IHashingService _hashingService;
+
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
         protected OrganisationOrchestrator()
         {
         }
 
-        public OrganisationOrchestrator(IMediator mediator, ILog logger, IMapper mapper, ICookieStorageService<EmployerAccountData> cookieService)
+        public OrganisationOrchestrator(
+            IMediator mediator, 
+            ILog logger, 
+            IMapper mapper, 
+            ICookieStorageService<EmployerAccountData> cookieService, 
+            IHashingService hashingService)
             : base(mediator)
         {
             _mediator = mediator;
             _logger = logger;
             _mapper = mapper;
             _cookieService = cookieService;
-        }
-
-        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>>
-            GetLimitedCompanyByRegistrationNumber(string companiesHouseNumber, string hashedLegalEntityId,
-                string userIdClaim)
-        {
-            if (!string.IsNullOrEmpty(hashedLegalEntityId))
-            {
-                var result = await CheckLegalEntityIsNotAddedToAccount(hashedLegalEntityId, userIdClaim, companiesHouseNumber, OrganisationType.CompaniesHouse);
-
-                if (result != null)
-                {
-                    result.Data.ErrorDictionary["CompaniesHouseNumber"] = "Company already added";
-                    return result;
-                }
-            }
-
-            var response = await _mediator.SendAsync(new GetEmployerInformationRequest
-            {
-                Id = companiesHouseNumber
-            });
-
-            if (response == null)
-            {
-                _logger.Warn("No response from SelectEmployerViewModel");
-                var errorResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
-                {
-                    Data = new OrganisationDetailsViewModel(),
-                    Status = HttpStatusCode.Conflict
-                };
-                errorResponse.Data.ErrorDictionary["CompaniesHouseNumber"] = "Company not found";
-                return errorResponse;
-            }
-
-            if (response.CompanyStatus != "active" && response.CompanyStatus != "administration" &&
-                response.CompanyStatus != "voluntary-arrangement")
-            {
-                var errorResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
-                {
-                    Data = new OrganisationDetailsViewModel(),
-                    Status = HttpStatusCode.Conflict
-                };
-                errorResponse.Data.ErrorDictionary["CompaniesHouseNumber"] =
-                    "Company must be active, under administration or in a voluntary arrangement";
-                return errorResponse;
-            }
-
-            _logger.Info($"Returning Data for {companiesHouseNumber}");
-
-            var address = BuildAddressString(response);
-
-            return new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = new OrganisationDetailsViewModel
-                {
-                    HashedId = hashedLegalEntityId,
-                    Type = OrganisationType.CompaniesHouse,
-                    ReferenceNumber = response.CompanyNumber,
-                    Name = response.CompanyName,
-                    DateOfInception =
-                        response.DateOfIncorporation.Equals(DateTime.MinValue)
-                            ? (DateTime?) null
-                            : response.DateOfIncorporation,
-                    Address = address,
-                    Status = response.CompanyStatus
-                }
-            };
-        }
-
-        public virtual async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>>
-            FindPublicSectorOrganisation(string searchTerm, string hashedAccountId, string userIdClaim)
-        {
-            var searchResults = await _mediator.SendAsync(new GetPublicSectorOrganisationQuery
-            {
-                SearchTerm = searchTerm,
-                PageNumber = 1,
-                PageSize = 200
-            });
-
-            if (searchResults == null || !searchResults.Organisaions.Data.Any())
-            {
-                _logger.Warn("No response from GetPublicSectorOrgainsationQuery");
-                return new OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>
-                {
-                    Data = new PublicSectorOrganisationSearchResultsViewModel
-                    {
-                        HashedAccountId = hashedAccountId,
-                        SearchTerm = searchTerm,
-                        Results = new PagedResponse<OrganisationDetailsViewModel>
-                        {
-                            Data = new List<OrganisationDetailsViewModel>()
-                        }
-                    },
-                    Status = HttpStatusCode.OK
-                };
-            }
-            
-            var organisations = searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel
-            {
-                Name = x.Name,
-                Status = string.Empty,
-                Type = OrganisationType.PublicBodies,
-                PublicSectorDataSource = (short)x.Source,
-                Sector = x.Sector,
-                Address = !string.IsNullOrEmpty(x.AddressLine1) && !string.IsNullOrEmpty(x.AddressLine4) && !string.IsNullOrEmpty(x.PostCode) 
-                        ?_mediator.Send(new CreateOrganisationAddressRequest
-                        {
-                            AddressFirstLine = x.AddressLine1,
-                            AddressSecondLine = x.AddressLine2,
-                            AddressThirdLine =x.AddressLine3,
-                            TownOrCity = x.AddressLine4,
-                            County = x.AddressLine5,
-                            Postcode = x.PostCode
-                        }).Address : "",
-                ReferenceNumber = x.OrganisationCode
-                 
-            }).ToList();
-
-            if (!string.IsNullOrEmpty(hashedAccountId))
-            {
-                var accountLegalEntitiesHelper = new AccountLegalEntitiesHelper(Mediator);
-                var accountEntities = await accountLegalEntitiesHelper.GetAccountLegalEntities(hashedAccountId, userIdClaim);
-
-                foreach (var viewModel in organisations)
-                {
-                    viewModel.AddedToAccount = accountLegalEntitiesHelper.IsLegalEntityAlreadyAddedToAccount(accountEntities, viewModel.Name, null, OrganisationType.PublicBodies);
-                }
-            }
-            
-            var pagedResponse = new PagedResponse<OrganisationDetailsViewModel>
-            {
-                Data = organisations,
-                PageNumber = searchResults.Organisaions.PageNumber,
-                TotalPages = searchResults.Organisaions.TotalPages
-            };
-
-            return new OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>
-            {
-                Data = new PublicSectorOrganisationSearchResultsViewModel
-                {
-                    HashedAccountId = hashedAccountId,
-                    SearchTerm = searchTerm,
-                    Results = pagedResponse
-                },
-                Status = HttpStatusCode.OK
-            };
-        }
-
-        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCharityByRegistrationNumber(
-            string registrationNumber, string hashedLegalEntityId, string userIdClaim)
-        {
-
-            if (!string.IsNullOrEmpty(hashedLegalEntityId))
-            {
-
-                var result = await CheckLegalEntityIsNotAddedToAccount(hashedLegalEntityId, userIdClaim, registrationNumber, OrganisationType.Charities);
-
-                if (result != null)
-                {
-                    result.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity already added";
-                    return result;
-                }
-                
-            }
-
-            int charityRegistrationNumber;
-            if (!int.TryParse(registrationNumber.Trim(), out charityRegistrationNumber))
-            {
-                var exception = new ArgumentException("Non-numeric registration number", nameof(registrationNumber));
-                _logger.Error(exception, exception.Message);
-            }
-
-            GetCharityQueryResponse charityResult;
-            try
-            {
-                charityResult = await _mediator.SendAsync(new GetCharityQueryRequest
-                {
-                    RegistrationNumber = charityRegistrationNumber
-                });
-            }
-            catch (HttpRequestException)
-            {
-                _logger.Warn("Charity not found");
-                var notFoundResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
-                {
-                    Data = new OrganisationDetailsViewModel(),
-                    Status = HttpStatusCode.NotFound
-                };
-                notFoundResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity not found";
-                return notFoundResponse;
-            }
-
-            if (charityResult == null)
-            {
-                _logger.Warn("No response from GetAccountLegalEntitiesRequest");
-                var notFoundResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
-                {
-                    Data = new OrganisationDetailsViewModel(),
-                    Status = HttpStatusCode.NotFound
-                };
-                notFoundResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity not found";
-                return notFoundResponse;
-            }
-
-            var charity = charityResult.Charity;
-
-            if (charity.IsRemoved)
-            {
-                var notFoundResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
-                {
-                    Data = new OrganisationDetailsViewModel(),
-                    Status = HttpStatusCode.BadRequest
-                };
-                notFoundResponse.Data.ErrorDictionary["CharityRegistrationNumber"] =
-                    "Charity must have registered status";
-                return notFoundResponse;
-            }
-
-            return new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = new OrganisationDetailsViewModel
-                {
-                    HashedId = hashedLegalEntityId,
-                    ReferenceNumber = charity.RegistrationNumber.ToString(),
-                    Name = charity.Name,
-                    Type = OrganisationType.Charities,
-                    Address = charity.FormattedAddress,
-                    Status = string.Empty
-                }
-            };
-        }
-
-        public virtual async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(
-            string hashedAccountId, string externalUserId)
-        {
-            var userRole = await GetUserAccountRole(hashedAccountId, externalUserId);
-
-            return new OrchestratorResponse<AddLegalEntityViewModel>
-            {
-                Data = new AddLegalEntityViewModel {HashedAccountId = hashedAccountId},
-                Status = userRole.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized
-            };
+            _hashingService = hashingService;
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
@@ -410,21 +178,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     }
                 };
             }
-        }
-
-        public virtual OrchestratorResponse<AddOrganisationAddressViewModel>
-            CreateAddOrganisationAddressViewModelFromOrganisationDetails(OrganisationDetailsViewModel model)
-        {
-            var result = new OrchestratorResponse<AddOrganisationAddressViewModel>
-            {
-                Data = new AddOrganisationAddressViewModel
-                {
-                    OrganisationType = OrganisationType.Other,
-                    OrganisationHashedId = model.HashedId,
-                    OrganisationName = model.Name
-                }
-            };
-            return result;
         }
 
         public virtual EmployerAccountData GetCookieData(HttpContextBase context)
@@ -591,10 +344,56 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
+        public Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string hashedAccountId, string hashedLegalEntityId, string hashedAgreementId)
+        {
+            var result = new OrchestratorResponse<ReviewOrganisationAddressViewModel>
+            {
+                Data = new ReviewOrganisationAddressViewModel
+                {
+                    HashedAccountId =  hashedAccountId,
+                    HashedLegalEntityId = hashedLegalEntityId,
+                    HashedAgreementId = hashedAgreementId,
+                    OrganisationName = "current name placeholder",
+                    OrganisationAddress = "current address placeholder, High Street, Newtown, NT1 1XX",
+                    RefreshedName = "refreshed name placeholder",
+                    RefreshedAddress = "refreshed address placeholder, High Street, Newtown, NT1 1XX"
+                }
+            };
+
+            return Task.FromResult(result);
+        }
+
         public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
         {
             var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
             return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
+        }
+
+        public async Task<OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>> UpdateOrganisation(string hashedAccountId, string hashedLegalEntityId, string organisationName, string organisationAddress)
+        {
+            var result = new OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>
+            {
+                Data = new OrganisationUpdatedNextStepsViewModel()
+            };
+
+            try
+            {
+                var request = new UpdateOrganisationDetailsRequest
+                {
+                    AccountId = _hashingService.DecodeValue(hashedAccountId),
+                    LegalEntityId = _hashingService.DecodeValue(hashedLegalEntityId),
+                    Name = organisationName,
+                    Address = organisationAddress
+                };
+
+                await _mediator.SendAsync(request);
+            }
+            catch (Exception e)
+            {
+                result.Data.ErrorMessage = "Failed to update the organisation's details.";
+            }
+
+            return result;
         }
     }
 }

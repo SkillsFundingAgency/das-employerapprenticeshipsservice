@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementByIdTest
         {
             //Arrange
             _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(It.IsAny<long>()))
-                .ReturnsAsync(null);
+                .ReturnsAsync(() => null);
 
             //Assert
             Assert.ThrowsAsync<InvalidRequestException>(() => RequestHandler.Handle(Query));

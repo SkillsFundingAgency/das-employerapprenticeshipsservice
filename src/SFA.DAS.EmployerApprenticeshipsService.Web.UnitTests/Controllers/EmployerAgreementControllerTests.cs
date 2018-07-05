@@ -272,7 +272,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
             {
                 ExternalUserId = UserId,
                 HashedAccountId = HashedAccountId,
-                HashedAgreementId = HashedAgreementId
+                AgreementId = HashedAgreementId
             };
 
             GetAgreementToSignViewModel = new EmployerAgreementViewModel

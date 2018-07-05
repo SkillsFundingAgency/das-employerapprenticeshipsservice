@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
         public void InvitationDoesNotExist()
         {
             //Arrange
-            _invitationRepository.Setup(x => x.Get(ExpectedAccountId, _command.Email)).ReturnsAsync(null);
+            _invitationRepository.Setup(x => x.Get(ExpectedAccountId, _command.Email)).ReturnsAsync(() => null);
 
             //Act
             var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));

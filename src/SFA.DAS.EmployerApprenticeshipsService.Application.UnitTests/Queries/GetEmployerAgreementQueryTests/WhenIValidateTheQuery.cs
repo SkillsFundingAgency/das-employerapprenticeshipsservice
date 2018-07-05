@@ -27,13 +27,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             {
                 ExternalUserId = "ASDABASD",
                 HashedAccountId = "ASDANSDLKN123",
-                HashedAgreementId = "123EDADS"
+                AgreementId = "123EDADS"
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
             _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(_query.HashedAgreementId)).Returns(ExpectedAgreementId);
+            _hashingService.Setup(x => x.DecodeValue(_query.AgreementId)).Returns(ExpectedAgreementId);
 
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {RoleId = (short)Role.Owner});
 
@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
         public async Task ThenIfTheUserIsNotConnectedToTheAccountAnUnauthorizedErrorIsReturned()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(() => null);
 
             //Act
             var result = await _validator.ValidateAsync(_query);
@@ -128,7 +128,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
         public async Task ThenIfThereIsNoAgreementTheValidationResultIsReturned()
         {
             //Arrange
-            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(null);
+            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(() => null);
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { RoleId = (short)Role.Owner });
 
             //Act

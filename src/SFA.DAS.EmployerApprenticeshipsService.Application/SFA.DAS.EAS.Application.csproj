@@ -289,6 +289,10 @@
     <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommandHandler.cs" />
     <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommandValidator.cs" />
     <Compile Include="DependencyResolution\ApprenticeshipLevyRegistry.cs" />
+    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsHandler.cs" />
+    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsRequest.cs" />
+    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsResponse.cs" />
+    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsValidator.cs" />
     <Compile Include="DependencyResolution\AuditRegistry.cs" />
     <Compile Include="DependencyResolution\AuthorizationRegistry.cs" />
     <Compile Include="DependencyResolution\CachesRegistry.cs" />

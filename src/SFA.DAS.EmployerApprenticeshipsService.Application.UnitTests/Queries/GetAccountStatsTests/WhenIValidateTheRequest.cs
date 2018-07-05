@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountStatsTests
         public async Task ThenTheRequestIsMarkedAsInvalidIfTheUserDoesNotExist()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(() => null);
 
             //Act
             var actual = await _validator.ValidateAsync(new GetAccountStatsQuery { ExternalUserId = "123ABC", HashedAccountId = "1" });

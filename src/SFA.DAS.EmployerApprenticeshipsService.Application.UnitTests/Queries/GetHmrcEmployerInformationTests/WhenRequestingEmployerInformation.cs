@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcEmployerInformationTe
             _hmrcService = new Mock<IHmrcService>();
             _hmrcService.Setup(x => x.DiscoverEmpref(ExpectedAuthToken)).ReturnsAsync(ExpectedEmpref);
             _hmrcService.Setup(x => x.DiscoverEmpref(ExpectedAuthTokenInUse)).ReturnsAsync(ExpectedEmprefInUse);
-            _hmrcService.Setup(x => x.DiscoverEmpref(ExpectedAuthTokenNoScheme)).ReturnsAsync(null);
+            _hmrcService.Setup(x => x.DiscoverEmpref(ExpectedAuthTokenNoScheme)).ReturnsAsync(() => null);
             _hmrcService.Setup(x => x.GetEmprefInformation(ExpectedAuthToken, ExpectedEmpref)).ReturnsAsync(new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefAssociatedName } }, Links = new Links() });
             _hmrcService.Setup(x => x.GetEmprefInformation(ExpectedAuthTokenInUse, ExpectedEmprefInUse)).ReturnsAsync(new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefAssociatedName } }, Links = new Links() });
 

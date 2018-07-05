@@ -1,0 +1,21 @@
+﻿using System;
+using System.Threading.Tasks;
+using SFA.DAS.EAS.Application.Validation;
+
+namespace SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails
+{
+    public class UpdateOrganisationDetailsValidator : IValidator<UpdateOrganisationDetailsRequest>
+    {
+        public ValidationResult Validate(UpdateOrganisationDetailsRequest item)
+        {
+            var results = new ValidationResult();
+
+            return results;
+        }
+
+        public Task<ValidationResult> ValidateAsync(UpdateOrganisationDetailsRequest item)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

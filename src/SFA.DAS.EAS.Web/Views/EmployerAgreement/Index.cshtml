@@ -86,7 +86,7 @@
                                     @:Agreement not signed
                                 }
                             }
-                            else
+                            else if (employerAgreement.HasSignedAgreement)
                             {
                                 @:Signed by @employerAgreement.Signed.SignedByName
                             }
@@ -96,7 +96,7 @@
                             {
                                 <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new { agreementid = employerAgreement.Pending.HashedAgreementId })" title="View agreement for @employerAgreement.LegalEntity.Name">Sign agreement</a>
                             }
-                            else
+                            else if (employerAgreement.HasSignedAgreement)
                             {
                                 <a href="@Url.Action("Details", "EmployerAgreement", new { agreementid = employerAgreement.Signed.HashedAgreementId })" title="View agreement">View</a>
                             }

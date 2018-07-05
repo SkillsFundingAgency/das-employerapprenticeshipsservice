@@ -21,5 +21,6 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings);
         Task<string> GetAccountName(long accountId);
         Task<Dictionary<long, string>> GetAccountNames(IEnumerable<long> accountIds);
+        Task UpdateLegalEntityDetailsForAccount(long accountId, long legalEntityId, string address, string name);
     }
 }

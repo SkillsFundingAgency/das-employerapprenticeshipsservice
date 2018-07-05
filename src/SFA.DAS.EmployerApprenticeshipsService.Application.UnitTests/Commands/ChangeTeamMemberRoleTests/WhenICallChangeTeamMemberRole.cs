@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
-            _membershipRepository.Setup(x => x.GetCaller(command.HashedAccountId, command.ExternalUserId)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(command.HashedAccountId, command.ExternalUserId)).ReturnsAsync(() => null);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -127,7 +127,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
             };
 
             _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
-            _membershipRepository.Setup(x => x.Get(callerMembership.AccountId, command.Email)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.Get(callerMembership.AccountId, command.Email)).ReturnsAsync(() => null);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 

@@ -38,6 +38,7 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
             types.FindTypes(TypeClassification.Concretes | TypeClassification.Closed)
                   .Where(t => t.CanBeCastTo<Controller>())
                   .ForEach(t => registry.For(t).LifecycleIs(new UniquePerRequestLifecycle()));
+
         }
 
         #endregion
