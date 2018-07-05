@@ -1,15 +1,48 @@
 ﻿using System.Data.Entity;
+using System.Web.Http.Filters;
+using System.Web.Mvc;
 using NServiceBus;
-using SFA.DAS.NServiceBus.MsSqlServer;
+using SFA.DAS.NServiceBus.Mvc;
+using SFA.DAS.NServiceBus.WebApi;
 
 namespace SFA.DAS.NServiceBus.EntityFramework
 {
     public static class EndpointConfigurationExtensions
     {
-        public static EndpointConfiguration SetupEntityFrameworkBehavior<T>(this EndpointConfiguration config) where T : DbContext
+        public static EndpointConfiguration SetupEntityFrameworkUnitOfWork<T>(this EndpointConfiguration config) where T : DbContext
         {
-            config.Pipeline.Register(new UnitOfWorkBehavior<T>(), "Sets up a unit of work for each message");
-            config.Pipeline.Register(new UnitOfWorkContextBehavior(), "Sets up a unit of work context for each message");
+            config.RegisterComponents(c =>
+            {
+                c.ConfigureComponent<Db<T>>(DependencyLifecycle.InstancePerUnitOfWork);
+            });
+
+            config.SetupUnitOfWork();
+
+            return config;
+        }
+
+        public static EndpointConfiguration SetupEntityFrameworkUnitOfWork<T>(this EndpointConfiguration config, GlobalFilterCollection filters) where T : DbContext, IOutboxDbContext
+        {
+            config.RegisterComponents(c =>
+            {
+                c.ConfigureComponent<Db<T>>(DependencyLifecycle.InstancePerUnitOfWork);
+                c.ConfigureComponent<Outbox<T>>(DependencyLifecycle.InstancePerUnitOfWork);
+            });
+            
+            config.SetupUnitOfWork(filters);
+
+            return config;
+        }
+
+        public static EndpointConfiguration SetupEntityFrameworkUnitOfWork<T>(this EndpointConfiguration config, HttpFilterCollection filters) where T : DbContext, IOutboxDbContext
+        {
+            config.RegisterComponents(c =>
+            {
+                c.ConfigureComponent<Db<T>>(DependencyLifecycle.InstancePerUnitOfWork);
+                c.ConfigureComponent<Outbox<T>>(DependencyLifecycle.InstancePerUnitOfWork);
+            });
+            
+            config.SetupUnitOfWork(filters);
 
             return config;
         }

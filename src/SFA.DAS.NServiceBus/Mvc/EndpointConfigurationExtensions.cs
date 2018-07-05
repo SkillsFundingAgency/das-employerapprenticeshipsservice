@@ -5,8 +5,9 @@ namespace SFA.DAS.NServiceBus.Mvc
 {
     public static class EndpointConfigurationExtensions
     {
-        public static EndpointConfiguration SetupOutbox(this EndpointConfiguration config, GlobalFilterCollection filters)
+        internal static EndpointConfiguration SetupUnitOfWork(this EndpointConfiguration config, GlobalFilterCollection filters)
         {
+            config.SetupUnitOfWork();
             filters.Add(new UnitOfWorkManagerFilter(() => DependencyResolver.Current.GetService<IUnitOfWorkManager>()), -999);
 
             return config;
