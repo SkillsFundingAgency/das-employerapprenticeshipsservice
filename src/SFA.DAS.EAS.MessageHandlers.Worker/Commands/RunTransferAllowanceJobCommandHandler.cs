@@ -1,11 +1,10 @@
 ﻿using System.Collections.Concurrent;
 using System.Linq;
-using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Application.Extensions;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.AzureServiceBus.Attributes;
 using SFA.DAS.Messaging.Interfaces;
