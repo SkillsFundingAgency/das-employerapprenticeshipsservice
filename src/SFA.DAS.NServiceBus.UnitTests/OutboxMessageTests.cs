@@ -12,7 +12,7 @@ namespace SFA.DAS.NServiceBus.UnitTests
         [Test]
         public void New_WhenCreatingAnOutboxMessage_ThenShouldCreateOutboxMessage()
         {
-            Run(f => f.New(), f => f.OutboxMessage.Should().NotBeNull().And.Match<OutboxMessage>(m =>
+            Run(f => f.New(), (f, r) => r.Should().NotBeNull().And.Match<OutboxMessage>(m =>
                 m.Id != Guid.Empty &&
                 m.Sent >= f.Now &&
                 m.Published == null &&
@@ -22,7 +22,7 @@ namespace SFA.DAS.NServiceBus.UnitTests
         [Test]
         public void Publish_WhenPublishing_ThenShouldPublishOutboxMessage()
         {
-            Run(f => f.Publish(), f => f.OutboxMessage.Published.Should().BeAfter(f.Now));
+            Run(f => f.Publish(), f => f.OutboxMessage.Published.Should().BeOnOrAfter(f.Now));
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace SFA.DAS.NServiceBus.UnitTests
         }
 
         [Test]
-        public void Publish_WhenRepublishing_ThenShouldReturnEvents()
+        public void Publish_WhenRepublishing_ThenShouldThrowException()
         {
             Run(f => f.Republish(), (f, a) => a.ShouldThrow<Exception>().WithMessage("Requires not already published"));
         }
@@ -55,24 +55,25 @@ namespace SFA.DAS.NServiceBus.UnitTests
             };
         }
 
-        public void New()
+        public OutboxMessage New()
         {
-            OutboxMessage = new OutboxMessage(Events);
+            return OutboxMessage = new OutboxMessage(Events);
         }
 
         public IEnumerable<Event> Publish()
         {
-            New();
+            var outboxMessage = New();
 
-            return OutboxMessage.Publish();
+            return outboxMessage.Publish();
         }
 
         public IEnumerable<Event> Republish()
         {
-            New();
-            OutboxMessage.Publish();
+            var outboxMessage = New();
 
-            return OutboxMessage.Publish();
+            outboxMessage.Publish();
+
+            return outboxMessage.Publish();
         }
     }
 }

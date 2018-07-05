@@ -97,7 +97,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     return RedirectToAction(ControllerConstants.GatewayInformActionName);
                 }
 
-                var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+                var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
                 _logger.Info($"Gateway response is for user identity ID {externalUserId}");
 
                 var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);

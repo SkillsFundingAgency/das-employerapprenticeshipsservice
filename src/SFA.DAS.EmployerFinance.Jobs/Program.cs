@@ -4,9 +4,11 @@ using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.NServiceBus;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
 using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.EntityFramework;
 using SFA.DAS.NServiceBus.NewtonsoftSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
@@ -43,6 +45,7 @@ namespace SFA.DAS.EmployerFinance.Jobs
 
             endpointConfiguration
                 .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
+                .SetupEntityFrameworkUnitOfWork<EmployerFinanceDbContext>()
                 .SetupErrorQueue()
                 .SetupInstallers()
                 .SetupNewtonsoftSerializer()

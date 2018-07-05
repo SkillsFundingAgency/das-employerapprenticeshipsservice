@@ -117,6 +117,7 @@
     <Compile Include="EventHandlers\ApprovedTransferConnectionRequestEventNotificationHandlerTests.cs" />
     <Compile Include="EventHandlers\RejectedTransferConnectionRequestEventNotificationHandlerTests.cs" />
     <Compile Include="EventHandlers\SentTransferConnectionRequestEventNotificationHandlerTests.cs" />
+    <Compile Include="NoopTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
