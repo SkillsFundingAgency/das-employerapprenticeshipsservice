@@ -13,8 +13,10 @@
         public decimal Balance { get; set; }
 
         public decimal TransferAllowance { get; set; }
+        public decimal YearlyTransferAllowance { get; set; }
 
         public string Href { get; set; }
         public bool IsLevyPayer { get; set; }
+
     }
 }

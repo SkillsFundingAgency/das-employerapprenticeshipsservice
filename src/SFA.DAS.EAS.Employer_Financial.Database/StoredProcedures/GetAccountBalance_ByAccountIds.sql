@@ -6,6 +6,7 @@ AS
 		acc.AccountId,
 		isnull(bal.Balance,0) as Balance,
 		isnull(bal.TransferAllowance, 0) as TransferAllowance,
+		isnull(bal.YearlyTransferAllowance, 0) as YearlyTransferAllowance,
 		CASE
 			WHEN IsLevyPayer IS NOT NULL THEN IsLevyPayer
 			WHEN HasDeclaredLevy = 1 AND AmountLevyDeclared > 0 THEN 1
@@ -47,7 +48,13 @@ AS
 						AND TransactionType = 4
 						AND TransferSenderAccountId = AccountId THEN Amount
 					ELSE 0
-				END) AS TransferAllowance
+				END) AS TransferAllowance,
+		SUM(CASE 
+					WHEN TransactionDate >= previousFinancialYear.YearStart
+						AND TransactionDate < previousFinancialYear.YearEnd
+						AND TransactionType = 1 THEN Amount * @allowancePercentage
+					ELSE 0
+				END) AS YearlyTransferAllowance
 		FROM employer_financial.TransactionLine
 		CROSS JOIN employer_financial.GetPreviousFinancialYearDates(DEFAULT) as previousFinancialYear
 		GROUP BY AccountId

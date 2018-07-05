@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
             toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
 
-            var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery() { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });
+            var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });
             var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
             {
                 AccountIds = accountsResult.Accounts.Select(account => account.Id).ToList()
@@ -68,6 +68,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 {
                     accountBalanceModel.Balance = accountBalance.Balance;
                     accountBalanceModel.TransferAllowance = accountBalance.TransferAllowance;
+                    accountBalanceModel.YearlyTransferAllowance = accountBalance.YearlyTransferAllowance;
                     accountBalanceModel.IsLevyPayer = accountBalance.IsLevyPayer == 1;
                 }
 
