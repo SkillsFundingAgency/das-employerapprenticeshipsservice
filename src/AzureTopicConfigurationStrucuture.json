@@ -16,16 +16,14 @@
     "topicName": "agreement_created",
     "subscription": [
       "Task_CreatedEmployerAgreementProcessor",
-      "Activity_AgreementCreatedMessageProcessor",
-      "MH_AgreementCreated"
+      "Activity_AgreementCreatedMessageProcessor"
     ]
   },
   {
     "topicName": "agreement_signed",
     "subscription": [
       "Task_SignedEmployerAgreementProcessor",
-      "Activity_AgreementSignedMessageProcessor",
-      "MH_AgreementSigned"
+      "Activity_AgreementSignedMessageProcessor"
     ]
   },
   {
