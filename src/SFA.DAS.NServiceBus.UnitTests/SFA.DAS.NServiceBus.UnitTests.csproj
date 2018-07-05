@@ -133,9 +133,13 @@
     <Compile Include="EntityFramework\DbAsyncQueryProviderStub.cs" />
     <Compile Include="EntityFramework\DbContextFake.cs" />
     <Compile Include="EntityFramework\DbSetStub.cs" />
-    <Compile Include="MsSqlServer\UnitOfWorkContextBehaviorTests.cs" />
-    <Compile Include="EntityFramework\UnitOfWorkBehaviorTests.cs" />
-    <Compile Include="EntityFramework\UnitOfWorkManagerTests.cs" />
+    <Compile Include="MsSqlServer\IncomingPhysicalMessageBehaviorTests.cs" />
+    <Compile Include="MsSqlServer\InvokeHandlerBehaviorTests.cs" />
+    <Compile Include="MsSqlServer\OutboxTransactionTests.cs" />
+    <Compile Include="OutboxMessageBuilder.cs" />
+    <Compile Include="UnitOfWorkBehaviorTests.cs" />
+    <Compile Include="EntityFramework\OutboxTests.cs" />
+    <Compile Include="UnitOfWorkManagerTests.cs" />
     <Compile Include="EventPublisherTests.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="FluentTestFixture.cs" />

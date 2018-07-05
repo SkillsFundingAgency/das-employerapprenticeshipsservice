@@ -2,7 +2,6 @@
 using System.Data.SqlClient;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.NServiceBus.EntityFramework;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution
@@ -12,8 +11,9 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         public DataRegistry()
         {
             For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
-            For<IOutboxDbContext>().Use(c => c.GetInstance<EmployerAccountsDbContext>());
-            For<SFA.DAS.EAS.Infrastructure.Data.IUnitOfWorkManager>().Use<SFA.DAS.EAS.Infrastructure.Data.UnitOfWorkManager>();
+            For<IUnitOfWorkManager>().Use<UnitOfWorkManager>();
+            ForConcreteType<EmployerAccountsDbContext>();
+            ForConcreteType<EmployerFinanceDbContext>();
         }
     }
 }

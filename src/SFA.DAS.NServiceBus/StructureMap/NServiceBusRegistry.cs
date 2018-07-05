@@ -1,5 +1,4 @@
-﻿using SFA.DAS.NServiceBus.EntityFramework;
-using StructureMap;
+﻿using StructureMap;
 
 namespace SFA.DAS.NServiceBus.StructureMap
 {

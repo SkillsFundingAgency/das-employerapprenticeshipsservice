@@ -5,8 +5,9 @@ namespace SFA.DAS.NServiceBus.WebApi
 {
     public static class EndpointConfigurationExtensions
     {
-        public static EndpointConfiguration SetupOutbox(this EndpointConfiguration config, HttpFilterCollection filters)
+        internal static EndpointConfiguration SetupUnitOfWork(this EndpointConfiguration config, HttpFilterCollection filters)
         {
+            config.SetupUnitOfWork();
             filters.Add(new UnitOfWorkManagerFilter());
 
             return config;
