@@ -6,6 +6,7 @@ using Microsoft.Azure;
 using Microsoft.ApplicationInsights.Extensibility;
 using NServiceBus;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.NServiceBus;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.EntityFramework;
@@ -44,11 +45,11 @@ namespace SFA.DAS.EAS.Account.Api
 
             endpointConfiguration
                 .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
+                .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>(GlobalConfiguration.Configuration.Filters)
                 .SetupErrorQueue()
                 .SetupInstallers()
                 .SetupNewtonsoftSerializer()
                 .SetupNLogFactory()
-                .SetupOutbox(GlobalConfiguration.Configuration.Filters)
                 .SetupSendOnly()
                 .SetupStructureMapBuilder(container);
 

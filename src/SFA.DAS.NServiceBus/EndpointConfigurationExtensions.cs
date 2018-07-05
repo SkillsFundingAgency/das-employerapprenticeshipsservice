@@ -45,5 +45,20 @@ namespace SFA.DAS.NServiceBus
 
             return config;
         }
+
+        public static EndpointConfiguration SetupUnitOfWork(this EndpointConfiguration config)
+        {
+            config.RegisterComponents(c =>
+            {
+                if (!c.HasComponent<IDb>())
+                {
+                    c.ConfigureComponent<Db>(DependencyLifecycle.InstancePerUnitOfWork);
+                }
+            });
+
+            config.Pipeline.Register(new UnitOfWorkBehavior(), "Sets up a unit of work for each message");
+
+            return config;
+        }
     }
 }
