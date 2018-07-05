@@ -25,11 +25,11 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.NServiceBus;
 using SFA.DAS.EAS.Web.App_Start;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.EntityFramework;
-using SFA.DAS.NServiceBus.Mvc;
 using SFA.DAS.NServiceBus.NewtonsoftSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
@@ -131,11 +131,11 @@ namespace SFA.DAS.EAS.Web
 
             endpointConfiguration
                 .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
+                .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>(GlobalFilters.Filters)
                 .SetupErrorQueue()
                 .SetupInstallers()
                 .SetupNewtonsoftSerializer()
                 .SetupNLogFactory()
-                .SetupOutbox(GlobalFilters.Filters)
                 .SetupSendOnly()
                 .SetupStructureMapBuilder(container);
 

@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
 
             endpointConfiguration
                 .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
-                .SetupEntityFrameworkBehavior<EmployerFinanceDbContext>()
+                .SetupEntityFrameworkUnitOfWork<EmployerFinanceDbContext>()
                 .SetupErrorQueue()
                 .SetupInstallers()
                 .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
