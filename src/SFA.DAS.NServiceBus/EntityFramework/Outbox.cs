@@ -52,7 +52,7 @@ namespace SFA.DAS.NServiceBus.EntityFramework
 
             var ids = await _db.Value.OutboxMessages
                 .Where(m => m.Sent <= sent && m.Published == null)
-                .OrderBy(m => m.Id)
+                .OrderBy(m => m.Sent)
                 .Select(m => m.Id)
                 .ToListAsync()
                 .ConfigureAwait(false);
