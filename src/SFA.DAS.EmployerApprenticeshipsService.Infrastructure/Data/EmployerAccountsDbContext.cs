@@ -73,7 +73,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             modelBuilder.Entity<UserAccountSetting>().HasRequired(u => u.Account);
             modelBuilder.Entity<UserAccountSetting>().HasRequired(u => u.User);
             modelBuilder.Entity<UserAccountSetting>().ToTable("UserAccountSettings");
-            modelBuilder.Entity<OutboxMessage>().ToTable("OutboxMessages", "dbo");
+            modelBuilder.Entity<OutboxMessage>().ToTable("OutboxData", "dbo");
             modelBuilder.Entity<Paye>().Ignore(a => a.AccountId);
         }
     }
