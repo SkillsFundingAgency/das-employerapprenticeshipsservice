@@ -67,7 +67,8 @@ namespace SFA.DAS.NServiceBus.UnitTests.EntityFramework
         [Test]
         public Task GetIdsToProcess_WhenGettingIdsToProcess_TheShouldReturnIdsOfUnpublishedOutboxMessagesCreatedMoreThan10MinutesAgo()
         {
-            return RunAsync(f => f.SetOutboxMessages(), f => f.GetIdsToProcess(), (f, r) => r.ShouldBeEquivalentTo(f.OutboxMessagesToProcess.Select(m => m.Id)));
+            return RunAsync(f => f.SetOutboxMessages(), f => f.GetIdsToProcess(), (f, r) => r.Should().HaveCount(2).And
+                .ContainInOrder(f.OutboxMessagesToProcess.Select(m => m.Id)));
         }
     }
 

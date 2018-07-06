@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
@@ -18,19 +19,23 @@ namespace SFA.DAS.NServiceBus.UnitTests
         [Test]
         public void GetEvents_WhenGettingEvents_ThenShouldReturnAllEvents()
         {
-            Run(f => f.SetEvents(), f => f.GetEvents(), (f, e) => e.ShouldAllBeEquivalentTo(f.Events));
+            Run(f => f.SetEvents(), f => f.GetEvents(), (f, r) => r.Should().HaveCount(2).And.Match<IEnumerable<Event>>(e =>
+                e.ElementAt(0) is FooEvent && e.ElementAt(0).Created == f.Events[0].Created &&
+                e.ElementAt(1) is BarEvent && e.ElementAt(1).Created == f.Events[1].Created));
         }
 
         [Test]
         public void GetEvents_WhenGettingEventsAddedOnSeparateThreadsForSameAsyncFlow_ThenShouldReturnAllEvents()
         {
-            Run(f => f.SetEventsOnSeparateThreads(), f => f.GetEvents(), (f, e) => e.ShouldAllBeEquivalentTo(f.Events));
+            Run(f => f.SetEventsOnSeparateThreads(), f => f.GetEvents(), (f, r) => r.Should().HaveCount(2).And
+                .Contain(e => e is FooEvent && e.Created == f.Events[0].Created).And
+                .Contain(e => e is BarEvent && e.Created == f.Events[1].Created));
         }
 
         [Test]
         public void GetEvents_WhenGettingEventsAddedOnSeparateThreadsForDifferentAsyncFlows_ThenShouldReturnNoEvents()
         {
-            Run(f => f.SetEventsOnSeparateAsyncFlow(), f => f.GetEvents(), (f, e) => e.Should().BeEmpty());
+            Run(f => f.SetEventsOnSeparateAsyncFlow(), f => f.GetEvents(), (f, r) => r.Should().BeEmpty());
         }
     }
 
