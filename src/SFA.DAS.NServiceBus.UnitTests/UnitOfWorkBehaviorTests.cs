@@ -21,7 +21,7 @@ namespace SFA.DAS.NServiceBus.UnitTests
         [Test]
         public Task Invoke_WhenHandlingAnIncomingLogicalMessage_ThenShouldPublishEventsAfterNextTask()
         {
-            return RunAsync(f => f.Invoke(), f => f.Context.PublishedMessages.Select(m => m.Message).ShouldAllBeEquivalentTo(f.Events));
+            return RunAsync(f => f.Invoke(), f => f.Context.PublishedMessages.Select(m => m.Message).Should().ContainInOrder(f.Events));
         }
     }
 
