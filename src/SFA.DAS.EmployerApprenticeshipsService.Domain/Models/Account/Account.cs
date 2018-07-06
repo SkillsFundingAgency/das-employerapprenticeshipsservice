@@ -32,7 +32,6 @@ namespace SFA.DAS.EAS.Domain.Models.Account
             RequiresTransferConnectionInvitationSenderIsNotTheReceiver(receiverAccount);
             RequiresMinTransferAllowanceIsAvailable(senderAccountTransferAllowance);
             RequiresTransferConnectionInvitationSenderIsNotAReceiver();
-            RequiresMaxTransferConnectionInvitationsHaveNotBeenSent();
             RequiresTransferConnectionInvitationReceiverIsNotASender(receiverAccount);
             RequiresTransferConnectionInvitationDoesNotExist(receiverAccount);
 
@@ -41,16 +40,6 @@ namespace SFA.DAS.EAS.Domain.Models.Account
             SentTransferConnectionInvitations.Add(transferConnectionInvitation);
 
             return transferConnectionInvitation;
-        }
-
-        private void RequiresMaxTransferConnectionInvitationsHaveNotBeenSent()
-        {
-            var sentCount = SentTransferConnectionInvitations.Count(i =>
-                i.Status == TransferConnectionInvitationStatus.Pending ||
-                i.Status == TransferConnectionInvitationStatus.Approved);
-
-            if (sentCount >= Constants.TransferConnectionInvitations.SenderMaxTransferConnectionInvitations)
-                throw new Exception("Requires max transfer connection invitations have not been sent");
         }
 
         private void RequiresMinTransferAllowanceIsAvailable(decimal senderAccountTransferAllowance)
