@@ -8,18 +8,18 @@ namespace SFA.DAS.NServiceBus
 {
     public class UnitOfWorkContext : IUnitOfWorkContext
     {
-        private static readonly AsyncLocal<ConcurrentStack<Func<Event>>> Events = new AsyncLocal<ConcurrentStack<Func<Event>>>();
+        private static readonly AsyncLocal<ConcurrentQueue<Func<Event>>> Events = new AsyncLocal<ConcurrentQueue<Func<Event>>>();
 
         private readonly ConcurrentDictionary<string, object> _data = new ConcurrentDictionary<string, object>();
 
         public UnitOfWorkContext()
         {
-            Events.Value = new ConcurrentStack<Func<Event>>();
+            Events.Value = new ConcurrentQueue<Func<Event>>();
         }
 
         public static void AddEvent<T>(Action<T> action) where T : Event, new()
         {
-            Events.Value.Push(() =>
+            Events.Value.Enqueue(() =>
             {
                 var message = new T();
 
