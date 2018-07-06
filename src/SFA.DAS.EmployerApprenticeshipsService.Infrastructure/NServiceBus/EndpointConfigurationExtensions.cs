@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Infrastructure.NServiceBus
 
                 r.RouteToEndpoint(
                     typeof(ProcessOutboxMessageCommand),
-                    "SFA.DAS.EAS.MessageHandlers");
+                    "SFA.DAS.EmployerAccounts.MessageHandlers");
             });
 
             return config;
