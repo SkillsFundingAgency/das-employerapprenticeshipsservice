@@ -140,11 +140,9 @@
     <Compile Include="MsSqlServer\DbConnectionExtensions.cs" />
     <Compile Include="MsSqlServer\OutboxTransaction.cs" />
     <Compile Include="MsSqlServer\IncomingPhysicalMessageBehavior.cs" />
-    <Compile Include="Mvc\EndpointConfigurationExtensions.cs" />
     <Compile Include="Mvc\UnitOfWorkManagerFilter.cs" />
     <Compile Include="ProcessOutboxMessagesJob.cs" />
     <Compile Include="UnitOfWorkBehavior.cs" />
-    <Compile Include="WebApi\EndpointConfigurationExtensions.cs" />
     <Compile Include="WebApi\UnitOfWorkManagerFilter.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="EndpointConfigurationExtensions.cs" />

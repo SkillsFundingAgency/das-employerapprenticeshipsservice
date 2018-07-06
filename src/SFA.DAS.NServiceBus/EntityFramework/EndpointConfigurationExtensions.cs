@@ -2,18 +2,17 @@
 using System.Web.Http.Filters;
 using System.Web.Mvc;
 using NServiceBus;
-using SFA.DAS.NServiceBus.Mvc;
-using SFA.DAS.NServiceBus.WebApi;
 
 namespace SFA.DAS.NServiceBus.EntityFramework
 {
     public static class EndpointConfigurationExtensions
     {
-        public static EndpointConfiguration SetupEntityFrameworkUnitOfWork<T>(this EndpointConfiguration config) where T : DbContext
+        public static EndpointConfiguration SetupEntityFrameworkUnitOfWork<T>(this EndpointConfiguration config) where T : DbContext, IOutboxDbContext
         {
             config.RegisterComponents(c =>
             {
                 c.ConfigureComponent<Db<T>>(DependencyLifecycle.InstancePerUnitOfWork);
+                c.ConfigureComponent<Outbox<T>>(DependencyLifecycle.InstancePerUnitOfWork);
             });
 
             config.SetupUnitOfWork();
@@ -23,26 +22,16 @@ namespace SFA.DAS.NServiceBus.EntityFramework
 
         public static EndpointConfiguration SetupEntityFrameworkUnitOfWork<T>(this EndpointConfiguration config, GlobalFilterCollection filters) where T : DbContext, IOutboxDbContext
         {
-            config.RegisterComponents(c =>
-            {
-                c.ConfigureComponent<Db<T>>(DependencyLifecycle.InstancePerUnitOfWork);
-                c.ConfigureComponent<Outbox<T>>(DependencyLifecycle.InstancePerUnitOfWork);
-            });
-            
-            config.SetupUnitOfWork(filters);
+            config.SetupEntityFrameworkUnitOfWork<T>();
+            filters.Add(new Mvc.UnitOfWorkManagerFilter(() => DependencyResolver.Current.GetService<IUnitOfWorkManager>()), -999);
 
             return config;
         }
 
         public static EndpointConfiguration SetupEntityFrameworkUnitOfWork<T>(this EndpointConfiguration config, HttpFilterCollection filters) where T : DbContext, IOutboxDbContext
         {
-            config.RegisterComponents(c =>
-            {
-                c.ConfigureComponent<Db<T>>(DependencyLifecycle.InstancePerUnitOfWork);
-                c.ConfigureComponent<Outbox<T>>(DependencyLifecycle.InstancePerUnitOfWork);
-            });
-            
-            config.SetupUnitOfWork(filters);
+            config.SetupEntityFrameworkUnitOfWork<T>();
+            filters.Add(new WebApi.UnitOfWorkManagerFilter());
 
             return config;
         }
