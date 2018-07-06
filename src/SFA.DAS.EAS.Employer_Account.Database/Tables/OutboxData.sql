@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[OutboxMessages]
+﻿CREATE TABLE [dbo].[OutboxData]
 (
 	[Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
 	[Sent] DATETIME NOT NULL,
@@ -7,5 +7,5 @@
 )
 GO
 
-CREATE INDEX [IX_OutboxMessages] ON [dbo].[OutboxMessages] ([Sent] ASC, [Published] ASC)
+CREATE INDEX [IX_OutboxData] ON [dbo].[OutboxData] ([Sent] ASC, [Published] ASC)
 GO
