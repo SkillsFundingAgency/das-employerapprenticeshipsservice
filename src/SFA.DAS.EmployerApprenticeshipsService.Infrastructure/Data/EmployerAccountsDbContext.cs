@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.AccountLegalEntity);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Template);
             modelBuilder.Entity<Membership>().HasKey(m => new { m.AccountId, m.UserId }).Ignore(m => m.RoleId).Property(m => m.Role).HasColumnName(nameof(Membership.RoleId));
-            modelBuilder.Entity<OutboxMessage>().ToTable("OutboxMessages", "dbo");
+            modelBuilder.Entity<OutboxMessage>().ToTable("OutboxData", "dbo");
             modelBuilder.Entity<Paye>().Ignore(a => a.AccountId);
             modelBuilder.Entity<User>().Ignore(u => u.FullName).Ignore(u => u.UserRef).Property(u => u.Ref).HasColumnName(nameof(User.UserRef));
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.ReceiverAccount);
