@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -28,7 +29,9 @@ namespace SFA.DAS.NServiceBus.UnitTests
         [Test]
         public void Publish_WhenPublishing_ThenShouldReturnEvents()
         {
-            Run(f => f.Publish(), (f, r) => r.ShouldAllBeEquivalentTo(f.Events));
+            Run(f => f.Publish(), (f, r) => r.Should().HaveCount(2).And.Match<IEnumerable<Event>>(e =>
+                e.ElementAt(0) is FooEvent && e.ElementAt(0).Created == f.Events[0].Created &&
+                e.ElementAt(1) is BarEvent && e.ElementAt(1).Created == f.Events[1].Created));
         }
 
         [Test]
@@ -50,8 +53,8 @@ namespace SFA.DAS.NServiceBus.UnitTests
 
             Events = new List<Event>
             {
-                new FooEvent(),
-                new BarEvent()
+                new FooEvent { Created = Now.AddDays(-1) },
+                new BarEvent { Created = Now }
             };
         }
 

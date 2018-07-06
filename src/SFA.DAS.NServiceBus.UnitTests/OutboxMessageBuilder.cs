@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Moq;
+using Newtonsoft.Json;
 
 namespace SFA.DAS.NServiceBus.UnitTests
 {
@@ -17,6 +19,13 @@ namespace SFA.DAS.NServiceBus.UnitTests
         public OutboxMessageBuilder WithSent(DateTime sent)
         {
             _outboxMessage.Setup(m => m.Sent).Returns(sent);
+
+            return this;
+        }
+
+        public OutboxMessageBuilder WithEvents(List<Event> events)
+        {
+            _outboxMessage.Setup(m => m.Data).Returns(JsonConvert.SerializeObject(events, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto }));
 
             return this;
         }
