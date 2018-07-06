@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using HMRC.ESFA.Levy.Api.Types;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions;
 using SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.NLog.Logger;
 
@@ -39,14 +39,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
                 new DasEnglishFraction
                 {
                     Id = "1",
-                    DateCalculated = DateTime.Parse(DateTime.Now.AddDays(-20).ToShortDateString()),
+                    DateCalculated = DateTime.Today.AddDays(-20),
                     EmpRef = _employerReference,
                     Amount = 0.45M
                 },
                 new DasEnglishFraction
                 {
                     Id = "2",
-                    DateCalculated = DateTime.Parse(DateTime.Now.AddDays(-10).ToShortDateString()),
+                    DateCalculated = DateTime.Today.AddDays(-10),
                     EmpRef = _employerReference,
                     Amount = 0.5M
                 }
@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             {
                 new FractionCalculation
                 {
-                    CalculatedAt = DateTime.Now.AddDays(-20).ToShortDateString(),
+                    CalculatedAt = DateTime.Today.AddDays(-20),
                     Fractions = new List<Fraction>
                     {
                         new Fraction {Region = "England", Value = "0.45"}
@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
                 },
                 new FractionCalculation
                 {
-                    CalculatedAt = DateTime.Now.AddDays(-10).ToShortDateString(),
+                    CalculatedAt = DateTime.Today.AddDays(-10),
                     Fractions = new List<Fraction>
                     {
                         new Fraction {Region = "England", Value = "0.5"}
@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
                 },
                 new FractionCalculation
                 {
-                    CalculatedAt = DateTime.Now.AddDays(-5).ToShortDateString(),
+                    CalculatedAt = DateTime.Today.AddDays(-5),
                     Fractions = new List<Fraction>
                     {
                         new Fraction {Region = "England", Value = "0.55"}
@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
                 },
                 new FractionCalculation
                 {
-                    CalculatedAt = DateTime.Today.ToShortDateString(),
+                    CalculatedAt = DateTime.Today,
                     Fractions = new List<Fraction>
                     {
                         new Fraction {Region = "England", Value = "0.6"}
@@ -121,43 +121,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             _englishFractionRepository.Verify(x => x.CreateEmployerFraction(
                 It.Is<DasEnglishFraction>(fraction => IsSameAsFractionCalculation(fraction, _fractionCalculations[2])),
                 _employerReference), Times.Once);
-
-            _englishFractionRepository.Verify(x => x.CreateEmployerFraction(
-               It.Is<DasEnglishFraction>(fraction => IsSameAsFractionCalculation(fraction, _fractionCalculations[3])),
-               _employerReference), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenIShouldUpdateFractionsWithValidCalculatedDates()
-        {
-            //Assign
-            _fractionCalculations[2].CalculatedAt = "this is not a date";
-
-            _englishFractionRepository.Setup(
-                x => x.CreateEmployerFraction(It.IsAny<DasEnglishFraction>(), It.IsAny<string>()))
-                .Returns(Task.Run(() => { }));
-
-            _englishFractionRepository.Setup(x => x.GetAllEmployerFractions(_employerReference))
-                .ReturnsAsync(_existingFractions);
-
-            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference, It.IsAny<DateTime?>()))
-                .ReturnsAsync(new EnglishFractionDeclarations
-                {
-                    Empref = _employerReference,
-                    FractionCalculations = _fractionCalculations
-                });
-
-            //Act
-            await _handler.Handle(new UpdateEnglishFractionsCommand
-            {
-                EmployerReference = _employerReference,
-                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { UpdateRequired = true }
-            });
-
-            //Assert
-            _englishFractionRepository.Verify(x => x.CreateEmployerFraction(
-                It.Is<DasEnglishFraction>(fraction => IsSameAsFractionCalculation(fraction, _fractionCalculations[2])),
-                _employerReference), Times.Never);
 
             _englishFractionRepository.Verify(x => x.CreateEmployerFraction(
                It.Is<DasEnglishFraction>(fraction => IsSameAsFractionCalculation(fraction, _fractionCalculations[3])),
@@ -215,7 +178,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             {
                 new FractionCalculation
                 {
-                    CalculatedAt = DateTime.Now.AddDays(-20).ToShortDateString(),
+                    CalculatedAt = DateTime.Today.AddDays(-20),
                     Fractions = new List<Fraction>
                     {
                         new Fraction {Region = "England", Value = "0.45"}
@@ -223,7 +186,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
                 },
                 new FractionCalculation
                 {
-                    CalculatedAt = DateTime.Now.AddDays(-10).ToShortDateString(),
+                    CalculatedAt = DateTime.Today.AddDays(-10),
                     Fractions = new List<Fraction>
                     {
                         new Fraction {Region = "England", Value = "0.5"}
@@ -361,12 +324,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
 
         private static bool IsSameAsFractionCalculation(DasEnglishFraction fraction, FractionCalculation fractionCalculation)
         {
-            var fractiondateString = fraction.DateCalculated.ToShortDateString();
+            var fractiondate = fraction.DateCalculated;
             var fractionAmountString = fraction.Amount.ToString(CultureInfo.InvariantCulture);
 
             var fractionCalculationAmount = fractionCalculation.Fractions.First().Value;
 
-            return fractiondateString.Equals(fractionCalculation.CalculatedAt) &&
+            return fractiondate.Equals(fractionCalculation.CalculatedAt) &&
                     fractionAmountString.Equals(fractionCalculationAmount);
         }
     }

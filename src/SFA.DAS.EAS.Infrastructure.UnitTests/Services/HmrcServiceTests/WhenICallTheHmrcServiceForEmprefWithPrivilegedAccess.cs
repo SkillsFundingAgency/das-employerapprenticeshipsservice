@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
-using System.Web;
+using HMRC.ESFA.Levy.Api.Client;
+using HMRC.ESFA.Levy.Api.Types;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Http;
-using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
@@ -21,6 +21,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private const string ExpectedAuthToken = "789654321AGFVD";
 
         private Mock<IHttpClientWrapper> _httpClientWrapper;
+        private Mock<IApprenticeshipLevyApiClient> _apprenticeshipLevyApiClient;
         private HmrcService _hmrcService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<ITokenServiceApiClient> _tokenService;
@@ -39,28 +40,22 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
                 }
             };
 
+            _apprenticeshipLevyApiClient = new Mock<IApprenticeshipLevyApiClient>();
+
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
-            _httpClientWrapper.Setup(x => x.Get<EmpRefLevyInformation>(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedName } }, Links = new Links() });
+            _apprenticeshipLevyApiClient.Setup(x => x.GetEmployerDetails(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new EmpRefLevyInformation
+                {
+                    Employer = new Employer {Name = new Name {EmprefAssociatedName = ExpectedName}},
+                    Links = new Links()
+                });
 
             _tokenService = new Mock<ITokenServiceApiClient>();
             _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken { AccessCode = ExpectedAuthToken });
 
-            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _tokenService.Object, new NoopExecutionPolicy(), null,null);
-        }
 
-        [Test]
-        public async Task ThenTheCorrectUrlIsUsedToGetTheEmprefInformation()
-        {
-            //Arrange
-            var empRef = "123/AB12345";
-
-            //Act
-            await _hmrcService.GetEmprefInformation(empRef);
-
-            //Assert
-            _tokenService.Verify(x=>x.GetPrivilegedAccessTokenAsync(),Times.Once);
-            _httpClientWrapper.Verify(x => x.Get<EmpRefLevyInformation>(ExpectedAuthToken, $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}"), Times.Once);
-
+            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object,
+                _apprenticeshipLevyApiClient.Object, _tokenService.Object, new NoopExecutionPolicy(), null, null);
         }
 
         [Test]

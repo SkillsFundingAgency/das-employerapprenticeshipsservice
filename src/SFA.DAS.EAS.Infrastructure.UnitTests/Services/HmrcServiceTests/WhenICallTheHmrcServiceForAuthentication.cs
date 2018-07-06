@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using System.Web;
+using HMRC.ESFA.Levy.Api.Client;
 using Moq;
 using Newtonsoft.Json;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Http;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.TokenService.Api.Client;
@@ -23,6 +22,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private string ExpectedOgdClientId = "123456789";
         private string ExpectedScope = "emp_ref";
         private Mock<IHttpClientWrapper> _httpClientWrapper;
+        private Mock<IApprenticeshipLevyApiClient> _apprenticeshipLevyApiClient;
         private string ExpectedClientSecret = "my_secret";
         private const string ExpectedAccessCode = "789654321AGFVD";
         private Mock<ITokenServiceApiClient> _tokenService;
@@ -48,7 +48,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             _tokenService = new Mock<ITokenServiceApiClient>();
             _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken { AccessCode = ExpectedAccessCode });
 
-            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _tokenService.Object, new NoopExecutionPolicy(), null,null);
+            _apprenticeshipLevyApiClient = new Mock<IApprenticeshipLevyApiClient>();
+
+            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object,
+                _apprenticeshipLevyApiClient.Object, _tokenService.Object, new NoopExecutionPolicy(), null, null);
         }
 
         [Test]

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using HMRC.ESFA.Levy.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration;
-using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.TestCommon.ScenarioCommonSteps;
 using TechTalk.SpecFlow;
 
@@ -47,7 +48,7 @@ namespace SFA.DAS.EAS.Levy.HmrcScenarios.AcceptanceTests2.Steps.LevyDeclarationW
                                 DateCeased = string.IsNullOrEmpty(row["DateCeased"]) ? default(DateTime) : Convert.ToDateTime(row["DateCeased"]),
                                 LevyDueYearToDate = string.IsNullOrEmpty(row["LevyDueYTD"]) ? 0 : Convert.ToDecimal(row["LevyDueYTD"]),
                                 NoPaymentForPeriod = !string.IsNullOrEmpty(row["NoPaymentForPeriod"]) && Convert.ToBoolean(row["NoPaymentForPeriod"]),
-                                SubmissionTime = row["SubmissionTime"],
+                                SubmissionTime = string.IsNullOrEmpty(row["SubmissionTime"]) ? default(DateTime) : DateTime.ParseExact(row["SubmissionTime"], "yyyy-MM-dd", CultureInfo.InvariantCulture),
                                 LevyAllowanceForFullYear = string.IsNullOrEmpty(row["LevyAllowanceForFullYear"]) ? 0 : Convert.ToDecimal(row["LevyAllowanceForFullYear"]),
                                 PayrollPeriod = new PayrollPeriod
                                 {

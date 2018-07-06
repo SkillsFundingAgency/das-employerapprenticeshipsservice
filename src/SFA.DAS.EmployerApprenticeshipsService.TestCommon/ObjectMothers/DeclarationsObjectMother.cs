@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using HMRC.ESFA.Levy.Api.Types;
 
 namespace SFA.DAS.EAS.TestCommon.ObjectMothers
 {
@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                         new Declaration
                         {
                             PayrollPeriod = new PayrollPeriod {Month = 10, Year = "2016"},
-                            SubmissionTime = DateTime.UtcNow.ToString(),
+                            SubmissionTime = DateTime.UtcNow,
                             DateCeased = DateTime.UtcNow,
                             NoPaymentForPeriod = true
                         }

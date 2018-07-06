@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using HMRC.ESFA.Levy.Api.Client;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -23,7 +24,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private HmrcService _hmrcService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IHttpClientWrapper> _httpClientWrapper;
-        
+        private Mock<IApprenticeshipLevyApiClient> _apprenticeshipLevyApiClient;
+
         private Mock<ITokenServiceApiClient> _tokenService;
         private Mock<IInProcessCache> _cacheProvider;
 
@@ -43,7 +45,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             };
             
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
-            
+            _apprenticeshipLevyApiClient = new Mock<IApprenticeshipLevyApiClient>();
+
             _tokenService = new Mock<ITokenServiceApiClient>();
             _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken {AccessCode = ExpectedAccessCode});
 
@@ -52,24 +55,25 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
                 .Returns(null)
                 .Returns(new DateTime());
 
-            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _tokenService.Object, new NoopExecutionPolicy(),_cacheProvider.Object,null);
+            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object,
+                _apprenticeshipLevyApiClient.Object, _tokenService.Object, new NoopExecutionPolicy(),
+                _cacheProvider.Object, null);
         }
 
         [Test]
         public async Task ThenIShouldGetTheCurrentUpdatedDate()
         {
             //Assign
-            const string expectedApiUrl = "apprenticeship-levy/fraction-calculation-date";
             var updateDate = DateTime.Now;
             
-            _httpClientWrapper.Setup(x => x.Get<DateTime>(It.IsAny<string>(), expectedApiUrl))
+            _apprenticeshipLevyApiClient.Setup(x => x.GetLastEnglishFractionUpdate(It.IsAny<string>()))
                 .ReturnsAsync(updateDate);
 
             //Act
             var result = await _hmrcService.GetLastEnglishFractionUpdate();
 
             //Assert
-            _httpClientWrapper.Verify(x => x.Get<DateTime>(ExpectedAccessCode, expectedApiUrl), Times.Once);
+            _apprenticeshipLevyApiClient.Verify(x => x.GetLastEnglishFractionUpdate(ExpectedAccessCode), Times.Once);
             Assert.AreEqual(updateDate, result);
         }
 
@@ -77,15 +81,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         [Test]
         public async Task ThenTheFractionLastCaclulatedDateIsReadFromTheCacheOnSubsequentReads()
         {
-            //Arrange
-            const string expectedApiUrl = "apprenticeship-levy/fraction-calculation-date";
-            
             //Act
             await _hmrcService.GetLastEnglishFractionUpdate();
             await _hmrcService.GetLastEnglishFractionUpdate();
 
             //Assert
-            _httpClientWrapper.Verify(x => x.Get<DateTime>(ExpectedAccessCode, expectedApiUrl), Times.Once);
+            _apprenticeshipLevyApiClient.Verify(x => x.GetLastEnglishFractionUpdate(ExpectedAccessCode), Times.Once);
             _cacheProvider.Verify(x => x.Set("HmrcFractionLastCalculatedDate", It.IsAny<DateTime>(), It.Is<TimeSpan>(c => c.Minutes.Equals(30))));
         }
     }

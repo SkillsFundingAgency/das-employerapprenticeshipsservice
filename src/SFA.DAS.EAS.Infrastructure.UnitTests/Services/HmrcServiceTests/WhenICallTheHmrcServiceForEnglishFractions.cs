@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web;
+using HMRC.ESFA.Levy.Api.Client;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -11,6 +12,7 @@ using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
+using EnglishFractionDeclarations = HMRC.ESFA.Levy.Api.Types.EnglishFractionDeclarations;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
@@ -28,6 +30,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private HmrcService _hmrcService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IHttpClientWrapper> _httpClientWrapper;
+        private Mock<IApprenticeshipLevyApiClient> _apprenticeshipLevyApiClient;
         private Mock<ITokenServiceApiClient> _tokenService;
         private Mock<IAzureAdAuthenticationService> _azureAdAuthService;
 
@@ -58,31 +61,34 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             _tokenService = new Mock<ITokenServiceApiClient>();
             _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken { AccessCode = ExpectedAuthToken });
 
+            _apprenticeshipLevyApiClient = new Mock<IApprenticeshipLevyApiClient>();
+
             _azureAdAuthService = new Mock<IAzureAdAuthenticationService>();
             _azureAdAuthService.Setup(x =>
                     x.GetAuthenticationResult(_configuration.Hmrc.AzureClientId, _configuration.Hmrc.AzureAppKey,
                         _configuration.Hmrc.AzureResourceId, _configuration.Hmrc.AzureTenant))
                 .ReturnsAsync(ExpectedAuthToken);
 
-            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _tokenService.Object, new NoopExecutionPolicy(),null, _azureAdAuthService.Object);
+            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _apprenticeshipLevyApiClient.Object, _tokenService.Object, new NoopExecutionPolicy(),null, _azureAdAuthService.Object);
         }
 
         [Test]
         public async Task ThenIShouldGetBackDeclarationsForAGivenEmpRef()
         {
             //Arrange
-            
-            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/fractions";
 
             var englishFractions = new EnglishFractionDeclarations();
-            _httpClientWrapper.Setup(x => x.Get<EnglishFractionDeclarations>(It.IsAny<string>(), expectedApiUrl))
+            _apprenticeshipLevyApiClient.Setup(x => x.GetEmployerFractionCalculations(It.IsAny<string>(),
+                    It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>()))
                 .ReturnsAsync(englishFractions);
 
             //Act
             var result = await _hmrcService.GetEnglishFractions(EmpRef);
 
             //Assert
-            _httpClientWrapper.Verify(x => x.Get<EnglishFractionDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
+            _apprenticeshipLevyApiClient.Verify(
+                x => x.GetEmployerFractionCalculations(ExpectedAuthToken, It.IsAny<string>(), It.IsAny<DateTime?>(),
+                    It.IsAny<DateTime?>()), Times.Once);
             Assert.AreEqual(englishFractions, result);
         }
 
@@ -95,7 +101,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 
             //Act
             await _hmrcService.GetEnglishFractions(EmpRef, expectedDate);
-            _httpClientWrapper.Verify(x => x.Get<EnglishFractionDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
+            _apprenticeshipLevyApiClient.Verify(x => x.GetEmployerFractionCalculations(ExpectedAuthToken,
+                It.IsAny<string>(), It.IsAny<DateTime?>(),
+                It.IsAny<DateTime?>()), Times.Once);
         }
 
 

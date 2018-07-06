@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using HMRC.ESFA.Levy.Api.Client;
+using HMRC.ESFA.Levy.Api.Types;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
@@ -28,6 +28,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private HmrcService _hmrcService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IHttpClientWrapper> _httpClientWrapper;
+        private Mock<IApprenticeshipLevyApiClient> _apprenticeshipLevyApiClient;
         private Mock<ITokenServiceApiClient> _tokenService;
         private Mock<IAzureAdAuthenticationService> _azureAdAuthService;
 
@@ -58,30 +59,37 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             _tokenService = new Mock<ITokenServiceApiClient>();
             _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken { AccessCode = ExpectedAuthToken });
 
+            _apprenticeshipLevyApiClient = new Mock<IApprenticeshipLevyApiClient>();
+
             _azureAdAuthService = new Mock<IAzureAdAuthenticationService>();
             _azureAdAuthService.Setup(x =>
                     x.GetAuthenticationResult(_configuration.Hmrc.AzureClientId, _configuration.Hmrc.AzureAppKey,
                         _configuration.Hmrc.AzureResourceId, _configuration.Hmrc.AzureTenant))
                 .ReturnsAsync( ExpectedAuthToken);
 
-            _hmrcService = new HmrcService( _configuration, _httpClientWrapper.Object, _tokenService.Object, new NoopExecutionPolicy(), null, _azureAdAuthService.Object);
+            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object,
+                _apprenticeshipLevyApiClient.Object, _tokenService.Object, new NoopExecutionPolicy(), null,
+                _azureAdAuthService.Object);
         }
         
         [Test]
         public async Task ThenIShouldGetBackDeclarationsForAGivenEmpRef()
         {
             //Arrange
-            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/declarations?fromDate=2017-04-01";
-            
             var levyDeclarations = new LevyDeclarations();
-            _httpClientWrapper.Setup(x => x.Get<LevyDeclarations>(It.IsAny<string>(), expectedApiUrl))
+            _apprenticeshipLevyApiClient.Setup(x => x.GetEmployerLevyDeclarations(It.IsAny<string>(),
+                    It.IsAny<string>(), It.IsAny<DateTime?>(),
+                    It.IsAny<DateTime?>()))
                 .ReturnsAsync(levyDeclarations);
 
             //Act
             var result = await _hmrcService.GetLevyDeclarations(EmpRef);
 
             //Assert
-            _httpClientWrapper.Verify(x => x.Get<LevyDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
+            _apprenticeshipLevyApiClient.Verify(
+                x => x.GetEmployerLevyDeclarations(ExpectedAuthToken, EmpRef, It.IsAny<DateTime?>(),
+                    It.IsAny<DateTime?>()), Times.Once);
+
             Assert.AreEqual(levyDeclarations, result);
         }
 
@@ -90,13 +98,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         {
             //Arrange
             var expectedDate = new DateTime(2017,04,01);
-            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/declarations?fromDate=2017-04-01";
 
             //Act
             await _hmrcService.GetLevyDeclarations(EmpRef, expectedDate);
 
             //Assert
-            _httpClientWrapper.Verify(x => x.Get<LevyDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
+            _apprenticeshipLevyApiClient.Verify(x => x.GetEmployerLevyDeclarations(ExpectedAuthToken, EmpRef, It.IsAny<DateTime?>(),
+                It.IsAny<DateTime?>()), Times.Once);
         }
 
         [Test]
@@ -104,26 +112,26 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         {
             //Arrange
             var expectedDate = new DateTime(2017, 03, 31);
-            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/declarations?fromDate=2017-04-01";
 
             //Act
             await _hmrcService.GetLevyDeclarations(EmpRef, expectedDate);
 
             //Assert
-            _httpClientWrapper.Verify(x => x.Get<LevyDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
+            _apprenticeshipLevyApiClient.Verify(x => x.GetEmployerLevyDeclarations(ExpectedAuthToken, EmpRef, It.IsAny<DateTime?>(),
+                It.IsAny<DateTime?>()), Times.Once);
         }
 
         [Test]
         public async Task ThenTheFromDateIsCorrectlyDefaultedWhenNotSupplied()
         {
             //Arrange
-            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/declarations?fromDate=2017-04-01";
 
             //Act
             await _hmrcService.GetLevyDeclarations(EmpRef);
 
             //Assert
-            _httpClientWrapper.Verify(x => x.Get<LevyDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
+            _apprenticeshipLevyApiClient.Verify(x => x.GetEmployerLevyDeclarations(ExpectedAuthToken, EmpRef, It.IsAny<DateTime?>(),
+                It.IsAny<DateTime?>()), Times.Once);
         }
 
         [Test]

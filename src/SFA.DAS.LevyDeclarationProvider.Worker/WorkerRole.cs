@@ -49,6 +49,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
 
             _container = new Container(c =>
             {
+                c.AddRegistry<ApprenticeshipLevyRegistry>();
+                c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
@@ -75,8 +77,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
         {
             Trace.TraceInformation("SFA.DAS.LevyDeclarationProvider.Worker is stopping");
 
-            this._cancellationTokenSource.Cancel();
-            this._runCompleteEvent.WaitOne();
+            _cancellationTokenSource.Cancel();
+            _runCompleteEvent.WaitOne();
 
             base.OnStop();
 

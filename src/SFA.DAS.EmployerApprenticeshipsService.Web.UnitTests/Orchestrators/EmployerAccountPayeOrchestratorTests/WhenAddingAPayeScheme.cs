@@ -20,6 +20,9 @@ using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
+using Employer = HMRC.ESFA.Levy.Api.Types.Employer;
+using EmpRefLevyInformation = HMRC.ESFA.Levy.Api.Types.EmpRefLevyInformation;
+using Name = HMRC.ESFA.Levy.Api.Types.Name;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
 {
