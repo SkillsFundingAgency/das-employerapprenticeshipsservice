@@ -96,16 +96,16 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             long accountId, long agreementId, bool agreementSigned, string createdBy,
             long legalEntityId, string organisationName, string userRef)
         {
-            return _eventPublisher.Publish<RemovedLegalEntityEvent>(e =>
+            return _eventPublisher.Publish(new RemovedLegalEntityEvent
             {
-                e.AccountId = accountId;
-                e.AgreementId = agreementId;
-                e.LegalEntityId = legalEntityId;
-                e.AgreementSigned = agreementSigned;
-                e.OrganisationName = organisationName;
-                e.Created = DateTime.UtcNow;
-                e.UserName = createdBy;
-                e.UserRef = Guid.Parse(userRef);
+                AccountId = accountId,
+                AgreementId = agreementId,
+                LegalEntityId = legalEntityId,
+                AgreementSigned = agreementSigned,
+                OrganisationName = organisationName,
+                Created = DateTime.UtcNow,
+                UserName = createdBy,
+                UserRef = Guid.Parse(userRef)
             });
         }
 
