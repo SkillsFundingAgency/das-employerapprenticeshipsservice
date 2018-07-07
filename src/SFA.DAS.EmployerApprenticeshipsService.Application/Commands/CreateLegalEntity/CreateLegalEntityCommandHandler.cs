@@ -95,15 +95,15 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             long accountId, long agreementId, string organisationName, string createdByName,
             long legalEntityId, Guid userRef)
         {
-            return _eventPublisher.Publish<AddedLegalEntityEvent>(c =>
+            return _eventPublisher.Publish(new AddedLegalEntityEvent
             {
-                c.AccountId = accountId;
-                c.AgreementId = agreementId;
-                c.LegalEntityId = legalEntityId;
-                c.OrganisationName = organisationName;
-                c.UserName = createdByName;
-                c.UserRef = userRef;
-                c.Created = DateTime.UtcNow;
+                AccountId = accountId,
+                AgreementId = agreementId,
+                LegalEntityId = legalEntityId,
+                OrganisationName = organisationName,
+                UserName = createdByName,
+                UserRef = userRef,
+                Created = DateTime.UtcNow
             });
         }
 
@@ -111,15 +111,15 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             long accountId, long agreementId, string organisationName, string createdByName,
             long legalEntityId, Guid userRef)
         {
-            return _eventPublisher.Publish<CreatedAgreementEvent>(c =>
+            return _eventPublisher.Publish(new CreatedAgreementEvent
             {
-                c.AgreementId = agreementId;
-                c.LegalEntityId = legalEntityId;
-                c.OrganisationName = organisationName;
-                c.AccountId = accountId;
-                c.UserName = createdByName;
-                c.UserRef = userRef;
-                c.Created = DateTime.UtcNow;
+                AgreementId = agreementId,
+                LegalEntityId = legalEntityId,
+                OrganisationName = organisationName,
+                AccountId = accountId,
+                UserName = createdByName,
+                UserRef = userRef,
+                Created = DateTime.UtcNow
             });
         }
 

@@ -93,12 +93,12 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
             {
                 var payment = newPayments[index];
 
-                paymentEventTasks[index] = _eventPublisher.Publish<CreatedPaymentEvent>(e =>
+                paymentEventTasks[index] = _eventPublisher.Publish(new CreatedPaymentEvent
                 {
-                    e.AccountId = payment.EmployerAccountId;
-                    e.ProviderName = payment.ProviderName;
-                    e.Amount = payment.Amount;
-                    e.Created = DateTime.UtcNow;
+                    AccountId = payment.EmployerAccountId,
+                    ProviderName = payment.ProviderName,
+                    Amount = payment.Amount,
+                    Created = DateTime.UtcNow
                 });
             }
 
