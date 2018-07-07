@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using SFA.DAS.Testing;
 
 namespace SFA.DAS.NServiceBus.UnitTests
 {

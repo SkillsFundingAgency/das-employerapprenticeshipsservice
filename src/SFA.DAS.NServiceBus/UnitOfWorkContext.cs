@@ -17,6 +17,11 @@ namespace SFA.DAS.NServiceBus
             Events.Value = new ConcurrentQueue<Func<Event>>();
         }
 
+        public static void AddEvent<T>(T message) where T : Event
+        {
+            Events.Value.Enqueue(() => message);
+        }
+
         public static void AddEvent<T>(Action<T> action) where T : Event, new()
         {
             Events.Value.Enqueue(() =>
@@ -27,6 +32,11 @@ namespace SFA.DAS.NServiceBus
 
                 return message;
             });
+        }
+
+        void IUnitOfWorkContext.AddEvent<T>(T message)
+        {
+            AddEvent(message);
         }
 
         void IUnitOfWorkContext.AddEvent<T>(Action<T> action)
