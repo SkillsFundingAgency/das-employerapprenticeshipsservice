@@ -8,7 +8,7 @@
     <licenseUrl>https://github.com/SkillsFundingAgency/das-shared-packages/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/SkillsFundingAgency/das-shared-packages/tree/master/SFA.DAS.NServiceBus</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>NServiceBus infrastructure to support transactional event publishing from MVC and WebApi clients</description>
+    <description>NServiceBus infrastructure to support transactional data persistence and event publishing from MVC and WebApi clients</description>
     <dependencies>
       <group targetFramework=".NETFramework4.6.2">
         <dependency id="EntityFramework" version="6.2.0" />
