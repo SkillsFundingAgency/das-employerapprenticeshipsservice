@@ -110,16 +110,16 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             long accountId, long legalEntityId, string legalEntityName, long agreementId,
             bool cohortCreated, string currentUserName, string currentUserRef)
         {
-            return _eventPublisher.Publish<SignedAgreementEvent>(e =>
+            return _eventPublisher.Publish(new SignedAgreementEvent
             {
-                e.AccountId = accountId;
-                e.AgreementId = agreementId;
-                e.LegalEntityId = legalEntityId;
-                e.OrganisationName = legalEntityName;
-                e.CohortCreated = cohortCreated;
-                e.Created = DateTime.UtcNow;
-                e.UserName = currentUserName;
-                e.UserRef = Guid.Parse(currentUserRef);
+                AccountId = accountId,
+                AgreementId = agreementId,
+                LegalEntityId = legalEntityId,
+                OrganisationName = legalEntityName,
+                CohortCreated = cohortCreated,
+                Created = DateTime.UtcNow,
+                UserName = currentUserName,
+                UserRef = Guid.Parse(currentUserRef)
             });
         }
 

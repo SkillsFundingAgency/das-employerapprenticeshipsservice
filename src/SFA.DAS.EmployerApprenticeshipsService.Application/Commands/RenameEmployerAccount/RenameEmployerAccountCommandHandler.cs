@@ -84,14 +84,14 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
         private Task PublishAccountRenamedMessage(
             long accountId, string previousName, string currentName, string creatorName, string creatorUserRef)
         {
-            return _eventPublisher.Publish<ChangedAccountNameEvent>(e =>
+            return _eventPublisher.Publish(new ChangedAccountNameEvent
             {
-                e.PreviousName = previousName;
-                e.CurrentName = currentName;
-                e.AccountId = accountId;
-                e.Created = DateTime.UtcNow;
-                e.UserName = creatorName;
-                e.UserRef = Guid.Parse(creatorUserRef);
+                PreviousName = previousName,
+                CurrentName = currentName,
+                AccountId = accountId,
+                Created = DateTime.UtcNow,
+                UserName = creatorName,
+                UserRef = Guid.Parse(creatorUserRef)
             });
         }
 
