@@ -118,29 +118,29 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, Guid userRef)
         {
-            return _eventPublisher.Publish<CreatedAgreementEvent>(c =>
+            return _eventPublisher.Publish(new CreatedAgreementEvent
             {
-                c.AgreementId = employerAgreementId;
-                c.LegalEntityId = legalEntityId;
-                c.OrganisationName = organisationName;
-                c.AccountId = accountId;
-                c.UserName = userName;
-                c.UserRef = userRef;
-                c.Created = DateTime.UtcNow;
+                AgreementId = employerAgreementId,
+                LegalEntityId = legalEntityId,
+                OrganisationName = organisationName,
+                AccountId = accountId,
+                UserName = userName,
+                UserRef = userRef,
+                Created = DateTime.UtcNow
             });
         }
 
         private Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, Guid userRef)
         {
-            return _eventPublisher.Publish<AddedLegalEntityEvent>(c =>
+            return _eventPublisher.Publish(new AddedLegalEntityEvent
             {
-                c.AgreementId = employerAgreementId;
-                c.LegalEntityId = legalEntityId;
-                c.OrganisationName = organisationName;
-                c.AccountId = accountId;
-                c.UserName = userName;
-                c.UserRef = userRef;
-                c.Created = DateTime.UtcNow;
+                AgreementId = employerAgreementId,
+                LegalEntityId = legalEntityId,
+                OrganisationName = organisationName,
+                AccountId = accountId,
+                UserName = userName,
+                UserRef = userRef,
+                Created = DateTime.UtcNow
             });
         }
 
@@ -160,24 +160,24 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, Guid userRef)
         {
-            return _eventPublisher.Publish<AddedPayeSchemeEvent>(c =>
+            return _eventPublisher.Publish(new AddedPayeSchemeEvent
             {
-                c.PayeRef = empref;
-                c.AccountId = accountId;
-                c.UserName = createdByName;
-                c.UserRef = userRef;
-                c.Created = DateTime.UtcNow;
+                PayeRef = empref,
+                AccountId = accountId,
+                UserName = createdByName,
+                UserRef = userRef,
+                Created = DateTime.UtcNow
             });
         }
 
         private Task PublishAccountCreatedMessage(long accountId, string createdByName, Guid userRef)
         {
-            return _eventPublisher.Publish<CreatedAccountEvent>(c =>
+            return _eventPublisher.Publish(new CreatedAccountEvent
             {
-                c.AccountId = accountId;
-                c.UserName = createdByName;
-                c.UserRef = userRef;
-                c.Created = DateTime.UtcNow;
+                AccountId = accountId,
+                UserName = createdByName,
+                UserRef = userRef,
+                Created = DateTime.UtcNow
             });
         }
 

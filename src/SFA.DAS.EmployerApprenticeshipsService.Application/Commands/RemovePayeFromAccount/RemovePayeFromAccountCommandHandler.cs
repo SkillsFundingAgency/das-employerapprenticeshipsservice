@@ -95,13 +95,13 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 
         private Task QueuePayeRemovedMessage(string payeRef, long accountId, string organisationName, string userName, string userRef)
         {
-            return _eventPublisher.Publish<DeletedPayeSchemeEvent>(e =>
+            return _eventPublisher.Publish(new DeletedPayeSchemeEvent
             {
-                e.AccountId = accountId;
-                e.PayeRef = payeRef;
-                e.OrganisationName = organisationName;
-                e.UserName = userName;
-                e.UserRef = Guid.Parse(userRef);
+                AccountId = accountId,
+                PayeRef = payeRef,
+                OrganisationName = organisationName,
+                UserName = userName,
+                UserRef = Guid.Parse(userRef)
             });
         }
 

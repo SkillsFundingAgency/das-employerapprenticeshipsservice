@@ -123,12 +123,12 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
 
         private Task PublishUserJoinedMessage(long accountId, User user)
         {
-            return _eventPublisher.Publish<UserJoinedEvent>(e =>
+            return _eventPublisher.Publish(new UserJoinedEvent
             {
-                e.AccountId = accountId;
-                e.UserName = user.FullName;
-                e.UserRef = user.Ref;
-                e.Created = DateTime.UtcNow;
+                AccountId = accountId,
+                UserName = user.FullName,
+                UserRef = user.Ref,
+                Created = DateTime.UtcNow
             });
         }
     }
