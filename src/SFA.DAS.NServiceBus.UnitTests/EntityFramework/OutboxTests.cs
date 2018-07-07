@@ -10,6 +10,8 @@ using Moq;
 using Moq.Protected;
 using NUnit.Framework;
 using SFA.DAS.NServiceBus.EntityFramework;
+using SFA.DAS.Testing;
+using SFA.DAS.Testing.EntityFramework;
 
 namespace SFA.DAS.NServiceBus.UnitTests.EntityFramework
 {

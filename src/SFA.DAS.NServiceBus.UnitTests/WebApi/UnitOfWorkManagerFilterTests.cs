@@ -7,6 +7,7 @@ using System.Web.Http.Hosting;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.NServiceBus.WebApi;
+using SFA.DAS.Testing;
 using StructureMap;
 using StructureMap.Pipeline;
 

@@ -128,11 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BarEvent.cs" />
-    <Compile Include="EntityFramework\DbAsyncEnumerableStub.cs" />
-    <Compile Include="EntityFramework\DbAsyncEnumeratorStub.cs" />
-    <Compile Include="EntityFramework\DbAsyncQueryProviderStub.cs" />
     <Compile Include="EntityFramework\DbContextFake.cs" />
-    <Compile Include="EntityFramework\DbSetStub.cs" />
     <Compile Include="EntityFramework\DbTests.cs" />
     <Compile Include="MsSqlServer\DbConnectionExtensionsTests.cs" />
     <Compile Include="MsSqlServer\IncomingPhysicalMessageBehaviorTests.cs" />
@@ -146,8 +142,6 @@
     <Compile Include="EntityFramework\OutboxTests.cs" />
     <Compile Include="UnitOfWorkManagerTests.cs" />
     <Compile Include="EventPublisherTests.cs" />
-    <Compile Include="FluentTest.cs" />
-    <Compile Include="FluentTestFixture.cs" />
     <Compile Include="FooEvent.cs" />
     <Compile Include="Mvc\UnitOfWorkManagerFilterTests.cs" />
     <Compile Include="OutboxMessageTests.cs" />
@@ -163,6 +157,10 @@
     <ProjectReference Include="..\SFA.DAS.NServiceBus\SFA.DAS.NServiceBus.csproj">
       <Project>{CBDFA38E-CD77-49BC-B6F4-A07F6E11DFFC}</Project>
       <Name>SFA.DAS.NServiceBus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.Testing\SFA.DAS.Testing.csproj">
+      <Project>{af6a3461-2ff1-4773-9e55-549ae55182b1}</Project>
+      <Name>SFA.DAS.Testing</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
