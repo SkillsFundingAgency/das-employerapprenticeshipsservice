@@ -137,13 +137,13 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
 
         private Task PublishUserInvitedEvent(long accountId, string personInvited, string invitedByUserName, Guid invitedByUserRef)
         {
-            return _eventPublisher.Publish<InvitedUserEvent>(e =>
+            return _eventPublisher.Publish(new InvitedUserEvent
             {
-                e.AccountId = accountId;
-                e.PersonInvited = personInvited;
-                e.UserName = invitedByUserName;
-                e.UserRef = invitedByUserRef;
-                e.Created = DateTime.UtcNow;
+                AccountId = accountId,
+                PersonInvited = personInvited,
+                UserName = invitedByUserName,
+                UserRef = invitedByUserRef,
+                Created = DateTime.UtcNow
             });
         }
     }
