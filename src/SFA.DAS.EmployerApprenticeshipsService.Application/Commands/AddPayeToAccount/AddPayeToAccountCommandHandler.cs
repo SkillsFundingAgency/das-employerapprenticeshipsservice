@@ -112,13 +112,13 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
         private Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef)
         {
-            return _eventPublisher.Publish<AddedPayeSchemeEvent>(e =>
+            return _eventPublisher.Publish(new AddedPayeSchemeEvent
             {
-                e.PayeRef = payeRef;
-                e.AccountId = accountId;
-                e.UserName = userName;
-                e.UserRef = Guid.Parse(userRef);
-                e.Created = DateTime.UtcNow;
+                PayeRef = payeRef,
+                AccountId = accountId,
+                UserName = userName,
+                UserRef = Guid.Parse(userRef),
+                Created = DateTime.UtcNow
             });
         }
 
