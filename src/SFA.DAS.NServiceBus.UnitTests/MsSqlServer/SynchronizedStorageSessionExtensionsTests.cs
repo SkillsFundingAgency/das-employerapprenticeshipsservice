@@ -5,6 +5,7 @@ using NServiceBus.Persistence;
 using NServiceBus.Persistence.Sql;
 using NUnit.Framework;
 using SFA.DAS.NServiceBus.MsSqlServer;
+using SFA.DAS.Testing;
 
 namespace SFA.DAS.NServiceBus.UnitTests.MsSqlServer
 {
