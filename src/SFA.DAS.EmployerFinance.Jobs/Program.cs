@@ -39,11 +39,8 @@ namespace SFA.DAS.EmployerFinance.Jobs
         public static async Task AsyncMain(CancellationToken cancellationToken)
         {
             var container = IoC.Initialize();
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.Jobs");
-            
-            ServiceLocator.Initialize(container);
 
-            endpointConfiguration
+            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.Jobs")
                 .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
                 .SetupEntityFrameworkUnitOfWork<EmployerFinanceDbContext>()
                 .SetupErrorQueue()
@@ -59,6 +56,8 @@ namespace SFA.DAS.EmployerFinance.Jobs
             {
                 c.For<IMessageSession>().Use(endpoint);
             });
+
+            ServiceLocator.Initialize(container);
         }
     }
 }
