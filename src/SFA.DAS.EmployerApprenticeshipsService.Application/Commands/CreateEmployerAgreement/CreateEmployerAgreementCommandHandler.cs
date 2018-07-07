@@ -36,11 +36,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreement
                                 message.AccountId,
                                 message.LegalEntityId);
 
-            await _eventPublisher.Publish<CreatedAgreementEvent>(c =>
+            await _eventPublisher.Publish(new CreatedAgreementEvent
             {
-                c.AccountId = message.AccountId;
-                c.AgreementId = newAgreementId;
-                c.LegalEntityId = message.LegalEntityId;
+                AccountId = message.AccountId,
+                AgreementId = newAgreementId,
+                LegalEntityId = message.LegalEntityId
             });
         }
     }
