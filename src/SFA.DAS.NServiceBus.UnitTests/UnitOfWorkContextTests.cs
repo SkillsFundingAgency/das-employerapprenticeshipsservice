@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
+using SFA.DAS.Testing;
 
 namespace SFA.DAS.NServiceBus.UnitTests
 {
@@ -19,17 +20,21 @@ namespace SFA.DAS.NServiceBus.UnitTests
         [Test]
         public void GetEvents_WhenGettingEvents_ThenShouldReturnAllEvents()
         {
-            Run(f => f.SetEvents(), f => f.GetEvents(), (f, r) => r.Should().HaveCount(2).And.Match<IEnumerable<Event>>(e =>
-                e.ElementAt(0) is FooEvent && e.ElementAt(0).Created == f.Events[0].Created &&
-                e.ElementAt(1) is BarEvent && e.ElementAt(1).Created == f.Events[1].Created));
+            Run(f => f.SetEvents(), f => f.GetEvents(), (f, r) => r.Should().HaveCount(4).And.Match<IEnumerable<Event>>(e =>
+                e.ElementAt(0) is FooEvent && e.ElementAt(0).Created == DateTime.MinValue &&
+                e.ElementAt(1) is FooEvent && e.ElementAt(1).Created == f.Now &&
+                e.ElementAt(2) is BarEvent && e.ElementAt(2).Created == DateTime.MinValue &&
+                e.ElementAt(3) is BarEvent && e.ElementAt(3).Created == f.Now));
         }
 
         [Test]
         public void GetEvents_WhenGettingEventsAddedOnSeparateThreadsForSameAsyncFlow_ThenShouldReturnAllEvents()
         {
-            Run(f => f.SetEventsOnSeparateThreads(), f => f.GetEvents(), (f, r) => r.Should().HaveCount(2).And
-                .Contain(e => e is FooEvent && e.Created == f.Events[0].Created).And
-                .Contain(e => e is BarEvent && e.Created == f.Events[1].Created));
+            Run(f => f.SetEventsOnSeparateThreads(), f => f.GetEvents(), (f, r) => r.Should().HaveCount(4).And
+                .Contain(e => e is FooEvent && e.Created == DateTime.MinValue).And
+                .Contain(e => e is FooEvent && e.Created == f.Now).And
+                .Contain(e => e is BarEvent && e.Created == DateTime.MinValue).And
+                .Contain(e => e is BarEvent && e.Created == f.Now));
         }
 
         [Test]
@@ -46,9 +51,9 @@ namespace SFA.DAS.NServiceBus.UnitTests
         public List<Event> Events { get; set; }
         public IUnitOfWorkContext UnitOfWorkContextInstance { get; set; }
 
+
         public UnitOfWorkContextTestsFixture()
         {
-            Now = DateTime.UtcNow;
             Data = new object();
             Events = new List<Event>();
             UnitOfWorkContextInstance = new UnitOfWorkContext();
@@ -73,47 +78,55 @@ namespace SFA.DAS.NServiceBus.UnitTests
 
         public UnitOfWorkContextTestsFixture SetEvents()
         {
-            var fooEvent = new FooEvent();
-            var barEvent = new BarEvent();
-            
+            var fooEvent = new FooEvent { Created = Now };
+            var barEvent = new BarEvent { Created = Now };
+
             Events.Add(fooEvent);
             Events.Add(barEvent);
 
-            UnitOfWorkContextInstance.AddEvent<FooEvent>(e => e.Created = fooEvent.Created);
-            UnitOfWorkContext.AddEvent<BarEvent>(e => e.Created = barEvent.Created);
+            UnitOfWorkContextInstance.AddEvent(fooEvent);
+            UnitOfWorkContextInstance.AddEvent<FooEvent>(e => e.Created = Now);
+            UnitOfWorkContext.AddEvent(barEvent);
+            UnitOfWorkContext.AddEvent<BarEvent>(e => e.Created = Now);
 
-            fooEvent.Created = Now.Date.AddDays(-1);
-            barEvent.Created = Now.Date.AddDays(1);
+            Now = DateTime.UtcNow;
 
             return this;
         }
 
         public UnitOfWorkContextTestsFixture SetEventsOnSeparateThreads()
         {
-            var fooEvent = new FooEvent();
-            var barEvent = new BarEvent();
+            var fooEvent = new FooEvent { Created = Now };
+            var barEvent = new BarEvent { Created = Now };
 
             Events.Add(fooEvent);
             Events.Add(barEvent);
 
             var tasks = new List<Task>
             {
-                Task.Run(() => UnitOfWorkContextInstance.AddEvent<FooEvent>(e => e.Created = fooEvent.Created)),
-                Task.Run(() => UnitOfWorkContext.AddEvent<BarEvent>(e => e.Created = barEvent.Created))
+                Task.Run(() =>
+                {
+                    UnitOfWorkContextInstance.AddEvent(fooEvent);
+                    UnitOfWorkContextInstance.AddEvent<FooEvent>(e => e.Created = Now);
+                }),
+                Task.Run(() =>
+                {
+                    UnitOfWorkContext.AddEvent(barEvent);
+                    UnitOfWorkContext.AddEvent<BarEvent>(e => e.Created = Now);
+                })
             };
 
             Task.WhenAll(tasks).GetAwaiter().GetResult();
 
-            fooEvent.Created = Now.Date.AddDays(-1);
-            barEvent.Created = Now.Date.AddDays(1);
+            Now = DateTime.UtcNow;
 
             return this;
         }
 
         public UnitOfWorkContextTestsFixture SetEventsOnSeparateAsyncFlow()
         {
-            var fooEvent = new FooEvent();
-            var barEvent = new BarEvent();
+            var fooEvent = new FooEvent { Created = Now };
+            var barEvent = new BarEvent { Created = Now };
 
             Events.Add(fooEvent);
             Events.Add(barEvent);
@@ -124,22 +137,25 @@ namespace SFA.DAS.NServiceBus.UnitTests
                 {
                     IUnitOfWorkContext unitOfWorkContextInstance = new UnitOfWorkContext();
 
-                    unitOfWorkContextInstance.AddEvent<FooEvent>(e => e.Created = fooEvent.Created);
-                    UnitOfWorkContext.AddEvent<BarEvent>(e => e.Created = barEvent.Created);
+                    UnitOfWorkContextInstance.AddEvent(fooEvent);
+                    unitOfWorkContextInstance.AddEvent<FooEvent>(e => e.Created = Now);
+                    UnitOfWorkContext.AddEvent(barEvent);
+                    UnitOfWorkContext.AddEvent<BarEvent>(e => e.Created = Now);
                 }),
                 Task.Run(() =>
                 {
                     IUnitOfWorkContext unitOfWorkContextInstance = new UnitOfWorkContext();
 
-                    unitOfWorkContextInstance.AddEvent<FooEvent>(e => e.Created = fooEvent.Created);
-                    UnitOfWorkContext.AddEvent<BarEvent>(e => e.Created = barEvent.Created);
+                    UnitOfWorkContextInstance.AddEvent(fooEvent);
+                    unitOfWorkContextInstance.AddEvent<FooEvent>(e => e.Created = Now);
+                    UnitOfWorkContext.AddEvent(barEvent);
+                    UnitOfWorkContext.AddEvent<BarEvent>(e => e.Created = Now);
                 })
             };
 
             Task.WhenAll(tasks).GetAwaiter().GetResult();
 
-            fooEvent.Created = Now.Date.AddDays(-1);
-            barEvent.Created = Now.Date.AddDays(1);
+            Now = DateTime.UtcNow;
 
             return this;
         }

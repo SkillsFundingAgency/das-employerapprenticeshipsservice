@@ -7,6 +7,7 @@ using Moq;
 using NServiceBus;
 using NServiceBus.Testing;
 using NUnit.Framework;
+using SFA.DAS.Testing;
 
 namespace SFA.DAS.NServiceBus.UnitTests
 {
