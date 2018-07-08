@@ -1,4 +1,5 @@
-﻿using NServiceBus;
+﻿using System;
+using NServiceBus;
 
 namespace SFA.DAS.NServiceBus
 {
@@ -11,6 +12,13 @@ namespace SFA.DAS.NServiceBus
             return config;
         }
 
+        public static EndpointConfiguration SetupHeartbeat(this EndpointConfiguration config)
+        {
+            config.SendHeartbeatTo("heartbeats");
+
+            return config;
+        }
+
         public static EndpointConfiguration SetupInstallers(this EndpointConfiguration config)
         {
             config.EnableInstallers();
@@ -18,9 +26,21 @@ namespace SFA.DAS.NServiceBus
             return config;
         }
 
+        public static EndpointConfiguration SetupMetrics(this EndpointConfiguration config)
+        {
+            var metrics = config.EnableMetrics();
+
+            metrics.SendMetricDataToServiceControl("particular.monitoring", TimeSpan.FromSeconds(10));
+
+            return config;
+        }
+
         public static EndpointConfiguration SetupOutbox(this EndpointConfiguration config)
         {
-            config.EnableOutbox();
+            var outbox = config.EnableOutbox();
+            
+            outbox.KeepDeduplicationDataFor(TimeSpan.FromDays(28));
+            outbox.RunDeduplicationDataCleanupEvery(TimeSpan.FromDays(1));
 
             return config;
         }
@@ -28,13 +48,6 @@ namespace SFA.DAS.NServiceBus
         public static EndpointConfiguration SetupPurgeOnStartup(this EndpointConfiguration config)
         {
             config.PurgeOnStartup(true);
-
-            return config;
-        }
-
-        public static EndpointConfiguration SetupRouting(this EndpointConfiguration config)
-        {
-
 
             return config;
         }
