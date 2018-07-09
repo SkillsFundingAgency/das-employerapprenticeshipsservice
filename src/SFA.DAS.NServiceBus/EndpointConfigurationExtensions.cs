@@ -39,8 +39,7 @@ namespace SFA.DAS.NServiceBus
         {
             var outbox = config.EnableOutbox();
             
-            outbox.KeepDeduplicationDataFor(TimeSpan.FromDays(28));
-            outbox.RunDeduplicationDataCleanupEvery(TimeSpan.FromDays(1));
+            outbox.DisableCleanup();
 
             return config;
         }
@@ -67,6 +66,10 @@ namespace SFA.DAS.NServiceBus
                 {
                     c.ConfigureComponent<Db>(DependencyLifecycle.InstancePerUnitOfWork);
                 }
+
+                c.ConfigureComponent<EventPublisher>(DependencyLifecycle.InstancePerUnitOfWork);
+                c.ConfigureComponent<UnitOfWorkContext>(DependencyLifecycle.InstancePerUnitOfWork);
+                c.ConfigureComponent<UnitOfWorkManager>(DependencyLifecycle.InstancePerUnitOfWork);
             });
 
             config.Pipeline.Register(new UnitOfWorkBehavior(), "Sets up a unit of work for each message");
