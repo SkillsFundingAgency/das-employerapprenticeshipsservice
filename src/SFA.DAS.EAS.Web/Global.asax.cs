@@ -16,6 +16,7 @@ using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.Web.Policy;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Net;
 using System.Reflection;
 using System.Security.Claims;
@@ -30,6 +31,8 @@ using SFA.DAS.EAS.Infrastructure.NServiceBus;
 using SFA.DAS.EAS.Web.App_Start;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.EntityFramework;
+using SFA.DAS.NServiceBus.MsSqlServer;
+using SFA.DAS.NServiceBus.Mvc;
 using SFA.DAS.NServiceBus.NewtonsoftSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
@@ -130,14 +133,15 @@ namespace SFA.DAS.EAS.Web
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Web")
                 .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
-                .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>(GlobalFilters.Filters)
+                .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>()
                 .SetupErrorQueue()
                 .SetupHeartbeat()
                 .SetupInstallers()
                 .SetupMetrics()
+                .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .SetupNewtonsoftSerializer()
                 .SetupNLogFactory()
-                .SetupSendOnly()
+                .SetupOutbox(GlobalFilters.Filters)
                 .SetupStructureMapBuilder(container);
 
             _endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
