@@ -18,11 +18,19 @@ namespace SFA.DAS.NServiceBus.AzureServiceBus
             else
             {
                 var transport = config.UseTransport<AzureServiceBusTransport>();
-
+                
                 transport.ConnectionString(connectionStringBuilder);
                 transport.Transactions(TransportTransactionMode.ReceiveOnly);
                 transport.UseForwardingTopology();
-                
+
+                var messageReceiver = transport.MessageReceivers();
+
+                messageReceiver.AutoRenewTimeout(TimeSpan.FromMinutes(10));
+
+                var queues = transport.Queues();
+
+                queues.LockDuration(TimeSpan.FromMinutes(1));
+
                 routing(transport.Routing());
             }
 
