@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
+﻿using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using System;
+using System.Collections.Generic;
 
 namespace SFA.DAS.EAS.TestCommon.ObjectMothers
 {
@@ -179,7 +179,7 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
             return refreshEmployerLevyDataCommand;
         }
 
-        public static RefreshEmployerLevyDataCommand CreateEndOfYearAdjustment(string empRef, long accountId = 1)
+        public static RefreshEmployerLevyDataCommand CreateEndOfYearAdjustment(string empRef, long accountId = 1, decimal? levyDueYtd = 10)
         {
             var refreshEmployerLevyDataCommand = new RefreshEmployerLevyDataCommand
             {
@@ -196,7 +196,7 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                                 new DasDeclaration
                                 {
                                     Id = "1",
-                                    LevyDueYtd = 10,
+                                    LevyDueYtd = levyDueYtd,
                                     PayrollYear = "16-17",
                                     PayrollMonth = 12,
                                     SubmissionDate = new DateTime(2017, 05, 01),

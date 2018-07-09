@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Events.ProcessDeclaration;
 using SFA.DAS.EAS.Application.Exceptions;
@@ -16,6 +11,10 @@ using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 {
@@ -123,7 +122,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
         private async Task<DasDeclaration[]> FilterActiveDeclarations(EmployerLevyData employerLevyData, IEnumerable<DasDeclaration> declarations)
         {
             var existingSubmissionIds = await _dasLevyRepository.GetEmployerDeclarationSubmissionIds(employerLevyData.EmpRef);
-            var existingSubmissionIdsLookup = new HashSet<string>(existingSubmissionIds.Select( x => x.ToString()));
+            var existingSubmissionIdsLookup = new HashSet<string>(existingSubmissionIds.Select(x => x.ToString()));
 
             //NOTE: The submissionId in our database is the same as the declaration ID from HMRC (DasDeclaration)
             declarations = declarations.Where(x => !existingSubmissionIdsLookup.Contains(x.Id)).ToArray();
@@ -162,12 +161,34 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 
         private async Task UpdateEndOfYearAdjustment(EmployerLevyData employerLevyData, DasDeclaration dasDeclaration)
         {
-            var adjustmentDeclaration = await _dasLevyRepository.GetSubmissionByEmprefPayrollYearAndMonth(employerLevyData.EmpRef, dasDeclaration.PayrollYear, dasDeclaration.PayrollMonth.Value);
+            if (dasDeclaration.LevyDueYtd == null)
+            {
+                throw new ArgumentNullException(nameof(dasDeclaration));
+            }
+
+            DasDeclaration adjustmentDeclaration = null;
+            var payrollMonth = dasDeclaration.PayrollMonth ?? 12;
+
+            do
+            {
+                adjustmentDeclaration = await _dasLevyRepository.GetSubmissionByEmprefPayrollYearAndMonth(employerLevyData.EmpRef, dasDeclaration.PayrollYear, payrollMonth);
+                payrollMonth--;
+            } while (adjustmentDeclaration == null && payrollMonth > 0);
+
             dasDeclaration.EndOfYearAdjustment = true;
-            dasDeclaration.EndOfYearAdjustmentAmount = adjustmentDeclaration?.LevyDueYtd - dasDeclaration.LevyDueYtd ?? 0;
+
+            if (adjustmentDeclaration?.LevyDueYtd != null)
+            {
+                dasDeclaration.EndOfYearAdjustmentAmount =
+                    adjustmentDeclaration.LevyDueYtd.Value - dasDeclaration.LevyDueYtd.Value;
+            }
+            else
+            {
+                dasDeclaration.EndOfYearAdjustmentAmount = dasDeclaration.LevyDueYtd.Value;
+            }
         }
 
-     
+
 
         private async Task PublishDeclarationUpdatedEvents(long accountId, IEnumerable<DasDeclaration> savedDeclarations)
         {
