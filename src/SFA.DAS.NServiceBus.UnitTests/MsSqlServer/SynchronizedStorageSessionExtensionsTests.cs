@@ -13,15 +13,16 @@ namespace SFA.DAS.NServiceBus.UnitTests.MsSqlServer
     public class SynchronizedStorageSessionExtensionsTests : FluentTest<SynchronizedStorageSessionExtensionsTestsFixture>
     {
         [Test]
-        public void GetSqlStorageSession_WhenGettingSqlStorageSession_TheShouldReturnSqlStorageSession()
+        public void GetSqlStorageSession_WhenGettingTheSqlStorageSession_TheShouldReturnTheSqlStorageSession()
         {
             Run(f => f.SetSqlStorageSession(), f => f.GetSqlStorageSession(), (f, r) => r.Should().Be(f.StorageSession.Object));
         }
 
         [Test]
-        public void GetSqlStorageSession_WhenGettingSqlStorageSessionAndIsNotASqlStorageSession_TheShouldReturnSqlStorageSession()
+        public void GetSqlStorageSession_WhenGettingTheSqlStorageSessionAndItIsNotASqlStorageSession_ThenShouldThrowAnException()
         {
-            Run(f => f.SetNonSqlStorageSession(), f => f.GetSqlStorageSession(), (f, a) => a.ShouldThrow<Exception>());
+            Run(f => f.SetNonSqlStorageSession(), f => f.GetSqlStorageSession(), (f, a) => a.ShouldThrow<Exception>()
+                .WithMessage("Cannot access the SQL storage session"));
         }
     }
 

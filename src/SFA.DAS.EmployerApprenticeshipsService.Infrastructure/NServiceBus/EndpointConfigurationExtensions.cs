@@ -2,7 +2,6 @@
 using NServiceBus;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EmployerFinance.Messages.Commands;
-using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.AzureServiceBus;
 using Environment = SFA.DAS.EAS.Infrastructure.DependencyResolution.Environment;
 
@@ -20,10 +19,6 @@ namespace SFA.DAS.EAS.Infrastructure.NServiceBus
                     typeof(ImportLevyDeclarationsCommand).Assembly,
                     typeof(ImportLevyDeclarationsCommand).Namespace,
                     "SFA.DAS.EmployerFinance.MessageHandlers");
-
-                r.RouteToEndpoint(
-                    typeof(ProcessOutboxMessageCommand),
-                    "SFA.DAS.EmployerAccounts.MessageHandlers");
             });
 
             return config;
