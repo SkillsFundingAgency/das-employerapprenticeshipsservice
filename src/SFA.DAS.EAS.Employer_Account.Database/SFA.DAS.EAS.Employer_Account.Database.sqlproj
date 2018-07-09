@@ -131,6 +131,7 @@
     <None Include="Scripts\PostDeployment\SeedDevData.sql" />
     <Build Include="Tables\TransferRequest.sql" />
     <None Include="Scripts\PreDeployment\AML-2381-DeleteDuplicateUserAccountSettings.sql" />
+    <Build Include="Tables\ClientOutboxData.sql" />
     <Build Include="Tables\OutboxData.sql" />
   </ItemGroup>
   <ItemGroup>
