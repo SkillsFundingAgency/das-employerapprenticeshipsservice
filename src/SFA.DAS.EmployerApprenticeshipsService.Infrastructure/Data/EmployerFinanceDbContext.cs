@@ -5,14 +5,12 @@ using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
 using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.EntityFramework;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     [DbConfigurationType(typeof(SqlAzureDbConfiguration))]
-    public class EmployerFinanceDbContext : DbContext, IOutboxDbContext
+    public class EmployerFinanceDbContext : DbContext
     {
-        public virtual DbSet<OutboxMessage> OutboxMessages { get; set; }
         public virtual DbSet<PeriodEnd> PeriodEnds { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
 
@@ -45,7 +43,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema("employer_financial");
-            modelBuilder.Entity<OutboxMessage>().ToTable("OutboxData", "dbo");
             modelBuilder.Entity<Payment>().Ignore(a => a.StandardCode).Ignore(a => a.FrameworkCode).Ignore(a => a.ProgrammeType).Ignore(a => a.PathwayCode).Ignore(a => a.PathwayName);
             modelBuilder.Entity<Payment>().Property(a => a.EmployerAccountId).HasColumnName("AccountId");
             modelBuilder.Ignore<PaymentDetails>();
