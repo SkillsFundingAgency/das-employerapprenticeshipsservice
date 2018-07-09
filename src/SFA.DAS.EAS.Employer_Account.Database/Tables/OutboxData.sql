@@ -1,11 +1,12 @@
 ﻿CREATE TABLE [dbo].[OutboxData]
 (
-	[Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
-	[Sent] DATETIME NOT NULL,
-	[Published] DATETIME NULL,
-	[Data] NVARCHAR(MAX) NOT NULL
+	[MessageId] NVARCHAR(200) NOT NULL PRIMARY KEY NONCLUSTERED,
+	[Dispatched] BIT NOT NULL DEFAULT(0),
+	[DispatchedAt] DATETIME NULL,
+	[PersistenceVersion] VARCHAR(23) NOT NULL,
+	[Operations] NVARCHAR(MAX) NOT NULL,
 )
 GO
 
-CREATE INDEX [IX_OutboxData] ON [dbo].[OutboxData] ([Sent] ASC, [Published] ASC)
+CREATE INDEX [Index_DispatchedAt] ON [dbo].[OutboxData] ([DispatchedAt] ASC) WHERE [Dispatched] = 1
 GO

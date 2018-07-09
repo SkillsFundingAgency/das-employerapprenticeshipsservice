@@ -1,14 +1,14 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿using System.Data.Common;
+using Microsoft.Azure.WebJobs;
 using NServiceBus;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.NServiceBus;
 using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
 using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.EntityFramework;
+using SFA.DAS.NServiceBus.MsSqlServer;
 using SFA.DAS.NServiceBus.NewtonsoftSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
@@ -42,11 +42,8 @@ namespace SFA.DAS.EmployerAccounts.Jobs
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Jobs")
                 .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
-                .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>()
-                .SetupErrorQueue()
                 .SetupHeartbeat()
-                .SetupInstallers()
-                .SetupMetrics()
+                .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .SetupNewtonsoftSerializer()
                 .SetupNLogFactory()
                 .SetupSendOnly()
