@@ -1,7 +1,20 @@
-﻿DELETE FROM  [employer_account].[AccountEmployerAgreement]
+﻿
+IF (EXISTS (SELECT *  
+					FROM INFORMATION_SCHEMA.TABLES  
+					WHERE TABLE_SCHEMA = 'employer_account'  
+					AND  TABLE_NAME = 'AccountEmployerAgreement')) 
+BEGIN 
+	DELETE FROM  [employer_account].[AccountEmployerAgreement]
+END
+
 
 -- Store the original data 
-IF (NOT EXISTS (SELECT *  
+IF (EXISTS (SELECT *  
+				FROM INFORMATION_SCHEMA.TABLES  
+				WHERE TABLE_SCHEMA = 'employer_account')
+	AND
+	
+	NOT EXISTS (SELECT *  
 					FROM INFORMATION_SCHEMA.TABLES  
 					WHERE TABLE_SCHEMA = 'employer_account'  
 					AND  TABLE_NAME = 'LegalEntityNonUnique')) 
@@ -57,17 +70,17 @@ BEGIN
 	-- Now we could have ended up with duplicates in the EmployerAgreement table after the update 
 
 	-- Clean any dupliacates
-	 ;WITH duplicateRow as (SELECT Id, LegalEntityId, AccountId,  TemplateId, StatusId, row_number() 
-	 OVER(PARTITION BY LegalEntityId, AccountId,TemplateId ORDER BY SignedDate DESC) AS [rn]
-	 FROM [employer_account].[EmployerAgreement])
+		;WITH duplicateRow as (SELECT Id, LegalEntityId, AccountId,  TemplateId, StatusId, row_number() 
+		OVER(PARTITION BY LegalEntityId, AccountId,TemplateId ORDER BY SignedDate DESC) AS [rn]
+		FROM [employer_account].[EmployerAgreement])
 
-	 DELETE FROM [employer_account].[EmployerAgreement]
-	 WHERE Id IN 
-	 ( 
-		 SELECT Id FROM duplicateRow 
-		 WHERE rn > 1
-		 AND StatusId <> 5
-	 )
+		DELETE FROM [employer_account].[EmployerAgreement]
+		WHERE Id IN 
+		( 
+			SELECT Id FROM duplicateRow 
+			WHERE rn > 1
+			AND StatusId <> 5
+		)
 END
 GO
 
