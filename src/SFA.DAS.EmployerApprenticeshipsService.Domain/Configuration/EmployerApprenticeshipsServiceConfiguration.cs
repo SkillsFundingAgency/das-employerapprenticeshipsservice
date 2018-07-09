@@ -14,11 +14,12 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string Hashstring { get; set; }
         public HmrcConfiguration Hmrc { get; set; }
         public IdentityServerConfiguration Identity { get; set; }
+	    public IdProcessorConfiguration IdProcessor { get; set; }
         public string MessageServiceBusConnectionString { get; set; }
         public PostcodeAnywhereConfiguration PostcodeAnywhere { get; set; }
-        public IdProcessorConfiguration IdProcessor { get; set; }
         public string PublicAllowedHashstringCharacters { get; set; }
         public string PublicHashstring { get; set; }
+	    public string ServiceBusConnectionString { get; set; }
         public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
 	}
 }

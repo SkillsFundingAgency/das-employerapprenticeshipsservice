@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Account.Api
             var container = GlobalConfiguration.Configuration.DependencyResolver.GetService<IContainer>();
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Api")
-                .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().MessageServiceBusConnectionString)
+                .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
                 .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>()
                 .SetupErrorQueue()
                 .SetupHeartbeat()
