@@ -9,6 +9,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
         {
             return new Container(c =>
             {
+                c.AddRegistry<ApprenticeshipLevyRegistry>();
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
