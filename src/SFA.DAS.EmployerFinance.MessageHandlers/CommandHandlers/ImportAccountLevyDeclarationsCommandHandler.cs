@@ -106,7 +106,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
                 var dasDeclaration = new DasDeclaration
                 {
-                    SubmissionDate = DateTime.Parse(declaration.SubmissionTime),
+                    SubmissionDate = declaration.SubmissionTime,
                     Id = declaration.Id,
                     PayrollMonth = declaration.PayrollPeriod?.Month,
                     PayrollYear = declaration.PayrollPeriod?.Year,
