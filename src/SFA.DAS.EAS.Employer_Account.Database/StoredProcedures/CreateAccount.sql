@@ -8,6 +8,7 @@
 	@employerDateOfIncorporation DATETIME,
 	@accountId BIGINT OUTPUT,
 	@legalEntityId BIGINT OUTPUT,
+	@accountLegalentityId BIGINT OUTPUT,
 	@employerAgreementId BIGINT OUTPUT,
 	@accessToken VARCHAR(50),
 	@refreshToken VARCHAR(50),
@@ -36,7 +37,8 @@ BEGIN
 		@publicSectorDataSource = @publicSectorDataSource,
 		@sector = @sector,
 		@legalEntityId = @legalEntityId OUTPUT,
-		@employerAgreementId = @employerAgreementId OUTPUT
+		@employerAgreementId = @employerAgreementId OUTPUT,
+		@accountLegalentityId = @accountLegalentityId OUTPUT;
 		
 	IF EXISTS(select 1 from [employer_account].[Paye] where Ref = @employerRef)
 	BEGIN

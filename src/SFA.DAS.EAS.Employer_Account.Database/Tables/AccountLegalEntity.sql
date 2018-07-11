@@ -10,15 +10,23 @@
     [SignedAgreementVersion] INT NULL, 
     [SignedAgreementId] BIGINT NULL, 
     [PendingAgreementVersion] INT NULL, 
-    [PendingAgreementId] BIGINT NULL, 
+    [PendingAgreementId] BIGINT NULL,
+    [PublicHashedId] NVARCHAR(6) NULL, 
     CONSTRAINT [FK_AccountLegalEntity_Account] FOREIGN KEY ([AccountId]) REFERENCES [Employer_Account].[Account]([Id]),
     CONSTRAINT [FK_AccountLegalEntity_LegalEntity] FOREIGN KEY ([LegalEntityId]) REFERENCES [Employer_Account].[LegalEntity]([Id])
 )
 
 GO
 
-CREATE INDEX [IX_AccountLegalEntity_AccountId] ON [employer_account].[AccountLegalEntity] ([AccountId])
-
+CREATE INDEX [IX_AccountLegalEntity_AccountId] ON [employer_account].[AccountLegalEntity] ([AccountId]);
 GO
 
-CREATE INDEX [IX_AccountLegalEntity_LegalEntityId] ON [employer_account].[AccountLegalEntity] ([LegalEntityId])
+CREATE INDEX [IX_AccountLegalEntity_LegalEntityId] ON [employer_account].[AccountLegalEntity] ([LegalEntityId]);
+GO 
+
+CREATE UNIQUE INDEX [IX_AccountLegalEntity_AccountIdLegalEntityId] ON [employer_account].[AccountLegalEntity] (AccountId, LegalEntityId);
+GO
+
+CREATE UNIQUE INDEX [IX_AccountLegalEntity_PublicHashedId] ON [employer_account].[AccountLegalEntity] ([PublicHashedId]) WHERE PublicHashedId IS NOT NULL;
+GO
+

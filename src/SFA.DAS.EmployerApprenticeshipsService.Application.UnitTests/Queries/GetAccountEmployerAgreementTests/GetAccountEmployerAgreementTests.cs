@@ -219,7 +219,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
 
             var queryHandler = new GetAccountEmployerAgreementsQueryHandler(
                 EmployerAgreementBuilder.EmployerAccountDbContext, 
-                EmployerAgreementBuilder.HashingService, 
+                EmployerAgreementBuilder.HashingService,
                 Validator, ConfigurationProvider);
 
             return queryHandler;

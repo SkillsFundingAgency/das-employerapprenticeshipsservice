@@ -32,6 +32,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IValidator<CreateAccountCommand> _validator;
         private readonly IHashingService _hashingService;
         private readonly IHashingService _publicHashingService;
+        private readonly IHashingService _accountLegalEntityHashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
@@ -47,7 +48,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IGenericEventFactory genericEventFactory, 
             IAccountEventFactory accountEventFactory, 
             IRefreshEmployerLevyService refreshEmployerLevyService,
-            IMembershipRepository membershipRepository)
+            IMembershipRepository membershipRepository,
+            IHashingService accountLegalEntityHashingService)
         {
             _accountRepository = accountRepository;
             _messagePublisher = messagePublisher;
@@ -60,6 +62,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _accountEventFactory = accountEventFactory;
             _refreshEmployerLevyService = refreshEmployerLevyService;
             _membershipRepository = membershipRepository;
+            _accountLegalEntityHashingService = accountLegalEntityHashingService;
         }
 
         public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
@@ -79,6 +82,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             var publicHashedAccountId = _publicHashingService.HashValue(createAccountResult.AccountId);
 
             await _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId);
+
+            await _accountRepository.UpdateAccountLegalEntityHashedId(createAccountResult.AccountLegalEntityId);
 
             await SetAccountLegalEntityAgreementStatus(createAccountResult.AccountId, createAccountResult.LegalEntityId);
 

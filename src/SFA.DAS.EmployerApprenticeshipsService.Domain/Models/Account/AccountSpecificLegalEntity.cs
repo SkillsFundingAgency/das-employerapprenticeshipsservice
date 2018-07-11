@@ -10,6 +10,7 @@ namespace SFA.DAS.EAS.Domain.Models.Account
     {
         #region Legal Entity properties common to all accounts
         public long Id { get; set; }
+        public string HashedId { get; set; }
         public string Code { get; set; }
         public DateTime? DateOfIncorporation { get; set; }
         public byte? PublicSectorDataSource { get; set; }
@@ -25,6 +26,7 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public long? SignedAgreementId { get; set; }
         public int? PendingAgreementVersion { get; set; }
         public long? PendingAgreementId { get; set; }
+        public string AccountLegalEntityHashedId { get; set; }
         #endregion
     }
 }

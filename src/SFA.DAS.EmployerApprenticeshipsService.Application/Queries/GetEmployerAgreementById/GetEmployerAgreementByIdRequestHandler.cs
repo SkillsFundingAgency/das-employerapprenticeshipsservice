@@ -41,7 +41,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Agreement", "The agreement could not be found" } });
 
             agreement.HashedAgreementId = message.HashedAgreementId;
-            agreement.HashedLegalEntityId = _hashingService.HashValue(agreement.LegalEntityId);
             return new GetEmployerAgreementByIdResponse
             {
                 EmployerAgreement = agreement

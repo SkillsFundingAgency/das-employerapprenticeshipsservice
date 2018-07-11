@@ -164,17 +164,16 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> ProcessReviewSelection(
             string updateChoice, 
+            string hashedAccountId,
             string hashedAgreementId,
-            string hashedAccountId, 
-            string hashedLegalEntityId, 
+            string hashedAccountLegalEntityId, 
             string organisationName,
             string organisationAddress)
         {
             if (updateChoice == "update")
             {
                 var response = await _orchestrator.UpdateOrganisation(
-                    hashedAccountId, 
-                    hashedLegalEntityId, 
+                    hashedAccountLegalEntityId, 
                     organisationName,
                     organisationAddress);
 

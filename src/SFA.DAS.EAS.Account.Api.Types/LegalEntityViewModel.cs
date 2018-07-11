@@ -17,6 +17,7 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public string Source { get; set; }
         public byte SourceNumeric { get; set; }
         public string Status { get; set; }
+        public long AccountLegalEntityId { get; set; }
 
         [Obsolete]
         public string AgreementSignedByName { get; set; }

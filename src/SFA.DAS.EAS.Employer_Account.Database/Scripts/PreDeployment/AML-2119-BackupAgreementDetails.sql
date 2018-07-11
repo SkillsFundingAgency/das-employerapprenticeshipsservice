@@ -42,7 +42,7 @@ BEGIN
 				JOIN employer_account.LegalEntity AS LE
 					ON LE.Id = EA.LegalEntityId;';
 
-		EXEC @SQL;
+		EXEC (@SQL);
 
 		PRINT 'Created backup of EmployerAgreements';
 

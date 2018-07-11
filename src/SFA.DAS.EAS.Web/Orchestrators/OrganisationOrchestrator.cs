@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly ILog _logger;
         private readonly IMapper _mapper;
         private readonly ICookieStorageService<EmployerAccountData> _cookieService;
-        private readonly IHashingService _hashingService;
+        private readonly IHashingService _accountLegalEntityHashingService;
 
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
@@ -50,14 +50,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             ILog logger, 
             IMapper mapper, 
             ICookieStorageService<EmployerAccountData> cookieService, 
-            IHashingService hashingService)
+            IHashingService accountLegalEntityHashingService)
             : base(mediator)
         {
             _mediator = mediator;
             _logger = logger;
             _mapper = mapper;
             _cookieService = cookieService;
-            _hashingService = hashingService;
+            _accountLegalEntityHashingService = accountLegalEntityHashingService;
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
@@ -350,8 +350,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Data = new ReviewOrganisationAddressViewModel
                 {
-                    HashedAccountId =  hashedAccountId,
-                    HashedLegalEntityId = hashedLegalEntityId,
+                    HashedAccountLegalEntityId =  hashedAccountId,
                     HashedAgreementId = hashedAgreementId,
                     OrganisationName = "current name placeholder",
                     OrganisationAddress = "current address placeholder, High Street, Newtown, NT1 1XX",
@@ -369,7 +368,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
         }
 
-        public async Task<OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>> UpdateOrganisation(string hashedAccountId, string hashedLegalEntityId, string organisationName, string organisationAddress)
+        public async Task<OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>> UpdateOrganisation(string hashedAccountLegalEntityId, string organisationName, string organisationAddress)
         {
             var result = new OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>
             {
@@ -380,8 +379,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var request = new UpdateOrganisationDetailsRequest
                 {
-                    AccountId = _hashingService.DecodeValue(hashedAccountId),
-                    LegalEntityId = _hashingService.DecodeValue(hashedLegalEntityId),
+                    AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(hashedAccountLegalEntityId),
                     Name = organisationName,
                     Address = organisationAddress
                 };

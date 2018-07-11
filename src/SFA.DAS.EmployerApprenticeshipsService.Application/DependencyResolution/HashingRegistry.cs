@@ -11,6 +11,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         {
             For<IHashingService>().Use(c => GetHashingService(c));
             For<IPublicHashingService>().Use(c => GetPublicHashingservice(c));
+            For<IPublicHashingService>().Add(c => GetAccountLegalEntityPublicHashingservice(c)).Named("accountLegalEntityHashingService");
         }
 
         private IHashingService GetHashingService(IContext context)
@@ -27,6 +28,14 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
             var publicHashingService = new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring);
 
             return publicHashingService;
+        }
+
+        private IPublicHashingService GetAccountLegalEntityPublicHashingservice(IContext context)
+        {
+            var config = context.GetInstance<EmployerApprenticeshipsServiceConfiguration>();
+            var agreementHashingService = new PublicHashingService(config.PublicAllowedAccountLegalEntityHashstringCharacters, config.PublicAllowedAccountLegalEntityHashstringSalt);
+
+            return agreementHashingService;
         }
     }
 }

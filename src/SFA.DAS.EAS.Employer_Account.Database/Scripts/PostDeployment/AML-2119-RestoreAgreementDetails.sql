@@ -16,6 +16,13 @@ BEGIN
 			THROW 50000, 'The employer agreement backup cannot be restored because the employer_account.AccountLegalEntity table does not exist - has the database been upgraded?', 1;
 		END;
 
+		IF(EXISTS(SELECT TOP 1 * FROM employer_account.AccountLegalEntity))
+		BEGIN
+			PRINT 'It looks like the account-legal entity has already been restored - skipping this step';
+			RETURN;
+		END;
+
+
 		BEGIN TRAN;
 
 			INSERT 
