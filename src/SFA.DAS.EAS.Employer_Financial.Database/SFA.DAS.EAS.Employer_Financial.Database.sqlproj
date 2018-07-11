@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
+    <None Include="Scripts\Manual\FixIncorrectLevyAdjustmentEntries.sql" />
     <None Include="Scripts\Manual\AML-2502_DeleteFullyFundedPayments.sql" />
   </ItemGroup>
   <ItemGroup>
