@@ -29,8 +29,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails
             }
 
             await _accountRepository.UpdateLegalEntityDetailsForAccount(
-                request.AccountId, 
-                request.LegalEntityId,
+                request.AccountLegalEntityId, 
                 request.Name, 
                 request.Address);
 

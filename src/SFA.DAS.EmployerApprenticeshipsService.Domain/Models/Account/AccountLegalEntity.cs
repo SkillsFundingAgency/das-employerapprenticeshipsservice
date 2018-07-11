@@ -40,6 +40,8 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public virtual DateTime Created { get; set; }
         public virtual DateTime Modified { get; set; }
 
+        public string PublicHashedId { get; set; }
+
         public virtual Account Account { get; set; }
         public virtual LegalEntity LegalEntity { get; set; }
         public virtual EmployerAgreement SignedAgreement { get; set; }

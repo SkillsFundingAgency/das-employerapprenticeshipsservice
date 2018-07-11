@@ -9,13 +9,14 @@
 	@publicSectorDataSource TINYINT,
 	@legalEntityId BIGINT OUTPUT,
 	@employerAgreementId BIGINT OUTPUT,
-	@sector NVARCHAR(100) NULL
+	@sector NVARCHAR(100) NULL,
+	@accountLegalentityId BIGINT OUTPUT,
+	@accountLegalEntityCreated BIT OUTPUT
 AS
 BEGIN	
 	DECLARE @firstName NVARCHAR(MAX)	
 	DECLARE @lastName NVARCHAR(MAX)
 	DECLARE @signedByName NVARCHAR(100)
-	DECLARE @accountLegalEntityId BIGINT;
 
 	SELECT @legalEntityId = Id FROM [employer_account].[LegalEntity] WHERE Code = @companyNumber AND Source = @source
 
@@ -36,8 +37,8 @@ BEGIN
 			@legalEntityId = @legalEntityId,
 			@employerName = @companyName,
 			@employerRegisteredAddress = @companyAddress,
-			@accountLegalEntityId = @accountLegalEntityId OUTPUT
-
+			@accountLegalEntityId = @accountLegalEntityId OUTPUT,
+			@accountLegalEntityCreated = @accountLegalEntityCreated OUTPUT
 
 	EXEC [employer_account].[CreateEmployerAgreement] 
 			@accountLegalEntityId = @accountLegalEntityId, 

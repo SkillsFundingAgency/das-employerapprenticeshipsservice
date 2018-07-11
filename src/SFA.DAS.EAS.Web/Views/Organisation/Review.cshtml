@@ -26,8 +26,7 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName" />
                 <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress" />
-                <input type="hidden" name="hashedAccountId" value="@Model.Data.HashedAccountId" />
-                <input type="hidden" name="hashedLegalEntityId" value="@Model.Data.HashedLegalEntityId" />
+                <input type="hidden" name="hashedAccountLegalEntityId" value="@Model.Data.HashedAccountLegalEntityId" />
                 <input type="hidden" name="hashedAgreementId" value="@Model.Data.HashedAgreementId" />
                 <fieldset>
                     <label for="update" class="block-label">

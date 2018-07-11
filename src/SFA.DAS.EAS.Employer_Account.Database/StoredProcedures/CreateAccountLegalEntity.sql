@@ -3,7 +3,8 @@
 	@legalEntityId bigint,
 	@employerName NVARCHAR(100), 
 	@employerRegisteredAddress NVARCHAR(256),
-	@accountLegalEntityId bigint output
+	@accountLegalEntityId bigint output,
+	@accountLegalEntityCreated BIT OUTPUT
 AS
 BEGIN
 
@@ -12,12 +13,15 @@ BEGIN
 	WHERE	AccountId = @accountId AND
 			LegalEntityId = @legalEntityId;
 
+	SELECT @accountLegalEntityCreated = 0;
+
 	IF @accountLegalEntityId IS NULL
 	BEGIN
 		INSERT INTO [employer_account].[AccountLegalEntity](Name, Address, AccountId, LegalEntityId, Created) 
 		VALUES (@employerName, @employerRegisteredAddress, @accountId, @legalEntityId, GetDate());
 
-		SELECT @accountLegalEntityId = SCOPE_IDENTITY();
-	END;
+		SELECT	@accountLegalEntityId = SCOPE_IDENTITY(),
+				@accountLegalEntityCreated = 1;
 
+	END;
 END

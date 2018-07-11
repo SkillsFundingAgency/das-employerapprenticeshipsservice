@@ -70,4 +70,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="PendingAgreementVersion" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="9ac81fbb-201a-456c-9c90-f42ba0b52788" ChangeDateTime="07/09/2018 15:23:22">
+    <Property Name="ElementName" Value="[employer_account].[AccountLegalEntity].[Has]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_account].[AccountLegalEntity]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PublicHashedId" />
+  </Operation>
 </Operations>

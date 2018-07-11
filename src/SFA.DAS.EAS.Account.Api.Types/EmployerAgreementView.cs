@@ -16,10 +16,12 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public string LegalEntityCode { get; set; }
         public string LegalEntityAddress { get; set; }
         public DateTime? LegalEntityInceptionDate { get; set; }
+        public string AccountLegalEntityHashstring { get; set; }
         public int TemplateId { get; set; }
         public string TemplatePartialViewName { get; set; }
         public string HashedAgreementId { get; set; }
         public string LegalEntityStatus { get; set; }
         public string Sector { get; set; }
+        public string HashedAccountLegalEntityId { get; set; }
     }
 }

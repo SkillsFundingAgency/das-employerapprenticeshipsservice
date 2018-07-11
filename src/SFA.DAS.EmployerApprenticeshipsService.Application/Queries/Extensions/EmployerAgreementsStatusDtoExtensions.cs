@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.Queries.Extensions
@@ -18,7 +12,7 @@ namespace SFA.DAS.EAS.Application.Queries.Extensions
             IHashingService hashingService,
             long accountId)
         {
-            void DoIf(EmployerAgreementStatusDto ea, bool runIf, Action action)
+            void DoIf(bool runIf, Action action)
             {
                 if (runIf)
                 {
@@ -29,9 +23,9 @@ namespace SFA.DAS.EAS.Application.Queries.Extensions
             return items.SetItemValues(
                 ag => ag.AccountId = accountId,
                 ag => ag.HashedAccountId = hashingService.HashValue(ag.AccountId),
-                ag => DoIf(ag, ag.HasSignedAgreement, () => ag.Signed.HashedAgreementId = hashingService.HashValue(ag.Signed.Id)),
-                ag => DoIf(ag, ag.HasPendingAgreement, () => ag.Pending.HashedAgreementId = hashingService.HashValue(ag.Pending.Id)),
-                ag => DoIf(ag, ag.HasSignedAgreement && ag.HasPendingAgreement && ag.Signed.VersionNumber > ag.Pending.VersionNumber, () => ag.Pending = null)
+                ag => DoIf(ag.HasSignedAgreement, () => ag.Signed.HashedAgreementId = hashingService.HashValue(ag.Signed.Id)),
+                ag => DoIf(ag.HasPendingAgreement, () => ag.Pending.HashedAgreementId = hashingService.HashValue(ag.Pending.Id)),
+                ag => DoIf(ag.HasSignedAgreement && ag.HasPendingAgreement && ag.Signed.VersionNumber > ag.Pending.VersionNumber, () => ag.Pending = null)
             );
         }
     }

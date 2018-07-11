@@ -37,6 +37,8 @@ namespace SFA.DAS.EAS.TestCommon
 
         public Mock<IHashingService> HashingServiceMock { get; }
         public IHashingService HashingService => HashingServiceMock.Object;
+        public Mock<IHashingService> AccountLegalEntityHashingServiceMock { get; }
+        public IHashingService AccountLegalEntityHashingService => AccountLegalEntityHashingServiceMock.Object;
         public List<Domain.Models.Account.Account> Accounts { get; }
         public List<AgreementTemplate> AgreementTemplates { get; set; }
         public List<AccountLegalEntity> AccountLegalEntities { get; set; }
