@@ -17,7 +17,12 @@ BEGIN
 		ale.Address AS LegalEntityAddress,
 		le.Code AS LegalEntityCode,
 		ea.TemplateId,
-		eat.PartialViewName AS TemplatePartialViewName
+		eat.PartialViewName AS TemplatePartialViewName,
+		le.DateOfIncorporation as LegalEntityInceptionDate,
+		le.Status as LegalEntityStatus,
+		le.Sector,
+		ea.AccountLegalEntityId,
+		ale.PublicHashedId as HashedAccountLegalEntityId
 	FROM [employer_account].[EmployerAgreement] ea
 		JOIN [employer_account].[AccountLegalEntity] ale
 			ON ale.Id = ea.AccountLegalEntityId
