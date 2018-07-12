@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 
                 var sql = @"
                         SELECT	le.Id, le.Code, le.DateOfIncorporation, le.PublicSectorDataSource, le.Sector, le.Source, le.Status,
-		                        ale.Name, ale.Address, ale.SignedAgreementVersion, ale.SignedAgreementId, ale.PendingAgreementVersion, ale.PendingAgreementId, ale.PublicHashedId as AccountLegalEntityHashedId
+		                        ale.Name, ale.Address, ale.SignedAgreementVersion, ale.SignedAgreementId, ale.PendingAgreementVersion, ale.PendingAgreementId, ale.PublicHashedId as AccountLegalEntityPublicHashedId
                         FROM	[employer_account].[AccountLegalEntity] AS ale
 		                        JOIN [employer_account].[LegalEntity] AS le
 			                        ON le.Id = ale.LegalEntityId

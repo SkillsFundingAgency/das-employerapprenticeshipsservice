@@ -2,7 +2,7 @@
 {
     public class ReviewOrganisationAddressViewModel : OrganisationViewModelBase
     {
-        public string HashedAccountLegalEntityId { get; set; }
+        public string AccountLegalEntityPublicHashedId { get; set; }
         public string RefreshedName { get; set; }
         public string RefreshedAddress { get; set; }
     }

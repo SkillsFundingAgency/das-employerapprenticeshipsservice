@@ -154,9 +154,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("review")]
-        public async Task<ActionResult> Review(string hashedAccountId, string hashedAccountLegalEntityId)
+        public async Task<ActionResult> Review(string hashedAccountId, string accountLegalEntityPublicHashedId)
         {
-            var viewModel = await _orchestrator.GetRefreshedOrganisationDetails(hashedAccountLegalEntityId);
+            var viewModel = await _orchestrator.GetRefreshedOrganisationDetails(accountLegalEntityPublicHashedId);
 
             return View(viewModel);
         }
@@ -166,14 +166,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> ProcessReviewSelection(
             string updateChoice,
             string hashedAccountId,
-            string hashedAccountLegalEntityId, 
+            string accountLegalEntityPublicHashedId, 
             string organisationName,
             string organisationAddress)
         {
             if (updateChoice == "update")
             {
                 var response = await _orchestrator.UpdateOrganisation(
-                    hashedAccountLegalEntityId, 
+                    accountLegalEntityPublicHashedId, 
                     organisationName,
                     organisationAddress);
 

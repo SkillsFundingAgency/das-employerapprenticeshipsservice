@@ -83,7 +83,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             await _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId);
 
-            await _accountRepository.UpdateAccountLegalEntityHashedId(createAccountResult.AccountLegalEntityId);
+            await _accountRepository.UpdateAccountLegalEntityPublicHashedId(createAccountResult.AccountLegalEntityId);
 
             await SetAccountLegalEntityAgreementStatus(createAccountResult.AccountId, createAccountResult.LegalEntityId);
 

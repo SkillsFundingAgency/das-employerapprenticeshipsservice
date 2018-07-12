@@ -344,13 +344,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string hashedAccountLegalEntityId)
+        public Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string accountLegalEntityPublicHashedId)
         {
             var result = new OrchestratorResponse<ReviewOrganisationAddressViewModel>
             {
                 Data = new ReviewOrganisationAddressViewModel
                 {
-                    HashedAccountLegalEntityId = hashedAccountLegalEntityId,
+                    AccountLegalEntityPublicHashedId = accountLegalEntityPublicHashedId,
                     OrganisationName = "current name placeholder",
                     OrganisationAddress = "current address placeholder, High Street, Newtown, NT1 1XX",
                     RefreshedName = "refreshed name placeholder",
@@ -367,7 +367,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
         }
 
-        public async Task<OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>> UpdateOrganisation(string hashedAccountLegalEntityId, string organisationName, string organisationAddress)
+        public async Task<OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>> UpdateOrganisation(string accountLegalEntityPublicHashedId, string organisationName, string organisationAddress)
         {
             var result = new OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>
             {
@@ -378,7 +378,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var request = new UpdateOrganisationDetailsRequest
                 {
-                    AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(hashedAccountLegalEntityId),
+                    AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(accountLegalEntityPublicHashedId),
                     Name = organisationName,
                     Address = organisationAddress
                 };

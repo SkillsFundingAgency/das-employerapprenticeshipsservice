@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Application.Mappings
 
             CreateMap<AccountSpecificLegalEntity, AccountSpecificLegalEntityDto>()
                 .ForMember(d => d.RegisteredAddress, o => o.MapFrom(l => l.Address))
-                .ForMember(d => d.HashedAccountLegalEntityId, o => o.MapFrom(l => l.AccountLegalEntityHashedId));
+                .ForMember(d => d.AccountLegalEntityPublicHashedId, o => o.MapFrom(l => l.AccountLegalEntityPublicHashedId));
 
             CreateMap<AccountLegalEntity, AccountSpecificLegalEntityDto>()
                 .ForMember(d => d.RegisteredAddress, o => o.MapFrom(l => l.Address))
@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Application.Mappings
                 .ForMember(d => d.Status, o => o.MapFrom(l => l.LegalEntity.Status))
                 .ForMember(d => d.PublicSectorDataSource, o => o.MapFrom(l => l.LegalEntity.PublicSectorDataSource))
                 .ForMember(d => d.Source, o => o.MapFrom(l => l.LegalEntity.Source))
-                .ForMember(d => d.HashedAccountLegalEntityId, o => o.MapFrom(l => l.PublicHashedId));
+                .ForMember(d => d.AccountLegalEntityPublicHashedId, o => o.MapFrom(l => l.PublicHashedId));
 
             CreateMap<AccountLegalEntity, LegalEntityViewModel>()
                 .ForMember(d => d.Agreements, o => o.MapFrom(l => l.Agreements.Where(a =>
@@ -36,6 +36,7 @@ namespace SFA.DAS.EAS.Application.Mappings
                             a.StatusId == EmployerAgreementStatus.Signed))))
                 .ForMember(d => d.DasAccountId, o => o.MapFrom(l => accountHashedId))
                 .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
+                .ForMember(dest => dest.AccountLegalEntityPublicHashedId, o => o.MapFrom(l => l.PublicHashedId))
                 .ForMember(d => d.LegalEntityId, o => o.MapFrom(l => l.LegalEntityId))
                 .ForMember(d => d.DateOfInception, o => o.MapFrom(l => l.LegalEntity.DateOfIncorporation))
                 .ForMember(d => d.Code, o => o.MapFrom(l => l.LegalEntity.Code))
