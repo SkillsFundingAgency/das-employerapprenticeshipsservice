@@ -92,7 +92,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
                 var accountLegalEntityId = parameters.Get<long>("@accountLegalentityId");
 
-                await UpdateAccountLegalEntityHashedIdsInternal(c, t, accountLegalEntityId);
+                await UpdateAccountLegalEntityPublicHashedIdInternal(c, t, accountLegalEntityId);
 
                 return new CreateAccountResult
                 {
@@ -136,7 +136,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
                 if (accountLegalEntityCreated)
                 {
-                    await UpdateAccountLegalEntityHashedIdsInternal(c, trans, accountLegalEntityId);
+                    await UpdateAccountLegalEntityPublicHashedIdInternal(c, trans, accountLegalEntityId);
                 }
 
                 trans.Commit();
@@ -317,12 +317,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public Task UpdateAccountLegalEntityHashedId(long accountLegalEntityId)
+        public Task UpdateAccountLegalEntityPublicHashedId(long accountLegalEntityId)
         {
-            return WithTransaction( (c,t) => UpdateAccountLegalEntityHashedIdsInternal(c, t, accountLegalEntityId));
+            return WithTransaction( (c,t) => UpdateAccountLegalEntityPublicHashedIdInternal(c, t, accountLegalEntityId));
         }
 
-        private Task UpdateAccountLegalEntityHashedIdsInternal(IDbConnection connection, IDbTransaction transaction, long accountLegalEntityId)
+        private Task UpdateAccountLegalEntityPublicHashedIdInternal(IDbConnection connection, IDbTransaction transaction, long accountLegalEntityId)
         {
             var parameters = new DynamicParameters();
 

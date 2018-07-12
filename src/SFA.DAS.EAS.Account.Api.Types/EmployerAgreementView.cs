@@ -21,6 +21,6 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public string HashedAgreementId { get; set; }
         public string LegalEntityStatus { get; set; }
         public string Sector { get; set; }
-        public string HashedAccountLegalEntityId { get; set; }
+        public string AccountLegalEntityPublicHashedId { get; set; }
     }
 }

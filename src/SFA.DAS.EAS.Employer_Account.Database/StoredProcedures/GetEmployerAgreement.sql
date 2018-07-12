@@ -22,7 +22,7 @@ BEGIN
 		le.Status as LegalEntityStatus,
 		le.Sector,
 		ea.AccountLegalEntityId,
-		ale.PublicHashedId as HashedAccountLegalEntityId
+		ale.PublicHashedId as AccountLegalEntityPublicHashedId
 	FROM [employer_account].[EmployerAgreement] ea
 		JOIN [employer_account].[AccountLegalEntity] ale
 			ON ale.Id = ea.AccountLegalEntityId
