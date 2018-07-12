@@ -154,18 +154,18 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("review")]
-        public async Task<ActionResult> Review(string hashedAccountId, string hashedLegalEntityId, string hashedAgreementId)
+        public async Task<ActionResult> Review(string hashedAccountId, string hashedAccountLegalEntityId)
         {
-            var viewModel = await _orchestrator.GetRefreshedOrganisationDetails(hashedAccountId, hashedLegalEntityId, hashedAgreementId);
+            var viewModel = await _orchestrator.GetRefreshedOrganisationDetails(hashedAccountLegalEntityId);
 
             return View(viewModel);
         }
 
         [HttpPost]
+        [Route("review")]
         public async Task<ActionResult> ProcessReviewSelection(
-            string updateChoice, 
+            string updateChoice,
             string hashedAccountId,
-            string hashedAgreementId,
             string hashedAccountLegalEntityId, 
             string organisationName,
             string organisationAddress)
@@ -180,19 +180,20 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View(ControllerConstants.OrganisationUpdatedNextStepsActionName, response);
             }
 
-            return RedirectToAction("Details", "EmployerAgreement", new { HashedAccountId = hashedAccountId });
+            return RedirectToAction("Details", "EmployerAgreement");
         }
 
         [HttpPost]
+        [Route("PostUpdateSelection")]
         public ActionResult GoToPostUpdateSelection(string nextStep, string hashedAccountId)
         {
             switch (nextStep)
             {
                 case "dashboard":
-                    return RedirectToAction("Index", "EmployerAgreement", new { agreementId = hashedAccountId, hashedAccountId = hashedAccountId });
+                    return RedirectToAction("Index", "EmployerAgreement");
 
                 case "homepage":
-                    return RedirectToAction("Index", "Account", new { HashedAccountId = hashedAccountId });
+                    return RedirectToAction("Index", "Home");
                 
                 default:
                     var errorMessage = "Please select one of the next steps below";

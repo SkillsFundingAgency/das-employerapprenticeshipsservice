@@ -344,14 +344,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string hashedAccountId, string hashedLegalEntityId, string hashedAgreementId)
+        public Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string hashedAccountLegalEntityId)
         {
             var result = new OrchestratorResponse<ReviewOrganisationAddressViewModel>
             {
                 Data = new ReviewOrganisationAddressViewModel
                 {
-                    HashedAccountLegalEntityId =  hashedAccountId,
-                    HashedAgreementId = hashedAgreementId,
+                    HashedAccountLegalEntityId = hashedAccountLegalEntityId,
                     OrganisationName = "current name placeholder",
                     OrganisationAddress = "current address placeholder, High Street, Newtown, NT1 1XX",
                     RefreshedName = "refreshed name placeholder",

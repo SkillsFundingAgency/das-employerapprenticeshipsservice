@@ -37,6 +37,13 @@
             <strong>@Model.Data.EmployerAgreement.LegalEntityName</strong><br />
             @Html.CommaSeperatedAddressToHtml(@Model.Data.EmployerAgreement.LegalEntityAddress)
         </address>
+
+        <span class="column-two-thirds">
+            <a href="@Url.Action("review", "organisation", new
+                {
+                    Model.Data.EmployerAgreement.HashedAccountLegalEntityId
+                })">Update these details</a>
+        </span>
     </div>
 </div>
 
