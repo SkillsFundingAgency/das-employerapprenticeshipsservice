@@ -14,6 +14,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private const string NestedContainerKey = "Nested.Container.Key";
+        private bool _hasNestedContainer = false;
 
         public IContainer CurrentNestedContainer {
             get
@@ -23,6 +24,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
             set
             {
+                _hasNestedContainer = value != null;
                 HttpContext.Items[NestedContainerKey] = value;
             }
         }
@@ -64,7 +66,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
 
         public void DisposeNestedContainer()
         {
-            if (CurrentNestedContainer != null)
+            if (_hasNestedContainer)
             {
                 CurrentNestedContainer.Dispose();
 				CurrentNestedContainer = null;
