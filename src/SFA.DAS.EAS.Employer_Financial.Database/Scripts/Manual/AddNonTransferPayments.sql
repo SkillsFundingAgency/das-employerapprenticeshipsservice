@@ -21,12 +21,12 @@ GO
 IF NOT EXISTS
 (
     select 1 FROM [employer_financial].[periodend] 
-    WHERE periodendid = '1718-R06'
+    WHERE periodendid = '1819-R01'
 )
 BEGIN        
     insert into employer_financial.periodend (periodendid, calendarperiodmonth, calendarperiodyear, accountdatavalidat, commitmentdatavalidat, completiondatetime, paymentsforperiod)
     values
-    ('1718-R06',2,2018,'2018-02-04 00:00:00.000','2018-02-04 09:07:34.457','2018-02-04 10:50:27.760','https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=1617-R10')
+    ('1819-R01',5,2018,'2018-05-04 00:00:00.000','2018-05-04 09:07:34.457','2018-05-04 10:50:27.760','https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=1617-R10')
 END
 GO
 
@@ -52,14 +52,14 @@ BEGIN
     INSERT INTO employer_financial.paymentmetadata 
     (ProviderName, StandardCode, FrameworkCode, ProgrammeType, PathwayCode, ApprenticeshipCourseName, ApprenticeshipCourseStartDate, ApprenticeshipCourseLevel, ApprenticeName, ApprenticeNINumber)
     VALUES
-    (@providerName,4,null,null,null, @apprenticeshipCourseName,'01/04/2018', @apprenticeshipCourseLevel, @apprenticeName, null)
+    (@providerName,4,null,null,null, @apprenticeshipCourseName,'01/06/2018', @apprenticeshipCourseLevel, @apprenticeName, null)
 
     SELECT @paymentMetadataId  = SCOPE_IDENTITY()
 
     INSERT INTO employer_financial.payment
     (paymentid, ukprn,uln,accountid, apprenticeshipid, deliveryperiodmonth, deliveryperiodyear, collectionperiodid, collectionperiodmonth, collectionperiodyear, evidencesubmittedon, employeraccountversion,apprenticeshipversion, fundingsource, transactiontype,amount,periodend,paymentmetadataid)
     VALUES
-    (newid(), @ukprn, @uln, @accountid, @apprenticeshipid, 4, 2018, @periodend, 5, 2018, '2018-05-03 16:24:22.340', 20170504, 69985, @fundingsource, 1, @Amount, @periodEnd, @paymentMetadataId)
+    (newid(), @ukprn, @uln, @accountid, @apprenticeshipid, 5, 2018, @periodend, 6, 2018, '2018-06-03 16:24:22.340', 20170504, 69985, @fundingsource, 1, @Amount, @periodEnd, @paymentMetadataId)
 END;  
 GO  
 
@@ -99,9 +99,9 @@ BEGIN TRANSACTION
     ------ EDIT THE VALUES BELOW TO AFFECT THE TRANSFER PAYMENTS ---------------------------------------------------------------------------------------------------------------
     ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
-    SET @accountId  = 1274
-    SET @accountName  = 'Nevolve'	
-    SET @payeScheme = '333/AA00001'
+    SET @accountId  = 0
+    SET @accountName  = 'XXX'	
+    SET @payeScheme = 'XXX'
     
     SET @currentDate = GETDATE()
     SET @periodEnd = '1819-R01'

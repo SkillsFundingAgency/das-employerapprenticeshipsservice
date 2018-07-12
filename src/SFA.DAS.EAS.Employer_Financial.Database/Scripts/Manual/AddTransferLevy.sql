@@ -5,8 +5,8 @@ DECLARE @payeScheme NVARCHAR(50)
 DECLARE @yearlyLevy DECIMAL(18, 4)
 DECLARE @currentYearLevy DECIMAL(18, 4)
 
-SET @accountId = 10517
-SET @payeScheme = '555/AA00001'
+SET @accountId = 0
+SET @payeScheme = 'XXX'
 SET @yearlyLevy = 120000
 SET @currentYearLevy = 10000
 
@@ -29,7 +29,7 @@ ELSE
     SET @previousLevyYearEnd = @currentYear - 1
 	END
 
-DECLARE @payrollYear VARCHAR(4) = (SELECT RIGHT(CONVERT(VARCHAR(4), @previousLevyYearStart, 1), 2)) + '-' + (SELECT RIGHT(CONVERT(VARCHAR(4), @previousLevyYearEnd, 1), 2))
+DECLARE @payrollYear VARCHAR(5) = (SELECT RIGHT(CONVERT(VARCHAR(5), @previousLevyYearStart, 1), 2)) + '-' + (SELECT RIGHT(CONVERT(VARCHAR(4), @previousLevyYearEnd, 1), 2))
 
 INSERT INTO employer_financial.EnglishFraction (DateCalculated, Amount, EmpRef, DateCreated)
 VALUES
@@ -57,7 +57,7 @@ VALUES
 
 IF(@currentMonth > 4)
 BEGIN
-    DECLARE @nextPayrollYear VARCHAR(4) = (SELECT RIGHT(CONVERT(VARCHAR(4), @previousLevyYearEnd, 1), 2)) + '-' + (SELECT RIGHT(CONVERT(VARCHAR(4), @previousLevyYearEnd + 1, 1), 2))
+    DECLARE @nextPayrollYear VARCHAR(5) = (SELECT RIGHT(CONVERT(VARCHAR(5), @previousLevyYearEnd, 1), 2)) + '-' + (SELECT RIGHT(CONVERT(VARCHAR(4), @previousLevyYearEnd + 1, 1), 2))
     
     INSERT INTO employer_financial.levydeclaration (AccountId,empref,levydueytd,levyallowanceforyear,submissiondate,submissionid,payrollyear,payrollmonth,createddate,hmrcsubmissionid)
     VALUES (@accountId, @payeScheme, @currentYearLevy, 1500.0000, @previousLevyYearEnd + '-05-18 07:12:28.060',  @maxSubmissionId + 13, @nextPayrollYear, 1, @previousLevyYearEnd + '-05-20 07:12:28.060',  @maxSubmissionId + 13)
