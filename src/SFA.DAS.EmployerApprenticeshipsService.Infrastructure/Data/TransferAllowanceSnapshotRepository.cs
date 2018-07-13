@@ -3,16 +3,19 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class TransferAllowanceSnapshotRepository : ITransferAllowanceSnapshotRepository
     {
         private readonly EmployerFinancialDbContext _db;
+        private readonly ILog _logger;
 
-        public TransferAllowanceSnapshotRepository(EmployerFinancialDbContext dbContext)
+        public TransferAllowanceSnapshotRepository(EmployerFinancialDbContext dbContext, ILog logger)
         {
             _db = dbContext;
+            _logger = logger;
         }
 
         public async Task UpsertAsync(long accountId, int endYear, decimal transferAllowance)
@@ -37,7 +40,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.Error(e, $"Filed to set transfer allowance: accountId:{accountId} endYear:{endYear} transferAllowance:{transferAllowance}");
                 throw;
             }
         }
