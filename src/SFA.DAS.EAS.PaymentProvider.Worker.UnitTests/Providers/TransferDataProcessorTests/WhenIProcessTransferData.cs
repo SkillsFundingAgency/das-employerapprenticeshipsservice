@@ -27,12 +27,15 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.TransferDataPro
         private Mock<ILog> _logger;
         private CancellationTokenSource _cancellationTokenSource;
         private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<IMessageContextProvider> _messageContextProvider;
 
         [SetUp]
         public void Arrange()
         {
             var stubDataFile = new FileInfo(@"C:\SomeFile.txt");
             _cancellationTokenSource = new CancellationTokenSource();
+
+            _messageContextProvider = new Mock<IMessageContextProvider>();
 
             _messageSubscriberFactory = new Mock<IMessageSubscriberFactory>();
             _messageSubscriber = new Mock<IMessageSubscriber<AccountPaymentsProcessingCompletedMessage>>();
@@ -52,7 +55,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.TransferDataPro
             _logger = new Mock<ILog>();
 
             _transferDataProcessor = new TransferDataProcessor(
-                _messageSubscriberFactory.Object, _messagePublisher.Object, _mediator.Object, _logger.Object);
+                _messageSubscriberFactory.Object, _messagePublisher.Object, _mediator.Object, _logger.Object, _messageContextProvider.Object);
         }
 
         [Test]

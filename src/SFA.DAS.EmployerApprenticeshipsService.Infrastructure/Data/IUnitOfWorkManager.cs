@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Infrastructure.Data
 {
-    public interface IUnitOfWorkManager
+    public interface IUnitOfWorkManagerAccount
     {
         void End();
     }

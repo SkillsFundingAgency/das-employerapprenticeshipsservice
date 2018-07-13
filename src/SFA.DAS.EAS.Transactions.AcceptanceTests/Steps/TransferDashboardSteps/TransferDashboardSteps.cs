@@ -15,6 +15,7 @@ using SFA.DAS.Messaging.Interfaces;
 using StructureMap;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
+using SFA.DAS.EAS.Application.Queries.GetTransferAllowanceSnapshot;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using TechTalk.SpecFlow;
 
@@ -71,7 +72,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransferDashboardSteps
             var userId = (long)ScenarioContext.Current["AccountOwnerUserId"];
             var controller = _container.GetInstance<TransfersController>();
 
-            var view = controller.TransferAllowance(new GetTransferAllowanceQuery
+            var view = controller.TransferAllowance(new GetTransferAllowanceSnapshotQuery
             {
                 AccountId = accountId,
                 UserId = userId

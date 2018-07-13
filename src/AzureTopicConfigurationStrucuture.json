@@ -92,5 +92,13 @@
   {
     "topicName": "transfers_processing_completed",
     "subscription": [ "MA_TransferTransactionProcessor" ]
+  },
+  {
+    "topicName": "calculate_transfer_allowance_snapshot",
+    "subscription": [ "MA_CalculateTransferAllowanceSnapshotCommand" ]
+  },
+  {
+    "topicName": "run_transfer_allowance_snapshot_job",
+    "subscription": [ "MA_RunTransferAllowanceSnapshotJobCommand" ]
   }
 ]

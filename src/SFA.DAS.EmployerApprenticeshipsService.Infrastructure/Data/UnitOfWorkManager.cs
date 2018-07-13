@@ -5,12 +5,12 @@ using SFA.DAS.Messaging.Interfaces;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
-    public class UnitOfWorkManager : IUnitOfWorkManager
+    public class UnitOfWorkManagerAccount : IUnitOfWorkManagerAccount
     {
         private readonly EmployerAccountDbContext _db;
         private readonly IMessagePublisher _messagePublisher;
 
-        public UnitOfWorkManager(EmployerAccountDbContext db, IMessagePublisher messagePublisher)
+        public UnitOfWorkManagerAccount(EmployerAccountDbContext db, IMessagePublisher messagePublisher)
         {
             _db = db;
             _messagePublisher = messagePublisher;

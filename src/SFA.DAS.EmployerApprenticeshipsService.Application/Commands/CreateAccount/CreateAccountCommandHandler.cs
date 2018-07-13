@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Hashing;
+using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -18,6 +19,7 @@ using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateAccount
@@ -35,6 +37,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
         private readonly IMembershipRepository _membershipRepository;
+        private readonly ILog _logger;
 
         public CreateAccountCommandHandler(
             IAccountRepository accountRepository, 
@@ -46,7 +49,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IGenericEventFactory genericEventFactory, 
             IAccountEventFactory accountEventFactory, 
             IRefreshEmployerLevyService refreshEmployerLevyService,
-            IMembershipRepository membershipRepository)
+            IMembershipRepository membershipRepository,
+            ILog logger)
         {
             _accountRepository = accountRepository;
             _messagePublisher = messagePublisher;
@@ -59,6 +63,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _accountEventFactory = accountEventFactory;
             _refreshEmployerLevyService = refreshEmployerLevyService;
             _membershipRepository = membershipRepository;
+            _logger = logger;
         }
 
         public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
@@ -80,6 +85,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             await _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId);
 
             await RefreshLevy(createAccountResult, message.PayeReference);
+
+            await SendCalculateTransferAllowanceSnapshotCommand(createAccountResult.AccountId);
 
             var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
 
@@ -136,6 +143,15 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private async Task PublishAccountCreatedMessage(long accountId, string createdByName, string userRef)
         {
             await _messagePublisher.PublishAsync(new AccountCreatedMessage(accountId, createdByName, userRef));
+        }
+
+        private Task SendCalculateTransferAllowanceSnapshotCommand(long accountId)
+        {
+            _logger.Info($"Sending {nameof(CalculateTransferAllowanceSnapshotCommand)} to queue"); 
+            return _messagePublisher.PublishAsync(new CalculateTransferAllowanceSnapshotCommand
+            {
+                AccountId = accountId
+            });
         }
 
         private async Task ValidateMessage(CreateAccountCommand message)

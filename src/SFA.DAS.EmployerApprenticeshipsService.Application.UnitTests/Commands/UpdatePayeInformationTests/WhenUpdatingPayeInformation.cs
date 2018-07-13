@@ -121,7 +121,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdatePayeInformationTests
         public async Task ThenIfNullIsReturnedFromHmrcThenTheRecordIsNotUpdated()
         {
             //Arrange
-            _hmrcService.Setup(x => x.GetEmprefInformation(ExpectedEmpRef)).ReturnsAsync(null);
+            _hmrcService.Setup(x => x.GetEmprefInformation(ExpectedEmpRef)).ReturnsAsync(() => null);
 
             //Act
             await _handler.Handle(new UpdatePayeInformationCommand { PayeRef = ExpectedEmpRef });

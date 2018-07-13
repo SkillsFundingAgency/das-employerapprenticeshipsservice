@@ -79,6 +79,8 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
 
         public Mock<IMessageSubscriber<SentTransferConnectionInvitationEvent>> MessageSubscriber { get; set; }
 
+        public Mock<IMessageContextProvider> MessageContextProvider { get; set; }
+
         public Mock<ILog> Logger { get; set; }
 
         public Mock<IMessageSubscriberFactory> MessageSubscriberFactory { get; set; }
@@ -119,6 +121,7 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
             MessageSubscriberFactory = new Mock<IMessageSubscriberFactory>();
             MessageSubscriber = new Mock<IMessageSubscriber<SentTransferConnectionInvitationEvent>>();
             Logger = new Mock<ILog>();
+            MessageContextProvider = new Mock<IMessageContextProvider>();
 
             Message = new Mock<IMessage<SentTransferConnectionInvitationEvent>>();
 
@@ -141,7 +144,7 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.UnitTests.EventHandlers
                 .Returns(MessageSubscriber.Object);
 
             Handler = new SentTransferConnectionInvitationEventHandler(MessageSubscriberFactory.Object,
-                Logger.Object, EmployerAccountDbContext.Object, NotificationsApi.Object, Configuration);
+                Logger.Object, EmployerAccountDbContext.Object, NotificationsApi.Object, Configuration, MessageContextProvider.Object);
         }
 
         private SentTransferConnectionInvitationEventHandlerTestFixture SetMessage()

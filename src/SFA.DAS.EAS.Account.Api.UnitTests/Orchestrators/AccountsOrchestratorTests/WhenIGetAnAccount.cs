@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Application.Queries.GetTransferAllowanceSnapshot;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
@@ -52,8 +53,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
                 .Verifiable("Get account was not called"); ;
 
             _mediator
-                .Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceQuery>()))
-                .ReturnsAsync(new GetTransferAllowanceResponse { TransferAllowance = TransferAllowance })
+                .Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceSnapshotQuery>()))
+                .ReturnsAsync(new GetTransferAllowanceSnapshotResponse { TransferAllowance = TransferAllowance })
                 .Verifiable("Get transfer balance was not called");
 
             _mediator

@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Web.ViewModels.Transfers;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
+using SFA.DAS.EAS.Application.Queries.GetTransferAllowanceSnapshot;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Mappings;
 
@@ -14,8 +15,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
     public class WhenIViewTheTransferAllowanceComponent
     {
         private TransfersController _controller;
-        private GetTransferAllowanceQuery _query;
-        private GetTransferAllowanceResponse _response;
+        private GetTransferAllowanceSnapshotQuery _query;
+        private GetTransferAllowanceSnapshotResponse _response;
         private IConfigurationProvider _mapperConfig;
         private IMapper _mapper;
         private Mock<IMediator> _mediator;
@@ -23,8 +24,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
         [SetUp]
         public void Arrange()
         {
-            _query = new GetTransferAllowanceQuery();
-            _response = new GetTransferAllowanceResponse { TransferAllowance = 123.456m };
+            _query = new GetTransferAllowanceSnapshotQuery();
+            _response = new GetTransferAllowanceSnapshotResponse { TransferAllowance = 123.456m };
             _mapperConfig = new MapperConfiguration(c => c.AddProfile<TransferMappings>());
             _mapper = _mapperConfig.CreateMapper();
             _mediator = new Mock<IMediator>();

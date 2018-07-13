@@ -6,9 +6,9 @@ namespace SFA.DAS.EAS.Web.Filters
 {
     public class UnitOfWorkManagerFilter : ActionFilterAttribute
     {
-        private readonly Func<IUnitOfWorkManager> _unitOfWorkManager;
+        private readonly Func<IUnitOfWorkManagerAccount> _unitOfWorkManager;
 
-        public UnitOfWorkManagerFilter(Func<IUnitOfWorkManager> unitOfWorkManager)
+        public UnitOfWorkManagerFilter(Func<IUnitOfWorkManagerAccount> unitOfWorkManager)
         {
             _unitOfWorkManager = unitOfWorkManager;
         }

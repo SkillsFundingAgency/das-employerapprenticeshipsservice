@@ -13,6 +13,7 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Infrastructure.Features;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
+using SFA.DAS.EAS.Application.Queries.GetTransferAllowanceSnapshot;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -39,7 +40,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult TransferAllowance(GetTransferAllowanceQuery query)
+        public ActionResult TransferAllowance(GetTransferAllowanceSnapshotQuery query)
         {
             var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
             var model = _mapper.Map<TransferAllowanceViewModel>(response);

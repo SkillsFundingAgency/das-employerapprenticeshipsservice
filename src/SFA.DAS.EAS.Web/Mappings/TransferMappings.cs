@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Queries.GetReceivedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetRejectedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
+using SFA.DAS.EAS.Application.Queries.GetTransferAllowanceSnapshot;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthorization;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
@@ -45,6 +46,7 @@ namespace SFA.DAS.EAS.Web.Mappings
                 .ForMember(m => m.Choice, o => o.Ignore());
 
             CreateMap<GetTransferAllowanceResponse, TransferAllowanceViewModel>();
+            CreateMap<GetTransferAllowanceSnapshotResponse, TransferAllowanceViewModel>();
             CreateMap<GetTransferConnectionInvitationAuthorizationResponse, TransferConnectionInvitationAuthorizationViewModel>();
             CreateMap<GetTransferConnectionInvitationResponse, DeleteTransferConnectionInvitationCommand>();
 

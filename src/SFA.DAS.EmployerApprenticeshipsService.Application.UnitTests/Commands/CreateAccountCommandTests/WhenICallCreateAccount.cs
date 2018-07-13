@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Hashing;
+using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -23,6 +24,7 @@ using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 {
@@ -39,6 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IAccountEventFactory> _accountEventFactory;
         private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
         private Mock<IMembershipRepository> _mockMembershipRepository;
+        private Mock<ILog> _mockLogger;
         
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
@@ -79,6 +82,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _mockMembershipRepository.Setup(r => r.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(new MembershipView() { FirstName = "Caller", LastName = "Full Name" }));
 
+            _mockLogger = new Mock<ILog>();
+
             _handler = new CreateAccountCommandHandler(
                 _accountRepository.Object, 
                 _messagePublisher.Object, 
@@ -89,7 +94,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 _genericEventFactory.Object,
                 _accountEventFactory.Object,
                 _refreshEmployerLevyService.Object,
-                _mockMembershipRepository.Object);
+                _mockMembershipRepository.Object,
+                _mockLogger.Object
+                );
         }
 
         [Test]
@@ -258,6 +265,23 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 c.AccountId.Equals(ExpectedAccountId) &&
                 c.CreatorUserRef.Equals(_user.UserRef)
                 )), Times.Once());
+        }
+
+        [Test]
+        public async Task ThenTheCalculateTransferAllowanceSnapshotCommandIsPublished()
+        {
+            //Arrange
+            var expectedPayeRef = "123/abc";
+
+            var createAccountCommand = new CreateAccountCommand { PayeReference = expectedPayeRef, AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.UserRef };
+
+            //Act
+            await _handler.Handle(createAccountCommand);
+
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(
+                    It.Is<CalculateTransferAllowanceSnapshotCommand>(c => c.AccountId.Equals(ExpectedAccountId))),
+                    Times.Once());
         }
 
         [Test]

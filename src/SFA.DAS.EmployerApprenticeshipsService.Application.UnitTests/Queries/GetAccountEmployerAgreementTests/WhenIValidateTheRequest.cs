@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
         public async Task ThenUnauthorizedIsSetToTrueIfTheUserIsNotPartOfTheAccount()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, ExpectedExternalUserId)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, ExpectedExternalUserId)).ReturnsAsync(() => null);
 
             //Act
             var actual = await _validator.ValidateAsync(new GetAccountEmployerAgreementsRequest { ExternalUserId = ExpectedExternalUserId, HashedAccountId = ExpectedHashedId });

@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.CommitmentsServiceTests
         public async Task ThenIShouldGetNoCommitmentsIfApiReturnsNull()
         {
             //Arrange
-            _commitmentsApi.Setup(x => x.GetEmployerCommitments(It.IsAny<long>())).ReturnsAsync(null);
+            _commitmentsApi.Setup(x => x.GetEmployerCommitments(It.IsAny<long>())).ReturnsAsync(() => null);
 
             //Act
             var result = await _service.GetEmployerCommitments(4);

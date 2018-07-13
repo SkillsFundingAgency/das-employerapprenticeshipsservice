@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Filters.UnitOfWorkManagerFilterTests
         private HttpRequestMessage _httpRequestMessage;
         private Mock<IDependencyScope> _dependencyScope;
         private Mock<IContainer> _container;
-        private Mock<IUnitOfWorkManager> _unitOfWorkManager;
+        private Mock<IUnitOfWorkManagerAccount> _unitOfWorkManager;
 
         [SetUp]
         public void Arrange()
@@ -34,9 +34,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Filters.UnitOfWorkManagerFilterTests
             _actionExecutedContext = new HttpActionExecutedContext(_actionContext, null) { Response = new HttpResponseMessage() };
             _dependencyScope = new Mock<IDependencyScope>();
             _container = new Mock<IContainer>();
-            _unitOfWorkManager = new Mock<IUnitOfWorkManager>();
+            _unitOfWorkManager = new Mock<IUnitOfWorkManagerAccount>();
             
-            _container.Setup(c => c.GetInstance<IUnitOfWorkManager>(It.IsAny<ExplicitArguments>())).Returns(_unitOfWorkManager.Object);
+            _container.Setup(c => c.GetInstance<IUnitOfWorkManagerAccount>(It.IsAny<ExplicitArguments>())).Returns(_unitOfWorkManager.Object);
             _dependencyScope.Setup(s => s.GetService(typeof(IContainer))).Returns(_container.Object);
             _httpRequestMessage.Properties[HttpPropertyKeys.DependencyScope] = _dependencyScope.Object;
 

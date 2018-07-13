@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserByRefTests
         public void ThenIShouldThrowExceptionIfTheUserCannotBeFound()
         {
             //Assign
-            _repository.Setup(x => x.GetUserByRef(It.IsAny<string>())).ReturnsAsync(null);
+            _repository.Setup(x => x.GetUserByRef(It.IsAny<string>())).ReturnsAsync(() => null);
 
             //Act
             Assert.ThrowsAsync<InvalidRequestException>(async () =>

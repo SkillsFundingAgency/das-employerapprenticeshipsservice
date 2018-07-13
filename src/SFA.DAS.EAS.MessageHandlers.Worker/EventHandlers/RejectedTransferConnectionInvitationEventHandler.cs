@@ -27,7 +27,14 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.EventHandlers
         private readonly ILog _log;
         private readonly INotificationsApi _notificationsApi;
 
-        public RejectedTransferConnectionInvitationEventHandler(IMessageSubscriberFactory subscriberFactory, ILog log, EmployerAccountDbContext dbContext, INotificationsApi notificationsApi, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration) : base(subscriberFactory, log)
+        public RejectedTransferConnectionInvitationEventHandler(
+            IMessageSubscriberFactory subscriberFactory, 
+            ILog log, 
+            EmployerAccountDbContext dbContext, 
+            INotificationsApi notificationsApi, 
+            EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration,
+            IMessageContextProvider messageContextProvider) 
+            : base(subscriberFactory, log, messageContextProvider)
         {
             _db = dbContext;
             _notificationsApi = notificationsApi;

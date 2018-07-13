@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountStatsTests
         {
             //Arrange
             _repository.Setup(x => x.GetAccountStats(It.IsAny<long>()))
-                .ReturnsAsync(null);
+                .ReturnsAsync(() => null);
 
             //Act
             var result = await RequestHandler.Handle(Query);

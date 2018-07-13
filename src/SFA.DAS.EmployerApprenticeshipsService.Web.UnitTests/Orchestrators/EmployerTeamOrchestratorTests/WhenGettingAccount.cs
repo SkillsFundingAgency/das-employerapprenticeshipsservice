@@ -146,7 +146,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         {
             //Arrange
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTasksQuery>()))
-                .ReturnsAsync(null);
+                .ReturnsAsync(() => null);
 
             // Act
             var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);

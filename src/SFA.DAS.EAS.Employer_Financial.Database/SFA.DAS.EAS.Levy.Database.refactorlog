@@ -49,4 +49,39 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[RequiredPaymentId]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="f2b71380-f64f-4773-ace4-3d540d07a7df" ChangeDateTime="06/12/2018 14:31:08">
+    <Property Name="ElementName" Value="[employer_financial].[AccountTransferSnapshot].[SenderAccountId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_financial].[AccountTransferSnapshot]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AccountId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="acc18908-a704-4d2b-920b-9ad620687fbe" ChangeDateTime="06/12/2018 14:31:22">
+    <Property Name="ElementName" Value="[employer_financial].[AccountTransferSnapshot].[SenderAccountName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_financial].[AccountTransferSnapshot]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Year" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="bbb58941-f104-4e79-9299-46094fcbabdd" ChangeDateTime="06/12/2018 14:31:49">
+    <Property Name="ElementName" Value="[employer_financial].[AccountTransferSnapshot].[ReceiverAccountId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_financial].[AccountTransferSnapshot]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Decimal(18,5)" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7f941a81-6435-40ae-b15e-120858e4d76b" ChangeDateTime="06/12/2018 14:31:57">
+    <Property Name="ElementName" Value="[employer_financial].[AccountTransferSnapshot].[Decimal(18,5)]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_financial].[AccountTransferSnapshot]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TransferAllowance" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5dce74ec-4343-4450-83f5-da5aec66b503" ChangeDateTime="06/13/2018 15:38:52">
+    <Property Name="ElementName" Value="[employer_financial].[AccountTransferAllowanceSnapshot].[CalculatedDate]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_financial].[AccountTransferAllowanceSnapshot]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SnapshotTime" />
+  </Operation>
 </Operations>

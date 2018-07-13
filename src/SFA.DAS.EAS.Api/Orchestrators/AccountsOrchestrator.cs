@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Application.Queries.GetTransferAllowanceSnapshot;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
@@ -245,7 +246,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
         private async Task<decimal> GetTransferAllowanceForAccount(long accountId)
         {
-            var transferAllowanceResult = await _mediator.SendAsync(new GetTransferAllowanceQuery
+            var transferAllowanceResult = await _mediator.SendAsync(new GetTransferAllowanceSnapshotQuery
             {
                 AccountId = accountId
             });
