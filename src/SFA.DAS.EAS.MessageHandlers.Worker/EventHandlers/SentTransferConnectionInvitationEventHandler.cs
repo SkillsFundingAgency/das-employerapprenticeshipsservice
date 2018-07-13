@@ -54,18 +54,34 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.EventHandlers
                 _log.Info($"There are no users that receive notifications for ReceiverAccountId '{messageContent.ReceiverAccountId}'");
             }
 
-            foreach (var owner in users)
+            foreach (var user in users)
             {
                 try
                 {
-                    await _notificationsApi.SendEmail(CreateEmail(owner, messageContent.SenderAccountName,
+                    _log.Info($"Sending email to '{user.Id}' ReceiverAccountId '{messageContent.ReceiverAccountId}'");
+
+                    await _notificationsApi.SendEmail(CreateEmail(user, messageContent.SenderAccountName,
                         messageContent.ReceiverAccountHashedId));
+
+                    _log.Info($"Sent email to '{user.Id}' ReceiverAccountId '{messageContent.ReceiverAccountId}'");
                 }
                 catch (Exception ex)
                 {
-                    _log.Error(ex, $"Unable to send sent transfer invitation notification to userId {owner.Id} for Receiver Account Id {messageContent.SenderAccountId} ");
+                    _log.Error(ex, $"Unable to send sent transfer invitation notification to userId {user.Id} for Receiver Account Id {messageContent.ReceiverAccountId} ");
                 }
             }
+        }
+
+        protected override Task OnErrorAsync(IMessage<SentTransferConnectionInvitationEvent> message, Exception ex)
+        {
+            _log.Error(ex, $"Could not process SentTransferConnectionInvitationEvent message for Receiver Account Id '{message.Content.ReceiverAccountId}'");
+            return Task.CompletedTask;
+        }
+
+        protected override Task OnFatalAsync(Exception ex)
+        {
+            _log.Fatal(ex, "Failed to process SentTransferConnectionInvitationEvent message");
+            return Task.CompletedTask;
         }
 
         private Email CreateEmail(User user, string accountName, string senderExternalId)

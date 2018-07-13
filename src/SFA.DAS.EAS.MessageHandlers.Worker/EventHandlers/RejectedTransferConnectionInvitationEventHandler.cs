@@ -54,19 +54,35 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.EventHandlers
                 _log.Info($"There are no users that receive notifications for SenderAccountId '{messageContent.SenderAccountId}'");
             }
 
-            foreach (var owner in users)
+            foreach (var user in users)
             {
                 try
                 {
-                    await _notificationsApi.SendEmail(CreateEmail(owner, messageContent.ReceiverAccountName,
+                    _log.Info($"Sending email to '{user.Id}' SenderAccountId '{messageContent.SenderAccountId}'");
+
+                    await _notificationsApi.SendEmail(CreateEmail(user, messageContent.ReceiverAccountName,
                         messageContent.SenderAccountHashedId));
+
+                    _log.Info($"Sent email to '{user.Id}' SenderAccountId '{messageContent.SenderAccountId}'");
                 }
                 catch (Exception ex)
                 {
                     _log.Error(ex,
-                        $"Unable to send rejected transfer invitation notification to userId {owner.Id} for Receiver Account Id {messageContent.ReceiverAccountId} ");
+                        $"Unable to send rejected transfer invitation notification to userId {user.Id} for SenderAccountId {messageContent.SenderAccountId} ");
                 }
             }
+        }
+
+        protected override Task OnErrorAsync(IMessage<RejectedTransferConnectionInvitationEvent> message, Exception ex)
+        {
+            _log.Error(ex, $"Could not process RejectedTransferConnectionInvitationEvent message for SenderAccountId '{message.Content.SenderAccountId}'");
+            return Task.CompletedTask;
+        }
+
+        protected override Task OnFatalAsync(Exception ex)
+        {
+            _log.Fatal(ex, "Failed to process RejectedTransferConnectionInvitationEvent message");
+            return Task.CompletedTask;
         }
 
         private Email CreateEmail(User user, string accountName, string senderExternalId)

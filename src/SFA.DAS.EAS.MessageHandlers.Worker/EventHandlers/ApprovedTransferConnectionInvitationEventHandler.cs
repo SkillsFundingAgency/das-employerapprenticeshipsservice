@@ -63,9 +63,20 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.EventHandlers
                 }
                 catch (Exception ex)
                 {
-                    _log.Error(ex, $"Unable to send approved transfer invitation notification to userId {owner.Id} for Receiver Account Id {messageContent.ReceiverAccountId} ");
+                    _log.Error(ex, $"Unable to send approved transfer invitation notification to userId {owner.Id} for SenderAccountId {messageContent.SenderAccountId} ");
                 }
             }
+        }
+        protected override Task OnErrorAsync(IMessage<ApprovedTransferConnectionInvitationEvent> message, Exception ex)
+        {
+            _log.Error(ex, $"Could not process ApprovedTransferConnectionInvitationEvent message for SenderAccountId '{message.Content.SenderAccountId}'");
+            return Task.CompletedTask;
+        }
+
+        protected override Task OnFatalAsync(Exception ex)
+        {
+            _log.Fatal(ex, "Failed to process ApprovedTransferConnectionInvitationEvent message");
+            return Task.CompletedTask;
         }
 
         private Email CreateEmail(User user, string accountName, string senderExternalId)
