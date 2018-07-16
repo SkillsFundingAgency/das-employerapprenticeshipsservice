@@ -24,6 +24,7 @@ namespace SFA.DAS.EAS.Application.Mappings
                 .ForMember(d => d.Code, o => o.MapFrom(l => l.LegalEntity.Code))
                 .ForMember(d => d.Sector, o => o.MapFrom(l => l.LegalEntity.Sector))
                 .ForMember(d => d.Status, o => o.MapFrom(l => l.LegalEntity.Status))
+                .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
                 .ForMember(d => d.PublicSectorDataSource, o => o.MapFrom(l => l.LegalEntity.PublicSectorDataSource))
                 .ForMember(d => d.Source, o => o.MapFrom(l => l.LegalEntity.Source))
                 .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
