@@ -69,6 +69,12 @@ namespace SFA.DAS.EAS.MessageHandlers.Worker.EventHandlers
         }
         protected override Task OnErrorAsync(IMessage<ApprovedTransferConnectionInvitationEvent> message, Exception ex)
         {
+            if (message.Content == null)
+            {
+                _log.Error(ex, $"Could not process ApprovedTransferConnectionInvitationEvent message NULL content");
+                return Task.CompletedTask;
+            }
+
             _log.Error(ex, $"Could not process ApprovedTransferConnectionInvitationEvent message for SenderAccountId '{message.Content.SenderAccountId}'");
             return Task.CompletedTask;
         }
