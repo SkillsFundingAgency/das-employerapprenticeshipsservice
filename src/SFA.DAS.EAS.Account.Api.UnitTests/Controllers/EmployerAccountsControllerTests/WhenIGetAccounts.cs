@@ -33,7 +33,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                         new Domain.Models.Account.Account {HashedId = "ABC999", Id = 987, Name = "Test 2"}
                     }
             };
-            Mediator.Setup(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageNumber == pageNumber && q.PageSize == pageSize && q.ToDate == toDate))).ReturnsAsync(accountsResponse);
+            Mediator.Setup(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageNumber == pageNumber && q.PageSize == pageSize && q.ToDate == toDate)))
+                    .ReturnsAsync(accountsResponse);
 
             var balancesResponse = new GetAccountBalancesResponse
             {
@@ -43,7 +44,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                         new AccountBalance {AccountId = accountsResponse.Accounts[1].Id, Balance = 123.45m,IsLevyPayer = 1}
                     }
             };
-            Mediator.Setup(x => x.SendAsync(It.Is<GetAccountBalancesRequest>(q => q.AccountIds.TrueForAll(id => accountsResponse.Accounts.Any(a => a.Id == id))))).ReturnsAsync(balancesResponse);
+            Mediator.Setup(x => x.SendAsync(It.Is<GetAccountBalancesRequest>(q => q.AccountIds.TrueForAll(id => accountsResponse.Accounts.Any(a => a.Id == id)))))
+                    .ReturnsAsync(balancesResponse);
 
             UrlHelper.Setup(x => x.Route("GetAccount", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId = accountsResponse.Accounts[0].HashedId })))).Returns($"/api/accounts/{accountsResponse.Accounts[0].HashedId}");
             UrlHelper.Setup(x => x.Route("GetAccount", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId = accountsResponse.Accounts[1].HashedId })))).Returns($"/api/accounts/{accountsResponse.Accounts[1].HashedId}");
@@ -102,10 +104,12 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                         new Domain.Models.Account.Account {HashedId = "ABC123", Id = 123, Name = "Test 1"}
                     }
             };
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>()))
+                    .ReturnsAsync(accountsResponse);
 
             var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>()))
+                    .ReturnsAsync(balancesResponse);
 
             var response = await Controller.GetAccounts(DateTime.Now.AddDays(-1).ToString("yyyyMMddHHmmss"));
             var model = response as OkNegotiatedContentResult<PagedApiResponseViewModel<AccountWithBalanceViewModel>>;
@@ -126,8 +130,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                         new Domain.Models.Account.Account {HashedId = "ABC999", Id = 987, Name = "Test 2"}
                     }
             };
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() });
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>()))
+                    .ReturnsAsync(accountsResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>()))
+                    .ReturnsAsync(new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() });
 
             //Act
             var actual = await Controller.GetAccounts();
@@ -151,8 +157,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                         new Domain.Models.Account.Account {HashedId = "ABC999", Id = 987, Name = "Test 2"}
                     }
             };
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(new GetAccountBalancesResponse { Accounts = new List<AccountBalance> { new AccountBalance { AccountId = 123, Balance = 1, IsLevyPayer = 0 } } });
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>()))
+                    .ReturnsAsync(accountsResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>()))
+                    .ReturnsAsync(new GetAccountBalancesResponse { Accounts = new List<AccountBalance> { new AccountBalance { AccountId = 123, Balance = 1, IsLevyPayer = 0 } } });
 
             //Act
             var actual = await Controller.GetAccounts();
@@ -195,8 +203,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                             {
                                 AccountId = 123,
                                 Balance=1000,
-                                TransferAllowance = expectedTransferAllowance,
-                                YearlyTransferAllowance = expectedTransferAllowance + 20000,
+                                RemainingTransferAllowance = expectedTransferAllowance,
+                                StartingTransferAllowance = expectedTransferAllowance + 20000,
                                 IsLevyPayer = 1
                             }
                         }
@@ -209,13 +217,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var model = actual as OkNegotiatedContentResult<PagedApiResponseViewModel<AccountWithBalanceViewModel>>;
             Assert.IsNotNull(model);
             Assert.IsNotEmpty(model.Content.Data);
-            Assert.AreEqual(expectedTransferAllowance, model.Content.Data.First().TransferAllowance);
+            Assert.AreEqual(expectedTransferAllowance, model.Content.Data.First().RemainingTransferAllowance);
         }
 
         [Test]
         public async Task ThenTheYearlyTransferAllowanceShouldBeReturned()
         {
-            var expectedYearlyTransferAllowance = 50000;
+            var expectedStartingTransferAllowance = 50000;
             var accountsResponse = new GetPagedEmployerAccountsResponse
             {
                 AccountsCount = 1,
@@ -242,8 +250,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                             {
                                 AccountId = 123,
                                 Balance=1000,
-                                TransferAllowance = expectedYearlyTransferAllowance - 20000,
-                                YearlyTransferAllowance = expectedYearlyTransferAllowance,
+                                RemainingTransferAllowance = expectedStartingTransferAllowance - 20000,
+                                StartingTransferAllowance = expectedStartingTransferAllowance,
                                 IsLevyPayer = 1
                             }
                         }
@@ -256,7 +264,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var model = actual as OkNegotiatedContentResult<PagedApiResponseViewModel<AccountWithBalanceViewModel>>;
             Assert.IsNotNull(model);
             Assert.IsNotEmpty(model.Content.Data);
-            Assert.AreEqual(expectedYearlyTransferAllowance, model.Content.Data.First().YearlyTransferAllowance);
+            Assert.AreEqual(expectedStartingTransferAllowance, model.Content.Data.First().StartingTransferAllowance);
         }
     }
 }

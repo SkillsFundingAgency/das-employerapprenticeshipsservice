@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
                  f => f.WithTransferAllowance(f.TransferAllowance)
                        .WithNoTransferPayments(),
                  f => f.Handle(f.SenderAccountId),
-                 f => f.FinancialDatabaseMock.Verify(d => d.SqlQueryAsync<decimal?>(
+                 f => f.FinancialDatabaseMock.Verify(d => d.SqlQueryAsync<TransferAllowance>(
                     It.Is<string>(q => q.StartsWith("[employer_financial].[GetAccountTransferAllowance]")),
                     f.SenderAccountId,
                     f.LevyDeclarationProviderConfiguration.TransferAllowancePercentage), Times.Once));
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
                      f => f.WithTransferAllowance(f.TransferAllowance)
                            .WithNoTransferPayments(),
                      f => f.Handle(f.SenderAccountId),
-                     f => Assert.That(f.Response.TransferAllowance, Is.EqualTo(f.TransferAllowance)));
+                     f => Assert.That(f.Response.TransferAllowance.RemainingTransferAllowance, Is.EqualTo(f.TransferAllowance)));
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
             await RunAsync(
                 f => f.WithTransferAllowance(f.TransferAllowance),
                 f => f.Handle(f.SenderAccountId),
-                f => Assert.That(f.Response.TransferAllowance,
+                f => Assert.That(f.Response.TransferAllowance.RemainingTransferAllowance,
                      Is.EqualTo(f.TransferAllowance)));
         }
 
@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
             await RunAsync(
                 f => f.WithTransferAllowance(-10),
                 f => f.Handle(f.SenderAccountId),
-                f => Assert.That(f.Response.TransferAllowance,
+                f => Assert.That(f.Response.TransferAllowance.RemainingTransferAllowance,
                     Is.EqualTo(0)));
         }
 
@@ -125,14 +125,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
             };
         }
 
-        public GetTransferAllowanceTestFixtures WithTransferAllowance(decimal transferAllowance)
+        public GetTransferAllowanceTestFixtures WithTransferAllowance(decimal remainingTransferAllowance)
         {
-            FinancialDatabaseMock.Setup(d => d.SqlQueryAsync<decimal?>
+            var transferAllowance = new TransferAllowance
+            {
+                RemainingTransferAllowance = remainingTransferAllowance
+            };
+
+            FinancialDatabaseMock.Setup(d => d.SqlQueryAsync<TransferAllowance>
                                 (
                                     It.Is<string>(s => s.StartsWith("[employer_financial].[GetAccountTransferAllowance]")),
                                     It.IsAny<long>(),
                                     It.IsAny<decimal>())
-                                ).ReturnsAsync(new List<decimal?> { transferAllowance });
+                                ).ReturnsAsync(new List<TransferAllowance> { transferAllowance });
             return this;
         }
 

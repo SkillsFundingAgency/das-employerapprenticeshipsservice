@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
@@ -25,14 +26,15 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         private Mock<ILog> _log;
         private Mock<IHashingService> _hashingService;
         private IMapper _mapper;
+        private TransferAllowance _transferAllowance;
 
-        private const decimal TransferAllowance = 123.45M;
         private const decimal AccountBalance = 678.90M;
 
 
         [SetUp]
         public void Arrange()
         {
+            _transferAllowance = new TransferAllowance {RemainingTransferAllowance = 123.45M, StartingTransferAllowance = 234.56M};
             _mediator = new Mock<IMediator>();
             _mapper = ConfigureMapper();
             _log = new Mock<ILog>();
@@ -53,7 +55,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
 
             _mediator
                 .Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceQuery>()))
-                .ReturnsAsync(new GetTransferAllowanceResponse { TransferAllowance = TransferAllowance })
+                .ReturnsAsync(new GetTransferAllowanceResponse { TransferAllowance = _transferAllowance })
                 .Verifiable("Get transfer balance was not called");
 
             _mediator
@@ -101,7 +103,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             var result = await _orchestrator.GetAccount(hashedAgreementId);
 
             //Assert
-            Assert.AreEqual(TransferAllowance, result.Data.TransferAllowance);
+            Assert.AreEqual(_transferAllowance.RemainingTransferAllowance, result.Data.RemainingTransferAllowance);
         }
 
         private IMapper ConfigureMapper()

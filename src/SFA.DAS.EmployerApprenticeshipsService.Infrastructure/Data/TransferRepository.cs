@@ -57,22 +57,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task<decimal> GetTransferAllowance(long accountId)
-        {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int64);
-                parameters.Add("@allowancePercentage", _allowancePercentage, DbType.Single);
+        //public async Task<decimal> GetTransferAllowance(long accountId)
+        //{
+        //    var result = await WithConnection(async c =>
+        //    {
+        //        var parameters = new DynamicParameters();
+        //        parameters.Add("@accountId", accountId, DbType.Int64);
+        //        parameters.Add("@allowancePercentage", _allowancePercentage, DbType.Single);
 
-                return await c.QuerySingleOrDefaultAsync<decimal?>(
-                    sql: "[employer_financial].[GetAccountTransferAllowance]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
+        //        return await c.QuerySingleOrDefaultAsync<decimal?>(
+        //            sql: "[employer_financial].[GetAccountTransferAllowance]",
+        //            param: parameters,
+        //            commandType: CommandType.StoredProcedure);
+        //    });
 
-            return result ?? 0;
-        }
+        //    return result ?? 0;
+        //}
 
         public async Task<AccountTransferDetails> GetTransferPaymentDetails(AccountTransfer transfer)
         {

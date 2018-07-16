@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EAS.Account.Api.Types
+﻿using System;
+
+namespace SFA.DAS.EAS.Account.Api.Types
 {
     public class AccountWithBalanceViewModel : IAccountResource
     {
@@ -12,8 +14,16 @@
 
         public decimal Balance { get; set; }
 
-        public decimal TransferAllowance { get; set; }
-        public decimal YearlyTransferAllowance { get; set; }
+        [Obsolete("This property is now being replaced by RemainingTransferAllowance")]
+        public decimal TransferAllowance
+        {
+            get => RemainingTransferAllowance;
+            set => RemainingTransferAllowance = value;
+        }
+
+        public decimal RemainingTransferAllowance { get; set; }
+
+        public decimal StartingTransferAllowance { get; set; }
 
         public string Href { get; set; }
         public bool IsLevyPayer { get; set; }
