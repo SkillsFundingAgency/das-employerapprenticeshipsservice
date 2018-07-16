@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
 {
@@ -24,13 +25,15 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
         private readonly IAuditService _auditService;
         private readonly IValidator<AcceptInvitationCommand> _validator;
         private readonly IMessagePublisher _messagePublisher;
+        private readonly ILog _logger;
 
         public AcceptInvitationCommandHandler(IInvitationRepository invitationRepository,
             IMembershipRepository membershipRepository,
             IUserAccountRepository userAccountRepository,
             IAuditService auditService,
             IMessagePublisher messagePublisher,
-            IValidator<AcceptInvitationCommand> validator)
+            IValidator<AcceptInvitationCommand> validator,
+            ILog logger)
         {
             _invitationRepository = invitationRepository;
             _membershipRepository = membershipRepository;
@@ -38,10 +41,13 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
             _auditService = auditService;
             _messagePublisher = messagePublisher;
             _validator = validator;
+            _logger = logger;
         }
 
         protected override async Task HandleCore(AcceptInvitationCommand message)
         {
+            _logger.Info($"Accepting Invitation '{message.Id}'");
+
             var validationResult = _validator.Validate(message);
 
             if (!validationResult.IsValid())

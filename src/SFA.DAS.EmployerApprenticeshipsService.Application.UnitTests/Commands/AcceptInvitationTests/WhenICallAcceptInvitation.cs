@@ -13,6 +13,7 @@ using SFA.DAS.TimeProvider;
 using System;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
 {
@@ -62,7 +63,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
                 _userAccountRepository.Object,
                 _auditService.Object,
                 _messagePublisher.Object,
-                _validator.Object);
+                _validator.Object,
+                Mock.Of<ILog>());
         }
 
         [TearDown]
