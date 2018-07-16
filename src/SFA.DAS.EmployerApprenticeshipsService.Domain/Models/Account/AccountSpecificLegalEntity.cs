@@ -26,6 +26,7 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public long? SignedAgreementId { get; set; }
         public int? PendingAgreementVersion { get; set; }
         public long? PendingAgreementId { get; set; }
+        public long AccountLegalEntityId { get; set; }
         public string AccountLegalEntityPublicHashedId { get; set; }
         #endregion
     }

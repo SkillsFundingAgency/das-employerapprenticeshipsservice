@@ -196,9 +196,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
         }
     }
 }

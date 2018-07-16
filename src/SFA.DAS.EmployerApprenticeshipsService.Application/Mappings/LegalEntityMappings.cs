@@ -15,8 +15,7 @@ namespace SFA.DAS.EAS.Application.Mappings
             string accountHashedId = null;
 
             CreateMap<AccountSpecificLegalEntity, AccountSpecificLegalEntityDto>()
-                .ForMember(d => d.RegisteredAddress, o => o.MapFrom(l => l.Address))
-                .ForMember(d => d.AccountLegalEntityPublicHashedId, o => o.MapFrom(l => l.AccountLegalEntityPublicHashedId));
+                .ForMember(d => d.RegisteredAddress, o => o.MapFrom(l => l.Address));
 
             CreateMap<AccountLegalEntity, AccountSpecificLegalEntityDto>()
                 .ForMember(d => d.RegisteredAddress, o => o.MapFrom(l => l.Address))
@@ -27,6 +26,7 @@ namespace SFA.DAS.EAS.Application.Mappings
                 .ForMember(d => d.Status, o => o.MapFrom(l => l.LegalEntity.Status))
                 .ForMember(d => d.PublicSectorDataSource, o => o.MapFrom(l => l.LegalEntity.PublicSectorDataSource))
                 .ForMember(d => d.Source, o => o.MapFrom(l => l.LegalEntity.Source))
+                .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
                 .ForMember(d => d.AccountLegalEntityPublicHashedId, o => o.MapFrom(l => l.PublicHashedId));
 
             CreateMap<AccountLegalEntity, LegalEntityViewModel>()
