@@ -195,6 +195,15 @@
     <Reference Include="NServiceBus.Core, Version=7.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\packages\NServiceBus.7.0.1\lib\net452\NServiceBus.Core.dll</HintPath>
     </Reference>
+    <Reference Include="NServiceBus.Heartbeat, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.Heartbeat.3.0.0\lib\net452\NServiceBus.Heartbeat.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Metrics, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.Metrics.3.0.0\lib\net452\NServiceBus.Metrics.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Metrics.ServiceControl, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.Metrics.ServiceControl.3.0.1\lib\net452\NServiceBus.Metrics.ServiceControl.dll</HintPath>
+    </Reference>
     <Reference Include="NServiceBus.Newtonsoft.Json, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\packages\NServiceBus.Newtonsoft.Json.2.1.0\lib\net452\NServiceBus.Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -302,6 +311,9 @@
     <Reference Include="SFA.DAS.Notifications.Api.Types, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.NServiceBus, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NServiceBus.1.0.4\lib\net462\SFA.DAS.NServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.OidcMiddleware, Version=2.0.0.61553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.OidcMiddleware.2.0.0.61553\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
@@ -447,6 +459,9 @@
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <HintPath>..\packages\WebActivatorEx.2.0.5\lib\net40\WebActivatorEx.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="WebApi.StructureMap, Version=1.0.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebApi.StructureMap.1.0.21\lib\net462\WebApi.StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -1156,10 +1171,6 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.NServiceBus\SFA.DAS.NServiceBus.csproj">
-      <Project>{CBDFA38E-CD77-49BC-B6F4-A07F6E11DFFC}</Project>
-      <Name>SFA.DAS.NServiceBus</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
