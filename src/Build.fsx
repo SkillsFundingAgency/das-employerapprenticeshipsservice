@@ -25,8 +25,8 @@ open Fake
    ==>"Run Jasmine Tests"
    ==>"Build Cloud Projects"
    ==>"Build Database project"
-   ==>"Build WebJob Project" 
-   ==>"Publish Solution"  
+   ==>"Build And Zip Webjob Host Projects" 
+   ==>"Publish Solution"
    ==>"Compile Views"
    ==>"Create Nuget Package"
 
