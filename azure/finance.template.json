@@ -27,10 +27,13 @@
         },
         "loggingRedisKey": {
             "type": "string"
+        },
+        "storageConnectionString": {
+            "type": "string"
         }
     },
     "variables": {},
-    "resources": [        
+    "resources": [
         {
             "apiVersion": "2017-08-01",
             "name": "WorkerAppServicePlan",
@@ -101,6 +104,10 @@
                             {
                                 "name": "EnvironmentName",
                                 "value": "[parameters('environmentName')]"
+                            },
+                            {
+                                "name": "StorageConnectionString",
+                                "value": "[parameters('storageConnectionString')]"
                             }
                         ]
                     },
