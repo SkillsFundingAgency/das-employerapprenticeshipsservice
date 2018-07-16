@@ -17,7 +17,7 @@ using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
-    public interface IAccountRepository
+    public class AccountRepository : BaseRepository, IAccountRepository
     {
         private readonly EmployerAccountDbContext _employerAccountDbContext;
         private readonly IHashingService _accountLegalEntityHashingService;
@@ -27,8 +27,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             ILog logger, 
             EmployerAccountDbContext employerAccountDbContext,
             IHashingService accountLegalEntityHashingService)
-
-        public AccountRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, EmployerAccountDbContext employerAccountDbContext)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _employerAccountDbContext = employerAccountDbContext;
@@ -157,23 +155,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     Status = EmployerAgreementStatus.Pending,
                 };
             });
-        }
-
-        public Task CreateLegalEntity(LegalEntity legalEntity)
-        {
-            _employerAccountDbContext.LegalEntities.Add(legalEntity);
-            return _employerAccountDbContext.SaveChangesAsync();
-        }
-
-        public Task EnsureLegalEntityLinkedToAccount(long legalEntityId, long accountId)
-        {
-            _employerAccountDbContext.LegalEntities
-            return Task.CompletedTask;
-        }
-
-        public Task CreateAgreementForLegalEntity(long legalEntityId, long accountId)
-        {
-            return Task.CompletedTask;
         }
 
         public async Task<AccountStats> GetAccountStats(long accountId)

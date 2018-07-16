@@ -361,8 +361,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return Task.FromResult(result);
         }
 
-        }
-
         public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
         {
             var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
@@ -392,7 +390,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 result.Data.ErrorMessage = "Failed to update the organisation's details.";
             }
 
-            return result;
             return result;
         }
     }
