@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         #endregion
 
         #region Account legal entity properties specific to account
-        public string Name { get; set; }
+        public string Name { get; set; }    
         public string Address { get; set; }
         public int? SignedAgreementVersion { get; set; }
         public long? SignedAgreementId { get; set; }
