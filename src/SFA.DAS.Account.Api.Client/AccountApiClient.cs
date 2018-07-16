@@ -41,6 +41,11 @@ namespace SFA.DAS.EAS.Account.Api.Client
             return JsonConvert.DeserializeObject<AccountDetailViewModel>(json);
         }
 
+        public Task<ICollection<AccountLegalEntityViewModel>> GetAccountLegalEntities(string highWaterMarkId = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ICollection<TeamMemberViewModel>> GetAccountUsers(string accountId)
         {
             var baseUrl = GetBaseUrl();

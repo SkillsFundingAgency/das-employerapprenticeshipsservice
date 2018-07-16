@@ -9,6 +9,7 @@ namespace SFA.DAS.EAS.Account.Api.Client
     {
         Task<AccountDetailViewModel> GetAccount(string hashedAccountId);
         Task<AccountDetailViewModel> GetAccount(long accountId);
+        Task<ICollection<AccountLegalEntityViewModel>> GetAccountLegalEntities(string highWaterMarkId = null);
         Task<ICollection<TeamMemberViewModel>> GetAccountUsers(string accountId);
         Task<ICollection<TeamMemberViewModel>> GetAccountUsers(long accountId);
         Task<EmployerAgreementView> GetEmployerAgreement(string accountId, string legalEntityId, string agreementId);
@@ -18,11 +19,10 @@ namespace SFA.DAS.EAS.Account.Api.Client
         Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetPageOfAccounts(int pageNumber = 1, int pageSize = 1000, DateTime? toDate = null);
         Task<ICollection<ResourceViewModel>> GetPayeSchemesConnectedToAccount(string accountId);
         Task<T> GetResource<T>(string uri) where T : IAccountResource;
+        Task<StatisticsViewModel> GetStatistics();
         Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month);
         Task<ICollection<TransactionSummaryViewModel>> GetTransactionSummary(string accountId);
         Task<ICollection<TransferConnectionViewModel>> GetTransferConnections(string accountHashedId);
         Task<ICollection<AccountDetailViewModel>> GetUserAccounts(string userId);
-
-        Task<StatisticsViewModel> GetStatistics();
     }
 }
