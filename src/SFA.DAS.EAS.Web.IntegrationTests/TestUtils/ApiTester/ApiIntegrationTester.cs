@@ -169,7 +169,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         private void CustomiseConfig(HttpConfiguration config)
         {
             var container = config.DependencyResolver.GetService<IContainer>();
-            var assembliesResolver = new TestWebApiResolver<AccountLegalEntitiesController>();
+            var assembliesResolver = new TestWebApiResolver<LegalEntitiesController>();
 
             container.Configure(c =>
             {

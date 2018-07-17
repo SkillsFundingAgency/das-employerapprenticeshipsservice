@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             // Arrange
             var callRequirements =
                 new CallRequirements("api/accounts/%20/legalentities")
-                    .ExpectControllerType(typeof(AccountLegalEntitiesController))
+                    .ExpectControllerType(typeof(LegalEntitiesController))
                     .ExpectValidationError();
 
             // Act

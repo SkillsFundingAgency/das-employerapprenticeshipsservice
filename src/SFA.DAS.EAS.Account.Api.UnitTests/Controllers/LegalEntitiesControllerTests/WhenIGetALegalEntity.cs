@@ -7,12 +7,12 @@ using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLegalEntitiesControllerTests
+namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.LegalEntitiesControllerTests
 {
     [TestFixture]
     public class WhenIGetALegalEntity
     {
-        private AccountLegalEntitiesController _controller;
+        private LegalEntitiesController _controller;
         private Mock<IMediator> _mediator;
         private GetLegalEntityQuery _query;
         private GetLegalEntityResponse _response;
@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLegalEntitiesCont
 
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
 
-            _controller = new AccountLegalEntitiesController(null, _mediator.Object);
+            _controller = new LegalEntitiesController(null, _mediator.Object);
         }
 
         [Test]

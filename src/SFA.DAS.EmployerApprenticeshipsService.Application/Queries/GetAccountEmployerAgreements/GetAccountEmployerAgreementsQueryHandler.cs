@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
-            var agreements = await _db.AccountLegalEntity
+            var agreements = await _db.AccountLegalEntities
                 .Where(ale => ale.AccountId == accountId)
                 .ProjectTo<EmployerAgreementStatusDto>(_configurationProvider)
                 .ToListAsync();

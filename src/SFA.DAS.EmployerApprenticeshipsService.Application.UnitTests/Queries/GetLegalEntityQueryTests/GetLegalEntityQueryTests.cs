@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
             AccountLegalEntitiesDbSet = new DbSetStub<AccountLegalEntity>(AccountLegalEntities);
 
             Db.Setup(d => d.LegalEntities).Returns(LegalEntitiesDbSet);
-            Db.Setup(d => d.AccountLegalEntity).Returns(AccountLegalEntitiesDbSet);
+            Db.Setup(d => d.AccountLegalEntities).Returns(AccountLegalEntitiesDbSet);
 
             Handler = new GetLegalEntityQueryHandler(Db.Object, ConfigurationProvider);
 

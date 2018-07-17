@@ -113,7 +113,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\AccountLegalEntitiesControllerTests\AccountLegalEntitiesControllerTests.cs" />
+    <Compile Include="Controllers\AccountLegalEntitiesControllerTests.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\AccountLevyControllerTests.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetAllLevyForAnAccount.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetLevyForAnAccountAndPeriod.cs" />
@@ -123,10 +123,11 @@
     <Compile Include="Controllers\EmployerAccountsControllerTests\EmployerAccountsControllerTests.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAccounts.cs" />
     <Compile Include="Controllers\AccountPayeSchemesControllerTests\WhenIGetAPayeScheme.cs" />
-    <Compile Include="Controllers\AccountLegalEntitiesControllerTests\WhenIGetALegalEntity.cs" />
     <Compile Include="Controllers\AccountPayeSchemesControllerTests\WhenIGetPayeSchemesForAnAccount.cs" />
-    <Compile Include="Controllers\AccountLegalEntitiesControllerTests\WhenIGetLegalEntitiesForAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAnAccount.cs" />
+    <Compile Include="Controllers\LegalEntitiesControllerTests\LegalEntitiesControllerTests.cs" />
+    <Compile Include="Controllers\LegalEntitiesControllerTests\WhenIGetALegalEntity.cs" />
+    <Compile Include="Controllers\LegalEntitiesControllerTests\WhenIGetLegalEntitiesForAnAccount.cs" />
     <Compile Include="Controllers\StatisticsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="Controllers\TransferConnectionsControllerTests\WhenIGetTransferConnections.cs" />
     <Compile Include="Filters\UnitOfWorkManagerFilterTests\WhenIRequestAResponse.cs" />

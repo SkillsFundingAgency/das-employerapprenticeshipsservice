@@ -30,11 +30,15 @@ namespace SFA.DAS.EAS.Application.Mappings
                 .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
                 .ForMember(d => d.AccountLegalEntityPublicHashedId, o => o.MapFrom(l => l.PublicHashedId));
 
+            CreateMap<AccountLegalEntity, AccountLegalEntityViewModel>()
+                .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
+                .ForMember(d => d.AccountLegalEntityPublicHashedId, o => o.MapFrom(l => l.PublicHashedId));
+
             CreateMap<AccountLegalEntity, LegalEntityViewModel>()
                 .ForMember(d => d.Agreements, o => o.MapFrom(l => l.Agreements.Where(a =>
-                        a.AccountLegalEntity.AccountId == accountId && (
-                            a.StatusId == EmployerAgreementStatus.Pending ||
-                            a.StatusId == EmployerAgreementStatus.Signed))))
+                    a.AccountLegalEntity.AccountId == accountId && (
+                    a.StatusId == EmployerAgreementStatus.Pending ||
+                    a.StatusId == EmployerAgreementStatus.Signed))))
                 .ForMember(d => d.DasAccountId, o => o.MapFrom(l => accountHashedId))
                 .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
                 .ForMember(dest => dest.AccountLegalEntityPublicHashedId, o => o.MapFrom(l => l.PublicHashedId))
@@ -52,7 +56,6 @@ namespace SFA.DAS.EAS.Application.Mappings
                     l.LegalEntity.Source == 2 ? "Charities" :
                     l.LegalEntity.Source == 3 ? "Public Bodies" : "Other"))
                 .ForMember(d => d.SourceNumeric, o => o.MapFrom(l => l.LegalEntity.Source))
-                // These obsolete items are populated explicitly by the 
                 .ForMember(d => d.AgreementSignedByName, o => o.Ignore())
                 .ForMember(d => d.AgreementSignedDate, o => o.Ignore())
                 .ForMember(d => d.AgreementStatus, o => o.Ignore());
