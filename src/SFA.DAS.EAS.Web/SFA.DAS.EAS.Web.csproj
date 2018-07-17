@@ -662,6 +662,7 @@
     <Content Include="dist\javascripts\length-limit.js" />
     <Content Include="dist\javascripts\lodash.js" />
     <Content Include="dist\javascripts\payment-order.js" />
+    <Content Include="App_Data\.keep" />
     <None Include="src\sass\_tabs.scss" />
     <Content Include="dist\javascripts\sfa-modernizr.js" />
     <Content Include="src\svg\arrows.svg" />
@@ -1187,9 +1188,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
