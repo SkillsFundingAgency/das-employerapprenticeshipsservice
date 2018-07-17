@@ -111,6 +111,20 @@
                             }
                         ]
                     },
+                    "appServiceConnectionStrings": {
+                        "value": [
+                            {
+                                "name": "AzureWebJobsDashboard",
+                                "connectionString": "[parameters('storageConnectionString')]",
+                                "type": "Custom"
+                            },
+                            {
+                                "name": "AzureWebJobsStorage",
+                                "connectionString": "[parameters('storageConnectionString')]",
+                                "type": "Custom"
+                            }
+                        ]
+                    },
                     "deployStagingSlot": {
                         "value": false
                     }
