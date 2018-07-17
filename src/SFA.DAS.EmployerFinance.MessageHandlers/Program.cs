@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
                 .SetupEntityFrameworkUnitOfWork<EmployerFinanceDbContext>()
                 .SetupErrorQueue()
                 .SetupInstallers()
-                .SetupLicense(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().NServiceBusLicense)
+                //.SetupLicense(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().NServiceBusLicense)
                 .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .SetupNewtonsoftSerializer()
                 .SetupNLogFactory()
