@@ -1,5 +1,4 @@
-﻿using System;
-using NServiceBus;
+﻿using NServiceBus;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NServiceBus.AzureServiceBus;
@@ -9,11 +8,11 @@ namespace SFA.DAS.EAS.Infrastructure.NServiceBus
 {
     public static class EndpointConfigurationExtensions
     {
-        public static EndpointConfiguration SetupAzureServiceBusTransport(this EndpointConfiguration config, Func<string> connectionStringBuilder)
+        public static EndpointConfiguration SetupAzureServiceBusTransport(this EndpointConfiguration config, string connectionString)
         {
             var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
 
-            config.SetupAzureServiceBusTransport(isDevelopment, connectionStringBuilder, r =>
+            config.SetupAzureServiceBusTransport(isDevelopment, connectionString, r =>
             {
                 r.RouteToEndpoint(
                     typeof(ImportLevyDeclarationsCommand).Assembly,
