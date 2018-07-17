@@ -41,8 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs
             var container = IoC.Initialize();
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Jobs")
-                .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
-                .SetupHeartbeat()
+                .SetupAzureServiceBusTransport(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
                 .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .SetupNewtonsoftSerializer()
                 .SetupNLogFactory()
