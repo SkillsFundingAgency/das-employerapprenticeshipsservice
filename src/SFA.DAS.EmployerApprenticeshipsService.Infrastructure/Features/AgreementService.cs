@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Infrastructure.Features
 
         private async Task<int> GetMinAgreementVersionAsync(long accountId)
         {
-            var versionNumber = await _db.AccountLegalEntity
+            var versionNumber = await _db.AccountLegalEntities
                                         .Where(ale => ale.AccountId == accountId)
                                         .MinAsync(ale => ale.SignedAgreementId == null ? 0 : (int) ale.SignedAgreementVersion)
                                         .ConfigureAwait(false);

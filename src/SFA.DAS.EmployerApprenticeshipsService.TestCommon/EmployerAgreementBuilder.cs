@@ -178,7 +178,7 @@ namespace SFA.DAS.EAS.TestCommon
                 .Returns(agreementsDbSet);
 
             EmployerAccountDbContextMock
-                .Setup(db => db.AccountLegalEntity)
+                .Setup(db => db.AccountLegalEntities)
                 .Returns(accountLegalEntityDbSet);
 
             EmployerAccountDbContextMock

@@ -41,11 +41,6 @@ namespace SFA.DAS.EAS.Account.Api.Client
             return JsonConvert.DeserializeObject<AccountDetailViewModel>(json);
         }
 
-        public Task<ICollection<AccountLegalEntityViewModel>> GetAccountLegalEntities(string highWaterMarkId = null)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ICollection<TeamMemberViewModel>> GetAccountUsers(string accountId)
         {
             var baseUrl = GetBaseUrl();
@@ -98,6 +93,15 @@ namespace SFA.DAS.EAS.Account.Api.Client
             var json = await _httpClient.GetAsync(url);
 
             return JsonConvert.DeserializeObject<List<LevyDeclarationViewModel>>(json);
+        }
+
+        public async Task<PagedApiResponseViewModel<AccountLegalEntityViewModel>> GetPageOfAccountLegalEntities(int pageNumber = 1, int pageSize = 1000)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accountlegalentities?pageNumber={pageNumber}&pageSize={pageSize}";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<PagedApiResponseViewModel<AccountLegalEntityViewModel>>(json);
         }
 
         public async Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetPageOfAccounts(int pageNumber = 1, int pageSize = 1000, DateTime? toDate = null)

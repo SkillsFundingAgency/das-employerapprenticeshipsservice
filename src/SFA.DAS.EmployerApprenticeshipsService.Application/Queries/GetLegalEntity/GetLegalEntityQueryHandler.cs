@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntity
 
         public async Task<GetLegalEntityResponse> Handle(GetLegalEntityQuery message)
         {
-            var legalEntity = await _db.AccountLegalEntity
+            var legalEntity = await _db.AccountLegalEntities
                 .Where(l =>
                     l.LegalEntityId == message.LegalEntityId.Value &&
                     l.AccountId == message.AccountId.Value && 

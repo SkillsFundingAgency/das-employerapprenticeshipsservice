@@ -279,6 +279,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQuery.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandler.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesResponse.cs" />
     <Compile Include="Commands\SetAccountLegalEntityAgreementStatus\SetAccountLegalEntityAgreementStatusCommand.cs" />
     <Compile Include="Commands\SetAccountLegalEntityAgreementStatus\SetAccountLegalEntityAgreementStatusCommandHandler.cs" />
     <Compile Include="Commands\SetAccountLegalEntityAgreementStatus\SetAccountLegalEntityAgreementStatusCommandValidator.cs" />
@@ -323,6 +326,12 @@
     <Compile Include="Dtos\EmployerAgreement\PendingEmployerAgreementDetailsDto.cs" />
     <Compile Include="Dtos\EmployerAgreement\SignedEmployerAgreementDetailsDto.cs" />
     <Compile Include="Dtos\AccountSpecificLegalEntityDto.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesQueryHandler.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesRequest.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesResponse.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesValidator.cs" />
+    <Compile Include="Queries\GetAccountTransferTransactionDetails\GetSenderTransferTransactionDetailsQuery.cs" />
+    <Compile Include="Queries\GetAccountTransferTransactionDetails\GetSenderTransferTransactionDetailsResponse.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsQueryHandler.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsQuery.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsResponse.cs" />
@@ -564,10 +573,6 @@
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsResponse.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsValidator.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesQueryHandler.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesRequest.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesResponse.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesValidator.cs" />
     <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesQueryHandler.cs" />
     <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesQueryValidator.cs" />
     <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesQuery.cs" />
