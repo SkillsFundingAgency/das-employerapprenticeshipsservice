@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Jobs")
                 .SetupAzureServiceBusTransport(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
-                .SetupLicense(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().NServiceBusLicense)
+                //.SetupLicense(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().NServiceBusLicense)
                 .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .SetupNewtonsoftSerializer()
                 .SetupNLogFactory()
