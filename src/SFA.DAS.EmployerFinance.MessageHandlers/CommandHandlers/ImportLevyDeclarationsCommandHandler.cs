@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using NServiceBus;
-using NServiceBus.Logging;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EmployerFinance.Messages.Commands;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 {
