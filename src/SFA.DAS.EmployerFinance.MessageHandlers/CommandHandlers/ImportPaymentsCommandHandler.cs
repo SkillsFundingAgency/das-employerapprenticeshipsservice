@@ -3,12 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using NServiceBus;
-using NServiceBus.Logging;
 using SFA.DAS.EAS.Application.Commands.CreateNewPeriodEnd;
 using SFA.DAS.EAS.Application.Queries.GetAllEmployerAccounts;
 using SFA.DAS.EAS.Application.Queries.Payments.GetCurrentPeriodEnd;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
 

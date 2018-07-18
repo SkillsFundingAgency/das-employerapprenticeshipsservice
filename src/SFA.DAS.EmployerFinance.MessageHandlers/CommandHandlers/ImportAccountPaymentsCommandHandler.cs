@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using NServiceBus;
-using NServiceBus.Logging;
 using SFA.DAS.EAS.Application.Commands.CreateTransferTransactions;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
 using SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers;
 using SFA.DAS.EmployerFinance.Messages.Commands;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 {
