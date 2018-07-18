@@ -32,5 +32,7 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         ///     The version number of the last agreement template signed by the legal entity for the account.
         /// </summary>
         public virtual int? SignedAgreementVersion { get; set; }
+
+        public virtual DateTime? Deleted { get; set; }
     }
 }
