@@ -190,7 +190,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.5.0\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -199,11 +199,11 @@
     <Reference Include="Polly, Version=5.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.7.0\lib\net45\Polly.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Activities, Version=1.0.0.59218, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.59218\lib\net45\SFA.DAS.Activities.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.1.2.1\lib\net45\SFA.DAS.Activities.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Activities.Client, Version=1.0.0.59218, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.1.0.0.59218\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities.Client, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.1.2.1\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Apprenticeships.Api.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Client.0.11.39\lib\net462\SFA.DAS.Apprenticeships.Api.Client.dll</HintPath>
@@ -274,8 +274,8 @@
     <Reference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.StructureMap.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.StructureMap.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.56651, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.56651\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.1.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.1.5\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.NLog.Targets.Redis, Version=1.0.0.47445, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Targets.Redis.1.0.0.47445\lib\net45\SFA.DAS.NLog.Targets.Redis.dll</HintPath>
@@ -368,6 +368,7 @@
     <Reference Include="System.Text.Encodings.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encodings.Web.4.0.0\lib\netstandard1.0\System.Text.Encodings.Web.dll</HintPath>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -627,9 +628,7 @@
     <Content Include="dist\javascripts\length-limit.js" />
     <Content Include="dist\javascripts\lodash.js" />
     <Content Include="dist\javascripts\payment-order.js" />
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="NLog.config" />
     <None Include="src\sass\_tabs.scss" />
     <Content Include="dist\javascripts\sfa-modernizr.js" />
     <Content Include="src\svg\arrows.svg" />
