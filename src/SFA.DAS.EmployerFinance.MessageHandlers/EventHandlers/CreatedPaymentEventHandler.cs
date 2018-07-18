@@ -4,7 +4,7 @@ using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.Messaging.Interfaces;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
+namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
 {
     public class CreatedPaymentEventHandler : IHandleMessages<CreatedPaymentEvent>
     {

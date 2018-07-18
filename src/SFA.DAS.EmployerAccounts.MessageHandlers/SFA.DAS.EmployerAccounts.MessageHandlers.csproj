@@ -291,7 +291,6 @@
     <Compile Include="EventHandlers\ChangedAccountNameEventHandler.cs" />
     <Compile Include="EventHandlers\CreatedAccountEventHandler.cs" />
     <Compile Include="EventHandlers\CreatedAgreementEventHandler.cs" />
-    <Compile Include="EventHandlers\CreatedPaymentEventHandler.cs" />
     <Compile Include="EventHandlers\DeletedPayeSchemeEventHandler.cs" />
     <Compile Include="EventHandlers\DeletedTransferConnectionRequestEventHandler.cs" />
     <Compile Include="EventHandlers\InvitedUserEventHandler.cs" />
@@ -344,10 +343,6 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj">
-      <Project>{C15DEC5C-666D-4CB2-968E-A273EB60D15E}</Project>
-      <Name>SFA.DAS.EmployerFinance.Messages</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
