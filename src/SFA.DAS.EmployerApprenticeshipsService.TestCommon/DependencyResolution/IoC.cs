@@ -5,6 +5,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging.Interfaces;
@@ -77,6 +78,26 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry(new LevyWorkerDefaultRegistry(hmrcService, messagePublisher, messageSubscriberFactory, eventsApi));
             });
+        }
+
+        public static IContainer CreateContainer(Mock<IMessagePublisher> messagePublisher,
+            Mock<IAuthenticationService> owinWrapper,
+            Mock<ICookieStorageService<EmployerAccountData>> cookieService,
+            Mock<IEventsApi> eventsApi,
+            Mock<IEmployerCommitmentApi> commitmentApi,
+            Mock<IAuthorizationService> authorizationService)
+        {
+            var container = new Container(c =>
+            {
+                c.AddRegistry<AuditRegistry>();
+                c.AddRegistry<CachesRegistry>();
+                c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<DateTimeRegistry>();
+                c.AddRegistry(new DefaultRegistry(owinWrapper, cookieService, eventsApi, commitmentApi,
+                    messagePublisher, authorizationService));
+            });
+
+            return container;
         }
     }
 }

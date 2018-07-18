@@ -1,25 +1,29 @@
 ﻿using Moq;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Authorization;
+using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
+using SFA.DAS.HashingService;
+using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using StructureMap;
-using SFA.DAS.HashingService;
-using SFA.DAS.EAS.Application.Hashing;
-using SFA.DAS.EAS.Infrastructure.Authentication;
-using SFA.DAS.EAS.Infrastructure.Authorization;
-using SFA.DAS.Messaging.Interfaces;
 
 namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 {
-    public class DefaultRegistry : Registry
+    public class EmployerAccountPayeControllerRegistry : Registry
     {
-
-        public DefaultRegistry(Mock<IAuthenticationService> owinWrapperMock, Mock<ICookieStorageService<EmployerAccountData>> cookieServiceMock, Mock<IEventsApi> eventApi, Mock<IEmployerCommitmentApi> commitmentsApi, Mock<IMessagePublisher> messagePublisher)
+        public EmployerAccountPayeControllerRegistry(
+            IMock<ICookieStorageService<EmployerAccountData>> cookieServiceEmployerAccountData,
+            IMock<ICookieStorageService<FlashMessageViewModel>> cookieServiceFlashMessageViewModel,
+            IMock<IAuthenticationService> owinWrapperMock, Mock<IEmployerCommitmentApi> commitmentsApi, Mock<IEventsApi> eventApi,
+            IMock<IMessagePublisher> messagePublisher, Mock<IAuthorizationService> authorizationService)
         {
             Scan(s =>
             {
@@ -30,7 +34,6 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 
             For<IAuditApiClient>().Use<StubAuditApiClient>();
             For<IAuthenticationService>().Use(owinWrapperMock.Object);
-            For<ICookieStorageService<EmployerAccountData>>().Use(cookieServiceMock.Object);
             For<IEmployerCommitmentApi>().Use(commitmentsApi.Object);
             For<IEventsApi>().Use(() => eventApi.Object);
             For<IHashingService>().Use(new HashingService.HashingService("12345QWERTYUIOPNDGHAK", "TEST: Dummy hash code London is a city in UK"));
@@ -38,17 +41,9 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
             For<IMessagePublisher>().Use(messagePublisher.Object);
             For<INotificationsApi>().Use(() => Mock.Of<INotificationsApi>());
             For<IPublicHashingService>().Use(x => new PublicHashingService("BCDEFGHIJKLMMOPQRSTUVWXYZ", "haShStRiNg"));
-        }
-
-
-        public DefaultRegistry(Mock<IAuthenticationService> owinWrapperMock,
-            Mock<ICookieStorageService<EmployerAccountData>> cookieServiceMock,
-            Mock<IEventsApi> eventApi, Mock<IEmployerCommitmentApi> commitmentsApi,
-            Mock<IMessagePublisher> messagePublisher,
-            Mock<IAuthorizationService> authorizationService) : this(owinWrapperMock, cookieServiceMock, eventApi, commitmentsApi, messagePublisher)
-        {
-            //For<MyInterface>().Add<Class1ForMyInterface>().Named("Class1");
             For<IAuthorizationService>().Use(x => authorizationService.Object);
+            For<ICookieStorageService<EmployerAccountData>>().Use(cookieServiceEmployerAccountData.Object);
+            For<ICookieStorageService<FlashMessageViewModel>>().Use(cookieServiceFlashMessageViewModel.Object);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
@@ -19,6 +20,7 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public virtual int RoleId { get; set; }
         public string RoleName => ((Role)RoleId).ToString();
         public virtual ICollection<TransferConnectionInvitation> SentTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
+        public virtual ICollection<Membership> Memberships { get; protected set; } = new List<Membership>();
 
         public bool IsTransferConnectionInvitationSender()
         {
