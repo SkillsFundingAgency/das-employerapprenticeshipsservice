@@ -12,7 +12,7 @@
 		@legalEntitySource TINYINT,
 		@payeRef NVARCHAR(16),
 		@payeName VARCHAR(500),
-		@PublicHasdhedId NVARCHAR(6)
+		@PublicHashedId NVARCHAR(6)
 	AS
 	BEGIN
 		IF (NOT EXISTS (SELECT 1 FROM [employer_account].[Account] WHERE Id = @accountId))
@@ -48,7 +48,7 @@
 
 			EXEC [Employer_account].[UpdateAccountLegalEntity_SetPublicHashedId] 
 					@accountLegalEntityId=@accountLegalEntityId,
-					@PublicHasdhedId=@PublicHasdhedId
+					@PublicHashedId=@PublicHashedId
 
 			EXEC [employer_account].[SignEmployerAgreement] @employerAgreementId, @userId, ''Test User'', @now
 			EXEC [employer_account].[CreatePaye] @payeRef, ''accessToken'', ''refreshToken'', @payeName

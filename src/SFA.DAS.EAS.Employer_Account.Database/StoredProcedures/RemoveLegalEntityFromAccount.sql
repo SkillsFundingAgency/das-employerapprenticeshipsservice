@@ -5,12 +5,19 @@ BEGIN
 
 	SET NOCOUNT ON;
 
-	UPDATE	ea
+	DECLARE	@accountLegalEntityId as BIGINT
+
+	SELECT	@accountLegalEntityId = accountLegalEntityId
+	FROM	employer_account.EmployerAgreement AS EA
+	WHERE	EA.Id = @employerAgreementId
+
+	UPDATE	[employer_account].[EmployerAgreement] 
 	SET		StatusId = 5
-	FROM	[employer_account].[EmployerAgreement] ea
-			JOIN [employer_account].[EmployerAgreement] ea2 
-				ON ea2.AccountLegalEntityId = ea.AccountLegalEntityId
-	WHERE	ea2.Id = @employerAgreementId;
+	WHERE	AccountLegalEntityId = @accountLegalEntityId
+
+	UPDATE	[employer_account].[AccountLegalEntity] 
+	SET		Deleted = GetDate()
+	WHERE	id = @accountLegalEntityId
 
 END;
 

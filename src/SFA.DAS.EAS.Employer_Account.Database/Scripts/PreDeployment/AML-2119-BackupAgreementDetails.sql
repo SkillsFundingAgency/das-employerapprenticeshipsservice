@@ -8,6 +8,10 @@ IF EXISTS(SELECT	1
 BEGIN
 	PRINT 'The EmployerAgreement table has already been updated - nothing to do';
 END
+ELSE IF OBJECT_ID('employer_account.EmployerAgreement') IS NULL
+BEGIN 
+	PRINT 'There is no employer_account.EmployerAgreement data to back up - nothing to do';	
+END
 ELSE 
 BEGIN
 	BEGIN TRY

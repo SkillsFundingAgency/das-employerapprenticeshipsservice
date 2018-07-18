@@ -26,6 +26,8 @@ BEGIN
 	INSERT INTO [employer_account].[Account](Name, CreatedDate) VALUES (@employerName, @addedDate);
 	SELECT @accountId = SCOPE_IDENTITY();
 
+	DECLARE @accountLegalEntityCreated AS BIT;
+
 	EXEC [employer_account].[CreateLegalEntityWithAgreement]
 		@accountId = @accountId,
 		@companyNumber = @employerNumber,
@@ -38,8 +40,9 @@ BEGIN
 		@sector = @sector,
 		@legalEntityId = @legalEntityId OUTPUT,
 		@employerAgreementId = @employerAgreementId OUTPUT,
-		@accountLegalentityId = @accountLegalentityId OUTPUT;
-		
+		@accountLegalentityId = @accountLegalentityId OUTPUT,
+		@accountLegalEntityCreated = @accountLegalEntityCreated OUTPUT;
+
 	IF EXISTS(select 1 from [employer_account].[Paye] where Ref = @employerRef)
 	BEGIN
 		EXEC [employer_account].[UpdatePaye] @employerRef,@accessToken, @refreshToken,@employerRefName
