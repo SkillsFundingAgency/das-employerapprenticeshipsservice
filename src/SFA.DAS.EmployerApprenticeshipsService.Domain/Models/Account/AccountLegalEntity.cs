@@ -33,6 +33,10 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         /// </summary>
         public virtual int? SignedAgreementVersion { get; set; }
 
+        /// <summary>
+        ///     If this has a value then the ALE is logically deleted. Note that logically deleted ALE may still
+        ///     have the signed and pending fields set so do not rely on these being null.
+        /// </summary>
         public virtual DateTime? Deleted { get; set; }
     }
 }

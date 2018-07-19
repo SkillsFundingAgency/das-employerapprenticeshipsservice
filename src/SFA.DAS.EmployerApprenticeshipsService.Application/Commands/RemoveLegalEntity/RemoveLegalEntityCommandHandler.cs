@@ -31,7 +31,9 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
         private readonly IMessagePublisher _messagePublisher;
-        
+        private readonly IAgreementService _agreementService;
+
+
         public RemoveLegalEntityCommandHandler(
             IValidator<RemoveLegalEntityCommand> validator,
             ILog logger,
@@ -40,7 +42,8 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             IHashingService hashingService,
             IGenericEventFactory genericEventFactory,
             IEmployerAgreementEventFactory employerAgreementEventFactory,
-            IMessagePublisher messagePublisher)
+            IMessagePublisher messagePublisher,
+            IAgreementService agreementService)
         {
             _validator = validator;
             _logger = logger;
@@ -50,6 +53,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             _genericEventFactory = genericEventFactory;
             _employerAgreementEventFactory = employerAgreementEventFactory;
             _messagePublisher = messagePublisher;
+            _agreementService = agreementService;
         }
 
         protected override async Task HandleCore(RemoveLegalEntityCommand message)
@@ -73,6 +77,8 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreementId);
 
             await _employerAgreementRepository.RemoveLegalEntityFromAccount(legalAgreementId);
+
+            await _agreementService.RemoveFromCacheAsync(accountId);
 
             await AddAuditEntry(accountId, message.HashedLegalAgreementId);
 

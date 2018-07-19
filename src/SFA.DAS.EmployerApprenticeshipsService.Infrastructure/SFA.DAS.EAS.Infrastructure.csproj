@@ -298,6 +298,7 @@
     <Compile Include="ExecutionPolicies\IdamsExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\PolicyNameAttribute.cs" />
     <Compile Include="ExecutionPolicies\RequiredPolicyAttribute.cs" />
+    <Compile Include="Extensions\AccountLegalEntityExtensions.cs" />
     <Compile Include="Extensions\EmployerFinancialDbContextExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
