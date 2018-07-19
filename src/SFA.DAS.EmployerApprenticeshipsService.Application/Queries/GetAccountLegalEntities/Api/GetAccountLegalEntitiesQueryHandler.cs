@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api
 
         public async Task<GetAccountLegalEntitiesResponse> Handle(GetAccountLegalEntitiesQuery message)
         {
-            var accountLegalEntitiesCountQuery = _db.Value.AccountLegalEntities.FutureCount();
+            var accountLegalEntitiesCountQuery = _db.Value.AccountLegalEntities.Where(ale => ale.Deleted == null).FutureCount();
 
             var accountLegalEntitiesQuery = _db.Value.AccountLegalEntities
                 .Where(ale => ale.Deleted == null)
