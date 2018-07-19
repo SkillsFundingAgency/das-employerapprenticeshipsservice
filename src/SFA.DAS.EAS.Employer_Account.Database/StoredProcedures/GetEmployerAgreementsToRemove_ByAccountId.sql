@@ -12,13 +12,15 @@ BEGIN
 			le.Code
 	FROM	employer_account.AccountLegalEntity AS ALE
 			JOIN employer_account.Account AS A
-				on A.Id = ALE.AccountId
+				ON A.Id = ALE.AccountId
 			JOIN employer_account.LegalEntity AS LE
-				on LE.Id = ALE.LegalEntityId
-			LEFT JOIN (SELECT TOP 1 Id, StatusId, AccountLegalEntityId FROM employer_account.EmployerAgreement WHERE StatusId = 1) AS Pending
-				on Pending.AccountLegalEntityId = ALE.Id
-			LEFT JOIN (SELECT TOP 1 Id, StatusId, AccountLegalEntityId FROM employer_account.EmployerAgreement WHERE StatusId = 2) AS Signed
-				on Signed.AccountLegalEntityId = ALE.Id
-	WHERE	ALE.AccountId = @accountId; 
+				ON LE.Id = ALE.LegalEntityId
+			LEFT JOIN employer_account.EmployerAgreement AS Pending
+				ON Pending.AccountLegalEntityId = ALE.ID 
+					AND Pending.StatusId = 1 
+			LEFT JOIN employer_account.EmployerAgreement AS Signed
+				ON Signed.AccountLegalEntityId = ALE.ID
+					AND Signed.StatusId = 2
+	WHERE	ALE.AccountId = 6; 
 
 END;
