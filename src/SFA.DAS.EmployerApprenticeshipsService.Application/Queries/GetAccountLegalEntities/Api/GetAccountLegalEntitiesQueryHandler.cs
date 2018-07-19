@@ -27,6 +27,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api
             var accountLegalEntitiesCountQuery = _db.Value.AccountLegalEntities.FutureCount();
 
             var accountLegalEntitiesQuery = _db.Value.AccountLegalEntities
+                .Where(ale => ale.Deleted == null)
                 .Skip(message.PageSize.Value * (message.PageNumber.Value - 1))
                 .Take(message.PageSize.Value)
                 .OrderBy(a => a.Id)
