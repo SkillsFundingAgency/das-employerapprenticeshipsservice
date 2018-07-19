@@ -16,7 +16,8 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 s.With(new ControllerConvention());
             });
 
-            For<ILoggingContext>().Use(c => HttpContext.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContext.Current)));
+ 			For<ILoggingContext>().Use(c => HttpContext.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContext.Current)));
+            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
         }
     }
 }
