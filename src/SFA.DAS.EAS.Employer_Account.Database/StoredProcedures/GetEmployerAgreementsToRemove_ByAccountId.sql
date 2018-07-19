@@ -21,6 +21,7 @@ BEGIN
 			LEFT JOIN employer_account.EmployerAgreement AS Signed
 				ON Signed.AccountLegalEntityId = ALE.ID
 					AND Signed.StatusId = 2
-	WHERE	ALE.AccountId = 6; 
+	WHERE	ALE.Deleted IS NULL 
+			AND ALE.AccountId = @accountId; 
 
 END;
