@@ -12,6 +12,7 @@ using AutoMapper.QueryableExtensions;
 using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.Extensions;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 {

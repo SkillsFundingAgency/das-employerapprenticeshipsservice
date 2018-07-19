@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 
 namespace SFA.DAS.EAS.Infrastructure.Features
 {
@@ -36,7 +37,7 @@ namespace SFA.DAS.EAS.Infrastructure.Features
         private async Task<int> GetMinAgreementVersionAsync(long accountId)
         {
             var versionNumber = await _db.AccountLegalEntities
-                                        .Where(ale => ale.AccountId == accountId)
+                                        .WithSignedOrPendingAgreementsForAccount(accountId)
                                         .MinAsync(ale => ale.SignedAgreementId == null ? 0 : (int) ale.SignedAgreementVersion)
                                         .ConfigureAwait(false);
 

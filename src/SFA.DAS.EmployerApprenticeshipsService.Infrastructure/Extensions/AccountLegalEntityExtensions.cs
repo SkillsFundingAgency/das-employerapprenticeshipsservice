@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using SFA.DAS.EAS.Domain.Models.Account;
 
-namespace SFA.DAS.EAS.Application.Queries.Extensions
+namespace SFA.DAS.EAS.Infrastructure.Extensions
 {
     public static class AccountLegalEntityExtensions
     {

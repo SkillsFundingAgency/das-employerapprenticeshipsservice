@@ -140,6 +140,20 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
         }
 
         [Test]
+        public Task GetLowestSignedAgreementVersionNumberAsync_WhenLegalEntityIsRemoved_ShouldIgnoreLegalEntity()
+        {
+            return RunAsync(
+                f => f
+                    .AddAgreement(1, 1, 1, EmployerAgreementStatus.Signed)
+                    .AddAgreement(1, 2, 2, EmployerAgreementStatus.Signed)
+                    .RemoveAccountLegalEntity(1, 1)
+                    .SetupDb()
+                    .SetupCache(),
+                f => f.GetLowestSignedAgreementVersionNumberAsync(1),
+                (f, r) => r.Should().Be(2));
+        }
+
+        [Test]
         public Task RemoveFromCacheAsync_WhenRemovingAccountDataFromCache_ShouldRemoveVersionNumberFromCache()
         {
             return RunAsync(
@@ -173,6 +187,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
                 .WithAccount(accountId, "ABC123")
                 .WithLegalEntityId(legalEntityId)
                 .WithAgreement(accountId, legalEntityId, templateVersionNumber, status);
+
+            return this;
+        }
+
+        public AgreementServiceTestsFixture RemoveAccountLegalEntity(long accountId, long legalEntityId)
+        {
+            _employerAgreementBuilder
+                .RemoveAccountLegalEntity(accountId, legalEntityId);
 
             return this;
         }

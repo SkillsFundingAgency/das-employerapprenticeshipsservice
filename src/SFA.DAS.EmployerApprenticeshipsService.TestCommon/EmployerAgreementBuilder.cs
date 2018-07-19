@@ -131,6 +131,13 @@ namespace SFA.DAS.EAS.TestCommon
             return WithAgreement(accountId, legalEntityId, agreementVersion, status, out _);
         }
 
+        public EmployerAgreementBuilder RemoveAccountLegalEntity(long accountId, long legalEntityId)
+        {
+            var accountLegalEntity = EnsureAccountLegalEntity(accountId, legalEntityId);
+            accountLegalEntity.Deleted = DateTime.Now;
+            return this;
+        }
+
         public EmployerAgreementBuilder EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities()
         {
             EmployerAgreement FindVersionToUse(AccountLegalEntity ale, EmployerAgreementStatus status)
