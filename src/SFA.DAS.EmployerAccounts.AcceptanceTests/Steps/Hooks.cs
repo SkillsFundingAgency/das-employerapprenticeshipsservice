@@ -111,7 +111,7 @@ namespace SFA.DAS.EmployerAccounts.AcceptanceTests.Steps
         {
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Web")
-                .SetupAzureServiceBusTransport(() => _container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
+                .SetupAzureServiceBusTransport(_container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
                 .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>()
                 .SetupErrorQueue()
                 .SetupHeartbeat()
