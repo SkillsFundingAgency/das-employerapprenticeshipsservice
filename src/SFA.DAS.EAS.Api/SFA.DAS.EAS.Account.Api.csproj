@@ -324,9 +324,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Optimization">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
@@ -351,14 +348,6 @@
     </Reference>
     <Reference Include="WebApi.StructureMap, Version=1.0.21.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WebApi.StructureMap.1.0.21\lib\net462\WebApi.StructureMap.dll</HintPath>
-    </Reference>
-    <Reference Include="WebGrease">
-      <Private>True</Private>
-      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
-    </Reference>
-    <Reference Include="Antlr3.Runtime">
-      <Private>True</Private>
-      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -444,6 +433,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01ac2bc2-ac01-400f-ab8f-548dd5c0ee74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
+      <Project>{8dd6e754-567c-46e3-a071-b1049380ea6c}</Project>
+      <Name>SFA.DAS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
