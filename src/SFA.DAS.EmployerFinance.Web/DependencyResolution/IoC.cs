@@ -18,6 +18,7 @@
 
 namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
 {
+    using SFA.DAS.EmployerFinance.DependenyResolution;
     using StructureMap;
 
     public static class IoC
@@ -26,6 +27,8 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
         {
             return new Container(c =>
             {
+                c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

@@ -1,8 +1,8 @@
-﻿using System.Configuration;
+﻿using SFA.DAS.Configuration;
+using SFA.DAS.Configuration.AzureTableStorage;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.Configuration;
-using SFA.DAS.Configuration.AzureTableStorage;
 
 namespace SFA.DAS.EmployerAccounts.Configuration
 {
@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
             }
         }
 
-        private static string CurrentEnvironmentName
+        public static string CurrentEnvironmentName
         {
             get
             {
