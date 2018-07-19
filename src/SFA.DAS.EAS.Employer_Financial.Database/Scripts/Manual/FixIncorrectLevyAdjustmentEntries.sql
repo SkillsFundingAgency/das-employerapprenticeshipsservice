@@ -47,29 +47,38 @@ BEGIN TRANSACTION
 		AND tl.Amount = 0
 		AND tl.LevyDeclared <> 0) levyAdjustment ON LevyTopUp.submissionId = levyAdjustment.submissionId
 
-	-- UPDATE TRANSACTION LINE AMOUNT
+	-- UPDATE TRANSACTION LINE AMOUNT AND Levy YTD
 	UPDATE TransactionLine
 	SET transactionLine.Amount = levyAdjustment.NewAmount
+	    ,transactionLine.LevyDeclared = levyAdjustment.NewLevyYtd
 	FROM [employer_financial].[TransactionLine] transactionLine
 	INNER JOIN 
 	(SELECT
 		tl.submissionId as submissionId	
-	    ,(ld.LevyDueYTD - ISNULL(ld2.LevyDueYTD, 0)) * 1.1 as NewAmount
+	    ,(ld.LevyDueYTD - ISNULL(ld2.LevyDueYTD, 0)) * ISNULL(ld2.EnglishFraction, 1) * 1.1 as NewAmount
+		,(ld.LevyDueYTD - ISNULL(ld2.LevyDueYTD, 0)) as NewLevyYtd
 	FROM [employer_financial].[LevyDeclaration] ld
 		INNER JOIN [employer_financial].[TransactionLine] tl ON ld.SubmissionId = tl.SubmissionId
 		CROSS APPLY(
-			SELECT TOP(1) * FROM [employer_financial].[LevyDeclaration] 
-			WHERE AccountId = ld.AccountId 
-			AND empRef = ld.empRef
-			AND SubmissionId <> ld.SubmissionId
-			AND PayrollYear = ld.PayrollYear
-			AND SubmissionDate <= ld.SubmissionDate
-			ORDER BY SubmissionDate DESC
+			SELECT TOP(1) levy.*, ldtu.EnglishFraction FROM [employer_financial].[LevyDeclaration] levy
+			INNER JOIN [employer_financial].[GetLevyDeclarationAndTopUp] ldtu ON ldtu.SubmissionId = levy.SubmissionId
+			WHERE levy.AccountId = ld.AccountId 
+			AND levy.empRef = ld.empRef
+			AND levy.SubmissionId <> ld.SubmissionId
+			AND levy.PayrollYear = ld.PayrollYear
+			AND levy.SubmissionDate <= ld.SubmissionDate
+			ORDER BY levy.SubmissionDate DESC
 		) ld2
 		WHERE ld.EndOfYearAdjustment = 1 
 		AND tl.Amount = 0
 		AND tl.LevyDeclared <> 0) levyAdjustment ON transactionLine.submissionId = levyAdjustment.submissionId
 
+	UPDATE TransactionLine
+	SET transactionLine.EnglishFraction = ldtu.EnglishFraction   
+	FROM [employer_financial].[TransactionLine] transactionLine	
+	INNER JOIN [employer_financial].[GetLevyDeclarationAndTopUp] ldtu ON ldtu.SubmissionId = transactionLine.SubmissionId
+	WHERE transactionLine.EnglishFraction IS NULL
+	AND ldtu.EndOfYearAdjustment = 1
 	
 END TRY
 BEGIN CATCH
