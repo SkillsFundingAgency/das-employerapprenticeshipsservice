@@ -1,4 +1,5 @@
 using StructureMap;
+using System.Web;
 
 namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
 {
@@ -12,6 +13,8 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
                 s.With(new ControllerConvention());
             });
+
+            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
         }
     }
 }

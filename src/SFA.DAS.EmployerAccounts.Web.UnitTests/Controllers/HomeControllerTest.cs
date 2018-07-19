@@ -1,6 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authenication;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 {
@@ -11,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         public void Index()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            HomeController controller = new HomeController(Mock.Of<IAuthenticationService>(), Mock.Of<EmployerAccountsConfiguration>());
 
             // Act
             ViewResult result = controller.Index() as ViewResult;
