@@ -28,7 +28,7 @@ AS
 							MAX(CASE WHEN StatusId = 2 THEN AgreementId ELSE NULL END) AS SignedAgreementId,
 							MAX(CASE WHEN StatusId = 2 THEN VersionNumber ELSE NULL END) AS SignedAgreementVersion
 					FROM	(
-								-- This subqeury will return at most two rows - up to 1 pending row and upto 1 signed row. If there are more than one then the highest version wins
+								-- This subqeury will return at most two rows - up to 1 pending row and up to 1 signed row. If there are more than one then the highest version wins
 								SELECT	EA.StatusId, ROW_NUMBER() OVER(PARTITION BY ALE.Id, StatusId order by VersionNumber desc) AS RowNumber, VersionNumber, EA.Id as AgreementId, ALE.Id as AccountLegalEntityId
 								FROM	employer_account.AccountLegalEntity AS ALE
 										JOIN employer_account.EmployerAgreement AS EA
