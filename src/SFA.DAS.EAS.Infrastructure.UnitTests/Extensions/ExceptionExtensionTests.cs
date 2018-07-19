@@ -4,6 +4,7 @@ using System.Net;
 using System.Web;
 using NUnit.Framework;
 using SFA.DAS.EAS.Infrastructure.Extensions;
+using SFA.DAS.Exceptions;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Extensions
 {
