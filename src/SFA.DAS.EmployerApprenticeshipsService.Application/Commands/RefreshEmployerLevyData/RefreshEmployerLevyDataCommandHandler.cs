@@ -89,14 +89,15 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
         private DasDeclaration[] FilterDuplicateHmrcDeclarations(string empRef,
             DasDeclaration[] declarations)
         { 
-            var duplicateIds = declarations.GroupBy(d => d.SubmissionId).Where(g => g.Count() > 1)
-                .Select(s => s.First().SubmissionId).ToList();
+            var duplicateIds = declarations.GroupBy(d => d.Id).Where(g => g.Count() > 1)    
+                .Select(s => s.First().Id).ToList();
 
-            var submissionIds = string.Join(", ", duplicateIds);
+            if (duplicateIds.Any())
+            {
+                _logger.Info($"PayeScheme '{empRef}' has duplicate submission id(s) from Hmrc = '{string.Join(", ", duplicateIds)}'");
+            }
 
-            _logger.Info($"PayeScheme '{empRef}' has duplicate submission id(s) from Hmrc = '{submissionIds}'");
-
-            return declarations.DistinctBy(x => x.SubmissionId).ToArray(); 
+            return declarations.DistinctBy(x => x.Id).ToArray(); 
         } 
  
         private async Task ProcessEndOfYearAdjustmentDeclarations(IEnumerable<DasDeclaration> declarations, EmployerLevyData employerLevyData)
