@@ -285,9 +285,14 @@
     <Compile Include="DbCleanup\UpdateTransactionLine.cs" />
     <Compile Include="DbSetStub.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
+    <Compile Include="DependencyResolution\EmployerAccountPayeControllerRegistry.cs" />
+    <Compile Include="DependencyResolution\EmployerFinanceDbContextRegistry.cs" />
+    <Compile Include="DependencyResolution\EmployerAccountsDbContextRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\LevyWorkerDefaultRegistry.cs" />
+    <Compile Include="DependencyResolution\ServiceLocator.cs" />
     <Compile Include="Extensions\DateTimeExtention.cs" />
+    <Compile Include="Extensions\UserExtensions.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="FluentTestFixture.cs" />
@@ -308,6 +313,11 @@
     <Compile Include="ScenarioCommonSteps\AccountSteps.cs" />
     <Compile Include="ScenarioCommonSteps\LevyWorkerSteps.cs" />
     <Compile Include="ScenarioCommonSteps\UserSteps.cs" />
+    <Compile Include="Steps\AccountSteps.cs" />
+    <Compile Include="Steps\MembershipSteps.cs" />
+    <Compile Include="Steps\ObjectContext.cs" />
+    <Compile Include="Steps\PayeSchemeSteps.cs" />
+    <Compile Include="Steps\UserSteps.cs" />
     <Compile Include="TestModels\TestAccount.cs" />
     <Compile Include="TestModels\TestUser.cs" />
   </ItemGroup>
@@ -328,10 +338,17 @@
       <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.NServiceBus\SFA.DAS.NServiceBus.csproj">
+      <Project>{cbdfa38e-cd77-49bc-b6f4-a07f6e11dffc}</Project>
+      <Name>SFA.DAS.NServiceBus</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SpecFlow.2.3.1\build\SpecFlow.targets" Condition="Exists('..\packages\SpecFlow.2.3.1\build\SpecFlow.targets')" />

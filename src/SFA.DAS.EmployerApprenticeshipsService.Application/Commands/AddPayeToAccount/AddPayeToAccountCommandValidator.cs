@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -27,19 +28,29 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
             if (validationResult.IsValid())
             {
-                var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
+                try
+                {
+                    var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
 
-                if (member == null)
-                {
-                    validationResult.AddError(nameof(member),"Unauthorised: User not connected to account");
-                }
-                else
-                {
-                    if (member.RoleId != (short) Role.Owner)
+                    if (member == null)
                     {
-                        validationResult.IsUnauthorized = true;
+                        validationResult.AddError(nameof(member), "Unauthorised: User not connected to account");
                     }
+                    else
+                    {
+                        if (member.RoleId != (short)Role.Owner)
+                        {
+                            validationResult.IsUnauthorized = true;
+                        }
+                    }
+
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+
             }
 
             return validationResult;
