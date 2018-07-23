@@ -132,7 +132,7 @@ namespace SFA.DAS.EAS.Web
             var container = StructuremapMvc.StructureMapDependencyScope.Container;
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Web")
-                .SetupAzureServiceBusTransport(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
+                .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
                 .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>()
                 .SetupErrorQueue()
                 .SetupInstallers()
