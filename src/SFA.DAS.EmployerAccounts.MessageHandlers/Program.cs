@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
             var container = IoC.Initialize();
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.MessageHandlers")
-                .SetupAzureServiceBusTransport(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
+                .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
                 .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>()
                 .SetupErrorQueue()
                 .SetupInstallers()
