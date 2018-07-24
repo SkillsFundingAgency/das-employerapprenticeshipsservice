@@ -26,6 +26,11 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails;
 using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.EAS.Application.Extensions;
+using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntitiy;
+using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
+using SFA.DAS.EAS.Application.Queries.GetOrganisationById;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.EAS.Web.Validation;
 using SFA.DAS.HashingService;
 
@@ -344,21 +349,32 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string accountLegalEntityPublicHashedId)
+        public async Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string accountLegalEntityPublicHashedId)
         {
+            var currentDetails = await Mediator.SendAsync(new GetAccountLegalEntityRequest
+            {
+                AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(accountLegalEntityPublicHashedId)
+            });
+
+            var refreshedDetails = await Mediator.SendAsync(new GetOrganisationByIdRequest
+            {
+                Identifier = currentDetails.AccountLegalEntity.Identifier,
+                OrganisationType = currentDetails.AccountLegalEntity.OrganisationType
+            });
+
             var result = new OrchestratorResponse<ReviewOrganisationAddressViewModel>
             {
                 Data = new ReviewOrganisationAddressViewModel
                 {
                     AccountLegalEntityPublicHashedId = accountLegalEntityPublicHashedId,
-                    OrganisationName = "current name placeholder",
-                    OrganisationAddress = "current address placeholder, High Street, Newtown, NT1 1XX",
-                    RefreshedName = "refreshed name placeholder",
-                    RefreshedAddress = "refreshed address placeholder, High Street, Newtown, NT1 1XX"
+                    OrganisationName = currentDetails.AccountLegalEntity.Name,
+                    OrganisationAddress = currentDetails.AccountLegalEntity.Address,
+                    RefreshedName = refreshedDetails.Organisation.Name,
+                    RefreshedAddress = refreshedDetails.Organisation.Address.FormatAddress()
                 }
             };
 
-            return Task.FromResult(result);
+            return result;
         }
 
         public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 
 namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
@@ -19,5 +20,6 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task RemoveLegalEntityFromAccount(long agreementId);
         Task<List<RemoveEmployerAgreementView>> GetEmployerAgreementsToRemove(long accountId);
         Task EvaluateEmployerLegalEntityAgreementStatus(long accountId, long legalEntityId);
+        Task<AccountLegalEntityModel> GetAccountLegalEntity(long accountLegalEntityId);
     }
 }

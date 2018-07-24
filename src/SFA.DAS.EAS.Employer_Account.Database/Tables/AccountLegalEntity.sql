@@ -28,6 +28,6 @@ GO
 CREATE UNIQUE INDEX [IX_AccountLegalEntity_AccountIdLegalEntityId] ON [employer_account].[AccountLegalEntity] (AccountId, LegalEntityId);
 GO
 
-CREATE UNIQUE INDEX [IX_AccountLegalEntity_PublicHashedId] ON [employer_account].[AccountLegalEntity] ([PublicHashedId]) WHERE PublicHashedId IS NOT NULL;
+CREATE UNIQUE INDEX [IX_AccountLegalEntity_PublicHashedId] ON [employer_account].[AccountLegalEntity] ([PublicHashedId]) WHERE PublicHashedId IS NOT NULL AND Deleted IS NOT NULL;
 GO
 

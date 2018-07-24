@@ -18,7 +18,7 @@ BEGIN
 	IF @accountLegalEntityId IS NULL
 	BEGIN
 		INSERT INTO [employer_account].[AccountLegalEntity](Name, Address, AccountId, LegalEntityId, Created) 
-		VALUES (@employerName, @employerRegisteredAddress, @accountId, @legalEntityId, GetDate());
+		VALUES (@employerName, @employerRegisteredAddress, @accountId, @legalEntityId, GetUtcDate());
 
 		SELECT	@accountLegalEntityId = SCOPE_IDENTITY(),
 				@accountLegalEntityCreated = 1;

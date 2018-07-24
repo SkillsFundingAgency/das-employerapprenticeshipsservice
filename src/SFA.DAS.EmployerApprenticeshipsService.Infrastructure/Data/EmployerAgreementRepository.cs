@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.Sql.Client;
 using SFA.DAS.NLog.Logger;
 
@@ -14,19 +15,20 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRepository
     {
-        public EmployerAgreementRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger) 
+        public EmployerAgreementRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         {
         }
 
-        public async Task<List<AccountSpecificLegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId, bool signedOnly)
+        public async Task<List<AccountSpecificLegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId,
+            bool signedOnly)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
 
                 parameters.Add("@accountId", accountId, DbType.Int64);
-                
+
                 var sql = @"
                         SELECT	le.Id, le.Code, le.DateOfIncorporation, le.PublicSectorDataSource, le.Sector, le.Source, le.Status,
 		                        ale.Name, ale.Address, ale.SignedAgreementVersion, ale.SignedAgreementId, ale.PendingAgreementVersion, ale.PendingAgreementId, ale.PublicHashedId as AccountLegalEntityPublicHashedId
@@ -75,7 +77,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
                 parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@templateId", templateId, DbType.Int32);
-                parameters.Add("@employerAgreementId", templateId, DbType.Int64,ParameterDirection.InputOutput);
+                parameters.Add("@employerAgreementId", templateId, DbType.Int64, ParameterDirection.InputOutput);
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
@@ -115,7 +117,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@signedById", agreement.SignedById, DbType.Int64);
                 parameters.Add("@signedByName", agreement.SignedByName, DbType.String);
                 parameters.Add("@signedDate", agreement.SignedDate, DbType.DateTime);
-                
+
                 var result = await c.ExecuteAsync(
                     sql: "[employer_account].[SignEmployerAgreement]",
                     param: parameters,
@@ -148,7 +150,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return result.FirstOrDefault();
         }
-        
+
         public async Task RemoveLegalEntityFromAccount(long agreementId)
         {
             await WithConnection(async c =>
@@ -161,7 +163,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     sql: "[employer_account].[RemoveLegalEntityFromAccount]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
-                
+
             });
         }
 
@@ -196,6 +198,34 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
+        }
+
+        public async Task<AccountLegalEntityModel> GetAccountLegalEntity(long accountLegalEntityId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", accountLegalEntityId, DbType.Int64);
+
+                return await c.QueryAsync<AccountLegalEntityModel>(
+                    sql: @"
+                    SELECT  ALE.Id as AccountLegalEntityId, 
+                            LE.Id AS LegalEntityId, 
+                            ALE.Name, 
+                            ALE.PublicHashedId AS AccountLegalEntityPublicHashedId, 
+                            ALE.Name, 
+                            ALE.Address, 
+                            LE.Source AS OrganisationType, 
+                            LE.Code AS Identifier 
+                    FROM    [employer_account].[AccountLegalEntity] AS ALE 
+                            JOIN [employer_account].[LegalEntity] AS LE
+                                ON LE.Id = ALE.LegalEntityId
+                        WHERE ALE.Id = @Id;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result.SingleOrDefault();
         }
     }
 }

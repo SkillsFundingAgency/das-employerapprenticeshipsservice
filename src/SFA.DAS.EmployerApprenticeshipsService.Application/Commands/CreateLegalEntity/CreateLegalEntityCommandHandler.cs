@@ -5,7 +5,6 @@ using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
-using SFA.DAS.EAS.Application.Commands.SetAccountLegalEntityAgreementStatus;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Extensions;
@@ -31,7 +30,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         private readonly IMessagePublisher _messagePublisher;
         private readonly IHashingService _hashingService;
         private readonly IAgreementService _agreementService;
-
+        private readonly IEmployerAgreementRepository _employerAgreementRepository;
 
         public CreateLegalEntityCommandHandler(
             IAccountRepository accountRepository, 
@@ -41,7 +40,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             ILegalEntityEventFactory legalEntityEventFactory,
             IMessagePublisher messagePublisher,
             IHashingService hashingService,
-            IAgreementService agreementService)
+            IAgreementService agreementService,
+            IEmployerAgreementRepository employerAgreementRepository)
         {
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
@@ -51,6 +51,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             _messagePublisher = messagePublisher;
             _hashingService = hashingService;
             _agreementService = agreementService;
+            _employerAgreementRepository = employerAgreementRepository;
         }
 
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
@@ -116,11 +117,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
         private Task EvaluateEmployerLegalEntityAgreementStatus(long accountId, long legalEntityId)
         {
-            return _mediator.SendAsync(new SetAccountLegalEntityAgreementStatusCommand
-            {
-                AccountId = accountId,
-                LegalEntityId = legalEntityId
-            });
+            return _employerAgreementRepository.EvaluateEmployerLegalEntityAgreementStatus(accountId, legalEntityId);
         }
 
         private async Task CreateAuditEntries(MembershipView owner, EmployerAgreementView agreementView)
