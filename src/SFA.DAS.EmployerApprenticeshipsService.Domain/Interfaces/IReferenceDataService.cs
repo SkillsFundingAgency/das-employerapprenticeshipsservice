@@ -1,6 +1,10 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
+using SFA.DAS.ReferenceData.Types.DTO;
+using Charity = SFA.DAS.EAS.Domain.Models.ReferenceData.Charity;
+using OrganisationType = SFA.DAS.ReferenceData.Types.DTO.OrganisationType;
+using PublicSectorOrganisation = SFA.DAS.EAS.Domain.Models.ReferenceData.PublicSectorOrganisation;
 
 namespace SFA.DAS.EAS.Domain.Interfaces
 {
@@ -23,6 +27,8 @@ namespace SFA.DAS.EAS.Domain.Interfaces
             string searchTerm, 
             int pageNumber = 1, 
             int pageSize = 20, 
-            OrganisationType? organisationType = null);
+            Common.Domain.Types.OrganisationType? organisationType = null);
+
+        Task<Organisation> GetLatestDetails(OrganisationType organisationType, string identifier);
     }
 }

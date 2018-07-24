@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SFA.DAS.ReferenceData.Api.Client.Dto;
+using SFA.DAS.ReferenceData.Types.DTO;
 
 namespace SFA.DAS.EAS.Infrastructure.Mapping.Profiles
 {

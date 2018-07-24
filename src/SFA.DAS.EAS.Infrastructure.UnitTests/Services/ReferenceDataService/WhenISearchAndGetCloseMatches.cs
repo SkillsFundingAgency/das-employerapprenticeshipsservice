@@ -8,7 +8,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.ReferenceData.Api.Client;
 using SFA.DAS.EAS.Infrastructure.Caching;
-using Organisation = SFA.DAS.ReferenceData.Api.Client.Dto.Organisation;
+using SFA.DAS.ReferenceData.Types.DTO;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
 {
@@ -97,9 +97,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             Assert.AreEqual("SHOULD BE AT END", searchResults.Data.ToList()[i].Name);
         }
 
-        private static ReferenceData.Api.Client.Dto.Address ConstructStandardAddressDto()
+        private static Address ConstructStandardAddressDto()
         {
-            return new ReferenceData.Api.Client.Dto.Address
+            return new Address
             {
                 Line1 = "test 1",
                 Line2 = "test 2",
@@ -121,8 +121,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "Talmud Torah Bobov Primary School",
                     RegistrationDate = null,
                     Sector = "Other independent school",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.EducationOrganisation
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.EducationOrganisation
                 },
                 new Organisation
                 {
@@ -131,8 +131,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "Ling Bob Junior, Infant and Nursery School",
                     RegistrationDate = null,
                     Sector = "Community school",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.EducationOrganisation
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.EducationOrganisation
                 },
                 new Organisation
                 {
@@ -141,8 +141,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "Bobbing Village School",
                     RegistrationDate = null,
                     Sector = "Community school",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.EducationOrganisation
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.EducationOrganisation
                 },
                 new Organisation
                 {
@@ -151,8 +151,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "Ling Bob Nursery School",
                     RegistrationDate = null,
                     Sector = "Local authority nursery school",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.EducationOrganisation
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.EducationOrganisation
                 },
                 new Organisation
                 {
@@ -161,8 +161,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "Bnos Zion of Bobov",
                     RegistrationDate = null,
                     Sector = "Other independent school",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.EducationOrganisation
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.EducationOrganisation
                 },
                 new Organisation
                 {
@@ -171,8 +171,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "Bobbing Village School",
                     RegistrationDate = null,
                     Sector = "Academy converter",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.EducationOrganisation
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.EducationOrganisation
                 },
                 new Organisation
                 {
@@ -181,8 +181,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "Bobby Moore School",
                     RegistrationDate = null,
                     Sector = "Free schools",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.EducationOrganisation
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.EducationOrganisation
                 },
                 new Organisation
                 {
@@ -191,8 +191,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "Bobby Moore Academy",
                     RegistrationDate = null,
                     Sector = "Free schools",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.EducationOrganisation
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.EducationOrganisation
                 },
                 new Organisation
                 {
@@ -201,8 +201,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "BOB CARTER MEMORIAL YOUTH AND LEISURE CENTRE TRUST",
                     RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
                     Sector = "Free schools",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.Charity
                 },
                 new Organisation
                 {
@@ -211,8 +211,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "BOB",
                     RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
                     Sector = "Free schools",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.Charity
                 },
                 //THIS MIMICS AN INCORRECT ENTRY BEING RETURNED FROM SERVICE
                 new Organisation
@@ -222,8 +222,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "SHOULD BE AT END",
                     RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
                     Sector = "Free schools",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.Charity
                 },
                 new Organisation
                 {
@@ -232,8 +232,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "BOB LIMITED",
                     RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
                     Sector = "Free schools",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.Charity
                 },
                 new Organisation
                 {
@@ -242,8 +242,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "BOB LTD",
                     RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
                     Sector = "Free schools",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.Charity
                 },
                 new Organisation
                 {
@@ -252,8 +252,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "BOB LTD.",
                     RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
                     Sector = "Free schools",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.Charity
                 },
                 new Organisation
                 {
@@ -262,8 +262,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "BOB PLC.",
                     RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
                     Sector = "Free schools",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.Charity
                 },
                 new Organisation
                 {
@@ -272,8 +272,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                     Name = "BOB PLC",
                     RegistrationDate = DateTime.Parse("02/09/1977 00:00:00"),
                     Sector = "Free schools",
-                    SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.None,
-                    Type = ReferenceData.Api.Client.Dto.OrganisationType.Charity
+                    SubType = OrganisationSubType.None,
+                    Type = OrganisationType.Charity
                 }
 
             };

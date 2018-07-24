@@ -10,7 +10,7 @@ using FluentAssertions;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Infrastructure.Caching;
-using SFA.DAS.ReferenceData.Api.Client.Dto;
+using SFA.DAS.ReferenceData.Types.DTO;
 using OrganisationType = SFA.DAS.Common.Domain.Types.OrganisationType;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
         private Infrastructure.Services.ReferenceDataService _referenceDataService;
         private Mock<IMapper> _mapper;
         private Mock<IInProcessCache> _inProcessCache;
-        private ReferenceData.Api.Client.Dto.Organisation _expectedOrganisation;
+        private Organisation _expectedOrganisation;
 
         [SetUp]
         public void Arrange()
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             _expectedOrganisation = ArrangeOrganisation();
             _apiClient.Setup(x => x.SearchOrganisations(expectedSearchTerm, 500))
                 .ReturnsAsync(
-                    new List<ReferenceData.Api.Client.Dto.Organisation>
+                    new List<Organisation>
                     {
                         _expectedOrganisation
                     }
@@ -97,7 +97,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
         {
             //Arrange
             var expectedSearchTerm = "Some Org";
-            var organisations = new List<ReferenceData.Api.Client.Dto.Organisation>();
+            var organisations = new List<Organisation>();
             for (var i = 0; i < 50; i++)
             {
                 organisations.Add(ArrangeOrganisation());
@@ -177,7 +177,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
         private async Task<PagedResponse<OrganisationName>> ArrangePagedResponse(int OrganisationCount, int PageNumberToView, int PageSize)
         {
             var expectedSearchTerm = "Some Org";
-            var organisations = new List<ReferenceData.Api.Client.Dto.Organisation>();
+            var organisations = new List<Organisation>();
             for (var i = 0; i < OrganisationCount; i++)
             {
                 organisations.Add(ArrangeOrganisation());
@@ -200,13 +200,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
         public async Task AndAnOrganisationTypeIsProvidedThenOnlyOrganisationsOfThatTypeAreReturned(OrganisationType? organisationType, int expectedResults)
         {
             var expectedSearchTerm = "Some Org";
-            var organisations = new List<ReferenceData.Api.Client.Dto.Organisation>();
-            organisations.Add(ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType.Charity));
-            organisations.Add(ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType.Company));
-            organisations.Add(ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType.Company));
-            organisations.Add(ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType.PublicSector));
-            organisations.Add(ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType.PublicSector));
-            organisations.Add(ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType.EducationOrganisation));
+            var organisations = new List<Organisation>();
+            organisations.Add(ArrangeOrganisation(ReferenceData.Types.DTO.OrganisationType.Charity));
+            organisations.Add(ArrangeOrganisation(ReferenceData.Types.DTO.OrganisationType.Company));
+            organisations.Add(ArrangeOrganisation(ReferenceData.Types.DTO.OrganisationType.Company));
+            organisations.Add(ArrangeOrganisation(ReferenceData.Types.DTO.OrganisationType.PublicSector));
+            organisations.Add(ArrangeOrganisation(ReferenceData.Types.DTO.OrganisationType.PublicSector));
+            organisations.Add(ArrangeOrganisation(ReferenceData.Types.DTO.OrganisationType.EducationOrganisation));
             _apiClient.Setup(x => x.SearchOrganisations(expectedSearchTerm, 500)).ReturnsAsync(organisations);
 
             //Act
@@ -215,13 +215,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             Assert.AreEqual(expectedResults, actual.Data.Count);
         }
 
-        private static ReferenceData.Api.Client.Dto.Organisation ArrangeOrganisation(ReferenceData.Api.Client.Dto.OrganisationType organisationType = ReferenceData.Api.Client.Dto.OrganisationType.Company)
+        private static Organisation ArrangeOrganisation(ReferenceData.Types.DTO.OrganisationType organisationType = ReferenceData.Types.DTO.OrganisationType.Company)
         {
-            return new ReferenceData.Api.Client.Dto.Organisation
+            return new Organisation
             {
                 Name = "Company Name",
                 Type = organisationType,
-                Address = new ReferenceData.Api.Client.Dto.Address
+                Address = new Address
                 {
                     Line1 = "test 1",
                     Line2 = "test 2",
@@ -233,7 +233,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
                 Code = "ABC123",
                 RegistrationDate = new DateTime(2016, 10, 15),
                 Sector = "sector",
-                SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.Police
+                SubType = OrganisationSubType.Police
             };
         }
     }
