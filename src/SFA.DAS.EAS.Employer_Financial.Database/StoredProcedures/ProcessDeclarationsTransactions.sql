@@ -72,7 +72,7 @@ select mainUpdate.* from
 			x.SubmissionId as SubmissionId,
 			x.SubmissionDate as TransactionDate,
 			1 as TransactionType,
-			x.LevyDeclaredInMonth as LevyDeclared,
+			x.EndOfYearAdjustmentAmount * -1 as LevyDeclared,
 			((x.EndOfYearAdjustmentAmount * ISNULL(x.EnglishFraction,1)) - ldt.Amount) * -1 as Amount,
 			x.EmpRef as EmpRef,
 			null as PeriodEnd,
