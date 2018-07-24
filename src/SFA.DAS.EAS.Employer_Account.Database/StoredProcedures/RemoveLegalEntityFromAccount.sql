@@ -16,7 +16,7 @@ BEGIN
 	WHERE	AccountLegalEntityId = @accountLegalEntityId
 
 	UPDATE	[employer_account].[AccountLegalEntity] 
-	SET		Deleted = GetDate()
+	SET		Deleted = GetUtcDate()
 	WHERE	id = @accountLegalEntityId
 
 END;

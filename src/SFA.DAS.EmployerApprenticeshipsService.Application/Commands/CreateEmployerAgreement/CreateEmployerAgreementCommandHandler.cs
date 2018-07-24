@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Commands.SetAccountLegalEntityAgreementStatus;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -57,11 +56,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreement
 
         private Task SetAccountLegalEntityAgreementStatus(long accountId, long legalEntityId)
         {
-            return _mediator.SendAsync(new SetAccountLegalEntityAgreementStatusCommand
-            {
-                AccountId = accountId,
-                LegalEntityId = legalEntityId
-            });
+            return _employerAgreementRepository.EvaluateEmployerLegalEntityAgreementStatus(accountId, legalEntityId);
         }
     }
 }

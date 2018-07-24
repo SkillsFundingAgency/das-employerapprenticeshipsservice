@@ -36,7 +36,7 @@ BEGIN
 						Pending.AgreementId, 
 						bak.AccountId, 
 						bak.LegalEntityId, 
-						GetDate()
+						GetUtcDate()
 				FROM	(SELECT Distinct AccountId, LegalEntityId, Name, RegisteredAddress FROM employer_account.EmployerAgreement_Backup) AS bak
 						JOIN employer_account.LegalEntity AS LE
 							ON LE.Id = bak.LegalEntityId

@@ -262,6 +262,7 @@
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\Features\FeatureType.cs" />
     <Compile Include="Models\IEntity.cs" />
+    <Compile Include="Models\Organisation\AccountLegalEntityModel.cs" />
     <Compile Include="Models\Organisation\Address.cs" />
     <Compile Include="Models\Payments\Payment.cs" />
     <Compile Include="Models\Payments\PeriodEnd.cs" />

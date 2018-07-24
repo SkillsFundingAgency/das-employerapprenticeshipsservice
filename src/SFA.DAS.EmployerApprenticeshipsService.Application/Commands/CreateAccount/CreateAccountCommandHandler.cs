@@ -5,7 +5,6 @@ using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
-using SFA.DAS.EAS.Application.Commands.SetAccountLegalEntityAgreementStatus;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Hashing;
@@ -37,6 +36,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
         private readonly IMembershipRepository _membershipRepository;
+        private readonly IEmployerAgreementRepository _employerAgreementRepository;
 
         public CreateAccountCommandHandler(
             IAccountRepository accountRepository, 
@@ -49,7 +49,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IAccountEventFactory accountEventFactory, 
             IRefreshEmployerLevyService refreshEmployerLevyService,
             IMembershipRepository membershipRepository,
-            IHashingService accountLegalEntityHashingService)
+            IHashingService accountLegalEntityHashingService,
+            IEmployerAgreementRepository employerAgreementRepository)
         {
             _accountRepository = accountRepository;
             _messagePublisher = messagePublisher;
@@ -63,6 +64,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _refreshEmployerLevyService = refreshEmployerLevyService;
             _membershipRepository = membershipRepository;
             _accountLegalEntityHashingService = accountLegalEntityHashingService;
+            _employerAgreementRepository = employerAgreementRepository;
         }
 
         public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
@@ -114,11 +116,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private Task SetAccountLegalEntityAgreementStatus(long accountId, long legalEntityId)
         {
-            return _mediator.SendAsync(new SetAccountLegalEntityAgreementStatusCommand
-            {
-                AccountId = accountId,
-                LegalEntityId = legalEntityId
-            });
+            return _employerAgreementRepository.EvaluateEmployerLegalEntityAgreementStatus(accountId, legalEntityId);
         }
 
         private Task PublishAgreementCreatedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, string userRef)
