@@ -294,9 +294,11 @@
     <Reference Include="SFA.DAS.Providers.Api.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.11.39\lib\net462\SFA.DAS.Providers.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.33424, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.33424\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.1.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.1.21\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.ReferenceData.Types, Version=1.1.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.1.21\lib\net45\SFA.DAS.ReferenceData.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
