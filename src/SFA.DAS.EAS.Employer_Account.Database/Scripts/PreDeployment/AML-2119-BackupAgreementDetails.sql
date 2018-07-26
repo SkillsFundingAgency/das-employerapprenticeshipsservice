@@ -16,6 +16,8 @@ ELSE
 BEGIN
 	BEGIN TRY
 
+		PRINT '>>TranCount:' + convert(varchar(10), @@TranCount);
+
 		BEGIN TRANSACTION;
 		PRINT 'The EmployerAgreement table has not been updated yet - creating agreement backup';
 
@@ -75,6 +77,8 @@ BEGIN
 
 		COMMIT TRANSACTION;
 
+		PRINT '<<OK: TranCount:' + convert(varchar(10), @@TranCount);
+
 	END TRY
 	BEGIN CATCH
 
@@ -86,6 +90,8 @@ BEGIN
 			PRINT 'Rolling back transaction';
 			ROLLBACK TRAN;
 		END;
+
+		PRINT '<<Error: TranCount:' + convert(varchar(10), @@TranCount);
 
 		THROW;
 
