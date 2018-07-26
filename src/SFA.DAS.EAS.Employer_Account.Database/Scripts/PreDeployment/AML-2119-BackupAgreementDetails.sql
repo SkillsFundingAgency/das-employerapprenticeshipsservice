@@ -61,9 +61,6 @@ BEGIN
 
 		TRUNCATE TABLE employer_account.EmployerAgreement;
 
-		ALTER TABLE employer_account.LegalEntity 
-			DROP COLUMN Name, RegisteredAddress;
-
 		PRINT 'Cleared down the EmployerAgreement table';
 
 		IF @fkeyExists = 1
