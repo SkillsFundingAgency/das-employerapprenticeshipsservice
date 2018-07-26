@@ -17,8 +17,6 @@ BEGIN
 	BEGIN TRY
 
 		PRINT '>>TranCount:' + convert(varchar(10), @@TranCount);
-
-		BEGIN TRANSACTION;
 		PRINT 'The EmployerAgreement table has not been updated yet - creating agreement backup';
 
 		IF(OBJECT_ID('employer_account.EmployerAgreement_Backup') IS NOT NULL)
@@ -38,6 +36,8 @@ BEGIN
 			DROP TABLE employer_account.EmployerAgreement_Backup;
 		END
 		
+
+		BEGIN TRANSACTION;
 
 		DECLARE @SQL AS NVARCHAR(4000);
 
