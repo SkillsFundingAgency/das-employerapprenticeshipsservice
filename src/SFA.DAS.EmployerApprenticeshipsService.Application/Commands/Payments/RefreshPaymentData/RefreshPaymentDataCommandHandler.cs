@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Provider.Events.Api.Types;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -83,7 +84,9 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 
             _logger.Info($"CreatePayments for new payments AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
 
-            await _dasLevyRepository.CreatePayments(newPayments);
+            var newNonFullyFundedPayments = newPayments.Where(p => p.FundingSource != FundingSource.FullyFundedSfa);
+
+            await _dasLevyRepository.CreatePayments(newNonFullyFundedPayments);
             await _mediator.PublishAsync(new ProcessPaymentEvent { AccountId = message.AccountId });
 
             foreach (var payment in newPayments)

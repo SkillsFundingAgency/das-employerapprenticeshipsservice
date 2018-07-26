@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Provider.Events.Api.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -217,6 +218,32 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             //Assert
             _dasLevyRepository.Verify(x => x.CreatePayments(It.Is<IEnumerable<PaymentDetails>>(s =>
                 s.Any(p => p.Id.Equals(newPaymentGuid)) &&
+                s.Count() == 1)));
+
+            _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Once);
+        }
+
+        [Test]
+        public async Task ShouldOnlyAddNonFullyFundedPayments()
+        {
+            //Arrange
+            var newPaymentGuid = Guid.NewGuid();
+            var fullyFundedPaymentGuid = Guid.NewGuid();
+            _paymentDetails = new List<PaymentDetails>
+            {
+                new PaymentDetails { Id = newPaymentGuid, FundingSource = FundingSource.Levy},
+                new PaymentDetails { Id = fullyFundedPaymentGuid, FundingSource = FundingSource.FullyFundedSfa}
+            };
+
+            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
+                .ReturnsAsync(_paymentDetails);
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _dasLevyRepository.Verify(x => x.CreatePayments(It.Is<IEnumerable<PaymentDetails>>(s =>
+                s.All(p => !p.Id.Equals(fullyFundedPaymentGuid)) &&
                 s.Count() == 1)));
 
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Once);
