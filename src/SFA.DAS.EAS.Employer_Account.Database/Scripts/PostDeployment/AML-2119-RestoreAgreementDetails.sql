@@ -22,6 +22,7 @@ BEGIN
 			RETURN;
 		END;
 
+		PRINT '>>TranCount:' + convert(varchar(10), @@TranCount);
 
 		BEGIN TRAN;
 
@@ -76,6 +77,8 @@ BEGIN
 
 		COMMIT TRAN;
 
+		PRINT '<<OK: TranCount:' + convert(varchar(10), @@TranCount);
+
 		PRINT 'Restore agreement links successful';
 	
 	END TRY
@@ -88,6 +91,8 @@ BEGIN
 			PRINT 'Rolling back transaction';
 			ROLLBACK TRAN;
 		END;
+
+		PRINT '<<Error: TranCount:' + convert(varchar(10), @@TranCount);
 
 		THROW;
 	END CATCH;
