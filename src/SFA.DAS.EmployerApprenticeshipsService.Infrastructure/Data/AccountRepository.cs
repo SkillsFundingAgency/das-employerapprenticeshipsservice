@@ -289,12 +289,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<Dictionary<long, string>> GetAccountNames(IEnumerable<long> accountIds)
         {
-            var result = await WithConnection(async c =>
-            {
-                return await c.QueryAsync<AccountNameItem>(
-                     "SELECT Id, Name FROM [employer_account].[Account] WHERE Id IN @accountIds"
-                    , new { accountIds = accountIds });
-            });
+            var result = await WithConnection(async c => await c.QueryAsync<AccountNameItem>(
+                "SELECT Id, Name FROM [employer_account].[Account] WHERE Id IN @accountIds"
+                , new { accountIds = accountIds }));
 
             return result.ToDictionary(data => data.Id, data => data.Name);
         }
@@ -320,6 +317,25 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public Task UpdateAccountLegalEntityPublicHashedId(long accountLegalEntityId)
         {
             return WithTransaction( (c,t) => UpdateAccountLegalEntityPublicHashedIdInternal(c, t, accountLegalEntityId));
+        }
+
+        public async Task<long[]> GetAccountLegalEntitiesWithoutPublicHashId(long firstId, int count)
+        {
+            return await WithConnection(async c =>
+            {
+                var query = await c.QueryAsync<long>(
+                    sql: @"
+                        SELECT  TOP (@count) Id 
+                        FROM    [employer_account].[AccountLegalEntity] 
+                        WHERE   Deleted IS NULL 
+                                AND PublicHashedId IS NULL 
+                                AND Id >= @firstId 
+                        ORDER BY Id ASC",
+                    param: new {@count, @firstId},
+                    commandType: CommandType.Text);
+                
+                return query.ToArray();
+            });
         }
 
         private Task UpdateAccountLegalEntityPublicHashedIdInternal(IDbConnection connection, IDbTransaction transaction, long accountLegalEntityId)

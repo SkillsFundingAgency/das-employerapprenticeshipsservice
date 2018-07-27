@@ -271,6 +271,9 @@
     <Compile Include="Jobs\DemoJobs\ListTriggeredJobs.cs" />
     <Compile Include="Jobs\DemoJobs\Test2.cs" />
     <Compile Include="Jobs\DemoJobs\TickTockJob.cs" />
+    <Compile Include="Jobs\SetAccountLegalEntityPublicHashIds\SetAccountLegalEntityPublicHashIdsIdProvider.cs" />
+    <Compile Include="Jobs\SetAccountLegalEntityPublicHashIds\SetAccountLegalEntityPublicHashIdsJob.cs" />
+    <Compile Include="Jobs\SetAccountLegalEntityPublicHashIds\SetAccountLegalEntityPublicHashIdsProcessor.cs" />
     <Compile Include="Jobs\GenerateAgreements\Constants.cs" />
     <Compile Include="Jobs\GenerateAgreements\GenerateAgreementsIdProvider.cs" />
     <Compile Include="Jobs\GenerateAgreements\GenerateAgreementsJob.cs" />
