@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using SFA.DAS.EAS.Account.Worker.Infrastructure.Interfaces;
 using SFA.DAS.EAS.Account.Worker.Jobs;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 
 namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 {
@@ -41,10 +42,16 @@ namespace SFA.DAS.EAS.Account.Worker.Infrastructure
 		            var job = (IJob) thisContainer.GetInstance(jobtype);
 		            logger.Verbose($"Obtained instance of type {jobtype.FullName} from IoC");
 
-		            job.Run().ContinueWith(task =>
+		            var jobTask = job.Run().ContinueWith(task =>
 		            {
-		                logger.Info($"Job has ended. Canceled?:{task.IsCanceled} Faulted?:{task.IsFaulted}");
+		                logger.Info($"Job has ended. Cancelled?:{task.IsCanceled} Faulted?:{task.IsFaulted}");
+		                if (task.IsFaulted)
+		                {
+                            logger.Error($"Exception: {task.Exception.GetMessage()}");
+		                }
 		            });
+
+		            jobTask.Wait();
 		        }
                 catch (Exception e)
 		        {

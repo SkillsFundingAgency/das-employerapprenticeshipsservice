@@ -24,6 +24,7 @@ UpdateAccountPublicHashedIdsJob | No                              |
 GenerateAgreementsJob           | No                              |[Generate Agreements](GenerateAgreements.md "Generate Agreements")
 ListRecentActivity              | No                              |
 ListTriggeredJobs               | No                              |
+SetAccountLegalEntityPublicHashIdsJob | No 						  |Sets the PublicHashedId on non-deleted AccountLegalEntity which do not currently have a value.  
    
 
 
