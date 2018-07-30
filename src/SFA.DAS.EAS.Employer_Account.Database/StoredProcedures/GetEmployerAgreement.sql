@@ -26,6 +26,7 @@ BEGIN
 	FROM [employer_account].[EmployerAgreement] ea
 		JOIN [employer_account].[AccountLegalEntity] ale
 			ON ale.Id = ea.AccountLegalEntityId
+			   AND ale.Deleted IS NULL
 		JOIN [employer_account].[LegalEntity] le
 			ON le.Id = ale.LegalEntityId
 		JOIN [employer_account].[EmployerAgreementTemplate] eat
