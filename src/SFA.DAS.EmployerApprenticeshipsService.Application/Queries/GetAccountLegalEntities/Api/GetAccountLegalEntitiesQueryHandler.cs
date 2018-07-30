@@ -28,9 +28,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api
 
             var accountLegalEntitiesQuery = _db.Value.AccountLegalEntities
                 .Where(ale => ale.Deleted == null)
+                .OrderBy(a => a.Id)
                 .Skip(message.PageSize.Value * (message.PageNumber.Value - 1))
                 .Take(message.PageSize.Value)
-                .OrderBy(a => a.Id)
                 .ProjectTo<AccountLegalEntityViewModel>(_configurationProvider)
                 .Future();
 
