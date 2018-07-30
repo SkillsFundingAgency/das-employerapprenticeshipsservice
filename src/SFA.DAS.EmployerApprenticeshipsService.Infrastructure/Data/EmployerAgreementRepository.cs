@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                         FROM	[employer_account].[AccountLegalEntity] AS ale
 		                        JOIN [employer_account].[LegalEntity] AS le
 			                        ON le.Id = ale.LegalEntityId
-                        WHERE	ale.AccountId = @accountId";
+                        WHERE	ale.AccountId = @accountId and ale.Deleted IS NULL";
 
                 if (signedOnly)
                 {

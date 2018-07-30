@@ -11,7 +11,8 @@ BEGIN
 	SELECT	@accountLegalEntityId = Id
 	FROM	employer_account.AccountLegalEntity 
 	WHERE	AccountId = @accountId AND
-			LegalEntityId = @legalEntityId;
+			LegalEntityId = @legalEntityId AND
+			Deleted IS NULL;
 
 	SELECT @accountLegalEntityCreated = 0;
 

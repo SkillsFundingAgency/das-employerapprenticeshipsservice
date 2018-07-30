@@ -25,4 +25,5 @@ AS
 		ORDER BY m.CreatedDate DESC
 	) u
 	WHERE a.HashedId = @hashedAccountId AND
-	ea.StatusId IN (1, 2)
+	ea.StatusId IN (1, 2) AND
+	ale.Deleted IS NULL;
