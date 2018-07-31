@@ -4,8 +4,6 @@
     <Runtime executionContext="elevated" />
     <Startup>
       <Task commandLine="AppInit.cmd" executionContext="elevated" taskType="simple" />
-      <Task commandLine="StartUp\IIS.bat" executionContext="elevated" taskType="background">
-      </Task>
     </Startup>
     <Sites>
       <Site name="Web">
@@ -37,6 +35,7 @@
     </Endpoints>
     <Certificates>
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
+      <Certificate name="TokenCertificate" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
     <Imports>
     </Imports>
