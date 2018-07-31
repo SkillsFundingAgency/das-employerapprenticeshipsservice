@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SFA.DAS.Exceptions.MessageFormatters
 {
-    internal class HttpExceptionMessageFormatter : BaseExceptionMessageFormatter
+    internal class HttpRequestExceptionMessageFormatter : BaseExceptionMessageFormatter
     {
         public override Type SupportedException => typeof(HttpRequestException);
 
