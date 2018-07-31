@@ -153,7 +153,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task RemoveLegalEntityFromAccount(long agreementId)
         {
-            await WithConnection(async c =>
+            await WithTransaction(async (c, txn) =>
             {
                 var parameters = new DynamicParameters();
 
