@@ -142,6 +142,11 @@ else
                                                     @task.ItemsDueCount connection request@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.Action("Index", "Transfers")">View details</a>
                                                 </p>
                                                 break;
+                                            case "TransferRequestReceived":
+                                                <p>
+                                                    Transfer request received<a href="@Url.Action("Index", "Transfers")">View details</a>
+                                                </p>
+                                                break;
                                         }
                                     </li>
                                 }

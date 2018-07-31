@@ -15,6 +15,7 @@ namespace SFA.DAS.EAS.Web.Helpers
                 case "CohortRequestReadyForApproval": return 5;
                 case "IncompleteApprenticeshipDetails": return 6;
                 case "ReviewConnectionRequest": return 7;
+                case "TransferRequestReceived": return 8;
 
                 default: return int.MaxValue; //if its an usupported type we place it last
             }
