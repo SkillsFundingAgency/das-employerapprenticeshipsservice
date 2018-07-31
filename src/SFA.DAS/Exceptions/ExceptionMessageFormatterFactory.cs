@@ -16,7 +16,7 @@ namespace SFA.DAS.Exceptions
         private static readonly IExceptionMessageFormatter[] ExceptionFormatters =
         {
             new AggregateExceptionMessageFormatter(),
-            new HttpExceptionMessageFormatter(),
+            new HttpRequestExceptionMessageFormatter(),
             new ExceptionMessageFormatter()
         };
 
