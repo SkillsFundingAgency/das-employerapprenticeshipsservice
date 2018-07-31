@@ -37,6 +37,7 @@
     </Endpoints>
     <Certificates>
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
+      <Certificate name="TokenCertificate" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
     <Imports>
     </Imports>

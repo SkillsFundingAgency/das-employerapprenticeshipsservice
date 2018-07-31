@@ -20,6 +20,7 @@
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="7E0C8989B70195C9AF040EBAD6F6E5012E07F050" thumbprintAlgorithm="sha1" />
+      <Certificate name="TokenCertificate" thumbprint="6B7ACC520305BFDB4F7252DAEB2177CC091FAAE1" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
 </ServiceConfiguration>
