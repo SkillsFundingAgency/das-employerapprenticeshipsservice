@@ -12,6 +12,9 @@ let mutable publishDirectory = rootPublishDirectory @@ projectName
 Target "Dotnet Restore" (fun _ ->
     DotNetCli.Restore(fun p ->
         { p with
+                Project = ".\\SFA.DAS" })
+    DotNetCli.Restore(fun p ->
+        { p with
                 Project = ".\\SFA.DAS.Account.Api.Client" })
     DotNetCli.Restore(fun p ->
         { p with
