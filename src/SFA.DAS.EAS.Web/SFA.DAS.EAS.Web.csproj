@@ -676,6 +676,9 @@
     <Content Include="dist\javascripts\lodash.js" />
     <Content Include="dist\javascripts\payment-order.js" />
     <Content Include="App_Data\.keep" />
+    <Content Include="AppInit.cmd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="src\sass\_tabs.scss" />
     <Content Include="dist\javascripts\sfa-modernizr.js" />
     <Content Include="src\svg\arrows.svg" />
