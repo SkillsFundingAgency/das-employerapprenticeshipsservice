@@ -1,37 +1,30 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetPaymentDetail_ByAccountProviderAndDateRange]
-    @AccountId BIGINT,
-    @Ukprn BIGINT,
+    @accountId BIGINT,
+    @ukprn BIGINT,
     @fromDate DATETIME,
     @toDate DATETIME
-AS	
-SELECT
-    p.[AccountId]
-    ,3 as TransactionType
-    ,MAX(dervx.DateCreated) as DateCreated
-    ,MAX(dervx.TransactionDate) as TransactionDate
-    ,MAX(p.PaymentId) as PaymentId
-    ,MAX(dervx.Ukprn) as Ukprn
-    ,MAX(p.PeriodEnd) as PeriodEnd	
-    ,MAX(meta.ProviderName) as ProviderName
-    ,(SUM(pays1.[Amount]) * -1) as LineAmount
-    ,meta.ApprenticeshipCourseName as CourseName
-    ,meta.ApprenticeshipCourseLevel	as CourseLevel
-    ,meta.PathwayName as PathwayName
-    ,MAX(meta.PathwayCode) as PathwayCode
-    ,MAX(meta.ApprenticeshipCourseStartDate) as CourseStartDate
-    ,MAX(meta.ApprenticeName) as ApprenticeName
-    ,MAX(meta.ApprenticeNINumber) as ApprenticeNINumber	
-    ,(SUM(pays2.Amount) * -1) as SfaCoInvestmentAmount
-    ,(SUM(pays3.Amount) * -1) as EmployerCoInvestmentAmount	
-  FROM [employer_financial].[Payment] p
-  inner JOIN [employer_financial].[PaymentMetaData] meta ON p.PaymentMetaDataId = meta.Id
-  inner join (select PeriodEnd,AccountId,Ukprn,TransactionDate, DateCreated from employer_financial.TransactionLine where DateCreated >= @fromDate AND 
-        DateCreated <= @toDate) dervx on dervx.AccountId = p.AccountId and dervx.PeriodEnd = p.PeriodEnd and dervx.Ukprn = p.Ukprn
-  left join [employer_financial].[Payment] pays1 on pays1.AccountId = p.AccountId and pays1.Ukprn = p.Ukprn and pays1.FundingSource IN (1, 5) and pays1.PaymentMetaDataId = meta.Id
-  left join [employer_financial].[Payment] pays2 on pays2.AccountId = p.AccountId and pays2.Ukprn = p.Ukprn and pays2.FundingSource = 2 and pays2.PaymentMetaDataId = meta.Id
-  left join [employer_financial].[Payment] pays3 on pays3.AccountId = p.AccountId and pays3.Ukprn = p.Ukprn and pays3.FundingSource = 3 and pays3.PaymentMetaDataId = meta.Id
-  where 
-  p.AccountId = @AccountId AND
-  p.Ukprn = @Ukprn  AND
-  p.FundingSource IN (1,2,3,5)   
-  group by p.AccountId, p.Ukprn, meta.ApprenticeshipCourseName, meta.ApprenticeshipCourseLevel,meta.PathwayName
+AS
+	SELECT
+		@accountId AS AccountId,
+		@ukprn AS Ukprn,
+		p.PeriodEnd,
+		3 AS TransactionType,
+		pm.ApprenticeshipCourseName AS CourseName,
+		pm.ApprenticeshipCourseLevel AS CourseLevel,
+		pm.PathwayName,
+		pm.PathwayCode,
+		MAX(pm.ApprenticeshipCourseStartDate) AS CourseStartDate,
+		MAX(pm.ProviderName) AS ProviderName,
+		MIN(t.DateCreated) AS DateCreated,
+		SUM(CASE WHEN p.FundingSource IN (1, 5) THEN p.Amount END) * -1 AS LineAmount,
+		SUM(CASE WHEN p.FundingSource = 2 THEN p.Amount END) * -1 AS SfaCoInvestmentAmount,
+		SUM(CASE WHEN p.FundingSource = 3 THEN p.Amount END) * -1 AS EmployerCoInvestmentAmount
+	FROM [employer_financial].[Payment] p
+	INNER JOIN [employer_financial].[PaymentMetaData] pm ON pm.Id = p.PaymentMetaDataId
+	INNER JOIN [employer_financial].[TransactionLine] t ON t.AccountId = p.AccountId AND t.PeriodEnd = p.PeriodEnd AND t.Ukprn = p.Ukprn
+	WHERE p.AccountId = @accountId
+	AND p.Ukprn = @ukprn
+	AND p.FundingSource IN (1, 2, 3, 5)
+	AND t.DateCreated >= @fromDate
+	AND t.DateCreated <= @toDate
+	GROUP BY p.PeriodEnd, pm.ApprenticeshipCourseName, pm.ApprenticeshipCourseLevel, pm.PathwayName, pm.PathwayCode
