@@ -12,5 +12,6 @@ Post-Deployment Script Template
 -- ONLY DO THIS FOR DB UPGRADES - CHECK THE SCHEMA EXISTS!
 IF EXISTS (SELECT * FROM sys.schemas WHERE name = 'employer_financial')
 BEGIN
-	:r .\RemoveDuplicateLevyDeclarations.sql
+	:r .\AML-2616-RemoveDuplicateLevyDeclarationsWithoutEmpRef.sql
+
 END
