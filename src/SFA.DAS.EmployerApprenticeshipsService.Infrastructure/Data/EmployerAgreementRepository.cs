@@ -162,7 +162,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 return await c.ExecuteAsync(
                     sql: "[employer_account].[RemoveLegalEntityFromAccount]",
                     param: parameters,
-                    commandType: CommandType.StoredProcedure);
+                    commandType: CommandType.StoredProcedure,
+                    transaction: txn);
 
             });
         }
