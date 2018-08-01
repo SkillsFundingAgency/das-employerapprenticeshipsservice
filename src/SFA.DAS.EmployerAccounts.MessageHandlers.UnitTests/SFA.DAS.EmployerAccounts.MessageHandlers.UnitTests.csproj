@@ -114,7 +114,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -122,7 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.MessageHandlers\SFA.DAS.EmployerAccounts.MessageHandlers.csproj">
-      <Project>{41E84BA4-A174-4DD8-89A1-7F0B4E470E97}</Project>
+      <Project>{41e84ba4-a174-4dd8-89a1-7f0b4e470e97}</Project>
       <Name>SFA.DAS.EmployerAccounts.MessageHandlers</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj">
