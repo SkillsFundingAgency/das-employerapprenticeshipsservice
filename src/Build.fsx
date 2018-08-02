@@ -26,6 +26,7 @@ open Fake
    ==>"Build Cloud Projects"
    ==>"Build Database project"
    ==>"Build And Zip Webjob Host Projects" 
+   ==>"Build And Zip Web App Projects"
    ==>"Publish Solution"
    ==>"Compile Views"
    ==>"Create Nuget Package"
