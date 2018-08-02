@@ -4,9 +4,11 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using NLog;
 using Owin;
+using SFA.DAS.Authenication;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Web;
 using SFA.DAS.EmployerFinance.Web.App_Start;
+using SFA.DAS.EmployerFinance.Web.Authentication;
 using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
@@ -17,9 +19,8 @@ using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using SFA.DAS.Authenication;
-using SFA.DAS.EmployerFinance.Web.Authentication;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -121,7 +122,7 @@ namespace SFA.DAS.EmployerFinance.Web
             identity.AddClaim(new Claim("sub", identity.Claims.First(c => c.Type == constants.Id()).Value));
             identity.AddClaim(new Claim("email", identity.Claims.First(c => c.Type == constants.Email()).Value));
 
-            //Task.Run(async () => await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName)).Wait();
+            Task.Run(async () => await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName)).Wait();
         }
     }
 
