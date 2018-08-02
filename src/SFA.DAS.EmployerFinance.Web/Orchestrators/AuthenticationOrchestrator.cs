@@ -1,22 +1,16 @@
-﻿using System;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser;
-using SFA.DAS.NLog.Logger;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
     public class AuthenticationOrchestrator
     {
         private readonly IMediator _mediator;
-        private readonly ILog _logger;
 
-        public AuthenticationOrchestrator(IMediator mediator, ILog logger)
+        public AuthenticationOrchestrator(IMediator mediator)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
-            _logger = logger;
         }
 
         public async Task SaveIdentityAttributes(string userRef, string email, string firstName, string lastName)
