@@ -9,9 +9,9 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
--- ONLY DO THIS FOR DB UPGRADES - CHECK THE SCHEMA EXISTS!
+
 IF EXISTS (SELECT * FROM sys.schemas WHERE name = 'employer_financial')
 BEGIN
-	:r .\AML-2616-RemoveDuplicateLevyDeclarationsWithoutEmpRef.sql
-
+	:r .\AML-2616-DeleteDuplicateLevyDeclarationsWithoutEmpRef.sql
+	:r .\AML-2643-DeleteDuplicateTransactionLines.sql
 END
