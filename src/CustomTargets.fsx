@@ -42,3 +42,29 @@ Target "Build And Zip Webjob Host Projects" ( fun _ ->
             |> MSBuildReleaseExt null properties "Build"
             |> Log "Build-Output: "
 )
+
+Target "Build And Zip Web App Projects" ( fun _ ->
+    let buildMode = getBuildParamOrDefault "buildMode" "Debug"
+
+    if buildMode.ToLower().Equals("release") then
+        let directoryinfo = FileSystemHelper.directoryInfo(@".\" @@ publishDirectory @@ "\..\WebApps")
+        let directory = directoryinfo.FullName
+        traceImportant directory
+        let properties =
+                        [
+                            ("DeployOnBuild", "True");
+                            ("WebPublishMethod", "Package");
+                            ("PackageAsSingleFile", "True");
+                            ("SkipInvalidConfigurations", "true");
+                            ("PackageLocation", directory);
+                            ("ToolsVersion","14");
+                        ]
+
+        !! (@".\**\SFA.DAS.EmployerFinance.Web.csproj")
+            |> MSBuildReleaseExt null properties "Build"
+            |> Log "Build-Output: "
+
+        !! (@".\**\SFA.DAS.EmployerAccounts.Web.csproj")
+        |> MSBuildReleaseExt null properties "Build"
+        |> Log "Build-Output: "
+)
