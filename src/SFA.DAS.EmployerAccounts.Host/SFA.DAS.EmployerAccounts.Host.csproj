@@ -53,6 +53,4 @@
     </VisualStudio>
   </ProjectExtensions>
 
-  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" />
-
 </Project>
