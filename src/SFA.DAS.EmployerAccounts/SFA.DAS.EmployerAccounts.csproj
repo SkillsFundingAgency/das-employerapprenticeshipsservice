@@ -10,15 +10,20 @@
     <PackageReference Include="MediatR" Version="2.1.0" />
     <PackageReference Include="SFA.DAS.Configuration" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="1.0.0.53229" />
+    <PackageReference Include="SFA.DAS.Configuration.FileStorage" Version="1.0.0.49931" />
     <PackageReference Include="SFA.DAS.Events.Api.Client" Version="1.20.0.26497" />
+    <PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.0.0.36524" />
     <PackageReference Include="SFA.DAS.Http" Version="1.0.0.39136" />
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap" Version="3.0.0.63765" />
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.0.0.35919" />
+    <PackageReference Include="SFA.DAS.Notifications.Api.Types" Version="2.0.0.35919" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.31" />
     <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="1.0.0.26382" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
+    <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
   </ItemGroup>
 
   <ItemGroup>
