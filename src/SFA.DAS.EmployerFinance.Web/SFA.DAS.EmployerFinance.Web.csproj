@@ -288,6 +288,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="App_Data\.keep" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -306,7 +307,6 @@
     <Content Include="Views\Home\SignedIn.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
