@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.AccountTeam;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.TestCommon;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Types;
+using SFA.DAS.Testing;
+using SFA.DAS.Testing.EntityFramework;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
 {
@@ -50,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
     public class RejectedTransferConnectionRequestEventNotificationHandlerTestFixture : FluentTestFixture
     {
         public RejectedTransferConnectionRequestEventNotificationHandler Handler { get; set; }
-        public EmployerApprenticeshipsServiceConfiguration Configuration { get; set; }
+        public EmployerAccountsConfiguration Configuration { get; set; }
         public Mock<EmployerAccountsDbContext> Db { get; set; }
         public Mock<ILog> Logger { get; set; }
         public Mock<INotificationsApi> NotificationsApiClient { get; set; }
@@ -67,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
 
         public RejectedTransferConnectionRequestEventNotificationHandlerTestFixture()
         {
-            Configuration = new EmployerApprenticeshipsServiceConfiguration();
+            Configuration = new EmployerAccountsConfiguration();
             Db = new Mock<EmployerAccountsDbContext>();
             Logger = new Mock<ILog>();
             NotificationsApiClient = new Mock<INotificationsApi>();

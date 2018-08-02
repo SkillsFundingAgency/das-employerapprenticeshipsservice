@@ -7,9 +7,9 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.ReferenceData.Api.Client;
 using FluentAssertions;
+using SFA.DAS.Caches;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
-using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.ReferenceData.Types.DTO;
 using OrganisationType = SFA.DAS.Common.Domain.Types.OrganisationType;
 

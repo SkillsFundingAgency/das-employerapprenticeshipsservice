@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.Caches;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
 {
