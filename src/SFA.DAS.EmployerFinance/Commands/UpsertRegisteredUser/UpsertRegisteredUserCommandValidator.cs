@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Validation;
+using SFA.DAS.EmployerFinance.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser
+namespace SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser
 {
     public class UpsertRegisteredUserCommandValidator : IValidator<UpsertRegisteredUserCommand>
     {
