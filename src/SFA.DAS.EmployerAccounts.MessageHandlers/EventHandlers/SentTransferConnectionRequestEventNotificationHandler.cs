@@ -4,9 +4,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Extensions;
-using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
@@ -18,13 +17,13 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
     {
         public const string UrlFormat = "/accounts/{0}/transfers";
 
-        private readonly EmployerApprenticeshipsServiceConfiguration _config;
+        private readonly EmployerAccountsConfiguration _config;
         private readonly ILog _logger;
         private readonly INotificationsApi _notificationsApi;
         private readonly Lazy<EmployerAccountsDbContext> _db;
         
         public SentTransferConnectionRequestEventNotificationHandler(
-            EmployerApprenticeshipsServiceConfiguration config,
+            EmployerAccountsConfiguration config,
             ILog logger,
             INotificationsApi notificationsApi,
             Lazy<EmployerAccountsDbContext> db)

@@ -1,5 +1,5 @@
-﻿using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Caching;
+﻿using SFA.DAS.Caches;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using StructureMap;
 

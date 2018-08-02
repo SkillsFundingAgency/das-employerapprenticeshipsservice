@@ -26,7 +26,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Microsoft.ApplicationInsights;
 using NLog;
-using SFA.DAS.Exceptions;
+using SFA.DAS.Logging;
 using ConfigurationHelper = SFA.DAS.EmployerAccounts.Configuration.ConfigurationHelper;
 using Environment = SFA.DAS.EmployerAccounts.Configuration.Environment;
 
