@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
+using SFA.DAS.Caches;
+using SFA.DAS.Common.Domain.Types;
 using DocumentFormat.OpenXml.Wordprocessing;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;

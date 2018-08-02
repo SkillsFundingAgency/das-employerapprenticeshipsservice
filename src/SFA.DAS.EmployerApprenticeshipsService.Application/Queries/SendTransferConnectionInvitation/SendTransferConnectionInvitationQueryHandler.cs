@@ -9,8 +9,7 @@ using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;
-using SFA.DAS.EAS.Infrastructure.Hashing;
-using SFA.DAS.EAS.Infrastructure.Interfaces;
+using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
 {

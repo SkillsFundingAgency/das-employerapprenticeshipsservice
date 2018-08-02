@@ -9,8 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Infrastructure.Hashing;
-using SFA.DAS.EAS.Infrastructure.Interfaces;
+using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetailsTests
 {

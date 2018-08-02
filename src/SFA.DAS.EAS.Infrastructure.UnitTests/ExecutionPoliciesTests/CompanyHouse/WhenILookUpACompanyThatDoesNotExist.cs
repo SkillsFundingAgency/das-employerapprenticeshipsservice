@@ -2,7 +2,8 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Http;
-using SFA.DAS.EAS.Infrastructure.ExecutionPolicies;
+using SFA.DAS.ExecutionPolicies;
+using SFA.DAS.Http;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.ExecutionPoliciesTests.CompanyHouse
