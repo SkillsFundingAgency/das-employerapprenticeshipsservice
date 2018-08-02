@@ -5,13 +5,13 @@ using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.TestCommon.Builders;
+using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvitationTests
 {

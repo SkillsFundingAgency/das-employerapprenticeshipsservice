@@ -13,9 +13,10 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
     {
         public void ScanTypes(TypeSet types, Registry registry)
         {
-            types.FindTypes(TypeClassification.Concretes | TypeClassification.Closed)
-                .Where(t => t.CanBeCastTo<Controller>())
-                .ForEach(t => registry.For(t).LifecycleIs(new UniquePerRequestLifecycle()));
+            foreach (var type in types.FindTypes(TypeClassification.Concretes | TypeClassification.Closed).Where(t => t.CanBeCastTo<Controller>()))
+            {
+                registry.For(type).LifecycleIs(new UniquePerRequestLifecycle());
+            }
         }
     }
 }

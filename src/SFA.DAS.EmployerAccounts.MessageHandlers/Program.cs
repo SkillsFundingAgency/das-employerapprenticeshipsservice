@@ -1,12 +1,11 @@
 ﻿using System.Data.Common;
 using Microsoft.Azure.WebJobs;
 using NServiceBus;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using System.Threading;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.Infrastructure.NServiceBus;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.EntityFramework;
@@ -14,7 +13,6 @@ using SFA.DAS.NServiceBus.MsSqlServer;
 using SFA.DAS.NServiceBus.NewtonsoftSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
-using Environment = SFA.DAS.EAS.Infrastructure.DependencyResolution.Environment;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers
 {
@@ -42,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
             var container = IoC.Initialize();
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.MessageHandlers")
-                .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
+                .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString)
                 .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>()
                 .SetupErrorQueue()
                 .SetupInstallers()

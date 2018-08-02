@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Caches;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.ReferenceData.Api.Client;
-using SFA.DAS.EAS.Infrastructure.Caching;
 using Organisation = SFA.DAS.ReferenceData.Api.Client.Dto.Organisation;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
