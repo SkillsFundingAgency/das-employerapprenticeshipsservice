@@ -1,5 +1,5 @@
 ﻿using SFA.DAS.EAS.Infrastructure.DependencyResolution;
-using SFA.DAS.EAS.Infrastructure.ExecutionPolicies;
+using SFA.DAS.ExecutionPolicies;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution

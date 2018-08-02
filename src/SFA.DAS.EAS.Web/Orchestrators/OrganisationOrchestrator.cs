@@ -26,8 +26,8 @@ using SFA.DAS.EAS.Application.Extensions;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntitiy;
 using SFA.DAS.EAS.Application.Queries.GetOrganisationById;
 using SFA.DAS.EAS.Infrastructure.Extensions;
-using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Web.Validation;
+using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

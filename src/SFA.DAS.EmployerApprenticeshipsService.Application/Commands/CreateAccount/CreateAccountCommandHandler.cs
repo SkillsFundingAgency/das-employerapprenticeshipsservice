@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.Hashing;
 using SFA.DAS.NServiceBus;
 using Entity = SFA.DAS.Audit.Types.Entity;
 

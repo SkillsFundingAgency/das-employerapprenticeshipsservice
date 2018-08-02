@@ -311,10 +311,6 @@
     <Compile Include="Authorization\IUserContext.cs" />
     <Compile Include="Authorization\MembershipContext.cs" />
     <Compile Include="Authorization\UserContext.cs" />
-    <Compile Include="Caching\Constants.cs" />
-    <Compile Include="Caching\InProcessCache.cs" />
-    <Compile Include="Caching\LocalDevCache.cs" />
-    <Compile Include="Caching\RedisCache.cs" />
     <Compile Include="Data\AccountIdUserTableParam.cs" />
     <Compile Include="Data\IUnitOfWorkManager.cs" />
     <Compile Include="Data\SqlAzureDbConfiguration.cs" />
@@ -342,14 +338,7 @@
     <Compile Include="DependencyResolution\ConfigurationHelper.cs" />
     <Compile Include="DependencyResolution\CurrentDatePolicy.cs" />
     <Compile Include="DependencyResolution\Environment.cs" />
-    <Compile Include="DependencyResolution\ExecutionPolicyPolicy.cs" />
     <Compile Include="Exceptions\InvalidOrganisationTypeConversionException.cs" />
-    <Compile Include="ExecutionPolicies\CompaniesHouseExecutionPolicy.cs" />
-    <Compile Include="ExecutionPolicies\ExecutionPolicy.cs" />
-    <Compile Include="ExecutionPolicies\HmrcExecutionPolicy.cs" />
-    <Compile Include="ExecutionPolicies\IdamsExecutionPolicy.cs" />
-    <Compile Include="ExecutionPolicies\PolicyNameAttribute.cs" />
-    <Compile Include="ExecutionPolicies\RequiredPolicyAttribute.cs" />
     <Compile Include="Extensions\AccountLegalEntityExtensions.cs" />
     <Compile Include="Extensions\EmployerFinancialDbContextExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
@@ -360,9 +349,6 @@
     <Compile Include="Extensions\QueryFutureEnumerableExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Features\IFeatureService.cs" />
-    <Compile Include="Hashing\PublicHashingService.cs" />
-    <Compile Include="Hashing\IAccountLegalEntityPublicHashingService.cs" />
-    <Compile Include="Hashing\IPublicHashingService.cs" />
     <Compile Include="Mapping\Profiles\PaymentMappings.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringAttribute.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringPolicy.cs" />
@@ -420,6 +406,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj">
       <Project>{C15DEC5C-666D-4CB2-968E-A273EB60D15E}</Project>
       <Name>SFA.DAS.EmployerFinance.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
+      <Project>{8DD6E754-567C-46E3-A071-B1049380EA6C}</Project>
+      <Name>SFA.DAS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Application.DependencyResolution;
+﻿using SFA.DAS.EmployerAccounts.DependencyResolution;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
@@ -10,7 +10,6 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
             return new Container(c =>
             {
                 c.AddRegistry<CachesRegistry>();
-                c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
                 c.AddRegistry<EventsRegistry>();
@@ -21,8 +20,6 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
-                c.AddRegistry<RepositoriesRegistry>();
-                c.AddRegistry<PaymentsRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });

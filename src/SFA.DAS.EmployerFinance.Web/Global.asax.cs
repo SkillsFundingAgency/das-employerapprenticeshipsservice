@@ -14,7 +14,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Microsoft.ApplicationInsights;
 using NLog;
-using SFA.DAS.Exceptions;
+using SFA.DAS.Logging;
 using Environment = SFA.DAS.EmployerFinance.Configuration.Environment;
 
 namespace SFA.DAS.EmployerFinance.Web

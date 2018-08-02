@@ -22,6 +22,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.Hashing;
 using SFA.DAS.NServiceBus.Testing;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 

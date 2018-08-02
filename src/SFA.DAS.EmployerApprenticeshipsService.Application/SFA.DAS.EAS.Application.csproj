@@ -850,6 +850,10 @@
       <Project>{C15DEC5C-666D-4CB2-968E-A273EB60D15E}</Project>
       <Name>SFA.DAS.EmployerFinance.Messages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
+      <Project>{8DD6E754-567C-46E3-A071-B1049380EA6C}</Project>
+      <Name>SFA.DAS</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
