@@ -1,11 +1,11 @@
 ﻿using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Exceptions;
-using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Exceptions;
+using SFA.DAS.EmployerFinance.Models;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Validation;
+using SFA.DAS.EmployerFinance.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser
+namespace SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser
 {
     public class UpsertRegisteredUserCommandHandler : AsyncRequestHandler<UpsertRegisteredUserCommand>
     {
