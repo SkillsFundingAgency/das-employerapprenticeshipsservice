@@ -47,6 +47,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 var accounts = await _homeOrchestrator.GetUserAccounts(userId);
 
+                if (accounts.Data.Invitations > 0)
+                {
+                    return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName, new {});
+                }
+
                 if (accounts.Data.Accounts.AccountList.Count == 1)
                 {
                     var account = accounts.Data.Accounts.AccountList.FirstOrDefault();
