@@ -13,6 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public IdentityServerConfiguration Identity { get; set; }
         public string LegacyServiceBusConnectionString { get; set; }
         public string MessageServiceBusConnectionString => LegacyServiceBusConnectionString;
+        public string NServiceBusLicense { get; set; }
         public string PublicAllowedHashstringCharacters { get; set; }
         public string PublicAllowedAccountLegalEntityHashstringCharacters { get; set; }
         public string PublicAllowedAccountLegalEntityHashstringSalt { get; set; }
