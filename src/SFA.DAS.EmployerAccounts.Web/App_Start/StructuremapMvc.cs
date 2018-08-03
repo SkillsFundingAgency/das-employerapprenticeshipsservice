@@ -15,36 +15,37 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using SFA.DAS.EmployerAccounts.Web.App_Start;
+using SFA.DAS.EmployerAccounts.Web;
 
 using WebActivatorEx;
 
 [assembly: PreApplicationStartMethod(typeof(StructuremapMvc), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(StructuremapMvc), "End")]
 
-namespace SFA.DAS.EmployerAccounts.Web.App_Start {
-	using System.Web.Mvc;
-
+namespace SFA.DAS.EmployerAccounts.Web
+{
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-
-	using SFA.DAS.EmployerAccounts.Web.DependencyResolution;
-
+    using SFA.DAS.EmployerAccounts.Web.DependencyResolution;
     using StructureMap;
-    
-	public static class StructuremapMvc {
+    using System.Web.Mvc;
+
+    public static class StructuremapMvc
+    {
         #region Public Properties
 
         public static StructureMapDependencyScope StructureMapDependencyScope { get; set; }
 
         #endregion
-		
-		#region Public Methods and Operators
-		
-		public static void End() {
+
+        #region Public Methods and Operators
+
+        public static void End()
+        {
             StructureMapDependencyScope.Dispose();
         }
-		
-        public static void Start() {
+
+        public static void Start()
+        {
             IContainer container = IoC.Initialize();
             StructureMapDependencyScope = new StructureMapDependencyScope(container);
             DependencyResolver.SetResolver(StructureMapDependencyScope);
