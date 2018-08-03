@@ -1,8 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk;Microsoft.NET.Sdk.Publish">
 
   <PropertyGroup>
+    <IsWebJobProject>true</IsWebJobProject>
     <OutputType>Exe</OutputType>
     <TargetFramework>net462</TargetFramework>
+    <WebJobName>EmployerAccounts-Jobs</WebJobName>
+    <WebJobType>Continuous</WebJobType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,6 +44,10 @@
       <DependentUpon>App.config</DependentUpon>
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
   <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
