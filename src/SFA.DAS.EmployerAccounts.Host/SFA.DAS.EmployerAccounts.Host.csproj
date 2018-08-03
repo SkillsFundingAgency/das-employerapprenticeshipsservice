@@ -20,4 +20,17 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <MSDeployPackagePublishDependsOn>CopyWebJobs</MSDeployPackagePublishDependsOn>
+    <WebJobProjects>$(MSBuildProjectDirectory)\..\SFA.DAS.EmployerAccounts.Jobs\SFA.DAS.EmployerAccounts.Jobs.csproj;$(MSBuildProjectDirectory)\..\SFA.DAS.EmployerAccounts.MessageHandlers\SFA.DAS.EmployerAccounts.MessageHandlers.csproj</WebJobProjects>
+  </PropertyGroup>
+
+  <Target Name="CopyWebJobs">
+    <MSBuild Projects="$(WebJobProjects)" Targets="Restore;Build" Properties="DeployOnBuild=true;Configuration=$(Configuration);WebPublishMethod=FileSystem;PublishUrl=$(PublishIntermediateOutputPath)" RunEachTargetSeparately="true" StopOnFirstFailure="true" />
+  </Target>
+  
 </Project>
