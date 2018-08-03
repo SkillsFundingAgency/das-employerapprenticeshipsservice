@@ -1,6 +1,5 @@
 namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
 {
-    using SFA.DAS.EmployerFinance.Web.App_Start;
     using StructureMap.Web.Pipeline;
     using System.Web;
 
