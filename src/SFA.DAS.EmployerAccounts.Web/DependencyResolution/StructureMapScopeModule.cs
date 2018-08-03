@@ -1,8 +1,5 @@
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution {
     using System.Web;
-
-    using SFA.DAS.EmployerAccounts.Web.App_Start;
-
     using StructureMap.Web.Pipeline;
 
     public class StructureMapScopeModule : IHttpModule {
