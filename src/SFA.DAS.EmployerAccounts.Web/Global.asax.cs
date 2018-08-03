@@ -108,7 +108,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>()
                 .SetupErrorQueue()
                 .SetupInstallers()
-                //.SetupLicense(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().NServiceBusLicense)
+                .SetupLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense)
                 .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .SetupNewtonsoftSerializer()
                 .SetupNLogFactory()
