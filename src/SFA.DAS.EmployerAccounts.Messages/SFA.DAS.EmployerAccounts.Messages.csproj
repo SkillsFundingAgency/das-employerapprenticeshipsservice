@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.31" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.40" />
   </ItemGroup>
 
   <ItemGroup>
