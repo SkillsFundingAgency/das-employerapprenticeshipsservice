@@ -7,6 +7,7 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
+using SFA.DAS.Extensions;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.EntityFramework;
 using SFA.DAS.NServiceBus.MsSqlServer;
@@ -44,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
                 .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>()
                 .SetupErrorQueue()
                 .SetupInstallers()
-                //.SetupLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense)
+                .SetupLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense.HtmlDecode())
                 .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .SetupNewtonsoftSerializer()
                 .SetupNLogFactory()

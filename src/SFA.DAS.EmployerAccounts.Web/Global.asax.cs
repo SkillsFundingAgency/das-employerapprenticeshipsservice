@@ -26,6 +26,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Microsoft.ApplicationInsights;
 using NLog;
+using SFA.DAS.Extensions;
 using SFA.DAS.Logging;
 using Environment = SFA.DAS.EmployerAccounts.Configuration.Environment;
 
@@ -107,7 +108,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>()
                 .SetupErrorQueue()
                 .SetupInstallers()
-                //.SetupLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense)
+                .SetupLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense.HtmlDecode())
                 .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .SetupNewtonsoftSerializer()
                 .SetupNLogFactory()
