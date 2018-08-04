@@ -91,7 +91,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Account.API.Int
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Account.Api", "SFA.DAS.EAS.Api\SFA.DAS.EAS.Account.Api.csproj", "{40190475-1220-4CF8-8A60-223FACAFEDA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Jobs", "SFA.DAS.EmployerAccounts.Jobs\SFA.DAS.EmployerAccounts.Jobs.csproj", "{C129093D-7F7E-4D89-92BF-55407553B191}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Jobs", "SFA.DAS.EmployerAccounts.Jobs\SFA.DAS.EmployerAccounts.Jobs.csproj", "{C129093D-7F7E-4D89-92BF-55407553B191}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SFA.DAS.EmployerAccounts", "SFA.DAS.EmployerAccounts", "{A177AC61-DF6E-4A04-8EFE-1E7004277669}"
 EndProject
@@ -99,11 +99,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SFA.DAS.EmployerFinance", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{19BA54F2-A356-49AF-8062-9D492E8D03D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Host", "SFA.DAS.EmployerAccounts.Host\SFA.DAS.EmployerAccounts.Host.csproj", "{6D84017B-D6A3-433A-B66B-DCECAC37741E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Host", "SFA.DAS.EmployerAccounts.Host\SFA.DAS.EmployerAccounts.Host.csproj", "{6D84017B-D6A3-433A-B66B-DCECAC37741E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.MessageHandlers", "SFA.DAS.EmployerAccounts.MessageHandlers\SFA.DAS.EmployerAccounts.MessageHandlers.csproj", "{41E84BA4-A174-4DD8-89A1-7F0B4E470E97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.MessageHandlers", "SFA.DAS.EmployerAccounts.MessageHandlers\SFA.DAS.EmployerAccounts.MessageHandlers.csproj", "{41E84BA4-A174-4DD8-89A1-7F0B4E470E97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Messages", "SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj", "{2035D46A-422F-438C-A460-39E60A9F6EAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Messages", "SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj", "{2035D46A-422F-438C-A460-39E60A9F6EAD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Host", "SFA.DAS.EmployerFinance.Host\SFA.DAS.EmployerFinance.Host.csproj", "{D494902B-C081-47DD-9CD4-6EF4D9CD6FF1}"
 EndProject
@@ -117,7 +117,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{29FCFFB5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{56860F8C-F41E-4B99-8B5A-4C160904DBD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests", "SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests\SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.csproj", "{50234833-94B9-4719-9072-7F38CEBB2E3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests", "SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests\SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.csproj", "{50234833-94B9-4719-9072-7F38CEBB2E3C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.MessageHandlers.UnitTests", "SFA.DAS.EmployerFinance.MessageHandlers.UnitTests\SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.csproj", "{349D11C1-B5E1-49D3-B1E6-EA6DA3510863}"
 EndProject
@@ -125,13 +125,13 @@ Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.API", "SFA.DAS.API\
 EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.CloudService", "SFA.DAS.CloudService\SFA.DAS.CloudService.ccproj", "{97F77CF7-A13E-4441-8081-F941AC1B8BB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Web", "SFA.DAS.EmployerAccounts.Web\SFA.DAS.EmployerAccounts.Web.csproj", "{4FFEA4C7-0E7D-4A5E-BFC4-1819CAF8905C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Web", "SFA.DAS.EmployerAccounts.Web\SFA.DAS.EmployerAccounts.Web.csproj", "{4FFEA4C7-0E7D-4A5E-BFC4-1819CAF8905C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Web", "SFA.DAS.EmployerFinance.Web\SFA.DAS.EmployerFinance.Web.csproj", "{53BF9CE7-8355-4734-AC0F-D8659960BB51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts", "SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj", "{B520A3E4-8259-4309-94D4-4A99FD32D2F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts", "SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj", "{B520A3E4-8259-4309-94D4-4A99FD32D2F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Web.UnitTests", "SFA.DAS.EmployerAccounts.Web.UnitTests\SFA.DAS.EmployerAccounts.Web.UnitTests.csproj", "{6B1F29F1-47A2-471A-BD37-2C7A766DF081}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Web.UnitTests", "SFA.DAS.EmployerAccounts.Web.UnitTests\SFA.DAS.EmployerAccounts.Web.UnitTests.csproj", "{6B1F29F1-47A2-471A-BD37-2C7A766DF081}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Web.UnitTests", "SFA.DAS.EmployerFinance.Web.UnitTests\SFA.DAS.EmployerFinance.Web.UnitTests.csproj", "{CF7C3A98-A0D9-4034-B8EC-0026B3F0205B}"
 EndProject

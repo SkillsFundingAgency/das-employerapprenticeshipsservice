@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
+using SFA.DAS.Extensions;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.MsSqlServer;
 using SFA.DAS.NServiceBus.NewtonsoftSerializer;
@@ -41,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Jobs")
                 .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString)
-                //.SetupLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense)
+                .SetupLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense.HtmlDecode())
                 .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .SetupNewtonsoftSerializer()
                 .SetupNLogFactory()
