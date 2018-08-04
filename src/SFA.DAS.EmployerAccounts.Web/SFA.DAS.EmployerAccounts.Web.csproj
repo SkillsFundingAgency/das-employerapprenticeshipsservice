@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <TargetFramework>net462</TargetFramework>
+    <OutputPath>bin\</OutputPath>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 
