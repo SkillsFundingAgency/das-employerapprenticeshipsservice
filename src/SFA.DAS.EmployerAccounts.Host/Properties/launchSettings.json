@@ -1,27 +1,9 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:58041/",
-      "sslPort": 0
-    }
-  },
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
     "SFA.DAS.EmployerAccounts.Host": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:58042/"
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\IIS Express\\iisexpress.exe",
+      "commandLineArgs": "/path:\"$(SolutionDir)$(ProjectName)\""
     }
   }
 }
