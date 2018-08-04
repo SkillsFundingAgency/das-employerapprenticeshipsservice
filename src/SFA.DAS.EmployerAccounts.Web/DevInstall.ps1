@@ -8,7 +8,7 @@ $port = "44344"
 
 $appDataPath = "$Env:APPDATA"
 $programFilesPath = "$Env:PROGRAMFILES"
-$projectPath = "$PSScriptRoot\$projectName"
+$projectPath = "$PSScriptRoot"
 $configPath = "$appDataPath\$projectName"
 $applicationHostConfigFilename = "ApplicationHost.config"
 $applicationHostConfigSourcePath = "$programFilesPath\IIS Express\AppServer\$applicationHostConfigFilename"
