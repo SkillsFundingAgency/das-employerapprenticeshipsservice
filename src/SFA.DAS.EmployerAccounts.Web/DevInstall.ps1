@@ -19,6 +19,6 @@ $iisExpressAdminCmdExe = "$programFilesPath\IIS Express\IisExpressAdminCmd.exe"
 md "$configPath" -force
 copy "$applicationHostConfigSourcePath" "$configPath"
 
-& $appCmdExe set config -section:system.ApplicationHost/sites /"[name='Development Web Site'].[path='/'].[path='/'].physicalPath:${projectPath}" /commit:apphost /apphostconfig:"$applicationHostConfigDestinationPath"
-& $appCmdExe set config -section:system.ApplicationHost/sites /+"[name='Development Web Site'].bindings.[protocol='https',bindingInformation=':${port}:localhost']" /commit:apphost /apphostconfig:"$applicationHostConfigDestinationPath"
+& $appCmdExe set config -section:system.applicationHost/sites /"[name='Development Web Site'].[path='/'].[path='/'].physicalPath:${projectPath}" /commit:apphost /apphostconfig:"$applicationHostConfigDestinationPath"
+& $appCmdExe set config -section:system.applicationHost/sites /+"[name='Development Web Site'].bindings.[protocol='https',bindingInformation=':${port}:localhost']" /commit:apphost /apphostconfig:"$applicationHostConfigDestinationPath"
 & $iisExpressAdminCmdExe setupSslUrl -url:https://localhost:$port/ -UseSelfSigned
