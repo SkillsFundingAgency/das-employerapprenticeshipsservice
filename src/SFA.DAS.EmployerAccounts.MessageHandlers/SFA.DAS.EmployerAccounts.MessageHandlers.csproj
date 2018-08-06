@@ -6,6 +6,7 @@
     <TargetFramework>net462</TargetFramework>
     <WebJobName>EmployerAccounts-MessageHandlers</WebJobName>
     <WebJobType>Continuous</WebJobType>
+    <IsGenerateRunCommandFileDisabled>true</IsGenerateRunCommandFileDisabled>
   </PropertyGroup>
 
   <ItemGroup>
