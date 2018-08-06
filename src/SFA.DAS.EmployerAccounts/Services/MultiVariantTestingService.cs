@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.Caches;
-using SFA.DAS.EAS.Domain.Models.UserView;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.UserView;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
