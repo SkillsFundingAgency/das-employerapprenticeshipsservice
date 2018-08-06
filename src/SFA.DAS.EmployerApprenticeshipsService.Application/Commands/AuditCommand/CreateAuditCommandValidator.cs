@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.Commands.AuditCommand
 {
