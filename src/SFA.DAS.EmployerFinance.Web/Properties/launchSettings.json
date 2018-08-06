@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SFA.DAS.EmployerFinance.Web": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\IIS Express\\iisexpress.exe",
+      "commandLineArgs": "/config:\"$(AppData)\\$(ProjectName)\\ApplicationHost.config\""
+    }
+  }
+}

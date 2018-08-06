@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EntityFramework;
 using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Data

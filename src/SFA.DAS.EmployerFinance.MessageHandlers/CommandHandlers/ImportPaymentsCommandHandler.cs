@@ -3,11 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using NServiceBus;
-using SFA.DAS.EAS.Application.Commands.CreateNewPeriodEnd;
-using SFA.DAS.EAS.Application.Queries.GetAllEmployerAccounts;
-using SFA.DAS.EAS.Application.Queries.Payments.GetCurrentPeriodEnd;
-using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EmployerFinance.Commands.CreateNewPeriodEnd;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
+using SFA.DAS.EmployerFinance.Queries.GetAllEmployerAccounts;
+using SFA.DAS.EmployerFinance.Queries.GetCurrentPeriodEnd;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
@@ -79,7 +79,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
             foreach (var paymentsPeriodEnd in periodsToProcess)
             {
-                var periodEnd = new EAS.Domain.Models.Payments.PeriodEnd
+                var periodEnd = new Models.Payments.PeriodEnd
                 {
                     PeriodEndId = paymentsPeriodEnd.Id,
                     CalendarPeriodMonth = paymentsPeriodEnd.CalendarPeriod?.Month ?? 0,

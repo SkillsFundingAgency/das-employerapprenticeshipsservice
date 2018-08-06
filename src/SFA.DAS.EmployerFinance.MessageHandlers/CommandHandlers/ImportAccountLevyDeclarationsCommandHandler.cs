@@ -4,15 +4,16 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Azure;
 using NServiceBus;
-using SFA.DAS.EAS.Application.Commands.CreateEnglishFractionCalculationDate;
-using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
-using SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions;
-using SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired;
-using SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
-using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EmployerFinance.Commands.CreateEnglishFractionCalculationDate;
+using SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData;
+using SFA.DAS.EmployerFinance.Commands.UpdateEnglishFractions;
 using SFA.DAS.EmployerFinance.Messages.Commands;
+using SFA.DAS.EmployerFinance.Models.Levy;
+using SFA.DAS.EmployerFinance.Queries.GetEnglishFractionsUpdateRequired;
+using SFA.DAS.EmployerFinance.Queries.GetHMRCLevyDeclaration;
+using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
