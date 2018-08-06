@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk;Microsoft.NET.Sdk.Publish">
 
   <PropertyGroup>
+    <IsGenerateRunCommandFileDisabled>true</IsGenerateRunCommandFileDisabled>
     <IsWebJobProject>true</IsWebJobProject>
     <OutputType>Exe</OutputType>
     <TargetFramework>net462</TargetFramework>

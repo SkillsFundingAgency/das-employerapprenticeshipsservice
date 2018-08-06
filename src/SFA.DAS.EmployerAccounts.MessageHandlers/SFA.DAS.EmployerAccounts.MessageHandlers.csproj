@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk;Microsoft.NET.Sdk.Publish">
 
   <PropertyGroup>
+    <IsGenerateRunCommandFileDisabled>true</IsGenerateRunCommandFileDisabled>
     <IsWebJobProject>true</IsWebJobProject>
     <OutputType>Exe</OutputType>
     <TargetFramework>net462</TargetFramework>
     <WebJobName>EmployerAccounts-MessageHandlers</WebJobName>
     <WebJobType>Continuous</WebJobType>
-    <IsGenerateRunCommandFileDisabled>true</IsGenerateRunCommandFileDisabled>
   </PropertyGroup>
 
   <ItemGroup>
