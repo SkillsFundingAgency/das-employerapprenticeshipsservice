@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Domain.Models.UserView
+namespace SFA.DAS.EmployerAccounts.Models.UserView
 {
     public class MultiVariantView
     {

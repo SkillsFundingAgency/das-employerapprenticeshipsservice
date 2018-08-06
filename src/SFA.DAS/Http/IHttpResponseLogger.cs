@@ -2,7 +2,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Domain.Interfaces
+namespace SFA.DAS.Http
 {
     public interface IHttpResponseLogger
     {
