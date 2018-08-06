@@ -61,19 +61,6 @@ tr.total {
     display: inline-block;
 }
 
-table.organisations {
-    td {
-        width: 40%;
-    }
-
-    th.link-right,
-    td.link-right {
-        text-align: left;
-        padding-right: 1em;
-        width: 15%;
-    }
-}
-
 table.edited-changes {
     td.changed-item {
         font-weight: 700;
@@ -88,8 +75,6 @@ table.details-list {
         font-weight: normal;
     }
 }
-
-
 
 td, th {
     &.highlight {

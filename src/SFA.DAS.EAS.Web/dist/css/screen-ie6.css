@@ -3326,17 +3326,6 @@ tr.total td {
   display: inline-block;
 }
 
-table.organisations td {
-  width: 40%;
-}
-
-table.organisations th.link-right,
-table.organisations td.link-right {
-  text-align: left;
-  padding-right: 1em;
-  width: 15%;
-}
-
 table.edited-changes td.changed-item {
   font-weight: 700;
   font-size: 105%;
