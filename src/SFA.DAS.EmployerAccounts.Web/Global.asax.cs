@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.Web
     public class MvcApplication : HttpApplication
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-
+        
         private IEndpointInstance _endpoint;
 
         protected void Application_Start()

@@ -4,7 +4,10 @@ using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.EntityFramework;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.TransferConnections;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Data

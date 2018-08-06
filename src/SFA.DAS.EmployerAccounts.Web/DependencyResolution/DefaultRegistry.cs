@@ -1,3 +1,7 @@
+using SFA.DAS.CookieService;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Services;
+using SFA.DAS.EmployerAccounts.Web.Logging;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
 using System.Web;
@@ -18,6 +22,8 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 
             For<ILoggingContext>().Use(c => HttpContext.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContext.Current)));
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
+            For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
+            For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
         }
     }
 }
