@@ -1,7 +1,7 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain.Http;
+using SFA.DAS.Validation;
 using SFA.DAS.ExecutionPolicies;
 using SFA.DAS.Http;
 using SFA.DAS.NLog.Logger;

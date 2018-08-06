@@ -2,7 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.HashingService;

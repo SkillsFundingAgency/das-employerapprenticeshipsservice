@@ -1,7 +1,7 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Exceptions;

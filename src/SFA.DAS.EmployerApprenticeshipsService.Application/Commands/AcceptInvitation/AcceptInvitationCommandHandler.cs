@@ -1,7 +1,7 @@
 using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;

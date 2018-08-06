@@ -7,7 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
