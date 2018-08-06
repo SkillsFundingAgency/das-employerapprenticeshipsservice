@@ -17,7 +17,7 @@ using SignInUserViewModel = SFA.DAS.EmployerAccounts.Web.ViewModels.SignInUserVi
 using SFA.DAS.Authenication;
 using SFA.DAS.EmployerAccounts.Web;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 {
     public class WhenIViewTheHomePage
     {

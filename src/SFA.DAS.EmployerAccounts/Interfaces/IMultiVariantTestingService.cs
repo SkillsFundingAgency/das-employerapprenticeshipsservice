@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Domain.Models.UserView;
+﻿using SFA.DAS.EmployerAccounts.Models.UserView;
 using System;
 using System.Collections.Generic;
 using System.Linq;
