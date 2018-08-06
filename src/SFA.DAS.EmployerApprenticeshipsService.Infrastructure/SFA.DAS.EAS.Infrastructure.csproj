@@ -370,7 +370,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AddressLookupService.cs" />
     <Compile Include="Services\AuditService.cs" />
-    <Compile Include="Services\AzureAdAuthenticationService.cs" />
     <Compile Include="Services\AzureServiceBase.cs" />
     <Compile Include="Services\CommitmentService.cs" />
     <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />
@@ -381,13 +380,10 @@
     <Compile Include="Features\FeatureAttribute.cs" />
     <Compile Include="Services\HmrcDateService.cs" />
     <Compile Include="Services\HmrcService.cs" />
-    <Compile Include="Services\HttpClientWrapper.cs" />
-    <Compile Include="Services\HttpResponseLogger.cs" />
     <Compile Include="Services\PdfService.cs" />
     <Compile Include="Services\ReferenceDataService.cs" />
     <Compile Include="Services\RestService.cs" />
     <Compile Include="Services\MultiVariantTestingService.cs" />
-    <Compile Include="Services\PaymentService.cs" />
     <Compile Include="Services\TaskService.cs" />
   </ItemGroup>
   <ItemGroup />

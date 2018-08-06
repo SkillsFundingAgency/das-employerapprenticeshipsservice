@@ -284,20 +284,14 @@
     <Compile Include="MockModels\MockMessage.cs" />
     <Compile Include="ObjectMothers\AddPayeToNewLegalEntityCommandObjectMother.cs" />
     <Compile Include="ObjectMothers\ApprenticeshipObjectMother.cs" />
-    <Compile Include="ObjectMothers\DeclarationsObjectMother.cs" />
     <Compile Include="ObjectMothers\FrameworkObjectMother.cs" />
-    <Compile Include="ObjectMothers\GetHMRCLevyDeclarationResponseObjectMother.cs" />
     <Compile Include="ObjectMothers\LevyDeclarationSourceDataObjectMother.cs" />
     <Compile Include="ObjectMothers\LevyDeclarationViewsObjectMother.cs" />
     <Compile Include="ObjectMothers\EnglishFractionObjectMother.cs" />
     <Compile Include="ObjectMothers\MessageObjectMother.cs" />
-    <Compile Include="ObjectMothers\RefreshEmployerLevyDataCommandObjectMother.cs" />
     <Compile Include="ObjectMothers\StandardObjectMother.cs" />
     <Compile Include="ObjectMothers\TransactionLineObjectMother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScenarioCommonSteps\AccountSteps.cs" />
-    <Compile Include="ScenarioCommonSteps\LevyWorkerSteps.cs" />
-    <Compile Include="ScenarioCommonSteps\UserSteps.cs" />
     <Compile Include="TestModels\TestAccount.cs" />
     <Compile Include="TestModels\TestUser.cs" />
   </ItemGroup>
