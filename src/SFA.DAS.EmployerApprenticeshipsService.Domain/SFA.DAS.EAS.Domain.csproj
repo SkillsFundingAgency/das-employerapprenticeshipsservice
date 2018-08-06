@@ -265,13 +265,11 @@
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Interfaces\IAgreementService.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
-    <Compile Include="Interfaces\IAzureAdAuthenticationService.cs" />
     <Compile Include="Interfaces\ICommitmentService.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
     <Compile Include="Interfaces\ICurrentDateTime.cs" />
     <Compile Include="Interfaces\IExcelService.cs" />
     <Compile Include="Interfaces\IHmrcDateService.cs" />
-    <Compile Include="Interfaces\IHttpResponseLogger.cs" />
     <Compile Include="Interfaces\IPdfService.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
     <Compile Include="Interfaces\IMultiVariantTestingService.cs" />
@@ -346,11 +344,9 @@
     <Compile Include="Interfaces\IAuditService.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
     <Compile Include="Data\Repositories\ILegalEntityRepository.cs" />
-    <Compile Include="Interfaces\IDasAccountService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
-    <Compile Include="Http\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
     <Compile Include="Models\AccountTeam\Invitation.cs" />
     <Compile Include="Models\AccountTeam\InvitationStatus.cs" />
@@ -365,7 +361,6 @@
     <Compile Include="Models\Transaction\TransactionItemType.cs" />
     <Compile Include="Models\AccountTeam\Membership.cs" />
     <Compile Include="Models\AccountTeam\MembershipView.cs" />
-    <Compile Include="Interfaces\IPaymentService.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentDetails.cs" />
     <Compile Include="Models\Features\Feature.cs" />

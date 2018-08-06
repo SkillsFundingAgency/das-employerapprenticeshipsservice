@@ -1,10 +1,8 @@
-
+using SFA.DAS.EmployerAccounts.DependencyResolution;
+using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {
-    using SFA.DAS.EmployerAccounts.DependencyResolution;
-    using StructureMap;
-
     public static class IoC
     {
         public static IContainer Initialize()

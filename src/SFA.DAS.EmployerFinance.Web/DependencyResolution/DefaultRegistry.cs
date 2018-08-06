@@ -1,5 +1,7 @@
 using StructureMap;
 using System.Web;
+using SFA.DAS.EmployerFinance.Web.Logging;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
 {
@@ -14,6 +16,7 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
                 s.With(new ControllerConvention());
             });
 
+            For<ILoggingContext>().Use(c => HttpContext.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContext.Current)));
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 using System.Data.SqlClient;
-using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EmployerFinance.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
 
-            For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<LevyDeclarationProviderConfiguration>().DatabaseConnectionString));
+            For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerFinanceConfiguration>().DatabaseConnectionString));
         }
     }
 }
