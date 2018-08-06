@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Exceptions;
 using SFA.DAS.EmployerFinance.Models.Transfers;

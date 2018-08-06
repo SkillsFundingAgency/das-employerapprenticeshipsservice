@@ -1,7 +1,7 @@
 ﻿using Moq;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.Events.Api.Client;

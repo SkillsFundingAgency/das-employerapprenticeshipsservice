@@ -8,7 +8,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeInUse;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.NLog.Logger;

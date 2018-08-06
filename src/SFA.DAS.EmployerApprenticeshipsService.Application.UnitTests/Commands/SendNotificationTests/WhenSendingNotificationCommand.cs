@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.NLog.Logger;

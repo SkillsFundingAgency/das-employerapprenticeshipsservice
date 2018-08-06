@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Azure;
 using NServiceBus;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerFinance.Commands.CreateEnglishFractionCalculationDate;
 using SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData;
