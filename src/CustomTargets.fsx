@@ -60,6 +60,9 @@ Target "Dotnet Restore" (fun _ ->
                 Project = ".\\SFA.DAS.EmployerFinance.Web" })
     DotNetCli.Restore(fun p ->
         { p with
+                Project = ".\\SFA.DAS.EmployerFinance.UnitTests" })
+    DotNetCli.Restore(fun p ->
+        { p with
                 Project = ".\\SFA.DAS.EmployerFinance.MessageHandlers.UnitTests" })
     DotNetCli.Restore(fun p ->
         { p with
