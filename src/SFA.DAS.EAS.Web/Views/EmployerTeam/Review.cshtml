@@ -18,43 +18,47 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@Model.Data.Name</h1>
-        <table>     
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-full">
+        <table class="responsive your-team-user">
             <thead>
                 <tr>
                     <th scope="col">Email</th>
                     <th scope="col">What they can do</th>
                     <th></th>
                 </tr>
-            </thead> 
+            </thead>
             <tbody>
                 <tr>
-                    <td>@Model.Data.Email</td>
-                    <td>@RoleStrings.GetRoleDescription(@Model.Data.Role)</td>
+                    <td data-label="Email"><div>@Model.Data.Email</div></td>
+                    <td data-label="What they can do"><div>@RoleStrings.GetRoleDescription(@Model.Data.Role)</div></td>
                     @if (Model.Data.IsUser)
                     {
-                        <td class="link-right">
+                        <td data-label="" class="link-right">
                             <a href="@Url.Action("ChangeRole","EmployerTeam", new { Model.Data.Email })">Change <span class="vh">role for @Model.Data.Name</span></a>
                         </td>
                     }
                     else
                     {
-                        <td></td>
+                        <td>&nbsp;</td>
                     }
-                </tr>              
+                </tr>
             </tbody>
         </table>
-      
+
         @if (@Model.Data.Status == InvitationStatus.Pending || @Model.Data.Status == InvitationStatus.Expired)
         {
             <div class="form-group">
                 <form action="@Url.Action("Resend")" method="POST">
                     @Html.AntiForgeryToken()
-                    <input type="hidden" id="Email" name="Email" value="@Model.Data.Email"/>
+                    <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
                     <input type="hidden" id="Name" name="Name" value="@Model.Data.Name" />
                     <button type="submit" class="button" id="resend_invitation">Resend Invitation</button>
                 </form>
-                <a href="@Url.Action("Cancel", "EmployerTeam",new {email = Model.Data.Email, invitationId = Model.Data.HashedInvitationId })" class="button button-link">Cancel Invitation</a> 
-                
+                <a href="@Url.Action("Cancel", "EmployerTeam",new {email = Model.Data.Email, invitationId = Model.Data.HashedInvitationId })" class="button button-link">Cancel Invitation</a>
+
             </div>
         }
         @if (@Model.Data.IsUser)
@@ -63,7 +67,7 @@
                 <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
                 <button type="submit" class="button" id="delete_user">Remove team member</button>
             </form>
-         
+
         }
     </div>
 </div>

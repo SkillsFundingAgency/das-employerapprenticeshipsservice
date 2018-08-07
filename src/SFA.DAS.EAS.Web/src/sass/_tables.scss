@@ -97,12 +97,15 @@ td, th {
     }
 }
 
-// Responsive Tables 
+
+
+// Responsive Tables
 
 table.responsive {
     thead {
         display: none;
     }
+
     tr {
         border: 1px solid $border-colour;
         margin-bottom: 10px;
@@ -110,33 +113,61 @@ table.responsive {
         float: left;
         width: 100%;
         box-sizing: border-box;
+
         td {
             display: block;
             text-align: right;
-            clear:left;
-            float:left;
+            clear: left;
+            float: left;
             width: 100%;
             padding: 10px 10px 8px;
             box-sizing: border-box;
             border-bottom: 1px dotted $border-colour;
+
             &:before {
                 content: attr(data-label);
                 float: left;
                 font-weight: bold;
                 padding-right: 10px;
             }
+
             &:last-child {
                 border-bottom: none;
             }
+
             &:empty {
                 display: none;
             }
         }
+
         &.total {
             border: 2px solid #000;
         }
     }
+
+    &.your-team-user {
+        tr {
+            border: 0 none;
+        }
+
+        td {
+            float: none;
+            text-align: left;
+            border-bottom: 1px solid $border-colour;
+            padding: 10px 0;
+
+            &:before {
+                float: none;
+                padding-right: 0;
+            }
+
+            &:last-child {
+                border-bottom: 1px solid $border-colour;
+            }
+        }
+    }
 }
+
 
 @include media(tablet) {
     table.responsive {
