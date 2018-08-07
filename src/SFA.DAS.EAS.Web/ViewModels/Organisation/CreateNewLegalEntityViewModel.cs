@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Web.ViewModels.Organisation
 {
@@ -11,7 +12,7 @@ namespace SFA.DAS.EAS.Web.ViewModels.Organisation
         public DateTime? IncorporatedDate { get; set; }
         public string ExternalUserId { get; set; }
         public string LegalEntityStatus { get; set; }
-        public byte Source { get; set; }
+        public OrganisationType Source { get; set; }
         public byte? PublicSectorDataSource { get; set; }
         public string Sector { get; set; }
     }

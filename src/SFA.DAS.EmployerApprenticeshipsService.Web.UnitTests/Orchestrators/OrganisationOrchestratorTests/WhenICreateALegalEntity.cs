@@ -5,6 +5,7 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -53,6 +54,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 HashedAccountId = "1",
                 Name = "Test Corp",
                 Code = "SD665734",
+                Source = OrganisationType.CompaniesHouse,
                 Address = "1, Test Street",
                 IncorporatedDate = DateTime.Now.AddYears(-20),
                 ExternalUserId = "2",
@@ -71,6 +73,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                              LegalEntityId = legalEntityId,
                              LegalEntityName = request.Name,
                              LegalEntityCode = request.Code,
+                             LegalEntitySource = request.Source,
                              LegalEntityAddress = request.Address,
                              LegalEntityStatus = request.LegalEntityStatus,
                              Status = EmployerAgreementStatus.Pending
@@ -85,6 +88,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             command.Name.Equals(request.Name) &&
             command.Address.Equals(request.Address) &&
             command.Code.Equals(request.Code) &&
+            command.Source.Equals(request.Source) &&
             command.DateOfIncorporation.Equals(request.IncorporatedDate) &&
             command.Status.Equals(request.LegalEntityStatus))));
         }

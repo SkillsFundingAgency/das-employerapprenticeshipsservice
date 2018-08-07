@@ -10,6 +10,7 @@ using FluentAssertions;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.ReferenceData.Types.DTO;
 using OrganisationType = SFA.DAS.Common.Domain.Types.OrganisationType;
 
@@ -22,6 +23,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
         private Mock<IMapper> _mapper;
         private Mock<IInProcessCache> _inProcessCache;
         private Organisation _expectedOrganisation;
+        private Mock<ILog> _logger;
 
         [SetUp]
         public void Arrange()
@@ -42,7 +44,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
 
             _inProcessCache = new Mock<IInProcessCache>();
 
-            _referenceDataService = new Infrastructure.Services.ReferenceDataService(_apiClient.Object, _mapper.Object, _inProcessCache.Object);
+            _logger = new Mock<ILog>();
+
+            _referenceDataService = new Infrastructure.Services.ReferenceDataService(_apiClient.Object, _mapper.Object, _inProcessCache.Object, _logger.Object);
         }
 
         [Test]

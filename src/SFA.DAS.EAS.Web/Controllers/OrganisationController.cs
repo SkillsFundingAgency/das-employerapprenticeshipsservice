@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 IncorporatedDate = incorporated,
                 ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName),
                 LegalEntityStatus = string.IsNullOrWhiteSpace(legalEntityStatus) ? null : legalEntityStatus,
-                Source = (byte)organisationType,
+                Source = organisationType,
                 PublicSectorDataSource = publicSectorDataSource,
                 Sector = sector
             };

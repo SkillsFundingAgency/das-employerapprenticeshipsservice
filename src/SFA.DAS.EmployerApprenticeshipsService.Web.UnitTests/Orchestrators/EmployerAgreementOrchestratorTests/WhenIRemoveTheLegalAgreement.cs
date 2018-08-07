@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
@@ -19,6 +20,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
     {
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
+        private Mock<IReferenceDataService> _referenceDataService;
+
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private EmployerAgreementOrchestrator _orchestrator;
 
@@ -36,7 +39,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, Mock.Of<IMapper>(), _configuration);
+            _referenceDataService = new Mock<IReferenceDataService>();
+
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, Mock.Of<IMapper>(), _configuration, _referenceDataService.Object);
         }
 
         [Test]

@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Domain.Models.EmployerAgreement
 {
@@ -14,6 +15,7 @@ namespace SFA.DAS.EAS.Domain.Models.EmployerAgreement
         public long LegalEntityId { get; set; }
         public string LegalEntityName { get; set; }
         public string LegalEntityCode { get; set; }
+        public OrganisationType LegalEntitySource { get; set; }
         public string LegalEntityAddress { get; set; }
         public DateTime? LegalEntityInceptionDate { get; set; }
         public int TemplateId { get; set; }

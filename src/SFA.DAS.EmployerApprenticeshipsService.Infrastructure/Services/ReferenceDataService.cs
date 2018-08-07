@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
-using DocumentFormat.OpenXml.Wordprocessing;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
-using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Extensions;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.ReferenceData.Api.Client;
 using SFA.DAS.ReferenceData.Types.DTO;
 using Address = SFA.DAS.EAS.Domain.Models.Organisation.Address;
 using Charity = SFA.DAS.EAS.Domain.Models.ReferenceData.Charity;
 using OrganisationSubType = SFA.DAS.Common.Domain.Types.OrganisationSubType;
-using OrganisationType = SFA.DAS.Common.Domain.Types.OrganisationType;
+using CommonOrganisationType = SFA.DAS.Common.Domain.Types.OrganisationType;
+using ReferenceDataOrganisationType = SFA.DAS.ReferenceData.Types.DTO.OrganisationType;
 using PublicSectorOrganisation = SFA.DAS.EAS.Domain.Models.ReferenceData.PublicSectorOrganisation;
 
 
@@ -24,17 +24,25 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     {
         private const int DefaultPageSize = 100;
 
+        private readonly Lazy<Task<CommonOrganisationType[]>> _locateableOrganisationTypes;
         private readonly IReferenceDataApiClient _client;
         private readonly IMapper _mapper;
         private readonly IInProcessCache _inProcessCache;
+        private readonly ILog _logger;
 
         private readonly List<string> _termsToRemove = new List<string> { "ltd", "ltd.", "limited", "plc", "plc." };
 
-        public ReferenceDataService(IReferenceDataApiClient client, IMapper mapper, IInProcessCache inProcessCache)
+        public ReferenceDataService(
+            IReferenceDataApiClient client, 
+            IMapper mapper, 
+            IInProcessCache inProcessCache,
+            ILog logger)
         {
             _client = client;
             _mapper = mapper;
             _inProcessCache = inProcessCache;
+            _locateableOrganisationTypes = new Lazy<Task<CommonOrganisationType[]>>(InitialiseOrganisationTypes);
+            _logger = logger;
         }
 
         public async Task<Charity> GetCharity(int registrationNumber)
@@ -68,7 +76,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             };
         }
 
-        public async Task<PagedResponse<OrganisationName>> SearchOrganisations(string searchTerm, int pageNumber = 1, int pageSize = 25, OrganisationType? organisationType = null)
+        public async Task<PagedResponse<OrganisationName>> SearchOrganisations(string searchTerm, int pageNumber = 1, int pageSize = 25, CommonOrganisationType? organisationType = null)
         {
             var result = await SearchOrganisations(searchTerm);
 
@@ -85,9 +93,41 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return CreatePagedOrganisationResponse(pageNumber, pageSize, result);
         }
 
-        public Task<Organisation> GetLatestDetails(ReferenceData.Types.DTO.OrganisationType organisationType, string identifier)
+        public Task<Organisation> GetLatestDetails(CommonOrganisationType organisationType, string identifier)
         {
-            return _client.GetLatestDetails(organisationType, identifier);
+            return _client.GetLatestDetails(organisationType.ToReferenceDataOrganisationType(), identifier);
+        }
+
+        public async Task<bool> IsLocateableOrganisationType(CommonOrganisationType organisationType)
+        {
+            if (organisationType.TryToReferenceDataOrganisationType(out ReferenceDataOrganisationType referenceDataType))
+            {
+                var locateableOrganisationTypes = await _locateableOrganisationTypes.Value;
+
+                return locateableOrganisationTypes.Contains(organisationType);
+            }
+
+            return false;
+        }
+
+        private Task<CommonOrganisationType[]> InitialiseOrganisationTypes()
+        {
+            var task = Task.Run(() => new ReferenceDataOrganisationType[]
+            {
+                OrganisationType.Charity,
+                OrganisationType.Company
+            });
+
+            // var task = _client.GetLocateableOrganisationTypes());
+
+            return task.ContinueWith(t =>
+            {
+                var filteredOrganisationTypes = t.Result
+                    .Select(referenceDataOrganisationType => referenceDataOrganisationType.ToCommonOrganisationType())
+                    .ToArray();
+
+                return filteredOrganisationTypes;
+            });
         }
 
         private List<OrganisationName> SortOrganisations(List<OrganisationName> result, string searchTerm)
@@ -199,11 +239,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             }
         }
 
-        private List<OrganisationName> FilterOrganisationsByType(IEnumerable<OrganisationName> result, OrganisationType organisationType)
+        private List<OrganisationName> FilterOrganisationsByType(IEnumerable<OrganisationName> result, CommonOrganisationType organisationType)
         {
-            if (organisationType == OrganisationType.Other || organisationType == OrganisationType.PublicBodies)
+            if (organisationType == CommonOrganisationType.Other || organisationType == CommonOrganisationType.PublicBodies)
             {
-                return result.Where(x => x.Type == OrganisationType.Other || x.Type == OrganisationType.PublicBodies).ToList();
+                return result.Where(x => x.Type == CommonOrganisationType.Other || x.Type == CommonOrganisationType.PublicBodies).ToList();
             }
             return result.Where(x => x.Type == organisationType).ToList();
         }

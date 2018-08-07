@@ -150,6 +150,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     LegalEntityId = legalEntityId,
                     LegalEntityName = createParams.Name,
                     LegalEntityCode = createParams.Code,
+                    LegalEntitySource = createParams.Source,
                     LegalEntityAddress = createParams.Address,
                     LegalEntityInceptionDate = createParams.DateOfIncorporation,
                     Sector = createParams.Sector,

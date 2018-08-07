@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Application.Factories;
@@ -59,6 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 LegalEntityId = 5246,
                 LegalEntityName = "Test Corp",
                 LegalEntityCode = "3476782638",
+                LegalEntitySource = OrganisationType.CompaniesHouse,
                 LegalEntityAddress = "12, test street",
                 LegalEntityInceptionDate = DateTime.Now
             };

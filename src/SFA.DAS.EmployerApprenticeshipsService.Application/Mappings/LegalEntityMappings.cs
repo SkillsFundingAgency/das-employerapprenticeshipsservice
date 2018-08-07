@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -52,9 +53,9 @@ namespace SFA.DAS.EAS.Application.Mappings
                     l.LegalEntity.PublicSectorDataSource == 2 ? "NHS" :
                     l.LegalEntity.PublicSectorDataSource == 3 ? "Police" : ""))
                 .ForMember(d => d.Source, o => o.MapFrom(l =>
-                    l.LegalEntity.Source == 1 ? "Companies House" :
-                    l.LegalEntity.Source == 2 ? "Charities" :
-                    l.LegalEntity.Source == 3 ? "Public Bodies" : "Other"))
+                    l.LegalEntity.Source == OrganisationType.CompaniesHouse ? "Companies House" :
+                    l.LegalEntity.Source == OrganisationType.Charities ? "Charities" :
+                    l.LegalEntity.Source == OrganisationType.PublicBodies ? "Public Bodies" : "Other"))
                 .ForMember(d => d.SourceNumeric, o => o.MapFrom(l => l.LegalEntity.Source))
                 .ForMember(d => d.AgreementSignedByName, o => o.Ignore())
                 .ForMember(d => d.AgreementSignedDate, o => o.Ignore())
