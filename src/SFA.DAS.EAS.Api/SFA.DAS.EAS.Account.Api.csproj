@@ -243,14 +243,14 @@
     <Reference Include="SFA.DAS.NLog.Targets.Redis, Version=1.0.0.47445, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Targets.Redis.1.0.0.47445\lib\net45\SFA.DAS.NLog.Targets.Redis.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NServiceBus, Version=1.0.41.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NServiceBus.1.0.41\lib\net462\SFA.DAS.NServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.NServiceBus, Version=1.0.42.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NServiceBus.1.0.42\lib\net462\SFA.DAS.NServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NServiceBus.EntityFramework, Version=1.0.41.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NServiceBus.EntityFramework.1.0.41\lib\net462\SFA.DAS.NServiceBus.EntityFramework.dll</HintPath>
+    <Reference Include="SFA.DAS.NServiceBus.EntityFramework, Version=1.0.42.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NServiceBus.EntityFramework.1.0.42\lib\net462\SFA.DAS.NServiceBus.EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NServiceBus.WebApi, Version=1.0.40.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NServiceBus.WebApi.1.0.40\lib\net462\SFA.DAS.NServiceBus.WebApi.dll</HintPath>
+    <Reference Include="SFA.DAS.NServiceBus.WebApi, Version=1.0.42.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NServiceBus.WebApi.1.0.42\lib\net462\SFA.DAS.NServiceBus.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="StackExchange.Redis, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StackExchange.Redis.1.2.6\lib\net46\StackExchange.Redis.dll</HintPath>
