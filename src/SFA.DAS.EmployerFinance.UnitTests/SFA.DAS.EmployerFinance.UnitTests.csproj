@@ -11,7 +11,7 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
     <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="2.1.151" />
     <PackageReference Include="SFA.DAS.Commitments.Api.Types" Version="2.1.151" />
-    <PackageReference Include="SFA.DAS.NServiceBus.Testing" Version="1.0.41" />
+    <PackageReference Include="SFA.DAS.NServiceBus.Testing" Version="1.0.42" />
     <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
     <PackageReference Include="SFA.DAS.Testing.EntityFramework" Version="1.0.14" />
   </ItemGroup>

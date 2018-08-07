@@ -63,9 +63,9 @@
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.41" />
-    <PackageReference Include="SFA.DAS.NServiceBus.EntityFramework" Version="1.0.41" />
-    <PackageReference Include="SFA.DAS.NServiceBus.Mvc" Version="1.0.41" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.42" />
+    <PackageReference Include="SFA.DAS.NServiceBus.EntityFramework" Version="1.0.42" />
+    <PackageReference Include="SFA.DAS.NServiceBus.Mvc" Version="1.0.42" />
     <PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
