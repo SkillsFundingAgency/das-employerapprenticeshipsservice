@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <IsWebConfigTransformDisabled>true</IsWebConfigTransformDisabled>
     <TargetFramework>net462</TargetFramework>
     <OutputPath>bin\</OutputPath>
     <OutputType>Library</OutputType>
