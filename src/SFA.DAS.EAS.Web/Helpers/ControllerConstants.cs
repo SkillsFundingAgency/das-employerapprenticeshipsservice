@@ -41,6 +41,8 @@
         public const string IndexActionName = "Index";
         public const string InformActionName = "Inform";
         public const string InviteActionName = "Invite";
+        public const string InvitationControllerName = "Invitation";
+        public const string InvitationIndexName = "All";
         public const string LegalAgreementViewName = "LegalAgreement";
         public const string LevyDeclarationDetailViewName = "LevyDeclarationDetail";
         public const string ModelStateTempDataKey = "ModelState";
