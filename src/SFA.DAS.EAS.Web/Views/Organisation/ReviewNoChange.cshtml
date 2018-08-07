@@ -1,0 +1,71 @@
+﻿@using SFA.DAS.Common.Domain.Types
+@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.ReviewOrganisationAddressViewModel>
+@{
+    ViewBag.Title = "Update an organisation";
+    ViewBag.Section = "organisations";
+    ViewBag.PageID = "update-organisation-details";
+}
+<div class="grid-row">
+    <div>
+        <h1 class="heading-xlarge">Review your details</h1>
+    </div>
+
+    <div>
+        <div>
+            Here are the most up-to-date details we found for your organisation. These details are the same as those previously held.
+        </div>
+        <div>
+            <table>
+                <tbody>
+                <tr>
+                    <td>Information from</td><td>@Model.Data.DataSourceFriendlyName</td>
+                    <td>Organisation name</td><td>@Model.Data.RefreshedName</td>
+                    <td>Organisation address</td><td>@Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div>
+            If these details are incorrect, you need to update them at @Model.Data.DataSourceFriendlyName. This update can take up to 7 working days to process.
+        </div>
+
+        <div>
+            <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
+
+                <input type="hidden" name="hashedAccountId" value="@Model.Data.HashedAccountId"/>
+
+                <fieldset>
+                    <legend>
+                        <span class="vh">What's next?</span>
+                    </legend>
+
+                    <label for="acceptAgreement" class="block-label">
+                        <span class="form-label">Go to your organisations and agreements</span>
+                        <input type="radio" name="nextStep" value="dashboard"/>
+                    </label>
+
+                    <label for="teamMembers" class="block-label">
+                        <span class="form-label">Go to the homepage</span>
+                        <input type="radio" name="nextStep" value="homepage"/>
+                    </label>
+
+                    <div class="form-group">
+                        <button type="submit" class="button">Continue</button>
+                    </div>
+
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
+        </ol>
+    </div>
+}

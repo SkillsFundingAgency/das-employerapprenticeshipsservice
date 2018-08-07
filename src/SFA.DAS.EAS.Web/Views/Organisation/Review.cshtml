@@ -25,8 +25,6 @@
             <form method="POST" action="@Url.Action("ProcessReviewSelection")">
                 @Html.AntiForgeryToken()
 
-                <!-- Solving problem: We need the account hased id in the url but it's null on the postback -->
-
                 <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName" />
                 <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress" />
                 <input type="hidden" name="accountLegalEntityPublicHashedId" value="@Model.Data.AccountLegalEntityPublicHashedId" />

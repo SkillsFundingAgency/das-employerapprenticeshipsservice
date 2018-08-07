@@ -158,7 +158,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var viewModel = await _orchestrator.GetRefreshedOrganisationDetails(accountLegalEntityPublicHashedId);
 
-            return View(viewModel);
+            if((viewModel.Data.UpdatesAvailable & OrganisationUpdatesAvailable.Any) != 0)
+            {
+                return View(viewModel);
+            }
+
+            return View("ReviewNoChange", viewModel);
         }
 
         [HttpPost]

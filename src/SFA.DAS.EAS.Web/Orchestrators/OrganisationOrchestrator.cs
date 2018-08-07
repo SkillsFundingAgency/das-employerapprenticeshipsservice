@@ -376,6 +376,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Data = new ReviewOrganisationAddressViewModel
                 {
+                    DataSourceFriendlyName = currentDetails.AccountLegalEntity.OrganisationType.GetFriendlyName(),
                     AccountLegalEntityPublicHashedId = accountLegalEntityPublicHashedId,
                     OrganisationName = currentDetails.AccountLegalEntity.Name,
                     OrganisationAddress = currentDetails.AccountLegalEntity.Address,

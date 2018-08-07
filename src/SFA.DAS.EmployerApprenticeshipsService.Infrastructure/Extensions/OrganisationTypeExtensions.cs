@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Infrastructure.Exceptions;
+﻿using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EAS.Infrastructure.Exceptions;
 using CommonOrganisationType = SFA.DAS.Common.Domain.Types.OrganisationType;
 using ReferenceDataOrganisationType = SFA.DAS.ReferenceData.Types.DTO.OrganisationType;
 
@@ -6,7 +7,7 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
 {
     /// <remarks>
     ///     There are two organisation types used within MA - one from ReferenceData and one from common types (there is also a third from commitments but this is not relevant here).
-    ///     The two organisations types look similar but are not identical and are subtly incompatible. I suspect this was by accident but now it is running free in the wild it is a bit
+    ///     The two organisation types look similar but are not identical and are subtly incompatible. I suspect this was by accident but now it is running free in the wild it is a bit
     ///     more difficult to fix. 
     ///     There has always been an implicit mapping that occurs when the json from reference data is de-serialised in MA. This mapping was hitherto obscured but a recent update to 
     ///     reference data that added the organisation type to the API has made the mapping a lot more obvious. 
@@ -83,6 +84,17 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
             var commonOrganisationType = organisationType.ToCommonOrganisationType();
 
             return commonOrganisationType.TryToReferenceDataOrganisationType(out _);
+        }
+
+        public static string GetFriendlyName(this CommonOrganisationType commonOrganisationType)
+        {
+            switch (commonOrganisationType)
+            {
+                case CommonOrganisationType.CompaniesHouse: return "Companies House";
+                case CommonOrganisationType.Charities: return "Charity Commission";
+                case CommonOrganisationType.PublicBodies: return "Public Bodies";
+                default: return "Other";
+            }
         }
     }
 }
