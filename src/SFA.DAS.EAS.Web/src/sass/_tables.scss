@@ -144,28 +144,6 @@ table.responsive {
             border: 2px solid #000;
         }
     }
-
-    &.your-team-user {
-        tr {
-            border: 0 none;
-        }
-
-        td {
-            float: none;
-            text-align: left;
-            border-bottom: 1px solid $border-colour;
-            padding: 10px 0;
-
-            &:before {
-                float: none;
-                padding-right: 0;
-            }
-
-            &:last-child {
-                border-bottom: 1px solid $border-colour;
-            }
-        }
-    }
 }
 
 

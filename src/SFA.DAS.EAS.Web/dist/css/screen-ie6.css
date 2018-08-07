@@ -3398,26 +3398,6 @@ table.responsive tr.total {
   border: 2px solid #000;
 }
 
-table.responsive.your-team-user tr {
-  border: 0 none;
-}
-
-table.responsive.your-team-user td {
-  float: none;
-  text-align: left;
-  border-bottom: 1px solid #bfc1c3;
-  padding: 10px 0;
-}
-
-table.responsive.your-team-user td:before {
-  float: none;
-  padding-right: 0;
-}
-
-table.responsive.your-team-user td:last-child {
-  border-bottom: 1px solid #bfc1c3;
-}
-
 table.responsive thead {
   display: table-header-group;
 }
