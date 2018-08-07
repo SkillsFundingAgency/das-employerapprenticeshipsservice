@@ -18,7 +18,9 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public PostcodeAnywhereConfiguration PostcodeAnywhere { get; set; }
         public IdProcessorConfiguration IdProcessor { get; set; }
         public string PublicAllowedHashstringCharacters { get; set; }
-        public string PublicHashstring { get; set; }
-        public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
+	    public string PublicHashstring { get; set; }
+	    public string PublicAllowedAccountLegalEntityHashstringCharacters { get; set; }
+	    public string PublicAllowedAccountLegalEntityHashstringSalt { get; set; }
+	    public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
 	}
 }

@@ -18,18 +18,18 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
         [SetUp]
         public void Arrange()
         {
-            _apiClient.Setup(x => x.GetCharity(It.Is<int>(y=> y == 12345))).ReturnsAsync(new ReferenceData.Api.Client.Dto.Charity
+            _apiClient.Setup(x => x.GetCharity(It.Is<int>(y=> y == 12345))).ReturnsAsync(new ReferenceData.Types.DTO.Charity
             {
                 RegistrationNumber = 12345,
                 Name = "Test Charity DTO"
             });
 
-            _apiClient.Setup(x => x.GetCharity(It.Is<int>(y => y == 999))).ReturnsAsync(null);
+            _apiClient.Setup(x => x.GetCharity(It.Is<int>(y => y == 999))).ReturnsAsync(() => null);
 
-            _mapper.Setup(x => x.Map<ReferenceData.Api.Client.Dto.Charity, Charity>(It.Is<ReferenceData.Api.Client.Dto.Charity>(c=> c!=null && c.RegistrationNumber == 12345)))
+            _mapper.Setup(x => x.Map<SFA.DAS.ReferenceData.Types.DTO.Charity, Charity>(It.Is<SFA.DAS.ReferenceData.Types.DTO.Charity>(c=> c!=null && c.RegistrationNumber == 12345)))
                 .Returns(new Charity { RegistrationNumber = 12345, Name = "Test Charity"});
 
-            _mapper.Setup(x => x.Map<ReferenceData.Api.Client.Dto.Charity, Charity>(It.Is<ReferenceData.Api.Client.Dto.Charity>(c => c == null)))
+            _mapper.Setup(x => x.Map<SFA.DAS.ReferenceData.Types.DTO.Charity, Charity>(It.Is<SFA.DAS.ReferenceData.Types.DTO.Charity>(c => c == null)))
                 .Returns(() => null);
 
             _referenceDataService = new Infrastructure.Services.ReferenceDataService(_apiClient.Object, _mapper.Object, Mock.Of<IInProcessCache>());
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
 
             //Assert
             _apiClient.Verify(x => x.GetCharity(It.Is<int>(i => i == 12345)), Times.Once());
-            _mapper.Verify(x=> x.Map<ReferenceData.Api.Client.Dto.Charity, Charity> (It.Is<ReferenceData.Api.Client.Dto.Charity>(c => c.RegistrationNumber == 12345)), Times.Once);
+            _mapper.Verify(x=> x.Map<SFA.DAS.ReferenceData.Types.DTO.Charity, SFA.DAS.EAS.Domain.Models.ReferenceData.Charity> (It.Is<SFA.DAS.ReferenceData.Types.DTO.Charity>(c => c.RegistrationNumber == 12345)), Times.Once);
             Assert.AreEqual("Test Charity", charity.Name);
         }
 

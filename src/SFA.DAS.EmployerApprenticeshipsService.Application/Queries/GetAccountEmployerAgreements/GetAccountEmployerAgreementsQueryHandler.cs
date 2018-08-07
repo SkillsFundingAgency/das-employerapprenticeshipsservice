@@ -8,8 +8,11 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.HashingService;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using SFA.DAS.EAS.Application.Dtos;
+using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.Extensions;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 {
@@ -51,10 +54,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
-            var agreements = await _db.Agreements
-                .GetAgreementStatus(_configurationProvider, ea => ea.AccountId == accountId)
+            var agreements = await _db.AccountLegalEntities
+                .WithSignedOrPendingAgreementsForAccount(accountId)
+                .ProjectTo<EmployerAgreementStatusDto>(_configurationProvider)
                 .ToListAsync();
-
+                                    
             agreements = agreements.PostFixEmployerAgreementStatusDto(_hashingService, accountId).ToList();
 
             return new GetAccountEmployerAgreementsResponse

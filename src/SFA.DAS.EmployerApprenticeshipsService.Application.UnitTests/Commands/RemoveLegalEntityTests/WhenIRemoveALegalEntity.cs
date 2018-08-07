@@ -13,6 +13,7 @@ using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.Events.Api.Types;
 using SFA.DAS.Messaging.Interfaces;
@@ -32,6 +33,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
         private Mock<IHashingService> _hashingService;
         private Mock<IGenericEventFactory> _genericEventHandler;
         private Mock<IEmployerAgreementEventFactory> _employerAgreementEventFactory;
+        private Mock<IAgreementService> _agreementService;
 
         private const string ExpectedHashedAccountId = "34RFD";
         private const long ExpectedAccountId = 123455;
@@ -52,6 +54,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
 
             _repository = new Mock<IEmployerAgreementRepository>();
 
+            _agreementService = new Mock<IAgreementService>();
+
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountId)).Returns(ExpectedAccountId);
             _hashingService.Setup(x => x.DecodeValue(ExpectedHashedEmployerAgreementId)).Returns(ExpectedEmployerAgreementId);
@@ -62,7 +66,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
             _genericEventHandler.Setup(x => x.Create(It.Is<AgreementRemovedEvent>(c => c.HashedAgreementId.Equals(ExpectedHashedEmployerAgreementId)))).Returns(new GenericEvent {Payload = ExpectedHashedEmployerAgreementId});
 
             _command = new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = ExpectedUserId,HashedLegalAgreementId = ExpectedHashedEmployerAgreementId };
-            _handler = new RemoveLegalEntityCommandHandler(_validator.Object, _logger.Object, _repository.Object, _mediator.Object, _hashingService.Object, _genericEventHandler.Object, _employerAgreementEventFactory.Object, Mock.Of<IMessagePublisher>());
+            _handler = new RemoveLegalEntityCommandHandler(
+                _validator.Object, 
+                _logger.Object, 
+                _repository.Object, 
+                _mediator.Object, 
+                _hashingService.Object, 
+                _genericEventHandler.Object, 
+                _employerAgreementEventFactory.Object, 
+                Mock.Of<IMessagePublisher>(),
+                _agreementService.Object
+                );
         }
 
         [Test]

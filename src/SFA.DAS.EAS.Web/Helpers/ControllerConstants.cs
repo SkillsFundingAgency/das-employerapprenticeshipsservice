@@ -52,6 +52,7 @@
         public const string OrganisationAddedNextStepsActionName = "OrganisationAddedNextSteps";
         public const string OrganisationAddedNextStepsViewName = "OrganisationAddedNextSteps";
         public const string OrganisationAddedNextStepsSearchActionName = "OrganisationAddedNextStepsSearch";
+        public const string OrganisationUpdatedNextStepsActionName = "OrganisationUpdatedNextSteps";
         public const string OrganisationControllerName = "Organisation";
         public const string OrganisationSharedControllerName = "OrganisationShared";
         public const string ProjectionsBaseUrlKeyName = "EmployerProjectionsBaseUrl";

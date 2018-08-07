@@ -92,7 +92,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
-            _membershipRepository.Setup(x => x.Get(membership.UserId, membership.AccountId)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.Get(membership.UserId, membership.AccountId)).ReturnsAsync(() => null);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 

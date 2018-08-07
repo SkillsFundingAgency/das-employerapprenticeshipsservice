@@ -71,22 +71,22 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
 
             if (employerAgreement.StatusId != EmployerAgreementStatus.Signed)
             {
-                var currentUser = (from user in _database.Users
-                                   join member in _database.Memberships on user.Id equals member.UserId
-                                   where user.ExternalId.ToString().Equals(message.ExternalUserId) &&
-                                         member.AccountId.Equals(accountId)
-                                   select user).Single();
-
-                employerAgreement.SignedByName = currentUser.FullName;
+                employerAgreement.SignedByName = _database.Memberships
+                    .Where(m => m.AccountId == accountId && m.User.ExternalId.ToString() == message.ExternalUserId)
+                    .AsEnumerable()
+                    .Select(m => m.User.FullName)
+                    .Single();
             }
 
             employerAgreement.HashedAccountId = _hashingService.HashValue(employerAgreement.AccountId);
             employerAgreement.HashedAgreementId = _hashingService.HashValue(employerAgreement.Id);
+            employerAgreement.HashedLegalEntityId = _hashingService.HashValue(employerAgreement.LegalEntityId);
 
             if (lastSignedAgreement != null)
             {
                 lastSignedAgreement.HashedAccountId = _hashingService.HashValue(lastSignedAgreement.AccountId);
                 lastSignedAgreement.HashedAgreementId = _hashingService.HashValue(lastSignedAgreement.Id);
+                lastSignedAgreement.HashedLegalEntityId = _hashingService.HashValue(lastSignedAgreement.LegalEntityId);
             }
 
             return new GetEmployerAgreementResponse

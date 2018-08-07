@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserTest
         public async Task ThenIShouldGetNullIfTheUserCannotBeFound()
         {
             //Assign
-            _repository.Setup(x => x.GetUserById(It.IsAny<long>())).ReturnsAsync(null);
+            _repository.Setup(x => x.GetUserById(It.IsAny<long>())).ReturnsAsync(() => null);
 
             //Act
             var result = await RequestHandler.Handle(Query);

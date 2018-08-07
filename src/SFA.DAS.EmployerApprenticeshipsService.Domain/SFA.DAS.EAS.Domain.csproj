@@ -116,11 +116,11 @@
     <Reference Include="SFA.DAS.Http, Version=1.0.0.39136, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Http.1.0.0.39136\lib\net45\SFA.DAS.Http.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.63765\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging, Version=3.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.3.1.7\lib\net45\SFA.DAS.Messaging.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.1.7\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.StructureMap.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.StructureMap.dll</HintPath>
@@ -142,9 +142,11 @@
     <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.1.30.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.30\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.33424, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.33424\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.1.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.1.21\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.ReferenceData.Types, Version=1.1.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.1.21\lib\net45\SFA.DAS.ReferenceData.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.7.0.49084, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.7.0.49084\lib\net45\SFA.DAS.Tasks.API.Types.dll</HintPath>
@@ -191,6 +193,9 @@
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />
     <Compile Include="Configuration\WebJobConfig.cs" />
     <Compile Include="Extensions\UserExtension.cs" />
+    <Compile Include="Models\Account\AccountLegalEntity.cs" />
+    <Compile Include="Models\Account\CreateLegalEntityWithAgreementParams.cs" />
+    <Compile Include="Models\Account\AccountSpecificLegalEntity.cs" />
     <Compile Include="Models\Account\AgreementTemplate.cs" />
     <Compile Include="Models\Account\EmployerAgreement.cs" />
     <Compile Include="Data\Entities\Statistics\StatisticsAccounts.cs" />
@@ -257,6 +262,7 @@
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\Features\FeatureType.cs" />
     <Compile Include="Models\IEntity.cs" />
+    <Compile Include="Models\Organisation\AccountLegalEntityModel.cs" />
     <Compile Include="Models\Organisation\Address.cs" />
     <Compile Include="Models\Payments\Payment.cs" />
     <Compile Include="Models\Payments\PeriodEnd.cs" />

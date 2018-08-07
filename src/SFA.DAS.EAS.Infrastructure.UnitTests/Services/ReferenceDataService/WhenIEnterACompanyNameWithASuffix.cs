@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.ReferenceData.Api.Client;
 using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.ReferenceData.Types.DTO;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
 {
@@ -196,24 +197,24 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
          {
              _apiClient.Setup(x => x.SearchOrganisations(wsSearchTerm, 500))
                  .ReturnsAsync(
-                     new List<ReferenceData.Api.Client.Dto.Organisation>
+                     new List<Organisation>
                      {
-                         new ReferenceData.Api.Client.Dto.Organisation
+                         new Organisation
                          {
                              Name = wsResultName,
                              Address = ConstructStandardAddressDto(),
                              Code = "ABC123",
                              RegistrationDate = new DateTime(2016, 10, 15),
                              Sector = "sector",
-                             SubType = ReferenceData.Api.Client.Dto.OrganisationSubType.Police
+                             SubType = OrganisationSubType.Police
                          }
                      }
                  );
          }
 
-         private static ReferenceData.Api.Client.Dto.Address ConstructStandardAddressDto()
+         private static Address ConstructStandardAddressDto()
          {
-             return new ReferenceData.Api.Client.Dto.Address
+             return new Address
              {
                  Line1 = "test 1",
                  Line2 = "test 2",

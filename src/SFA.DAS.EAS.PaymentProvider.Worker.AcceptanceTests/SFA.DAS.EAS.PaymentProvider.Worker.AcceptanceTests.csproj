@@ -64,8 +64,8 @@
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=8.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.Storage.8.7.0\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="Moq, Version=4.5.23.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\packages\Moq.4.5.23\lib\net45\Moq.dll</HintPath>
+    <Reference Include="Moq, Version=4.5.28.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.5.28\lib\net45\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -86,13 +86,13 @@
       <HintPath>..\packages\SFA.DAS.ApiSubstitute.WebAPI.1.0.0.59078\lib\net45\SFA.DAS.ApiSubstitute.WebAPI.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.36\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.39\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.63765\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging, Version=3.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.3.1.7\lib\net45\SFA.DAS.Messaging.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.1.7\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.56651, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.56651\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>

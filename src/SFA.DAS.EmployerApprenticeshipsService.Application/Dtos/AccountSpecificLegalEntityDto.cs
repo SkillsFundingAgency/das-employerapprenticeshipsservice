@@ -2,9 +2,11 @@
 
 namespace SFA.DAS.EAS.Application.Dtos
 {
-    public class LegalEntityDto
+    public class AccountSpecificLegalEntityDto
     {
         public long Id { get; set; }
+        public long AccountLegalEntityId { get; set; }
+        public string AccountLegalEntityPublicHashedId { get; set; }
         public string Code { get; set; }
         public DateTime? DateOfIncorporation { get; set; }
         public string Name { get; set; }

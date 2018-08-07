@@ -164,11 +164,11 @@
     <Reference Include="SFA.DAS.Http, Version=1.0.0.39136, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Http.1.0.0.39136\lib\net45\SFA.DAS.Http.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.63765\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging, Version=3.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.3.1.7\lib\net45\SFA.DAS.Messaging.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.1.7\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.StructureMap.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.StructureMap.dll</HintPath>
@@ -193,8 +193,11 @@
     <Reference Include="SFA.DAS.Providers.Api.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.11.39\lib\net462\SFA.DAS.Providers.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.33424, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.33424\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.1.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.1.21\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.ReferenceData.Types, Version=1.1.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.1.21\lib\net45\SFA.DAS.ReferenceData.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
@@ -279,6 +282,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\AddressExtensions.cs" />
+    <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityHandler.cs" />
+    <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityRequest.cs" />
+    <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityResponse.cs" />
+    <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityValidator.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQuery.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandler.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesResponse.cs" />
     <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommand.cs" />
     <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommandValidator.cs" />
@@ -286,6 +297,10 @@
     <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommandHandler.cs" />
     <Compile Include="Commands\CreateTransferTransactions\CreateTransferTransactionsCommandValidator.cs" />
     <Compile Include="DependencyResolution\ApprenticeshipLevyRegistry.cs" />
+    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsHandler.cs" />
+    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsRequest.cs" />
+    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsResponse.cs" />
+    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsValidator.cs" />
     <Compile Include="DependencyResolution\AuditRegistry.cs" />
     <Compile Include="DependencyResolution\AuthorizationRegistry.cs" />
     <Compile Include="DependencyResolution\CachesRegistry.cs" />
@@ -315,7 +330,17 @@
     <Compile Include="Dtos\EmployerAgreement\EmployerAgreementStatusDto.cs" />
     <Compile Include="Dtos\EmployerAgreement\PendingEmployerAgreementDetailsDto.cs" />
     <Compile Include="Dtos\EmployerAgreement\SignedEmployerAgreementDetailsDto.cs" />
-    <Compile Include="Dtos\LegalEntityDto.cs" />
+    <Compile Include="Dtos\AccountSpecificLegalEntityDto.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesQueryHandler.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesRequest.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesResponse.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesValidator.cs" />
+    <Compile Include="Queries\GetAccountTransferTransactionDetails\GetSenderTransferTransactionDetailsQuery.cs" />
+    <Compile Include="Queries\GetAccountTransferTransactionDetails\GetSenderTransferTransactionDetailsResponse.cs" />
+    <Compile Include="Queries\GetOrganisationById\GetOrganisationByIdQueryHandler.cs" />
+    <Compile Include="Queries\GetOrganisationById\GetOrganisationByIdRequest.cs" />
+    <Compile Include="Queries\GetOrganisationById\GetOrganisationByIdResponse.cs" />
+    <Compile Include="Queries\GetOrganisationById\GetOrganisationByIdValidator.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsQueryHandler.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsQuery.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsResponse.cs" />
@@ -557,10 +582,6 @@
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsResponse.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsValidator.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesQueryHandler.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesRequest.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesResponse.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesValidator.cs" />
     <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesQueryHandler.cs" />
     <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesQueryValidator.cs" />
     <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesQuery.cs" />
@@ -787,9 +808,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

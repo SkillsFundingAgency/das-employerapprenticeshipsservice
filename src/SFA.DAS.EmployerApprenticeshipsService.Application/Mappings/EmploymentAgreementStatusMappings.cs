@@ -22,16 +22,13 @@ namespace SFA.DAS.EAS.Application.Mappings
                 .ForMember(d => d.TemplateId, conf => conf.MapFrom(ol => ol.Template.Id))
                 .ForMember(d => d.VersionNumber, conf => conf.MapFrom(ol => ol.Template.VersionNumber));
 
-            CreateMap<IGrouping<LegalEntity, EmployerAgreement>, EmployerAgreementStatusDto>()
-                .ForMember(d => d.LegalEntity, o => o.MapFrom(g => g.Key))
+            CreateMap<AccountLegalEntity, EmployerAgreementStatusDto>()
+                .ForMember(d => d.LegalEntity, o => o.MapFrom(g => g.LegalEntity))
                 .ForMember(d => d.AccountId, o => o.Ignore())
                 .ForMember(d => d.HashedAccountId, o => o.Ignore())
-                .ForMember(d => d.Signed, o => o.MapFrom(g => g
-                    .OrderByDescending(a => a.Template.VersionNumber)
-                    .FirstOrDefault(a => a.StatusId == EmployerAgreementStatus.Signed)))
-                .ForMember(d => d.Pending, o => o.MapFrom(g => g
-                    .OrderByDescending(a => a.Template.VersionNumber)
-                    .FirstOrDefault(a => a.StatusId == EmployerAgreementStatus.Pending)));
+                .ForMember(d => d.Signed, o => o.MapFrom(g => g.SignedAgreement))
+                .ForMember(d => d.Pending, o => o.MapFrom(g => g.PendingAgreement))
+                .ForMember(d => d.LegalEntity, o => o.MapFrom(l => l));
         }
     }
 }

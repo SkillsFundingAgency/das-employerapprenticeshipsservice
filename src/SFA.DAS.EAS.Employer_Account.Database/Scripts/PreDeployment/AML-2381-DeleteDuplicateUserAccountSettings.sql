@@ -20,3 +20,5 @@ BEGIN
 		) d
 	)
 END
+
+GO

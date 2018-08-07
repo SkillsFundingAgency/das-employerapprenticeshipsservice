@@ -89,6 +89,8 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(agreementId);
 
+            await _employerAgreementRepository.EvaluateEmployerLegalEntityAgreementStatus(accountId, agreement.LegalEntityId);
+
             var hashedLegalEntityId = _hashingService.HashValue(agreement.LegalEntityId);
 
             var agreementEvent = _agreementEventFactory.CreateSignedEvent(message.HashedAccountId, hashedLegalEntityId, message.HashedAgreementId);

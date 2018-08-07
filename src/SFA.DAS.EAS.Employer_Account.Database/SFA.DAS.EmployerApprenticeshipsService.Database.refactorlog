@@ -49,4 +49,32 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="UserRef" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="0aea7d19-23ce-4478-8e88-02723547ea04" ChangeDateTime="06/19/2018 11:31:29">
+    <Property Name="ElementName" Value="[employer_account].[AccountLegalEntity].[DateTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_account].[AccountLegalEntity]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Created" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b09bdc29-764f-42d5-9f57-41b9495ebc7c" ChangeDateTime="06/21/2018 14:35:31">
+    <Property Name="ElementName" Value="[employer_account].[AccountLegalEntity].[CurrentSignedAgreement]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_account].[AccountLegalEntity]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SignedAgreementVersion" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="dc9e3e47-2cd7-4727-b4fa-ef9c8de6b16c" ChangeDateTime="06/21/2018 14:35:44">
+    <Property Name="ElementName" Value="[employer_account].[AccountLegalEntity].[CurrentPendingAgreement]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_account].[AccountLegalEntity]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PendingAgreementVersion" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9ac81fbb-201a-456c-9c90-f42ba0b52788" ChangeDateTime="07/09/2018 15:23:22">
+    <Property Name="ElementName" Value="[employer_account].[AccountLegalEntity].[Has]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_account].[AccountLegalEntity]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PublicHashedId" />
+  </Operation>
 </Operations>

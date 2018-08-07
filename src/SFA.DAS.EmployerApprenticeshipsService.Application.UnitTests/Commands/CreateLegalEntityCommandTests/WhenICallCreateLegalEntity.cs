@@ -32,6 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
         private Mock<ILegalEntityEventFactory> _legalEntityEventFactory;
         private Mock<IHashingService> _hashingService;
         private Mock<IAgreementService> _agreementService;
+        private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
 
         [SetUp]
         public void Arrange()
@@ -65,7 +66,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _command = new CreateLegalEntityCommand
             {
                 HashedAccountId = "ABC123",
-                LegalEntity = new LegalEntity(),
                 SignAgreement = true,
                 SignedDate = DateTime.Now.AddDays(-10),
                 ExternalUserId = "12345"
@@ -74,8 +74,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
                                  .ReturnsAsync(_owner);
 
-            _accountRepository.Setup(x => x.CreateLegalEntity(_owner.AccountId, _command.LegalEntity))
-                              .ReturnsAsync(_agreementView);
+            _accountRepository
+                .Setup(x => x.CreateLegalEntityWithAgreement(It.Is<CreateLegalEntityWithAgreementParams>(
+                    createParams => createParams.AccountId == _owner.AccountId)))
+                .ReturnsAsync(_agreementView);
 
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _legalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
@@ -84,6 +86,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
 
             _hashingService.Setup(hs => hs.HashValue(It.IsAny<long>())).Returns<long>(value => $"*{value}*");
             _hashingService.Setup(hs => hs.DecodeValue(_command.HashedAccountId)).Returns(_owner.AccountId);
+            _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
 
             _commandHandler = new CreateLegalEntityCommandHandler(
                 _accountRepository.Object, 
@@ -93,7 +96,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 _legalEntityEventFactory.Object, 
                 Mock.Of<IMessagePublisher>(),
                 _hashingService.Object,
-                _agreementService.Object);
+                _agreementService.Object,
+                _employerAgreementRepository.Object
+                );
         }
 
         [Test]
@@ -162,7 +167,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             await _commandHandler.Handle(_command);
 
             //Assert
-            _accountRepository.Verify(r => r.CreateLegalEntity(It.IsAny<long>(), It.Is<LegalEntity>(le => !string.IsNullOrEmpty(le.Code))), Times.Once);
+            _accountRepository.Verify(r => r.CreateLegalEntityWithAgreement(It.Is<CreateLegalEntityWithAgreementParams>(cp => !string.IsNullOrEmpty(cp.Code))), Times.Once);
         }
 
         [Test]

@@ -1,0 +1,58 @@
+﻿@using SFA.DAS.Common.Domain.Types
+@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.ReviewOrganisationAddressViewModel>
+@{
+    ViewBag.Title = "Update an organisation";
+    ViewBag.Section = "organisations";
+    ViewBag.PageID = "update-organisation-details";
+}
+<div class="grid-row">
+    <div>
+        <h1 class="heading-xlarge">Review your details</h1>
+    </div>
+
+    <div>
+        <address class="party">
+            <strong>@Model.Data.RefreshedName</strong><br />
+            @Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)
+        </address>
+
+        <div>
+            <h3>
+            Are these details correct?
+            </h3>
+            
+            <form method="POST" action="@Url.Action("ProcessReviewSelection")">
+                @Html.AntiForgeryToken()
+
+                <!-- Solving problem: We need the account hased id in the url but it's null on the postback -->
+
+                <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName" />
+                <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress" />
+                <input type="hidden" name="accountLegalEntityPublicHashedId" value="@Model.Data.AccountLegalEntityPublicHashedId" />
+                <fieldset>
+                    <label for="update" class="block-label">
+                        <input id="update" type="radio" name="updateChoice" value="update" />
+                        Yes, these details are correct
+                    </label>
+                    <label for="cancel" class="block-label">
+                        <input id="cancel" type="radio" name="updateChoice" value="cancel" />
+                        No, cancel and return
+                    </label>
+                </fieldset>
+                <div class="form-group">
+                    <button type="submit" class="button" id="accept">Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
+        </ol>
+    </div>
+}

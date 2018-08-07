@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(() => null);
 
             _validator = new GetEmployerAccountTransactionsValidator(_membershipRepository.Object);
         }
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenTheResultIsMarkedAsUnauthorizedIfTheUserIsNotAMemberOfTheAccount()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller("AD1", "123")).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller("AD1", "123")).ReturnsAsync(() => null);
 
             //Act
             var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { ExternalUserId = "123", HashedAccountId = "AD1" });

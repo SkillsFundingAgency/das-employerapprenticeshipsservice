@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementR
         public async Task ThenTheUserIsCheckedToMakeSureThatTheyAreConnectedToTheAccount()
         {
             //Act
-            _membershipRepository.Setup(x => x.GetCaller("ABC123", "XYZ987")).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller("ABC123", "XYZ987")).ReturnsAsync(() => null);
             var actual = await _validator.ValidateAsync(new GetAccountEmployerAgreementRemoveRequest { HashedAccountId = "ABC123", UserId = "XYZ987", HashedAgreementId = "546TGF"});
 
             //Assert

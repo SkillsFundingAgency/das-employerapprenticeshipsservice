@@ -101,8 +101,8 @@
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=8.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.Storage.8.7.0\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="Moq, Version=4.5.23.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\packages\Moq.4.5.23\lib\net45\Moq.dll</HintPath>
+    <Reference Include="Moq, Version=4.5.28.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.5.28\lib\net45\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Nest, Version=5.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
       <HintPath>..\packages\NEST.5.6.0\lib\net46\Nest.dll</HintPath>
@@ -166,11 +166,11 @@
     <Reference Include="SFA.DAS.Http, Version=1.0.0.39136, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Http.1.0.0.39136\lib\net45\SFA.DAS.Http.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.63765\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging, Version=3.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.3.1.7\lib\net45\SFA.DAS.Messaging.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.1.7\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.56651, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.56651\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
@@ -270,6 +270,9 @@
     <Compile Include="Commands\SendTransferConnectionInvitation\SendTransferConnectionInvitationHandlerTests.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementTests\GetAccountEmployerAgreementTests.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandlerTests.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\WhenIGetAccountLegalEntities.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\WhenValidatingAccountLegalEntities.cs" />
     <Compile Include="Queries\GetStatisticsTests\GetStatisticsQueryTests.cs" />
     <Compile Include="Queries\GetApprovedTransferConnectionInvitationTests\WhenIGetApprovedTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetEmployerAgreementQueryTests\GetEmployerAgreementTests.cs" />
@@ -393,8 +396,6 @@
     <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIGetEmployerAccounts.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIQueryExistingSchemes.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\WhenIGetAccountLegalEntities.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\WhenValidatingAccountLegalEntities.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\WhenIGetUserAccounts.cs" />
     <Compile Include="Queries\GetEmployerInformationTests\WhenIRequestEmployerInformation.cs" />
     <Compile Include="Queries\GetGatewayInformationTests\WhenGettingGatewayQuery.cs" />
@@ -450,6 +451,10 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
       <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EAS.Support.Core\SFA.DAS.EAS.Support.Core.csproj">
+      <Project>{99F6DD4A-CD1C-4D45-A2C9-ED2F89D1FB84}</Project>
+      <Name>SFA.DAS.EAS.Support.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj">
       <Project>{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}</Project>

@@ -11,8 +11,8 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
     public interface IAccountRepository
     {
         Task AddPayeToAccount(Paye payeScheme);
-        Task<CreateAccountResult> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector);
-        Task<EmployerAgreementView> CreateLegalEntity(long accountId, LegalEntity legalEntity);
+        Task<CreateAccountResult>  CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector);
+        Task<EmployerAgreementView> CreateLegalEntityWithAgreement(CreateLegalEntityWithAgreementParams createParams);
         Task<AccountStats> GetAccountStats(long accountId);
         Task<List<PayeView>> GetPayeSchemesByAccountId(long accountId);
         Task<List<UserNotificationSetting>> GetUserAccountSettings(string userRef);
@@ -21,6 +21,8 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings);
         Task<string> GetAccountName(long accountId);
         Task<Dictionary<long, string>> GetAccountNames(IEnumerable<long> accountIds);
-
+        Task UpdateLegalEntityDetailsForAccount(long accountLegalEntityId, string address, string name);
+        Task UpdateAccountLegalEntityPublicHashedId(long accountLegalEntityId);
+        Task<long[]> GetAccountLegalEntitiesWithoutPublicHashId(long firstId, int count);
     }
 }

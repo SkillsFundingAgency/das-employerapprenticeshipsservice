@@ -4,12 +4,18 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
-using SFA.DAS.Common.Domain.Types;
+using DocumentFormat.OpenXml.Wordprocessing;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.ReferenceData.Api.Client;
+using SFA.DAS.ReferenceData.Types.DTO;
+using Address = SFA.DAS.EAS.Domain.Models.Organisation.Address;
+using Charity = SFA.DAS.EAS.Domain.Models.ReferenceData.Charity;
+using OrganisationSubType = SFA.DAS.Common.Domain.Types.OrganisationSubType;
+using OrganisationType = SFA.DAS.Common.Domain.Types.OrganisationType;
+using PublicSectorOrganisation = SFA.DAS.EAS.Domain.Models.ReferenceData.PublicSectorOrganisation;
 
 
 namespace SFA.DAS.EAS.Infrastructure.Services
@@ -34,7 +40,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         public async Task<Charity> GetCharity(int registrationNumber)
         {
             var dto = await _client.GetCharity(registrationNumber);
-            var result = _mapper.Map<ReferenceData.Api.Client.Dto.Charity, Charity>(dto);
+            var result = _mapper.Map<ReferenceData.Types.DTO.Charity, Charity>(dto);
             return result;
         }
 
@@ -77,6 +83,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             }
             
             return CreatePagedOrganisationResponse(pageNumber, pageSize, result);
+        }
+
+        public Task<Organisation> GetLatestDetails(ReferenceData.Types.DTO.OrganisationType organisationType, string identifier)
+        {
+            return _client.GetLatestDetails(organisationType, identifier);
         }
 
         private List<OrganisationName> SortOrganisations(List<OrganisationName> result, string searchTerm)
@@ -246,7 +257,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             };
         }
 
-        private OrganisationName ConvertToOrganisation(ReferenceData.Api.Client.Dto.Organisation source)
+        private OrganisationName ConvertToOrganisation(Organisation source)
         {
             return new OrganisationName
             {
@@ -264,36 +275,19 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 RegistrationDate = source.RegistrationDate,
                 Sector = source.Sector,
                 SubType = ConvertToOrganisationSubType(source.SubType),
-                Type = ConvertToOrganisationType(source.Type)
+                Type = source.Type.ToCommonOrganisationType()
             };
         }
 
-        private OrganisationType ConvertToOrganisationType(ReferenceData.Api.Client.Dto.OrganisationType sourceType)
-        {
-            switch (sourceType)
-            {
-                case ReferenceData.Api.Client.Dto.OrganisationType.Charity:
-                    return OrganisationType.Charities;
-                case ReferenceData.Api.Client.Dto.OrganisationType.Company:
-                    return OrganisationType.CompaniesHouse;
-                case ReferenceData.Api.Client.Dto.OrganisationType.EducationOrganisation:
-                    return OrganisationType.PublicBodies;
-                case ReferenceData.Api.Client.Dto.OrganisationType.PublicSector:
-                    return OrganisationType.PublicBodies;
-                default:
-                    return OrganisationType.Other;
-            }
-        }
-
-        private OrganisationSubType ConvertToOrganisationSubType(ReferenceData.Api.Client.Dto.OrganisationSubType sourceSubType)
+        private OrganisationSubType ConvertToOrganisationSubType(ReferenceData.Types.DTO.OrganisationSubType sourceSubType)
         {
             switch (sourceSubType)
             {
-                case ReferenceData.Api.Client.Dto.OrganisationSubType.Nhs:
+                case ReferenceData.Types.DTO.OrganisationSubType.Nhs:
                     return OrganisationSubType.Nhs;
-                case ReferenceData.Api.Client.Dto.OrganisationSubType.Ons:
+                case ReferenceData.Types.DTO.OrganisationSubType.Ons:
                     return OrganisationSubType.Ons;
-                case ReferenceData.Api.Client.Dto.OrganisationSubType.Police:
+                case ReferenceData.Types.DTO.OrganisationSubType.Police:
                     return OrganisationSubType.Police;
                 default:
                     return 0;

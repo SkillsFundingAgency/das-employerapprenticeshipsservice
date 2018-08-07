@@ -14,6 +14,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     [DbConfigurationType(typeof(SqlAzureDbConfiguration))]
     public class EmployerAccountDbContext : DbContext
     {
+        public virtual DbSet<AccountLegalEntity> AccountLegalEntities { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<EmployerAgreement> Agreements { get; set; }
         public virtual DbSet<AgreementTemplate> AgreementTemplates { get; set; }
@@ -46,24 +47,27 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.HasDefaultSchema("employer_account");
             modelBuilder.Entity<Account>().Ignore(a => a.RoleId).Ignore(a => a.RoleName);
-            modelBuilder.Entity<Account>().HasMany(a => a.Agreements);
+            modelBuilder.Entity<Account>().HasMany(a => a.AccountLegalEntities);
             modelBuilder.Entity<Account>().HasMany(a => a.ReceivedTransferConnectionInvitations).WithRequired(i => i.ReceiverAccount);
             modelBuilder.Entity<Account>().HasMany(a => a.SentTransferConnectionInvitations).WithRequired(i => i.SenderAccount);
+            modelBuilder.Entity<AccountLegalEntity>().HasMany(ale => ale.Agreements);
+            modelBuilder.Entity<AccountLegalEntity>().HasRequired(ale => ale.Account);
+            modelBuilder.Entity<AccountLegalEntity>().HasRequired(ale => ale.LegalEntity);
+            modelBuilder.Entity<AccountLegalEntity>().HasOptional(ale => ale.SignedAgreement).WithMany().HasForeignKey(ale => ale.SignedAgreementId);
+            modelBuilder.Entity<AccountLegalEntity>().HasOptional(ale => ale.PendingAgreement).WithMany().HasForeignKey(ale => ale.PendingAgreementId);
             modelBuilder.Entity<AgreementTemplate>().ToTable("EmployerAgreementTemplate").HasMany(t => t.Agreements);
-            modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Account);
-            modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.LegalEntity);
+            modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.AccountLegalEntity);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Template);
-            modelBuilder.Entity<LegalEntity>().HasMany(l => l.Agreements);
             modelBuilder.Entity<Membership>().HasKey(m => new { m.AccountId, m.UserId }).Ignore(m => m.RoleId).Property(m => m.Role).HasColumnName(nameof(Membership.RoleId));
+            modelBuilder.Entity<Paye>().Ignore(a => a.AccountId);
             modelBuilder.Entity<User>().Ignore(u => u.FullName).Ignore(u => u.UserRef).Property(u => u.ExternalId).HasColumnName(nameof(User.UserRef));
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.ReceiverAccount);
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.SenderAccount);
             modelBuilder.Entity<UserAccountSetting>().HasRequired(u => u.Account);
             modelBuilder.Entity<UserAccountSetting>().HasRequired(u => u.User);
             modelBuilder.Entity<UserAccountSetting>().ToTable("UserAccountSettings");
-            modelBuilder.HasDefaultSchema("employer_account");
-            modelBuilder.Entity<Paye>().Ignore(a => a.AccountId);
         }
     }
 }

@@ -151,5 +151,66 @@ namespace SFA.DAS.EAS.Web.Controllers
                     });
             }
         }
+
+        [HttpGet]
+        [Route("review")]
+        public async Task<ActionResult> Review(string hashedAccountId, string accountLegalEntityPublicHashedId)
+        {
+            var viewModel = await _orchestrator.GetRefreshedOrganisationDetails(accountLegalEntityPublicHashedId);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("review")]
+        public async Task<ActionResult> ProcessReviewSelection(
+            string updateChoice,
+            string hashedAccountId,
+            string accountLegalEntityPublicHashedId, 
+            string organisationName,
+            string organisationAddress)
+        {
+            if (updateChoice == "update")
+            {
+                var response = await _orchestrator.UpdateOrganisation(
+                    accountLegalEntityPublicHashedId, 
+                    organisationName,
+                    organisationAddress);
+
+                return View(ControllerConstants.OrganisationUpdatedNextStepsActionName, response);
+            }
+
+            return RedirectToAction("Details", "EmployerAgreement");
+        }
+
+        [HttpPost]
+        [Route("PostUpdateSelection")]
+        public ActionResult GoToPostUpdateSelection(string nextStep, string hashedAccountId)
+        {
+            switch (nextStep)
+            {
+                case "dashboard":
+                    return RedirectToAction("Index", "EmployerAgreement");
+
+                case "homepage":
+                    return RedirectToAction("Index", "Home");
+                
+                default:
+                    var errorMessage = "Please select one of the next steps below";
+
+                    return View(ControllerConstants.OrganisationUpdatedNextStepsActionName,
+                        new OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>
+                        {
+                            Data = new OrganisationUpdatedNextStepsViewModel {ErrorMessage = errorMessage, HashedAccountId = hashedAccountId},
+                            FlashMessage = new FlashMessageViewModel
+                            {
+                                Headline = "Invalid next step chosen",
+                                Message = errorMessage,
+                                ErrorMessages = new Dictionary<string, string> { { "nextStep", errorMessage } },
+                                Severity = FlashMessageSeverityLevel.Error
+                            }
+                        });
+            }
+        }
     }
 }

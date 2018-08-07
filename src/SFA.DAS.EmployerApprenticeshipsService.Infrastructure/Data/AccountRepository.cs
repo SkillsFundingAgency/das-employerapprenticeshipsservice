@@ -10,16 +10,27 @@ using SFA.DAS.Sql.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class AccountRepository : BaseRepository, IAccountRepository
     {
-        public AccountRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+        private readonly EmployerAccountDbContext _employerAccountDbContext;
+        private readonly IHashingService _accountLegalEntityHashingService;
+
+        public AccountRepository(
+            EmployerApprenticeshipsServiceConfiguration configuration, 
+            ILog logger, 
+            EmployerAccountDbContext employerAccountDbContext,
+            IHashingService accountLegalEntityHashingService)
             : base(configuration.DatabaseConnectionString, logger)
         {
+            _employerAccountDbContext = employerAccountDbContext;
+            _accountLegalEntityHashingService = accountLegalEntityHashingService;
         }
 
         public async Task AddPayeToAccount(Paye payeScheme)
@@ -62,6 +73,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@employerRef", employerRef, DbType.String);
                 parameters.Add("@accountId", null, DbType.Int64, ParameterDirection.Output, 8);
                 parameters.Add("@legalentityId", null, DbType.Int64, ParameterDirection.Output, 8);
+                parameters.Add("@accountLegalentityId", null, DbType.Int64, ParameterDirection.Output, 8);
                 parameters.Add("@employerAgreementId", null, DbType.Int64, ParameterDirection.Output, 8);
                 parameters.Add("@accessToken", accessToken, DbType.String);
                 parameters.Add("@refreshToken", refreshToken, DbType.String);
@@ -78,6 +90,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     transaction: t,
                     commandType: CommandType.StoredProcedure);
 
+                var accountLegalEntityId = parameters.Get<long>("@accountLegalentityId");
+
+                await UpdateAccountLegalEntityPublicHashedIdInternal(c, t, accountLegalEntityId);
+
                 return new CreateAccountResult
                 {
                     AccountId = parameters.Get<long>("@accountId"),
@@ -87,23 +103,24 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task<EmployerAgreementView> CreateLegalEntity(long accountId, LegalEntity legalEntity)
+        public async Task<EmployerAgreementView> CreateLegalEntityWithAgreement(CreateLegalEntityWithAgreementParams createParams)
         {
             return await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-
-                parameters.Add("@accountId", accountId, DbType.Int64);
-                parameters.Add("@companyNumber", legalEntity.Code, DbType.String);
-                parameters.Add("@companyName", legalEntity.Name, DbType.String);
-                parameters.Add("@CompanyAddress", legalEntity.RegisteredAddress, DbType.String);
-                parameters.Add("@CompanyDateOfIncorporation", legalEntity.DateOfIncorporation, DbType.DateTime);
+                parameters.Add("@accountId", createParams.AccountId, DbType.Int64);
+                parameters.Add("@companyNumber", createParams.Code, DbType.String);
+                parameters.Add("@companyName", createParams.Name, DbType.String);
+                parameters.Add("@CompanyAddress", createParams.Address, DbType.String);
+                parameters.Add("@CompanyDateOfIncorporation", createParams.DateOfIncorporation, DbType.DateTime);
                 parameters.Add("@legalEntityId", null, DbType.Int64, ParameterDirection.Output);
                 parameters.Add("@employerAgreementId", null, DbType.Int64, ParameterDirection.Output);
-                parameters.Add("@status", legalEntity.Status, DbType.String);
-                parameters.Add("@source", legalEntity.Source, DbType.Int16);
-                parameters.Add("@publicSectorDataSource", legalEntity.PublicSectorDataSource, DbType.Int16);
-                parameters.Add("@sector", legalEntity.Sector, DbType.String);
+                parameters.Add("@status", createParams.Status, DbType.String);
+                parameters.Add("@source", createParams.Source, DbType.Int16);
+                parameters.Add("@publicSectorDataSource", createParams.PublicSectorDataSource, DbType.Int16);
+                parameters.Add("@sector", createParams.Sector, DbType.String);
+                parameters.Add("@accountLegalentityId", null, DbType.Int64, ParameterDirection.Output);
+                parameters.Add("@accountLegalEntityCreated", null, DbType.Boolean, ParameterDirection.Output);
 
                 var trans = c.BeginTransaction();
 
@@ -112,21 +129,29 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
 
-                trans.Commit();
-
                 var legalEntityId = parameters.Get<long>("@legalEntityId");
                 var agreementId = parameters.Get<long>("@employerAgreementId");
+                var accountLegalEntityId = parameters.Get<long>("@accountLegalentityId");
+                var accountLegalEntityCreated = parameters.Get<bool>("@accountLegalEntityCreated");
+
+                if (accountLegalEntityCreated)
+                {
+                    await UpdateAccountLegalEntityPublicHashedIdInternal(c, trans, accountLegalEntityId);
+                }
+
+                trans.Commit();
 
                 return new EmployerAgreementView
                 {
                     Id = agreementId,
-                    AccountId = accountId,
+                    AccountId = createParams.AccountId,
+                    AccountLegalentityId = accountLegalEntityId,
                     LegalEntityId = legalEntityId,
-                    LegalEntityName = legalEntity.Name,
-                    LegalEntityCode = legalEntity.Code,
-                    LegalEntityAddress = legalEntity.RegisteredAddress,
-                    LegalEntityInceptionDate = legalEntity.DateOfIncorporation,
-                    Sector = legalEntity.Sector,
+                    LegalEntityName = createParams.Name,
+                    LegalEntityCode = createParams.Code,
+                    LegalEntityAddress = createParams.Address,
+                    LegalEntityInceptionDate = createParams.DateOfIncorporation,
+                    Sector = createParams.Sector,
                     Status = EmployerAgreementStatus.Pending,
                 };
             });
@@ -168,13 +193,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<List<UserNotificationSetting>> GetUserAccountSettings(string userRef)
         {
-            var result = await WithConnection(async c =>
+            var result = await WithConnection(c =>
             {
                 var parameters = new DynamicParameters();
 
                 parameters.Add("@UserRef", Guid.Parse(userRef), DbType.Guid);
 
-                return await c.QueryAsync<UserNotificationSetting>(
+                return c.QueryAsync<UserNotificationSetting>(
                     sql: "[employer_account].[GetUserAccountSettings]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
@@ -185,7 +210,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task RemovePayeFromAccount(long accountId, string payeRef)
         {
-            await WithConnection(async c =>
+            await WithConnection(c =>
             {
                 var parameters = new DynamicParameters();
 
@@ -193,12 +218,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@PayeRef", payeRef, DbType.String);
                 parameters.Add("@RemovedDate", DateTime.UtcNow, DbType.DateTime);
 
-                var result = await c.ExecuteAsync(
+                return c.ExecuteAsync(
                    sql: "[employer_account].[UpdateAccountHistory]",
                    param: parameters,
                    commandType: CommandType.StoredProcedure);
-
-                return result;
             });
         }
 
@@ -266,18 +289,89 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<Dictionary<long, string>> GetAccountNames(IEnumerable<long> accountIds)
         {
-            var result = await WithConnection(async c =>
-            {
-                // var parameters = new DynamicParameters();
-
-                //parameters.Add("@accountIds", accountIds, DbType.);
-
-                return await c.QueryAsync<AccountNameItem>(
-                     "SELECT Id, Name FROM [employer_account].[Account] WHERE Id IN @accountIds"
-                    , new { accountIds = accountIds });
-            });
+            var result = await WithConnection(async c => await c.QueryAsync<AccountNameItem>(
+                "SELECT Id, Name FROM [employer_account].[Account] WHERE Id IN @accountIds"
+                , new { accountIds = accountIds }));
 
             return result.ToDictionary(data => data.Id, data => data.Name);
+        }
+
+        public Task UpdateLegalEntityDetailsForAccount(long accountLegalEntityId, string address, string name)
+        {
+            return WithTransaction((c, t) =>
+            {
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@AccountLegalEntityId", accountLegalEntityId, DbType.Int64);
+                parameters.Add("@Name", name, DbType.String);
+                parameters.Add("@Address", address, DbType.String);
+
+                return c.ExecuteAsync(
+                    sql: "[employer_account].[UpdateAccountLegalEntity_SetNameAndAddress]",
+                    param: parameters,
+                    transaction: t,
+                    commandType: CommandType.StoredProcedure);
+            });
+        }
+
+        public Task UpdateAccountLegalEntityPublicHashedId(long accountLegalEntityId)
+        {
+            return WithTransaction( (c,t) => UpdateAccountLegalEntityPublicHashedIdInternal(c, t, accountLegalEntityId));
+        }
+
+        public async Task<long[]> GetAccountLegalEntitiesWithoutPublicHashId(long firstId, int count)
+        {
+            return await WithConnection(async c =>
+            {
+                var query = await c.QueryAsync<long>(
+                    sql: @"
+                        SELECT  TOP (@count) Id 
+                        FROM    [employer_account].[AccountLegalEntity] 
+                        WHERE   Deleted IS NULL 
+                                AND PublicHashedId IS NULL 
+                                AND Id >= @firstId 
+                        ORDER BY Id ASC",
+                    param: new {@count, @firstId},
+                    commandType: CommandType.Text);
+                
+                return query.ToArray();
+            });
+        }
+
+        private Task UpdateAccountLegalEntityPublicHashedIdInternal(IDbConnection connection, IDbTransaction transaction, long accountLegalEntityId)
+        {
+            var parameters = new DynamicParameters();
+
+            var publicHash = _accountLegalEntityHashingService.HashValue(accountLegalEntityId);
+
+            parameters.Add("@AccountLegalEntityId", accountLegalEntityId, DbType.Int64);
+            parameters.Add("@PublicHashedId", publicHash, DbType.String);
+
+            return connection.ExecuteAsync(
+                sql: "[employer_account].[UpdateAccountLegalEntity_SetPublicHashedId]",
+                param: parameters,
+                transaction: transaction,
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public Task UpdateLegalEntityDetailsForAccount(long accountId, long legalEntityId, string address, string name)
+        {
+            //[employer_account].[UpdateAccountLegalEntity_SetNameAndAddress]
+            return WithTransaction(async (c, t) =>
+            {
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@AccountId", accountId, DbType.Int64);
+                parameters.Add("@LegalEntityId", legalEntityId, DbType.Int64);
+                parameters.Add("@Name", name, DbType.String);
+                parameters.Add("@Address", address, DbType.String);
+
+                await c.ExecuteAsync(
+                    sql: "[employer_account].[UpdateAccountLegalEntity_SetNameAndAddress]",
+                    param: parameters,
+                    transaction: t,
+                    commandType: CommandType.StoredProcedure);
+            });
         }
 
         // ReSharper disable once ClassNeverInstantiated.Local

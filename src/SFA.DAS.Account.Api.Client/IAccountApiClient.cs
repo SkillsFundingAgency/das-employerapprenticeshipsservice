@@ -15,14 +15,14 @@ namespace SFA.DAS.EAS.Account.Api.Client
         Task<ICollection<ResourceViewModel>> GetLegalEntitiesConnectedToAccount(string accountId);
         Task<LegalEntityViewModel> GetLegalEntity(string accountId, long id);
         Task<ICollection<LevyDeclarationViewModel>> GetLevyDeclarations(string accountId);
+        Task<PagedApiResponseViewModel<AccountLegalEntityViewModel>> GetPageOfAccountLegalEntities(int pageNumber = 1, int pageSize = 1000);
         Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetPageOfAccounts(int pageNumber = 1, int pageSize = 1000, DateTime? toDate = null);
         Task<ICollection<ResourceViewModel>> GetPayeSchemesConnectedToAccount(string accountId);
         Task<T> GetResource<T>(string uri) where T : IAccountResource;
+        Task<StatisticsViewModel> GetStatistics();
         Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month);
         Task<ICollection<TransactionSummaryViewModel>> GetTransactionSummary(string accountId);
         Task<ICollection<TransferConnectionViewModel>> GetTransferConnections(string accountHashedId);
         Task<ICollection<AccountDetailViewModel>> GetUserAccounts(string userId);
-
-        Task<StatisticsViewModel> GetStatistics();
     }
 }

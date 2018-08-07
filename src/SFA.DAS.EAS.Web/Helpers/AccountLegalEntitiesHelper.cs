@@ -19,17 +19,17 @@ namespace SFA.DAS.EAS.Web.Helpers
             _mediator = mediator;
         }
 
-        internal async Task<List<LegalEntity>> GetAccountLegalEntities(string hashedLegalEntityId, string userIdClaim)
+        internal async Task<List<AccountSpecificLegalEntity>> GetAccountLegalEntities(string hashedLegalEntityId, string userIdClaim)
         {
             var accountEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
                 HashedLegalEntityId = hashedLegalEntityId,
                 UserId = userIdClaim
             });
-            return accountEntities.Entites.LegalEntityList;
+            return accountEntities.Entites;
         }
 
-        internal bool IsLegalEntityAlreadyAddedToAccount(List<LegalEntity> accountLegalEntities, string organisationName, string organisationCode, OrganisationType organisationType)
+        internal bool IsLegalEntityAlreadyAddedToAccount(List<AccountSpecificLegalEntity> accountLegalEntities, string organisationName, string organisationCode, OrganisationType organisationType)
         {
             if (organisationType == OrganisationType.Charities || organisationType == OrganisationType.CompaniesHouse)
             {

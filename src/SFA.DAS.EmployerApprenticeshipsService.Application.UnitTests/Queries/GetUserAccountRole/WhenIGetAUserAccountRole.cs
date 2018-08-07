@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
         {
             //Arrange
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
-                                 .ReturnsAsync(null);
+                                 .ReturnsAsync(() => null);
 
             //Act
             var result = await RequestHandler.Handle(Query);

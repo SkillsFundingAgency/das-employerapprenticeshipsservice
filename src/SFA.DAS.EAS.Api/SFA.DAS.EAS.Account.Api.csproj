@@ -203,11 +203,11 @@
     <Reference Include="SFA.DAS.Http, Version=1.0.0.39136, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Http.1.0.0.39136\lib\net45\SFA.DAS.Http.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.63765\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging, Version=3.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.3.1.7\lib\net45\SFA.DAS.Messaging.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=3.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.3.1.7\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.StructureMap.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.StructureMap.dll</HintPath>
@@ -330,6 +330,7 @@
   <ItemGroup>
     <Compile Include="Authorization\AuthorizationContextCache.cs" />
     <Compile Include="Authorization\CallerContextProvider.cs" />
+    <Compile Include="Controllers\AccountLegalEntitiesController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Filters\HandleErrorFilter.cs" />
     <Compile Include="Filters\ValidateModelStateFilter.cs" />
@@ -346,7 +347,7 @@
     <Compile Include="Controllers\AccountTransferConnectionsController.cs" />
     <Compile Include="Controllers\AccountTransactionsController.cs" />
     <Compile Include="Controllers\AccountLevyController.cs" />
-    <Compile Include="Controllers\AccountLegalEntitiesController.cs" />
+    <Compile Include="Controllers\LegalEntitiesController.cs" />
     <Compile Include="Controllers\AccountPayeSchemesController.cs" />
     <Compile Include="Controllers\EmployerAgreementController.cs" />
     <Compile Include="Controllers\EmployerAccountsController.cs" />

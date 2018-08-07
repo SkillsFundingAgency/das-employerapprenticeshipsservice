@@ -39,6 +39,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IAccountEventFactory> _accountEventFactory;
         private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
         private Mock<IMembershipRepository> _mockMembershipRepository;
+        private Mock<IHashingService> _mockAccountLegalEntityHashingService;
+        private Mock<IEmployerAgreementRepository> _mockEmployerAgreementRepository;
         
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
@@ -79,6 +81,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _mockMembershipRepository.Setup(r => r.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(new MembershipView() { FirstName = "Caller", LastName = "Full Name" }));
 
+            _mockAccountLegalEntityHashingService = new Mock<IHashingService>();
+
+            _mockEmployerAgreementRepository = new Mock<IEmployerAgreementRepository>();
+
             _handler = new CreateAccountCommandHandler(
                 _accountRepository.Object, 
                 _messagePublisher.Object, 
@@ -89,7 +95,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 _genericEventFactory.Object,
                 _accountEventFactory.Object,
                 _refreshEmployerLevyService.Object,
-                _mockMembershipRepository.Object);
+                _mockMembershipRepository.Object,
+                _mockAccountLegalEntityHashingService.Object,
+                _mockEmployerAgreementRepository.Object
+                );
         }
 
         [Test]

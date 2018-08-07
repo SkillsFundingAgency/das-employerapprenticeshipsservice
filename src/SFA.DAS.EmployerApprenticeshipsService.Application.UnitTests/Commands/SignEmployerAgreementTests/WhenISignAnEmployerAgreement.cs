@@ -140,7 +140,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         public void ThenIfTheUserIsNotConnectedToTheAccountThenAnUnauthorizedExceptionIsThrown()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(() => null);
 
             //Act Assert
             Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(_command));
@@ -213,7 +213,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         { 
             //Arrange
             _commintmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>()))
-                .ReturnsAsync(null);
+                .ReturnsAsync(() => null);
 
             //Act
             await _handler.Handle(_command);

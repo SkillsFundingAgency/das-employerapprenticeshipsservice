@@ -1,0 +1,65 @@
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.OrganisationUpdatedNextStepsViewModel>
+
+@{ViewBag.PageID = "page-organisation-updated-what-next"; }
+@{
+    ViewBag.Title = "What Next";
+    ViewBag.Section = "organisations";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-large">What's next?</h1>
+
+        @if (string.IsNullOrEmpty(Model.Data.ErrorMessage))
+        {
+            <div>
+                <div>
+                    Details updated
+                </div>
+                <div>
+                    You've successfully updated your organisation details
+                </div>
+            </div>
+        }
+        else
+        {
+            <div>
+                <div>
+                    Details could not be updated
+                </div>
+                <div>
+                    <span class="error-message">@Model.Data.ErrorMessage</span>
+                </div>
+            </div>
+        }
+        
+
+        <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
+
+            <input type="hidden" name="hashedAccountId" value="@Model.Data.HashedAccountId"/>
+
+            <fieldset>
+                <legend>
+                    <span class="vh">What's next?</span>
+                </legend>
+
+                <label for="acceptAgreement" class="block-label">
+                    <span class="form-label">Go to your organisations and agreements</span>
+                    <input type="radio" name="nextStep" value="dashboard"/>
+                </label>
+
+                <label for="teamMembers" class="block-label">
+                    <span class="form-label">Go to the homepage</span>
+                    <input type="radio" name="nextStep" value="homepage"/>
+                </label>
+
+                <div class="form-group">
+                    <button type="submit" class="button">Continue</button>
+                </div>
+
+            </fieldset>
+        </form>
+
+    </div>
+</div>
+

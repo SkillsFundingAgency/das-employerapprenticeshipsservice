@@ -11,9 +11,10 @@ AS
 		a.CreatedDate,
 		u.Email AS OwnerEmail,
 		ah.PayeRef AS PayeSchemeId,
-		ea.LegalEntityId
+		ale.LegalEntityId
 	FROM employer_account.Account a
-	INNER JOIN [employer_account].[EmployerAgreement] ea ON ea.AccountId = a.Id
+	INNER JOIN [employer_account].[AccountLegalEntity] ale ON ale.AccountId = a.Id
+	INNER JOIN [employer_account].[EmployerAgreement] ea ON ea.AccountLegalEntityId = ale.Id
 	INNER JOIN [employer_account].[AccountHistory] ah ON ah.AccountId = a.Id
 	OUTER APPLY
 	(
@@ -24,4 +25,5 @@ AS
 		ORDER BY m.CreatedDate DESC
 	) u
 	WHERE a.HashedId = @hashedAccountId AND
-	ea.StatusId IN (1, 2)
+	ea.StatusId IN (1, 2) AND
+	ale.Deleted IS NULL;

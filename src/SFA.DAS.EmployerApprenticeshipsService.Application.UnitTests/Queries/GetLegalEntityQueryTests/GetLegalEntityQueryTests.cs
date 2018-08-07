@@ -37,14 +37,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
         public IConfigurationProvider ConfigurationProvider { get; set; }
         public Domain.Models.Account.Account Account { get; private set; }
         public LegalEntity LegalEntity { get; set; }
+        public AccountLegalEntity AccountLegalEntity { get; set; }
         public DbSetStub<LegalEntity> LegalEntitiesDbSet { get; set; }
         public List<LegalEntity> LegalEntities { get; set; }
-
+        public List<AccountLegalEntity> AccountLegalEntities { get; set; }
+        public DbSetStub<AccountLegalEntity> AccountLegalEntitiesDbSet { get; set; }
 
         public GetLegalEntityQueryTestsFixture()
         {
-            LegalEntities = new List<LegalEntity>();
-            LegalEntitiesDbSet = new DbSetStub<LegalEntity>(LegalEntities);
             Db = new Mock<EmployerAccountDbContext>();
 
             ConfigurationProvider = new MapperConfiguration(c =>
@@ -53,15 +53,24 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
                 c.AddProfile<LegalEntityMappings>();
             });
 
+            LegalEntities = new List<LegalEntity>();
+            LegalEntitiesDbSet = new DbSetStub<LegalEntity>(LegalEntities);
+
+            AccountLegalEntities = new List<AccountLegalEntity>();
+            AccountLegalEntitiesDbSet = new DbSetStub<AccountLegalEntity>(AccountLegalEntities);
+
             Db.Setup(d => d.LegalEntities).Returns(LegalEntitiesDbSet);
+            Db.Setup(d => d.AccountLegalEntities).Returns(AccountLegalEntitiesDbSet);
 
             Handler = new GetLegalEntityQueryHandler(Db.Object, ConfigurationProvider);
 
             SetAccount()
                 .SetLegalEntity()
+                .SetLegalAccountLegalEntity()
                 .AddLegalEntityAgreement(1, EmployerAgreementStatus.Removed)
                 .AddLegalEntityAgreement(1, EmployerAgreementStatus.Signed)
-                .AddLegalEntityAgreement(2, EmployerAgreementStatus.Pending);
+                .AddLegalEntityAgreement(2, EmployerAgreementStatus.Pending)
+                .EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities();
         }
 
         public Task<GetLegalEntityResponse> Handle()
@@ -85,30 +94,76 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
             return this;
         }
 
+        public GetLegalEntityQueryTestsFixture EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities()
+        {
+            EmployerAgreement FindVersionToUse(AccountLegalEntity ale, EmployerAgreementStatus status)
+            {
+                return ale.Agreements.Where(a => a.StatusId == status)
+                    .OrderByDescending(a => a.Template.VersionNumber)
+                    .FirstOrDefault();
+            }
+
+            foreach (var accountLegalEntity in AccountLegalEntities)
+            {
+                var pending = FindVersionToUse(accountLegalEntity, EmployerAgreementStatus.Pending);
+                var signed = FindVersionToUse(accountLegalEntity, EmployerAgreementStatus.Signed);
+                accountLegalEntity.PendingAgreementId = pending?.Id;
+                accountLegalEntity.PendingAgreement = pending;
+                accountLegalEntity.PendingAgreementVersion = pending?.Template?.VersionNumber;
+
+                accountLegalEntity.SignedAgreementId = signed?.Id;
+                accountLegalEntity.SignedAgreement = signed;
+                accountLegalEntity.SignedAgreementVersion = signed?.Template?.VersionNumber;
+            }
+
+            return this;
+        }
+
         private GetLegalEntityQueryTestsFixture SetLegalEntity()
         {
             LegalEntity = new LegalEntity
             {
-                Id = 222222,
-                Name = "Acme"
+                Id = 222222
             };
 
             LegalEntities.Add(LegalEntity);
+            return this;
+        }
+
+        private GetLegalEntityQueryTestsFixture SetLegalAccountLegalEntity()
+        {
+
+            AccountLegalEntity = new AccountLegalEntity
+            {
+                Id = AccountLegalEntities.Count + 1,
+                Account = Account,
+                AccountId = Account.Id,
+                LegalEntity = LegalEntity,
+                LegalEntityId = LegalEntity.Id
+            };
+
+            LegalEntity.AccountLegalEntities.Add(AccountLegalEntity);
+            Account.AccountLegalEntities.Add(AccountLegalEntity);
+
+            AccountLegalEntities.Add(AccountLegalEntity);
 
             return this;
         }
 
         private GetLegalEntityQueryTestsFixture AddLegalEntityAgreement(int versionNumber, EmployerAgreementStatus status)
         {
-            LegalEntity.Agreements.Add(new EmployerAgreement
+            var newAgreement = new EmployerAgreement
             {
-                Account = Account,
                 Template = new AgreementTemplate
                 {
                     VersionNumber = versionNumber
                 },
                 StatusId = status
-            });
+            };
+
+            newAgreement.AccountLegalEntity = AccountLegalEntity;
+            newAgreement.AccountLegalEntityId = AccountLegalEntity.Id;
+            AccountLegalEntity.Agreements.Add(newAgreement);
 
             return this;
         }

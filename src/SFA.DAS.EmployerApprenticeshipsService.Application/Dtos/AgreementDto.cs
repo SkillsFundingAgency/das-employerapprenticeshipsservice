@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Application.Dtos
         public DateTime? ExpiredDate { get; set; }
         public string HashedAccountId { get; set; }
         public string HashedAgreementId { get; set; }
-        public LegalEntityDto LegalEntity { get; set; }
+        public AccountSpecificLegalEntityDto LegalEntity { get; set; }
         public long LegalEntityId { get; set; }
         public long? SignedById { get; set; }
         public string SignedByName { get; set; }
@@ -19,5 +19,6 @@ namespace SFA.DAS.EAS.Application.Dtos
         public EmployerAgreementStatus StatusId { get; set; }
         public AgreementTemplateDto Template { get; set; }
         public int TemplateId { get; set; }
+        public string HashedLegalEntityId { get; set; }
     }
 }

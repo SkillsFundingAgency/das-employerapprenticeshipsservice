@@ -24,6 +24,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
             return RunAsync(
                 f => f
                     .AddAgreement(1, 1, 1, EmployerAgreementStatus.Signed)
+                    .SetupDb()
                     .SetupCache(),
                 f => f.GetLowestSignedAgreementVersionNumberAsync(1),
                 (f, r) => f.DistributedCache.Verify(c => c.GetOrAddAsync("AccountId:1", It.IsAny<Func<string, Task<int>>>())));
@@ -35,6 +36,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
             return RunAsync(
                 f => f
                     .AddAgreement(1, 1, 1, EmployerAgreementStatus.Signed)
+                    .SetupDb()
                     .SetupCache(1, 9999),
                 f => f.GetLowestSignedAgreementVersionNumberAsync(1),
                 (f, r) => r.Should().Be(9999));
@@ -47,6 +49,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
                 f => f
                     .AddAgreement(1, 1, 1, EmployerAgreementStatus.Signed)
                     .AddAgreement(2, 1, 2, EmployerAgreementStatus.Pending)
+                    .SetupDb()
                     .SetupCache(),
                 f => f.GetLowestSignedAgreementVersionNumberAsync(1),
                 (f, r) => r.Should().Be(1));
@@ -60,6 +63,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
                     .AddAgreement(1, 1, 1, EmployerAgreementStatus.Signed)
                     .AddAgreement(1, 1, 2, EmployerAgreementStatus.Signed)
                     .AddAgreement(2, 1, 1, EmployerAgreementStatus.Pending)
+                    .SetupDb()
                     .SetupCache(),
                 f => f.GetLowestSignedAgreementVersionNumberAsync(1),
                 (f, r) => r.Should().Be(2));
@@ -73,6 +77,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
                     .AddAgreement(1, 1, 1, EmployerAgreementStatus.Signed)
                     .AddAgreement(1, 1, 2, EmployerAgreementStatus.Pending)
                     .AddAgreement(2, 1, 2, EmployerAgreementStatus.Pending)
+                    .SetupDb()
                     .SetupCache(),
                 f => f.GetLowestSignedAgreementVersionNumberAsync(1),
                 (f, r) => r.Should().Be(1));
@@ -86,6 +91,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
                     .AddAgreement(1, 1, 1, EmployerAgreementStatus.Pending)
                     .AddAgreement(1, 1, 2, EmployerAgreementStatus.Signed)
                     .AddAgreement(2, 1, 1, EmployerAgreementStatus.Pending)
+                    .SetupDb()
                     .SetupCache(),
                 f => f.GetLowestSignedAgreementVersionNumberAsync(1),
                 (f, r) => r.Should().Be(2));
@@ -99,6 +105,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
                     .AddAgreement(1, 1, 1, EmployerAgreementStatus.Pending)
                     .AddAgreement(1, 1, 2, EmployerAgreementStatus.Pending)
                     .AddAgreement(2, 1, 1, EmployerAgreementStatus.Signed)
+                    .SetupDb()
                     .SetupCache(),
                 f => f.GetLowestSignedAgreementVersionNumberAsync(1),
                 (f, r) => r.Should().NotHaveValue());
@@ -112,6 +119,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
                     .AddAgreement(1, 1, 1, EmployerAgreementStatus.Signed)
                     .AddAgreement(1, 2, 2, EmployerAgreementStatus.Signed)
                     .AddAgreement(2, 1, 2, EmployerAgreementStatus.Pending)
+                    .SetupDb()
                     .SetupCache(),
                 f => f.GetLowestSignedAgreementVersionNumberAsync(1),
                 (f, r) => r.Should().Be(1));
@@ -125,9 +133,24 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
                     .AddAgreement(1, 1, 1, EmployerAgreementStatus.Pending)
                     .AddAgreement(1, 2, 2, EmployerAgreementStatus.Signed)
                     .AddAgreement(2, 1, 1, EmployerAgreementStatus.Pending)
+                    .SetupDb()
                     .SetupCache(),
                 f => f.GetLowestSignedAgreementVersionNumberAsync(1),
                 (f, r) => r.Should().NotHaveValue());
+        }
+
+        [Test]
+        public Task GetLowestSignedAgreementVersionNumberAsync_WhenLegalEntityIsRemoved_ShouldIgnoreLegalEntity()
+        {
+            return RunAsync(
+                f => f
+                    .AddAgreement(1, 1, 1, EmployerAgreementStatus.Signed)
+                    .AddAgreement(1, 2, 2, EmployerAgreementStatus.Signed)
+                    .RemoveAccountLegalEntity(1, 1)
+                    .SetupDb()
+                    .SetupCache(),
+                f => f.GetLowestSignedAgreementVersionNumberAsync(1),
+                (f, r) => r.Should().Be(2));
         }
 
         [Test]
@@ -141,27 +164,16 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
 
     public class AgreementServiceTestsFixture : FluentTestFixture
     {
-        public Mock<EmployerAccountDbContext> Db { get; set; }
         public Mock<IDistributedCache> DistributedCache { get; set; }
-        public List<Account> Accounts { get; }
-        public List<EmployerAgreement> Agreements { get; }
-        public List<LegalEntity> LegalEntities { get; }
-        public List<AgreementTemplate> Templates { get; set; }
-
         private readonly IAgreementService _service;
+
+        private readonly EmployerAgreementBuilder _employerAgreementBuilder;
 
         public AgreementServiceTestsFixture()
         {
-            Db = new Mock<EmployerAccountDbContext>();
             DistributedCache = new Mock<IDistributedCache>();
-            Accounts = new List<Account>();
-            Agreements = new List<EmployerAgreement>();
-            LegalEntities = new List<LegalEntity>();
-            Templates = new List<AgreementTemplate>();
-
-            Db.Setup(d => d.Agreements).Returns(new DbSetStub<EmployerAgreement>(Agreements));
-
-            _service = new AgreementService(Db.Object, DistributedCache.Object);
+            _employerAgreementBuilder = new EmployerAgreementBuilder();
+            _service = new AgreementService(_employerAgreementBuilder.EmployerAccountDbContext, DistributedCache.Object);
         }
 
         public Task<int?> GetLowestSignedAgreementVersionNumberAsync(long accountId)
@@ -171,17 +183,18 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
 
         public AgreementServiceTestsFixture AddAgreement(long accountId, long legalEntityId, int templateVersionNumber, EmployerAgreementStatus status)
         {
-            var account = EnsureAccount(accountId);
-            var legalEntity = EnsureLegalEntity(legalEntityId);
-            var template = EnsureTemplate(templateVersionNumber);
+            _employerAgreementBuilder
+                .WithAccount(accountId, "ABC123")
+                .WithLegalEntityId(legalEntityId)
+                .WithAgreement(accountId, legalEntityId, templateVersionNumber, status);
 
-            Agreements.Add(new EmployerAgreement
-            {
-                Account = account,
-                LegalEntity = legalEntity,
-                Template = template,
-                StatusId = status
-            });
+            return this;
+        }
+
+        public AgreementServiceTestsFixture RemoveAccountLegalEntity(long accountId, long legalEntityId)
+        {
+            _employerAgreementBuilder
+                .RemoveAccountLegalEntity(accountId, legalEntityId);
 
             return this;
         }
@@ -193,7 +206,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
 
         public AgreementServiceTestsFixture SetupCache()
         {
-            foreach (var account in Accounts)
+            foreach (var account in _employerAgreementBuilder.Accounts)
             {
                 DistributedCache.Setup(c => c.GetOrAddAsync("AccountId:" + account.Id.ToString(CultureInfo.InvariantCulture), It.IsAny<Func<string, Task<int>>>()))
                     .Returns<string, Func<string, Task<int>>>((k, f) => f(k));
@@ -210,55 +223,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
             return this;
         }
 
-        private Account EnsureAccount(long accountId)
+        public AgreementServiceTestsFixture SetupDb()
         {
-            var existingAccount = Accounts.SingleOrDefault(a => a.Id == accountId);
+            _employerAgreementBuilder
+                .EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities()
+                .SetupMockDbContext();
 
-            if (existingAccount == null)
-            {
-                existingAccount = new Account
-                {
-                    Id = accountId
-                };
-
-                Accounts.Add(existingAccount);
-            }
-
-            return existingAccount;
-        }
-
-        private LegalEntity EnsureLegalEntity(long legalEntityId)
-        {
-            var existingLegalEntity = LegalEntities.SingleOrDefault(l => l.Id == legalEntityId);
-
-            if (existingLegalEntity == null)
-            {
-                existingLegalEntity = new LegalEntity
-                {
-                    Id = legalEntityId
-                };
-
-                LegalEntities.Add(existingLegalEntity);
-            }
-
-            return existingLegalEntity;
-        }
-
-        private AgreementTemplate EnsureTemplate(int templateVersionNumber)
-        {
-            var existingTemplate = Templates.SingleOrDefault(t => t.VersionNumber == templateVersionNumber);
-
-            if (existingTemplate == null)
-            {
-                existingTemplate = new AgreementTemplate
-                {
-                    VersionNumber = templateVersionNumber
-                };
-
-                Templates.Add(existingTemplate);
-            }
-
-            return existingTemplate;
+            return this;
         }
     }
 }

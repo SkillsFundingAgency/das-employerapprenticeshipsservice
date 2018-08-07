@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
@@ -23,6 +24,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         private Mock<ILog> _logger;
         private Mock<IMapper> _mapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
+        private Mock<IHashingService> _hashingService;
+
         private GetCharityQueryResponse _expected;
 
         [SetUp]
@@ -35,10 +38,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
                 .ReturnsAsync(new GetAccountLegalEntitiesResponse
                 {
-                    Entites = new LegalEntities {LegalEntityList = new List<LegalEntity>()}
+                    Entites = new List<AccountSpecificLegalEntity>()
                 });
 
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
+            _hashingService = new Mock<IHashingService>();
 
             _expected = new GetCharityQueryResponse
             {
@@ -57,47 +61,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 
 
             _orchestrator = new OrganisationOrchestrator(_mediator.Object, _logger.Object, _mapper.Object,
-                _cookieService.Object);
+                _cookieService.Object, _hashingService.Object);
         }
-
-        [Test]
-        public async Task ThenTheCharityDetailsAreMappedToTheModel()
-        {
-           //Act
-            var actual = await _orchestrator.GetCharityByRegistrationNumber(string.Empty, string.Empty, string.Empty);
-
-            //Assert
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(_expected.Charity.RegistrationNumber.ToString(), actual.Data.ReferenceNumber);
-            Assert.AreEqual(_expected.Charity.Name, actual.Data.Name);
-            Assert.AreEqual(_expected.Charity.FormattedAddress, actual.Data.Address);
-        }
-
-        
-
-        [Test]
-        public async Task ThenTheStatusWillBeSetToConflictWhenTheLegalEntityHasAlreadyBeenAddedAndTheCharityHasLeadingAndTrailingWhitespace()
-        {
-            //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
-                .ReturnsAsync(new GetAccountLegalEntitiesResponse
-                {
-                    Entites = new LegalEntities { LegalEntityList = new List<LegalEntity>
-                    {
-                        new LegalEntity
-                        {
-                            Code="12345",
-                            Source = (byte)OrganisationType.Charities
-                        }
-                    } }
-                });
-
-            //Act
-            var actual = await _orchestrator.GetCharityByRegistrationNumber(" 12345 ", "123", string.Empty);
-
-            //Assert
-            Assert.AreEqual(HttpStatusCode.Conflict,actual.Status);
-        }
-
     }
 }
