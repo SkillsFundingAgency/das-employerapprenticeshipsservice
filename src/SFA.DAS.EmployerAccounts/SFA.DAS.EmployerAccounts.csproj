@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="5.1.1" />
+    <PackageReference Include="Dapper" Version="1.50.2" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="MediatR" Version="2.1.0" />
     <PackageReference Include="SFA.DAS.Configuration" Version="1.0.0.53229" />
@@ -21,6 +22,7 @@
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.0.0.35919" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Types" Version="2.0.0.35919" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.42" />
+    <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
     <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="1.0.0.26382" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />

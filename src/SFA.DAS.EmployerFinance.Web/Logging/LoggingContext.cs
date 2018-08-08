@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Logging
+namespace SFA.DAS.EmployerFinance.Web.Logging
 {
     public sealed class LoggingContext : ILoggingContext
     {
