@@ -667,6 +667,7 @@
     <Content Include="Views\Organisation\Review.cshtml" />
     <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
     <Content Include="Views\Organisation\ReviewNoChange.cshtml" />
+    <Content Include="Views\Organisation\ReviewIncorrectDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />
