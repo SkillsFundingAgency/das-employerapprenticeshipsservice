@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Authenication;
+﻿using SFA.DAS.Authentication;
 using SFA.DAS.EmployerFinance.Configuration;
 using System.Web;
 using System.Web.Mvc;

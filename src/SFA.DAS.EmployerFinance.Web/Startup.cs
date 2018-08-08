@@ -4,7 +4,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using NLog;
 using Owin;
-using SFA.DAS.Authenication;
+using SFA.DAS.Authentication;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Web;
 using SFA.DAS.EmployerFinance.Web.App_Start;
