@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Authenication;
+﻿using SFA.DAS.Authentication;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Configuration

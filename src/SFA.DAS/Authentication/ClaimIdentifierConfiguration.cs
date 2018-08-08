@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Authenication
+﻿namespace SFA.DAS.Authentication
 {
     public class ClaimIdentifierConfiguration
     {
