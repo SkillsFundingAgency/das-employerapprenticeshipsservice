@@ -110,3 +110,11 @@ Target "Build And Zip Web App Projects" ( fun _ ->
         |> MSBuildReleaseExt null properties "Build"
         |> Log "Build-Output: "
 )
+
+Target "Restore Solution Packages" (fun _ ->
+     "./SFA.DAS.EAS.sln"
+     |> RestoreMSSolutionPackages (fun p ->
+         { p with
+             OutputPath = ".\\packages"
+             Retries = 4 })
+ )
