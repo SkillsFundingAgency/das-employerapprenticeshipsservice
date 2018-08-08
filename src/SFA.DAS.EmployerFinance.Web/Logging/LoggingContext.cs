@@ -1,5 +1,5 @@
-﻿using SFA.DAS.NLog.Logger;
-using System.Web;
+﻿using System.Web;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Web.Logging
 {

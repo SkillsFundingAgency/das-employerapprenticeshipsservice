@@ -1,6 +1,6 @@
-using System.Security.Cryptography.X509Certificates;
 using Microsoft.Azure;
 using SFA.DAS.TokenService.Api.Client;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SFA.DAS.EmployerFinance.Configuration
 {
@@ -39,6 +39,5 @@ namespace SFA.DAS.EmployerFinance.Configuration
         }
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
-        public string MessageServiceBusConnectionString { get; set; }
     }
 }

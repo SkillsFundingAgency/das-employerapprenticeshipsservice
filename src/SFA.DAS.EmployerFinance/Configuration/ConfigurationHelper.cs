@@ -2,7 +2,6 @@
 using SFA.DAS.Configuration.AzureTableStorage;
 using System.Configuration;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Configuration
 {
@@ -44,12 +43,6 @@ namespace SFA.DAS.EmployerFinance.Configuration
         {
             var configurationService = CreateConfigurationService(serviceName);
             return configurationService.Get<T>();
-        }
-
-        public static Task<T> GetConfigurationAsync<T>(string serviceName)
-        {
-            var configurationService = CreateConfigurationService(serviceName);
-            return configurationService.GetAsync<T>();
         }
 
         public static bool IsEnvironmentAnyOf(params Environment[] environment)

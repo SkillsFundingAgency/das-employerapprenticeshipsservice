@@ -10,10 +10,14 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
             return new Container(c =>
             {
                 c.AddRegistry<ConfigurationRegistry>();
-                c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DataRegistry>();
+                c.AddRegistry<LoggerRegistry>();
+                c.AddRegistry<MediatorRegistry>();
+                c.AddRegistry<RepositoriesRegistry>();
+                c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }
     }
 }
+
