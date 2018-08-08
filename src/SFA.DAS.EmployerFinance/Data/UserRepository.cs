@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerFinance.Data
 {
     public class UserRepository : BaseRepository, IUserRepository
     {
-        public UserRepository(EmployerFinanceConfiguration configuration, ILog logger)
+        public UserRepository(EmployerAccountsConfiguration configuration, ILog logger)
             : base(configuration.DatabaseConnectionString, logger)
         { }
 
