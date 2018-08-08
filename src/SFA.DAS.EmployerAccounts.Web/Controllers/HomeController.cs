@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Authenication;
+﻿using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Authorization;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;

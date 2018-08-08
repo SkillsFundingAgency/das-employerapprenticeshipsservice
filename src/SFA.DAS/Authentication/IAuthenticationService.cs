@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SFA.DAS.Authenication
+namespace SFA.DAS.Authentication
 {
     public interface IAuthenticationService
     {

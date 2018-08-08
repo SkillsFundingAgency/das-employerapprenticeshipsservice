@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 using System;
