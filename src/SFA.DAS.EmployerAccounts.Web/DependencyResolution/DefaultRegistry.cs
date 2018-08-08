@@ -1,7 +1,7 @@
-using SFA.DAS.EmployerAccounts.Logging;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
 using System.Web;
+using SFA.DAS.EmployerAccounts.Web.Logging;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {
