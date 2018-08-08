@@ -20,4 +20,3 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
         }
     }
 }
-
