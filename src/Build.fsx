@@ -18,6 +18,7 @@ open Fake
    ==>"Set Solution Name"
    ==>"Update Assembly Info Version Numbers"
    ==>"Clean Directories" 
+   ==>"Restore Solution Packages"
    ==>"Dotnet Restore"
    ==>"Build Projects"
    ==>"Run NUnit Tests"
