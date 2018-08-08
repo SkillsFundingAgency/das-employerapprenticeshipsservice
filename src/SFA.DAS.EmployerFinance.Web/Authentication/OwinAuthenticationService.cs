@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using IdentityModel.Client;
-using SFA.DAS.Authenication;
+using SFA.DAS.Authentication;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 

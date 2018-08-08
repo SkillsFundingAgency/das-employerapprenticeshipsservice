@@ -1,6 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authenication;
+using SFA.DAS.Authentication;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Web.Controllers;
 using System.Web.Mvc;
