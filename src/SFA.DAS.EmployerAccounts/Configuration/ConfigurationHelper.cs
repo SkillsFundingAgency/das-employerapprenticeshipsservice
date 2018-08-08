@@ -1,7 +1,9 @@
-﻿using SFA.DAS.Configuration;
+﻿using Microsoft.Azure;
+using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using System.Configuration;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Azure;
 
 namespace SFA.DAS.EmployerAccounts.Configuration
@@ -46,6 +48,12 @@ namespace SFA.DAS.EmployerAccounts.Configuration
             return configurationService.Get<T>();
         }
 
+        public static Task<T> GetConfigurationAsync<T>(string serviceName)
+        {
+            var configurationService = CreateConfigurationService(serviceName);
+            return configurationService.GetAsync<T>();
+        }
+
         public static bool IsEnvironmentAnyOf(params Environment[] environment)
         {
             return environment.Contains(CurrentEnvironment);
@@ -55,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         {
             var storageConnectionString = CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString");
             var environmentName = CurrentEnvironmentName;
-            var configurationRepository = new AzureTableStorageConfigurationRepository(storageConnectionString);
+            var configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
             var configurationService = new ConfigurationService(configurationRepository, new ConfigurationOptions(serviceName, environmentName, "1.0"));
 
             return configurationService;
