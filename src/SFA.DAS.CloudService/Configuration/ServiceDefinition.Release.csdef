@@ -17,6 +17,8 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="CurrentTime" />
       <Setting name="EmployerCommitmentsBaseUrl" />
+      <Setting name="EmployerAccountsWebBaseUrl" />
+      <Setting name="EmployerFinanceWebBaseUrl" />
       <Setting name="EmployerRecruitBaseUrl" />
       <Setting name="EmployerProjectionsBaseUrl" />
       <Setting name="EnvironmentName" />

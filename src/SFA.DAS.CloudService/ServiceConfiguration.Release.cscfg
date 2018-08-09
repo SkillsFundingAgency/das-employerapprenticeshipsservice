@@ -7,6 +7,8 @@
       <Setting name="ConfigurationStorageConnectionString" value="" />
       <Setting name="CurrentTime" value="" />
       <Setting name="EmployerCommitmentsBaseUrl" value="" />
+      <Setting name="EmployerAccountsWebBaseUrl" value="" />
+      <Setting name="EmployerFinanceWebBaseUrl" value="" />
       <Setting name="EmployerRecruitBaseUrl" value="" />
       <Setting name="EmployerProjectionsBaseUrl" value="" />
       <Setting name="EnvironmentName" value="" />
