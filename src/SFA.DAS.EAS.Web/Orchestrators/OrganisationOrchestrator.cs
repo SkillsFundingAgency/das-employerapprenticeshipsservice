@@ -401,7 +401,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 await _mediator.SendAsync(request);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 result.Data.ErrorMessage = "Failed to update the organisation's details.";
             }
