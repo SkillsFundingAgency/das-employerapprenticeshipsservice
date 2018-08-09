@@ -6,6 +6,8 @@
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="CurrentTime" value="" />
       <Setting name="EmployerCommitmentsBaseUrl" value="__EmployerCommitmentsBaseUrl__" />
+      <Setting name="EmployerAccountsWebBaseUrl" value="__EmployerAccountsWebBaseUrl__" />
+      <Setting name="EmployerFinanceWebBaseUrl" value="__EmployerFinanceWebBaseUrl__" />
       <Setting name="EmployerRecruitBaseUrl" value="__EmployerRecruitBaseUrl__" />
       <Setting name="EmployerProjectionsBaseUrl" value="__EmployerProjectionsBaseUrl__" />
       <Setting name="EnvironmentName" value="__EnvironmentName__" />

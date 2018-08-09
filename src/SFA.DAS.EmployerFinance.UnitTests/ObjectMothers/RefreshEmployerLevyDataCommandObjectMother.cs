@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData;
+using SFA.DAS.EmployerFinance.Models.HmrcLevy;
 using SFA.DAS.EmployerFinance.Models.Levy;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.ObjectMothers

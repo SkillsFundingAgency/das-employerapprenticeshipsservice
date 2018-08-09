@@ -14,6 +14,8 @@
         public const string AddOtherOrganisationDetailsViewName = "AddOtherOrganisationDetails";
         public const string CodeKeyName = "code";
         public const string CommitmentsBaseUrlKeyName = "EmployerCommitmentsBaseUrl";
+        public const string EmployerAccountsWebBaseUrlKeyName = "EmployerAccountsWebBaseUrl";
+        public const string EmployerFinanceWebBaseUrlKeyName = "EmployerFinanceWebBaseUrl";
         public const string ControllerKeyName = "Controller";
         public const string ConfirmOrganisationDetailsViewName = "../OrganisationShared/ConfirmOrganisationDetails";
         public const string ConfirmPayeSchemeActionName = "ConfirmPayeScheme";

@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Authorization;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
