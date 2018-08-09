@@ -154,6 +154,14 @@
     <Content Include="Views\Home\SignedIn.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Home\ServiceLandingPage.cshtml" />
+    <Content Include="Views\Home\ServiceStartPage.cshtml" />
+    <Content Include="Views\Home\SetupAccount.cshtml" />
+    <Content Include="Views\Home\UsedServiceBefore.cshtml" />
+    <Content Include="Views\Shared\GoogleAnalyticsInfo.cshtml" />
+    <Content Include="Views\Shared\_SetupAccount.cshtml" />
+    <Content Include="Views\Shared\_SuccessMessage.cshtml" />
+    <Content Include="Views\Shared\_SVGSprite.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
