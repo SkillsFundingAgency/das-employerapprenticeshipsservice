@@ -1,6 +1,6 @@
-﻿using System.Web.Mvc;
-using Microsoft.Azure;
+﻿using Microsoft.Azure;
 using SFA.DAS.EAS.Web.Helpers;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.Extensions
 {
@@ -19,6 +19,16 @@ namespace SFA.DAS.EAS.Web.Extensions
         public static string RecruitmentsAction(this UrlHelper helper)
         {
             return Action(helper, string.Empty, ControllerConstants.RecruitmentsBaseUrlKeyName);
+        }
+
+        public static string EmployerAccountsAction(this UrlHelper helper, string path)
+        {
+            return Action(helper, path, ControllerConstants.EmployerAccountsWebBaseUrlKeyName);
+        }
+
+        public static string EmployerFinanceAction(this UrlHelper helper, string path)
+        {
+            return Action(helper, path, ControllerConstants.EmployerFinanceWebBaseUrlKeyName);
         }
 
         private static string Action(UrlHelper helper, string path, string baseUrlKeyName)

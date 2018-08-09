@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
-    public class FlashMessageViewModel
+    public class FlashMessageViewModel 
     {
         public FlashMessageViewModel()
         {

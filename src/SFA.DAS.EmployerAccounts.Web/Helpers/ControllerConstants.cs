@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.EmployerAccounts.Web.Helpers
+﻿namespace SFA.DAS.EmployerAccounts.Web.Helpers
 {
     public static class ControllerConstants
     {
@@ -46,6 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
         public const string IndexActionName = "Index";
         public const string InformActionName = "Inform";
         public const string InviteActionName = "Invite";
+        public const string LegacyEasBaseUrlKeyName = "LegacyEasBaseUrl";
         public const string LegalAgreementViewName = "LegalAgreement";
         public const string LevyDeclarationDetailViewName = "LevyDeclarationDetail";
         public const string ModelStateTempDataKey = "ModelState";
