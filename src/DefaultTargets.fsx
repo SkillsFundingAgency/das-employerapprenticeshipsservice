@@ -562,7 +562,8 @@ Target "Create Nuget Package" (fun _ ->
 
 
     if testDirectory.ToLower() = "release" then
-        let nupkgFiles = !! (currentDirectory + "/**/*.nuspec")
+        let mutable nupkgFiles = !! (currentDirectory + "/**/*.nuspec")
+        nupkgFiles <- nupkgFiles.ButNot(currentDirectory + "/packages/**/*.*")
 
         for nupkgFile in nupkgFiles do
             let fileInfo = fileSystemInfo(nupkgFile)
