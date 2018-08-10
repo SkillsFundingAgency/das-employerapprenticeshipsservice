@@ -3388,6 +3388,10 @@ table.responsive tr th:last-child, table.responsive tr td:last-child {
   border-bottom: 1px solid #bfc1c3;
 }
 
+table.responsive tr th.link-right:last-child, table.responsive tr td.link-right:last-child {
+  text-align: right;
+}
+
 table.responsive tr.total {
   border: none;
 }
