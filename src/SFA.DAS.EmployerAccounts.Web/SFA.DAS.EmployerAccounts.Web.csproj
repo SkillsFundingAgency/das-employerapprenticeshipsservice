@@ -415,8 +415,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\SignedIn.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
@@ -510,6 +508,11 @@
     <Content Include="src\sass\_tasks.scss" />
     <Content Include="src\sass\_typography.scss" />
     <Content Include="src\sass\_welcome.scss" />
+    <Content Include="Views\Home\Help.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\LegalAgreement.cshtml" />
+    <Content Include="Views\Home\Privacy.cshtml" />
+    <Content Include="Views\Home\WhatYoullNeed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
