@@ -2,6 +2,7 @@
 using SFA.DAS.Configuration.AzureTableStorage;
 using System.Configuration;
 using System.Linq;
+using Microsoft.Azure;
 
 namespace SFA.DAS.EmployerAccounts.Configuration
 {
@@ -32,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
 
                 if (string.IsNullOrEmpty(environmentName))
                 {
-                    environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
+                    environmentName = CloudConfigurationManager.GetSetting("EnvironmentName");
                 }
 
                 return environmentName.ToUpperInvariant();
@@ -52,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
 
         private static ConfigurationService CreateConfigurationService(string serviceName)
         {
-            var storageConnectionString = ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"];
+            var storageConnectionString = CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString");
             var environmentName = CurrentEnvironmentName;
             var configurationRepository = new AzureTableStorageConfigurationRepository(storageConnectionString);
             var configurationService = new ConfigurationService(configurationRepository, new ConfigurationOptions(serviceName, environmentName, "1.0"));
