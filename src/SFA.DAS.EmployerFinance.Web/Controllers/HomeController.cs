@@ -2,6 +2,7 @@
 using SFA.DAS.EmployerFinance.Configuration;
 using System.Web;
 using System.Web.Mvc;
+using SFA.DAS.EmployerFinance.Web.Helpers;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
@@ -26,6 +27,12 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        [Route("privacy")]
+        public ActionResult Privacy()
+        {
+            return View();
+        }
         [Route("signOut")]
         public ActionResult SignOut()
         {
@@ -38,5 +45,19 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
             return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken, owinContext.Request.Uri.Scheme, owinContext.Request.Uri.Authority));
         }
+
+        [HttpGet]
+        [Route("help")]
+        public ActionResult Help()
+        {
+            return View();
+        }
+        [Authorize]
+        [Route("signIn")]
+        public ActionResult SignIn()
+        {
+            return RedirectToAction(ControllerConstants.IndexActionName);
+        }
+
     }
 }
