@@ -11,7 +11,7 @@ using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Commands.RefreshPaymentData;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Events.ProcessPayment;
-using SFA.DAS.EmployerFinance.Exceptions;
+using SFA.DAS.Exceptions;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Services;

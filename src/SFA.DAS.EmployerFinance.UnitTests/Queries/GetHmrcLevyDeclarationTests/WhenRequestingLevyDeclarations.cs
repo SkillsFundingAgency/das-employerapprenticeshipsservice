@@ -6,7 +6,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Validation;
-using SFA.DAS.EmployerFinance.Exceptions;
+using SFA.DAS.Exceptions;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EmployerFinance.Queries.GetLastLevyDeclaration;

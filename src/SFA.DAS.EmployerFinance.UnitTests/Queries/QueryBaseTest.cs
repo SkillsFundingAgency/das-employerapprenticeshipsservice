@@ -4,7 +4,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Validation;
-using SFA.DAS.EmployerFinance.Exceptions;
+using SFA.DAS.Exceptions;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Queries
 {

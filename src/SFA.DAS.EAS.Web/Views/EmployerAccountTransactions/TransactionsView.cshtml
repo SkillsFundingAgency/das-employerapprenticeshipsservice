@@ -131,16 +131,24 @@
                                 @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
                                      aggregationLine.TransactionType == TransactionItemType.TopUp)
                                 {
-                                    <a title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
-                                        Details <span class="vh"> for the transaction on @date</span>
+                                    <a title="View details for the transaction on @date" 
+                                       href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions",
+                                                 new {hashedAccountId = Model.Data.Model.Data.HashedAccountId,
+                                                     fromDate,
+                                                     toDate })">Details <span class="vh"> for the transaction on @date</span>
                                     </a>
                                 }
                                 else if (aggregationLine.TransactionType == TransactionItemType.Payment)
                                 {
                                     var paymentTransaction = aggregationLine as PaymentTransactionLine;
 
-                                    <a title="View details for the transaction on @date" href="@Url.Action("ProviderPaymentSummary", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, ukPrn = paymentTransaction?.UkPrn, fromDate = fromDate, toDate = toDate })">
-                                        Details <span class="vh"> for the transaction on @date</span>
+                                    <a title="View details for the transaction on @date" 
+                                       
+                                       href="@Url.EmployerFinanceAction("finance/provider/summary",
+                                                 new {hashedAccountId = Model.Data.Model.Data.HashedAccountId,
+                                                     ukPrn = paymentTransaction?.UkPrn,
+                                                     fromDate = fromDate,
+                                                     toDate = toDate })">Details <span class="vh"> for the transaction on @date</span>
 
                                     </a>
                                 }
