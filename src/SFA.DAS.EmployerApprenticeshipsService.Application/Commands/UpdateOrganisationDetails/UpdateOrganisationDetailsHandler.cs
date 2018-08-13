@@ -1,10 +1,8 @@
-﻿using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
 using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails
 {
