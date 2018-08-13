@@ -6,13 +6,14 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Http;
-using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
 using EnglishFractionDeclarations = HMRC.ESFA.Levy.Api.Types.EnglishFractionDeclarations;
+using SFA.DAS.Http;
+using SFA.DAS.ActiveDirectory;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {

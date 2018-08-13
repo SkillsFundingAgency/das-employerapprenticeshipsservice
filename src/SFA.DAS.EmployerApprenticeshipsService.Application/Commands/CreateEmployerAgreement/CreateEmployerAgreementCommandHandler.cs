@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.NServiceBus;
 using System.Threading.Tasks;

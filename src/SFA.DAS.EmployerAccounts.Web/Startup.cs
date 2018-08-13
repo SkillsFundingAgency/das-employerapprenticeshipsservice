@@ -4,7 +4,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using NLog;
 using Owin;
-using SFA.DAS.Authenication;
+using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web;
 using SFA.DAS.EmployerAccounts.Web.App_Start;
@@ -147,6 +147,8 @@ namespace SFA.DAS.EmployerAccounts.Web
         public string GivenName() => _baseUrl + _configuration.ClaimIdentifierConfiguration.GivenName;
         public string Id() => _baseUrl + _configuration.ClaimIdentifierConfiguration.Id;
         public string LogoutEndpoint() => $"{_configuration.BaseAddress}{_configuration.LogoutEndpoint}";
+        public string RegisterLink() => _configuration.BaseAddress.Replace("/identity", "") + string.Format(_configuration.RegisterLink, _configuration.ClientId);
+        public string RequiresVerification() => _baseUrl + "requires_verification";
         public string TokenEndpoint() => $"{_configuration.BaseAddress}{_configuration.TokenEndpoint}";
         public string UserInfoEndpoint() => $"{_configuration.BaseAddress}{_configuration.UserInfoEndpoint}";
     }

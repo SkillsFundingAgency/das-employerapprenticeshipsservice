@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Infrastructure.Services
+namespace SFA.DAS.Http
 {
     public class HttpResponseLogger : IHttpResponseLogger
     {

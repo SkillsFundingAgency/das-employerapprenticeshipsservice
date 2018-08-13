@@ -7,12 +7,12 @@ using System.Web;
 using HMRC.ESFA.Levy.Api.Client;
 using Newtonsoft.Json;
 using SFA.DAS.Caches;
-using SFA.DAS.EAS.Domain.Http;
-using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.Http;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Models.HmrcLevy;
 using SFA.DAS.ExecutionPolicies;
 using SFA.DAS.TokenService.Api.Client;
+using SFA.DAS.ActiveDirectory;
 
 namespace SFA.DAS.EmployerFinance.Services
 {

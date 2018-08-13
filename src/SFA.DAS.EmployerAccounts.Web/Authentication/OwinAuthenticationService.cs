@@ -1,5 +1,5 @@
 ﻿using IdentityModel.Client;
-using SFA.DAS.Authenication;
+using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using System;

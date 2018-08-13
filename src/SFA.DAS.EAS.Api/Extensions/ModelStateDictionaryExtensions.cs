@@ -1,6 +1,6 @@
 ﻿using System.Web.Http.ModelBinding;
 using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Account.Api.Extensions
 {

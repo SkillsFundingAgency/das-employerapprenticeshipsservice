@@ -1,9 +1,10 @@
-﻿using MediatR;
+using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Exceptions;
 using SFA.DAS.EmployerAccounts.Models;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Validation;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser
 {

@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetLastLevyDeclaration
 {
