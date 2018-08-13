@@ -58,4 +58,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Queries\AccountTransactions\GetAccountProviderPayments\" />
+    <Folder Include="Queries\FindAccountProviderPayments\" />
+  </ItemGroup>
+
 </Project>

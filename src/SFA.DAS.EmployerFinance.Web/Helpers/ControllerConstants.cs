@@ -5,5 +5,8 @@
         public const string AccountHashedIdRouteKeyName = "HashedAccountId";
         public const string LegacyEasBaseUrlKeyName = "LegacyEasBaseUrl";
         public const string CommitmentsBaseUrlKeyName = "EmployerCommitmentsBaseUrl";
+    
+        public const string ProviderPaymentSummaryViewName = "ProviderPaymentSummary";
+        public const string UserRefClaimKeyName = "sub";
     }
 }
