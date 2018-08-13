@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
   </ItemGroup>
@@ -94,12 +95,14 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
+    <Compile Include="Filters\HandleErrorFilter.cs" />
     <Compile Include="Filters\UnitOfWorkManagerFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -134,6 +137,9 @@
     <Content Include="Views\Home\SignedIn.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\AccessDenied.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\NotFound.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
