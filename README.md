@@ -53,6 +53,8 @@ Repeat these steps for:
 1. SFA.DAS.EAS.Employer_Account.Database
 2. SFA.DAS.EAS.Employer_Financial.Database
 
+Note: If you have an existing database you may need to drop it first, to avoid the script aborting after an error on truncating data.
+
 Steps:
 
 * Right click on the db project in the solution explorer
