@@ -8,7 +8,7 @@ using NUnit.Framework;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers;
 using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.EmployerFinance.Exceptions;
+using SFA.DAS.Exceptions;
 using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.Messaging.Interfaces;

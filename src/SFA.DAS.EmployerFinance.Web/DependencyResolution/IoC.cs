@@ -14,6 +14,8 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
                 c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
+                c.AddRegistry<MapperRegistry>();
+                c.AddRegistry<HashingRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });

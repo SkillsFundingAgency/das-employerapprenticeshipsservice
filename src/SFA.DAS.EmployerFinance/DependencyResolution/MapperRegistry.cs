@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
         {
             var profiles = AppDomain.CurrentDomain
                 .GetAssemblies()
-                .Where(a => a.FullName.StartsWith("SFA.DAS.EmployerAccounts"))
+                .Where(a => a.FullName.StartsWith("SFA.DAS.EmployerFinance"))
                 .SelectMany(a => a.GetTypes())
                 .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
                 .Select(t => (Profile)Activator.CreateInstance(t));

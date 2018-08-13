@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.EmployerFinance.Exceptions;
+using SFA.DAS.Exceptions;
 using SFA.DAS.EmployerFinance.Models;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerFinance.Validation;
