@@ -32,6 +32,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
         private readonly IMessagePublisher _messagePublisher;
         private readonly IAgreementService _agreementService;
+        private readonly IMembershipRepository _membershipRepository;
 
 
         public RemoveLegalEntityCommandHandler(
@@ -43,7 +44,8 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             IGenericEventFactory genericEventFactory,
             IEmployerAgreementEventFactory employerAgreementEventFactory,
             IMessagePublisher messagePublisher,
-            IAgreementService agreementService)
+            IAgreementService agreementService,
+            IMembershipRepository membershipRepository)
         {
             _validator = validator;
             _logger = logger;
@@ -54,6 +56,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             _employerAgreementEventFactory = employerAgreementEventFactory;
             _messagePublisher = messagePublisher;
             _agreementService = agreementService;
+            _membershipRepository = membershipRepository;
         }
 
         protected override async Task HandleCore(RemoveLegalEntityCommand message)
@@ -86,8 +89,18 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
 
             if (agreement != null)
             {
-                await PublishLegalEntityRemovedMessage(accountId, legalAgreementId,
-                    agreement.Status, agreement.SignedByName, agreement.LegalEntityId, agreement.LegalEntityName, message.UserId);
+                var caller = await _membershipRepository.GetCaller(accountId, message.UserId);
+
+                var createdByName = caller.FullName();
+
+                await PublishLegalEntityRemovedMessage(
+                    accountId, 
+                    legalAgreementId,
+                    agreement.Status, 
+                    createdByName, 
+                    agreement.LegalEntityId, 
+                    agreement.LegalEntityName, 
+                    message.UserId);
             }
         }
 
