@@ -62,21 +62,21 @@
 </div>
 <div class="grid-row">
     <div class="column-full">
-        <table class="organisations">
+        <table class="responsive">
             <thead>
                 <tr>
                     <th scope="col">Organisation</th>
                     <th scope="col">Agreement status</th>
-                    <th class="link-right" scope="col">Action</th>
-                    <th scope="col">Agreement Id</th>
+                    <th scope="col">Action</th>
+                    <th class="no-wrap" scope="col">Agreement ID</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var employerAgreement in Model.Data.EmployerAgreementsData.EmployerAgreements)
                         {
                     <tr>
-                        <td>@employerAgreement.LegalEntity.Name</td>
-                        <td>
+                        <td data-label="Organisation">@employerAgreement.LegalEntity.Name</td>
+                        <td data-label="Agreement status">
                             @if (employerAgreement.HasPendingAgreement)
                             {
                                 if (employerAgreement.HasSignedAgreement)
@@ -93,7 +93,7 @@
                                 @:Signed by @employerAgreement.Signed.SignedByName
                             }
                         </td>
-                        <td class="link-right">
+                        <td data-label="Action">
                             @if (employerAgreement.HasPendingAgreement)
                             {
                                 <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new { agreementid = employerAgreement.Pending.HashedAgreementId })" title="View agreement for @employerAgreement.LegalEntity.Name">Sign agreement</a>
@@ -103,7 +103,7 @@
                                 <a href="@Url.Action("Details", "EmployerAgreement", new { agreementid = employerAgreement.Signed.HashedAgreementId })" title="View agreement">View</a>
                             }
                         </td>
-                        <td>
+                        <td data-label="Agreement ID">
                             @if (employerAgreement.HasSignedAgreement)
                             {
                                 <span>@employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId</span>
