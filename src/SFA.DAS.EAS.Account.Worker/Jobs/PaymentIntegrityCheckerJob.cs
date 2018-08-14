@@ -1,8 +1,9 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Data.Repositories;
+﻿using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Account.Worker.Jobs
 {
@@ -53,7 +54,7 @@ namespace SFA.DAS.EAS.Account.Worker.Jobs
                     {
                         _logger.Info($"Processing payments for account {account.Id} ({accountIndex + 1}/{accounts.Length})");
 
-                    var expectedPayments = await _paymentService.GetAccountPayments(periodEnd.PeriodEndId, account.Id);
+                        var expectedPayments = await _paymentService.GetAccountPayments(periodEnd.PeriodEndId, account.Id);
 
                         var actualPayments =
                         (await _levyRepository.GetAccountPaymentsByPeriodEnd(account.Id, periodEnd.PeriodEndId))
