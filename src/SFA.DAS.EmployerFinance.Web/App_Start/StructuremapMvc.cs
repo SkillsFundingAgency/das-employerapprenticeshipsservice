@@ -15,14 +15,14 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using SFA.DAS.EmployerFinance.Web.App_Start;
+using SFA.DAS.EmployerFinance.Web;
 
 using WebActivatorEx;
 
 [assembly: PreApplicationStartMethod(typeof(StructuremapMvc), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(StructuremapMvc), "End")]
 
-namespace SFA.DAS.EmployerFinance.Web.App_Start
+namespace SFA.DAS.EmployerFinance.Web
 {
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
     using SFA.DAS.EmployerFinance.Web.DependencyResolution;

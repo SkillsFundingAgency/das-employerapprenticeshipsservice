@@ -4,7 +4,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 {
     public class BundleConfig
     {
-        // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
+        // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/sfajs").Include(
@@ -47,6 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             bundles.Add(new StyleBundle("~/bundles/screenie7").Include("~/dist/css/screen-ie7.css"));
             bundles.Add(new StyleBundle("~/bundles/screenie8").Include("~/dist/css/screen-ie8.css"));
             bundles.Add(new StyleBundle("~/bundles/screen").Include("~/dist/css/screen.css"));
+
         }
     }
 }

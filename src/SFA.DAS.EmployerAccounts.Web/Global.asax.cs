@@ -1,10 +1,12 @@
-﻿using NServiceBus;
+﻿using Microsoft.ApplicationInsights;
+using NLog;
+using NServiceBus;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Extensions;
-using SFA.DAS.EmployerAccounts.Web.App_Start;
 using SFA.DAS.EmployerAccounts.Web.Logging;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.Logging;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.EntityFramework;
 using SFA.DAS.NServiceBus.MsSqlServer;
@@ -28,6 +30,7 @@ using Microsoft.ApplicationInsights;
 using NLog;
 using SFA.DAS.Extensions;
 using SFA.DAS.Logging;
+using ConfigurationHelper = SFA.DAS.EmployerAccounts.Configuration.ConfigurationHelper;
 using Environment = SFA.DAS.EmployerAccounts.Configuration.Environment;
 
 namespace SFA.DAS.EmployerAccounts.Web

@@ -1,9 +1,9 @@
 namespace SFA.DAS.EmployerFinance.Web.DependencyResolution {
     using System.Web;
 
-    using SFA.DAS.EmployerFinance.Web.App_Start;
 
     using StructureMap.Web.Pipeline;
+    using System.Web;
 
     public class StructureMapScopeModule : IHttpModule {
         #region Public Methods and Operators
