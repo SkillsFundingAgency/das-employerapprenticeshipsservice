@@ -1,8 +1,9 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Data.Repositories;
+﻿using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Account.Worker.Jobs
 {
@@ -27,41 +28,63 @@ namespace SFA.DAS.EAS.Account.Worker.Jobs
 
         public async Task Run()
         {
-            var accounts = await _employerAccountRepository.GetAllAccounts();
+            var accounts = (await _employerAccountRepository.GetAllAccounts()).ToArray();
+
+            _logger.Info($"Found {accounts.Length} to check payments for");
 
             var periodEnds = await _levyRepository.GetAllPeriodEnds();
 
-            foreach (var periodEnd in periodEnds)
+            var orderedPeriodEnds = periodEnds.OrderByDescending(pe => pe.CalendarPeriodYear)
+                .ThenByDescending(pe => pe.CalendarPeriodMonth).ToArray();
+
+            _logger.Info($"Found {orderedPeriodEnds.Length} period ends to process payments for");
+
+
+            for (var periodEndIndex = 0; periodEndIndex < orderedPeriodEnds.Length; periodEndIndex++)
             {
-                foreach (var account in accounts)
+                var periodEnd = orderedPeriodEnds[periodEndIndex];
+
+                _logger.Info($"Processing payments for period end {periodEnd.Id} ({periodEndIndex + 1}/{orderedPeriodEnds.Length})");
+
+                for (var accountIndex = 0; accountIndex < accounts.Length; accountIndex++)
                 {
-                    var expectedPayments = await _paymentService.GetAccountPayments(periodEnd.PeriodEndId, account.Id);
+                    var account = accounts[accountIndex];
 
-                    var actualPayments =
+                    try
+                    {
+                        _logger.Info($"Processing payments for account {account.Id} ({accountIndex + 1}/{accounts.Length})");
+
+                        var expectedPayments = await _paymentService.GetAccountPayments(periodEnd.PeriodEndId, account.Id);
+
+                        var actualPayments =
                         (await _levyRepository.GetAccountPaymentsByPeriodEnd(account.Id, periodEnd.PeriodEndId))
-                        .ToArray();
+                            .ToArray();
 
+                        var expectedPaymentsTotal = expectedPayments.Sum(x => x.Amount);
+                        var actualPaymentsTotal = actualPayments.Sum(x => x.Amount);
 
-                    var expectedPaymentsTotal = expectedPayments.Sum(x => x.Amount);
-                    var actualPaymentsTotal = actualPayments.Sum(x => x.Amount);
+                        var paymentMissing = actualPaymentsTotal != expectedPaymentsTotal;
 
-                    var paymentMissing = actualPaymentsTotal != expectedPaymentsTotal;
+                        //If the totals add up we check to see if all the payments are correct
+                        //just in case a duplicate or incorrect record has the same amount as a correct one
+                        if (!paymentMissing)
+                        {
+                            paymentMissing = expectedPayments.Except(actualPayments).Any();
+                        }
 
-                    //If the totals add up we check to see if all the payments are correct
-                    //just in case a duplicate or incorrect record has the same amount as a correct one
-                    if (!paymentMissing)
-                    {
-                        paymentMissing = expectedPayments.Except(actualPayments).Any();
-                    }
-
-                    if (paymentMissing)
-                    {
-                        _logger.Warn(
+                        if (paymentMissing)
+                        {
+                            _logger.Warn(
                             $"Some payments for account ID {account.Id} for period end {periodEnd.PeriodEndId} are missing");
+                        }
+                        else
+                        {
+                            _logger.Info($"All payments for account ID {account.Id} for period end {periodEnd.Id} are correct");
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        _logger.Info($"All payments for account ID {account.Id} for period end {periodEnd.PeriodEndId} are correct");
+                        _logger.Error(ex, $"Failed to process payments for account Id: {account.Id} and Period end: {periodEnd.Id}");
                     }
                 }
             }
