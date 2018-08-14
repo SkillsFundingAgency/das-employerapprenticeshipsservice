@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthori
                 i.Status == TransferConnectionInvitationStatus.Pending ||
                 i.Status == TransferConnectionInvitationStatus.Approved));
 
-            var isValidSender = transferAllowance >= Constants.TransferConnectionInvitations.SenderMinTransferAllowance && !isReceiver;
+            var isValidSender = transferAllowance.RemainingTransferAllowance >= Constants.TransferConnectionInvitations.SenderMinTransferAllowance && !isReceiver;
 
             return new GetTransferConnectionInvitationAuthorizationResponse
             {
