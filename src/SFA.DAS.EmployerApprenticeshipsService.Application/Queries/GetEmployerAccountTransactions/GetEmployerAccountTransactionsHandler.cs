@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
@@ -13,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Infrastructure.Interfaces;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 {
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper,
             ILog logger,
             IHashingService hashingService,
-            Hashing.IPublicHashingService publicHashingService)
+            IPublicHashingService publicHashingService)
         {
             _dasLevyService = dasLevyService;
             _validator = validator;

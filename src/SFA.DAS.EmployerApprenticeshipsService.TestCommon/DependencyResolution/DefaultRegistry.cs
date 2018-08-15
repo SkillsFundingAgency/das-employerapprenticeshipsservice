@@ -11,6 +11,7 @@ using StructureMap;
 using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Infrastructure.Authentication;
+using SFA.DAS.EAS.Infrastructure.Interfaces;
 using SFA.DAS.Messaging.Interfaces;
 
 namespace SFA.DAS.EAS.TestCommon.DependencyResolution
@@ -36,7 +37,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
             For<ILog>().Use(Mock.Of<ILog>());
             For<IMessagePublisher>().Use(messagePublisher.Object);
             For<INotificationsApi>().Use(() => Mock.Of<INotificationsApi>());
-            For<IPublicHashingService>().Use(x => new PublicHashingService("BCDEFGHIJKLMMOPQRSTUVWXYZ", "haShStRiNg"));
+            For<IPublicHashingService>().Use(x => new IalePublicHashingService("BCDEFGHIJKLMMOPQRSTUVWXYZ", "haShStRiNg"));
         }
     }
 }

@@ -15,6 +15,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Infrastructure.Interfaces;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.HashingService;
@@ -31,7 +32,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IValidator<CreateAccountCommand> _validator;
         private readonly IHashingService _hashingService;
         private readonly IHashingService _publicHashingService;
-        private readonly IHashingService _accountLegalEntityHashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
@@ -49,7 +49,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IAccountEventFactory accountEventFactory, 
             IRefreshEmployerLevyService refreshEmployerLevyService,
             IMembershipRepository membershipRepository,
-            IHashingService accountLegalEntityHashingService,
             IEmployerAgreementRepository employerAgreementRepository)
         {
             _accountRepository = accountRepository;
@@ -63,7 +62,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _accountEventFactory = accountEventFactory;
             _refreshEmployerLevyService = refreshEmployerLevyService;
             _membershipRepository = membershipRepository;
-            _accountLegalEntityHashingService = accountLegalEntityHashingService;
             _employerAgreementRepository = employerAgreementRepository;
         }
 

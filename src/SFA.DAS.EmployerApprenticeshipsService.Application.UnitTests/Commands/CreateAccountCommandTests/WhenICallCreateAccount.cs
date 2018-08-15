@@ -10,7 +10,6 @@ using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Factories;
-using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -19,6 +18,7 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Infrastructure.Interfaces;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
@@ -39,7 +39,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IAccountEventFactory> _accountEventFactory;
         private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
         private Mock<IMembershipRepository> _mockMembershipRepository;
-        private Mock<IHashingService> _mockAccountLegalEntityHashingService;
         private Mock<IEmployerAgreementRepository> _mockEmployerAgreementRepository;
         
         private const long ExpectedAccountId = 12343322;
@@ -81,8 +80,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _mockMembershipRepository.Setup(r => r.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(new MembershipView() { FirstName = "Caller", LastName = "Full Name" }));
 
-            _mockAccountLegalEntityHashingService = new Mock<IHashingService>();
-
             _mockEmployerAgreementRepository = new Mock<IEmployerAgreementRepository>();
 
             _handler = new CreateAccountCommandHandler(
@@ -96,7 +93,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 _accountEventFactory.Object,
                 _refreshEmployerLevyService.Object,
                 _mockMembershipRepository.Object,
-                _mockAccountLegalEntityHashingService.Object,
                 _mockEmployerAgreementRepository.Object
                 );
         }

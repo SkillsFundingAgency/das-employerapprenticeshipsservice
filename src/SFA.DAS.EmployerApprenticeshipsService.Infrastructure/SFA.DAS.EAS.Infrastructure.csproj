@@ -311,6 +311,8 @@
     <Compile Include="Extensions\QueryableExtensions.cs" />
     <Compile Include="Extensions\QueryFutureEnumerableExtensions.cs" />
     <Compile Include="Features\IFeatureService.cs" />
+    <Compile Include="Interfaces\IPublicALEHashingService.cs" />
+    <Compile Include="Interfaces\IPublicHashingService.cs" />
     <Compile Include="Mapping\Profiles\PaymentMappings.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringAttribute.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringPolicy.cs" />
