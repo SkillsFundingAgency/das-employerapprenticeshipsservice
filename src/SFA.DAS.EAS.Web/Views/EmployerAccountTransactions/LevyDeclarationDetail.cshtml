@@ -24,45 +24,51 @@
 </div>
 <div class="grid-row">
     <div class="column-full">
-        <table>
+        <table class="small responsive--desktop">
             <thead>
                 <tr>
                     <th id="th-ps" scope="col">PAYE scheme</th>
                     <th id="th-pd" scope="col">Payroll date</th>
                     <th id="th-ld" class="numeric" scope="col">Levy declared</th>
-                    <th id="th-ef" class="numeric" scope="col"><span class="nowrap">English %</span></th>
+                    <th id="th-ef" class="numeric nowrap" scope="col">English %</th>
                     <th id="th-tu" class="numeric" scope="col">10% top up</th>
                     <th id="th-pi" class="numeric" scope="col">Your funds</th>
                 </tr>
             </thead>
             <tbody>
+                <tr class="total">
+                    <th scope="row" colspan="5" id="th-total"><span class="vh">Total</span></th>
+                    <td data-label="Your funds total" class="numeric" headers="th-total">@Model.Data.Amount.ToString("C2", culture)</td>
+                </tr>
+
                 @foreach (var aggregationLineItem in Model.Data.SubTransactions)
                 {
                     <tr class="responsive-tr">
-                        <td headers="th-ps">
+                        <td data-label="PAYE scheme" headers="th-ps">
                             <span>@aggregationLineItem.EmpRef</span>
                             <span>@aggregationLineItem.PayeSchemeName</span>
                         </td>
-                        <td headers="th-pd">
-                           @aggregationLineItem.PayrollDate.ToGdsFormatWithoutDayAbbrMonth()
+                        <td data-label="Payroll date" headers="th-pd">
+                            @aggregationLineItem.PayrollDate.ToGdsFormatWithoutDayAbbrMonth()
                         </td>
-                        <td headers="th-ld" class="numeric">
+                        <td data-label="Levy declared" headers="th-ld" class="numeric">
                             @(aggregationLineItem.Amount.ToString("C2", culture))
                         </td>
-                        <td headers="th-ef" class="numeric">
-                            <span class="nowrap">@($"{aggregationLineItem.EnglishFraction:P3}")</span>
+                        <td data-label="English %" headers="th-ef" class="numeric nowrap">
+                            @($"{aggregationLineItem.EnglishFraction:P3}")
                         </td>
-                        <td headers="th-tu" class="numeric">
+                        <td data-label="10% top up" headers="th-tu" class="numeric">
                             @(aggregationLineItem.TopUp.ToString("C2", culture))
                         </td>
-                        <td headers="th-pi" class="numeric">
+                        <td data-label="Your funds" headers="th-pi" class="numeric">
                             @((aggregationLineItem.LineAmount).ToString("C2", culture))
                         </td>
                     </tr>
                 }
+
                 <tr class="total">
                     <th scope="row" colspan="5" id="th-total"><span class="vh">Total</span></th>
-                    <td class="numeric" headers="th-total">@Model.Data.Amount.ToString("C2", culture)</td>
+                    <td data-label="Your funds total" class="numeric" headers="th-total">@Model.Data.Amount.ToString("C2", culture)</td>
                 </tr>
             </tbody>
         </table>

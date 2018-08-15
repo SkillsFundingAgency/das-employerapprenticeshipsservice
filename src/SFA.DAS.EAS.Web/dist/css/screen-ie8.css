@@ -3289,11 +3289,15 @@ td.highlight, th.highlight {
   background: #dee0e2;
 }
 
-table.responsive thead {
+table.small th, table.small td {
+  font-size: 16px;
+}
+
+table.responsive thead, table.responsive--desktop thead {
   display: none;
 }
 
-table.responsive tr {
+table.responsive tr, table.responsive--desktop tr {
   border: 1px solid #bfc1c3;
   margin-bottom: 10px;
   display: block;
@@ -3302,7 +3306,7 @@ table.responsive tr {
   box-sizing: border-box;
 }
 
-table.responsive tr td {
+table.responsive tr td, table.responsive--desktop tr td {
   display: block;
   text-align: right;
   clear: left;
@@ -3313,23 +3317,27 @@ table.responsive tr td {
   border-bottom: 1px dotted #bfc1c3;
 }
 
-table.responsive tr td:before {
+table.responsive tr td:before, table.responsive--desktop tr td:before {
   content: attr(data-label);
   float: left;
   font-weight: bold;
   padding-right: 10px;
 }
 
-table.responsive tr td:last-child {
+table.responsive tr td:last-child, table.responsive--desktop tr td:last-child {
   border-bottom: none;
 }
 
-table.responsive tr td:empty {
+table.responsive tr td:empty, table.responsive--desktop tr td:empty {
   display: none;
 }
 
-table.responsive tr.total {
+table.responsive tr.total, table.responsive--desktop tr.total {
   border: 2px solid #000;
+}
+
+table.responsive tr.total th, table.responsive--desktop tr.total th {
+  display: none;
 }
 
 table.responsive thead {
@@ -3381,12 +3389,17 @@ table.responsive tr.total {
   border: none;
 }
 
-table.responsive tr.total td {
-  border-bottom: none;
+table.responsive tr.total.total--top {
+  display: none;
 }
 
-table.responsive tr.total td.total {
-  border-bottom: 2px solid #000;
+table.responsive tr.total th {
+  display: table-cell;
+  border-bottom: 0;
+}
+
+table.responsive tr.total td {
+  border-bottom: 3px solid #000;
 }
 
 table.responsive tr th.tw-5 {
@@ -3442,6 +3455,124 @@ table.responsive tr th.tw-65 {
 }
 
 table.responsive tr th.tw-70 {
+  width: 70%;
+}
+
+table.responsive--desktop thead {
+  display: table-header-group;
+}
+
+table.responsive--desktop tr {
+  display: table-row;
+  border: none;
+  float: none;
+  margin: 0;
+}
+
+table.responsive--desktop tr th, table.responsive--desktop tr td {
+  display: table-cell;
+  text-align: left;
+  float: none;
+  clear: none;
+  padding: 0.6em 1em 0.5em;
+  border-bottom-style: solid;
+  width: auto;
+}
+
+table.responsive--desktop tr th:first-child, table.responsive--desktop tr td:first-child {
+  padding-left: 0;
+}
+
+table.responsive--desktop tr th:last-child, table.responsive--desktop tr td:last-child {
+  padding-right: 0;
+}
+
+table.responsive--desktop tr th:before, table.responsive--desktop tr td:before {
+  display: none;
+}
+
+table.responsive--desktop tr th.numeric, table.responsive--desktop tr td.numeric {
+  text-align: right;
+}
+
+table.responsive--desktop tr th.colgroup, table.responsive--desktop tr td.colgroup {
+  text-align: center;
+}
+
+table.responsive--desktop tr th:last-child, table.responsive--desktop tr td:last-child {
+  border-bottom: 1px solid #bfc1c3;
+}
+
+table.responsive--desktop tr.total {
+  border: none;
+}
+
+table.responsive--desktop tr.total.total--top {
+  display: none;
+}
+
+table.responsive--desktop tr.total th {
+  display: table-cell;
+  border-bottom: 0;
+}
+
+table.responsive--desktop tr.total td {
+  border-bottom: 3px solid #000;
+}
+
+table.responsive--desktop tr th.tw-5 {
+  width: 5%;
+}
+
+table.responsive--desktop tr th.tw-10 {
+  width: 10%;
+}
+
+table.responsive--desktop tr th.tw-15 {
+  width: 15%;
+}
+
+table.responsive--desktop tr th.tw-20 {
+  width: 20%;
+}
+
+table.responsive--desktop tr th.tw-25 {
+  width: 25%;
+}
+
+table.responsive--desktop tr th.tw-30 {
+  width: 30%;
+}
+
+table.responsive--desktop tr th.tw-35 {
+  width: 35%;
+}
+
+table.responsive--desktop tr th.tw-40 {
+  width: 40%;
+}
+
+table.responsive--desktop tr th.tw-45 {
+  width: 45%;
+}
+
+table.responsive--desktop tr th.tw-50 {
+  width: 50%;
+}
+
+table.responsive--desktop tr th.tw-55 {
+  width: 55%;
+}
+
+table.responsive--desktop tr th.tw-60 {
+  width: 60%;
+}
+
+table.responsive--desktop tr th.tw-65 {
+  width: 65%;
+}
+
+table.responsive--desktop tr th.tw-70 {
   width: 70%;
 }
 
