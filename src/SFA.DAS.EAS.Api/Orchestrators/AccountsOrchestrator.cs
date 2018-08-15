@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EAS.Application.Queries.GetTeamMembers;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System;
@@ -43,7 +44,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
             toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
 
-            var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery() { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });
+            var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });
             var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
             {
                 AccountIds = accountsResult.Accounts.Select(account => account.Id).ToList()
@@ -67,14 +68,15 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 if (accountBalanceHash.TryGetValue(account.Id, out var accountBalance))
                 {
                     accountBalanceModel.Balance = accountBalance.Balance;
-                    accountBalanceModel.TransferAllowance = accountBalance.TransferAllowance;
+                    accountBalanceModel.RemainingTransferAllowance = accountBalance.RemainingTransferAllowance;
+                    accountBalanceModel.StartingTransferAllowance = accountBalance.StartingTransferAllowance;
                     accountBalanceModel.IsLevyPayer = accountBalance.IsLevyPayer == 1;
                 }
 
                 data.Add(accountBalanceModel);
             });
 
-            return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>() { Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel>() { Data = data, Page = pageNumber, TotalPages = (accountsResult.AccountsCount / pageSize) + 1 } };
+            return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>> { Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel> { Data = data, Page = pageNumber, TotalPages = (accountsResult.AccountsCount / pageSize) + 1 } };
         }
 
         private Dictionary<long, AccountBalance> BuildAccountBalanceHash(List<AccountBalance> accountBalances)
@@ -108,16 +110,14 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
             var viewModel = ConvertAccountDetailToViewModel(accountResult);
 
-            var tasks = new[]
-            {
-                GetBalanceForAccount(accountResult.Account.AccountId),
-                GetTransferAllowanceForAccount(accountResult.Account.AccountId)
-            };
+            var accountBalanceTask = GetBalanceForAccount(accountResult.Account.AccountId);
+            var transferBalanceTask = GetTransferAllowanceForAccount(accountResult.Account.AccountId);
 
-            await Task.WhenAll(tasks).ConfigureAwait(false);
+            await Task.WhenAll(accountBalanceTask, transferBalanceTask).ConfigureAwait(false);
 
-            viewModel.Balance = tasks[0].Result;
-            viewModel.TransferAllowance = tasks[1].Result;
+            viewModel.Balance = accountBalanceTask.Result;
+            viewModel.RemainingTransferAllowance = transferBalanceTask.Result.RemainingTransferAllowance ?? 0;
+            viewModel.StartingTransferAllowance = transferBalanceTask.Result.StartingTransferAllowance ?? 0;
 
             return new OrchestratorResponse<AccountDetailViewModel> { Data = viewModel };
         }
@@ -243,14 +243,14 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             return account?.Balance ?? 0;
         }
 
-        private async Task<decimal> GetTransferAllowanceForAccount(long accountId)
+        private async Task<TransferAllowance> GetTransferAllowanceForAccount(long accountId)
         {
             var transferAllowanceResult = await _mediator.SendAsync(new GetTransferAllowanceQuery
             {
                 AccountId = accountId
             });
 
-            return transferAllowanceResult?.TransferAllowance ?? 0M;
+            return transferAllowanceResult.TransferAllowance;
         }
     }
 }

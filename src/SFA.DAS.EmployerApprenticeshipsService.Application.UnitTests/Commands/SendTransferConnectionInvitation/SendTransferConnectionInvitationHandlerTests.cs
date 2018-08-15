@@ -1,15 +1,16 @@
-﻿using System;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.TestCommon.Builders;
+using System;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvitation
 {
@@ -46,7 +47,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
             TransferAllowanceService = new Mock<ITransferAllowanceService>();
             TransferConnectionInvitationRepository = new Mock<ITransferConnectionInvitationRepository>();
             UserRepository = new Mock<IUserRepository>();
-            
+
             SetSenderAccount()
                 .SetReceiverAccount()
                 .SetSenderUser()
@@ -117,8 +118,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
             return AddAccount(SenderAccount);
         }
 
-        public SendTransferConnectionInvitationHandlerTestsFixture SetSenderAccountTransferAllowance(decimal transferAllowance)
+        public SendTransferConnectionInvitationHandlerTestsFixture SetSenderAccountTransferAllowance(decimal remainingTransferAllowance)
         {
+            var transferAllowance = new TransferAllowance { RemainingTransferAllowance = remainingTransferAllowance };
+
             TransferAllowanceService.Setup(s => s.GetTransferAllowance(SenderAccount.Id)).ReturnsAsync(transferAllowance);
 
             return this;

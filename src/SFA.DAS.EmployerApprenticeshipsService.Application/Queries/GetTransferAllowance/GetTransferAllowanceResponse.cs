@@ -1,7 +1,9 @@
-﻿namespace SFA.DAS.EAS.Application.Queries.GetTransferAllowance
+﻿using SFA.DAS.EAS.Domain.Models.Transfers;
+
+namespace SFA.DAS.EAS.Application.Queries.GetTransferAllowance
 {
     public class GetTransferAllowanceResponse
     {
-        public decimal TransferAllowance { get; set; }
+        public TransferAllowance TransferAllowance { get; set; }
     }
 }
