@@ -1,9 +1,8 @@
-using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances
 {
@@ -29,7 +28,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances
 
             var result = await _dasLevyRepository.GetAccountBalances(message.AccountIds);
 
-            return new GetAccountBalancesResponse {Accounts = result};
+            return new GetAccountBalancesResponse { Accounts = result };
         }
     }
 }

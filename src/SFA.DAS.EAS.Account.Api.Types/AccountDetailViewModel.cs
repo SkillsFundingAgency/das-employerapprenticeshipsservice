@@ -13,7 +13,18 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public ResourceList LegalEntities { get; set; }
         public ResourceList PayeSchemes { get; set; }
         public decimal Balance { get; set; }
-        public decimal TransferAllowance { get; set; }
+
+        [Obsolete("This property is now being replaced by RemainingTransferAllowance")]
+        public decimal TransferAllowance
+        {
+            get => RemainingTransferAllowance;
+            set => RemainingTransferAllowance = value;
+        }
+
+        public decimal RemainingTransferAllowance { get; set; }
+
+        public decimal StartingTransferAllowance { get; set; }
+
         [Obsolete]
         public string DasAccountId => HashedAccountId;
     }
