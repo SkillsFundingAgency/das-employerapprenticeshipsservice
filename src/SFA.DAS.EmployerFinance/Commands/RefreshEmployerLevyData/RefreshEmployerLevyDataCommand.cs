@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using MediatR;
-using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.EmployerFinance.Models.HmrcLevy;
 
 namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
 {

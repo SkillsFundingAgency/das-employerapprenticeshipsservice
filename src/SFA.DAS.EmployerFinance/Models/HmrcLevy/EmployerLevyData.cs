@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.EmployerFinance.Models.Levy;
 
-namespace SFA.DAS.EAS.Domain.Models.HmrcLevy
+namespace SFA.DAS.EmployerFinance.Models.HmrcLevy
 {
     public class EmployerLevyData
     {
