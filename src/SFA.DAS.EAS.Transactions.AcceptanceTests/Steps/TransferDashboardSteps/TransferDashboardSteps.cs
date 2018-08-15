@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransferDashboardSteps
             var viewModel = view?.Model as TransferAllowanceViewModel;
 
             Assert.IsNotNull(viewModel);
-            Assert.AreEqual(expectedTransferBalance.ToString("C0"), viewModel.RemainingTransferAllowance.ToString("C0"));
+            Assert.AreEqual(expectedTransferBalance.ToString("C0"), viewModel.TransferAllowance.ToString("C0"));
         }
     }
 }

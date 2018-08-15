@@ -2,7 +2,6 @@
 {
     public class TransferAllowanceViewModel
     {
-        public decimal RemainingTransferAllowance { get; set; }
-        public decimal StartingTransferAllowance { get; set; }
+        public decimal TransferAllowance { get; set; }
     }
 }
