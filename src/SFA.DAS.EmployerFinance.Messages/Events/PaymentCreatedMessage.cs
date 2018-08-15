@@ -1,11 +1,11 @@
-﻿using SFA.DAS.Messaging.Attributes;
-using System;
+﻿using System;
+using SFA.DAS.Messaging.Attributes;
 
-namespace SFA.DAS.EmployerAccounts.Events.Messages
+namespace SFA.DAS.EmployerFinance.Messages.Events
 {
     [Serializable]
     [MessageGroup("payment_created")]
-    public class PaymentCreatedMessage : AccountMessageBase
+    public class PaymentCreatedMessage : PaymentMessageBase
     {
         public decimal Amount { get; protected set; }
         public string ProviderName { get; protected set; }

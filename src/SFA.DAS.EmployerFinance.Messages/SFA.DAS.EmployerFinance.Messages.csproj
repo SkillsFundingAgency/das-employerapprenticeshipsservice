@@ -10,6 +10,9 @@
 
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="SFA.DAS.Messaging">
+      <HintPath>..\..\..\..\Users\Iain.Stevenson\.nuget\packages\sfa.das.messaging\3.0.0.63765\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
