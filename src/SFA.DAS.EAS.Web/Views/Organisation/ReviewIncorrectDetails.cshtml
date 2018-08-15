@@ -1,6 +1,6 @@
 ﻿@using SFA.DAS.Common.Domain.Types
 @using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.ReviewOrganisationAddressViewModel>
+@model SFA.DAS.EAS.Web.ViewModels.Organisation.IncorrectOrganisationDetailsViewModel
 @{
     ViewBag.Title = "Update an organisation";
     ViewBag.Section = "organisations";
@@ -13,16 +13,14 @@
 
     <div>
         <div>
-            Please ensure you've updated your organisation's details at @Model.Data.DataSourceFriendlyName. This update can take up to 7 working days to process.
+            Please ensure you've updated your organisation's details at <span>@Model.DataSourceFriendlyName</span>. This update can take up to 7 working days to process.
         </div>
         <div>
-            If you have done this and the updated information is stil not displayed here, please contact support for further help.
+            If you have done this and the updated information is still not displayed here, please contact support for further help.
         </div>
         
         <div>
             <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
-
-                <input type="hidden" name="hashedAccountId" value="@Model.Data.HashedAccountId"/>
 
                 <fieldset>
                     <legend>

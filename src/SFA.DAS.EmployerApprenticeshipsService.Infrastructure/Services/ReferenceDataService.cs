@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     {
         private const int DefaultPageSize = 100;
 
-        private readonly Lazy<Task<CommonOrganisationType[]>> _locateableOrganisationTypes;
+        private readonly Lazy<Task<CommonOrganisationType[]>> _identifiableOrganisationTypes;
         private readonly IReferenceDataApiClient _client;
         private readonly IMapper _mapper;
         private readonly IInProcessCache _inProcessCache;
@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             _client = client;
             _mapper = mapper;
             _inProcessCache = inProcessCache;
-            _locateableOrganisationTypes = new Lazy<Task<CommonOrganisationType[]>>(InitialiseOrganisationTypes);
+            _identifiableOrganisationTypes = new Lazy<Task<CommonOrganisationType[]>>(InitialiseOrganisationTypes);
             _logger = logger;
         }
 
@@ -98,11 +98,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return _client.GetLatestDetails(organisationType.ToReferenceDataOrganisationType(), identifier);
         }
 
-        public async Task<bool> IsLocateableOrganisationType(CommonOrganisationType organisationType)
+        public async Task<bool> IsIdentifiableOrganisationType(CommonOrganisationType organisationType)
         {
             if (organisationType.TryToReferenceDataOrganisationType(out ReferenceDataOrganisationType referenceDataType))
             {
-                var locateableOrganisationTypes = await _locateableOrganisationTypes.Value;
+                var locateableOrganisationTypes = await _identifiableOrganisationTypes.Value;
 
                 return locateableOrganisationTypes.Contains(organisationType);
             }
@@ -112,22 +112,16 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         private Task<CommonOrganisationType[]> InitialiseOrganisationTypes()
         {
-            var task = Task.Run(() => new ReferenceDataOrganisationType[]
-            {
-                OrganisationType.Charity,
-                OrganisationType.Company
-            });
+            return _client.GetIdentifiableOrganisationTypes()
+                .ContinueWith(t =>
+                        {
+                            // switch the organisation types provided by the API back to the organisation type used locally
+                            var filteredOrganisationTypes = t.Result
+                                .Select(referenceDataOrganisationType => referenceDataOrganisationType.ToCommonOrganisationType())
+                                .ToArray();
 
-            // var task = _client.GetLocateableOrganisationTypes());
-
-            return task.ContinueWith(t =>
-            {
-                var filteredOrganisationTypes = t.Result
-                    .Select(referenceDataOrganisationType => referenceDataOrganisationType.ToCommonOrganisationType())
-                    .ToArray();
-
-                return filteredOrganisationTypes;
-            });
+                            return filteredOrganisationTypes;
+                        });
         }
 
         private List<OrganisationName> SortOrganisations(List<OrganisationName> result, string searchTerm)

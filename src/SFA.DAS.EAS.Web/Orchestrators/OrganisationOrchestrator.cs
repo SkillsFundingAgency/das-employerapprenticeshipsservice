@@ -362,14 +362,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 OrganisationType = currentDetails.AccountLegalEntity.OrganisationType
             });
 
-            OrganisationUpdatesAvailable CheckForUpdate(string currentValue, string updatedValue, ref OrganisationUpdatesAvailable updatedFlags, OrganisationUpdatesAvailable includeIfDifferent)
+            OrganisationUpdatesAvailable CheckForUpdate(string currentValue, string updatedValue, OrganisationUpdatesAvailable includeIfDifferent)
             {
-                if (string.Equals(currentValue, updatedValue))
+                // The address will be stored with leading and trailing spaces removed, so the change comparison will exclude these.
+                if (!string.Equals(currentValue?.Trim(), updatedValue?.Trim()))
                 {
-                    updatedFlags = updatedFlags | includeIfDifferent;
+                    return includeIfDifferent;
                 }
 
-                return updatedFlags;
+                return OrganisationUpdatesAvailable.None;
             }
 
             var result = new OrchestratorResponse<ReviewOrganisationAddressViewModel>
@@ -385,12 +386,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
             };
 
-            var detectedUpdates = OrganisationUpdatesAvailable.None;
-
-            CheckForUpdate(result.Data.OrganisationName, result.Data.RefreshedName, ref detectedUpdates, OrganisationUpdatesAvailable.Name);
-            CheckForUpdate(result.Data.OrganisationAddress, result.Data.RefreshedAddress, ref detectedUpdates, OrganisationUpdatesAvailable.Address);
-
-            result.Data.UpdatesAvailable = detectedUpdates;
+            result.Data.UpdatesAvailable = CheckForUpdate(result.Data.OrganisationName, result.Data.RefreshedName, OrganisationUpdatesAvailable.Name) |
+                                           CheckForUpdate(result.Data.OrganisationAddress, result.Data.RefreshedAddress, OrganisationUpdatesAvailable.Address);
 
             return result;
         }

@@ -12,30 +12,44 @@
     </div>
 
     <div>
-        <address class="party">
-            <strong>@Model.Data.RefreshedName</strong><br />
-            @Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)
-        </address>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Information from</td>
+                    <td>@Model.Data.DataSourceFriendlyName</td>
+                </tr>
+                <tr>
+                    <td>Organisation name</td>
+                    <td>@Model.Data.RefreshedName</td>
+                </tr>
+                <tr>
+                    <td>Organisation address</td>
+                    <td>@Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)</td>
+                </tr>
+            </tbody>
+        </table>
 
         <div>
             <h3>
-            Are these details correct?
+                Are these details correct?
             </h3>
-            
+
             <form method="POST" action="@Url.Action("ProcessReviewSelection")">
                 @Html.AntiForgeryToken()
 
-                <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName" />
-                <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress" />
-                <input type="hidden" name="accountLegalEntityPublicHashedId" value="@Model.Data.AccountLegalEntityPublicHashedId" />
+                <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName"/>
+                <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress"/>
+                <input type="hidden" name="accountLegalEntityPublicHashedId" value="@Model.Data.AccountLegalEntityPublicHashedId"/>
+                <input type="hidden" name="dataSourceFriendlyName" value="@Model.Data.DataSourceFriendlyName"/>
+
                 <fieldset>
                     <label for="update" class="block-label">
-                        <input id="update" type="radio" name="updateChoice" value="update" />
-                        Yes, these details are correct
+                        <input id="update" type="radio" name="updateChoice" value="update"/>
+                        Yes, update my details using this information
                     </label>
                     <label for="cancel" class="block-label">
-                        <input id="cancel" type="radio" name="updateChoice" value="cancel" />
-                        No, cancel and return
+                        <input id="cancel" type="radio" name="updateChoice" value="incorrectDetails"/>
+                        No, these details are incorrect
                     </label>
                 </fieldset>
                 <div class="form-group">

@@ -104,7 +104,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var employerAgreementView =
                     _mapper.Map<AgreementDto, EmployerAgreementView>(response.EmployerAgreement);
 
-                var organisationLookupByIdPossible = await _referenceDataService.IsLocateableOrganisationType(employerAgreementView.LegalEntitySource);
+                var organisationLookupByIdPossible = await _referenceDataService.IsIdentifiableOrganisationType(employerAgreementView.LegalEntitySource);
 
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {

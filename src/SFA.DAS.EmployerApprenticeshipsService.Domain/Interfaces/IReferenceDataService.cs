@@ -35,7 +35,12 @@ namespace SFA.DAS.EAS.Domain.Interfaces
         ///     Returns true if the supplied organisation type can be retrieved by id.
         /// </summary>
         /// <param name="organisationType"></param>
-        /// <returns></returns>
-        Task<bool> IsLocateableOrganisationType(CommonOrganisationType organisationType);
+        /// <returns>
+        /// True if the supplied organisation supports fetching by ID otherwise false.
+        /// </returns>
+        /// <remarks>
+        ///     Companies House and the Charity commission 
+        /// </remarks>
+        Task<bool> IsIdentifiableOrganisationType(CommonOrganisationType organisationType);
     }
 }

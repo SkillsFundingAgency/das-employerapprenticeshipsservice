@@ -18,11 +18,18 @@
         <div>
             <table>
                 <tbody>
-                <tr>
-                    <td>Information from</td><td>@Model.Data.DataSourceFriendlyName</td>
-                    <td>Organisation name</td><td>@Model.Data.RefreshedName</td>
-                    <td>Organisation address</td><td>@Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)</td>
-                </tr>
+                    <tr>
+                        <td>Information from</td>
+                        <td>@Model.Data.DataSourceFriendlyName</td>
+                    </tr>
+                    <tr>
+                        <td>Organisation name</td>
+                        <td>@Model.Data.RefreshedName</td>
+                    </tr>
+                    <tr>
+                        <td>Organisation address</td>
+                        <td>@Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -33,9 +40,6 @@
 
         <div>
             <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
-
-                <input type="hidden" name="hashedAccountId" value="@Model.Data.HashedAccountId"/>
-
                 <fieldset>
                     <legend>
                         <span class="vh">What's next?</span>

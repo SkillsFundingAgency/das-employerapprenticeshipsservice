@@ -173,16 +173,22 @@ namespace SFA.DAS.EAS.Web.Controllers
             string hashedAccountId,
             string accountLegalEntityPublicHashedId, 
             string organisationName,
-            string organisationAddress)
+            string organisationAddress,
+            string dataSourceFriendlyName)
         {
-            if (updateChoice == "update")
+            switch (updateChoice)
             {
-                var response = await _orchestrator.UpdateOrganisation(
-                    accountLegalEntityPublicHashedId, 
-                    organisationName,
-                    organisationAddress);
+                case "update":
+                    var response = await _orchestrator.UpdateOrganisation(
+                        accountLegalEntityPublicHashedId, 
+                        organisationName,
+                        organisationAddress);
 
-                return View(ControllerConstants.OrganisationUpdatedNextStepsActionName, response);
+                    return View(ControllerConstants.OrganisationUpdatedNextStepsActionName, response);
+
+                case "incorrectDetails":
+                    return View("ReviewIncorrectDetails", new IncorrectOrganisationDetailsViewModel {DataSourceFriendlyName = dataSourceFriendlyName});
+
             }
 
             return RedirectToAction("Details", "EmployerAgreement");
