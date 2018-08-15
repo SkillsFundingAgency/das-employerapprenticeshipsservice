@@ -1,8 +1,8 @@
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
 {
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
             var receiverAccount = await _employerAccountRepository.GetAccountById(receiverAccountId);
             var senderUser = await _userRepository.GetUserById(message.UserId.Value);
             var senderAccountTransferAllowance = await _transferAllowanceService.GetTransferAllowance(message.AccountId.Value);
-            var transferConnectionInvitation = senderAccount.SendTransferConnectionInvitation(receiverAccount, senderUser, senderAccountTransferAllowance.RemainingTransferAllowance ?? 0);
+            var transferConnectionInvitation = senderAccount.SendTransferConnectionInvitation(receiverAccount, senderUser, senderAccountTransferAllowance);
 
             await _transferConnectionInvitationRepository.Add(transferConnectionInvitation);
 

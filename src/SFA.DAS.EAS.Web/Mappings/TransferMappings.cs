@@ -44,10 +44,7 @@ namespace SFA.DAS.EAS.Web.Mappings
             CreateMap<GetSentTransferConnectionInvitationResponse, SentTransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore());
 
-            CreateMap<GetTransferAllowanceResponse, TransferAllowanceViewModel>()
-                .ForMember(m => m.RemainingTransferAllowance, opt => opt.MapFrom(src => src.TransferAllowance.RemainingTransferAllowance))
-                .ForMember(m => m.StartingTransferAllowance, opt => opt.MapFrom(src => src.TransferAllowance.StartingTransferAllowance));
-
+            CreateMap<GetTransferAllowanceResponse, TransferAllowanceViewModel>();
             CreateMap<GetTransferConnectionInvitationAuthorizationResponse, TransferConnectionInvitationAuthorizationViewModel>();
             CreateMap<GetTransferConnectionInvitationResponse, DeleteTransferConnectionInvitationCommand>();
 
@@ -63,6 +60,7 @@ namespace SFA.DAS.EAS.Web.Mappings
                 .ForMember(m => m.Choice, o => o.Ignore())
                 .ForMember(m => m.SendTransferConnectionInvitationCommand, o => o.MapFrom(r => r));
             CreateMap<GetTransferTransactionDetailsResponse, TransferTransactionDetailsViewModel>();
+
         }
     }
 }

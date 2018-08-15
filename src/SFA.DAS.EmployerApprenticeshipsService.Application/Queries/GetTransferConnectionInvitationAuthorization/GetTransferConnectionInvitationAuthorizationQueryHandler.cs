@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using System.Data.Entity;
+using System.Threading.Tasks;
+using MediatR;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.Features;
@@ -6,8 +8,6 @@ using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;
-using System.Data.Entity;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthorization
 {
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthori
                 i.Status == TransferConnectionInvitationStatus.Pending ||
                 i.Status == TransferConnectionInvitationStatus.Approved));
 
-            var isValidSender = transferAllowance.RemainingTransferAllowance >= Constants.TransferConnectionInvitations.SenderMinTransferAllowance && !isReceiver;
+            var isValidSender = transferAllowance >= Constants.TransferConnectionInvitations.SenderMinTransferAllowance && !isReceiver;
 
             return new GetTransferConnectionInvitationAuthorizationResponse
             {
