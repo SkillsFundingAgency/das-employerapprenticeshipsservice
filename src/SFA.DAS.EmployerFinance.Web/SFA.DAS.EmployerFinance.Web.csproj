@@ -98,6 +98,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
+    <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />

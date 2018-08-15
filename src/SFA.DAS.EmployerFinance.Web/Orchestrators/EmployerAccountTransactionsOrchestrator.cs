@@ -5,11 +5,9 @@ using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.Exceptions;
 using SFA.DAS.NLog.Logger;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -108,6 +106,12 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     Exception = e
                 };
             }
+        }
+
+        public Task<string> GetCoursePaymentSummary(string hashedAccountId, long ukprn, string courseName, int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate, string getClaimValue)
+        {
+            // Dummy method for replacement by future merge
+            throw new NotImplementedException();
         }
     }
 }
