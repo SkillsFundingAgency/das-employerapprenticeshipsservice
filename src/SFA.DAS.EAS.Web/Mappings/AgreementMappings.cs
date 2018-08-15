@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Ajax.Utilities;
 using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
@@ -21,7 +22,8 @@ namespace SFA.DAS.EAS.Web.Mappings
                 .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opt => opt.MapFrom(src => src.LegalEntity.AccountLegalEntityPublicHashedId));
 
             CreateMap<GetEmployerAgreementResponse, EmployerAgreementViewModel>()
-                .ForMember(dest => dest.PreviouslySignedEmployerAgreement, opt => opt.MapFrom(src => src.LastSignedAgreement));
+                .ForMember(dest => dest.PreviouslySignedEmployerAgreement, opt => opt.MapFrom(src => src.LastSignedAgreement))
+                .ForMember(dest => dest.OrganisationLookupPossible, opt => opt.Ignore());
         }
     }
 }
