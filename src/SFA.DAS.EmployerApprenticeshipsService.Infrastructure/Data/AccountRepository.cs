@@ -10,9 +10,10 @@ using SFA.DAS.Sql.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Infrastructure.Hashing;
+using SFA.DAS.EAS.Infrastructure.Interfaces;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
@@ -20,13 +21,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     public class AccountRepository : BaseRepository, IAccountRepository
     {
         private readonly EmployerAccountDbContext _employerAccountDbContext;
-        private readonly IHashingService _accountLegalEntityHashingService;
+        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
 
         public AccountRepository(
             EmployerApprenticeshipsServiceConfiguration configuration, 
             ILog logger, 
             EmployerAccountDbContext employerAccountDbContext,
-            IHashingService accountLegalEntityHashingService)
+            IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _employerAccountDbContext = employerAccountDbContext;
@@ -327,8 +328,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     sql: @"
                         SELECT  TOP (@count) Id 
                         FROM    [employer_account].[AccountLegalEntity] 
-                        WHERE   Deleted IS NULL 
-                                AND PublicHashedId IS NULL 
+                        WHERE   PublicHashedId IS NULL 
                                 AND Id >= @firstId 
                         ORDER BY Id ASC",
                     param: new {@count, @firstId},

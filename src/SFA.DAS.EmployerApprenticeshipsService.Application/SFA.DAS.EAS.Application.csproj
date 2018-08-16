@@ -496,8 +496,6 @@
     <Compile Include="Factories\IPayeSchemeEventFactory.cs" />
     <Compile Include="Factories\LegalEntityEventFactory.cs" />
     <Compile Include="Factories\PayeSchemeEventFactory.cs" />
-    <Compile Include="Hashing\PublicHashingService.cs" />
-    <Compile Include="Hashing\IPublicHashingService.cs" />
     <Compile Include="Helpers\NameOf.cs" />
     <Compile Include="Exceptions\InvalidRequestException.cs" />
     <Compile Include="Mappings\AccountMappings.cs" />
