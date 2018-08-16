@@ -312,7 +312,7 @@
     <Compile Include="Extensions\QueryFutureEnumerableExtensions.cs" />
     <Compile Include="Features\IFeatureService.cs" />
     <Compile Include="Hashing\PublicHashingService.cs" />
-    <Compile Include="Hashing\IPublicALEHashingService.cs" />
+    <Compile Include="Hashing\IAccountLegalEntityPublicHashingService.cs" />
     <Compile Include="Hashing\IPublicHashingService.cs" />
     <Compile Include="Mapping\Profiles\PaymentMappings.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringAttribute.cs" />

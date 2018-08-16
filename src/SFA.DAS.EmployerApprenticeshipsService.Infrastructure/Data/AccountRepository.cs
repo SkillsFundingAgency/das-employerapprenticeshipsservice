@@ -21,13 +21,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     public class AccountRepository : BaseRepository, IAccountRepository
     {
         private readonly EmployerAccountDbContext _employerAccountDbContext;
-        private readonly IALEPublicHashingService _accountLegalEntityHashingService;
+        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
 
         public AccountRepository(
             EmployerApprenticeshipsServiceConfiguration configuration, 
             ILog logger, 
             EmployerAccountDbContext employerAccountDbContext,
-            IALEPublicHashingService accountLegalEntityHashingService)
+            IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _employerAccountDbContext = employerAccountDbContext;

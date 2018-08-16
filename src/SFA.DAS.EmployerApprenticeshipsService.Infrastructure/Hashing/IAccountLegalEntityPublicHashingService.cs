@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Infrastructure.Hashing
 {
-    public interface IALEPublicHashingService : IHashingService
+    public interface IAccountLegalEntityPublicHashingService : IHashingService
     {
 
     }
