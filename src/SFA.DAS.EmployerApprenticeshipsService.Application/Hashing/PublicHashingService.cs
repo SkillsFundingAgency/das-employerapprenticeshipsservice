@@ -2,9 +2,9 @@
 
 namespace SFA.DAS.EAS.Application.Hashing
 {
-    public class IalePublicHashingService : HashingService.HashingService, IPublicHashingService, IALEPublicHashingService
+    public class PublicHashingService : HashingService.HashingService, IPublicHashingService, IALEPublicHashingService
     {
-        public IalePublicHashingService(string allowedCharacters, string hashstring) : base(allowedCharacters, hashstring)
+        public PublicHashingService(string allowedCharacters, string hashstring) : base(allowedCharacters, hashstring)
         {
         }
     }

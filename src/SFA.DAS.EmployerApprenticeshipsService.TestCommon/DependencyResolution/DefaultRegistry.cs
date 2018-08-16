@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
             For<ILog>().Use(Mock.Of<ILog>());
             For<IMessagePublisher>().Use(messagePublisher.Object);
             For<INotificationsApi>().Use(() => Mock.Of<INotificationsApi>());
-            For<IPublicHashingService>().Use(x => new IalePublicHashingService("BCDEFGHIJKLMMOPQRSTUVWXYZ", "haShStRiNg"));
+            For<IPublicHashingService>().Use(x => new PublicHashingService("BCDEFGHIJKLMMOPQRSTUVWXYZ", "haShStRiNg"));
         }
     }
 }
