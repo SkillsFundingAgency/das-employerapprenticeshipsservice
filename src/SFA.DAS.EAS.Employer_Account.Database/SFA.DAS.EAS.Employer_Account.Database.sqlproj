@@ -139,7 +139,7 @@
     <Build Include="StoredProcedures\EvaluateEmployerLegalEntityAgreementStatus.sql" />
     <Build Include="StoredProcedures\UpdateAccountLegalEntity_SetNameAndAddress.sql" />
     <Build Include="StoredProcedures\UpdateAccountLegalEntity_SetPublicHashedId.sql" />
-    <Build Include="Scripts\Manual\AML-2674-NullALEHashIds.sql" />
+    <None Include="Scripts\Manual\AML-2674-NullALEHashIds.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
