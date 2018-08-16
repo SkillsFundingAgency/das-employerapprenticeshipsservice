@@ -328,8 +328,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     sql: @"
                         SELECT  TOP (@count) Id 
                         FROM    [employer_account].[AccountLegalEntity] 
-                        WHERE   Deleted IS NULL 
-                                AND PublicHashedId IS NULL 
+                        WHERE   PublicHashedId IS NULL 
                                 AND Id >= @firstId 
                         ORDER BY Id ASC",
                     param: new {@count, @firstId},
