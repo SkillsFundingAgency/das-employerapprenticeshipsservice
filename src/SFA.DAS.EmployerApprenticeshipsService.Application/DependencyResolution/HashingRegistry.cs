@@ -1,5 +1,5 @@
-﻿using SFA.DAS.EAS.Application.Hashing;
-using SFA.DAS.EAS.Domain.Configuration;
+﻿using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Infrastructure.Interfaces;
 using SFA.DAS.HashingService;
 using StructureMap;

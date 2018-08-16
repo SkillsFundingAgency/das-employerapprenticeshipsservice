@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Account.Worker.Data;
+using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Infrastructure.Interfaces;
 using SFA.DAS.NLog.Logger;
 

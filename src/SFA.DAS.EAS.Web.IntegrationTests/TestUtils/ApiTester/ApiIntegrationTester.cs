@@ -16,6 +16,7 @@ using Owin;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Account.Api;
 using SFA.DAS.EAS.Account.Api.Controllers;
+using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Infrastructure.Interfaces;
 using SFA.DAS.NLog.Logger;
 using StructureMap;

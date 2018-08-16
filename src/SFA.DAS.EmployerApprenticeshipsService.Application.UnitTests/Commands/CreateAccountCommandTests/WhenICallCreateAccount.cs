@@ -18,6 +18,7 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Infrastructure.Interfaces;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;

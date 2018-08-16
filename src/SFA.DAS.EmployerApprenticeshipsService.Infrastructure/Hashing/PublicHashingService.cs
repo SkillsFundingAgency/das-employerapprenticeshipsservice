@@ -1,6 +1,4 @@
-﻿using SFA.DAS.EAS.Infrastructure.Interfaces;
-
-namespace SFA.DAS.EAS.Application.Hashing
+﻿namespace SFA.DAS.EAS.Infrastructure.Hashing
 {
     public class PublicHashingService : HashingService.HashingService, IPublicHashingService, IALEPublicHashingService
     {

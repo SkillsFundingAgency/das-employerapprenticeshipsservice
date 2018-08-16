@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Infrastructure.Interfaces;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionsTests

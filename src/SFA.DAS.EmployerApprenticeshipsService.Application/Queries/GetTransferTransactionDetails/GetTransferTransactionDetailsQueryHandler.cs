@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Infrastructure.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Infrastructure.Interfaces;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails

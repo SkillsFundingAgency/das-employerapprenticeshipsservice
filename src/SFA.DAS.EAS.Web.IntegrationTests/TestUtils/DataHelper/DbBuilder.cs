@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
+using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Infrastructure.Interfaces;
 using SFA.DAS.HashingService;
 
