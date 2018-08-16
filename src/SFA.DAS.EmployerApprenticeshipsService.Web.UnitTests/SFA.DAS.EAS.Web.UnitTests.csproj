@@ -227,6 +227,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\SignOutAttributeTests\WhenActionExecuting.cs" />
     <Compile Include="Attributes\ValidateMembershipAttributeTests\WhenIViewAPage.cs" />
     <Compile Include="Binders\DefaultBinderTests\WhenIBindAViewModel.cs" />
     <Compile Include="Controllers\ActivitiesControllerTests\WhenIViewTheLatestActivitiesPage.cs" />

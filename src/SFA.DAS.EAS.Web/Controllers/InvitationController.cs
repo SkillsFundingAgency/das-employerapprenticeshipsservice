@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.Authorization;
+using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -126,6 +127,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("register-and-accept")]
+        [SignOut]
         public ActionResult AcceptInvitationNewUser()
         {
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
@@ -133,8 +135,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var c = new Constants(_configuration.Identity);
             return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/invitations");
         }
-
-
+        
         [HttpGet]
         [Route("accept")]
         public ActionResult AcceptInvitationExistingUser()
