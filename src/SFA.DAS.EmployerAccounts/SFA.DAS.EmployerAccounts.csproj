@@ -28,6 +28,7 @@
     <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
     <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="1.0.0.26382" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
+    <PackageReference Include="System.Net.Http" Version="4.3.3" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
     <PackageReference Include="Z.EntityFramework.Plus.QueryFuture.EF6" Version="1.7.19" />
   </ItemGroup>
@@ -44,7 +45,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
