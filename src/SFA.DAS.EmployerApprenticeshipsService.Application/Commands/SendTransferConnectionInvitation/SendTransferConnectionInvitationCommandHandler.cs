@@ -1,8 +1,9 @@
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Hashing;
+using SFA.DAS.EAS.Infrastructure.Interfaces;
 
 namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
 {

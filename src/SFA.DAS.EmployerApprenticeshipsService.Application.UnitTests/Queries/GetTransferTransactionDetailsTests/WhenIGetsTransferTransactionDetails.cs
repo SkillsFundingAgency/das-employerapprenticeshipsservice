@@ -1,6 +1,5 @@
 ﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Hashing;
 using SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transfers;
@@ -10,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Infrastructure.Hashing;
+using SFA.DAS.EAS.Infrastructure.Interfaces;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferTransactionDetailsTests
 {
