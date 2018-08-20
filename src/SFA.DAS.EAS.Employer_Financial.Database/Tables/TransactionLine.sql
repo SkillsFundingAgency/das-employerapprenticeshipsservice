@@ -22,13 +22,18 @@ GO
 
 CREATE INDEX [IX_TransactionLine_SubmissionId] ON [employer_financial].[TransactionLine] (SubmissionId)
 GO
+
 CREATE INDEX [IX_TransactionLine_AccountId] ON [employer_financial].[TransactionLine] (AccountId) INCLUDE (Ukprn,PeriodEnd,TransactionType)
 GO
+
 CREATE INDEX [IX_TransactionLine_Payment] on [employer_financial].[TransactionLine] (PeriodEnd,AccountId,Ukprn,TransactionDate, DateCreated)
 GO
 
-CREATE NONCLUSTERED INDEX [IX_TransactionLine_AccountId_DateCreated] ON employer_financial.TransactionLine (AccountId, DateCreated) WITH (ONLINE = ON)
+CREATE UNIQUE INDEX [IX_TransactionLine_TransactionType_SubmissionId] ON [employer_financial].[TransactionLine] (SubmissionId) WHERE (TransactionType = 1);
 GO
 
-CREATE NONCLUSTERED INDEX [IX_TransactionLine_Account_TransactionType] ON employer_financial.TransactionLine (AccountId, TransactionType) INCLUDE (DateCreated) WITH (ONLINE = ON)
+CREATE INDEX [IX_TransactionLine_AccountId_DateCreated] ON [employer_financial].[TransactionLine] (AccountId, DateCreated) WITH (ONLINE = ON)
+GO
+
+CREATE INDEX [IX_TransactionLine_Account_TransactionType] ON [employer_financial].[TransactionLine] (AccountId, TransactionType) INCLUDE (DateCreated) WITH (ONLINE = ON)
 GO
