@@ -5180,7 +5180,6 @@ h2 .float-right {
   border: 5px solid #28a197;
 }
 
-/*Email notification settings*/
 #notification-settings .alert-default {
   background: #dee0e2;
   margin-bottom: 40px;
@@ -5486,58 +5485,22 @@ h2 .float-right {
   left: -30px;
 }
 
-/*Finance dashboard UI new*/
-#page-transactions .column-half .data,
-#page-transfers .column-half .data {
-  width: 100%;
+.data {
+  width: 50%;
 }
 
-#page-transactions .column-half .data dl,
-#page-transfers .column-half .data dl {
-  position: relative;
-  min-height: 170px;
-  padding-bottom: 50px;
+.data dl dd {
+  word-break: break-word;
+}
+
+#page-finance .data dl {
   background: #2e358b;
-}
-
-#page-transactions .column-half .data dl dt,
-#page-transfers .column-half .data dl dt {
-  position: absolute;
-  bottom: 10px;
-}
-
-#page-transactions .column-half .data dl dt a,
-#page-transfers .column-half .data dl dt a {
-  color: #fff;
-}
-
-#page-transactions .column-half .data dl dd,
-#page-transfers .column-half .data dl dd {
-  word-break: break-all;
-}
-
-#page-transactions .column-half .data dl.current-funds,
-#page-transfers .column-half .data dl.current-funds {
-  background: #2e358b;
-}
-
-#page-transactions .column-half .data dl.current-transfer-funds,
-#page-transfers .column-half .data dl.current-transfer-funds {
-  background: #df3034;
-}
-
-/* Transfers */
-#page-transfers .data {
-  width: auto;
-  margin-top: 30px;
-  margin-bottom: 60px;
 }
 
 .govuk-box-highlight.govuk-box-highlight__bottom-margin {
   margin-bottom: 2em;
 }
 
-/* Transfer transaction detaills */
 .account-info > p {
   margin-bottom: 0.3125em;
 }
@@ -5554,7 +5517,6 @@ tr.total td:last-child {
   border-bottom: 1px solid #0b0c0c;
 }
 
-/*See all activity*/
 .timeline .all-activity p.activity:before {
   width: 20px;
   height: 20px;
@@ -5682,13 +5644,6 @@ tr.total td:last-child {
   color: #005ea5;
   background-color: #fff;
   box-shadow: none;
-  /*
-
-        a {
-            color: $link-colour;
-        }
-
-        */
 }
 
 .flash-card .button:visited, .flash-card .button-link:visited {
