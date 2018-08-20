@@ -4318,21 +4318,32 @@ table.responsive tr.total {
   }
 }
 
+.section-heading {
+  margin-top: 0;
+}
+
+.agreement-parties .column-hide {
+  display: none;
+}
+
+@media (min-width: 641px) {
+  .agreement-parties .column-hide {
+    display: block;
+  }
+}
+
 .agreement-parties address.party {
   font-style: normal;
 }
 
-@media (min-width: 641px) {
-  .agreement-parties address.party {
-    margin-top: 45px;
-    margin-bottom: 45px;
-  }
+.agreement-parties .update-details {
+  margin-bottom: 0;
 }
 
 .signed-agreement .attachment {
   position: relative;
   margin: 0;
-  padding: 15px 0 0 129px;
+  padding: 0 0 0 129px;
 }
 
 .signed-agreement .attachment .attachment-thumb {
@@ -4340,7 +4351,7 @@ table.responsive tr.total {
   float: left;
   margin-top: 5px;
   margin-left: -124px;
-  padding-bottom: 15px;
+  padding-bottom: 0;
 }
 
 .signed-agreement .attachment .attachment-thumb img {

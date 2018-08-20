@@ -7,11 +7,10 @@
     ViewBag.PageID = "update-organisation-details";
 }
 <div class="grid-row">
-    <div>
+    <div class="column-two-thirds">
         <h1 class="heading-xlarge">Review your details</h1>
-    </div>
+        <p>We've retrieved the most up-to-date details we could find for your organisation.</p>
 
-    <div>
         <table>
             <tbody>
                 <tr>
@@ -37,21 +36,21 @@
             <form method="POST" action="@Url.Action("ProcessReviewSelection")">
                 @Html.AntiForgeryToken()
 
-                <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName"/>
-                <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress"/>
-                <input type="hidden" name="accountLegalEntityPublicHashedId" value="@Model.Data.AccountLegalEntityPublicHashedId"/>
-                <input type="hidden" name="dataSourceFriendlyName" value="@Model.Data.DataSourceFriendlyName"/>
+                <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName" />
+                <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress" />
+                <input type="hidden" name="accountLegalEntityPublicHashedId" value="@Model.Data.AccountLegalEntityPublicHashedId" />
+                <input type="hidden" name="dataSourceFriendlyName" value="@Model.Data.DataSourceFriendlyName" />
 
-                <fieldset>
+                <div class="form-group">
                     <label for="update" class="block-label">
-                        <input id="update" type="radio" name="updateChoice" value="update"/>
+                        <input id="update" type="radio" name="updateChoice" value="update" />
                         Yes, update my details using this information
                     </label>
                     <label for="cancel" class="block-label">
-                        <input id="cancel" type="radio" name="updateChoice" value="incorrectDetails"/>
+                        <input id="cancel" type="radio" name="updateChoice" value="incorrectDetails" />
                         No, these details are incorrect
                     </label>
-                </fieldset>
+                </div>
                 <div class="form-group">
                     <button type="submit" class="button" id="accept">Continue</button>
                 </div>
@@ -59,7 +58,6 @@
         </div>
     </div>
 </div>
-
 
 @section breadcrumb {
     <div class="breadcrumbs">
