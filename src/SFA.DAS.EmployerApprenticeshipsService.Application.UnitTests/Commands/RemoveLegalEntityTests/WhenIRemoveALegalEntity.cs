@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.Events.Api.Types;
 using SFA.DAS.Messaging.Interfaces;
@@ -34,6 +35,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
         private Mock<IGenericEventFactory> _genericEventHandler;
         private Mock<IEmployerAgreementEventFactory> _employerAgreementEventFactory;
         private Mock<IAgreementService> _agreementService;
+        private Mock<IMembershipRepository> _membershipRepository;
 
         private const string ExpectedHashedAccountId = "34RFD";
         private const long ExpectedAccountId = 123455;
@@ -65,6 +67,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
             _genericEventHandler = new Mock<IGenericEventFactory>();
             _genericEventHandler.Setup(x => x.Create(It.Is<AgreementRemovedEvent>(c => c.HashedAgreementId.Equals(ExpectedHashedEmployerAgreementId)))).Returns(new GenericEvent {Payload = ExpectedHashedEmployerAgreementId});
 
+            _membershipRepository = new Mock<IMembershipRepository>();
+            _membershipRepository
+                .Setup(mr => mr.GetCaller(ExpectedAccountId, ExpectedUserId))
+                .Returns<long, string>((accountId, userRef) => Task.FromResult(new MembershipView {AccountId = ExpectedAccountId, FirstName = "Harry", LastName = "Potter"}));
+
             _command = new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = ExpectedUserId,HashedLegalAgreementId = ExpectedHashedEmployerAgreementId };
             _handler = new RemoveLegalEntityCommandHandler(
                 _validator.Object, 
@@ -75,7 +82,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
                 _genericEventHandler.Object, 
                 _employerAgreementEventFactory.Object, 
                 Mock.Of<IMessagePublisher>(),
-                _agreementService.Object
+                _agreementService.Object,
+                _membershipRepository.Object
                 );
         }
 
