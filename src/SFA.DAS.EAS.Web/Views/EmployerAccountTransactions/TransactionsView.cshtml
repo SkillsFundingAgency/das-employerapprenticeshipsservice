@@ -85,11 +85,11 @@
         }
         else
         {
-            <table>
+            <table class="responsive">
                 <thead>
                     <tr>
                         <th scope="col" class="no-wrap">Payment date</th>
-                        <th scope="col" class="mobile-hide-cell">Description</th>
+                        <th scope="col">Description</th>
                         <th scope="col" class="numeric">Amount</th>
                         <th scope="col"><span class="vh">Action</span></th>
                     </tr>
@@ -101,10 +101,10 @@
                         var toDate = new DateTime(aggregationLine.DateCreated.Year, aggregationLine.DateCreated.Month, aggregationLine.DateCreated.Day, 23, 59, 59);
 
                         <tr>
-                            <td class="no-wrap">
+                            <td data-label="Payment date" class="no-wrap">
                                 @{var date = aggregationLine.DateCreated.ToGdsFormat();} @date
                             </td>
-                            <td class="mobile-hide-cell">
+                            <td data-label="Description">
                                 <span class="description">
                                     @aggregationLine.Description
                                 </span>
@@ -125,9 +125,9 @@
                                 }
                             }
 
-                            <td class="numeric no-wrap">@(transactionAmount.ToString("C2", culture))</td>
+                            <td data-label="Amount" class="numeric no-wrap">@(transactionAmount.ToString("C2", culture))</td>
 
-                            <td class="link-right">
+                            <td data-label="Payment date" class="link-right">
                                 @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
                                      aggregationLine.TransactionType == TransactionItemType.TopUp)
                                 {
