@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 
-namespace SFA.DAS.EmployerAccounts.DtosX
+namespace SFA.DAS.EmployerAccounts.Dtos
 {
     public class TransferConnectionInvitationDto
     {

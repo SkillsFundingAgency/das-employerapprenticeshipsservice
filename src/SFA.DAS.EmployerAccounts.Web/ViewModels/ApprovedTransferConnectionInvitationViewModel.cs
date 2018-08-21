@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EmployerAccounts.DTOs;
+﻿using SFA.DAS.EmployerAccounts.Dtos;
 using System.ComponentModel.DataAnnotations;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels

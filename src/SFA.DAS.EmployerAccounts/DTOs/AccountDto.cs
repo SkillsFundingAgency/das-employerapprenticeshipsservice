@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EmployerAccounts.DtosX
+namespace SFA.DAS.EmployerAccounts.Dtos
 {
     public class AccountDto
     {
