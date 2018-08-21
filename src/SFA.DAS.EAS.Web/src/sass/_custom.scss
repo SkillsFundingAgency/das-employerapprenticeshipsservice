@@ -21,7 +21,6 @@
   }
 }
 
-// custom to overwrite the GDS defaults
 .hr-double {
   border-bottom: 4px solid $grey-2;
   margin-bottom: 20px;
@@ -32,6 +31,7 @@
 .hr-bottom {
   margin-top: 20px;
 }
+
 // add apprentice entry
 #add-apprentice-entry,
 #edit-apprentice {
@@ -53,7 +53,7 @@
 }
 t
 
-/*validation styles*/
+// validation styles
 .missingForApproval {
   border-left: 5px solid $error-colour;
   padding-left: 15px;
@@ -122,7 +122,7 @@ t
   }
 }
 
-//review cohorts page styles
+// review cohorts page styles
 #review-cohorts {
   .heading-small {
     font-size: 24px;
@@ -160,7 +160,7 @@ t
   }
 }
 
-//cohors summary block styles
+// cohors summary block styles
 .js-enabled {
   .clickable {
     cursor: pointer;
@@ -214,7 +214,7 @@ t
   }
 }
 
-//delete cohort
+// delete cohort
 #apprentice-details,
 #edit-apprentice {
   .delete-button {
@@ -338,7 +338,7 @@ body {
   }
 }
 
-//character count error
+// character count error
 .form-group {
   .limit-reached {
     color: $error-colour;
@@ -393,7 +393,7 @@ h2 {
   padding: 20px;
 }
 
-//dynamic-class-mobile-views
+// dynamic-class-mobile-views
 .dynamic-cost-display {
   .bold-xlarge {
     line-height: 82px;
@@ -433,7 +433,7 @@ h2 {
   border: 5px solid $turquoise;
 }
 
-/*Email notification settings*/
+// Email notification settings
 #notification-settings {
   .alert-default {
     background: $panel-colour;
@@ -454,7 +454,7 @@ h2 {
   }
 }
 
-//start -- Apprentice Filter Styles
+// start -- Apprentice Filter Styles
 .filter-option-select {
   margin-bottom: 30px;
   background-color: $panel-colour;
@@ -481,7 +481,7 @@ h2 {
     overflow: auto;
     .item {
       border-bottom: 1px solid #bfc1c3;
-    } //// wrap labels per item for borders
+    } // wrap labels per item for borders
     label {
       font-size: 16px;
       line-height: 1.25;
@@ -536,7 +536,7 @@ h2 {
   }
 }
 
-//datalock styles
+// datalock styles
 #review-datalock-changes {
   h2.heading-small {
     margin-top: 40px;
@@ -566,7 +566,7 @@ h2 {
     }
   }
 }
-//edit-started-apprentice
+// edit-started-apprentice
 #edit-started-apprentice {
   .approve-alert {
     margin-top: 30px;
@@ -684,7 +684,7 @@ h2 {
   }
 }
 
-//ACTIVITY LOG: Vertical line with bulleted list
+// ACTIVITY LOG: Vertical line with bulleted list
 #item-list {
   position: relative;
   padding-left: 1px;
@@ -738,61 +738,31 @@ h2 {
   }
 }
 
-/*Finance dashboard UI new*/
-#page-transactions,
-#page-transfers {
-  .column-half {
-    .data {
-      width: 100%;
-
-      dl {
-        position: relative;
-        min-height: 170px;
-        padding-bottom: 50px;
-        background: $purple;
-
-        dt {
-          position: absolute;
-          bottom: 10px;
-
-          a {
-            color: #fff;
-          }
-        }
-
-        dd {
-          word-break: break-all;
-        }
-      }
-
-      dl.current-funds {
-        background: $purple;
-      }
-
-      dl.current-transfer-funds {
-        background: $mellow-red;
-      }
+.data {
+    @include media(960px) {
+        width: 50%;
     }
-  }
+
+    dl {
+        dd {
+            word-break: break-word;
+        }
+    }
 }
 
-/* Transfers */
-#page-transfers {
-  .data {
-    width: auto;
-    @include media(tablet) {
-      margin-top: 30px;
-      margin-bottom: 60px;
+#page-finance {
+    .data {
+        dl {
+            background: $purple;
+        }
     }
-  }
 }
 
 .govuk-box-highlight.govuk-box-highlight__bottom-margin {
-  margin-bottom: 2em;
+    margin-bottom: 2em;
 }
 
-/* Transfer transaction detaills */
-
+// Transfer transaction detaills
 .account-info > p {
     margin-bottom: 0.3125em;
 
@@ -809,120 +779,118 @@ tr.total td {
     }
 }
 
-/*See all activity*/
+// See all activity
 .timeline {
-  .all-activity {
-    p.activity {
-      &:before {
-        width: 20px;
-        height: 20px;
-        left: -9px;
-      }
+    .all-activity {
+        p.activity {
+            &:before {
+                width: 20px;
+                height: 20px;
+                left: -9px;
+            }
 
-      a {
-        margin-top: 15px;
-        display: block;
-      }
+            a {
+                margin-top: 15px;
+                display: block;
+            }
+        }
     }
-  }
 }
 
-//remove yellow outline around selected tabs
+// remove yellow outline around selected tabs
 .js-enabled ul.js-tabs a.selected {
-  outline: none;
+    outline: none;
 }
-//all mobile media query breakpoints
-//==================================
-@media only screen and (max-device-width: 640px),
-  only screen and (max-device-width: 667px),
-  only screen and (max-width: 480px) {
-  #apprentice-details {
-    .tableResponsive {
-      margin-top: 30px;
 
-      .funding-cap-alert-td {
-        border-left: 10px solid $govuk-blue;
-        background: #fff;
+// all mobile media query breakpoints
+@media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
+    #apprentice-details {
+        .tableResponsive {
+            margin-top: 30px;
 
-        a {
-          text-decoration: none;
-          color: $text-colour;
-          cursor: pointer;
+            .funding-cap-alert-td {
+                border-left: 10px solid $govuk-blue;
+                background: #fff;
+
+                a {
+                    text-decoration: none;
+                    color: $text-colour;
+                    cursor: pointer;
+                }
+            }
+
+            .overlap-alert {
+                border-left: 10px solid $error-colour;
+                background: #fff;
+
+                a {
+                    text-decoration: none;
+                    color: $text-colour;
+                    cursor: pointer;
+                }
+            }
         }
-      }
 
-      .overlap-alert {
-        border-left: 10px solid $error-colour;
-        background: #fff;
-
-        a {
-          text-decoration: none;
-          color: $text-colour;
-          cursor: pointer;
+        .finishEditingBtn {
+            margin-bottom: 20px;
         }
-      }
     }
 
-    .finishEditingBtn {
-      margin-bottom: 20px;
-    }
-  }
-
-  .bubble-arrow,
-  .overlap-arrow {
-    display: none;
-  }
-
-  .manage-all-apprentices {
-    td:nth-of-type(1):before {
-      content: 'Name';
-      font-weight: normal;
-      margin-top: 5px;
-      min-height: 30px;
+    .bubble-arrow,
+    .overlap-arrow {
+        display: none;
     }
 
-    td:nth-of-type(2):before {
-      content: 'Date of birth';
-      font-weight: normal;
-      margin-top: 5px;
+    .manage-all-apprentices {
+        td:nth-of-type(1):before {
+            content: 'Name';
+            font-weight: normal;
+            margin-top: 5px;
+            min-height: 30px;
+        }
+
+        td:nth-of-type(2):before {
+            content: 'Date of birth';
+            font-weight: normal;
+            margin-top: 5px;
+        }
+
+        td:nth-of-type(3):before {
+            content: 'Satus';
+            font-weight: normal;
+            margin-top: 5px;
+            word-wrap: break-word;
+        }
     }
 
-    td:nth-of-type(3):before {
-      content: 'Satus';
-      font-weight: normal;
-      margin-top: 5px;
-      word-wrap: break-word;
-    }
-  }
+    .to-be-sent-list {
+        td:nth-of-type(1):before {
+            content: 'Employer';
+            font-weight: normal;
+            margin-top: 5px;
+            min-height: 30px;
+        }
 
-  .to-be-sent-list {
-    td:nth-of-type(1):before {
-      content: 'Employer';
-      font-weight: normal;
-      margin-top: 5px;
-      min-height: 30px;
-    }
+        td:nth-of-type(2):before {
+            content: 'Cohort reference';
+            font-weight: normal;
+            margin-top: 5px;
+        }
 
-    td:nth-of-type(2):before {
-      content: 'Cohort reference';
-      font-weight: normal;
-      margin-top: 5px;
+        td:nth-of-type(3):before {
+            content: 'Last message';
+            font-weight: normal;
+            margin-top: 5px;
+            word-wrap: break-word;
+        }
     }
-
-    td:nth-of-type(3):before {
-      content: 'Last message';
-      font-weight: normal;
-      margin-top: 5px;
-      word-wrap: break-word;
-    }
-  }
 }
 
 .circle-white {
-  color: #005ea5;
-  background: #fff;
-  float: left;
-  margin-right: 10px;
+    color: #005ea5;
+    background: #fff;
+    float: left;
+    margin-right: 10px;
 }
 
 .flash-card {
@@ -959,7 +927,6 @@ tr.total td {
     }
 
     details {
-        // margin-bottom: 1em;
         summary {
             color: $page-colour;
         }
@@ -973,14 +940,7 @@ tr.total td {
         color: $link-colour;
         background-color: $page-colour;
         box-shadow: none;
-        // Link styles
-        /*
 
-        a {
-            color: $link-colour;
-        }
-
-        */
         &:visited {
             color: $link-visited-colour;
         }
