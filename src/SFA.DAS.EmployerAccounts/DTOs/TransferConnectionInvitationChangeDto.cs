@@ -1,8 +1,7 @@
 ﻿using System;
-using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 
-namespace SFA.DAS.EmployerAccounts.DtosX
+namespace SFA.DAS.EmployerAccounts.Dtos
 {
     public class TransferConnectionInvitationChangeDto
     {

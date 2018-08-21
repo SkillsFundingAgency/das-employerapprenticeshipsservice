@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EmployerAccounts.DtosX;
+﻿using SFA.DAS.EmployerAccounts.Dtos;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement
 {

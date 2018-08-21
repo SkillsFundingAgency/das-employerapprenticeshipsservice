@@ -116,6 +116,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
+    <Compile Include="ViewModels\TransactionDownloadViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

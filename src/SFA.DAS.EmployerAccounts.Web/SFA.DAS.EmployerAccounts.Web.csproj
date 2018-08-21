@@ -94,9 +94,25 @@
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
     <Compile Include="Authorization\AuthorizationContextCache.cs" />
     <Compile Include="Authorization\CallerContextProvider.cs" />
+    <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\EmployerAccountController.cs" />
+    <Compile Include="Controllers\EmployerAccountPayeController.cs" />
+    <Compile Include="Controllers\EmployerAgreementController.cs" />
+    <Compile Include="Controllers\EmployerCommitmentsController.cs" />
+    <Compile Include="Controllers\EmployerManageApprenticesController.cs" />
+    <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InvitationController.cs" />
+    <Compile Include="Controllers\OrganisationController.cs" />
+    <Compile Include="Controllers\OrganisationSharedController.cs" />
+    <Compile Include="Controllers\SearchOrganisationController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsController.cs" />
+    <Compile Include="Controllers\TransfersController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -127,13 +143,37 @@
     <Compile Include="Validation\SerializableModelState.cs" />
     <Compile Include="Validation\SerializableModelStateDictionary.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
+    <Compile Include="ViewModels\AddNewPayeSchemeViewModel.cs" />
+    <Compile Include="ViewModels\AddOrganisationAddressViewModel.cs" />
+    <Compile Include="ViewModels\AddressViewModel.cs" />
+    <Compile Include="ViewModels\ApprovedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\ConfirmLegalAgreementToRemoveViewModel.cs" />
+    <Compile Include="ViewModels\DeletedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\DismissTaskViewModel.cs" />
+    <Compile Include="ViewModels\FindOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\FlashMessageViewModel.cs" />
     <Compile Include="ViewModels\IAccountViewModel.cs" />
+    <Compile Include="ViewModels\InviteTeamMemberViewModel.cs" />
+    <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
+    <Compile Include="ViewModels\NavigationViewModel.cs" />
+    <Compile Include="ViewModels\NotificationSettingsViewModel.cs" />
+    <Compile Include="ViewModels\OrgainsationViewModelBase.cs" />
+    <Compile Include="ViewModels\OrganisationDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ReceiveTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
+    <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
+    <Compile Include="ViewModels\SendTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\SentTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SignInViewModel.cs" />
+    <Compile Include="ViewModels\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\UserAccountsViewModel.cs" />
+    <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\.keep" />
@@ -519,6 +559,7 @@
     <Content Include="Views\Shared\AccessDenied.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
+    <Content Include="Views\AccessDenied\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">

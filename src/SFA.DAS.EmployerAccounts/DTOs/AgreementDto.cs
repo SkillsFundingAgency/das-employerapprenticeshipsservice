@@ -1,7 +1,7 @@
 ﻿using System;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
-namespace SFA.DAS.EmployerAccounts.DtosX
+namespace SFA.DAS.EmployerAccounts.Dtos
 {
     public class AgreementDto
     {

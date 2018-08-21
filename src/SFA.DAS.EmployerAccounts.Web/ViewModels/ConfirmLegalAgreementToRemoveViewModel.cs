@@ -1,4 +1,4 @@
-using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
