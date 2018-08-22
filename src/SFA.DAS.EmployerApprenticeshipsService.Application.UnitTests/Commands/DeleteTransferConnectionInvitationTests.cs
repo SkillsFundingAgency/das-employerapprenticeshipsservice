@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands
         [Test]
         public void Handle_WhenreceiverDeleting_ThenShouldBeDeletedByReceiver()
         {
-            RunAsync(act: f => f.Handle(TransferConnectionInvitationStatus.Rejected, DeleteTransferConnectionInvitationTestFixture.Constants.TestSenderAccountId),
+            RunAsync(act: f => f.Handle(TransferConnectionInvitationStatus.Rejected, DeleteTransferConnectionInvitationTestFixture.Constants.TestReceiverAccountId),
                 assert: f => Assert.That(f.TransferConnectionInvitation.DeletedByReceiver, Is.True));
         }
 
@@ -229,7 +229,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands
             };
 
             UserRepositoryMock
-                .Setup(r => r.GetUserById(DeleterUser.Id))
+                .Setup(r => r.GetUserByRef(DeleterUser.Ref))
                 .ReturnsAsync(DeleterUser);
 
             return this;
