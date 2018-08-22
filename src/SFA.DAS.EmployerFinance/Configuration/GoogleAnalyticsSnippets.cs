@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EmployerAccounts.Configuration
+﻿namespace SFA.DAS.EmployerFinance.Configuration
 {
     public class GoogleAnalyticsSnippets
     {

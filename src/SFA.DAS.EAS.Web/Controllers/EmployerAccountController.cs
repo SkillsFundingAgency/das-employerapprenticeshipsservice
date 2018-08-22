@@ -235,7 +235,5 @@ namespace SFA.DAS.EAS.Web.Controllers
             var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             return userIdClaim ?? "";
         }
-
-
     }
 }

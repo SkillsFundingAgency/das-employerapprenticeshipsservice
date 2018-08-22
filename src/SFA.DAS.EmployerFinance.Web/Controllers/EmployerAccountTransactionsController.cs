@@ -1,4 +1,6 @@
 ﻿using SFA.DAS.Authentication;
+using SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails;
+using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.EmployerFinance.Web.Helpers;
 using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using System;
@@ -68,9 +70,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [Route("balance/levyDeclaration/details")]
         public ActionResult LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
         {
-            var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
-
-            return Redirect(Url.LegacyEasAccountAction($"finance/levyDeclaration/details{paramString}"));
+           return Redirect(Url.LegacyEasAccountAction($"finance/levyDeclaration/details{Request?.Url?.Query}"));
         }
 
 
@@ -79,9 +79,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         public ActionResult CourseStandardPaymentSummary(string hashedAccountId, long ukprn, string courseName,
             int? courseLevel, DateTime fromDate, DateTime toDate)
         {
-            var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
-
-            return Redirect(Url.LegacyEasAccountAction($"finance/course/standard/summary{paramString}"));
+            return Redirect(Url.LegacyEasAccountAction($"finance/course/standard/summary{Request?.Url?.Query}"));
         }
 
         [Route("finance/course/framework/summary")]
@@ -89,18 +87,14 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         public ActionResult CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName,
             int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
-            var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
-
-            return Redirect(Url.LegacyEasAccountAction($"finance/course/framework/summary{paramString}"));
+            return Redirect(Url.LegacyEasAccountAction($"finance/course/framework/summary{Request?.Url?.Query}"));
         }
 
         [Route("finance/transfer/details")]
         [Route("balance/transfer/details")]
         public ActionResult TransferDetail(GetTransferTransactionDetailsQuery query)
         {
-            var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
-
-            return Redirect(Url.LegacyEasAccountAction($"finance/transfer/details{paramString}"));
+            return Redirect(Url.LegacyEasAccountAction($"finance/transfer/details{Request?.Url?.Query}"));
         }
     }
 }

@@ -11,9 +11,11 @@
                 ViewBag.Section = "finance";
 
 }
-@{
+@*
+    Uncomment this line when the GaData handling branch is merged
+    @{
     ViewBag.GaData.Vpv = "/accounts/balance/levyDeclaration/page-transaction-details";
-}
+}*@
 <div class="grid-row">
     <div class="column-two-thirds">
         <div class="hgroup">
@@ -71,7 +73,7 @@
                                     courseDetailsLink = Url.Action("CourseStandardPaymentSummary", "EmployerAccountTransactions",
                                         new
                                         {
-                                            HashedAccountId = Model.Data.HashedAccountId,
+                                            hashedAccountId = Model.Data.HashedAccountId,
                                             Ukprn = Model.Data.UkPrn,
                                             CourseName = coursePaymentSummary.CourseName,
                                             CourseLevel = coursePaymentSummary.CourseLevel,
@@ -84,7 +86,7 @@
                                     courseDetailsLink = Url.Action("CourseFrameworkPaymentSummary", "EmployerAccountTransactions",
                                         new
                                         {
-                                            HashedAccountId = Model.Data.HashedAccountId,
+                                            hashedAccountId = Model.Data.HashedAccountId,
                                             Ukprn = Model.Data.UkPrn,
                                             CourseName = coursePaymentSummary.CourseName,
                                             CourseLevel = coursePaymentSummary.CourseLevel,
@@ -144,7 +146,7 @@
 @section breadcrumb {
     <div class="breadcrumbs" id="js-breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li><a href="@Url.LegacyEasAccountAction($"accounts/{@Model.Data.HashedAccountId}/teams")">Home</a></li>
             <li><a href="@Url.Action("Index", "EmployerAccountTransactions")">Your transactions</a></li>
             <li>Debit details</li>
         </ol>
