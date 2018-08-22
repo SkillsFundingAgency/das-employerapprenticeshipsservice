@@ -125,6 +125,8 @@
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\FlashMessageViewModel.cs" />
     <Compile Include="ViewModels\ProviderPaymentsSummaryViewModel.cs" />
@@ -237,6 +239,7 @@
     <Content Include="Views\Shared\_SuccessMessage.cshtml" />
     <Content Include="Views\Shared\Privacy.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\CoursePaymentSummary.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
