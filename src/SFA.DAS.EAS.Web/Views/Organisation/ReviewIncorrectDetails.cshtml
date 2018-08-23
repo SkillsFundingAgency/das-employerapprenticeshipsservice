@@ -7,43 +7,32 @@
     ViewBag.PageID = "update-organisation-details";
 }
 <div class="grid-row">
-    <div>
+    <div class="column-two-thirds">
+
         <h1 class="heading-xlarge">Update your organisation's details</h1>
-    </div>
 
-    <div>
-        <div>
-            Please ensure you've updated your organisation's details at <span>@Model.DataSourceFriendlyName</span>. This update can take up to 7 working days to process.
+        <div class="panel panel-border-wide">
+                Please ensure you've updated your organisation's details at <span>@Model.DataSourceFriendlyName</span>. This update can take up to 7 working days to process.
         </div>
-        <div>
-            If you have done this and the updated information is still not displayed here, please contact support for further help.
-        </div>
-        
-        <div>
-            <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
 
-                <fieldset>
-                    <legend>
-                        <span class="vh">What's next?</span>
-                    </legend>
+        <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")">contact support</a> for further help.</p>
 
-                    <label for="acceptAgreement" class="block-label">
-                        <span class="form-label">Go to your organisations and agreements</span>
-                        <input type="radio" name="nextStep" value="dashboard"/>
-                    </label>
 
-                    <label for="teamMembers" class="block-label">
-                        <span class="form-label">Go to the homepage</span>
-                        <input type="radio" name="nextStep" value="homepage"/>
-                    </label>
-
-                    <div class="form-group">
-                        <button type="submit" class="button">Continue</button>
-                    </div>
-
-                </fieldset>
-            </form>
-        </div>
+        <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
+            <div class="form-group">
+                <h2 class="heading-large">What's next?</h2>
+                <div class="multiple-choice">
+                    <input type="radio" name="nextStep" value="dashboard" />
+                    <label for="acceptAgreement">Go to your organisations and agreements</label>
+                </div>
+                
+                <div class="multiple-choice">
+                    <input type="radio" name="nextStep" value="homepage" />
+                    <label for="teamMembers">Go to the homepage</label>
+                </div>
+            </div>
+            <button type="submit" class="button">Continue</button>
+        </form>
     </div>
 </div>
 
