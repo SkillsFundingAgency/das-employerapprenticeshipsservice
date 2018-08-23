@@ -36,14 +36,14 @@
             </ul>
             <p>Once you and your training provider approve the apprenticeship details, a transfer request is automatically sent to the sending employer to review.</p>
         </div>
-        <h2 class="heading-xlarge">What next?</h2>
+        <h2 class="heading-xlarge">What's next?</h2>
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
             <div class="form-group @(Html.IsValid(m => m.Choice) ? "" : "error")">
                 <fieldset>
                     <legend>
-                        <span class="visuallyhidden">What next?</span>
+                        <span class="visuallyhidden">What's next?</span>
                         @Html.ValidationMessageFor(m => m.Choice)
                     </legend>
                     <label class="block-label selection-button-radio">

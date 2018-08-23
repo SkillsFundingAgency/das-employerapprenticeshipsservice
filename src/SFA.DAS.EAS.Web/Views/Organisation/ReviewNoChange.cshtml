@@ -7,16 +7,12 @@
     ViewBag.PageID = "update-organisation-details";
 }
 <div class="grid-row">
-    <div>
+    <div class="column-two-thirds">
         <h1 class="heading-xlarge">Review your details</h1>
-    </div>
+        <p>Here are the most up-to-date details we found for your organisation. These details are the same as those previously held.</p>
 
-    <div>
-        <div>
-            Here are the most up-to-date details we found for your organisation. These details are the same as those previously held.
-        </div>
-        <div>
-            <table>
+        <div class="form-group">
+            <table class="details-list">
                 <tbody>
                     <tr>
                         <td>Information from</td>
@@ -32,37 +28,33 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
-        
-        <div>
-            If these details are incorrect, you need to update them at @Model.Data.DataSourceFriendlyName. This update can take up to 7 working days to process.
-        </div>
 
-        <div>
+            <div class="panel panel-border-wide">
+                If these details are incorrect, you need to update them at @Model.Data.DataSourceFriendlyName. This update can take up to 7 working days to process.
+            </div>
+
+            <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")">contact support</a> for further help.</p>
+
             <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
-                <fieldset>
-                    <legend>
-                        <span class="vh">What's next?</span>
-                    </legend>
+                <div class="form-group">
+                    <h2 class="heading-large">
+                        What's next?
+                    </h2>
 
-                    <label for="acceptAgreement" class="block-label">
-                        <span class="form-label">Go to your organisations and agreements</span>
-                        <input type="radio" name="nextStep" value="dashboard"/>
-                    </label>
-
-                    <label for="teamMembers" class="block-label">
-                        <span class="form-label">Go to the homepage</span>
-                        <input type="radio" name="nextStep" value="homepage"/>
-                    </label>
-
-                    <div class="form-group">
-                        <button type="submit" class="button">Continue</button>
+                    <div class="multiple-choice">
+                        <input type="radio" name="nextStep" value="dashboard" />
+                        <label for="acceptAgreement">Go to your organisations and agreements</label>
                     </div>
-
-                </fieldset>
+                    <div class="multiple-choice">
+                        <input type="radio" name="nextStep" value="homepage" />
+                        <label for="teamMembers">Go to the homepage</label>
+                    </div>
+                </div>
+                <button type="submit" class="button">Continue</button>
             </form>
         </div>
     </div>
+
 </div>
 
 
