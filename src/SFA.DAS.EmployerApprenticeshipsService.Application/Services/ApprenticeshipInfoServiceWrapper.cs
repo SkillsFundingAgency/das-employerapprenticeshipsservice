@@ -73,7 +73,7 @@ namespace SFA.DAS.EAS.Application.Services
                 throw;
             }
             catch (EntityNotFoundException)
-            {
+            {//Put in check here, select provider name from PaymentMetaData join Payment on paymentmetadataid where ukprn = this.ukprn
                 return null;
             }
         }
