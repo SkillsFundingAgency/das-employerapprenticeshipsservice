@@ -18,5 +18,6 @@ namespace SFA.DAS.EmployerFinance.Web.ViewModels
         public decimal PaymentsTotal => LevyPaymentsTotal + SFACoInvestmentTotal + EmployerCoInvestmentTotal;
 
         public ICollection<AprrenticeshipPaymentSummaryViewModel> ApprenticePayments { get; set; }
+        public string HashedAccountId { get; set; }
     }
 }

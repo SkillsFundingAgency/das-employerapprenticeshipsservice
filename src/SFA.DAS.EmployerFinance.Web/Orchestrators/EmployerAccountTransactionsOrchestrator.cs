@@ -157,7 +157,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                         LevyPaymentsTotal = apprenticePayments.Sum(p => p.LevyPaymentAmount),
                         SFACoInvestmentTotal = apprenticePayments.Sum(p => p.SFACoInvestmentAmount),
                         EmployerCoInvestmentTotal = apprenticePayments.Sum(p => p.EmployerCoInvestmentAmount),
-                        ApprenticePayments = apprenticePayments
+                        ApprenticePayments = apprenticePayments,
+                        HashedAccountId = hashedAccountId
                     }
                 };
             }
