@@ -416,7 +416,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\.keep" />
-    <Content Include="NLog.config" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
