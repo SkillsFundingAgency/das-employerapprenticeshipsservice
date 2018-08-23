@@ -19,6 +19,9 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
                 c.AddRegistry<HashingRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
+                c.AddRegistry<HashingRegistry>();
+                c.AddRegistry<MapperRegistry>();
+
             });
         }
     }

@@ -1,9 +1,10 @@
 ﻿@using System.Globalization
-@using SFA.DAS.EAS.Domain.Models.Payments
-@using SFA.DAS.EAS.Domain.Models.Transaction
-@using SFA.DAS.EAS.Domain.Models.Transfers
-@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.TransactionViewResultViewModel>
+@using SFA.DAS.EmployerFinance.Models.Payments
+@using SFA.DAS.EmployerFinance.Models.Transaction
+@using SFA.DAS.EmployerFinance.Models.Transfers
+@using SFA.DAS.EmployerFinance.Web.Extensions
+@model OrchestratorResponse<SFA.DAS.EmployerFinance.Web.ViewModels.TransactionViewResultViewModel>
+
 @{
     var culture = new CultureInfo("en-GB");
 }
@@ -17,9 +18,9 @@
     var nextMonthDate = displayingMonthDate.AddMonths(1);
 }
 
-@{
+@*@{
     ViewBag.GaData.Vpv = "/accounts/balance/" + Model.Data.Year + "/" + Model.Data.Month + "/page-transactions";
-}
+}*@
 
 <div class="grid-row">
     <div class="column-full">
@@ -148,22 +149,22 @@
                                 {
                                     var transferTransaction = aggregationLine as TransferTransactionLine;
 
-                                    var targetAccountPublicHashedId = 
-                                        transferTransaction.TransactionAccountIsTransferSender ? 
+                                    var targetAccountPublicHashedId =
+                                        transferTransaction.TransactionAccountIsTransferSender ?
                                             transferTransaction?.ReceiverAccountPublicHashedId :
                                             transferTransaction?.SenderAccountPublicHashedId;
 
-                                        <a title="View details for the transfer transaction on @date"
-                                           href="@Url.Action("TransferDetail", "EmployerAccountTransactions",
+                                    <a title="View details for the transfer transaction on @date"
+                                       href="@Url.Action("TransferDetail", "EmployerAccountTransactions",
                                                      new
                                                      {
                                                          HashedAccountId = Model.Data.Model.Data.HashedAccountId,
                                                          TargetAccountPublicHashedId = targetAccountPublicHashedId,
                                                          PeriodEnd = transferTransaction?.PeriodEnd
                                                      })">
-                                            Details <span class="vh"> for the transfer transaction on @date</span>
-                                        </a>
-                                    
+                                        Details <span class="vh"> for the transfer transaction on @date</span>
+                                    </a>
+
                                 }
 
                             </td>
@@ -217,7 +218,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId})">Home</a></li>
+            @*<li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId})">Home</a></li>*@
             <li><a href="@Url.Action("Index", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId})">Finance</a></li>
             <li>@ViewBag.Title</li>
         </ol>

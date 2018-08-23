@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using StructureMap;
 using StructureMap.TypeRules;
+using System;
+using System.Linq;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
 {
