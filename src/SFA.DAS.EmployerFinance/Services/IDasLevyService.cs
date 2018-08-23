@@ -9,7 +9,11 @@ namespace SFA.DAS.EmployerFinance.Services
 {
     public interface IDasLevyService
     {
-        Task<ICollection<T>> GetAccountProviderPaymentsByDateRange<T>(
+        Task<ICollection<TransactionLine>> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
+
+        Task<int> GetPreviousAccountTransaction(long AccountId, DateTime FromDate);
+		
+		Task<ICollection<T>> GetAccountProviderPaymentsByDateRange<T>(
             long accountId, long ukprn, DateTime fromDate, DateTime toDate)
             where T : TransactionLine;
 

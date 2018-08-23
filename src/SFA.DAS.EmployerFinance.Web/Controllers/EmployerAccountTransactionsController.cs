@@ -1,4 +1,4 @@
-using SFA.DAS.Authentication;
+﻿using SFA.DAS.Authentication;
 using SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails;
 using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.EmployerFinance.Web.Helpers;
@@ -13,12 +13,16 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAccountTransactionsController : BaseController
     {
+        private readonly IAuthenticationService _owinWrapper;
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
 
-        public EmployerAccountTransactionsController(IAuthenticationService owinWrapper,
+
+
+        public EmployerAccountTransactionsController(
+            IAuthenticationService owinWrapper,
             EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator)
-            : base(owinWrapper)
         {
+            _owinWrapper = owinWrapper;
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }
 
@@ -46,9 +50,17 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [Route("finance/{year}/{month}")]
         [Route("balance/{year}/{month}")]
-        public ActionResult TransactionsView(string hashedAccountId, int year, int month)
+        public async Task<ActionResult> TransactionsView(string hashedAccountId, int year, int month)
         {
-            return Redirect(Url.LegacyEasAccountAction($"finance/{year}/{month}"));
+            var transactionViewResult = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, year, month, _owinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+
+            if (transactionViewResult.Data.Account == null)
+            {
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.AccessDeniedControllerName);
+            }
+
+            transactionViewResult.Data.Model.Data.HashedAccountId = hashedAccountId;
+            return View(transactionViewResult);
         }
 
         [Route("finance/levyDeclaration/details")]

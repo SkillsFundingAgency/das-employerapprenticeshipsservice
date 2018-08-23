@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Dapper;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Models.Levy;
@@ -11,6 +7,10 @@ using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
@@ -38,6 +38,69 @@ namespace SFA.DAS.EmployerFinance.Data
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
+        }
+
+        public Task<int> GetPreviousTransactionsCount(long accountId, DateTime fromDate)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@fromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day), DbType.DateTime);
+
+            return _db.Value.Database.Connection.ExecuteScalarAsync<int>(
+                sql: "[employer_financial].[GetPreviousTransactionsCount]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<List<TransactionLine>> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@fromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day), DbType.DateTime);
+            parameters.Add("@toDate", new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59), DbType.DateTime);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<TransactionEntity>(
+                sql: "[employer_financial].[GetTransactionLines_ByAccountId]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return MapTransactions(result);
+        }
+
+        private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)
+        {
+            var transactions = new List<TransactionLine>();
+
+            foreach (var entity in transactionEntities)
+            {
+                switch (entity.TransactionType)
+                {
+                    case TransactionItemType.Declaration:
+                    case TransactionItemType.TopUp:
+                        transactions.Add(_mapper.Map<LevyDeclarationTransactionLine>(entity));
+                        break;
+
+                    case TransactionItemType.Payment:
+                        transactions.Add(_mapper.Map<PaymentTransactionLine>(entity));
+                        break;
+
+                    case TransactionItemType.Transfer:
+                        transactions.Add(_mapper.Map<TransferTransactionLine>(entity));
+                        break;
+
+                    case TransactionItemType.Unknown:
+                        transactions.Add(_mapper.Map<TransactionLine>(entity));
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            return transactions;
         }
 
         private static DataTable CreateTransferTransactionDataTable(IEnumerable<TransferTransactionLine> transactions)

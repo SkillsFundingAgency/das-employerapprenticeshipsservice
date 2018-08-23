@@ -8,7 +8,6 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.Authorization;
-using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.HashingService;
@@ -65,7 +64,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         public async Task ThenTransactionsAreRetrievedForTheAccount()
         {
             //Act
-            var result = await _controller.TransactionsView("TEST", 2017, 1);
+            var result = _controller.TransactionsView("TEST", 2017, 1);
 
             //Assert
             _orchestrator.Verify(x => x.GetAccountTransactions(It.Is<string>(s => s == "TEST"), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Once);
@@ -76,7 +75,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         public async Task ThenPreivousTransactionsStatusIsShown()
         {
             //Act
-            var result = await _controller.TransactionsView("TEST", 2017, 1);
+            var result = _controller.TransactionsView("TEST", 2017, 1);
 
             var viewResult = result as ViewResult;
             var viewModel = viewResult?.Model as OrchestratorResponse<TransactionViewResultViewModel>;
