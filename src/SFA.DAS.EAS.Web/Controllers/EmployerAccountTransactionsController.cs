@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Attributes;
+using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -73,17 +74,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [Route("finance/{year}/{month}")]
         [Route("balance/{year}/{month}")]
-        public async Task<ActionResult> TransactionsView(string hashedAccountId, int year, int month)
+        public ActionResult TransactionsView(string hashedAccountId, int year, int month)
         {
-            var transactionViewResult = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, year, month, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            if (transactionViewResult.Data.Account == null)
-            {
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.AccessDeniedControllerName);
-            }
-
-            transactionViewResult.Data.Model.Data.HashedAccountId = hashedAccountId;
-            return View(transactionViewResult);
+            return Redirect(Url.EmployerFinanceAction($"finance/{year}/{month}{Request.QueryString}"));
         }
 
         [Route("finance/levyDeclaration/details")]
