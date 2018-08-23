@@ -14,25 +14,10 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     public class EmployerAccountTransactionsController : BaseController
     {
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
-        //private readonly IMapper _mapper;
-        //private readonly IMediator _mediator;
-
-        //public EmployerAccountTransactionsController(IAuthenticationService owinWrapper, IAuthorizationService authorization,
-        //IHashingService hashingService,
-        //IMediator mediator,
-        //EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService,
-        //ICookieStorageService<FlashMessageViewModel> flashMessage, ITransactionFormatterFactory transactionsFormatterFactory,
-        //IMapper mapper)
-        //: base(owinWrapper, multiVariantTestingService, flashMessage)
-        //{
-        //    _mediator = mediator;
-        //    _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
-        //    _mapper = mapper;
-        //}
 
         public EmployerAccountTransactionsController(IAuthenticationService owinWrapper,
-        EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator)
-        : base(owinWrapper)
+            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator)
+            : base(owinWrapper)
         {
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }
@@ -92,24 +77,6 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
             return View(ControllerConstants.CoursePaymentSummaryViewName, viewModel);
         }
-
-        //[Route("finance/course/standard/summary")]
-        //[Route("balance/course/standard/summary")]
-        //public ActionResult CourseStandardPaymentSummary(string hashedAccountId, long ukprn, string courseName,
-        //    int? courseLevel, DateTime fromDate, DateTime toDate)
-        //{
-        //    //TODO: Implement locally
-        //    return Redirect(Url.LegacyEasAccountAction($"finance/course/standard/summary{Request?.Url?.Query}"));
-        //}
-
-        //[Route("finance/course/framework/summary")]
-        //[Route("balance/course/framework/summary")]
-        //public ActionResult CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName,
-        //    int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
-        //{
-        //    //TODO: Implement locally
-        //    return Redirect(Url.LegacyEasAccountAction($"finance/course/framework/summary{Request?.Url?.Query}"));
-        //}
 
         [Route("finance/transfer/details")]
         [Route("balance/transfer/details")]
