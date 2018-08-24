@@ -56,7 +56,15 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 
             foreach (var employerLevyData in message.EmployerLevyData)
             {
-                var declarations = employerLevyData.Declarations.Declarations.OrderBy(c => c.SubmissionDate).ToArray();
+                if (employerLevyData.Declarations.Declarations
+                    .Any(d => !d.LevyDueYtd.HasValue))
+                {
+                    _logger.Warn($"Account Id {message.AccountId} has declarations with no Levy YTD values");
+                }
+
+                var declarations = employerLevyData.Declarations.Declarations
+                    .Where(d => d.LevyDueYtd.HasValue)
+                    .OrderBy(c => c.SubmissionDate).ToArray();
 
                 declarations = FilterDuplicateHmrcDeclarations(employerLevyData.EmpRef, declarations);
 
@@ -87,8 +95,8 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
         /// </summary> 
         private DasDeclaration[] FilterDuplicateHmrcDeclarations(string empRef,
             DasDeclaration[] declarations)
-        { 
-            var duplicateIds = declarations.GroupBy(d => d.Id).Where(g => g.Count() > 1)    
+        {
+            var duplicateIds = declarations.GroupBy(d => d.Id).Where(g => g.Count() > 1)
                 .Select(s => s.First().Id).ToList();
 
             if (duplicateIds.Any())
@@ -96,9 +104,9 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
                 _logger.Info($"PayeScheme '{empRef}' has duplicate submission id(s) from Hmrc = '{string.Join(", ", duplicateIds)}'");
             }
 
-            return declarations.DistinctBy(x => x.Id).ToArray(); 
-        } 
- 
+            return declarations.DistinctBy(x => x.Id).ToArray();
+        }
+
         private async Task ProcessEndOfYearAdjustmentDeclarations(IEnumerable<DasDeclaration> declarations, EmployerLevyData employerLevyData)
         {
             var endOfYearAdjustmentDeclarations = declarations.Where(IsEndOfYearAdjustment).ToList();
