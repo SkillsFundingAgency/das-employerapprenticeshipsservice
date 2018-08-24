@@ -6,6 +6,11 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
 {
     public static class UrlHelperExtensions
     {
+        public static string CommitmentsAction(this UrlHelper helper, string path)
+        {
+            return Action(helper, path, ControllerConstants.CommitmentsBaseUrlKeyName);
+        }
+
         public static string LegacyEasAccountAction(this UrlHelper helper, string path)
         {
             return AccountAction(helper, path, ControllerConstants.LegacyEasBaseUrlKeyName);
@@ -23,7 +28,13 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
 
             return Action(accountPath, baseUrlKeyName);
         }
+        private static string Action(UrlHelper helper, string path, string baseUrlKeyName)
+        {
+            var baseUrl = CloudConfigurationManager.GetSetting(baseUrlKeyName)?.TrimEnd('/');
+            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
 
+            return $"{baseUrl}/accounts/{hashedAccountId}/{path}";
+        }
         private static string Action(string path, string baseUrlKeyName)
         {
             var baseUrl = CloudConfigurationManager.GetSetting(baseUrlKeyName)?.TrimEnd('/');
