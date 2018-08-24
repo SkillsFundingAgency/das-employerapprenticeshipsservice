@@ -5,7 +5,7 @@ AS
 	SET NOCOUNT ON
 
 	DECLARE @previousYearLevyTotal DECIMAL(18,4)
-	DECLARE @transferAllowance DECIMAL(18,4)
+	DECLARE @startingTransferAllowance DECIMAL(18,4)
 	DECLARE @transferSpent DECIMAL(18,5)
 
 	-- Get last years total levy
@@ -18,7 +18,7 @@ AS
 			AND lines.AccountId = @AccountId	
 
 	-- Get the transfer allowance for the current year
-	SET @transferAllowance = @previousYearLevyTotal * @allowancePercentage
+	SET @startingTransferAllowance = @previousYearLevyTotal * @allowancePercentage
 
 	-- Get total transfer allowance spent this year
 	SELECT @transferSpent = ISNULL(SUM(transfers.Amount), 0) FROM [employer_financial].[AccountTransfers] transfers
@@ -27,5 +27,5 @@ AS
 	AND transfers.CreatedDate >= previousFinancialYear.YearEnd
 
 	-- Return the current available transfer allowance	
-	SELECT @transferAllowance - @transferSpent
+	SELECT @startingTransferAllowance as StartingTransferAllowance, @startingTransferAllowance - @transferSpent as RemainingTransferAllowance
 GO

@@ -2,11 +2,12 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Web.ViewModels.Transfers;
-using System.Web.Mvc;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Mappings;
+using SFA.DAS.EAS.Web.ViewModels.Transfers;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
 {
@@ -19,12 +20,18 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
         private IConfigurationProvider _mapperConfig;
         private IMapper _mapper;
         private Mock<IMediator> _mediator;
+        private TransferAllowance _transferAllowance;
 
         [SetUp]
         public void Arrange()
         {
+            _transferAllowance = new TransferAllowance
+            {
+                RemainingTransferAllowance = 123.456m,
+                StartingTransferAllowance = 234.56M
+            };
             _query = new GetTransferAllowanceQuery();
-            _response = new GetTransferAllowanceResponse { TransferAllowance = 123.456m };
+            _response = new GetTransferAllowanceResponse { TransferAllowance = _transferAllowance };
             _mapperConfig = new MapperConfiguration(c => c.AddProfile<TransferMappings>());
             _mapper = _mapperConfig.CreateMapper();
             _mediator = new Mock<IMediator>();
@@ -50,7 +57,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.TransfersControllerTests
             Assert.That(result, Is.Not.Null);
             Assert.That(result.ViewName, Is.EqualTo(""));
             Assert.That(model, Is.Not.Null);
-            Assert.That(model.TransferAllowance, Is.EqualTo(_response.TransferAllowance));
+            Assert.That(model.RemainingTransferAllowance, Is.EqualTo(_response.TransferAllowance.RemainingTransferAllowance));
         }
     }
 }

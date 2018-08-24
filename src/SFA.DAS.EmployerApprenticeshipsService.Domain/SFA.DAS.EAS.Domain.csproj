@@ -363,6 +363,7 @@
     <Compile Include="Models\TransferConnections\TransferConnectionInvitationStatus.cs" />
     <Compile Include="Models\Transfers\AccountTransfer.cs" />
     <Compile Include="Models\Transfers\AccountTransferDetails.cs" />
+    <Compile Include="Models\Transfers\TransferAllowance.cs" />
     <Compile Include="Models\Transfers\TransferTransactionLine.cs" />
     <Compile Include="Models\UserProfile\Role.cs" />
     <Compile Include="Models\UserProfile\User.cs" />

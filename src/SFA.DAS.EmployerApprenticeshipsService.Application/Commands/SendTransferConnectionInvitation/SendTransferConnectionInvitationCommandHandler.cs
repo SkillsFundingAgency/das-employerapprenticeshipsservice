@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
             var receiverAccount = await _employerAccountRepository.GetAccountById(receiverAccountId);
             var senderUser = await _userRepository.GetUserById(message.UserId.Value);
             var senderAccountTransferAllowance = await _transferAllowanceService.GetTransferAllowance(message.AccountId.Value);
-            var transferConnectionInvitation = senderAccount.SendTransferConnectionInvitation(receiverAccount, senderUser, senderAccountTransferAllowance);
+            var transferConnectionInvitation = senderAccount.SendTransferConnectionInvitation(receiverAccount, senderUser, senderAccountTransferAllowance.RemainingTransferAllowance ?? 0);
 
             await _transferConnectionInvitationRepository.Add(transferConnectionInvitation);
 
