@@ -21,6 +21,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         public EmployerAccountTransactionsController(
             IAuthenticationService owinWrapper,
             EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator)
+        : base(owinWrapper)
         {
             _owinWrapper = owinWrapper;
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
@@ -67,7 +68,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [Route("balance/levyDeclaration/details")]
         public ActionResult LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
         {
-           return Redirect(Url.LegacyEasAccountAction($"finance/levyDeclaration/details{Request?.Url?.Query}"));
+            return Redirect(Url.LegacyEasAccountAction($"finance/levyDeclaration/details{Request?.Url?.Query}"));
         }
 
         [Route("finance/course/standard/summary")]

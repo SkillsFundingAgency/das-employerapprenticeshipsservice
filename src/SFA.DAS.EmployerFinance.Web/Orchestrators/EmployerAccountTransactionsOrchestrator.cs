@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.Transaction;
+using SFA.DAS.EmployerFinance.Queries.FindAccountProviderPayments;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
@@ -32,8 +33,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             _currentTime = currentTime;
             _logger = logger;
         }
-		     public async Task<OrchestratorResponse<ProviderPaymentsSummaryViewModel>> GetProviderPaymentSummary(
-            string hashedId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
+        public async Task<OrchestratorResponse<ProviderPaymentsSummaryViewModel>> GetProviderPaymentSummary(
+       string hashedId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
         {
             try
             {
