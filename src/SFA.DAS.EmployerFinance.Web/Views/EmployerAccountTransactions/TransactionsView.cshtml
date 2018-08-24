@@ -132,7 +132,7 @@
                                 @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
                                      aggregationLine.TransactionType == TransactionItemType.TopUp)
                                 {
-                                    <a title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
+                                    <a id="LevyDeclarationDetails" title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
                                         Details <span class="vh"> for the transaction on @date</span>
                                     </a>
                                 }
@@ -140,7 +140,7 @@
                                 {
                                     var paymentTransaction = aggregationLine as PaymentTransactionLine;
 
-                                    <a title="View details for the transaction on @date" href="@Url.Action("ProviderPaymentSummary", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, ukPrn = paymentTransaction?.UkPrn, fromDate = fromDate, toDate = toDate })">
+                                    <a id="ProviderPaymentDetails" title="View details for the transaction on @date" href="@Url.Action("ProviderPaymentSummary", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, ukPrn = paymentTransaction?.UkPrn, fromDate = fromDate, toDate = toDate })">
                                         Details <span class="vh"> for the transaction on @date</span>
 
                                     </a>
@@ -154,7 +154,9 @@
                                             transferTransaction?.ReceiverAccountPublicHashedId :
                                             transferTransaction?.SenderAccountPublicHashedId;
 
-                                    <a title="View details for the transfer transaction on @date"
+                                    var transferDetailClickId = transferTransaction.TransactionAccountIsTransferSender ? "SenderTransferDetails" : "ReceiverTransferDetails";
+
+                                    <a id="@transferDetailClickId" title="View details for the transfer transaction on @date"
                                        href="@Url.Action("TransferDetail", "EmployerAccountTransactions",
                                                      new
                                                      {
