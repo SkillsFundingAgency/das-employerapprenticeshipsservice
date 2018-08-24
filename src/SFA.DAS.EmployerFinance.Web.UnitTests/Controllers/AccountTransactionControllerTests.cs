@@ -1,45 +1,28 @@
-﻿using AutoMapper;
-using MediatR;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.Transaction;
-using SFA.DAS.EAS.Infrastructure.Authentication;
-using SFA.DAS.EAS.Infrastructure.Authorization;
-using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.HashingService;
+using SFA.DAS.Authentication;
+using SFA.DAS.EmployerFinance.Models.Account;
+using SFA.DAS.EmployerFinance.Models.Transaction;
+using SFA.DAS.EmployerFinance.Web.Orchestrators;
+using SFA.DAS.EmployerFinance.Web.ViewModels;
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
+namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers
 {
-    public class WhenIViewTransactions
+    public class AccountTransactionControllerTests
     {
         private Web.Controllers.EmployerAccountTransactionsController _controller;
         private Mock<EmployerAccountTransactionsOrchestrator> _orchestrator;
         private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IAuthorizationService> _featureToggle;
-        private Mock<IMultiVariantTestingService> _userViewTestingService;
-        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
-        private Mock<IHashingService> _hashingService;
-        private Mock<IMediator> _mediator;
+
 
         [SetUp]
         public void Arrange()
         {
             _orchestrator = new Mock<EmployerAccountTransactionsOrchestrator>();
             _owinWrapper = new Mock<IAuthenticationService>();
-            _featureToggle = new Mock<IAuthorizationService>();
-            _userViewTestingService = new Mock<IMultiVariantTestingService>();
-            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-
-            _hashingService = new Mock<IHashingService>();
-            _mediator = new Mock<IMediator>();
 
             _orchestrator.Setup(x => x.GetAccountTransactions(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<TransactionViewResultViewModel>
@@ -55,10 +38,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                     }
                 });
 
-            _controller = new Web.Controllers.EmployerAccountTransactionsController(_owinWrapper.Object,
-                _featureToggle.Object, _hashingService.Object, _mediator.Object,
-                _orchestrator.Object, _userViewTestingService.Object, _flashMessage.Object,
-                Mock.Of<ITransactionFormatterFactory>(), Mock.Of<IMapper>());
+            _controller = new Web.Controllers.EmployerAccountTransactionsController(
+                _owinWrapper.Object, _orchestrator.Object);
         }
 
         [Test]

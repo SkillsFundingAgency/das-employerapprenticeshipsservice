@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
-using Dapper;
+﻿using Dapper;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
@@ -28,6 +29,21 @@ namespace SFA.DAS.EmployerFinance.Data
                 commandType: CommandType.Text);
 
             return result.AsList();
+        }
+
+        public async Task<Account> GetAccountByHashedId(string hashedAccountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<Account>(
+                sql: "select a.* from [employer_account].[Account] a where a.HashedId = @HashedAccountId;",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
+
+            return result.SingleOrDefault();
         }
     }
 }
