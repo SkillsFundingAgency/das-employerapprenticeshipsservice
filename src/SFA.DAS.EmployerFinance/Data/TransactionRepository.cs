@@ -71,38 +71,6 @@ namespace SFA.DAS.EmployerFinance.Data
             return MapTransactions(result);
         }
 
-        private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)
-        {
-            var transactions = new List<TransactionLine>();
-
-            foreach (var entity in transactionEntities)
-            {
-                switch (entity.TransactionType)
-                {
-                    case TransactionItemType.Declaration:
-                    case TransactionItemType.TopUp:
-                        transactions.Add(_mapper.Map<LevyDeclarationTransactionLine>(entity));
-                        break;
-
-                    case TransactionItemType.Payment:
-                        transactions.Add(_mapper.Map<PaymentTransactionLine>(entity));
-                        break;
-
-                    case TransactionItemType.Transfer:
-                        transactions.Add(_mapper.Map<TransferTransactionLine>(entity));
-                        break;
-
-                    case TransactionItemType.Unknown:
-                        transactions.Add(_mapper.Map<TransactionLine>(entity));
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-            return transactions;
-        }
-
         private static DataTable CreateTransferTransactionDataTable(IEnumerable<TransferTransactionLine> transactions)
         {
             var table = new DataTable();

@@ -292,7 +292,6 @@
     <Compile Include="Controllers\EmployerAccountTransactionsControllerTests\WhenIDownloadTransactionsByDate.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsControllerTests\WhenIViewFinanceDashboard.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsControllerTests\WhenIViewTranferTransactions.cs" />
-    <Compile Include="Controllers\EmployerAccountTransactionsControllerTests\WhenIViewTransactions.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests.cs" />
     <Compile Include="Controllers\EmployerTeamControllerTests\WhenIViewNextSteps.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenIHandleNewRegistration.cs" />
