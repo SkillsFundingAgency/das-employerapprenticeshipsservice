@@ -10,5 +10,7 @@ namespace SFA.DAS.EmployerFinance.Data
     {
         Task CreateTransferTransactions(IEnumerable<TransferTransactionLine> transaction);
         Task<List<TransactionLine>> GetAccountTransactionByProviderAndDateRange(long accountId, long ukprn, DateTime fromDate, DateTime toDate);
+        Task<List<TransactionLine>> GetAccountCoursePaymentsByDateRange(long accountId, long ukprn, string courseName, int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate);
+
     }
 }
