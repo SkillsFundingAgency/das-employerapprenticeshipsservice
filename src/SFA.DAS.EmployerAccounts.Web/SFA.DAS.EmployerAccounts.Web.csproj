@@ -134,7 +134,6 @@
     <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
-    <Compile Include="Models\GoogleAnalyticsModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -570,6 +569,9 @@
       <Project>{8dd6e754-567c-46e3-a071-b1049380ea6c}</Project>
       <Name>SFA.DAS</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

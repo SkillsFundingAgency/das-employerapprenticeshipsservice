@@ -1,13 +1,7 @@
-﻿
-@using Microsoft.ApplicationInsights.Extensibility
-@using SFA.DAS.EmployerAccounts.Models.Features
-@using SFA.DAS.EmployerAccounts.Web
+﻿@using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.EmployerAccounts.Web.Extensions
-@using SFA.DAS.EmployerAccounts.Web.Models
 @using SFA.DAS.EmployerAccounts.Web.ViewModels
 @using SFA.DAS.Extensions
-@using System.Web
-@using System.Web.Optimization
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -56,12 +50,13 @@
     @RenderSection("gaDataLayer", required: false)
 
     <!-- Google Tag Manager -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-83918739-9"></script>
     <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-	@Html.Raw(GoogleAnalyticsModel.Instance.GoogleHeaderUrl);f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-KWQBWGJ');</script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-83918739-9');
+    </script>
     <!-- End Google Tag Manager -->
 
     <script type="text/javascript">
@@ -80,10 +75,8 @@
 <body id="@ViewBag.PageID">
 
     <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="@Html.Raw(GoogleAnalyticsModel.Instance.GoogleBodyUrl)"
-                height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
+    <script>(function (w, d, s, l, i) { w[l]‌‌=w[l]‌‌|| []‌‌; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' }); var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f); })(window, document, 'script', 'dataLayer', 'GTM-KWQBWGJ');</script>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
@@ -182,11 +175,11 @@ if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetPro
                 <nav class="header-inner">
                     <ul role="menubar" id="global-nav-links">
                         <li><a href="@Url.Action("Index", "EmployerTeam")" class="@(ViewBag.Section == "home" ? "selected" : "")" role="menuitem">Home</a></li>
-                        <li><a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
+                        <li><a href="@Url.LegacyEasAccountAction("finance")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
                         @*@if (Html.IsAuthorized(FeatureType.Recruitments))
-                        {
-                            <li><a href="@Url.RecruitmentsAction()" role="menuitem">Recruitment</a></li>
-                        }*@
+                            {
+                                <li><a href="@Url.RecruitmentsAction()" role="menuitem">Recruitment</a></li>
+                            }*@
                         <li><a href="@Url.CommitmentsAction("apprentices/home")" class="@(controllerString == "EmployerCommitments" ? "selected" : "")" role="menuitem">Apprentices</a></li>
                         <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Your team</a></li>
                         <li><a href="@Url.Action("Index", "EmployerAgreement")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Your organisations and agreements</a></li>
