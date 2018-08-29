@@ -31,6 +31,7 @@ using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntitiy;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
 using SFA.DAS.EAS.Application.Queries.GetOrganisationById;
 using SFA.DAS.EAS.Infrastructure.Extensions;
+using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Web.Validation;
 using SFA.DAS.HashingService;
 
@@ -42,7 +43,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly ILog _logger;
         private readonly IMapper _mapper;
         private readonly ICookieStorageService<EmployerAccountData> _cookieService;
-        private readonly IHashingService _accountLegalEntityHashingService;
+        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
 
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
@@ -54,8 +55,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             IMediator mediator, 
             ILog logger, 
             IMapper mapper, 
-            ICookieStorageService<EmployerAccountData> cookieService, 
-            IHashingService accountLegalEntityHashingService)
+            ICookieStorageService<EmployerAccountData> cookieService,
+            IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
             : base(mediator)
         {
             _mediator = mediator;

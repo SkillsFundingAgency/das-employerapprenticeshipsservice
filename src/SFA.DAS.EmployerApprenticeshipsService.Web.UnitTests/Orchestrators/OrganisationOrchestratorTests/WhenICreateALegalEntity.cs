@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.HashingService;
@@ -25,7 +26,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
         private Mock<IMapper> _mapper;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IAccountLegalEntityPublicHashingService> _hashingService;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
         [SetUp]
@@ -34,7 +35,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
             _mapper = new Mock<IMapper>();
-            _hashingService = new Mock<IHashingService>();
+            _hashingService = new Mock<IAccountLegalEntityPublicHashingService>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _orchestrator = new OrganisationOrchestrator(
