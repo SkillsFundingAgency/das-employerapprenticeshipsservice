@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.EmployerFinance.Services;
+using SFA.DAS.Exceptions;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTests
 {
@@ -32,6 +33,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
         private RefreshAccountTransfersCommand _command;
         private Mock<IMessagePublisher> _messagePublisher;
         private AccountTransferDetails _details;
+        private AccountTransfer _accountTransfer;
 
 
         [SetUp]
@@ -52,7 +54,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
                 PaymentTotal = 1200
             };
 
-            var accountTransfer = new AccountTransfer
+            _accountTransfer = new AccountTransfer
             {
                 SenderAccountId = SenderAccountId,
                 SenderAccountName = SenderAccountName,
@@ -64,7 +66,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
 
             _transfers = new List<AccountTransfer>
             {
-                accountTransfer
+                _accountTransfer
             };
 
             _command = new RefreshAccountTransfersCommand
@@ -96,7 +98,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             _accountRepository.Setup(x => x.GetAccountNames(It.Is<IEnumerable<long>>(ids => ids.All(id => id == SenderAccountId))))
                 .ReturnsAsync(new Dictionary<long, string>
                 {
-                    {accountTransfer.SenderAccountId, SenderAccountName}
+                    {_accountTransfer.SenderAccountId, SenderAccountName}
                 });
         }
 
@@ -284,6 +286,58 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
 
             //Assert
             _logger.Verify(x => x.Warn("Transfer total does not match transfer payments total"));
+        }
+
+        [Test]
+        public async Task ThenATransferPamentsForTheSameApprenticeAndCourseShouldBeAggregated()
+        {
+            //Assert
+            //Duplicate the transfer to simulate two transfers from different delivery periods
+            //(We will not be catching duplicate transfers that exactly match as there is no ID or value in the transfer that remains unique to help us)
+            _transfers.Add(_accountTransfer);
+
+            _paymentService.Setup(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId))
+                .ReturnsAsync(_transfers);
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            //There should be only one transfer which has combine amount of above
+            _transferRepository.Verify(x => x.CreateAccountTransfers(It.Is<IEnumerable<AccountTransfer>>(
+                transfers =>
+                    transfers.All(t => t.Amount.Equals(_accountTransfer.Amount * 2)))), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenATransferPamentsForTheSameApprenticeButDifferentCourseShouldNotBeAggregated()
+        {
+            //Assert
+
+            _transfers.Add(new AccountTransfer
+            {
+                Amount = _accountTransfer.Amount,
+                PeriodEnd = _accountTransfer.PeriodEnd,
+                SenderAccountId = _accountTransfer.SenderAccountId,
+                ReceiverAccountId = _accountTransfer.ReceiverAccountId,
+                CommitmentId = _accountTransfer.CommitmentId + 1
+            });
+
+
+            _paymentService.Setup(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId))
+                .ReturnsAsync(_transfers);
+
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _transferRepository.Verify(x => x.CreateAccountTransfers(It.Is<IEnumerable<AccountTransfer>>(
+                transfers => transfers.Count().Equals(2))), Times.Once);
+
+            _transferRepository.Verify(x => x.CreateAccountTransfers(It.Is<IEnumerable<AccountTransfer>>(
+                transfers =>
+                    transfers.All(t => t.Amount.Equals(_accountTransfer.Amount)))), Times.Once);
         }
     }
 }
