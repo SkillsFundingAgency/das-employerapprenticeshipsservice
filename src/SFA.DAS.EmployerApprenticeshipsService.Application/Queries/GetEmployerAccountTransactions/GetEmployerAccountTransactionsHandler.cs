@@ -117,21 +117,15 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             }
         }
 
-        private string GetPaymentTransactionDescription(PaymentTransactionLine transaction)
+        public string GetPaymentTransactionDescription(PaymentTransactionLine transaction)
         {
             var transactionPrefix = transaction.IsCoInvested ? "Co-investment - " : string.Empty;
-
-            try
+            if (transaction.ProviderName != null)
             {
-                var ukprn = Convert.ToInt32(transaction.UkPrn);
-                var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(ukprn);
+                return $"{transactionPrefix}{transaction.ProviderName}";
+            };
 
-                return $"{transactionPrefix}{providerName.Provider.ProviderName}";
-            }
-            catch (Exception ex)
-            {
-                _logger.Info($"Provider not found for UkPrn:{transaction.UkPrn} - {ex.Message}");
-            }
+            _logger.Info($"Provider not found for UkPrn:{transaction.UkPrn}");
 
             return $"{transactionPrefix}Training provider - name not recognised";
         }
