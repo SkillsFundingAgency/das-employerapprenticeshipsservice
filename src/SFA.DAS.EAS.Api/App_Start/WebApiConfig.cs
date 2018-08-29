@@ -2,7 +2,7 @@
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using System.Web.Http.ModelBinding;
-using SFA.DAS.EAS.Account.Api.Binders;
+using SFA.DAS.Authorization.WebApi;
 using SFA.DAS.EAS.Account.Api.DependencyResolution;
 using SFA.DAS.EAS.Account.Api.ExceptionLoggers;
 using SFA.DAS.EAS.Account.Api.Filters;

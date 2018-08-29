@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateInvitation

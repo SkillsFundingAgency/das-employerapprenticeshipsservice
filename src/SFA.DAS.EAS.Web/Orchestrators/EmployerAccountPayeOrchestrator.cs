@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
 using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
 using SFA.DAS.EAS.Application.Exceptions;

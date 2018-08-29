@@ -1,16 +1,13 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Features;
-using SFA.DAS.EmployerAccounts.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization;
 using Z.EntityFramework.Plus;
 using SFA.DAS.EmployerAccounts.Extensions;
-using SFA.DAS.EmployerAccounts.Models.Features;
 
 namespace SFA.DAS.EmployerAccounts.Authorization
 {

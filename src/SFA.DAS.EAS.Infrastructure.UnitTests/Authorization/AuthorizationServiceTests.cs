@@ -5,11 +5,11 @@ using AutoMapper;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
-using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Infrastructure.Data;
@@ -95,8 +95,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
 
     public class AuthorizationServiceTestFixture : FluentTestFixture
     {
-        public List<Account> Accounts { get; }
-        public DbSetStub<Account> AccountsDbSet { get; }
+        public List<Domain.Models.Account.Account> Accounts { get; }
+        public DbSetStub<Domain.Models.Account.Account> AccountsDbSet { get; }
         public Mock<IAuthorizationContextCache> AuthorizationContextCache { get; }
         public Mock<ICallerContextProvider> CallerContextProvider { get; }
         public IConfigurationProvider ConfigurationProvider { get; }
@@ -125,8 +125,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
             });
 
             FeatureService = new Mock<IFeatureService>();
-            Accounts = new List<Account>();
-            AccountsDbSet = new DbSetStub<Account>(Accounts);
+            Accounts = new List<Domain.Models.Account.Account>();
+            AccountsDbSet = new DbSetStub<Domain.Models.Account.Account>(Accounts);
             Users = new List<User>();
             UsersDbSet = new DbSetStub<User>(Users);
             Memberships = new List<Membership>();
@@ -222,13 +222,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
             authorizationService.ValidateMembership();
         }
 
-        private Account EnsureAccount(int accountId)
+        private Domain.Models.Account.Account EnsureAccount(int accountId)
         {
             var existingAccount = Accounts.SingleOrDefault(ac => ac.Id == accountId);
 
             if (existingAccount == null)
             {
-                existingAccount = new Account
+                existingAccount = new Domain.Models.Account.Account
                 {
                     Id = accountId
                 };

@@ -115,7 +115,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
                 .ReturnsAsync(new GetEmployerAccountResponse
                 {
-                    Account = new Account
+                    Account = new Domain.Models.Account.Account
                     {
                         Name = "test account"
                     }
@@ -141,7 +141,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
                 .ReturnsAsync(new GetEmployerAccountResponse
                 {
-                    Account = new Account
+                    Account = new Domain.Models.Account.Account
                     {
                         Name = "test account"
                     }

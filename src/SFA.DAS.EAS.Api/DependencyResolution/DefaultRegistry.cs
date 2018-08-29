@@ -1,3 +1,5 @@
+using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.WebApi;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
 using StructureMap;
@@ -15,6 +17,7 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
             });
 
             For<EmployerFinanceDbContext>().Use(c => new EmployerFinanceDbContext(c.GetInstance<LevyDeclarationProviderConfiguration>().DatabaseConnectionString));
+            For<IAuthorizationContextCache>().Use<AuthorizationContextCache>();
         }
     }
 }

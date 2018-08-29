@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
@@ -6,7 +7,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
 {
     public class AccountDashboardViewModel
     {
-        public Account Account { get; set; }
+        public Domain.Models.Account.Account Account { get; set; }
         public string EmployerAccountType { get; set; }
         public string HashedAccountId { get; set; }
         public string HashedUserId { get; set; }

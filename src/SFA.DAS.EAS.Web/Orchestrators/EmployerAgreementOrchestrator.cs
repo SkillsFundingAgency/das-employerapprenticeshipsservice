@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Domain.Interfaces;
 

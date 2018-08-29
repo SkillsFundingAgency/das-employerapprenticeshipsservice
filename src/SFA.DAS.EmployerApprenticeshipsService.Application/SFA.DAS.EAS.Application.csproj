@@ -370,8 +370,6 @@
     <Compile Include="Dtos\EmployerAgreement\EmployerAgreementStatusDto.cs" />
     <Compile Include="Dtos\EmployerAgreement\PendingEmployerAgreementDetailsDto.cs" />
     <Compile Include="Dtos\EmployerAgreement\SignedEmployerAgreementDetailsDto.cs" />
-    <Compile Include="Messages\IAccountMessage.cs" />
-    <Compile Include="Messages\IUserMessage.cs" />
     <Compile Include="Dtos\AccountSpecificLegalEntityDto.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesQueryHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesRequest.cs" />
@@ -523,10 +521,7 @@
     <Compile Include="Mappings\MembershipMappings.cs" />
     <Compile Include="Mappings\TransferConnectionInvitationMappings.cs" />
     <Compile Include="Mappings\UserMappings.cs" />
-    <Compile Include="Messages\AccountMessage.cs" />
-    <Compile Include="Messages\MembershipMessage.cs" />
     <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
-    <Compile Include="Messages\UserMessage.cs" />
     <Compile Include="Exceptions\NotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesQueryHandler.cs" />

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Features;
-using SFA.DAS.EAS.Infrastructure.Authorization;
+using SFA.DAS.Authorization;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Features

@@ -264,7 +264,6 @@
     <Compile Include="Data\Repositories\ITransferConnectionInvitationRepository.cs" />
     <Compile Include="Data\Repositories\ITransferRepository.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
-    <Compile Include="Interfaces\IAgreementService.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\ICommitmentService.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
@@ -298,7 +297,6 @@
     <Compile Include="Models\EmployerAgreement\RemoveEmployerAgreementView.cs" />
     <Compile Include="Models\EmployerAgreement\SignEmployerAgreement.cs" />
     <Compile Include="Models\Entity.cs" />
-    <Compile Include="Models\Features\FeatureType.cs" />
     <Compile Include="Models\Organisation\AccountLegalEntityModel.cs" />
     <Compile Include="Models\Organisation\Address.cs" />
     <Compile Include="Models\Payments\Payment.cs" />
@@ -364,8 +362,6 @@
     <Compile Include="Models\AccountTeam\MembershipView.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentDetails.cs" />
-    <Compile Include="Models\Features\Feature.cs" />
-    <Compile Include="Models\Features\FeaturesConfiguration.cs" />
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
     <Compile Include="Models\HmrcLevy\EmployerLevyData.cs" />
     <Compile Include="Models\HmrcLevy\LevyDeclarations.cs" />
@@ -397,7 +393,6 @@
     <Compile Include="Models\Transfers\AccountTransferDetails.cs" />
     <Compile Include="Models\Transfers\TransferAllowance.cs" />
     <Compile Include="Models\Transfers\TransferTransactionLine.cs" />
-    <Compile Include="Models\UserProfile\Role.cs" />
     <Compile Include="Models\UserProfile\User.cs" />
     <Compile Include="Models\UserProfile\UserAccountSetting.cs" />
     <Compile Include="Models\UserProfile\Users.cs" />
@@ -423,6 +418,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj">
       <Project>{2035D46A-422F-438C-A460-39E60A9F6EAD}</Project>
       <Name>SFA.DAS.EmployerAccounts.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
+      <Project>{8dd6e754-567c-46e3-a071-b1049380ea6c}</Project>
+      <Name>SFA.DAS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

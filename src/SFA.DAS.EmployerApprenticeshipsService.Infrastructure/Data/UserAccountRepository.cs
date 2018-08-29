@@ -23,21 +23,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             _db = db;
         }
 
-        public async Task<Accounts<Account>> GetAccountsByUserRef(string userRef)
+        public async Task<Accounts<Domain.Models.Account.Account>> GetAccountsByUserRef(string userRef)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@userRef", Guid.Parse(userRef), DbType.Guid);
 
-            var result = await _db.Value.Database.Connection.QueryAsync<Account>(
+            var result = await _db.Value.Database.Connection.QueryAsync<Domain.Models.Account.Account>(
                 sql: @"[employer_account].[GetAccounts_ByUserRef]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
-            return new Accounts<Account>
+            return new Accounts<Domain.Models.Account.Account>
             {
-                AccountList = (List<Account>)result
+                AccountList = (List<Domain.Models.Account.Account>)result
             };
         }
 

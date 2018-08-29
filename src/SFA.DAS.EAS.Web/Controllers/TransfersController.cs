@@ -2,16 +2,15 @@
 using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitations;
-using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.ViewModels.Transfers;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthorization;
 using SFA.DAS.EAS.Application.Queries.GetTransferRequests;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.EAS.Domain.Models.Features;
-using SFA.DAS.EAS.Infrastructure.Features;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 
 namespace SFA.DAS.EAS.Web.Controllers

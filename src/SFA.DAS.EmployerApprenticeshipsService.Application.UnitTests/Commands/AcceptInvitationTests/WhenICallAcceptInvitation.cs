@@ -14,6 +14,7 @@ using SFA.DAS.TimeProvider;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.NLog.Logger;
 

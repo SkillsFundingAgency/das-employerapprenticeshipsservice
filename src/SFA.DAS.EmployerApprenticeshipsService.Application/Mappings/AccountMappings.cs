@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 

@@ -1,6 +1,6 @@
 using MediatR;
-using SFA.DAS.EmployerAccounts.Messages;
 using System.ComponentModel.DataAnnotations;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Queries.SendTransferConnectionInvitation
 {

@@ -107,8 +107,6 @@
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
-    <Compile Include="Features\Feature.cs" />
-    <Compile Include="Features\FeatureType.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
     <Compile Include="Filters\HandleErrorFilter.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />

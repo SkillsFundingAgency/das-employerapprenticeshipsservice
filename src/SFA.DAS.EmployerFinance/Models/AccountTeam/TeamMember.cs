@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EmployerFinance.Models.UserProfile;
 using System;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerFinance.Models.AccountTeam
 {

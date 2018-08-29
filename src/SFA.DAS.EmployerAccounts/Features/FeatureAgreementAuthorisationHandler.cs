@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Authorization;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.EmployerAccounts.Models.Features;
+using SFA.DAS.Authorization;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Features

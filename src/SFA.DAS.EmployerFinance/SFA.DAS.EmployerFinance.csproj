@@ -59,6 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\UserProfile\" />
     <Folder Include="Queries\AccountTransactions\GetAccountProviderPayments\" />
     <Folder Include="Queries\FindAccountProviderPayments\" />
   </ItemGroup>

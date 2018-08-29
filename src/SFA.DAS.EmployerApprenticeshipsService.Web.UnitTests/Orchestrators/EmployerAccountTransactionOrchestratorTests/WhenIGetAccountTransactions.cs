@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
             _response = new GetEmployerAccountResponse
             {
-                Account = new Account
+                Account = new Domain.Models.Account.Account
                 {
                     HashedId = HashedAccountId,
                     Name = "Test Account"

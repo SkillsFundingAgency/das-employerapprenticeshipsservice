@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Features;
-using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Infrastructure.Features;
 using StructureMap;

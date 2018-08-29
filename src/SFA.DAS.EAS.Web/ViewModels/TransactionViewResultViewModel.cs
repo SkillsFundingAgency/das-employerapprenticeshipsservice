@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
         }
 
         public DateTime CurrentTime { get; }
-        public Account Account { get; set; }
+        public Domain.Models.Account.Account Account { get; set; }
         public TransactionViewModel Model { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }

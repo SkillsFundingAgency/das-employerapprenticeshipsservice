@@ -5,7 +5,7 @@ namespace SFA.DAS.EAS.TestCommon.Builders
 {
     public class AccountBuilder
     {
-        private readonly Account _account = new Account();
+        private readonly Domain.Models.Account.Account _account = new Domain.Models.Account.Account();
 
         public AccountBuilder WithId(long id)
         {
@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.TestCommon.Builders
             return this;
         }
 
-        public Account Build()
+        public Domain.Models.Account.Account Build()
         {
             return _account;
         }

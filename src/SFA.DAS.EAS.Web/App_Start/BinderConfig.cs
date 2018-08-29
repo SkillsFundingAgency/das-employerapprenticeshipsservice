@@ -1,4 +1,6 @@
 ﻿using System.Web.Mvc;
+using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Binders;
 
