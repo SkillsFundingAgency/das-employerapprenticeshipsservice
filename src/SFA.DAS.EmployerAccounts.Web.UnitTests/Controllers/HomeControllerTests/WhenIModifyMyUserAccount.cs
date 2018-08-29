@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 {

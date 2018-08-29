@@ -15,6 +15,7 @@ using SFA.DAS.TimeProvider;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 {

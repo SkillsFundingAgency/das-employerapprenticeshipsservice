@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

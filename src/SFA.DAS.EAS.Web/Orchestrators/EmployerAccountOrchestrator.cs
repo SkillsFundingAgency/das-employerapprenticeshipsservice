@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using MediatR;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
 using SFA.DAS.EAS.Application.Exceptions;

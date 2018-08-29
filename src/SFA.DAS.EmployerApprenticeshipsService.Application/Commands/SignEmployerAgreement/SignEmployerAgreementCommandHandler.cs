@@ -14,6 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Infrastructure.Features;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.NServiceBus;
 using Entity = SFA.DAS.Audit.Types.Entity;

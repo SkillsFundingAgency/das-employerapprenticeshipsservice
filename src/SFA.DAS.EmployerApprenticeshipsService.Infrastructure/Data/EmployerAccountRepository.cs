@@ -23,18 +23,18 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             _db = db;
         }
 
-        public Task<Account> GetAccountById(long id)
+        public Task<Domain.Models.Account.Account> GetAccountById(long id)
         {
             return _db.Value.Accounts.SingleOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task<Account> GetAccountByHashedId(string hashedAccountId)
+        public async Task<Domain.Models.Account.Account> GetAccountByHashedId(string hashedAccountId)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
 
-            var result = await _db.Value.Database.Connection.QueryAsync<Account>(
+            var result = await _db.Value.Database.Connection.QueryAsync<Domain.Models.Account.Account>(
                 sql: "select a.* from [employer_account].[Account] a where a.HashedId = @HashedAccountId;",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize)
+        public async Task<Accounts<Domain.Models.Account.Account>> GetAccounts(string toDate, int pageNumber, int pageSize)
         {
             var parameters = new DynamicParameters();
 
@@ -55,12 +55,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 sql: $"select count(*) from [employer_account].[Account] a;",
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
 
-            var result = await WithConnection(async c => await c.QueryAsync<Account>(
+            var result = await WithConnection(async c => await c.QueryAsync<Domain.Models.Account.Account>(
                 sql: $"select a.* from [employer_account].[Account] a ORDER BY a.Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;",
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text));
 
-            return new Accounts<Account>
+            return new Accounts<Domain.Models.Account.Account>
             {
                 AccountsCount = countResult.First(),
                 AccountList = result.ToList()
@@ -104,9 +104,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return accountDetail;
         }
 
-        public async Task<List<Account>> GetAllAccounts()
+        public async Task<List<Domain.Models.Account.Account>> GetAllAccounts()
         {
-            var result = await _db.Value.Database.Connection.QueryAsync<Account>(
+            var result = await _db.Value.Database.Connection.QueryAsync<Domain.Models.Account.Account>(
                 sql: "select * from [employer_account].[Account]",
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);

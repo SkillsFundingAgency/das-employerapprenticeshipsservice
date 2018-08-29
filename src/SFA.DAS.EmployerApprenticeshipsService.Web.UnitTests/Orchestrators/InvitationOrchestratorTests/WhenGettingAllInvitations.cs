@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserInvitationsRequest>())).ReturnsAsync(new GetUserInvitationsResponse {Invitations = new List<InvitationView> {new InvitationView()} });
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountsQuery>())).ReturnsAsync(new GetUserAccountsQueryResponse
                 {
-                    Accounts = new Accounts<Account> { AccountList = new List<Account>()}
+                    Accounts = new Accounts<Domain.Models.Account.Account> { AccountList = new List<Domain.Models.Account.Account>()}
                 });
 
             _logger = new Mock<ILog>();

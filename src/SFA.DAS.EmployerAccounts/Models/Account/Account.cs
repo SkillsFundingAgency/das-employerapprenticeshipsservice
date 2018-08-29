@@ -3,6 +3,7 @@ using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Models.Account
 {

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Attributes;
 using SFA.DAS.EAS.Application.Formatters.TransactionDowloads;
 using SFA.DAS.EAS.Application.Messages;

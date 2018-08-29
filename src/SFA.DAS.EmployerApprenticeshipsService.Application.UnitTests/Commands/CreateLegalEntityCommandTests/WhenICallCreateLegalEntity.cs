@@ -14,6 +14,7 @@ using SFA.DAS.NServiceBus;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Infrastructure.Features;
 
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTests

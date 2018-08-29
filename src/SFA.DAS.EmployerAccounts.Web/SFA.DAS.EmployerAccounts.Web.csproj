@@ -88,12 +88,9 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Attributes\HttpNotFoundForNullModelAttribute.cs" />
     <Compile Include="Attributes\ImportModelStateFromTempDataAttribute.cs" />
-    <Compile Include="Attributes\ValidateMembershipAttribute.cs" />
     <Compile Include="Attributes\ValidateModelStateAttribute.cs" />
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
-    <Compile Include="Authorization\AuthorizationContextCache.cs" />
-    <Compile Include="Authorization\CallerContextProvider.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -126,8 +123,6 @@
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
     <Compile Include="Filters\HandleErrorFilter.cs" />
-    <Compile Include="Filters\ValidateFeatureFilter.cs" />
-    <Compile Include="Filters\ViewModelFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

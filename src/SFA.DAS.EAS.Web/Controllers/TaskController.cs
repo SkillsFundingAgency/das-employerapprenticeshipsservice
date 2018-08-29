@@ -1,10 +1,10 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.Authorization;
-using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using MediatR;
 using SFA.DAS.Activities;
-using SFA.DAS.EmployerAccounts.Messages;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetActivities
 {

@@ -2,9 +2,9 @@
 using System.Data.Entity;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Infrastructure.Data;

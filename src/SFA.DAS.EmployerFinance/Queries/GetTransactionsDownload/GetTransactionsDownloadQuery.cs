@@ -2,6 +2,7 @@
 using SFA.DAS.EmployerFinance.Attributes;
 using SFA.DAS.EmployerFinance.Messages;
 using System.ComponentModel.DataAnnotations;
+using SFA.DAS.Authorization;
 using SFA.DAS.EmployerFinance.Formatters.TransactionDowloads;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetTransactionsDownload

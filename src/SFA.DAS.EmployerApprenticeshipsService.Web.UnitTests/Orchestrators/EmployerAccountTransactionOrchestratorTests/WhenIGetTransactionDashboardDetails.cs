@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
             var accountResponse = new GetEmployerAccountResponse
             {
-                Account = new Account
+                Account = new Domain.Models.Account.Account
                 {
                     HashedId = HashedAccountId,
                     Name = "Test Account"

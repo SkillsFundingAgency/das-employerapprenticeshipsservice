@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetGatewayToken;

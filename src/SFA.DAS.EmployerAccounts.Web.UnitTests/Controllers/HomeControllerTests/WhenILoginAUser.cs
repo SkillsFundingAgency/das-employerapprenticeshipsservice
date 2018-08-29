@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Authorization;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;

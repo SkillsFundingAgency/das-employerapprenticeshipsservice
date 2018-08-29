@@ -6,11 +6,11 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
     public interface IEmployerAccountRepository
     {
-        Task<Account> GetAccountById(long id);
-        Task<Account> GetAccountByHashedId(string hashedAccountId);
-        Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize);
+        Task<Models.Account.Account> GetAccountById(long id);
+        Task<Models.Account.Account> GetAccountByHashedId(string hashedAccountId);
+        Task<Accounts<Models.Account.Account>> GetAccounts(string toDate, int pageNumber, int pageSize);
         Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId);
-        Task<List<Account>> GetAllAccounts();
+        Task<List<Models.Account.Account>> GetAllAccounts();
         Task<List<AccountHistoryEntry>> GetAccountHistory(long accountId);
         Task RenameAccount(long id, string name);
     }

@@ -272,8 +272,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\ValidateMembershipAttributeTests\WhenIViewAPage.cs" />
-    <Compile Include="Binders\MessageModelBinderTests\WhenIBindAViewModel.cs" />
     <Compile Include="Controllers\ActivitiesControllerTests\WhenIViewTheLatestActivitiesPage.cs" />
     <Compile Include="Controllers\ActivitiesControllerTests\WhenIViewTheActivitiesPage.cs" />
     <Compile Include="Controllers\BaseControllerTests\WhenOnActionExecuting.cs" />
@@ -333,7 +331,6 @@
     <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransferRequestsComponent.cs" />
     <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransfersPage.cs" />
     <Compile Include="Controllers\TransfersControllerTests\WhenIViewTheTransferConnectionInvitationsComponent.cs" />
-    <Compile Include="Filters\ValidateFeatureFilterTests\WhenIViewAPage.cs" />
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
@@ -407,6 +404,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EAS.TestCommon.csproj">
       <Project>{05d7c094-e2c9-4ccd-b0d7-85d263254b26}</Project>
       <Name>SFA.DAS.EAS.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
+      <Project>{8DD6E754-567C-46E3-A071-B1049380EA6C}</Project>
+      <Name>SFA.DAS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

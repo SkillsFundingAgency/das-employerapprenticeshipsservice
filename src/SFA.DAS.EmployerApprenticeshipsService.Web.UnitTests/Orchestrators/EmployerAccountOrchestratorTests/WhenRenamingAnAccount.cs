@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
@@ -24,7 +25,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         private Mock<IMediator> _mediator;
         private EmployerAccountOrchestrator _orchestrator;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
-        private Account _account;
+        private Domain.Models.Account.Account _account;
 
         [SetUp]
         public void Arrange()
@@ -34,7 +35,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             _mediator = new Mock<IMediator>();
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
-            _account = new Account
+            _account = new Domain.Models.Account.Account
             {
                 Id = 123,
                 HashedId = "ABC123",

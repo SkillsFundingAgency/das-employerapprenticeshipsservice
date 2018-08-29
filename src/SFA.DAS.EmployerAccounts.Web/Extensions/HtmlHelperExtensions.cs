@@ -1,9 +1,8 @@
-﻿using SFA.DAS.EmployerAccounts.Authorization;
-using SFA.DAS.EmployerAccounts.Models.Features;
-using System;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {

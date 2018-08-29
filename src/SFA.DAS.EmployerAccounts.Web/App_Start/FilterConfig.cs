@@ -1,6 +1,7 @@
-﻿using SFA.DAS.EmployerAccounts.Authorization;
-using SFA.DAS.EmployerAccounts.Web.Filters;
+﻿using SFA.DAS.EmployerAccounts.Web.Filters;
 using System.Web.Mvc;
+using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {

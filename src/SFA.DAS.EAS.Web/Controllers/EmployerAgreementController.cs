@@ -2,7 +2,6 @@
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -12,7 +11,8 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Web.Routing;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {

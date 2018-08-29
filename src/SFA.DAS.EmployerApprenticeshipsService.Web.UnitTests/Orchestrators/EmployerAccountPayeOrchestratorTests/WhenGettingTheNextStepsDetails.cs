@@ -2,6 +2,7 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
