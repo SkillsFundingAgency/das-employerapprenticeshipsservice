@@ -8,7 +8,7 @@
 
         public decimal? RemainingTransferAllowance
         {
-            get => _remainingAllowance < 0 ? 0 : _remainingAllowance;
+            get => 1000m;
             set => _remainingAllowance = value;
         }
     }

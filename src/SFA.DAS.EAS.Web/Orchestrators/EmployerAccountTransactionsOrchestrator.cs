@@ -34,9 +34,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 			_currentTime = currentTime;
 			_logger = logger;
 		}
-       
 
-		public virtual async Task<OrchestratorResponse<FinanceDashboardViewModel>> GetFinanceDashboardViewModel(
+
+        public virtual async Task<OrchestratorResponse<FinanceDashboardViewModel>> GetFinanceDashboardViewModel(
 			string hashedId, int year, int month, string externalUserId)
 		{
 			var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery

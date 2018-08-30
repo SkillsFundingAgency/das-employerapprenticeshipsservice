@@ -1,0 +1,135 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsSpecFlowProject>true</IsSpecFlowProject>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <ShowTrace>true</ShowTrace>
+    <VerboseOutput>true</VerboseOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="HMRC.ESFA.Levy.Api.Types" version="1.0.43" />
+    <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager" version="3.2.3" />
+    <PackageReference Include="Moq" Version="4.9.0" />
+    <PackageReference Include="NUnit" version="3.5.0" />
+    <PackageReference Include="NServiceBus" version="7.0.1" />
+    <PackageReference Include="SFA.DAS.Configuration" Version="1.0.0.53229" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
+    <PackageReference Include="SFA.DAS.Events.Api.Types" version="2.0.0.36524" />
+    <!--<PackageReference Include="SFA.DAS.Events.Api.Client" version="1.20.0.26497" />-->
+    <PackageReference Include="SFA.DAS.Sql.Client" version="1.0.0.32930" />
+    <PackageReference Include="SpecFlow" Version="2.3.1" />
+    <PackageReference Include="SpecFlow.MsTest" Version="2.3.1" />
+    <PackageReference Include="System.ValueTuple" version="4.4.0" />
+    <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--<Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.5.1.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="MediatR">
+      <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Events.Api.Client">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.20.0.26497\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
+    </Reference>-->
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance.MessageHandlers\SFA.DAS.EmployerFinance.MessageHandlers.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Web\SFA.DAS.EmployerFinance.Web.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
+    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Features\Scenario-01-Single-PAYE-no-adjustments.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scenario-01-Single-PAYE-no-adjustments.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Scenario-02-Seasonal-variations-single-PAYE.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scenario-02-Seasonal-variations-single-PAYE.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Scenario-03-Multiple-EPS-submissions-for-month-within-submission-window.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scenario-03-Multiple-EPS-submissions-for-month-within-submission-window.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Scenario-04-a-In-year-adjustment-results-in-balance-change.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scenario-04-a-In-year-adjustment-results-in-balance-change.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Scenario-04-b-In-year-adjustments-no-change-to-current-balance.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scenario-04-b-In-year-adjustments-no-change-to-current-balance.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Scenario-05-Adjustment-to-prior-tax-year.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scenario-05-Adjustment-to-prior-tax-year.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Scenario-06-Period-of-inactivity.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scenario-06-Period-of-inactivity.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Scenario-07-No-Payment-for-Period-and-Ceased-PAYE-Scheme.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scenario-07-No-Payment-for-Period-and-Ceased-PAYE-Scheme.feature</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Features\Scenario-01-Single-PAYE-no-adjustments.feature">
+      <LastGenOutput>Scenario-01-Single-PAYE-no-adjustments.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </None>
+    <None Update="Features\Scenario-02-Seasonal-variations-single-PAYE.feature">
+      <LastGenOutput>Scenario-02-Seasonal-variations-single-PAYE.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </None>
+    <None Update="Features\Scenario-03-Multiple-EPS-submissions-for-month-within-submission-window.feature">
+      <LastGenOutput>Scenario-03-Multiple-EPS-submissions-for-month-within-submission-window.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </None>
+    <None Update="Features\Scenario-04-a-In-year-adjustment-results-in-balance-change.feature">
+      <LastGenOutput>Scenario-04-a-In-year-adjustment-results-in-balance-change.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </None>
+    <None Update="Features\Scenario-04-b-In-year-adjustments-no-change-to-current-balance.feature">
+      <LastGenOutput>Scenario-04-b-In-year-adjustments-no-change-to-current-balance.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </None>
+    <None Update="Features\Scenario-05-Adjustment-to-prior-tax-year.feature">
+      <LastGenOutput>Scenario-05-Adjustment-to-prior-tax-year.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </None>
+    <None Update="Features\Scenario-06-Period-of-inactivity.feature">
+      <LastGenOutput>Scenario-06-Period-of-inactivity.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </None>
+    <None Update="Features\Scenario-07-No-Payment-for-Period-and-Ceased-PAYE-Scheme.feature">
+      <LastGenOutput>Scenario-07-No-Payment-for-Period-and-Ceased-PAYE-Scheme.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </None>
+  </ItemGroup>
+
+</Project>

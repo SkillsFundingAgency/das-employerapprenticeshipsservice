@@ -146,6 +146,10 @@
     <None Include="Scripts\Manual\CreateTransferPayments.sql" />
     <Build Include="Tables\ClientOutboxData.sql" />
     <Build Include="Tables\OutboxData.sql" />
+    <Build Include="StoredProcedures\UpdateTransactionLineDateCreatedToTransactionDate_BySubmissionId.sql" />
+    <Build Include="Types\SubmissionIds.sql" />
+    <Build Include="Types\SubmissionIdsDate.sql" />
+    <Build Include="StoredProcedures\UpdateTransactionLinesDateCreated_BySubmissionId.sql" />
     <None Include="Scripts\Manual\GetPaymentTotals.sql" />
     <None Include="Scripts\PreDeployment\AML-2643-DeleteDuplicateTransactionLines.sql" />
     <None Include="Scripts\PreDeployment\AML-2616-DeleteDuplicateLevyDeclarationsWithoutEmpRef.sql" />
