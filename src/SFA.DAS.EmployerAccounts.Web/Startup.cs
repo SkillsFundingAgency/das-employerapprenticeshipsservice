@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             return () =>
             {
-                var store = new X509Store(StoreLocation.LocalMachine);
+                var store = new X509Store(StoreLocation.CurrentUser);
 
                 store.Open(OpenFlags.ReadOnly);
 
@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
                     if (certificates.Count < 1)
                     {
-                        throw new Exception($"Could not find certificate with thumbprint '{thumbprint}' in LocalMachine store.");
+                        throw new Exception($"Could not find certificate with thumbprint '{thumbprint}' in CurrentUser store.");
                     }
 
                     return certificates[0];
