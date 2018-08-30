@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Z.EntityFramework.Plus;
 
-namespace SFA.DAS.EmployerAccounts.Extensions
+namespace SFA.DAS.EntityFramework
 {
     public static class QueryFutureEnumerableExtensions
     {

@@ -6,8 +6,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.Infrastructure.Extensions;
-using SFA.DAS.EAS.Infrastructure.Features;
+using SFA.DAS.EntityFramework;
 using Z.EntityFramework.Plus;
 
 namespace SFA.DAS.EAS.Infrastructure.Authorization

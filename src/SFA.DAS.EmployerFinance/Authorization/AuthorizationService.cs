@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using SFA.DAS.EmployerAccounts.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
 using SFA.DAS.Authorization;
-using Z.EntityFramework.Plus;
+using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EntityFramework;
+using Z.EntityFramework.Plus;
 
-namespace SFA.DAS.EmployerAccounts.Authorization
+namespace SFA.DAS.EmployerFinance.Authorization
 {
     public class AuthorizationService : IAuthorizationService
     {

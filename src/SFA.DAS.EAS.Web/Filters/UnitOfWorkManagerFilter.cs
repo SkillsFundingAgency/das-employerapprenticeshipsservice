@@ -23,9 +23,9 @@ namespace SFA.DAS.EAS.Web.Filters
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            if (!filterContext.IsChildAction && filterContext.Exception == null)
+            if (!filterContext.IsChildAction)
             {
-                _unitOfWorkManager().End();
+                _unitOfWorkManager().End(filterContext.Exception);
             }
         }
     }

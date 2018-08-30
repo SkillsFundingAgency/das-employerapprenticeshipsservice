@@ -12,16 +12,13 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<DataRegistry>();
+                c.AddRegistry<HashingRegistry>();
                 c.AddRegistry<LoggerRegistry>();
+                c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
-                c.AddRegistry<MapperRegistry>();
-                c.AddRegistry<HashingRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
-                c.AddRegistry<HashingRegistry>();
-                c.AddRegistry<MapperRegistry>();
-
             });
         }
     }

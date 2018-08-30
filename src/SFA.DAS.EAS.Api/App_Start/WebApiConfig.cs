@@ -30,7 +30,6 @@ namespace SFA.DAS.EAS.Account.Api
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
-                c.AddRegistry<DataRegistry>();
                 c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
@@ -47,6 +46,7 @@ namespace SFA.DAS.EAS.Account.Api
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<DefaultRegistry>();
+                c.AddRegistry<DataRegistry>();
             });
         }
     }

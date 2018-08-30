@@ -7,6 +7,7 @@ using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;
+using SFA.DAS.EntityFramework;
 using Z.EntityFramework.Plus;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api

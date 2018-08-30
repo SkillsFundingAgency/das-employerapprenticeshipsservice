@@ -331,7 +331,6 @@
     <Compile Include="Extensions\OrganisationTypeExtensions.cs" />
     <Compile Include="Extensions\PaymentDetailsExtensions.cs" />
     <Compile Include="Extensions\QueryableExtensions.cs" />
-    <Compile Include="Extensions\QueryFutureEnumerableExtensions.cs" />
     <Compile Include="Features\IAgreementService.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Mapping\Profiles\PaymentMappings.cs" />
