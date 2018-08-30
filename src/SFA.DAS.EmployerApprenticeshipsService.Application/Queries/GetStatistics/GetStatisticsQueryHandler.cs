@@ -5,6 +5,7 @@ using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;
+using SFA.DAS.EntityFramework;
 using EmployerAgreementStatus = SFA.DAS.EAS.Domain.Models.EmployerAgreement.EmployerAgreementStatus;
 
 namespace SFA.DAS.EAS.Application.Queries.GetStatistics

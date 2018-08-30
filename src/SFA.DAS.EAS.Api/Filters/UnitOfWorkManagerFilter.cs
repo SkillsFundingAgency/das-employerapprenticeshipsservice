@@ -14,10 +14,7 @@ namespace SFA.DAS.EAS.Account.Api.Filters
 
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
-            if (actionExecutedContext.Exception == null)
-            {
-                actionExecutedContext.GetService<IUnitOfWorkManager>().End();
-            }
+            actionExecutedContext.GetService<IUnitOfWorkManager>().End(actionExecutedContext.Exception);
         }
     }
 }

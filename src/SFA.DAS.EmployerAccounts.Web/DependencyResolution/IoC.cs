@@ -1,17 +1,14 @@
-
+using SFA.DAS.EmployerAccounts.DependencyResolution;
+using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {
-    using SFA.DAS.EmployerAccounts.DependencyResolution;
-    using StructureMap;
-
     public static class IoC
     {
         public static IContainer Initialize()
         {
             return new Container(c =>
             {
-                c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
@@ -24,6 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
+                c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
