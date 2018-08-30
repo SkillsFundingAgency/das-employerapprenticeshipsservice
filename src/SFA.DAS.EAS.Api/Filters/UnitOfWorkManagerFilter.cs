@@ -9,12 +9,12 @@ namespace SFA.DAS.EAS.Account.Api.Filters
     {
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            actionContext.GetService<IUnitOfWorkManager>().Begin();
+            actionContext.Request.GetService<IUnitOfWorkManager>().Begin();
         }
 
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
-            actionExecutedContext.GetService<IUnitOfWorkManager>().End(actionExecutedContext.Exception);
+            actionExecutedContext.Request.GetService<IUnitOfWorkManager>().End(actionExecutedContext.Exception);
         }
     }
 }
