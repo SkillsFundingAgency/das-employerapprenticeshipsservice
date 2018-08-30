@@ -9,5 +9,6 @@ namespace SFA.DAS.EmployerFinance.Services
     {
         Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId);
         Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long receiverAccountId);
+        Task<Models.ApprenticeshipProvider.Provider> GetProvider(int ukPrn);
     }
 }

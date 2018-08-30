@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
@@ -15,7 +14,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.Hashing;
+using IApprenticeshipInfoServiceWrapper = SFA.DAS.EAS.Domain.Interfaces.IApprenticeshipInfoServiceWrapper;
+using IDasLevyService = SFA.DAS.EAS.Domain.Interfaces.IDasLevyService;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionsTests
 {
@@ -31,6 +33,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public override Mock<IValidator<GetEmployerAccountTransactionsQuery>> RequestValidator { get; set; }
         private Mock<IHashingService> _hashingService;
         private Mock<IPublicHashingService> _publicHashingService;
+        private Mock<IProviderService> _providerService;
 
 
         [SetUp]
@@ -66,7 +69,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                 _apprenticshipInfoService.Object,
                 _logger.Object,
                 _hashingService.Object,
-                _publicHashingService.Object);
+                _publicHashingService.Object,
+                _providerService.Object);
             Query = new GetEmployerAccountTransactionsQuery();
         }
 

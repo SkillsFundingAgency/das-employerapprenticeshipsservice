@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
@@ -11,7 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.Hashing;
+using IApprenticeshipInfoServiceWrapper = SFA.DAS.EAS.Domain.Interfaces.IApprenticeshipInfoServiceWrapper;
+using IDasLevyService = SFA.DAS.EAS.Domain.Interfaces.IDasLevyService;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 {
@@ -24,6 +26,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
         private readonly IHashingService _hashingService;
         private readonly IPublicHashingService _publicHashingService;
         private readonly ILog _logger;
+        private readonly IProviderService _providerService;
 
         public GetEmployerAccountTransactionsHandler(
             IDasLevyService dasLevyService,
@@ -31,7 +34,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper,
             ILog logger,
             IHashingService hashingService,
-            IPublicHashingService publicHashingService)
+            IPublicHashingService publicHashingService, IProviderService providerService)
         {
             _dasLevyService = dasLevyService;
             _validator = validator;
@@ -39,6 +42,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             _logger = logger;
             _hashingService = hashingService;
             _publicHashingService = publicHashingService;
+            _providerService = providerService;
         }
 
         public async Task<GetEmployerAccountTransactionsResponse> Handle(GetEmployerAccountTransactionsQuery message)
@@ -119,12 +123,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
         public string GetPaymentTransactionDescription(PaymentTransactionLine transaction)
         {
             var transactionPrefix = transaction.IsCoInvested ? "Co-investment - " : string.Empty;
-            if (transaction.ProviderName != null)
+            try
             {
-                return $"{transactionPrefix}{transaction.ProviderName}";
-            };
-
-            _logger.Info($"Provider not found for UkPrn:{transaction.UkPrn}");
+                return $"{transactionPrefix}{_providerService.GetProvider(transaction.UkPrn)}";
+            }
+            catch (Exception ex)
+            {
+                _logger.Info($"Provider not found for UkPrn:{transaction.UkPrn} - {ex.Message}");
+            }
 
             return $"{transactionPrefix}Training provider - name not recognised";
         }

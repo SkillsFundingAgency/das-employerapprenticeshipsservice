@@ -171,7 +171,7 @@ namespace SFA.DAS.EmployerFinance.Services
             return null;
         }
 
-        private Task<Models.ApprenticeshipProvider.Provider> GetProvider(int ukPrn)
+        public Task<Models.ApprenticeshipProvider.Provider> GetProvider(int ukPrn)
         {
             return Task.Run(() =>
             {
