@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
         {
             get
             {
-                var store = new X509Store(StoreLocation.LocalMachine);
+                var store = new X509Store(StoreLocation.CurrentUser);
                 store.Open(OpenFlags.ReadOnly);
                 try
                 {
