@@ -39,6 +39,13 @@
         },
         "storageConnectionString": {
             "type": "string"
+        },
+        "loadCertificateThumbprints": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Comma separated list of certificate thumbprints to load into the app service"
+            }
         }
     },
     "variables": {},
@@ -109,6 +116,10 @@
                             {
                                 "name": "InstrumentationKey",
                                 "value": "[reference('UIAppInsights').outputs.InstrumentationKey.value]"
+                            },
+                            {
+                                "name": "WEBSITE_LOAD_CERTIFICATES",
+                                "value": "[parameters('loadCertificateThumbprints')]"
                             }
                         ]
                     }
