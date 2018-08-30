@@ -310,6 +310,7 @@
     <Compile Include="Extensions\HashingServiceExtensions.cs" />
     <Compile Include="Extensions\QueryableExtensions.cs" />
     <Compile Include="Extensions\QueryFutureEnumerableExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Features\IFeatureService.cs" />
     <Compile Include="Hashing\PublicHashingService.cs" />
     <Compile Include="Hashing\IAccountLegalEntityPublicHashingService.cs" />

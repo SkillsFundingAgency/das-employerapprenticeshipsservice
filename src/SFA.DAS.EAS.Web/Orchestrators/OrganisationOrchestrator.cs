@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -10,14 +9,11 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
-using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
-using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
 using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -28,12 +24,10 @@ using SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Extensions;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntitiy;
-using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
 using SFA.DAS.EAS.Application.Queries.GetOrganisationById;
 using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Web.Validation;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -366,7 +360,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             OrganisationUpdatesAvailable CheckForUpdate(string currentValue, string updatedValue, OrganisationUpdatesAvailable includeIfDifferent)
             {
                 // The address will be stored with leading and trailing spaces removed, so the change comparison will exclude these.
-                if (!string.Equals(currentValue?.Trim(), updatedValue?.Trim()))
+                // Also, the names and addresses returned by CH search and get by id are inconsistent. Specifically the spacing within a 
+                // name of address are different. To counter this one or spaces will be considered to be equivalent. 
+                if (!currentValue.IsEquivalent(updatedValue, StringEquivalenceOptions.IgnoreLeadingSpaces | StringEquivalenceOptions.IgnoreTrailingSpaces | StringEquivalenceOptions.MultipleSpacesAreEquivalent))
                 {
                     return includeIfDifferent;
                 }

@@ -5,6 +5,7 @@ using System.Web;
 using MediatR;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.EAS.Application.Extensions;
 using SFA.DAS.EAS.Application.Queries.GetOrganisations;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -91,7 +92,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             return new OrganisationDetailsViewModel
             {
-                Address = organisation.Address.GetAddress(),
+                Address = organisation.Address.FormatAddress(),
                 Name = organisation.Name,
                 Type = organisation.Type,
                 DateOfInception = organisation.RegistrationDate,
