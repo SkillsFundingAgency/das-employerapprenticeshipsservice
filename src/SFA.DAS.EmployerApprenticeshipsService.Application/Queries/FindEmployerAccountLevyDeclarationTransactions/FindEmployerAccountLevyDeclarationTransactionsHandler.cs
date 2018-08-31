@@ -10,6 +10,9 @@ using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions
 {
+    /// <summary>
+    ///  AML-2454: Move to finance
+    /// </summary>
     public class FindEmployerAccountLevyDeclarationTransactionsHandler : IAsyncRequestHandler<FindEmployerAccountLevyDeclarationTransactionsQuery, FindEmployerAccountLevyDeclarationTransactionsResponse>
     {
         private readonly IValidator<FindEmployerAccountLevyDeclarationTransactionsQuery> _validator;

@@ -39,6 +39,9 @@ namespace SFA.DAS.EAS.Application.Services
             return result.TransactionLines;
         }
 
+        /// <summary>
+        ///  AML-2454: Move to finance
+        /// </summary>
         public async Task<ICollection<T>> GetAccountLevyTransactionsByDateRange<T>(long accountId, DateTime fromDate, DateTime toDate) where T : TransactionLine
         {
             var result = await _mediator.SendAsync(new GetAccountLevyTransactionsQuery

@@ -4,6 +4,9 @@ using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Web.ViewModels
 {
+    /// <summary>
+    /// AML-2454: Move or copy to Finance
+    /// </summary>
     public class TransactionLineViewModel<T> where T : TransactionLine
     {
         public DateTime TransactionDate { get; set; }

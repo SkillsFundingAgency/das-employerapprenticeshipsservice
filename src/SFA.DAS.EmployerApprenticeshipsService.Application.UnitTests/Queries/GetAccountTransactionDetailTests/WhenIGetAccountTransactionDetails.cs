@@ -12,6 +12,9 @@ using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailTests
 {
+    /// <summary>
+    ///  AML-2454: Move to finance
+    /// </summary>
     public class WhenIGetAccountTransactionDetails : QueryBaseTest<GetAccountLevyTransactionsQueryHandler, GetAccountLevyTransactionsQuery, GetAccountLevyTransactionsResponse>
     {
         private Mock<ITransactionRepository> _transactionRepository;
