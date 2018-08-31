@@ -11,6 +11,9 @@ namespace SFA.DAS.EAS.Domain.Interfaces
     {
         Task<ICollection<TransactionLine>> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
 
+        /// <summary>
+        ///  AML-2454: Move to finance
+        /// </summary>
         Task<ICollection<T>> GetAccountLevyTransactionsByDateRange<T>(
             long accountId, DateTime fromDate, DateTime toDate)
             where T : TransactionLine;

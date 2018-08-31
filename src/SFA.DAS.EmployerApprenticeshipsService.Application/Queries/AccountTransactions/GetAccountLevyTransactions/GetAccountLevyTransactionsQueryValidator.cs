@@ -4,6 +4,9 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTransactions
 {
+    /// <summary>
+    ///  AML-2454: Move to finance
+    /// </summary>
     public class GetAccountLevyTransactionsQueryValidator : IValidator<GetAccountLevyTransactionsQuery>
     {
         public ValidationResult Validate(GetAccountLevyTransactionsQuery item)

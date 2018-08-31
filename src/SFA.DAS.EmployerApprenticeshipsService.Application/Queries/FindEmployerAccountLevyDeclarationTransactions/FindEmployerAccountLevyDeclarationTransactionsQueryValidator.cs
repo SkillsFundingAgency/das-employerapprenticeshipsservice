@@ -5,6 +5,9 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions
 {
+    /// <summary>
+    ///  AML-2454: Move to finance
+    /// </summary>
     public class FindEmployerAccountLevyDeclarationTransactionsQueryValidator : IValidator<FindEmployerAccountLevyDeclarationTransactionsQuery>
     {
         private readonly IMembershipRepository _membershipRepository;

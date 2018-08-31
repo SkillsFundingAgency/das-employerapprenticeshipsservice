@@ -40,7 +40,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 			_currentTime = currentTime;
 			_logger = logger;
 		}
-
+        /// <summary>
+        /// AML-2454: Move to Finance orchestrator as local Controller no longer processes this feature
+        /// </summary>
 		public async Task<OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>>
 			FindAccountLevyDeclarationTransactions(
 				string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)

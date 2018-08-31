@@ -11,6 +11,9 @@ using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
 {
+    /// <summary>
+    ///  AML-2454: Move to finance
+    /// </summary>
     public class WhenIGetTransactionDetailInformation
     {
         private DasLevyService _dasLevyService;
@@ -38,7 +41,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
 
             _dasLevyService = new DasLevyService(_mediator.Object);
         }
-        
+        /// <summary>
+        ///  AML-2454: Move to finance
+        /// </summary>
         [Test]
         public async Task ThenTheMediatorMethodIsCalled()
         {
@@ -53,7 +58,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
                     c.FromDate.Equals(_fromDate) && 
                     c.ToDate.Equals(_toDate))), Times.Once);
         }
-
+        /// <summary>
+        ///  AML-2454: Move to finance
+        /// </summary>
         [Test]
         public async Task ThenTheResponseFromTheQueryIsReturned()
         {
@@ -64,7 +71,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
             //Assert
             Assert.IsNotEmpty(actual);
         }
-
+        /// <summary>
+        ///  AML-2454: Move to finance
+        /// </summary>
         [Test]
         public async Task ThenIfNullIsReturnedFromTheResponseEmptyListIsReturnedFromTheCall()
         {
