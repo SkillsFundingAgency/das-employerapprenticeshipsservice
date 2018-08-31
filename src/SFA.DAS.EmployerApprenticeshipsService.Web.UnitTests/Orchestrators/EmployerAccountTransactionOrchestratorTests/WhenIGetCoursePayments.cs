@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrchestratorTests
 {

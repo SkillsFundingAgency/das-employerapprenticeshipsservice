@@ -3,8 +3,6 @@ using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
 using SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Authorization;
-using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -17,6 +15,7 @@ using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Validation.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {

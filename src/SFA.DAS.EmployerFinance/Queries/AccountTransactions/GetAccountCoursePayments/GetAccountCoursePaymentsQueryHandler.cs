@@ -3,7 +3,6 @@ using MediatR;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.Exceptions;
 
 namespace SFA.DAS.EmployerFinance.Queries.AccountTransactions.GetAccountCoursePayments
 {

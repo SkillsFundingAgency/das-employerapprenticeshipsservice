@@ -12,7 +12,6 @@ using SFA.DAS.EmployerFinance.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Events.ProcessDeclaration;
-using SFA.DAS.Exceptions;
 using SFA.DAS.EmployerFinance.Factories;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Services;

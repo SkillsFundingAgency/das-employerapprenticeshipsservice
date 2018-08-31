@@ -10,7 +10,6 @@ using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities
 {

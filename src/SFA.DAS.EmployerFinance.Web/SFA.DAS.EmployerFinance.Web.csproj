@@ -108,7 +108,6 @@
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
-    <Compile Include="Filters\HandleErrorFilter.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Filters\UnitOfWorkManagerFilter.cs" />
     <Compile Include="Global.asax.cs">

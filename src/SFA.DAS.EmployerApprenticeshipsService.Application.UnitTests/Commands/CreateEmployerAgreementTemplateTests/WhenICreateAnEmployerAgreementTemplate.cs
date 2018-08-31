@@ -2,8 +2,8 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateEmployerAgreementTemplate;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateEmployerAgreementTemplateTests
 {

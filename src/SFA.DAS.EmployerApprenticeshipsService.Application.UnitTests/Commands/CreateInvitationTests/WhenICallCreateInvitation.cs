@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateInvitation;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;

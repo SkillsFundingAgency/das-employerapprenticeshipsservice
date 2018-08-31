@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.Validation;

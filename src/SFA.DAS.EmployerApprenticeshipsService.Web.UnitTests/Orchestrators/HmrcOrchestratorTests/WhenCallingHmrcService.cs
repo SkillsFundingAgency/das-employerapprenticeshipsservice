@@ -3,7 +3,6 @@ using HMRC.ESFA.Levy.Api.Types;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -12,6 +11,7 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HmrcOrchestratorTests
 {

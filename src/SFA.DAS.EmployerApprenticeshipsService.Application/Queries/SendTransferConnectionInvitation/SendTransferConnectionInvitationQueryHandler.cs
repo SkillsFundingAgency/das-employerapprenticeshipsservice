@@ -5,11 +5,10 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using SFA.DAS.EAS.Application.Dtos;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.Hashing;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
 {

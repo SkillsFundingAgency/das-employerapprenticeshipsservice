@@ -6,10 +6,10 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.DismissMonthlyTaskReminder;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Tasks.API.Types.Enums;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.TaskOrchestratorTests
 {

@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SFA.DAS.Validation;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Application.Exceptions;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries
 {

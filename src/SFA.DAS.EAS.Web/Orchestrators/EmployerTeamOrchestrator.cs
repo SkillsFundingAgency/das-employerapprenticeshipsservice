@@ -5,7 +5,6 @@ using SFA.DAS.EAS.Application.Commands.DeleteInvitation;
 using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
 using SFA.DAS.EAS.Application.Commands.ResendInvitation;
 using SFA.DAS.EAS.Application.Commands.UpdateShowWizard;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountStats;
 using SFA.DAS.EAS.Application.Queries.GetAccountTasks;
@@ -18,7 +17,6 @@ using SFA.DAS.EAS.Application.Queries.GetUser;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -26,6 +24,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.Authorization;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

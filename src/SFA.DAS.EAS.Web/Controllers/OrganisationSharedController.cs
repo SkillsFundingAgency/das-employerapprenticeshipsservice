@@ -7,7 +7,6 @@ using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;

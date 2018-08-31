@@ -5,7 +5,6 @@ using MediatR;
 using SFA.DAS.Validation;
 using SFA.DAS.HashingService;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.Exceptions;
 using SFA.DAS.EmployerFinance.Models.Payments;
 
 namespace SFA.DAS.EmployerFinance.Queries.FindAccountProviderPayments

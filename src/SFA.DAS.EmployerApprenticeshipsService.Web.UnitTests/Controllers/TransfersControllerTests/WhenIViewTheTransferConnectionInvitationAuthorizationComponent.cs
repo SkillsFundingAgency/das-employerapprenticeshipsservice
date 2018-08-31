@@ -5,7 +5,6 @@ using NUnit.Framework;
 using System.Web.Mvc;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthorization;
-using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Mappings;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;

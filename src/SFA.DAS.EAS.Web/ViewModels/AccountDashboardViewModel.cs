@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Web.ViewModels
 {

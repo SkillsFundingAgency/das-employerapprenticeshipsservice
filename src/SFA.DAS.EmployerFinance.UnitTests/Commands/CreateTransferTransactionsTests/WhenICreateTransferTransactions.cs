@@ -7,7 +7,6 @@ using NUnit.Framework;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Commands.CreateTransferTransactions;
 using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.Exceptions;
 using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.NLog.Logger;
 
