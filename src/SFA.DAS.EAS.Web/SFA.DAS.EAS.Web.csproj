@@ -537,7 +537,6 @@
     <Compile Include="ViewModels\AccountPaye\PayeSchemeNextStepsViewModel.cs" />
     <Compile Include="ViewModels\Activities\ActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Activities\LatestActivitiesViewModel.cs" />
-    <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationUpdatedNextStepsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\UpdateOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\SignAgreementViewModel.cs" />
@@ -586,7 +585,6 @@
     <Compile Include="ViewModels\Organisation\OrganisationAddedNextStepsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SearchOrganisationResultsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SearchOrganisationViewModel.cs" />
-    <Compile Include="ViewModels\ProviderPaymentsSummaryViewModel.cs" />
     <Compile Include="ViewModels\SummaryUnsubscribeViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
     <Compile Include="ViewModels\Organisation\AddLegalEntityViewModel.cs" />
@@ -1106,7 +1104,6 @@
     <Content Include="src\sass\_notifications.scss" />
     <Content Include="src\sass\_navigation.scss" />
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
-    <Content Include="Views\EmployerAccountTransactions\ProviderPaymentSummary.cshtml" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="src\sass\_welcome.scss" />

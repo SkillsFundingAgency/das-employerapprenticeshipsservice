@@ -90,15 +90,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(ControllerConstants.LevyDeclarationDetailViewName, viewModel);
         }
 
-        [Route("finance/provider/summary")]
-        [Route("balance/provider/summary")]
-        public async Task<ActionResult> ProviderPaymentSummary(string hashedAccountId, long ukprn, DateTime fromDate, DateTime toDate)
-        {
-            var viewModel = await _accountTransactionsOrchestrator.GetProviderPaymentSummary(hashedAccountId, ukprn, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            return View(ControllerConstants.ProviderPaymentSummaryViewName, viewModel);
-        }
-
 
         [Route("finance/transfer/details")]
         [Route("balance/transfer/details")]
