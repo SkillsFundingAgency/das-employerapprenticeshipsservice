@@ -6,7 +6,6 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -15,6 +14,7 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
 {

@@ -4,10 +4,10 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {

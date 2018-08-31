@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+﻿using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 
 namespace SFA.DAS.EAS.Web.ViewModels
 {

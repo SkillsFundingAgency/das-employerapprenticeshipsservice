@@ -366,11 +366,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountLegalEntitiesController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
-    <Compile Include="Filters\HandleErrorFilter.cs" />
     <Compile Include="Filters\UnitOfWorkManagerFilter.cs" />
-    <Compile Include="Filters\ValidateModelStateFilter.cs" />
-    <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
-    <Compile Include="Attributes\HttpNotFoundForNullModelAttribute.cs" />
     <Compile Include="Controllers\TransferConnectionsController.cs" />
     <Compile Include="ExceptionLoggers\ErrorLogger.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />

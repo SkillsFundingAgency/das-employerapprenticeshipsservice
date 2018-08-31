@@ -7,7 +7,6 @@ using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Helpers;

@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;

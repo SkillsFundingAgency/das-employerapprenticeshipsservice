@@ -5,7 +5,6 @@ using SFA.DAS.EmployerFinance.Queries.FindAccountProviderPayments;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
-using SFA.DAS.Exceptions;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
@@ -13,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {

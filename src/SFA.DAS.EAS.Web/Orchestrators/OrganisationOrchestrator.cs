@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -11,29 +10,23 @@ using MediatR;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
-using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
-using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
 using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.ReferenceData;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails;
-using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Extensions;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntitiy;
-using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
 using SFA.DAS.EAS.Application.Queries.GetOrganisationById;
-using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.EAS.Web.Validation;
 using SFA.DAS.HashingService;
+using SFA.DAS.Validation;
+using SFA.DAS.EAS.Application.Extensions;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

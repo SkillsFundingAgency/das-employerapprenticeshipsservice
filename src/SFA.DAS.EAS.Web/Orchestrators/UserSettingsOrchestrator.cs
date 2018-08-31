@@ -9,7 +9,6 @@ using SFA.DAS.EAS.Application.Commands.UnsubscribeNotification;
 using SFA.DAS.EAS.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetUserNotificationSettings;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Settings;
 using SFA.DAS.EAS.Web.Exceptions;
 using SFA.DAS.EAS.Web.ViewModels;

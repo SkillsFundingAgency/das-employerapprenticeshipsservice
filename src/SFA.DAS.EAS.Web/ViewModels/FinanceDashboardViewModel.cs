@@ -1,6 +1,4 @@
-﻿using SFA.DAS.EAS.Domain.Models.Account;
-
-namespace SFA.DAS.EAS.Web.ViewModels
+﻿namespace SFA.DAS.EAS.Web.ViewModels
 {
     public class FinanceDashboardViewModel
     {

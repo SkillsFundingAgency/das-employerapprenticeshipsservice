@@ -6,7 +6,6 @@ using MediatR;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
 using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory;
@@ -16,10 +15,10 @@ using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.AccountPaye;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

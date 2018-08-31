@@ -1,15 +1,11 @@
 ﻿using FluentValidation.Mvc;
-using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure;
 using NLog;
 using NLog.Targets;
 using NServiceBus;
-using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
-using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
@@ -39,6 +35,9 @@ using SFA.DAS.NServiceBus.NewtonsoftSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
 using Environment = SFA.DAS.EAS.Infrastructure.DependencyResolution.Environment;
+using SFA.DAS.Audit.Client;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights;
 
 namespace SFA.DAS.EAS.Web
 {

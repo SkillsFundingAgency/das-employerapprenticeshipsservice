@@ -1,12 +1,10 @@
 ﻿using MediatR;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments;
 using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
-using SFA.DAS.EAS.Domain.Extensions;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
@@ -18,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.Activities.Client;
+using SFA.DAS.Validation;
 using TransactionLine = SFA.DAS.EAS.Domain.Models.Transaction.TransactionLine;
 
 namespace SFA.DAS.EAS.Web.Orchestrators

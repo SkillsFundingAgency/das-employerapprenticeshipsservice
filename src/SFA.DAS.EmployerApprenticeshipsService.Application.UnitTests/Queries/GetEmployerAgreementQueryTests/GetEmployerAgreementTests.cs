@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.Validation;
@@ -13,9 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
-using SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementTests;
 using SFA.DAS.EAS.Infrastructure.Data;
-using Membership = SFA.DAS.EAS.Domain.Models.AccountTeam.Membership;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTests
 {

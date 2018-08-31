@@ -1,7 +1,6 @@
 ﻿using System;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Web.ViewModels
 {

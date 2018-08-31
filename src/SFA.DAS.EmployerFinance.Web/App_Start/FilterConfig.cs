@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Web.Filters;
 

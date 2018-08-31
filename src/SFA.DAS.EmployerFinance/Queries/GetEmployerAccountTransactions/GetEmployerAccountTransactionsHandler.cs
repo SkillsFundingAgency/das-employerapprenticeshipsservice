@@ -4,7 +4,6 @@ using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.Exceptions;
 using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;

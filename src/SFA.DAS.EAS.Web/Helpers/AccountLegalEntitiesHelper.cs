@@ -6,7 +6,6 @@ using MediatR;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.Organisation;
 
 namespace SFA.DAS.EAS.Web.Helpers
 {

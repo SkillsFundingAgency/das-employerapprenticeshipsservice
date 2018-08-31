@@ -2,7 +2,6 @@
 using MediatR;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.Exceptions;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Commands.CreateEnglishFractionCalculationDate

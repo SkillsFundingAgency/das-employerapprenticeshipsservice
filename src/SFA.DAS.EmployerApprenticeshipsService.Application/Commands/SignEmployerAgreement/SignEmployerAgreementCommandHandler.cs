@@ -2,13 +2,11 @@
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.HashingService;
 using System;
 using System.Collections.Generic;

@@ -6,7 +6,6 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountStats;
@@ -17,8 +16,6 @@ using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.EAS.TestCommon.Builders;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests

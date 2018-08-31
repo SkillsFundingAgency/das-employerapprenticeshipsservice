@@ -416,10 +416,6 @@
     <Compile Include="Commands\DeleteSentTransferConnectionInvitation\DeleteTransferConnectionInvitationCommandHandler.cs" />
     <Compile Include="Commands\RejectTransferConnectionInvitation\RejectTransferConnectionInvitationCommandHandler.cs" />
     <Compile Include="Commands\RejectTransferConnectionInvitation\RejectTransferConnectionInvitationCommand.cs" />
-    <Compile Include="Attributes\DateAttribute.cs" />
-    <Compile Include="Attributes\DayAttribute.cs" />
-    <Compile Include="Attributes\YearAttribute.cs" />
-    <Compile Include="Attributes\MonthAttribute.cs" />
     <Compile Include="Commands\SendTransferConnectionInvitation\SendTransferConnectionInvitationCommand.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommand.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommandHandler.cs" />
@@ -516,13 +512,11 @@
     <Compile Include="Factories\LegalEntityEventFactory.cs" />
     <Compile Include="Factories\PayeSchemeEventFactory.cs" />
     <Compile Include="Helpers\NameOf.cs" />
-    <Compile Include="Exceptions\InvalidRequestException.cs" />
     <Compile Include="Mappings\AccountMappings.cs" />
     <Compile Include="Mappings\MembershipMappings.cs" />
     <Compile Include="Mappings\TransferConnectionInvitationMappings.cs" />
     <Compile Include="Mappings\UserMappings.cs" />
     <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
-    <Compile Include="Exceptions\NotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesRequest.cs" />
@@ -769,13 +763,9 @@
     <Compile Include="Queries\GetUser\GetUserQuery.cs" />
     <Compile Include="Queries\GetUser\GetUserQueryValidator.cs" />
     <Compile Include="Queries\GetUser\GetUserResponse.cs" />
-    <Compile Include="Messages\DayMonthYear.cs" />
     <Compile Include="Services\DasLevyService.cs" />
     <Compile Include="Services\RefreshEmployerLevyService.cs" />
     <Compile Include="Services\TransferAllowanceService.cs" />
-    <Compile Include="Messages\MonthYear.cs" />
-    <Compile Include="Exceptions\ValidationException.cs" />
-    <Compile Include="Messages\Year.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">

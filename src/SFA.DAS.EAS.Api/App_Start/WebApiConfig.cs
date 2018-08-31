@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Account.Api.DependencyResolution;
 using SFA.DAS.EAS.Account.Api.ExceptionLoggers;
 using SFA.DAS.EAS.Account.Api.Filters;
 using SFA.DAS.EAS.Application.DependencyResolution;
+using SFA.DAS.Validation.WebApi;
 using WebApi.StructureMap;
 
 namespace SFA.DAS.EAS.Account.Api

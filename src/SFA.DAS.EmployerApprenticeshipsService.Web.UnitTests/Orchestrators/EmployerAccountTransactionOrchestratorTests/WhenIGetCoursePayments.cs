@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
@@ -15,7 +14,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrchestratorTests
 {

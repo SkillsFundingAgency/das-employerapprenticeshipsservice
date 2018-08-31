@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.DismissMonthlyTaskReminder;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.HashingService;
