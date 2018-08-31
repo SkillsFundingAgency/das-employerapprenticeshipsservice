@@ -99,25 +99,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(ControllerConstants.ProviderPaymentSummaryViewName, viewModel);
         }
 
-        [Route("finance/course/standard/summary")]
-        [Route("balance/course/standard/summary")]
-        public async Task<ActionResult> CourseStandardPaymentSummary(string hashedAccountId, long ukprn, string courseName,
-            int? courseLevel, DateTime fromDate, DateTime toDate)
-        {
-            return await CourseFrameworkPaymentSummary(hashedAccountId, ukprn, courseName, courseLevel, null, fromDate, toDate);
-        }
-
-        [Route("finance/course/framework/summary")]
-        [Route("balance/course/framework/summary")]
-        public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName,
-            int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
-        {
-            var viewModel = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(
-                                                                        hashedAccountId, ukprn, courseName, courseLevel, pathwayCode,
-                                                                        fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            return View(ControllerConstants.CoursePaymentSummaryViewName, viewModel);
-        }
 
         [Route("finance/transfer/details")]
         [Route("balance/transfer/details")]
