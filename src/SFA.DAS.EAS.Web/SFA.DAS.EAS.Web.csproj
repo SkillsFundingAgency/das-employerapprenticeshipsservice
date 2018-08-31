@@ -537,8 +537,6 @@
     <Compile Include="ViewModels\AccountPaye\PayeSchemeNextStepsViewModel.cs" />
     <Compile Include="ViewModels\Activities\ActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Activities\LatestActivitiesViewModel.cs" />
-    <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
-    <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationUpdatedNextStepsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\UpdateOrganisationAddressViewModel.cs" />
@@ -1109,7 +1107,6 @@
     <Content Include="src\sass\_navigation.scss" />
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\ProviderPaymentSummary.cshtml" />
-    <Content Include="Views\EmployerAccountTransactions\CoursePaymentSummary.cshtml" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="src\sass\_welcome.scss" />
