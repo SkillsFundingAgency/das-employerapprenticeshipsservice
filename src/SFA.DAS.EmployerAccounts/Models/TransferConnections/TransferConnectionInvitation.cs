@@ -1,8 +1,7 @@
-﻿using System;
+﻿using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using SFA.DAS.EmployerFinance.Messages.Events;
+using System;
 using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Models.UserProfile;
 
 namespace SFA.DAS.EmployerAccounts.Models.TransferConnections
 {

@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RejectTransferConnectionInvitation

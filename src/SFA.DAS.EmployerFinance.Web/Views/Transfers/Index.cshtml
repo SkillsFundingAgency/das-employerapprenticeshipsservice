@@ -1,0 +1,49 @@
+﻿@using SFA.DAS.Authorization
+@using SFA.DAS.Authorization.Mvc
+@using SFA.DAS.EAS.Web.Extensions
+
+@{
+    ViewBag.Title = "Transfers";
+    ViewBag.Section = "finance";
+    ViewBag.PageID = "page-transfers";
+    ViewBag.GaData.Vpv = "/accounts/transfers";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Transfers</h1>
+    </div>
+</div>
+
+@if (Html.IsAuthorized(FeatureType.Transfers))
+{
+    @Html.Action("TransferAllowance")
+    @Html.Action("TransferConnectionInvitationAuthorization")
+    @Html.Action("TransferConnectionInvitations")
+    @Html.Action("TransferRequests")
+}
+else
+{
+    @Html.Action("TransferAllowance")
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <p><a href="@Url.ProjectionsAction("forecasting/estimations/start-transfer")">Estimate</a> the number of apprentices you can fund with your transfer allowance.</p>
+            <p>Employers who pay the apprenticeship levy will soon be able to connect with other employers and transfer up to 10% of their previous year's annual funds.</p>
+            <p>Before connecting to another employer, both employers will need to:</p>
+            <ul class="list list-bullet">
+                <li>read and understand the <a href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">rules for sending and receiving transfers</a></li>
+                <li>sign the updated ESFA organisation agreement once it's available. View <a href="https://www.gov.uk/government/publications/apprenticeship-funding-legal-agreement-to-enable-spending/guidance-note-on-the-employer-agreement">guidance on the updated agreement</a> to find out what's changed.</li>
+            </ul>
+        </div>
+    </div>
+}
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAccountTransactions")">Finance</a></li>
+            <li>@ViewBag.Title</li>
+        </ol>
+    </div>
+}

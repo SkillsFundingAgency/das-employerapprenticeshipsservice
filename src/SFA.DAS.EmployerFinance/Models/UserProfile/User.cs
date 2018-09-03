@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EmployerFinance.Models
+namespace SFA.DAS.EmployerFinance.Models.UserProfile
 {
     public class User
     {
@@ -22,6 +22,8 @@ namespace SFA.DAS.EmployerFinance.Models
         public virtual string Email { get; set; }
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
+
+        public virtual string FullName => $"{FirstName} {LastName}";
 
         private Guid? _ref;
         private string _userRef;
