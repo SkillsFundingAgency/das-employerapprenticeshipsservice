@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Dapper;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.Sql.Client;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.Sql.Client;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             _db = db;
         }
 
-        public Task<Domain.Models.Account.Account> GetAccountById(long id)
+        public Task<Account> GetAccountById(long id)
         {
             return _db.Value.Accounts.SingleOrDefaultAsync(a => a.Id == id);
         }
@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
         {
             AccountDetail accountDetail = null;
-            
+
             var parameters = new DynamicParameters();
 
             parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
@@ -141,6 +141,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
-		}
+        }
     }
 }

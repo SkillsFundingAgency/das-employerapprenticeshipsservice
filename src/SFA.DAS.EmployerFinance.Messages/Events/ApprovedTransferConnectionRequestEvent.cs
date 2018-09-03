@@ -1,7 +1,7 @@
 ﻿using System;
 using SFA.DAS.NServiceBus;
 
-namespace SFA.DAS.EmployerAccounts.Messages.Events
+namespace SFA.DAS.EmployerFinance.Messages.Events
 {
     public class ApprovedTransferConnectionRequestEvent : Event
     {

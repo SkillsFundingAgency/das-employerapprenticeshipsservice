@@ -1,15 +1,15 @@
-﻿using System;
+﻿using NServiceBus;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerFinance.Messages.Events;
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Notifications.Api.Types;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using NServiceBus;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Types;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
 {
@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
         private readonly ILog _logger;
         private readonly INotificationsApi _notificationsApi;
         private readonly Lazy<EmployerAccountsDbContext> _db;
-        
+
         public SentTransferConnectionRequestEventNotificationHandler(
             EmployerAccountsConfiguration config,
             ILog logger,

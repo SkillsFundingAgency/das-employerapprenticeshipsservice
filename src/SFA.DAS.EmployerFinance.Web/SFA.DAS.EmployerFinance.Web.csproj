@@ -100,6 +100,8 @@
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsController.cs" />
+    <Compile Include="Controllers\TransfersController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -120,15 +122,27 @@
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\ApprovedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
     <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\DeletedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\FlashMessageViewModel.cs" />
     <Compile Include="ViewModels\ProviderPaymentsSummaryViewModel.cs" />
+    <Compile Include="ViewModels\ReceiveTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\SendTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\SentTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
     <Compile Include="ViewModels\TransactionDownloadViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewResultViewModel.cs" />
+    <Compile Include="ViewModels\TransferAllowanceViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitationAuthorizationViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitationsViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\TransferRequestsViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +252,21 @@
     <Content Include="Views\Shared\Privacy.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\CoursePaymentSummary.cshtml" />
+    <Content Include="Views\Transfers\Index.cshtml" />
+    <Content Include="Views\Transfers\TransferAllowance.cshtml" />
+    <Content Include="Views\Transfers\TransferConnectionInvitationAuthorization.cshtml" />
+    <Content Include="Views\Transfers\TransferConnectionInvitations.cshtml" />
+    <Content Include="Views\Transfers\TransferRequests.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Approved.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Deleted.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Details.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Index.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Receive.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Rejected.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Send.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Sent.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Start.cshtml" />
+    <Content Include="Views\Shared\_ValidationSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
