@@ -195,7 +195,7 @@ namespace SFA.DAS.EmployerFinance.Data
         }
 		
 
-        public async Task<string> GetProviderName(long ukprn, long accountId, string periodEnd)
+        public Task<string> GetProviderName(long ukprn, long accountId, string periodEnd)
         {
             var parameters = new DynamicParameters();
 
@@ -203,7 +203,7 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@accountId", accountId, DbType.Int64);
             parameters.Add("@periodEnd", periodEnd, DbType.String);
 
-            return await _db.Value.Database.Connection.ExecuteScalarAsync<string>(
+            return _db.Value.Database.Connection.ExecuteScalarAsync<string>(
                 sql: "[employer_financial].[GetProviderName]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,

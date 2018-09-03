@@ -25,7 +25,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         private GetEmployerAccountTransactionsQuery _request;
         private Mock<IApprenticeshipInfoServiceWrapper> _apprenticshipInfoService;
         private Mock<ILog> _logger;
-        private Mock<IProviderService> _providerService;
         private Mock<IPaymentService> _paymentService;
         public override GetEmployerAccountTransactionsQuery Query { get; set; }
         public override GetEmployerAccountTransactionsHandler RequestHandler { get; set; }
@@ -59,8 +58,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
 
             _apprenticshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
 
-            _providerService = new Mock<IProviderService>();
-
             _paymentService = new Mock<IPaymentService>();
 
             _logger = new Mock<ILog>();
@@ -71,8 +68,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 _apprenticshipInfoService.Object,
                 _logger.Object,
                 _hashingService.Object,
-                _publicHashingService.Object,
-                _providerService.Object);
+                _publicHashingService.Object);
             Query = new GetEmployerAccountTransactionsQuery();
         }
 
@@ -189,10 +185,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             _apprenticshipInfoService.Setup(x => x.GetProvider(expectedUkprn)).Returns(new ProvidersView { Provider = new EmployerFinance.Models.ApprenticeshipProvider.Provider { ProviderName = "test" } });
             _dasLevyService.Setup(x => x.GetProviderName(expectedUkprn, It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync("test");
             //Act
-            await RequestHandler.Handle(_request);
+            var actual = await RequestHandler.Handle(_request);
 
             //Assert
-            _providerService.Verify(x => x.GetProvider(expectedUkprn), Times.Once);
+            _dasLevyService.Verify(x => x.GetProviderName(expectedUkprn, It.IsAny<long>(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -213,7 +209,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                            .ReturnsAsync(transactions);
 
-            _providerService.Setup(x => x.GetProvider(It.IsAny<long>())).Throws(new WebException());
+            _dasLevyService.Setup(x => x.GetProviderName(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>())).Throws(new WebException());
 
             //Act
             var actual = await RequestHandler.Handle(_request);
@@ -241,7 +237,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(transactions);
 
-            _providerService.Setup(x => x.GetProvider(It.IsAny<long>())).Returns((string)null);
+            _dasLevyService.Setup(x => x.GetProviderName(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>()))
+                .ReturnsAsync((string) null);
 
             //Act
             var actual = await RequestHandler.Handle(_request);
