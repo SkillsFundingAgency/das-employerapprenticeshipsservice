@@ -15,16 +15,11 @@ namespace SFA.DAS.EmployerFinance.Services
             _apprenticeshipInfoServiceWrapper = apprenticeshipInfoServiceWrapper;
             _paymentService = paymentService;
         }
-        public string GetProvider(long ukprn)
+        public virtual string GetProvider(long ukprn)
         {
             var providerFromDb = _paymentService.GetProvider((Int16)ukprn);
             var providerName = providerFromDb.Result.ProviderName;
-            if (providerName == null)
-            {
-                var providerFromApi = _apprenticeshipInfoServiceWrapper.GetProvider(ukprn);
-                return providerFromApi.Provider.Name;
-            }
-            return providerName;
+           return providerName;
         }
     }
 }

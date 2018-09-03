@@ -151,6 +151,7 @@
     <None Include="Scripts\PreDeployment\AML-2616-DeleteDuplicateLevyDeclarationsWithoutEmpRef.sql" />
     <Build Include="Tables\HealthChecks.sql" />
     <None Include="Scripts\PreDeployment\DeleteHealthChecks.sql" />
+    <Build Include="StoredProcedures\GetProviderName.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />

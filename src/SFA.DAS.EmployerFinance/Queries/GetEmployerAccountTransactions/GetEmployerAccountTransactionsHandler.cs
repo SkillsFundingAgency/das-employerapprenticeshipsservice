@@ -24,6 +24,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
         private readonly IHashingService _hashingService;
         private readonly IPublicHashingService _publicHashingService;
         private readonly ILog _logger;
+        private readonly IProviderService _providerService;
 
         public GetEmployerAccountTransactionsHandler(
             IDasLevyService dasLevyService,
@@ -31,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
             IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper,
             ILog logger,
             IHashingService hashingService,
-            Hashing.IPublicHashingService publicHashingService)
+            Hashing.IPublicHashingService publicHashingService, IProviderService providerService)
         {
             _dasLevyService = dasLevyService;
             _validator = validator;
@@ -39,6 +40,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
             _logger = logger;
             _hashingService = hashingService;
             _publicHashingService = publicHashingService;
+            _providerService = providerService;
         }
 
         public async Task<GetEmployerAccountTransactionsResponse> Handle(GetEmployerAccountTransactionsQuery message)
@@ -123,9 +125,9 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
             try
             {
                 var ukprn = Convert.ToInt32(transaction.UkPrn);
-                var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(ukprn);
-
-                return $"{transactionPrefix}{providerName.Provider.ProviderName}";
+                var providerName = _dasLevyService.GetProviderName(ukprn, transaction.AccountId, transaction.PeriodEnd);
+                if (providerName != null)
+                    return $"{transactionPrefix}{providerName}";
             }
             catch (Exception ex)
             {
