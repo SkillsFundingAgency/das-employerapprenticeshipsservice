@@ -4,7 +4,6 @@ using SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.Exceptions;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
@@ -119,7 +118,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             await _handler.Handle(_command);
 
             //Assert
-            _transferRepository.Verify(x => x.CreateAccountTransfers(_transfers), Times.Once);
+            _transferRepository.Verify(x => x.CreateAccountTransfers(It.Is<IEnumerable<AccountTransfer>>(t =>
+                t.All(at => at.CommitmentId.Equals(_accountTransfer.CommitmentId) &&
+                            at.SenderAccountId.Equals(_accountTransfer.SenderAccountId) &&
+                            at.SenderAccountName.Equals(_accountTransfer.SenderAccountName) &&
+                            at.ReceiverAccountId.Equals(_accountTransfer.ReceiverAccountId) &&
+                            at.ReceiverAccountName.Equals(_accountTransfer.ReceiverAccountName) &&
+                            at.Amount.Equals(_accountTransfer.Amount)))), Times.Once);
         }
 
         [Test]
@@ -202,7 +207,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             }
 
             //Assert
-            _transferRepository.Verify(x => x.CreateAccountTransfers(_transfers), Times.Never);
+            _transferRepository.Verify(x => x.CreateAccountTransfers(It.IsAny<IEnumerable<AccountTransfer>>()), Times.Never);
         }
 
         [Test]
@@ -242,7 +247,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             //Assert
             foreach (var transfer in _transfers)
             {
-                _transferRepository.Verify(x => x.GetTransferPaymentDetails(transfer), Times.Once);
+                _transferRepository.Verify(x => x.GetTransferPaymentDetails(It.Is<AccountTransfer>(t =>
+                                t.CommitmentId.Equals(_accountTransfer.CommitmentId) &&
+                                t.SenderAccountId.Equals(_accountTransfer.SenderAccountId) &&
+                                t.SenderAccountName.Equals(_accountTransfer.SenderAccountName) &&
+                                t.ReceiverAccountId.Equals(_accountTransfer.ReceiverAccountId) &&
+                                t.ReceiverAccountName.Equals(_accountTransfer.ReceiverAccountName) &&
+                                t.Amount.Equals(_accountTransfer.Amount))), Times.Once);
             }
         }
 
