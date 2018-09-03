@@ -6,6 +6,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef
 {
     public class GetPayeSchemeByRefValidator : IValidator<GetPayeSchemeByRefQuery>
     {
+        /// <summary>
+        ///  AML-2454: Copy to finance
+        /// </summary>
         public ValidationResult Validate(GetPayeSchemeByRefQuery item)
         {
             var validationResult = new ValidationResult();

@@ -5,6 +5,9 @@ using SFA.DAS.EAS.Domain.Data;
 
 namespace SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef
 {
+    /// <summary>
+    ///  AML-2454: Copy to finance
+    /// </summary>
     public class GetPayeSchemeByRefHandler : IAsyncRequestHandler<GetPayeSchemeByRefQuery, GetPayeSchemeByRefResponse>
     {
         private readonly IValidator<GetPayeSchemeByRefQuery> _validator;

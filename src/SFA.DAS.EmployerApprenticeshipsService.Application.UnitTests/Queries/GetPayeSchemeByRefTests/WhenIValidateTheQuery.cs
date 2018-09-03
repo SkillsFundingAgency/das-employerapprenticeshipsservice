@@ -4,6 +4,9 @@ using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPayeSchemeByRefTests
 {
+    /// <summary>
+    ///  AML-2454: Copy to finance
+    /// </summary>
     public class WhenIValidateTheQuery
     {
         private GetPayeSchemeByRefValidator _validator;

@@ -9,6 +9,9 @@ using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPayeSchemeByRefTests
 {
+    /// <summary>
+    ///  AML-2454: Copy to finance
+    /// </summary>
     public class WhenIGetAPayeScheme : QueryBaseTest<GetPayeSchemeByRefHandler, GetPayeSchemeByRefQuery, GetPayeSchemeByRefResponse>
     {
         private Mock<IPayeRepository> _payeRepository;
