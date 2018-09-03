@@ -240,6 +240,7 @@
     <Content Include="Views\Shared\Privacy.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\CoursePaymentSummary.cshtml" />
+    <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
