@@ -139,6 +139,7 @@
     <Build Include="StoredProcedures\EvaluateEmployerLegalEntityAgreementStatus.sql" />
     <Build Include="StoredProcedures\UpdateAccountLegalEntity_SetNameAndAddress.sql" />
     <Build Include="StoredProcedures\UpdateAccountLegalEntity_SetPublicHashedId.sql" />
+    <None Include="Scripts\PreDeployment\AML-2434-DeleteOrphanedUserAccountSettings.sql" />
     <None Include="Scripts\Manual\AML-2674-NullAccountLegalEntityPublicHashIds.sql" />
   </ItemGroup>
   <ItemGroup>

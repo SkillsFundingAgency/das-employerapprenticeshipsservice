@@ -53,15 +53,17 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task Remove(long userId, long accountId)
         {
-            await WithConnection(async c =>
+            await WithTransaction(async (c, t) =>
             {
                 var parameters = new DynamicParameters();
+
                 parameters.Add("@UserId", userId, DbType.Int64);
                 parameters.Add("@AccountId", accountId, DbType.Int64);
 
-                return await c.ExecuteAsync(
+                await c.ExecuteAsync(
                     sql: "[employer_account].[RemoveMembership]",
                     param: parameters,
+                    transaction: t,
                     commandType: CommandType.StoredProcedure);
             });
         }
