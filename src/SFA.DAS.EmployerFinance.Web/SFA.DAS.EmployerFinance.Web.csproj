@@ -95,6 +95,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
+    <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
@@ -240,6 +241,7 @@
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\CoursePaymentSummary.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
+    <Content Include="Views\AccessDenied\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
