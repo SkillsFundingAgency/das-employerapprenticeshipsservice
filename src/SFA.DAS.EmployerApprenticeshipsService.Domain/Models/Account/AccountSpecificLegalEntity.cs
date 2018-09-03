@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Domain.Models.Account
 {
@@ -15,7 +16,7 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public DateTime? DateOfIncorporation { get; set; }
         public byte? PublicSectorDataSource { get; set; }
         public string Sector { get; set; }
-        public byte Source { get; set; }
+        public OrganisationType Source { get; set; }
         public string Status { get; set; }
         #endregion
 

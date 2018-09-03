@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetOrganisationById
             }
 
             var organisation =
-                await _referenceDataService.GetLatestDetails(message.OrganisationType.ToReferenceDataOrganisationType(), message.Identifier);
+                await _referenceDataService.GetLatestDetails(message.OrganisationType, message.Identifier);
 
             return new GetOrganisationByIdResponse { Organisation = organisation };
         }

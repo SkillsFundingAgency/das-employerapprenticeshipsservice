@@ -78,7 +78,8 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
             {
                 
                 var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
-                
+
+                // BUG: the look up on LegalEntityIdentifier by itself is invalid - it should also be by source, but this is not provided by commitments API
                 var returnValue = commitments
                                     .FirstOrDefault(c => 
                                         !string.IsNullOrEmpty(c.LegalEntityIdentifier) 

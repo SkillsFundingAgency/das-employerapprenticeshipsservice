@@ -138,11 +138,11 @@
     <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.1.30.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.30\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.1.21.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.1.21\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.1.32.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.1.32\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.ReferenceData.Types, Version=1.1.21.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.1.21\lib\net45\SFA.DAS.ReferenceData.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.ReferenceData.Types, Version=1.1.32.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.1.32\lib\net45\SFA.DAS.ReferenceData.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Tasks.API.Client, Version=1.7.0.49084, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.7.0.49084\lib\net45\SFA.DAS.Tasks.API.Client.dll</HintPath>
@@ -212,6 +212,7 @@
     <Compile Include="Extensions\EnumerableExtensionsTests.cs" />
     <Compile Include="Extensions\ExceptionExtensionTests.cs" />
     <Compile Include="Extensions\PaymentDetailsExtensionsTests.cs" />
+    <Compile Include="Extensions\StringEquivalenceOptionsTests.cs" />
     <Compile Include="Factories\WhenICreateARestClient.cs" />
     <Compile Include="Features\AgreementServiceTests.cs" />
     <Compile Include="Mapping\PaymentMappingTests\WhenIMapAPaymentToPaymentDetails.cs" />

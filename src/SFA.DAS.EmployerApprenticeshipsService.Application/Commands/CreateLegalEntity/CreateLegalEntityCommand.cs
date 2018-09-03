@@ -1,5 +1,6 @@
 ﻿using System;
 using MediatR;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
@@ -11,7 +12,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         public DateTime? DateOfIncorporation { get; set; }
         public byte? PublicSectorDataSource { get; set; }
         public string Sector { get; set; }
-        public byte Source { get; set; }
+        public OrganisationType Source { get; set; }
         public string Status { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }

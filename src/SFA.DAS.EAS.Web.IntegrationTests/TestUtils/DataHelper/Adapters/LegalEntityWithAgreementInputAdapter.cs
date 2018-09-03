@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters
             Name = input.CompanyName;
             PublicSectorDataSource = (byte) input.PublicSectorDataSource;
             Sector = input.Sector;
-            Source = (byte) input.Source;
+            Source = input.Source;
             Status = input.Status;
         }
     }

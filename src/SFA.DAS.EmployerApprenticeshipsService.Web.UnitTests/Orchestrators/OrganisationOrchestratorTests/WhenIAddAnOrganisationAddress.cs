@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
 using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.HashingService;
@@ -21,7 +22,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
         private Mock<IMapper> _mapper;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IAccountLegalEntityPublicHashingService> _hashingService;
 
         private CreateOrganisationAddressRequest _request;
         private AddOrganisationAddressViewModel _viewModel;
@@ -48,7 +49,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
             _mapper = new Mock<IMapper>();
-            _hashingService = new Mock<IHashingService>();
+            _hashingService = new Mock<IAccountLegalEntityPublicHashingService>();
 
             _mapper.Setup(x => x.Map<CreateOrganisationAddressRequest>(It.IsAny<AddOrganisationAddressViewModel>()))
                 .Returns(_request);

@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Dtos;
+using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -32,6 +33,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly IMapper _mapper;
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private readonly IMediator _mediator;
+        private readonly IReferenceDataService _referenceDataService;
 
         protected EmployerAgreementOrchestrator()
         {
@@ -41,56 +43,21 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             IMediator mediator,
             ILog logger,
             IMapper mapper,
-            EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator)
+            EmployerApprenticeshipsServiceConfiguration configuration,
+            IReferenceDataService referenceDataService) : base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
+            if (referenceDataService == null)
+                throw new ArgumentNullException(nameof(referenceDataService));
+
             _mediator = mediator;
             _logger = logger;
             _mapper = mapper;
             _configuration = configuration;
-        }
-
-        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> Create(
-            string hashedId, string externalUserId, string name, string code, string address, DateTime incorporatedDate)
-        {
-            var response = new OrchestratorResponse<EmployerAgreementViewModel>();
-
-            try
-            {
-                var request = new GetLatestEmployerAgreementTemplateRequest
-                {
-                    HashedAccountId = hashedId,
-                    UserId = externalUserId
-                };
-
-                var templateResponse = await _mediator.SendAsync(request);
-
-                response.Data = new EmployerAgreementViewModel
-                {
-                    EmployerAgreement = new EmployerAgreementView
-                    {
-                        LegalEntityName = name,
-                        LegalEntityCode = code,
-                        LegalEntityAddress = address,
-                        LegalEntityInceptionDate = incorporatedDate,
-                        Status = EmployerAgreementStatus.Pending,
-                        TemplatePartialViewName = templateResponse.Template.PartialViewName
-                    }
-                };
-            }
-            catch (UnauthorizedAccessException)
-            {
-                response.Status = HttpStatusCode.Unauthorized;
-            }
-            catch (InvalidRequestException)
-            {
-                response.Status = HttpStatusCode.BadRequest;
-            }
-
-            return response;
+            _referenceDataService = referenceDataService;
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(string hashedId,
@@ -137,11 +104,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var employerAgreementView =
                     _mapper.Map<AgreementDto, EmployerAgreementView>(response.EmployerAgreement);
 
+                var organisationLookupByIdPossible = await _referenceDataService.IsIdentifiableOrganisationType(employerAgreementView.LegalEntitySource);
+
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
                     Data = new EmployerAgreementViewModel
                     {
-                        EmployerAgreement = employerAgreementView
+                        EmployerAgreement = employerAgreementView,
+                        OrganisationLookupPossible = organisationLookupByIdPossible
                     }
                 };
             }

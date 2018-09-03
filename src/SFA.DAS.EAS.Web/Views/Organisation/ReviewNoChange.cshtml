@@ -9,7 +9,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Review your details</h1>
-        <p>We've retrieved the most up-to-date details we could find for your organisation.</p>
+        <p>Here are the most up-to-date details we found for your organisation. These details are the same as those previously held.</p>
 
         <div class="form-group">
             <table class="details-list">
@@ -29,35 +29,34 @@
                 </tbody>
             </table>
 
-            <form method="POST" action="@Url.Action("ProcessReviewSelection")">
-                @Html.AntiForgeryToken()
-                <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName" />
-                <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress" />
-                <input type="hidden" name="accountLegalEntityPublicHashedId" value="@Model.Data.AccountLegalEntityPublicHashedId" />
-                <input type="hidden" name="dataSourceFriendlyName" value="@Model.Data.DataSourceFriendlyName" />
+            <div class="panel panel-border-wide">
+                If these details are incorrect, you need to update them at @Model.Data.DataSourceFriendlyName. This update can take up to 7 working days to process.
+            </div>
 
+            <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")">contact support</a> for further help.</p>
+
+            <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
                 <div class="form-group">
-                    <h2 class="heading-medium">
-                        Are these details correct?
+                    <h2 class="heading-large">
+                        What's next?
                     </h2>
+
                     <div class="multiple-choice">
-                        <input id="update" type="radio" name="updateChoice" value="update" />
-                        <label for="update">
-                            Yes, update my details using this information
-                        </label>
+                        <input type="radio" name="nextStep" value="dashboard" />
+                        <label for="acceptAgreement">Go to your organisations and agreements</label>
                     </div>
                     <div class="multiple-choice">
-                        <input id="cancel" type="radio" name="updateChoice" value="incorrectDetails" />
-                        <label for="cancel">
-                            No, these details are incorrect
-                        </label>
+                        <input type="radio" name="nextStep" value="homepage" />
+                        <label for="teamMembers">Go to the homepage</label>
                     </div>
                 </div>
-               <button type="submit" class="button" id="accept">Continue</button> 
+                <button type="submit" class="button">Continue</button>
             </form>
         </div>
     </div>
+
 </div>
+
 
 @section breadcrumb {
     <div class="breadcrumbs">

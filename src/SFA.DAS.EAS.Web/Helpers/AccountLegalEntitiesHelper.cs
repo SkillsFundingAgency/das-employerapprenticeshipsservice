@@ -33,11 +33,11 @@ namespace SFA.DAS.EAS.Web.Helpers
         {
             if (organisationType == OrganisationType.Charities || organisationType == OrganisationType.CompaniesHouse)
             {
-                return accountLegalEntities.Any(x => x.Code.Equals(organisationCode.Trim(), StringComparison.CurrentCultureIgnoreCase) && x.Source == (short)organisationType);
+                return accountLegalEntities.Any(x => x.Code.Equals(organisationCode.Trim(), StringComparison.CurrentCultureIgnoreCase) && x.Source == organisationType);
             }
             else
             {
-                return accountLegalEntities.Any(x => x.Name.Equals(organisationName.Trim(), StringComparison.CurrentCultureIgnoreCase) && x.Source == (short)organisationType);
+                return accountLegalEntities.Any(x => x.Name.Equals(organisationName.Trim(), StringComparison.CurrentCultureIgnoreCase) && x.Source == organisationType);
             }
         }
     }

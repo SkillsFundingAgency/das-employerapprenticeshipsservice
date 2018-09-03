@@ -8,9 +8,9 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-large">
-            What next?
-        </h1>
+        <h2 class="heading-large">
+            What's next
+        </h2>
         <form method="POST" action="@Url.Action("NextSteps")">
             @Html.AntiForgeryToken()
             <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "error" : "")">

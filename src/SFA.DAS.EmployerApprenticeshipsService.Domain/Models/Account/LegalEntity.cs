@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Domain.Models.Account
 {
@@ -11,7 +12,7 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public virtual DateTime? DateOfIncorporation { get; set; }
         public virtual byte? PublicSectorDataSource { get; set; }
         public virtual string Sector { get; set; }
-        public virtual byte Source { get; set; }
+        public virtual OrganisationType Source { get; set; }
         public virtual string Status { get; set; }
     }
 }

@@ -134,6 +134,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
                         new PropertyUpdate {PropertyName = "Id", NewValue = agreementView.LegalEntityId.ToString()},
                         new PropertyUpdate {PropertyName = "Name", NewValue = agreementView.LegalEntityName},
                         new PropertyUpdate {PropertyName = "Code", NewValue = agreementView.LegalEntityCode},
+                        new PropertyUpdate {PropertyName = "Source", NewValue = agreementView.LegalEntitySource.ToString()},
                         new PropertyUpdate {PropertyName = "Status", NewValue = agreementView.LegalEntityStatus},
                         new PropertyUpdate {PropertyName = "Address", NewValue = agreementView.LegalEntityAddress},
                         new PropertyUpdate {PropertyName = "DateOfInception", NewValue = agreementView.LegalEntityInceptionDate.GetDateString("G")},

@@ -5,12 +5,14 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.HashingService;
@@ -24,7 +26,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
         private Mock<IMapper> _mapper;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IAccountLegalEntityPublicHashingService> _hashingService;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
         [SetUp]
@@ -33,7 +35,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
             _mapper = new Mock<IMapper>();
-            _hashingService = new Mock<IHashingService>();
+            _hashingService = new Mock<IAccountLegalEntityPublicHashingService>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _orchestrator = new OrganisationOrchestrator(
@@ -53,6 +55,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 HashedAccountId = "1",
                 Name = "Test Corp",
                 Code = "SD665734",
+                Source = OrganisationType.CompaniesHouse,
                 Address = "1, Test Street",
                 IncorporatedDate = DateTime.Now.AddYears(-20),
                 ExternalUserId = "2",
@@ -71,6 +74,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                              LegalEntityId = legalEntityId,
                              LegalEntityName = request.Name,
                              LegalEntityCode = request.Code,
+                             LegalEntitySource = request.Source,
                              LegalEntityAddress = request.Address,
                              LegalEntityStatus = request.LegalEntityStatus,
                              Status = EmployerAgreementStatus.Pending
@@ -85,6 +89,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             command.Name.Equals(request.Name) &&
             command.Address.Equals(request.Address) &&
             command.Code.Equals(request.Code) &&
+            command.Source.Equals(request.Source) &&
             command.DateOfIncorporation.Equals(request.IncorporatedDate) &&
             command.Status.Equals(request.LegalEntityStatus))));
         }

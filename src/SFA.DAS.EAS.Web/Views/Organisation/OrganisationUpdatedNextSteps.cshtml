@@ -2,64 +2,51 @@
 
 @{ViewBag.PageID = "page-organisation-updated-what-next"; }
 @{
-    ViewBag.Title = "What Next";
+    ViewBag.Title = "What's next";
     ViewBag.Section = "organisations";
 }
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-large">What's next?</h1>
 
         @if (string.IsNullOrEmpty(Model.Data.ErrorMessage))
         {
-            <div>
-                <div>
-                    Details updated
-                </div>
-                <div>
-                    You've successfully updated your organisation details
-                </div>
+            <div class="success-summary" tabindex="-1">
+                <h1 class="bold-large">Details updated</h1>
+                <p>You've successfully updated your organisation details</p>
             </div>
         }
         else
         {
-            <div>
-                <div>
-                    Details could not be updated
-                </div>
-                <div>
-                    <span class="error-message">@Model.Data.ErrorMessage</span>
-                </div>
+            <div class="error-summary" tabindex="-1">
+                <h1 class="bold-large">Details could not be updated</h1>
+                <p class="error-message">@Model.Data.ErrorMessage</p>
             </div>
         }
-        
 
         <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
+            <div class="form-group">
+                <input type="hidden" name="hashedAccountId" value="@Model.Data.HashedAccountId" />
+                <h2 class="heading-large">What's next?</h2>
 
-            <input type="hidden" name="hashedAccountId" value="@Model.Data.HashedAccountId"/>
-
-            <fieldset>
-                <legend>
-                    <span class="vh">What's next?</span>
-                </legend>
-
-                <label for="acceptAgreement" class="block-label">
-                    <span class="form-label">Go to your organisations and agreements</span>
-                    <input type="radio" name="nextStep" value="dashboard"/>
-                </label>
-
-                <label for="teamMembers" class="block-label">
-                    <span class="form-label">Go to the homepage</span>
-                    <input type="radio" name="nextStep" value="homepage"/>
-                </label>
-
-                <div class="form-group">
-                    <button type="submit" class="button">Continue</button>
+                <div class="multiple-choice">
+                    <input type="radio" name="nextStep" value="dashboard" />
+                    <label for="acceptAgreement">Go to your organisations and agreements</label>
                 </div>
-
-            </fieldset>
+                <div class="multiple-choice">
+                    <input type="radio" name="nextStep" value="homepage" />
+                    <label for="teamMembers">Go to the homepage</label>
+                </div>
+            </div>
+            <button type="submit" class="button">Continue</button>
         </form>
-
     </div>
 </div>
 
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="back-link">Back to your team</a></li>
+        </ol>
+    </div>
+}

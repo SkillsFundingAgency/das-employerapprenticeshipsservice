@@ -147,6 +147,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     LegalEntityName = viewModel.OrganisationName,
                     LegalEntityCode = viewModel.OrganisationReferenceNumber,
+                    LegalEntitySource = viewModel.OrganisationType,
                     LegalEntityAddress = viewModel.OrganisationAddress,
                     LegalEntityInceptionDate = viewModel.OrganisationDateOfInception,
                     Status = EmployerAgreementStatus.Pending,

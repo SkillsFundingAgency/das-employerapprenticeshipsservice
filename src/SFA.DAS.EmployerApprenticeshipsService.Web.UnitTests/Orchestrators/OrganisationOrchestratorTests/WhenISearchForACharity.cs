@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
+using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
@@ -24,7 +25,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         private Mock<ILog> _logger;
         private Mock<IMapper> _mapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IAccountLegalEntityPublicHashingService> _hashingService;
 
         private GetCharityQueryResponse _expected;
 
@@ -42,7 +43,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 });
 
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
-            _hashingService = new Mock<IHashingService>();
+            _hashingService = new Mock<IAccountLegalEntityPublicHashingService>();
 
             _expected = new GetCharityQueryResponse
             {

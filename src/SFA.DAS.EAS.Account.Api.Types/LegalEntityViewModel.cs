@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public string PublicSectorDataSource { get; set; }
         public string Sector { get; set; }
         public string Source { get; set; }
-        public byte SourceNumeric { get; set; }
+        public short SourceNumeric { get; set; }
         public string Status { get; set; }
         public long AccountLegalEntityId { get; set; }
         public string AccountLegalEntityPublicHashedId { get; set; }

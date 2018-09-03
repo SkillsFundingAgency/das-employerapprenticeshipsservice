@@ -150,6 +150,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     LegalEntityId = legalEntityId,
                     LegalEntityName = createParams.Name,
                     LegalEntityCode = createParams.Code,
+                    LegalEntitySource = createParams.Source,
                     LegalEntityAddress = createParams.Address,
                     LegalEntityInceptionDate = createParams.DateOfIncorporation,
                     Sector = createParams.Sector,
@@ -297,7 +298,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToDictionary(data => data.Id, data => data.Name);
         }
 
-        public Task UpdateLegalEntityDetailsForAccount(long accountLegalEntityId, string address, string name)
+        public Task UpdateLegalEntityDetailsForAccount(long accountLegalEntityId, string name, string address)
         {
             return WithTransaction((c, t) =>
             {
@@ -352,26 +353,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 param: parameters,
                 transaction: transaction,
                 commandType: CommandType.StoredProcedure);
-        }
-
-        public Task UpdateLegalEntityDetailsForAccount(long accountId, long legalEntityId, string address, string name)
-        {
-            //[employer_account].[UpdateAccountLegalEntity_SetNameAndAddress]
-            return WithTransaction(async (c, t) =>
-            {
-                var parameters = new DynamicParameters();
-
-                parameters.Add("@AccountId", accountId, DbType.Int64);
-                parameters.Add("@LegalEntityId", legalEntityId, DbType.Int64);
-                parameters.Add("@Name", name, DbType.String);
-                parameters.Add("@Address", address, DbType.String);
-
-                await c.ExecuteAsync(
-                    sql: "[employer_account].[UpdateAccountLegalEntity_SetNameAndAddress]",
-                    param: parameters,
-                    transaction: t,
-                    commandType: CommandType.StoredProcedure);
-            });
         }
 
         // ReSharper disable once ClassNeverInstantiated.Local

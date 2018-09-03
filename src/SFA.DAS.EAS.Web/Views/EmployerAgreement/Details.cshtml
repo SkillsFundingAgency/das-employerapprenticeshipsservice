@@ -20,6 +20,7 @@
 
     </div>
 </div>
+<hr />
 <div class="grid-row agreement-parties">
     <div class="column-one-third">
         <h2 class="heading-medium section-heading">Parties</h2>
@@ -33,22 +34,33 @@
             Coventry<br />
             CV1 2WT
         </address>
+    </div>
+</div>
+<div class="grid-row agreement-parties">
+    <div class="column-one-third column-hide">&nbsp;</div>
+    <div class="column-two-thirds"><hr /></div>
+</div>
+<div class="grid-row agreement-parties">
+    <div class="column-one-third column-hide">&nbsp;</div>
+    <div class="column-one-third">
         <address class="party">
             <strong>@Model.Data.EmployerAgreement.LegalEntityName</strong><br />
             @Html.CommaSeperatedAddressToHtml(@Model.Data.EmployerAgreement.LegalEntityAddress)
+            @if (Model.Data.OrganisationLookupPossible)
+            {
+                <p class="update-details">
+                    <a href="@Url.Action("review", "organisation", new
+                    {
+                        Model.Data.EmployerAgreement.HashedAccountId,
+                        Model.Data.EmployerAgreement.HashedAgreementId,
+                        Model.Data.EmployerAgreement.AccountLegalEntityPublicHashedId
+                    })">Update these details</a>
+                </p>
+            }
         </address>
-
-        @*<span class="column-two-thirds">
-            <a href="@Url.Action("review", "organisation", new
-                {
-                    Model.Data.EmployerAgreement.HashedAccountId,
-                    Model.Data.EmployerAgreement.HashedAgreementId,
-                    Model.Data.EmployerAgreement.AccountLegalEntityPublicHashedId
-                })">Update these details</a>
-        </span>*@
     </div>
 </div>
-
+<hr />
 <div class="grid-row">
     <div class="column-one-third">
         <h2 class="heading-medium section-heading">Document</h2>
@@ -69,9 +81,7 @@
         </div>
     </div>
 </div>
-
 <hr />
-
 <div class="grid-row">
     <div class="column-two-thirds">
         <h3 class="heading-medium">This agreement has been signed</h3>

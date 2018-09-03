@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 IncorporatedDate = incorporated,
                 ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName),
                 LegalEntityStatus = string.IsNullOrWhiteSpace(legalEntityStatus) ? null : legalEntityStatus,
-                Source = (byte)organisationType,
+                Source = organisationType,
                 PublicSectorDataSource = publicSectorDataSource,
                 Sector = sector
             };
@@ -158,7 +158,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var viewModel = await _orchestrator.GetRefreshedOrganisationDetails(accountLegalEntityPublicHashedId);
 
-            return View(viewModel);
+            if((viewModel.Data.UpdatesAvailable & OrganisationUpdatesAvailable.Any) != 0)
+            {
+                return View(viewModel);
+            }
+
+            return View("ReviewNoChange", viewModel);
         }
 
         [HttpPost]
@@ -168,16 +173,22 @@ namespace SFA.DAS.EAS.Web.Controllers
             string hashedAccountId,
             string accountLegalEntityPublicHashedId, 
             string organisationName,
-            string organisationAddress)
+            string organisationAddress,
+            string dataSourceFriendlyName)
         {
-            if (updateChoice == "update")
+            switch (updateChoice)
             {
-                var response = await _orchestrator.UpdateOrganisation(
-                    accountLegalEntityPublicHashedId, 
-                    organisationName,
-                    organisationAddress);
+                case "update":
+                    var response = await _orchestrator.UpdateOrganisation(
+                        accountLegalEntityPublicHashedId, 
+                        organisationName,
+                        organisationAddress);
 
-                return View(ControllerConstants.OrganisationUpdatedNextStepsActionName, response);
+                    return View(ControllerConstants.OrganisationUpdatedNextStepsActionName, response);
+
+                case "incorrectDetails":
+                    return View("ReviewIncorrectDetails", new IncorrectOrganisationDetailsViewModel {DataSourceFriendlyName = dataSourceFriendlyName});
+
             }
 
             return RedirectToAction("Details", "EmployerAgreement");

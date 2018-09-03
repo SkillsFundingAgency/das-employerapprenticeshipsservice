@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.ReferenceData.Api.Client;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
@@ -14,6 +15,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
         private readonly Mock<IReferenceDataApiClient> _apiClient = new Mock<IReferenceDataApiClient>();
         private Infrastructure.Services.ReferenceDataService _referenceDataService;
         private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
+        private Mock<ILog> _logger;
 
         [SetUp]
         public void Arrange()
@@ -32,7 +34,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             _mapper.Setup(x => x.Map<SFA.DAS.ReferenceData.Types.DTO.Charity, Charity>(It.Is<SFA.DAS.ReferenceData.Types.DTO.Charity>(c => c == null)))
                 .Returns(() => null);
 
-            _referenceDataService = new Infrastructure.Services.ReferenceDataService(_apiClient.Object, _mapper.Object, Mock.Of<IInProcessCache>());
+            _logger = new Mock<ILog>();
+
+            _referenceDataService = new Infrastructure.Services.ReferenceDataService(_apiClient.Object, _mapper.Object, Mock.Of<IInProcessCache>(), _logger.Object);
         }
 
         [Test]
