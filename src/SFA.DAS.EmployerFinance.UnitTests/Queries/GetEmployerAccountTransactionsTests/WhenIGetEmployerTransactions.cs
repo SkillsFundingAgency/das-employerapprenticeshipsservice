@@ -179,14 +179,15 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                        TransactionDate = DateTime.Now.AddMonths(-3),
                         Amount = 1000,
                         TransactionType = TransactionItemType.Payment,
-                        UkPrn = expectedUkprn
+                        UkPrn = expectedUkprn,
+                        PeriodEnd = "17-18"
                     }
                 };
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                            .ReturnsAsync(transactions);
 
             _apprenticshipInfoService.Setup(x => x.GetProvider(expectedUkprn)).Returns(new ProvidersView { Provider = new EmployerFinance.Models.ApprenticeshipProvider.Provider { ProviderName = "test" } });
-            _providerService.Setup(x => x.GetProvider(expectedUkprn)).Returns("test");
+            _dasLevyService.Setup(x => x.GetProviderName(expectedUkprn, It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync("test");
             //Act
             await RequestHandler.Handle(_request);
 
