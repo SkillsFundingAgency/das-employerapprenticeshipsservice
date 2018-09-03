@@ -132,7 +132,7 @@
                                      aggregationLine.TransactionType == TransactionItemType.TopUp)
                                 {
                                     <a title="View details for the transaction on @date" 
-                                       href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", @*AML-2454: Reference direct to Finance Site*@
+                                       href="@Url.EmployerFinanceAction("finance/levyDeclaration/details", 
                                                  new {hashedAccountId = Model.Data.Model.Data.HashedAccountId,
                                                      fromDate,
                                                      toDate })">Details <span class="vh"> for the transaction on @date</span>
