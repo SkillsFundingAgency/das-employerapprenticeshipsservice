@@ -8,6 +8,9 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries
 {
+    /// <summary>
+    ///  AML-2454: Move to finance
+    /// </summary>
     public class WhenIValidateTheRequest
     {
         private Mock<IMembershipRepository> _membershipRepository;
