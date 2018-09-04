@@ -12,9 +12,6 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountLevyTransactionDetailTests
 {
-    /// <summary>
-    ///  AML-2454: Move to finance
-    /// </summary>
     public class WhenIGetAccountLevyTransactionDetails : QueryBaseTest<GetAccountLevyTransactionsQueryHandler, GetAccountLevyTransactionsQuery, GetAccountLevyTransactionsResponse>
     {
         private Mock<ITransactionRepository> _transactionRepository;
