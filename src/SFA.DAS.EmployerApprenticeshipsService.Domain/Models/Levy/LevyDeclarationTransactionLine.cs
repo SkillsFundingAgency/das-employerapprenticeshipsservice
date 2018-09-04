@@ -4,9 +4,6 @@ using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Domain.Models.Levy
 {
-    /// <summary>
-    /// AML-2454: Move or copy to Finance
-    /// </summary>
     public class LevyDeclarationTransactionLine : TransactionLine
     {
         public long SubmissionId { get; set; }

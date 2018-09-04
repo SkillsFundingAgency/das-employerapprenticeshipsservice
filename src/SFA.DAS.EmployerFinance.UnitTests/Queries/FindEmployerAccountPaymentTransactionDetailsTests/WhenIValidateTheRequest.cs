@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
-using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTransactions;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.FindEmployerAccountLevyDeclarationTransactionDetailsTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Queries.FindEmployerAccountPaymentTransactionDetailsTests
 {
-    /// <summary>
-    ///  AML-2454: Move to finance
-    /// </summary>
     public class WhenIValidateTheRequest
     {
         private Mock<IMembershipRepository> _membershipRepository;

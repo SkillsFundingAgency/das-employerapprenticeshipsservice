@@ -129,6 +129,7 @@
     <Compile Include="ViewModels\ProviderPaymentsSummaryViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
     <Compile Include="ViewModels\TransactionDownloadViewModel.cs" />
+    <Compile Include="ViewModels\TransactionLineViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewResultViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
@@ -242,6 +243,7 @@
     <Content Include="Views\EmployerAccountTransactions\CoursePaymentSummary.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\LevyDeclarationDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

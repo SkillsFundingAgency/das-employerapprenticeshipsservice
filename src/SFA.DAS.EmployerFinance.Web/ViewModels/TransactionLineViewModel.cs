@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EmployerFinance.Models.Transaction;
 
-namespace SFA.DAS.EAS.Web.ViewModels
+namespace SFA.DAS.EmployerFinance.Web.ViewModels
 {
     public class TransactionLineViewModel<T> where T : TransactionLine
     {

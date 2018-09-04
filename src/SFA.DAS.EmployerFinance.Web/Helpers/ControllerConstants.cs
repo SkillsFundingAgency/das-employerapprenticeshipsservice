@@ -11,5 +11,7 @@
         public const string ProviderPaymentSummaryViewName = "ProviderPaymentSummary";
         public const string UserRefClaimKeyName = "sub";
         public const string CoursePaymentSummaryViewName = "CoursePaymentSummary";
+        public const string LevyDeclarationDetailViewName = "LevyDeclarationDetail";
+
     }
 }

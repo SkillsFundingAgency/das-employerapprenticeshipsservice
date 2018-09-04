@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments;
+using SFA.DAS.EmployerFinance.Queries.AccountTransactions.GetAccountProviderPayments;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountLevyTransactionDetailTests
 {
     public class WhenIValidateTheRequest
     {

@@ -1,11 +1,8 @@
 ﻿using System;
 using MediatR;
 
-namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTransactions
+namespace SFA.DAS.EmployerFinance.Queries.GetAccountLevyTransactions
 {
-    /// <summary>
-    ///  AML-2454: Move to finance
-    /// </summary>
     public class GetAccountLevyTransactionsQuery : IAsyncRequest<GetAccountLevyTransactionsResponse>
     {
         public long AccountId { get; set; }

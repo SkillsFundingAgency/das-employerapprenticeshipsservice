@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Paye;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
@@ -48,5 +49,22 @@ namespace SFA.DAS.EmployerFinance.Data
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
+
+        public async Task<PayeSchemeView> GetPayeForAccountByRef(string hashedAccountId, string reference)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
+            parameters.Add("@Ref", reference, DbType.String);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<PayeSchemeView>(
+                sql: "[employer_account].[GetPayeForAccount_ByRef]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.SingleOrDefault();
+        }
+
     }
 }

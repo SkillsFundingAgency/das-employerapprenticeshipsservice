@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTransactions;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Models.Levy;
+using SFA.DAS.EmployerFinance.Models.Transaction;
+using SFA.DAS.EmployerFinance.Queries.GetAccountLevyTransactions;
+using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Levy;
-using SFA.DAS.EAS.Domain.Models.Transaction;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountLevyTransactionDetailTests
 {
     /// <summary>
     ///  AML-2454: Move to finance
     /// </summary>
-    public class WhenIGetAccountTransactionDetails : QueryBaseTest<GetAccountLevyTransactionsQueryHandler, GetAccountLevyTransactionsQuery, GetAccountLevyTransactionsResponse>
+    public class WhenIGetAccountLevyTransactionDetails : QueryBaseTest<GetAccountLevyTransactionsQueryHandler, GetAccountLevyTransactionsQuery, GetAccountLevyTransactionsResponse>
     {
         private Mock<ITransactionRepository> _transactionRepository;
         private DateTime _fromDate;

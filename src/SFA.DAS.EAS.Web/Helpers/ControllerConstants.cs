@@ -46,7 +46,6 @@
         public const string InvitationControllerName = "Invitation";
         public const string InvitationIndexName = "All";
         public const string LegalAgreementViewName = "LegalAgreement";
-        public const string LevyDeclarationDetailViewName = "LevyDeclarationDetail";
         public const string ModelStateTempDataKey = "ModelState";
         public const string NextStepsActionName = "NextSteps";
         public const string NotFoundViewName = "NotFound";

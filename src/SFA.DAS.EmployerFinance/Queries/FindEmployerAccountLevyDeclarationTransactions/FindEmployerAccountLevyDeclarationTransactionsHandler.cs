@@ -2,17 +2,15 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EmployerFinance.Models.Levy;
+using SFA.DAS.EmployerFinance.Services;
+using SFA.DAS.Exceptions;
 using SFA.DAS.HashingService;
+using SFA.DAS.Validation;
 
-namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions
+namespace SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTransactions
 {
-    /// <summary>
-    ///  AML-2454: Move to finance
-    /// </summary>
-    public class FindEmployerAccountLevyDeclarationTransactionsHandler : IAsyncRequestHandler<FindEmployerAccountLevyDeclarationTransactionsQuery, FindEmployerAccountLevyDeclarationTransactionsResponse>
+   public class FindEmployerAccountLevyDeclarationTransactionsHandler : IAsyncRequestHandler<FindEmployerAccountLevyDeclarationTransactionsQuery, FindEmployerAccountLevyDeclarationTransactionsResponse>
     {
         private readonly IValidator<FindEmployerAccountLevyDeclarationTransactionsQuery> _validator;
         private readonly IDasLevyService _dasLevyService;

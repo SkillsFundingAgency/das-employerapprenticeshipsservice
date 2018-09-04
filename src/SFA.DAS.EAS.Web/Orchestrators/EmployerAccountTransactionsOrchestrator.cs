@@ -1,12 +1,10 @@
 ﻿using MediatR;
-using SFA.DAS.EAS.Application.Queries.FindAccountCoursePayments;
 using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
-using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
+using SFA.DAS.EAS.Domain.Extensions;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -16,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.Activities.Client;
 using SFA.DAS.Validation;
 using TransactionLine = SFA.DAS.EAS.Domain.Models.Transaction.TransactionLine;
 
@@ -38,43 +37,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 			_currentTime = currentTime;
 			_logger = logger;
 		}
-        /// <summary>
-        /// AML-2454: Move to Finance orchestrator as local Controller no longer processes this feature
-        /// </summary>
-		public async Task<OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>>
-			FindAccountLevyDeclarationTransactions(
-				string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
-		{
-			var data = await _mediator.SendAsync(new FindEmployerAccountLevyDeclarationTransactionsQuery
-			{
-				HashedAccountId = hashedId,
-				FromDate = fromDate,
-				ToDate = toDate,
-				ExternalUserId = externalUserId
-			});
-
-			foreach (var transaction in data.Transactions)
-			{
-				var payeSchemeData = await _mediator.SendAsync(new GetPayeSchemeByRefQuery
-				{
-					HashedAccountId = hashedId,
-					Ref = transaction.EmpRef
-				});
-
-				transaction.PayeSchemeName = payeSchemeData?.PayeScheme?.Name ?? string.Empty;
-			}
-
-			return new OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>
-			{
-				Status = HttpStatusCode.OK,
-				Data = new TransactionLineViewModel<LevyDeclarationTransactionLine>
-				{
-					Amount = data.Total,
-					SubTransactions = data.Transactions,
-					TransactionDate = data.Transactions.First().DateCreated
-				}
-			};
-		}
+       
 
 		public async Task<OrchestratorResponse<PaymentTransactionViewModel>> FindAccountPaymentTransactions(
 			string hashedId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)

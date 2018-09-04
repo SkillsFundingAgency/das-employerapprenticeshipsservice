@@ -64,11 +64,14 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             return View(transactionViewResult);
         }
 
+
         [Route("finance/levyDeclaration/details")]
         [Route("balance/levyDeclaration/details")]
-        public ActionResult LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
+        public async Task<ActionResult> LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
         {
-            return Redirect(Url.LegacyEasAccountAction($"finance/levyDeclaration/details{Request?.Url?.Query}"));
+            var viewModel = await _accountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+
+            return View(ControllerConstants.LevyDeclarationDetailViewName, viewModel);
         }
 
         [Route("finance/course/standard/summary")]
@@ -97,5 +100,6 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         {
             return Redirect(Url.LegacyEasAccountAction($"finance/transfer/details{Request?.Url?.Query}"));
         }
+
     }
 }

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef
+namespace SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef
 {
     public class GetPayeSchemeByRefValidator : IValidator<GetPayeSchemeByRefQuery>
     {
