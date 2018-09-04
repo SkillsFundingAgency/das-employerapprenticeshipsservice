@@ -1,11 +1,8 @@
 ﻿using System;
 using MediatR;
 
-namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions
+namespace SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTransactions
 {
-    /// <summary>
-    ///  AML-2454: Move to finance
-    /// </summary>
     public class FindEmployerAccountLevyDeclarationTransactionsQuery : IAsyncRequest<FindEmployerAccountLevyDeclarationTransactionsResponse>
     {
         public string HashedAccountId { get; set; }

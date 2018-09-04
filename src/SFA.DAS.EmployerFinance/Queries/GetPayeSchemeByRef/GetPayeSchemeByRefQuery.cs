@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef
+namespace SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef
 {
     public class GetPayeSchemeByRefQuery : IAsyncRequest<GetPayeSchemeByRefResponse>
     {

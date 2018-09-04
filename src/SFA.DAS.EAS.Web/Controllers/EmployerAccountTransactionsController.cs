@@ -3,7 +3,6 @@ using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
 using SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Helpers;
@@ -80,17 +79,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return Redirect(Url.EmployerFinanceAction($"finance/{year}/{month}{Request.QueryString}"));
         }
-        /// <summary>
-        /// AML-2454: Remove due to View ReferenceData change in TransactionsView.cshtml
-        /// </summary>
-        [Route("finance/levyDeclaration/details")]
-        [Route("balance/levyDeclaration/details")]
-        public async Task<ActionResult> LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
-        {
-            var viewModel = await _accountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
-            return View(ControllerConstants.LevyDeclarationDetailViewName, viewModel);
-        }
 
 
         [Route("finance/transfer/details")]

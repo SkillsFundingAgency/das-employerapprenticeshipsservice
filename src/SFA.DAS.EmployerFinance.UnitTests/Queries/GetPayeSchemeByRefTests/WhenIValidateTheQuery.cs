@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
+using SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPayeSchemeByRefTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetPayeSchemeByRefTests
 {
     public class WhenIValidateTheQuery
     {

@@ -177,5 +177,23 @@ namespace SFA.DAS.EmployerFinance.Data
 
             return MapTransactions(result);
         }
+
+        public async Task<List<TransactionLine>> GetAccountLevyTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@fromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day), DbType.DateTime);
+            parameters.Add("@toDate", new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59), DbType.DateTime);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<TransactionEntity>(
+                sql: "[employer_financial].[GetLevyDetail_ByAccountIdAndDateRange]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return MapTransactions(result);
+        }
+
     }
 }

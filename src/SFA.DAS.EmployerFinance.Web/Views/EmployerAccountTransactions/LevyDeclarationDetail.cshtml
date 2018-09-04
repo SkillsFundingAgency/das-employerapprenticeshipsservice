@@ -1,6 +1,6 @@
-﻿@using System.Globalization@*AML-2454: Move to Finance*@
-@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.TransactionLineViewModel<SFA.DAS.EAS.Domain.Models.Levy.LevyDeclarationTransactionLine>>
+﻿@using System.Globalization
+@using SFA.DAS.EmployerFinance.Web.Extensions
+@model SFA.DAS.EmployerFinance.Web.OrchestratorResponse<SFA.DAS.EmployerFinance.Web.ViewModels.TransactionLineViewModel<SFA.DAS.EmployerFinance.Models.Levy.LevyDeclarationTransactionLine>>
 
 @{
     var culture = new CultureInfo("en-GB");
@@ -85,7 +85,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>  @*AML-2454: Change to cross-site reference*@
+            <li><a href="@Url.LegacyEasAccountAction($"teams")">Home</a></li>
             <li><a href="@Url.Action("TransactionsView", "EmployerAccountTransactions", new {year = Model.Data.TransactionDate.Year, month = Model.Data.TransactionDate.Month})">Your transactions</a></li>
             <li>@paymentType details</li>
         </ol>

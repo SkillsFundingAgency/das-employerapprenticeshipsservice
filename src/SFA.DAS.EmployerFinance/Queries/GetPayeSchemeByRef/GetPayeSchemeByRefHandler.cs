@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.Exceptions;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef
+namespace SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef
 {
     public class GetPayeSchemeByRefHandler : IAsyncRequestHandler<GetPayeSchemeByRefQuery, GetPayeSchemeByRefResponse>
     {

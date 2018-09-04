@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
-using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
-using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EmployerFinance.Models.ApprenticeshipProvider;
+using SFA.DAS.EmployerFinance.Models.Payments;
+using SFA.DAS.EmployerFinance.Queries.FindAccountProviderPayments;
+using SFA.DAS.EmployerFinance.Services;
+using SFA.DAS.Exceptions;
 using SFA.DAS.HashingService;
+using SFA.DAS.Validation;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries
+namespace SFA.DAS.EmployerFinance.UnitTests.Queries.FindEmployerAccountPaymentTransactionDetailsTests
 {
     public class WhenIGetEmployerPaymentTransactionDetails : QueryBaseTest<FindAccountProviderPaymentsHandler, FindAccountProviderPaymentsQuery, FindAccountProviderPaymentsResponse>
     {
@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>()))
                 .Returns(new ProvidersView
                 {
-                    Provider = new Domain.Models.ApprenticeshipProvider.Provider()
+                    Provider = new Models.ApprenticeshipProvider.Provider()
                         {
                             Name = ProviderName
                         }

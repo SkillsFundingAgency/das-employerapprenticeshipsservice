@@ -12,7 +12,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments;
+using SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTransactions;
+using SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -297,6 +300,41 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                 .Where(t => t.TransactionType != TransactionItemType.Declaration)
                 .Union(aggregatedLevyTransactions)
                 .ToList();
+        }
+
+        public async Task<OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>>
+            FindAccountLevyDeclarationTransactions(
+                string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
+        {
+            var data = await _mediator.SendAsync(new FindEmployerAccountLevyDeclarationTransactionsQuery
+            {
+                HashedAccountId = hashedId,
+                FromDate = fromDate,
+                ToDate = toDate,
+                ExternalUserId = externalUserId
+            });
+
+            foreach (var transaction in data.Transactions)
+            {
+                var payeSchemeData = await _mediator.SendAsync(new GetPayeSchemeByRefQuery
+                {
+                    HashedAccountId = hashedId,
+                    Ref = transaction.EmpRef
+                });
+
+                transaction.PayeSchemeName = payeSchemeData?.PayeScheme?.Name ?? string.Empty;
+            }
+
+            return new OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>
+            {
+                Status = HttpStatusCode.OK,
+                Data = new TransactionLineViewModel<LevyDeclarationTransactionLine>
+                {
+                    Amount = data.Total,
+                    SubTransactions = data.Transactions,
+                    TransactionDate = data.Transactions.First().DateCreated
+                }
+            };
         }
     }
 }

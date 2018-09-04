@@ -1,7 +1,6 @@
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountCoursePayments;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTransactions;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetEnglishFrationDetail;
@@ -37,21 +36,6 @@ namespace SFA.DAS.EAS.Application.Services
             });
 
             return result.TransactionLines;
-        }
-
-        /// <summary>
-        ///  AML-2454: Move to finance
-        /// </summary>
-        public async Task<ICollection<T>> GetAccountLevyTransactionsByDateRange<T>(long accountId, DateTime fromDate, DateTime toDate) where T : TransactionLine
-        {
-            var result = await _mediator.SendAsync(new GetAccountLevyTransactionsQuery
-            {
-                AccountId = accountId,
-                FromDate = fromDate,
-                ToDate = toDate
-            });
-
-            return result?.Transactions?.OfType<T>().ToList() ?? new List<T>();
         }
 
         public async Task<ICollection<T>> GetAccountProviderPaymentsByDateRange<T>(

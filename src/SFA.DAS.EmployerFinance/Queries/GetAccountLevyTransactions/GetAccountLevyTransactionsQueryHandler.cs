@@ -1,15 +1,12 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Services;
+using SFA.DAS.Exceptions;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountLevyTransactions
+namespace SFA.DAS.EmployerFinance.Queries.GetAccountLevyTransactions
 {
-    /// <summary>
-    ///  AML-2454: Move to finance
-    /// </summary>
     public class GetAccountLevyTransactionsQueryHandler : IAsyncRequestHandler<GetAccountLevyTransactionsQuery, GetAccountLevyTransactionsResponse>
     {
         private readonly IValidator<GetAccountLevyTransactionsQuery> _validator;

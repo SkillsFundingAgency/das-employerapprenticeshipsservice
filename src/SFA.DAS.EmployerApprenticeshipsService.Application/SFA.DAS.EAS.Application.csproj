@@ -532,10 +532,6 @@
     <Compile Include="Queries\AccountTransactions\GetAccountCoursePayments\GetAccountCoursePaymentsQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountCoursePayments\GetAccountCoursePaymentsQueryValidator.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountCoursePayments\GetAccountCoursePaymentsResponse.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountLevyTransactions\GetAccountLevyTransactionsQuery.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountLevyTransactions\GetAccountLevyTransactionsQueryHandler.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountLevyTransactions\GetAccountLevyTransactionsQueryValidator.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountLevyTransactions\GetAccountLevyTransactionsResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeQuery.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeResponse.cs" />
@@ -612,10 +608,6 @@
     <Compile Include="Queries\GetCharity\GetCharityQueryRequest.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryResponse.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryValidator.cs" />
-    <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsQuery.cs" />
-    <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsHandler.cs" />
-    <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsQueryValidator.cs" />
-    <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsResponse.cs" />
     <Compile Include="Formatters\TransactionDowloads\CsvTransactionFormatter.cs" />
     <Compile Include="Formatters\TransactionDowloads\DownloadFormatType.cs" />
     <Compile Include="Formatters\TransactionDowloads\ExcelTransactionFormatter.cs" />

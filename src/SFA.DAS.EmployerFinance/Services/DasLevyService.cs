@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerFinance.Queries.AccountTransactions.GetAccountCoursePayments;
+using SFA.DAS.EmployerFinance.Queries.GetAccountLevyTransactions;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
@@ -73,5 +74,18 @@ namespace SFA.DAS.EmployerFinance.Services
 
             return result.Count;
         }
+
+        public async Task<ICollection<T>> GetAccountLevyTransactionsByDateRange<T>(long accountId, DateTime fromDate, DateTime toDate) where T : TransactionLine
+        {
+            var result = await _mediator.SendAsync(new GetAccountLevyTransactionsQuery
+            {
+                AccountId = accountId,
+                FromDate = fromDate,
+                ToDate = toDate
+            });
+
+            return result?.Transactions?.OfType<T>().ToList() ?? new List<T>();
+        }
+
     }
 }

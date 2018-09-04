@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Models.Account;
+using SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Models.Account;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPayeSchemeByRefTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetPayeSchemeByRefTests
 {
     public class WhenIGetAPayeScheme : QueryBaseTest<GetPayeSchemeByRefHandler, GetPayeSchemeByRefQuery, GetPayeSchemeByRefResponse>
     {

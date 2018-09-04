@@ -1,13 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
 
-namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions
+namespace SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTransactions
 {
-    /// <summary>
-    ///  AML-2454: Move to finance
-    /// </summary>
     public class FindEmployerAccountLevyDeclarationTransactionsQueryValidator : IValidator<FindEmployerAccountLevyDeclarationTransactionsQuery>
     {
         private readonly IMembershipRepository _membershipRepository;
