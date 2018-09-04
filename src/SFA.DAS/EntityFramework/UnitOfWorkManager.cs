@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Data.Entity;
 
-namespace SFA.DAS.EmployerFinance.Data
+namespace SFA.DAS.EntityFramework
 {
-    public class UnitOfWorkManager : IUnitOfWorkManager
+    public class UnitOfWorkManager<T> : IUnitOfWorkManager where T : DbContext
     {
-        private readonly Lazy<EmployerAccountsDbContext> _db;
+        private readonly Lazy<T> _db;
         private DbContextTransaction _transaction;
 
-        public UnitOfWorkManager(Lazy<EmployerAccountsDbContext> db)
+        public UnitOfWorkManager(Lazy<T> db)
         {
             _db = db;
         }
