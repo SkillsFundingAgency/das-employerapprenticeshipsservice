@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Infrastructure.Data;
 
-namespace SFA.DAS.EAS.Web.Filters
+namespace SFA.DAS.EntityFramework.Mvc
 {
     public class UnitOfWorkManagerFilter : ActionFilterAttribute
     {

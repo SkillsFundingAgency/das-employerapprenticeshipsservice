@@ -366,7 +366,6 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountLegalEntitiesController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
-    <Compile Include="Filters\UnitOfWorkManagerFilter.cs" />
     <Compile Include="Controllers\TransferConnectionsController.cs" />
     <Compile Include="ExceptionLoggers\ErrorLogger.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />

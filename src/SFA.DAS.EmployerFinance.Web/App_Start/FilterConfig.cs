@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc;
-using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.EmployerFinance.Web.Filters;
+using SFA.DAS.EntityFramework;
+using SFA.DAS.EntityFramework.Mvc;
 
 namespace SFA.DAS.EmployerFinance.Web
 {

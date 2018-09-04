@@ -1,9 +1,8 @@
 ﻿using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using SFA.DAS.EAS.Infrastructure.Data;
 using WebApi.StructureMap;
 
-namespace SFA.DAS.EAS.Account.Api.Filters
+namespace SFA.DAS.EntityFramework.WebApi
 {
     public class UnitOfWorkManagerFilter : ActionFilterAttribute
     {

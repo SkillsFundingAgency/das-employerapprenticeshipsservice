@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EmployerFinance.Data
+namespace SFA.DAS.EntityFramework
 {
     public interface IUnitOfWorkManager
     {

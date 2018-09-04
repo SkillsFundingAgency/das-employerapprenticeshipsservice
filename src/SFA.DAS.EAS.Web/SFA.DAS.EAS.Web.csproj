@@ -498,7 +498,6 @@
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
     <Compile Include="Extensions\TransferConnectionInvitationDtoExtensions.cs" />
-    <Compile Include="Filters\UnitOfWorkManagerFilter.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />
     <Compile Include="Mappings\ActivityMappings.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
