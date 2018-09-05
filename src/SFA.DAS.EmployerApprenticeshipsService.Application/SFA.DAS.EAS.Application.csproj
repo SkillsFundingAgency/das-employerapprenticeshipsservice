@@ -551,10 +551,6 @@
     <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountRequestHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountRequestValidator.cs" />
     <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountResponse.cs" />
-    <Compile Include="Queries\FindAccountProviderPayments\FindAccountProviderPaymentsHandler.cs" />
-    <Compile Include="Queries\FindAccountProviderPayments\FindAccountProviderPaymentsQuery.cs" />
-    <Compile Include="Queries\FindAccountProviderPayments\FindAccountProviderPaymentsQueryValidator.cs" />
-    <Compile Include="Queries\FindAccountProviderPayments\FindAccountProviderPaymentsResponse.cs" />
     <Compile Include="Queries\GetActivities\GetActivitiesQueryHandler.cs" />
     <Compile Include="Queries\GetActivities\GetActivitiesQuery.cs" />
     <Compile Include="Queries\GetActivities\GetActivitiesResponse.cs" />
