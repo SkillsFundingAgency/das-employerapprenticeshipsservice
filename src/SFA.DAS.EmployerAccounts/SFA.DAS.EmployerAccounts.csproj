@@ -10,7 +10,7 @@
     <PackageReference Include="Dapper" Version="1.50.2" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="MediatR" Version="2.1.0" />
-    <PackageReference Include="SFA.DAS.Activities.Client" Version="1.2.12" />
+    <PackageReference Include="SFA.DAS.Activities.Client" Version="1.2.39" />
     <PackageReference Include="SFA.DAS.Configuration" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.Configuration.FileStorage" Version="1.0.0.49931" />
