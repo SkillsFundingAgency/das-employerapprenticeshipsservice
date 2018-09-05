@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using SFA.DAS.EAS.Application.Queries.FindAccountProviderPayments;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
@@ -38,70 +37,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 			_logger = logger;
 		}
        
-
-		public async Task<OrchestratorResponse<PaymentTransactionViewModel>> FindAccountPaymentTransactions(
-			string hashedId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
-		{
-			try
-			{
-				var data = await _mediator.SendAsync(new FindAccountProviderPaymentsQuery
-				{
-					HashedAccountId = hashedId,
-					UkPrn = ukprn,
-					FromDate = fromDate,
-					ToDate = toDate,
-					ExternalUserId = externalUserId
-				});
-
-				var courseGroups = data.Transactions.GroupBy(x => new {x.CourseName, x.CourseLevel, x.CourseStartDate});
-
-				var coursePaymentGroups = courseGroups.Select(x => new ApprenticeshipPaymentGroup
-				{
-					ApprenticeCourseName = x.Key.CourseName,
-					CourseLevel = x.Key.CourseLevel,
-					CourseStartDate = x.Key.CourseStartDate,
-					Payments = x.ToList()
-				}).ToList();
-
-
-				return new OrchestratorResponse<PaymentTransactionViewModel>
-				{
-					Status = HttpStatusCode.OK,
-					Data = new PaymentTransactionViewModel
-					{
-						ProviderName = data.ProviderName,
-						TransactionDate = data.TransactionDate,
-						Amount = data.Total,
-						SubTransactions = data.Transactions,
-						CoursePaymentGroups = coursePaymentGroups
-					}
-				};
-			}
-			catch (NotFoundException e)
-			{
-				return new OrchestratorResponse<PaymentTransactionViewModel>
-				{
-					Status = HttpStatusCode.NotFound,
-					Exception = e
-				};
-			}
-			catch (InvalidRequestException e)
-			{
-				return new OrchestratorResponse<PaymentTransactionViewModel>
-				{
-					Status = HttpStatusCode.BadRequest,
-					Exception = e
-				};
-			}
-			catch (UnauthorizedAccessException e)
-			{
-				return new OrchestratorResponse<PaymentTransactionViewModel>
-				{
-					Status = HttpStatusCode.Unauthorized,
-					Exception = e
-				};
-			}
-		}
 
 		public virtual async Task<OrchestratorResponse<FinanceDashboardViewModel>> GetFinanceDashboardViewModel(
 			string hashedId, int year, int month, string externalUserId)
