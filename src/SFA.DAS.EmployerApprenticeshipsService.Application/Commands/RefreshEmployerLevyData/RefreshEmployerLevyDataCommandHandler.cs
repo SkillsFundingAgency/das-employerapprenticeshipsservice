@@ -169,16 +169,17 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
             DasDeclaration adjustmentDeclaration = null;
             var payrollMonth = dasDeclaration.PayrollMonth ?? 12;
 
+            dasDeclaration.EndOfYearAdjustment = true;
+
+            if (dasDeclaration.NoPaymentForPeriod)
+                return;
+
             do
             {
                 adjustmentDeclaration = await _dasLevyRepository.GetSubmissionByEmprefPayrollYearAndMonth(employerLevyData.EmpRef, dasDeclaration.PayrollYear, payrollMonth);
                 payrollMonth--;
             } while (adjustmentDeclaration == null && payrollMonth > 0);
 
-            dasDeclaration.EndOfYearAdjustment = true;
-
-            if (dasDeclaration.NoPaymentForPeriod)
-                return;
 
             if (adjustmentDeclaration?.LevyDueYtd != null)
             {
