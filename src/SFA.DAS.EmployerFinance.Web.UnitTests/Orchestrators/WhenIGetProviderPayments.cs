@@ -16,7 +16,7 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 {
-    internal class WhenIGetCoursePayments
+    internal class WhenIGetProviderPayments
     {
         private const string HashedAccountId = "123ABC";
         private const long AccountId = 1234;
