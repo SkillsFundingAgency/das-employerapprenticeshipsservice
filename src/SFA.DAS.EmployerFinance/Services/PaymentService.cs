@@ -185,7 +185,7 @@ namespace SFA.DAS.EmployerFinance.Services
 
                     if (providerView == null)
                     {
-                        //providerView = _apprenticeshipInfoService.GetProvider(ukPrn);
+                        providerView = _apprenticeshipInfoService.GetProvider(ukPrn);
 
                         if (providerView != null)
                         {

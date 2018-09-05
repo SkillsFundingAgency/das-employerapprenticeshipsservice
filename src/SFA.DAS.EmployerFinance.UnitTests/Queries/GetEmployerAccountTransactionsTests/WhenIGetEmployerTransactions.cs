@@ -25,7 +25,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         private GetEmployerAccountTransactionsQuery _request;
         private Mock<IApprenticeshipInfoServiceWrapper> _apprenticshipInfoService;
         private Mock<ILog> _logger;
-        private Mock<IPaymentService> _paymentService;
         public override GetEmployerAccountTransactionsQuery Query { get; set; }
         public override GetEmployerAccountTransactionsHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetEmployerAccountTransactionsQuery>> RequestValidator { get; set; }
@@ -57,9 +56,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 .ReturnsAsync(2);
 
             _apprenticshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
-
-            _paymentService = new Mock<IPaymentService>();
-
+            
             _logger = new Mock<ILog>();
 
             RequestHandler = new GetEmployerAccountTransactionsHandler(
