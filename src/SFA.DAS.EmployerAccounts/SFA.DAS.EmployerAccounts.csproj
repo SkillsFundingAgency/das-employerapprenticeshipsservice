@@ -24,7 +24,7 @@
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.0.0.35919" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Types" Version="2.0.0.35919" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.42" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.46" />
     <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
     <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="1.0.0.26382" />
     <PackageReference Include="StructureMap" Version="4.6.1" />

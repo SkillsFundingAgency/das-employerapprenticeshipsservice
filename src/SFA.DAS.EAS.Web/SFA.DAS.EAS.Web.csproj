@@ -316,14 +316,14 @@
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.NServiceBus, Version=1.0.42.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NServiceBus.1.0.42\lib\net462\SFA.DAS.NServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.NServiceBus, Version=1.0.46.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NServiceBus.1.0.46\lib\net462\SFA.DAS.NServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NServiceBus.EntityFramework, Version=1.0.42.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NServiceBus.EntityFramework.1.0.42\lib\net462\SFA.DAS.NServiceBus.EntityFramework.dll</HintPath>
+    <Reference Include="SFA.DAS.NServiceBus.EntityFramework, Version=1.0.46.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NServiceBus.EntityFramework.1.0.46\lib\net462\SFA.DAS.NServiceBus.EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.NServiceBus.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NServiceBus.Mvc.1.0.42\lib\net462\SFA.DAS.NServiceBus.Mvc.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.NServiceBus.Mvc.1.0.46\lib\net462\SFA.DAS.NServiceBus.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.OidcMiddleware, Version=2.0.0.61553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.OidcMiddleware.2.0.0.61553\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
