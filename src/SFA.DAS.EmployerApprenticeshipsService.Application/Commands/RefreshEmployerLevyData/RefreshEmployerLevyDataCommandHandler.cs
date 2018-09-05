@@ -56,15 +56,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 
             foreach (var employerLevyData in message.EmployerLevyData)
             {
-                if (employerLevyData.Declarations.Declarations
-                    .Any(d => !d.LevyDueYtd.HasValue))
-                {
-                    _logger.Warn($"Account Id {message.AccountId} has declarations with no Levy YTD values");
-                }
-
-                var declarations = employerLevyData.Declarations.Declarations
-                    .Where(d => d.LevyDueYtd.HasValue)
-                    .OrderBy(c => c.SubmissionDate).ToArray();
+                var declarations = employerLevyData.Declarations.Declarations.OrderBy(c => c.SubmissionDate).ToArray();
 
                 declarations = FilterDuplicateHmrcDeclarations(employerLevyData.EmpRef, declarations);
 
@@ -169,7 +161,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 
         private async Task UpdateEndOfYearAdjustment(EmployerLevyData employerLevyData, DasDeclaration dasDeclaration)
         {
-            if (dasDeclaration.LevyDueYtd == null)
+            if (dasDeclaration.LevyDueYtd == null && !dasDeclaration.NoPaymentForPeriod)
             {
                 throw new ArgumentNullException(nameof(dasDeclaration));
             }
@@ -185,17 +177,19 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 
             dasDeclaration.EndOfYearAdjustment = true;
 
+            if (dasDeclaration.NoPaymentForPeriod)
+                return;
+
             if (adjustmentDeclaration?.LevyDueYtd != null)
             {
                 dasDeclaration.EndOfYearAdjustmentAmount =
-                    adjustmentDeclaration.LevyDueYtd.Value - dasDeclaration.LevyDueYtd.Value;
+                    adjustmentDeclaration.LevyDueYtd.Value - (dasDeclaration.LevyDueYtd ?? 0);
             }
             else
             {
-                dasDeclaration.EndOfYearAdjustmentAmount = dasDeclaration.LevyDueYtd.Value;
+                dasDeclaration.EndOfYearAdjustmentAmount = (dasDeclaration.LevyDueYtd ?? 0);
             }
         }
-
 
 
         private async Task PublishDeclarationUpdatedEvents(long accountId, IEnumerable<DasDeclaration> savedDeclarations)
