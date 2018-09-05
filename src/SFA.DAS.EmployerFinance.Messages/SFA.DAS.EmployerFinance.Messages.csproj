@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.42" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.46" />
   </ItemGroup>
 
   <ItemGroup>
