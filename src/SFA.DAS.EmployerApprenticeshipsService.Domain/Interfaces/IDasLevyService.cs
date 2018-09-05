@@ -15,10 +15,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
             long accountId, long ukprn, DateTime fromDate, DateTime toDate)
             where T : TransactionLine;
 
-        Task<ICollection<T>> GetAccountCoursePaymentsByDateRange<T>(
-            long accountId, long ukprn, string courseName, int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
-            where T : TransactionLine;
-
         Task<ICollection<AccountBalance>> GetAllAccountBalances();
 
         Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef);
