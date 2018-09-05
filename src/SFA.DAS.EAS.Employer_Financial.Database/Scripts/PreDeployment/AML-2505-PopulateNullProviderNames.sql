@@ -1,4 +1,5 @@
-﻿BEGIN TRAN
+﻿BEGIN TRY
+BEGIN TRANSACTION
 
     ;With ALLProviders (UKprn, ProviderName)
    AS
@@ -30,4 +31,19 @@
    ON upm.UKprn = payment.UKprn
    AND pm.ProviderName IS NULL
 
-COMMIT TRAN
+END TRY
+BEGIN CATCH
+DECLARE @ErrorMsg nvarchar(max)
+DECLARE @ErrorSeverity INT;
+DECLARE @ErrorState INT;
+SET @ErrorMsg = ERROR_NUMBER() + ERROR_LINE() + ERROR_MESSAGE()
+SET @ErrorSeverity = ERROR_SEVERITY()
+SET @ErrorState = ERROR_STATE()
+
+IF @@TRANCOUNT > 0
+    ROLLBACK TRANSACTION
+
+RAISERROR(@ErrorMsg, @ErrorSeverity, @ErrorState)
+END CATCH
+IF @@TRANCOUNT > 0
+COMMIT TRANSACTION
