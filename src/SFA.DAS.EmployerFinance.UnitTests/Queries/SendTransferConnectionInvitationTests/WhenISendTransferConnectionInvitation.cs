@@ -2,16 +2,16 @@ using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Mappings;
 using SFA.DAS.EmployerFinance.Models.TransferConnections;
 using SFA.DAS.EmployerFinance.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EmployerFinance.UnitTests.Builders;
-using SFA.DAS.Exceptions;
 using SFA.DAS.Hashing;
 using SFA.DAS.Testing.EntityFramework;
+using SFA.DAS.Validation;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerFinance.Mappings;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Queries.SendTransferConnectionInvitationTests
 {
