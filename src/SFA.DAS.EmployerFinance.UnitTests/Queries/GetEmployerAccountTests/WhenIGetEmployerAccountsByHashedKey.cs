@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTests
             base.SetUp();
 
             _employerAccountRepository = new Mock<IEmployerAccountRepository>();
-            _employerAccountRepository.Setup(x => x.GetAccountByHashedId(ExpectedHashedId)).ReturnsAsync(new Models.Account.Account());
+            _employerAccountRepository.Setup(x => x.GetAccountByHashedId(ExpectedHashedId)).ReturnsAsync(new EmployerFinance.Models.Account.Account());
 
             RequestHandler = new GetEmployerAccountHashedHandler(_employerAccountRepository.Object, RequestValidator.Object);
             Query = new GetEmployerAccountHashedQuery { HashedAccountId = ExpectedHashedId, UserId = ExpectedUserId };
