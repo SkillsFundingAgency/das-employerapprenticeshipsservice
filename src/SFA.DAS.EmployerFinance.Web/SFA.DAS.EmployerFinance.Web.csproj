@@ -118,6 +118,7 @@
     <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
+    <Compile Include="Mappings\TransferMappings.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="ViewModels\TransferConnectionInvitationsViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferRequestsViewModel.cs" />
+    <Compile Include="ViewModels\TransferTransactionDetailsViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
