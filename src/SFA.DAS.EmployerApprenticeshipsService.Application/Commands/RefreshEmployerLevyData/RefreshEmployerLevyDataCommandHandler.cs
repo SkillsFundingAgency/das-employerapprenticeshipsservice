@@ -87,8 +87,8 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
         /// </summary> 
         private DasDeclaration[] FilterDuplicateHmrcDeclarations(string empRef,
             DasDeclaration[] declarations)
-        { 
-            var duplicateIds = declarations.GroupBy(d => d.Id).Where(g => g.Count() > 1)    
+        {
+            var duplicateIds = declarations.GroupBy(d => d.Id).Where(g => g.Count() > 1)
                 .Select(s => s.First().Id).ToList();
 
             if (duplicateIds.Any())
@@ -96,9 +96,9 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
                 _logger.Info($"PayeScheme '{empRef}' has duplicate submission id(s) from Hmrc = '{string.Join(", ", duplicateIds)}'");
             }
 
-            return declarations.DistinctBy(x => x.Id).ToArray(); 
-        } 
- 
+            return declarations.DistinctBy(x => x.Id).ToArray();
+        }
+
         private async Task ProcessEndOfYearAdjustmentDeclarations(IEnumerable<DasDeclaration> declarations, EmployerLevyData employerLevyData)
         {
             var endOfYearAdjustmentDeclarations = declarations.Where(IsEndOfYearAdjustment).ToList();
@@ -161,7 +161,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 
         private async Task UpdateEndOfYearAdjustment(EmployerLevyData employerLevyData, DasDeclaration dasDeclaration)
         {
-            if (dasDeclaration.LevyDueYtd == null)
+            if (dasDeclaration.LevyDueYtd == null && !dasDeclaration.NoPaymentForPeriod)
             {
                 throw new ArgumentNullException(nameof(dasDeclaration));
             }
@@ -169,25 +169,28 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
             DasDeclaration adjustmentDeclaration = null;
             var payrollMonth = dasDeclaration.PayrollMonth ?? 12;
 
+            dasDeclaration.EndOfYearAdjustment = true;
+
+            if (dasDeclaration.NoPaymentForPeriod)
+                return;
+
             do
             {
                 adjustmentDeclaration = await _dasLevyRepository.GetSubmissionByEmprefPayrollYearAndMonth(employerLevyData.EmpRef, dasDeclaration.PayrollYear, payrollMonth);
                 payrollMonth--;
             } while (adjustmentDeclaration == null && payrollMonth > 0);
 
-            dasDeclaration.EndOfYearAdjustment = true;
 
             if (adjustmentDeclaration?.LevyDueYtd != null)
             {
                 dasDeclaration.EndOfYearAdjustmentAmount =
-                    adjustmentDeclaration.LevyDueYtd.Value - dasDeclaration.LevyDueYtd.Value;
+                    adjustmentDeclaration.LevyDueYtd.Value - (dasDeclaration.LevyDueYtd ?? 0);
             }
             else
             {
-                dasDeclaration.EndOfYearAdjustmentAmount = dasDeclaration.LevyDueYtd.Value;
+                dasDeclaration.EndOfYearAdjustmentAmount = (dasDeclaration.LevyDueYtd ?? 0);
             }
         }
-
 
 
         private async Task PublishDeclarationUpdatedEvents(long accountId, IEnumerable<DasDeclaration> savedDeclarations)
