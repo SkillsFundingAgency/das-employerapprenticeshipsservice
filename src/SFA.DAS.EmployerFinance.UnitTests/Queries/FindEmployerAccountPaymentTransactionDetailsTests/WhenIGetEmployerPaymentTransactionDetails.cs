@@ -7,7 +7,6 @@ using SFA.DAS.EmployerFinance.Models.ApprenticeshipProvider;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Queries.FindAccountProviderPayments;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.Exceptions;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 

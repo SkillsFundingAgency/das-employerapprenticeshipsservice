@@ -2,7 +2,6 @@
 using MediatR;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.Exceptions;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetAccountLevyTransactions
