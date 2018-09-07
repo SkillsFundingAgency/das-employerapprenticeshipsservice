@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.EAS.Application.Dtos;
 

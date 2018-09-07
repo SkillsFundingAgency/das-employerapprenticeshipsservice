@@ -12,9 +12,9 @@ using SFA.DAS.EAS.Application.Queries.GetRejectedTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetSentTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation;
-using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
+using SFA.DAS.Validation.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {

@@ -5,7 +5,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.ApproveTransferConnectionInvitation;
 using SFA.DAS.EAS.Application.Commands.RejectTransferConnectionInvitation;
-using SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations;
 

@@ -65,9 +65,9 @@
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.42" />
-    <PackageReference Include="SFA.DAS.NServiceBus.EntityFramework" Version="1.0.42" />
-    <PackageReference Include="SFA.DAS.NServiceBus.Mvc" Version="1.0.42" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.46" />
+    <PackageReference Include="SFA.DAS.NServiceBus.EntityFramework" Version="1.0.46" />
+    <PackageReference Include="SFA.DAS.NServiceBus.Mvc" Version="1.0.46" />
     <PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
@@ -86,9 +86,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
-    <Compile Include="Attributes\HttpNotFoundForNullModelAttribute.cs" />
-    <Compile Include="Attributes\ImportModelStateFromTempDataAttribute.cs" />
-    <Compile Include="Attributes\ValidateModelStateAttribute.cs" />
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
@@ -115,14 +112,9 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
-    <Compile Include="Extensions\ActionDescriptorExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
-    <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
-    <Compile Include="Extensions\RouteValueDictionaryExtensions.cs" />
-    <Compile Include="Extensions\SerializableModelStateDictionaryExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
-    <Compile Include="Filters\HandleErrorFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -134,8 +126,6 @@
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Validation\SerializableModelState.cs" />
-    <Compile Include="Validation\SerializableModelStateDictionary.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="ViewModels\AddNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\AddOrganisationAddressViewModel.cs" />

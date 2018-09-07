@@ -16,6 +16,7 @@ using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Validation.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {

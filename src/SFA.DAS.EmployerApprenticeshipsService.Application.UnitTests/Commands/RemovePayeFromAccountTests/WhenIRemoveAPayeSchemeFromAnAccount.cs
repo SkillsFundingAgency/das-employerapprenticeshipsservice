@@ -6,7 +6,6 @@ using SFA.DAS.EAS.Account.Api.Types.Events.PayeScheme;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;

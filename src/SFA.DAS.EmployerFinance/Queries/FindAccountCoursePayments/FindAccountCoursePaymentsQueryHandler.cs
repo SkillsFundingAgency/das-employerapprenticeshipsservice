@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.Exceptions;
 using SFA.DAS.Validation;
 using SFA.DAS.HashingService;
 

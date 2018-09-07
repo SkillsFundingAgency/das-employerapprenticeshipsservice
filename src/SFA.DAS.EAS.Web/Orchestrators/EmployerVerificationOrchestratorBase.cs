@@ -4,7 +4,6 @@ using System.Data;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EAS.Application.Queries.GetGatewayToken;
@@ -17,6 +16,7 @@ using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

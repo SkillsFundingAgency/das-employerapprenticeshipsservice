@@ -14,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Models.Account;
 using TransactionLine = SFA.DAS.EAS.Domain.Models.Transaction.TransactionLine;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrchestratorTests

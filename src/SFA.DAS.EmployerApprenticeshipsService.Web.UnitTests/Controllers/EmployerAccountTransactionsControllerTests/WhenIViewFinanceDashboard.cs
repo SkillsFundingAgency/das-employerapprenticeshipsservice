@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Infrastructure.Authorization;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {

@@ -5,7 +5,6 @@ using SFA.DAS.EmployerFinance.Queries.FindAccountProviderPayments;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
-using SFA.DAS.Exceptions;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;

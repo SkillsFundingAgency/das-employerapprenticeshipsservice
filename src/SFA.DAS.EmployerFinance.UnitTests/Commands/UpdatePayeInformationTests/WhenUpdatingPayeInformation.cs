@@ -6,7 +6,6 @@ using NUnit.Framework;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Commands.UpdatePayeInformation;
 using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.Exceptions;
 using SFA.DAS.EmployerFinance.Models.Paye;
 using SFA.DAS.EmployerFinance.Services;
 

@@ -1,19 +1,17 @@
 using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Exceptions;
-using SFA.DAS.EmployerAccounts.Models;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Validation;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser
 {
     public class UpsertRegisteredUserCommandHandler : AsyncRequestHandler<UpsertRegisteredUserCommand>
     {
-        private readonly IValidator<UpsertRegisteredUserCommand> _validator;
+        private readonly Validation.IValidator<UpsertRegisteredUserCommand> _validator;
         private readonly IUserRepository _userRepository;
 
-        public UpsertRegisteredUserCommandHandler(IValidator<UpsertRegisteredUserCommand> validator, IUserRepository userRepository)
+        public UpsertRegisteredUserCommandHandler(Validation.IValidator<UpsertRegisteredUserCommand> validator, IUserRepository userRepository)
         {
             _validator = validator;
             _userRepository = userRepository;

@@ -6,7 +6,6 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetOrganisations;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -15,6 +14,7 @@ using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.SearchOrganisationOrchestratorTests
 {

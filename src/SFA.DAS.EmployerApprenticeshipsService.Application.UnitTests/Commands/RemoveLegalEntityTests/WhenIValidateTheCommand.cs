@@ -10,7 +10,6 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests

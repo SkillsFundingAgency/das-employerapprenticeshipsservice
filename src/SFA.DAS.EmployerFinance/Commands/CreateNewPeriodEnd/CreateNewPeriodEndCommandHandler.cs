@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.Exceptions;
 
 namespace SFA.DAS.EmployerFinance.Commands.CreateNewPeriodEnd
 {

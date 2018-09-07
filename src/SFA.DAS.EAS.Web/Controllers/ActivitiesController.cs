@@ -2,8 +2,6 @@
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetActivities;
 using SFA.DAS.EAS.Application.Queries.GetLatestActivities;
-using SFA.DAS.EAS.Infrastructure.Features;
-using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.ViewModels.Activities;
 using SFA.DAS.NLog.Logger;

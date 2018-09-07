@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using MediatR;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Validation;
-using SFA.DAS.Exceptions;
 using SFA.DAS.EmployerFinance.Queries.GetLastLevyDeclaration;
 using SFA.DAS.EmployerFinance.Services;
 
