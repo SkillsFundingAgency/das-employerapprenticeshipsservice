@@ -9,6 +9,7 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
         {
             return new Container(c =>
             {
+                c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<DataRegistry>();
