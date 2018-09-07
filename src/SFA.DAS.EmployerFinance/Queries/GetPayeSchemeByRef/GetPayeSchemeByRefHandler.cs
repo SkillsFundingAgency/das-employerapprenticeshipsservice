@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.Exceptions;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef
