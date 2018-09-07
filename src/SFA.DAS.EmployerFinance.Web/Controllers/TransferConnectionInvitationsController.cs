@@ -11,6 +11,7 @@ using SFA.DAS.EmployerFinance.Queries.GetTransferConnectionInvitation;
 using SFA.DAS.EmployerFinance.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
+using SFA.DAS.Validation.Mvc;
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -38,7 +39,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             return View();
         }
 
-        // [ImportModelStateFromTempData]
+        [ImportModelStateFromTempData]
         [Route("start")]
         public ActionResult Start()
         {
@@ -47,7 +48,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // [ValidateModelState]
+        [ValidateModelState]
         [Route("start")]
         public async Task<ActionResult> Start(StartTransferConnectionInvitationViewModel model)
         {
@@ -55,8 +56,8 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             return RedirectToAction("Send", new { receiverAccountPublicHashedId = model.SendTransferConnectionInvitationQuery.ReceiverAccountPublicHashedId });
         }
 
-        // [HttpNotFoundForNullModel]
-        // [ImportModelStateFromTempData]
+        [HttpNotFoundForNullModel]
+        [ImportModelStateFromTempData]
         [Route("send")]
         public async Task<ActionResult> Send(SendTransferConnectionInvitationQuery query)
         {
@@ -68,7 +69,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // [ValidateModelState]
+        [ValidateModelState]
         [Route("send")]
         public async Task<ActionResult> Send(SendTransferConnectionInvitationViewModel model)
         {
@@ -84,8 +85,8 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             }
         }
 
-        // [HttpNotFoundForNullModel]
-        // [ImportModelStateFromTempData]
+        [HttpNotFoundForNullModel]
+        [ImportModelStateFromTempData]
         [Route("{transferConnectionInvitationId}/sent")]
         public async Task<ActionResult> Sent(GetSentTransferConnectionInvitationQuery query)
         {
@@ -97,7 +98,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // [ValidateModelState]
+        [ValidateModelState]
         [Route("{transferConnectionInvitationId}/sent")]
         public ActionResult Sent(SentTransferConnectionInvitationViewModel model)
         {
@@ -112,8 +113,8 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             }
         }
 
-        // [HttpNotFoundForNullModel]
-        // [ImportModelStateFromTempData]
+        [HttpNotFoundForNullModel]
+        [ImportModelStateFromTempData]
         [Route("{transferConnectionInvitationId}/receive")]
         public async Task<ActionResult> Receive(GetReceivedTransferConnectionInvitationQuery query)
         {
@@ -125,7 +126,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // [ValidateModelState]
+        [ValidateModelState]
         [Route("{transferConnectionInvitationId}/receive")]
         public async Task<ActionResult> Receive(ReceiveTransferConnectionInvitationViewModel model)
         {
@@ -142,8 +143,8 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             }
         }
 
-        // [HttpNotFoundForNullModel]
-        //  [ImportModelStateFromTempData]
+        [HttpNotFoundForNullModel]
+        [ImportModelStateFromTempData]
         [Route("{transferConnectionInvitationId}/approved")]
         public async Task<ActionResult> Approved(GetApprovedTransferConnectionInvitationQuery query)
         {
@@ -155,7 +156,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // [ValidateModelState]
+        [ValidateModelState]
         [Route("{transferConnectionInvitationId}/approved")]
         public ActionResult Approved(ApprovedTransferConnectionInvitationViewModel model)
         {
@@ -170,8 +171,8 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             }
         }
 
-        //[HttpNotFoundForNullModel]
-        // [ImportModelStateFromTempData]
+        [HttpNotFoundForNullModel]
+        [ImportModelStateFromTempData]
         [Route("{transferConnectionInvitationId}/rejected")]
         public async Task<ActionResult> Rejected(GetRejectedTransferConnectionInvitationQuery query)
         {
@@ -183,7 +184,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // [ValidateModelState]
+        [ValidateModelState]
         [Route("{transferConnectionInvitationId}/rejected")]
         public async Task<ActionResult> Rejected(RejectedTransferConnectionInvitationViewModel model)
         {
@@ -199,7 +200,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             }
         }
 
-        // [HttpNotFoundForNullModel]
+        [HttpNotFoundForNullModel]
         [Route("{transferConnectionInvitationId}/details")]
         public async Task<ActionResult> Details(GetTransferConnectionInvitationQuery query)
         {
@@ -211,7 +212,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[ValidateModelState]
+        [ValidateModelState]
         [Route("{transferConnectionInvitationId}/details")]
         public async Task<ActionResult> Details(TransferConnectionInvitationViewModel model)
         {
@@ -227,7 +228,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             }
         }
 
-        // [ImportModelStateFromTempData]
+        [ImportModelStateFromTempData]
         [Route("{transferConnectionInvitationId}/deleted")]
         public ActionResult Deleted()
         {
@@ -238,7 +239,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // [ValidateModelState]
+        [ValidateModelState]
         [Route("{transferConnectionInvitationId}/deleted")]
         public ActionResult Deleted(DeletedTransferConnectionInvitationViewModel model)
         {
