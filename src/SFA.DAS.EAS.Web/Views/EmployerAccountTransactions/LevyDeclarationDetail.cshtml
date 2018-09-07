@@ -36,7 +36,10 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var aggregationLineItem in Model.Data.SubTransactions)
+            @{
+                var orderedTransactions = Model.Data.SubTransactions.OrderBy(t => t.PayrollDate);
+
+                foreach (var aggregationLineItem in orderedTransactions)
                 {
                     <tr class="responsive-tr">
                         <td headers="th-ps">
@@ -44,7 +47,7 @@
                             <span>@aggregationLineItem.PayeSchemeName</span>
                         </td>
                         <td headers="th-pd">
-                           @aggregationLineItem.PayrollDate.ToGdsFormatWithoutDayAbbrMonth()
+                            @aggregationLineItem.PayrollDate.ToGdsFormatWithoutDayAbbrMonth()
                         </td>
                         <td headers="th-ld" class="numeric">
                             @(aggregationLineItem.Amount.ToString("C2", culture))
@@ -60,6 +63,7 @@
                         </td>
                     </tr>
                 }
+            }
                 <tr class="total">
                     <th scope="row" colspan="5" id="th-total"><span class="vh">Total</span></th>
                     <td class="numeric" headers="th-total">@Model.Data.Amount.ToString("C2", culture)</td>
