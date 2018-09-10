@@ -28,7 +28,7 @@ This page describes:
 ### A constantly running worker role subscribes to a topic containing `EmployerRefreshLevyQueueMessage`
 
 - The worker role `SFA.DAS.EAS.LevyDeclarationProvider.Worker` uses our `MessageSubscriberFactory` pattern to subscribe to a topic named ` MA_LevyDeclaration`.
-- Each `EmployerRefreshLevyQueueMessage` message recieved is used to update the database
+- Each `EmployerRefreshLevyQueueMessage` message received is used to update the database
  
 ### How each message is processed
  
@@ -41,7 +41,7 @@ This page describes:
 
 # How the HMRC system is used in tests
 
-There is not a test system provided by the HMRC. Instead, a fake HMRC has been created by the SFA, which is hosted externally on `https://das-alpha-hmrc-api-mock.herokuapp.com/apprenticeship-levy`. This system is written in Scala, the source code to which is available here `https://github.com/UKGovernmentBEIS/das-alpha-hmrc-api-mock`. This is a fairly think layer that fronts a managed Mongo database (hosted at MLabs). There is some functionality but this is limited to enforcing token-based authentication and filtering on the document collections. 
+There is not a test system provided by the HMRC. Instead, a fake HMRC has been created by the SFA, which is hosted externally on `https://das-alpha-hmrc-api-mock.herokuapp.com/apprenticeship-levy`. This system is written in Scala, the source code to which is available [https://github.com/](https://github.com/UKGovernmentBEIS/das-alpha-hmrc-api-mock "here"). This is a fairly thin layer that fronts a managed Mongo database (hosted at MLabs). There is some functionality but this is limited to enforcing token-based authentication and filtering on the document collections. 
 
 # How test data is created
 
