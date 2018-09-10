@@ -6,6 +6,7 @@ using SFA.DAS.Sql.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,11 @@ namespace SFA.DAS.EmployerFinance.Data
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
+        }
+
+        public Task<Account> GetAccountById(long id)
+        {
+            return _db.Value.Accounts.SingleOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<List<Account>> GetAllAccounts()

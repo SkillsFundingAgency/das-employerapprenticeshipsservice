@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using SFA.DAS.EmployerFinance.Models.TransferConnections;
+using SFA.DAS.EmployerFinance.Models.UserProfile;
+using SFA.DAS.EntityFramework;
+using SFA.DAS.NServiceBus;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
@@ -6,8 +10,6 @@ using System.Threading.Tasks;
 using SFA.DAS.EmployerFinance.Models;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.AccountTeam;
-using SFA.DAS.EntityFramework;
-using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
@@ -17,6 +19,7 @@ namespace SFA.DAS.EmployerFinance.Data
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<EmployerAgreement> Agreements { get; set; }
         public virtual DbSet<Membership> Memberships { get; set; }
+		public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
         static EmployerAccountsDbContext()
@@ -49,6 +52,11 @@ namespace SFA.DAS.EmployerFinance.Data
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema("employer_account");
             modelBuilder.Entity<AgreementTemplate>().ToTable("EmployerAgreementTemplate").HasMany(t => t.Agreements);
+			modelBuilder.Entity<User>().Ignore(u => u.FullName).Ignore(u => u.UserRef).Property(u => u.Ref).HasColumnName(nameof(User.UserRef));
+            modelBuilder.Entity<Models.Account.Account>().HasMany(a => a.ReceivedTransferConnectionInvitations).WithRequired(i => i.ReceiverAccount);
+            modelBuilder.Entity<Models.Account.Account>().HasMany(a => a.SentTransferConnectionInvitations).WithRequired(i => i.SenderAccount);
+            modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.ReceiverAccount);
+            modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.SenderAccount);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Account);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.LegalEntity);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Template);

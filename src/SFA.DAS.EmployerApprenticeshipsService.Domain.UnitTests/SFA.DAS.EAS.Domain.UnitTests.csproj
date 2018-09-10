@@ -181,6 +181,10 @@
       <Project>{05d7c094-e2c9-4ccd-b0d7-85d263254b26}</Project>
       <Name>SFA.DAS.EAS.TestCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj">
+      <Project>{c15dec5c-666d-4cb2-968e-a273eb60d15e}</Project>
+      <Name>SFA.DAS.EmployerFinance.Messages</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
