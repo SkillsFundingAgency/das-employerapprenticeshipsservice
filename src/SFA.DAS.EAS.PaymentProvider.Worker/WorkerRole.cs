@@ -80,6 +80,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
+                c.AddRegistry<HashingRegistry>();
                 c.AddRegistry<LevyRegistry>();
                 c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<MapperRegistry>();
