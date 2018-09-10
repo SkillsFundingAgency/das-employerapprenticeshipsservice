@@ -92,5 +92,37 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View(ControllerConstants.TransferDetailsViewName, model);
         }
+
+
+
+        [Route("finance/levyDeclaration/details")]
+        [Route("balance/levyDeclaration/details")]
+        public async Task<ActionResult> LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
+        {
+            return Redirect(Url.EmployerFinanceAction($"finance/levyDeclaration/details/{fromDate}/{toDate}/{Request.QueryString}"));
+        }
+
+        [Route("finance/provider/summary")]
+        [Route("balance/provider/summary")]
+        public async Task<ActionResult> ProviderPaymentSummary(string hashedAccountId, long ukprn, DateTime fromDate, DateTime toDate)
+        {
+            return Redirect(Url.EmployerFinanceAction($"finance/levyDeclaration/details/{fromDate}/{toDate}/{Request.QueryString}"));
+        }
+
+        [Route("finance/course/standard/summary")]
+        [Route("balance/course/standard/summary")]
+        public async Task<ActionResult> CourseStandardPaymentSummary(string hashedAccountId, long ukprn, string courseName,
+            int? courseLevel, DateTime fromDate, DateTime toDate)
+        {
+            return Redirect(Url.EmployerFinanceAction($"finance/course/standard/summary/{ukprn}/{courseName}/{courseLevel}/{fromDate}/{toDate}/{Request.QueryString}"));
+        }
+
+        [Route("finance/course/framework/summary")]
+        [Route("balance/course/framework/summary")]
+        public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName,
+            int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
+        {
+            return Redirect(Url.EmployerFinanceAction($"finance/levyDeclaration/details/{ukprn}/{courseName}/{courseLevel}/{pathwayCode}/{fromDate}/{toDate}"));
+        }
     }
 }
