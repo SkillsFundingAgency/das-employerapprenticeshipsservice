@@ -77,7 +77,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance/{year}/{month}")]
         public ActionResult TransactionsView(string hashedAccountId, int year, int month)
         {
-            return Redirect(Url.EmployerFinanceAction($"finance/{year}/{month}{Request.QueryString}"));
+            return Redirect(Url.EmployerFinanceAction($"finance/{year}/{month}?{Request.QueryString}"));
         }
 
 
@@ -99,14 +99,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance/levyDeclaration/details")]
         public async Task<ActionResult> LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
         {
-            return Redirect(Url.EmployerFinanceAction($"finance/levyDeclaration/details/{Request.QueryString}"));
+            return Redirect(Url.EmployerFinanceAction($"finance/levyDeclaration/details?{Request.QueryString}"));
         }
 
         [Route("finance/provider/summary")]
         [Route("balance/provider/summary")]
         public async Task<ActionResult> ProviderPaymentSummary(string hashedAccountId, long ukprn, DateTime fromDate, DateTime toDate)
         {
-            return Redirect(Url.EmployerFinanceAction($"finance/provider/summary/{Request.QueryString}"));
+            return Redirect(Url.EmployerFinanceAction($"finance/provider/summary?{Request.QueryString}"));
         }
 
         [Route("finance/course/standard/summary")]
@@ -114,7 +114,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> CourseStandardPaymentSummary(string hashedAccountId, long ukprn, string courseName,
             int? courseLevel, DateTime fromDate, DateTime toDate)
         {
-            return Redirect(Url.EmployerFinanceAction($"finance/course/standard/summary/{Request.QueryString}"));
+            return Redirect(Url.EmployerFinanceAction($"finance/course/standard/summary?{Request.QueryString}"));
         }
 
         [Route("finance/course/framework/summary")]
@@ -122,7 +122,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName,
             int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
-            return Redirect(Url.EmployerFinanceAction($"finance/course/framework/summary/{Request.QueryString}"));
+            return Redirect(Url.EmployerFinanceAction($"finance/course/framework/summary?{Request.QueryString}"));
         }
     }
 }
