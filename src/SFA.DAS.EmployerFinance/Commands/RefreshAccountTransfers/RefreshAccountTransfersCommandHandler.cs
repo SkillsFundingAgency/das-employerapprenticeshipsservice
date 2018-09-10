@@ -1,12 +1,13 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
 {
@@ -48,7 +49,25 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
             {
                 var paymentTransfers = await _paymentService.GetAccountTransfers(message.PeriodEnd, message.ReceiverAccountId);
 
-                var transfers = paymentTransfers.ToArray();
+                //Handle multiple transfers for the same account, period end and commitment ID by grouping them together
+                //This can happen if delivery months are different by collection months are not for payments
+                var transfers = paymentTransfers.GroupBy(t => new { t.SenderAccountId, t.ReceiverAccountId, t.CommitmentId, t.PeriodEnd })
+                    .Select(g =>
+                    {
+                        var firstGroupItem = g.First();
+
+                        return new AccountTransfer
+                        {
+                            PeriodEnd = firstGroupItem.PeriodEnd,
+                            Amount = g.Sum(x => x.Amount),
+                            CommitmentId = firstGroupItem.CommitmentId,
+                            ReceiverAccountId = firstGroupItem.ReceiverAccountId,
+                            ReceiverAccountName = firstGroupItem.ReceiverAccountName,
+                            SenderAccountId = firstGroupItem.SenderAccountId,
+                            SenderAccountName = firstGroupItem.SenderAccountName,
+                            Type = firstGroupItem.Type
+                        };
+                    }).ToArray();
 
                 var transferSenderIds = transfers.Select(t => t.SenderAccountId).Distinct();
 
