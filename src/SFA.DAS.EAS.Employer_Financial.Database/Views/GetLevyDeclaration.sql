@@ -23,11 +23,12 @@ SELECT
 	ld.DateCeased AS DateCeased,
 	ld.InactiveFrom AS InactiveFrom,
 	ld.InactiveTo AS InactiveTo,
-	ld.HmrcSubmissionId AS HmrcSubmissionId
+	ld.HmrcSubmissionId AS HmrcSubmissionId,
+	ld.NoPaymentForPeriod
 FROM [employer_financial].[LevyDeclaration] ld
 left join
 (
-	-- Find the latest submisison
+	-- Find the latest submission
 	select max(SubmissionId) SubmissionId,EmpRef,PayrollMonth,PayrollYear from
 	[employer_financial].LevyDeclaration xld
 	where SubmissionDate in 

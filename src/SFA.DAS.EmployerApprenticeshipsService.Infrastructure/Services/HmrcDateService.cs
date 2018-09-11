@@ -36,15 +36,6 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return dateToCompare > dateProcessed;
         }
 
-        private DateTime GetDateRange(string payrollYear, out DateTime endDate)
-        {
-            var payrollSplit = payrollYear.Split('-');
-
-            var startDate = new DateTime(Convert.ToInt32("20" + payrollSplit[0]), 4, 1);
-            endDate = new DateTime(Convert.ToInt32("20" + payrollSplit[1]), 3, 31, 23, 59, 59);
-            return startDate;
-        }
-
         public DateTime GetDateFromPayrollYearMonth(string payrollYear, int payrollMonth)
         {
             var yearToUse = 2000;
@@ -66,6 +57,26 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return new DateTime(yearToUse,monthToUse,20);
         }
 
+        public bool IsDateInPayrollPeriod(string payrollYear, int payrollMonth, DateTime dateTime)
+        {
+            var dateRange = GetDateRangeForPayrollPeriod(payrollYear, payrollMonth);
+
+            return dateTime >= dateRange.StartDate && dateTime <= dateRange.EndDate;
+        }
+
+        public DateRange GetDateRangeForPayrollPeriod(string payrollYear, int payrollMonth)
+        {
+            var startDate = GetDateFromPayrollYearMonth(payrollYear, payrollMonth);
+
+            var dateRange = new DateRange
+            {
+                StartDate = startDate,
+                EndDate = startDate.AddMonths(1).AddMilliseconds(-1)
+            };
+
+            return dateRange;
+        }
+
         public bool DoesSubmissionPreDateLevy(string payrollYear)
         {
             if (string.IsNullOrEmpty(payrollYear))
@@ -84,6 +95,15 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 }
             }
             return false;
+        }
+
+        private DateTime GetDateRange(string payrollYear, out DateTime endDate)
+        {
+            var payrollSplit = payrollYear.Split('-');
+
+            var startDate = new DateTime(Convert.ToInt32("20" + payrollSplit[0]), 4, 1);
+            endDate = new DateTime(Convert.ToInt32("20" + payrollSplit[1]), 3, 31, 23, 59, 59);
+            return startDate;
         }
     }
 }

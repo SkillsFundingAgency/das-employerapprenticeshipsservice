@@ -39,13 +39,13 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
 
         protected override Task OnErrorAsync(IMessage<PaymentProcessorQueueMessage> message, Exception ex)
         {
-            _logger.Error(ex, $"Could not process payment processor message for Account Id {message.Content.AccountId} & period end {message.Content.PeriodEndId}");
+            _logger.Error(ex, $"Could not process payment processor message for Account Id {message?.Content?.AccountId} & period end {message?.Content?.PeriodEndId}");
             return Task.CompletedTask;
         }
 
         protected override Task OnFatalAsync(Exception ex)
         {
-            _logger.Fatal(ex, "Failed to process payment processer message");
+            _logger.Fatal(ex, "Failed to process payment processor message");
             return Task.CompletedTask;
         }
     }

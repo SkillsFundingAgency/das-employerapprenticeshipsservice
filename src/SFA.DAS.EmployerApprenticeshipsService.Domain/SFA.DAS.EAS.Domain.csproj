@@ -194,6 +194,7 @@
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />
     <Compile Include="Configuration\WebJobConfig.cs" />
     <Compile Include="Extensions\UserExtension.cs" />
+    <Compile Include="Interfaces\DateRange.cs" />
     <Compile Include="Models\Account\AccountLegalEntity.cs" />
     <Compile Include="Models\Account\CreateLegalEntityWithAgreementParams.cs" />
     <Compile Include="Models\Account\AccountSpecificLegalEntity.cs" />
