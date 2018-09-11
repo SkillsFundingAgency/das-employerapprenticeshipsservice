@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.FindEmployerAccountPaymentTr
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>()))
                 .Returns(new ProvidersView
                 {
-                    Provider = new Models.ApprenticeshipProvider.Provider()
+                    Provider = new EmployerFinance.Models.ApprenticeshipProvider.Provider
                         {
                             Name = ProviderName
                         }
