@@ -23,7 +23,6 @@
       <Setting name="EmployerProjectionsBaseUrl" />
       <Setting name="EnvironmentName" />
       <Setting name="InstrumentationKey" />
-      <Setting name="LegacyEasBaseUrl" />
       <Setting name="LoggingRedisConnectionString" />
       <Setting name="LoggingRedisKey" />
       <Setting name="LogLevel" />

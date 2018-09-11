@@ -12,7 +12,6 @@
       <Setting name="EmployerProjectionsBaseUrl" value="__EmployerProjectionsBaseUrl__" />
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
-      <Setting name="LegacyEasBaseUrl" value="__LegacyEasBaseUrl__" />
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
       <Setting name="LogLevel" value="__LogLevel__" />
