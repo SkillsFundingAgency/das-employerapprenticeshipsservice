@@ -12,6 +12,7 @@
       <Setting name="EmployerProjectionsBaseUrl" value="http://localhost:50770/" />
       <Setting name="EnvironmentName" value="LOCAL" />
       <Setting name="InstrumentationKey" value="" />
+      <Setting name="LegacyEasBaseUrl" value="https:localhost/" />
       <Setting name="LoggingRedisConnectionString" value="" />
       <Setting name="LoggingRedisKey" value="" />
       <Setting name="LogLevel" value="Debug" />
