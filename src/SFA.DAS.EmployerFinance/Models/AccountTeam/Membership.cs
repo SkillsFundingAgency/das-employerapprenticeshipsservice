@@ -1,5 +1,6 @@
 ﻿using System;
 using SFA.DAS.Authorization;
+using SFA.DAS.EmployerFinance.Models.UserProfile;
 
 namespace SFA.DAS.EmployerFinance.Models.AccountTeam
 {

@@ -1,19 +1,29 @@
 ﻿using Dapper;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Models;
+using SFA.DAS.EmployerFinance.Models.UserProfile;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 using System;
 using System.Data;
+using System.Data.Entity;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
     public class UserRepository : BaseRepository, IUserRepository
     {
-        public UserRepository(EmployerAccountsConfiguration configuration, ILog logger)
+        private readonly Lazy<EmployerAccountsDbContext> _db;
+
+        public UserRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
-        { }
+        {
+            _db = db;
+        }
+
+        public Task<User> GetUserByRef(Guid @ref)
+        {
+            return _db.Value.Users.SingleOrDefaultAsync(u => u.Ref == @ref);
+        }
 
         public Task Upsert(User user)
         {
