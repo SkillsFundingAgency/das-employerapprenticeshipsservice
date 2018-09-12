@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types.Events.Levy;
-using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EmployerFinance.Data;
@@ -19,6 +14,11 @@ using SFA.DAS.EmployerFinance.UnitTests.ObjectMothers;
 using SFA.DAS.Events.Api.Types;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTests
 {
@@ -220,9 +220,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
 
             // this creates a period 12 declaration and a year-end adjustment. The GetSubmissionByEmprefPayrollYearAndMonth() method should not be called
             var data = RefreshEmployerLevyDataCommandObjectMother.CreateEndOfYearAdjustmentToPeriod12DeclarationOnHmrcFeed(
-                ExpectedEmpRef, 
-                ExpectedAccountId, 
-                period12Value, 
+                ExpectedEmpRef,
+                ExpectedAccountId,
+                period12Value,
                 period12SubmissionDate,
                 yearEndAdjustment,
                 yearEndAdjustmentSubmissionDate);
@@ -339,7 +339,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
         }
 
         [Test]
-        public void ThenShouldThrowErrorIfAdjustmentLevyYtdIsNull()
+        public void ThenShouldThrowErrorIfAdjustmentLevyYtdIsNullAndIsNotANonPayment()
         {
             //Arrange
             var latestDeclaration = new DasDeclaration { LevyDueYtd = 20 };
@@ -353,12 +353,33 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
 
             var data = RefreshEmployerLevyDataCommandObjectMother.CreateEndOfYearAdjustment(ExpectedEmpRef, ExpectedAccountId);
 
-            data.EmployerLevyData.First().Declarations.Declarations.First().LevyDueYtd = null;
+            var newDeclaration = data.EmployerLevyData.First().Declarations.Declarations.First();
+            newDeclaration.LevyDueYtd = null;
+            newDeclaration.NoPaymentForPeriod = false;
 
             //Act
             Func<Task> action = () => _refreshEmployerLevyDataCommandHandler.Handle(data);
 
             action.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void ThenShouldNotThrowErrorIfAdjustmentLevyYtdIsNullAndIsANonPayment()
+        {
+            //Arrange
+            var latestDeclaration = new DasDeclaration { LevyDueYtd = 20 };
+            _hmrcDateService.Setup(x => x.IsSubmissionEndOfYearAdjustment("16-17", 12, It.IsAny<DateTime>()))
+                .Returns(true);
+            _levyRepository.Setup(x => x.GetSubmissionByEmprefPayrollYearAndMonth(ExpectedEmpRef, "16-17", 8))
+                .ReturnsAsync(latestDeclaration);
+            var data = RefreshEmployerLevyDataCommandObjectMother.CreateEndOfYearAdjustment(ExpectedEmpRef,
+                ExpectedAccountId);
+            var newDeclaration = data.EmployerLevyData.First().Declarations.Declarations.First();
+            newDeclaration.LevyDueYtd = null;
+            newDeclaration.NoPaymentForPeriod = true;
+            //Act
+            Func<Task> action = () => _refreshEmployerLevyDataCommandHandler.Handle(data);
+            action.ShouldNotThrow();
         }
     }
 }

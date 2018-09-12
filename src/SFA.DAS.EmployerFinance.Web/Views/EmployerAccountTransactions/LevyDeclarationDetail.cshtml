@@ -41,7 +41,9 @@
                     <td data-label="Your funds total" class="numeric" headers="th-total">@Model.Data.Amount.ToString("C2", culture)</td>
                 </tr>
 
-                @foreach (var aggregationLineItem in Model.Data.SubTransactions)
+            @{
+                var orderedTransactions = Model.Data.SubTransactions.OrderBy(t => t.PayrollDate);
+                foreach (var aggregationLineItem in orderedTransactions)
                 {
                     <tr class="responsive-tr">
                         <td data-label="PAYE scheme" headers="th-ps">
@@ -65,6 +67,7 @@
                         </td>
                     </tr>
                 }
+            }
                 <tr class="total">
                     <th scope="row" colspan="5" id="th-total"><span class="vh">Total</span></th>
                     <td data-label="Your funds total" class="numeric" headers="th-total">@Model.Data.Amount.ToString("C2", culture)</td>

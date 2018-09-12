@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.Validation;
+﻿using MediatR;
 using SFA.DAS.EmployerFinance.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Events.ProcessDeclaration;
@@ -14,6 +9,11 @@ using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
 {
@@ -86,8 +86,8 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
         /// </summary> 
         private DasDeclaration[] FilterDuplicateHmrcDeclarations(string empRef,
             DasDeclaration[] declarations)
-        { 
-            var duplicateIds = declarations.GroupBy(d => d.Id).Where(g => g.Count() > 1)    
+        {
+            var duplicateIds = declarations.GroupBy(d => d.Id).Where(g => g.Count() > 1)
                 .Select(s => s.First().Id).ToList();
 
             if (duplicateIds.Any())
@@ -95,9 +95,9 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
                 _logger.Info($"PayeScheme '{empRef}' has duplicate submission id(s) from Hmrc = '{string.Join(", ", duplicateIds)}'");
             }
 
-            return declarations.DistinctBy(x => x.Id).ToArray(); 
-        } 
- 
+            return declarations.DistinctBy(x => x.Id).ToArray();
+        }
+
         private async Task ProcessEndOfYearAdjustmentDeclarations(IEnumerable<DasDeclaration> declarations, EmployerLevyData employerLevyData)
         {
             var endOfYearAdjustmentDeclarations = declarations.Where(IsEndOfYearAdjustment).ToList();
@@ -160,12 +160,15 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
 
         private async Task UpdateEndOfYearAdjustment(EmployerLevyData employerLevyData, DasDeclaration yearEndAdjustment)
         {
-            if (yearEndAdjustment.LevyDueYtd == null)
+            if (yearEndAdjustment.LevyDueYtd == null && !yearEndAdjustment.NoPaymentForPeriod)
             {
                 throw new ArgumentNullException(nameof(yearEndAdjustment));
             }
 
             yearEndAdjustment.EndOfYearAdjustment = true;
+
+            if (yearEndAdjustment.NoPaymentForPeriod)
+                return;
 
             var period12Declaration = await GetDeclarationEffectiveForPeriod12(employerLevyData, yearEndAdjustment.PayrollYear);
 
@@ -174,11 +177,11 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
                 // Caution: the calculation here is incorrect (it should be the other way round). This results in negative values in LevyDeclaration EndOfYearAdjustmentAmount.
                 // However, do not fix this as somewhere later (probably in a view or sproc) the EndOfYearAdjustmentAmount is being inverted when writing to the transaction line table.
                 yearEndAdjustment.EndOfYearAdjustmentAmount =
-                    period12Declaration.LevyDueYtd.Value - yearEndAdjustment.LevyDueYtd.Value;
+                    period12Declaration.LevyDueYtd.Value - yearEndAdjustment.LevyDueYtd ?? 0;
             }
             else
             {
-                yearEndAdjustment.EndOfYearAdjustmentAmount = yearEndAdjustment.LevyDueYtd.Value;
+                yearEndAdjustment.EndOfYearAdjustmentAmount = yearEndAdjustment.LevyDueYtd ?? 0;
             }
         }
 
@@ -194,7 +197,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
         private async Task<DasDeclaration> GetDeclarationEffectiveForPeriod12(EmployerLevyData employerLevyData, string payrollYear)
         {
             // Look in the declarations that have just been retrieved from HMRC (which will contain everything not yet in the database)
-            DasDeclaration period12Declaration = await GetEffectivePeriod12SubmissionFromLatestHmrcFeed(employerLevyData, payrollYear); 
+            DasDeclaration period12Declaration = await GetEffectivePeriod12SubmissionFromLatestHmrcFeed(employerLevyData, payrollYear);
 
             // Look in the database (which will contain everything previously retrieved from HMRC)
             if (period12Declaration == null)
@@ -209,8 +212,8 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
         {
             // We are only interested in declarations for the current year that are not year-end-adjustments and that were submitted on time
             DasDeclaration period12Declaration = employerLevyData.Declarations.Declarations
-                .Where(ld => ld.PayrollYear == payrollYear 
-                             && ld.EndOfYearAdjustment==false 
+                .Where(ld => ld.PayrollYear == payrollYear
+                             && ld.EndOfYearAdjustment == false
                              && ld.PayrollMonth.HasValue
                              && _hmrcDateService.IsDateInPayrollPeriod(ld.PayrollYear, ld.PayrollMonth.Value, ld.SubmissionDate))
                 .OrderByDescending(ld => ld.PayrollMonth)
