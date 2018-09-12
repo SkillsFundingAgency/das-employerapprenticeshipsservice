@@ -206,7 +206,53 @@ namespace SFA.DAS.EmployerFinance.UnitTests.ObjectMothers
                         }
                     }
                 }
+            };
 
+            return refreshEmployerLevyDataCommand;
+        }
+
+        public static RefreshEmployerLevyDataCommand CreateEndOfYearAdjustmentToPeriod12DeclarationOnHmrcFeed(
+            string empRef, 
+            long accountId, 
+            decimal period12Value, 
+            DateTime period12SubmissionDate,
+            decimal yearEndAdjustment,
+            DateTime yearEndAdjustmentDate)
+        {
+            var refreshEmployerLevyDataCommand = new RefreshEmployerLevyDataCommand
+            {
+                AccountId = accountId,
+                EmployerLevyData = new List<EmployerLevyData>
+                {
+                    new EmployerLevyData
+                    {
+                        EmpRef = empRef,
+                        Declarations = new DasDeclarations
+                        {
+                            Declarations = new List<DasDeclaration>
+                            {
+                                new DasDeclaration
+                                {
+                                    Id = "1",
+                                    LevyDueYtd = period12Value,
+                                    PayrollYear = "16-17",
+                                    PayrollMonth = 12,
+                                    SubmissionDate = period12SubmissionDate,
+                                    SubmissionId = 1
+                                },
+                                new DasDeclaration
+                                {
+                                    Id = "2",
+                                    LevyDueYtd = yearEndAdjustment,
+                                    PayrollYear = "16-17",
+                                    PayrollMonth = 12,
+                                    SubmissionDate = yearEndAdjustmentDate,
+                                    SubmissionId = 2
+                                }
+                            }
+                        }
+                    }
+                }
             };
 
             return refreshEmployerLevyDataCommand;
