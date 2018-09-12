@@ -3,11 +3,11 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
-using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Data
 {
@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Data
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<EmployerAgreement> Agreements { get; set; }
         public virtual DbSet<AgreementTemplate> AgreementTemplates { get; set; }
+        public virtual DbSet<HealthCheck> HealthChecks { get; set; }
         public virtual DbSet<LegalEntity> LegalEntities { get; set; }
         public virtual DbSet<Membership> Memberships { get; set; }
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
@@ -33,10 +34,10 @@ namespace SFA.DAS.EmployerAccounts.Data
         {
         }
 
-        public EmployerAccountsDbContext(IUnitOfWorkContext unitOfWorkContext)
-            : base(unitOfWorkContext.Get<DbConnection>(), false)
+        public EmployerAccountsDbContext(DbConnection connection, DbTransaction transaction)
+            : base(connection, false)
         {
-            Database.UseTransaction(unitOfWorkContext.Get<DbTransaction>());
+            Database.UseTransaction(transaction);
         }
 
         protected EmployerAccountsDbContext()
@@ -60,6 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Account);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.LegalEntity);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Template);
+            modelBuilder.Entity<HealthCheck>().ToTable("HealthChecks", "dbo");
             modelBuilder.Entity<LegalEntity>().HasMany(l => l.Agreements);
             modelBuilder.Entity<Membership>().HasKey(m => new { m.AccountId, m.UserId }).Ignore(m => m.RoleId).Property(m => m.Role).HasColumnName(nameof(Membership.RoleId));
             modelBuilder.Entity<User>().Ignore(u => u.FullName).Ignore(u => u.UserRef).Property(u => u.Ref).HasColumnName(nameof(User.UserRef));

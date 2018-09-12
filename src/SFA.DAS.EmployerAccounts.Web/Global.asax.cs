@@ -2,17 +2,12 @@
 using NLog;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Logging;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Extensions;
 using SFA.DAS.Logging;
 using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.EntityFramework;
-using SFA.DAS.NServiceBus.MsSqlServer;
-using SFA.DAS.NServiceBus.Mvc;
-using SFA.DAS.NServiceBus.NewtonsoftSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
 using SFA.DAS.Web.Policy;
@@ -28,6 +23,9 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using SFA.DAS.EmployerAccounts.Web.App_Start;
+using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
+using SFA.DAS.NServiceBus.SqlServer;
+using SFA.DAS.UnitOfWork.NServiceBus;
 using Environment = SFA.DAS.EmployerAccounts.Configuration.Environment;
 
 namespace SFA.DAS.EmployerAccounts.Web
@@ -105,16 +103,16 @@ namespace SFA.DAS.EmployerAccounts.Web
             var container = StructuremapMvc.StructureMapDependencyScope.Container;
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Web")
-                .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString)
-                .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>()
-                .SetupErrorQueue()
-                .SetupInstallers()
-                .SetupLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense.HtmlDecode())
-                .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
-                .SetupNewtonsoftSerializer()
-                .SetupNLogFactory()
-                .SetupOutbox(GlobalFilters.Filters)
-                .SetupStructureMapBuilder(container);
+                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString)
+                .UseErrorQueue()
+                .UseInstallers()
+                .UseLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense.HtmlDecode())
+                .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
+                .UseNewtonsoftJsonSerializer()
+                .UseNLogFactory()
+                .UseOutbox()
+                .UseStructureMapBuilder(container)
+                .UseUnitOfWork();
 
             _endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 

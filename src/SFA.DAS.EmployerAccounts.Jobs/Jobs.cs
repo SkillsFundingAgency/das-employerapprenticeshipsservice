@@ -2,7 +2,7 @@
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
-using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.ClientOutbox;
 
 namespace SFA.DAS.EmployerAccounts.Jobs
 {
@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs
     {
         public static Task ProcessOutboxMessages([TimerTrigger("0 */10 * * * *")] TimerInfo timer, TraceWriter logger)
         {
-            var job = ServiceLocator.GetInstance<IProcessOutboxMessagesJob>();
+            var job = ServiceLocator.GetInstance<IProcessClientOutboxMessagesJob>();
             return job.RunAsync();
         }
     }

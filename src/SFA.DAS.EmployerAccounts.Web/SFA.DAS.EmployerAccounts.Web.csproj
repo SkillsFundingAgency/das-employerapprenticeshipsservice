@@ -65,10 +65,20 @@
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.46" />
-    <PackageReference Include="SFA.DAS.NServiceBus.EntityFramework" Version="1.0.46" />
-    <PackageReference Include="SFA.DAS.NServiceBus.Mvc" Version="1.0.46" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
+    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer">
+      <Version>2.0.12</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework">
+      <Version>1.0.14</Version>
+    </PackageReference>
+    <PackageReference Include="SFA.DAS.UnitOfWork.Mvc">
+      <Version>1.0.14</Version>
+    </PackageReference>
+    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus">
+      <Version>1.0.14</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
     <PackageReference Include="StructureMap.MVC5" Version="3.1.1.134" />
@@ -98,6 +108,7 @@
     <Compile Include="Controllers\EmployerManageApprenticesController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
@@ -544,6 +555,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
+    <Content Include="Views\HealthCheck\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">

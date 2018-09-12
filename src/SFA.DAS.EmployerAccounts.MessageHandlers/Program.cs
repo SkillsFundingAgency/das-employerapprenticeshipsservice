@@ -4,16 +4,15 @@ using NServiceBus;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
 using SFA.DAS.Extensions;
 using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.EntityFramework;
-using SFA.DAS.NServiceBus.MsSqlServer;
-using SFA.DAS.NServiceBus.NewtonsoftSerializer;
+using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
+using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.NServiceBus.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers
 {
@@ -41,16 +40,16 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
             var container = IoC.Initialize();
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.MessageHandlers")
-                .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString)
-                .SetupEntityFrameworkUnitOfWork<EmployerAccountsDbContext>()
-                .SetupErrorQueue()
-                .SetupInstallers()
-                .SetupLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense.HtmlDecode())
-                .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
-                .SetupNewtonsoftSerializer()
-                .SetupNLogFactory()
-                .SetupOutbox()
-                .SetupStructureMapBuilder(container);
+                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString)
+                .UseErrorQueue()
+                .UseInstallers()
+                .UseLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense.HtmlDecode())
+                .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
+                .UseNewtonsoftJsonSerializer()
+                .UseNLogFactory()
+                .UseOutbox()
+                .UseStructureMapBuilder(container)
+                .UseUnitOfWork();
 
             var endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 

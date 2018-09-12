@@ -1,4 +1,7 @@
-﻿using SFA.DAS.EmployerAccounts.DependencyResolution;
+﻿using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.DependencyResolution;
+using SFA.DAS.UnitOfWork.EntityFramework;
+using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
@@ -12,6 +15,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
+                c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerAccountsDbContext>>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
@@ -20,6 +24,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
+                c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
