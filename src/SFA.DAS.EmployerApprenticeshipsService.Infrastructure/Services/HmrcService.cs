@@ -5,16 +5,16 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using HMRC.ESFA.Levy.Api.Client;
-using HMRC.ESFA.Levy.Api.Types;
 using Newtonsoft.Json;
-using SFA.DAS.ActiveDirectory;
 using SFA.DAS.Caches;
+using SFA.DAS.Http;
+using SFA.DAS.ExecutionPolicies;
+using SFA.DAS.TokenService.Api.Client;
+using SFA.DAS.ActiveDirectory;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
-using SFA.DAS.ExecutionPolicies;
-using SFA.DAS.Http;
-using SFA.DAS.TokenService.Api.Client;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -27,16 +27,18 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly ExecutionPolicy _executionPolicy;
         private readonly IInProcessCache _inProcessCache;
         private readonly IAzureAdAuthenticationService _azureAdAuthenticationService;
+        private readonly ILog _log;
 
 
         public HmrcService(
-            EmployerApprenticeshipsServiceConfiguration configuration, 
+            EmployerApprenticeshipsServiceConfiguration configuration,
             IHttpClientWrapper httpClientWrapper,
             IApprenticeshipLevyApiClient apprenticeshipLevyApiClient,
             ITokenServiceApiClient tokenServiceApiClient, 
             [RequiredPolicy(HmrcExecutionPolicy.Name)] ExecutionPolicy executionPolicy,
             IInProcessCache inProcessCache, 
-            IAzureAdAuthenticationService azureAdAuthenticationService)
+            IAzureAdAuthenticationService azureAdAuthenticationService,
+            ILog log)
         {
             _configuration = configuration;
             _httpClientWrapper = httpClientWrapper;
@@ -45,6 +47,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             _executionPolicy = executionPolicy;
             _inProcessCache = inProcessCache;
             _azureAdAuthenticationService = azureAdAuthenticationService;
+            _log = log;
 
             _httpClientWrapper.BaseUrl = _configuration.Hmrc.BaseUrl;
             _httpClientWrapper.AuthScheme = "Bearer";
@@ -118,7 +121,10 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                     fromDate = earliestDate;
                 }
 
-                return await _apprenticeshipLevyApiClient.GetEmployerLevyDeclarations(accessToken, empRef, fromDate);
+                var levyDeclartions = await _apprenticeshipLevyApiClient.GetEmployerLevyDeclarations(accessToken, empRef, fromDate);
+
+                _log.Debug($"Received {levyDeclartions?.Declarations?.Count} levy declarations empRef:{empRef} fromDate:{fromDate}");
+                return levyDeclartions;
             });
         }
 

@@ -13,6 +13,7 @@ using SFA.DAS.EmployerFinance.Models.HmrcLevy;
 using SFA.DAS.ExecutionPolicies;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.ActiveDirectory;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
@@ -25,6 +26,7 @@ namespace SFA.DAS.EmployerFinance.Services
         private readonly ExecutionPolicy _executionPolicy;
         private readonly IInProcessCache _inProcessCache;
         private readonly IAzureAdAuthenticationService _azureAdAuthenticationService;
+        private readonly ILog _log;
 
 
         public HmrcService(
@@ -34,7 +36,8 @@ namespace SFA.DAS.EmployerFinance.Services
             ITokenServiceApiClient tokenServiceApiClient, 
             [RequiredPolicy(HmrcExecutionPolicy.Name)] ExecutionPolicy executionPolicy,
             IInProcessCache inProcessCache, 
-            IAzureAdAuthenticationService azureAdAuthenticationService)
+            IAzureAdAuthenticationService azureAdAuthenticationService,
+            ILog log)
         {
             _configuration = configuration;
             _httpClientWrapper = httpClientWrapper;
@@ -116,7 +119,10 @@ namespace SFA.DAS.EmployerFinance.Services
                     fromDate = earliestDate;
                 }
 
-                return await _apprenticeshipLevyApiClient.GetEmployerLevyDeclarations(accessToken, empRef, fromDate);
+                var levyDeclartions = await _apprenticeshipLevyApiClient.GetEmployerLevyDeclarations(accessToken, empRef, fromDate);
+
+                _log.Debug($"Received {levyDeclartions?.Declarations?.Count} levy declarations empRef:{empRef} fromDate:{fromDate}");
+                return levyDeclartions;
             });
         }
 

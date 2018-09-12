@@ -251,6 +251,8 @@
     <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />
     <Compile Include="Configuration\WebJobConfig.cs" />
+    <Compile Include="Interfaces\DateRange.cs" />
+    <Compile Include="Interfaces\IHmrcDateService.cs" />
     <Compile Include="Models\Account\AccountLegalEntity.cs" />
     <Compile Include="Models\Account\CreateLegalEntityWithAgreementParams.cs" />
     <Compile Include="Models\Account\AccountSpecificLegalEntity.cs" />
@@ -269,7 +271,6 @@
     <Compile Include="Interfaces\ICookieStorageService.cs" />
     <Compile Include="Interfaces\ICurrentDateTime.cs" />
     <Compile Include="Interfaces\IExcelService.cs" />
-    <Compile Include="Interfaces\IHmrcDateService.cs" />
     <Compile Include="Interfaces\IPdfService.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
     <Compile Include="Interfaces\IMultiVariantTestingService.cs" />

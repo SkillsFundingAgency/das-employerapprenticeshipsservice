@@ -72,7 +72,7 @@ Steps:
 
 ![Select Local > ProjectsV13](/docs/img/db3.PNG)
 
-**TODO replace the publish with a post deploy step on building**
+** TODO replace the publish with a post deploy step on building**
 
 ##### Add configuration to Azure Storage Emulator
 
@@ -100,3 +100,4 @@ Using `"Action": "*"` can also be used to disable all actions on the controller.
 * [Integration Tests](docs/IntegrationTesting.md "Integration Testing")
 * [Authorization Pipeline](docs/AuthorizationPipeline.md "Authorization Pipeline")
 * [Running Jobs](docs/Jobs/RunningJobs.md "Running Jobs")
+* [Finance](docs/Finance/Index.md "Finance")
