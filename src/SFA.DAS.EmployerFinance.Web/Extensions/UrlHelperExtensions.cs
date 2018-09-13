@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerFinance.Configuration;
+﻿using System.Web.Mvc;
+using Microsoft.Azure;
 using SFA.DAS.EmployerFinance.Web.Helpers;
-using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerFinance.Web.Extensions
 {
@@ -23,27 +23,23 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
 
         private static string AccountAction(UrlHelper helper, string path)
         {
-            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
+            var hashedAccountId =
+                helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
             var accountPath = hashedAccountId == null ? $"accounts/{path}" : $"accounts/{hashedAccountId}/{path}";
-
             return LegacyEasAction(accountPath);
         }
+
         private static string CommitmentAction(UrlHelper helper, string path)
         {
-            var config = ConfigurationHelper.GetConfiguration<EmployerFinanceConfiguration>("SFA.DAS.EmployerFinance");
-            var baseUrl = config.CommitmentBaseUrl?.TrimEnd('/');
-
-            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
-
+            var baseUrl = CloudConfigurationManager.GetSetting("CommitmentBaseUrl");
+            var hashedAccountId =
+                helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
             return $"{baseUrl}/accounts/{hashedAccountId}/{path}";
         }
 
         private static string LegacyEasAction(string path)
         {
-            var config = ConfigurationHelper.GetConfiguration<EmployerFinanceConfiguration>("SFA.DAS.EmployerFinance");
-
-            var baseUrl = config.LegacyEasWebsiteBaseUrl?.TrimEnd('/');
-
+            var baseUrl = CloudConfigurationManager.GetSetting("LegacyEasWebsiteBaseUrl");
             return $"{baseUrl}/{path}";
         }
     }
