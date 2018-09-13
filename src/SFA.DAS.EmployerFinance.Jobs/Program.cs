@@ -8,9 +8,9 @@ using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
 using SFA.DAS.Extensions;
 using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.MsSqlServer;
-using SFA.DAS.NServiceBus.NewtonsoftSerializer;
+using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
+using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.NServiceBus.StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Jobs
@@ -41,13 +41,13 @@ namespace SFA.DAS.EmployerFinance.Jobs
             var container = IoC.Initialize();
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.Jobs")
-                .SetupAzureServiceBusTransport(() => container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
-                .SetupLicense(container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
-                .SetupMsSqlServerPersistence(() => container.GetInstance<DbConnection>())
-                .SetupNewtonsoftSerializer()
-                .SetupNLogFactory()
-                .SetupSendOnly()
-                .SetupStructureMapBuilder(container);
+                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
+                .UseLicense(container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
+                .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
+                .UseNewtonsoftJsonSerializer()
+                .UseNLogFactory()
+                .UseSendOnly()
+                .UseStructureMapBuilder(container);
 
             var endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 

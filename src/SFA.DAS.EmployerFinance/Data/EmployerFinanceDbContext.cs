@@ -1,17 +1,18 @@
 ﻿using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EntityFramework;
-using SFA.DAS.NServiceBus;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Models;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
     [DbConfigurationType(typeof(SqlAzureDbConfiguration))]
     public class EmployerFinanceDbContext : DbContext
     {
+        public virtual DbSet<HealthCheck> HealthChecks { get; set; }
         public virtual DbSet<PeriodEnd> PeriodEnds { get; set; }
 
         static EmployerFinanceDbContext()
@@ -24,10 +25,10 @@ namespace SFA.DAS.EmployerFinance.Data
         {
         }
 
-        public EmployerFinanceDbContext(IUnitOfWorkContext unitOfWorkContext)
-            : base(unitOfWorkContext.Get<DbConnection>(), false)
+        public EmployerFinanceDbContext(DbConnection connection, DbTransaction transaction)
+            : base(connection, false)
         {
-            Database.UseTransaction(unitOfWorkContext.Get<DbTransaction>());
+            Database.UseTransaction(transaction);
         }
 
         protected EmployerFinanceDbContext()
@@ -43,6 +44,7 @@ namespace SFA.DAS.EmployerFinance.Data
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema("employer_financial");
+            modelBuilder.Entity<HealthCheck>().ToTable("HealthChecks", "dbo");
         }
     }
 }

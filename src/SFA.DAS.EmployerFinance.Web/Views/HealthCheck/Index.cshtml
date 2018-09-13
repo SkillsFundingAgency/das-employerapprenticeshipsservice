@@ -1,0 +1,58 @@
+﻿@using SFA.DAS.Extensions
+@model SFA.DAS.EmployerFinance.Models.HealthCheck
+
+<div class="grid-row">
+    <div class="column-full">
+        <h1 class="heading-xlarge">Health check</h1>
+        <p>Running a health check will test the availability of each application. Please note that this can take a few minutes to complete.</p>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @if (Model != null)
+                {
+                    <table class="table-font-xsmall">
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <th colspan="2" style="text-align: center">Request/Response</th>
+                                <th colspan="2" style="text-align: center">Publish/Subscribe</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="text-align: center">Request sent</td>
+                                <td style="text-align: center">Response received</td>
+                                <td style="text-align: center">Event published</td>
+                                <td style="text-align: center">Event received</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>SFA.DAS.EmployerFinance</td>
+                                <td style="text-align: center">-</td>
+                                <td style="text-align: center">-</td>
+                                <td style="text-align: center">@Model.PublishedEvent.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                <td style="text-align: center">
+                                    @if (Model.ReceivedEvent == null)
+                                    {
+                                        @:Waiting (@DateTime.UtcNow.Subtract(Model.PublishedEvent).ToHumanReadableString())
+                                    }
+                                    else
+                                    {
+                                        @Model.ReceivedEvent.Value.ToString("yyyy-MM-dd HH:mm:ss") @:(@Model.ReceivedEvent.Value.Subtract(Model.PublishedEvent).ToHumanReadableString())
+                                    }
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>A health check has never been run, please click the run button below.</p>
+                }
+            </div>
+            
+            <button class="button" name="choice" type="submit" value="Run">Run</button>
+        }
+    </div>
+</div>

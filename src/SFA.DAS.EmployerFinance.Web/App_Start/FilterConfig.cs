@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.EntityFramework;
-using SFA.DAS.EntityFramework.Mvc;
+using SFA.DAS.UnitOfWork.Mvc;
 
 namespace SFA.DAS.EmployerFinance.Web
 {
@@ -9,7 +9,8 @@ namespace SFA.DAS.EmployerFinance.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new UnitOfWorkManagerFilter(() => DependencyResolver.Current.GetService<IUnitOfWorkManager>()));
+            filters.AddUnitOfWorkFilter();
+            filters.Add(new EntityFramework.Mvc.UnitOfWorkManagerFilter(() => DependencyResolver.Current.GetService<IUnitOfWorkManager>()));
             filters.Add(new HandleErrorFilter());
         }
     }

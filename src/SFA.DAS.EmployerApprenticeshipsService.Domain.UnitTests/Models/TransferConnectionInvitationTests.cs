@@ -10,6 +10,7 @@ using SFA.DAS.EAS.TestCommon.Builders;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NServiceBus;
+using SFA.DAS.UnitOfWork;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
 {

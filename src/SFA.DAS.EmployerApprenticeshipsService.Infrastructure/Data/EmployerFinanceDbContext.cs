@@ -1,10 +1,8 @@
 ﻿using SFA.DAS.EAS.Domain.Models.Payments;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
-using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -22,12 +20,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public EmployerFinanceDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
-        }
-
-        public EmployerFinanceDbContext(IUnitOfWorkContext unitOfWorkContext)
-            : base(unitOfWorkContext.Get<DbConnection>(), false)
-        {
-            Database.UseTransaction(unitOfWorkContext.Get<DbTransaction>());
         }
 
         protected EmployerFinanceDbContext()

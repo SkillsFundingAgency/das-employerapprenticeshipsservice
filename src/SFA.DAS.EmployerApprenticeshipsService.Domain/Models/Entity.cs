@@ -1,5 +1,6 @@
 ﻿using System;
 using SFA.DAS.NServiceBus;
+using SFA.DAS.UnitOfWork;
 
 namespace SFA.DAS.EAS.Domain.Models
 {

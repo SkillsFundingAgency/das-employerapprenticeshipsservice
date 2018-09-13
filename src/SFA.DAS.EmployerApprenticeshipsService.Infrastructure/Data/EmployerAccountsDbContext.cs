@@ -36,10 +36,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public EmployerAccountsDbContext(IUnitOfWorkContext unitOfWorkContext)
-            : base(unitOfWorkContext.Get<DbConnection>(), false)
+        public EmployerAccountsDbContext(DbConnection connection, DbTransaction transaction)
+            : base(connection, false)
         {
-            Database.UseTransaction(unitOfWorkContext.Get<DbTransaction>());
+            Database.UseTransaction(transaction);
         }
 
         protected EmployerAccountsDbContext()

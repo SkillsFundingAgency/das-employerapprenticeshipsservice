@@ -1,13 +1,10 @@
 ﻿using SFA.DAS.EmployerFinance.Models.TransferConnections;
 using SFA.DAS.EmployerFinance.Models.UserProfile;
 using SFA.DAS.EntityFramework;
-using SFA.DAS.NServiceBus;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerFinance.Models;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.AccountTeam;
 
@@ -30,12 +27,6 @@ namespace SFA.DAS.EmployerFinance.Data
         public EmployerAccountsDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
-        }
-
-        public EmployerAccountsDbContext(IUnitOfWorkContext unitOfWorkContext)
-            : base(unitOfWorkContext.Get<DbConnection>(), false)
-        {
-            Database.UseTransaction(unitOfWorkContext.Get<DbTransaction>());
         }
 
         protected EmployerAccountsDbContext()

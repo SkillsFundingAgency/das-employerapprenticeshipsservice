@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.TestCommon.Builders;
 using SFA.DAS.NServiceBus;
+using SFA.DAS.UnitOfWork;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
 {

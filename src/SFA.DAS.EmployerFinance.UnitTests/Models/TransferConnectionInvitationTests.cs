@@ -9,6 +9,7 @@ using SFA.DAS.NServiceBus;
 using SFA.DAS.Testing;
 using System;
 using System.Linq;
+using SFA.DAS.UnitOfWork;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Models
 {

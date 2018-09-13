@@ -220,6 +220,9 @@
     <Reference Include="NServiceBus.Persistence.Sql, Version=4.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\packages\NServiceBus.Persistence.Sql.4.1.1\lib\net452\NServiceBus.Persistence.Sql.dll</HintPath>
     </Reference>
+    <Reference Include="NServiceBus.UniformSession, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.UniformSession.2.1.0\lib\net461\NServiceBus.UniformSession.dll</HintPath>
+    </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
@@ -316,14 +319,11 @@
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.NServiceBus, Version=1.0.46.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NServiceBus.1.0.46\lib\net462\SFA.DAS.NServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.NServiceBus, Version=2.0.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NServiceBus.2.0.12\lib\net462\SFA.DAS.NServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NServiceBus.EntityFramework, Version=1.0.46.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NServiceBus.EntityFramework.1.0.46\lib\net462\SFA.DAS.NServiceBus.EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="SFA.DAS.NServiceBus.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NServiceBus.Mvc.1.0.46\lib\net462\SFA.DAS.NServiceBus.Mvc.dll</HintPath>
+    <Reference Include="SFA.DAS.NServiceBus.SqlServer, Version=2.0.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NServiceBus.SqlServer.2.0.12\lib\netstandard2.0\SFA.DAS.NServiceBus.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.OidcMiddleware, Version=2.0.0.61553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.OidcMiddleware.2.0.0.61553\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
@@ -353,6 +353,18 @@
     <Reference Include="SFA.DAS.TokenService.Api.Types, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Types.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.UnitOfWork, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.UnitOfWork.1.0.14\lib\netstandard2.0\SFA.DAS.UnitOfWork.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.UnitOfWork.EntityFramework, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.UnitOfWork.EntityFramework.1.0.14\lib\net462\SFA.DAS.UnitOfWork.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.UnitOfWork.Mvc, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.UnitOfWork.Mvc.1.0.14\lib\net462\SFA.DAS.UnitOfWork.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.UnitOfWork.NServiceBus, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.UnitOfWork.NServiceBus.1.0.14\lib\netstandard2.0\SFA.DAS.UnitOfWork.NServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Web.Policy, Version=1.1.0.44309, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Web.Policy.1.1.0.44309\lib\net45\SFA.DAS.Web.Policy.dll</HintPath>
