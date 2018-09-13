@@ -54,9 +54,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 
             var agreements = await _db.Value.AccountLegalEntities
                 .WithSignedOrPendingAgreementsForAccount(accountId)
+                .OrderBy(a => a.Created)
                 .ProjectTo<EmployerAgreementStatusDto>(_configurationProvider)
                 .ToListAsync();
-                                    
+
             agreements = agreements.PostFixEmployerAgreementStatusDto(_hashingService, accountId).ToList();
 
             return new GetAccountEmployerAgreementsResponse
