@@ -1,12 +1,11 @@
 ﻿using System.Data.Common;
 using System.Web;
 using System.Web.Http;
-using SFA.DAS.EAS.Infrastructure.Logging;
 using Microsoft.Azure;
 using Microsoft.ApplicationInsights.Extensibility;
 using NServiceBus;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.NServiceBus;
+using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.Extensions;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
@@ -17,7 +16,7 @@ using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
 using WebApi.StructureMap;
 
-namespace SFA.DAS.EAS.Account.Api
+namespace SFA.DAS.EmployerFinance.Api
 {
     public class WebApiApplication : HttpApplication
     {
@@ -26,8 +25,6 @@ namespace SFA.DAS.EAS.Account.Api
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            LoggingConfig.ConfigureLogging();
-            TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
 
             StartServiceBusEndpoint();
         }
@@ -41,11 +38,11 @@ namespace SFA.DAS.EAS.Account.Api
         {
             var container = GlobalConfiguration.Configuration.DependencyResolver.GetService<IContainer>();
 
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Api")
-                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
+            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.Api")
+                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
                 .UseErrorQueue()
                 .UseInstallers()
-                .UseLicense(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().NServiceBusLicense.HtmlDecode())
+                .UseLicense(container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
