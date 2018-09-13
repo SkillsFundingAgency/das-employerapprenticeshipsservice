@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
@@ -13,9 +10,13 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.HashingService;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.NServiceBus;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using SFA.DAS.EAS.Infrastructure.Features;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
@@ -27,18 +28,19 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         private readonly IMediator _mediator;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly ILegalEntityEventFactory _legalEntityEventFactory;
-        private readonly IMessagePublisher _messagePublisher;
+
+        private readonly IEventPublisher _eventPublisher;
         private readonly IHashingService _hashingService;
         private readonly IAgreementService _agreementService;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
 
         public CreateLegalEntityCommandHandler(
-            IAccountRepository accountRepository, 
-            IMembershipRepository membershipRepository, 
-            IMediator mediator, 
+            IAccountRepository accountRepository,
+            IMembershipRepository membershipRepository,
+            IMediator mediator,
             IGenericEventFactory genericEventFactory,
             ILegalEntityEventFactory legalEntityEventFactory,
-            IMessagePublisher messagePublisher,
+            IEventPublisher eventPublisher,
             IHashingService hashingService,
             IAgreementService agreementService,
             IEmployerAgreementRepository employerAgreementRepository)
@@ -48,7 +50,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             _mediator = mediator;
             _genericEventFactory = genericEventFactory;
             _legalEntityEventFactory = legalEntityEventFactory;
-            _messagePublisher = messagePublisher;
+            _eventPublisher = eventPublisher;
             _hashingService = hashingService;
             _agreementService = agreementService;
             _employerAgreementRepository = employerAgreementRepository;
@@ -57,6 +59,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
         {
             var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
+
+            var ownerExternalUserId = Guid.Parse(owner.UserRef);
 
             var createParams = new CreateLegalEntityWithAgreementParams
             {
@@ -83,9 +87,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
             await EvaluateEmployerLegalEntityAgreementStatus(owner.AccountId, agreementView.LegalEntityId);
 
-            await PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
+            await PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, ownerExternalUserId);
 
-            await PublishAgreementCreatedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, owner.UserRef);
+            await PublishAgreementCreatedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, ownerExternalUserId);
 
             await _agreementService.RemoveFromCacheAsync(accountId);
 
@@ -95,14 +99,32 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             };
         }
 
-        private Task PublishLegalEntityAddedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, string userRef)
+        private Task PublishLegalEntityAddedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, Guid userRef)
         {
-            return _messagePublisher.PublishAsync(new LegalEntityAddedMessage(accountId, agreementId, organisationName, legalEntityId, createdByName, userRef));
+            return _eventPublisher.Publish(new AddedLegalEntityEvent
+            {
+                AccountId = accountId,
+                AgreementId = agreementId,
+                LegalEntityId = legalEntityId,
+                OrganisationName = organisationName,
+                UserName = createdByName,
+                UserRef = userRef,
+                Created = DateTime.UtcNow
+            });
         }
 
-        private Task PublishAgreementCreatedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, string userRef)
+        private Task PublishAgreementCreatedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, Guid userRef)
         {
-            return _messagePublisher.PublishAsync(new AgreementCreatedMessage(accountId, agreementId, organisationName, legalEntityId, createdByName, userRef));
+            return _eventPublisher.Publish(new CreatedAgreementEvent
+            {
+                AgreementId = agreementId,
+                LegalEntityId = legalEntityId,
+                OrganisationName = organisationName,
+                AccountId = accountId,
+                UserName = createdByName,
+                UserRef = userRef,
+                Created = DateTime.UtcNow
+            });
         }
 
         private Task NotifyLegalEntityCreated(string hashedAccountId, long legalEntityId)

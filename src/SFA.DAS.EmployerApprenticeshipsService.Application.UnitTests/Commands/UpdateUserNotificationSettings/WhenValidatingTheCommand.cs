@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Castle.Components.DictionaryAdapter;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.EAS.Domain.Models.Settings;

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EAS.Application.Commands.CreateInvitation;
 using SFA.DAS.EAS.Application.Commands.DeleteInvitation;
 using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
 using SFA.DAS.EAS.Application.Commands.ResendInvitation;
 using SFA.DAS.EAS.Application.Commands.UpdateShowWizard;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountStats;
 using SFA.DAS.EAS.Application.Queries.GetAccountTasks;
@@ -23,8 +17,14 @@ using SFA.DAS.EAS.Application.Queries.GetUser;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using SFA.DAS.Authorization;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -151,7 +151,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = accountId,
                     ExternalUserId = externalUserId
                 });
-                
+
                 var agreementsResponseTask = _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
                 {
                     HashedAccountId = accountId,
@@ -174,7 +174,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 var requiresAgreementSigning = agreementsResponse.EmployerAgreements.Count(a => a.HasPendingAgreement);
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0 && t.Type != "AgreementToSign").ToList() ?? new List<AccountTask>();
-                var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;              
+                var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
 
                 var viewModel = new AccountDashboardViewModel
                 {

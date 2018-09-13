@@ -3,9 +3,9 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Authentication;
-using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -97,7 +97,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     return RedirectToAction(ControllerConstants.GatewayInformActionName);
                 }
 
-                var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+                var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
                 _logger.Info($"Gateway response is for user identity ID {externalUserId}");
 
                 var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
@@ -189,7 +189,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(string hashedAccountId)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
             return View(vm);
         }
@@ -199,7 +199,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, userIdClaim);
 
             if (response.Status == HttpStatusCode.OK)
@@ -232,10 +232,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private string GetUserId()
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             return userIdClaim ?? "";
         }
-
-
     }
 }

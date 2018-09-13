@@ -1,9 +1,8 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.Caches;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;
 
@@ -13,10 +12,10 @@ namespace SFA.DAS.EAS.Infrastructure.Features
     {
         private const int NullCacheValue = -1;
 
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IDistributedCache _cache;
 
-        public AgreementService(EmployerAccountDbContext db, IDistributedCache cache)
+        public AgreementService(Lazy<EmployerAccountsDbContext> db, IDistributedCache cache)
         {
             _db = db;
             _cache = cache;
@@ -36,7 +35,7 @@ namespace SFA.DAS.EAS.Infrastructure.Features
 
         private async Task<int> GetMinAgreementVersionAsync(long accountId)
         {
-            var versionNumber = await _db.AccountLegalEntities
+            var versionNumber = await _db.Value.AccountLegalEntities
                                         .WithSignedOrPendingAgreementsForAccount(accountId)
                                         .MinAsync(ale => ale.SignedAgreementId == null ? 0 : (int) ale.SignedAgreementVersion)
                                         .ConfigureAwait(false);

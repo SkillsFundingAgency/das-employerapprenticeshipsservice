@@ -14,6 +14,8 @@
         public const string AddOtherOrganisationDetailsViewName = "AddOtherOrganisationDetails";
         public const string CodeKeyName = "code";
         public const string CommitmentsBaseUrlKeyName = "EmployerCommitmentsBaseUrl";
+        public const string EmployerAccountsWebBaseUrlKeyName = "EmployerAccountsWebBaseUrl";
+        public const string EmployerFinanceWebBaseUrlKeyName = "EmployerFinanceWebBaseUrl";
         public const string ControllerKeyName = "Controller";
         public const string ConfirmOrganisationDetailsViewName = "../OrganisationShared/ConfirmOrganisationDetails";
         public const string ConfirmPayeSchemeActionName = "ConfirmPayeScheme";
@@ -44,7 +46,6 @@
         public const string InvitationControllerName = "Invitation";
         public const string InvitationIndexName = "All";
         public const string LegalAgreementViewName = "LegalAgreement";
-        public const string LevyDeclarationDetailViewName = "LevyDeclarationDetail";
         public const string ModelStateTempDataKey = "ModelState";
         public const string NextStepsActionName = "NextSteps";
         public const string NotFoundViewName = "NotFound";
@@ -71,12 +72,12 @@
         public const string SetupAccountViewName = "SetupAccount";
         public const string SignAgreementViewName = "SignAgreement";
         public const string SignInActionName = "SignIn";
-        public const string UserExternalIdClaimKeyName = "sub";
         public const string SummaryActionName = "Summary";
         public const string ViewTeamActionName = "ViewTeam";
         public const string ViewTeamViewName = "ViewTeam";
         public const string WhatYoullNeedActionName = "WhatYoullNeed";
         public const string TransfersControllerName = "Transfers";
         public const string TransferDetailsViewName = "TransferDetails";
+        public const string UserRefClaimKeyName = "sub";
     }
 }

@@ -33,69 +33,29 @@
   </PropertyGroup>
   <!-- Items for the project -->
   <ItemGroup>
-    <ServiceConfiguration Include="ServiceConfiguration.MO.cscfg" />
+    <None Include="ServiceConfiguration.NoNetworking.cscfg" />
     <ServiceDefinition Include="ServiceDefinition.csdef" />
     <None Include="Configuration\ServiceDefinition.Release.csdef" />
     <None Include="Configuration\ServiceDefinition.Cloud.csdef" />
     <ServiceConfiguration Include="ServiceConfiguration.Release.cscfg" />
-    <None Include="ServiceConfiguration.Prod.cscfg" />
-    <None Include="ServiceConfiguration.PreProd.cscfg" />
+    <None Include="ServiceConfiguration.Networking.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.Local.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configuration" />
-    <Folder Include="SFA.DAS.EAS.Account.WorkerContent\" />
-    <Folder Include="SFA.DAS.EAS.MessageHandlers.WorkerContent\" />
-    <Folder Include="SFA.DAS.EAS.PaymentProvider.WorkerContent\" />
     <Folder Include="SFA.DAS.EAS.WebContent" />
-    <Folder Include="SFA.DAS.EAS.LevyDeclarationProvider.WorkerContent" />
   </ItemGroup>
   <ItemGroup>
-    <DiagnosticsConfiguration Include="SFA.DAS.EAS.Account.WorkerContent\diagnostics.wadcfgx" />
-    <DiagnosticsConfiguration Include="SFA.DAS.EAS.MessageHandlers.WorkerContent\diagnostics.wadcfgx" />
-    <DiagnosticsConfiguration Include="SFA.DAS.EAS.PaymentProvider.WorkerContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.EAS.WebContent\diagnostics.wadcfgx" />
-    <DiagnosticsConfiguration Include="SFA.DAS.EAS.LevyDeclarationProvider.WorkerContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Account.Worker\SFA.DAS.EAS.Account.Worker.csproj">
-      <Name>SFA.DAS.EAS.Account.Worker</Name>
-      <Project>{d04abc36-52c3-4203-8db1-642492d5414a}</Project>
-      <Private>True</Private>
-      <RoleType>Worker</RoleType>
-      <RoleName>SFA.DAS.EAS.Account.Worker</RoleName>
-      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.MessageHandlers.Worker\SFA.DAS.EAS.MessageHandlers.Worker.csproj">
-      <Name>SFA.DAS.EAS.MessageHandlers.Worker</Name>
-      <Project>{b7e81c37-d160-48a9-9bcd-3296a480b739}</Project>
-      <Private>True</Private>
-      <RoleType>Worker</RoleType>
-      <RoleName>SFA.DAS.EAS.MessageHandlers.Worker</RoleName>
-      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.PaymentProvider.Worker\SFA.DAS.EAS.PaymentProvider.Worker.csproj">
-      <Name>SFA.DAS.EAS.PaymentProvider.Worker</Name>
-      <Project>{52069b5e-6a8d-413e-b4bd-a7c7c4fd2ccf}</Project>
-      <Private>True</Private>
-      <RoleType>Worker</RoleType>
-      <RoleName>SFA.DAS.EAS.PaymentProvider.Worker</RoleName>
-      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EAS.Web\SFA.DAS.EAS.Web.csproj">
       <Name>SFA.DAS.EAS.Web</Name>
       <Project>{65db60b1-80f0-432c-926e-7a6dd02a5645}</Project>
       <Private>True</Private>
       <RoleType>Web</RoleType>
       <RoleName>SFA.DAS.EAS.Web</RoleName>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.EAS.LevyDeclarationProvider.Worker.csproj">
-      <Name>SFA.DAS.EAS.LevyDeclarationProvider.Worker</Name>
-      <Project>{386adb6f-ce56-4afd-b762-de93e74afd41}</Project>
-      <Private>True</Private>
-      <RoleType>Worker</RoleType>
-      <RoleName>SFA.DAS.EAS.LevyDeclarationProvider.Worker</RoleName>
     </ProjectReference>
   </ItemGroup>
   <!-- Import the target files for this project template -->

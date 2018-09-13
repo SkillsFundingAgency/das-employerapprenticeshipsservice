@@ -1,16 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetActivities;
 using SFA.DAS.EAS.Application.Queries.GetLatestActivities;
-using SFA.DAS.EAS.Domain.Models.Features;
-using SFA.DAS.EAS.Infrastructure.Features;
-using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.ViewModels.Activities;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -30,7 +29,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             _mediator = mediator;
             _logger = logger;
         }
-        
+
         [Route]
         public async Task<ActionResult> Index(GetActivitiesQuery query)
         {

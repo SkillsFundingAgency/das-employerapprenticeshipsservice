@@ -3,9 +3,7 @@ using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
 using SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Authentication;
-using SFA.DAS.EAS.Infrastructure.Authorization;
-using SFA.DAS.EAS.Web.Attributes;
+using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -14,6 +12,10 @@ using SFA.DAS.HashingService;
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Validation.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -42,7 +44,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance")]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
-            var transactionViewResult = await _accountTransactionsOrchestrator.GetFinanceDashboardViewModel(hashedAccountId, 0, 0, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var transactionViewResult = await _accountTransactionsOrchestrator.GetFinanceDashboardViewModel(hashedAccountId, 0, 0, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             if (transactionViewResult.Data.Account == null)
             {
@@ -73,56 +75,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [Route("finance/{year}/{month}")]
         [Route("balance/{year}/{month}")]
-        public async Task<ActionResult> TransactionsView(string hashedAccountId, int year, int month)
+        public ActionResult TransactionsView(string hashedAccountId, int year, int month)
         {
-            var transactionViewResult = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, year, month, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
-
-            if (transactionViewResult.Data.Account == null)
-            {
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.AccessDeniedControllerName);
-            }
-
-            transactionViewResult.Data.Model.Data.HashedAccountId = hashedAccountId;
-            return View(transactionViewResult);
+            return Redirect(Url.EmployerFinanceAction($"finance/{year}/{month}?{Request.QueryString}"));
         }
 
-        [Route("finance/levyDeclaration/details")]
-        [Route("balance/levyDeclaration/details")]
-        public async Task<ActionResult> LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
-        {
-            var viewModel = await _accountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
 
-            return View(ControllerConstants.LevyDeclarationDetailViewName, viewModel);
-        }
-
-        [Route("finance/provider/summary")]
-        [Route("balance/provider/summary")]
-        public async Task<ActionResult> ProviderPaymentSummary(string hashedAccountId, long ukprn, DateTime fromDate, DateTime toDate)
-        {
-            var viewModel = await _accountTransactionsOrchestrator.GetProviderPaymentSummary(hashedAccountId, ukprn, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
-
-            return View(ControllerConstants.ProviderPaymentSummaryViewName, viewModel);
-        }
-
-        [Route("finance/course/standard/summary")]
-        [Route("balance/course/standard/summary")]
-        public async Task<ActionResult> CourseStandardPaymentSummary(string hashedAccountId, long ukprn, string courseName,
-            int? courseLevel, DateTime fromDate, DateTime toDate)
-        {
-            return await CourseFrameworkPaymentSummary(hashedAccountId, ukprn, courseName, courseLevel, null, fromDate, toDate);
-        }
-
-        [Route("finance/course/framework/summary")]
-        [Route("balance/course/framework/summary")]
-        public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName,
-            int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
-        {
-            var viewModel = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(
-                                                                        hashedAccountId, ukprn, courseName, courseLevel, pathwayCode,
-                                                                        fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
-
-            return View(ControllerConstants.CoursePaymentSummaryViewName, viewModel);
-        }
 
         [Route("finance/transfer/details")]
         [Route("balance/transfer/details")]
@@ -133,6 +91,38 @@ namespace SFA.DAS.EAS.Web.Controllers
             var model = _mapper.Map<TransferTransactionDetailsViewModel>(response);
 
             return View(ControllerConstants.TransferDetailsViewName, model);
+        }
+
+
+
+        [Route("finance/levyDeclaration/details")]
+        [Route("balance/levyDeclaration/details")]
+        public async Task<ActionResult> LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
+        {
+            return Redirect(Url.EmployerFinanceAction($"finance/levyDeclaration/details?{Request.QueryString}"));
+        }
+
+        [Route("finance/provider/summary")]
+        [Route("balance/provider/summary")]
+        public async Task<ActionResult> ProviderPaymentSummary(string hashedAccountId, long ukprn, DateTime fromDate, DateTime toDate)
+        {
+            return Redirect(Url.EmployerFinanceAction($"finance/provider/summary?{Request.QueryString}"));
+        }
+
+        [Route("finance/course/standard/summary")]
+        [Route("balance/course/standard/summary")]
+        public async Task<ActionResult> CourseStandardPaymentSummary(string hashedAccountId, long ukprn, string courseName,
+            int? courseLevel, DateTime fromDate, DateTime toDate)
+        {
+            return Redirect(Url.EmployerFinanceAction($"finance/course/standard/summary?{Request.QueryString}"));
+        }
+
+        [Route("finance/course/framework/summary")]
+        [Route("balance/course/framework/summary")]
+        public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName,
+            int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
+        {
+            return Redirect(Url.EmployerFinanceAction($"finance/course/framework/summary?{Request.QueryString}"));
         }
     }
 }

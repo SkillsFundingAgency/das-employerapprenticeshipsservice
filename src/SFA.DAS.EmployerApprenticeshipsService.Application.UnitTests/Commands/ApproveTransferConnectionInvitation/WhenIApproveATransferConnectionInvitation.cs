@@ -1,15 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.ApproveTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon.Builders;
-using SFA.DAS.EmployerAccounts.Events.Messages;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.EmployerFinance.Messages.Events;
+using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionInvitation
 {
@@ -22,7 +23,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
         private Mock<ITransferConnectionInvitationRepository> _transferConnectionInvitationRepository;
         private Mock<IUserRepository> _userRepository;
         private TransferConnectionInvitation _transferConnectionInvitation;
-        private IEntity _entity;
+        private IUnitOfWorkContext _unitOfWorkContext;
         private User _receiverUser;
         private Domain.Models.Account.Account _senderAccount;
         private Domain.Models.Account.Account _receiverAccount;
@@ -37,7 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
             _receiverUser = new User
             {
                 Id = 123456,
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 FirstName = "John",
                 LastName = "Doe"
             };
@@ -56,14 +57,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
                 Name = "Receiver"
             };
 
-            _entity = _transferConnectionInvitation = new TransferConnectionInvitationBuilder()
+            _unitOfWorkContext = new UnitOfWorkContext();
+
+            _transferConnectionInvitation = new TransferConnectionInvitationBuilder()
                 .WithId(111111)
                 .WithSenderAccount(_senderAccount)
                 .WithReceiverAccount(_receiverAccount)
                 .WithStatus(TransferConnectionInvitationStatus.Pending)
                 .Build();
 
-            _userRepository.Setup(r => r.GetUserById(_receiverUser.Id)).ReturnsAsync(_receiverUser);
+            _userRepository.Setup(r => r.GetUserByRef(_receiverUser.Ref)).ReturnsAsync(_receiverUser);
             _employerAccountRepository.Setup(r => r.GetAccountById(_senderAccount.Id)).ReturnsAsync(_senderAccount);
             _employerAccountRepository.Setup(r => r.GetAccountById(_receiverAccount.Id)).ReturnsAsync(_receiverAccount);
             _transferConnectionInvitationRepository.Setup(r => r.GetTransferConnectionInvitationById(_transferConnectionInvitation.Id)).ReturnsAsync(_transferConnectionInvitation);
@@ -77,33 +80,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
             _command = new ApproveTransferConnectionInvitationCommand
             {
                 AccountId = _receiverAccount.Id,
-                UserId = _receiverUser.Id,
+                UserRef = _receiverUser.Ref,
                 TransferConnectionInvitationId = _transferConnectionInvitation.Id
             };
-        }
-
-        [Test]
-        public async Task ThenShouldGetReceiversAccount()
-        {
-            await _handler.Handle(_command);
-
-            _employerAccountRepository.Verify(r => r.GetAccountById(_receiverAccount.Id), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenShouldGetUser()
-        {
-            await _handler.Handle(_command);
-
-            _userRepository.Verify(r => r.GetUserById(_receiverUser.Id), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenShouldGetTransferConnectionInvitation()
-        {
-            await _handler.Handle(_command);
-
-            _transferConnectionInvitationRepository.Verify(r => r.GetTransferConnectionInvitationById(_transferConnectionInvitation.Id), Times.Once);
         }
 
         [Test]
@@ -112,7 +91,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
             var now = DateTime.UtcNow;
 
             await _handler.Handle(_command);
-            
+
             Assert.That(_transferConnectionInvitation.Status, Is.EqualTo(TransferConnectionInvitationStatus.Approved));
             Assert.That(_transferConnectionInvitation.Changes.Count, Is.EqualTo(1));
 
@@ -129,26 +108,26 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveTransferConnectionIn
         }
 
         [Test]
-        public async Task ThenShouldPublishApprovedTransferConnectionInvitationEvent()
+        public async Task ThenShouldPublishApprovedTransferConnectionRequestEvent()
         {
             await _handler.Handle(_command);
 
-            var messages = _entity.GetEvents().ToList();
-            var message = messages.OfType<ApprovedTransferConnectionInvitationEvent>().FirstOrDefault();
+            var messages = _unitOfWorkContext.GetEvents().ToList();
+            var message = messages.OfType<ApprovedTransferConnectionRequestEvent>().FirstOrDefault();
 
             Assert.That(messages.Count, Is.EqualTo(1));
             Assert.That(message, Is.Not.Null);
-            Assert.That(message.ApprovedByUserExternalId, Is.EqualTo(_receiverUser.ExternalId));
+            Assert.That(message.ApprovedByUserRef, Is.EqualTo(_receiverUser.Ref));
             Assert.That(message.ApprovedByUserId, Is.EqualTo(_receiverUser.Id));
             Assert.That(message.ApprovedByUserName, Is.EqualTo(_receiverUser.FullName));
-            Assert.That(message.CreatedAt, Is.EqualTo(_transferConnectionInvitation.Changes.Select(c => c.CreatedDate).Cast<DateTime?>().SingleOrDefault()));
+            Assert.That(message.Created, Is.EqualTo(_transferConnectionInvitation.Changes.Select(c => c.CreatedDate).Cast<DateTime?>().SingleOrDefault()));
             Assert.That(message.ReceiverAccountHashedId, Is.EqualTo(_receiverAccount.HashedId));
             Assert.That(message.ReceiverAccountId, Is.EqualTo(_receiverAccount.Id));
             Assert.That(message.ReceiverAccountName, Is.EqualTo(_receiverAccount.Name));
             Assert.That(message.SenderAccountHashedId, Is.EqualTo(_senderAccount.HashedId));
             Assert.That(message.SenderAccountId, Is.EqualTo(_senderAccount.Id));
             Assert.That(message.SenderAccountName, Is.EqualTo(_senderAccount.Name));
-            Assert.That(message.TransferConnectionInvitationId, Is.EqualTo(_transferConnectionInvitation.Id));
+            Assert.That(message.TransferConnectionRequestId, Is.EqualTo(_transferConnectionInvitation.Id));
         }
 
         [Test]

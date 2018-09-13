@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestPendingReceivedTran
         public GetLatestPendingReceivedTransferConnectionInvitationResponse Response { get; set; }
         public GetLatestPendingReceivedTransferConnectionInvitationQueryHandler Handler { get; set; }
         public GetLatestPendingReceivedTransferConnectionInvitationQuery Query { get; set; }
-        public Mock<EmployerAccountDbContext> Db { get; set; }
+        public Mock<EmployerAccountsDbContext> Db { get; set; }
         public List<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public TransferConnectionInvitation PendingReceivedTransferConnectionInvitation1 { get; set; }
         public TransferConnectionInvitation PendingReceivedTransferConnectionInvitation2 { get; set; }
@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestPendingReceivedTran
                 c.AddProfile<UserMappings>();
             });
 
-            Db = new Mock<EmployerAccountDbContext>();
+            Db = new Mock<EmployerAccountsDbContext>();
 
             SenderAccount = new Domain.Models.Account.Account
             {
@@ -102,7 +102,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestPendingReceivedTran
 
             Db.Setup(d => d.TransferConnectionInvitations).Returns(new DbSetStub<TransferConnectionInvitation>(TransferConnectionInvitations));
 
-            Handler = new GetLatestPendingReceivedTransferConnectionInvitationQueryHandler(Db.Object, configurationProvider);
+            Handler = new GetLatestPendingReceivedTransferConnectionInvitationQueryHandler(new Lazy<EmployerAccountsDbContext>(() => Db.Object), configurationProvider);
             Query = new GetLatestPendingReceivedTransferConnectionInvitationQuery { AccountId = ReceiverAccount.Id };
         }
 

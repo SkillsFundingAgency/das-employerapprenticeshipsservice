@@ -2,14 +2,13 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Authentication;
-using SFA.DAS.EAS.Infrastructure.Authorization;
-using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -34,7 +33,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
-            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
             var flashMessage = GetFlashMessageViewModelFromCookie();
 
@@ -52,7 +51,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> ViewTeam(string hashedAccountId)
         {
             
-            var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
             if (flashMessage != null)
@@ -67,7 +66,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("invite")]
         public async Task<ActionResult> Invite(string hashedAccountId)
         {
-            var response = await _employerTeamOrchestrator.GetNewInvitation(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var response = await _employerTeamOrchestrator.GetNewInvitation(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             return View(response);
         }
@@ -77,7 +76,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("invite")]
         public async Task<ActionResult> Invite(InviteTeamMemberViewModel model)
         {
-            var response = await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var response = await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -108,7 +107,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("invite/next")]
         public async Task<ActionResult> NextSteps(string hashedAccountId)
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
             var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
 
@@ -129,7 +128,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("invite/next")]
         public async Task<ActionResult> NextSteps(int? choice, string hashedAccountId)
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
             var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
 
@@ -169,7 +168,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (cancel != 1)
                 return RedirectToAction(ControllerConstants.ViewTeamViewName, new { HashedAccountId = hashedAccountId });
 
-            var response =  await _employerTeamOrchestrator.Cancel(email, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var response =  await _employerTeamOrchestrator.Cancel(email, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             return View(ControllerConstants.ViewTeamViewName, response);
         }
@@ -179,7 +178,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("resend")]
         public async Task<ActionResult> Resend(string hashedAccountId, string email, string name)
         {
-            var response = await _employerTeamOrchestrator.Resend(email, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName), name);
+            var response = await _employerTeamOrchestrator.Resend(email, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName), name);
             
             return View(ControllerConstants.ViewTeamViewName, response);
         }
@@ -206,7 +205,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 if (remove != 1)
                     return RedirectToAction(ControllerConstants.ViewTeamViewName, new { HashedAccountId = hashedAccountId });
 
-                var response = await _employerTeamOrchestrator.Remove(userId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+                var response = await _employerTeamOrchestrator.Remove(userId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
                 
                 return View(ControllerConstants.ViewTeamViewName, response);
             }
@@ -232,7 +231,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{email}/role/change")]
         public async Task<ActionResult> ChangeRole(string hashedAccountId, string email)
         {
-            var teamMember = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var teamMember = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             return View(teamMember);
         }
@@ -242,14 +241,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{email}/role/change")]
         public async Task<ActionResult> ChangeRole(string hashedAccountId, string email, short role)
         {
-            var response = await _employerTeamOrchestrator.ChangeRole(hashedAccountId, email, role, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var response = await _employerTeamOrchestrator.ChangeRole(hashedAccountId, email, role, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             if (response.Status == HttpStatusCode.OK)
             {
                 return View(ControllerConstants.ViewTeamViewName, response);
             }
             
-            var teamMemberResponse = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var teamMemberResponse = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             //We have to override flash message as the change role view has different model to view team view
             teamMemberResponse.FlashMessage = response.FlashMessage;
@@ -262,7 +261,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{email}/review/")]
         public async Task<ActionResult> Review(string hashedAccountId, string email)
         {
-            var invitation = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+            var invitation = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             return View(invitation);
         }
@@ -271,7 +270,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("hideWizard")]
         public async Task<ActionResult> HideWizard(string hashedAccountId)
         {
-            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
             await _employerTeamOrchestrator.HideWizard(hashedAccountId, externalUserId);
 

@@ -6,13 +6,15 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Http;
-using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
 using EnglishFractionDeclarations = HMRC.ESFA.Levy.Api.Types.EnglishFractionDeclarations;
+using SFA.DAS.Http;
+using SFA.DAS.ActiveDirectory;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
@@ -69,7 +71,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
                         _configuration.Hmrc.AzureResourceId, _configuration.Hmrc.AzureTenant))
                 .ReturnsAsync(ExpectedAuthToken);
 
-            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _apprenticeshipLevyApiClient.Object, _tokenService.Object, new NoopExecutionPolicy(),null, _azureAdAuthService.Object);
+            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _apprenticeshipLevyApiClient.Object, _tokenService.Object, new NoopExecutionPolicy(),null, _azureAdAuthService.Object, new Mock<ILog>().Object);
         }
 
         [Test]

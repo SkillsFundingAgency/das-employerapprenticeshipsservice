@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
                  f => f.WithTransferAllowance(f.TransferAllowance)
                        .WithNoTransferPayments(),
                  f => f.Handle(f.SenderAccountId),
-                 f => f.FinancialDatabaseMock.Verify(d => d.SqlQueryAsync<TransferAllowance>(
+                 f => f.FinanceDatabaseMock.Verify(d => d.SqlQueryAsync<TransferAllowance>(
                     It.Is<string>(q => q.StartsWith("[employer_financial].[GetAccountTransferAllowance]")),
                     f.SenderAccountId,
                     f.LevyDeclarationProviderConfiguration.TransferAllowancePercentage), Times.Once));
@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
             await RunAsync(
                 f => f.WithTransferAllowance(f.TransferAllowance),
                 f => f.Handle(null),
-                f => f.FinancialDatabaseMock.Verify(d => d.SqlQueryAsync<decimal?>(
+                f => f.FinanceDatabaseMock.Verify(d => d.SqlQueryAsync<decimal?>(
                     It.IsAny<string>(),
                     It.IsAny<long>(),
                     It.IsAny<decimal>()), Times.Never));
@@ -86,8 +86,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
         public decimal TransferAllowance => 1500.235m;
         public decimal TransferAllowancePercentage => 10;
 
-        public Mock<EmployerFinancialDbContext> FinancialDatabaseMock { get; }
-        public EmployerFinancialDbContext FinancialDatabase => FinancialDatabaseMock.Object;
+        public Mock<EmployerFinanceDbContext> FinanceDatabaseMock { get; }
+        public EmployerFinanceDbContext FinanceDatabase => FinanceDatabaseMock.Object;
         public LevyDeclarationProviderConfiguration LevyDeclarationProviderConfiguration =>
                     new LevyDeclarationProviderConfiguration
                     { TransferAllowancePercentage = TransferAllowancePercentage };
@@ -100,7 +100,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
 
         public GetTransferAllowanceTestFixtures()
         {
-            FinancialDatabaseMock = new Mock<EmployerFinancialDbContext>();
+            FinanceDatabaseMock = new Mock<EmployerFinanceDbContext>();
 
             SenderAccountTransfers = new[]
             {
@@ -132,7 +132,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
                 RemainingTransferAllowance = remainingTransferAllowance
             };
 
-            FinancialDatabaseMock.Setup(d => d.SqlQueryAsync<TransferAllowance>
+            FinanceDatabaseMock.Setup(d => d.SqlQueryAsync<TransferAllowance>
                                 (
                                     It.Is<string>(s => s.StartsWith("[employer_financial].[GetAccountTransferAllowance]")),
                                     It.IsAny<long>(),
@@ -144,7 +144,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
 
         public GetTransferAllowanceTestFixtures WithNoTransferPayments()
         {
-            FinancialDatabaseMock.Setup(d => d.SqlQueryAsync<AccountTransfer>
+            FinanceDatabaseMock.Setup(d => d.SqlQueryAsync<AccountTransfer>
                 (
                     It.Is<string>(s => s.StartsWith("[employer_financial].[GetSenderAccountTransactionsInCurrentFinancialYear]")),
                     It.IsAny<long>())
@@ -174,7 +174,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferAllowanceTests
 
         private GetTransferAllowanceQueryHandler CreateHandler()
         {
-            return new GetTransferAllowanceQueryHandler(FinancialDatabase, LevyDeclarationProviderConfiguration);
+            return new GetTransferAllowanceQueryHandler(FinanceDatabase, LevyDeclarationProviderConfiguration);
         }
     }
 }

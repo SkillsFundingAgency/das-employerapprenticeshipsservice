@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.TestCommon;
@@ -19,7 +20,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionsTests
         private GetTransferConnectionsQueryHandler _handler;
         private GetTransferConnectionsQuery _query;
         private GetTransferConnectionsResponse _response;
-        private Mock<EmployerAccountDbContext> _db;
+        private Mock<EmployerAccountsDbContext> _db;
         private DbSetStub<TransferConnectionInvitation> _transferConnectionInvitationsDbSet;
         private List<TransferConnectionInvitation> _transferConnectionInvitations;
         private TransferConnectionInvitation _sentTransferConnectionInvitation;
@@ -34,7 +35,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionsTests
         [SetUp]
         public void Arrange()
         {
-            _db = new Mock<EmployerAccountDbContext>();
+            _db = new Mock<EmployerAccountsDbContext>();
 
             _senderAccount1 = new Domain.Models.Account.Account
             {
@@ -110,7 +111,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferConnectionsTests
 
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
 
-            _handler = new GetTransferConnectionsQueryHandler(_db.Object, _configurationProvider);
+            _handler = new GetTransferConnectionsQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _configurationProvider);
 
             _query = new GetTransferConnectionsQuery
             {

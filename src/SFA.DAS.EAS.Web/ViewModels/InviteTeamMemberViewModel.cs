@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Domain.Models.UserProfile;
+﻿using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EAS.Web.ViewModels
 {

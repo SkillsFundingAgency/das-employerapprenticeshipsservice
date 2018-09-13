@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,10 +13,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntity
 {
     public class GetLegalEntityQueryHandler : IAsyncRequestHandler<GetLegalEntityQuery, GetLegalEntityResponse>
     {
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IConfigurationProvider _configurationProvider;
 
-        public GetLegalEntityQueryHandler(EmployerAccountDbContext db, IConfigurationProvider configurationProvider)
+        public GetLegalEntityQueryHandler(Lazy<EmployerAccountsDbContext> db, IConfigurationProvider configurationProvider)
         {
             _db = db;
             _configurationProvider = configurationProvider;
@@ -23,7 +24,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntity
 
         public async Task<GetLegalEntityResponse> Handle(GetLegalEntityQuery message)
         {
-            var legalEntity = await _db.AccountLegalEntities
+            var legalEntity = await _db.Value.AccountLegalEntities
                 .Where(l =>
                     l.LegalEntityId == message.LegalEntityId.Value &&
                     l.AccountId == message.AccountId.Value && 

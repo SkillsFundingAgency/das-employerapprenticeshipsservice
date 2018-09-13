@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Models.ReferenceData;
+﻿using SFA.DAS.EAS.Domain.Models.ReferenceData;
 
 namespace SFA.DAS.EAS.Application.Queries.GetCharity
 {

@@ -1,5 +1,4 @@
-﻿using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Models.Transaction;
+﻿using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 {

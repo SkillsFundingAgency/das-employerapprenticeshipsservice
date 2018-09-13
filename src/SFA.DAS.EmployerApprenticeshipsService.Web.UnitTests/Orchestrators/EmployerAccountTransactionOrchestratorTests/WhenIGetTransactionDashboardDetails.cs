@@ -3,7 +3,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
 
@@ -28,7 +27,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
             var accountResponse = new GetEmployerAccountResponse
             {
-                Account = new Account
+                Account = new Domain.Models.Account.Account
                 {
                     HashedId = HashedAccountId,
                     Name = "Test Account"

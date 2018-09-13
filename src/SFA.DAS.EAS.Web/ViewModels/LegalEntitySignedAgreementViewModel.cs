@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace SFA.DAS.EAS.Web.ViewModels
+﻿namespace SFA.DAS.EAS.Web.ViewModels
 {
     public class LegalEntitySignedAgreementViewModel
     {

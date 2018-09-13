@@ -1,19 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
-using SFA.DAS.EAS.Infrastructure.Hashing;
 using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.HashingService;
+using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests

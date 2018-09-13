@@ -4,8 +4,6 @@
     <Runtime executionContext="elevated" />
     <Startup>
       <Task commandLine="AppInit.cmd" executionContext="elevated" taskType="simple" />
-      <Task commandLine="StartUp\IIS.bat" executionContext="elevated" taskType="background">
-      </Task>
     </Startup>
     <Sites>
       <Site name="Web">
@@ -16,21 +14,22 @@
       </Site>
     </Sites>
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
-      <Setting name="StorageConnectionString" />
-      <Setting name="EnvironmentName" />
       <Setting name="ConfigurationStorageConnectionString" />
-      <Setting name="InstrumentationKey" />
-      <Setting name="LogLevel" />
-      <Setting name="RedisConnection" />
-      <Setting name="LoggingRedisConnectionString" />
-      <Setting name="LoggingRedisKey" />
-      <Setting name="TokenCertificateThumbprint" />
-      <Setting name="ShowPayeHistory" />
       <Setting name="CurrentTime" />
       <Setting name="EmployerCommitmentsBaseUrl" />
+      <Setting name="EmployerAccountsWebBaseUrl" />
+      <Setting name="EmployerFinanceWebBaseUrl" />
       <Setting name="EmployerRecruitBaseUrl" />
       <Setting name="EmployerProjectionsBaseUrl" />
+      <Setting name="EnvironmentName" />
+      <Setting name="InstrumentationKey" />
+      <Setting name="LoggingRedisConnectionString" />
+      <Setting name="LoggingRedisKey" />
+      <Setting name="LogLevel" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="RedisConnection" />
+      <Setting name="StorageConnectionString" />
+      <Setting name="TokenCertificateThumbprint" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" />
@@ -38,68 +37,9 @@
     </Endpoints>
     <Certificates>
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
+      <Certificate name="TokenCertificate" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
     <Imports>
     </Imports>
   </WebRole>
-  <WorkerRole name="SFA.DAS.EAS.LevyDeclarationProvider.Worker" vmsize="Small">
-    <Runtime executionContext="elevated" />
-    <Startup>
-      <Task commandLine="StartUp\IIS.bat" executionContext="elevated" taskType="background">
-      </Task>
-    </Startup>
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
-      <Setting name="ConfigurationStorageConnectionString" />
-      <Setting name="EnvironmentName" />
-      <Setting name="StorageConnectionString" />
-      <Setting name="LogLevel" />
-      <Setting name="LoggingRedisConnectionString" />
-      <Setting name="LoggingRedisKey" />
-      <Setting name="DeclarationsEnabled" />
-      <Setting name="TokenServiceCertificateThumbprint" />
-    </ConfigurationSettings>
-    <LocalResources>
-    </LocalResources>
-    <Imports>
-    </Imports>
-  </WorkerRole>
-  <WorkerRole name="SFA.DAS.EAS.PaymentProvider.Worker" vmsize="Small">
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
-      <Setting name="StorageConnectionString" />
-      <Setting name="EnvironmentName" />
-      <Setting name="ConfigurationStorageConnectionString" />
-      <Setting name="LogLevel" />
-      <Setting name="InstrumentationKey" />
-      <Setting name="LoggingRedisConnectionString" />
-      <Setting name="LoggingRedisKey" />
-      <Setting name="ProcessPayments" />
-    </ConfigurationSettings>
-  </WorkerRole>
-  <WorkerRole name="SFA.DAS.EAS.Account.Worker" vmsize="Small">
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
-      <Setting name="ConfigurationStorageConnectionString" />
-      <Setting name="DashboardConnectionString" />
-      <Setting name="EnvironmentName" />
-      <Setting name="StorageConnectionString" />
-      <Setting name="LogLevel" />
-      <Setting name="InstrumentationKey" />
-      <Setting name="LoggingRedisConnectionString" />
-      <Setting name="LoggingRedisKey" />
-    </ConfigurationSettings>
-  </WorkerRole>
-  <WorkerRole name="SFA.DAS.EAS.MessageHandlers.Worker" vmsize="Small">
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
-      <Setting name="StorageConnectionString" />
-      <Setting name="EnvironmentName" />
-      <Setting name="ConfigurationStorageConnectionString" />
-      <Setting name="LogLevel" />
-      <Setting name="InstrumentationKey" />
-      <Setting name="LoggingRedisConnectionString" />
-      <Setting name="LoggingRedisKey" />
-    </ConfigurationSettings>
-  </WorkerRole>
 </ServiceDefinition>

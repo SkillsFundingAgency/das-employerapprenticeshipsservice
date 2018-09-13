@@ -2,13 +2,14 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.TestCommon.Builders;
-using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.EmployerFinance.Messages.Events;
+using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
 {
@@ -34,25 +35,25 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
         [Test]
         public void SendTransferConnectionInvitation_WhenISendATransferConnection_ThenShouldPublishSentTransferConnectionInvitationEvent()
         {
-            Run(f => f.SendTransferConnectionInvitation(), f => f.GetEvent<SentTransferConnectionInvitationEvent>().Should().NotBeNull()
-                .And.Match<SentTransferConnectionInvitationEvent>(e =>
+            Run(f => f.SendTransferConnectionInvitation(), f => f.GetEvent<SentTransferConnectionRequestEvent>().Should().NotBeNull()
+                .And.Match<SentTransferConnectionRequestEvent>(e =>
                     e.ReceiverAccountHashedId == f.ReceiverAccount.HashedId &&
                     e.ReceiverAccountId == f.ReceiverAccount.Id &&
                     e.ReceiverAccountName == f.ReceiverAccount.Name &&
                     e.SenderAccountHashedId == f.SenderAccount.HashedId &&
                     e.SenderAccountId == f.SenderAccount.Id &&
                     e.SenderAccountName == f.SenderAccount.Name &&
-                    e.SentByUserExternalId == f.SenderUser.ExternalId &&
+                    e.SentByUserRef == f.SenderUser.Ref &&
                     e.SentByUserId == f.SenderUser.Id &&
                     e.SentByUserName == f.SenderUser.FullName &&
-                    e.TransferConnectionInvitationId == f.TransferConnectionInvitation.Id));
+                    e.TransferConnectionRequestId == f.TransferConnectionInvitation.Id));
         }
     }
 
     public class TransferConnectionInvitationTestsFixture : FluentTestFixture
     {
+        public IUnitOfWorkContext UnitOfWorkContext { get; set; } = new UnitOfWorkContext();
         public TransferConnectionInvitation TransferConnectionInvitation { get; set; }
-        public IEntity Entity { get; set; }
         public Account ReceiverAccount { get; set; }
         public long? Result { get; set; }
         public Account SenderAccount { get; set; }
@@ -85,19 +86,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
 
         public T GetEvent<T>()
         {
-            return Entity.GetEvents().OfType<T>().SingleOrDefault();
+            return UnitOfWorkContext.GetEvents().OfType<T>().SingleOrDefault();
         }
 
         public void SendTransferConnectionInvitation()
         {
-            Entity = TransferConnectionInvitation = SenderAccount.SendTransferConnectionInvitation(ReceiverAccount, SenderUser, SenderAccountTransferAllowance);
+            TransferConnectionInvitation = SenderAccount.SendTransferConnectionInvitation(ReceiverAccount, SenderUser, SenderAccountTransferAllowance);
         }
 
         public TransferConnectionInvitationTestsFixture SetSenderUser()
         {
             SenderUser = new User
             {
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 Id = 123456,
                 FirstName = "John",
                 LastName = "Doe"

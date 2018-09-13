@@ -1,37 +1,45 @@
-﻿using System.Threading.Tasks;
-using Moq;
+﻿using FluentAssertions;
+using NServiceBus.Testing;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Services;
-using SFA.DAS.Messaging.Interfaces;
+using System.Linq;
+using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Messages.Commands;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Services.RefreshEmployerLevyServiceTests
 {
     public class WhenQueuingAMessage
     {
         private RefreshEmployerLevyService _refreshEmployerLevyService;
-        private Mock<IMessagePublisher> _messagePublisher;
+        private TestableEndpointInstance _endpoint;
 
         [SetUp]
         public void Arrange()
         {
-            _messagePublisher = new Mock<IMessagePublisher>();
+            _endpoint = new TestableEndpointInstance();
 
-            _refreshEmployerLevyService = new RefreshEmployerLevyService(_messagePublisher.Object);
+            _refreshEmployerLevyService = new RefreshEmployerLevyService(_endpoint);
         }
 
         [Test]
         public async Task ThenTheMessageIsAddedToTheQueueWithThePassedInParameters()
         {
             //Arrange
-            var expectedAccountId = 123123;
-            var expectedPayeRef = "123RFV";
+            const int expectedAccountId = 123123;
+            const string expectedPayeRef = "123RFV";
 
             //Act
             await _refreshEmployerLevyService.QueueRefreshLevyMessage(expectedAccountId, expectedPayeRef);
 
             //Assert
-            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c=>c.AccountId.Equals(expectedAccountId) && c.PayeRef.Equals(expectedPayeRef))));
+            _endpoint.SentMessages.Length.Should().Be(1);
+
+            var message = _endpoint.SentMessages.Select(x => x.Message)
+                                                .OfType<ImportAccountLevyDeclarationsCommand>()
+                                                .Single();
+
+            message.AccountId.Should().Be(expectedAccountId);
+            message.PayeRef.Should().Be(expectedPayeRef);
         }
     }
 }

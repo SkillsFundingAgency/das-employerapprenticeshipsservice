@@ -1,10 +1,9 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Authentication;
-using SFA.DAS.EAS.Infrastructure.Authorization;
-using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -37,7 +36,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("dismissTask", Name = "DismissTask")]
         public async Task<ActionResult> DismissTask(DismissTaskViewModel viewModel)
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName)))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
             {
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
             }

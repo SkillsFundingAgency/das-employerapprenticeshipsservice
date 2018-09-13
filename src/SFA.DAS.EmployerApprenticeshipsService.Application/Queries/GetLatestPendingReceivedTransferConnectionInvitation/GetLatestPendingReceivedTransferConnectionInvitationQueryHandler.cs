@@ -1,3 +1,4 @@
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,10 +13,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetLatestPendingReceivedTransferConnec
 {
     public class GetLatestPendingReceivedTransferConnectionInvitationQueryHandler : IAsyncRequestHandler<GetLatestPendingReceivedTransferConnectionInvitationQuery, GetLatestPendingReceivedTransferConnectionInvitationResponse>
     {
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IConfigurationProvider _configurationProvider;
 
-        public GetLatestPendingReceivedTransferConnectionInvitationQueryHandler(EmployerAccountDbContext db, IConfigurationProvider configurationProvider)
+        public GetLatestPendingReceivedTransferConnectionInvitationQueryHandler(Lazy<EmployerAccountsDbContext> db, IConfigurationProvider configurationProvider)
         {
             _db = db;
             _configurationProvider = configurationProvider;
@@ -23,7 +24,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetLatestPendingReceivedTransferConnec
 
         public async Task<GetLatestPendingReceivedTransferConnectionInvitationResponse> Handle(GetLatestPendingReceivedTransferConnectionInvitationQuery message)
         {
-            var transferConnectionInvitation = await _db.TransferConnectionInvitations
+            var transferConnectionInvitation = await _db.Value.TransferConnectionInvitations
                 .Where(i => i.ReceiverAccountId == message.AccountId && i.Status == TransferConnectionInvitationStatus.Pending)
                 .OrderByDescending(i => i.CreatedDate)
                 .ProjectTo<TransferConnectionInvitationDto>(_configurationProvider)

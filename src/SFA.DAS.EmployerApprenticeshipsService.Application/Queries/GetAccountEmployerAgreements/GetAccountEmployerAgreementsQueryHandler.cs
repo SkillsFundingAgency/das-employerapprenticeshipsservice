@@ -3,13 +3,11 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.HashingService;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.Extensions;
 using SFA.DAS.EAS.Infrastructure.Extensions;
@@ -19,14 +17,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
     public class GetAccountEmployerAgreementsQueryHandler : IAsyncRequestHandler<GetAccountEmployerAgreementsRequest,
         GetAccountEmployerAgreementsResponse>
     {
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IHashingService _hashingService;
         private readonly IValidator<GetAccountEmployerAgreementsRequest> _validator;
         private readonly IConfigurationProvider _configurationProvider;
 
 
         public GetAccountEmployerAgreementsQueryHandler(
-            EmployerAccountDbContext db,
+            Lazy<EmployerAccountsDbContext> db,
             IHashingService hashingService,
             IValidator<GetAccountEmployerAgreementsRequest> validator,
             IConfigurationProvider configurationProvider
@@ -54,7 +52,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
-            var agreements = await _db.AccountLegalEntities
+            var agreements = await _db.Value.AccountLegalEntities
                 .WithSignedOrPendingAgreementsForAccount(accountId)
                 .ProjectTo<EmployerAgreementStatusDto>(_configurationProvider)
                 .ToListAsync();

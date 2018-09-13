@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -13,54 +14,57 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class PayeRepository : BaseRepository, IPayeRepository
     {
-        public PayeRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger) : base(configuration.DatabaseConnectionString, logger)
+        private readonly Lazy<EmployerAccountsDbContext> _db;
+
+        public PayeRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
+            : base(configuration.DatabaseConnectionString, logger)
         {
+            _db = db;
         }
 
         public async Task<PayeSchemeView> GetPayeForAccountByRef(string hashedAccountId, string reference)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
-                parameters.Add("@Ref", reference, DbType.String);
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<PayeSchemeView>(
-                    sql: "[employer_account].[GetPayeForAccount_ByRef]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
+            parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
+            parameters.Add("@Ref", reference, DbType.String);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<PayeSchemeView>(
+                sql: "[employer_account].[GetPayeForAccount_ByRef]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
             return result.SingleOrDefault();
         }
 
         public async Task<Paye> GetPayeSchemeByRef(string payeRef)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@Ref", payeRef, DbType.String);
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<Paye>(
-                    sql: "[employer_account].[GetPaye_ByRef]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
+            parameters.Add("@Ref", payeRef, DbType.String);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<Paye>(
+                sql: "[employer_account].[GetPaye_ByRef]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
             return result.SingleOrDefault();
         }
 
-        public async Task UpdatePayeSchemeName(string payeRef, string refName)
+        public Task UpdatePayeSchemeName(string payeRef, string refName)
         {
-            await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@Ref", payeRef, DbType.String);
-                parameters.Add("@RefName", refName, DbType.String);
+            var parameters = new DynamicParameters();
 
-                return await c.ExecuteAsync(
-                    sql: "[employer_account].[UpdatePayeName_ByRef]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
+            parameters.Add("@Ref", payeRef, DbType.String);
+            parameters.Add("@RefName", refName, DbType.String);
+
+            return _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_account].[UpdatePayeName_ByRef]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
         }
     }
 }

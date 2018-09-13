@@ -14,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Models.Account;
 using TransactionLine = SFA.DAS.EAS.Domain.Models.Transaction.TransactionLine;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrchestratorTests
@@ -40,7 +39,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
             _response = new GetEmployerAccountResponse
             {
-                Account = new Account
+                Account = new Domain.Models.Account.Account
                 {
                     HashedId = HashedAccountId,
                     Name = "Test Account"

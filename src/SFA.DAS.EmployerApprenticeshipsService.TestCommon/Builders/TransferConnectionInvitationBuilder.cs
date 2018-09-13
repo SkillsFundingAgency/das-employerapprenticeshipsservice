@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.TestCommon.Builders
             return this;
         }
 
-        public TransferConnectionInvitationBuilder WithReceiverAccount(Account receiverAccount)
+        public TransferConnectionInvitationBuilder WithReceiverAccount(Domain.Models.Account.Account receiverAccount)
         {
             _transferConnectionInvitation.SetupProperty(i => i.ReceiverAccount, receiverAccount);
             _transferConnectionInvitation.SetupProperty(i => i.ReceiverAccountId, receiverAccount.Id);
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.TestCommon.Builders
             return this;
         }
 
-        public TransferConnectionInvitationBuilder WithSenderAccount(Account senderAccount)
+        public TransferConnectionInvitationBuilder WithSenderAccount(Domain.Models.Account.Account senderAccount)
         {
             _transferConnectionInvitation.SetupProperty(i => i.SenderAccount, senderAccount);
             _transferConnectionInvitation.SetupProperty(i => i.SenderAccountId, senderAccount.Id);

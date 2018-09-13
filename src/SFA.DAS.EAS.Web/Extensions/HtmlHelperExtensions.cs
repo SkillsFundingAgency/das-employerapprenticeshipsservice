@@ -1,6 +1,4 @@
-﻿using SFA.DAS.EAS.Domain.Models.Features;
-using SFA.DAS.EAS.Infrastructure.Authorization;
-using System;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
@@ -16,22 +14,6 @@ namespace SFA.DAS.EAS.Web.Extensions
                 .Aggregate("", (x, y) => x + y);
 
             return new MvcHtmlString(htmlAddress);
-        }
-
-        public static AuthorizationResult GetAuthorizationResult(this HtmlHelper htmlHelper, FeatureType featureType)
-        {
-            var authorisationService = DependencyResolver.Current.GetService<IAuthorizationService>();
-            var authorizationResult = authorisationService.GetAuthorizationResult(featureType);
-
-            return authorizationResult;
-        }
-
-        public static bool IsAuthorized(this HtmlHelper htmlHelper, FeatureType featureType)
-        {
-            var authorisationService = DependencyResolver.Current.GetService<IAuthorizationService>();
-            var isAuthorized = authorisationService.IsAuthorized(featureType);
-
-            return isAuthorized;
         }
 
         public static bool IsValid<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)

@@ -144,6 +144,8 @@
     <None Include="Scripts\Manual\CreateNonTransferPayments.sql" />
     <None Include="Scripts\Manual\CreateTransferLevy.sql" />
     <None Include="Scripts\Manual\CreateTransferPayments.sql" />
+    <Build Include="Tables\ClientOutboxData.sql" />
+    <Build Include="Tables\OutboxData.sql" />
     <None Include="Scripts\Manual\GetPaymentTotals.sql" />
     <None Include="Scripts\PreDeployment\AML-2643-DeleteDuplicateTransactionLines.sql" />
     <None Include="Scripts\PreDeployment\AML-2616-DeleteDuplicateLevyDeclarationsWithoutEmpRef.sql" />

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Caches;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
@@ -173,7 +174,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
         {
             DistributedCache = new Mock<IDistributedCache>();
             _employerAgreementBuilder = new EmployerAgreementBuilder();
-            _service = new AgreementService(_employerAgreementBuilder.EmployerAccountDbContext, DistributedCache.Object);
+            _service = new AgreementService(new Lazy<EmployerAccountsDbContext>(() => _employerAgreementBuilder.EmployerAccountDbContext), DistributedCache.Object);
         }
 
         public Task<int?> GetLowestSignedAgreementVersionNumberAsync(long accountId)

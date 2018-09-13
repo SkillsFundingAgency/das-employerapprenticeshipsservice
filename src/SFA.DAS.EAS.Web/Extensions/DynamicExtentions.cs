@@ -1,4 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Dynamic;
 
 namespace SFA.DAS.EAS.Web.Extensions
 {
@@ -31,6 +33,18 @@ namespace SFA.DAS.EAS.Web.Extensions
             }
 
             return false;
+        }
+
+        public static IDictionary<string, object> ToDictionary(this object obj)
+        {
+            IDictionary<string, object> expando = new ExpandoObject();
+
+            foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(obj.GetType()))
+            {
+                expando.Add(property.Name, property.GetValue(obj));
+            }
+
+            return expando;
         }
     }
 }

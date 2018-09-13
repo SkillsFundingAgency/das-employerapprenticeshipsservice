@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{53BF9CE7-8355-4734-AC0F-D8659960BB51}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SFA.DAS.EmployerFinance.Web</RootNamespace>
+    <AssemblyName>SFA.DAS.EmployerFinance.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort>44344</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="5.1.1" />
+    <PackageReference Include="BrockAllen.CookieTempData.dll" Version="1.3.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.4.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.4.1" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
+    <PackageReference Include="Microsoft.AspNet.TelemetryCorrelation" Version="1.0.0" />
+    <PackageReference Include="Microsoft.AspNet.Web.Optimization" Version="1.1.3" />
+    <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="1.0.8" />
+    <PackageReference Include="Microsoft.Owin" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.0.1" />
+    <PackageReference Include="NLog.Schema" Version="4.5.3" />
+    <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.4388" />
+    <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="1.0.46" />
+    <PackageReference Include="SFA.DAS.NServiceBus.EntityFramework" Version="1.0.46" />
+    <PackageReference Include="SFA.DAS.NServiceBus.Mvc" Version="1.0.46" />
+    <PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
+    <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
+    <PackageReference Include="StructureMap" Version="4.6.1" />
+    <PackageReference Include="StructureMap.MVC5" Version="3.1.1.134" />
+    <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
+      <Project>{c5880f73-59d6-4c59-a1a2-dba38d13e8dc}</Project>
+      <Name>SFA.DAS.EmployerFinance</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
+      <Project>{8dd6e754-567c-46e3-a071-b1049380ea6c}</Project>
+      <Name>SFA.DAS</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
+    <Compile Include="Authentication\OwinAuthenticationService.cs" />
+    <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
+    <Compile Include="Controllers\EmployerTeamController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsController.cs" />
+    <Compile Include="Controllers\TransfersController.cs" />
+    <Compile Include="DependencyResolution\ControllerConvention.cs" />
+    <Compile Include="DependencyResolution\DefaultRegistry.cs" />
+    <Compile Include="DependencyResolution\IoC.cs" />
+    <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
+    <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
+    <Compile Include="Extensions\HtmlHelperExtensions.cs" />
+    <Compile Include="Extensions\UrlHelperExtensions.cs" />
+    <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\ControllerConstants.cs" />
+    <Compile Include="Logging\LoggingConfig.cs" />
+    <Compile Include="Logging\LoggingContext.cs" />
+    <Compile Include="Mappings\TransferMappings.cs" />
+    <Compile Include="OrchestratorResponse.cs" />
+    <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
+    <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\ApprovedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\CoursePaymentDetailsViewModel.cs" />
+    <Compile Include="ViewModels\CoursePaymentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\DeletedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\FlashMessageViewModel.cs" />
+    <Compile Include="ViewModels\ProviderPaymentsSummaryViewModel.cs" />
+    <Compile Include="ViewModels\ReceiveTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\SendTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\SentTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\StartTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
+    <Compile Include="ViewModels\TransactionDownloadViewModel.cs" />
+    <Compile Include="ViewModels\TransactionLineViewModel.cs" />
+    <Compile Include="ViewModels\TransactionViewModel.cs" />
+    <Compile Include="ViewModels\TransactionViewResultViewModel.cs" />
+    <Compile Include="ViewModels\TransferAllowanceViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitationAuthorizationViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitationsViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\TransferRequestsViewModel.cs" />
+    <Compile Include="ViewModels\TransferTransactionDetailsViewModel.cs" />
+    <Compile Include="ViewModels\UserLinksViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\.keep" />
+    <Content Include="dist\css\external-links\external-link-24x24.png" />
+    <Content Include="dist\css\external-links\external-link-black-12x12.png" />
+    <Content Include="dist\css\external-links\external-link-black-24x24.png" />
+    <Content Include="dist\css\external-links\external-link.png" />
+    <Content Include="dist\css\fonts-ie8.css" />
+    <Content Include="dist\css\fonts.css" />
+    <Content Include="dist\css\govuk-template-ie6.css" />
+    <Content Include="dist\css\govuk-template-ie7.css" />
+    <Content Include="dist\css\govuk-template-ie8.css" />
+    <Content Include="dist\css\govuk-template-print.css" />
+    <Content Include="dist\css\govuk-template.css" />
+    <Content Include="dist\css\images\close.png" />
+    <Content Include="dist\css\images\gov.uk_logotype_crown-1x.png" />
+    <Content Include="dist\css\images\gov.uk_logotype_crown.png" />
+    <Content Include="dist\css\images\govuk-crest-2x.png" />
+    <Content Include="dist\css\images\govuk-crest-ie.png" />
+    <Content Include="dist\css\images\govuk-crest.png" />
+    <Content Include="dist\css\images\open-government-licence.png" />
+    <Content Include="dist\css\images\open-government-licence_2x.png" />
+    <Content Include="dist\css\images\option-select-toggle-sprite.png" />
+    <Content Include="dist\css\images\pagination-arrow-sprite.png" />
+    <Content Include="dist\css\screen-ie6.css" />
+    <Content Include="dist\css\screen-ie7.css" />
+    <Content Include="dist\css\screen-ie8.css" />
+    <Content Include="dist\css\screen.css" />
+    <Content Include="dist\css\select2.min.css" />
+    <Content Include="dist\images\apple-touch-icon-120x120.png" />
+    <Content Include="dist\images\apple-touch-icon-152x152.png" />
+    <Content Include="dist\images\apple-touch-icon-60x60.png" />
+    <Content Include="dist\images\apple-touch-icon-76x76.png" />
+    <Content Include="dist\images\arrow-sprite.png" />
+    <Content Include="dist\images\favicon.ico" />
+    <Content Include="dist\images\gov.uk_logotype_crown.svg" />
+    <Content Include="dist\images\gov.uk_logotype_crown_invert.png" />
+    <Content Include="dist\images\gov.uk_logotype_crown_invert_trans.png" />
+    <Content Include="dist\images\icon-green-tick.png" />
+    <Content Include="dist\images\icon-important-2x.png" />
+    <Content Include="dist\images\icon-important.png" />
+    <Content Include="dist\images\icon-pointer-2x.png" />
+    <Content Include="dist\images\icon-pointer-black-2x.png" />
+    <Content Include="dist\images\icon-pointer-black.png" />
+    <Content Include="dist\images\icon-pointer-indexed.png" />
+    <Content Include="dist\images\icon-pointer.png" />
+    <Content Include="dist\images\icon-search-2x.png" />
+    <Content Include="dist\images\icon-search.png" />
+    <Content Include="dist\images\opengraph-image.png" />
+    <Content Include="dist\images\org_crest_13px.png" />
+    <Content Include="dist\images\org_crest_13px_x2.png" />
+    <Content Include="dist\images\org_crest_18px.png" />
+    <Content Include="dist\images\org_crest_18px_x2.png" />
+    <Content Include="dist\images\org_crest_27px.png" />
+    <Content Include="dist\images\org_crest_27px_x2.png" />
+    <Content Include="dist\images\pub-cover-html.png" />
+    <Content Include="dist\images\separator-2x.png" />
+    <Content Include="dist\images\separator.png" />
+    <Content Include="dist\javascripts\app.js" />
+    <Content Include="dist\javascripts\apprentice\dropdown.js" />
+    <Content Include="dist\javascripts\apprentice\select2.min.js" />
+    <Content Include="dist\javascripts\character-limit.js" />
+    <Content Include="dist\javascripts\govuk-template.js" />
+    <Content Include="dist\javascripts\ie.js" />
+    <Content Include="dist\javascripts\jquery-1.11.0.min.js" />
+    <Content Include="dist\javascripts\length-limit.js" />
+    <Content Include="dist\javascripts\lodash.js" />
+    <Content Include="dist\javascripts\payment-order.js" />
+    <Content Include="dist\javascripts\respond.min.js" />
+    <Content Include="dist\javascripts\selection-buttons.js" />
+    <Content Include="dist\javascripts\sfa-modernizr.js" />
+    <Content Include="dist\javascripts\showhide-content.js" />
+    <Content Include="dist\javascripts\stacker.js" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dist\css\fonts\GDSTransportTabular-Bold.eot" />
+    <Content Include="dist\css\fonts\GDSTransportTabular-Light.eot" />
+    <Content Include="dist\css\fonts\GDSTransportWebsite-Bold.eot" />
+    <Content Include="dist\css\fonts\GDSTransportWebsite.eot" />
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\SignedIn.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\AccessDenied.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\NotFound.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\TransactionsView.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\ProviderPaymentSummary.cshtml" />
+    <Content Include="Views\Shared\_SVGSprite.cshtml" />
+    <Content Include="Views\Shared\GoogleAnalyticsInfo.cshtml" />
+    <Content Include="Views\Shared\_SuccessMessage.cshtml" />
+    <Content Include="Views\Shared\Privacy.cshtml" />
+    <Content Include="Views\Home\Help.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\CoursePaymentSummary.cshtml" />
+    <Content Include="Views\Transfers\Index.cshtml" />
+    <Content Include="Views\Transfers\TransferAllowance.cshtml" />
+    <Content Include="Views\Transfers\TransferConnectionInvitationAuthorization.cshtml" />
+    <Content Include="Views\Transfers\TransferConnectionInvitations.cshtml" />
+    <Content Include="Views\Transfers\TransferRequests.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Approved.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Deleted.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Details.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Index.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Receive.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Rejected.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Send.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Sent.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Start.cshtml" />
+    <Content Include="Views\Shared\_ValidationSummary.cshtml" />
+    <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
+    <Content Include="Views\AccessDenied\Index.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\LevyDeclarationDetail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>52664</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44304/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

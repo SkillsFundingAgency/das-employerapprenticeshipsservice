@@ -3,10 +3,27 @@
 	@PayrollYear varchar(10),
 	@PayrollMonth int
 AS
-	select TOP 1
-		*
+	select 
+		Id, 
+		AccountId, 
+		EmpRef, 
+		LevyDueYTD, 
+		LevyAllowanceForYear, 
+		SubmissionDate, 
+		SubmissionId, 
+		PayrollYear, 
+		PayrollMonth, 
+		CreatedDate, 
+		EndOfYearAdjustment,
+		EndOfYearAdjustmentAmount,
+		LevyAllowanceForYear,
+		DateCeased,
+		InactiveFrom,
+		InactiveTo,
+		HmrcSubmissionId,
+		NoPaymentForPeriod
 	FROM 
-		[employer_financial].[LevyDeclaration]
+		[employer_financial].[GetLevyDeclaration]
 	where
 		EmpRef = @EmpRef
 	AND
@@ -15,8 +32,8 @@ AS
 		PayrollYear = @PayrollYear
 	AND 
 		EndOfYearAdjustment = 0
-	ORDER BY 
-		SubmissionDate DESC
+	AND 
+		LastSubmission = 1
 		
 	
 

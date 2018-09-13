@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Moq;
@@ -17,7 +18,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSentTransferConnectionInv
     {
         private GetSentTransferConnectionInvitationQueryHandler _handler;
         private GetSentTransferConnectionInvitationQuery _query;
-        private Mock<EmployerAccountDbContext> _db;
+        private Mock<EmployerAccountsDbContext> _db;
         private DbSetStub<TransferConnectionInvitation> _transferConnectionInvitationsDbSet;
         private List<TransferConnectionInvitation> _transferConnectionInvitations;
         private TransferConnectionInvitation _sentTransferConnectionInvitation;
@@ -29,7 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSentTransferConnectionInv
         [SetUp]
         public void Arrange()
         {
-            _db = new Mock<EmployerAccountDbContext>();
+            _db = new Mock<EmployerAccountsDbContext>();
 
             _senderAccount = new Domain.Models.Account.Account
             {
@@ -71,7 +72,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSentTransferConnectionInv
 
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
 
-            _handler = new GetSentTransferConnectionInvitationQueryHandler(_db.Object, _configurationProvider);
+            _handler = new GetSentTransferConnectionInvitationQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _configurationProvider);
 
             _query = new GetSentTransferConnectionInvitationQuery
             {

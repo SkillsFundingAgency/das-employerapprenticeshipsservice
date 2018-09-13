@@ -1,12 +1,9 @@
-﻿
-@using Microsoft.ApplicationInsights.Extensibility
-@using SFA.DAS.EAS.Domain.Models.Features
+﻿@using Microsoft.ApplicationInsights.Extensibility
+@using SFA.DAS.Authorization
+@using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Web.Extensions
-@using SFA.DAS.EAS.Web.Models
 @using SFA.DAS.EAS.Web.ViewModels
-@using StringExtensions = SFA.DAS.EAS.Web.Extensions.StringExtensions
-
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
 <!--[if gt IE 8]><!-->
@@ -48,17 +45,18 @@
     <!--<![endif]-->
 
     @Html.Partial("GoogleAnalyticsInfo")
-    
+
     <!-- This is from individual pages -->
     @RenderSection("gaDataLayer", required: false)
 
     <!-- Google Tag Manager -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-83918739-9"></script>
     <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-	@Html.Raw(GoogleAnalyticsModel.Instance.GoogleHeaderUrl);f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-KWQBWGJ');</script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-83918739-9');
+    </script>
     <!-- End Google Tag Manager -->
 
     <script type="text/javascript">
@@ -77,10 +75,8 @@
 <body id="@ViewBag.PageID">
 
     <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="@Html.Raw(GoogleAnalyticsModel.Instance.GoogleBodyUrl)"
-                height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
+    <script>(function (w, d, s, l, i) { w[l]‌‌=w[l]‌‌|| []‌‌; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' }); var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f); })(window, document, 'script', 'dataLayer', 'GTM-KWQBWGJ');</script>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
@@ -146,16 +142,16 @@
                                         }
                                         <li><a href="@UserLinksViewModel.ChangePasswordLink" class="sub-menu-item">Change your password</a></li>
                                         <li><a href="@UserLinksViewModel.ChangeEmailLink" class="sub-menu-item">Change your email address</a></li>
-				        @if (!DynamicExtensions.ParseHideNavFromViewBag(ViewBag))
-				        {
-					    <li><a href="@Url.Action("NotificationSettings", "Settings")" class="sub-menu-item">Notification settings</a></li>
-				        }
+                                        @if (!DynamicExtensions.ParseHideNavFromViewBag(ViewBag))
+                                        {
+                                            <li><a href="@Url.Action("NotificationSettings", "Settings")" class="sub-menu-item">Notification settings</a></li>
+                                        }
                                     </ul>
                                 </li>
                                 <li><a href="@Url.Action("SignOut", "Home")" role="menuitem">Sign out</a></li>
                             }
                             else
-            if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
 
                             {
                                 {
@@ -169,7 +165,7 @@
             </div>
         </div> <!--/floating-menu-holder-->
     }
-  
+
     @if (HttpContext.Current.User.Identity.IsAuthenticated)
     {
         var controllerString = ViewContext.RouteData.Values["Controller"].ToString();

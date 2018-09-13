@@ -3,16 +3,16 @@
   <Role name="SFA.DAS.EAS.Account.Api">
     <Instances count="3" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
-      <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
-      <Setting name="LogLevel" value="__loglevel__" />
-      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
-      <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
-      <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
+      <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="idaAudience" value="__idaAudience__" />
       <Setting name="idaTenant" value="__idaTenant__" />
-      <Setting name="InstrumentationKey" value="__AccInstrumentationKey__"/>
+      <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
+      <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
+      <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
+      <Setting name="LogLevel" value="__LogLevel__" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
+      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="68C6661219A1B03911E542F15C979203CEF2CC38" thumbprintAlgorithm="sha1" />

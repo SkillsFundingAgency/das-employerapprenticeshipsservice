@@ -1,17 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.Infrastructure.Hashing;
-using SFA.DAS.EAS.Infrastructure.Interfaces;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.TestCommon.Builders;
+using SFA.DAS.Hashing;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvitationTests
 {
@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvita
         private SendTransferConnectionInvitationQueryHandler _handler;
         private SendTransferConnectionInvitationQuery _query;
         private SendTransferConnectionInvitationResponse _response;
-        private Mock<EmployerAccountDbContext> _db;
+        private Mock<EmployerAccountsDbContext> _db;
         private DbSetStub<Domain.Models.Account.Account> _accountsDbSet;
         private List<Domain.Models.Account.Account> _accounts;
         private DbSetStub<TransferConnectionInvitation> _transferConnectionInvitationsDbSet;
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvita
         [SetUp]
         public void Arrange()
         {
-            _db = new Mock<EmployerAccountDbContext>();
+            _db = new Mock<EmployerAccountsDbContext>();
 
             _receiverAccount = new Domain.Models.Account.Account
             {
@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvita
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
             _publicHashingService.Setup(h => h.DecodeValue(_receiverAccount.PublicHashedId)).Returns(_receiverAccount.Id);
 
-            _handler = new SendTransferConnectionInvitationQueryHandler(_db.Object, _configurationProvider, _publicHashingService.Object);
+            _handler = new SendTransferConnectionInvitationQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _configurationProvider, _publicHashingService.Object);
 
             _query = new SendTransferConnectionInvitationQuery
             {

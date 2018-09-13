@@ -6,10 +6,9 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.Infrastructure.Hashing;
-using SFA.DAS.EAS.Infrastructure.Interfaces;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.TestCommon.Builders;
+using SFA.DAS.Hashing;
 using System;
 using System.Threading.Tasks;
 
@@ -66,7 +65,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
             Command = new SendTransferConnectionInvitationCommand
             {
                 AccountId = SenderAccount.Id,
-                UserId = SenderUser.Id,
+                UserRef = SenderUser.Ref,
                 ReceiverAccountPublicHashedId = ReceiverAccount.PublicHashedId
             };
         }
@@ -132,7 +131,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
         {
             SenderUser = new User
             {
-                ExternalId = Guid.NewGuid(),
+                Ref = Guid.NewGuid(),
                 Id = 123456,
                 FirstName = "John",
                 LastName = "Doe"

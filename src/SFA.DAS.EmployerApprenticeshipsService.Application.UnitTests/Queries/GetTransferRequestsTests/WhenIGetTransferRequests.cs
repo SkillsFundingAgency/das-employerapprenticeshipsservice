@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.TestCommon;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferRequestsTests
         private GetTransferRequestsQueryHandler _handler;
         private GetTransferRequestsQuery _query;
         private GetTransferRequestsResponse _response;
-        private Mock<EmployerAccountDbContext> _db;
+        private Mock<EmployerAccountsDbContext> _db;
         private IConfigurationProvider _configurationProvider;
         private Mock<IEmployerCommitmentApi> _employerCommitmentApi;
         private Mock<IHashingService> _hashingService;
@@ -35,7 +36,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferRequestsTests
         [SetUp]
         public void Arrange()
         {
-            _db = new Mock<EmployerAccountDbContext>();
+            _db = new Mock<EmployerAccountsDbContext>();
             _employerCommitmentApi = new Mock<IEmployerCommitmentApi>();
             _hashingService = new Mock<IHashingService>();
 
@@ -93,7 +94,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransferRequestsTests
             _hashingService.Setup(h => h.DecodeValue(_account1.HashedId)).Returns(_account1.Id);
             _hashingService.Setup(h => h.DecodeValue(_account2.HashedId)).Returns(_account2.Id);
 
-            _handler = new GetTransferRequestsQueryHandler(_db.Object, _configurationProvider, _employerCommitmentApi.Object, _hashingService.Object);
+            _handler = new GetTransferRequestsQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _configurationProvider, _employerCommitmentApi.Object, _hashingService.Object);
 
             _query = new GetTransferRequestsQuery
             {

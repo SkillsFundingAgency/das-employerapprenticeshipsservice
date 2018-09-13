@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.Caches;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Caching
 {

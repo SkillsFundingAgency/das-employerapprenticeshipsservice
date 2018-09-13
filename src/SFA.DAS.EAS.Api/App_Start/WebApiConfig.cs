@@ -2,11 +2,12 @@
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using System.Web.Http.ModelBinding;
-using SFA.DAS.EAS.Account.Api.Binders;
+using SFA.DAS.Authorization.WebApi;
 using SFA.DAS.EAS.Account.Api.DependencyResolution;
 using SFA.DAS.EAS.Account.Api.ExceptionLoggers;
-using SFA.DAS.EAS.Account.Api.Filters;
 using SFA.DAS.EAS.Application.DependencyResolution;
+using SFA.DAS.EntityFramework.WebApi;
+using SFA.DAS.Validation.WebApi;
 using WebApi.StructureMap;
 
 namespace SFA.DAS.EAS.Account.Api
@@ -30,11 +31,11 @@ namespace SFA.DAS.EAS.Account.Api
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<DataRegistry>();
                 c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
-                c.AddRegistry<LevyRegistry>();
                 c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();

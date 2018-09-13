@@ -5,7 +5,7 @@ using StructureMap;
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
     public static class IoC
-    { 
+    {
         public static IContainer Initialize()
         {
             return new Container(c =>
@@ -17,11 +17,11 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<DataRegistry>();
                 c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
-                c.AddRegistry<LevyRegistry>();
                 c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();

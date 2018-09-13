@@ -1,7 +1,8 @@
 ﻿using Moq;
 using SFA.DAS.Audit.Client;
+using SFA.DAS.Authentication;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.Events.Api.Client;
@@ -9,9 +10,7 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using StructureMap;
 using SFA.DAS.HashingService;
-using SFA.DAS.EAS.Infrastructure.Authentication;
-using SFA.DAS.EAS.Infrastructure.Hashing;
-using SFA.DAS.EAS.Infrastructure.Interfaces;
+using SFA.DAS.Hashing;
 using SFA.DAS.Messaging.Interfaces;
 
 namespace SFA.DAS.EAS.TestCommon.DependencyResolution

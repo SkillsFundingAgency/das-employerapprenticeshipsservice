@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.Hashing;
-using SFA.DAS.EAS.Infrastructure.Interfaces;
+using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 using StructureMap;
 
@@ -11,8 +10,8 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         public HashingRegistry()
         {
             For<IHashingService>().Use(c => GetHashingService(c));
-            For<IPublicHashingService>().Use(c => GetPublicHashingservice(c));
-            For<IAccountLegalEntityPublicHashingService>().Add(c => GetAccountLegalEntityPublicHashingservice(c));
+            For<IPublicHashingService>().Use(c => GetPublicHashingService(c));
+            For<IAccountLegalEntityPublicHashingService>().Add(c => GetAccountLegalEntityPublicHashingService(c));
         }
 
         private IHashingService GetHashingService(IContext context)
@@ -23,7 +22,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
             return hashingService;
         }
 
-        private IPublicHashingService GetPublicHashingservice(IContext context)
+        private IPublicHashingService GetPublicHashingService(IContext context)
         {
             var config = context.GetInstance<EmployerApprenticeshipsServiceConfiguration>();
             var publicHashingService = new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring);
@@ -31,12 +30,12 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
             return publicHashingService;
         }
 
-        private IAccountLegalEntityPublicHashingService GetAccountLegalEntityPublicHashingservice(IContext context)
+        private IAccountLegalEntityPublicHashingService GetAccountLegalEntityPublicHashingService(IContext context)
         {
             var config = context.GetInstance<EmployerApprenticeshipsServiceConfiguration>();
-            var agreementHashingService = new PublicHashingService(config.PublicAllowedAccountLegalEntityHashstringCharacters, config.PublicAllowedAccountLegalEntityHashstringSalt);
+            var accountLegalEntityPublicHashingService = new PublicHashingService(config.PublicAllowedAccountLegalEntityHashstringCharacters, config.PublicAllowedAccountLegalEntityHashstringSalt);
 
-            return agreementHashingService;
+            return accountLegalEntityPublicHashingService;
         }
     }
 }

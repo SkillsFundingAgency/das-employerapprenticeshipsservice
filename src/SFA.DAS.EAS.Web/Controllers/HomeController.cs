@@ -3,15 +3,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Authorization;
-using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
-using IAuthenticationService = SFA.DAS.EAS.Infrastructure.Authentication.IAuthenticationService;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -35,7 +34,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Index")]
         public async Task<ActionResult> Index()
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 await OwinWrapper.UpdateClaims();
@@ -198,7 +197,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 await OwinWrapper.UpdateClaims();
 
-                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
                 var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
                 var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
                 var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);

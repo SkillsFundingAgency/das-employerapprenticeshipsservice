@@ -2,10 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
-using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransactionsDownload
 {

@@ -5,12 +5,11 @@ using AutoMapper;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
-using SFA.DAS.EAS.Domain.Models.Authorization;
-using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Infrastructure.Data;
@@ -96,12 +95,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
 
     public class AuthorizationServiceTestFixture : FluentTestFixture
     {
-        public List<Account> Accounts { get; }
-        public DbSetStub<Account> AccountsDbSet { get; }
+        public List<Domain.Models.Account.Account> Accounts { get; }
+        public DbSetStub<Domain.Models.Account.Account> AccountsDbSet { get; }
         public Mock<IAuthorizationContextCache> AuthorizationContextCache { get; }
         public Mock<ICallerContextProvider> CallerContextProvider { get; }
         public IConfigurationProvider ConfigurationProvider { get; }
-        public Mock<EmployerAccountDbContext> Db { get; }
+        public Mock<EmployerAccountsDbContext> Db { get; }
         public Feature Feature { get; }
         public Mock<IFeatureService> FeatureService { get; }
         public List<IAuthorizationHandler> Handlers { get; }
@@ -113,7 +112,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
         public AuthorizationServiceTestFixture()
         {
             Feature = new Feature { Enabled = true, FeatureType = FeatureType.Test1 };
-            Db = new Mock<EmployerAccountDbContext>();
+            Db = new Mock<EmployerAccountsDbContext>();
             AuthorizationContextCache = new Mock<IAuthorizationContextCache>();
             Handlers = new List<IAuthorizationHandler>();
             CallerContextProvider = new Mock<ICallerContextProvider>();
@@ -126,8 +125,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
             });
 
             FeatureService = new Mock<IFeatureService>();
-            Accounts = new List<Account>();
-            AccountsDbSet = new DbSetStub<Account>(Accounts);
+            Accounts = new List<Domain.Models.Account.Account>();
+            AccountsDbSet = new DbSetStub<Domain.Models.Account.Account>(Accounts);
             Users = new List<User>();
             UsersDbSet = new DbSetStub<User>(Users);
             Memberships = new List<Membership>();
@@ -144,26 +143,24 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
 
         public IAuthorizationContext GetAuthorizationContext()
         {
-            var authorizationService = new AuthorizationService(
-                Db.Object,
-                AuthorizationContextCache.Object,
+            var authorizationService = new AuthorizationService(AuthorizationContextCache.Object,
                 Handlers,
                 CallerContextProvider.Object,
                 ConfigurationProvider,
-                FeatureService.Object);
+                FeatureService.Object,
+                new Lazy<EmployerAccountsDbContext>(() => Db.Object));
 
             return authorizationService.GetAuthorizationContext();
         }
 
         public bool IsAuthorized()
         {
-            var authorizationService = new AuthorizationService(
-                Db.Object,
-                AuthorizationContextCache.Object,
+            var authorizationService = new AuthorizationService(AuthorizationContextCache.Object,
                 Handlers,
                 CallerContextProvider.Object,
                 ConfigurationProvider,
-                FeatureService.Object);
+                FeatureService.Object,
+                new Lazy<EmployerAccountsDbContext>(() => Db.Object));
 
             return authorizationService.IsAuthorized(Feature.FeatureType);
         }
@@ -207,7 +204,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
             CallerContextProvider.Setup(p => p.GetCallerContext()).Returns(new CallerContext
             {
                 AccountId = account?.Id,
-                UserExternalId = user.ExternalId
+                UserRef = user.Ref
             });
 
             return this;
@@ -215,24 +212,23 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
 
         public void ValidateMembership()
         {
-            var authorizationService = new AuthorizationService(
-                Db.Object,
-                AuthorizationContextCache.Object,
+            var authorizationService = new AuthorizationService(AuthorizationContextCache.Object,
                 Handlers,
                 CallerContextProvider.Object,
                 ConfigurationProvider,
-                FeatureService.Object);
+                FeatureService.Object,
+                new Lazy<EmployerAccountsDbContext>(() => Db.Object));
 
             authorizationService.ValidateMembership();
         }
 
-        private Account EnsureAccount(int accountId)
+        private Domain.Models.Account.Account EnsureAccount(int accountId)
         {
             var existingAccount = Accounts.SingleOrDefault(ac => ac.Id == accountId);
 
             if (existingAccount == null)
             {
-                existingAccount = new Account
+                existingAccount = new Domain.Models.Account.Account
                 {
                     Id = accountId
                 };
@@ -252,7 +248,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Authorization
                 existingUser = new User
                 {
                     Id = userId,
-                    ExternalId = Guid.NewGuid()
+                    Ref = Guid.NewGuid()
                 };
 
                 Users.Add(existingUser);

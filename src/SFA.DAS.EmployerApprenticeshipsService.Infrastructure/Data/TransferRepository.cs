@@ -15,46 +15,28 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     public class TransferRepository : BaseRepository, ITransferRepository
     {
         private readonly decimal _allowancePercentage;
-        private readonly ILog _logger;
-        public TransferRepository(LevyDeclarationProviderConfiguration configuration, ILog logger)
+        private readonly Lazy<EmployerFinanceDbContext> _db;
+
+        public TransferRepository(LevyDeclarationProviderConfiguration configuration, ILog logger, Lazy<EmployerFinanceDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
-            _logger = logger;
             _allowancePercentage = configuration.TransferAllowancePercentage;
-
+            _db = db;
         }
 
-        public async Task CreateAccountTransfers(IEnumerable<AccountTransfer> transfers)
+        public Task CreateAccountTransfers(IEnumerable<AccountTransfer> transfers)
         {
-            await WithTransaction(async (connection, transaction) =>
-            {
-                var accountTransfers = transfers as AccountTransfer[] ?? transfers.ToArray();
+            var accountTransfers = transfers as AccountTransfer[] ?? transfers.ToArray();
+            var transferDataTable = CreateTransferDataTable(accountTransfers);
+            var parameters = new DynamicParameters();
 
-                try
-                {
-                    var transferDataTable = CreateTransferDataTable(accountTransfers);
+            parameters.Add("@transfers", transferDataTable.AsTableValuedParameter("[employer_financial].[AccountTransferTable]"));
 
-                    var parameters = new DynamicParameters();
-                    parameters.Add("@transfers", transferDataTable.AsTableValuedParameter("[employer_financial].[AccountTransferTable]"));
-
-                    await connection.ExecuteAsync(
-                        sql: "[employer_financial].[CreateAccountTransfers]",
-                        param: parameters,
-                        transaction: transaction,
-                        commandType: CommandType.StoredProcedure);
-
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-
-                    var transfer = accountTransfers.FirstOrDefault();
-                    _logger.Error(ex, $"Failed to save transfers for account id {transfer?.SenderAccountId}");
-
-                    throw;
-                }
-            });
+            return _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_financial].[CreateAccountTransfers]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
         }
 
         //public async Task<decimal> GetTransferAllowance(long accountId)
@@ -74,39 +56,33 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         //    return result ?? 0;
         //}
 
-        public async Task<AccountTransferDetails> GetTransferPaymentDetails(AccountTransfer transfer)
+        public Task<AccountTransferDetails> GetTransferPaymentDetails(AccountTransfer transfer)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@receiverAccountId", transfer.ReceiverAccountId, DbType.Int64);
-                parameters.Add("@periodEnd", transfer.PeriodEnd, DbType.String);
-                parameters.Add("@apprenticeshipId", transfer.CommitmentId, DbType.Int64);
+            var parameters = new DynamicParameters();
 
-                return await c.QuerySingleOrDefaultAsync<AccountTransferDetails>(
-                    sql: "[employer_financial].[GetTransferPaymentDetails]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
+            parameters.Add("@receiverAccountId", transfer.ReceiverAccountId, DbType.Int64);
+            parameters.Add("@periodEnd", transfer.PeriodEnd, DbType.String);
+            parameters.Add("@apprenticeshipId", transfer.CommitmentId, DbType.Int64);
 
-            return result;
+            return _db.Value.Database.Connection.QuerySingleOrDefaultAsync<AccountTransferDetails>(
+                sql: "[employer_financial].[GetTransferPaymentDetails]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
         }
 
-        public async Task<IEnumerable<AccountTransfer>> GetReceiverAccountTransfersByPeriodEnd(long receiverAccountId, string periodEnd)
+        public Task<IEnumerable<AccountTransfer>> GetReceiverAccountTransfersByPeriodEnd(long receiverAccountId, string periodEnd)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@receiverAccountId", receiverAccountId, DbType.Int64);
-                parameters.Add("@periodEnd", periodEnd, DbType.String);
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<AccountTransfer>(
-                    sql: "[employer_financial].[GetAccountTransfersByPeriodEnd]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
+            parameters.Add("@receiverAccountId", receiverAccountId, DbType.Int64);
+            parameters.Add("@periodEnd", periodEnd, DbType.String);
 
-            return result;
+            return _db.Value.Database.Connection.QueryAsync<AccountTransfer>(
+                sql: "[employer_financial].[GetAccountTransfersByPeriodEnd]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
         }
 
         private static DataTable CreateTransferDataTable(IEnumerable<AccountTransfer> transfers)
