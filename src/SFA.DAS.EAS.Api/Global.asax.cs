@@ -6,7 +6,6 @@ using Microsoft.Azure;
 using Microsoft.ApplicationInsights.Extensibility;
 using NServiceBus;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.NServiceBus;
 using SFA.DAS.Extensions;
 using SFA.DAS.NServiceBus;
