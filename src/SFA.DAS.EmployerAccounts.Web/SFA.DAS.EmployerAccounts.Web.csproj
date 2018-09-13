@@ -549,7 +549,6 @@
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\LegalAgreement.cshtml" />
-    <Content Include="Views\Home\Privacy.cshtml" />
     <Content Include="Views\Home\WhatYoullNeed.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
