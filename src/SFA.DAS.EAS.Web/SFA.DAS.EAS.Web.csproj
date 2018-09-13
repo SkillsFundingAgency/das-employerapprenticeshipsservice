@@ -988,7 +988,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\EmployerAccountTransactions\TransactionsView.cshtml" />
     <Content Include="Views\Invitation\View.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
     <Content Include="Views\EmployerTeam\Invite.cshtml" />

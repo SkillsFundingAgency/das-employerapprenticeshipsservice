@@ -48,7 +48,7 @@ else
                     </h2>
                     <p>Add your organisations that will make contracts with training providers.</p>
                     <h2 class="heading-medium">
-                        <a href="@Url.CommitmentsAction("apprentices/home")">Apprentices</a>
+                        <a href="@Url.EmployerCommitmentsAction("apprentices/home")">Apprentices</a>
                     </h2>
                     <p>Add apprentices, update details of existing apprentices and authorise payments to training providers.</p>
                 </div>
@@ -68,7 +68,7 @@ else
                     @if (Html.IsAuthorized(FeatureType.Recruitments))
                     {
                         <h2 class="heading-medium">
-                            <a href="@Url.RecruitmentsAction()">Recruitment</a>
+                            <a href="@Url.EmployerRecruitAction()">Recruitment</a>
                         </h2>
                         <p>Recruit an apprentice by creating a vacancy. This vacancy will be advertised on Find an apprenticeship.</p>
                     }
@@ -125,17 +125,17 @@ else
                                                 break;
                                             case "AddApprentices":
                                                 <p>
-                                                    <a href="@Url.CommitmentsAction("apprentices/inform")">Start adding apprentices now</a>
+                                                    <a href="@Url.EmployerCommitmentsAction("apprentices/inform")">Start adding apprentices now</a>
                                                 </p>
                                                 break;
                                             case "ApprenticeChangesToReview":
                                                 <p>
-                                                    @task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.CommitmentsAction("apprentices/manage/all?RecordStatus=ChangesForReview")">View changes</a>
+                                                    @task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.EmployerCommitmentsAction("apprentices/manage/all?RecordStatus=ChangesForReview")">View changes</a>
                                                 </p>
                                                 break;
                                             case "CohortRequestReadyForApproval":
                                                 <p>
-                                                    @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="@Url.CommitmentsAction("apprentices/cohorts/review")">View cohorts</a>
+                                                    @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="@Url.EmployerCommitmentsAction("apprentices/cohorts/review")">View cohorts</a>
                                                 </p>
                                                 break;
                                             case "ReviewConnectionRequest":

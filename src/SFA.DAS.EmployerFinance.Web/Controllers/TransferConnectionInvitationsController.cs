@@ -163,7 +163,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             switch (model.Choice)
             {
                 case "GoToApprenticesPage":
-                    return Redirect(Url.CommitmentsAction("apprentices/home"));
+                    return Redirect(Url.EmployerCommitmentsAction("apprentices/home"));
                 case "GoToHomepage":
                     return RedirectToAction("Index", "EmployerTeam");
                 default:

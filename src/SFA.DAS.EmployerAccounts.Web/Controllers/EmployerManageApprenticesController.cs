@@ -62,9 +62,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         private RedirectResult RedirectPermanentCommitmentsUrl()
         {
-            var baseUrl = CloudConfigurationManager.GetSetting(ControllerConstants.CommitmentsBaseUrlKeyName).EndsWith("/")
-                ? CloudConfigurationManager.GetSetting(ControllerConstants.CommitmentsBaseUrlKeyName)
-                : CloudConfigurationManager.GetSetting(ControllerConstants.CommitmentsBaseUrlKeyName) + "/";
+            var baseUrl = CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName).EndsWith("/")
+                ? CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName)
+                : CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName) + "/";
 
             var path = Request.Url.AbsolutePath;
 

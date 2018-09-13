@@ -6,9 +6,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
     public static class UrlHelperExtensions
     {
-        public static string CommitmentsAction(this UrlHelper helper, string path)
+        public static string EmployerCommitmentsAction(this UrlHelper helper, string path)
         {
-            return AccountAction(helper, path, ControllerConstants.CommitmentsBaseUrlKeyName);
+            return AccountAction(helper, path, ControllerConstants.EmployerCommitmentsBaseUrlKeyName);
+        }
+
+        public static string EmployerFinanceAction(this UrlHelper helper, string path)
+        {
+            return AccountAction(helper, path, ControllerConstants.EmployerFinanceBaseUrlKeyName);
+        }
+
+        public static string EmployerProjectionsAction(this UrlHelper helper, string path)
+        {
+            return AccountAction(helper, path, ControllerConstants.EmployerProjectionsBaseUrlKeyName);
+        }
+
+        public static string EmployerRecruitAction(this UrlHelper helper)
+        {
+            return AccountAction(helper, string.Empty, ControllerConstants.EmployerRecruitBaseUrlKeyName);
         }
 
         public static string LegacyEasAccountAction(this UrlHelper helper, string path)
@@ -19,16 +34,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         public static string LegacyEasAction(this UrlHelper helper, string path)
         {
             return Action(path, ControllerConstants.LegacyEasBaseUrlKeyName);
-        }
-
-        public static string ProjectionsAction(this UrlHelper helper, string path)
-        {
-            return AccountAction(helper, path, ControllerConstants.ProjectionsBaseUrlKeyName);
-        }
-
-        public static string RecruitmentsAction(this UrlHelper helper)
-        {
-            return AccountAction(helper, string.Empty, ControllerConstants.RecruitmentsBaseUrlKeyName);
         }
 
         private static string AccountAction(UrlHelper helper, string path, string baseUrlKeyName)
