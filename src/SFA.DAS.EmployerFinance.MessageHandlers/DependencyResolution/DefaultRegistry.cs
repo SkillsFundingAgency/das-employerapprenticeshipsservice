@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
         {
             Scan(s =>
             {
-                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS."));
+                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
         }
