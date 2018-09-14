@@ -256,6 +256,7 @@
     <Compile Include="Configuration\WebJobConfig.cs" />
     <Compile Include="Interfaces\DateRange.cs" />
     <Compile Include="Interfaces\IHmrcDateService.cs" />
+    <Compile Include="Models\Account\AccountHistory.cs" />
     <Compile Include="Models\Account\AccountLegalEntity.cs" />
     <Compile Include="Models\Account\CreateLegalEntityWithAgreementParams.cs" />
     <Compile Include="Models\Account\AccountSpecificLegalEntity.cs" />

@@ -10,6 +10,8 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -68,37 +70,36 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
         {
-            AccountDetail accountDetail = null;
-
-            var parameters = new DynamicParameters();
-
-            parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
-
-            await _db.Value.Database.Connection.QueryAsync<AccountDetail, string, long, AccountDetail>(
-                sql: "[employer_account].[GetAccountDetails_ByHashedId]",
-                param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.StoredProcedure,
-                splitOn: "PayeSchemeId,LegalEntityId",
-                map: (parent, payeSchemeRef, legalEntityId) =>
+            var accountDetail = await _db.Value.Accounts
+                .Where(ac => ac.HashedId == hashedAccountId)
+                .Select(ac => new AccountDetail
                 {
-                    if (accountDetail == null)
-                    {
-                        accountDetail = parent;
-                    }
+                    AccountId = ac.Id,
+                    HashedId = ac.HashedId,
+                    PublicHashedId = ac.PublicHashedId,
+                    Name = ac.Name,
+                    CreatedDate = ac.CreatedDate
+                }).FirstAsync();
 
-                    if (!accountDetail.PayeSchemes.Contains(payeSchemeRef))
-                    {
-                        accountDetail.PayeSchemes.Add(payeSchemeRef);
-                    }
+            accountDetail.OwnerEmail = await _db.Value.Memberships
+                .Where(m => m.AccountId == accountDetail.AccountId && m.Role == Role.Owner)
+                .OrderBy(m => m.CreatedDate)
+                .Select(m => m.User.Email)
+                .FirstOrDefaultAsync();
 
-                    if (!accountDetail.LegalEntities.Contains(legalEntityId))
-                    {
-                        accountDetail.LegalEntities.Add(legalEntityId);
-                    }
+            accountDetail.PayeSchemes = await _db.Value.AccountHistory
+                                    .Where(ach => ach.AccountId == accountDetail.AccountId)
+                                    .Select(ach => ach.PayeRef)
+                                    .ToListAsync();
 
-                    return accountDetail;
-                });
+            accountDetail.LegalEntities = await _db.Value.AccountLegalEntities
+                .Where(ale => ale.AccountId == accountDetail.AccountId
+                              && ale.Deleted == null
+                              && ale.Agreements.Any(ea =>
+                                  ea.StatusId == EmployerAgreementStatus.Pending ||
+                                  ea.StatusId == EmployerAgreementStatus.Signed))
+                .Select(ale => ale.LegalEntityId)
+                .ToListAsync();
 
             return accountDetail;
         }
