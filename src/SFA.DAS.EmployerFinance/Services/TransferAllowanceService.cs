@@ -2,6 +2,7 @@
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Extensions;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Models.Transfers;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
@@ -16,7 +17,7 @@ namespace SFA.DAS.EmployerFinance.Services
             _configuration = configuration;
         }
 
-        public Task<decimal> GetTransferAllowance(long accountId)
+        public Task<TransferAllowance> GetTransferAllowance(long accountId)
         {
             return _db.GetTransferAllowance(accountId, _configuration.TransferAllowancePercentage);
         }

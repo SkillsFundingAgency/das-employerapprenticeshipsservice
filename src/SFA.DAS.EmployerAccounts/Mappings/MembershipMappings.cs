@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
-namespace SFA.DAS.EAS.Application.Mappings
+namespace SFA.DAS.EmployerAccounts.Mappings
 {
     public class MembershipMappings : Profile
     {

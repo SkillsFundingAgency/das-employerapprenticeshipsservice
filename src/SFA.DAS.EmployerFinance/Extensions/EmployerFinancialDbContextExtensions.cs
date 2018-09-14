@@ -8,14 +8,14 @@ namespace SFA.DAS.EmployerFinance.Extensions
 {
     public static class EmployerFinancialDbContextExtensions
     {
-        public static async Task<decimal> GetTransferAllowance(this EmployerFinanceDbContext db, long accountId, decimal transferAllowancePercentage)
+        public static async Task<TransferAllowance> GetTransferAllowance(this EmployerFinanceDbContext db, long accountId, decimal transferAllowancePercentage)
         {
-            var transferAllowance = await db.SqlQueryAsync<decimal?>(
+            var transferAllowance = await db.SqlQueryAsync<TransferAllowance>(
                 "[employer_financial].[GetAccountTransferAllowance] @accountId = {0}, @allowancePercentage = {1}",
                 accountId,
                 transferAllowancePercentage).ConfigureAwait(false);
 
-            return transferAllowance.SingleOrDefault() ?? 0;
+            return transferAllowance.SingleOrDefault() ?? new TransferAllowance();
         }
 
         public static async Task<IEnumerable<AccountTransfer>> GetTransfersByTargetAccountId(this EmployerFinanceDbContext db, long accountId, long targetAccountId, string periodEnd)

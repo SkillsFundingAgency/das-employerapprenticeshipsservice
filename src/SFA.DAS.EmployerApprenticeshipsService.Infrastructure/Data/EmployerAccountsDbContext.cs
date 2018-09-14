@@ -8,7 +8,6 @@ using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -16,7 +15,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     public class EmployerAccountsDbContext : DbContext
     {
         public virtual DbSet<AccountLegalEntity> AccountLegalEntities { get; set; }
-        public virtual DbSet<Domain.Models.Account.Account> Accounts { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<EmployerAgreement> Agreements { get; set; }
         public virtual DbSet<AgreementTemplate> AgreementTemplates { get; set; }
         public virtual DbSet<LegalEntity> LegalEntities { get; set; }
@@ -55,10 +54,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema("employer_account");
-            modelBuilder.Entity<Domain.Models.Account.Account>().Ignore(a => a.RoleId).Ignore(a => a.RoleName);
-            modelBuilder.Entity<Domain.Models.Account.Account>().HasMany(a => a.AccountLegalEntities);
-            modelBuilder.Entity<Domain.Models.Account.Account>().HasMany(a => a.ReceivedTransferConnectionInvitations).WithRequired(i => i.ReceiverAccount);
-            modelBuilder.Entity<Domain.Models.Account.Account>().HasMany(a => a.SentTransferConnectionInvitations).WithRequired(i => i.SenderAccount);
+            modelBuilder.Entity<Account>().Ignore(a => a.RoleId).Ignore(a => a.RoleName);
+            modelBuilder.Entity<Account>().HasMany(a => a.AccountLegalEntities);
+            modelBuilder.Entity<Account>().HasMany(a => a.ReceivedTransferConnectionInvitations).WithRequired(i => i.ReceiverAccount);
+            modelBuilder.Entity<Account>().HasMany(a => a.SentTransferConnectionInvitations).WithRequired(i => i.SenderAccount);
             modelBuilder.Entity<AccountLegalEntity>().HasMany(ale => ale.Agreements);
             modelBuilder.Entity<AccountLegalEntity>().HasRequired(ale => ale.Account);
             modelBuilder.Entity<AccountLegalEntity>().HasRequired(ale => ale.LegalEntity);

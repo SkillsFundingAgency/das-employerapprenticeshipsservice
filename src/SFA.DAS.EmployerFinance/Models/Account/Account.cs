@@ -12,6 +12,7 @@ namespace SFA.DAS.EmployerFinance.Models.Account
         public virtual string HashedId { get; set; }
         public virtual string PublicHashedId { get; set; }
         public virtual string Name { get; set; }
+        public virtual ICollection<AccountLegalEntity> AccountLegalEntities { get; set; } = new List<AccountLegalEntity>();
         public virtual ICollection<TransferConnectionInvitation> ReceivedTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
         public virtual ICollection<TransferConnectionInvitation> SentTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
 

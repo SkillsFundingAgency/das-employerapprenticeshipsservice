@@ -141,6 +141,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\.keep" />
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

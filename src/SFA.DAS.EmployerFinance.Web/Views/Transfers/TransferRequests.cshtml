@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
-@using SFA.DAS.EAS.Web.Extensions
+@using SFA.DAS.EmployerFinance.Web.Extensions
 
 @model SFA.DAS.EmployerFinance.Web.ViewModels.TransferRequestsViewModel
 
@@ -37,11 +37,11 @@
                                 {
                                     if (Model.AccountId == transferRequest.SenderAccount.Id)
                                     {
-                                        <a href="@Url.CommitmentsAction($"sender/transfers/{transferRequest.TransferRequestHashedId}")">Details</a>
+                                        <a href="@Url.EmployerCommitmentsAction($"sender/transfers/{transferRequest.TransferRequestHashedId}")">Details</a>
                                     }
                                     else
                                     {
-                                        <a href="@Url.CommitmentsAction($"receiver/transfers/{transferRequest.TransferRequestHashedId}")">Details</a>
+                                        <a href="@Url.EmployerCommitmentsAction($"receiver/transfers/{transferRequest.TransferRequestHashedId}")">Details</a>
                                     }
                                 }
                             </td>

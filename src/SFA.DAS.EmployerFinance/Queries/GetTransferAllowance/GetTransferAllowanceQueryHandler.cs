@@ -21,8 +21,6 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransferAllowance
         {
             var transferAllowance = await _db.GetTransferAllowance(message.AccountId.Value, _configuration.TransferAllowancePercentage);
 
-            transferAllowance = transferAllowance < 0 ? 0 : transferAllowance;
-
             return new GetTransferAllowanceResponse
             {
                 TransferAllowance = transferAllowance

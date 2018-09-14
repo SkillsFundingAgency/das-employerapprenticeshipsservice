@@ -36,9 +36,9 @@ namespace SFA.DAS.EAS.Infrastructure.Features
         private async Task<int> GetMinAgreementVersionAsync(long accountId)
         {
             var versionNumber = await _db.Value.AccountLegalEntities
-                                        .WithSignedOrPendingAgreementsForAccount(accountId)
-                                        .MinAsync(ale => ale.SignedAgreementId == null ? 0 : (int) ale.SignedAgreementVersion)
-                                        .ConfigureAwait(false);
+                .WithSignedOrPendingAgreementsForAccount(accountId)
+                .MinAsync(ale => ale.SignedAgreementId == null ? 0 : (int) ale.SignedAgreementVersion)
+                .ConfigureAwait(false);
 
             return versionNumber > 0 ? versionNumber : NullCacheValue;
         }

@@ -39,12 +39,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransferConnectionInvitationAuthori
                 i.Status == TransferConnectionInvitationStatus.Pending ||
                 i.Status == TransferConnectionInvitationStatus.Approved));
 
-            var sentCount = await _accountDb.Value.TransferConnectionInvitations.CountAsync(i =>
-                i.SenderAccount.Id == message.AccountId && (
-                i.Status == TransferConnectionInvitationStatus.Pending ||
-                i.Status == TransferConnectionInvitationStatus.Approved));
-
-            var isValidSender = transferAllowance >= Constants.TransferConnectionInvitations.SenderMinTransferAllowance && !isReceiver;
+            var isValidSender = transferAllowance.RemainingTransferAllowance >= Constants.TransferConnectionInvitations.SenderMinTransferAllowance && !isReceiver;
 
             return new GetTransferConnectionInvitationAuthorizationResponse
             {

@@ -7,6 +7,7 @@ using SFA.DAS.EmployerFinance.Web.Controllers;
 using SFA.DAS.EmployerFinance.Web.Mappings;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using System.Web.Mvc;
+using SFA.DAS.EmployerFinance.Models.Transfers;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerTests
 {
@@ -19,12 +20,19 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
         private IConfigurationProvider _mapperConfig;
         private IMapper _mapper;
         private Mock<IMediator> _mediator;
+        private TransferAllowance _transferAllowance;
 
         [SetUp]
         public void Arrange()
         {
+            _transferAllowance = new TransferAllowance
+            {
+                RemainingTransferAllowance = 123.456m,
+                StartingTransferAllowance = 234.56M
+            };
+
             _query = new GetTransferAllowanceQuery();
-            _response = new GetTransferAllowanceResponse { TransferAllowance = 123.456m };
+            _response = new GetTransferAllowanceResponse { TransferAllowance = _transferAllowance };
             _mapperConfig = new MapperConfiguration(c => c.AddProfile<TransferMappings>());
             _mapper = _mapperConfig.CreateMapper();
             _mediator = new Mock<IMediator>();
@@ -50,7 +58,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
             Assert.That(result, Is.Not.Null);
             Assert.That(result.ViewName, Is.EqualTo(""));
             Assert.That(model, Is.Not.Null);
-            Assert.That(model.TransferAllowance, Is.EqualTo(_response.TransferAllowance));
+            Assert.That(model.RemainingTransferAllowance, Is.EqualTo(_response.TransferAllowance.RemainingTransferAllowance));
         }
     }
 }
