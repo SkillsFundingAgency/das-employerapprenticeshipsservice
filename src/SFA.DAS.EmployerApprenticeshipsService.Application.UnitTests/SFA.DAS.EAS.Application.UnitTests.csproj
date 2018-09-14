@@ -232,8 +232,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SFA.DAS.TimeProvider.1.0.0.3956\lib\net45\SFA.DAS.TimeProvider.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.UnitOfWork, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.UnitOfWork.1.0.14\lib\netstandard2.0\SFA.DAS.UnitOfWork.dll</HintPath>
+    <Reference Include="SFA.DAS.UnitOfWork, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.UnitOfWork.1.0.15\lib\netstandard2.0\SFA.DAS.UnitOfWork.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.6.0\lib\net45\StructureMap.dll</HintPath>
