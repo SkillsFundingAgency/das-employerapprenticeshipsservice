@@ -1,5 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.Queries.SendTransferConnectionInvitation;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using SFA.DAS.EmployerAccounts.Queries.SendTransferConnectionInvitation;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {

@@ -1,4 +1,11 @@
-﻿using SFA.DAS.EmployerAccounts.Queries.GetApprovedTransferConnectionInvitation;
+﻿using System;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using AutoMapper;
+using MediatR;
+using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.EmployerAccounts.Queries.GetApprovedTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetLatestPendingReceivedTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetReceivedTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetRejectedTransferConnectionInvitation;
@@ -6,89 +13,256 @@ using SFA.DAS.EmployerAccounts.Queries.GetSentTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
-using System.Web.Mvc;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.Validation.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
     [Authorize]
+    [Feature(FeatureType.TransferConnectionRequests)]
+    [ValidateMembership]
     [RoutePrefix("accounts/{HashedAccountId}/transfers/connections/requests")]
     public class TransferConnectionInvitationsController : Controller
     {
+        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
+
+        public TransferConnectionInvitationsController(IMapper mapper, IMediator mediator)
+        {
+            _mapper = mapper;
+            _mediator = mediator;
+        }
+
         [Route]
         public ActionResult Index()
         {
-            return Redirect(Url.LegacyEasAccountAction("transfers/connections/requests"));
+            return View();
         }
 
+        [ImportModelStateFromTempData]
         [Route("start")]
         public ActionResult Start()
         {
-            return Redirect(Url.LegacyEasAccountAction("transfers/connections/requests/start"));
+            return View(new StartTransferConnectionInvitationViewModel());
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateModelState]
+        [Route("start")]
+        public async Task<ActionResult> Start(StartTransferConnectionInvitationViewModel model)
+        {
+            await _mediator.SendAsync(model.SendTransferConnectionInvitationQuery);
+            return RedirectToAction("Send", new { receiverAccountPublicHashedId = model.SendTransferConnectionInvitationQuery.ReceiverAccountPublicHashedId });
+        }
+
+        [HttpNotFoundForNullModel]
+        [ImportModelStateFromTempData]
         [Route("send")]
-        public ActionResult Send(SendTransferConnectionInvitationQuery query)
+        public async Task<ActionResult> Send(SendTransferConnectionInvitationQuery query)
         {
-            var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
+            var response = await _mediator.SendAsync(query);
+            var model = _mapper.Map<SendTransferConnectionInvitationViewModel>(response);
 
-            return Redirect(Url.LegacyEasAccountAction($"transfers/connections/requests/send{paramString}"));
+            return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateModelState]
+        [Route("send")]
+        public async Task<ActionResult> Send(SendTransferConnectionInvitationViewModel model)
+        {
+            switch (model.Choice)
+            {
+                case "Confirm":
+                    var transferConnectionInvitationId = await _mediator.SendAsync(model.SendTransferConnectionInvitationCommand);
+                    return RedirectToAction("Sent", new { transferConnectionInvitationId });
+                case "ReEnterAccountId":
+                    return RedirectToAction("Start");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(model.Choice));
+            }
+        }
+
+        [HttpNotFoundForNullModel]
+        [ImportModelStateFromTempData]
         [Route("{transferConnectionInvitationId}/sent")]
-        public ActionResult Sent(GetSentTransferConnectionInvitationQuery query, string transferConnectionInvitationId)
+        public async Task<ActionResult> Sent(GetSentTransferConnectionInvitationQuery query)
         {
-            var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
+            var response = await _mediator.SendAsync(query);
+            var model = _mapper.Map<SentTransferConnectionInvitationViewModel>(response);
 
-            return Redirect(Url.LegacyEasAccountAction($"transfers/connections/requests/{transferConnectionInvitationId}/sent{paramString}"));
+            return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateModelState]
+        [Route("{transferConnectionInvitationId}/sent")]
+        public ActionResult Sent(SentTransferConnectionInvitationViewModel model)
+        {
+            switch (model.Choice)
+            {
+                case "GoToTransfersPage":
+                    return RedirectToAction("Index", "Transfers");
+                case "GoToHomepage":
+                    return RedirectToAction("Index", "EmployerTeam");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(model.Choice));
+            }
+        }
+
+        [HttpNotFoundForNullModel]
+        [ImportModelStateFromTempData]
         [Route("{transferConnectionInvitationId}/receive")]
-        public ActionResult Receive(GetReceivedTransferConnectionInvitationQuery query, string transferConnectionInvitationId)
+        public async Task<ActionResult> Receive(GetReceivedTransferConnectionInvitationQuery query)
         {
-            var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
+            var response = await _mediator.SendAsync(query);
+            var model = _mapper.Map<ReceiveTransferConnectionInvitationViewModel>(response);
 
-            return Redirect(Url.LegacyEasAccountAction($"transfers/connections/requests/{transferConnectionInvitationId}/receive{paramString}"));
+            return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateModelState]
+        [Route("{transferConnectionInvitationId}/receive")]
+        public async Task<ActionResult> Receive(ReceiveTransferConnectionInvitationViewModel model)
+        {
+            switch (model.Choice)
+            {
+                case "Approve":
+                    await _mediator.SendAsync(model.ApproveTransferConnectionInvitationCommand);
+                    return RedirectToAction("Approved", new { transferConnectionInvitationId = model.ApproveTransferConnectionInvitationCommand.TransferConnectionInvitationId });
+                case "Reject":
+                    await _mediator.SendAsync(model.RejectTransferConnectionInvitationCommand);
+                    return RedirectToAction("Rejected", new { transferConnectionInvitationId = model.RejectTransferConnectionInvitationCommand.TransferConnectionInvitationId });
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(model.Choice));
+            }
+        }
+
+        [HttpNotFoundForNullModel]
+        [ImportModelStateFromTempData]
         [Route("{transferConnectionInvitationId}/approved")]
-        public ActionResult Approved(GetApprovedTransferConnectionInvitationQuery query, string transferConnectionInvitationId)
+        public async Task<ActionResult> Approved(GetApprovedTransferConnectionInvitationQuery query)
         {
-            var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
+            var response = await _mediator.SendAsync(query);
+            var model = _mapper.Map<ApprovedTransferConnectionInvitationViewModel>(response);
 
-            return Redirect(Url.LegacyEasAccountAction($"transfers/connections/requests/{transferConnectionInvitationId}/approved{paramString}"));
+            return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateModelState]
+        [Route("{transferConnectionInvitationId}/approved")]
+        public ActionResult Approved(ApprovedTransferConnectionInvitationViewModel model)
+        {
+            switch (model.Choice)
+            {
+                case "GoToApprenticesPage":
+                    return Redirect(Url.EmployerCommitmentsAction("apprentices/home"));
+                case "GoToHomepage":
+                    return RedirectToAction("Index", "EmployerTeam");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(model.Choice));
+            }
+        }
+
+        [HttpNotFoundForNullModel]
+        [ImportModelStateFromTempData]
         [Route("{transferConnectionInvitationId}/rejected")]
-        public ActionResult Rejected(GetRejectedTransferConnectionInvitationQuery query, string transferConnectionInvitationId)
+        public async Task<ActionResult> Rejected(GetRejectedTransferConnectionInvitationQuery query)
         {
-            var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
+            var response = await _mediator.SendAsync(query);
+            var model = _mapper.Map<RejectedTransferConnectionInvitationViewModel>(response);
 
-            return Redirect(Url.LegacyEasAccountAction($"transfers/connections/requests/{transferConnectionInvitationId}/rejected{paramString}"));
+            return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateModelState]
+        [Route("{transferConnectionInvitationId}/rejected")]
+        public async Task<ActionResult> Rejected(RejectedTransferConnectionInvitationViewModel model)
+        {
+            switch (model.Choice)
+            {
+                case "Confirm":
+                    await _mediator.SendAsync(model.DeleteTransferConnectionInvitationCommand);
+                    return RedirectToAction("Deleted");
+                case "GoToTransfersPage":
+                    return RedirectToAction("Index", "Transfers");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(model.Choice));
+            }
+        }
+
+        [HttpNotFoundForNullModel]
         [Route("{transferConnectionInvitationId}/details")]
-        public ActionResult Details(GetTransferConnectionInvitationQuery query, string transferConnectionInvitationId)
+        public async Task<ActionResult> Details(GetTransferConnectionInvitationQuery query)
         {
-            var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
+            var response = await _mediator.SendAsync(query);
+            var model = _mapper.Map<TransferConnectionInvitationViewModel>(response);
 
-            return Redirect(Url.LegacyEasAccountAction($"transfers/connections/requests/{transferConnectionInvitationId}/details{paramString}"));
+            return View(model);
         }
 
-        [Route("{transferConnectionInvitationId}/deleted")]
-        public ActionResult Deleted(string transferConnectionInvitationId)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateModelState]
+        [Route("{transferConnectionInvitationId}/details")]
+        public async Task<ActionResult> Details(TransferConnectionInvitationViewModel model)
         {
-            var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
+            switch (model.Choice)
+            {
+                case "Confirm":
+                    await _mediator.SendAsync(model.DeleteTransferConnectionInvitationCommand);
+                    return RedirectToAction("Deleted");
+                case "GoToTransfersPage":
+                    return RedirectToAction("Index", "Transfers");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(model.Choice));
+            }
+        }
 
-            return Redirect(Url.LegacyEasAccountAction($"transfers/connections/requests/{transferConnectionInvitationId}/deleted{paramString}"));
+        [ImportModelStateFromTempData]
+        [Route("{transferConnectionInvitationId}/deleted")]
+        public ActionResult Deleted()
+        {
+            var model = new DeletedTransferConnectionInvitationViewModel();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateModelState]
+        [Route("{transferConnectionInvitationId}/deleted")]
+        public ActionResult Deleted(DeletedTransferConnectionInvitationViewModel model)
+        {
+            switch (model.Choice)
+            {
+                case "GoToTransfersPage":
+                    return RedirectToAction("Index", "Transfers");
+                case "GoToHomepage":
+                    return RedirectToAction("Index", "EmployerTeam");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(model.Choice));
+            }
         }
 
         [HttpGet]
         [Route("outstanding")]
-        public ActionResult Outstanding(GetLatestPendingReceivedTransferConnectionInvitationQuery query)
+        public async Task<ActionResult> Outstanding(GetLatestPendingReceivedTransferConnectionInvitationQuery query)
         {
-            var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
+            var response = await _mediator.SendAsync(query);
 
-            return Redirect(Url.LegacyEasAccountAction($"transfers/connections/requests/outstanding{paramString}"));
+            return response.TransferConnectionInvitation == null
+                ? RedirectToAction("Index", "Transfers")
+                : RedirectToAction("Receive", new { transferConnectionInvitationId = response.TransferConnectionInvitation.Id });
         }
     }
 }

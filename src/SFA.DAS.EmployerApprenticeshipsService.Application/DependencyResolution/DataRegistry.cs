@@ -17,9 +17,9 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         public DataRegistry()
         {
             For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
+            For<EmployerAccountsDbContext>().Use(c => GetDbContext(c));
             For<EmployerFinanceDbContext>().Use(c => new EmployerFinanceDbContext(c.GetInstance<LevyDeclarationProviderConfiguration>().DatabaseConnectionString));
             For<IUnitOfWorkManager>().Use<UnitOfWorkManager<EmployerFinanceDbContext>>();
-            For<EmployerAccountsDbContext>().Use(c => GetDbContext(c));
         }
 
         private EmployerAccountsDbContext GetDbContext(IContext context)

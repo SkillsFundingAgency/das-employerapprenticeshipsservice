@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route]
         public ActionResult Index()
         {
-            return Redirect(Url.EmployerFinanceAction($"transfers{Request.QueryString}"));
+            return Redirect(Url.EmployerAccountsAction($"transfers?{Request.QueryString}"));
         }
     }
 }

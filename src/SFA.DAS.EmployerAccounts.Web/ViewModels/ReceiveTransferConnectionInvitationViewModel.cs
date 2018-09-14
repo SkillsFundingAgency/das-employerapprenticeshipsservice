@@ -1,6 +1,7 @@
-﻿using SFA.DAS.EmployerAccounts.Commands;
+﻿using System.ComponentModel.DataAnnotations;
+using SFA.DAS.EmployerAccounts.Commands.ApproveTransferConnectionInvitation;
+using SFA.DAS.EmployerAccounts.Commands.RejectTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Dtos;
-using System.ComponentModel.DataAnnotations;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {

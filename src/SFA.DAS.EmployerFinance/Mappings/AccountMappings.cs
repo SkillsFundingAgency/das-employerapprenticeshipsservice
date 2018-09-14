@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerFinance.Dtos;
+using SFA.DAS.EmployerFinance.Models.Account;
 
 namespace SFA.DAS.EmployerFinance.Mappings
 {
@@ -8,8 +9,8 @@ namespace SFA.DAS.EmployerFinance.Mappings
     {
         public AccountMappings()
         {
-            CreateMap<Models.Account.Account, AccountContext>();
-            CreateMap<Models.Account.Account, AccountDto>();
+            CreateMap<Account, AccountContext>();
+            CreateMap<Account, AccountDto>();
         }
     }
 }

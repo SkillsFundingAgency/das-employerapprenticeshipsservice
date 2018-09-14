@@ -126,6 +126,8 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
+    <Compile Include="Extensions\TransferConnectionInvitationDtoExtensions.cs" />
+    <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
     <Compile Include="Global.asax.cs">
@@ -134,6 +136,7 @@
     <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
+    <Compile Include="Mappings\TransferMappings.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -165,7 +168,11 @@
     <Compile Include="ViewModels\SignInViewModel.cs" />
     <Compile Include="ViewModels\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
+    <Compile Include="ViewModels\TransferAllowanceViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitationAuthorizationViewModel.cs" />
+    <Compile Include="ViewModels\TransferConnectionInvitationsViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\TransferRequestsViewModel.cs" />
     <Compile Include="ViewModels\UserAccountsViewModel.cs" />
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
@@ -557,6 +564,20 @@
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
     <Content Include="Views\HealthCheck\Index.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Approved.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Deleted.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Details.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Index.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Receive.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Rejected.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Send.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Sent.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Start.cshtml" />
+    <Content Include="Views\Transfers\Index.cshtml" />
+    <Content Include="Views\Transfers\TransferAllowance.cshtml" />
+    <Content Include="Views\Transfers\TransferConnectionInvitationAuthorization.cshtml" />
+    <Content Include="Views\Transfers\TransferConnectionInvitations.cshtml" />
+    <Content Include="Views\Transfers\TransferRequests.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 
 namespace SFA.DAS.EmployerAccounts.Data
@@ -20,6 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Data
         public virtual DbSet<HealthCheck> HealthChecks { get; set; }
         public virtual DbSet<LegalEntity> LegalEntities { get; set; }
         public virtual DbSet<Membership> Memberships { get; set; }
+        public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAccountSetting> UserAccountSettings { get; set; }
 
@@ -64,6 +66,8 @@ namespace SFA.DAS.EmployerAccounts.Data
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Template);
             modelBuilder.Entity<HealthCheck>().ToTable("HealthChecks", "dbo");
             modelBuilder.Entity<Membership>().HasKey(m => new { m.AccountId, m.UserId }).Ignore(m => m.RoleId).Property(m => m.Role).HasColumnName(nameof(Membership.RoleId));
+            modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.ReceiverAccount);
+            modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.SenderAccount);
             modelBuilder.Entity<User>().Ignore(u => u.FullName).Ignore(u => u.UserRef).Property(u => u.Ref).HasColumnName(nameof(User.UserRef));
             modelBuilder.Entity<UserAccountSetting>().HasRequired(u => u.Account);
             modelBuilder.Entity<UserAccountSetting>().HasRequired(u => u.User);

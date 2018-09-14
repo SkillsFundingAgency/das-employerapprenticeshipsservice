@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Repositories;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.Queries.GetUserInvitations

@@ -1,5 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.Dtos;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using SFA.DAS.EmployerAccounts.Dtos;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {

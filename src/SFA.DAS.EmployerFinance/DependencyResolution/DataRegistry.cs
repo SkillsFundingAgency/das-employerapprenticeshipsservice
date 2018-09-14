@@ -18,8 +18,8 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
         {
             For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerFinanceConfiguration>().DatabaseConnectionString));
             For<EmployerAccountsDbContext>().Use(c => new EmployerAccountsDbContext(c.GetInstance<EmployerAccountsConfiguration>().DatabaseConnectionString));
-            For<IUnitOfWorkManager>().Use<UnitOfWorkManager<EmployerAccountsDbContext>>();
             For<EmployerFinanceDbContext>().Use(c => GetDbContext(c));
+            For<IUnitOfWorkManager>().Use<UnitOfWorkManager<EmployerAccountsDbContext>>();
         }
 
         private EmployerFinanceDbContext GetDbContext(IContext context)

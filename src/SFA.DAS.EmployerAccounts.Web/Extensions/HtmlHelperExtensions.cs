@@ -17,22 +17,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return new MvcHtmlString(htmlAddress);
         }
 
-        public static AuthorizationResult GetAuthorizationResult(this HtmlHelper htmlHelper, FeatureType featureType)
-        {
-            var authorisationService = DependencyResolver.Current.GetService<IAuthorizationService>();
-            var authorizationResult = authorisationService.GetAuthorizationResult(featureType);
-
-            return authorizationResult;
-        }
-
-        public static bool IsAuthorized(this HtmlHelper htmlHelper, FeatureType featureType)
-        {
-            var authorisationService = DependencyResolver.Current.GetService<IAuthorizationService>();
-            var isAuthorized = authorisationService.IsAuthorized(featureType);
-
-            return isAuthorized;
-        }
-
         public static bool IsValid<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
         {
             var partialFieldName = ExpressionHelper.GetExpressionText(expression);

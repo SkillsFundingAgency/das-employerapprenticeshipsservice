@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerAccounts.Commands;
+﻿using System.ComponentModel.DataAnnotations;
+using SFA.DAS.EmployerAccounts.Commands.SendTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Dtos;
-using System.ComponentModel.DataAnnotations;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
@@ -11,7 +11,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string Choice { get; set; }
 
         public AccountDto ReceiverAccount { get; set; }
-
         public AccountDto SenderAccount { get; set; }
 
         [Required]
