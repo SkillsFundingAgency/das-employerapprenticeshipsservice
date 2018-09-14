@@ -8,6 +8,12 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string AllowedHashstringCharacters { get; set; }
         public string DashboardUrl { get; set; }
         public string DatabaseConnectionString { get; set; }
+        public string EmployerAccountsBaseUrl { get; set; }
+        public string EmployerCommitmentsBaseUrl { get; set; }
+        public string EmployerFinanceBaseUrl { get; set; }
+        public string EmployerPortalBaseUrl { get; set; }
+        public string EmployerProjectionsBaseUrl { get; set; }
+        public string EmployerRecruitBaseUrl { get; set; }
         public EventsApiClientConfiguration EventsApi { get; set; }
         public string Hashstring { get; set; }
         public IdentityServerConfiguration Identity { get; set; }

@@ -1,54 +1,78 @@
-using Microsoft.Azure;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using System.Web.Mvc;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
     public static class UrlHelperExtensions
     {
+        public static string EmployerAccountsAction(this UrlHelper helper, string path)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerAccountsBaseUrl;
+
+            return AccountAction(helper, baseUrl, path);
+        }
+
         public static string EmployerCommitmentsAction(this UrlHelper helper, string path)
         {
-            return AccountAction(helper, path, ControllerConstants.EmployerCommitmentsBaseUrlKeyName);
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerCommitmentsBaseUrl;
+
+            return AccountAction(helper, baseUrl, path);
         }
 
         public static string EmployerFinanceAction(this UrlHelper helper, string path)
         {
-            return AccountAction(helper, path, ControllerConstants.EmployerFinanceBaseUrlKeyName);
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerFinanceBaseUrl;
+
+            return AccountAction(helper, baseUrl, path);
         }
 
         public static string EmployerProjectionsAction(this UrlHelper helper, string path)
         {
-            return AccountAction(helper, path, ControllerConstants.EmployerProjectionsBaseUrlKeyName);
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerProjectionsBaseUrl;
+
+            return AccountAction(helper, baseUrl, path);
         }
 
         public static string EmployerRecruitAction(this UrlHelper helper)
         {
-            return AccountAction(helper, string.Empty, ControllerConstants.EmployerRecruitBaseUrlKeyName);
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerRecruitBaseUrl;
+
+            return AccountAction(helper, baseUrl, "");
         }
 
         public static string LegacyEasAccountAction(this UrlHelper helper, string path)
         {
-            return AccountAction(helper, path, ControllerConstants.LegacyEasBaseUrlKeyName);
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerPortalBaseUrl;
+
+            return AccountAction(helper, baseUrl, path);
         }
 
         public static string LegacyEasAction(this UrlHelper helper, string path)
         {
-            return Action(path, ControllerConstants.LegacyEasBaseUrlKeyName);
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerPortalBaseUrl;
+
+            return Action(baseUrl, path);
         }
 
-        private static string AccountAction(UrlHelper helper, string path, string baseUrlKeyName)
+        private static string AccountAction(UrlHelper helper, string baseUrl, string path)
         {
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
             var accountPath = hashedAccountId == null ? $"accounts/{path}" : $"accounts/{hashedAccountId}/{path}";
 
-            return Action(accountPath, baseUrlKeyName);
+            return Action(baseUrl, accountPath);
         }
 
-        private static string Action(string path, string baseUrlKeyName)
+        private static string Action(string baseUrl, string path)
         {
-            var baseUrl = CloudConfigurationManager.GetSetting(baseUrlKeyName)?.TrimEnd('/');
-
-            return $"{baseUrl}/{path}";
+            return $"{baseUrl}/{path}".TrimEnd('/');
         }
     }
 }

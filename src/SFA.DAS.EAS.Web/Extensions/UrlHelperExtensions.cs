@@ -1,5 +1,5 @@
 ﻿using System.Web.Mvc;
-using Microsoft.Azure;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Helpers;
 
 namespace SFA.DAS.EAS.Web.Extensions
@@ -8,42 +8,55 @@ namespace SFA.DAS.EAS.Web.Extensions
     {
         public static string EmployerAccountsAction(this UrlHelper helper, string path)
         {
-            return AccountAction(helper, path, ControllerConstants.EmployerAccountsBaseUrlKeyName);
+            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
+            var baseUrl = configuration.EmployerAccountsBaseUrl;
+
+            return AccountAction(helper, baseUrl, path);
         }
 
         public static string EmployerCommitmentsAction(this UrlHelper helper, string path)
         {
-            return AccountAction(helper, path, ControllerConstants.EmployerCommitmentsBaseUrlKeyName);
+            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
+            var baseUrl = configuration.EmployerCommitmentsBaseUrl;
+
+            return AccountAction(helper, baseUrl, path);
         }
 
         public static string EmployerFinanceAction(this UrlHelper helper, string path)
         {
-            return AccountAction(helper, path, ControllerConstants.EmployerFinanceBaseUrlKeyName);
+            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
+            var baseUrl = configuration.EmployerFinanceBaseUrl;
+
+            return AccountAction(helper, baseUrl, path);
         }
 
         public static string EmployerProjectionsAction(this UrlHelper helper, string path)
         {
-            return AccountAction(helper, path, ControllerConstants.EmployerProjectionsBaseUrlKeyName);
+            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
+            var baseUrl = configuration.EmployerProjectionsBaseUrl;
+
+            return AccountAction(helper, baseUrl, path);
         }
 
         public static string EmployerRecruitAction(this UrlHelper helper)
         {
-            return AccountAction(helper, string.Empty, ControllerConstants.EmployerRecruitBaseUrlKeyName);
+            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
+            var baseUrl = configuration.EmployerRecruitBaseUrl;
+
+            return AccountAction(helper, baseUrl, "");
         }
 
-        private static string AccountAction(UrlHelper helper, string path, string baseUrlKeyName)
+        private static string AccountAction(UrlHelper helper, string baseUrl, string path)
         {
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
             var accountPath = hashedAccountId == null ? $"accounts/{path}" : $"accounts/{hashedAccountId}/{path}";
 
-            return Action(accountPath, baseUrlKeyName);
+            return Action(baseUrl, accountPath);
         }
 
-        private static string Action(string path, string baseUrlKeyName)
+        private static string Action(string baseUrl, string path)
         {
-            var baseUrl = CloudConfigurationManager.GetSetting(baseUrlKeyName)?.TrimEnd('/');
-
-            return $"{baseUrl}/{path}";
+            return $"{baseUrl}/{path}".TrimEnd('/');
         }
     }
 }
