@@ -14,7 +14,7 @@ using SFA.DAS.Hashing;
 using SFA.DAS.Testing.EntityFramework;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.SendTransferConnectionInvitationTests
+namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SendTransferConnectionInvitationTests
 {
     [TestFixture]
     public class WhenISendTransferConnectionInvitation

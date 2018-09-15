@@ -314,22 +314,15 @@
   <ItemGroup>
     <Compile Include="Commands\AddPayeToAccountTests\WhenIAddPayeToAnAccount.cs" />
     <Compile Include="Commands\AddPayeToAccountTests\WhenIValidateTheCommand.cs" />
-    <Compile Include="Commands\SendTransferConnectionInvitation\SendTransferConnectionInvitationHandlerTests.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementTests\GetAccountEmployerAgreementTests.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandlerTests.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenIGetAccountLegalEntities.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenValidatingAccountLegalEntities.cs" />
     <Compile Include="Queries\GetStatisticsTests\GetStatisticsQueryTests.cs" />
-    <Compile Include="Queries\GetApprovedTransferConnectionInvitationTests\WhenIGetApprovedTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetEmployerAgreementQueryTests\GetEmployerAgreementTests.cs" />
     <Compile Include="Queries\GetLegalEntityQueryTests\GetLegalEntityQueryTests.cs" />
-    <Compile Include="Queries\GetReceivedTransferConnectionInvitationTests\WhenIGetReceivedTransferConnectionInvitation.cs" />
-    <Compile Include="Queries\GetRejectedTransferConnectionInvitationTests\WhenIGetRejectedTransferConnectionInvitation.cs" />
-    <Compile Include="Queries\GetSentTransferConnectionInvitationTests\WhenIGetSentTransferConnectionInvitation.cs" />
     <Compile Include="Queries\GetTransferAllowanceTests\GetTransferAllowanceTests.cs" />
-    <Compile Include="Queries\SendTransferConnectionInvitationTests\WhenISendTransferConnectionInvitation.cs" />
-    <Compile Include="Queries\GetLatestPendingReceivedTransferConnectionInvitationTests\WhenIGetLatestPendingReceivedTransferConnectionInvitation.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminderTests\WhenIDismissATaskReminder.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminderTests\WhenTheCommandIsValidated.cs" />
     <Compile Include="Commands\RemoveLegalEntityTests\WhenIRemoveALegalEntity.cs" />
@@ -441,9 +434,6 @@
     <Compile Include="Queries\GetTeamMembers\WhenIGetTeamMembers.cs" />
     <Compile Include="Queries\GetTeamMembers\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetTransferConnectionsTests\WhenIGetTransferConnections.cs" />
-    <Compile Include="Queries\GetTransferConnectionInvitationsTests\WhenIGetTransferConnectionInvitations.cs" />
-    <Compile Include="Queries\GetTransferConnectionInvitationTests\WhenIGetTransferConnectionInvitation.cs" />
-    <Compile Include="Queries\GetTransferRequestsTests\WhenIGetTransferRequests.cs" />
     <Compile Include="Queries\GetTransferTransactionDetailsTests\WhenIGetsTransferTransactionDetails.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIGetAUserAccountRole.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIValidateTheRequest.cs" />

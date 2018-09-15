@@ -1,18 +1,19 @@
-﻿using Moq;
-using NUnit.Framework;
-using SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.TransferConnections;
-using SFA.DAS.EAS.Domain.Models.Transfers;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.TestCommon;
-using SFA.DAS.EAS.TestCommon.Builders;
-using SFA.DAS.Hashing;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Commands.SendTransferConnectionInvitation;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.TransferConnections;
+using SFA.DAS.EmployerAccounts.Models.Transfers;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Services;
+using SFA.DAS.EmployerAccounts.UnitTests.Builders;
+using SFA.DAS.Hashing;
+using SFA.DAS.Testing;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvitation
+namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
 {
     [TestFixture]
     public class SendTransferConnectionInvitationHandlerTests : FluentTest<SendTransferConnectionInvitationHandlerTestsFixture>
@@ -33,9 +34,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
         public Mock<ITransferAllowanceService> TransferAllowanceService { get; set; }
         public Mock<ITransferConnectionInvitationRepository> TransferConnectionInvitationRepository { get; set; }
         public Mock<IUserRepository> UserRepository { get; set; }
-        public Domain.Models.Account.Account ReceiverAccount { get; set; }
+        public Account ReceiverAccount { get; set; }
         public long? Result { get; set; }
-        public Domain.Models.Account.Account SenderAccount { get; set; }
+        public Account SenderAccount { get; set; }
         public decimal SenderAccountTransferAllowance { get; set; }
         public User SenderUser { get; set; }
         public TransferConnectionInvitation TransferConnectionInvitation { get; set; }
@@ -70,7 +71,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
             };
         }
 
-        public SendTransferConnectionInvitationHandlerTestsFixture AddAccount(Domain.Models.Account.Account account)
+        public SendTransferConnectionInvitationHandlerTestsFixture AddAccount(Account account)
         {
             EmployerAccountRepository.Setup(r => r.GetAccountById(account.Id)).ReturnsAsync(account);
             PublicHashingService.Setup(h => h.DecodeValue(account.PublicHashedId)).Returns(account.Id);
@@ -96,7 +97,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
 
         public SendTransferConnectionInvitationHandlerTestsFixture SetReceiverAccount()
         {
-            ReceiverAccount = new Domain.Models.Account.Account
+            ReceiverAccount = new Account
             {
                 Id = 222222,
                 PublicHashedId = "XYZ987",
@@ -108,7 +109,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendTransferConnectionInvit
 
         public SendTransferConnectionInvitationHandlerTestsFixture SetSenderAccount()
         {
-            SenderAccount = new Domain.Models.Account.Account
+            SenderAccount = new Account
             {
                 Id = 333333,
                 PublicHashedId = "ABC123",

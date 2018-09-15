@@ -4,16 +4,17 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Mappings;
-using SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation;
-using SFA.DAS.EAS.Domain.Models.TransferConnections;
-using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.TestCommon;
-using SFA.DAS.EAS.TestCommon.Builders;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Mappings;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.TransferConnections;
+using SFA.DAS.EmployerAccounts.Queries.SendTransferConnectionInvitation;
+using SFA.DAS.EmployerAccounts.UnitTests.Builders;
 using SFA.DAS.Hashing;
+using SFA.DAS.Testing.EntityFramework;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvitationTests
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.SendTransferConnectionInvitationTests
 {
     [TestFixture]
     public class WhenISendTransferConnectionInvitation
@@ -22,12 +23,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvita
         private SendTransferConnectionInvitationQuery _query;
         private SendTransferConnectionInvitationResponse _response;
         private Mock<EmployerAccountsDbContext> _db;
-        private DbSetStub<Domain.Models.Account.Account> _accountsDbSet;
-        private List<Domain.Models.Account.Account> _accounts;
+        private DbSetStub<Account> _accountsDbSet;
+        private List<Account> _accounts;
         private DbSetStub<TransferConnectionInvitation> _transferConnectionInvitationsDbSet;
         private List<TransferConnectionInvitation> _transferConnectionInvitations;
-        private Domain.Models.Account.Account _receiverAccount;
-        private Domain.Models.Account.Account _senderAccount;
+        private Account _receiverAccount;
+        private Account _senderAccount;
         private IConfigurationProvider _configurationProvider;
         private Mock<IPublicHashingService> _publicHashingService;
 
@@ -36,20 +37,20 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.SendTransferConnectionInvita
         {
             _db = new Mock<EmployerAccountsDbContext>();
 
-            _receiverAccount = new Domain.Models.Account.Account
+            _receiverAccount = new Account
             {
                 Id = 111111,
                 PublicHashedId = "ABC123"
             };
 
-            _senderAccount = new Domain.Models.Account.Account
+            _senderAccount = new Account
             {
                 Id = 222222,
                 PublicHashedId = "XYZ987"
             };
 
-            _accounts = new List<Domain.Models.Account.Account>{ _receiverAccount, _senderAccount };
-            _accountsDbSet = new DbSetStub<Domain.Models.Account.Account>(_accounts);
+            _accounts = new List<Account>{ _receiverAccount, _senderAccount };
+            _accountsDbSet = new DbSetStub<Account>(_accounts);
             _transferConnectionInvitations = new List<TransferConnectionInvitation>();
             _transferConnectionInvitationsDbSet = new DbSetStub<TransferConnectionInvitation>(_transferConnectionInvitations);
             _configurationProvider = new MapperConfiguration(c => c.AddProfile<AccountMappings>());
