@@ -12,6 +12,7 @@ Post-Deployment Script Template
 
 IF EXISTS (SELECT * FROM sys.schemas WHERE name = 'employer_financial')
 BEGIN
+	:r .\DeleteHealthChecks.sql
 	:r .\AML-2616-DeleteDuplicateLevyDeclarationsWithoutEmpRef.sql
 	:r .\AML-2643-DeleteDuplicateTransactionLines.sql
 END

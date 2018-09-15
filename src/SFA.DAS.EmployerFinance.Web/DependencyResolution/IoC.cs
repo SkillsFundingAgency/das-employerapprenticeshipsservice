@@ -1,3 +1,4 @@
+using SFA.DAS.EmployerFinance.Api.Client;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.DependencyResolution;
 using SFA.DAS.UnitOfWork.EntityFramework;
@@ -18,6 +19,7 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<DataRegistry>();
+                c.AddRegistry<EmployerFinanceApiClientRegistry>();
                 c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerFinanceDbContext>>();
                 c.AddRegistry<HashingRegistry>();
                 c.AddRegistry<LoggerRegistry>();

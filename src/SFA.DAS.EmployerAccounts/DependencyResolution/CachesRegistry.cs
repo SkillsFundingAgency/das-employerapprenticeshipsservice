@@ -1,5 +1,5 @@
 ﻿using SFA.DAS.Caches;
-using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution

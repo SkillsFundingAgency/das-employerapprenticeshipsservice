@@ -1,8 +1,8 @@
 ﻿using StructureMap;
 using System.Collections.Generic;
 using SFA.DAS.Authorization;
+using SFA.DAS.Configuration;
 using SFA.DAS.EmployerFinance.Authorization;
-using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Features;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution

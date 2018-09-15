@@ -2,7 +2,6 @@
 using NLog;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Web.App_Start;
 using SFA.DAS.EmployerFinance.Web.Logging;
@@ -21,13 +20,14 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using SFA.DAS.Configuration;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.NServiceBus.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
-using Environment = SFA.DAS.EmployerFinance.Configuration.Environment;
+using Environment = SFA.DAS.Configuration.Environment;
 
 namespace SFA.DAS.EmployerFinance.Web
 {
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerFinance.Web
 
             if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local, Environment.At, Environment.Test))
             {
-                SystemDetailsViewModel.EnvironmentName = ConfigurationHelper.CurrentEnvironmentName;
+                SystemDetailsViewModel.EnvironmentName = ConfigurationHelper.CurrentEnvironment.ToString();
                 SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
 

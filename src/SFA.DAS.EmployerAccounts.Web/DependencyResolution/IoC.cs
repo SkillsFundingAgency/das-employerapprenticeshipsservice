@@ -1,3 +1,4 @@
+using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.DependencyResolution;
 using SFA.DAS.UnitOfWork.EntityFramework;
@@ -17,6 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
+                c.AddRegistry<EmployerAccountsApiClientRegistry>();
                 c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerAccountsDbContext>>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();

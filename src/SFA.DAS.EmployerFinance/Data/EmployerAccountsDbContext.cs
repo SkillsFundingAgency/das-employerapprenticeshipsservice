@@ -1,8 +1,10 @@
-﻿using SFA.DAS.EmployerFinance.Models.UserProfile;
+﻿using System;
+using SFA.DAS.EmployerFinance.Models.UserProfile;
 using SFA.DAS.EntityFramework;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.AccountTeam;
@@ -33,6 +35,22 @@ namespace SFA.DAS.EmployerFinance.Data
 
         protected EmployerAccountsDbContext()
         {
+        }
+
+        public override int SaveChanges()
+        {
+            throw new Exception($"The {GetType().FullName} is for read only operations");
+        }
+
+        public override Task<int> SaveChangesAsync()
+        {
+
+            throw new Exception($"The {GetType().FullName} is for read only operations");
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            throw new Exception($"The {GetType().FullName} is for read only operations");
         }
 
         public virtual Task<List<T>> SqlQueryAsync<T>(string query, params object[] parameters)

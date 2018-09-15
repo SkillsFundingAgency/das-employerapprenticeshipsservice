@@ -144,6 +144,7 @@
     <None Include="Scripts\PreDeployment\AML-2434-DeleteOrphanedUserAccountSettings.sql" />
     <None Include="Scripts\Manual\AML-2674-NullAccountLegalEntityPublicHashIds.sql" />
     <Build Include="Tables\HealthChecks.sql" />
+    <None Include="Scripts\PreDeployment\DeleteHealthChecks.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />

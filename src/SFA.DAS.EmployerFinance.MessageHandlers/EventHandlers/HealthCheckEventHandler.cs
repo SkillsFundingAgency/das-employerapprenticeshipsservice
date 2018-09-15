@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
         {
             var healthCheck = await _db.Value.HealthChecks.SingleAsync(h => h.Id == message.Id);
 
-            healthCheck.ReceiveEvent();
+            healthCheck.ReceiveEvent(message);
         }
     }
 }

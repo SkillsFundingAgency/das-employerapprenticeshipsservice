@@ -1,14 +1,10 @@
 ﻿using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Newtonsoft.Json;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NLog.Logger;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using SFA.DAS.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.EmployerFinance.Models;
+using MediatR;
+using SFA.DAS.EmployerFinance.Commands.RunHealthCheckCommand;
+using SFA.DAS.EmployerFinance.Queries.GetHealthCheck;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
@@ -12,31 +10,27 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     [RoutePrefix("healthcheck")]
     public class HealthCheckController : Controller
     {
-        private readonly Lazy<EmployerFinanceDbContext> _db;
+        private readonly IMediator _mediator;
 
-        public HealthCheckController(Lazy<EmployerFinanceDbContext> db)
+        public HealthCheckController(IMediator mediator)
         {
-            _db = db;
+            _mediator = mediator;
         }
 
         [Route]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(GetHealthCheckQuery query)
         {
-            var healthCheck = await _db.Value.HealthChecks.OrderByDescending(h => h.Id).FirstOrDefaultAsync();
+            var response = await _mediator.SendAsync(query);
 
-            return View(healthCheck);
+            return View(response.HealthCheck);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route]
-        public ActionResult Index(string choice)
+        public async Task<ActionResult> Index(RunHealthCheckCommand command)
         {
-            var healthCheck = new HealthCheck();
-
-            healthCheck.PublishEvent();
-
-            _db.Value.HealthChecks.Add(healthCheck);
+            await _mediator.SendAsync(command);
 
             return RedirectToAction("Index");
         }

@@ -26,7 +26,7 @@ namespace SFA.DAS.Authorization.WebApi
             }
 
             var accountHashedId = GetAccountHashedId();
-            var accountId = GetAccountId(accountHashedId);
+            var accountId = accountHashedId == null ? null : GetAccountId(accountHashedId);
 
             var requestContext = new CallerContext
             {

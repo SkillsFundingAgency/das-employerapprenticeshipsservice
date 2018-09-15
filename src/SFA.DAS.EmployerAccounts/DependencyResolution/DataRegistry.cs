@@ -3,12 +3,10 @@ using System.Data.SqlClient;
 using NServiceBus.Persistence;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EntityFramework;
 using SFA.DAS.NServiceBus.ClientOutbox;
 using SFA.DAS.NServiceBus.SqlServer.ClientOutbox;
 using SFA.DAS.UnitOfWork;
 using StructureMap;
-using IUnitOfWorkManager = SFA.DAS.EntityFramework.IUnitOfWorkManager;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution
 {
@@ -19,7 +17,6 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerAccountsConfiguration>().DatabaseConnectionString));
             For<EmployerAccountsDbContext>().Use(c => GetDbContext(c));
             For<EmployerFinanceDbContext>().Use(c => new EmployerFinanceDbContext(c.GetInstance<EmployerFinanceConfiguration>().DatabaseConnectionString));
-            For<IUnitOfWorkManager>().Use<UnitOfWorkManager<EmployerFinanceDbContext>>();
         }
 
         private EmployerAccountsDbContext GetDbContext(IContext context)

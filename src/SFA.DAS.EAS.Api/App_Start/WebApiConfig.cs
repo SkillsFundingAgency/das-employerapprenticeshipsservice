@@ -13,7 +13,6 @@ using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
 using SFA.DAS.UnitOfWork.WebApi;
 using SFA.DAS.Validation.WebApi;
 using WebApi.StructureMap;
-using UnitOfWorkManagerFilter = SFA.DAS.EntityFramework.WebApi.UnitOfWorkManagerFilter;
 
 namespace SFA.DAS.EAS.Account.Api
 {
@@ -23,7 +22,6 @@ namespace SFA.DAS.EAS.Account.Api
         {
             config.Filters.AddUnitOfWorkFilter();
             config.Filters.Add(new ValidateModelStateFilter());
-            config.Filters.Add(new UnitOfWorkManagerFilter());
             config.Filters.Add(new HandleErrorFilter());
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             config.MapHttpAttributeRoutes();

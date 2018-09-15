@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerFinance.Configuration;
+﻿using SFA.DAS.Configuration;
+using SFA.DAS.EmployerFinance.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution

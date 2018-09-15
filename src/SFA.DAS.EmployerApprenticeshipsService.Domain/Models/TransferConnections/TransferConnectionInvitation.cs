@@ -1,7 +1,7 @@
 ﻿using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EmployerFinance.Messages.Events;
 using System;
 using System.Collections.Generic;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 
 namespace SFA.DAS.EAS.Domain.Models.TransferConnections
 {

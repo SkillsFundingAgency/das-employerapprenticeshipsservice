@@ -2,6 +2,7 @@
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Configuration;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;

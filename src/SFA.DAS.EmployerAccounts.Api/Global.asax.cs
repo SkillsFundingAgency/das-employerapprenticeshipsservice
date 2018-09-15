@@ -1,8 +1,6 @@
 ﻿using System.Data.Common;
 using System.Web;
 using System.Web.Http;
-using Microsoft.Azure;
-using Microsoft.ApplicationInsights.Extensibility;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;

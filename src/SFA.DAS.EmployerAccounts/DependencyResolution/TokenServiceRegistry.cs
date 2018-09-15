@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EmployerAccounts.Configuration;
+﻿using SFA.DAS.Configuration;
 using SFA.DAS.TokenService.Api.Client;
 using StructureMap;
 using TokenServiceApiClientConfiguration = SFA.DAS.EmployerAccounts.Configuration.TokenServiceApiClientConfiguration;

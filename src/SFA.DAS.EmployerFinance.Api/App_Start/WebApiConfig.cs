@@ -22,7 +22,6 @@ namespace SFA.DAS.EmployerFinance.Api
         {
             config.Filters.AddUnitOfWorkFilter();
             config.Filters.Add(new ValidateModelStateFilter());
-            config.Filters.Add(new UnitOfWorkManagerFilter());
             config.Filters.Add(new HandleErrorFilter());
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             config.MapHttpAttributeRoutes();

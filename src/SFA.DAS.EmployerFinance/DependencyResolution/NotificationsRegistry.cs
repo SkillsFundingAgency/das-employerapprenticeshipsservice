@@ -1,5 +1,5 @@
 ﻿using System.Net.Http;
-using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.Configuration;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;

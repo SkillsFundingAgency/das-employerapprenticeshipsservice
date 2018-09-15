@@ -1,8 +1,8 @@
 ﻿using System;
 using NServiceBus;
-using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.Configuration;
 using SFA.DAS.NServiceBus.AzureServiceBus;
-using Environment = SFA.DAS.EmployerAccounts.Configuration.Environment;
+using Environment = SFA.DAS.Configuration.Environment;
 
 namespace SFA.DAS.EmployerAccounts.Extensions
 {

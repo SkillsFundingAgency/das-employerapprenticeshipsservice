@@ -1,9 +1,9 @@
 ﻿using System;
 using NServiceBus;
-using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.Configuration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NServiceBus.AzureServiceBus;
-using Environment = SFA.DAS.EmployerFinance.Configuration.Environment;
+using Environment = SFA.DAS.Configuration.Environment;
 
 namespace SFA.DAS.EmployerFinance.Extensions
 {

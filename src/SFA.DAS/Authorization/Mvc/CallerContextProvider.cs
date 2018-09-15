@@ -29,7 +29,7 @@ namespace SFA.DAS.Authorization.Mvc
             }
 
             var accountHashedId = GetAccountHashedId();
-            var accountId = GetAccountId(accountHashedId);
+            var accountId = accountHashedId == null ? null : GetAccountId(accountHashedId);
             var userRef = GetUserRef();
 
             var requestContext = new CallerContext

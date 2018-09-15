@@ -1,8 +1,8 @@
-﻿using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Features;
+﻿using SFA.DAS.EmployerAccounts.Features;
 using StructureMap;
 using System.Collections.Generic;
 using SFA.DAS.Authorization;
+using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution

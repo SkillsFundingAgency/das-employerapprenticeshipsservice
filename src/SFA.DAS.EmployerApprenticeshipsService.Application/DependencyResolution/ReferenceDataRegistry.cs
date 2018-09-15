@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EAS.Domain.Configuration;
+﻿using SFA.DAS.Configuration;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.ReferenceData.Api.Client;
 using StructureMap;

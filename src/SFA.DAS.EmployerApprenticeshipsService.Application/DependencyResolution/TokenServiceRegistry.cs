@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+﻿using SFA.DAS.Configuration;
 using SFA.DAS.TokenService.Api.Client;
 using StructureMap;
 using TokenServiceApiClientConfiguration = SFA.DAS.EAS.Domain.Configuration.TokenServiceApiClientConfiguration;

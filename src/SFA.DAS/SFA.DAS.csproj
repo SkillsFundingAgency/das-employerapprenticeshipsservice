@@ -13,6 +13,8 @@
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="3.18.0" />
     <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager" Version="3.2.3" />
     <PackageReference Include="Polly" Version="5.7.0" />
+    <PackageReference Include="SFA.DAS.Configuration" Version="1.0.0.53229" />
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />

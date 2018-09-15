@@ -1,9 +1,9 @@
 ﻿using System;
 using NServiceBus;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.Configuration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NServiceBus.AzureServiceBus;
-using Environment = SFA.DAS.EAS.Infrastructure.DependencyResolution.Environment;
+using Environment = SFA.DAS.Configuration.Environment;
 
 namespace SFA.DAS.EAS.Infrastructure.NServiceBus
 {

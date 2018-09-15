@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerFinance.Configuration;
+﻿using SFA.DAS.Configuration;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.Provider.Events.Api.Client;
 using StructureMap;
 

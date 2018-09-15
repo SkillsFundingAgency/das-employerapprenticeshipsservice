@@ -2,11 +2,11 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.UnitTests.Builders;
-using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.Testing;
 using SFA.DAS.UnitOfWork;
 

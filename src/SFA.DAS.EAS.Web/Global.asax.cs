@@ -5,7 +5,6 @@ using NLog.Targets;
 using NServiceBus;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.Audit.Types;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
@@ -26,16 +25,17 @@ using SFA.DAS.EAS.Infrastructure.NServiceBus;
 using SFA.DAS.EAS.Web.App_Start;
 using SFA.DAS.Extensions;
 using SFA.DAS.Logging;
-using Environment = SFA.DAS.EAS.Infrastructure.DependencyResolution.Environment;
 using SFA.DAS.Audit.Client;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights;
+using SFA.DAS.Configuration;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.NServiceBus.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
+using Environment = SFA.DAS.Configuration.Environment;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Web
 
             if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local, Environment.At, Environment.Test))
             {
-                SystemDetailsViewModel.EnvironmentName = ConfigurationHelper.CurrentEnvironmentName;
+                SystemDetailsViewModel.EnvironmentName = ConfigurationHelper.CurrentEnvironment.ToString();
                 SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
 

@@ -3,6 +3,7 @@ using Microsoft.Azure.WebJobs;
 using NServiceBus;
 using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.Configuration;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
