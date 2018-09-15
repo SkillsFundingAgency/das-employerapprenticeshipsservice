@@ -153,9 +153,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Un
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.Api.UnitTests", "SFA.DAS.EmployerFinance.Api.UnitTests\SFA.DAS.EmployerFinance.Api.UnitTests.csproj", "{0D888B78-B896-4A84-BDF0-71AB13D603A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Api.Client", "SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj", "{98714180-ADDF-4FF9-B928-3E9A557CA4D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Api.Client", "SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj", "{98714180-ADDF-4FF9-B928-3E9A557CA4D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Api.Client", "SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj", "{AA299F18-D0CA-43A2-AE4D-54CB6C48EA70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.Api.Client", "SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj", "{AA299F18-D0CA-43A2-AE4D-54CB6C48EA70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Api.Client.UnitTests", "SFA.DAS.EmployerAccounts.Api.Client.UnitTests\SFA.DAS.EmployerAccounts.Api.Client.UnitTests.csproj", "{F8FD7B45-B602-4C4B-BF2A-AB55373A2389}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Api.Client.UnitTests", "SFA.DAS.EmployerFinance.Api.Client.UnitTests\SFA.DAS.EmployerFinance.Api.Client.UnitTests.csproj", "{3BE38DFF-DCCF-45AC-93EA-AB6E30DBB90D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Jobs.UnitTests", "SFA.DAS.EmployerAccounts.Jobs.UnitTests\SFA.DAS.EmployerAccounts.Jobs.UnitTests.csproj", "{644B4794-B428-44CA-8A47-55A8136EE5CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Jobs.UnitTests", "SFA.DAS.EmployerFinance.Jobs.UnitTests\SFA.DAS.EmployerFinance.Jobs.UnitTests.csproj", "{4341EE0B-9ECE-424C-B7C2-E5715A5247C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -392,6 +400,22 @@ Global
 		{AA299F18-D0CA-43A2-AE4D-54CB6C48EA70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA299F18-D0CA-43A2-AE4D-54CB6C48EA70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA299F18-D0CA-43A2-AE4D-54CB6C48EA70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8FD7B45-B602-4C4B-BF2A-AB55373A2389}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8FD7B45-B602-4C4B-BF2A-AB55373A2389}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8FD7B45-B602-4C4B-BF2A-AB55373A2389}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8FD7B45-B602-4C4B-BF2A-AB55373A2389}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BE38DFF-DCCF-45AC-93EA-AB6E30DBB90D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BE38DFF-DCCF-45AC-93EA-AB6E30DBB90D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BE38DFF-DCCF-45AC-93EA-AB6E30DBB90D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BE38DFF-DCCF-45AC-93EA-AB6E30DBB90D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{644B4794-B428-44CA-8A47-55A8136EE5CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{644B4794-B428-44CA-8A47-55A8136EE5CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{644B4794-B428-44CA-8A47-55A8136EE5CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{644B4794-B428-44CA-8A47-55A8136EE5CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4341EE0B-9ECE-424C-B7C2-E5715A5247C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4341EE0B-9ECE-424C-B7C2-E5715A5247C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4341EE0B-9ECE-424C-B7C2-E5715A5247C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4341EE0B-9ECE-424C-B7C2-E5715A5247C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -442,6 +466,10 @@ Global
 		{0D888B78-B896-4A84-BDF0-71AB13D603A4} = {56860F8C-F41E-4B99-8B5A-4C160904DBD9}
 		{98714180-ADDF-4FF9-B928-3E9A557CA4D5} = {A177AC61-DF6E-4A04-8EFE-1E7004277669}
 		{AA299F18-D0CA-43A2-AE4D-54CB6C48EA70} = {8D013ACF-E88D-4941-AE77-765F19C6F4B2}
+		{F8FD7B45-B602-4C4B-BF2A-AB55373A2389} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
+		{3BE38DFF-DCCF-45AC-93EA-AB6E30DBB90D} = {56860F8C-F41E-4B99-8B5A-4C160904DBD9}
+		{644B4794-B428-44CA-8A47-55A8136EE5CA} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
+		{4341EE0B-9ECE-424C-B7C2-E5715A5247C0} = {56860F8C-F41E-4B99-8B5A-4C160904DBD9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7BB69664-F8C0-4231-9940-51CE90904197}
