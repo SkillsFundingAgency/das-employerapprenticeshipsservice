@@ -7,6 +7,7 @@ using SFA.DAS.EmployerFinance.Web.Helpers;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
+    [RoutePrefix("service")]
     public class HomeController : Controller
     {
         private readonly IAuthenticationService _owinWrapper;
@@ -33,7 +34,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [Route("privacy")]
         public ActionResult Privacy()
         {
-            return Redirect(Url.LegacyEasAction("privacy"));
+            return Redirect(Url.LegacyEasAction("service/privacy"));
         }
 
         [Route("signOut")]

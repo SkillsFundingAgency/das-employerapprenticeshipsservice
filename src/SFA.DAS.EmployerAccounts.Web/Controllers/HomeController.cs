@@ -228,7 +228,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("privacy")]
         public ActionResult Privacy()
         {
-            return Redirect(Url.LegacyEasAction("privacy"));
+            return Redirect(Url.LegacyEasAction("service/privacy"));
         }
 
         [HttpGet]
