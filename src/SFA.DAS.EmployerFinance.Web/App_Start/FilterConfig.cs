@@ -13,6 +13,7 @@ namespace SFA.DAS.EmployerFinance.Web
             filters.AddUnitOfWorkFilter();
             filters.Add(new ValidateFeatureFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>()));
             filters.Add(new GoogleAnalyticsFilter());
+            filters.Add(new ViewModelFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>()));
             filters.Add(new HandleErrorFilter());
         }
     }

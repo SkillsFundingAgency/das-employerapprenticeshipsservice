@@ -31,6 +31,7 @@ namespace SFA.DAS.EmployerFinance.Data
         public EmployerAccountsDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
+            Database.BeginTransaction();
         }
 
         protected EmployerAccountsDbContext()
