@@ -570,6 +570,7 @@
     <Content Include="Views\Transfers\TransferConnectionInvitationAuthorization.cshtml" />
     <Content Include="Views\Transfers\TransferConnectionInvitations.cshtml" />
     <Content Include="Views\Transfers\TransferRequests.cshtml" />
+    <Content Include="Views\Shared\_ValidationSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">
