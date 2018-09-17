@@ -1,5 +1,6 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Azure;
+﻿using System;
+using System.Configuration;
+using System.Threading.Tasks;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 
@@ -11,11 +12,11 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
         {
             get
             {
-                var environmentName = System.Environment.GetEnvironmentVariable("DASENV");
+                var environmentName = Environment.GetEnvironmentVariable("DASENV");
 
                 if (string.IsNullOrEmpty(environmentName))
                 {
-                    environmentName = CloudConfigurationManager.GetSetting("EnvironmentName");
+                    environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
                 }
 
                 return environmentName.ToUpperInvariant();
@@ -36,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
 
         private static ConfigurationService CreateConfigurationService(string serviceName)
         {
-            var storageConnectionString = CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString");
+            var storageConnectionString = ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"];
             var configurationRepository = new AzureTableStorageConfigurationRepository(storageConnectionString);
             var configurationService = new ConfigurationService(configurationRepository, new ConfigurationOptions(serviceName, CurrentEnvironmentName, "1.0"));
 
