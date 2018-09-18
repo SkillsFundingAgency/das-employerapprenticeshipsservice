@@ -1,30 +1,36 @@
 ﻿BEGIN TRY
 BEGIN TRANSACTION
 
-    ;With ALLProviders (UKprn, ProviderName)
+    ;With ALLProviders (UKprn, ProviderName, PeriodEnd, RowNum)
    AS
    (
-       SELECT p.UKprn, MAX(pm.ProviderName) as ProviderName
-       FROM employer_financial.Payment p
-       INNER JOIN employer_financial.PaymentMetaData pm
-           ON p.PaymentMetaDataId = pm.id
-       GROUP BY p.UKprn, pm.ProviderName
-       HAVING pm.ProviderName IS NOT NULL
-   )
+       SELECT p.Ukprn,
+           pm.ProviderName,
+           p.PeriodEnd,
+           ROW_NUMBER() OVER(PARTITION BY p.Ukprn
+                                 ORDER BY p.PeriodEnd DESC) AS rowNum
+      FROM employer_financial.Payment p
+      INNER JOIN employer_financial.PaymentMetaData pm
+            ON p.PaymentMetaDataId = pm.id
+      WHERE pm.ProviderName IS NOT NULL
+   ),
+   LatestProviders (UKprn, ProviderName)
+   AS
+   (SELECT ap.UKprn, ap.ProviderName FROM ALLProviders ap WHERE rowNum = 1)
 
    UPDATE pm
    SET pm.ProviderName = upm.ReplacementProviderName
-   FROM employer_financial.PaymentMetaData pm
+    FROM employer_financial.PaymentMetaData pm
    INNER JOIN employer_financial.Payment payment
        ON payment.PaymentMetaDataId = pm.id
    INNER JOIN
        (
-           SELECT p.UKprn, MAX(ap.ProviderName) as ReplacementProviderName
+           SELECT p.UKprn, MAX(lp.ProviderName) as ReplacementProviderName
            FROM employer_financial.PaymentMetaData pm
            INNER JOIN employer_financial.Payment p
                ON p.PaymentMetaDataId = pm.id
-           INNER JOIN ALLProviders ap
-               ON ap.UKprn = p.UKprn
+           INNER JOIN LatestProviders lp
+               ON lp.UKprn = p.UKprn
            GROUP BY p.UKprn, pm.ProviderName
            HAVING pm.ProviderName IS NULL
        ) upm
@@ -46,4 +52,4 @@ IF @@TRANCOUNT > 0
 RAISERROR(@ErrorMsg, @ErrorSeverity, @ErrorState)
 END CATCH
 IF @@TRANCOUNT > 0
-COMMIT TRANSACTION
+ COMMIT TRANSACTION
