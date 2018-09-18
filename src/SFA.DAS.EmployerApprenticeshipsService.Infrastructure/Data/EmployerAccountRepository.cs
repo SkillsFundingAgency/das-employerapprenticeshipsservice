@@ -55,10 +55,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 sql: $"select count(*) from [employer_account].[Account] a;",
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
 
-            var result = await WithConnection(async c => await c.QueryAsync<Domain.Models.Account.Account>(
+            var result = await _db.Value.Database.Connection.QueryAsync<Domain.Models.Account.Account>(
                 sql: $"select a.* from [employer_account].[Account] a ORDER BY a.Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;",
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.Text));
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
 
             return new Accounts<Domain.Models.Account.Account>
             {
