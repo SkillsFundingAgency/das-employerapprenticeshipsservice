@@ -1,5 +1,9 @@
-﻿using SFA.DAS.Authentication;
+﻿using System;
+using System.Linq.Expressions;
+using SFA.DAS.Authentication;
+using SFA.DAS.Caches;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
+using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Configuration
 {
@@ -25,5 +29,6 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public string PublicAllowedHashstringCharacters { get; set; }
         public string PublicHashstring { get; set; }
         public string ServiceBusConnectionString { get; set; }
+        public string RedisConnectionString { get; set; }
     }
 }
