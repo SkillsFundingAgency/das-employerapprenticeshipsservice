@@ -25,13 +25,13 @@ BEGIN TRANSACTION
        ON payment.PaymentMetaDataId = pm.id
    INNER JOIN
        (
-           SELECT p.UKprn, MAX(lp.ProviderName) as ReplacementProviderName
+           SELECT p.UKprn, lp.ProviderName as ReplacementProviderName
            FROM employer_financial.PaymentMetaData pm
            INNER JOIN employer_financial.Payment p
                ON p.PaymentMetaDataId = pm.id
            INNER JOIN LatestProviders lp
                ON lp.UKprn = p.UKprn
-           GROUP BY p.UKprn, pm.ProviderName
+           GROUP BY p.UKprn, pm.ProviderName, lp.ProviderName
            HAVING pm.ProviderName IS NULL
        ) upm
    ON upm.UKprn = payment.UKprn
