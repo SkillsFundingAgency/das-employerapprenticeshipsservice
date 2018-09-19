@@ -578,6 +578,8 @@
     <Content Include="Views\Invitation\All.cshtml" />
     <Content Include="Views\Invitation\Invite.cshtml" />
     <Content Include="Views\Invitation\View.cshtml" />
+    <Content Include="Views\Activities\Index.cshtml" />
+    <Content Include="Views\Activities\Latest.cshtml" />
     <Content Include="Views\HealthCheck\Index.cshtml" />
     <Content Include="Views\TransferConnectionInvitations\Approved.cshtml" />
     <Content Include="Views\TransferConnectionInvitations\Deleted.cshtml" />

@@ -2,9 +2,9 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Activities.Client;
-using SFA.DAS.EAS.Application.Queries.GetLatestActivities;
+using SFA.DAS.EmployerAccounts.Queries.GetLatestActivities;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestActivitiesTests
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLatestActivitiesTests
 {
     [TestFixture]
     public class WhenIGetLatestActivities

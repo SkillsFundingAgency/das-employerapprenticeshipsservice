@@ -1,5 +1,6 @@
 using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.Activities.Client;
 using SFA.DAS.EmployerAccounts.DependencyResolution;
 using SFA.DAS.UnitOfWork.EntityFramework;
 using SFA.DAS.UnitOfWork.NServiceBus;
@@ -14,6 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
         {
             return new Container(c =>
             {
+                c.AddRegistry<ActivitiesClientRegistry>();
                 c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<CachesRegistry>();
