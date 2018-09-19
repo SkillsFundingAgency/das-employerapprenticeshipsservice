@@ -2,13 +2,13 @@
 using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
 
-namespace SFA.DAS.Queries.GetUsers
+namespace SFA.DAS.EmployerAccounts.Queries.GetUsers
 {
     public class GetUsersQueryHandler : IAsyncRequestHandler<GetUsersQuery, GetUsersQueryResponse>
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserAccountRepository _userRepository;
 
-        public GetUsersQueryHandler(IUserRepository userRepository)
+        public GetUsersQueryHandler(IUserAccountRepository userRepository)
         {
             _userRepository = userRepository;
         }

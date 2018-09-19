@@ -29,6 +29,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             _flashMessage = flashMessage;
         }
 
+        public BaseController(IAuthenticationService owinWrapper)
+        {
+            OwinWrapper = owinWrapper;
+        }
+
         protected override ViewResult View(string viewName, string masterName, object model)
         {
             var orchestratorResponse = model as OrchestratorResponse;

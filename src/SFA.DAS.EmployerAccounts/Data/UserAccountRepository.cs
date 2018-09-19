@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -68,6 +69,62 @@ namespace SFA.DAS.EmployerAccounts.Data
                 commandType: CommandType.Text);
 
             return result.SingleOrDefault();
+        }
+
+
+        public Task<User> GetUserByRef(Guid @ref)
+        {
+            return _db.Value.Users.SingleOrDefaultAsync(u => u.Ref == @ref);
+        }
+
+        public async Task<Users> GetAllUsers()
+        {
+            var parameters = new DynamicParameters();
+
+            var result = await _db.Value.Database.Connection.QueryAsync<User>(
+                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User];",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
+
+            return new Users
+            {
+                UserList = result.ToList()
+            };
+        }
+
+
+        public async Task<User> GetByEmailAddress(string emailAddress)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@email", emailAddress, DbType.String);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<User>(
+                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Email = @email",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
+
+            return result.SingleOrDefault();
+        }
+
+        public Task Upsert(User user)
+        {
+            return WithConnection(c =>
+            {
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@email", user.Email, DbType.String);
+                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
+                parameters.Add("@firstName", user.FirstName, DbType.String);
+                parameters.Add("@lastName", user.LastName, DbType.String);
+
+                return c.ExecuteAsync(
+                    sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
         }
     }
 }
