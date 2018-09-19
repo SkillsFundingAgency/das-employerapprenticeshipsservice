@@ -46,6 +46,7 @@ namespace SFA.DAS.EmployerFinance.Services
             _executionPolicy = executionPolicy;
             _inProcessCache = inProcessCache;
             _azureAdAuthenticationService = azureAdAuthenticationService;
+            _log = log;
 
             _httpClientWrapper.BaseUrl = _configuration.Hmrc.BaseUrl;
             _httpClientWrapper.AuthScheme = "Bearer";
