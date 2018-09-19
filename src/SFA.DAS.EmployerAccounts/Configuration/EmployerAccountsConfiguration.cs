@@ -25,5 +25,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string PublicAllowedAccountLegalEntityHashstringSalt { get; set; }
         public string PublicHashstring { get; set; }
         public string ServiceBusConnectionString { get; set; }
+        public string RedisConnection { get; set; }
     }
 }
