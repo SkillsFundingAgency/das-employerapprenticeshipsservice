@@ -17,8 +17,8 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             }
             else
             {
-                For<IDistributedCache>().Use<RedisCache>(c=> 
-                    new RedisCache(c.GetInstance<EmployerFinanceConfiguration>().RedisConnection))
+                For<IDistributedCache>().Use(c=> 
+                    new RedisCache(c.GetInstance<EmployerFinanceConfiguration>().RedisConnectionString))
                     .Singleton();
             }
         }

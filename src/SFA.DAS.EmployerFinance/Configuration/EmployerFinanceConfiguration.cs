@@ -29,6 +29,6 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public string PublicAllowedHashstringCharacters { get; set; }
         public string PublicHashstring { get; set; }
         public string ServiceBusConnectionString { get; set; }
-        public string RedisConnection { get; set; }
+        public string RedisConnectionString { get; set; }
     }
 }

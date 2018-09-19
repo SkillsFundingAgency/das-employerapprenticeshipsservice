@@ -8,12 +8,12 @@ namespace SFA.DAS.Caches
 {
     public class RedisCache : IDistributedCache
     {
-        private static string _redisConnection;
+        private static string _redisConnectionString;
         private readonly Lazy<IDatabase> _cache = new Lazy<IDatabase>(InitialiseRedis);
 
-        public RedisCache(string redisConnection)
+        public RedisCache(string redisConnectionString)
         {
-            _redisConnection = redisConnection;
+            _redisConnectionString = redisConnectionString;
         }
 
         public Task<bool> ExistsAsync(string key)
@@ -71,7 +71,7 @@ namespace SFA.DAS.Caches
         {
             var connectionMultiplexer =
                 ConnectionMultiplexer.Connect(
-                    (string.IsNullOrWhiteSpace(_redisConnection) ? null : _redisConnection) ??
+                    (string.IsNullOrWhiteSpace(_redisConnectionString) ? null : _redisConnectionString) ??
                     CloudConfigurationManager.GetSetting("RedisConnection"));
             var cache = connectionMultiplexer.GetDatabase();
 
