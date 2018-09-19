@@ -8,12 +8,12 @@ namespace SFA.DAS.EmployerAccounts.Commands.RejectTransferConnectionInvitation
     {
         private readonly IEmployerAccountRepository _employerAccountRepository;
         private readonly ITransferConnectionInvitationRepository _transferConnectionInvitationRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserAccountRepository _userRepository;
 
         public RejectTransferConnectionInvitationCommandHandler(
             IEmployerAccountRepository employerAccountRepository,
             ITransferConnectionInvitationRepository transferConnectionInvitationRepository,
-            IUserRepository userRepository)
+            IUserAccountRepository userRepository)
         {
             _employerAccountRepository = employerAccountRepository;
             _transferConnectionInvitationRepository = transferConnectionInvitationRepository;

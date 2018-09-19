@@ -14,7 +14,8 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
         {
             For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(c => GetHttpClient(c));
             For<INotificationsApiClientConfiguration>().Use(c => c.GetInstance<NotificationsApiClientConfiguration>());
-            For<NotificationsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<NotificationsApiClientConfiguration>("SFA.DAS.Notifications")).Singleton();
+            For<NotificationsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<NotificationsApiClientConfiguration>($"{Constants.ServiceName}.Notifications")).Singleton();
+            //For<NotificationsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<NotificationsApiClientConfiguration>("SFA.DAS.Notifications")).Singleton();
         }
 
         private HttpClient GetHttpClient(IContext context)

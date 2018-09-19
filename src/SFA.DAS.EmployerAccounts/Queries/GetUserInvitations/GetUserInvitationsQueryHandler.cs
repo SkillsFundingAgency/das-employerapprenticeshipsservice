@@ -3,7 +3,7 @@ using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.HashingService;
 
-namespace SFA.DAS.Queries.GetUserInvitations
+namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations
 {
     public class GetUserInvitationsQueryHandler : IAsyncRequestHandler<GetUserInvitationsRequest, GetUserInvitationsResponse>
     {

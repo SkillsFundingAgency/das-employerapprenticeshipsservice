@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.Queries.GetUserAccounts;
-using SFA.DAS.Queries.GetUserInvitations;
-using SFA.DAS.Queries.GetUsers;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
+using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
+using SFA.DAS.EmployerAccounts.Queries.GetUsers;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {

@@ -18,13 +18,16 @@
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <IISExpressSSLPort>44355</IISExpressSSLPort>
+    <IISExpressSSLPort>443</IISExpressSSLPort>
     <TargetFrameworkProfile />
     <Use64BitIISExpress />
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
@@ -502,6 +505,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
@@ -555,7 +559,6 @@
     <Compile Include="ViewModels\FinanceDashboardViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IPaginationViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementNextStepsViewModel.cs" />
-    <Compile Include="ViewModels\InviteTeamMemberNextStepsViewModel.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
@@ -577,7 +580,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Mappings\OrganisationMappings.cs" />
-    <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
     <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
     <Compile Include="ViewModels\InvalidStateViewModel.cs" />
@@ -612,10 +614,8 @@
     <Compile Include="ViewModels\EmployerAccountPayeListViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementListViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementViewModel.cs" />
-    <Compile Include="ViewModels\EmployerTeamMembersViewModel.cs" />
     <Compile Include="ViewModels\GatewayViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberViewModel.cs" />
-    <Compile Include="ViewModels\InvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SelectEmployerViewModel.cs" />
@@ -643,10 +643,8 @@
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
-    <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
-    <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestrator.cs" />
     <Compile Include="ViewModels\UserAccountsViewModel.cs" />
     <Compile Include="ViewModels\TransactionLineViewModel.cs" />
@@ -677,7 +675,6 @@
     <Content Include="src\svg\important.svg" />
     <Content Include="src\svg\tick.svg" />
     <Compile Include="WebRole.cs" />
-    <Content Include="Views\EmployerTeam\Index.cshtml" />
     <Content Include="Views\Organisation\AddOrganisation.cshtml" />
     <Content Include="Views\Organisation\OrganisationUpdatedNextSteps.cshtml" />
     <Content Include="Views\SearchOrganisation\FindAddress.cshtml" />
@@ -974,15 +971,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Invitation\View.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
-    <Content Include="Views\EmployerTeam\Invite.cshtml" />
-    <Content Include="Views\EmployerTeam\Cancel.cshtml" />
-    <Content Include="Views\EmployerTeam\Remove.cshtml" />
-    <Content Include="Views\EmployerTeam\ChangeRole.cshtml" />
-    <Content Include="Views\Invitation\Invite.cshtml" />
-    <Content Include="Views\Invitation\All.cshtml" />
-    <Content Include="Views\EmployerTeam\ViewTeam.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
     <Content Include="Views\Shared\_SuccessMessage.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
@@ -992,7 +981,6 @@
     <Content Include="Views\EmployerAgreement\View.cshtml" />
     <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
@@ -1105,9 +1093,7 @@
     <Content Include="Views\EmployerAccountPaye\NextSteps.cshtml" />
     <Content Include="Views\Shared\_SVGSprite.cshtml" />
     <Content Include="src\sass\_icons.scss" />
-    <Content Include="Views\EmployerTeam\_WelcomeWizard.cshtml" />
     <Content Include="src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
-    <Content Include="Views\EmployerTeam\NextSteps.cshtml" />
     <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
     <Content Include="Views\OrganisationShared\AddOrganisationAddress.cshtml" />
     <Content Include="Views\OrganisationShared\SelectAddress.cshtml" />

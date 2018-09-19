@@ -12,14 +12,14 @@ namespace SFA.DAS.EmployerAccounts.Commands.SendTransferConnectionInvitation
         private readonly IPublicHashingService _publicHashingService;
         private readonly ITransferAllowanceService _transferAllowanceService;
         private readonly ITransferConnectionInvitationRepository _transferConnectionInvitationRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserAccountRepository _userRepository;
 
         public SendTransferConnectionInvitationCommandHandler(
             IEmployerAccountRepository employerAccountRepository,
             IPublicHashingService publicHashingService,
             ITransferAllowanceService transferAllowanceService,
             ITransferConnectionInvitationRepository transferConnectionInvitationRepository,
-            IUserRepository userRepository)
+            IUserAccountRepository userRepository)
         {
             _employerAccountRepository = employerAccountRepository;
             _publicHashingService = publicHashingService;

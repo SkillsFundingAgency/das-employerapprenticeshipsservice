@@ -1,0 +1,206 @@
+﻿@using SFA.DAS.Authorization
+@using SFA.DAS.Authorization.Mvc
+@using SFA.DAS.EmployerAccounts.Web.Extensions
+@using SFA.DAS.EmployerAccounts.Web.Helpers
+@using SFA.DAS.Tasks.API.Types.Enums
+
+@model SFA.DAS.EmployerAccounts.Web.OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel>
+
+@{
+    ViewBag.Title = "Home";
+    ViewBag.Section = "home";
+    ViewBag.PageID = "page-company-homepage";
+    ViewBag.GaData.Vpv = "/accounts/agreements/page-company-homepage";
+
+    if (!string.IsNullOrEmpty(Model.Data.EmployerAccountType))
+    {
+        ViewBag.PageID = $"page-employer-account-created-{Model.Data.EmployerAccountType}";
+    }
+}
+
+@if (Model.Data.ShowWizard)
+{
+    @Html.Partial("_WelcomeWizard")
+}
+else
+{
+    <h1 class="heading-xlarge heading-dashboard" id="company-Name">
+        @Model.Data.Account.Name
+        <span class="heading-secondary">Account ID: @Model.Data.Account.PublicHashedId</span>
+    </h1>
+    <div class="grid-row page-dashboard">
+
+
+
+        <div class="column-two-thirds">
+            <div class="grid-row">
+                <div class="column-half">
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("ViewTeam")">Your team</a>
+                    </h2>
+                    <p>Control what your team can do and invite new team members.</p>
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a>
+                    </h2>
+                    <p>Add your organisations that will make contracts with training providers.</p>
+                    <h2 class="heading-medium">
+                        <a href="@Url.EmployerCommitmentsAction("apprentices/home")">Apprentices</a>
+                    </h2>
+                    <p>Add apprentices, update details of existing apprentices and authorise payments to training providers.</p>
+                </div>
+                <div class="column-half">
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Index", "EmployerAccountTransactions")">Finance</a>
+                    </h2>
+                    <p>View your financial transactions, connect with other employers and send or receive transfer funds.</p>
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a>
+                    </h2>
+                    <p>Add or remove <abbr title="Pay as your earn">PAYE</abbr> schemes.</p>
+                    <h2 class="heading-medium">
+                        <a href="https://findapprenticeshiptraining.sfa.bis.gov.uk/" target="_blank" rel="external">Find apprenticeship training</a>
+                    </h2>
+                    <p>Search for apprenticeships and see details of approved providers who can deliver the training.</p>
+                    @if (Html.IsAuthorized(FeatureType.Recruitments))
+                    {
+                        <h2 class="heading-medium">
+                            <a href="@Url.EmployerRecruitAction()">Recruitment</a>
+                        </h2>
+                        <p>Recruit an apprentice by creating a vacancy. This vacancy will be advertised on Find an apprenticeship.</p>
+                    }
+                </div>
+            </div>
+            <div class="grid-row">
+                <div class="column-full">
+                    <div class="panel panel-filled">
+                        <h3 class="heading-medium">Help us improve this service</h3>
+                        <p><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>
+                        <p><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank" class="button">Take the survey <span class="vh">so that we can improve the service</span></a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column-one-third">
+            <section>
+                <nav>
+                    <ul class="js-tabs" role="tablist">
+                        <li role="tab" id="tab-tasks" aria-controls="pane-tasks"><a href="#pane-tasks">Tasks</a></li>
+                        @if (Html.IsAuthorized(FeatureType.Activities))
+                        {
+                            <li role="tab" id="tab-activity" aria-controls="pane-activity"><a href="#pane-activity">Activity</a></li>
+                        }
+                    </ul>
+                </nav>
+                <div class="panes">
+                    <div class="js-tab-pane" id="pane-tasks" role="tabpanel">
+                        @if (Model.Data.Tasks.Count > 0)
+                        {
+                            <ul class="task-list">
+                                @{
+                                    var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();
+                                }
+
+                                @foreach (var task in priorityOrderTaskList)
+                                {
+                                    <li>
+                                        @switch (task.Type)
+                                        {
+                                            case "LevyDeclarationDue":
+                                                <p>
+                                                    Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
+                                                </p>
+                                                <form action="@Url.Action("DismissTask", "Task")" method="POST">
+                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
+                                                    <button class="button-link" type="submit">Dismiss this message</button>
+                                                </form>
+                                                break;
+                                            case "AgreementToSign":
+                                                <p>
+                                                    @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")">View agreements</a>
+                                                </p>
+                                                break;
+                                            case "AddApprentices":
+                                                <p>
+                                                    <a href="@Url.EmployerCommitmentsAction("apprentices/inform")">Start adding apprentices now</a>
+                                                </p>
+                                                break;
+                                            case "ApprenticeChangesToReview":
+                                                <p>
+                                                    @task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.EmployerCommitmentsAction("apprentices/manage/all?RecordStatus=ChangesForReview")">View changes</a>
+                                                </p>
+                                                break;
+                                            case "CohortRequestReadyForApproval":
+                                                <p>
+                                                    @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="@Url.EmployerCommitmentsAction("apprentices/cohorts/review")">View cohorts</a>
+                                                </p>
+                                                break;
+                                            case "ReviewConnectionRequest":
+                                                <p>
+                                                    @task.ItemsDueCount connection request@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.Action("Index", "Transfers")">View details</a>
+                                                </p>
+                                                break;
+                                            case "TransferRequestReceived":
+                                                <p>
+                                                    Transfer request received<a href="@Url.Action("Index", "Transfers")">View details</a>
+                                                </p>
+                                                break;
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p>You do not have any tasks</p>
+                        }
+                    </div>
+                    @if (Html.IsAuthorized(FeatureType.Activities))
+                    {
+                        <div class="js-tab-pane" id="pane-activity" role="tabpanel">
+                            @Html.Action("Latest", "Activities")
+                        </div>
+                    }
+                </div>
+            </section>
+        </div>
+    </div>
+}
+
+@if (Model.Data.ShowAcademicYearBanner)
+{
+    <section>
+        <div class="panel alert-default">
+            <h4 class="heading-small">Apprentice records in 2016/17</h4>
+            <p>It's critical that you complete and approve any apprentice records for the academic year ending 31 July 2017 before <strong>18:00 on 19 October 2017</strong>.  After this date you will not be able to update apprentice details from 2016/17 or make payments for training in this period.</p>
+        </div>
+    </section>
+}
+
+@*@if (Model.Data.RequiresAgreementSigning > 0)
+    {
+        <section>
+            <div class="panel alert-default">
+                <h3 class="heading-small">Spending not enabled (@Model.Data.RequiresAgreementSigning)</h3>
+
+                @if (Model.Data.UserRole == Role.Owner)
+                {
+                    <p>You need to <a href="@Url.Action("Index", "EmployerAgreement")">sign an agreement</a> to enable your organisations to spend funds.</p>
+                }
+
+                @if (Model.Data.UserRole == Role.Transactor)
+                {
+                    <p>An agreement needs to be signed to enable your organisations to spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View this agreement</a>.</p>
+                }
+            </div>
+        </section>
+    }
+
+    <section>
+        @foreach (var task in Model.Data.Tasks)
+        {
+            <div class="panel alert-default">
+                <h3 class="heading-small">@task.Type</h3>
+                <p>You have @task.ItemsDueCount items</p>
+            </div>
+        }
+    </section>*@
