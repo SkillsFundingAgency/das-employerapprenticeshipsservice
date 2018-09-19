@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.Caches;
 using SFA.DAS.Configuration;
+using SFA.DAS.EmployerFinance.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
@@ -16,7 +17,9 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             }
             else
             {
-                For<IDistributedCache>().Use<RedisCache>().Singleton();
+                For<IDistributedCache>().Use<RedisCache>(c=> 
+                    new RedisCache(c.GetInstance<EmployerFinanceConfiguration>().RedisConnection))
+                    .Singleton();
             }
         }
     }
