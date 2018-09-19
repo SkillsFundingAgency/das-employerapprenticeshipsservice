@@ -354,17 +354,17 @@
       <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.UnitOfWork, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.UnitOfWork.1.0.15\lib\netstandard2.0\SFA.DAS.UnitOfWork.dll</HintPath>
+    <Reference Include="SFA.DAS.UnitOfWork, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.UnitOfWork.1.0.17\lib\netstandard2.0\SFA.DAS.UnitOfWork.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.UnitOfWork.EntityFramework, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.UnitOfWork.EntityFramework.1.0.15\lib\net462\SFA.DAS.UnitOfWork.EntityFramework.dll</HintPath>
+    <Reference Include="SFA.DAS.UnitOfWork.EntityFramework, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.UnitOfWork.EntityFramework.1.0.17\lib\net462\SFA.DAS.UnitOfWork.EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.UnitOfWork.Mvc, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.UnitOfWork.Mvc.1.0.15\lib\net462\SFA.DAS.UnitOfWork.Mvc.dll</HintPath>
+    <Reference Include="SFA.DAS.UnitOfWork.Mvc, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.UnitOfWork.Mvc.1.0.17\lib\net462\SFA.DAS.UnitOfWork.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.UnitOfWork.NServiceBus, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.UnitOfWork.NServiceBus.1.0.15\lib\netstandard2.0\SFA.DAS.UnitOfWork.NServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.UnitOfWork.NServiceBus, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.UnitOfWork.NServiceBus.1.0.17\lib\netstandard2.0\SFA.DAS.UnitOfWork.NServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Web.Policy, Version=1.1.0.44309, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Web.Policy.1.1.0.44309\lib\net45\SFA.DAS.Web.Policy.dll</HintPath>

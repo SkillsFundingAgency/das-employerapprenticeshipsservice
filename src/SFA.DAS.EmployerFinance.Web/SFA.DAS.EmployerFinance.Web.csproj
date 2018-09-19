@@ -69,13 +69,13 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework">
-      <Version>1.0.15</Version>
+      <Version>1.0.17</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.UnitOfWork.Mvc">
-      <Version>1.0.15</Version>
+      <Version>1.0.17</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus">
-      <Version>1.0.15</Version>
+      <Version>1.0.17</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
