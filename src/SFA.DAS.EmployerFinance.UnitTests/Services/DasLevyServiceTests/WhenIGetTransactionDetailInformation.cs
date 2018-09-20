@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Queries.GetAccountLevyTransactions;
 using SFA.DAS.EmployerFinance.Services;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasLevyServiceTests
 {
@@ -15,6 +16,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasLevyServiceTests
     {
         private DasLevyService _dasLevyService;
         private Mock<IMediator> _mediator;
+        private Mock<ITransactionRepository> _transactionRepository;
         private DateTime _fromDate;
         private DateTime _toDate;
         private long _accountId;
@@ -26,30 +28,32 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasLevyServiceTests
             _toDate = DateTime.Now.AddDays(-2);
             _accountId = 2;
 
+            _transactionRepository = new Mock<ITransactionRepository>();
+
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLevyTransactionsQuery>()))
                      .ReturnsAsync(new GetAccountLevyTransactionsResponse
-                    {
-                        Transactions= new List<TransactionLine>
+                     {
+                         Transactions = new List<TransactionLine>
                         {
                             new LevyDeclarationTransactionLine()
                         }
-                    });
+                     });
 
-            _dasLevyService = new DasLevyService(_mediator.Object);
+            _dasLevyService = new DasLevyService(_mediator.Object, _transactionRepository.Object);
         }
         [Test]
         public async Task ThenTheMediatorMethodIsCalled()
         {
             //Act
-            await _dasLevyService.GetAccountLevyTransactionsByDateRange< LevyDeclarationTransactionLine>
+            await _dasLevyService.GetAccountLevyTransactionsByDateRange<LevyDeclarationTransactionLine>
                         (_accountId, _fromDate, _toDate);
 
             //Assert
-            _mediator.Verify(x => 
-                x.SendAsync(It.Is<GetAccountLevyTransactionsQuery>(c => 
+            _mediator.Verify(x =>
+                x.SendAsync(It.Is<GetAccountLevyTransactionsQuery>(c =>
                     c.AccountId.Equals(_accountId) &&
-                    c.FromDate.Equals(_fromDate) && 
+                    c.FromDate.Equals(_fromDate) &&
                     c.ToDate.Equals(_toDate))), Times.Once);
         }
         [Test]

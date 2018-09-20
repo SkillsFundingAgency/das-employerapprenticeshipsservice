@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 .ReturnsAsync(2);
 
             _apprenticshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
-            
+
             _logger = new Mock<ILog>();
 
             RequestHandler = new GetEmployerAccountTransactionsHandler(
@@ -235,13 +235,40 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 .ReturnsAsync(transactions);
 
             _dasLevyService.Setup(x => x.GetProviderName(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>()))
-                .ReturnsAsync((string) null);
+                .ReturnsAsync((string)null);
 
             //Act
             var actual = await RequestHandler.Handle(_request);
 
             //Assert
             Assert.AreEqual("Training provider - name not recognised", actual.Data.TransactionLines.First().Description);
+        }
+
+        [Test]
+        public async Task ThenShouldLogIfExceptionOccursWhenGettingProviderName()
+        {
+            //Arrange
+            var transactions = new List<TransactionLine>
+            {
+                new PaymentTransactionLine
+                {
+                    AccountId = 1,
+                    TransactionDate = DateTime.Now.AddMonths(-3),
+                    Amount = 1000,
+                    TransactionType = TransactionItemType.Payment,
+                    UkPrn = 1254545
+                }
+            };
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(transactions);
+
+            _dasLevyService.Setup(x => x.GetProviderName(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>()))
+                .Throws<Exception>();
+
+            //Act
+            await RequestHandler.Handle(_request);
+
+            //Assert
             _logger.Verify(x => x.Info(It.Is<string>(y => y.StartsWith("Provider not found for UkPrn:1254545"))));
         }
 
@@ -319,6 +346,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                     transaction
                 });
 
+            _dasLevyService.Setup(x => x.GetProviderName(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>()))
+                .ReturnsAsync(provider.ProviderName);
+
             //Act
             var actual = await RequestHandler.Handle(Query);
 
@@ -349,6 +379,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 {
                     transaction
                 });
+
+            _dasLevyService.Setup(x => x.GetProviderName(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>()))
+                .ReturnsAsync(provider.ProviderName);
 
             //Act
             var actual = await RequestHandler.Handle(Query);
@@ -383,6 +416,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 {
                     transaction
                 });
+
+            _dasLevyService.Setup(x => x.GetProviderName(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>()))
+                .ReturnsAsync(provider.ProviderName);
 
             //Act
             var actual = await RequestHandler.Handle(Query);
