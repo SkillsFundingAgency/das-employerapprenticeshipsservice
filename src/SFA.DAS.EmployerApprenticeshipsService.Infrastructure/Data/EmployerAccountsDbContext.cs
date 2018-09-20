@@ -16,6 +16,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
     {
         public virtual DbSet<AccountLegalEntity> AccountLegalEntities { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<AccountHistory> AccountHistory { get; set; }
         public virtual DbSet<EmployerAgreement> Agreements { get; set; }
         public virtual DbSet<AgreementTemplate> AgreementTemplates { get; set; }
         public virtual DbSet<LegalEntity> LegalEntities { get; set; }
