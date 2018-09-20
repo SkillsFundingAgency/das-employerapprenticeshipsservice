@@ -124,7 +124,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             {
                 var ukprn = Convert.ToInt32(transaction.UkPrn);
                 var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(ukprn);
-
                 return $"{transactionPrefix}{providerName.Provider.ProviderName}";
             }
             catch (Exception ex)

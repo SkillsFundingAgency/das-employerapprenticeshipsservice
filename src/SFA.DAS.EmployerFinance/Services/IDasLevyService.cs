@@ -25,5 +25,7 @@ namespace SFA.DAS.EmployerFinance.Services
         Task<ICollection<T>> GetAccountLevyTransactionsByDateRange<T>(
             long accountId, DateTime fromDate, DateTime toDate)
             where T : TransactionLine;
+
+        Task<string> GetProviderName(long ukprn, long accountId, string periodEnd);
     }
 }

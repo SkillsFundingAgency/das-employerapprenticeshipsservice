@@ -89,7 +89,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
             return toDate;
         }
 
-        private void GenerateTransactionDescription(TransactionLine transaction)
+        private async Task GenerateTransactionDescription(TransactionLine transaction)
         {
             if (transaction.GetType() == typeof(LevyDeclarationTransactionLine))
             {
@@ -99,7 +99,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
             {
                 var paymentTransaction = (PaymentTransactionLine)transaction;
 
-                transaction.Description = GetPaymentTransactionDescription(paymentTransaction);
+                transaction.Description = await GetPaymentTransactionDescription(paymentTransaction);
             }
             else if (transaction.GetType() == typeof(TransferTransactionLine))
             {
@@ -116,16 +116,16 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
             }
         }
 
-        private string GetPaymentTransactionDescription(PaymentTransactionLine transaction)
+        private async Task<string> GetPaymentTransactionDescription(PaymentTransactionLine transaction)
         {
             var transactionPrefix = transaction.IsCoInvested ? "Co-investment - " : string.Empty;
 
             try
             {
                 var ukprn = Convert.ToInt32(transaction.UkPrn);
-                var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(ukprn);
-
-                return $"{transactionPrefix}{providerName.Provider.ProviderName}";
+                var providerName = await _dasLevyService.GetProviderName(ukprn, transaction.AccountId, transaction.PeriodEnd);
+                if (providerName != null)
+                    return $"{transactionPrefix}{providerName}";
             }
             catch (Exception ex)
             {

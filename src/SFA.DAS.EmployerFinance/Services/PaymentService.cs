@@ -7,6 +7,7 @@ using AutoMapper;
 using SFA.DAS.Caches;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.ApprenticeshipCourse;
 using SFA.DAS.EmployerFinance.Models.ApprenticeshipProvider;
 using SFA.DAS.EmployerFinance.Models.Payments;
@@ -27,7 +28,9 @@ namespace SFA.DAS.EmployerFinance.Services
         private readonly ILog _logger;
         private readonly IInProcessCache _inProcessCache;
 
-        public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient, IEmployerCommitmentApi commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService, IMapper mapper, ILog logger, IInProcessCache inProcessCache)
+        public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient,
+            IEmployerCommitmentApi commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService,
+            IMapper mapper, ILog logger, IInProcessCache inProcessCache)
         {
             _paymentsEventsApiClient = paymentsEventsApiClient;
             _commitmentsApiClient = commitmentsApiClient;
@@ -70,7 +73,8 @@ namespace SFA.DAS.EmployerFinance.Services
 
         public async Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long receiverAccountId)
         {
-            var pageOfTransfers = await _paymentsEventsApiClient.GetTransfers(periodEnd, receiverAccountId: receiverAccountId);
+            var pageOfTransfers =
+                await _paymentsEventsApiClient.GetTransfers(periodEnd, receiverAccountId: receiverAccountId);
 
             var transfers = new List<AccountTransfer>();
 
@@ -171,7 +175,7 @@ namespace SFA.DAS.EmployerFinance.Services
             return null;
         }
 
-        private Task<Models.ApprenticeshipProvider.Provider> GetProvider(int ukPrn)
+        public virtual Task<Models.ApprenticeshipProvider.Provider> GetProvider(int ukPrn)
         {
             return Task.Run(() =>
             {
@@ -182,9 +186,11 @@ namespace SFA.DAS.EmployerFinance.Services
                     if (providerView == null)
                     {
                         providerView = _apprenticeshipInfoService.GetProvider(ukPrn);
+
                         if (providerView != null)
                         {
-                            _inProcessCache.Set($"{nameof(ProvidersView)}_{ukPrn}", providerView, new TimeSpan(1, 0, 0));
+                            _inProcessCache.Set($"{nameof(ProvidersView)}_{ukPrn}", providerView,
+                                new TimeSpan(1, 0, 0));
                         }
                     }
 
@@ -245,9 +251,9 @@ namespace SFA.DAS.EmployerFinance.Services
                 }
 
                 return frameworksView?.Frameworks.SingleOrDefault(f =>
-                                     f.FrameworkCode.Equals(frameworkCode) &&
-                                     f.ProgrammeType.Equals(programType) &&
-                                     f.PathwayCode.Equals(pathwayCode));
+                    f.FrameworkCode.Equals(frameworkCode) &&
+                    f.ProgrammeType.Equals(programType) &&
+                    f.PathwayCode.Equals(pathwayCode));
             }
             catch (Exception e)
             {

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Queries.AccountTransactions.GetAccountCoursePayments;
 using SFA.DAS.EmployerFinance.Queries.GetAccountLevyTransactions;
 
@@ -15,10 +16,12 @@ namespace SFA.DAS.EmployerFinance.Services
     public class DasLevyService : IDasLevyService
     {
         private readonly IMediator _mediator;
+        private readonly ITransactionRepository _transactionRepository;
 
-        public DasLevyService(IMediator mediator)
+        public DasLevyService(IMediator mediator, ITransactionRepository transactionRepository)
         {
             _mediator = mediator;
+            _transactionRepository = transactionRepository;
         }
 
         public async Task<ICollection<TransactionLine>> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
@@ -62,6 +65,11 @@ namespace SFA.DAS.EmployerFinance.Services
             });
 
             return result?.Transactions?.OfType<T>().ToList() ?? new List<T>();
+        }
+
+        public Task<string> GetProviderName(long ukprn, long accountId, string periodEnd)
+        {
+            return _transactionRepository.GetProviderName(ukprn, accountId, periodEnd);
         }
 
         public async Task<int> GetPreviousAccountTransaction(long accountId, DateTime fromDate)

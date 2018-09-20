@@ -177,8 +177,7 @@ namespace SFA.DAS.EmployerFinance.Data
 
             return MapTransactions(result);
         }
-
-        public async Task<List<TransactionLine>> GetAccountLevyTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
+		public async Task<List<TransactionLine>> GetAccountLevyTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
         {
             var parameters = new DynamicParameters();
 
@@ -194,6 +193,22 @@ namespace SFA.DAS.EmployerFinance.Data
 
             return MapTransactions(result);
         }
+		
 
+        public Task<string> GetProviderName(long ukprn, long accountId, string periodEnd)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@ukprn", ukprn, DbType.Int64);
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@periodEnd", periodEnd, DbType.String);
+
+            return _db.Value.Database.Connection.ExecuteScalarAsync<string>(
+                sql: "[employer_financial].[GetProviderName]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+            
+        }
     }
 }

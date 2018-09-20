@@ -11,6 +11,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using SFA.DAS.Caches;
+using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.NServiceBus;
 using Framework = SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse.Framework;
 using Standard = SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse.Standard;
 

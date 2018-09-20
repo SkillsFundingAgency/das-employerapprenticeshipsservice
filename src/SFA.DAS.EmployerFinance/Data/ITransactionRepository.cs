@@ -15,6 +15,6 @@ namespace SFA.DAS.EmployerFinance.Data
             long accountId, DateTime fromDate, DateTime toDate);
  		Task<List<TransactionLine>> GetAccountCoursePaymentsByDateRange(long accountId, long ukprn, string courseName, int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate);
         Task<List<TransactionLine>> GetAccountLevyTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
-
+        Task<string> GetProviderName(long ukprn, long accountId, string periodEnd);
     }
 }
