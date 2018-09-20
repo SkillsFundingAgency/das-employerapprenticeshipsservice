@@ -1,8 +1,8 @@
 ﻿using SFA.DAS.Authentication;
-using SFA.DAS.EmployerAccounts.Authorization;
+using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -12,7 +12,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -221,7 +220,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var idToken = authenticationManager.User.FindFirst("id_token")?.Value;
             var constants = new Constants(_configuration.Identity);
 
-            return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken, owinContext.Request.Uri.Scheme, owinContext.Request.Uri.Authority));
+            return new RedirectResult(string.Format(
+                constants.LogoutEndpoint(),
+                idToken,
+                string.Empty,
+                Url.LegacyEasAction("service/signout")));
         }
 
         [HttpGet]
