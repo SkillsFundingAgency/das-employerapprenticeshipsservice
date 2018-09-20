@@ -1,9 +1,9 @@
 ﻿using SFA.DAS.Authentication;
 using SFA.DAS.EmployerFinance.Configuration;
-using System.Web;
-using System.Web.Mvc;
 using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.EmployerFinance.Web.Helpers;
+using System.Web;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
@@ -47,7 +47,8 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             var idToken = authenticationManager.User.FindFirst("id_token")?.Value;
             var constants = new Constants(_configuration.Identity);
 
-            return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken, owinContext.Request.Uri.Scheme, owinContext.Request.Uri.Authority));
+            return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken, owinContext.Request.Uri.Scheme,
+                "localhost/service/signout")); //owinContext.Request.Uri.Authority));
         }
 
         [HttpGet]
