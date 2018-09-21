@@ -1,5 +1,7 @@
-﻿using SFA.DAS.Caches;
+﻿using Microsoft.Azure;
+using SFA.DAS.Caches;
 using SFA.DAS.Configuration;
+using StructureMap;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution
 {
