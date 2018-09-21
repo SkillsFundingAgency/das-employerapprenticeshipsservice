@@ -56,7 +56,9 @@ namespace SFA.DAS.EAS.Web.Extensions
 
         private static string Action(string baseUrl, string path)
         {
-            return $"{baseUrl}/{path}".TrimEnd('/');
+            var trimmedBaseUrl = baseUrl.TrimEnd('/');
+
+            return $"{trimmedBaseUrl}/{path}".TrimEnd('/');
         }
     }
 }

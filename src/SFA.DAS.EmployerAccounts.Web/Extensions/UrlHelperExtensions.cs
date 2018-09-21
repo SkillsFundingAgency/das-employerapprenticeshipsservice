@@ -1,6 +1,6 @@
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using System.Web.Mvc;
-using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -72,7 +72,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
         private static string Action(string baseUrl, string path)
         {
-            return $"{baseUrl}/{path}".TrimEnd('/');
+            var trimmedBaseUrl = baseUrl.TrimEnd('/');
+
+            return $"{trimmedBaseUrl}/{path}".TrimEnd('/');
         }
     }
 }
