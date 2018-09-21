@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Azure;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using StackExchange.Redis;
+using System;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.Caches
 {
@@ -70,9 +69,7 @@ namespace SFA.DAS.Caches
         private static IDatabase InitialiseRedis()
         {
             var connectionMultiplexer =
-                ConnectionMultiplexer.Connect(
-                    (string.IsNullOrWhiteSpace(_redisConnectionString) ? null : _redisConnectionString) ??
-                    CloudConfigurationManager.GetSetting("RedisConnection"));
+                ConnectionMultiplexer.Connect(_redisConnectionString);
             var cache = connectionMultiplexer.GetDatabase();
 
             return cache;
