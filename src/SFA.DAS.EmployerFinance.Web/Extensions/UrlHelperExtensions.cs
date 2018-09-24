@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Web.Helpers;
+using System;
 using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerFinance.Web.Extensions
@@ -76,11 +77,11 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
         {
             var formattedUrl = url;
 
-            if (url.StartsWith("http://"))
+            if (url.StartsWith("http://", StringComparison.CurrentCultureIgnoreCase))
             {
                 formattedUrl = url.Substring("http://".Length);
             }
-            else if (url.StartsWith("https://"))
+            else if (url.StartsWith("https://", StringComparison.CurrentCultureIgnoreCase))
             {
                 formattedUrl = url.Substring("https://".Length);
             }
