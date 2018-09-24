@@ -62,6 +62,32 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
             return Action(baseUrl, path);
         }
 
+        public static string LegacyEasActionWithoutHttpScheme(this UrlHelper helper, string path)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
+            var baseUrl = configuration.EmployerPortalBaseUrl;
+
+            var url = Action(baseUrl, path);
+
+            return RemoveHttpScheme(helper, url);
+        }
+
+        public static string RemoveHttpScheme(this UrlHelper helper, string url)
+        {
+            var formattedUrl = url;
+
+            if (url.StartsWith("http://"))
+            {
+                formattedUrl = url.Substring("http://".Length);
+            }
+            else if (url.StartsWith("https://"))
+            {
+                formattedUrl = url.Substring("https://".Length);
+            }
+
+            return formattedUrl;
+        }
+
         private static string AccountAction(UrlHelper helper, string baseUrl, string path)
         {
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
