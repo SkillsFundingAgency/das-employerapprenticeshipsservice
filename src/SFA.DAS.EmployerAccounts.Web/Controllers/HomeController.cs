@@ -223,8 +223,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return new RedirectResult(string.Format(
                 constants.LogoutEndpoint(),
                 idToken,
-                string.Empty,
-                Url.LegacyEasAction("service/signout")));
+                owinContext.Request.Uri.Scheme,
+                Url.LegacyEasActionWithoutHttpScheme("service/signout")));
         }
 
         [HttpGet]

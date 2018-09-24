@@ -50,9 +50,8 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             return new RedirectResult(string.Format(
                 constants.LogoutEndpoint(),
                 idToken,
-                string.Empty,
-                Url.LegacyEasAction("service/signout")));
-
+                owinContext.Request.Uri.Scheme,
+                Url.LegacyEasActionWithoutHttpScheme("service/signout")));
         }
 
         [HttpGet]

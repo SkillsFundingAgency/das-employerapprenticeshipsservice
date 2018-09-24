@@ -1,5 +1,6 @@
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
+using System;
 using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
@@ -62,6 +63,32 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return Action(baseUrl, path);
         }
 
+        public static string LegacyEasActionWithoutHttpScheme(this UrlHelper helper, string path)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerPortalBaseUrl;
+
+            var url = Action(baseUrl, path);
+
+            return RemoveHttpScheme(helper, url);
+        }
+
+        public static string RemoveHttpScheme(this UrlHelper helper, string url)
+        {
+            var formattedUrl = url;
+
+            if (url.StartsWith("http://", StringComparison.CurrentCultureIgnoreCase))
+            {
+                formattedUrl = url.Substring("http://".Length);
+            }
+            else if (url.StartsWith("https://", StringComparison.CurrentCultureIgnoreCase))
+            {
+                formattedUrl = url.Substring("https://".Length);
+            }
+
+            return formattedUrl;
+        }
+
         private static string AccountAction(UrlHelper helper, string baseUrl, string path)
         {
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
@@ -72,7 +99,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
         private static string Action(string baseUrl, string path)
         {
-            var trimmedBaseUrl = baseUrl.TrimEnd('/');
+            var trimmedBaseUrl = baseUrl?.TrimEnd('/') ?? string.Empty;
 
             return $"{trimmedBaseUrl}/{path}".TrimEnd('/');
         }
