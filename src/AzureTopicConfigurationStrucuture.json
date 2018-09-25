@@ -79,4 +79,14 @@
     "topicName": "payment_created",
     "subscription": [ "Activity_PaymentCreatedMessageProcessor" ]
   }
+  ,
+  {
+    "topicName": "paymentdataimport_completed",
+    "subscription": [ ]
+  },
+  {
+    "topicName": "levydataimport_completed",
+    "subscription": [ ]
+  }
+
 ]
