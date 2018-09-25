@@ -122,7 +122,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
             await _eventPublisher.Publish(new RefreshPaymentDataCompletedEvent()
             {
                 AccountId = message.AccountId,
-                Created = DateTime.Now,
+                Created = DateTime.UtcNow,
                 PeriodEnd = message.PeriodEnd,
                 PaymentsProcessed = hasPayments
             });
