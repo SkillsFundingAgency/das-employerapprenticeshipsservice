@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
         public Mock<IPublicHashingService> PublicHashingService { get; set; }
         public Mock<ITransferAllowanceService> TransferAllowanceService { get; set; }
         public Mock<ITransferConnectionInvitationRepository> TransferConnectionInvitationRepository { get; set; }
-        public Mock<IUserRepository> UserRepository { get; set; }
+        public Mock<IUserAccountRepository> UserRepository { get; set; }
         public Account ReceiverAccount { get; set; }
         public long? Result { get; set; }
         public Account SenderAccount { get; set; }
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
             PublicHashingService = new Mock<IPublicHashingService>();
             TransferAllowanceService = new Mock<ITransferAllowanceService>();
             TransferConnectionInvitationRepository = new Mock<ITransferConnectionInvitationRepository>();
-            UserRepository = new Mock<IUserRepository>();
+            UserRepository = new Mock<IUserAccountRepository>();
 
             SetSenderAccount()
                 .SetReceiverAccount()
@@ -139,7 +139,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
             };
 
             UserRepository
-                .Setup(r => r.GetUserById(SenderUser.Id))
+                .Setup(r => r.Get(SenderUser.Id))
                 .ReturnsAsync(SenderUser);
 
             return this;

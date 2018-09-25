@@ -1,5 +1,5 @@
-using SFA.DAS.EmployerAccounts.Validation;
 using System.Threading.Tasks;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser
 {

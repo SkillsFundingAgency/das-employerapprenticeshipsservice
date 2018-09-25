@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.Queries.GetUserInvitations
+namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations
 {
     public class GetUserInvitationsRequest : IAsyncRequest<GetUserInvitationsResponse>
     {

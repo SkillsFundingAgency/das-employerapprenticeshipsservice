@@ -168,7 +168,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
         {
             EmployerAccountRepositoryMock = new Mock<IEmployerAccountRepository>();
             TransferConnectionInvitationRepositoryMock = new Mock<ITransferConnectionInvitationRepository>();
-            UserRepositoryMock = new Mock<IUserRepository>();
+            UserRepositoryMock = new Mock<IUserAccountRepository>();
             UnitOfWorkContext = new UnitOfWorkContext();
         }
 
@@ -178,8 +178,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
         public Mock<ITransferConnectionInvitationRepository> TransferConnectionInvitationRepositoryMock;
         public ITransferConnectionInvitationRepository TransferConnectionInvitationRepository => TransferConnectionInvitationRepositoryMock.Object;
 
-        public Mock<IUserRepository> UserRepositoryMock;
-        public IUserRepository UserRepository => UserRepositoryMock.Object;
+        public Mock<IUserAccountRepository> UserRepositoryMock;
+        public IUserAccountRepository UserRepository => UserRepositoryMock.Object;
 
         public Account SenderAccount { get; private set; }
         public Account ReceiverAccount { get; private set; }

@@ -9,5 +9,6 @@ namespace SFA.DAS.EmployerAccounts.Data
         Task<Account> GetAccountById(long id);
         Task<List<Account>> GetAllAccounts();
         Task<Account> GetAccountByHashedId(string hashedAccountId);
+        Task<AccountStats> GetAccountStats(long accountId);
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;

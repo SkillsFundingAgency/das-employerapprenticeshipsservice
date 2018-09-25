@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.Queries.GetUserInvitations
+namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations
 {
     public class GetNumberOfUserInvitationsValidator : IValidator<GetNumberOfUserInvitationsQuery>
     {

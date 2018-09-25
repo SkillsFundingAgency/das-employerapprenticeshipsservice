@@ -1,7 +1,7 @@
-﻿using SFA.DAS.EmployerAccounts.Models.UserProfile;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 
-namespace SFA.DAS.Queries.GetUsers
+namespace SFA.DAS.EmployerAccounts.Queries.GetUsers
 {
     public class GetUsersQueryResponse
     {
