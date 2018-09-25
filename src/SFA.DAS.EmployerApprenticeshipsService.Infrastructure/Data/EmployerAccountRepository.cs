@@ -8,21 +8,25 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using Stopwatch = System.Diagnostics.Stopwatch;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class EmployerAccountRepository : BaseRepository, IEmployerAccountRepository
     {
         private readonly Lazy<EmployerAccountsDbContext> _db;
+        private readonly ILog _logger;
 
         public EmployerAccountRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
+            _logger = logger;
         }
 
         public Task<Account> GetAccountById(long id)
@@ -70,7 +74,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
         {
-            var accountDetail = await _db.Value.Accounts
+            var sw = new Stopwatch();
+            AccountDetail accountDetail = null;
+
+            sw.Start();
+            accountDetail = await _db.Value.Accounts
                 .Where(ac => ac.HashedId == hashedAccountId)
                 .Select(ac => new AccountDetail
                 {
@@ -79,7 +87,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     PublicHashedId = ac.PublicHashedId,
                     Name = ac.Name,
                     CreatedDate = ac.CreatedDate
-                }).FirstAsync();
+                }).FirstOrDefaultAsync();
+
+            if (accountDetail == null)
+            {
+                _logger.Warn($"An attempt to fetch an account using an unknown account - {hashedAccountId}");
+                return null;
+            }
 
             accountDetail.OwnerEmail = await _db.Value.Memberships
                 .Where(m => m.AccountId == accountDetail.AccountId && m.Role == Role.Owner)
@@ -88,18 +102,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 .FirstOrDefaultAsync();
 
             accountDetail.PayeSchemes = await _db.Value.AccountHistory
-                                    .Where(ach => ach.AccountId == accountDetail.AccountId)
-                                    .Select(ach => ach.PayeRef)
-                                    .ToListAsync();
+                .Where(ach => ach.AccountId == accountDetail.AccountId)
+                .Select(ach => ach.PayeRef)
+                .ToListAsync();
 
             accountDetail.LegalEntities = await _db.Value.AccountLegalEntities
                 .Where(ale => ale.AccountId == accountDetail.AccountId
-                              && ale.Deleted == null
-                              && ale.Agreements.Any(ea =>
-                                  ea.StatusId == EmployerAgreementStatus.Pending ||
-                                  ea.StatusId == EmployerAgreementStatus.Signed))
+                                && ale.Deleted == null
+                                && ale.Agreements.Any(ea =>
+                                    ea.StatusId == EmployerAgreementStatus.Pending ||
+                                    ea.StatusId == EmployerAgreementStatus.Signed))
                 .Select(ale => ale.LegalEntityId)
                 .ToListAsync();
+
+            sw.Stop();
+            _logger.Debug($"Fetched account with {accountDetail.LegalEntities.Count} legal entities and {accountDetail.PayeSchemes.Count} PAYE schemes in {sw.ElapsedMilliseconds} msecs");
 
             return accountDetail;
         }
