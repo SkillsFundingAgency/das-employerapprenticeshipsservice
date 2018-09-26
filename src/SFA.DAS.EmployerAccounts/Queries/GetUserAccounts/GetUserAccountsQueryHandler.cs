@@ -2,7 +2,7 @@
 using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
 
-namespace SFA.DAS.Queries.GetUserAccounts
+namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccounts
 {
     public class GetUserAccountsQueryHandler : IAsyncRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>
     {

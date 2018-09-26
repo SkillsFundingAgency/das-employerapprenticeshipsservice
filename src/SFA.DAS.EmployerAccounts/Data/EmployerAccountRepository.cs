@@ -51,5 +51,22 @@ namespace SFA.DAS.EmployerAccounts.Data
 
             return result.SingleOrDefault();
         }
+
+
+        public async Task<AccountStats> GetAccountStats(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<AccountStats>(
+                sql: "[employer_account].[GetAccountStats]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.SingleOrDefault();
+        }
+
     }
 }

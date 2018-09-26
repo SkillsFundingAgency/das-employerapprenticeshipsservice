@@ -7,7 +7,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public RepositoriesRegistry()
         {
-            For<IUserRepository>().Use<UserRepository>();
+            For<IUserAccountRepository>().Use<UserAccountRepository>();
         }
     }
 }

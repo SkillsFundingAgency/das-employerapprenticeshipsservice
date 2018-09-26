@@ -1,6 +1,6 @@
 using SFA.DAS.EmployerAccounts.Models.Account;
 
-namespace SFA.DAS.Queries.GetUserAccounts
+namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccounts
 {
     public class GetUserAccountsQueryResponse
     {

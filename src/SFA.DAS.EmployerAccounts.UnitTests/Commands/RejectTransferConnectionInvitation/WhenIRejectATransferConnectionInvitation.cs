@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RejectTransferConnectionIn
         private RejectTransferConnectionInvitationCommand _command;
         private Mock<IEmployerAccountRepository> _employerAccountRepository;
         private Mock<ITransferConnectionInvitationRepository> _transferConnectionInvitationRepository;
-        private Mock<IUserRepository> _userRepository;
+        private Mock<IUserAccountRepository> _userRepository;
         private TransferConnectionInvitation _transferConnectionInvitation;
         private UnitOfWorkContext _unitOfWorkContext;
         private Account _senderAccount;
@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RejectTransferConnectionIn
         {
             _employerAccountRepository = new Mock<IEmployerAccountRepository>();
             _transferConnectionInvitationRepository = new Mock<ITransferConnectionInvitationRepository>();
-            _userRepository = new Mock<IUserRepository>();
+            _userRepository = new Mock<IUserAccountRepository>();
 
             _receiverUser = new User
             {
