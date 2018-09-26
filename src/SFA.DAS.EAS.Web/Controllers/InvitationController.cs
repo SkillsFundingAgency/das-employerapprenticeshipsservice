@@ -1,6 +1,6 @@
-﻿using System.Web.Mvc;
-using SFA.DAS.EAS.Web.Extensions;
+﻿using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("invite")]
         public ActionResult Invite()
         {
-            return Redirect(Url.EmployerAccountsAction("invitations/invite"));
+            return Redirect(Url.EmployerAccountsAction("invitations/invite", false));
         }
 
         [HttpGet]
@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route]
         public ActionResult All()
         {
-            return Redirect(Url.EmployerAccountsAction("invitations"));
+            return Redirect(Url.EmployerAccountsAction("invitations", false));
         }
 
         [HttpGet]
@@ -26,14 +26,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("view")]
         public ActionResult Details(string invitationId)
         {
-            return Redirect(Url.EmployerAccountsAction($"invitations/view?invitationId={invitationId}"));
+            return Redirect(Url.EmployerAccountsAction($"invitations/view?invitationId={invitationId}", false));
         }
 
         [HttpGet]
         [Route("register-and-accept")]
         public ActionResult AcceptInvitationNewUser()
         {
-            return Redirect(Url.EmployerAccountsAction("invitations/register-and-accept"));
+            return Redirect(Url.EmployerAccountsAction("invitations/register-and-accept", false));
         }
 
 
@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("accept")]
         public ActionResult AcceptInvitationExistingUser()
         {
-            return Redirect(Url.EmployerAccountsAction("invitations/accept"));
+            return Redirect(Url.EmployerAccountsAction("invitations/accept", false));
         }
     }
 }
