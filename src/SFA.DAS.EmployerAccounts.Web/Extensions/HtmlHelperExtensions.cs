@@ -1,8 +1,8 @@
-﻿using System;
+﻿using SFA.DAS.Authorization;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
-using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -24,14 +24,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
             return authorizationResult;
         }
-
-        //public static bool IsAuthorized(this HtmlHelper htmlHelper, FeatureType featureType)
-        //{
-        //    var authorisationService = DependencyResolver.Current.GetService<IAuthorizationService>();
-        //    var isAuthorized = authorisationService.IsAuthorized(featureType);
-
-        //    return isAuthorized;
-        //}
 
         public static bool IsValid<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
         {
