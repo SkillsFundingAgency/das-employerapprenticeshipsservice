@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Models.Account
 {
@@ -13,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Models.Account
         public virtual byte? PublicSectorDataSource { get; set; }
         public virtual string RegisteredAddress { get; set; }
         public virtual string Sector { get; set; }
-        public virtual byte Source { get; set; }
+        public virtual OrganisationType Source { get; set; }
         public virtual string Status { get; set; }
     }
 }

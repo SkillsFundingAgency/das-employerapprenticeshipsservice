@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Dtos
 {
@@ -13,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Dtos
         public byte? PublicSectorDataSource { get; set; }
         public string RegisteredAddress { get; set; }
         public string Sector { get; set; }
-        public byte Source { get; set; }
+        public OrganisationType Source { get; set; }
         public string Status { get; set; }
     }
 }
