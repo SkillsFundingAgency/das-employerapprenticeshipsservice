@@ -1,10 +1,10 @@
-﻿using System.Net.Http;
-using SFA.DAS.Configuration;
+﻿using SFA.DAS.Configuration;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using StructureMap;
+using System.Net.Http;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution
 {
@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(c => GetHttpClient(c));
             For<INotificationsApiClientConfiguration>().Use(c => c.GetInstance<NotificationsApiClientConfiguration>());
             For<NotificationsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<NotificationsApiClientConfiguration>($"{Constants.ServiceName}.Notifications")).Singleton();
-            //For<NotificationsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<NotificationsApiClientConfiguration>("SFA.DAS.Notifications")).Singleton();
+
         }
 
         private HttpClient GetHttpClient(IContext context)

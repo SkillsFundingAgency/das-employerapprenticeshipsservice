@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using NUnit.Framework;
+
 using SFA.DAS.EmployerAccounts.Mappings;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Mappings
@@ -13,9 +14,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Mappings
             var config = new MapperConfiguration(c =>
             {
                 c.AddProfile<ActivityMappings>();
-                //c.AddProfile<TransferMappings>();
-                //c.AddProfile<OrganisationMappings>();
-                //c.AddProfile<AgreementMappings>();
             });
 
             config.AssertConfigurationIsValid();
