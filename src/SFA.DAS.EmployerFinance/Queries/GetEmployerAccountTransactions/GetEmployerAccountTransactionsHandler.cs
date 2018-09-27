@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
 
             foreach (var transaction in transactions)
             {
-                GenerateTransactionDescription(transaction);
+                await GenerateTransactionDescription(transaction);
             }
 
             PopulateTransferPublicHashedIds(transactions);
