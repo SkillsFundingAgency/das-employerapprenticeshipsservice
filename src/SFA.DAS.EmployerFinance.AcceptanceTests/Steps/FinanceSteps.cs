@@ -14,53 +14,61 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
     {
         private readonly IObjectContainer _objectContainer;
         private readonly ObjectContext _objectContext;
+        private readonly UnitOfWorkManagerTestHelper _unitOfWorkManagerTestHelper;
 
-        public FinanceSteps(IObjectContainer objectContainer, ObjectContext objectContext)
+        public FinanceSteps(IObjectContainer objectContainer, ObjectContext objectContext, UnitOfWorkManagerTestHelper unitOfWorkManagerTestHelper)
         {
             _objectContainer = objectContainer;
             _objectContext = objectContext;
+            _unitOfWorkManagerTestHelper = unitOfWorkManagerTestHelper;
         }
 
-        [Then(@"account with id ([^ ]*) should see a level 1 screen with a balance of (.*) on the (.*)/(.*)")]
-        public async Task ThenLevel1HasRowWithCorrectBalance(int accountId, int balance, int month, int year)
+        private Task<TOperationResultType> Run<TOperationResultType>(Func<Task<TOperationResultType>> operation)
         {
-            var account = _objectContext.Get<Account>(accountId);
+            return _unitOfWorkManagerTestHelper.RunInIsolatedTransactionAsync(operation);
+        }
 
-            var actual = await _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef");
+        [Then(@"we should see a level 1 screen with a balance of (.*) on the (.*)/(.*)")]
+        public async Task ThenLevel1HasRowWithCorrectBalance(int balance, int month, int year)
+        {
+            var account = _objectContext.FirstOrDefault<Account>();
+
+            var actual = await Run(() => _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef"));
+
             Assert.AreEqual(balance, actual.Data.Model.CurrentBalance);
         }
 
-        [Then(@"account with id ([^ ]*) should see a level 1 screen with a total levy of (.*) on the (.*)/(.*)")]
-        public async Task ThenLevel1HasRowWithCorrectTotalLevy(int accountId, int totalLevy, int month, int year)
+        [Then(@"we should see a level 1 screen with a total levy of (.*) on the (.*)/(.*)")]
+        public async Task ThenLevel1HasRowWithCorrectTotalLevy(int totalLevy, int month, int year)
         {
-            var account = _objectContext.Get<Account>(accountId);
+            var account = _objectContext.Account;
 
-            var actual = await _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef");
+            var actual = await Run(() => _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef"));
             Assert.AreEqual(totalLevy, actual.Data.Model.Data.TransactionLines.Sum(t => t.Amount));
         }
 
-        [Then(@"account with id ([^ ]*) should see a level 2 screen with a levy declared of ([^ ]*) on the (.*)/(.*)")]
-        public async Task ThenUserDaveFromAccountAShouldSeeALevelScreenWithALevyDeclaredOfOnThe(int accountId, int levyDeclared, int month, int year)
+        [Then(@"we should see a level 2 screen with a levy declared of ([^ ]*) on the (.*)/(.*)")]
+        public async Task ThenUserDaveFromAccountAShouldSeeALevelScreenWithALevyDeclaredOfOnThe(int levyDeclared, int month, int year)
         {
-            var account = _objectContext.Get<Account>(accountId);
+            var account = _objectContext.FirstOrDefault<Account>();
 
             var fromDate = new DateTime(year, month, 1);
             var toDate = new DateTime(year, month + 1, 1).AddMilliseconds(-1);
 
-            var viewModel = await _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().FindAccountLevyDeclarationTransactions(account.HashedId, fromDate, toDate, "userRef");
+            var viewModel = await Run(() => _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().FindAccountLevyDeclarationTransactions(account.HashedId, fromDate, toDate, "userRef"));
 
             Assert.AreEqual(levyDeclared, viewModel.Data.Amount - viewModel.Data.SubTransactions.Sum(x => x.TopUp));
         }
 
-        [Then(@"account with id ([^ ]*) should see a level 2 screen with a top up of ([^ ]*) on the (.*)/(.*)")]
-        public async Task ThenUserDaveFromAccountAShouldSeeALevelScreenWithATopUpOfOnThe(int accountId, int topUp, int month, int year)
+        [Then(@"we should see a level 2 screen with a top up of ([^ ]*) on the (.*)/(.*)")]
+        public async Task ThenUserDaveFromAccountAShouldSeeALevelScreenWithATopUpOfOnThe(int topUp, int month, int year)
         {
-            var account = _objectContext.Get<Account>(accountId);
+            var account = _objectContext.FirstOrDefault<Account>();
 
             var fromDate = new DateTime(year, month, 1);
             var toDate = new DateTime(year, month + 1, 1).AddMilliseconds(-1);
 
-            var viewModel = await _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().FindAccountLevyDeclarationTransactions(account.HashedId, fromDate, toDate, "userRef");
+            var viewModel = await Run(() => _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().FindAccountLevyDeclarationTransactions(account.HashedId, fromDate, toDate, "userRef"));
 
             var topUpTotal = viewModel.Data.SubTransactions.Sum(x => x.TopUp);
 

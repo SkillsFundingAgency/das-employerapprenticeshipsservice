@@ -28,6 +28,15 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
             await ClearFinancialDb();
         }
 
+        public async Task<int> GetNextAccountId()
+        {
+            var result = await _employerFinanceDbContext.Value.Database.Connection.QueryAsync<int>(
+                sql: "SELECT MAX(AccountId) FROM [employer_financial].LevyDeclaration",
+                transaction: _employerFinanceDbContext.Value.Database.CurrentTransaction.UnderlyingTransaction);
+
+            return result.First();
+        }
+
         public async Task SetTransactionLineDateCreatedToTransactionDate(IEnumerable<long> submissionIds)
         {
             var ids = submissionIds as long[] ?? submissionIds.ToArray();

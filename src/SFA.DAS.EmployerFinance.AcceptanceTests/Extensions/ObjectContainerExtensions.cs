@@ -14,6 +14,7 @@ using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.UnitOfWork;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
@@ -25,6 +26,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             //objectContainer.RegisterInstanceAs(container.GetInstance<EAS.Infrastructure.Data.EmployerAccountsDbContext>());
             //objectContainer.RegisterInstanceAs(container.GetInstance<EAS.Infrastructure.Data.EmployerFinanceDbContext>());
 
+            objectContainer.RegisterInstanceAs(container.GetInstance<IUnitOfWorkManager>());
             objectContainer.RegisterInstanceAs(container.GetInstance<IHashingService>());
             objectContainer.RegisterInstanceAs(container.GetInstance<IMediator>());
             //objectContainer.RegisterInstanceAs(container.GetInstance<IPublicHashingService>());
@@ -34,7 +36,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             objectContainer.RegisterInstanceAs(new Mock<IApprenticeshipLevyApiClient>());
             objectContainer.RegisterInstanceAs(new Mock<IAuthenticationService>());
             objectContainer.RegisterInstanceAs(new Mock<ICurrentDateTime>());
-            objectContainer.RegisterInstanceAs(new Mock<ICurrentDateTime>());
+            //objectContainer.RegisterInstanceAs(new Mock<ICurrentDateTime>());
             //objectContainer.RegisterInstanceAs(new Mock<ICookieStorageService<FlashMessageViewModel>>());
             //objectContainer.RegisterInstanceAs(new Mock<ICookieStorageService<EmployerAccountData>>());
             objectContainer.RegisterInstanceAs(new Mock<IAuthorizationService>());

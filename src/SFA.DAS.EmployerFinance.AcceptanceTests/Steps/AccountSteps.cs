@@ -1,4 +1,5 @@
-﻿using BoDi;
+﻿using System.Threading.Tasks;
+using BoDi;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
 using SFA.DAS.EmployerFinance.Models.Account;
 using TechTalk.SpecFlow;
@@ -17,10 +18,10 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             _objectContext = objectContext;
         }
 
-        [Given(@"We have an account with id (.*)")]
-        public Account GivenWeHaveAnAccountWithId(int accountId)
+        [Given(@"We have an account")]
+        public async Task<Account> GivenWeHaveAnAccount()
         {
-            return _objectContext.CreateAccount(accountId, _objectContainer);
+            return await _objectContext.CreateAccount(_objectContainer);
         }
     }
 }

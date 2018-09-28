@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NServiceBus;
+using SFA.DAS.EmployerFinance.Models.Account;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 {
@@ -10,15 +11,12 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         private readonly Dictionary<string, object> _entities = new Dictionary<string, object>();
         private readonly Dictionary<int, object> _entitiesId = new Dictionary<int, object>();
 
-        /// <summary>
-        /// The endpoint handling the finance worker messages
-        /// </summary>
-        public IEndpointInstance FinanceJobsServiceBusEndpoint { get; set; }
-
         ///// <summary>
         ///// The endpoint to publish finance worker messages
         ///// </summary>
         public IEndpointInstance InitiateJobServiceBusEndpoint { get; set; }
+
+        public Account Account { get; set; }
 
         public Dictionary<string, T> GetAll<T>()
         {
@@ -30,6 +28,18 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             _entities.Add(key, value);
         }
 
+        
+        public T FirstOrDefault<T>()
+        {
+            try
+            {
+                return (T)_entitiesId.FirstOrDefault(e => e.Value.GetType() == typeof(T)).Value;
+            }
+            catch (Exception)
+            {
+                return default(T);
+            }
+        }
 
         public T Get<T>(int key)
         {
@@ -43,9 +53,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             }
         }
 
-        public void Set<T>(int key, T value)
+        public T Set<T>(int key, T value)
         {
             _entitiesId.Add(key, value);
+
+            return value;
         }
     }
 }

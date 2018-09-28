@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using BoDi;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Models;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Steps;
@@ -34,9 +35,10 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             return objectContainer;
         }
 
-        public static Account CreateAccount(this ObjectContext objectContext, int accountId, IObjectContainer objectContainer)
+        public static async Task<Account> CreateAccount(this ObjectContext objectContext, IObjectContainer objectContainer)
         {
             var hashingService = objectContainer.Resolve<IHashingService>();
+            var accountId = await objectContainer.Resolve<ITestTransactionRepository>().GetNextAccountId();
 
             var account = new Account
             {
@@ -44,9 +46,9 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
                 HashedId = hashingService.HashValue(accountId)
             };
 
+            objectContext.Set(accountId, account).SetupAuthorizedUser(objectContainer);
             objectContainer.SetupAuthorizedUser(account);
 
-            objectContext.Set(accountId, account);
             return account;
         }
 

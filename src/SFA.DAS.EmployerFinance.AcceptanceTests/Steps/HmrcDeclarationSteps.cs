@@ -19,15 +19,17 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
     [Binding]
     public class HmrcDeclarationSteps : TechTalk.SpecFlow.Steps
     {
-        public const int StepTimeout = 50000;
+        public const int StepTimeout = 10000;
 
         private readonly IObjectContainer _objectContainer;
         private readonly ObjectContext _objectContext;
+        private readonly UnitOfWorkManagerTestHelper _unitOfWorkManagerTestHelper;
 
-        public HmrcDeclarationSteps(IObjectContainer objectContainer, ObjectContext objectContext)
+        public HmrcDeclarationSteps(IObjectContainer objectContainer, ObjectContext objectContext, UnitOfWorkManagerTestHelper unitOfWorkManagerTestHelper)
         {
             _objectContainer = objectContainer;
             _objectContext = objectContext;
+            _unitOfWorkManagerTestHelper = unitOfWorkManagerTestHelper;
         }
 
         [Given(@"Hmrc return the following submissions for paye scheme ([^ ]*)")]
@@ -39,35 +41,45 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             SetupLevyDeclarations(empRef, table);
         }
 
-        [When(@"we refresh levy data for account id ([^ ]*) paye scheme ([^ ]*)")]
-        public async Task WhenWeRefreshLevyData(int accountId, string payeScheme)
+        private Task<TOperationResultType> Run<TOperationResultType>(Func<Task<TOperationResultType>> operation)
         {
-            var account = _objectContext.Get<Account>(accountId);
-
-            await _objectContext.InitiateJobServiceBusEndpoint.Send(new ImportAccountLevyDeclarationsCommand
-            {
-                AccountId = account.Id,
-                PayeRef = payeScheme
-            }).ConfigureAwait(false);
-
-            await _objectContainer.Resolve<ITransactionRepository>()
-                .WaitForTransactionLinesInDatabase(account, StepTimeout).ConfigureAwait(false);
+            return _unitOfWorkManagerTestHelper.RunInIsolatedTransactionAsync(operation);
         }
 
-        [When(@"All the transaction lines in this scenario have had there transaction date updated to their created date")]
+        private Task Run(Func<Task> operation)
+        {
+            return _unitOfWorkManagerTestHelper.RunInIsolatedTransactionAsync(operation);
+        }
+
+        [When(@"we refresh levy data for paye scheme ([^ ]*)")]
+        public Task WhenWeRefreshLevyData(string payeScheme)
+        {
+            var account = _objectContext.FirstOrDefault<Account>();
+
+            return Task.WhenAll(
+                Run(() => _objectContext.InitiateJobServiceBusEndpoint.Send(new ImportAccountLevyDeclarationsCommand
+                {
+                    AccountId = account.Id,
+                    PayeRef = payeScheme
+                })), 
+
+                Run(() => _objectContainer.Resolve<ITransactionRepository>().WaitForTransactionLinesInDatabase(account, StepTimeout)));
+        }
+
+        [When(@"all the transaction lines in this scenario have had there transaction date updated to their created date")]
         public async Task WhenScenarioTransactionLinesTransactionDateHaveBeenUpdatedToTheirCreatedDate()
         {
             var transactionRepository = _objectContainer.Resolve<ITestTransactionRepository>();
-            await transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
-                .ProcessingSubmissionIds());
+            await Run(() => transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
+                .ProcessingSubmissionIds()));
         }
 
-        [When(@"All the transaction lines in this scenario have had there transaction date updated to the specified created date")]
+        [When(@"all the transaction lines in this scenario have had there transaction date updated to the specified created date")]
         public void WhenAllTheTransactionLinesInThisScenarioHaveHadThereTransactionDateUpdatedToTheSpecifiedCreatedDate()
         {
             var transactionRepository = _objectContainer.Resolve<ITestTransactionRepository>();
-            transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
-                .ProcessingSubmissionIdsDictionary());
+            Run(() => transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
+                .ProcessingSubmissionIdsDictionary()));
         }
 
         private void SetPayeSchemeRef(string empRef)

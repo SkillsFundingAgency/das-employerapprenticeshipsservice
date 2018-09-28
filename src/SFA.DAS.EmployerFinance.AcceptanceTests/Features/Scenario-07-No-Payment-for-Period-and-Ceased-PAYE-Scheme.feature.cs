@@ -64,14 +64,14 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Sceanrio-01-Balance-should-remain-if-no-payment-occurs")]
-        public virtual void Sceanrio_01_Balance_Should_Remain_If_No_Payment_Occurs()
+        [NUnit.Framework.DescriptionAttribute("Balance-should-remain-if-no-payment-occurs")]
+        public virtual void Balance_Should_Remain_If_No_Payment_Occurs()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sceanrio-01-Balance-should-remain-if-no-payment-occurs", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Balance-should-remain-if-no-payment-occurs", ((string[])(null)));
 #line 3
 this.ScenarioSetup(scenarioInfo);
 #line 4
- testRunner.Given("We have an account with id 25", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("We have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
@@ -109,26 +109,25 @@ this.ScenarioSetup(scenarioInfo);
 #line 5
  testRunner.And("Hmrc return the following submissions for paye scheme 123/ABC", ((string)(null)), table1, "And ");
 #line 9
- testRunner.When("we refresh levy data for account id 25 paye scheme 123/ABC", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("we refresh levy data for paye scheme 123/ABC", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 10
- testRunner.And("All the transaction lines in this scenario have had there transaction date update" +
+ testRunner.And("all the transaction lines in this scenario have had there transaction date update" +
                     "d to the specified created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.Then("account with id 25 should see a level 1 screen with a balance of 1100 on the 06/2" +
-                    "017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("we should see a level 1 screen with a balance of 1100 on the 06/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Sceanrio-02-Balance-should-not-be-affected-by-past-non-payment-months")]
-        public virtual void Sceanrio_02_Balance_Should_Not_Be_Affected_By_Past_Non_Payment_Months()
+        [NUnit.Framework.DescriptionAttribute("Balance-should-not-be-affected-by-past-non-payment-months")]
+        public virtual void Balance_Should_Not_Be_Affected_By_Past_Non_Payment_Months()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sceanrio-02-Balance-should-not-be-affected-by-past-non-payment-months", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Balance-should-not-be-affected-by-past-non-payment-months", ((string[])(null)));
 #line 14
 this.ScenarioSetup(scenarioInfo);
 #line 15
- testRunner.Given("We have an account with id 25", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("We have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
@@ -177,13 +176,12 @@ this.ScenarioSetup(scenarioInfo);
 #line 16
  testRunner.And("Hmrc return the following submissions for paye scheme 123/ABC", ((string)(null)), table2, "And ");
 #line 21
- testRunner.When("we refresh levy data for account id 25 paye scheme 123/ABC", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("we refresh levy data for paye scheme 123/ABC", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 22
- testRunner.And("All the transaction lines in this scenario have had there transaction date update" +
+ testRunner.And("all the transaction lines in this scenario have had there transaction date update" +
                     "d to the specified created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 23
- testRunner.Then("account with id 25 should see a level 1 screen with a balance of 2200 on the 06/2" +
-                    "017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("we should see a level 1 screen with a balance of 2200 on the 06/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

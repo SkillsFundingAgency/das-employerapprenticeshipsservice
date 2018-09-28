@@ -64,14 +64,14 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Sceanrio-01-Inactivity-period")]
-        public virtual void Sceanrio_01_Inactivity_Period()
+        [NUnit.Framework.DescriptionAttribute("Inactivity-period")]
+        public virtual void Inactivity_Period()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sceanrio-01-Inactivity-period", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Inactivity-period", ((string[])(null)));
 #line 3
 this.ScenarioSetup(scenarioInfo);
 #line 5
- testRunner.Given("We have an account with id 25", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("We have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
@@ -132,22 +132,18 @@ this.ScenarioSetup(scenarioInfo);
 #line 6
  testRunner.And("Hmrc return the following submissions for paye scheme 123/ABC", ((string)(null)), table1, "And ");
 #line 14
- testRunner.When("we refresh levy data for account id 25 paye scheme 123/ABC", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("we refresh levy data for paye scheme 123/ABC", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 15
- testRunner.And("All the transaction lines in this scenario have had there transaction date update" +
+ testRunner.And("all the transaction lines in this scenario have had there transaction date update" +
                     "d to the specified created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 16
- testRunner.Then("account with id 25 should see a level 1 screen with a balance of 63250 on the 12/" +
-                    "2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("we should see a level 1 screen with a balance of 63250 on the 12/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 17
- testRunner.And("account with id 25 should see a level 1 screen with a total levy of 8250 on the 1" +
-                    "1/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("we should see a level 1 screen with a total levy of 8250 on the 11/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 18
- testRunner.And("account with id 25 should see a level 2 screen with a levy declared of 7500 on th" +
-                    "e 11/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("we should see a level 2 screen with a levy declared of 7500 on the 11/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 19
- testRunner.And("account with id 25 should see a level 2 screen with a top up of 750 on the 11/201" +
-                    "7", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("we should see a level 2 screen with a top up of 750 on the 11/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }

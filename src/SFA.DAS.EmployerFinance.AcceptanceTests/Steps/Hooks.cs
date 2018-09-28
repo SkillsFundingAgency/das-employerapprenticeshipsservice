@@ -25,16 +25,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         private readonly ObjectContext _objectContext;
         private readonly IObjectContainer _objectContainer;
 
-        private IEndpointInstance _jobsServiceBusEndpoint;
-
         private IEndpointInstance _initiateJobServiceBusEndpoint;
 
         static Hooks()
         {
             Container =  IoC.Initialize();
-
-            Container
-                .InitialiseAndUseEmployerFinanceDbContexts();
         }
 
         public Hooks(IObjectContainer objectContainer, ObjectContext objectContext)
@@ -66,13 +61,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [AfterTestRun]
         public static void AfterTestRun()
         {
-            Container.FinalizeTransactions();
             Container.Dispose();
         }
 
         private void StopNServiceBusEndPoints()
         {
-            StopFinanceJobsEndPoint();
             StopInitiateJobServiceBusEndpoint();
         }
 
@@ -83,34 +76,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 
         private async Task StartNServiceBusEndPoints()
         {
-            await StartFinanceJobsEndPoint();
             await StartInitiateJobServiceBusEndpoint();
-        }
-
-        private async Task StartFinanceJobsEndPoint()
-        {
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests.Steps.MessageHandlers")
-                .UseAzureServiceBusTransport(() => Container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString)
-                .UseErrorQueue()
-                .UseInstallers()
-                .UseLicense(Container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense.HtmlDecode())
-                .UseSqlServerPersistence(() => Container.GetInstance<DbConnection>())
-                .UseNewtonsoftJsonSerializer()
-                .UseNLogFactory()
-                .UseOutbox()
-                .UseStructureMapBuilder(Container)
-                .UseUnitOfWork();
-
-            endpointConfiguration.PurgeOnStartup(true);
-
-            _jobsServiceBusEndpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
-
-            _objectContext.FinanceJobsServiceBusEndpoint = _jobsServiceBusEndpoint;
-        }
-
-        private void StopFinanceJobsEndPoint()
-        {
-            _jobsServiceBusEndpoint?.Stop().GetAwaiter().GetResult();
         }
 
         private async Task StartInitiateJobServiceBusEndpoint()
@@ -130,6 +96,10 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             _initiateJobServiceBusEndpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             _objectContext.InitiateJobServiceBusEndpoint = _initiateJobServiceBusEndpoint;
+            Container.Configure(c =>
+            {
+                c.For<IMessageSession>().Use(_initiateJobServiceBusEndpoint);
+            });
        }
 
         private void StopInitiateJobServiceBusEndpoint()

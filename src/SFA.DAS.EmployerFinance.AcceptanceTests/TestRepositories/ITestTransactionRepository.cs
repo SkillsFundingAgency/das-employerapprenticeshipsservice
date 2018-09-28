@@ -11,5 +11,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
         Task SetTransactionLineDateCreatedToTransactionDate(IDictionary<long, DateTime?> submissionIds);
 
         Task InitialiseDatabaseData();
+
+        Task<int> GetNextAccountId();
     }
 }

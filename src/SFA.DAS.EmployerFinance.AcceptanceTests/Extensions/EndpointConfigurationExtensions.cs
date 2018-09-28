@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
                 r.RouteToEndpoint(
                     typeof(ImportLevyDeclarationsCommand).Assembly,
                     typeof(ImportLevyDeclarationsCommand).Namespace,
-                    "SFA.DAS.EmployerFinance.AcceptanceTests.Steps.MessageHandlers");
+                    "SFA.DAS.EmployerFinance.AcceptanceTests.Steps.Jobs");
             });
 
             return config;
