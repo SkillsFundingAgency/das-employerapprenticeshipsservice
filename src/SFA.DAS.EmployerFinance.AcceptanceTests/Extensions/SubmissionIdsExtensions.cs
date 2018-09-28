@@ -22,6 +22,5 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 
             return table;
         }
-
     }
 }

@@ -3,6 +3,7 @@ using NServiceBus;
 using SFA.DAS.Configuration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NServiceBus.AzureServiceBus;
+using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 {
@@ -21,6 +22,15 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             });
 
             return config;
+        }
+
+        public static IEndpointInstance UseEndpoint(this IEndpointInstance endpointInstance,
+            IContainer container)
+        {
+            container.Configure(c => { c.For<IEndpointInstance>().Use(endpointInstance); });
+            container.Configure(c => { c.For<IMessageSession>().Use(endpointInstance); });
+
+            return endpointInstance;
         }
     }
 }

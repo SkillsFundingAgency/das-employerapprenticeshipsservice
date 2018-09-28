@@ -12,11 +12,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
         public static Account SetupAuthorizedUser(this Account account, IObjectContainer objectContainer)
         {
             objectContainer.Resolve<Mock<IMembershipRepository>>().Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync((string hashedAccountId, string externalUserId) => new MembershipView
-                {
-                    //HashedAccountId = hashedAccountId,
-                    //UserRef = externalUserId
-                });
+                .ReturnsAsync((string hashedAccountId, string externalUserId) => new MembershipView());
 
             objectContainer.Resolve<Mock<IEmployerAccountRepository>>()
                 .Setup(x => x.GetAccountByHashedId(It.IsAny<string>()))

@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using BoDi;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
-using SFA.DAS.EmployerFinance.Models.Account;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
@@ -11,17 +11,25 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
     {
         private readonly IObjectContainer _objectContainer;
         private readonly ObjectContext _objectContext;
+        private readonly UnitOfWorkManagerTestHelper _unitOfWorkManagerTestHelper;
 
-        public AccountSteps(IObjectContainer objectContainer, ObjectContext objectContext)
+        public AccountSteps(IObjectContainer objectContainer, ObjectContext objectContext, UnitOfWorkManagerTestHelper unitOfWorkManagerTestHelper)
         {
             _objectContainer = objectContainer;
             _objectContext = objectContext;
+            _unitOfWorkManagerTestHelper = unitOfWorkManagerTestHelper;
         }
 
         [Given(@"We have an account")]
-        public async Task<Account> GivenWeHaveAnAccount()
+        public async Task GivenWeHaveAnAccount()
         {
-            return await _objectContext.CreateAccount(_objectContainer);
+            await Run(() => _objectContext.CreateAccount(_objectContainer));
         }
+
+        private Task Run(Func<Task> operation)
+        {
+            return _unitOfWorkManagerTestHelper.RunInIsolatedTransactionAsync(operation);
+        }
+
     }
 }

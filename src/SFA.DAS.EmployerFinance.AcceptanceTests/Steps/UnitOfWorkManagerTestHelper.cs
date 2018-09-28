@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BoDi;
 using SFA.DAS.UnitOfWork;
@@ -18,60 +16,59 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 
         public async Task RunInIsolatedTransactionAsync(Func<Task> operation)
         {
-            var unitOfWorkManagers = _objectContainer.Resolve<IEnumerable<IUnitOfWorkManager>>().ToArray();
+            await operation();
+            //var unitOfWorkManager = _objectContainer.Resolve<IUnitOfWorkManager>();
 
-            await StartAllTransactions(unitOfWorkManagers);
-            try
-            {
-                await operation();
-                await EndAllTransactions(unitOfWorkManagers);
-            }
-            catch (Exception exception)
-            {
-                await EndAllTransactions(unitOfWorkManagers, exception);
-                throw;
-            }
+            //try
+            //{
+            //    await StartAllTransactions(unitOfWorkManager);
+
+            //}
+            //catch (Exception e)
+            //{
+            //    // TODO IT BREAKS HERE SECOND TIME
+            //    Console.WriteLine(e);
+            //    throw;
+            //}
+            //try
+            //{
+            //    await operation();
+            //    await EndAllTransactions(unitOfWorkManager);
+            //}
+            //catch (Exception exception)
+            //{
+            //    await EndAllTransactions(unitOfWorkManager, exception);
+            //    throw;
+            //}
         }
 
         public async Task<TOperationResponseType> RunInIsolatedTransactionAsync<TOperationResponseType>(Func<Task<TOperationResponseType>> operation)
         {
-            var unitOfWorkManagers = _objectContainer.Resolve<IEnumerable<IUnitOfWorkManager>>().ToArray();
+            return await operation();
+            //var unitOfWorkManager = _objectContainer.Resolve<IUnitOfWorkManager>();
 
-            await StartAllTransactions(unitOfWorkManagers);
-            try
-            {
-                var response = await operation();
-                await EndAllTransactions(unitOfWorkManagers);
-                return response;
-            }
-            catch (Exception exception)
-            {
-                await EndAllTransactions(unitOfWorkManagers, exception);
-                throw;
-            }
+            //await StartAllTransactions(unitOfWorkManager);
+            //try
+            //{
+            //    var response = await operation();
+            //    await EndAllTransactions(unitOfWorkManager);
+            //    return response;
+            //}
+            //catch (Exception exception)
+            //{
+            //    await EndAllTransactions(unitOfWorkManager, exception);
+            //    throw;
+            //}
         }
 
-        private Task StartAllTransactions(IEnumerable<IUnitOfWorkManager> unitOfWorkManagers)
+        public Task StartAllTransactions(IUnitOfWorkManager unitOfWorkManager)
         {
-            List<Task> startTranTasks = new List<Task>();
-
-            foreach (var unitOfWork in unitOfWorkManagers)
-            {
-                startTranTasks.Add(unitOfWork.BeginAsync());
-            }
-
-            return Task.WhenAll(startTranTasks);
+            return unitOfWorkManager.BeginAsync();
         }
 
-        private Task EndAllTransactions(IEnumerable<IUnitOfWorkManager> unitOfWorkManagers, Exception exception = null)
+        public Task EndAllTransactions(IUnitOfWorkManager unitOfWorkManager, Exception exception = null)
         {
-            List<Task> endTranTasks = new List<Task>();
-            foreach (var unitOfWork in unitOfWorkManagers)
-            {
-                endTranTasks.Add(unitOfWork.EndAsync(exception));
-            }
-
-            return Task.WhenAll(endTranTasks);
+            return unitOfWorkManager.EndAsync(exception);
         }
     }
 }

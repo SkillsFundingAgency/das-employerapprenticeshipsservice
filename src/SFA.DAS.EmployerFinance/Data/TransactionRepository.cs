@@ -47,11 +47,20 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@accountId", accountId, DbType.Int64);
             parameters.Add("@fromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day), DbType.DateTime);
 
-            return _db.Value.Database.Connection.ExecuteScalarAsync<int>(
-                sql: "[employer_financial].[GetPreviousTransactionsCount]",
-                param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.StoredProcedure);
+            try
+            {
+                return _db.Value.Database.Connection.ExecuteScalarAsync<int>(
+                    sql: "[employer_financial].[GetPreviousTransactionsCount]",
+                    param: parameters,
+                    transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                    commandType: CommandType.StoredProcedure);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task<List<TransactionLine>> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)

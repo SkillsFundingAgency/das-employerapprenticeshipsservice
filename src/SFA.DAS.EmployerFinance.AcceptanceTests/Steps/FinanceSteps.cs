@@ -23,11 +23,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             _unitOfWorkManagerTestHelper = unitOfWorkManagerTestHelper;
         }
 
-        private Task<TOperationResultType> Run<TOperationResultType>(Func<Task<TOperationResultType>> operation)
-        {
-            return _unitOfWorkManagerTestHelper.RunInIsolatedTransactionAsync(operation);
-        }
-
         [Then(@"we should see a level 1 screen with a balance of (.*) on the (.*)/(.*)")]
         public async Task ThenLevel1HasRowWithCorrectBalance(int balance, int month, int year)
         {
@@ -41,9 +36,10 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [Then(@"we should see a level 1 screen with a total levy of (.*) on the (.*)/(.*)")]
         public async Task ThenLevel1HasRowWithCorrectTotalLevy(int totalLevy, int month, int year)
         {
-            var account = _objectContext.Account;
+            var account = _objectContext.FirstOrDefault<Account>();
 
             var actual = await Run(() => _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef"));
+
             Assert.AreEqual(totalLevy, actual.Data.Model.Data.TransactionLines.Sum(t => t.Amount));
         }
 
@@ -73,6 +69,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             var topUpTotal = viewModel.Data.SubTransactions.Sum(x => x.TopUp);
 
             Assert.AreEqual(topUp, topUpTotal);
+        }
+
+        private Task<TOperationResultType> Run<TOperationResultType>(Func<Task<TOperationResultType>> operation)
+        {
+            return _unitOfWorkManagerTestHelper.RunInIsolatedTransactionAsync(operation);
         }
     }
 }

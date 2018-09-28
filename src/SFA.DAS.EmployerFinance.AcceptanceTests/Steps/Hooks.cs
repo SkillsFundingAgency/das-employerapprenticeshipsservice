@@ -12,6 +12,7 @@ using TechTalk.SpecFlow;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.SqlServer;
+using SFA.DAS.UnitOfWork;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using IoC = SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution.IoC;
 
@@ -20,89 +21,86 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
     [Binding]
     public class Hooks
     {
-        private static readonly IContainer Container;
-
-        private readonly ObjectContext _objectContext;
+        private static IContainer _container;
+        private static IEndpointInstance _initiateJobServiceBusEndpoint;
+        private static IContainer _nestedContainer;
         private readonly IObjectContainer _objectContainer;
-
-        private IEndpointInstance _initiateJobServiceBusEndpoint;
-
-        static Hooks()
+        private UnitOfWorkManagerTestHelper _helper;
+        public Hooks(IObjectContainer objectContainer)
         {
-            Container =  IoC.Initialize();
+            _objectContainer = objectContainer;
+            
         }
 
-        public Hooks(IObjectContainer objectContainer, ObjectContext objectContext)
+        [BeforeTestRun]
+        public static async Task BeforeTestRun()
         {
-            _objectContext = objectContext;
-            _objectContainer = objectContainer;
+
+            _container = IoC.Initialize();
+
+            await  StartNServiceBusEndPoints();
         }
 
         [BeforeScenario]
         public async Task BeforeScenario()
         {
-            _objectContainer
-                .AddImplementationsRequiredInCommonSteps(Container)
-                .AddEmployerFinanceImplementations(Container)
-                .SetupEatOrchestrator(Container)
-                .SetupEatController(Container)
-                .InitialiseDatabaseData();
 
-            await StartNServiceBusEndPoints();
+            _nestedContainer = _container.GetNestedContainer();
+            
+            _objectContainer
+                .AddRequiredImplementations(_nestedContainer)
+                .SetupEatOrchestrator(_nestedContainer)
+                .SetupEatController(_nestedContainer);
+
+            _helper = new UnitOfWorkManagerTestHelper(_objectContainer);
+
+            await _helper.StartAllTransactions(ResolveIUnitOfWorkManager());
+        }
+
+        private IUnitOfWorkManager ResolveIUnitOfWorkManager()
+        {
+            return _objectContainer.Resolve<IUnitOfWorkManager>();
         }
 
         [AfterScenario]
-        public void AfterScenario()
+        public async Task AfterScenario()
         {
-            StopNServiceBusEndPoints();
-            DisposeContainers();
+            await _helper.EndAllTransactions(ResolveIUnitOfWorkManager());
+
+            _nestedContainer.Dispose();
+            _objectContainer.Dispose();
         }
 
         [AfterTestRun]
         public static void AfterTestRun()
         {
-            Container.Dispose();
+            StopNServiceBusEndPoints();
+            _container.Dispose();
         }
 
-        private void StopNServiceBusEndPoints()
-        {
-            StopInitiateJobServiceBusEndpoint();
-        }
-
-        private void DisposeContainers()
-        {
-            _objectContainer.Dispose();
-        }
-
-        private async Task StartNServiceBusEndPoints()
-        {
-            await StartInitiateJobServiceBusEndpoint();
-        }
-
-        private async Task StartInitiateJobServiceBusEndpoint()
+        private static async Task StartNServiceBusEndPoints()
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests.Steps.Jobs")
-                .UseAzureServiceBusTransport(() => Container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
+                .UseAzureServiceBusTransport(() => _container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
                 .UseErrorQueue()
                 .UseInstallers()
-                .UseLicense(Container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
-                .UseSqlServerPersistence(() => Container.GetInstance<DbConnection>())
+                .UseLicense(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
+                .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
                 .UseOutbox()
-                .UseStructureMapBuilder(Container)
+                .UseStructureMapBuilder(_container)
                 .UseUnitOfWork();
+
+            endpointConfiguration.PurgeOnStartup(true);
 
             _initiateJobServiceBusEndpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
-            _objectContext.InitiateJobServiceBusEndpoint = _initiateJobServiceBusEndpoint;
-            Container.Configure(c =>
-            {
-                c.For<IMessageSession>().Use(_initiateJobServiceBusEndpoint);
-            });
-       }
+            _initiateJobServiceBusEndpoint
+                .UseEndpoint(_container);
+        }
 
-        private void StopInitiateJobServiceBusEndpoint()
+        private static void StopNServiceBusEndPoints()
         {
             _initiateJobServiceBusEndpoint?.Stop().GetAwaiter().GetResult();
         }

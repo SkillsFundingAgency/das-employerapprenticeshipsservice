@@ -23,18 +23,13 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
             _employerFinanceDbContext = employerFinanceDbContext;
         }
 
-        public async Task InitialiseDatabaseData()
-        {
-            await ClearFinancialDb();
-        }
-
         public async Task<int> GetNextAccountId()
         {
-            var result = await _employerFinanceDbContext.Value.Database.Connection.QueryAsync<int>(
-                sql: "SELECT MAX(AccountId) FROM [employer_financial].LevyDeclaration",
+            var result = await _employerFinanceDbContext.Value.Database.Connection.QueryFirstAsync<int>(
+                sql: "SELECT COALESCE(MAX(AccountId), 0) FROM [employer_financial].LevyDeclaration",
                 transaction: _employerFinanceDbContext.Value.Database.CurrentTransaction.UnderlyingTransaction);
 
-            return result.First();
+            return result + 1;
         }
 
         public async Task SetTransactionLineDateCreatedToTransactionDate(IEnumerable<long> submissionIds)
@@ -61,17 +56,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
 
             await _employerFinanceDbContext.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[UpdateTransactionLinesDateCreated_BySubmissionId]",
-                param: parameters,
-                transaction: _employerFinanceDbContext.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.StoredProcedure);
-        }
-
-        private async Task ClearFinancialDb()
-        {
-            var parameters = new DynamicParameters();
-            parameters.Add("@INCLUDETOPUPTABLE", true, DbType.Boolean);
-            await _employerFinanceDbContext.Value.Database.Connection.ExecuteAsync(
-                sql: "[employer_financial].[Cleardown]",
                 param: parameters,
                 transaction: _employerFinanceDbContext.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);

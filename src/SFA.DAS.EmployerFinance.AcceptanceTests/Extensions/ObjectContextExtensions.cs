@@ -7,34 +7,14 @@ using BoDi;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Models;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Steps;
 using SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories;
-using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.HashingService;
-using StructureMap;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 {
     public static class ObjectContextExtensions
     {
-        public static IObjectContainer AddEmployerFinanceImplementations(this IObjectContainer objectContainer, IContainer container)
-        {
-            objectContainer.RegisterInstanceAs(container.GetInstance<EmployerAccountsDbContext>());
-            objectContainer.RegisterInstanceAs(container.GetInstance<EmployerFinanceDbContext>());
-
-            objectContainer.RegisterInstanceAs(container.GetInstance<ITransactionRepository>());
-            objectContainer.RegisterInstanceAs(container.GetInstance<ITestTransactionRepository>());
-
-            return objectContainer;
-        }
-
-        public static IObjectContainer DeleteExistingTransactions(this IObjectContainer objectContainer)
-        {
-            objectContainer.Resolve<ITestTransactionRepository>().InitialiseDatabaseData();
-
-            return objectContainer;
-        }
-
         public static async Task<Account> CreateAccount(this ObjectContext objectContext, IObjectContainer objectContainer)
         {
             var hashingService = objectContainer.Resolve<IHashingService>();
@@ -47,7 +27,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             };
 
             objectContext.Set(accountId, account).SetupAuthorizedUser(objectContainer);
-            objectContainer.SetupAuthorizedUser(account);
 
             return account;
         }
@@ -56,7 +35,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
         {
             return objectContext.GetAll<ProcessingSubmissionId>().Select(s => s.Value.SubmissionId);
         }
-
         
         public static IDictionary<long, DateTime?> ProcessingSubmissionIdsDictionary(this ObjectContext objectContext)
         {

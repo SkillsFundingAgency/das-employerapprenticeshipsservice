@@ -41,44 +41,36 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             SetupLevyDeclarations(empRef, table);
         }
 
-        private Task<TOperationResultType> Run<TOperationResultType>(Func<Task<TOperationResultType>> operation)
-        {
-            return _unitOfWorkManagerTestHelper.RunInIsolatedTransactionAsync(operation);
-        }
-
-        private Task Run(Func<Task> operation)
-        {
-            return _unitOfWorkManagerTestHelper.RunInIsolatedTransactionAsync(operation);
-        }
-
         [When(@"we refresh levy data for paye scheme ([^ ]*)")]
-        public Task WhenWeRefreshLevyData(string payeScheme)
+        public async Task WhenWeRefreshLevyData(string payeScheme)
         {
             var account = _objectContext.FirstOrDefault<Account>();
 
-            return Task.WhenAll(
-                Run(() => _objectContext.InitiateJobServiceBusEndpoint.Send(new ImportAccountLevyDeclarationsCommand
-                {
-                    AccountId = account.Id,
-                    PayeRef = payeScheme
-                })), 
+            await Run(() => _objectContainer.Resolve<IEndpointInstance>().Send(new ImportAccountLevyDeclarationsCommand
+            {
+                AccountId = account.Id,
+                PayeRef = payeScheme
+            }));
 
-                Run(() => _objectContainer.Resolve<ITransactionRepository>().WaitForTransactionLinesInDatabase(account, StepTimeout)));
+            await Run(() => _objectContainer.Resolve<ITransactionRepository>()
+                .WaitForTransactionLinesInDatabase(account, StepTimeout));
         }
 
         [When(@"all the transaction lines in this scenario have had there transaction date updated to their created date")]
         public async Task WhenScenarioTransactionLinesTransactionDateHaveBeenUpdatedToTheirCreatedDate()
         {
             var transactionRepository = _objectContainer.Resolve<ITestTransactionRepository>();
+
             await Run(() => transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
                 .ProcessingSubmissionIds()));
         }
 
         [When(@"all the transaction lines in this scenario have had there transaction date updated to the specified created date")]
-        public void WhenAllTheTransactionLinesInThisScenarioHaveHadThereTransactionDateUpdatedToTheSpecifiedCreatedDate()
+        public async Task WhenAllTheTransactionLinesInThisScenarioHaveHadThereTransactionDateUpdatedToTheSpecifiedCreatedDate()
         {
             var transactionRepository = _objectContainer.Resolve<ITestTransactionRepository>();
-            Run(() => transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
+
+            await Run(() => transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
                 .ProcessingSubmissionIdsDictionary()));
         }
 
@@ -136,6 +128,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                     It.Is<string>(s => s.Equals(empRef)), It.IsAny<DateTime?>(),
                     It.IsAny<DateTime?>()))
                 .ReturnsAsync(levyDeclarations);
+        }
+
+        private Task Run(Func<Task> operation)
+        {
+            return _unitOfWorkManagerTestHelper.RunInIsolatedTransactionAsync(operation);
         }
     }
 }
