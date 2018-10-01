@@ -11,17 +11,15 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         public string OrganisationName { get; protected set; }
         public long AgreementId { get; protected set; }
         public long LegalEntityId { get; protected set; }
-        public long AccountLegalEntityId { get; protected set; }
 
         public LegalEntityAddedMessage()
         { }
 
-        public LegalEntityAddedMessage(long accountId, long aggreementId, string organisationName, long legalEntityId, long accountLegalEntityId, string creatorName, string creatorUserRef) : base(accountId, creatorName, creatorUserRef)
+        public LegalEntityAddedMessage(long accountId, long aggreementId, string organisationName, long legalEntityId, string creatorName, string creatorUserRef) : base(accountId, creatorName, creatorUserRef)
         {
             AgreementId = aggreementId;
             OrganisationName = organisationName;
             LegalEntityId = legalEntityId;
-            AccountLegalEntityId = accountLegalEntityId;
         }
     }
 }

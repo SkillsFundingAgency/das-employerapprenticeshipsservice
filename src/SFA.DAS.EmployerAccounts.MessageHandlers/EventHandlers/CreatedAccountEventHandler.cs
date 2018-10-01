@@ -20,8 +20,6 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
             await _messagePublisher.PublishAsync(
                 new AccountCreatedMessage(
                     message.AccountId,
-                    message.PublicHashedId,
-                    message.Name,
                     message.UserName,
                     message.UserRef.ToString()));
         }

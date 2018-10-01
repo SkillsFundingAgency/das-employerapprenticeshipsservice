@@ -23,7 +23,6 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
                     message.AgreementId,
                     message.OrganisationName,
                     message.LegalEntityId,
-                    message.AccountLegalEntityId,
                     message.UserName,
                     message.UserRef.ToString()));
         }
