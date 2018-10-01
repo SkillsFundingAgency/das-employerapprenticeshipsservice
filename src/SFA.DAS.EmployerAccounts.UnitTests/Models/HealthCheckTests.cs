@@ -33,6 +33,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Models
         }
 
         [Test]
+        public Task Run_WhenRunningAHealthCheckAndAnApiExceptionIsThrown_ThenShouldSetReceivedResponseProperty()
+        {
+            return RunAsync(f => f.SetHealthCheck().SetApiRequestException(), f => f.Run(), f => f.HealthCheck.Should().Match<HealthCheck>(h => h.ReceivedResponse == null));
+        }
+
+        [Test]
         public Task Run_WhenRunningAHealthCheck_ThenShouldSetPublishedEventProperty()
         {
             return RunAsync(f => f.SetHealthCheck(), f => f.Run(), f => f.HealthCheck.Should().Match<HealthCheck>(h => h.PublishedEvent >= f.PreRun && h.PublishedEvent <= f.PostRun));
@@ -57,6 +63,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Models
         public Guid UserRef { get; set; }
         public IUnitOfWorkContext UnitOfWorkContext { get; set; }
         public HealthCheck HealthCheck { get; set; }
+        public Func<Task> ApiRequest { get; set; }
         public DateTime? PreRun { get; set; }
         public DateTime? PostRun { get; set; }
 
@@ -64,6 +71,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Models
         {
             UserRef = Guid.NewGuid();
             UnitOfWorkContext = new UnitOfWorkContext();
+            ApiRequest = () => Task.CompletedTask;
         }
 
         public HealthCheck New()
@@ -75,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Models
         {
             PreRun = DateTime.UtcNow;
 
-            await HealthCheck.Run(() => Task.CompletedTask);
+            await HealthCheck.Run(ApiRequest);
 
             PostRun = DateTime.UtcNow;
         }
@@ -92,6 +100,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Models
         public HealthCheckTestsFixture SetHealthCheck()
         {
             HealthCheck = new HealthCheckBuilder().WithId(1).Build();
+
+            return this;
+        }
+
+        public HealthCheckTestsFixture SetApiRequestException()
+        {
+            ApiRequest = () => throw new Exception();
 
             return this;
         }

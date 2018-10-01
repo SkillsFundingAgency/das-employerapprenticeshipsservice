@@ -40,12 +40,11 @@ namespace SFA.DAS.EmployerAccounts.Models
             try
             {
                 await run();
+                ReceivedResponse = DateTime.UtcNow;
             }
             catch
             {
             }
-
-            ReceivedResponse = DateTime.UtcNow;
         }
 
         private void PublishEvent()
