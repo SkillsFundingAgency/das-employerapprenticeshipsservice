@@ -271,8 +271,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         [Test]
         public async Task ThenACreatedAccountEventIsPublished()
         {
+            const string organisationName = "Org";
+
             //Arrange
-            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.Ref.ToString() };
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", OrganisationName = organisationName, ExternalUserId = _user.Ref.ToString() };
 
             //Act
             await _handler.Handle(createAccountCommand);
@@ -281,6 +283,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             var createdAccountEvent = _eventPublisher.Events.OfType<CreatedAccountEvent>().Single();
 
             createdAccountEvent.AccountId.Should().Be(ExpectedAccountId);
+            createdAccountEvent.PublicHashedId.Should().Be(ExpectedPublicHashString);
+            createdAccountEvent.Name.Should().Be(organisationName);
             createdAccountEvent.UserName.Should().Be(_user.FullName);
             createdAccountEvent.UserRef.Should().Be(_user.Ref);
         }

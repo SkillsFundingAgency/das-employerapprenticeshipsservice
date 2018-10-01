@@ -94,7 +94,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             var createdByName = caller.FullName();
             await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.Ref);
 
-            await PublishAccountCreatedMessage(createAccountResult.AccountId, createdByName, externalUserId);
+            await PublishAccountCreatedMessage(createAccountResult.AccountId, publicHashedAccountId, message.OrganisationName, createdByName, externalUserId);
 
             await NotifyAccountCreated(hashedAccountId);
 
@@ -171,11 +171,13 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             });
         }
 
-        private Task PublishAccountCreatedMessage(long accountId, string createdByName, Guid userRef)
+        private Task PublishAccountCreatedMessage(long accountId, string publicHashedId, string name, string createdByName, Guid userRef)
         {
             return _eventPublisher.Publish(new CreatedAccountEvent
-            {
+            { 
                 AccountId = accountId,
+                PublicHashedId = publicHashedId,
+                Name = name,
                 UserName = createdByName,
                 UserRef = userRef,
                 Created = DateTime.UtcNow
