@@ -22,7 +22,33 @@ namespace SFA.DAS.EmployerAccounts.Models
         {
         }
 
-        public void PublishEvent()
+        public async Task Run(Func<Task> request)
+        {
+            await SendRequest(request);
+            PublishEvent();
+        }
+
+        public void ReceiveEvent(HealthCheckEvent message)
+        {
+            ReceivedEvent = DateTime.UtcNow;
+        }
+
+        private async Task SendRequest(Func<Task> run)
+        {
+            SentRequest = DateTime.UtcNow;
+
+            try
+            {
+                await run();
+            }
+            catch
+            {
+            }
+
+            ReceivedResponse = DateTime.UtcNow;
+        }
+
+        private void PublishEvent()
         {
             PublishedEvent = DateTime.UtcNow;
 
@@ -31,20 +57,6 @@ namespace SFA.DAS.EmployerAccounts.Models
                 e.Id = Id;
                 e.Created = PublishedEvent;
             });
-        }
-
-        public async Task SendRequest(Func<Task> run)
-        {
-            SentRequest = DateTime.UtcNow;
-
-            await run();
-
-            ReceivedResponse = DateTime.UtcNow;
-        }
-
-        public void ReceiveEvent(HealthCheckEvent message)
-        {
-            ReceivedEvent = DateTime.UtcNow;
         }
     }
 }

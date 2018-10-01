@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerFinance.Queries.GetHealthCheck
 {
-    public class GetHealthCheckResponse
+    public class GetHealthCheckQueryResponse
     {
         public HealthCheckDto HealthCheck { get; set; }
     }

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Web.Mappings;
+using SFA.DAS.EmployerFinance.Mappings;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Mappings
+namespace SFA.DAS.EmployerFinance.UnitTests.Mappings
 {
     [TestFixture]
     public class WhenAutoMapping

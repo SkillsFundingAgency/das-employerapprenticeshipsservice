@@ -1,5 +1,4 @@
-﻿@using SFA.DAS.Extensions
-@model SFA.DAS.EmployerAccounts.Dtos.HealthCheckDto
+﻿@model HealthCheckViewModel
 
 <div class="grid-row">
     <div class="column-full">
@@ -9,7 +8,7 @@
         {
             @Html.AntiForgeryToken()
             <div class="form-group">
-                @if (Model != null)
+                @if (Model.HealthCheck != null)
                 {
                     <table class="table-font-xsmall">
                         <thead>
@@ -29,17 +28,17 @@
                         <tbody>
                             <tr>
                                 <td>SFA.DAS.EmployerAccounts</td>
-                                <td style="text-align: center">@Model.SentRequest.ToString("HH:mm:ss")</td>
-                                <td style="text-align: center">@(Model.ReceivedResponse?.ToString("HH:mm:ss") ?? "Failed")</td>
-                                <td style="text-align: center">@Model.PublishedEvent.ToString("HH:mm:ss")</td>
+                                <td style="text-align: center">@Model.HealthCheck.SentRequest.ToString("HH:mm:ss")</td>
+                                <td style="text-align: center">@(Model.HealthCheck.ReceivedResponse?.ToString("HH:mm:ss") ?? "Failed")</td>
+                                <td style="text-align: center">@Model.HealthCheck.PublishedEvent.ToString("HH:mm:ss")</td>
                                 <td style="text-align: center">
-                                    @if (Model.ReceivedEvent == null)
+                                    @if (Model.HealthCheck.ReceivedEvent == null)
                                     {
-                                        @:Waiting (@DateTime.UtcNow.Subtract(Model.PublishedEvent).ToHumanReadableString())
+                                        @:Waiting (@DateTime.UtcNow.Subtract(Model.HealthCheck.PublishedEvent).ToHumanReadableString())
                                     }
                                     else
                                     {
-                                        @Model.ReceivedEvent.Value.ToString("HH:mm:ss") @:(@Model.ReceivedEvent.Value.Subtract(Model.PublishedEvent).ToHumanReadableString())
+                                        @Model.HealthCheck.ReceivedEvent.Value.ToString("HH:mm:ss") @:(@Model.HealthCheck.ReceivedEvent.Value.Subtract(Model.HealthCheck.PublishedEvent).ToHumanReadableString())
                                     }
                                 </td>
                             </tr>
@@ -51,8 +50,7 @@
                     <p>A health check has not been run since the last deployment, please click the run button below.</p>
                 }
             </div>
-            
-            <button class="button" name="choice" type="submit" value="Run">Run</button>
+            <button class="button" type="submit">Run</button>
         }
     </div>
 </div>

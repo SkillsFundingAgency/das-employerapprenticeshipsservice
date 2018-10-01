@@ -1,8 +1,8 @@
 ﻿using SFA.DAS.EmployerAccounts.Dtos;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetHealthCheck
+namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
-    public class GetHealthCheckResponse
+    public class HealthCheckViewModel
     {
         public HealthCheckDto HealthCheck { get; set; }
     }

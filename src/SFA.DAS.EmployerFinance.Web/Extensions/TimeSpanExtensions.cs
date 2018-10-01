@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.Extensions
+namespace SFA.DAS.EmployerFinance.Web.Extensions
 {
     public static class TimeSpanExtensions
     {
