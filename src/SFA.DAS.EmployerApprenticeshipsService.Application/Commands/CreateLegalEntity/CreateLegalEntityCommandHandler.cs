@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
             await EvaluateEmployerLegalEntityAgreementStatus(owner.AccountId, agreementView.LegalEntityId);
 
-            await PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, ownerExternalUserId);
+            await PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, agreementView.AccountLegalentityId, ownerExternalUserId);
 
             await PublishAgreementCreatedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, ownerExternalUserId);
 
@@ -99,13 +99,14 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             };
         }
 
-        private Task PublishLegalEntityAddedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, Guid userRef)
+        private Task PublishLegalEntityAddedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, long accountLegalEntityId, Guid userRef)
         {
             return _eventPublisher.Publish(new AddedLegalEntityEvent
             {
                 AccountId = accountId,
                 AgreementId = agreementId,
                 LegalEntityId = legalEntityId,
+                AccountLegalEntityId = accountLegalEntityId,
                 OrganisationName = organisationName,
                 UserName = createdByName,
                 UserRef = userRef,

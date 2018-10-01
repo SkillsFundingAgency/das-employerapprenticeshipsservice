@@ -101,7 +101,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             await CreateAuditEntries(message, createAccountResult, hashedAccountId, userResponse.User);
 
             await PublishLegalEntityAddedMessage(createAccountResult.AccountId, createAccountResult.LegalEntityId,
-                createAccountResult.EmployerAgreementId, message.OrganisationName, createdByName, externalUserId);
+                createAccountResult.EmployerAgreementId, createAccountResult.AccountLegalEntityId, message.OrganisationName, createdByName, externalUserId);
 
             await PublishAgreementCreatedMessage(createAccountResult.AccountId, createAccountResult.LegalEntityId,
                 createAccountResult.EmployerAgreementId, message.OrganisationName, createdByName, externalUserId);
@@ -131,7 +131,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             });
         }
 
-        private Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, string organisationName, string userName, Guid userRef)
+        private Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, long accountLegalEntityId, string organisationName, string userName, Guid userRef)
         {
             return _eventPublisher.Publish(new AddedLegalEntityEvent
             {
@@ -139,6 +139,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                 LegalEntityId = legalEntityId,
                 OrganisationName = organisationName,
                 AccountId = accountId,
+                AccountLegalEntityId = accountLegalEntityId,
                 UserName = userName,
                 UserRef = userRef,
                 Created = DateTime.UtcNow
