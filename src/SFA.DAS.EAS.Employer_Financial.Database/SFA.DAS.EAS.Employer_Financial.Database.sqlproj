@@ -162,4 +162,7 @@
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\PreDeployment\AML-2671-PopulateNullApprenticeshipCourseNames.sql" />
+  </ItemGroup>
 </Project>
