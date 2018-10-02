@@ -47,6 +47,8 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@accountId", accountId, DbType.Int64);
             parameters.Add("@fromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day), DbType.DateTime);
 
+            var a = _db.Value.Database.CurrentTransaction;
+
             try
             {
                 return _db.Value.Database.Connection.ExecuteScalarAsync<int>(

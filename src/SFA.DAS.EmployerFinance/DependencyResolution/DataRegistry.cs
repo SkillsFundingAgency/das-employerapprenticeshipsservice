@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
     {
         public DataRegistry()
         {
-            For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerFinanceConfiguration>().DatabaseConnectionString)).Singleton();
+            For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerFinanceConfiguration>().DatabaseConnectionString));
             For<EmployerAccountsDbContext>().Use(c => new EmployerAccountsDbContext(c.GetInstance<EmployerAccountsConfiguration>().DatabaseConnectionString));
             For<EmployerFinanceDbContext>().Use(c => GetDbContext(c));
         }

@@ -10,6 +10,7 @@ using SFA.DAS.Extensions;
 using StructureMap;
 using TechTalk.SpecFlow;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
+using SFA.DAS.EmployerFinance.DependencyResolution;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.UnitOfWork;
@@ -46,7 +47,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
 
             _nestedContainer = _container.GetNestedContainer();
-            
+            _nestedContainer.Configure(config => config.AddRegistry<DataRegistry>());
+
             _objectContainer
                 .AddRequiredImplementations(_nestedContainer)
                 .SetupEatOrchestrator(_nestedContainer)
