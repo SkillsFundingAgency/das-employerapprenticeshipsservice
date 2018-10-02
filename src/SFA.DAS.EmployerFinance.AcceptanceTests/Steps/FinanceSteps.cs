@@ -14,13 +14,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
     {
         private readonly IObjectContainer _objectContainer;
         private readonly ObjectContext _objectContext;
-        private readonly UnitOfWorkManagerTestHelper _unitOfWorkManagerTestHelper;
 
-        public FinanceSteps(IObjectContainer objectContainer, ObjectContext objectContext, UnitOfWorkManagerTestHelper unitOfWorkManagerTestHelper)
+        public FinanceSteps(IObjectContainer objectContainer, ObjectContext objectContext)
         {
             _objectContainer = objectContainer;
             _objectContext = objectContext;
-            _unitOfWorkManagerTestHelper = unitOfWorkManagerTestHelper;
         }
 
         [Then(@"we should see a level 1 screen with a balance of (.*) on the (.*)/(.*)")]
@@ -28,7 +26,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             var account = _objectContext.FirstOrDefault<Account>();
 
-            var actual = await Run(() => _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef"));
+            var actual = await _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef");
 
             Assert.AreEqual(balance, actual.Data.Model.CurrentBalance);
         }
@@ -38,7 +36,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             var account = _objectContext.FirstOrDefault<Account>();
 
-            var actual = await Run(() => _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef"));
+            var actual = await _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef");
 
             Assert.AreEqual(totalLevy, actual.Data.Model.Data.TransactionLines.Sum(t => t.Amount));
         }
@@ -51,7 +49,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             var fromDate = new DateTime(year, month, 1);
             var toDate = new DateTime(year, month + 1, 1).AddMilliseconds(-1);
 
-            var viewModel = await Run(() => _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().FindAccountLevyDeclarationTransactions(account.HashedId, fromDate, toDate, "userRef"));
+            var viewModel = await _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().FindAccountLevyDeclarationTransactions(account.HashedId, fromDate, toDate, "userRef");
 
             Assert.AreEqual(levyDeclared, viewModel.Data.Amount - viewModel.Data.SubTransactions.Sum(x => x.TopUp));
         }
@@ -64,16 +62,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             var fromDate = new DateTime(year, month, 1);
             var toDate = new DateTime(year, month + 1, 1).AddMilliseconds(-1);
 
-            var viewModel = await Run(() => _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().FindAccountLevyDeclarationTransactions(account.HashedId, fromDate, toDate, "userRef"));
+            var viewModel = await _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().FindAccountLevyDeclarationTransactions(account.HashedId, fromDate, toDate, "userRef");
 
             var topUpTotal = viewModel.Data.SubTransactions.Sum(x => x.TopUp);
 
             Assert.AreEqual(topUp, topUpTotal);
-        }
-
-        private Task<TOperationResultType> Run<TOperationResultType>(Func<Task<TOperationResultType>> operation)
-        {
-            return _unitOfWorkManagerTestHelper.RunInIsolatedTransactionAsync(operation);
         }
     }
 }

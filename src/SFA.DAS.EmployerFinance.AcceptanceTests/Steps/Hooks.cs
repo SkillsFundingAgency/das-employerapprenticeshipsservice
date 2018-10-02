@@ -26,17 +26,14 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         private static IEndpointInstance _initiateJobServiceBusEndpoint;
         private static IContainer _nestedContainer;
         private readonly IObjectContainer _objectContainer;
-        private UnitOfWorkManagerTestHelper _helper;
         public Hooks(IObjectContainer objectContainer)
         {
             _objectContainer = objectContainer;
-            
         }
 
         [BeforeTestRun]
         public static async Task BeforeTestRun()
         {
-
             _container = IoC.Initialize();
 
             await  StartNServiceBusEndPoints();
@@ -45,7 +42,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [BeforeScenario]
         public async Task BeforeScenario()
         {
-
             _nestedContainer = _container.GetNestedContainer();
             _nestedContainer.Configure(config => config.AddRegistry<DataRegistry>());
 
@@ -54,9 +50,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 .SetupEatOrchestrator(_nestedContainer)
                 .SetupEatController(_nestedContainer);
 
-            _helper = new UnitOfWorkManagerTestHelper(_objectContainer);
-
-            await _helper.StartAllTransactions(ResolveIUnitOfWorkManager());
+            await ResolveIUnitOfWorkManager().BeginAsync();
         }
 
         private IUnitOfWorkManager ResolveIUnitOfWorkManager()
@@ -67,7 +61,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [AfterScenario]
         public async Task AfterScenario()
         {
-            await _helper.EndAllTransactions(ResolveIUnitOfWorkManager());
+            await ResolveIUnitOfWorkManager().EndAsync();
 
             _nestedContainer.Dispose();
             _objectContainer.Dispose();

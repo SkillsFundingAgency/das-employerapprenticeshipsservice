@@ -23,13 +23,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 
         private readonly IObjectContainer _objectContainer;
         private readonly ObjectContext _objectContext;
-        private readonly UnitOfWorkManagerTestHelper _unitOfWorkManagerTestHelper;
 
-        public HmrcDeclarationSteps(IObjectContainer objectContainer, ObjectContext objectContext, UnitOfWorkManagerTestHelper unitOfWorkManagerTestHelper)
+        public HmrcDeclarationSteps(IObjectContainer objectContainer, ObjectContext objectContext)
         {
             _objectContainer = objectContainer;
             _objectContext = objectContext;
-            _unitOfWorkManagerTestHelper = unitOfWorkManagerTestHelper;
         }
 
         [Given(@"Hmrc return the following submissions for paye scheme ([^ ]*)")]
@@ -46,14 +44,14 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             var account = _objectContext.FirstOrDefault<Account>();
 
-            await Run(() => _objectContainer.Resolve<IEndpointInstance>().Send(new ImportAccountLevyDeclarationsCommand
+            await _objectContainer.Resolve<IEndpointInstance>().Send(new ImportAccountLevyDeclarationsCommand
             {
                 AccountId = account.Id,
                 PayeRef = payeScheme
-            }));
+            });
 
-            await Run(() => _objectContainer.Resolve<ITransactionRepository>()
-                .WaitForTransactionLinesInDatabase(account, StepTimeout));
+            await _objectContainer.Resolve<ITransactionRepository>()
+                .WaitForTransactionLinesInDatabase(account, StepTimeout);
         }
 
         [When(@"all the transaction lines in this scenario have had there transaction date updated to their created date")]
@@ -61,8 +59,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             var transactionRepository = _objectContainer.Resolve<ITestTransactionRepository>();
 
-            await Run(() => transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
-                .ProcessingSubmissionIds()));
+            await transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
+                .ProcessingSubmissionIds());
         }
 
         [When(@"all the transaction lines in this scenario have had there transaction date updated to the specified created date")]
@@ -70,8 +68,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             var transactionRepository = _objectContainer.Resolve<ITestTransactionRepository>();
 
-            await Run(() => transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
-                .ProcessingSubmissionIdsDictionary()));
+            await transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
+                .ProcessingSubmissionIdsDictionary());
         }
 
         private void SetPayeSchemeRef(string empRef)
@@ -128,11 +126,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                     It.Is<string>(s => s.Equals(empRef)), It.IsAny<DateTime?>(),
                     It.IsAny<DateTime?>()))
                 .ReturnsAsync(levyDeclarations);
-        }
-
-        private Task Run(Func<Task> operation)
-        {
-            return _unitOfWorkManagerTestHelper.RunInIsolatedTransactionAsync(operation);
         }
     }
 }

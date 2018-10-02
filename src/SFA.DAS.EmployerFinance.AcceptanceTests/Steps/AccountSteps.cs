@@ -11,25 +11,17 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
     {
         private readonly IObjectContainer _objectContainer;
         private readonly ObjectContext _objectContext;
-        private readonly UnitOfWorkManagerTestHelper _unitOfWorkManagerTestHelper;
 
-        public AccountSteps(IObjectContainer objectContainer, ObjectContext objectContext, UnitOfWorkManagerTestHelper unitOfWorkManagerTestHelper)
+        public AccountSteps(IObjectContainer objectContainer, ObjectContext objectContext)
         {
             _objectContainer = objectContainer;
             _objectContext = objectContext;
-            _unitOfWorkManagerTestHelper = unitOfWorkManagerTestHelper;
         }
 
         [Given(@"We have an account")]
         public async Task GivenWeHaveAnAccount()
         {
-            await Run(() => _objectContext.CreateAccount(_objectContainer));
+            await _objectContext.CreateAccount(_objectContainer);
         }
-
-        private Task Run(Func<Task> operation)
-        {
-            return _unitOfWorkManagerTestHelper.RunInIsolatedTransactionAsync(operation);
-        }
-
     }
 }
