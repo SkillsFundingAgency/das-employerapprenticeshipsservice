@@ -43,7 +43,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         public async Task BeforeScenario()
         {
             _nestedContainer = _container.GetNestedContainer();
-            _nestedContainer.Configure(config => config.AddRegistry<DataRegistry>());
 
             _objectContainer
                 .AddRequiredImplementations(_nestedContainer)
