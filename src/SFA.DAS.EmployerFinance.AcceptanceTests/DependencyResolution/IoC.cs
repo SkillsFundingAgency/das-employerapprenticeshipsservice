@@ -32,6 +32,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
+                c.AddRegistry<MockRegisterations>();
             });
         }
     }

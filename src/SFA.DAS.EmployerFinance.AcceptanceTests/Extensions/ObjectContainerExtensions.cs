@@ -24,40 +24,34 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
     {
         public static IObjectContainer AddRequiredImplementations(this IObjectContainer objectContainer, IContainer nestedContainer)
         {
-            //objectContainer.RegisterInstanceAs(nestedContainer.GetInstance<DbConnection>());
-            //objectContainer.RegisterInstanceAs(nestedContainer.GetInstance<EmployerAccountsDbContext>());
-            //objectContainer.RegisterInstanceAs(nestedContainer.GetInstance<EmployerFinanceDbContext>());
-            objectContainer.RegisterInstanceAs(nestedContainer.GetInstance<IEndpointInstance>());
-            objectContainer.RegisterInstanceAs(nestedContainer.GetInstance<IEnumerable<IUnitOfWorkManager>>());
-            objectContainer.RegisterInstanceAs(nestedContainer.GetInstance<IHashingService>());
-            objectContainer.RegisterInstanceAs(nestedContainer.GetInstance<IMediator>());
-            objectContainer.RegisterInstanceAs(nestedContainer.GetInstance<ILog>());
-            objectContainer.RegisterInstanceAs(nestedContainer.GetInstance<ITestTransactionRepository>());
-            objectContainer.RegisterInstanceAs(nestedContainer.GetInstance<ITransactionRepository>());
-            objectContainer.RegisterInstanceAs(nestedContainer.GetInstance<IUnitOfWorkManager>());
+            objectContainer.Copy<IEndpointInstance>(nestedContainer);
+            objectContainer.Copy<IUnitOfWorkManager>(nestedContainer);
+            objectContainer.Copy<IHashingService>(nestedContainer);
+            objectContainer.Copy<IMediator>(nestedContainer);
+            objectContainer.Copy<ILog>(nestedContainer);
+            objectContainer.Copy<ITestTransactionRepository>(nestedContainer);
+            objectContainer.Copy<ITransactionRepository>(nestedContainer);
+            objectContainer.Copy<IUnitOfWorkManager>(nestedContainer);
 
-            objectContainer.RegisterInstanceAs(new Mock<IApprenticeshipLevyApiClient>());
-            objectContainer.RegisterInstanceAs(new Mock<IAuthenticationService>());
-            objectContainer.RegisterInstanceAs(new Mock<IAuthorizationService>());
-            objectContainer.RegisterInstanceAs(new Mock<ICurrentDateTime>());
-            objectContainer.RegisterInstanceAs(new Mock<IEmployerAccountRepository>());
-            objectContainer.RegisterInstanceAs(new Mock<IEventsApi>());
-            objectContainer.RegisterInstanceAs(new Mock<IMembershipRepository>());
-            objectContainer.RegisterInstanceAs(new Mock<IPayeRepository>());
-
-            nestedContainer.Configure(c =>
-            {
-                c.For<IApprenticeshipLevyApiClient>().Use(objectContainer.Resolve<Mock<IApprenticeshipLevyApiClient>>().Object);
-                c.For<IAuthenticationService>().Use(objectContainer.Resolve<Mock<IAuthenticationService>>().Object);
-                c.For<IAuthorizationService>().Use(objectContainer.Resolve<Mock<IAuthorizationService>>().Object);
-                c.For<ICurrentDateTime>().Use(objectContainer.Resolve<Mock<ICurrentDateTime>>().Object);
-                c.For<IEmployerAccountRepository>().Use(objectContainer.Resolve<Mock<IEmployerAccountRepository>>().Object);
-                c.For<IEventsApi>().Use(objectContainer.Resolve<Mock<IEventsApi>>().Object);
-                c.For<IMembershipRepository>().Use(objectContainer.Resolve<Mock<IMembershipRepository>>().Object);
-                c.For<IPayeRepository>().Use(objectContainer.Resolve<Mock<IPayeRepository>>().Object);
-            });
+            objectContainer.CopyMock<IApprenticeshipLevyApiClient>(nestedContainer);
+            objectContainer.CopyMock<IAuthenticationService>(nestedContainer);
+            objectContainer.CopyMock<IAuthorizationService>(nestedContainer);
+            objectContainer.CopyMock<ICurrentDateTime>(nestedContainer);
+            objectContainer.CopyMock<IEmployerAccountRepository>(nestedContainer);
+            objectContainer.CopyMock<IEventsApi>(nestedContainer);
+            objectContainer.CopyMock<IMembershipRepository>(nestedContainer);
+            objectContainer.CopyMock<IPayeRepository>(nestedContainer);
 
             return objectContainer;
+        }
+        private static void Copy<T>(this IObjectContainer objectContainer, IContainer container) where T : class
+        {
+            objectContainer.RegisterInstanceAs(container.GetInstance<T>());
+        }
+
+        private static void CopyMock<TMock>(this IObjectContainer objectContainer, IContainer container) where TMock : class
+        {
+            objectContainer.RegisterInstanceAs(container.GetInstance<IMock<TMock>>());
         }
 
         public static IObjectContainer SetupEatOrchestrator(this IObjectContainer objectContainer, IContainer container)
