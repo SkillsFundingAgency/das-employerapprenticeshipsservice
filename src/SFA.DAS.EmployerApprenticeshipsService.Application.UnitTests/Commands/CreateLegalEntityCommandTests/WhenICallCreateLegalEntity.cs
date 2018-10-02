@@ -201,15 +201,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
         {
             await _commandHandler.Handle(_command);
 
-            _eventPublisher.Verify(ep => ep.Publish(It.Is<AddedLegalEntityEvent>(cmd =>
-                cmd.AccountId.Equals(_owner.AccountId) &&
-                cmd.AgreementId.Equals(_agreementView.Id) &&
-                cmd.LegalEntityId.Equals(_agreementView.LegalEntityId) &&
-                cmd.AccountLegalEntityId.Equals(_agreementView.AccountLegalentityId) &&
-                cmd.OrganisationName.Equals(_command.Name) &&
-                cmd.UserName.Equals(_owner.FullName()) &&
-                cmd.UserRef.Equals(Guid.Parse(_owner.UserRef)))));
-            //cmd.Created.)));
+            _eventPublisher.Verify(ep => ep.Publish(It.Is<AddedLegalEntityEvent>(e =>
+                e.AccountId.Equals(_owner.AccountId) &&
+                e.AgreementId.Equals(_agreementView.Id) &&
+                e.LegalEntityId.Equals(_agreementView.LegalEntityId) &&
+                e.AccountLegalEntityId.Equals(_agreementView.AccountLegalentityId) &&
+                e.OrganisationName.Equals(_command.Name) &&
+                e.UserName.Equals(_owner.FullName()) &&
+                e.UserRef.Equals(Guid.Parse(_owner.UserRef)))));
+            //e.Created.)));
         }
     }
 }
