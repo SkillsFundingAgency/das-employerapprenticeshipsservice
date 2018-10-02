@@ -11,7 +11,7 @@
         "sharedAppServicePlanResourceGroup": {
             "type": "string"
         },
-        "ActAppServiceName": {
+        "ApiAppServiceName": {
             "type": "string"
         },
         "workerAppServiceName": {
@@ -76,7 +76,7 @@
         },
         {
             "apiVersion": "2017-08-01",
-            "name": "ActAppInsights",
+            "name": "ApiAppInsights",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -86,10 +86,10 @@
                 },
                 "parameters": {
                     "appInsightsName": {
-                        "value": "[parameters('actAppServiceName')]"
+                        "value": "[parameters('ApiAppServiceName')]"
                     },
                     "attachedService": {
-                        "value": "[parameters('actAppServiceName')]"
+                        "value": "[parameters('ApiAppServiceName')]"
                     }
                 }
             },
@@ -155,7 +155,7 @@
         },
                 {
             "apiVersion": "2017-08-01",
-            "name": "ActAppService",
+            "name": "ApiAppService",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -192,23 +192,15 @@
                                 "value": "[parameters('environmentName')]"
                             },
                             {
-                                "name": "StorageConnectionString",
-                                "value": "[parameters('storageConnectionString')]"
-                            },
-                            {
                                 "name": "InstrumentationKey",
-                                "value": "[reference('ActAppInsights').outputs.InstrumentationKey.value]"
-                            },
-                            {
-                                "name": "WEBSITE_LOAD_CERTIFICATES",
-                                "value": "[parameters('loadCertificateThumbprints')]"
+                                "value": "[reference('ApiAppInsights').outputs.InstrumentationKey.value]"
                             }
                         ]
                     }
                 }
             },
             "dependsOn": [
-                "ActAppInsights"
+                "ApiAppInsights"
             ]
         },
         {
