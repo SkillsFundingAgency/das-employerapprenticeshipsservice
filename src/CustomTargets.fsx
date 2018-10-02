@@ -114,7 +114,7 @@ Target "Build And Zip Web App Projects" ( fun _ ->
         |> MSBuildReleaseExt null properties "Build"
         |> Log "Build-Output: "
         
-         !! (@".\**\SFA.DAS.EmployerFinance.Api.csproj")
+        !! (@".\**\SFA.DAS.EmployerFinance.Api.csproj")
         |> MSBuildReleaseExt null properties "Build"
         |> Log "Build-Output: "
 )
