@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using System.Threading.Tasks;
 using BoDi;
 using NServiceBus;
@@ -60,7 +61,15 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [AfterScenario]
         public async Task AfterScenario()
         {
-            await ResolveIUnitOfWorkManager().EndAsync();
+            try
+            {
+                await ResolveIUnitOfWorkManager().EndAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
 
             _nestedContainer.Dispose();
             _objectContainer.Dispose();

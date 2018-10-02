@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
     [Binding]
     public class HmrcDeclarationSteps : TechTalk.SpecFlow.Steps
     {
-        public const int StepTimeout = 10000;
+        public const int StepTimeout = 20000;
 
         private readonly IObjectContainer _objectContainer;
         private readonly ObjectContext _objectContext;
