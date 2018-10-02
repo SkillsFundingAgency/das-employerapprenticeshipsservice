@@ -43,14 +43,14 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails
                 command.Name, 
                 command.Address);
 
-            await PublishLegalEntityUpdatedMessage(command.HashedAccountId, command.AccountLegalEntityId, command.Name, command.UserId);
+            await PublishLegalEntityUpdatedMessage(command.HashedAccountId, command.AccountLegalEntityId, command.Name, command.Address, command.UserId);
         }
 
         private async Task PublishLegalEntityUpdatedMessage(
             string hashedAccountId,
             long accountLegalEntityId,
-            string organisationName,
-            //long accountId, long agreementId, long legalEntityId,
+            string name,
+            string address,
             string userRef)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
@@ -60,16 +60,13 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails
 
             await _eventPublisher.Publish(new UpdatedLegalEntityEvent
             {
-                //AccountId = accountId,
-                //AgreementId = agreementId,
-                //LegalEntityId = legalEntityId,
-                OrganisationName = organisationName,
+                Name = name,
+                Address = address,
                 AccountLegalEntityId = accountLegalEntityId,
-                //Updated = DateTime.UtcNow,
                 UserName = updatedByName,
-                UserRef = Guid.Parse(userRef)
+                UserRef = Guid.Parse(userRef),
+                Created = DateTime.UtcNow
             });
         }
-
     }
 }

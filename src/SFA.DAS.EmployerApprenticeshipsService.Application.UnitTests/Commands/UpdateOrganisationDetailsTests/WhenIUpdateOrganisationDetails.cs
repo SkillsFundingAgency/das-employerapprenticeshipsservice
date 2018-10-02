@@ -84,7 +84,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateOrganisationDetailsTe
             await _handler.Handle(_command);
 
             _eventPublisher.Verify(ep => ep.Publish(It.Is<UpdatedLegalEntityEvent>(e =>
-                e.OrganisationName.Equals(ExpectedOrganisationName)
+                e.Name.Equals(ExpectedOrganisationName)
+                && e.Address.Equals(ExpectedOrganisationAddress)
                 && e.AccountLegalEntityId.Equals(ExpectedAccountLegalEntityId)
                 && e.UserName.Equals("Harry Potter")
                 && e.UserRef.Equals(Guid.Parse(_expectedUserId))
