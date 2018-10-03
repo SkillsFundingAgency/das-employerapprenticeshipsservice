@@ -107,16 +107,16 @@ Target "Build And Zip Web App Projects" ( fun _ ->
             |> Log "Build-Output: "
 
         !! (@".\**\SFA.DAS.EmployerAccounts.Web.csproj")
-        |> MSBuildReleaseExt null properties "Build"
-        |> Log "Build-Output: "
+            |> MSBuildReleaseExt null properties "Build"
+            |> Log "Build-Output: "
 
         !! (@".\**\SFA.DAS.EmployerAccounts.Api.csproj")
-        |> MSBuildReleaseExt null properties "Build"
-        |> Log "Build-Output: "
+            |> MSBuildReleaseExt null properties "Build"
+            |> Log "Build-Output: "
 
         !! (@".\**\SFA.DAS.EmployerFinance.Api.csproj")
-        |> MSBuildReleaseExt null properties "Build"
-        |> Log "Build-Output: "
+            |> MSBuildReleaseExt null properties "Build"
+            |> Log "Build-Output: "
 )
 
 Target "Restore Solution Packages" (fun _ ->
