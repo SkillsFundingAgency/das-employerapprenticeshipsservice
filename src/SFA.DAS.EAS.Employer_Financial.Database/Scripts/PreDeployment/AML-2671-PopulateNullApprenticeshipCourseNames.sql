@@ -44,8 +44,5 @@ SET @ErrorMsg = ERROR_NUMBER() + ERROR_LINE() + ERROR_MESSAGE();
 SET @ErrorSeverity = ERROR_SEVERITY();
 SET @ErrorState = ERROR_STATE();
 
-IF @@TRANCOUNT > 0
-    ROLLBACK TRANSACTION
-
 RAISERROR(@ErrorMsg, @ErrorSeverity, @ErrorState);
 END CATCH
