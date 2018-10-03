@@ -61,6 +61,9 @@ Target "Dotnet Restore" (fun _ ->
     DotNetCli.Restore(fun p ->
         { p with
                 Project = ".\\SFA.DAS.EAS.Account.Api.Types" })
+    DotNetCli.Restore(fun p ->
+        { p with
+                Project = ".\\SFA.DAS.EmployerAccounts.AcceptanceTests" })
 )
 
 Target "Build And Zip Webjob Host Projects" ( fun _ ->
