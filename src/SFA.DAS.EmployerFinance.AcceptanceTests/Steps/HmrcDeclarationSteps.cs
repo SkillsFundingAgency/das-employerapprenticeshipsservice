@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using BoDi;
 using HMRC.ESFA.Levy.Api.Client;
@@ -42,6 +43,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [When(@"we refresh levy data for paye scheme ([^ ]*)")]
         public async Task WhenWeRefreshLevyData(string payeScheme)
         {
+            var cancellationTokenSource = new CancellationTokenSource(StepTimeout);
+
             var account = _objectContext.FirstOrDefault<Account>();
 
             await _objectContainer.Resolve<IEndpointInstance>().Send(new ImportAccountLevyDeclarationsCommand
@@ -51,7 +54,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             });
 
             await _objectContainer.Resolve<ITransactionRepository>()
-                .WaitForTransactionLinesInDatabase(account, StepTimeout);
+                .WaitForAllTransactionLinesInDatabase(account, cancellationTokenSource.Token);
         }
 
         [When(@"all the transaction lines in this scenario have had there transaction date updated to their created date")]
