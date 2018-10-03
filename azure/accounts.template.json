@@ -168,7 +168,7 @@
                         "value": "[parameters('ApiAppServiceName')]"
                     },
                     "appServicePlanName": {
-                        "value": "[parameters('ShareAppServicePlanName')]"
+                        "value": "[parameters('SharedAppServicePlanName')]"
                     },
                     "appServicePlanResourceGroup": {
                         "value": "[parameters('SharedAppServicePlanResourceGroup')]"
