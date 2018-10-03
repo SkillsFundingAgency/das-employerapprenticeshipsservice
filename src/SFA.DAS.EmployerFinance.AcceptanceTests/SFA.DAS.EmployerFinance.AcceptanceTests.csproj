@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
@@ -42,16 +42,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.MessageHandlers\SFA.DAS.EmployerFinance.MessageHandlers.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Web\SFA.DAS.EmployerFinance.Web.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
     <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="App.config">
+      <TransformOnBuild>true</TransformOnBuild>
+    </None>
+    <None Include="App.*.config">
+      <DependentUpon>App.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
