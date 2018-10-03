@@ -60,7 +60,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             try
             {
-                //await ResolveIUnitOfWorkManager().EndAsync();
+                var x = ResolveIUnitOfWorkManager();
+                await x.EndAsync();
             }
             catch (Exception e)
             {

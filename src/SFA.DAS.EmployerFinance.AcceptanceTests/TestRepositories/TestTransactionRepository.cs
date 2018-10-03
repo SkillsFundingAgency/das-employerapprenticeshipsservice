@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -32,18 +33,34 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
             return result + 1;
         }
 
-        public async Task ClearSubmissions(IEnumerable<long> submissionIds)
+        public Task ClearSubmissions(IEnumerable<long> submissionIds)
         {
             var ids = submissionIds as long[] ?? submissionIds.ToArray();
             var idsDataTable = ids.ToDataTable();
             var parameters = new DynamicParameters();
+            parameters.Add("@submissionIds",
+                idsDataTable.AsTableValuedParameter("[employer_financial].[SubmissionIds]"));
 
-            parameters.Add("@submissionIds", idsDataTable.AsTableValuedParameter("[employer_financial].[SubmissionIds]"));
-            await _employerFinanceDbContext.Value.Database.Connection.ExecuteAsync(
-                sql: "[employer_financial].[DeleteSubmissions_BySubmissionId]",
-                param: parameters,
-                transaction: _employerFinanceDbContext.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.StoredProcedure);
+            return RunOutsideTxn(conn => 
+                conn.ExecuteAsync(
+                        sql: "[employer_financial].[DeleteSubmissions_BySubmissionId]",
+                        param: parameters,
+                        commandType: CommandType.StoredProcedure));
+        }
+
+        private async Task RunOutsideTxn(Func<SqlConnection, Task> command)
+        {
+            var connStr = _employerFinanceDbContext.Value.Database.Connection.ConnectionString;
+            var conn = new SqlConnection(connStr);
+            await conn.OpenAsync();
+            try
+            {
+                await command(conn);
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         public async Task SetTransactionLineDateCreatedToTransactionDate(IEnumerable<long> submissionIds)

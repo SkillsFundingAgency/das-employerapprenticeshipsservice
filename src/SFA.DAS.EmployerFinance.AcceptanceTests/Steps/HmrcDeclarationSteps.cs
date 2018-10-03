@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using BoDi;
@@ -43,7 +44,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [When(@"we refresh levy data for paye scheme ([^ ]*)")]
         public async Task WhenWeRefreshLevyData(string payeScheme)
         {
-            var cancellationTokenSource = new CancellationTokenSource(StepTimeout);
+            var cancellationTokenSource = new CancellationTokenSource(Debugger.IsAttached ? -1 : StepTimeout);
 
             var account = _objectContext.FirstOrDefault<Account>();
 
@@ -57,8 +58,14 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 PayeRef = payeScheme
             });
 
-            await _objectContainer.Resolve<ITransactionRepository>()
+            var allLevyDeclarationsLoaded = await _objectContainer.Resolve<ITransactionRepository>()
                 .WaitForAllTransactionLinesInDatabase(account, cancellationTokenSource.Token);
+
+            if (!allLevyDeclarationsLoaded)
+            {
+                throw new Exception(
+                    $"The levy declarations have not been completely loaded within the allowed time ({StepTimeout} msecs). Either they are still loading or something has failed.");
+            }
         }
 
         [When(@"all the transaction lines in this scenario have had there transaction date updated to their created date")]
