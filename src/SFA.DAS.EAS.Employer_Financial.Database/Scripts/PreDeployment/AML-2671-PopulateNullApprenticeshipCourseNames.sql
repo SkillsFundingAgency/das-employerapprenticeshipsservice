@@ -37,12 +37,12 @@ ORDER BY 1, 2, 3;
 
 END TRY
 BEGIN CATCH
-DECLARE @ErrorMsg nvarchar(max);
-DECLARE @ErrorSeverity INT;
-DECLARE @ErrorState INT;
-SET @ErrorMsg = ERROR_NUMBER() + ERROR_LINE() + ERROR_MESSAGE();
-SET @ErrorSeverity = ERROR_SEVERITY();
-SET @ErrorState = ERROR_STATE();
+DECLARE @ErrorMessage nvarchar(max);
+DECLARE @ErrorSeverityLevel INT;
+DECLARE @ErrorStatus INT;
+SET @ErrorMessage = ERROR_NUMBER() + ERROR_LINE() + ERROR_MESSAGE();
+SET @ErrorSeverityLevel = ERROR_SEVERITY();
+SET @ErrorStatus = ERROR_STATE();
 
 RAISERROR(@ErrorMsg, @ErrorSeverity, @ErrorState);
 END CATCH
