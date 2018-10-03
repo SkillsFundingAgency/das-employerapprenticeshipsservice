@@ -11,6 +11,9 @@
         "sharedAppServicePlanResourceGroup": {
             "type": "string"
         },
+        "ApiAppServiceName": {
+            "type": "string"
+        },
         "workerAppServiceName": {
             "type": "string"
         },
@@ -73,6 +76,27 @@
         },
         {
             "apiVersion": "2017-08-01",
+            "name": "ApiAppInsights",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/application-insights.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appInsightsName": {
+                        "value": "[parameters('ApiAppServiceName')]"
+                    },
+                    "attachedService": {
+                        "value": "[parameters('ApiAppServiceName')]"
+                    }
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "apiVersion": "2017-08-01",
             "name": "UIAppService",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -127,6 +151,56 @@
             },
             "dependsOn": [
                 "UIAppInsights"
+            ]
+        },
+                {
+            "apiVersion": "2017-08-01",
+            "name": "ApiAppService",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/app-service.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServiceName": {
+                        "value": "[parameters('SharedAppServiceName')]"
+                    },
+                    "appServicePlanName": {
+                        "value": "[parameters('ShareAppServicePlanName')]"
+                    },
+                    "appServicePlanResourceGroup": {
+                        "value": "[parameters('SharedAppServicePlanResourceGroup')]"
+                    },
+                    "appServiceAppSettings": {
+                        "value": [
+                            {
+                                "name": "LoggingRedisConnectionString",
+                                "value": "[parameters('loggingRedisConnectionString')]"
+                            },
+                            {
+                                "name": "LoggingRedisKey",
+                                "value": "[parameters('loggingRedisKey')]"
+                            },
+                            {
+                                "name": "ConfigurationStorageConnectionString",
+                                "value": "[parameters('configurationStorageConnectionString')]"
+                            },
+                            {
+                                "name": "EnvironmentName",
+                                "value": "[parameters('environmentName')]"
+                            },
+                            {
+                                "name": "InstrumentationKey",
+                                "value": "[reference('ApiAppInsights').outputs.InstrumentationKey.value]"
+                            }
+                        ]
+                    }
+                }
+            },
+            "dependsOn": [
+                "ApiAppInsights"
             ]
         },
         {
