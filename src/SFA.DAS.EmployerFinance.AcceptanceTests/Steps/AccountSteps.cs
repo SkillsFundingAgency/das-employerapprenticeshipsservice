@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BoDi;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
 using TechTalk.SpecFlow;

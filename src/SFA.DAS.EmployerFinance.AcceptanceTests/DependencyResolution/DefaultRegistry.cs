@@ -1,8 +1,11 @@
 ﻿using System.Web;
+using MediatR;
+using SFA.DAS.Authentication;
 using SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories;
-using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Web.Controllers;
 using SFA.DAS.EmployerFinance.Web.Logging;
+using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
 
@@ -15,13 +18,29 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
             For<ILoggingContext>().Use(c => HttpContext.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContext.Current)));
             For<ITestTransactionRepository>().Use<TestTransactionRepository>();
 
+            RegisterEmployerAccountTransactionsController();
+
             Scan(s =>
             {
                 s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
+        }
 
-            //For<EmployerFinanceDbContext>().Use(c => new EmployerFinanceDbContext(c.GetInstance<EmployerFinanceConfiguration>().DatabaseConnectionString));
+        private void RegisterEmployerAccountTransactionsController()
+        {
+            RegisterEmployerAccountTransactionsOrchestrator();
+
+            For<EmployerAccountTransactionsController>().Use(c => new EmployerAccountTransactionsController(
+                c.GetInstance<IAuthenticationService>(),
+                c.GetInstance<EmployerAccountTransactionsOrchestrator>()));
+        }
+
+        private void RegisterEmployerAccountTransactionsOrchestrator()
+        {
+            For<EmployerAccountTransactionsOrchestrator>().Use(c => new EmployerAccountTransactionsOrchestrator(
+                c.GetInstance<IMediator>(),
+                c.GetInstance<ICurrentDateTime>(), c.GetInstance<ILog>()));
         }
     }
 }

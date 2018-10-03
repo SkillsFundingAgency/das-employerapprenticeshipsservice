@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.Common;
-using BoDi;
+﻿using BoDi;
 using HMRC.ESFA.Levy.Api.Client;
 using MediatR;
 using Moq;
@@ -33,6 +31,9 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             objectContainer.Copy<ITransactionRepository>(nestedContainer);
             objectContainer.Copy<IUnitOfWorkManager>(nestedContainer);
 
+            objectContainer.Copy<EmployerAccountTransactionsOrchestrator>(nestedContainer);
+            objectContainer.Copy<EmployerAccountTransactionsController>(nestedContainer);
+
             objectContainer.CopyMock<IApprenticeshipLevyApiClient>(nestedContainer);
             objectContainer.CopyMock<IAuthenticationService>(nestedContainer);
             objectContainer.CopyMock<IAuthorizationService>(nestedContainer);
@@ -44,6 +45,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 
             return objectContainer;
         }
+
         private static void Copy<T>(this IObjectContainer objectContainer, IContainer container) where T : class
         {
             objectContainer.RegisterInstanceAs(container.GetInstance<T>());
@@ -52,24 +54,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
         private static void CopyMock<TMock>(this IObjectContainer objectContainer, IContainer container) where TMock : class
         {
             objectContainer.RegisterInstanceAs(container.GetInstance<IMock<TMock>>());
-        }
-
-        public static IObjectContainer SetupEatOrchestrator(this IObjectContainer objectContainer, IContainer container)
-        {
-            objectContainer.RegisterInstanceAs(new EmployerAccountTransactionsOrchestrator(
-                container.GetInstance<IMediator>(),
-                container.GetInstance<ICurrentDateTime>(), container.GetInstance<ILog>()));
-
-            return objectContainer;
-        }
-
-        public static IObjectContainer SetupEatController(this IObjectContainer objectContainer, IContainer container)
-        {
-            objectContainer.RegisterInstanceAs(new EmployerAccountTransactionsController(
-                container.GetInstance<IAuthenticationService>(),
-                container.GetInstance<EmployerAccountTransactionsOrchestrator>()));
-
-            return objectContainer;
         }
     }
 }
