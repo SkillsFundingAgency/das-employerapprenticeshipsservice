@@ -23,5 +23,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         public DateTime SignedDate { get; set; }
 
         public string ExternalUserId { get; set; }
+        public string UserId { get; set; }
     }
 }

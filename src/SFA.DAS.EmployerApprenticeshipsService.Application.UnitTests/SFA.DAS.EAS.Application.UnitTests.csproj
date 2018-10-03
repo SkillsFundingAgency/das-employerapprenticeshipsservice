@@ -314,6 +314,7 @@
   <ItemGroup>
     <Compile Include="Commands\AddPayeToAccountTests\WhenIAddPayeToAnAccount.cs" />
     <Compile Include="Commands\AddPayeToAccountTests\WhenIValidateTheCommand.cs" />
+    <Compile Include="Commands\CreateLegalEntityCommandTests\WhenICallCreateLegalEntityWhenNotAccountOwner.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementTests\GetAccountEmployerAgreementTests.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandlerTests.cs" />
