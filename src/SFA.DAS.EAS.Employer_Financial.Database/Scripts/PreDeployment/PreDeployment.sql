@@ -16,4 +16,5 @@ BEGIN
 	:r .\AML-2616-DeleteDuplicateLevyDeclarationsWithoutEmpRef.sql
 	:r .\AML-2643-DeleteDuplicateTransactionLines.sql
 	:r .\AML-2505-PopulateNullProviderNames.sql
+	:r .\AML-2671-PopulateNullApprenticeshipCourseNames.sql
 END
