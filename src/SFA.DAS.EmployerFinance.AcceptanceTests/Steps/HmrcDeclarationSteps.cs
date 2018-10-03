@@ -47,6 +47,10 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 
             var account = _objectContext.FirstOrDefault<Account>();
 
+            await _objectContainer.Resolve<ITestTransactionRepository>()
+                .ClearSubmissions(_objectContext
+                    .ProcessingSubmissionIds());
+
             await _objectContainer.Resolve<IEndpointInstance>().Send(new ImportAccountLevyDeclarationsCommand
             {
                 AccountId = account.Id,

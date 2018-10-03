@@ -32,6 +32,20 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
             return result + 1;
         }
 
+        public async Task ClearSubmissions(IEnumerable<long> submissionIds)
+        {
+            var ids = submissionIds as long[] ?? submissionIds.ToArray();
+            var idsDataTable = ids.ToDataTable();
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@submissionIds", idsDataTable.AsTableValuedParameter("[employer_financial].[SubmissionIds]"));
+            await _employerFinanceDbContext.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_financial].[DeleteSubmissions_BySubmissionId]",
+                param: parameters,
+                transaction: _employerFinanceDbContext.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
+
         public async Task SetTransactionLineDateCreatedToTransactionDate(IEnumerable<long> submissionIds)
         {
             var ids = submissionIds as long[] ?? submissionIds.ToArray();
@@ -44,7 +58,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
                 param: parameters,
                 transaction: _employerFinanceDbContext.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
-
         }
 
         public async Task SetTransactionLineDateCreatedToTransactionDate(IDictionary<long, DateTime?> submissionIds)
