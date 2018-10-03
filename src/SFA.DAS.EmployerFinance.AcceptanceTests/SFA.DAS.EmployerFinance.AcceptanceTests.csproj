@@ -2,12 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
-    <IsPackable>false</IsPackable>
-    <IsSpecFlowProject>true</IsSpecFlowProject>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-    <ShowTrace>true</ShowTrace>
-    <VerboseOutput>true</VerboseOutput>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +14,6 @@
     <PackageReference Include="SFA.DAS.Configuration" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
     <PackageReference Include="SFA.DAS.Events.Api.Types" version="2.0.0.36524" />
-    <!--<PackageReference Include="SFA.DAS.Events.Api.Client" version="1.20.0.26497" />-->
     <PackageReference Include="SFA.DAS.Sql.Client" version="1.0.0.32930" />
     <PackageReference Include="SpecFlow" Version="2.3.1" />
     <PackageReference Include="SpecFlow.MsTest" Version="2.3.1" />
@@ -29,15 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--<Reference Include="AutoMapper">
-      <HintPath>..\packages\AutoMapper.5.1.1\lib\net45\AutoMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="MediatR">
-      <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
-    </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Client">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.20.0.26497\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
-    </Reference>-->
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
     <Reference Include="System.Web" />
   </ItemGroup>
 
