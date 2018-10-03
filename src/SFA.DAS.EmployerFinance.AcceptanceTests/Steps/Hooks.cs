@@ -26,6 +26,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         private static IEndpointInstance _initiateJobServiceBusEndpoint;
         private static IContainer _nestedContainer;
         private readonly IObjectContainer _objectContainer;
+        private IUnitOfWorkManager _unitOfWorkManager;
+
         public Hooks(IObjectContainer objectContainer)
         {
             _objectContainer = objectContainer;
@@ -47,7 +49,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             _objectContainer
                 .AddRequiredImplementations(_nestedContainer);
 
-            await ResolveIUnitOfWorkManager().BeginAsync();
+            _unitOfWorkManager = ResolveIUnitOfWorkManager();
+            await _unitOfWorkManager.BeginAsync();
         }
 
         private IUnitOfWorkManager ResolveIUnitOfWorkManager()
@@ -60,8 +63,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             try
             {
-                var x = ResolveIUnitOfWorkManager();
-                await x.EndAsync();
+                await _unitOfWorkManager.EndAsync();
             }
             catch (Exception e)
             {
