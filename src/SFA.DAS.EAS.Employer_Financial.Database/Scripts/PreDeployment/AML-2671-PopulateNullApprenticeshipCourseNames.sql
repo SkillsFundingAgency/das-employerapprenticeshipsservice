@@ -19,7 +19,7 @@ FROM (
     WHERE    PathwayName IS NOT NULL
             AND    ApprenticeshipCourseName IS NOT NULL) AS T1
 WHERE T1.RowNumber = 1
-ORDER BY 1, 2, 3
+ORDER BY 1, 2, 3;
 
 		UPDATE Bad
 		SET Bad.ApprenticeshipCourseName = FW.ApprenticeshipCourseName,
@@ -30,21 +30,22 @@ ORDER BY 1, 2, 3
 		AND FW.ProgrammeType = Bad.ProgrammeType
 		AND FW.PathwayCode = Bad.PathwayCode
 		WHERE Bad.PathwayName IS NULL
-		AND Bad.ApprenticeshipCourseName IS NULL
+		AND Bad.ApprenticeshipCourseName IS NULL;
+ 
+ IF @@TRANCOUNT > 0
+ COMMIT TRANSACTION
 
 END TRY
 BEGIN CATCH
-DECLARE @ErrorMsg nvarchar(max)
+DECLARE @ErrorMsg nvarchar(max);
 DECLARE @ErrorSeverity INT;
 DECLARE @ErrorState INT;
-SET @ErrorMsg = ERROR_NUMBER() + ERROR_LINE() + ERROR_MESSAGE()
-SET @ErrorSeverity = ERROR_SEVERITY()
-SET @ErrorState = ERROR_STATE()
+SET @ErrorMsg = ERROR_NUMBER() + ERROR_LINE() + ERROR_MESSAGE();
+SET @ErrorSeverity = ERROR_SEVERITY();
+SET @ErrorState = ERROR_STATE();
 
 IF @@TRANCOUNT > 0
     ROLLBACK TRANSACTION
 
-RAISERROR(@ErrorMsg, @ErrorSeverity, @ErrorState)
+RAISERROR(@ErrorMsg, @ErrorSeverity, @ErrorState);
 END CATCH
-IF @@TRANCOUNT > 0
- COMMIT TRANSACTION
