@@ -1,7 +1,9 @@
 ﻿using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.DependencyResolution;
+using SFA.DAS.UnitOfWork;
 using SFA.DAS.UnitOfWork.EntityFramework;
 using SFA.DAS.UnitOfWork.NServiceBus;
+using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
@@ -18,7 +20,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
-                c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerFinanceDbContext>>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
@@ -29,10 +30,14 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
                 c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<MockRegisterations>();
                 c.AddRegistry<NotificationsRegistry>();
+                c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<PaymentsRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
+                c.AddRegistry<TokenServiceRegistry>();
+                c.AddRegistry<UnitOfWorkRegistry>();
+                c.AddRegistry<DefaultRegistry>();
             });
         }
     }
