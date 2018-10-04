@@ -1,4 +1,6 @@
-﻿using BoDi;
+﻿using System;
+using System.Threading.Tasks;
+using BoDi;
 using HMRC.ESFA.Levy.Api.Client;
 using MediatR;
 using Moq;
@@ -20,40 +22,64 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 {
     public static class ObjectContainerExtensions
     {
-        public static IObjectContainer AddRequiredImplementations(this IObjectContainer objectContainer, IContainer nestedContainer)
+        public static void RegisterInstances(this IObjectContainer objectContainer, IContainer container)
         {
-            objectContainer.Copy<IEndpointInstance>(nestedContainer);
-            objectContainer.Copy<IUnitOfWorkManager>(nestedContainer);
-            objectContainer.Copy<IHashingService>(nestedContainer);
-            objectContainer.Copy<IMediator>(nestedContainer);
-            objectContainer.Copy<ILog>(nestedContainer);
-            objectContainer.Copy<ITestTransactionRepository>(nestedContainer);
-            objectContainer.Copy<ITransactionRepository>(nestedContainer);
-            objectContainer.Copy<IUnitOfWorkManager>(nestedContainer);
-
-            objectContainer.Copy<EmployerAccountTransactionsOrchestrator>(nestedContainer);
-            objectContainer.Copy<EmployerAccountTransactionsController>(nestedContainer);
-
-            objectContainer.CopyMock<IApprenticeshipLevyApiClient>(nestedContainer);
-            objectContainer.CopyMock<IAuthenticationService>(nestedContainer);
-            objectContainer.CopyMock<IAuthorizationService>(nestedContainer);
-            objectContainer.CopyMock<ICurrentDateTime>(nestedContainer);
-            objectContainer.CopyMock<IEmployerAccountRepository>(nestedContainer);
-            objectContainer.CopyMock<IEventsApi>(nestedContainer);
-            objectContainer.CopyMock<IMembershipRepository>(nestedContainer);
-            objectContainer.CopyMock<IPayeRepository>(nestedContainer);
-
-            return objectContainer;
+            objectContainer.RegisterInstance<EmployerAccountTransactionsOrchestrator>(container);
+            objectContainer.RegisterInstance<EmployerAccountTransactionsController>(container);
+            objectContainer.RegisterInstance<IContainer>(container);
+            objectContainer.RegisterInstance<IHashingService>(container);
+            objectContainer.RegisterInstance<ILog>(container);
+            objectContainer.RegisterInstance<IMediator>(container);
+            objectContainer.RegisterInstance<IMessageSession>(container);
+            objectContainer.RegisterInstance<ITestTransactionRepository>(container);
+            objectContainer.RegisterInstance<ITransactionRepository>(container);
         }
 
-        private static void Copy<T>(this IObjectContainer objectContainer, IContainer container) where T : class
+        public static void RegisterMocks(this IObjectContainer objectContainer, IContainer container)
+        {
+            objectContainer.RegisterMock<IApprenticeshipLevyApiClient>(container);
+            objectContainer.RegisterMock<IAuthenticationService>(container);
+            objectContainer.RegisterMock<IAuthorizationService>(container);
+            objectContainer.RegisterMock<ICurrentDateTime>(container);
+            objectContainer.RegisterMock<IEmployerAccountRepository>(container);
+            objectContainer.RegisterMock<IEventsApi>(container);
+            objectContainer.RegisterMock<IMembershipRepository>(container);
+            objectContainer.RegisterMock<IPayeRepository>(container);
+        }
+
+        public static async Task ScopeAsync(this IObjectContainer objectContainer, Func<IObjectContainer, Task> step)
+        {
+            using (var nestedContainer = objectContainer.Resolve<IContainer>().GetNestedContainer())
+            using (var nestedObjectContainer = new ObjectContainer(objectContainer))
+            {
+                var unitOfWorkManager = nestedContainer.GetInstance<IUnitOfWorkManager>();
+                
+                nestedObjectContainer.RegisterInstances(nestedContainer);
+
+                await unitOfWorkManager.BeginAsync().ConfigureAwait(false);
+
+                try
+                {
+                    await step(nestedObjectContainer);
+                }
+                catch (Exception ex)
+                {
+                    await unitOfWorkManager.EndAsync(ex).ConfigureAwait(false);
+                    throw;
+                }
+
+                await unitOfWorkManager.EndAsync().ConfigureAwait(false);
+            }
+        }
+
+        private static void RegisterInstance<T>(this IObjectContainer objectContainer, IContainer container) where T : class
         {
             objectContainer.RegisterInstanceAs(container.GetInstance<T>());
         }
 
-        private static void CopyMock<TMock>(this IObjectContainer objectContainer, IContainer container) where TMock : class
+        private static void RegisterMock<T>(this IObjectContainer objectContainer, IContainer container) where T : class
         {
-            objectContainer.RegisterInstanceAs(container.GetInstance<IMock<TMock>>());
+            objectContainer.RegisterInstanceAs(container.GetInstance<Mock<T>>());
         }
     }
 }

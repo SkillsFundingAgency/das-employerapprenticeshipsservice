@@ -42,48 +42,54 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         }
 
         [When(@"we refresh levy data for paye scheme ([^ ]*)")]
-        public async Task WhenWeRefreshLevyData(string payeScheme)
+        public Task WhenWeRefreshLevyData(string payeScheme)
         {
-            var cancellationTokenSource = new CancellationTokenSource(Debugger.IsAttached ? -1 : StepTimeout);
-
-            var account = _objectContext.Get<Account>();
-
-            await _objectContainer.Resolve<ITestTransactionRepository>()
-                .ClearSubmissions(_objectContext
-                    .ProcessingSubmissionIds());
-
-            await _objectContainer.Resolve<IEndpointInstance>().Send(new ImportAccountLevyDeclarationsCommand
+            return _objectContainer.ScopeAsync(async c =>
             {
-                AccountId = account.Id,
-                PayeRef = payeScheme
+                var cancellationTokenSource = new CancellationTokenSource(Debugger.IsAttached ? -1 : StepTimeout);
+                var account = _objectContext.Get<Account>();
+
+                await c.Resolve<ITestTransactionRepository>()
+                    .ClearSubmissions(_objectContext.ProcessingSubmissionIds());
+
+                await c.Resolve<IMessageSession>().Send(new ImportAccountLevyDeclarationsCommand
+                {
+                    AccountId = account.Id,
+                    PayeRef = payeScheme
+                });
+
+                var allLevyDeclarationsLoaded = await c.Resolve<ITransactionRepository>()
+                    .WaitForAllTransactionLinesInDatabase(account, cancellationTokenSource.Token);
+
+                if (!allLevyDeclarationsLoaded)
+                {
+                    throw new Exception($"The levy declarations have not been completely loaded within the allowed time ({StepTimeout} msecs). Either they are still loading or something has failed.");
+                }
             });
-
-            var allLevyDeclarationsLoaded = await _objectContainer.Resolve<ITransactionRepository>()
-                .WaitForAllTransactionLinesInDatabase(account, cancellationTokenSource.Token);
-
-            if (!allLevyDeclarationsLoaded)
-            {
-                throw new Exception(
-                    $"The levy declarations have not been completely loaded within the allowed time ({StepTimeout} msecs). Either they are still loading or something has failed.");
-            }
         }
 
         [When(@"all the transaction lines in this scenario have had there transaction date updated to their created date")]
-        public async Task WhenScenarioTransactionLinesTransactionDateHaveBeenUpdatedToTheirCreatedDate()
+        public Task WhenScenarioTransactionLinesTransactionDateHaveBeenUpdatedToTheirCreatedDate()
         {
-            var transactionRepository = _objectContainer.Resolve<ITestTransactionRepository>();
+            return _objectContainer.ScopeAsync(async c =>
+            {
+                var transactionRepository = c.Resolve<ITestTransactionRepository>();
 
-            await transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
-                .ProcessingSubmissionIds());
+                await transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
+                    .ProcessingSubmissionIds());
+            });
         }
 
         [When(@"all the transaction lines in this scenario have had there transaction date updated to the specified created date")]
-        public async Task WhenAllTheTransactionLinesInThisScenarioHaveHadThereTransactionDateUpdatedToTheSpecifiedCreatedDate()
+        public Task WhenAllTheTransactionLinesInThisScenarioHaveHadThereTransactionDateUpdatedToTheSpecifiedCreatedDate()
         {
-            var transactionRepository = _objectContainer.Resolve<ITestTransactionRepository>();
+            return _objectContainer.ScopeAsync(async c =>
+            {
+                var transactionRepository = c.Resolve<ITestTransactionRepository>();
 
-            await transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
-                .ProcessingSubmissionIdsDictionary());
+                await transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
+                    .ProcessingSubmissionIdsDictionary());
+            });
         }
 
         private void SetPayeSchemeRef(string empRef)

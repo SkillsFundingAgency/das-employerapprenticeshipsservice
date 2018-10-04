@@ -18,9 +18,9 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         }
 
         [Given(@"We have an account")]
-        public async Task GivenWeHaveAnAccount()
+        public Task GivenWeHaveAnAccount()
         {
-            await _objectContext.CreateAccount(_objectContainer);
+            return _objectContainer.ScopeAsync(c => _objectContext.CreateAccount(c));
         }
     }
 }

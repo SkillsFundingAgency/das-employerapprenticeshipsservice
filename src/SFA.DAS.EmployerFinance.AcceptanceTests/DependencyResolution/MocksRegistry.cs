@@ -9,9 +9,9 @@ using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
 {
-    public class MockRegisterations : Registry
+    public class MocksRegistry : Registry
     {
-        public MockRegisterations()
+        public MocksRegistry()
         {
             AddMock<IApprenticeshipLevyApiClient>();
             AddMock<IAuthenticationService>();
@@ -23,11 +23,13 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
             AddMock<IPayeRepository>();
         }
 
-        private void AddMock<TMock>() where TMock : class
+        private void AddMock<T>() where T : class
         {
-            var mock = new Mock<TMock>();
-            For<TMock>().Use(mock.Object);
-            For<IMock<TMock>>().Use(mock);
+            var mock = new Mock<T>();
+
+            For<IMock<T>>().Use(mock);
+            For<Mock<T>>().Use(mock);
+            For<T>().Use(mock.Object);
         }
     }
 }

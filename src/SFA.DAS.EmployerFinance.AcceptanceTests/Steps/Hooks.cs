@@ -23,7 +23,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         private static IContainer _container;
         private static IEndpointInstance _endpoint;
         private readonly IObjectContainer _objectContainer;
-        private IUnitOfWorkManager _unitOfWorkManager;
 
         public Hooks(IObjectContainer objectContainer)
         {
@@ -41,34 +40,13 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [BeforeScenario]
         public void BeforeScenario()
         {
-            _nestedContainer = _container.GetNestedContainer();
-
-            _objectContainer
-                .AddRequiredImplementations(_nestedContainer);
-
-            await ResolveIUnitOfWorkManager().BeginAsync();
-        }
-
-        private IUnitOfWorkManager ResolveIUnitOfWorkManager()
-        {
-            return _objectContainer.Resolve<IUnitOfWorkManager>();
+            _objectContainer.RegisterInstances(_container);
+            _objectContainer.RegisterMocks(_container);
         }
 
         [AfterScenario]
         public void AfterScenario()
         {
-            try
-            {
-                var x = ResolveIUnitOfWorkManager();
-                await x.EndAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
-            _nestedContainer.Dispose();
             _objectContainer.Dispose();
         }
 

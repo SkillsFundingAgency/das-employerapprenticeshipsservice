@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
-                c.AddRegistry<MockRegisterations>();
+                c.AddRegistry<MocksRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();

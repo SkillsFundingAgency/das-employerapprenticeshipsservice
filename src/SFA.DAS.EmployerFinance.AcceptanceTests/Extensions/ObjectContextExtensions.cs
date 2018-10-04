@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
                 HashedId = hashingService.HashValue(accountId)
             };
 
-            objectContext.Set(accountId, account);
+            objectContext.Set(account);
                 
             account.SetupAuthorizedUser(objectContainer);
 

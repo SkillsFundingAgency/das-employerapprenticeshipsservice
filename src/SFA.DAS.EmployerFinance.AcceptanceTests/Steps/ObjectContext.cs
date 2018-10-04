@@ -26,10 +26,5 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             _cache.Add(key, value);
         }
-
-        public void Set<T>(int key, T value)
-        {
-            Set(key.ToString(), value);
-        }
     }
 }
