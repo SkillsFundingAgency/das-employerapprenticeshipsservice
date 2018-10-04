@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             var cancellationTokenSource = new CancellationTokenSource(Debugger.IsAttached ? -1 : StepTimeout);
 
-            var account = _objectContext.FirstOrDefault<Account>();
+            var account = _objectContext.Get<Account>();
 
             await _objectContainer.Resolve<ITestTransactionRepository>()
                 .ClearSubmissions(_objectContext

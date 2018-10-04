@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [Then(@"we should see a level 1 screen with a balance of (.*) on the (.*)/(.*)")]
         public async Task ThenLevel1HasRowWithCorrectBalance(int balance, int month, int year)
         {
-            var account = _objectContext.FirstOrDefault<Account>();
+            var account = _objectContext.Get<Account>();
 
             var actual = await _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef");
 
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [Then(@"we should see a level 1 screen with a total levy of (.*) on the (.*)/(.*)")]
         public async Task ThenLevel1HasRowWithCorrectTotalLevy(int totalLevy, int month, int year)
         {
-            var account = _objectContext.FirstOrDefault<Account>();
+            var account = _objectContext.Get<Account>();
 
             var actual = await _objectContainer.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef");
 
@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [Then(@"we should see a level 2 screen with a levy declared of ([^ ]*) on the (.*)/(.*)")]
         public async Task ThenUserDaveFromAccountAShouldSeeALevelScreenWithALevyDeclaredOfOnThe(int levyDeclared, int month, int year)
         {
-            var account = _objectContext.FirstOrDefault<Account>();
+            var account = _objectContext.Get<Account>();
 
             var fromDate = new DateTime(year, month, 1);
             var toDate = new DateTime(year, month + 1, 1).AddMilliseconds(-1);
@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [Then(@"we should see a level 2 screen with a top up of ([^ ]*) on the (.*)/(.*)")]
         public async Task ThenUserDaveFromAccountAShouldSeeALevelScreenWithATopUpOfOnThe(int topUp, int month, int year)
         {
-            var account = _objectContext.FirstOrDefault<Account>();
+            var account = _objectContext.Get<Account>();
 
             var fromDate = new DateTime(year, month, 1);
             var toDate = new DateTime(year, month + 1, 1).AddMilliseconds(-1);

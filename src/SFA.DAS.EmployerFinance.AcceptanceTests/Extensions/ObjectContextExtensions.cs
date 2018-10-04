@@ -26,19 +26,21 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
                 HashedId = hashingService.HashValue(accountId)
             };
 
-            objectContext.Set(accountId, account).SetupAuthorizedUser(objectContainer);
+            objectContext.Set(accountId, account);
+                
+            account.SetupAuthorizedUser(objectContainer);
 
             return account;
         }
 
         public static IEnumerable<long> ProcessingSubmissionIds(this ObjectContext objectContext)
         {
-            return objectContext.GetAll<ProcessingSubmissionId>().Select(s => s.Value.SubmissionId);
+            return objectContext.GetAll<ProcessingSubmissionId>().Select(s => s.SubmissionId);
         }
         
         public static IDictionary<long, DateTime?> ProcessingSubmissionIdsDictionary(this ObjectContext objectContext)
         {
-            return objectContext.GetAll<ProcessingSubmissionId>().ToDictionary(item => item.Value.SubmissionId, item => item.Value.SubmissionDate);
+            return objectContext.GetAll<ProcessingSubmissionId>().ToDictionary(s => s.SubmissionId, s => s.SubmissionDate);
         }
 
         public static void ImportCurrentlyProcessingSubmissionIds(this ObjectContext objectContext, Table table)
