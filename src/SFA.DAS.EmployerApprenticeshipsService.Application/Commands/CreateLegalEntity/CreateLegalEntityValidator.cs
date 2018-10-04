@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         {
             var validationResult = new ValidationResult();
 
-            var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
+            var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
 
             if (member == null || member.RoleId != (short)Role.Owner)
             {
