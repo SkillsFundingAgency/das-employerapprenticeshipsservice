@@ -123,19 +123,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _orchestrator.Setup(x => x.CreateLegalEntity(It.IsAny<CreateNewLegalEntityViewModel>()))
-                .Throws<UnauthorizedAccessException>()
-                //.ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel>
-                //{
-                //    Status = HttpStatusCode.OK,
-                //    Data = new EmployerAgreementViewModel
-                //    {
-                //        EmployerAgreement = new EmployerAgreementView
-                //        {
-                //            HashedAgreementId = testHashedAgreementId
-                //        }
-                //    }
-                //})
-               ;
+                .Throws<UnauthorizedAccessException>();
 
             _logger = new Mock<ILog>();
 
