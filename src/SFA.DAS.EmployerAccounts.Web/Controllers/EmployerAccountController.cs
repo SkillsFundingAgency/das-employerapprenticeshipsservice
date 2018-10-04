@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("{HashedAccountId}/rename")]
         public ActionResult RenameAccount(string hashedAccountId)
         {
-            return Redirect(Url.LegacyEasAccountAction($"{hashedAccountId}/rename"));
+            return Redirect(Url.LegacyEasAccountAction("rename"));
         }
     }
 }
