@@ -1,21 +1,19 @@
-﻿using System;
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.Threading.Tasks;
 using BoDi;
 using NServiceBus;
+using SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution;
+using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
+using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.Extensions;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
-using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.Extensions;
-using StructureMap;
-using TechTalk.SpecFlow;
-using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.SqlServer;
-using SFA.DAS.UnitOfWork;
 using SFA.DAS.UnitOfWork.NServiceBus;
-using IoC = SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution.IoC;
+using StructureMap;
+using TechTalk.SpecFlow;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 {
@@ -23,8 +21,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
     public class Hooks
     {
         private static IContainer _container;
-        private static IEndpointInstance _initiateJobServiceBusEndpoint;
-        private static IContainer _nestedContainer;
+        private static IEndpointInstance _endpoint;
         private readonly IObjectContainer _objectContainer;
         private IUnitOfWorkManager _unitOfWorkManager;
 
@@ -38,19 +35,18 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             _container = IoC.Initialize();
 
-            await  StartNServiceBusEndPoints();
+            await StartNServiceBusEndpoint();
         }
 
         [BeforeScenario]
-        public async Task BeforeScenario()
+        public void BeforeScenario()
         {
             _nestedContainer = _container.GetNestedContainer();
 
             _objectContainer
                 .AddRequiredImplementations(_nestedContainer);
 
-            _unitOfWorkManager = ResolveIUnitOfWorkManager();
-            await _unitOfWorkManager.BeginAsync();
+            await ResolveIUnitOfWorkManager().BeginAsync();
         }
 
         private IUnitOfWorkManager ResolveIUnitOfWorkManager()
@@ -59,11 +55,12 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         }
 
         [AfterScenario]
-        public async Task AfterScenario()
+        public void AfterScenario()
         {
             try
             {
-                await _unitOfWorkManager.EndAsync();
+                var x = ResolveIUnitOfWorkManager();
+                await x.EndAsync();
             }
             catch (Exception e)
             {
@@ -76,15 +73,17 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         }
 
         [AfterTestRun]
-        public static void AfterTestRun()
+        public static async Task AfterTestRun()
         {
-            StopNServiceBusEndPoints();
-            _container.Dispose();
+            using (_container)
+            {
+                await StopNServiceBusEndpoint();
+            }
         }
 
-        private static async Task StartNServiceBusEndPoints()
+        private static async Task StartNServiceBusEndpoint()
         {
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests.Steps.Jobs")
+            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests")
                 .UseAzureServiceBusTransport(() => _container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
                 .UseErrorQueue()
                 .UseInstallers()
@@ -98,15 +97,14 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 
             endpointConfiguration.PurgeOnStartup(true);
 
-            _initiateJobServiceBusEndpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
+            _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
-            _initiateJobServiceBusEndpoint
-                .UseEndpoint(_container);
+            _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
         }
 
-        private static void StopNServiceBusEndPoints()
+        private static Task StopNServiceBusEndpoint()
         {
-            _initiateJobServiceBusEndpoint?.Stop().GetAwaiter().GetResult();
+            return _endpoint.Stop();
         }
     }
 }

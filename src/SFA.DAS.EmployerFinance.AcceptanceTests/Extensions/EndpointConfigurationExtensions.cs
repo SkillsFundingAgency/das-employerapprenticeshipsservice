@@ -3,7 +3,7 @@ using NServiceBus;
 using SFA.DAS.Configuration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NServiceBus.AzureServiceBus;
-using StructureMap;
+using Environment = SFA.DAS.Configuration.Environment;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 {
@@ -11,26 +11,17 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
     {
         public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config, Func<string> connectionStringBuilder)
         {
-            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(DAS.Configuration.Environment.Local);
+            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
 
             config.UseAzureServiceBusTransport(isDevelopment, connectionStringBuilder, r =>
             {
                 r.RouteToEndpoint(
                     typeof(ImportLevyDeclarationsCommand).Assembly,
                     typeof(ImportLevyDeclarationsCommand).Namespace,
-                    "SFA.DAS.EmployerFinance.AcceptanceTests.Steps.Jobs");
+                    "SFA.DAS.EmployerFinance.AcceptanceTests");
             });
 
             return config;
-        }
-
-        public static IEndpointInstance UseEndpoint(this IEndpointInstance endpointInstance,
-            IContainer container)
-        {
-            container.Configure(c => { c.For<IEndpointInstance>().Use(endpointInstance); });
-            container.Configure(c => { c.For<IMessageSession>().Use(endpointInstance); });
-
-            return endpointInstance;
         }
     }
 }
