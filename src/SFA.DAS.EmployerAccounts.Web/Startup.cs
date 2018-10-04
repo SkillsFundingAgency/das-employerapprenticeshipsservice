@@ -7,6 +7,7 @@ using Owin;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web;
+using SFA.DAS.EmployerAccounts.Web.App_Start;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -20,7 +21,6 @@ using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using SFA.DAS.EmployerAccounts.Web.App_Start;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -70,8 +70,10 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
             JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
-            UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/service/password/change")}";
-            UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/service/email/change")}";
+
+
+            UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/password/change")}";
+            UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/email/change")}";
         }
 
         private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)
