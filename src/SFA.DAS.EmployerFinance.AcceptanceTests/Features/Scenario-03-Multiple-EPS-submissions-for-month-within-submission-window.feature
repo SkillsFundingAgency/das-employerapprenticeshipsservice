@@ -9,8 +9,8 @@ Scenario: Month-03-submission-Multiple-submission-month
 		| 999000303   | 35000      | 17-18        | 3             | 1                | 2017-07-15     |		
 		| 999000304   | 25000      | 17-18        | 3             | 1                | 2017-07-16     |		
 		| 999000305   | 30000      | 17-18        | 3             | 1                | 2017-07-17     |		
-	When we refresh levy data for account id 25 paye scheme 123/ABC
-	And All the transaction lines in this scenario have had there transaction date updated to their created date
+	When we refresh levy data for paye scheme 123/ABC
+	And all the transaction lines in this scenario have had there transaction date updated to their created date
 	Then we should see a level 1 screen with a balance of 33000 on the 07/2017
 	And we should see a level 1 screen with a total levy of 11000 on the 07/2017
 	And we should see a level 2 screen with a levy declared of 10000 on the 07/2017
@@ -26,9 +26,9 @@ Scenario: Month-04-submission-Month-after-multiple-submissions
 		| 999000309   | 25000      | 17-18        | 3             | 1                | 2017-07-16     |		
 		| 999000310   | 30000      | 17-18        | 3             | 1                | 2017-07-17     |		
 		| 999000311   | 40000      | 17-18        | 4             | 1                | 2017-08-17     |		
-	When we refresh levy data for account id 25 paye scheme 123/ABC
-	And All the transaction lines in this scenario have had there transaction date updated to their created date
+	When we refresh levy data for paye scheme 123/ABC
+	And all the transaction lines in this scenario have had there transaction date updated to their created date
 	Then we should see a level 1 screen with a balance of 44000 on the 08/2017
 	And we should see a level 1 screen with a total levy of 11000 on the 08/2017
-	And account should see a level 2 screen with a levy declared of 10000 on the 08/2017
-	And account should see a level 2 screen with a top up of 1000 on the 08/2017
+	And we should see a level 2 screen with a levy declared of 10000 on the 08/2017
+	And we should see a level 2 screen with a top up of 1000 on the 08/2017

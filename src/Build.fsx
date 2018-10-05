@@ -12,7 +12,7 @@ open Fake
    ==>"Clean Directories"
    ==>"Build Projects"
    ==>"Building Acceptance Tests"
-    //==>"Run Acceptance Tests"
+   ==>"Run Acceptance Tests"
 
 "Set version number"
    ==>"Set Solution Name"
