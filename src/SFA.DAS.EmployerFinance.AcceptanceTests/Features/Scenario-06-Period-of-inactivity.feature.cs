@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
 #line 3
 this.ScenarioSetup(scenarioInfo);
 #line 5
- testRunner.Given("We have an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("We have an account with a paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
@@ -130,11 +130,11 @@ this.ScenarioSetup(scenarioInfo);
                         "2017-12-15",
                         "2017-12-23"});
 #line 6
- testRunner.And("Hmrc return the following submissions for paye scheme 123/ABC", ((string)(null)), table1, "And ");
+ testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table1, "And ");
 #line 14
- testRunner.When("we refresh levy data for paye scheme 123/ABC", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("we refresh levy data for paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 15
- testRunner.And("all the transaction lines in this scenario have had there transaction date update" +
+ testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
                     "d to the specified created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 16
  testRunner.Then("we should see a level 1 screen with a balance of 63250 on the 12/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

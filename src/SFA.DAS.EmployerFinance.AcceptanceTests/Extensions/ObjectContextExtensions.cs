@@ -60,5 +60,15 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
                     new ProcessingSubmissionId {SubmissionId = submissionId, SubmissionDate = createdDate});
             }
         }
+
+        public static void SetEmpRef(this ObjectContext objectContext, string empRef)
+        {
+            objectContext.Set(Constants.ObjectContextKeys.EmpRef, empRef);
+        }
+
+        public static string GetEmpRef(this ObjectContext objectContext)
+        {
+            return objectContext.Get<string>(Constants.ObjectContextKeys.EmpRef);
+        }
     }
 }

@@ -16,12 +16,13 @@ using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Paye;
 using TechTalk.SpecFlow;
 
+
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 {
     [Binding]
     public class HmrcDeclarationSteps : TechTalk.SpecFlow.Steps
     {
-        public const int StepTimeout = 20000;
+        public const int StepTimeout = 20000*4;
 
         private readonly IObjectContainer _objectContainer;
         private readonly ObjectContext _objectContext;
@@ -32,30 +33,29 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             _objectContext = objectContext;
         }
 
-        [Given(@"Hmrc return the following submissions for paye scheme ([^ ]*)")]
-        public void GivenIHaveTheFollowingSubmissionsForEmpRef(string empRef, Table table)
+        [Given(@"Hmrc return the following submissions for paye scheme")]
+        public void GivenIHaveTheFollowingSubmissionsForEmpRef(Table table)
         {
-            SetPayeSchemeRef(empRef);
-            SetupLastEnglishFractionUpdateDate();
+            var empRef = _objectContext.Get<string>(Extensions.Constants.ObjectContextKeys.EmpRef);
+            SetupLastEnglishFractionUpdateDate();  
             SetupEnglishFractions(empRef, table);
             SetupLevyDeclarations(empRef, table);
         }
 
-        [When(@"we refresh levy data for paye scheme ([^ ]*)")]
-        public Task WhenWeRefreshLevyData(string payeScheme)
+        [When(@"we refresh levy data for paye scheme")]
+        public Task WhenWeRefreshLevyData()
         {
             return _objectContainer.ScopeAsync(async c =>
             {
+                var empref = _objectContext.GetEmpRef();
+
                 var cancellationTokenSource = new CancellationTokenSource(Debugger.IsAttached ? -1 : StepTimeout);
                 var account = _objectContext.Get<Account>();
-
-                await c.Resolve<ITestTransactionRepository>()
-                    .ClearSubmissions(_objectContext.ProcessingSubmissionIds());
 
                 await c.Resolve<IMessageSession>().Send(new ImportAccountLevyDeclarationsCommand
                 {
                     AccountId = account.Id,
-                    PayeRef = payeScheme
+                     PayeRef = empref
                 });
 
                 var allLevyDeclarationsLoaded = await c.Resolve<ITransactionRepository>()
@@ -68,7 +68,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             });
         }
 
-        [When(@"all the transaction lines in this scenario have had there transaction date updated to their created date")]
+        [When(@"all the transaction lines in this scenario have had their transaction date updated to their created date")]
         public Task WhenScenarioTransactionLinesTransactionDateHaveBeenUpdatedToTheirCreatedDate()
         {
             return _objectContainer.ScopeAsync(async c =>
@@ -80,8 +80,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             });
         }
 
-        [When(@"all the transaction lines in this scenario have had there transaction date updated to the specified created date")]
-        public Task WhenAllTheTransactionLinesInThisScenarioHaveHadThereTransactionDateUpdatedToTheSpecifiedCreatedDate()
+        [When(@"all the transaction lines in this scenario have had their transaction date updated to the specified created date")]
+        public Task WhenAllTheTransactionLinesInThisScenarioHaveHadTheirTransactionDateUpdatedToTheSpecifiedCreatedDate()
         {
             return _objectContainer.ScopeAsync(async c =>
             {
@@ -90,26 +90,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 await transactionRepository.SetTransactionLineDateCreatedToTransactionDate(_objectContext
                     .ProcessingSubmissionIdsDictionary());
             });
-        }
-
-        private void SetPayeSchemeRef(string empRef)
-        {
-            _objectContainer.Resolve<Mock<IPayeRepository>>().Setup(x => x.GetPayeSchemeByRef(It.IsAny<string>()))
-                .ReturnsAsync(new Paye
-                {
-                    EmpRef = empRef
-                    ,RefName = empRef
-                });
-
-
-            _objectContainer.Resolve<Mock<IApprenticeshipLevyApiClient>>().Setup(x => x.GetEmployerDetails(It.IsAny<string>()))
-                .ReturnsAsync(new EmpRefLevyInformation
-                {
-                    Employer = new Employer()
-                    {
-                        Name = new Name { EmprefAssociatedName = $"Name{empRef}" }
-                    }
-                });
         }
 
         private void SetupLastEnglishFractionUpdateDate()

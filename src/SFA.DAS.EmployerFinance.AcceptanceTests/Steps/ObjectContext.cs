@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
     public class ObjectContext
     {
         private readonly Dictionary<string, object> _cache = new Dictionary<string, object>();
-        
+
         public T Get<T>()
         {
             return _cache.TryGetValue(typeof(T).FullName, out var value) ? (T)value : default(T);
@@ -25,6 +25,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         public void Set<T>(string key, T value)
         {
             _cache.Add(key, value);
+        }
+
+        public T Get<T>(string key)
+        {
+            return _cache.TryGetValue(key, out var value) ? (T)value : default(T);
         }
     }
 }

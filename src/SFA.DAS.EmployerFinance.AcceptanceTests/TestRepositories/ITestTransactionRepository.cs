@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
 {
     public interface ITestTransactionRepository
     {
-        Task ClearSubmissions(IEnumerable<long> submissionIds);
+        Task RemovePayeRef(string empRef);
 
         Task SetTransactionLineDateCreatedToTransactionDate(IEnumerable<long> submissionIds);
 

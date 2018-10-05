@@ -33,17 +33,14 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
             return result + 1;
         }
 
-        public Task ClearSubmissions(IEnumerable<long> submissionIds)
+        public Task RemovePayeRef(string empRef)
         {
-            var ids = submissionIds as long[] ?? submissionIds.ToArray();
-            var idsDataTable = ids.ToDataTable();
             var parameters = new DynamicParameters();
-            parameters.Add("@submissionIds",
-                idsDataTable.AsTableValuedParameter("[employer_financial].[SubmissionIds]"));
+            parameters.Add("@empref", empRef, DbType.String);
 
             return RunOutsideTxn(conn => 
                 conn.ExecuteAsync(
-                        sql: "[employer_financial].[DeleteSubmissions_BySubmissionId]",
+                        sql: "[employer_financial].[DeleteSubmissions_ByEmpRef]",
                         param: parameters,
                         commandType: CommandType.StoredProcedure));
         }

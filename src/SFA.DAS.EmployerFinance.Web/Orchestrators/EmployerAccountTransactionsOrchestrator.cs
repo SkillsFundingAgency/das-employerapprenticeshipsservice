@@ -391,6 +391,13 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                 transaction.PayeSchemeName = payeSchemeData?.PayeScheme?.Name ?? string.Empty;
             }
 
+            if (data.Transactions.Count == 0)
+            {
+                return new OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>
+                {
+                    Status = HttpStatusCode.NotFound
+                };
+            }
             return new OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>
             {
                 Status = HttpStatusCode.OK,
