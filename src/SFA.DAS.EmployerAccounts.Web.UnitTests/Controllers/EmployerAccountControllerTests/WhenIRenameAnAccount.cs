@@ -1,18 +1,18 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using System.Web.Routing;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Controllers;
-using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Web.Controllers;
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using System.Web.Routing;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
     public class WhenIRenameAnAccount : ControllerTestBase
     {
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                     Data = new RenameEmployerAccountViewModel()
                 });
 
-            _employerAccountController = new EmployerAccountController(_owinWrapper.Object, _orchestrator.Object, 
+            _employerAccountController = new EmployerAccountController(_owinWrapper.Object, _orchestrator.Object,
                 _featureToggle.Object, _userViewTestingService.Object, logger.Object, _flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object,

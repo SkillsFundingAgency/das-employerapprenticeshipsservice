@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.HashingService;
@@ -33,6 +33,23 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             _mediator = mediator;
             _logger = logger;
             _hashingService = hashingService;
+        }
+
+        public async Task<OrchestratorResponse<EmployerAccountViewModel>> GetEmployerAccount(string hashedAccountId)
+        {
+            var response = await Mediator.SendAsync(new GetEmployerAccountHashedQuery
+            {
+                HashedAccountId = hashedAccountId
+            });
+
+            return new OrchestratorResponse<EmployerAccountViewModel>
+            {
+                Data = new EmployerAccountViewModel
+                {
+                    HashedId = hashedAccountId,
+                    Name = response.Account.Name
+                }
+            };
         }
 
         public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> GetRenameEmployerAccountViewModel(string hashedAccountId, string userId)

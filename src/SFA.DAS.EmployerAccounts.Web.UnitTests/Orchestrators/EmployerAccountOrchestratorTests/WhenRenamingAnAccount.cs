@@ -1,30 +1,30 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
+using System.Net;
+using System.Threading.Tasks;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests
 {
-    public  class WhenRenamingAnAccount
+    public class WhenRenamingAnAccount
     {
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private Mock<ILog> _logger;
         private Mock<IMediator> _mediator;
         private EmployerAccountOrchestrator _orchestrator;
-        private EmployerApprenticeshipsServiceConfiguration _configuration;
-        private Domain.Models.Account.Account _account;
+        private EmployerAccountsConfiguration _configuration;
+        private EAS.Domain.Models.Account.Account _account;
 
         [SetUp]
         public void Arrange()
@@ -32,20 +32,20 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _logger = new Mock<ILog>();
             _mediator = new Mock<IMediator>();
-            _configuration = new EmployerApprenticeshipsServiceConfiguration();
+            _configuration = new EmployerAccountsConfiguration();
 
-            _account = new Domain.Models.Account.Account
+            _account = new EAS.Domain.Models.Account.Account
             {
                 Id = 123,
                 HashedId = "ABC123",
                 Name = "Test Account"
             };
-            
+
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
-                .ReturnsAsync(new GetEmployerAccountResponse {Account = _account});
+                .ReturnsAsync(new GetEmployerAccountResponse { Account = _account });
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
-                .ReturnsAsync(new GetUserAccountRoleResponse {UserRole = Role.Owner});
+                .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = Role.Owner });
 
             _orchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration, Mock.Of<IHashingService>());
         }
@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         {
             //Act
             var response = await _orchestrator.GetEmployerAccount("ABC123");
-            
+
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<GetEmployerAccountHashedQuery>(q => q.HashedAccountId.Equals(_account.HashedId))));
             Assert.AreEqual(_account.HashedId, response.Data.HashedId);
@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
 
         [Test]
         public async Task ThenTheAccountNameShouldBeUpdated()
-        { 
+        {
             //Act
             var response = await _orchestrator.RenameEmployerAccount(new RenameEmployerAccountViewModel
             {

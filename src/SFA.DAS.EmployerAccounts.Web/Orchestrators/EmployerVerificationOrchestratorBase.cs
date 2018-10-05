@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using SFA.DAS.NLog.Logger;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {

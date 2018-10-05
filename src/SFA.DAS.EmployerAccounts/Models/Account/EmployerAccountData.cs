@@ -1,7 +1,7 @@
 using System;
 using SFA.DAS.Common.Domain.Types;
 
-namespace SFA.DAS.EAS.Domain.Models.Account
+namespace SFA.DAS.EmployerAccounts.Models.Account
 {
     public class EmployerAccountData
     {

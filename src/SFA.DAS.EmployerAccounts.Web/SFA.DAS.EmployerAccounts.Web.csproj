@@ -153,6 +153,7 @@
     <Compile Include="ViewModels\ConfirmLegalAgreementToRemoveViewModel.cs" />
     <Compile Include="ViewModels\DeletedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\DismissTaskViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAccountViewModel.cs" />
     <Compile Include="ViewModels\EmployerTeamMembersViewModel.cs" />
     <Compile Include="ViewModels\FindOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\FlashMessageViewModel.cs" />
