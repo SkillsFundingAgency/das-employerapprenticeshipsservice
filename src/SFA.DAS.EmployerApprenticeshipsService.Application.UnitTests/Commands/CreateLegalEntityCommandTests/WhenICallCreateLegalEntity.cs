@@ -15,6 +15,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Infrastructure.Features;
+using SFA.DAS.Validation;
 
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTests
@@ -33,6 +34,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
         private Mock<IHashingService> _hashingService;
         private Mock<IAgreementService> _agreementService;
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
+        private Mock<IValidator<CreateLegalEntityCommand>> _validator;
 
         [SetUp]
         public void Arrange()
@@ -48,7 +50,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 Email = "test@test.com",
                 FirstName = "Bob",
                 LastName = "Green",
-                UserRef = Guid.NewGuid().ToString()
+                UserRef = Guid.NewGuid().ToString(),
+                RoleId= 1,
             };
 
             _agreementView = new EmployerAgreementView
@@ -90,6 +93,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _hashingService.Setup(hs => hs.DecodeValue(_command.HashedAccountId)).Returns(_owner.AccountId);
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
 
+            _validator = new Mock<IValidator<CreateLegalEntityCommand>>();
+
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateLegalEntityCommand>()))
+                .ReturnsAsync(new ValidationResult() { IsUnauthorized = false });
+
             _commandHandler = new CreateLegalEntityCommandHandler(
                 _accountRepository.Object,
                 _membershipRepository.Object,
@@ -99,7 +107,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 Mock.Of<IEventPublisher>(),
                 _hashingService.Object,
                 _agreementService.Object,
-                _employerAgreementRepository.Object
+                _employerAgreementRepository.Object, 
+                _validator.Object
                 );
         }
 

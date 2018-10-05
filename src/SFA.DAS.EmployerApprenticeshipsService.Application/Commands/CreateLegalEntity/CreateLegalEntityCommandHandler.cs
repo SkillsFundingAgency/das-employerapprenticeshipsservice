@@ -17,12 +17,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Infrastructure.Features;
 using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 {
     public class CreateLegalEntityCommandHandler : IAsyncRequestHandler<CreateLegalEntityCommand, CreateLegalEntityCommandResponse>
     {
+        private readonly IValidator<CreateLegalEntityCommand> _validator;
         private readonly IAccountRepository _accountRepository;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IMediator _mediator;
@@ -43,7 +45,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             IEventPublisher eventPublisher,
             IHashingService hashingService,
             IAgreementService agreementService,
-            IEmployerAgreementRepository employerAgreementRepository)
+            IEmployerAgreementRepository employerAgreementRepository, 
+            IValidator<CreateLegalEntityCommand> validator)
         {
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
@@ -54,10 +57,23 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             _hashingService = hashingService;
             _agreementService = agreementService;
             _employerAgreementRepository = employerAgreementRepository;
+            _validator = validator;
         }
 
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
         {
+
+            var validationResult = await _validator.ValidateAsync(message);
+
+            if (!validationResult.IsValid())
+            {
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
+            }
+            if (validationResult.IsUnauthorized)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
             var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
             var ownerExternalUserId = Guid.Parse(owner.UserRef);
