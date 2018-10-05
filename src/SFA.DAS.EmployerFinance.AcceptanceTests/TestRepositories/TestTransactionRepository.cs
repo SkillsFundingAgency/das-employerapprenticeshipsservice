@@ -54,6 +54,10 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
             {
                 await command(conn);
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             finally
             {
                 conn.Close();

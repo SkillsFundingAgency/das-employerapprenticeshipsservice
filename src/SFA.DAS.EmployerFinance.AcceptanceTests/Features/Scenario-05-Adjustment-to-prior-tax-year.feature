@@ -24,7 +24,7 @@ Scenario: End-of-year-adjustment
 		| 999000514   | 120000     | 17-18        | 12            | 1                | 2018-06-10     | 2018-06-23  | 
 		| 999000515   | 20000      | 18-19        | 2             | 1                | 2018-06-15     | 2018-06-23  | 
 	When we refresh levy data for paye scheme
-	And all the transaction lines in this scenario have had there transaction date updated to the specified created date
+	And all the transaction lines in this scenario have had their transaction date updated to the specified created date
 	Then we should see a level 1 screen with a balance of 154000 on the 06/2018
 	And we should see a level 1 screen with a total levy of -5500 on the 06/2018
 	And we should see a level 2 screen with a levy declared of -5000 on the 06/2018

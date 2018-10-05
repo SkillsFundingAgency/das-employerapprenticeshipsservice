@@ -222,7 +222,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 26
  testRunner.When("we refresh levy data for paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 27
- testRunner.And("all the transaction lines in this scenario have had there transaction date update" +
+ testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
                     "d to the specified created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 28
  testRunner.Then("we should see a level 1 screen with a balance of 154000 on the 06/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
