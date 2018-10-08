@@ -1,21 +1,21 @@
 ﻿using MediatR;
 using SFA.DAS.Audit.Types;
-using SFA.DAS.EAS.Application.Commands.AuditCommand;
-using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
-using SFA.DAS.EAS.Application.Factories;
-using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
+using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Events;
+using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus;
+using SFA.DAS.Validation;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Messages.Events;
 using Entity = SFA.DAS.Audit.Types.Entity;
-using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
+using IGenericEventFactory = SFA.DAS.EmployerAccounts.Events.IGenericEventFactory;
 
-namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
+namespace SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount
 {
     public class RenameEmployerAccountCommandHandler : AsyncRequestHandler<RenameEmployerAccountCommand>
     {

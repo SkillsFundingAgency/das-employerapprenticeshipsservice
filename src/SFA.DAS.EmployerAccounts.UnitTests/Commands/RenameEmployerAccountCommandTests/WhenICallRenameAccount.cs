@@ -2,21 +2,21 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Commands.AuditCommand;
-using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
-using SFA.DAS.EAS.Application.Factories;
-using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
+using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Events;
+using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Testing;
+using SFA.DAS.Validation;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Messages.Events;
-using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountCommandTests
+namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RenameEmployerAccountCommandTests
 {
     public class WhenICallRenameAccount
     {
@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
 
             _repository = new Mock<IEmployerAccountRepository>();
             _repository.Setup(x => x.GetAccountById(It.IsAny<long>()))
-                .ReturnsAsync(new Domain.Models.Account.Account
+                .ReturnsAsync(new Account
                 {
                     Id = AccountId,
                     HashedId = HashedAccountId,

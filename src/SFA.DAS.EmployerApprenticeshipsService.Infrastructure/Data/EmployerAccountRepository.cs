@@ -1,18 +1,17 @@
 ﻿using Dapper;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using Stopwatch = System.Diagnostics.Stopwatch;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
@@ -144,20 +143,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 commandType: CommandType.StoredProcedure);
 
             return result.ToList();
-        }
-
-        public Task RenameAccount(long accountId, string name)
-        {
-            var parameters = new DynamicParameters();
-
-            parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@accountName", name, DbType.String);
-
-            return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "[employer_account].[UpdateAccount_SetAccountName]",
-                param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.StoredProcedure);
         }
     }
 }

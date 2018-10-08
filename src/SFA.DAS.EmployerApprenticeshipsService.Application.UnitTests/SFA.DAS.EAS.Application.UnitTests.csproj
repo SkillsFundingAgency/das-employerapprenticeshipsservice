@@ -336,8 +336,6 @@
     <Compile Include="Commands\CreateOrganisationAddressTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIRemoveAPayeSchemeFromAnAccount.cs" />
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIValidateTheRequest.cs" />
-    <Compile Include="Commands\RenameEmployerAccountCommandTests\WhenICallRenameAccount.cs" />
-    <Compile Include="Commands\RenameEmployerAccountCommandTests\WhenIValidateTheRenameAccountCommand.cs" />
     <Compile Include="Commands\SignEmployerAgreementTests\WhenISignAnEmployerAgreement.cs" />
     <Compile Include="Commands\SignEmployerAgreementTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\WhenUpdatingUserNotificationSettings.cs" />

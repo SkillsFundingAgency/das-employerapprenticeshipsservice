@@ -617,7 +617,6 @@
     <Compile Include="ViewModels\GatewayViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
-    <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SelectEmployerViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\ReceiveTransferConnectionInvitationViewModel.cs" />
@@ -1062,7 +1061,6 @@
     <Content Include="Views\Home\WhatYoullNeed.cshtml" />
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
     <Content Include="Views\Organisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
-    <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
     <Content Include="Views\Home\ServiceStartPage.cshtml" />

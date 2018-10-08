@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Dapper;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.Sql.Client;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Sql.Client;
 
 namespace SFA.DAS.EmployerAccounts.Data
 {
@@ -66,6 +66,20 @@ namespace SFA.DAS.EmployerAccounts.Data
                 commandType: CommandType.StoredProcedure);
 
             return result.SingleOrDefault();
+        }
+
+        public Task RenameAccount(long accountId, string name)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@accountName", name, DbType.String);
+
+            return _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_account].[UpdateAccount_SetAccountName]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
         }
 
     }

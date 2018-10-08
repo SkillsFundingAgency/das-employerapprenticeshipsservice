@@ -1,17 +1,17 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.EAS.Web.Extensions;
+using System;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -23,9 +23,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly ILog _logger;
 
         public EmployerAccountController(IAuthenticationService owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator,
-            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService, ILog logger, 
+            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService, ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper,multiVariantTestingService,flashMessage)
+            : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             if (employerAccountOrchestrator == null)
             {
@@ -189,46 +189,10 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(string hashedAccountId)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
-            return View(vm);
+            return Redirect(Url.EmployerAccountsAction("rename"));
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("{HashedAccountId}/rename")]
-        public async Task<ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
-        {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, userIdClaim);
 
-            if (response.Status == HttpStatusCode.OK)
-            {
-                var flashmessage = new FlashMessageViewModel
-                {
-                    Headline = "Account renamed",
-                    Message = "You successfully updated the account name",
-                    Severity = FlashMessageSeverityLevel.Success
-                };
-
-                AddFlashMessageToCookie(flashmessage);
-
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName);
-            }
-
-            var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>();
-
-            if (response.Status == HttpStatusCode.BadRequest)
-            {
-                vm.ErrorDictionary = response.FlashMessage.ErrorMessages;
-            }
-
-            errorResponse.Data = vm;
-            errorResponse.FlashMessage = response.FlashMessage;
-            errorResponse.Status = response.Status;
-
-            return View(errorResponse);
-        }
 
         private string GetUserId()
         {

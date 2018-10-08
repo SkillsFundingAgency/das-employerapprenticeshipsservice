@@ -1,13 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.Authorization;
+﻿using SFA.DAS.Authorization;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
+using System;
+using System.Threading.Tasks;
 
-namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
+namespace SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount
 {
-    public class RenameEmployerAccountCommandValidator: IValidator<RenameEmployerAccountCommand>
+    public class RenameEmployerAccountCommandValidator : IValidator<RenameEmployerAccountCommand>
     {
         private readonly IMembershipRepository _membershipRepository;
 
@@ -39,7 +38,7 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
                     validationResult.AddError("Membership", "User is not a member of this Account");
                     validationResult.IsUnauthorized = true;
                 }
-                else if ((Role) caller.RoleId != Role.Owner)
+                else if ((Role)caller.RoleId != Role.Owner)
                 {
                     validationResult.AddError("Membership", "User is not an Owner");
                     validationResult.IsUnauthorized = true;

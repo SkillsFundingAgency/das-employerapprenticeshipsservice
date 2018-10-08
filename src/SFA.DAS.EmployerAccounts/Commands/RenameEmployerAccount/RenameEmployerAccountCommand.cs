@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
+namespace SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount
 {
     public class RenameEmployerAccountCommand : IAsyncRequest
     {
