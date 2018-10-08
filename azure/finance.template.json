@@ -49,6 +49,13 @@
             "metadata": {
                 "description": "Comma separated list of certificate thumbprints to load into the app service"
             }
+        },
+        "uiCustomHostname": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "uiCertificateName": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -146,6 +153,12 @@
                                 "value": "[parameters('loadCertificateThumbprints')]"
                             }
                         ]
+                    },
+                    "customHostName": {
+                        "value": "[parameters('uiCustomHostname')]"
+                    },
+                    "certificateThumbprint": {
+                        "value": "[reference(resourceId(parameters('sharedAppServicePlanResourceGroup'), 'Microsoft.Web/certificates', parameters('uiCertificateName')), '2016-03-01').Thumbprint]"
                     }
                 }
             },
@@ -153,7 +166,7 @@
                 "UIAppInsights"
             ]
         },
-                {
+        {
             "apiVersion": "2017-08-01",
             "name": "ApiAppService",
             "type": "Microsoft.Resources/deployments",
