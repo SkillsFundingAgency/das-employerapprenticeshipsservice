@@ -10,5 +10,10 @@ AS
 
 	DELETE 
 	FROM	employer_financial.LevyDeclaration 
-	WHERE	EmpRef = empRef;
+	WHERE	EmpRef = @empRef;
 
+	DELETE ldt
+	FROM	employer_financial.LevyDeclarationTopup ldt
+	INNER JOIN	employer_financial.LevyDeclaration ld 
+		On ld.SubmissionId= ldt.SubmissionId
+	WHERE	ld.EmpRef = @empRef;

@@ -37,9 +37,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 await _objectContext.CreateAccount(c);
                 await InitialisePayeSchemeRef(c, "123/ACT");
             });
-            //return _objectContainer.ScopeAsync(c => 
-            //           _objectContext.CreateAccount(c)
-            //                    .ContinueWith(t => InitialisePayeSchemeRef(c, "123/ACT")));
         }
 
         private Task InitialisePayeSchemeRef(IObjectContainer objectContainer, string empRef)
@@ -47,7 +44,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             return ClearDownPayeRefsFromDbAsync(objectContainer, empRef)
                 .ContinueWith(t =>
                 {
-                    // This continue With only happens After first se
                     SetupMocks(objectContainer, empRef);
                     StoreEmpRefInContext(empRef);
                 });
