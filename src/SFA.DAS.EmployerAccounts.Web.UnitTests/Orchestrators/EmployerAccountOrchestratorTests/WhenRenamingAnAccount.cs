@@ -2,12 +2,12 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
+using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.HashingService;
@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
         private Mock<IMediator> _mediator;
         private EmployerAccountOrchestrator _orchestrator;
         private EmployerAccountsConfiguration _configuration;
-        private EAS.Domain.Models.Account.Account _account;
+        private Account _account;
 
         [SetUp]
         public void Arrange()
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             _mediator = new Mock<IMediator>();
             _configuration = new EmployerAccountsConfiguration();
 
-            _account = new EAS.Domain.Models.Account.Account
+            _account = new Account
             {
                 Id = 123,
                 HashedId = "ABC123",
