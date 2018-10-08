@@ -64,28 +64,28 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
             }
         }
 
-        public async Task SetTransactionLineDateCreatedToTransactionDate(IEnumerable<long> submissionIds)
+        public Task SetTransactionLineDateCreatedToTransactionDate(IEnumerable<long> submissionIds)
         {
             var ids = submissionIds as long[] ?? submissionIds.ToArray();
             var idsDataTable = ids.ToDataTable();
             var parameters = new DynamicParameters();
 
             parameters.Add("@submissionIds", idsDataTable.AsTableValuedParameter("[employer_financial].[SubmissionIds]"));
-            await _employerFinanceDbContext.Value.Database.Connection.ExecuteAsync(
+            return _employerFinanceDbContext.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[UpdateTransactionLineDateCreatedToTransactionDate_BySubmissionId]",
                 param: parameters,
                 transaction: _employerFinanceDbContext.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
-        public async Task SetTransactionLineDateCreatedToTransactionDate(IDictionary<long, DateTime?> submissionIds)
+        public Task SetTransactionLineDateCreatedToTransactionDate(IDictionary<long, DateTime?> submissionIds)
         {
             var idsDataTable = submissionIds.ToDataTable();
             var parameters = new DynamicParameters();
 
             parameters.Add("@SubmissionIdsDates", idsDataTable.AsTableValuedParameter("[employer_financial].[SubmissionIdsDate]"));
 
-            await _employerFinanceDbContext.Value.Database.Connection.ExecuteAsync(
+            return _employerFinanceDbContext.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[UpdateTransactionLinesDateCreated_BySubmissionId]",
                 param: parameters,
                 transaction: _employerFinanceDbContext.Value.Database.CurrentTransaction.UnderlyingTransaction,
