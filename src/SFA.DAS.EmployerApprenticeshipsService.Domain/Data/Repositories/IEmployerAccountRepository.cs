@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SFA.DAS.EAS.Domain.Models.Account;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
@@ -12,6 +12,5 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId);
         Task<List<Models.Account.Account>> GetAllAccounts();
         Task<List<AccountHistoryEntry>> GetAccountHistory(long accountId);
-        Task RenameAccount(long id, string name);
     }
 }

@@ -10,7 +10,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System.Net;
 using System.Threading.Tasks;
@@ -47,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
                 .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = Role.Owner });
 
-            _orchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration, Mock.Of<IHashingService>());
+            _orchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
         }
 
         [Test]

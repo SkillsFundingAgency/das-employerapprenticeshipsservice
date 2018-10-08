@@ -6,7 +6,6 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 using System.Net;
@@ -17,9 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
     public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     {
         private readonly IMediator _mediator;
-        private readonly ILog _logger;
-        private readonly IHashingService _hashingService;
-        private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
+
 
         //Needed for tests
         protected EmployerAccountOrchestrator()
@@ -27,12 +24,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         }
 
         public EmployerAccountOrchestrator(IMediator mediator, ILog logger, ICookieStorageService<EmployerAccountData> cookieService,
-            EmployerAccountsConfiguration configuration, IHashingService hashingService)
+            EmployerAccountsConfiguration configuration)
             : base(mediator, logger, cookieService, configuration)
         {
             _mediator = mediator;
-            _logger = logger;
-            _hashingService = hashingService;
         }
 
         public async Task<OrchestratorResponse<EmployerAccountViewModel>> GetEmployerAccount(string hashedAccountId)
