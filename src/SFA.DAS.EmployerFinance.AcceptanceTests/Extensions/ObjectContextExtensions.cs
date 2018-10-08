@@ -18,7 +18,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
         public static async Task<Account> CreateAccount(this ObjectContext objectContext, IObjectContainer objectContainer)
         {
             var hashingService = objectContainer.Resolve<IHashingService>();
-            var accountId = await objectContainer.Resolve<ITestTransactionRepository>().GetNextAccountId();
+            var accountId = await objectContainer.Resolve<ITestTransactionRepository>()
+                .GetMaxAccountId() + 1;
 
             var account = new Account
             {

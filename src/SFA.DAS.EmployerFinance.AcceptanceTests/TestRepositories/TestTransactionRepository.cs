@@ -24,13 +24,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
             _employerFinanceDbContext = employerFinanceDbContext;
         }
 
-        public async Task<int> GetNextAccountId()
+        public Task<int> GetMaxAccountId()
         {
-            var result = await _employerFinanceDbContext.Value.Database.Connection.QueryFirstAsync<int>(
+            return _employerFinanceDbContext.Value.Database.Connection.QueryFirstAsync<int>(
                 sql: "SELECT COALESCE(MAX(AccountId), 0) FROM [employer_financial].LevyDeclaration",
                 transaction: _employerFinanceDbContext.Value.Database.CurrentTransaction.UnderlyingTransaction);
-
-            return result + 1;
         }
 
         public Task RemovePayeRef(string empRef)
