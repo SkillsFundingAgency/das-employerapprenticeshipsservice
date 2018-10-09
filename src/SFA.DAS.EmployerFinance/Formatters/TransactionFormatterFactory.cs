@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SFA.DAS.EAS.Application.Formatters.TransactionDowloads;
+using SFA.DAS.EmployerFinance.Formatters.TransactionDowloads;
+using SFA.DAS.EmployerFinance.Interfaces;
 
-namespace SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel
+namespace SFA.DAS.EmployerFinance.Formatters
 {
     public class TransactionFormatterFactory : ITransactionFormatterFactory
     {

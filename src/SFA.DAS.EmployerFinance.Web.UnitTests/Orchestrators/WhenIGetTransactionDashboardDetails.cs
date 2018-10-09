@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models.Account;
+using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
+using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrchestratorTests
+namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 {
     public class WhenIGetTransactionDashboardDetails
     {
@@ -27,7 +28,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
             var accountResponse = new GetEmployerAccountResponse
             {
-                Account = new Domain.Models.Account.Account
+                Account = new Account
                 {
                     HashedId = HashedAccountId,
                     Name = "Test Account"

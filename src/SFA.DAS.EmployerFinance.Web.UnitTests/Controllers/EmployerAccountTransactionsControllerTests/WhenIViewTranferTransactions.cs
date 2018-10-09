@@ -1,22 +1,18 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
-using SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Transfers;
-using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EAS.Web.ViewModels.Transactions;
-using SFA.DAS.HashingService;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
+using SFA.DAS.EmployerFinance.Models.Transfers;
+using SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails;
+using SFA.DAS.EmployerFinance.Web.Controllers;
+using SFA.DAS.EmployerFinance.Web.Orchestrators;
+using SFA.DAS.EmployerFinance.Web.ViewModels;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
+namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {
     class WhenIViewTranferTransactions
     {
@@ -24,13 +20,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         private const string ReceiverPublicHashedAccountId = "DEF456";
         private const string PeriodEnd = "1718-R01";
 
-        private Web.Controllers.EmployerAccountTransactionsController _controller;
+        private EmployerAccountTransactionsController _controller;
         private Mock<EmployerAccountTransactionsOrchestrator> _orchestrator;
         private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IAuthorizationService> _authorizationService;
-        private Mock<IMultiVariantTestingService> _userViewTestingService;
-        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
-        private Mock<IHashingService> _hashingService;
         private Mock<IMapper> _mapper;
         private Mock<IMediator> _mediator;
         private GetTransferTransactionDetailsQuery _query;
@@ -40,18 +32,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         {
             _orchestrator = new Mock<EmployerAccountTransactionsOrchestrator>();
             _owinWrapper = new Mock<IAuthenticationService>();
-            _authorizationService = new Mock<IAuthorizationService>();
-            _userViewTestingService = new Mock<IMultiVariantTestingService>();
-            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             _mapper = new Mock<IMapper>();
-
-            _hashingService = new Mock<IHashingService>();
             _mediator = new Mock<IMediator>();
 
-            _controller = new Web.Controllers.EmployerAccountTransactionsController(_owinWrapper.Object,
-                _authorizationService.Object, _hashingService.Object, _mediator.Object,
-                _orchestrator.Object, _userViewTestingService.Object, _flashMessage.Object,
-                Mock.Of<ITransactionFormatterFactory>(), _mapper.Object);
+            _controller = new EmployerAccountTransactionsController(
+                _owinWrapper.Object,
+                _orchestrator.Object,
+                _mapper.Object,
+                _mediator.Object);
 
             _query = new GetTransferTransactionDetailsQuery
             {
