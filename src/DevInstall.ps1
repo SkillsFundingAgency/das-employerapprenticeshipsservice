@@ -10,3 +10,4 @@ Import-PfxCertificate -FilePath $PSScriptRoot\DasAmlCert.pfx -CertStoreLocation 
 $idppwd = ConvertTo-SecureString -String idsrv3test -Force -AsPlainText
 
 Import-PfxCertificate -FilePath $PSScriptRoot\DasIDPCert.pfx -CertStoreLocation cert://CurrentUser/My -Password $idppwd -Exportable
+Import-PfxCertificate -FilePath $PSScriptRoot\DasIDPCert.pfx -CertStoreLocation cert://LocalMachine/My -Password $idppwd -Exportable
