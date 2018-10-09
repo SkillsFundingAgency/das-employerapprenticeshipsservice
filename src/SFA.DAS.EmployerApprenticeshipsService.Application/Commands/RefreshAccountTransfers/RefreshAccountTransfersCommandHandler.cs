@@ -3,6 +3,7 @@ using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 using System;
@@ -49,7 +50,22 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshAccountTransfers
             {
                 var paymentTransfers = await _paymentService.GetAccountTransfers(message.PeriodEnd, message.ReceiverAccountId);
 
-                var transfers = paymentTransfers.ToArray();
+                var transfers = paymentTransfers.GroupBy(t => new { t.SenderAccountId, t.ReceiverAccountId, t.CommitmentId, t.PeriodEnd })
+                    .Select(g =>
+                    {
+                        var firstGroupItem = g.First();
+                        return new AccountTransfer
+                        {
+                            PeriodEnd = firstGroupItem.PeriodEnd,
+                            Amount = g.Sum(x => x.Amount),
+                            CommitmentId = firstGroupItem.CommitmentId,
+                            ReceiverAccountId = firstGroupItem.ReceiverAccountId,
+                            ReceiverAccountName = firstGroupItem.ReceiverAccountName,
+                            SenderAccountId = firstGroupItem.SenderAccountId,
+                            SenderAccountName = firstGroupItem.SenderAccountName,
+                            Type = firstGroupItem.Type
+                        };
+                    }).ToArray();
 
                 var transferSenderIds = transfers.Select(t => t.SenderAccountId).Distinct();
 
