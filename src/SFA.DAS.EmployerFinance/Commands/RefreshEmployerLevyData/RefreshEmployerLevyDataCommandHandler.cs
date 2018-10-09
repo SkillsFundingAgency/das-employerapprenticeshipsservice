@@ -2,15 +2,10 @@
 using SFA.DAS.EmployerFinance.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Events.ProcessDeclaration;
-using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Factories;
-using SFA.DAS.EmployerFinance.Models.HmrcLevy;
 using SFA.DAS.EmployerFinance.Models.Levy;
-using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

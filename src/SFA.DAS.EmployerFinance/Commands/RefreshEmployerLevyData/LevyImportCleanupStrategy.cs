@@ -24,6 +24,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             _hmrcDateService = hmrcDateService;
             _logger = logger;
         }
+
         public async Task<IEnumerable<DasDeclaration>> Cleanup(string empRef, IEnumerable<DasDeclaration> declarations)
         {
             var temp = declarations.OrderBy(c => c.SubmissionDate).ToArray();
@@ -32,7 +33,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
 
             temp = await FilterActiveDeclarations(empRef, temp);
 
-            ProcessNoPaymentForPeriodDeclarations(empRef, temp);
+            ProcessNoPaymentForPeriodDeclarations(temp);
 
             await ProcessEndOfYearAdjustmentDeclarations(empRef, temp);
 
@@ -71,7 +72,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             }
         }
 
-        private static void ProcessNoPaymentForPeriodDeclarations(string empRef, DasDeclaration[] declarations)
+        private static void ProcessNoPaymentForPeriodDeclarations(DasDeclaration[] declarations)
         {
             var noPaymentForPeriodDeclarations = declarations.Where(x => x.NoPaymentForPeriod);
 
@@ -138,8 +139,16 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
         /// <summary>
         ///     Returns the latest declaration for the year (which is the one that will be effective for period 12).
         /// </summary>
-        /// <param name="hmrcDeclarations">The declarations retrieved from HMRC (these are in-memory and have not yet been written to the database.</param>
-        /// <returns>The declaration that was effective for period 12 or null if one was not found.</returns>
+        /// <param name="yearEndAdjustmentCutOff">
+        ///     If we are processing an adjustment we need to find the P12 value, which might be another adjustment. In that case, it must 
+        ///     be an earlier adjustment (i.e. the immediately preceding adjustment).
+        /// </param>
+        /// <param name="hmrcDeclarations">
+        ///     The declarations retrieved from HMRC (these are in-memory and have not yet been written to the database.
+        /// </param>
+        /// <returns>
+        ///     The declaration that was effective for period 12 or null if one was not found.
+        /// </returns>
         /// <remarks>
         ///     The database contains all the declarations retrieved to date from HMRC, <see cref="hmrcDeclarations"/>
         ///     contains the declarations that HMRC has that we have not retrieved previously (which is determined by submission date).

@@ -9,26 +9,25 @@ using SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.EmployerFinance.Validation;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
 {
     [TestFixture]
-    public class LevyImportCleanupStrategyTests
+    public class LevyImportCleanerStrategyTests
     { 
         [Test]
         public void Constructor_Valid_ShouldNotThrowException()
         {
-            var fixtures = new LevyImportCleanupStrategyTestFixtures();
-            var strategy = fixtures.CreateStrategy();
+            var fixtures = new LevyImportCleanerStrategyTestFixtures();
+            fixtures.CreateStrategy();
         }
 
         [Test]
         public async Task Cleanup_DuplicateSubsidyIdsInInput_DuplicatedSubsidyIdsShouldBeRemoved()
         {
             //Arrange 
-            var fixtures = new LevyImportCleanupStrategyTestFixtures()
+            var fixtures = new LevyImportCleanerStrategyTestFixtures()
                             .WithDeclarations(123, 123);
 
             // act
@@ -43,7 +42,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
         public async Task Cleanup_DuplicateSubsidyIdsInInput_DuplicatedSubsidyIdsShouldBeLogged()
         {
             //Arrange 
-            var fixtures = new LevyImportCleanupStrategyTestFixtures()
+            var fixtures = new LevyImportCleanerStrategyTestFixtures()
                 .WithDeclarations(123, 123);
 
             // act
@@ -58,7 +57,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
         public async Task Cleanup_MultipleLevyAdjustments_OnlyAdjustmentsShouldBeMArkedAsAdjustments()
         {
             //Arrange 
-            var fixtures = new LevyImportCleanupStrategyTestFixtures()
+            var fixtures = new LevyImportCleanerStrategyTestFixtures()
                 .WithDeclaration(123, 100, "17-18", 12, new DateTime(2018, 04, 19))
                 .WithDeclaration(124, 150, "17-18", 12, new DateTime(2018, 05, 19))
                 .WithDeclaration(125, 200, "17-18", 12, new DateTime(2018, 06, 19));
@@ -80,7 +79,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             const decimal secondAdjustmentValue = 200;
 
             //Arrange 
-            var fixtures = new LevyImportCleanupStrategyTestFixtures()
+            var fixtures = new LevyImportCleanerStrategyTestFixtures()
                 .WithDeclaration(123, p12KLevyDeclarationAmount, "17-18", 12, new DateTime(2018, 04, 19))
                 .WithDeclaration(124, firstAdjustmentValue, "17-18", 12, new DateTime(2018, 05, 19))
                 .WithDeclaration(125, secondAdjustmentValue, "17-18", 12, new DateTime(2018, 06, 19));
@@ -100,7 +99,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             const decimal secondAdjustmentValue = 200;
 
             //Arrange 
-            var fixtures = new LevyImportCleanupStrategyTestFixtures()
+            var fixtures = new LevyImportCleanerStrategyTestFixtures()
                 .WithDeclaration(123, 100, "17-18", 12, new DateTime(2018, 04, 19))
                 .WithDeclaration(124, firstAdjustmentValue, "17-18", 12, new DateTime(2018, 05, 19))
                 .WithDeclaration(125, secondAdjustmentValue, "17-18", 12, new DateTime(2018, 06, 19));
@@ -120,7 +119,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             const decimal adjustmentValue = 200;
 
             //Arrange 
-            var fixtures = new LevyImportCleanupStrategyTestFixtures()
+            var fixtures = new LevyImportCleanerStrategyTestFixtures()
                 .WithDeclaration(123, period12Value, "17-18", 12, new DateTime(2018, 04, 19))
                 .WithDeclaration(124, adjustmentValue, "17-18", 12, new DateTime(2018, 05, 19));
 
@@ -139,7 +138,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             const decimal adjustmentValue = 200;
 
             //Arrange 
-            var fixtures = new LevyImportCleanupStrategyTestFixtures()
+            var fixtures = new LevyImportCleanerStrategyTestFixtures()
                 .WithDeclaration(123, period8Value, "17-18", 8, new DateTime(2017, 12, 19))
                 .WithDeclaration(124, adjustmentValue, "17-18", 12, new DateTime(2018, 05, 19));
 
@@ -157,7 +156,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             const decimal adjustmentValue = 200;
 
             //Arrange 
-            var fixtures = new LevyImportCleanupStrategyTestFixtures()
+            var fixtures = new LevyImportCleanerStrategyTestFixtures()
                 .WithDeclaration(124, adjustmentValue, "17-18", 12, new DateTime(2018, 05, 19));
 
             // act
@@ -169,9 +168,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
         }
     }
 
-    internal class LevyImportCleanupStrategyTestFixtures
+    internal class LevyImportCleanerStrategyTestFixtures
     {
-        public LevyImportCleanupStrategyTestFixtures()
+        public LevyImportCleanerStrategyTestFixtures()
         {
             DasLevyRepositoryMock = new Mock<IDasLevyRepository>();
             LogMock = new Mock<ILog>();
@@ -203,7 +202,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
                 );
         }
 
-        public LevyImportCleanupStrategyTestFixtures WithDeclarations(params long[] subsidyIds)
+        public LevyImportCleanerStrategyTestFixtures WithDeclarations(params long[] subsidyIds)
         {
             foreach (var subsidyId in subsidyIds)
             {
@@ -213,7 +212,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             return this;
         }
 
-        public LevyImportCleanupStrategyTestFixtures WithDeclaration(long subsidyId, decimal levyDueYtd, string payrollYear, short payrollMonth, DateTime submissionDate)
+        public LevyImportCleanerStrategyTestFixtures WithDeclaration(long subsidyId, decimal levyDueYtd, string payrollYear, short payrollMonth, DateTime submissionDate)
         {
             return WithDeclaration(new DasDeclaration
             {
@@ -226,7 +225,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             });
         }
 
-        public LevyImportCleanupStrategyTestFixtures WithDeclaration(DasDeclaration declaration)
+        public LevyImportCleanerStrategyTestFixtures WithDeclaration(DasDeclaration declaration)
         {
             Declarations.Add(declaration);
 
