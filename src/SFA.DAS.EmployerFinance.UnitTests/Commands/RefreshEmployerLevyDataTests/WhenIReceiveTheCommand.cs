@@ -32,6 +32,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
         private Mock<ILevyEventFactory> _levyEventFactory;
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IHashingService> _hashingService;
+        private ILevyImportCleanupStrategy _levyImportCleanupStrategy;
         private Mock<ILog> _logger;
         private const string ExpectedEmpRef = "123456";
         private const long ExpectedAccountId = 44321;
@@ -54,9 +55,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _hashingService = new Mock<IHashingService>();
             _logger = new Mock<ILog>();
+            _levyImportCleanupStrategy = new LevyImportCleanupStrategy(_levyRepository.Object, _hmrcDateService.Object, _logger.Object);
 
-            _refreshEmployerLevyDataCommandHandler = new RefreshEmployerLevyDataCommandHandler(_validator.Object, _levyRepository.Object, _mediator.Object, _hmrcDateService.Object,
-                _levyEventFactory.Object, _genericEventFactory.Object, _hashingService.Object, _logger.Object);
+            _refreshEmployerLevyDataCommandHandler = new RefreshEmployerLevyDataCommandHandler(_validator.Object, _levyRepository.Object, _mediator.Object,
+                _levyEventFactory.Object, _genericEventFactory.Object, _hashingService.Object, _levyImportCleanupStrategy);
         }
 
         [Test]
