@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
             _repository.Setup(r => r.GetEmployerAgreement(ExpectedEmployerAgreementId))
                 .ReturnsAsync(new EmployerAgreementView
                 {
-                    AccountLegalentityId = ExpectedAccountLegalEntityId,
+                    AccountLegalEntityId = ExpectedAccountLegalEntityId,
                     LegalEntityId = ExpectedLegalEntityId,
                     LegalEntityName = ExpectedLegalEntityName,
                     Status = EmployerAgreementStatus.Signed

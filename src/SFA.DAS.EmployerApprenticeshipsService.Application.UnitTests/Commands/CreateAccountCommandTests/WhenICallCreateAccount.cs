@@ -47,6 +47,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private const long ExpectedAccountLegalEntityId = 333;
         private const string ExpectedHashString = "123ADF23";
         private const string ExpectedPublicHashString = "SCUFF";
+        private const string ExpectedAccountLegalEntityPublicHashString = "ALEPUB";
 
         private User _user;
 
@@ -73,6 +74,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 
             _externalhashingService = new Mock<IPublicHashingService>();
             _externalhashingService.Setup(x => x.HashValue(ExpectedAccountId)).Returns(ExpectedPublicHashString);
+            _externalhashingService.Setup(x => x.HashValue(ExpectedAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
 
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _accountEventFactory = new Mock<IAccountEventFactory>();
@@ -307,6 +309,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             addedLegalEntityEvent.OrganisationName.Should().Be(organisationName);
             addedLegalEntityEvent.AccountId.Should().Be(ExpectedAccountId);
             addedLegalEntityEvent.AccountLegalEntityId.Should().Be(ExpectedAccountLegalEntityId);
+            addedLegalEntityEvent.AccountLegalEntityPublicHashedId.Should().Be(ExpectedAccountLegalEntityPublicHashString);
             addedLegalEntityEvent.UserName.Should().Be(_user.FullName);
             addedLegalEntityEvent.UserRef.Should().Be(_user.Ref);
             //addedLegalEntityEvent.Created.Should().Be(rightAboutNow);

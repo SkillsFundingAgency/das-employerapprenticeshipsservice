@@ -133,6 +133,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, long accountLegalEntityId, string organisationName, string userName, Guid userRef)
         {
+            var accountLegalEntityPublicHashedId = _publicHashingService.HashValue(accountLegalEntityId);
+
             return _eventPublisher.Publish(new AddedLegalEntityEvent
             {
                 AgreementId = employerAgreementId,
@@ -140,6 +142,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                 OrganisationName = organisationName,
                 AccountId = accountId,
                 AccountLegalEntityId = accountLegalEntityId,
+                AccountLegalEntityPublicHashedId = accountLegalEntityPublicHashedId,
                 UserName = userName,
                 UserRef = userRef,
                 Created = DateTime.UtcNow

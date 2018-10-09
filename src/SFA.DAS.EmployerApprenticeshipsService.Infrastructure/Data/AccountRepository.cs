@@ -126,7 +126,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 Id = agreementId,
                 AccountId = createParams.AccountId,
-                AccountLegalentityId = accountLegalEntityId,
+                AccountLegalEntityId = accountLegalEntityId,
                 LegalEntityId = legalEntityId,
                 LegalEntityName = createParams.Name,
                 LegalEntityCode = createParams.Code,

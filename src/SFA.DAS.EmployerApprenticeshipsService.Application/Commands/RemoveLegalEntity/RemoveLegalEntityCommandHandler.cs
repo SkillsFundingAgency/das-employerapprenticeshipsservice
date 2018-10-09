@@ -99,7 +99,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
                     createdByName, 
                     agreement.LegalEntityId, 
                     agreement.LegalEntityName,
-                    agreement.AccountLegalentityId,
+                    agreement.AccountLegalEntityId,
                     message.UserId);
             }
         }

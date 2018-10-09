@@ -16,7 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Infrastructure.Features;
 using SFA.DAS.EmployerAccounts.Messages.Events;
-
+using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTests
 {
@@ -32,9 +32,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
         private EmployerAgreementView _agreementView;
         private Mock<ILegalEntityEventFactory> _legalEntityEventFactory;
         private Mock<IHashingService> _hashingService;
+        private Mock<IPublicHashingService> _externalHashingService;
         private Mock<IAgreementService> _agreementService;
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
         private Mock<IEventPublisher> _eventPublisher;
+
+        private const string ExpectedAccountLegalEntityPublicHashString = "ALEPUB";
 
         [SetUp]
         public void Arrange()
@@ -65,7 +68,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 LegalEntitySource = OrganisationType.CompaniesHouse,
                 LegalEntityAddress = "12, test street",
                 LegalEntityInceptionDate = DateTime.Now,
-                AccountLegalentityId = 830
+                AccountLegalEntityId = 830
             };
 
             _command = new CreateLegalEntityCommand
@@ -88,11 +91,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _legalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
             _eventPublisher = new Mock<IEventPublisher>();
-            _hashingService = new Mock<IHashingService>();
             _agreementService = new Mock<IAgreementService>();
 
+            _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(hs => hs.HashValue(It.IsAny<long>())).Returns<long>(value => $"*{value}*");
             _hashingService.Setup(hs => hs.DecodeValue(_command.HashedAccountId)).Returns(_owner.AccountId);
+
+            _externalHashingService = new Mock<IPublicHashingService>();
+            _externalHashingService.Setup(x => x.HashValue(_agreementView.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
+
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
 
             _commandHandler = new CreateLegalEntityCommandHandler(
@@ -103,6 +110,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 _legalEntityEventFactory.Object,
                 _eventPublisher.Object,
                 _hashingService.Object,
+                _externalHashingService.Object,
                 _agreementService.Object,
                 _employerAgreementRepository.Object
                 );
@@ -205,7 +213,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 e.AccountId.Equals(_owner.AccountId) &&
                 e.AgreementId.Equals(_agreementView.Id) &&
                 e.LegalEntityId.Equals(_agreementView.LegalEntityId) &&
-                e.AccountLegalEntityId.Equals(_agreementView.AccountLegalentityId) &&
+                e.AccountLegalEntityId.Equals(_agreementView.AccountLegalEntityId) &&
+                e.AccountLegalEntityPublicHashedId.Equals(ExpectedAccountLegalEntityPublicHashString) &&
                 e.OrganisationName.Equals(_command.Name) &&
                 e.UserName.Equals(_owner.FullName()) &&
                 e.UserRef.Equals(Guid.Parse(_owner.UserRef)))));
