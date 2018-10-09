@@ -1,9 +1,8 @@
 ﻿@using System.Globalization
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
-@using SFA.DAS.EAS.Web.Extensions
 
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.FinanceDashboardViewModel>
+@model OrchestratorResponse<FinanceDashboardViewModel>
 
 @{
     ViewBag.PageID = "page-finance";
@@ -79,7 +78,7 @@
     }
     <div class="column-half">
         <h2 class="heading-medium">
-            <a title="Manage transfers" href="@Url.Action("Index", "Transfers")">
+            <a title="Manage transfers" href="@Url.EmployerAccountsAction($"accounts/{Model.Data.Account.HashedId}/transfers")">
                 Transfers
             </a>
         </h2>

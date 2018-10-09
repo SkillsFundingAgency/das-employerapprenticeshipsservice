@@ -8,6 +8,8 @@ using SFA.DAS.EmployerFinance.Web.ViewModels;
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AutoMapper;
+using MediatR;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers
 {
@@ -39,7 +41,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers
                 });
 
             _controller = new Web.Controllers.EmployerAccountTransactionsController(
-                _owinWrapper.Object, _orchestrator.Object);
+                _owinWrapper.Object, _orchestrator.Object, Mock.Of<IMapper>(), Mock.Of<IMediator>());
         }
 
         [Test]

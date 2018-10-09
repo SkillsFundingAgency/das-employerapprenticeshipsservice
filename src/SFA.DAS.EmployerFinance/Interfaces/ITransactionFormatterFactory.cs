@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EAS.Application.Formatters.TransactionDowloads;
+﻿using SFA.DAS.EmployerFinance.Formatters.TransactionDowloads;
 
-namespace SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel
+namespace SFA.DAS.EmployerFinance.Interfaces
 {
     public interface ITransactionFormatterFactory
     {

@@ -1,22 +1,22 @@
-﻿using MediatR;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Levy;
-using SFA.DAS.EAS.Domain.Models.Payments;
-using SFA.DAS.EAS.Domain.Models.Transaction;
-using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TransactionLine = SFA.DAS.EAS.Domain.Models.Transaction.TransactionLine;
+using MediatR;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models.Account;
+using SFA.DAS.EmployerFinance.Models.Levy;
+using SFA.DAS.EmployerFinance.Models.Payments;
+using SFA.DAS.EmployerFinance.Models.Transaction;
+using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
+using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
+using SFA.DAS.EmployerFinance.Web.Orchestrators;
+using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrchestratorTests
+namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 {
     public class WhenIGetAccountTransactions
     {
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
             _response = new GetEmployerAccountResponse
             {
-                Account = new Domain.Models.Account.Account
+                Account = new Account
                 {
                     HashedId = HashedAccountId,
                     Name = "Test Account"

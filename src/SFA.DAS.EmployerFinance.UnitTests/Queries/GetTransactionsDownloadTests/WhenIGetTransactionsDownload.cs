@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Formatters.TransactionDowloads;
-using SFA.DAS.EAS.Application.Queries.GetTransactionsDownload;
-using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Formatters.TransactionDowloads;
+using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models.Transaction;
+using SFA.DAS.EmployerFinance.Queries.GetTransactionsDownload;
 using SFA.DAS.Validation;
+using MonthYear = SFA.DAS.EmployerFinance.Messages.MonthYear;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetTransactionsDownloadTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransactionsDownloadTests
 {
     [TestFixture]
     public class WhenIGetTransactionsDownload

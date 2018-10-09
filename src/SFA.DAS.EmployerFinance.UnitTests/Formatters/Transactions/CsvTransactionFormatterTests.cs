@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Text;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Formatters.TransactionDowloads;
+using SFA.DAS.EmployerFinance.Formatters.TransactionDowloads;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Formatters.Transactions
+namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
 {
     public class CsvTransactionFormatterTests : BaseFormatterTest
     {

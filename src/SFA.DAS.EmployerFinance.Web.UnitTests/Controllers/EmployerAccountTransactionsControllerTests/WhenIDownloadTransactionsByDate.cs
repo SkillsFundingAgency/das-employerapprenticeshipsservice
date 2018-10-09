@@ -1,25 +1,20 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Formatters.TransactionDowloads;
-using SFA.DAS.EAS.Application.Queries.GetTransactionsDownload;
-using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Transaction;
-using SFA.DAS.EAS.Web.Controllers;
-using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EAS.Web.ViewModels.Transactions;
-using SFA.DAS.HashingService;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
-using SFA.DAS.Validation;
+using SFA.DAS.EmployerFinance.Formatters.TransactionDowloads;
+using SFA.DAS.EmployerFinance.Messages;
+using SFA.DAS.EmployerFinance.Models.Transaction;
+using SFA.DAS.EmployerFinance.Queries.GetTransactionsDownload;
+using SFA.DAS.EmployerFinance.Web.Controllers;
+using SFA.DAS.EmployerFinance.Web.Orchestrators;
+using SFA.DAS.EmployerFinance.Web.ViewModels;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
+namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {
     [TestFixture]
     public class WhenIDownloadTransactionsByDate
@@ -30,12 +25,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
 
         private EmployerAccountTransactionsController _controller;
         private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IAuthorizationService> _featureToggle;
-        private Mock<IHashingService> _hashingService;
         private Mock<IMediator> _mediator;
         private Mock<EmployerAccountTransactionsOrchestrator> _orchestrator;
-        private Mock<IMultiVariantTestingService> _userViewTestingService;
-        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private Mock<ITransactionFormatter> _formatter;
         private TransactionDownloadViewModel _transactionDownloadViewModel;
 
@@ -60,12 +51,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             };
 
             _owinWrapper = new Mock<IAuthenticationService>();
-            _featureToggle = new Mock<IAuthorizationService>();
-            _hashingService = new Mock<IHashingService>();
             _mediator = new Mock<IMediator>();
             _orchestrator = new Mock<EmployerAccountTransactionsOrchestrator>();
-            _userViewTestingService = new Mock<IMultiVariantTestingService>();
-            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             _formatter = new Mock<ITransactionFormatter>();
 
             _mediator.Setup(m => m.SendAsync(It.IsAny<GetTransactionsDownloadQuery>()))
@@ -80,20 +67,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _formatter.Setup(x => x.MimeType).Returns("txt/csv");
             _formatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.CSV);
 
-            var transactionFormatterFactory = new Mock<ITransactionFormatterFactory>();
-
-            transactionFormatterFactory.Setup(x => x.GetTransactionsFormatterByType(It.IsAny<DownloadFormatType>())).Returns(_formatter.Object);
-
             _controller = new EmployerAccountTransactionsController(
                 _owinWrapper.Object,
-                _featureToggle.Object,
-                _hashingService.Object,
-                _mediator.Object,
                 _orchestrator.Object,
-                _userViewTestingService.Object,
-                _flashMessage.Object,
-                transactionFormatterFactory.Object,
-                Mock.Of<IMapper>());
+                Mock.Of<IMapper>(),
+                _mediator.Object);
         }
 
         [Test]

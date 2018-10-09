@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Formatters.TransactionDowloads;
-using SFA.DAS.EAS.Application.Queries.GetTransactionsDownloadResultViewModel;
+using SFA.DAS.EmployerFinance.Formatters.TransactionDowloads;
+using SFA.DAS.EmployerFinance.Interfaces;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Factories.TransactionFormatterFactory
+namespace SFA.DAS.EmployerFinance.UnitTests.Factories.TransactionFormatterFactory
 {
     public class WhenIUseTheTransactionFormatterFactory
     {
@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Factories.TransactionFormatterFactor
             _csvFormatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.CSV);
             _excelFormatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.Excel);
 
-            _paymentFormatterFactory = new Application.Queries.GetTransactionsDownloadResultViewModel.TransactionFormatterFactory(new List<ITransactionFormatter>
+            _paymentFormatterFactory = new EmployerFinance.Formatters.TransactionFormatterFactory(new List<ITransactionFormatter>
             {
                 _csvFormatter.Object,
                 _excelFormatter.Object

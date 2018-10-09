@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Formatters.TransactionDowloads;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EmployerFinance.Formatters.TransactionDowloads;
+using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models.Transaction;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Formatters.Transactions.ExcelTransactionFormatterTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions.ExcelTransactionFormatterTests
 {
     class WhenICreateAExcelFile
     {
