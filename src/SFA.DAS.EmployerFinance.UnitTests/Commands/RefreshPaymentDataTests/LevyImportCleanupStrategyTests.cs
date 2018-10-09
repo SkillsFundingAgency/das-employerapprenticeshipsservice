@@ -72,21 +72,100 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             Assert.IsTrue(fixtures.Result[2].EndOfYearAdjustment, "period 12 adjustment is not marked as adjustment");
         }
 
-        [Test(Description = "An adjustment should apply on top of previous adjustments, not replace")]
-        public async Task Cleanup_MultipleLevyAdjustments_AdjustmentsShouldApplyToPriorAdjustments()
+        [Test(Description = "The first adjustment should apply to the P12 declaration")]
+        public async Task Cleanup_MultipleLevyAdjustments_FirstAdjustmentShouldApplyToLatestDeclaration()
         {
+            const decimal p12KLevyDeclarationAmount = 25;
+            const decimal firstAdjustmentValue = 150;
+            const decimal secondAdjustmentValue = 200;
+
             //Arrange 
             var fixtures = new LevyImportCleanupStrategyTestFixtures()
-                .WithDeclaration(123, 100, "17-18", 12, new DateTime(2018, 04, 19))
-                .WithDeclaration(124, 150, "17-18", 12, new DateTime(2018, 05, 19))
-                .WithDeclaration(125, 200, "17-18", 12, new DateTime(2018, 06, 19));
+                .WithDeclaration(123, p12KLevyDeclarationAmount, "17-18", 12, new DateTime(2018, 04, 19))
+                .WithDeclaration(124, firstAdjustmentValue, "17-18", 12, new DateTime(2018, 05, 19))
+                .WithDeclaration(125, secondAdjustmentValue, "17-18", 12, new DateTime(2018, 06, 19));
 
             // act
             await fixtures.RunStrategy();
 
             //Assert 
-            const decimal expectedYearEndAdjustment = (200 - 150); // y/end adjustments are inverted
+            const decimal expectedYearEndAdjustment = (firstAdjustmentValue - p12KLevyDeclarationAmount) * -1; // adjustments are inverted
+            Assert.AreEqual(expectedYearEndAdjustment, fixtures.Result[1].EndOfYearAdjustmentAmount);
+        }
+
+        [Test(Description = "A later adjustment should apply on top of earlier adjustments, not replace")]
+        public async Task Cleanup_MultipleLevyAdjustments_LaterAdjustmentsShouldApplyToPriorAdjustments()
+        {
+            const decimal firstAdjustmentValue = 150;
+            const decimal secondAdjustmentValue = 200;
+
+            //Arrange 
+            var fixtures = new LevyImportCleanupStrategyTestFixtures()
+                .WithDeclaration(123, 100, "17-18", 12, new DateTime(2018, 04, 19))
+                .WithDeclaration(124, firstAdjustmentValue, "17-18", 12, new DateTime(2018, 05, 19))
+                .WithDeclaration(125, secondAdjustmentValue, "17-18", 12, new DateTime(2018, 06, 19));
+
+            // act
+            await fixtures.RunStrategy();
+
+            //Assert 
+            const decimal expectedYearEndAdjustment = (secondAdjustmentValue - firstAdjustmentValue) * -1; // adjustments are inverted
             Assert.AreEqual(expectedYearEndAdjustment, fixtures.Result[2].EndOfYearAdjustmentAmount);
+        }
+
+        [Test, Description("When an adjustment is received and a period 12 declaration has been made the adjustment should apply to the period 12 declaration")]
+        public async Task Cleanup_SingleLevyAdjustmentWithPeriod12Value_AdjustmentShouldApplyToPeriod12Value()
+        {
+            const decimal period12Value = 150;
+            const decimal adjustmentValue = 200;
+
+            //Arrange 
+            var fixtures = new LevyImportCleanupStrategyTestFixtures()
+                .WithDeclaration(123, period12Value, "17-18", 12, new DateTime(2018, 04, 19))
+                .WithDeclaration(124, adjustmentValue, "17-18", 12, new DateTime(2018, 05, 19));
+
+            // act
+            await fixtures.RunStrategy();
+
+            //Assert 
+            const decimal expectedYearEndAdjustment = (adjustmentValue - period12Value) * -1; // adjustments are inverted
+            Assert.AreEqual(expectedYearEndAdjustment, fixtures.Result[1].EndOfYearAdjustmentAmount);
+        }
+
+        [Test, Description("When an adjustment is received and the latest declaration is not period 12 the adjustment should apply to the latest declaration")]
+        public async Task Cleanup_SingleLevyAdjustmentWithPeriod8Value_AdjustmentShouldApplyToPeriod8Value()
+        {
+            const decimal period8Value = 150;
+            const decimal adjustmentValue = 200;
+
+            //Arrange 
+            var fixtures = new LevyImportCleanupStrategyTestFixtures()
+                .WithDeclaration(123, period8Value, "17-18", 8, new DateTime(2017, 12, 19))
+                .WithDeclaration(124, adjustmentValue, "17-18", 12, new DateTime(2018, 05, 19));
+
+            // act
+            await fixtures.RunStrategy();
+
+            //Assert 
+            const decimal expectedYearEndAdjustment = (adjustmentValue - period8Value) * -1; // adjustments are inverted
+            Assert.AreEqual(expectedYearEndAdjustment, fixtures.Result[1].EndOfYearAdjustmentAmount);
+        }
+
+        [Test, Description("When an adjustment is received but there is no declaration the adjustment should apply to an assumed zero declaration")]
+        public async Task Cleanup_AdjustmentWithNoDeclaration_AdjustmentShouldApplyToAnAssummedZeroDeclaration()
+        {
+            const decimal adjustmentValue = 200;
+
+            //Arrange 
+            var fixtures = new LevyImportCleanupStrategyTestFixtures()
+                .WithDeclaration(124, adjustmentValue, "17-18", 12, new DateTime(2018, 05, 19));
+
+            // act
+            await fixtures.RunStrategy();
+
+            //Assert 
+            const decimal expectedYearEndAdjustment = adjustmentValue * -1; // adjustments are inverted
+            Assert.AreEqual(expectedYearEndAdjustment, fixtures.Result[0].EndOfYearAdjustmentAmount);
         }
     }
 
@@ -128,25 +207,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
         {
             foreach (var subsidyId in subsidyIds)
             {
-                WithDeclaration(subsidyId);
+                WithDeclaration(new DasDeclaration{SubmissionId = subsidyId});
             }
 
             return this;
-        }
-
-        public LevyImportCleanupStrategyTestFixtures WithDeclaration(long subsidyId)
-        {
-            return WithDeclaration(subsidyId, 1M);
-        }
-
-        public LevyImportCleanupStrategyTestFixtures WithDeclaration(long subsidyId, decimal levyDueYtd)
-        {
-            return WithDeclaration(subsidyId, levyDueYtd, "17-18", 12, new DateTime(2017, 04, 19));
-        }
-
-        public LevyImportCleanupStrategyTestFixtures WithAdjustmentDeclaration(long subsidyId, decimal levyDueYtd, DateTime submissionDate)
-        {
-            return WithDeclaration(subsidyId, levyDueYtd, "16-17", 12, submissionDate);
         }
 
         public LevyImportCleanupStrategyTestFixtures WithDeclaration(long subsidyId, decimal levyDueYtd, string payrollYear, short payrollMonth, DateTime submissionDate)
@@ -166,12 +230,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
         {
             Declarations.Add(declaration);
 
-            return this;
-        }
-
-        public LevyImportCleanupStrategyTestFixtures WithEmpRef(string empRef)
-        {
-            EmpRef = empRef;
             return this;
         }
 
