@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HMRC.ESFA.Levy.Api.Types;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Models.Levy;
@@ -25,19 +26,19 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             _logger = logger;
         }
 
-        public async Task<IEnumerable<DasDeclaration>> Cleanup(string empRef, IEnumerable<DasDeclaration> declarations)
+        public async Task<DasDeclaration[]> Cleanup(string empRef, IEnumerable<DasDeclaration> declarations)
         {
-            var temp = declarations.OrderBy(c => c.SubmissionDate).ToArray();
+            var declarationsArray = declarations.OrderBy(c => c.SubmissionDate).ToArray();
 
-            temp = FilterDuplicateHmrcDeclarations(empRef, temp);
+            declarationsArray = FilterDuplicateHmrcDeclarations(empRef, declarationsArray);
 
-            temp = await FilterActiveDeclarations(empRef, temp);
+            declarationsArray = await FilterActiveDeclarations(empRef, declarationsArray);
 
-            ProcessNoPaymentForPeriodDeclarations(temp);
+            ProcessNoPaymentForPeriodDeclarations(declarationsArray);
 
-            await ProcessEndOfYearAdjustmentDeclarations(empRef, temp);
+            await ProcessEndOfYearAdjustmentDeclarations(empRef, declarationsArray);
 
-            return temp;
+            return declarationsArray;
         }
 
         /// <summary> 
@@ -155,10 +156,8 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
         /// </remarks>
         private async Task<DasDeclaration> GetDeclarationEffectiveForPeriod12(string empRef, string payrollYear, DateTime yearEndAdjustmentCutOff, IEnumerable<DasDeclaration> hmrcDeclarations)
         {
-            // Look in the declarations that have just been retrieved from HMRC (which will contain everything not yet in the database)
             DasDeclaration period12Declaration = await GetEffectivePeriod12SubmissionFromLatestHmrcFeed(hmrcDeclarations, payrollYear, yearEndAdjustmentCutOff);
 
-            // Look in the database (which will contain everything previously retrieved from HMRC)
             if (period12Declaration == null)
             {
                 period12Declaration = await GetEffectivePeriod12SubmissionFromDatabase(empRef, payrollYear, yearEndAdjustmentCutOff);
@@ -169,13 +168,8 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
 
         private Task<DasDeclaration> GetEffectivePeriod12SubmissionFromLatestHmrcFeed(IEnumerable<DasDeclaration> declarations, string payrollYear, DateTime yearEndAdjustmentCutOff)
         {
-            // We are only interested in declarations for the current year that are not year-end-adjustments and that were submitted on time
             DasDeclaration period12Declaration = declarations
-                .Where(ld => ld.PayrollYear == payrollYear
-                             && ld.PayrollMonth.HasValue
-                             // We're interested in LD that are either within the month (i.e. pre-cut off) or are year end adjustments before the supplied cut-off date
-                             && ((!ld.EndOfYearAdjustment && _hmrcDateService.IsDateInPayrollPeriod(ld.PayrollYear, ld.PayrollMonth.Value, ld.SubmissionDate))
-                                || ld.EndOfYearAdjustment && ld.SubmissionDate < yearEndAdjustmentCutOff)) 
+                .Where(ld => IsDeclarationAPossibleEffectivePeriod12Declaration(ld, payrollYear, yearEndAdjustmentCutOff)) 
                 .OrderByDescending(ld => ld.PayrollMonth)
                 .ThenByDescending(ld => ld.SubmissionDate)
                 .FirstOrDefault();
@@ -186,6 +180,17 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
         private Task<DasDeclaration> GetEffectivePeriod12SubmissionFromDatabase(string empRef, string payrollYear, DateTime yearEndAdjustmentCutOff)
         {
             return _dasLevyRepository.GetEffectivePeriod12Declaration(empRef, payrollYear, yearEndAdjustmentCutOff);
+        }
+
+        private bool IsDeclarationAPossibleEffectivePeriod12Declaration(DasDeclaration ld, string payrollYear, DateTime yearEndAdjustmentCutOff)
+        {
+            // We're interested in an LD if it were submitted on time (i.e. pre-cut off) or is a year end adjustment
+            return ld.PayrollYear == payrollYear
+                   && ld.PayrollMonth.HasValue
+                   && ((!ld.EndOfYearAdjustment &&
+                        _hmrcDateService.IsDateInPayrollPeriod(ld.PayrollYear, ld.PayrollMonth.Value,
+                            ld.SubmissionDate))
+                       || ld.EndOfYearAdjustment && ld.SubmissionDate < yearEndAdjustmentCutOff);
         }
     }
 }

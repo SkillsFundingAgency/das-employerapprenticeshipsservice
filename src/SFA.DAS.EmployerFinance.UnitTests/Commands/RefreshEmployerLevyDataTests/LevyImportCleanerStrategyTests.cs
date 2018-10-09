@@ -11,7 +11,7 @@ using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTests
 {
     [TestFixture]
     public class LevyImportCleanerStrategyTests
@@ -21,10 +21,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
         {
             var fixtures = new LevyImportCleanerStrategyTestFixtures();
             fixtures.CreateStrategy();
+            Assert.Pass("Should not have thrown an exception");
         }
 
         [Test]
-        public async Task Cleanup_DuplicateSubsidyIdsInInput_DuplicatedSubsidyIdsShouldBeRemoved()
+        public async Task Cleanup_DuplicateSubmissionIdsInInput_DuplicatedSubmissionIdsShouldBeRemoved()
         {
             //Arrange 
             var fixtures = new LevyImportCleanerStrategyTestFixtures()
@@ -39,7 +40,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
         }
 
         [Test]
-        public async Task Cleanup_DuplicateSubsidyIdsInInput_DuplicatedSubsidyIdsShouldBeLogged()
+        public async Task Cleanup_DuplicateSubmissionIdsInInput_DuplicatedSubmissionIdsShouldBeLogged()
         {
             //Arrange 
             var fixtures = new LevyImportCleanerStrategyTestFixtures()
@@ -74,13 +75,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
         [Test(Description = "The first adjustment should apply to the P12 declaration")]
         public async Task Cleanup_MultipleLevyAdjustments_FirstAdjustmentShouldApplyToLatestDeclaration()
         {
-            const decimal p12KLevyDeclarationAmount = 25;
+            const decimal period12Value = 25;
             const decimal firstAdjustmentValue = 150;
             const decimal secondAdjustmentValue = 200;
 
             //Arrange 
             var fixtures = new LevyImportCleanerStrategyTestFixtures()
-                .WithDeclaration(123, p12KLevyDeclarationAmount, "17-18", 12, new DateTime(2018, 04, 19))
+                .WithDeclaration(123, period12Value, "17-18", 12, new DateTime(2018, 04, 19))
                 .WithDeclaration(124, firstAdjustmentValue, "17-18", 12, new DateTime(2018, 05, 19))
                 .WithDeclaration(125, secondAdjustmentValue, "17-18", 12, new DateTime(2018, 06, 19));
 
@@ -88,7 +89,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             await fixtures.RunStrategy();
 
             //Assert 
-            const decimal expectedYearEndAdjustment = (firstAdjustmentValue - p12KLevyDeclarationAmount) * -1; // adjustments are inverted
+            const decimal expectedYearEndAdjustment = (firstAdjustmentValue - period12Value) * -1; // adjustments are inverted
             Assert.AreEqual(expectedYearEndAdjustment, fixtures.Result[1].EndOfYearAdjustmentAmount);
         }
 
@@ -202,22 +203,22 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
                 );
         }
 
-        public LevyImportCleanerStrategyTestFixtures WithDeclarations(params long[] subsidyIds)
+        public LevyImportCleanerStrategyTestFixtures WithDeclarations(params long[] submissionIds)
         {
-            foreach (var subsidyId in subsidyIds)
+            foreach (var submissionId in submissionIds)
             {
-                WithDeclaration(new DasDeclaration{SubmissionId = subsidyId});
+                WithDeclaration(new DasDeclaration{SubmissionId = submissionId});
             }
 
             return this;
         }
 
-        public LevyImportCleanerStrategyTestFixtures WithDeclaration(long subsidyId, decimal levyDueYtd, string payrollYear, short payrollMonth, DateTime submissionDate)
+        public LevyImportCleanerStrategyTestFixtures WithDeclaration(long SubmissionId, decimal levyDueYtd, string payrollYear, short payrollMonth, DateTime submissionDate)
         {
             return WithDeclaration(new DasDeclaration
             {
-                Id = subsidyId.ToString(CultureInfo.InvariantCulture),
-                SubmissionId = subsidyId,
+                Id = SubmissionId.ToString(CultureInfo.InvariantCulture),
+                SubmissionId = SubmissionId,
                 LevyDueYtd = levyDueYtd,
                 PayrollYear = payrollYear,
                 PayrollMonth = payrollMonth,

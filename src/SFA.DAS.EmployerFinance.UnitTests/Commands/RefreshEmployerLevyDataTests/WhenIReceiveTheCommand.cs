@@ -82,40 +82,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
         }
 
         [Test]
-        public async Task ThenAnyDuplicateSubmissionIdsFromHmrcAreFiltered()
-        {
-            //Arrange 
-            var refreshEmployerLevyDataCommand =
-                RefreshEmployerLevyDataCommandObjectMother.CreateDuplicateHmrcSubmissions(ExpectedEmpRef,
-                    ExpectedAccountId);
-
-            //Act 
-            await _refreshEmployerLevyDataCommandHandler.Handle(refreshEmployerLevyDataCommand);
-
-            //Assert 
-            _levyRepository.Verify(x => x.CreateEmployerDeclarations(
-                It.Is<IEnumerable<DasDeclaration>>(d => d.Count() == 1),
-                It.Is<string>(s => s == ExpectedEmpRef),
-                It.Is<long>(a => a == ExpectedAccountId)
-            ), Times.Once());
-        }
-
-        [Test]
-        public async Task ThenAnyDuplicateSubmissionIdsFromHmrcThatAreFilteredAreLogged()
-        {
-            //Arrange 
-            var refreshEmployerLevyDataCommand =
-                RefreshEmployerLevyDataCommandObjectMother.CreateDuplicateHmrcSubmissions(ExpectedEmpRef,
-                    ExpectedAccountId);
-
-            //Act 
-            await _refreshEmployerLevyDataCommandHandler.Handle(refreshEmployerLevyDataCommand);
-
-            ////Assert 
-            _logger.Verify(x => x.Info(It.IsAny<string>()), Times.Once());
-        }
-
-        [Test]
         public async Task ThenTheExistingDeclarationIdsAreCollected()
         {
             //Arrange
@@ -168,35 +134,35 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessDeclarationsEvent>()), Times.Never);
         }
 
-        [Test]
-        public async Task ThenIfTheSubmissionIsAnEndOfYearAdjustmentTheFlagIsSetOnTheRecord()
-        {
-            //Arrange
-            _hmrcDateService.Setup(x => x.IsSubmissionEndOfYearAdjustment("16-17", 12, It.IsAny<DateTime>())).Returns(true);
-            _levyRepository.Setup(x => x.GetSubmissionByEmprefPayrollYearAndMonth(ExpectedEmpRef, "16-17", 12)).ReturnsAsync(new DasDeclaration { LevyDueYtd = 20 });
-            var data = RefreshEmployerLevyDataCommandObjectMother.CreateEndOfYearAdjustment(ExpectedEmpRef, ExpectedAccountId);
+        //[Test]
+        //public async Task ThenIfTheSubmissionIsAnEndOfYearAdjustmentTheFlagIsSetOnTheRecord()
+        //{
+        //    //Arrange
+        //    _hmrcDateService.Setup(x => x.IsSubmissionEndOfYearAdjustment("16-17", 12, It.IsAny<DateTime>())).Returns(true);
+        //    _levyRepository.Setup(x => x.GetSubmissionByEmprefPayrollYearAndMonth(ExpectedEmpRef, "16-17", 12)).ReturnsAsync(new DasDeclaration { LevyDueYtd = 20 });
+        //    var data = RefreshEmployerLevyDataCommandObjectMother.CreateEndOfYearAdjustment(ExpectedEmpRef, ExpectedAccountId);
 
-            //Act
-            await _refreshEmployerLevyDataCommandHandler.Handle(data);
+        //    //Act
+        //    await _refreshEmployerLevyDataCommandHandler.Handle(data);
 
-            //Assert
-            _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.Is<IEnumerable<DasDeclaration>>(c => c.Any(d => d.EndOfYearAdjustment)), ExpectedEmpRef, ExpectedAccountId), Times.Once);
-        }
+        //    //Assert
+        //    _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.Is<IEnumerable<DasDeclaration>>(c => c.Any(d => d.EndOfYearAdjustment)), ExpectedEmpRef, ExpectedAccountId), Times.Once);
+        //}
 
-        [Test]
-        public async Task ThenIfTheSubmissionIsAnEndOfYearAdjustmentTheAmountIsWorkedOutFromThePreviousTaxYearValue()
-        {
-            //Arrange
-            _hmrcDateService.Setup(x => x.IsSubmissionEndOfYearAdjustment("16-17", 12, It.IsAny<DateTime>())).Returns(true);
-            _levyRepository.Setup(x => x.GetSubmissionByEmprefPayrollYearAndMonth(ExpectedEmpRef, "16-17", 12)).ReturnsAsync(new DasDeclaration { LevyDueYtd = 20 });
-            var data = RefreshEmployerLevyDataCommandObjectMother.CreateEndOfYearAdjustment(ExpectedEmpRef, ExpectedAccountId);
+        //[Test]
+        //public async Task ThenIfTheSubmissionIsAnEndOfYearAdjustmentTheAmountIsWorkedOutFromThePreviousTaxYearValue()
+        //{
+        //    //Arrange
+        //    _hmrcDateService.Setup(x => x.IsSubmissionEndOfYearAdjustment("16-17", 12, It.IsAny<DateTime>())).Returns(true);
+        //    _levyRepository.Setup(x => x.GetSubmissionByEmprefPayrollYearAndMonth(ExpectedEmpRef, "16-17", 12)).ReturnsAsync(new DasDeclaration { LevyDueYtd = 20 });
+        //    var data = RefreshEmployerLevyDataCommandObjectMother.CreateEndOfYearAdjustment(ExpectedEmpRef, ExpectedAccountId);
 
-            //Act
-            await _refreshEmployerLevyDataCommandHandler.Handle(data);
+        //    //Act
+        //    await _refreshEmployerLevyDataCommandHandler.Handle(data);
 
-            //Assert
-            _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.Is<IEnumerable<DasDeclaration>>(c => c.First().EndOfYearAdjustment && c.First().EndOfYearAdjustmentAmount.Equals(10m)), ExpectedEmpRef, ExpectedAccountId), Times.Once);
-        }
+        //    //Assert
+        //    _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.Is<IEnumerable<DasDeclaration>>(c => c.First().EndOfYearAdjustment && c.First().EndOfYearAdjustmentAmount.Equals(10m)), ExpectedEmpRef, ExpectedAccountId), Times.Once);
+        //}
 
         [Test]
         public async Task ThenIfTheSubmissionIsAnEndOfYearAdjustmentThePeriod12ValueWillBeTakenFromHmrcIfItExists()
@@ -296,48 +262,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
 
             //Assert
             _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.IsAny<IEnumerable<DasDeclaration>>(), It.IsAny<string>(), It.IsAny<long>()), Times.Never);
-        }
-
-        [Test]
-        public async Task ThenShouldWorkOutEndOfYearAdjustmentFromLastLevySubmission()
-        {
-            //Arrange
-            var adjustmentValue = 5;
-            var latestDeclaration = new DasDeclaration { LevyDueYtd = 20 };
-
-
-            _hmrcDateService.Setup(x => x.IsSubmissionEndOfYearAdjustment("16-17", 12, It.IsAny<DateTime>()))
-                            .Returns(true);
-
-            _levyRepository.Setup(x => x.GetSubmissionByEmprefPayrollYearAndMonth(ExpectedEmpRef, "16-17", 8))
-                           .ReturnsAsync(latestDeclaration);
-
-            var data = RefreshEmployerLevyDataCommandObjectMother.CreateEndOfYearAdjustment(ExpectedEmpRef, ExpectedAccountId, latestDeclaration.LevyDueYtd - adjustmentValue);
-
-            //Act
-            await _refreshEmployerLevyDataCommandHandler.Handle(data);
-
-            //Assert
-            _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.Is<IEnumerable<DasDeclaration>>(c => c.Any(d => d.EndOfYearAdjustment && d.EndOfYearAdjustmentAmount.Equals(adjustmentValue))), ExpectedEmpRef, ExpectedAccountId), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenShouldUserAdjustYtdValueIfNoLevyDeclared()
-        {
-            //Arrange
-            var adjustmentLevyYtd = 8;
-
-
-            _hmrcDateService.Setup(x => x.IsSubmissionEndOfYearAdjustment("16-17", 12, It.IsAny<DateTime>()))
-                .Returns(true);
-
-            var data = RefreshEmployerLevyDataCommandObjectMother.CreateEndOfYearAdjustment(ExpectedEmpRef, ExpectedAccountId, adjustmentLevyYtd);
-
-            //Act
-            await _refreshEmployerLevyDataCommandHandler.Handle(data);
-
-            //Assert
-            _levyRepository.Verify(x => x.CreateEmployerDeclarations(It.Is<IEnumerable<DasDeclaration>>(c => c.Any(d => d.EndOfYearAdjustment && d.EndOfYearAdjustmentAmount.Equals(adjustmentLevyYtd))), ExpectedEmpRef, ExpectedAccountId), Times.Once);
         }
 
         [Test]

@@ -56,14 +56,12 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             {
                 var declarations = await _levyImportCleanerStrategy.Cleanup(employerLevyData.EmpRef, employerLevyData.Declarations.Declarations);
 
-                var temp = declarations.ToArray();
+                if (declarations.Length == 0) continue;
 
-                if (temp.Length == 0) continue;
-
-                await _dasLevyRepository.CreateEmployerDeclarations(temp, employerLevyData.EmpRef, message.AccountId);
+                await _dasLevyRepository.CreateEmployerDeclarations(declarations, employerLevyData.EmpRef, message.AccountId);
 
                 updatedEmpRefs.Add(employerLevyData.EmpRef);
-                savedDeclarations.AddRange(temp);
+                savedDeclarations.AddRange(declarations);
             }
 
             if (savedDeclarations.Any())

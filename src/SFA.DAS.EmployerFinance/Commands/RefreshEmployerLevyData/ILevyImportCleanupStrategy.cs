@@ -14,6 +14,6 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
     /// </remarks>
     public interface ILevyImportCleanerStrategy
     {
-        Task<IEnumerable<DasDeclaration>> Cleanup(string empRef, IEnumerable<DasDeclaration> declarations);
+        Task<DasDeclaration[]> Cleanup(string empRef, IEnumerable<DasDeclaration> declarations);
     }
 }
