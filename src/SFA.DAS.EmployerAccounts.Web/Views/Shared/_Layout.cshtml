@@ -1,4 +1,6 @@
 ﻿@using Microsoft.ApplicationInsights.Extensibility
+@using SFA.DAS.Authorization
+@using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Web.Extensions
 @using SFA.DAS.EmployerAccounts.Web.ViewModels
 @using SFA.DAS.Extensions
@@ -176,10 +178,10 @@ if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetPro
                     <ul role="menubar" id="global-nav-links">
                         <li><a href="@Url.Action("Index", "EmployerTeam")" class="@(ViewBag.Section == "home" ? "selected" : "")" role="menuitem">Home</a></li>
                         <li><a href="@Url.LegacyEasAccountAction("finance")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
-                        @*@if (Html.IsAuthorized(FeatureType.Recruitments))
+                        @if (Html.IsAuthorized(FeatureType.Recruitments))
                             {
                                 <li><a href="@Url.EmployerRecruitAction()" role="menuitem">Recruitment</a></li>
-                            }*@
+                            }
                         <li><a href="@Url.EmployerCommitmentsAction("apprentices/home")" class="@(controllerString == "EmployerCommitments" ? "selected" : "")" role="menuitem">Apprentices</a></li>
                         <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Your team</a></li>
                         <li><a href="@Url.Action("Index", "EmployerAgreement")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Your organisations and agreements</a></li>
