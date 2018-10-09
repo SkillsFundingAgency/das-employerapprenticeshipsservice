@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Models;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments;
 using SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTransactions;
@@ -36,6 +37,71 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             _currentTime = currentTime;
             _logger = logger;
         }
+
+        public async Task<OrchestratorResponse<PaymentTransactionViewModel>> FindAccountPaymentTransactions(
+            string hashedId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
+        {
+            try
+            {
+                var data = await _mediator.SendAsync(new FindAccountProviderPaymentsQuery
+                {
+                    HashedAccountId = hashedId,
+                    UkPrn = ukprn,
+                    FromDate = fromDate,
+                    ToDate = toDate,
+                    ExternalUserId = externalUserId
+                });
+
+                var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.CourseStartDate });
+
+                var coursePaymentGroups = courseGroups.Select(x => new ApprenticeshipPaymentGroup
+                {
+                    ApprenticeCourseName = x.Key.CourseName,
+                    CourseLevel = x.Key.CourseLevel,
+                    CourseStartDate = x.Key.CourseStartDate,
+                    Payments = x.ToList()
+                }).ToList();
+
+
+                return new OrchestratorResponse<PaymentTransactionViewModel>
+                {
+                    Status = HttpStatusCode.OK,
+                    Data = new PaymentTransactionViewModel
+                    {
+                        ProviderName = data.ProviderName,
+                        TransactionDate = data.TransactionDate,
+                        Amount = data.Total,
+                        SubTransactions = data.Transactions,
+                        CoursePaymentGroups = coursePaymentGroups
+                    }
+                };
+            }
+            catch (NotFoundException e)
+            {
+                return new OrchestratorResponse<PaymentTransactionViewModel>
+                {
+                    Status = HttpStatusCode.NotFound,
+                    Exception = e
+                };
+            }
+            catch (InvalidRequestException e)
+            {
+                return new OrchestratorResponse<PaymentTransactionViewModel>
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = e
+                };
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                return new OrchestratorResponse<PaymentTransactionViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = e
+                };
+            }
+        }
+
         public async Task<OrchestratorResponse<ProviderPaymentsSummaryViewModel>> GetProviderPaymentSummary(
        string hashedId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
         {
@@ -325,6 +391,13 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                 transaction.PayeSchemeName = payeSchemeData?.PayeScheme?.Name ?? string.Empty;
             }
 
+            if (data.Transactions.Count == 0)
+            {
+                return new OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>
+                {
+                    Status = HttpStatusCode.NotFound
+                };
+            }
             return new OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>
             {
                 Status = HttpStatusCode.OK,

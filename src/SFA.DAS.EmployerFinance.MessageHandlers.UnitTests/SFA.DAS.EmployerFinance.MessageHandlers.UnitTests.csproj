@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.MessageHandlers\SFA.DAS.EmployerFinance.MessageHandlers.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance.UnitTests\SFA.DAS.EmployerFinance.UnitTests.csproj" />
     <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
   </ItemGroup>
 

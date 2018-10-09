@@ -41,20 +41,30 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
         public async Task Handle(ImportAccountLevyDeclarationsCommand message, IMessageHandlerContext context)
         {
-            var employerAccountId = message.AccountId;
-            var payeRef = message.PayeRef;
+            try
+            {
+                var employerAccountId = message.AccountId;
+                var payeRef = message.PayeRef;
 
-            _logger.Debug($"Getting english fraction updates for employer account {employerAccountId}");
+                _logger.Debug($"Getting english fraction updates for employer account {employerAccountId}");
 
-            var englishFractionUpdateResponse = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
+                var englishFractionUpdateResponse = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
 
-            _logger.Debug($"Getting levy declarations for PAYE scheme {payeRef} for employer account {employerAccountId}");
+                _logger.Debug($"Getting levy declarations for PAYE scheme {payeRef} for employer account {employerAccountId}");
 
-            var payeSchemeDeclarations = await ProcessScheme(payeRef, englishFractionUpdateResponse);
+                var payeSchemeDeclarations = await ProcessScheme(payeRef, englishFractionUpdateResponse);
 
-            _logger.Debug($"Adding Levy Declarations of PAYE scheme {payeRef} to employer account {employerAccountId}");
+                _logger.Debug($"Adding Levy Declarations of PAYE scheme {payeRef} to employer account {employerAccountId}");
 
-            await RefreshEmployerAccountLevyDeclarations(employerAccountId, payeSchemeDeclarations);
+                await RefreshEmployerAccountLevyDeclarations(employerAccountId, payeSchemeDeclarations);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
         }
 
         private async Task RefreshEmployerAccountLevyDeclarations(long employerAccountId, ICollection<EmployerLevyData> payeSchemeDeclarations)

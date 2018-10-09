@@ -331,6 +331,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityValidator.cs" />
     <Compile Include="Extensions\AddressExtensions.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityRequest.cs" />
@@ -459,9 +460,6 @@
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommand.cs" />
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommandHandler.cs" />
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommandResponse.cs" />
-    <Compile Include="Commands\RenameEmployerAccount\RenameEmployerAccountCommand.cs" />
-    <Compile Include="Commands\RenameEmployerAccount\RenameEmployerAccountCommandHandler.cs" />
-    <Compile Include="Commands\RenameEmployerAccount\RenameEmployerAccountCommandValidator.cs" />
     <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommand.cs" />
     <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommandHandler.cs" />
     <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommandValidator.cs" />

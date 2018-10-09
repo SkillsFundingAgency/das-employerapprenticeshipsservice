@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerFinance.Commands.UpdatePayeInformation
 
             var scheme = await _payeRepository.GetPayeSchemeByRef(message.PayeRef);
 
-            if (!string.IsNullOrEmpty(scheme.RefName))
+            if (!string.IsNullOrEmpty(scheme?.RefName))
             {
                 return;
             }

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web;
-using MediatR;
-using SFA.DAS.Authorization;
+﻿using MediatR;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
-using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -14,9 +8,12 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -55,7 +52,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     OrganisationDateOfInception = viewModel.OrganisationDateOfInception,
                     PayeReference = viewModel.PayeReference,
                     AccessToken = viewModel.AccessToken,
-                    RefreshToken = viewModel.RefreshToken,  
+                    RefreshToken = viewModel.RefreshToken,
                     OrganisationStatus = viewModel.OrganisationStatus,
                     EmployerRefName = viewModel.EmployerRefName,
                     PublicSectorDataSource = viewModel.PublicSectorDataSource,
@@ -87,7 +84,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     FlashMessage = new FlashMessageViewModel()
                 };
             }
-           
+
         }
 
 
@@ -122,12 +119,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual EmployerAccountData GetCookieData(HttpContextBase context)
         {
             return CookieService.Get(CookieName);
-            
+
         }
 
         public virtual void CreateCookieData(HttpContextBase context, EmployerAccountData data)
         {
-            CookieService.Create(data,CookieName, 365);
+            CookieService.Create(data, CookieName, 365);
         }
 
         public void UpdateCookieData(HttpContextBase context, EmployerAccountData data)
@@ -178,70 +175,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Name = response.Account.Name
                 }
             };
-        }
-
-        public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> GetRenameEmployerAccountViewModel(string hashedAccountId, string userId)
-        {
-            var response = await Mediator.SendAsync(new GetEmployerAccountHashedQuery
-            {
-                HashedAccountId = hashedAccountId,
-                UserId = userId
-            });
-
-            return new OrchestratorResponse<RenameEmployerAccountViewModel>
-            {
-                Data = new RenameEmployerAccountViewModel
-                {
-                    HashedId = hashedAccountId,
-                    CurrentName = response.Account.Name,
-                    NewName = String.Empty
-                }
-            };
-        }
-
-        public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> RenameEmployerAccount(RenameEmployerAccountViewModel model, string userId)
-        {
-            var response = new OrchestratorResponse<RenameEmployerAccountViewModel> { Data = model };
-
-            var userRoleResponse = await GetUserAccountRole(model.HashedId, userId);
-
-            if (!userRoleResponse.UserRole.Equals(Role.Owner))
-            {
-                return new OrchestratorResponse<RenameEmployerAccountViewModel>
-                {
-                    Status = HttpStatusCode.Unauthorized
-                };
-            }
-
-            try
-            {
-                await _mediator.SendAsync(new RenameEmployerAccountCommand
-                {
-                    HashedAccountId = model.HashedId,
-                    ExternalUserId = userId,
-                    NewName = (model.NewName ?? String.Empty).Trim()
-                });
-
-                model.CurrentName = model.NewName;
-                model.NewName = String.Empty;
-                response.Data = model;
-                response.Status = HttpStatusCode.OK;
-            }
-            catch (InvalidRequestException ex)
-            {
-                response.Status = HttpStatusCode.BadRequest;
-                response.Data.ErrorDictionary = ex.ErrorMessages;
-                response.Exception = ex;
-                response.FlashMessage = new FlashMessageViewModel
-                {
-                    Headline = "Errors to fix",
-                    Message = "Check the following details:",
-                    ErrorMessages = ex.ErrorMessages,
-                    Severity = FlashMessageSeverityLevel.Error
-                };
-            }
-
-            return response;
         }
     }
 }

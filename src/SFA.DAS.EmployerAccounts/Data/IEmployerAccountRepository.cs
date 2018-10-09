@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SFA.DAS.EmployerAccounts.Models.Account;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Data
 {
@@ -10,5 +10,6 @@ namespace SFA.DAS.EmployerAccounts.Data
         Task<List<Account>> GetAllAccounts();
         Task<Account> GetAccountByHashedId(string hashedAccountId);
         Task<AccountStats> GetAccountStats(long accountId);
+        Task RenameAccount(long id, string name);
     }
 }

@@ -9,34 +9,20 @@ namespace SFA.DAS.EmployerFinance.Commands.RunHealthCheckCommand
 {
     public class RunHealthCheckCommandHandler : AsyncRequestHandler<RunHealthCheckCommand>
     {
-        private readonly IEmployerFinanceApiClient _employerFinanceApiClient;
         private readonly Lazy<EmployerFinanceDbContext> _db;
+        private readonly IEmployerFinanceApiClient _employerFinanceApiClient;
 
-        public RunHealthCheckCommandHandler(IEmployerFinanceApiClient employerFinanceApiClient, Lazy<EmployerFinanceDbContext> db)
+        public RunHealthCheckCommandHandler(Lazy<EmployerFinanceDbContext> db, IEmployerFinanceApiClient employerFinanceApiClient)
         {
-            _employerFinanceApiClient = employerFinanceApiClient;
             _db = db;
+            _employerFinanceApiClient = employerFinanceApiClient;
         }
 
         protected override async Task HandleCore(RunHealthCheckCommand message)
         {
             var healthCheck = new HealthCheck(message.UserRef.Value);
 
-            try
-            {
-                await healthCheck.SendRequest(_employerFinanceApiClient.HealthCheck);
-            }
-            catch
-            {
-            }
-
-            try
-            {
-                healthCheck.PublishEvent();
-            }
-            catch
-            {
-            }
+            await healthCheck.Run(_employerFinanceApiClient.HealthCheck);
 
             _db.Value.HealthChecks.Add(healthCheck);
         }

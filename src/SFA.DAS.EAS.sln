@@ -157,13 +157,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.Api.Client", "SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj", "{AA299F18-D0CA-43A2-AE4D-54CB6C48EA70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Api.Client.UnitTests", "SFA.DAS.EmployerAccounts.Api.Client.UnitTests\SFA.DAS.EmployerAccounts.Api.Client.UnitTests.csproj", "{F8FD7B45-B602-4C4B-BF2A-AB55373A2389}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Api.Client.UnitTests", "SFA.DAS.EmployerAccounts.Api.Client.UnitTests\SFA.DAS.EmployerAccounts.Api.Client.UnitTests.csproj", "{F8FD7B45-B602-4C4B-BF2A-AB55373A2389}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Api.Client.UnitTests", "SFA.DAS.EmployerFinance.Api.Client.UnitTests\SFA.DAS.EmployerFinance.Api.Client.UnitTests.csproj", "{3BE38DFF-DCCF-45AC-93EA-AB6E30DBB90D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.Api.Client.UnitTests", "SFA.DAS.EmployerFinance.Api.Client.UnitTests\SFA.DAS.EmployerFinance.Api.Client.UnitTests.csproj", "{3BE38DFF-DCCF-45AC-93EA-AB6E30DBB90D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Jobs.UnitTests", "SFA.DAS.EmployerAccounts.Jobs.UnitTests\SFA.DAS.EmployerAccounts.Jobs.UnitTests.csproj", "{644B4794-B428-44CA-8A47-55A8136EE5CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Jobs.UnitTests", "SFA.DAS.EmployerAccounts.Jobs.UnitTests\SFA.DAS.EmployerAccounts.Jobs.UnitTests.csproj", "{644B4794-B428-44CA-8A47-55A8136EE5CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Jobs.UnitTests", "SFA.DAS.EmployerFinance.Jobs.UnitTests\SFA.DAS.EmployerFinance.Jobs.UnitTests.csproj", "{4341EE0B-9ECE-424C-B7C2-E5715A5247C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.Jobs.UnitTests", "SFA.DAS.EmployerFinance.Jobs.UnitTests\SFA.DAS.EmployerFinance.Jobs.UnitTests.csproj", "{4341EE0B-9ECE-424C-B7C2-E5715A5247C0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.AcceptanceTests", "SFA.DAS.EmployerFinance.AcceptanceTests\SFA.DAS.EmployerFinance.AcceptanceTests.csproj", "{BA502A04-A41F-418E-80A5-74F264CF0FBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -416,6 +418,10 @@ Global
 		{4341EE0B-9ECE-424C-B7C2-E5715A5247C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4341EE0B-9ECE-424C-B7C2-E5715A5247C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4341EE0B-9ECE-424C-B7C2-E5715A5247C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA502A04-A41F-418E-80A5-74F264CF0FBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA502A04-A41F-418E-80A5-74F264CF0FBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA502A04-A41F-418E-80A5-74F264CF0FBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA502A04-A41F-418E-80A5-74F264CF0FBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -470,6 +476,7 @@ Global
 		{3BE38DFF-DCCF-45AC-93EA-AB6E30DBB90D} = {56860F8C-F41E-4B99-8B5A-4C160904DBD9}
 		{644B4794-B428-44CA-8A47-55A8136EE5CA} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
 		{4341EE0B-9ECE-424C-B7C2-E5715A5247C0} = {56860F8C-F41E-4B99-8B5A-4C160904DBD9}
+		{BA502A04-A41F-418E-80A5-74F264CF0FBA} = {56860F8C-F41E-4B99-8B5A-4C160904DBD9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7BB69664-F8C0-4231-9940-51CE90904197}

@@ -11,6 +11,9 @@
         "sharedAppServicePlanResourceGroup": {
             "type": "string"
         },
+        "ApiAppServiceName": {
+            "type": "string"
+        },
         "workerAppServiceName": {
             "type": "string"
         },
@@ -46,6 +49,13 @@
             "metadata": {
                 "description": "Comma separated list of certificate thumbprints to load into the app service"
             }
+        },
+        "uiCustomHostname": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "uiCertificateName": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -66,6 +76,27 @@
                     },
                     "attachedService": {
                         "value": "[parameters('uiAppServiceName')]"
+                    }
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "apiVersion": "2017-08-01",
+            "name": "ApiAppInsights",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/application-insights.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appInsightsName": {
+                        "value": "[parameters('ApiAppServiceName')]"
+                    },
+                    "attachedService": {
+                        "value": "[parameters('ApiAppServiceName')]"
                     }
                 }
             },
@@ -122,11 +153,67 @@
                                 "value": "[parameters('loadCertificateThumbprints')]"
                             }
                         ]
+                    },
+                    "customHostName": {
+                        "value": "[parameters('uiCustomHostname')]"
+                    },
+                    "certificateThumbprint": {
+                        "value": "[reference(resourceId(parameters('sharedAppServicePlanResourceGroup'), 'Microsoft.Web/certificates', parameters('uiCertificateName')), '2016-03-01').Thumbprint]"
                     }
                 }
             },
             "dependsOn": [
                 "UIAppInsights"
+            ]
+        },
+        {
+            "apiVersion": "2017-08-01",
+            "name": "ApiAppService",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/app-service.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServiceName": {
+                        "value": "[parameters('ApiAppServiceName')]"
+                    },
+                    "appServicePlanName": {
+                        "value": "[parameters('SharedAppServicePlanName')]"
+                    },
+                    "appServicePlanResourceGroup": {
+                        "value": "[parameters('SharedAppServicePlanResourceGroup')]"
+                    },
+                    "appServiceAppSettings": {
+                        "value": [
+                            {
+                                "name": "LoggingRedisConnectionString",
+                                "value": "[parameters('loggingRedisConnectionString')]"
+                            },
+                            {
+                                "name": "LoggingRedisKey",
+                                "value": "[parameters('loggingRedisKey')]"
+                            },
+                            {
+                                "name": "ConfigurationStorageConnectionString",
+                                "value": "[parameters('configurationStorageConnectionString')]"
+                            },
+                            {
+                                "name": "EnvironmentName",
+                                "value": "[parameters('environmentName')]"
+                            },
+                            {
+                                "name": "InstrumentationKey",
+                                "value": "[reference('ApiAppInsights').outputs.InstrumentationKey.value]"
+                            }
+                        ]
+                    }
+                }
+            },
+            "dependsOn": [
+                "ApiAppInsights"
             ]
         },
         {

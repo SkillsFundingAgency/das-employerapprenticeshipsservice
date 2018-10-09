@@ -9,34 +9,20 @@ namespace SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand
 {
     public class RunHealthCheckCommandHandler : AsyncRequestHandler<RunHealthCheckCommand>
     {
-        private readonly IEmployerAccountsApiClient _employerAccountsApiClient;
         private readonly Lazy<EmployerAccountsDbContext> _db;
+        private readonly IEmployerAccountsApiClient _employerAccountsApiClient;
 
-        public RunHealthCheckCommandHandler(IEmployerAccountsApiClient employerAccountsApiClient, Lazy<EmployerAccountsDbContext> db)
+        public RunHealthCheckCommandHandler(Lazy<EmployerAccountsDbContext> db, IEmployerAccountsApiClient employerAccountsApiClient)
         {
-            _employerAccountsApiClient = employerAccountsApiClient;
             _db = db;
+            _employerAccountsApiClient = employerAccountsApiClient;
         }
 
         protected override async Task HandleCore(RunHealthCheckCommand message)
         {
             var healthCheck = new HealthCheck(message.UserRef.Value);
 
-            try
-            {
-                await healthCheck.SendRequest(_employerAccountsApiClient.HealthCheck);
-            }
-            catch
-            {
-            }
-
-            try
-            {
-                healthCheck.PublishEvent();
-            }
-            catch
-            {
-            }
+            await healthCheck.Run(_employerAccountsApiClient.HealthCheck);
 
             _db.Value.HealthChecks.Add(healthCheck);
         }

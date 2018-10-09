@@ -10,25 +10,25 @@ using SFA.DAS.EmployerFinance.Dtos;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetHealthCheck
 {
-    public class GetHealthCheckQueryHandler : IAsyncRequestHandler<GetHealthCheckQuery, GetHealthCheckResponse>
+    public class GetHealthCheckQueryHandler : IAsyncRequestHandler<GetHealthCheckQuery, GetHealthCheckQueryResponse>
     {
-        private readonly IConfigurationProvider _configurationProvider;
         private readonly Lazy<EmployerFinanceDbContext> _db;
+        private readonly IConfigurationProvider _configurationProvider;
 
-        public GetHealthCheckQueryHandler(IConfigurationProvider configurationProvider, Lazy<EmployerFinanceDbContext> db)
+        public GetHealthCheckQueryHandler(Lazy<EmployerFinanceDbContext> db, IConfigurationProvider configurationProvider)
         {
-            _configurationProvider = configurationProvider;
             _db = db;
+            _configurationProvider = configurationProvider;
         }
 
-        public async Task<GetHealthCheckResponse> Handle(GetHealthCheckQuery message)
+        public async Task<GetHealthCheckQueryResponse> Handle(GetHealthCheckQuery message)
         {
             var healthCheck = await _db.Value.HealthChecks
                 .OrderByDescending(h => h.Id)
                 .ProjectTo<HealthCheckDto>(_configurationProvider)
                 .FirstOrDefaultAsync();
 
-            return new GetHealthCheckResponse
+            return new GetHealthCheckQueryResponse
             {
                 HealthCheck = healthCheck
             };

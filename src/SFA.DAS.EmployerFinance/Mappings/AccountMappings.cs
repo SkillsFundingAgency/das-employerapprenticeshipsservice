@@ -10,7 +10,10 @@ namespace SFA.DAS.EmployerFinance.Mappings
         public AccountMappings()
         {
             CreateMap<Account, AccountContext>();
-            CreateMap<Account, AccountDto>();
+
+            CreateMap<Account, AccountDto>()
+                .ForMember(d => d.CreatedDate, o => o.Ignore())
+                .ForMember(d => d.ModifiedDate, o => o.Ignore());
         }
     }
 }
