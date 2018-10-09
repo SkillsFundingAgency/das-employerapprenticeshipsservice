@@ -95,7 +95,12 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsActionName,
-                new { hashedAccountId, organisationName = name, hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId });
+                new
+                {
+                    hashedAccountId,
+                    organisationName = name,
+                    hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId
+                });
 
         }
 
