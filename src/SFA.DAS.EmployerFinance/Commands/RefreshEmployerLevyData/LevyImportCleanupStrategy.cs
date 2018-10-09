@@ -10,12 +10,12 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
 {
-    public class LevyImportCleanupStrategy : ILevyImportCleanupStrategy
+    public class LevyImportCleanerStrategy : ILevyImportCleanerStrategy
     {
         private readonly IDasLevyRepository _dasLevyRepository;
         private readonly IHmrcDateService _hmrcDateService;
         private readonly ILog _logger;
-        public LevyImportCleanupStrategy(
+        public LevyImportCleanerStrategy(
             IDasLevyRepository dasLevyRepository,
             IHmrcDateService hmrcDateService,
             ILog logger)
@@ -131,7 +131,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             }
             else
             {
-                yearEndAdjustment.EndOfYearAdjustmentAmount = yearEndAdjustment.LevyDueYtd ?? 0;
+                yearEndAdjustment.EndOfYearAdjustmentAmount = -yearEndAdjustment.LevyDueYtd ?? 0;
             }
         }
 

@@ -4,7 +4,15 @@ using SFA.DAS.EmployerFinance.Models.Levy;
 
 namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
 {
-    public interface ILevyImportCleanupStrategy
+    /// <summary>
+    ///     Represents a service that can take levy declarations and pre-process them to make them 
+    ///     suitable for processing by EAS. 
+    /// </summary>
+    /// <remarks>
+    ///     The pre-processing that occurs is to remove duplicate subsidy ids, remove declarations that 
+    ///     are outside the period range and evaluate year end adjustments. 
+    /// </remarks>
+    public interface ILevyImportCleanerStrategy
     {
         Task<IEnumerable<DasDeclaration>> Cleanup(string empRef, IEnumerable<DasDeclaration> declarations);
     }

@@ -194,9 +194,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
 
         public List<DasDeclaration> Declarations { get; }
 
-        public LevyImportCleanupStrategy CreateStrategy()
+        public LevyImportCleanerStrategy CreateStrategy()
         {
-            return new LevyImportCleanupStrategy(
+            return new LevyImportCleanerStrategy(
                 DasLevyRepository,
                 HmrcDateService,
                 Log

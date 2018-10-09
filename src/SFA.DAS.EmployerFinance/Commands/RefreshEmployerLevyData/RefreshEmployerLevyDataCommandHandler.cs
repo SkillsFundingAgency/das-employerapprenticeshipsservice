@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
         private readonly ILevyEventFactory _levyEventFactory;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IHashingService _hashingService;
-        private readonly ILevyImportCleanupStrategy _levyImportCleanupStrategy;
+        private readonly ILevyImportCleanerStrategy _levyImportCleanerStrategy;
 
         public RefreshEmployerLevyDataCommandHandler(
             IValidator<RefreshEmployerLevyDataCommand> validator,
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             ILevyEventFactory levyEventFactory,
             IGenericEventFactory genericEventFactory,
             IHashingService hashingService,
-            ILevyImportCleanupStrategy levyImportCleanupStrategy)
+            ILevyImportCleanerStrategy levyImportCleanerStrategy)
         {
             _validator = validator;
             _dasLevyRepository = dasLevyRepository;
@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             _levyEventFactory = levyEventFactory;
             _genericEventFactory = genericEventFactory;
             _hashingService = hashingService;
-            _levyImportCleanupStrategy = levyImportCleanupStrategy;
+            _levyImportCleanerStrategy = levyImportCleanerStrategy;
         }
 
         protected override async Task HandleCore(RefreshEmployerLevyDataCommand message)
@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
 
             foreach (var employerLevyData in message.EmployerLevyData)
             {
-                var declarations = await _levyImportCleanupStrategy.Cleanup(employerLevyData.EmpRef, employerLevyData.Declarations.Declarations);
+                var declarations = await _levyImportCleanerStrategy.Cleanup(employerLevyData.EmpRef, employerLevyData.Declarations.Declarations);
 
                 var temp = declarations.ToArray();
 
