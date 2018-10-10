@@ -19,6 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NServiceBus;
+using SFA.DAS.EmployerFinance.Messages.Events;
+using SFA.DAS.NServiceBus.Testing;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTests
 {
@@ -33,6 +36,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IHashingService> _hashingService;
         private Mock<ILog> _logger;
+        private TestableEventPublisher _eventPublisher;
         private const string ExpectedEmpRef = "123456";
         private const long ExpectedAccountId = 44321;
 
@@ -54,9 +58,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _hashingService = new Mock<IHashingService>();
             _logger = new Mock<ILog>();
+            _eventPublisher = new TestableEventPublisher();
 
             _refreshEmployerLevyDataCommandHandler = new RefreshEmployerLevyDataCommandHandler(_validator.Object, _levyRepository.Object, _mediator.Object, _hmrcDateService.Object,
-                _levyEventFactory.Object, _genericEventFactory.Object, _hashingService.Object, _logger.Object);
+                _levyEventFactory.Object, _genericEventFactory.Object, _hashingService.Object, _logger.Object, _eventPublisher);
         }
 
         [Test]
@@ -380,6 +385,19 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
             //Act
             Func<Task> action = () => _refreshEmployerLevyDataCommandHandler.Handle(data);
             action.ShouldNotThrow();
+        }
+
+
+        [Test]
+        public async Task ThenARefreshEmployerLevyDataCompletedEventIsPublished()
+        {
+            //Act
+            await _refreshEmployerLevyDataCommandHandler.Handle(RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId));
+
+
+            //Assert
+            Assert.IsTrue(_eventPublisher.Events.OfType<RefreshEmployerLevyDataCompletedEvent>().Any(e =>
+                e.AccountId.Equals(ExpectedAccountId)));
         }
     }
 }
