@@ -1,5 +1,5 @@
 ﻿
--- Replace values below with correct values and then run the script on a per tranaction basis
+-- Replace values below with correct values and then run the script on a per transaction basis
 DECLARE @SubmissionId BIGINT = 1000
 DECLARE @TransactionAmount DECIMAL = 1000
 DECLARE @AdjustmentAmount DECIMAL = 1000
