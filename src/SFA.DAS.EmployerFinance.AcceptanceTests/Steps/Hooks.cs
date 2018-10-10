@@ -73,7 +73,9 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 .UseStructureMapBuilder(_container)
                 .UseUnitOfWork();
 
+#if DEBUG
             endpointConfiguration.PurgeOnStartup(true);
+#endif
 
             _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
