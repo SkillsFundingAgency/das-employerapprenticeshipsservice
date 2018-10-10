@@ -19,8 +19,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             this ITransactionRepository transactionRepository, 
             Account account, 
             CancellationToken cancellationToken,
-            int pollIntervalMsecs = 1000,
-            int requiredStableReadCount = 3)
+            int pollIntervalMsecs = 3000,
+            int requiredStableReadCount = 5)
         {
             return await WaitForStableResult(
                 () => transactionRepository.GetPreviousTransactionsCount(account.Id, DateTime.MaxValue),
