@@ -152,6 +152,7 @@
     <None Include="Database.publish.xml" />
     <None Include="Scripts\Manual\AML-2408-UpdateIncorrectLevyAdjustmentEntries.sql" />
     <None Include="Scripts\Manual\AML-2502-DeleteFullyFundedPayments.sql" />
+    <None Include="Scripts\Manual\AML-2920_TransactionFIx.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
