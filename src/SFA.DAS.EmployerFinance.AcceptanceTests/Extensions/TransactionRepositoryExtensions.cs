@@ -3,11 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Account;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 {
     public static class TransactionRepositoryExtensions
     {
+        private static readonly ILog _log = new NLogLogger(typeof(TransactionRepository));
 
         /// <summary>
         ///     Returns a task that polls the transaction table for the specified account's transactions.
@@ -20,13 +22,15 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             Account account, 
             CancellationToken cancellationToken,
             int pollIntervalMsecs = 3000,
-            int requiredStableReadCount = 5)
+            int requiredStableReadCount = 3)
         {
             return await WaitForStableResult(
                 () => transactionRepository.GetPreviousTransactionsCount(account.Id, DateTime.MaxValue),
                 cancellationToken, pollIntervalMsecs, requiredStableReadCount);
         }
 
+
+        private static int stabilityCheck = 0;
 
         /// <summary>
         ///     Returns true if the supplied delegate returns the same value <see cref="requiredStableReadCount"/>
@@ -54,6 +58,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 
             try
             {
+                var thisStabilityCheck = Interlocked.Increment(ref stabilityCheck);
+
                 while (!cancellationToken.IsCancellationRequested && actualStableReadCount < requiredStableReadCount)
                 {
                     var isSteady = await Task.Delay(pollIntervalMsecs, cancellationToken)
@@ -62,6 +68,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 
                     // Note that when IsResultStable returns true we have already read the same result twice so the first true result means we have a sequence of 2, not 1.
                     actualStableReadCount = isSteady ? (actualStableReadCount == 0 ? 2 : actualStableReadCount + 1) : 0;
+
+                    _log.Debug($"stability-check:{thisStabilityCheck} isSteady:{isSteady} count:{result} current-steady-count:{actualStableReadCount} ");
                 }
             }
             catch (TaskCanceledException)
