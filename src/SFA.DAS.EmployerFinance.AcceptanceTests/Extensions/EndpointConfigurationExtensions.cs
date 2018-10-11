@@ -9,11 +9,10 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 {
     public static class EndpointConfigurationExtensions
     {
-        public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config, Func<string> connectionStringBuilder)
+        public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config)
         {
-            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
-
-            config.UseAzureServiceBusTransport(isDevelopment, connectionStringBuilder, r =>
+            // It is important that we use the LearningTransport here to avoid clashes with the real message handler web job (which will be running in the AT env).
+            config.UseAzureServiceBusTransport(true, null, r =>
             {
                 r.RouteToEndpoint(
                     typeof(ImportLevyDeclarationsCommand).Assembly,
