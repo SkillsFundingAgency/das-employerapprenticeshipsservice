@@ -51,4 +51,15 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="App.Debug.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Update="App.Release.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+  </ItemGroup>
+
 </Project>
