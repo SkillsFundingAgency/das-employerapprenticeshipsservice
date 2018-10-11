@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using BoDi;
 using NServiceBus;
@@ -73,9 +74,10 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 .UseStructureMapBuilder(_container)
                 .UseUnitOfWork();
 
-#if DEBUG
-            endpointConfiguration.PurgeOnStartup(true);
-#endif
+            if (Debugger.IsAttached)
+            {
+                endpointConfiguration.PurgeOnStartup(true);
+            }
 
             _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
