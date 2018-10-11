@@ -1,8 +1,8 @@
-﻿using System;
-using HMRC.ESFA.Levy.Api.Types.Exceptions;
+﻿using HMRC.ESFA.Levy.Api.Types.Exceptions;
 using Polly;
 using SFA.DAS.Http;
 using SFA.DAS.NLog.Logger;
+using System;
 
 namespace SFA.DAS.ExecutionPolicies
 {
@@ -17,14 +17,20 @@ namespace SFA.DAS.ExecutionPolicies
         private readonly Policy InternalServerErrorPolicy;
         private readonly Policy RequestTimeoutPolicy;
 
-        public HmrcExecutionPolicy(ILog logger)
+        public HmrcExecutionPolicy(ILog logger) : this(logger, new TimeSpan(0, 0, 10))
+        {
+
+        }
+
+        public HmrcExecutionPolicy(ILog logger, TimeSpan retryWaitTime)
         {
             _logger = logger;
 
-            TooManyRequestsPolicy = Policy.Handle<TooManyRequestsException>().WaitAndRetryForeverAsync((i) => new TimeSpan(0, 0, 10), (ex, ts) => OnRetryableFailure(ex));
-            RequestTimeoutPolicy = Policy.Handle<RequestTimeOutException>().WaitAndRetryForeverAsync((i) => new TimeSpan(0, 0, 10), (ex, ts) => OnRetryableFailure(ex));
-            ServiceUnavailablePolicy = CreateAsyncRetryPolicy<ServiceUnavailableException>(5, new TimeSpan(0, 0, 10), OnRetryableFailure);
-            InternalServerErrorPolicy = CreateAsyncRetryPolicy<InternalServerErrorException>(5, new TimeSpan(0, 0, 10), OnRetryableFailure);
+            TooManyRequestsPolicy = Policy.Handle<TooManyRequestsException>().WaitAndRetryForeverAsync((i) => retryWaitTime, (ex, ts) => OnRetryableFailure(ex));
+            RequestTimeoutPolicy = Policy.Handle<RequestTimeOutException>().WaitAndRetryForeverAsync((i) => retryWaitTime, (ex, ts) => OnRetryableFailure(ex));
+            ServiceUnavailablePolicy = CreateAsyncRetryPolicy<ServiceUnavailableException>(5, retryWaitTime, OnRetryableFailure);
+            InternalServerErrorPolicy = CreateAsyncRetryPolicy<InternalServerErrorException>(5, retryWaitTime, OnRetryableFailure);
+
             RootPolicy = Policy.WrapAsync(TooManyRequestsPolicy, ServiceUnavailablePolicy, InternalServerErrorPolicy, RequestTimeoutPolicy);
         }
 
