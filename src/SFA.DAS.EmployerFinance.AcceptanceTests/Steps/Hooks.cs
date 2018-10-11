@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         private static async Task StartNServiceBusEndpoint()
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests")
-                .UseAzureServiceBusTransport(() => _container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
+                .UseAzureServiceBusTransport()
                 .UseErrorQueue()
                 .UseInstallers()
                 .UseLicense(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
