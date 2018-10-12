@@ -217,9 +217,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("signOut")]
         public ActionResult SignOut()
         {
-            if (!OwinWrapper.IsUserAuthenticated())
-                RedirectToAction("Index");
-
             OwinWrapper.SignOutUser();
 
             var owinContext = HttpContext.GetOwinContext();
