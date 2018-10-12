@@ -1,10 +1,10 @@
 ﻿
 -- Replace values below with correct values and then run the script on a per transaction basis
-DECLARE @SubmissionId BIGINT = NULL
-DECLARE @TransactionLevyAmount DECIMAL = NULL
-DECLARE @TransactionAmount DECIMAL = NULL
-DECLARE @AdjustmentAmount DECIMAL = NULL
-DECLARE @TopupAmount DECIMAL = NULL
+DECLARE @SubmissionId BIGINT = [PUT SUBMISSION ID HERE]
+DECLARE @TransactionLevyAmount DECIMAL = [PUT AMOUNT HERE]
+DECLARE @TransactionAmount DECIMAL =  [PUT AMOUNT HERE]
+DECLARE @AdjustmentAmount DECIMAL =  [PUT AMOUNT HERE]
+DECLARE @TopupAmount DECIMAL =  [PUT AMOUNT HERE]
 
 
 BEGIN TRY
