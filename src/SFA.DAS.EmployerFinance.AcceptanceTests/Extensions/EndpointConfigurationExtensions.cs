@@ -21,6 +21,27 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 
         private static readonly ILog _log = new NLogLogger(typeof(EndpointConfigurationExtensions));
 
+
+
+
+        public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config,
+            Func<string> connectionStringBuilder)
+        {
+            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
+
+            // If we use SendLocal we can use the configured queue
+            config.UseAzureServiceBusTransport(isDevelopment, connectionStringBuilder, r =>
+            {
+                r.RouteToEndpoint(
+                    typeof(ImportLevyDeclarationsCommand).Assembly,
+                    typeof(ImportLevyDeclarationsCommand).Namespace,
+                    "SFA.DAS.EmployerFinance.AcceptanceTests");
+            });
+
+            return config;
+        }
+
+
         public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config)
         {
             _log.Info("Setting NService bus to end point config");
