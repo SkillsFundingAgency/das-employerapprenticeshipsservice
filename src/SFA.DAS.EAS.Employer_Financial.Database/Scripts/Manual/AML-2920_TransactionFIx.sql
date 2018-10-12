@@ -1,19 +1,26 @@
 ﻿
 -- Replace values below with correct values and then run the script on a per transaction basis
-DECLARE @SubmissionId BIGINT = 1000
-DECLARE @TransactionAmount DECIMAL = 1000
-DECLARE @AdjustmentAmount DECIMAL = 1000
+DECLARE @SubmissionId BIGINT = NULL
+DECLARE @TransactionLevyAmount DECIMAL = NULL
+DECLARE @TransactionAmount DECIMAL = NULL
+DECLARE @AdjustmentAmount DECIMAL = NULL
+DECLARE @TopupAmount DECIMAL = NULL
 
 
 BEGIN TRY
 BEGIN TRANSACTION
 
 UPDATE employer_financial.TransactionLine
-SET Amount = @TransactionAmount
+SET Amount = @TransactionAmount,
+LevyDeclared = @TransactionLevyAmount
 WHERE SubmissionId = @SubmissionId
 
 UPDATE employer_financial.LevyDeclaration
 SET EndOfYearAdjustmentAmount = @AdjustmentAmount
+WHERE SubmissionId = @SubmissionId
+
+UPDATE [employer_financial].LevyDeclarationTopup
+SET [Amount] = @TopupAmount 
 WHERE SubmissionId = @SubmissionId
 
 END TRY
