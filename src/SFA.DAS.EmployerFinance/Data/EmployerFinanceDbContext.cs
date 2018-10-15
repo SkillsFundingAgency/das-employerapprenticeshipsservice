@@ -1,11 +1,13 @@
-﻿using SFA.DAS.EmployerFinance.Models.Payments;
+﻿using SFA.DAS.EmployerFinance.Models;
+using SFA.DAS.EmployerFinance.Models.Payments;
+using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EntityFramework;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerFinance.Models;
+
 
 namespace SFA.DAS.EmployerFinance.Data
 {
@@ -14,6 +16,8 @@ namespace SFA.DAS.EmployerFinance.Data
     {
         public virtual DbSet<HealthCheck> HealthChecks { get; set; }
         public virtual DbSet<PeriodEnd> PeriodEnds { get; set; }
+        public virtual DbSet<TransactionEntity> Transactions { get; set; }
+
 
         static EmployerFinanceDbContext()
         {

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Payments;
+using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails;
 using SFA.DAS.Hashing;
@@ -35,6 +36,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransferTransactionDetail
         private List<AccountTransfer> _transfers;
         private Mock<IPublicHashingService> _publicHashingService;
         private PeriodEnd _periodEnd;
+        private TransactionEntity _senderTranferTransaction;
+        private TransactionEntity _recieverTranferTransaction;
 
         [SetUp]
         public void Assign()
@@ -51,6 +54,20 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransferTransactionDetail
                 CommitmentDataValidAt = DateTime.Now.AddDays(-1),
                 CompletionDateTime = DateTime.Now,
                 PaymentsForPeriod = "Test"
+            };
+
+            _senderTranferTransaction = new TransactionEntity
+            {
+                AccountId = SenderAccountId,
+                PeriodEnd = PeriodEnd,
+                DateCreated = DateTime.Now.AddDays(-2)
+            };
+
+            _recieverTranferTransaction = new TransactionEntity
+            {
+                AccountId = ReceiverAccountId,
+                PeriodEnd = PeriodEnd,
+                DateCreated = DateTime.Now.AddDays(-1)
             };
 
             _publicHashingService = new Mock<IPublicHashingService>();
@@ -113,6 +130,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransferTransactionDetail
                 .ReturnsAsync(_transfers);
 
             _db.Setup(x => x.PeriodEnds).Returns(() => new DbSetStub<PeriodEnd>(_periodEnd));
+
+            _db.Setup(x => x.Transactions).Returns(() => new DbSetStub<TransactionEntity>(
+                _senderTranferTransaction,
+                _recieverTranferTransaction));
 
             _publicHashingService.Setup(x => x.DecodeValue(SenderPublicHashedId))
                 .Returns(SenderAccountId);
@@ -220,13 +241,31 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransferTransactionDetail
         }
 
         [Test]
-        public async Task ThenIShouldReturnTransferDate()
+        public async Task ThenIShouldReturnSenderTransferDate()
+        {
+            //Assign
+            var query = new GetTransferTransactionDetailsQuery
+            {
+                AccountId = SenderAccountId,
+                TargetAccountPublicHashedId = ReceiverPublicHashedId,
+                PeriodEnd = PeriodEnd
+            };
+
+            //Act
+            var result = await _handler.Handle(query);
+
+            //Assert
+            Assert.AreEqual(_senderTranferTransaction.DateCreated, result.DateCreated);
+        }
+
+        [Test]
+        public async Task ThenIShouldReturnReceiverTransferDate()
         {
             //Act
             var result = await _handler.Handle(_query);
 
             //Assert
-            Assert.AreEqual(_periodEnd.CompletionDateTime, result.DateCreated);
+            Assert.AreEqual(_recieverTranferTransaction.DateCreated, result.DateCreated);
         }
 
         [Test]

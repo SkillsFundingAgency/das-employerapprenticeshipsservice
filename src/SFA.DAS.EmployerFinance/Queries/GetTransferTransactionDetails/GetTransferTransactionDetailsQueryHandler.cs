@@ -50,9 +50,11 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails
                 ApprenticeCount = (uint)ct.DistinctBy(t => t.CommitmentId).Count()
             }).ToArray();
 
-            var periodEnd = _dbContext.PeriodEnds.Single(p => p.PeriodEndId.Equals(firstTransfer.PeriodEnd));
+            var tranferTransaction = _dbContext.Transactions.Single(t =>
+                t.AccountId.Equals(query.AccountId) &&
+                t.PeriodEnd.Equals(query.PeriodEnd));
 
-            var transferDate = periodEnd.CompletionDateTime;
+            var transferDate = tranferTransaction.DateCreated;
             var transfersPaymentTotal = transferDetails.Sum(t => t.PaymentTotal);
 
             var isCurrentAccountSender = query.AccountId.GetValueOrDefault() == firstTransfer.SenderAccountId;
