@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using BoDi;
@@ -7,6 +8,7 @@ using SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.Extensions;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
@@ -62,26 +64,35 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 
         private static async Task StartNServiceBusEndpoint()
         {
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests")
-                .UseAzureServiceBusTransport(() => _container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
-                .UseErrorQueue()
-                .UseInstallers()
-                .UseLicense(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
-                .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
-                .UseNewtonsoftJsonSerializer()
-                .UseNLogFactory()
-                .UseOutbox()
-                .UseStructureMapBuilder(_container)
-                .UseUnitOfWork();
-
-            if (Debugger.IsAttached)
+            try
             {
-                endpointConfiguration.PurgeOnStartup(true);
+                throw new NotImplementedException();
+                var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests")
+                    .UseAzureServiceBusTransport(() => _container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
+                    .UseErrorQueue()
+                    .UseInstallers()
+                    .UseLicense(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
+                    .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
+                    .UseNewtonsoftJsonSerializer()
+                    .UseNLogFactory()
+                    .UseOutbox()
+                    .UseStructureMapBuilder(_container)
+                    .UseUnitOfWork();
+
+                if (Debugger.IsAttached)
+                {
+                    endpointConfiguration.PurgeOnStartup(true);
+                }
+
+                _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
+
+                _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
             }
-
-            _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
-
-            _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
+            catch (Exception e)
+            {
+                _container.GetInstance<ILog>().Error(e, "Error starting endpoint.");
+                throw;
+            }
         }
 
         private static Task StopNServiceBusEndpoint()
