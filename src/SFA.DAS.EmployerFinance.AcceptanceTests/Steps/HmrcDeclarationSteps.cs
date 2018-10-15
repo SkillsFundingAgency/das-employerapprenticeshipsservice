@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                     {
                         var empref = _objectContext.GetEmpRef();
 
-                        return c.Resolve<IMessageSession>().SendLocal(new ImportAccountLevyDeclarationsCommand
+                        return c.Resolve<IMessageSession>().Send(new ImportAccountLevyDeclarationsCommand
                         {
                             AccountId = account.Id,
                             PayeRef = empref
