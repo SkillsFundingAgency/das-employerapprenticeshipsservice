@@ -66,7 +66,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             try
             {
-                throw new NotImplementedException();
                 var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests")
                     .UseAzureServiceBusTransport(() => _container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
                     .UseErrorQueue()
