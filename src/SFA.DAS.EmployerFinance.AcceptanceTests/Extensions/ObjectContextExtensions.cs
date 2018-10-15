@@ -9,6 +9,7 @@ using SFA.DAS.EmployerFinance.AcceptanceTests.Steps;
 using SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
@@ -17,21 +18,31 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
     {
         public static async Task<Account> CreateAccount(this ObjectContext objectContext, IObjectContainer objectContainer)
         {
-            var hashingService = objectContainer.Resolve<IHashingService>();
-            var accountId = await objectContainer.Resolve<ITestTransactionRepository>()
-                .GetMaxAccountId() + 1;
+            var logger = objectContainer.Resolve<ILog>();
 
-            var account = new Account
+            try
             {
-                Id = accountId,
-                HashedId = hashingService.HashValue(accountId)
-            };
+                var hashingService = objectContainer.Resolve<IHashingService>();
+                var accountId = await objectContainer.Resolve<ITestTransactionRepository>()
+                                    .GetMaxAccountId() + 1;
 
-            objectContext.Set(account);
-                
-            account.SetupAuthorizedUser(objectContainer);
+                var account = new Account
+                {
+                    Id = accountId,
+                    HashedId = hashingService.HashValue(accountId)
+                };
 
-            return account;
+                objectContext.Set(account);
+
+                account.SetupAuthorizedUser(objectContainer);
+
+                return account;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, "Error occurred in Acceptance Test creating account.");
+                throw;
+            }
         }
 
         public static IEnumerable<long> ProcessingSubmissionIds(this ObjectContext objectContext)
