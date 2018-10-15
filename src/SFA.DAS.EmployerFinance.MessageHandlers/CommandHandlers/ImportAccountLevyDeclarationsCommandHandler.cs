@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.Error(e, $"An error occurred importing levy for accountid='{message.AccountId}'");
                 throw;
             }
 
