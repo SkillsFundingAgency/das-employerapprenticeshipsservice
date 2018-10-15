@@ -16,12 +16,14 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
     public class TestTransactionRepository : BaseRepository, ITestTransactionRepository
     {
         private readonly Lazy<EmployerFinanceDbContext> _employerFinanceDbContext;
+        private readonly ILog _logger;
 
         public TestTransactionRepository(LevyDeclarationProviderConfiguration configuration,
             ILog logger, Lazy<EmployerFinanceDbContext> employerFinanceDbContext)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _employerFinanceDbContext = employerFinanceDbContext;
+            _logger = logger;
         }
 
         public Task<int> GetMaxAccountId()
@@ -54,6 +56,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in Acceptance Tests - ClearDownPayeRefsFromDbAsync");
                 throw ex;
             }
             finally
