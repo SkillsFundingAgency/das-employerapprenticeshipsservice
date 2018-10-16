@@ -101,6 +101,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
                 }
             }
 
+            _log.Debug($"Resolved folder {storageFolder} for learning transport storage folder");
+
             return !string.IsNullOrWhiteSpace(storageFolder);
         }
 
