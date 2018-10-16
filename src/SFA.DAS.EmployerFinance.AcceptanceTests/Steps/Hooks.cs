@@ -43,6 +43,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [BeforeScenario]
         public void BeforeScenario()
         {
+            _container.GetInstance<ILog>().Info("Starting Scenario.");
+
             _objectContainer.RegisterInstances(_container);
             _objectContainer.RegisterMocks(_container);
         }
@@ -66,6 +68,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             try
             {
+                _container.GetInstance<ILog>().Info("Starting endpoint.");
+
                 var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests")
                     .UseAzureServiceBusTransport(() => _container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
                     .UseErrorQueue()
@@ -86,6 +90,9 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
                 _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
+
+                _container.GetInstance<ILog>().Info("Endpoint Started.");
+
             }
             catch (Exception e)
             {
