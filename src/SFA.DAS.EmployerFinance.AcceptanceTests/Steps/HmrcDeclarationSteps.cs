@@ -14,6 +14,7 @@ using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Paye;
+using SFA.DAS.NLog.Logger;
 using TechTalk.SpecFlow;
 
 
@@ -50,10 +51,14 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 
             var account = _objectContext.Get<Account>();
 
+            _objectContainer.Resolve<ILog>().Info("About to start levy run task.");
+
             return _objectContainer.RunStepsInIsolation(cancellationTokenSource.Token,
                     // step 1: send request to get levy declarations to start that process running...
                     c =>
                     {
+                        _objectContainer.Resolve<ILog>().Info("About to start levy run.");
+
                         var empref = _objectContext.GetEmpRef();
 
                         return c.Resolve<IMessageSession>().Send(new ImportAccountLevyDeclarationsCommand
@@ -65,7 +70,9 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 
                     // step 2: wait for the levy declaration process to finish writing the transactions...
                     async c => 
-                    { 
+                    {
+                        _objectContainer.Resolve<ILog>().Info("About to start polling for levy decalaration.");
+
                         var allLevyDeclarationsLoaded = await c.Resolve<ITransactionRepository>()
                             .WaitForAllTransactionLinesInDatabase(account, cancellationTokenSource.Token);
 

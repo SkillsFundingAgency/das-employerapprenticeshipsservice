@@ -18,13 +18,16 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
     {
         public static async Task<Account> CreateAccount(this ObjectContext objectContext, IObjectContainer objectContainer)
         {
-            var logger = objectContainer.Resolve<ILog>();
-
             try
             {
                 var hashingService = objectContainer.Resolve<IHashingService>();
+
+                objectContainer.Resolve<ILog>().Info("Getting maximum account id.");
+
                 var accountId = await objectContainer.Resolve<ITestTransactionRepository>()
                                     .GetMaxAccountId() + 1;
+
+                objectContainer.Resolve<ILog>().Info($"Max account id is {accountId}.");
 
                 var account = new Account
                 {
@@ -36,11 +39,13 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 
                 account.SetupAuthorizedUser(objectContainer);
 
+                objectContainer.Resolve<ILog>().Info("Account succesfully initialized.");
+
                 return account;
             }
             catch (Exception e)
             {
-                logger.Error(e, "Error occurred in Acceptance Test creating account.");
+                objectContainer.Resolve<ILog>().Error(e, "Error occurred in Acceptance Test creating account.");
                 throw;
             }
         }
