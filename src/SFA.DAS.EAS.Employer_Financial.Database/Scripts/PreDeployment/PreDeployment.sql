@@ -17,4 +17,5 @@ BEGIN
 	:r .\AML-2643-DeleteDuplicateTransactionLines.sql
 	:r .\AML-2505-PopulateNullProviderNames.sql
 	:r .\AML-2671-PopulateNullApprenticeshipCourseNames.sql
+	:r .\AML-2395-DropDeprecatedView.sql
 END
