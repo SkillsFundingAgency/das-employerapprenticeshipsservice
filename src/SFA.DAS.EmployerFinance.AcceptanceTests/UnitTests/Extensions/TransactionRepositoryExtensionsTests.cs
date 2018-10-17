@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.UnitTests.Extensions
     public class TransactionRepositoryExtensionsTests
     {
         [TestCase(  10, 20, 2, new int[] { 0, 1, 1 }, false, 0)]
-        [TestCase(  20, 15, 2, new int[] { 0, 1, 1 }, false, 1)]
+        [TestCase(  60, 40, 2, new int[] { 0, 1, 1 }, false, 1)]
         [TestCase(1000,  5, 2, new int[] { 0, 1, 1}, true, 3)]
         [TestCase(1000,  5, 3, new int[] { 0, 0, 1, 1, 1 }, true, 5)]
         [TestCase(1000,  5, 3, new int[] { 0, 0, 1, 2, 3 }, false, -1)]

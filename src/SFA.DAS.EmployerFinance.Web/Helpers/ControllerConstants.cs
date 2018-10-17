@@ -14,6 +14,7 @@
         public const string LegacyEasBaseUrlKeyName = "LegacyEasBaseUrl";
         public const string LevyDeclarationDetailViewName = "LevyDeclarationDetail";
         public const string ProviderPaymentSummaryViewName = "ProviderPaymentSummary";
+        public const string TransferDetailsViewName = "TransferDetails";
         public const string UserRefClaimKeyName = "sub";
     }
 }

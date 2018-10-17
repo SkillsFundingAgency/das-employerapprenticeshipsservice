@@ -1,4 +1,6 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using BoDi;
 using NServiceBus;
@@ -6,6 +8,7 @@ using SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.Extensions;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
@@ -40,6 +43,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [BeforeScenario]
         public void BeforeScenario()
         {
+            _container.GetInstance<ILog>().Info("Starting Scenario.");
+
             _objectContainer.RegisterInstances(_container);
             _objectContainer.RegisterMocks(_container);
         }
@@ -61,23 +66,39 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 
         private static async Task StartNServiceBusEndpoint()
         {
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests")
-                .UseAzureServiceBusTransport(() => _container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
-                .UseErrorQueue()
-                .UseInstallers()
-                .UseLicense(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
-                .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
-                .UseNewtonsoftJsonSerializer()
-                .UseNLogFactory()
-                .UseOutbox()
-                .UseStructureMapBuilder(_container)
-                .UseUnitOfWork();
+            try
+            {
+                _container.GetInstance<ILog>().Info("Starting endpoint.");
 
-            endpointConfiguration.PurgeOnStartup(true);
+                var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests")
+                    .UseAzureServiceBusTransport()
+                    .UseErrorQueue()
+                    .UseInstallers()
+                    .UseLicense(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
+                    .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
+                    .UseNewtonsoftJsonSerializer()
+                    .UseNLogFactory()
+                    .UseOutbox()
+                    .UseStructureMapBuilder(_container)
+                    .UseUnitOfWork();
 
-            _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
+                if (Debugger.IsAttached)
+                {
+                    endpointConfiguration.PurgeOnStartup(true);
+                }
 
-            _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
+                _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
+
+                _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
+
+                _container.GetInstance<ILog>().Info("Endpoint Started.");
+
+            }
+            catch (Exception e)
+            {
+                _container.GetInstance<ILog>().Error(e, "Error starting endpoint.");
+                throw;
+            }
         }
 
         private static Task StopNServiceBusEndpoint()

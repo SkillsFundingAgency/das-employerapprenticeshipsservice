@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
+using NServiceBus;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Events.ProcessPayment;
@@ -24,6 +25,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
         private readonly IDasLevyRepository _dasLevyRepository;
         private readonly IMediator _mediator;
         private readonly ILog _logger;
+
 
         public RefreshPaymentDataCommandHandler(
             IEventPublisher eventPublisher,
@@ -67,6 +69,8 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
             {
                 _logger.Info($"GetAccountPayments did not find any payments for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
 
+                await PublishRefreshPaymentDataCompletedEvent(message, false);
+
                 return;
             }
 
@@ -78,6 +82,8 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
             if (!newPayments.Any())
             {
                 _logger.Info($"No new payments for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
+
+                await PublishRefreshPaymentDataCompletedEvent(message, false);
 
                 return;
             }
@@ -106,7 +112,20 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
 
             Task.WaitAll(paymentEventTasks);
 
+            await PublishRefreshPaymentDataCompletedEvent(message, true);
+
             _logger.Info($"Finished publishing ProcessPaymentEvent and PaymentCreatedMessage messages for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
+        }
+
+        private async Task PublishRefreshPaymentDataCompletedEvent(RefreshPaymentDataCommand message, bool hasPayments)
+        {
+            await _eventPublisher.Publish(new RefreshPaymentDataCompletedEvent()
+            {
+                AccountId = message.AccountId,
+                Created = DateTime.UtcNow,
+                PeriodEnd = message.PeriodEnd,
+                PaymentsProcessed = hasPayments
+            });
         }
     }
 }

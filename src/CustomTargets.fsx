@@ -9,60 +9,6 @@ let rootPublishDirectory = getBuildParamOrDefault "publishDirectory"  @"C:\Compi
 let mutable projectName = ""
 let mutable publishDirectory = rootPublishDirectory @@ projectName
 
-Target "Dotnet Restore" (fun _ ->
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.UnitTests" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EmployerAccounts" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EmployerAccounts.Host" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EmployerAccounts.Jobs" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EmployerAccounts.MessageHandlers" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EmployerAccounts.Messages" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EmployerFinance" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EmployerFinance.Host" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EmployerFinance.Jobs" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EmployerFinance.MessageHandlers" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EmployerFinance.Messages" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EmployerFinance.UnitTests" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EmployerFinance.MessageHandlers.UnitTests" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.Account.Api.Client" })
-    DotNetCli.Restore(fun p ->
-        { p with
-                Project = ".\\SFA.DAS.EAS.Account.Api.Types" })
-)
-
 Target "Build And Zip Webjob Host Projects" ( fun _ ->
     let buildMode = getBuildParamOrDefault "buildMode" "Debug"
 

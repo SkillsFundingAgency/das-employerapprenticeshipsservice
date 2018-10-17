@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 using SFA.DAS.EmployerFinance.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Events.ProcessDeclaration;
@@ -9,6 +10,9 @@ using SFA.DAS.Validation;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Messages.Events;
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
 {
@@ -21,6 +25,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IHashingService _hashingService;
         private readonly ILevyImportCleanerStrategy _levyImportCleanerStrategy;
+        private readonly IEventPublisher _eventPublisher;
 
         public RefreshEmployerLevyDataCommandHandler(
             IValidator<RefreshEmployerLevyDataCommand> validator,
@@ -29,7 +34,8 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             ILevyEventFactory levyEventFactory,
             IGenericEventFactory genericEventFactory,
             IHashingService hashingService,
-            ILevyImportCleanerStrategy levyImportCleanerStrategy)
+            ILevyImportCleanerStrategy levyImportCleanerStrategy,
+            IEventPublisher eventPublisher)
         {
             _validator = validator;
             _dasLevyRepository = dasLevyRepository;
@@ -38,6 +44,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             _genericEventFactory = genericEventFactory;
             _hashingService = hashingService;
             _levyImportCleanerStrategy = levyImportCleanerStrategy;
+            _eventPublisher = eventPublisher;
         }
 
         protected override async Task HandleCore(RefreshEmployerLevyDataCommand message)
@@ -64,11 +71,24 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
                 savedDeclarations.AddRange(declarations);
             }
 
-            if (savedDeclarations.Any())
+            var hasDecalarations = savedDeclarations.Any();
+            if (hasDecalarations)
             {
                 await PublishProcessDeclarationEvents(message, updatedEmpRefs);
                 await PublishDeclarationUpdatedEvents(message.AccountId, savedDeclarations);
             }
+
+            await PublishRefreshEmployerLevyDataCompletedEvent(hasDecalarations, message.AccountId);
+        }
+
+        private async Task PublishRefreshEmployerLevyDataCompletedEvent(bool levyImported, long accountId)
+        {
+            await _eventPublisher.Publish(new RefreshEmployerLevyDataCompletedEvent
+            {
+                AccountId = accountId,
+                Created = DateTime.UtcNow,
+                LevyImported = levyImported
+            });
         }
 
         private async Task PublishProcessDeclarationEvents(RefreshEmployerLevyDataCommand message, IEnumerable<string> updatedEmpRefs)
