@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation
 
             if (string.IsNullOrWhiteSpace(emprefInformation?.Employer?.Name?.EmprefAssociatedName))
             {
-                _logger.Warn($"The call to GetEmprefInformation() for employer reference '{empref}' has not return a name - continuing but the name in the database will be empty");
+                _logger.Warn($"The call to GetEmprefInformation() for employer reference '{empref}' has not returned a name - continuing but the name in the database will be empty");
             }
 
             var schemeCheck = await _mediator.SendAsync(new GetPayeSchemeInUseQuery { Empref = empref });
