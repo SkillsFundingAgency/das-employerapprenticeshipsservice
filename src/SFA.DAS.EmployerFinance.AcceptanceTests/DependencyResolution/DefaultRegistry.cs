@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using AutoMapper;
 using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories;
@@ -33,7 +34,9 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
 
             For<EmployerAccountTransactionsController>().Use(c => new EmployerAccountTransactionsController(
                 c.GetInstance<IAuthenticationService>(),
-                c.GetInstance<EmployerAccountTransactionsOrchestrator>()));
+                c.GetInstance<EmployerAccountTransactionsOrchestrator>(), 
+                c.GetInstance<IMapper>(), 
+                c.GetInstance<IMediator>()));
         }
 
         private void RegisterEmployerAccountTransactionsOrchestrator()

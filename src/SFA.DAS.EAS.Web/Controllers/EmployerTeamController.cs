@@ -8,16 +8,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
-    public class EmployerTeamController : BaseController
+    public class EmployerTeamController : Controller
     {
-        public EmployerTeamController(
-            IAuthenticationService owinWrapper,
-            IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, multiVariantTestingService, flashMessage)
-        {
-        }
-
         [HttpGet]
         [Route]
         public ActionResult Index(string hashedAccountId)

@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <TargetFramework>net462</TargetFramework>
   </PropertyGroup>
 
@@ -19,8 +20,7 @@
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="2.0.12" />
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="1.0.17" />
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="1.0.17" />
-    <PackageReference Include="SpecFlow" Version="2.3.1" />
-    <PackageReference Include="SpecFlow.MsTest" Version="2.3.1" />
+    <PackageReference Include="SpecFlow" Version="2.4.0" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
   </ItemGroup>
@@ -93,6 +93,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="App.Debug.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Update="App.Release.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
     <None Update="Features\Scenario-01-Single-PAYE-no-adjustments.feature">
       <LastGenOutput>Scenario-01-Single-PAYE-no-adjustments.feature.cs</LastGenOutput>
       <Generator>SpecFlowSingleFileGenerator</Generator>

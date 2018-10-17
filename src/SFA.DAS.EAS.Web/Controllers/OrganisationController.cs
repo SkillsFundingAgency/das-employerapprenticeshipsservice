@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using AutoMapper;
+﻿using AutoMapper;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
@@ -13,6 +8,11 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.NLog.Logger;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -95,17 +95,22 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsActionName,
-                new { hashedAccountId, organisationName = name });
+                new
+                {
+                    hashedAccountId,
+                    organisationName = name,
+                    hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId
+                });
 
         }
 
         [HttpGet]
         [Route("nextStep")]
-        public async Task<ActionResult> OrganisationAddedNextSteps(string organisationName, string hashedAccountId)
+        public async Task<ActionResult> OrganisationAddedNextSteps(string organisationName, string hashedAccountId, string hashedAgreementId)
         {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
-            var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId);
+            var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, hashedAgreementId);
 
             viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
 

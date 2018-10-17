@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
 using Moq;
+using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Commands.RefreshPaymentData;
@@ -25,6 +26,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
         private const long AccountId = 10;
         private const decimal Amount = 145.67M;
         private const string ProviderName = "Test Learning Ltd";
+        private const string PeriodEnd = "R12-13";
 
 
         private RefreshPaymentDataCommandHandler _handler;
@@ -38,13 +40,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
         private List<Guid> _existingPaymentIds;
         private TestableEventPublisher _eventPublisher;
 
+
         [SetUp]
         public void Arrange()
         {
             _command = new RefreshPaymentDataCommand
             {
                 AccountId = AccountId,
-                PeriodEnd = "R12-13",
+                PeriodEnd = PeriodEnd,
                 PaymentUrl = "http://someurl"
             };
 
@@ -264,7 +267,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(new RefreshPaymentDataCommand());
 
             //Assert
-            _eventPublisher.Events.Should().HaveCount(1);
+            _eventPublisher.Events.OfType<CreatedPaymentEvent>().Should().HaveCount(1);
 
             var message = _eventPublisher.Events.OfType<CreatedPaymentEvent>().Single();
 

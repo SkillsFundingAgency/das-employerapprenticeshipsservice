@@ -1,33 +1,33 @@
-﻿using System;
+﻿using AutoMapper;
+using MediatR;
+using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
+using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
+using SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails;
+using SFA.DAS.EAS.Application.Extensions;
+using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntitiy;
+using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
+using SFA.DAS.EAS.Application.Queries.GetOrganisationById;
+using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
+using SFA.DAS.EAS.Application.Queries.GetTeamUser;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Infrastructure.Extensions;
+using SFA.DAS.EAS.Web.Helpers;
+using SFA.DAS.EAS.Web.Validation;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.Hashing;
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using AutoMapper;
-using MediatR;
-using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
-using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
-using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
-using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
-using SFA.DAS.EAS.Application.Queries.GetTeamUser;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Web.Helpers;
-using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EAS.Web.ViewModels.Organisation;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails;
-using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntitiy;
-using SFA.DAS.EAS.Application.Queries.GetOrganisationById;
-using SFA.DAS.EAS.Web.Validation;
-using SFA.DAS.Validation;
-using SFA.DAS.EAS.Application.Extensions;
-using SFA.DAS.EAS.Infrastructure.Extensions;
-using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(CreateNewLegalEntityViewModel request)
         {
-            
+
             var result = await _mediator.SendAsync(new CreateLegalEntityCommand
             {
                 HashedAccountId = request.HashedAccountId,

@@ -157,6 +157,7 @@
     <None Include="Scripts\PreDeployment\DeleteHealthChecks.sql" />
     <Build Include="StoredProcedures\GetProviderName.sql" />
     <Build Include="StoredProcedures\DeleteSubmissions_ByEmpRef.sql" />
+    <None Include="Scripts\Manual\GetAccountTransactionTotalsByMonth.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />

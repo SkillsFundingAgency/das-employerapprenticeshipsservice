@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BoDi;
 using HMRC.ESFA.Levy.Api.Client;
@@ -69,6 +70,20 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
                 }
 
                 await unitOfWorkManager.EndAsync().ConfigureAwait(false);
+            }
+        }
+
+        public static async Task RunStepsInIsolation(this IObjectContainer container, CancellationToken cancellationToken, params Func<IObjectContainer, Task>[] funcs)
+
+        {
+            foreach (var func in funcs)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                await container.ScopeAsync(func);
             }
         }
 

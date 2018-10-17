@@ -9,17 +9,9 @@ open Fake
 
 "Set version number"
    ==>"Set Solution Name"
-   ==>"Clean Directories"
-   ==>"Build Projects"
-   ==>"Building Acceptance Tests"
-   ==>"Run Acceptance Tests"
-
-"Set version number"
-   ==>"Set Solution Name"
    ==>"Update Assembly Info Version Numbers"
    ==>"Clean Directories" 
    ==>"Restore Solution Packages"
-   ==>"Dotnet Restore"
    ==>"Build Projects"
    ==>"Run NUnit Tests"
    ==>"Run XUnit Tests"

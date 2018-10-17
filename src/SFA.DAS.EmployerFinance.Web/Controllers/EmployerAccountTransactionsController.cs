@@ -1,11 +1,15 @@
 ﻿using SFA.DAS.Authentication;
 using SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails;
-using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.EmployerFinance.Web.Helpers;
 using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AutoMapper;
+using MediatR;
+using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.EmployerFinance.Web.ViewModels;
+using SFA.DAS.Validation.Mvc;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
@@ -13,18 +17,22 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAccountTransactionsController : BaseController
     {
+        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
+
         private readonly IAuthenticationService _owinWrapper;
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
 
-
-
         public EmployerAccountTransactionsController(
             IAuthenticationService owinWrapper,
-            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator)
+            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMapper mapper, IMediator mediator)
         : base(owinWrapper)
         {
             _owinWrapper = owinWrapper;
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
+
+            _mapper = mapper;
+            _mediator = mediator;
         }
 
         [Route("finance/provider/summary")]
@@ -38,15 +46,35 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [Route("finance")]
         [Route("balance")]
-        public ActionResult Index(string hashedAccountId)
+        public async Task<ActionResult> Index(string hashedAccountId)
         {
-            return Redirect(Url.LegacyEasAccountAction("finance"));
+            var transactionViewResult = await _accountTransactionsOrchestrator.GetFinanceDashboardViewModel(hashedAccountId, 0, 0, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+
+            if (transactionViewResult.Data.Account == null)
+            {
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.AccessDeniedControllerName);
+            }
+
+            return View(transactionViewResult);
         }
 
+        [ValidateMembership]
+        [ImportModelStateFromTempData]
         [Route("finance/downloadtransactions")]
         public ActionResult TransactionsDownload(string hashedAccountId)
         {
-            return Redirect(Url.LegacyEasAccountAction("finance/downloadtransactions"));
+            return View(new TransactionDownloadViewModel());
+        }
+
+        [HttpPost]
+        [ValidateMembership]
+        [ValidateAntiForgeryToken]
+        [ValidateModelState]
+        [Route("finance/downloadtransactions")]
+        public async Task<ActionResult> TransactionsDownload(TransactionDownloadViewModel model)
+        {
+            var response = await _mediator.SendAsync(model.GetTransactionsDownloadQuery);
+            return File(response.FileData, response.MimeType, $"esfaTransactions_{DateTime.Now:yyyyMMddHHmmss}.{response.FileExtension}");
         }
 
         [Route("finance/{year}/{month}")]
@@ -96,9 +124,12 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [Route("finance/transfer/details")]
         [Route("balance/transfer/details")]
-        public ActionResult TransferDetail(GetTransferTransactionDetailsQuery query)
+        public async Task<ActionResult> TransferDetail(GetTransferTransactionDetailsQuery query)
         {
-            return Redirect(Url.LegacyEasAccountAction($"finance/transfer/details{Request?.Url?.Query}"));
+            var response = await _mediator.SendAsync(query);
+
+            var model = _mapper.Map<TransferTransactionDetailsViewModel>(response);
+            return View(ControllerConstants.TransferDetailsViewName, model);
         }
 
     }
