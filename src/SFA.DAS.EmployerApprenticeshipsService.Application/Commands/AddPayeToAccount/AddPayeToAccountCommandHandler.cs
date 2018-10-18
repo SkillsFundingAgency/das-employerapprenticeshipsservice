@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Queries.GetUserByRef;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.PAYE;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging.Interfaces;
-using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 using SFA.DAS.HashingService;
+using SFA.DAS.NServiceBus;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 using Entity = SFA.DAS.Audit.Types.Entity;
+using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 {
@@ -26,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
         private readonly IValidator<AddPayeToAccountCommand> _validator;
         private readonly IAccountRepository _accountRepository;
-        private readonly IMessagePublisher _messagePublisher;
+        private readonly IEventPublisher _eventPublisher;
         private readonly IHashingService _hashingService;
         private readonly IMediator _mediator;
         private readonly IGenericEventFactory _genericEventFactory;
@@ -34,18 +33,18 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
 
         public AddPayeToAccountCommandHandler(
-            IValidator<AddPayeToAccountCommand> validator, 
-            IAccountRepository accountRepository, 
-            IMessagePublisher messagePublisher, 
-            IHashingService hashingService, 
-            IMediator mediator, 
-            IGenericEventFactory genericEventFactory, 
-            IPayeSchemeEventFactory payeSchemeEventFactory, 
+            IValidator<AddPayeToAccountCommand> validator,
+            IAccountRepository accountRepository,
+            IEventPublisher eventPublisher,
+            IHashingService hashingService,
+            IMediator mediator,
+            IGenericEventFactory genericEventFactory,
+            IPayeSchemeEventFactory payeSchemeEventFactory,
             IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _validator = validator;
             _accountRepository = accountRepository;
-            _messagePublisher = messagePublisher;
+            _eventPublisher = eventPublisher;
             _hashingService = hashingService;
             _mediator = mediator;
             _genericEventFactory = genericEventFactory;
@@ -70,7 +69,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                     }
                 );
 
-            var userResponse = await _mediator.SendAsync(new GetUserByRefQuery{UserRef = message.ExternalUserId});
+            var userResponse = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = message.ExternalUserId });
 
             await AddAuditEntry(message, accountId);
 
@@ -102,7 +101,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
             var genericEvent = _genericEventFactory.Create(payeEvent);
 
-            await _mediator.SendAsync(new PublishGenericEventCommand {Event = genericEvent});
+            await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
         private async Task RefreshLevy(long accountId, string payeRef)
@@ -110,9 +109,16 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             await _refreshEmployerLevyService.QueueRefreshLevyMessage(accountId, payeRef);
         }
 
-        private async Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef)
+        private Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef)
         {
-            await _messagePublisher.PublishAsync(new PayeSchemeAddedMessage(payeRef, accountId, userName, userRef));
+            return _eventPublisher.Publish(new AddedPayeSchemeEvent
+            {
+                PayeRef = payeRef,
+                AccountId = accountId,
+                UserName = userName,
+                UserRef = Guid.Parse(userRef),
+                Created = DateTime.UtcNow
+            });
         }
 
         private async Task AddAuditEntry(AddPayeToAccountCommand message, long accountId)

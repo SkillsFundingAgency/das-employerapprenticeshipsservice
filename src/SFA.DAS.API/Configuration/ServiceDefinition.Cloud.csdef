@@ -10,16 +10,16 @@
       </Site>
     </Sites>
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
-      <Setting name="StorageConnectionString" />
-      <Setting name="EnvironmentName" />
       <Setting name="ConfigurationStorageConnectionString" />
-      <Setting name="LogLevel" />
-      <Setting name="LoggingRedisConnectionString"/>
-      <Setting name="LoggingRedisKey"/>
+      <Setting name="EnvironmentName" />
       <Setting name="idaAudience" />
       <Setting name="idaTenant" />
       <Setting name="InstrumentationKey" />
+      <Setting name="LoggingRedisConnectionString" />
+      <Setting name="LoggingRedisKey" />
+      <Setting name="LogLevel" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="StorageConnectionString" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" />

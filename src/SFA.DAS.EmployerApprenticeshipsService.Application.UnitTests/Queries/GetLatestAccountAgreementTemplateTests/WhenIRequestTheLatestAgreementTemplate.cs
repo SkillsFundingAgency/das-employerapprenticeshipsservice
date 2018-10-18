@@ -2,8 +2,6 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 

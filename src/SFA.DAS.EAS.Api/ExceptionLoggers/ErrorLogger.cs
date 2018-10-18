@@ -1,8 +1,8 @@
 ﻿using Microsoft.ApplicationInsights;
 using NLog;
-using SFA.DAS.EAS.Infrastructure.Extensions;
 using System.Collections.Generic;
 using System.Web.Http.ExceptionHandling;
+using SFA.DAS.Logging;
 
 namespace SFA.DAS.EAS.Account.Api.ExceptionLoggers
 {

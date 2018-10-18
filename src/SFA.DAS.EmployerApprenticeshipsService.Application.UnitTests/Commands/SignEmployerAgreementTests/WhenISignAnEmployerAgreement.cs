@@ -1,25 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types.Events.Agreement;
 using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Application.Factories;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Commitment;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.Messaging;
 using SFA.DAS.HashingService;
-using SFA.DAS.Messaging.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Infrastructure.Features;
+using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.NServiceBus.Testing;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
 {
@@ -39,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         private EmployerAgreementView _agreement;
         private AgreementSignedEvent _agreementEvent;
         private Mock<ICommitmentService> _commintmentService;
-        private Mock<IMessagePublisher> _messagePublisher;
+        private TestableEventPublisher _eventPublisher;
         private Mock<IAgreementService> _agreementService;
 
         private const long AccountId = 223344;
@@ -60,14 +61,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();
-            
+
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(_command.HashedAccountId)).Returns(AccountId);
             _hashingService.Setup(x => x.DecodeValue(_command.HashedAgreementId)).Returns(AgreementId);
             _hashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns(HashedLegalEntityId);
 
             _validator = new Mock<IValidator<SignEmployerAgreementCommand>>();
-            _validator.Setup(x => x.ValidateAsync(It.IsAny<SignEmployerAgreementCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> ()});
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<SignEmployerAgreementCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
 
 
             _agreement = new EmployerAgreementView
@@ -98,28 +99,29 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             _commintmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>()))
                 .ReturnsAsync(new List<Cohort>());
 
-            _messagePublisher = new Mock<IMessagePublisher>();
+            _eventPublisher = new TestableEventPublisher();
 
             _agreementService = new Mock<IAgreementService>();
 
             _handler = new SignEmployerAgreementCommandHandler(
-                _membershipRepository.Object, 
-                _agreementRepository.Object, 
-                _hashingService.Object, 
+                _membershipRepository.Object,
+                _agreementRepository.Object,
+                _hashingService.Object,
                 _validator.Object,
-                _agreementEventFactory.Object, 
+                _agreementEventFactory.Object,
                 _genericEventFactory.Object,
                 _mediator.Object,
-                _messagePublisher.Object,
+                _eventPublisher,
                 _commintmentService.Object,
                 _agreementService.Object);
 
             _owner = new MembershipView
             {
                 UserId = 1,
-                RoleId = (short) Role.Owner,
+                RoleId = (short)Role.Owner,
                 FirstName = "Fred",
-                LastName = "Bloggs"
+                LastName = "Bloggs",
+                UserRef = Guid.NewGuid().ToString()
             };
 
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
@@ -130,7 +132,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         public void ThenTheValidatorIsCalledAndAnInvalidRequestExceptionIsThrownIfItIsNotValid()
         {
             //Arrange
-            _validator.Setup(x => x.ValidateAsync(It.IsAny<SignEmployerAgreementCommand>())).ReturnsAsync(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<SignEmployerAgreementCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act Assert
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
@@ -152,7 +154,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         public void ThenIfTheUserIsNotAnOwnerThenAnUnauthorizedExceptionIsThrown(Role role)
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView {RoleId = (short)role});
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView { RoleId = (short)role });
 
             //Act Assert
             Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(_command));
@@ -162,18 +164,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         public async Task ThenIfTheCommandIsValidTheRepositoryIsCalledWithThePassedParameters()
         {
             //Arrange
-            var agreementId = 87761263;
+            const int agreementId = 87761263;
             _hashingService.Setup(x => x.DecodeValue(_command.HashedAgreementId)).Returns(agreementId);
 
             //Act
             await _handler.Handle(_command);
 
             //Assert
-            _agreementRepository.Verify(x=>x.SignAgreement(It.Is<SignEmployerAgreement>(c=>c.SignedDate.Equals(_command.SignedDate) 
-                                && c.AgreementId.Equals(agreementId) 
-                                && c.SignedDate.Equals(_command.SignedDate)
-                                && c.SignedById.Equals(_owner.UserId)
-                                && c.SignedByName.Equals($"{_owner.FirstName} {_owner.LastName}")
+            _agreementRepository.Verify(x => x.SignAgreement(It.Is<SignEmployerAgreement>(c => c.SignedDate.Equals(_command.SignedDate)
+                                  && c.AgreementId.Equals(agreementId)
+                                  && c.SignedDate.Equals(_command.SignedDate)
+                                  && c.SignedById.Equals(_owner.UserId)
+                                  && c.SignedByName.Equals($"{_owner.FirstName} {_owner.LastName}")
                                 )));
         }
 
@@ -186,11 +188,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             //Assert
             _agreementRepository.Verify(x => x.GetEmployerAgreement(AgreementId), Times.Once);
             _hashingService.Verify(x => x.HashValue(_agreement.LegalEntityId), Times.Once);
-            _agreementEventFactory.Verify(x => x.CreateSignedEvent(_command.HashedAccountId, HashedLegalEntityId, 
+            _agreementEventFactory.Verify(x => x.CreateSignedEvent(_command.HashedAccountId, HashedLegalEntityId,
                 _command.HashedAgreementId), Times.Once);
             _genericEventFactory.Verify(x => x.Create(_agreementEvent), Times.Once);
             _mediator.Verify(x => x.SendAsync(It.IsAny<PublishGenericEventCommand>()), Times.Once);
-            
+
         }
 
         [Test]
@@ -198,19 +200,28 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         {
             //Arrange
             _commintmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>()))
-                .ReturnsAsync(new List<Cohort>{new Cohort()});
+                .ReturnsAsync(new List<Cohort> { new Cohort() });
 
             //Act
             await _handler.Handle(_command);
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AgreementSignedMessage>(
-                m => m.CohortCreated && m.AccountId == AccountId && m.AgreementId == AgreementId && m.OrganisationName == OrganisationName && m.LegalEntityId == LegalEntityId)));
+            _eventPublisher.Events.Should().HaveCount(1);
+
+            var message = _eventPublisher.Events.First().As<SignedAgreementEvent>();
+
+            message.AccountId.Should().Be(AccountId);
+            message.AgreementId.Should().Be(AgreementId);
+            message.OrganisationName.Should().Be(OrganisationName);
+            message.LegalEntityId.Should().Be(LegalEntityId);
+            message.CohortCreated.Should().BeTrue();
+            message.UserName.Should().Be(_owner.FullName());
+            message.UserRef.Should().Be(_owner.UserRef);
         }
 
         [Test]
         public async Task ThenIfICannotGetCommitmentsForTheAccountIStillNotifyTheService()
-        { 
+        {
             //Arrange
             _commintmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>()))
                 .ReturnsAsync(() => null);
@@ -219,8 +230,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             await _handler.Handle(_command);
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<AgreementSignedMessage>(
-                m => !m.CohortCreated && m.AccountId == AccountId && m.AgreementId == AgreementId && m.OrganisationName == OrganisationName && m.LegalEntityId == LegalEntityId)));
+            _eventPublisher.Events.Should().HaveCount(1);
+
+            var message = _eventPublisher.Events.First().As<SignedAgreementEvent>();
+
+            message.AccountId.Should().Be(AccountId);
+            message.AgreementId.Should().Be(AgreementId);
+            message.OrganisationName.Should().Be(OrganisationName);
+            message.LegalEntityId.Should().Be(LegalEntityId);
+            message.CohortCreated.Should().BeFalse();
+            message.UserName.Should().Be(_owner.FullName());
+            message.UserRef.Should().Be(_owner.UserRef);
+
         }
 
         [Test]

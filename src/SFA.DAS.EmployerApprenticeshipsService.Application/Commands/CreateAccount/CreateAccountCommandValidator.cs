@@ -1,10 +1,7 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.Organisation;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 {

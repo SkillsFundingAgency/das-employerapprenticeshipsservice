@@ -1,26 +1,25 @@
+using System;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using SFA.DAS.EAS.Application.Dtos;
-using SFA.DAS.EAS.Application.Exceptions;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.Infrastructure.Extensions;
-using SFA.DAS.EAS.Infrastructure.Hashing;
-using SFA.DAS.EAS.Infrastructure.Interfaces;
+using SFA.DAS.Hashing;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
 {
     public class SendTransferConnectionInvitationQueryHandler : IAsyncRequestHandler<SendTransferConnectionInvitationQuery, SendTransferConnectionInvitationResponse>
     {
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IConfigurationProvider _configurationProvider;
         private readonly IPublicHashingService _publicHashingService;
 
         public SendTransferConnectionInvitationQueryHandler(
-            EmployerAccountDbContext db,
+            Lazy<EmployerAccountsDbContext> db,
             IConfigurationProvider configurationProvider,
             IPublicHashingService publicHashingService)
         {
@@ -32,7 +31,7 @@ namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
         public async Task<SendTransferConnectionInvitationResponse> Handle(SendTransferConnectionInvitationQuery message)
         {
             var receiverAccount = _publicHashingService.TryDecodeValue(message.ReceiverAccountPublicHashedId, out var receiverAccountId)
-                ? await _db.Accounts.ProjectTo<AccountDto>(_configurationProvider).SingleOrDefaultAsync(a => a.Id == receiverAccountId)
+                ? await _db.Value.Accounts.ProjectTo<AccountDto>(_configurationProvider).SingleOrDefaultAsync(a => a.Id == receiverAccountId)
                 : null;
 
             if (receiverAccount == null || receiverAccount.Id == message.AccountId)
@@ -40,7 +39,7 @@ namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
                 throw new ValidationException<SendTransferConnectionInvitationQuery>(q => q.ReceiverAccountPublicHashedId, "You must enter a valid account ID");
             }
 
-            var isReceiverASender = await _db.TransferConnectionInvitations.AnyAsync(i =>
+            var isReceiverASender = await _db.Value.TransferConnectionInvitations.AnyAsync(i =>
                 i.SenderAccountId == receiverAccount.Id && (
                 i.Status == TransferConnectionInvitationStatus.Pending ||
                 i.Status == TransferConnectionInvitationStatus.Approved));
@@ -50,7 +49,7 @@ namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
                 throw new ValidationException<SendTransferConnectionInvitationQuery>(q => q.ReceiverAccountPublicHashedId, "You can't connect with this employer because they already have pending or accepted connection requests");
             }
 
-            var anyTransferConnectionInvitations = await _db.TransferConnectionInvitations.AnyAsync(i => (
+            var anyTransferConnectionInvitations = await _db.Value.TransferConnectionInvitations.AnyAsync(i => (
                 i.SenderAccount.Id == message.AccountId.Value && i.ReceiverAccount.Id == receiverAccount.Id ||
                 i.SenderAccount.Id == receiverAccount.Id && i.ReceiverAccount.Id == message.AccountId.Value) && (
                 i.Status == TransferConnectionInvitationStatus.Pending ||
@@ -61,7 +60,7 @@ namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
                 throw new ValidationException<SendTransferConnectionInvitationQuery>(q => q.ReceiverAccountPublicHashedId, "You can't connect with this employer because they already have a pending or accepted connection request");
             }
 
-            var senderAccount = await _db.Accounts.ProjectTo<AccountDto>(_configurationProvider).SingleOrDefaultAsync(a => a.Id == message.AccountId);
+            var senderAccount = await _db.Value.Accounts.ProjectTo<AccountDto>(_configurationProvider).SingleOrDefaultAsync(a => a.Id == message.AccountId);
 
             return new SendTransferConnectionInvitationResponse
             {

@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Infrastructure.Authorization;
+﻿using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EAS.Web.ViewModels.TransferConnectionInvitations
 {

@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
+using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;

@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
-using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.HashingService;
@@ -17,13 +15,13 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
 {
     public class GetEmployerAgreementQueryHandler : IAsyncRequestHandler<GetEmployerAgreementRequest, GetEmployerAgreementResponse>
     {
-        private readonly EmployerAccountDbContext _database;
+        private readonly Lazy<EmployerAccountsDbContext> _database;
         private readonly IHashingService _hashingService;
         private readonly IValidator<GetEmployerAgreementRequest> _validator;
         private readonly IConfigurationProvider _configurationProvider;
 
         public GetEmployerAgreementQueryHandler(
-            EmployerAccountDbContext database,
+            Lazy<EmployerAccountsDbContext> database,
             IHashingService hashingService,
             IValidator<GetEmployerAgreementRequest> validator,
             IConfigurationProvider configurationProvider)
@@ -51,7 +49,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             var agreementId = _hashingService.DecodeValue(message.AgreementId);
 
-            var employerAgreement = await _database.Agreements.ProjectTo<AgreementDto>(_configurationProvider)
+            var employerAgreement = await _database.Value.Agreements.ProjectTo<AgreementDto>(_configurationProvider)
                                                               .SingleOrDefaultAsync(x => x.Id.Equals(agreementId));
 
             if (employerAgreement == null)
@@ -61,7 +59,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
 
             if (employerAgreement.StatusId == EmployerAgreementStatus.Pending)
             {
-                lastSignedAgreement = _database.Agreements
+                lastSignedAgreement = _database.Value.Agreements
                                                .OrderByDescending(x => x.Template.VersionNumber)
                                                .ProjectTo<AgreementDto>(_configurationProvider)
                                                .FirstOrDefault(x => x.AccountId.Equals(accountId) &&
@@ -71,8 +69,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
 
             if (employerAgreement.StatusId != EmployerAgreementStatus.Signed)
             {
-                employerAgreement.SignedByName = _database.Memberships
-                    .Where(m => m.AccountId == accountId && m.User.ExternalId.ToString() == message.ExternalUserId)
+                employerAgreement.SignedByName = _database.Value.Memberships
+                    .Where(m => m.AccountId == accountId && m.User.Ref.ToString() == message.ExternalUserId)
                     .AsEnumerable()
                     .Select(m => m.User.FullName)
                     .Single();

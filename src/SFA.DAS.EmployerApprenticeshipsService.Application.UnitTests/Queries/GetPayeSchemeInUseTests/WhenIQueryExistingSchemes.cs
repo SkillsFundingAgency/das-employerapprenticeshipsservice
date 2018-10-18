@@ -2,9 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeInUse;
-using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 

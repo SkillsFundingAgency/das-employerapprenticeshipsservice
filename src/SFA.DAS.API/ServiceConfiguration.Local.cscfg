@@ -3,16 +3,16 @@
   <Role name="SFA.DAS.EAS.Account.Api">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="EnvironmentName" value="LOCAL" />
       <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="LogLevel" value="Debug" />
-      <Setting name="LoggingRedisKey" value="" />
-      <Setting name="LoggingRedisConnectionString" value="" />
+      <Setting name="EnvironmentName" value="LOCAL" />
       <Setting name="idaAudience" value="https://citizenazuresfabisgov.onmicrosoft.com/eas-api" />
       <Setting name="idaTenant" value="citizenazuresfabisgov.onmicrosoft.com" />
-      <Setting name="InstrumentationKey" value=""/>
+      <Setting name="InstrumentationKey" value="" />
+      <Setting name="LoggingRedisKey" value="" />
+      <Setting name="LoggingRedisConnectionString" value="" />
+      <Setting name="LogLevel" value="Debug" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="CE71D8AD4A859BD1803DBE03989801B56E5B6875" thumbprintAlgorithm="sha1" />

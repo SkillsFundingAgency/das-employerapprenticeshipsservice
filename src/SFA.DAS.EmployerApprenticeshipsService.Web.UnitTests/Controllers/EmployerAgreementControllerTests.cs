@@ -7,8 +7,6 @@ using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.EAS.Infrastructure.Authentication;
-using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Helpers;
@@ -19,6 +17,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Dtos;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers
@@ -183,7 +183,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
                 act: fixtures => fixtures.ViewUnsignedAgreements(),
                 assert: (fixtures, result) =>
                 {
-                    fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+                    fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
                     fixtures.Orchestrator.Verify(x => x.Get(fixtures.HashedAccountId, fixtures.UserId));
                     Assert.IsNotNull(result);
                     Assert.AreEqual(result.RouteValues["action"], "AboutYourAgreement");
@@ -229,7 +229,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
                 act: fixtures => fixtures.ViewUnsignedAgreements(),
                 assert: (fixtures, actualResult) =>
                 {
-                    fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName));
+                    fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
                     fixtures.Orchestrator.Verify(x => x.Get(fixtures.HashedAccountId, fixtures.UserId));
                     Assert.IsNotNull(actualResult);
                     Assert.AreEqual(actualResult.RouteValues["action"], "Index");

@@ -1,17 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
+﻿using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Authorization;
-using SFA.DAS.EAS.Web.Attributes;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
-using IAuthenticationService = SFA.DAS.EAS.Infrastructure.Authentication.IAuthenticationService;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -22,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
         public HomeController(IAuthenticationService owinWrapper, HomeOrchestrator homeOrchestrator,
-            EmployerApprenticeshipsServiceConfiguration configuration, IAuthorizationService authorization, 
+            EmployerApprenticeshipsServiceConfiguration configuration, IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
@@ -35,7 +34,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Index")]
         public async Task<ActionResult> Index()
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 await OwinWrapper.UpdateClaims();
@@ -49,7 +48,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 if (accounts.Data.Invitations > 0)
                 {
-                    return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName, new {});
+                    return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName, new { });
                 }
 
                 if (accounts.Data.Accounts.AccountList.Count == 1)
@@ -64,12 +63,12 @@ namespace SFA.DAS.EAS.Web.Controllers
                 {
                     accounts.FlashMessage = flashMessage;
                 }
-                
+
                 if (accounts.Data.Accounts.AccountList.Count > 1)
                 {
                     return View(accounts);
                 }
-                
+
                 return View(ControllerConstants.SetupAccountViewName, accounts);
 
             }
@@ -115,7 +114,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 case 1: return RedirectToAction(ControllerConstants.WhatYoullNeedActionName); //No I have not used the service before
                 case 2: return RedirectToAction(ControllerConstants.SignInActionName); // Yes I have used the service
                 default:
-                    
+
                     var model = new
                     {
                         HideHeaderSignInLink = true,
@@ -198,7 +197,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 await OwinWrapper.UpdateClaims();
 
-                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserExternalIdClaimKeyName);
+                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
                 var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
                 var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
                 var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
@@ -226,7 +225,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var constants = new Constants(_configuration.Identity);
 
             return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken, owinContext.Request.Uri.Scheme, owinContext.Request.Uri.Authority));
-         }
+        }
 
         [HttpGet]
         [Route("privacy")]

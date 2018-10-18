@@ -1,5 +1,4 @@
-﻿using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Models.AccountTeam;
+﻿using SFA.DAS.EAS.Domain.Models.AccountTeam;
 
 namespace SFA.DAS.EAS.Application.Queries.GetMember
 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MediatR;
 using SFA.DAS.Activities;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Messages;
 
 namespace SFA.DAS.EAS.Application.Queries.GetActivities

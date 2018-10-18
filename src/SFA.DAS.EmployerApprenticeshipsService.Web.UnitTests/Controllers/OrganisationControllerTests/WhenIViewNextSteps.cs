@@ -1,16 +1,15 @@
-﻿using System.Web.Mvc;
-using AutoMapper;
+﻿using AutoMapper;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Authentication;
-using SFA.DAS.EAS.Infrastructure.Authorization;
-using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.NLog.Logger;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
 {
@@ -34,7 +33,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _mapper = new Mock<IMapper>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            
+
             _logger = new Mock<ILog>();
 
             _controller = new OrganisationController(
@@ -53,22 +52,23 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             //Arrange
             const string userId = "123";
             const string hashedAccountId = "ABC123";
+            const string hashedAgreementId = "DGF6756";
 
             _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId);
-            _orchestrator.Setup(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            _orchestrator.Setup(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                          .ReturnsAsync(new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
-                {
-                    Data = new OrganisationAddedNextStepsViewModel { ShowWizard = true}
-                });
+                         {
+                             Data = new OrganisationAddedNextStepsViewModel { ShowWizard = true }
+                         });
 
             //Act
-            var result = _controller.OrganisationAddedNextSteps("test", hashedAccountId).Result as ViewResult;
+            var result = _controller.OrganisationAddedNextSteps("test", hashedAccountId, hashedAgreementId).Result as ViewResult;
             var model = result?.Model as OrchestratorResponse<OrganisationAddedNextStepsViewModel>;
 
             //Assert
             Assert.IsNotNull(model);
             Assert.IsTrue(model.Data.ShowWizard);
-            _orchestrator.Verify(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), userId, hashedAccountId), Times.Once);
+            _orchestrator.Verify(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), userId, hashedAccountId, hashedAgreementId), Times.Once);
         }
 
         [Test]

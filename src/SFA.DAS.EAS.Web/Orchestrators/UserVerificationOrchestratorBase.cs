@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
-using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

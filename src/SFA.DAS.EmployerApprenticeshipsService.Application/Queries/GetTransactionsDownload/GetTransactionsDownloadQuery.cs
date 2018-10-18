@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
-using SFA.DAS.EAS.Application.Attributes;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Formatters.TransactionDowloads;
-using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransactionsDownload
 {

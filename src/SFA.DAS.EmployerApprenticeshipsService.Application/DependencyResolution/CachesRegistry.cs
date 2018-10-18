@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Caching;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+﻿using Microsoft.Azure;
+using SFA.DAS.Caches;
+using SFA.DAS.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution
@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
             }
             else
             {
-                For<IDistributedCache>().Use<RedisCache>().Singleton();
+                For<IDistributedCache>().Use<RedisCache>(() => new RedisCache(CloudConfigurationManager.GetSetting("RedisConnection"))).Singleton();
             }
         }
     }

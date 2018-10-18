@@ -37,7 +37,7 @@ Old style jobs have a dedicated CLI.
 
 The new style jobs may have a dedicated 'trigger' that causes it to run automatically. For example, on a timer basis or in response to posting a message to a queue. However, any job may be invoked manually by posting a message to a specific queue named adhocjobs (see below).
 
-#Running a Job Manually
+# Running a Job Manually
 
 
 > The objective here is to get a message into the queue named **adhocjobs** in the storage account used by the **SFA.DAS.EAS.Account.Worker** worker role.
@@ -46,12 +46,12 @@ The new style jobs may have a dedicated 'trigger' that causes it to run automati
 You will need a tool such as [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/ "Microsoft Azure Storage Explorer") that allows you to post messages to [Azure Storage Queues](https://azure.microsoft.com/en-gb/services/storage/queues "Azure Storage Queue"). The following screen shots will reference Microsoft Azure Storage Explorer.
  
 
-##Connect the tool to the  required storage account
+## Connect the tool to the  required storage account
 
 
 ![Open Account](AzureStorage_1.png)
 
-##Open the Queues container in the relevant storage account 
+## Open the Queues container in the relevant storage account 
 
 ![Open Account](AzureStorage_2.png)
 

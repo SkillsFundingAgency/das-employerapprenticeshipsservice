@@ -1,7 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Levy;
@@ -15,8 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Infrastructure.Hashing;
-using SFA.DAS.EAS.Infrastructure.Interfaces;
+using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionsTests
 {
@@ -32,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public override Mock<IValidator<GetEmployerAccountTransactionsQuery>> RequestValidator { get; set; }
         private Mock<IHashingService> _hashingService;
         private Mock<IPublicHashingService> _publicHashingService;
-
+        
 
         [SetUp]
         public void Arrange()
@@ -167,25 +166,24 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Arrange
             var expectedUkprn = 545646541;
             var transactions = new List<TransactionLine>
+            {
+                new PaymentTransactionLine()
                 {
-                    new PaymentTransactionLine()
-                    {
-                        AccountId = 1,
-                       TransactionDate = DateTime.Now.AddMonths(-3),
-                        Amount = 1000,
-                        TransactionType = TransactionItemType.Payment,
-                        UkPrn = expectedUkprn
-                    }
-                };
+                    AccountId = 1,
+                    TransactionDate = DateTime.Now.AddMonths(-3),
+                    Amount = 1000,
+                    TransactionType = TransactionItemType.Payment,
+                    UkPrn = expectedUkprn
+                }
+            };
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                           .ReturnsAsync(transactions);
-
+                .ReturnsAsync(transactions);
             _apprenticshipInfoService.Setup(x => x.GetProvider(expectedUkprn)).Returns(new ProvidersView { Provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" } });
 
             //Act
             await RequestHandler.Handle(_request);
 
-            //Act
+            //Assert
             _apprenticshipInfoService.Verify(x => x.GetProvider(expectedUkprn), Times.Once);
         }
 
@@ -194,18 +192,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         {
             //Arrange
             var transactions = new List<TransactionLine>
+            {
+                new PaymentTransactionLine
                 {
-                    new PaymentTransactionLine
-                    {
-                        AccountId = 1,
-                        TransactionDate = DateTime.Now.AddMonths(-3),
-                        Amount = 1000,
-                        TransactionType = TransactionItemType.Payment,
-                        UkPrn = 1254545
-                    }
-                };
+                    AccountId = 1,
+                    TransactionDate = DateTime.Now.AddMonths(-3),
+                    Amount = 1000,
+                    TransactionType = TransactionItemType.Payment,
+                    UkPrn = 1254545
+                }
+            };
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                           .ReturnsAsync(transactions);
+                .ReturnsAsync(transactions);
 
             _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>())).Throws(new WebException());
 

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Newtonsoft.Json;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.Configuration;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
