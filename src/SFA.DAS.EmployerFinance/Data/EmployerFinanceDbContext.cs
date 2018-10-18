@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerFinance.Data
     {
         public virtual DbSet<HealthCheck> HealthChecks { get; set; }
         public virtual DbSet<PeriodEnd> PeriodEnds { get; set; }
-        public virtual DbSet<TransactionEntity> Transactions { get; set; }
+        public virtual DbSet<TransactionLineEntity> Transactions { get; set; }
 
 
         static EmployerFinanceDbContext()
@@ -49,6 +49,8 @@ namespace SFA.DAS.EmployerFinance.Data
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema("employer_financial");
             modelBuilder.Entity<HealthCheck>().ToTable("HealthChecks", "dbo");
+            modelBuilder.Entity<TransactionLineEntity>().ToTable("TransactionLine");
+            modelBuilder.Entity<TransactionLineEntity>().HasKey(t => t.Id);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Extensions;
+using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.Hashing;
 using System.Collections.Generic;
@@ -50,8 +51,15 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails
                 ApprenticeCount = (uint)ct.DistinctBy(t => t.CommitmentId).Count()
             }).ToArray();
 
+            //NOTE: We should only get one tranfer transaction per sender per period end
+            // as this is how transfers are grouped together when creating transfer transactions
             var tranferTransaction = _dbContext.Transactions.Single(t =>
-                t.AccountId.Equals(query.AccountId) &&
+                t.AccountId == query.AccountId &&
+                t.TransactionType == TransactionItemType.Transfer &&
+                t.TransferSenderAccountId != null &&
+                t.TransferReceiverAccountId != null &&
+                t.TransferSenderAccountId == firstTransfer.SenderAccountId &&
+                t.TransferReceiverAccountId == firstTransfer.ReceiverAccountId &&
                 t.PeriodEnd.Equals(query.PeriodEnd));
 
             var transferDate = tranferTransaction.DateCreated;

@@ -36,8 +36,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransferTransactionDetail
         private List<AccountTransfer> _transfers;
         private Mock<IPublicHashingService> _publicHashingService;
         private PeriodEnd _periodEnd;
-        private TransactionEntity _senderTranferTransaction;
-        private TransactionEntity _recieverTranferTransaction;
+        private TransactionLineEntity _senderTranferTransaction;
+        private TransactionLineEntity _recieverTranferTransaction;
 
         [SetUp]
         public void Assign()
@@ -56,18 +56,24 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransferTransactionDetail
                 PaymentsForPeriod = "Test"
             };
 
-            _senderTranferTransaction = new TransactionEntity
+            _senderTranferTransaction = new TransactionLineEntity
             {
                 AccountId = SenderAccountId,
+                TransferSenderAccountId = SenderAccountId,
+                TransferReceiverAccountId = ReceiverAccountId,
                 PeriodEnd = PeriodEnd,
-                DateCreated = DateTime.Now.AddDays(-2)
+                DateCreated = DateTime.Now.AddDays(-2),
+                TransactionType = TransactionItemType.Transfer
             };
 
-            _recieverTranferTransaction = new TransactionEntity
+            _recieverTranferTransaction = new TransactionLineEntity
             {
                 AccountId = ReceiverAccountId,
                 PeriodEnd = PeriodEnd,
-                DateCreated = DateTime.Now.AddDays(-1)
+                TransferSenderAccountId = SenderAccountId,
+                TransferReceiverAccountId = ReceiverAccountId,
+                DateCreated = DateTime.Now.AddDays(-1),
+                TransactionType = TransactionItemType.Transfer
             };
 
             _publicHashingService = new Mock<IPublicHashingService>();
@@ -131,7 +137,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransferTransactionDetail
 
             _db.Setup(x => x.PeriodEnds).Returns(() => new DbSetStub<PeriodEnd>(_periodEnd));
 
-            _db.Setup(x => x.Transactions).Returns(() => new DbSetStub<TransactionEntity>(
+            _db.Setup(x => x.Transactions).Returns(() => new DbSetStub<TransactionLineEntity>(
                 _senderTranferTransaction,
                 _recieverTranferTransaction));
 
