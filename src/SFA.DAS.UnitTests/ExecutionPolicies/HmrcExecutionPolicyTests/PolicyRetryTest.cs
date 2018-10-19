@@ -24,7 +24,7 @@ namespace SFA.DAS.UnitTests.ExecutionPolicies.HmrcExecutionPolicyTests
         {
             var runner = new TestRunner<ApiHttpException>(CreateTestException(503, "service unavailable"));
 
-            Assert.Throws<AggregateException>(() => _policy.ExecuteAsync(runner.Execute).Wait());
+            Assert.ThrowsAsync<ApiHttpException>(() => _policy.ExecuteAsync(runner.Execute));
 
             Assert.AreEqual(6, runner.CallCount);
         }
@@ -34,32 +34,32 @@ namespace SFA.DAS.UnitTests.ExecutionPolicies.HmrcExecutionPolicyTests
         {
             var runner = new TestRunner<ApiHttpException>(CreateTestException(500, "internal server error"));
 
-            Assert.Throws<AggregateException>(() => _policy.ExecuteAsync(runner.Execute).Wait());
+            Assert.ThrowsAsync<ApiHttpException>(() => _policy.ExecuteAsync(runner.Execute));
 
             Assert.AreEqual(6, runner.CallCount);
         }
 
         [Test]
-        public void RetryForeverWhenTooManyRequestsReturned()
+        public async Task RetryForeverWhenTooManyRequestsReturned()
         {
             var runner = new TestRunner<ApiHttpException>(CreateTestException(429, "too many requests"));
 
-            _policy.ExecuteAsync(runner.Execute).Wait();
+            await _policy.ExecuteAsync(runner.Execute);
 
             Assert.AreEqual(runner.MaxCallCount, runner.CallCount);
         }
 
         [Test]
-        public void RetryForeverWhenRequestTimeoutReturned()
+        public async Task RetryForeverWhenRequestTimeoutReturned()
         {
             var runner = new TestRunner<ApiHttpException>(CreateTestException(408, "request timeout"));
 
-            _policy.ExecuteAsync(runner.Execute).Wait();
+            await _policy.ExecuteAsync(runner.Execute);
 
             Assert.AreEqual(runner.MaxCallCount, runner.CallCount);
         }
 
-        private ApiHttpException CreateTestException(int httpCode, string message)
+        private static ApiHttpException CreateTestException(int httpCode, string message)
         {
             return new ApiHttpException(httpCode, message, string.Empty, string.Empty);
         }
@@ -78,14 +78,10 @@ namespace SFA.DAS.UnitTests.ExecutionPolicies.HmrcExecutionPolicyTests
                 CallCount = 0;
             }
 
-            public async Task Execute()
+            public Task Execute()
             {
-                CallCount++;
-
-                if (CallCount >= MaxCallCount)
-                    return;
-
-                await Task.Delay(0);
+                if (++CallCount >= MaxCallCount)
+                    return Task.CompletedTask;
 
                 throw _exception;
             }
