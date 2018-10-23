@@ -46,6 +46,10 @@
         "tokenCertificateThumbprint": {
             "type": "string"
         },
+        "tokenServiceCertificateThumbprint": {
+            "type": "string",
+            "defaultValue": ""
+        },
         "uiCustomHostname": {
             "type": "string",
             "defaultValue": ""
@@ -290,6 +294,14 @@
                             {
                                 "name": "StorageConnectionString",
                                 "value": "[parameters('storageConnectionString')]"
+                            },
+                            {
+                                "name": "WEBSITE_LOAD_CERTIFICATES",
+                                "value": "[parameters('tokenServiceCertificateThumbprint')]"
+                            },
+                            {
+                                "name": "TokenServiceCertificateThumbprint",
+                                "value": "[parameters('tokenServiceCertificateThumbprint')]"
                             }
                         ]
                     },
