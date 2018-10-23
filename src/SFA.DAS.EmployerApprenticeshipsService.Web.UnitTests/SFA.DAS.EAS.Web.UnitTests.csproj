@@ -278,21 +278,15 @@
     <Compile Include="Controllers\BaseControllerTests\WhenReturningView.cs" />
     <Compile Include="Controllers\BaseControllerTests\WhenStoringFlashMessages.cs" />
     <Compile Include="Controllers\ControllerTestBase.cs" />
-    <Compile Include="Controllers\EmployerAccountControllerTests\WhenIManageMyNotificationSettings.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIAddAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests.cs" />
-    <Compile Include="Controllers\HomeControllerTests\WhenIHandleNewRegistration.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIConfirmAddOfOrganisation.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\OrganisationSharedControllerTestBase.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenIAddAnOrganisationAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenIEnterAPostcodeForAnAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenIGoToAddAnOrganisationOfTypeOther.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenIAddAnOrganisationOfTypeOther.cs" />
-    <Compile Include="Controllers\HomeControllerTests\WhenILoginAUser.cs" />
-    <Compile Include="Controllers\HomeControllerTests\WhenILogout.cs" />
-    <Compile Include="Controllers\HomeControllerTests\WhenIModifyMyUserAccount.cs" />
-    <Compile Include="Controllers\HomeControllerTests\WhenIViewTheHomePage.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIViewNextSteps.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenISearchForAnAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenISelectAnAddress.cs" />
@@ -300,8 +294,6 @@
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
-    <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenManagingUserSettings.cs" />
-    <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenSearchingForACompany.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenAddingAPayeScheme.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenGettingPayeSchemeDetails.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenGettingTheNextStepsDetails.cs" />
@@ -319,7 +311,6 @@
     <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenISearchForALegalEntity.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingAllUsers.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingUserAccounts.cs" />
-    <Compile Include="Orchestrators\UserSettingsOrchestrator\WhenUnsubscribingFromNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validation\WhenValidatingAddLegalEntityViewModel.cs" />
   </ItemGroup>
@@ -363,6 +354,9 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controllers\EmployerAccountControllerTests\" />
+    <Folder Include="Controllers\HomeControllerTests\" />
+    <Folder Include="Orchestrators\EmployerAccountOrchestratorTests\" />
     <Folder Include="Orchestrators\TaskOrchestratorTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
