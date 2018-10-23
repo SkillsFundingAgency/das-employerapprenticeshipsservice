@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Authentication;
+﻿using System;
+using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
@@ -10,6 +11,7 @@ using SFA.DAS.NLog.Logger;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -33,43 +35,149 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("gatewayInform")]
         public ActionResult GatewayInform()
         {
-            return Redirect(Url.LegacyEasAccountAction("gatewayInform"));
+            var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>
+            {
+                Data = new GatewayInformViewModel
+                {
+                    BreadcrumbDescription = "Back to Your User Profile",
+                    ConfirmUrl = Url.Action(ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName),
+                },
+
+            };
+
+            var flashMessageViewModel = GetFlashMessageViewModelFromCookie();
+
+            if (flashMessageViewModel != null)
+            {
+                gatewayInformViewModel.FlashMessage = flashMessageViewModel;
+            }
+
+            return View(gatewayInformViewModel);
         }
 
         [HttpGet]
         [Route("gateway")]
-        public ActionResult Gateway()
+        public async Task<ActionResult> Gateway()
         {
-            return Redirect(Url.LegacyEasAccountAction("gateway"));
+            return Redirect(await _employerAccountOrchestrator.GateWayUrlHelper(ControllerConstants.GateWayResponseActionName, ControllerConstants.EmployerAccountControllerName, HttpContext.Request.Url.Scheme, Url));
         }
 
         [Route("gatewayResponse")]
-        public ActionResult GateWayResponse()
+        public async Task<ActionResult> GateWayResponse()
         {
-            return Redirect(Url.LegacyEasAccountAction("gatewayResponse"));
+            try
+            {
+                _logger.Info("Starting processing gateway response");
+
+                var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params[ControllerConstants.CodeKeyName], Url.Action(ControllerConstants.GateWayResponseActionName, ControllerConstants.EmployerAccountControllerName, null, Request.Url.Scheme), System.Web.HttpContext.Current?.Request.QueryString);
+                if (response.Status != HttpStatusCode.OK)
+                {
+                    _logger.Warn($"Gateway response does not indicate success. Status = {response.Status}.");
+                    response.Status = HttpStatusCode.OK;
+
+                    AddFlashMessageToCookie(response.FlashMessage);
+
+                    return RedirectToAction(ControllerConstants.GatewayInformActionName);
+                }
+
+                var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+                _logger.Info($"Gateway response is for user identity ID {externalUserId}");
+
+                var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
+                var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
+                _logger.Info($"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
+
+                var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
+
+                enteredData.EmployerRefName = empref.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "";
+                enteredData.PayeReference = empref.Empref;
+                enteredData.AccessToken = response.Data.AccessToken;
+                enteredData.RefreshToken = response.Data.RefreshToken;
+                enteredData.EmpRefNotFound = empref.EmprefNotFound;
+                _employerAccountOrchestrator.UpdateCookieData(HttpContext, enteredData);
+
+                _logger.Info("Finished processing gateway response");
+                return RedirectToAction(ControllerConstants.SummaryActionName);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error processing Gateway response - {ex.Message}");
+                throw;
+            }
         }
 
         [HttpGet]
         [Route("summary")]
-        public ActionResult Summary()
+        public ViewResult Summary()
         {
-            return Redirect(Url.LegacyEasAccountAction("summary"));
+            var result = _employerAccountOrchestrator.GetSummaryViewModel(HttpContext);
+            return View(result);
         }
 
         [HttpGet]
         [Route("create")]
         public ActionResult Create()
         {
-            return Redirect(Url.LegacyEasAccountAction("create"));
+            return RedirectToAction(ControllerConstants.SummaryActionName);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("create")]
+        public async Task<ActionResult> CreateAccount()
+        {
+            var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
+
+            if (enteredData == null)
+            {
+                // N.B CHANGED THIS FROM SelectEmployer which went nowhere.
+                _employerAccountOrchestrator.DeleteCookieData(HttpContext);
+
+                return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+            }
+
+            var request = new CreateAccountViewModel
+            {
+                UserId = GetUserId(),
+                OrganisationType = enteredData.OrganisationType,
+                OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
+                OrganisationName = enteredData.OrganisationName,
+                OrganisationAddress = enteredData.OrganisationRegisteredAddress,
+                OrganisationDateOfInception = enteredData.OrganisationDateOfInception,
+                PayeReference = enteredData.PayeReference,
+                AccessToken = enteredData.AccessToken,
+                RefreshToken = enteredData.RefreshToken,
+                OrganisationStatus = string.IsNullOrWhiteSpace(enteredData.OrganisationStatus) ? null : enteredData.OrganisationStatus,
+                EmployerRefName = enteredData.EmployerRefName,
+                PublicSectorDataSource = enteredData.PublicSectorDataSource,
+                Sector = enteredData.Sector
+            };
+
+            var response = await _employerAccountOrchestrator.CreateAccount(request, HttpContext);
+
+            if (response.Status == HttpStatusCode.BadRequest)
+            {
+                response.Status = HttpStatusCode.OK;
+                response.FlashMessage = new FlashMessageViewModel { Headline = "There was a problem creating your account" };
+                return RedirectToAction(ControllerConstants.SummaryActionName);
+            }
+
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
         [HttpGet]
         [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(string hashedAccountId)
         {
+            return Redirect(Url.EmployerAccountsAction("rename"));
+        }
+
+
+
+        private string GetUserId()
+        {
             var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
-            return View(vm);
+            return userIdClaim ?? "";
         }
 
         [HttpPost]

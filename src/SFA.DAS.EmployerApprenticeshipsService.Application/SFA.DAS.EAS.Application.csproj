@@ -331,7 +331,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommand.cs" />
+    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandHandler.cs" />
+    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandResponse.cs" />
     <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityValidator.cs" />
+    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressHandler.cs" />
+    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressRequest.cs" />
+    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressResponse.cs" />
+    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressValidator.cs" />
     <Compile Include="Extensions\AddressExtensions.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityRequest.cs" />
@@ -448,16 +455,9 @@
     <Compile Include="Commands\AuditCommand\CreateAuditCommand.cs" />
     <Compile Include="Commands\AuditCommand\CreateAuditCommandHandler.cs" />
     <Compile Include="Commands\AuditCommand\CreateAuditCommandValidator.cs" />
-    <Compile Include="Commands\CreateAccount\CreateAccountCommandResponse.cs" />
-    <Compile Include="Commands\CreateAccount\CreateAccountCommand.cs" />
-    <Compile Include="Commands\CreateAccount\CreateAccountCommandHandler.cs" />
-    <Compile Include="Commands\CreateAccount\CreateAccountCommandValidator.cs" />
     <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommand.cs" />
     <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommandValidator.cs" />
-    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommand.cs" />
-    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandHandler.cs" />
-    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandResponse.cs" />
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommand.cs" />
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommandHandler.cs" />
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommandResponse.cs" />
@@ -467,10 +467,6 @@
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommand.cs" />
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandHandler.cs" />
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandValidator.cs" />
-    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressHandler.cs" />
-    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressRequest.cs" />
-    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressResponse.cs" />
-    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressValidator.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />

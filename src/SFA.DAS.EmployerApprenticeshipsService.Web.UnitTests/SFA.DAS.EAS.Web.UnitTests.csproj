@@ -279,11 +279,6 @@
     <Compile Include="Controllers\BaseControllerTests\WhenStoringFlashMessages.cs" />
     <Compile Include="Controllers\ControllerTestBase.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIManageMyNotificationSettings.cs" />
-    <Compile Include="Controllers\EmployerAccountControllerTests\WhenICreateAnAccount.cs" />
-    <Compile Include="Controllers\EmployerAccountControllerTests\WhenIHaveSelectedAnEmployer.cs" />
-    <Compile Include="Controllers\EmployerAccountControllerTests\WhenISearchForAnEmployer.cs" />
-    <Compile Include="Controllers\EmployerAccountControllerTests\WhenIStartTheProcess.cs" />
-    <Compile Include="Controllers\EmployerAccountControllerTests\WhenISubmitMyDetails.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIAddAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests.cs" />
@@ -305,7 +300,6 @@
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
-    <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenCreatingTheAccount.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenManagingUserSettings.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenSearchingForACompany.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenAddingAPayeScheme.cs" />
@@ -323,12 +317,9 @@
     <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenICreateALegalEntityWhenNotOwner.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenISearchForACharity.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenISearchForALegalEntity.cs" />
-    <Compile Include="Orchestrators\HmrcOrchestratorTests\WhenCallingHmrcService.cs" />
-    <Compile Include="Orchestrators\HmrcOrchestratorTests\WhenGettingTheTokenResponse.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingAllUsers.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingUserAccounts.cs" />
     <Compile Include="Orchestrators\UserSettingsOrchestrator\WhenUnsubscribingFromNotification.cs" />
-    <Compile Include="Orchestrators\SearchOrganisationOrchestratorTests\WhenISearchForAnOrganisation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validation\WhenValidatingAddLegalEntityViewModel.cs" />
   </ItemGroup>
