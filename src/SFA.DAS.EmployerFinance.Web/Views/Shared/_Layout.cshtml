@@ -1,11 +1,8 @@
-﻿@using System.Security.Policy
-@using Microsoft.ApplicationInsights.Extensibility
+﻿@using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerFinance.Web.Extensions
-@using SFA.DAS.EmployerFinance.Web.ViewModels
 @using SFA.DAS.Extensions
-@using StructureMap.Query
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -164,13 +161,13 @@
                                     <a href="/" role="menuitem">Settings</a>
                                     <ul role="menu" class="js-hidden" id="settings-menu">
                                         <li>
-                                            <a href="@Url.LegacyEasAction("accounts")" role="menuitem" class="sub-menu-item">Your accounts</a>
+                                            <a href="@Url.EmployerAccountsAction("service/accounts", false)" role="menuitem" class="sub-menu-item">Your accounts</a>
                                         </li>
                                         @if (!DynamicExtensions.ParseHideNavFromViewBag(ViewBag))
                                         {
                                             <li>
                                                 @*<a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem" class="sub-menu-item">Rename account</a>*@
-                                                <a href="@Url.LegacyEasAccountAction($"rename")" role="menuitem" class="sub-menu-item">Rename account</a>
+                                                <a href="@Url.EmployerAccountsAction("rename")" role="menuitem" class="sub-menu-item">Rename account</a>
                                             </li>
                                         }
                                         <li>
@@ -182,7 +179,7 @@
                                         @if (!DynamicExtensions.ParseHideNavFromViewBag(ViewBag))
                                         {
                                             <li>
-                                                <a href="@Url.LegacyEasAction("settings/notifications")" class="sub-menu-item">Notification settings</a>
+                                                <a href="@Url.EmployerAccountsAction("settings/notifications", false)" class="sub-menu-item">Notification settings</a>
                                             </li>
                                         }
                                     </ul>
@@ -217,7 +214,7 @@
                 <nav class="header-inner">
                     <ul role="menubar" id="global-nav-links">
                         <li>
-                            <a href="@Url.LegacyEasAccountAction("teams")" class="@(ViewBag.Section == "home" ? "selected" : "")" role="menuitem">Home</a>
+                            <a href="@Url.EmployerAccountsAction("teams")" class="@(ViewBag.Section == "home" ? "selected" : "")" role="menuitem">Home</a>
                         </li>
                         <li>
                             <a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a>
@@ -230,13 +227,13 @@
                             <a href="@Url.EmployerCommitmentsAction("apprentices/home")" class="@(controllerString == "EmployerCommitments" ? "selected" : "")" role="menuitem">Apprentices</a>
                         </li>
                         <li>
-                            <a href="@Url.LegacyEasAccountAction("teams/view")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Your team</a>
+                            <a href="@Url.EmployerAccountsAction("teams/view")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Your team</a>
                         </li>
                         <li>
-                            <a href="@Url.LegacyEasAccountAction("agreements")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Your organisations and agreements</a>
+                            <a href="@Url.EmployerAccountsAction("agreements")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Your organisations and agreements</a>
                         </li>
                         <li>
-                            <a href="@Url.LegacyEasAccountAction("schemes")" class="@(ViewBag.Section == "paye" ? "selected" : "")" role="menuitem">PAYE schemes</a>
+                            <a href="@Url.EmployerAccountsAction("schemes")" class="@(ViewBag.Section == "paye" ? "selected" : "")" role="menuitem">PAYE schemes</a>
                         </li>
                     </ul>
                 </nav>
