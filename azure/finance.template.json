@@ -46,7 +46,15 @@
         "tokenCertificateThumbprint": {
             "type": "string"
         },
-        "tokenServiceCertificateThumbprint": {
+        "keyVaultCertificateName": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "keyVaultName": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "keyVaultResourceGroup": {
             "type": "string",
             "defaultValue": ""
         },
@@ -297,11 +305,11 @@
                             },
                             {
                                 "name": "WEBSITE_LOAD_CERTIFICATES",
-                                "value": "[parameters('tokenServiceCertificateThumbprint')]"
+                                "value": "[reference('TokenServiceCert').outputs.certificateThumbprint.value]"
                             },
                             {
                                 "name": "TokenServiceCertificateThumbprint",
-                                "value": "[parameters('tokenServiceCertificateThumbprint')]"
+                                "value": "[reference('TokenServiceCert').outputs.certificateThumbprint.value]"
                             }
                         ]
                     },
@@ -327,6 +335,30 @@
             "dependsOn": [
                 "WorkerAppServicePlan"
             ]
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "TokenServiceCert",
+            "condition": "[and(and(greater(length(parameters('keyVaultCertificateName')),0), greater(length(parameters('keyVaultName')),0)), greater(length(parameters('keyVaultResourceGroup')),0))]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/app-service-certificate.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "keyVaultCertificateName": {
+                        "value": "[parameters('keyVaultCertificateName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('keyVaultName')]"
+                    },
+                    "keyVaultResourceGroup": {
+                        "value": "[parameters('keyVaultResourceGroup')]"
+                    }
+                }
+            }
         }
     ],
     "outputs": {}
