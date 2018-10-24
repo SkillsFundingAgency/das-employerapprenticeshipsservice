@@ -312,8 +312,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\AddPayeToAccountTests\WhenIAddPayeToAnAccount.cs" />
-    <Compile Include="Commands\AddPayeToAccountTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\CreateLegalEntityCommandTests\WhenICallCreateLegalEntityWhenNotAccountOwner.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementTests\GetAccountEmployerAgreementTests.cs" />
@@ -334,8 +332,6 @@
     <Compile Include="Commands\CreateLegalEntityCommandTests\WhenICallCreateLegalEntity.cs" />
     <Compile Include="Commands\CreateOrganisationAddressTests\WhenICreateAnAddress.cs" />
     <Compile Include="Commands\CreateOrganisationAddressTests\WhenIValidateTheRequest.cs" />
-    <Compile Include="Commands\RemovePayeFromAccountTests\WhenIRemoveAPayeSchemeFromAnAccount.cs" />
-    <Compile Include="Commands\RemovePayeFromAccountTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\SignEmployerAgreementTests\WhenISignAnEmployerAgreement.cs" />
     <Compile Include="Commands\SignEmployerAgreementTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\WhenUpdatingUserNotificationSettings.cs" />
@@ -352,8 +348,6 @@
     <Compile Include="Queries\GetAccountEmployerAgreementsRemove\WhenIGetAccountEmployerAgreementsToRemove.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementsRemove\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementTests\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetAccountPAYESchemes\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetAccountPAYESchemes\WhenIGetAccountPayeSchemes.cs" />
     <Compile Include="Queries\GetAccountStatsTests\WhenIGetAccountStats.cs" />
     <Compile Include="Queries\GetAccountStatsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTasksTests\WhenIGetAnAccountsTasks.cs" />
@@ -374,8 +368,6 @@
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriodTests\WhenIGetLevyDeclarations.cs" />
     <Compile Include="Queries\GetOrganisationTests\WhenISearchForAnOrganisation.cs" />
     <Compile Include="Queries\GetOrganisationTests\WhenIValidateTheQuery.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRefTests\WhenIGetAPayeScheme.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRefTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByAccountId.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByHashedKey.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByHashedIdRequest.cs" />
@@ -392,14 +384,12 @@
     <Compile Include="Queries\GetLevyDeclarationTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIGetEmployerAccounts.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIValidateTheQuery.cs" />
-    <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIQueryExistingSchemes.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\WhenIGetUserAccounts.cs" />
     <Compile Include="Queries\GetEmployerInformationTests\WhenIRequestEmployerInformation.cs" />
     <Compile Include="Queries\GetGatewayInformationTests\WhenGettingGatewayQuery.cs" />
     <Compile Include="Queries\GetGatewayTokenTests\WhenGettingTokenResponseFromHmrc.cs" />
     <Compile Include="Queries\GetHmrcEmployerInformationTests\WhenRequestingEmployerInformation.cs" />
     <Compile Include="Queries\GetHmrcEmployerInformationTests\WhenValidatingTheRequest.cs" />
-    <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetPostcodeAddressTests\WhenIGetAddressesFromAPostcode.cs" />
     <Compile Include="Queries\GetPreviousTransactionsCountTests\WhenIGetPreviousTransactionsCount.cs" />
     <Compile Include="Queries\GetPreviousTransactionsCountTests\WhenIValidateTheRequest.cs" />

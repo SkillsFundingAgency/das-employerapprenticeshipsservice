@@ -16,6 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             return new Container(c =>
             {
                 c.AddRegistry<ActivitiesClientRegistry>();
+                c.AddRegistry<ApprenticeshipLevyRegistry>();
                 c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<CachesRegistry>();

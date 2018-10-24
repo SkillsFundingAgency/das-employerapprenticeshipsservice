@@ -540,7 +540,6 @@
     <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\TaskOrchestrator.cs" />
     <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
-    <Compile Include="ViewModels\AccountPaye\PayeSchemeNextStepsViewModel.cs" />
     <Compile Include="ViewModels\Activities\ActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Activities\LatestActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Organisation\IncorrectOrganisationDetailsViewModel.cs" />
@@ -593,8 +592,6 @@
     <Compile Include="ViewModels\Organisation\AddOrganisationAddressViewModel.cs" />
     <Compile Include="Models\ApprenticeshipPaymentGroup.cs" />
     <Compile Include="ViewModels\BeginNewPayeSchemeViewModel.cs" />
-    <Compile Include="ViewModels\AddNewPayeSchemeViewModel.cs" />
-    <Compile Include="ViewModels\ConfirmNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\Organisation\AddressViewModel.cs" />
     <Compile Include="ViewModels\Organisation\FindOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrgainsationViewModelBase.cs" />
@@ -613,7 +610,6 @@
     <Compile Include="ViewModels\EmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\GatewayViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberViewModel.cs" />
-    <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SelectEmployerViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\ReceiveTransferConnectionInvitationViewModel.cs" />
@@ -635,7 +631,6 @@
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
-    <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -962,16 +957,12 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
     <Content Include="Views\Shared\_SuccessMessage.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
     <Content Include="Views\EmployerAgreement\Index.cshtml" />
     <Content Include="Views\EmployerAgreement\View.cshtml" />
     <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
     <Content Include="Views\Home\Privacy.cshtml" />
@@ -1079,7 +1070,6 @@
     <Content Include="Views\SearchOrganisation\SearchForOrganisation.cshtml" />
     <Content Include="Views\SearchOrganisation\SearchForOrganisationResults.cshtml" />
     <Content Include="src\sass\_search.scss" />
-    <Content Include="Views\EmployerAccountPaye\NextSteps.cshtml" />
     <Content Include="Views\Shared\_SVGSprite.cshtml" />
     <Content Include="src\sass\_icons.scss" />
     <Content Include="src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />

@@ -284,8 +284,6 @@
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenISearchForAnEmployer.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIStartTheProcess.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenISubmitMyDetails.cs" />
-    <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIAddAPayeScheme.cs" />
-    <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenIHandleNewRegistration.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIConfirmAddOfOrganisation.cs" />
@@ -308,11 +306,6 @@
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenCreatingTheAccount.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenManagingUserSettings.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenSearchingForACompany.cs" />
-    <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenAddingAPayeScheme.cs" />
-    <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenGettingPayeSchemeDetails.cs" />
-    <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenGettingTheNextStepsDetails.cs" />
-    <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenIGetPayeEnglishFractionHistory.cs" />
-    <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenRemovingAPayeScheme.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetTheConfirmRemoveAgreementModel.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetThePdfAgreement.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetAListOfAgreementsToRemove.cs" />

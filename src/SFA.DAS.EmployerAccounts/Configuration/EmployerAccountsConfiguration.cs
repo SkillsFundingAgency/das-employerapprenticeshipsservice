@@ -16,6 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string EmployerRecruitBaseUrl { get; set; }
         public EventsApiClientConfiguration EventsApi { get; set; }
         public string Hashstring { get; set; }
+        public HmrcConfiguration Hmrc { get; set; }
         public IdentityServerConfiguration Identity { get; set; }
         public string LegacyServiceBusConnectionString { get; set; }
         public string MessageServiceBusConnectionString => LegacyServiceBusConnectionString;
