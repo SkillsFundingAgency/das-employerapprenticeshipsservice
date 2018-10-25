@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
 using SFA.DAS.EmployerFinance.Messages.Commands;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.ClientOutbox;
 
 namespace SFA.DAS.EmployerFinance.Jobs
@@ -18,8 +20,26 @@ namespace SFA.DAS.EmployerFinance.Jobs
 
         public static Task ImportPayments([TimerTrigger("0 0 * * * *")] TimerInfo timer, TraceWriter logger)
         {
-            var messageSession = ServiceLocator.GetInstance<IMessageSession>();
-            return messageSession.Send(new ImportPaymentsCommand());
+            ILog nLogger = null;
+            try
+            {
+                nLogger = ServiceLocator.GetInstance<ILog>();
+
+                logger.Info("[TraceWriter] - About to create new import payment command");
+                nLogger.Info("[NLog] - Creating new import payment command");
+                var messageSession = ServiceLocator.GetInstance<IMessageSession>();
+                
+
+                logger.Info("[TraceWriter] - Creating new import payment command");
+                nLogger.Info("[NLog] - Creating new import payment command");
+                return messageSession.Send(new ImportPaymentsCommand());
+            }
+            catch (Exception e)
+            {
+                logger.Error("[TraceWriter] - Failed to create new import payment command", e);
+                nLogger?.Error(e, "[NLog] - Failed to create new import payment command");
+                throw;
+            }
         }
 
         public static Task ProcessOutboxMessages([TimerTrigger("0 */10 * * * *")] TimerInfo timer, TraceWriter logger)
