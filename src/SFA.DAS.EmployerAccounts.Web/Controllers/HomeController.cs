@@ -10,6 +10,7 @@ using SFA.DAS.EmployerUsers.WebClientComponents;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
@@ -214,7 +215,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             OwinWrapper.SignOutUser();
 
-            return new RedirectResult(Url.LegacyEasAction("service/signout"));
+            var owinContext = HttpContext.GetOwinContext();
+            var authenticationManager = owinContext.Authentication;
+            var idToken = authenticationManager.User.FindFirst("id_token")?.Value;
+            var constants = new Constants(_configuration.Identity);
+
+            return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken, owinContext.Request.Uri.Scheme, owinContext.Request.Uri.Authority));
+        }
+
+        [Route("SignOutCleanup")]
+        public void SignOutCleanup()
+        {
+            OwinWrapper.SignOutUser();
         }
 
         [HttpGet]
