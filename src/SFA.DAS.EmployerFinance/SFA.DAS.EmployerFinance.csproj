@@ -33,7 +33,7 @@
     <PackageReference Include="SFA.DAS.Provider.Events.Api.Client" Version="2.1.30" />
     <PackageReference Include="SFA.DAS.Providers.Api.Client" Version="0.11.39" />
     <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
-    <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="1.0.0.26382" />
+    <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="1.1.16" />
     <PackageReference Include="SFA.DAS.UnitOfWork" Version="1.0.17" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
     <PackageReference Include="System.Net.Http" Version="4.3.3" />

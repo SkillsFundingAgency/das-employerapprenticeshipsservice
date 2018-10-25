@@ -43,12 +43,20 @@
         "storageConnectionString": {
             "type": "string"
         },
-        "loadCertificateThumbprints": {
+        "tokenCertificateThumbprint": {
+            "type": "string"
+        },
+        "keyVaultCertificateName": {
             "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Comma separated list of certificate thumbprints to load into the app service"
-            }
+            "defaultValue": ""
+        },
+        "keyVaultName": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "keyVaultResourceGroup": {
+            "type": "string",
+            "defaultValue": ""
         },
         "uiCustomHostname": {
             "type": "string",
@@ -150,7 +158,11 @@
                             },
                             {
                                 "name": "WEBSITE_LOAD_CERTIFICATES",
-                                "value": "[parameters('loadCertificateThumbprints')]"
+                                "value": "[parameters('tokenCertificateThumbprint')]"
+                            },
+                            {
+                                "name": "TokenCertificateThumbprint",
+                                "value": "[parameters('tokenCertificateThumbprint')]"
                             }
                         ]
                     },
@@ -290,6 +302,14 @@
                             {
                                 "name": "StorageConnectionString",
                                 "value": "[parameters('storageConnectionString')]"
+                            },
+                            {
+                                "name": "WEBSITE_LOAD_CERTIFICATES",
+                                "value": "[reference('TokenServiceCert').outputs.certificateThumbprint.value]"
+                            },
+                            {
+                                "name": "TokenServiceCertificateThumbprint",
+                                "value": "[reference('TokenServiceCert').outputs.certificateThumbprint.value]"
                             }
                         ]
                     },
@@ -315,6 +335,30 @@
             "dependsOn": [
                 "WorkerAppServicePlan"
             ]
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "TokenServiceCert",
+            "condition": "[and(and(greater(length(parameters('keyVaultCertificateName')),0), greater(length(parameters('keyVaultName')),0)), greater(length(parameters('keyVaultResourceGroup')),0))]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/app-service-certificate.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "keyVaultCertificateName": {
+                        "value": "[parameters('keyVaultCertificateName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('keyVaultName')]"
+                    },
+                    "keyVaultResourceGroup": {
+                        "value": "[parameters('keyVaultResourceGroup')]"
+                    }
+                }
+            }
         }
     ],
     "outputs": {}

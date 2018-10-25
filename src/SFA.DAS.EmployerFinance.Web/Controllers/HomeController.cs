@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return Redirect(Url.LegacyEasAction(string.Empty));
         }
 
         [Authorize]
