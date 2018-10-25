@@ -301,7 +301,6 @@
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenManagingUserSettings.cs" />
-    <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenSearchingForACompany.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenAddingAPayeScheme.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenGettingPayeSchemeDetails.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenGettingTheNextStepsDetails.cs" />

@@ -12,12 +12,6 @@ using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
-//using SFA.DAS.EAS.Domain.Configuration;
-//using SFA.DAS.EAS.Domain.Data.Repositories;
-//using SFA.DAS.EAS.Domain.Models.Account;
-//using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-//using SFA.DAS.EAS.Domain.Models.PAYE;
-//using SFA.DAS.EAS.Domain.Models.Settings;
 
 namespace SFA.DAS.EmployerAccounts.Data
 {

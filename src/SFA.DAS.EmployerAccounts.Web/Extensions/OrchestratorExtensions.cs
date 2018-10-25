@@ -5,10 +5,6 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-//using SFA.DAS.EAS.Domain.Models.Account;
-//using SFA.DAS.EAS.Web.Orchestrators;
-//using SFA.DAS.EAS.Web.ViewModels.Organisation;
-
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
     public static class OrchestratorExtensions
