@@ -5,6 +5,8 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.EmployerAccounts.Commands.ApproveTransferConnectionInvitation;
+using SFA.DAS.EmployerAccounts.Commands.RejectTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetApprovedTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetLatestPendingReceivedTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetReceivedTransferConnectionInvitation;
@@ -133,11 +135,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             switch (model.Choice)
             {
                 case "Approve":
-                    await _mediator.SendAsync(model.ApproveTransferConnectionInvitationCommand);
-                    return RedirectToAction("Approved", new { transferConnectionInvitationId = model.ApproveTransferConnectionInvitationCommand.TransferConnectionInvitationId });
+                    await _mediator.SendAsync(new ApproveTransferConnectionInvitationCommand { AccountId  = model.AccountId, AccountHashedId = model.AccountHashedId, UserRef = model.UserRef, TransferConnectionInvitationId = model.TransferConnectionInvitationId});
+                    return RedirectToAction("Approved", new { transferConnectionInvitationId = model.TransferConnectionInvitationId });
                 case "Reject":
-                    await _mediator.SendAsync(model.RejectTransferConnectionInvitationCommand);
-                    return RedirectToAction("Rejected", new { transferConnectionInvitationId = model.RejectTransferConnectionInvitationCommand.TransferConnectionInvitationId });
+                    await _mediator.SendAsync(new RejectTransferConnectionInvitationCommand { AccountId = model.AccountId, AccountHashedId = model.AccountHashedId, UserRef = model.UserRef, TransferConnectionInvitationId = model.TransferConnectionInvitationId });
+                    return RedirectToAction("Rejected", new { transferConnectionInvitationId = model.TransferConnectionInvitationId });
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model.Choice));
             }
