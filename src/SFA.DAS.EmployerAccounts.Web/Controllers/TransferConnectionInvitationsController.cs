@@ -52,8 +52,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("start")]
         public async Task<ActionResult> Start(StartTransferConnectionInvitationViewModel model)
         {
-            await _mediator.SendAsync(model.SendTransferConnectionInvitationQuery);
-            return RedirectToAction("Send", new { receiverAccountPublicHashedId = model.SendTransferConnectionInvitationQuery.ReceiverAccountPublicHashedId });
+            await _mediator.SendAsync(new SendTransferConnectionInvitationQuery
+            {
+                ReceiverAccountPublicHashedId = model.ReceiverAccountPublicHashedId,
+                AccountHashedId = model.AccountHashedId,
+                AccountId = model.AccountId,
+                UserRef = model.UserRef
+            });
+            return RedirectToAction("Send", new { receiverAccountPublicHashedId = model.ReceiverAccountPublicHashedId });
         }
 
         [HttpNotFoundForNullModel]
