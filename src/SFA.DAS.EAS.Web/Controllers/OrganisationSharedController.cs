@@ -179,39 +179,5 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return Redirect(Url.EmployerAccountsAction(("accounts/{HashedAccountId}/organisations/address/update")));
         }
-
-        private ActionResult ReturnAddOrganisationAddressViewIfBadRequest(AddOrganisationAddressViewModel request, OrchestratorResponse<OrganisationDetailsViewModel> response)
-        {
-            if (response.Status != HttpStatusCode.BadRequest)
-            {
-                return null;
-            }
-
-            request.Address = request.Address ?? new AddressViewModel();
-            request.Address.ErrorDictionary = response.Data.ErrorDictionary;
-
-            var errorResponse = new OrchestratorResponse<AddOrganisationAddressViewModel>
-            {
-                Data = request,
-                Status = HttpStatusCode.BadRequest,
-                Exception = response.Exception,
-                FlashMessage = response.FlashMessage
-            };
-
-            return View(ControllerConstants.AddOrganisationAddressViewName, errorResponse);
-        }
-
-        private RedirectToRouteResult RedirectToGatewayInformWhenHashedAccountIdIsNotPresentInTheRoute(OrchestratorResponse<OrganisationDetailsViewModel> response)
-        {
-            if (RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName] != null)
-            {
-                return null;
-            }
-
-            response.Data.CreateOrganisationCookie(_orchestrator, HttpContext);
-
-            return RedirectToAction(ControllerConstants.GatewayInformViewName,
-                    ControllerConstants.EmployerAccountControllerName, response.Data);
-        }
     }
 }
