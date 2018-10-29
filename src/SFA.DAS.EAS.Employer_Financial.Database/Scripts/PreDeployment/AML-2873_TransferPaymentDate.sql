@@ -36,18 +36,21 @@ CREATE INDEX [IX_TransactionLine_SubmissionId] ON [employer_financial].[Transact
 CREATE INDEX [IX_TransactionLine_AccountId] ON [employer_financial].[TransactionLine] (AccountId) INCLUDE (Ukprn,PeriodEnd,TransactionType)
 CREATE INDEX [IX_TransactionLine_Payment] on [employer_financial].[TransactionLine] (PeriodEnd,AccountId,Ukprn,TransactionDate, DateCreated)
 CREATE UNIQUE INDEX [IX_TransactionLine_TransactionType_SubmissionId] ON [employer_financial].[TransactionLine] (SubmissionId) WHERE (TransactionType = 1);
-CREATE INDEX [IX_TransactionLine_AccountId_DateCreated] ON [employer_financial].[TransactionLine] (AccountId, DateCreated) WITH (ONLINE = ON)
-CREATE INDEX [IX_TransactionLine_Account_TransactionType] ON [employer_financial].[TransactionLine] (AccountId, TransactionType) INCLUDE (DateCreated) WITH (ONLINE = ON)
+CREATE INDEX [IX_TransactionLine_AccountId_DateCreated] ON [employer_financial].[TransactionLine] (AccountId, DateCreated) WITH (ONLINE = OFF)
+CREATE INDEX [IX_TransactionLine_Account_TransactionType] ON [employer_financial].[TransactionLine] (AccountId, TransactionType) INCLUDE (DateCreated) WITH (ONLINE = OFF)
 
 
 DROP TABLE employer_financial.TransactionLine3
 
+IF @@TRANCOUNT > 0
+ COMMIT TRANSACTION
+
 END TRY
 BEGIN CATCH
-DECLARE @ErrorMsg nvarchar(max)
+DECLARE @ErrorMsg nvarchar(max);
 DECLARE @ErrorSeverity INT;
 DECLARE @ErrorState INT;
-SET @ErrorMsg = ERROR_NUMBER() + ERROR_LINE() + ERROR_MESSAGE()
+SET @ErrorMsg = '[Code: ' + CAST(ERROR_NUMBER() AS VARCHAR) + ', Line: ' + CAST(ERROR_LINE() AS VARCHAR) + ' ] ' + ERROR_MESSAGE()
 SET @ErrorSeverity = ERROR_SEVERITY()
 SET @ErrorState = ERROR_STATE()
 
@@ -56,6 +59,4 @@ IF @@TRANCOUNT > 0
 
 RAISERROR(@ErrorMsg, @ErrorSeverity, @ErrorState)
 END CATCH
-IF @@TRANCOUNT > 0
- COMMIT TRANSACTION
 END
