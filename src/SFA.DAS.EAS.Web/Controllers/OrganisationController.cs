@@ -3,6 +3,7 @@ using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -60,48 +61,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             string hashedAccountId, string name, string code, string address, DateTime? incorporated,
             string legalEntityStatus, OrganisationType organisationType, byte? publicSectorDataSource, string sector, bool newSearch)
         {
-            var request = new CreateNewLegalEntityViewModel
-            {
-                HashedAccountId = hashedAccountId,
-                Name = name,
-                Code = code,
-                Address = address,
-                IncorporatedDate = incorporated,
-                ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName),
-                LegalEntityStatus = string.IsNullOrWhiteSpace(legalEntityStatus) ? null : legalEntityStatus,
-                Source = organisationType,
-                PublicSectorDataSource = publicSectorDataSource,
-                Sector = sector
-            };
-
-            var response = await _orchestrator.CreateLegalEntity(request);
-
-            var flashMessage = new FlashMessageViewModel
-            {
-                HiddenFlashMessageInformation = "page-organisations-added",
-                Headline = $"{response.Data.EmployerAgreement.LegalEntityName} has been added",
-                Severity = FlashMessageSeverityLevel.Success
-            };
-            AddFlashMessageToCookie(flashMessage);
-            if (newSearch)
-            {
-                return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsSearchActionName,
-                    new
-                    {
-                        hashedAccountId,
-                        organisationName = name,
-                        hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId
-                    });
-            }
-
-            return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsActionName,
-                new
-                {
-                    hashedAccountId,
-                    organisationName = name,
-                    hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId
-                });
-
+            return Redirect(Url.EmployerAccountsAction("confirm"));
         }
 
         [HttpGet]
