@@ -39,10 +39,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
-        protected OrganisationOrchestrator()
-        {
-        }
-
         public OrganisationOrchestrator(
             IMediator mediator,
             ILog logger,
