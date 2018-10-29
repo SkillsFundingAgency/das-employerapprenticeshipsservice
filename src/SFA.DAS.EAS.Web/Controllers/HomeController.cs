@@ -227,6 +227,12 @@ namespace SFA.DAS.EAS.Web.Controllers
             return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken, owinContext.Request.Uri.Scheme, owinContext.Request.Uri.Authority));
         }
 
+        [Route("SignOutCleanup")]
+        public void SignOutCleanup()
+        {
+            OwinWrapper.SignOutUser();
+        }
+
         [HttpGet]
         [Route("privacy")]
         public ActionResult Privacy()
