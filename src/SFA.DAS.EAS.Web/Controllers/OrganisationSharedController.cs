@@ -177,19 +177,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("accounts/organisations/address/update", Order = 1)]
         public ActionResult UpdateOrganisationAddress(AddOrganisationAddressViewModel request)
         {
-            var response = _orchestrator.AddOrganisationAddress(request);
-
-            var viewResult = ReturnAddOrganisationAddressViewIfBadRequest(request, response);
-
-            if (viewResult != null)
-            {
-                return viewResult;
-            }
-
-            ActionResult redirectToAction =
-                RedirectToGatewayInformWhenHashedAccountIdIsNotPresentInTheRoute(response);
-
-            return redirectToAction ?? View(ControllerConstants.ConfirmOrganisationDetailsViewName, response);
+            return Redirect(Url.EmployerAccountsAction(("accounts/{HashedAccountId}/organisations/address/update")));
         }
 
         private ActionResult ReturnAddOrganisationAddressViewIfBadRequest(AddOrganisationAddressViewModel request, OrchestratorResponse<OrganisationDetailsViewModel> response)
