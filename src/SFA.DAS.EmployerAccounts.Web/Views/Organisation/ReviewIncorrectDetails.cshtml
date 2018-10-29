@@ -1,6 +1,4 @@
-﻿@using SFA.DAS.Common.Domain.Types
-@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.ViewModels.Organisation.IncorrectOrganisationDetailsViewModel
+﻿@model IncorrectOrganisationDetailsViewModel
 @{
     ViewBag.Title = "Update an organisation";
     ViewBag.Section = "organisations";
@@ -18,7 +16,7 @@
         <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")">contact support</a> for further help.</p>
 
 
-        <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
+        <form action="@Url.Action("GoToPostUpdateSelection","Organisation")" method="post">
             <div class="form-group">
                 <h2 class="heading-large">What's next?</h2>
                 <div class="multiple-choice">

@@ -1,6 +1,5 @@
-﻿@using SFA.DAS.Common.Domain.Types
-@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.ReviewOrganisationAddressViewModel>
+﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
+@model OrchestratorResponse<ReviewOrganisationAddressViewModel>
 @{
     ViewBag.Title = "Update an organisation";
     ViewBag.Section = "organisations";
@@ -35,7 +34,7 @@
 
             <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")">contact support</a> for further help.</p>
 
-            <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
+            <form action="@Url.Action("GoToPostUpdateSelection", "Organisation")" method="post">
                 <div class="form-group">
                     <h2 class="heading-large">
                         What's next?

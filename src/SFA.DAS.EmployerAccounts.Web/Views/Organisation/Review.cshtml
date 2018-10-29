@@ -1,6 +1,6 @@
-﻿@using SFA.DAS.Common.Domain.Types
-@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.ReviewOrganisationAddressViewModel>
+﻿@using SFA.DAS.@model SFA.DAS.EmployerAccounts.Web.OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.Organisation.ReviewOrganisationAddressViewModel>
+.Web.Extensions
+@model OrchestratorResponse<ReviewOrganisationAddressViewModel>
 @{
     ViewBag.Title = "Update an organisation";
     ViewBag.Section = "organisations";
@@ -29,7 +29,7 @@
                 </tbody>
             </table>
 
-            <form method="POST" action="@Url.Action("ProcessReviewSelection")">
+            <form method="POST" action="@Url.Action("ProcessReviewSelection","Organisation")">
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName" />
                 <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress" />
@@ -53,7 +53,7 @@
                         </label>
                     </div>
                 </div>
-               <button type="submit" class="button" id="accept">Continue</button> 
+                <button type="submit" class="button" id="accept">Continue</button>
             </form>
         </div>
     </div>

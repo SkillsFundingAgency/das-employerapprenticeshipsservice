@@ -640,6 +640,9 @@
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\Shared\_PayeNotFound.cshtml" />
     <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
+    <Content Include="Views\Organisation\Review.cshtml" />
+    <Content Include="Views\Organisation\ReviewIncorrectDetails.cshtml" />
+    <Content Include="Views\Organisation\ReviewNoChange.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">
