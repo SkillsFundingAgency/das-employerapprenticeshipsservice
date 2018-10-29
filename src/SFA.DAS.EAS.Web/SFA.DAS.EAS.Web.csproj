@@ -1069,7 +1069,6 @@
     <Content Include="src\sass\_icons.scss" />
     <Content Include="src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
     <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
-    <Content Include="Views\OrganisationShared\AddOrganisationAddress.cshtml" />
     <Content Include="Views\OrganisationShared\SelectAddress.cshtml" />
     <Content Include="Views\OrganisationShared\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\OrganisationShared\FindAddress.cshtml" />

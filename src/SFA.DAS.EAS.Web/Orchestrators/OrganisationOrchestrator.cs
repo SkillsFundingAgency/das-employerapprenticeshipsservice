@@ -1,18 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
-using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
-using SFA.DAS.EAS.Application.Extensions;
-using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntitiy;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
-using SFA.DAS.EAS.Application.Queries.GetOrganisationById;
 using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
-using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Validation;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -274,44 +268,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
 
             return null;
-        }
-
-        public OrchestratorResponse<OrganisationDetailsViewModel> StartConfirmOrganisationDetails(AddOrganisationAddressViewModel request)
-        {
-            return new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = new OrganisationDetailsViewModel
-                {
-                    HashedId = request.OrganisationHashedId,
-                    Name = request.OrganisationName,
-                    Address = request.OrganisationAddress,
-                    DateOfInception = request.OrganisationDateOfInception,
-                    ReferenceNumber = request.OrganisationReferenceNumber ?? string.Empty,
-                    Type = request.OrganisationType,
-                    PublicSectorDataSource = request.PublicSectorDataSource,
-                    Status = request.OrganisationStatus,
-                    Sector = request.Sector
-                }
-            };
-        }
-
-        public OrchestratorResponse<OrganisationDetailsViewModel> StartConfirmOrganisationDetails(FindOrganisationAddressViewModel request)
-        {
-            return new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = new OrganisationDetailsViewModel
-                {
-                    HashedId = request.OrganisationHashedId,
-                    Name = request.OrganisationName,
-                    Address = request.OrganisationAddress,
-                    DateOfInception = request.OrganisationDateOfInception,
-                    ReferenceNumber = request.OrganisationReferenceNumber ?? string.Empty,
-                    Type = request.OrganisationType,
-                    PublicSectorDataSource = request.PublicSectorDataSource,
-                    Status = request.OrganisationStatus,
-                    Sector = request.Sector
-                }
-            };
         }
 
     }
