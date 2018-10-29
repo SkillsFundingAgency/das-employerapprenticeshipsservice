@@ -51,9 +51,9 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails
                 ApprenticeCount = (uint)ct.DistinctBy(t => t.CommitmentId).Count()
             }).ToArray();
 
-            //NOTE: We should only get one tranfer transaction per sender per period end
+            //NOTE: We should only get one transfer transaction per sender per period end
             // as this is how transfers are grouped together when creating transfer transactions
-            var tranferTransaction = _dbContext.Transactions.Single(t =>
+            var transferTransaction = _dbContext.Transactions.Single(t =>
                 t.AccountId == query.AccountId &&
                 t.TransactionType == TransactionItemType.Transfer &&
                 t.TransferSenderAccountId != null &&
@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails
                 t.TransferReceiverAccountId == firstTransfer.ReceiverAccountId &&
                 t.PeriodEnd.Equals(query.PeriodEnd));
 
-            var transferDate = tranferTransaction.DateCreated;
+            var transferDate = transferTransaction.DateCreated;
             var transfersPaymentTotal = transferDetails.Sum(t => t.PaymentTotal);
 
             var isCurrentAccountSender = query.AccountId.GetValueOrDefault() == firstTransfer.SenderAccountId;
