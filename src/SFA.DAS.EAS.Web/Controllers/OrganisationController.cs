@@ -4,13 +4,12 @@ using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.NLog.Logger;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -57,23 +56,21 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("confirm")]
-        public async Task<ActionResult> Confirm(
-            string hashedAccountId, string name, string code, string address, DateTime? incorporated,
-            string legalEntityStatus, OrganisationType organisationType, byte? publicSectorDataSource, string sector, bool newSearch)
+        public async Task<ActionResult> Confirm()
         {
             return Redirect(Url.EmployerAccountsAction("organisations/confirm"));
         }
 
         [HttpGet]
         [Route("nextStep")]
-        public async Task<ActionResult> OrganisationAddedNextSteps(string organisationName, string hashedAccountId, string hashedAgreementId)
+        public async Task<ActionResult> OrganisationAddedNextSteps()
         {
             return Redirect(Url.EmployerAccountsAction($"organisations/nextStep"));
         }
         
         [HttpGet]
         [Route("nextStepSearch")]
-        public async Task<ActionResult> OrganisationAddedNextStepsSearch(string organisationName, string hashedAccountId, string hashedAgreementId)
+        public async Task<ActionResult> OrganisationAddedNextStepsSearch()
         {
             return Redirect(Url.EmployerAccountsAction($"organisations/nextStepSearch"));
         }
@@ -81,34 +78,28 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [Route("nextStep")]
-        public async Task<ActionResult> GoToNextStep(string nextStep, string hashedAccountId, string organisationName, string hashedAgreementId)
+        public async Task<ActionResult> GoToNextStep()
         {
             return Redirect(Url.EmployerAccountsAction("nextStep"));
         }
 
         [HttpGet]
         [Route("review")]
-        public async Task<ActionResult> Review(string hashedAccountId, string accountLegalEntityPublicHashedId)
+        public async Task<ActionResult> Review()
         {
             return Redirect(Url.EmployerAccountsAction("organisations/review"));
         }
 
         [HttpPost]
         [Route("review")]
-        public async Task<ActionResult> ProcessReviewSelection(
-            string updateChoice,
-            string hashedAccountId,
-            string accountLegalEntityPublicHashedId,
-            string organisationName,
-            string organisationAddress,
-            string dataSourceFriendlyName)
+        public async Task<ActionResult> ProcessReviewSelection()
         {
             return Redirect(Url.EmployerAccountsAction("organisations/review"));
         }
 
         [HttpPost]
         [Route("PostUpdateSelection")]
-        public ActionResult GoToPostUpdateSelection(string nextStep, string hashedAccountId)
+        public ActionResult GoToPostUpdateSelection()
         {
             return Redirect(Url.EmployerAccountsAction("organisations/PostUpdateSelection"));
         }

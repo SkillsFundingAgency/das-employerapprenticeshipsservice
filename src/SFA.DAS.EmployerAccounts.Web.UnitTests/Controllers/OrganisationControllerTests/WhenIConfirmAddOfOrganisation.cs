@@ -8,16 +8,18 @@ using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.EAS.Web.Controllers;
-using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Web.Controllers;
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControllerTests
 {
+    /// <summary>
+    /// AML-2459: Move to EmployerAccounts site tests
+    /// </summary>
     public class WhenIConfirmAddOfOrganisation
     {
         private OrganisationController _controller;

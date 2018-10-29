@@ -283,7 +283,6 @@
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenIHandleNewRegistration.cs" />
-    <Compile Include="Controllers\OrganisationControllerTests\WhenIConfirmAddOfOrganisation.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\OrganisationSharedControllerTestBase.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenIAddAnOrganisationAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenIEnterAPostcodeForAnAddress.cs" />
@@ -293,7 +292,6 @@
     <Compile Include="Controllers\HomeControllerTests\WhenILogout.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenIModifyMyUserAccount.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenIViewTheHomePage.cs" />
-    <Compile Include="Controllers\OrganisationControllerTests\WhenIViewNextSteps.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenISearchForAnAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenISelectAnAddress.cs" />
     <Compile Include="Controllers\OrganisationSharedTests\WhenIUpdateAnOrganisationsAddress.cs" />
