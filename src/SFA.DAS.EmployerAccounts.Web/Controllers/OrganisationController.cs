@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using System.Web.Mvc;
 using AutoMapper;
 using SFA.DAS.Authentication;
