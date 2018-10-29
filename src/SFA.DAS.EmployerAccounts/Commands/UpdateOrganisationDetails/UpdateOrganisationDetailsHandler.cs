@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails
+namespace SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails
 {
     public class UpdateOrganisationDetailsHandler : IAsyncRequestHandler<UpdateOrganisationDetailsRequest, UpdateOrganisationDetailsResponse>
     {

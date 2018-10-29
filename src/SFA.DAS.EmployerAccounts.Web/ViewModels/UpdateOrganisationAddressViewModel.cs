@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EAS.Web.ViewModels.Organisation
+namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
 
     [Flags]

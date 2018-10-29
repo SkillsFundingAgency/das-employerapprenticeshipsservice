@@ -4,7 +4,6 @@ using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
-using SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails;
 using SFA.DAS.EAS.Application.Extensions;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntitiy;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
@@ -21,7 +20,6 @@ using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -320,103 +318,5 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public virtual Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
-                string organisationName,
-                string userId,
-                string hashedAccountId)
-        {
-            return this.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, string.Empty);
-        }
-
-        public virtual async Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
-            string organisationName,
-            string userId,
-            string hashedAccountId,
-            string hashedAgreementId)
-        {
-            var showWizard = await UserShownWizard(userId, hashedAccountId);
-
-            return new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
-            {
-                Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName, ShowWizard = showWizard, HashedAgreementId = hashedAgreementId }
-            };
-        }
-
-        public async Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string accountLegalEntityPublicHashedId)
-        {
-            var currentDetails = await Mediator.SendAsync(new GetAccountLegalEntityRequest
-            {
-                AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(accountLegalEntityPublicHashedId)
-            });
-
-            var refreshedDetails = await Mediator.SendAsync(new GetOrganisationByIdRequest
-            {
-                Identifier = currentDetails.AccountLegalEntity.Identifier,
-                OrganisationType = currentDetails.AccountLegalEntity.OrganisationType
-            });
-
-            OrganisationUpdatesAvailable CheckForUpdate(string currentValue, string updatedValue, OrganisationUpdatesAvailable includeIfDifferent)
-            {
-                // The address will be stored with leading and trailing spaces removed, so the change comparison will exclude these.
-                // Also, the names and addresses returned by CH search and get by id are inconsistent. Specifically the spacing within a 
-                // name of address are different. To counter this one or spaces will be considered to be equivalent. 
-                if (!currentValue.IsEquivalent(updatedValue, StringEquivalenceOptions.IgnoreLeadingSpaces | StringEquivalenceOptions.IgnoreTrailingSpaces | StringEquivalenceOptions.MultipleSpacesAreEquivalent))
-                {
-                    return includeIfDifferent;
-                }
-
-                return OrganisationUpdatesAvailable.None;
-            }
-
-            var result = new OrchestratorResponse<ReviewOrganisationAddressViewModel>
-            {
-                Data = new ReviewOrganisationAddressViewModel
-                {
-                    DataSourceFriendlyName = currentDetails.AccountLegalEntity.OrganisationType.GetFriendlyName(),
-                    AccountLegalEntityPublicHashedId = accountLegalEntityPublicHashedId,
-                    OrganisationName = currentDetails.AccountLegalEntity.Name,
-                    OrganisationAddress = currentDetails.AccountLegalEntity.Address,
-                    RefreshedName = refreshedDetails.Organisation.Name,
-                    RefreshedAddress = refreshedDetails.Organisation.Address.FormatAddress(),
-                }
-            };
-
-            result.Data.UpdatesAvailable = CheckForUpdate(result.Data.OrganisationName, result.Data.RefreshedName, OrganisationUpdatesAvailable.Name) |
-                                           CheckForUpdate(result.Data.OrganisationAddress, result.Data.RefreshedAddress, OrganisationUpdatesAvailable.Address);
-
-            return result;
-        }
-
-        public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
-        {
-            var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
-            return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
-        }
-
-        public async Task<OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>> UpdateOrganisation(string accountLegalEntityPublicHashedId, string organisationName, string organisationAddress)
-        {
-            var result = new OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>
-            {
-                Data = new OrganisationUpdatedNextStepsViewModel()
-            };
-
-            try
-            {
-                var request = new UpdateOrganisationDetailsRequest
-                {
-                    AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(accountLegalEntityPublicHashedId),
-                    Name = organisationName,
-                    Address = organisationAddress
-                };
-
-                await _mediator.SendAsync(request);
-            }
-            catch (Exception)
-            {
-                result.Data.ErrorMessage = "Failed to update the organisation's details.";
-            }
-
-            return result;
-        }
     }
 }

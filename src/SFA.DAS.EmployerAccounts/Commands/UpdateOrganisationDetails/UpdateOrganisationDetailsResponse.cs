@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails
+﻿namespace SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails
 {
     public class UpdateOrganisationDetailsResponse
     {

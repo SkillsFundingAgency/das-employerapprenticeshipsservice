@@ -542,9 +542,7 @@
     <Compile Include="ViewModels\AccountPaye\PayeSchemeNextStepsViewModel.cs" />
     <Compile Include="ViewModels\Activities\ActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Activities\LatestActivitiesViewModel.cs" />
-    <Compile Include="ViewModels\Organisation\IncorrectOrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationUpdatedNextStepsViewModel.cs" />
-    <Compile Include="ViewModels\Organisation\UpdateOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\SignAgreementViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\DeletedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\ApprovedTransferConnectionInvitationViewModel.cs" />
@@ -673,7 +671,6 @@
     <Content Include="Views\Shared\_Agreement_v2.cshtml" />
     <Content Include="Views\Shared\_Agreement_v2_changes.cshtml" />
     <Content Include="Views\Organisation\Review.cshtml" />
-    <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
     <Content Include="Views\Organisation\ReviewNoChange.cshtml" />
     <Content Include="Views\Organisation\ReviewIncorrectDetails.cshtml" />
   </ItemGroup>

@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
 
-namespace SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails
+namespace SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails
 {
     public class UpdateOrganisationDetailsRequest : IAsyncRequest<UpdateOrganisationDetailsResponse>
     {

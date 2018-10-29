@@ -56,6 +56,7 @@
         public const string OrganisationAddedNextStepsSearchActionName = "OrganisationAddedNextStepsSearch";
         public const string OrganisationControllerName = "Organisation";
         public const string OrganisationSharedControllerName = "OrganisationShared";
+        public const string OrganisationUpdatedNextStepsActionName = "OrganisationUpdatedNextSteps";
         public const string ProviderPaymentSummaryViewName = "ProviderPaymentSummary";
         public const string PdfContentTypeName = "application/pdf";
         public const string RegisterUserActionName = "RegisterUser";

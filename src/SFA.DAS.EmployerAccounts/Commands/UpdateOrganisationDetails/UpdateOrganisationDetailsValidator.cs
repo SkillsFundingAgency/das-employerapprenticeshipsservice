@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails
+namespace SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails
 {
     public class UpdateOrganisationDetailsValidator : IValidator<UpdateOrganisationDetailsRequest>
     {
