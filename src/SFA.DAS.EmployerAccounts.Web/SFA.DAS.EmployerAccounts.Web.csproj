@@ -628,7 +628,6 @@
     <Content Include="Views\Transfers\TransferRequests.cshtml" />
     <Content Include="Views\Shared\_ValidationSummary.cshtml" />
     <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
-    <Content Include="Views\SearchOrganisation\FindAddress.cshtml" />
     <Content Include="Views\SearchOrganisation\SearchForOrganisation.cshtml" />
     <Content Include="Views\SearchOrganisation\SearchForOrganisationResults.cshtml" />
     <Content Include="Views\OrganisationShared\AddOtherOrganisationDetails.cshtml" />
