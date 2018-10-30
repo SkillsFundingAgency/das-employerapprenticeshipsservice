@@ -55,7 +55,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         }
 
 
-
+        protected OrganisationOrchestrator()
+        {
+            
+        }
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(CreateNewLegalEntityViewModel request)
         {
 

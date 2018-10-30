@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Web.Helpers;
-using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationSharedTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationSharedTests
 {
     public class WhenIAddAnOrganisationOfTypeOther : OrganisationSharedControllerTestBase
     {
