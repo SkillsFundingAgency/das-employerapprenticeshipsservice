@@ -14,38 +14,65 @@ namespace SFA.DAS.EmployerFinance.Jobs
     {
         public static Task ImportLevyDeclarations([TimerTrigger("0 0 15 20 * *")] TimerInfo timer, TraceWriter logger)
         {
-            var messageSession = ServiceLocator.GetInstance<IMessageSession>();
-            return messageSession.Send(new ImportLevyDeclarationsCommand());
+            ILog nLogger = null;
+
+            try
+            {
+                nLogger = ServiceLocator.GetInstance<ILog>();
+
+                nLogger.Info("Getting message session for import levy declarations job");
+                var messageSession = ServiceLocator.GetInstance<IMessageSession>();
+                
+                nLogger.Info("Creating new import levy declarations command for job");
+                return messageSession.Send(new ImportLevyDeclarationsCommand());
+            }
+            catch (Exception e)
+            {
+                nLogger?.Error(e, "Failed to create new import levy declarations command for job");
+                throw;
+            }
         }
 
         public static Task ImportPayments([TimerTrigger("0 0 * * * *")] TimerInfo timer, TraceWriter logger)
         {
             ILog nLogger = null;
+
             try
             {
                 nLogger = ServiceLocator.GetInstance<ILog>();
-
-                logger.Info("[TraceWriter] - About to create new import payment command");
-                nLogger.Info("[NLog] - Creating new import payment command");
-                var messageSession = ServiceLocator.GetInstance<IMessageSession>();
                 
-
-                logger.Info("[TraceWriter] - Creating new import payment command");
-                nLogger.Info("[NLog] - Creating new import payment command");
+                nLogger.Info("Getting message session for import payments job");
+                var messageSession = ServiceLocator.GetInstance<IMessageSession>();
+              
+                nLogger.Info("Creating new import payment command for job");
                 return messageSession.Send(new ImportPaymentsCommand());
             }
             catch (Exception e)
             {
-                logger.Error("[TraceWriter] - Failed to create new import payment command", e);
-                nLogger?.Error(e, "[NLog] - Failed to create new import payment command");
+                nLogger?.Error(e, "Failed to create new import payment command for job");
                 throw;
             }
         }
 
         public static Task ProcessOutboxMessages([TimerTrigger("0 */10 * * * *")] TimerInfo timer, TraceWriter logger)
         {
-            var job = ServiceLocator.GetInstance<IProcessClientOutboxMessagesJob>();
-            return job.RunAsync();
+            ILog nLogger = null;
+
+            try
+            {
+                nLogger = ServiceLocator.GetInstance<ILog>();
+                
+                nLogger.Info("Getting client outbox message job");
+                var job = ServiceLocator.GetInstance<IProcessClientOutboxMessagesJob>();
+            
+                nLogger.Info("Running client outbox message job");   
+                return job.RunAsync();
+            }
+            catch (Exception e)
+            {
+                nLogger?.Error(e, "Failed run client outbox message job");
+                throw;
+            }
         }
     }
 }
