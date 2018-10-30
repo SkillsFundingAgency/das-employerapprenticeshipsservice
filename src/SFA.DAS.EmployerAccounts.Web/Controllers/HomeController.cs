@@ -10,6 +10,7 @@ using SFA.DAS.EmployerUsers.WebClientComponents;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
@@ -74,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             };
 
-            return View(ControllerConstants.ServiceStartPageViewName, model);
+            return new RedirectResult(Url.LegacyEasAction(string.Empty));
         }
 
         [AuthoriseActiveUser]
@@ -92,51 +93,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("usedServiceBefore")]
         public ActionResult UsedServiceBefore()
         {
-            var model = new
-            {
-                HideHeaderSignInLink = true
-            };
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("usedServiceBefore")]
-        public ActionResult UsedServiceBefore(int? choice)
-        {
-            switch (choice ?? 0)
-            {
-                case 1: return RedirectToAction(ControllerConstants.WhatYoullNeedActionName); //No I have not used the service before
-                case 2: return RedirectToAction(ControllerConstants.SignInActionName); // Yes I have used the service
-                default:
-
-                    var model = new
-                    {
-                        HideHeaderSignInLink = true,
-                        ErrorMessage = "You must select an option to continue."
-                    };
-
-                    return View(model); //No option entered
-            }
+            return new RedirectResult(Url.LegacyEasAction("service/usedServiceBefore"));
         }
 
         [HttpGet]
         [Route("whatYoullNeed")]
         public ActionResult WhatYoullNeed()
         {
-            var model = new
-            {
-                HideHeaderSignInLink = true
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [Route("whatYoullNeed")]
-        public ActionResult WhatYoullNeed(int? choice)
-        {
-            return RedirectToAction(ControllerConstants.RegisterUserActionName);
+            return new RedirectResult(Url.LegacyEasAction("service/whatYoullNeed"));
         }
 
         [HttpGet]
@@ -214,7 +178,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             OwinWrapper.SignOutUser();
 
-            return new RedirectResult(Url.LegacyEasAction("service/signout"));
+            var owinContext = HttpContext.GetOwinContext();
+            var authenticationManager = owinContext.Authentication;
+            var idToken = authenticationManager.User.FindFirst("id_token")?.Value;
+            var constants = new Constants(_configuration.Identity);
+
+            return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken, owinContext.Request.Uri.Scheme, owinContext.Request.Uri.Authority));
+        }
+
+        [Route("SignOutCleanup")]
+        public void SignOutCleanup()
+        {
+            OwinWrapper.SignOutUser();
         }
 
         [HttpGet]
@@ -235,11 +210,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("start")]
         public ActionResult ServiceStartPage()
         {
-            var model = new
-            {
-                HideHeaderSignInLink = true
-            };
-            return View(model);
+            return new RedirectResult(Url.LegacyEasAction("service/start"));
         }
 
 #if DEBUG

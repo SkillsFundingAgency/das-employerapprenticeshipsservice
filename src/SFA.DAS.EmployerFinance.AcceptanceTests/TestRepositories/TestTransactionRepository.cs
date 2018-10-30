@@ -17,13 +17,15 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
     {
         private readonly Lazy<EmployerFinanceDbContext> _employerFinanceDbContext;
         private readonly ILog _logger;
+        private readonly EmployerFinanceConfiguration _configuration;
 
-        public TestTransactionRepository(LevyDeclarationProviderConfiguration configuration,
+        public TestTransactionRepository(EmployerFinanceConfiguration configuration,
             ILog logger, Lazy<EmployerFinanceDbContext> employerFinanceDbContext)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _employerFinanceDbContext = employerFinanceDbContext;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public Task<int> GetMaxAccountId()
@@ -47,11 +49,10 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
 
         private async Task RunOutsideTxn(Func<SqlConnection, Task> command)
         {
-            var connStr = _employerFinanceDbContext.Value.Database.Connection.ConnectionString;
-            var conn = new SqlConnection(connStr);
-            await conn.OpenAsync();
+            var conn = new SqlConnection(_configuration.DatabaseConnectionString);
             try
             {
+                await conn.OpenAsync();
                 await command(conn);
             }
             catch (Exception ex)

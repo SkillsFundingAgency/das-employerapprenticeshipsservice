@@ -71,7 +71,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 _container.GetInstance<ILog>().Info("Starting endpoint.");
 
                 var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests")
-                    //.UseAzureServiceBusTransport(() => _container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
                     .UseAzureServiceBusTransport()
                     .UseErrorQueue()
                     .UseInstallers()
