@@ -28,8 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
 
             CreateMap<GetReceivedTransferConnectionInvitationResponse, ReceiveTransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore())
-                .ForMember(m => m.ApproveTransferConnectionInvitationCommand, o => o.MapFrom(r => r))
-                .ForMember(m => m.RejectTransferConnectionInvitationCommand, o => o.MapFrom(r => r));
+                .ForMember(m => m.TransferConnectionInvitationId, o => o.MapFrom(r => r.TransferConnectionInvitation.Id));
 
             CreateMap<GetReceivedTransferConnectionInvitationResponse, RejectTransferConnectionInvitationCommand>();
             CreateMap<GetRejectedTransferConnectionInvitationResponse, DeleteTransferConnectionInvitationCommand>();
