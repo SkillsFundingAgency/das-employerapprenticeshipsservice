@@ -35,7 +35,5 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return Redirect(Url.EmployerAccountsAction("organisations/search/manualAdd"));
         }
-
-        
     }
 }

@@ -1,18 +1,9 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
-using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EAS.Web.ViewModels.Organisation;
-using SFA.DAS.NLog.Logger;
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -20,37 +11,12 @@ namespace SFA.DAS.EAS.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}/organisations")]
     public class OrganisationController : BaseController
     {
-        private readonly OrganisationOrchestrator _orchestrator;
-        private readonly IMapper _mapper;
-        private readonly ILog _logger;
-
         public OrganisationController(
             IAuthenticationService owinWrapper,
-            OrganisationOrchestrator orchestrator,
-            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
-            IMapper mapper,
-            ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
-            _orchestrator = orchestrator;
-            _mapper = mapper;
-            _logger = logger;
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("legalAgreement")]
-        public ActionResult OrganisationLegalAgreement(string hashedAccountId, OrganisationDetailsViewModel model)
-        {
-            var viewModel = new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = model,
-                Status = HttpStatusCode.OK
-            };
-
-            return View(viewModel);
         }
 
         [HttpPost]
@@ -67,7 +33,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return Redirect(Url.EmployerAccountsAction($"organisations/nextStep"));
         }
-        
+
         [HttpGet]
         [Route("nextStepSearch")]
         public async Task<ActionResult> OrganisationAddedNextStepsSearch()

@@ -3,17 +3,18 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Web.ViewModels.Organisation; 
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 {
     public class WhenICreateALegalEntityOfOtherType
     {
-        private Web.Orchestrators.OrganisationOrchestrator _orchestrator;
+        private OrganisationOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
         private Mock<IMapper> _mapper;
@@ -29,7 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _hashingService = new Mock<IAccountLegalEntityPublicHashingService>();
 
-            _orchestrator = new Web.Orchestrators.OrganisationOrchestrator(_mediator.Object, _logger.Object, _mapper.Object, _cookieService.Object, _hashingService.Object);
+            _orchestrator = new OrganisationOrchestrator(_mediator.Object, _logger.Object, _mapper.Object, _cookieService.Object, _hashingService.Object);
         }
 
         [Test]

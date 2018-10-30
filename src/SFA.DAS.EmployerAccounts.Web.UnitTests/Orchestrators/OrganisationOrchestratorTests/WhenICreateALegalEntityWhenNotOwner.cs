@@ -5,15 +5,15 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 {
     class WhenICreateALegalEntityWhenNotOwner
     {

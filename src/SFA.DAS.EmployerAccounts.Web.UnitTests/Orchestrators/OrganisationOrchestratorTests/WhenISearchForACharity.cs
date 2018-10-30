@@ -3,27 +3,27 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
-using SFA.DAS.EAS.Application.Queries.GetCharity;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.ReferenceData;
-using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.ReferenceData;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities;
+using SFA.DAS.EmployerAccounts.Queries.GetCharity;
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 {
     public class WhenISearchForACharity
     {
-        private OrganisationOrchestrator _orchestrator;
-        private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
-        private Mock<IMapper> _mapper;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
-        private Mock<IAccountLegalEntityPublicHashingService> _hashingService;
 
         private GetCharityQueryResponse _expected;
+        private Mock<IAccountLegalEntityPublicHashingService> _hashingService;
+        private Mock<ILog> _logger;
+        private Mock<IMapper> _mapper;
+        private Mock<IMediator> _mediator;
+        private OrganisationOrchestrator _orchestrator;
 
         [SetUp]
         public void Arrange()
