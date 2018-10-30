@@ -329,7 +329,6 @@
     <Compile Include="Extensions\QueryableExtensions.cs" />
     <Compile Include="Features\IAgreementService.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Mapping\Profiles\PaymentMappings.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringAttribute.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringPolicy.cs" />
     <Compile Include="Messaging\MessageSubscriberPolicy.cs" />

@@ -224,7 +224,6 @@
     <Compile Include="Extensions\StringEquivalenceOptionsTests.cs" />
     <Compile Include="Factories\WhenICreateARestClient.cs" />
     <Compile Include="Features\AgreementServiceTests.cs" />
-    <Compile Include="Mapping\PaymentMappingTests\WhenIMapAPaymentToPaymentDetails.cs" />
     <Compile Include="NoopExecutionPolicy.cs" />
     <Compile Include="Authorization\AuthorizationServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
