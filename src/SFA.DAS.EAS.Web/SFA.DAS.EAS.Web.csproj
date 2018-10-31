@@ -543,6 +543,7 @@
     <Compile Include="ViewModels\Activities\ActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Activities\LatestActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationUpdatedNextStepsViewModel.cs" />
+    <Compile Include="ViewModels\Organisation\PublicSectorOrganisationSearchResultsViewModel.cs" />
     <Compile Include="ViewModels\SignAgreementViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\DeletedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\ApprovedTransferConnectionInvitationViewModel.cs" />
@@ -581,8 +582,6 @@
     <Compile Include="ViewModels\Organisation\ConfirmLegalAgreementToRemoveViewModel.cs" />
     <Compile Include="ViewModels\Organisation\EmployerAgreementPdfViewModel.cs" />
     <Compile Include="ViewModels\Organisation\LegalAgreementsToRemoveViewModel.cs" />
-    <Compile Include="ViewModels\Organisation\OrganisationAddedNextStepsViewModel.cs" />
-    <Compile Include="ViewModels\Organisation\SearchOrganisationViewModel.cs" />
     <Compile Include="ViewModels\SummaryUnsubscribeViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
     <Compile Include="ViewModels\Organisation\AddLegalEntityViewModel.cs" />
@@ -594,7 +593,6 @@
     <Compile Include="ViewModels\Organisation\AddressViewModel.cs" />
     <Compile Include="ViewModels\Organisation\FindOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrgainsationViewModelBase.cs" />
-    <Compile Include="ViewModels\Organisation\PublicSectorOrganisationSearchResultsViewModel.cs" />
     <Compile Include="ViewModels\EmployerAccountViewModel.cs" />
     <Compile Include="ViewModels\GatewayInformViewModel.cs" />
     <Compile Include="ViewModels\NavigationViewModel.cs" />
@@ -603,7 +601,6 @@
     <Compile Include="ViewModels\PaymentTransactionViewModel.cs" />
     <Compile Include="ViewModels\PrivacyViewModel.cs" />
     <Compile Include="ViewModels\CreateAccountViewModel.cs" />
-    <Compile Include="ViewModels\Organisation\CreateNewLegalEntityViewModel.cs" />
     <Compile Include="ViewModels\EmployerAccountPayeListViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementListViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementViewModel.cs" />
@@ -623,7 +620,6 @@
     <Compile Include="ViewModels\SignInUserViewModel.cs" />
     <Compile Include="ViewModels\FlashMessageViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
-    <Compile Include="ViewModels\Organisation\SummaryViewModel.cs" />
     <Compile Include="ViewModels\DateTimeViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />

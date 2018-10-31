@@ -27,6 +27,10 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("organisations/confirm"));
         }
 
+        /// <summary>
+        /// AML-2459: Unused entry point
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("nextStep")]
         public async Task<ActionResult> OrganisationAddedNextSteps()
@@ -34,6 +38,10 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction($"organisations/nextStep"));
         }
 
+        /// <summary>
+        /// AML-2459: Unused entry point
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("nextStepSearch")]
         public async Task<ActionResult> OrganisationAddedNextStepsSearch()
@@ -42,6 +50,10 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
 
+        /// <summary>
+        /// AML-2459: Unused entry point
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("nextStep")]
         public async Task<ActionResult> GoToNextStep()
@@ -49,6 +61,10 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("nextStep"));
         }
 
+        /// <summary>
+        /// AML-2459: Unused entry point
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("review")]
         public async Task<ActionResult> Review()
@@ -56,6 +72,10 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("organisations/review"));
         }
 
+        /// <summary>
+        /// AML-2459: Unused entry point
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("review")]
         public async Task<ActionResult> ProcessReviewSelection()
@@ -63,6 +83,10 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("organisations/review"));
         }
 
+        /// <summary>
+        /// AML-2459: Unused entry point
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("PostUpdateSelection")]
         public ActionResult GoToPostUpdateSelection()
