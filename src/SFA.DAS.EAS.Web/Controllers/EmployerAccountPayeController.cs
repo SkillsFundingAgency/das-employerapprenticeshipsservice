@@ -22,14 +22,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("schemes")]
         public ActionResult Index(string hashedAccountId)
         {
-            return Redirect(Url.EmployerAccountsAction($"schemes"));
+            return Redirect(Url.EmployerAccountsAction("schemes"));
         }
 
         [HttpGet]
         [Route("schemes/next")]
         public ActionResult NextSteps(string hashedAccountId)
         {
-            return Redirect(Url.EmployerAccountsAction($"schemes/next"));
+            return Redirect(Url.EmployerAccountsAction("schemes/next"));
         }
 
         [HttpGet]
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("schemes/gatewayInform")]
         public ActionResult GatewayInform(string hashedAccountId)
         {
-            return Redirect(Url.EmployerAccountsAction($"schemes/gatewayInform"));
+            return Redirect(Url.EmployerAccountsAction("schemes/gatewayInform"));
         }
         
         [HttpGet]
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("schemes/confirm")]
         public ActionResult ConfirmPayeScheme(string hashedAccountId)
         {
-            return Redirect(Url.EmployerAccountsAction($"/schemes/confirm"));
+            return Redirect(Url.EmployerAccountsAction("/schemes/confirm"));
         }
         
         [HttpGet]
