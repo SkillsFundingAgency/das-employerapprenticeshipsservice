@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
 
             _viewModel = new SendTransferConnectionInvitationViewModel
             {
-                SendTransferConnectionInvitationCommand = new SendTransferConnectionInvitationCommand()
+                ReceiverAccountPublicHashedId = "ABC123"
             };
         }
 
@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
 
             await _controller.Send(_viewModel);
 
-            _mediator.Verify(m => m.SendAsync(_viewModel.SendTransferConnectionInvitationCommand), Times.Once);
+            _mediator.Verify(m => m.SendAsync(It.Is<SendTransferConnectionInvitationCommand>(c => c.ReceiverAccountPublicHashedId == _viewModel.ReceiverAccountPublicHashedId)), Times.Once);
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
 
             await _controller.Send(_viewModel);
 
-            _mediator.Verify(m => m.SendAsync(_viewModel.SendTransferConnectionInvitationCommand), Times.Never);
+            _mediator.Verify(m => m.SendAsync(It.IsAny<SendTransferConnectionInvitationCommand>()), Times.Never);
         }
 
         [Test]

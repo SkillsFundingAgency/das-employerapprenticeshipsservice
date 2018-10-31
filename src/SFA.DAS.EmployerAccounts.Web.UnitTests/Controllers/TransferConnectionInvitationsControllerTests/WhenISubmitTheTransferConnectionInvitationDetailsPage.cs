@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
 
             _viewModel = new TransferConnectionInvitationViewModel
             {
-                DeleteTransferConnectionInvitationCommand = new DeleteTransferConnectionInvitationCommand()
+                TransferConnectionInvitationId = 123
             };
         }
 
@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
 
             await _controller.Details(_viewModel);
 
-            _mediator.Verify(m => m.SendAsync(_viewModel.DeleteTransferConnectionInvitationCommand), Times.Once);
+            _mediator.Verify(m => m.SendAsync(It.Is<DeleteTransferConnectionInvitationCommand>(c => c.TransferConnectionInvitationId == _viewModel.TransferConnectionInvitationId)), Times.Once);
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
 
             await _controller.Details(_viewModel);
 
-            _mediator.Verify(m => m.SendAsync(_viewModel.DeleteTransferConnectionInvitationCommand), Times.Never);
+            _mediator.Verify(m => m.SendAsync(It.IsAny<DeleteTransferConnectionInvitationCommand>()), Times.Never);
         }
 
         [Test]

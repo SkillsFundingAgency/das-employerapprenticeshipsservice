@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.DeleteSentTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Dtos;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
-    public class TransferConnectionInvitationViewModel
+    public class TransferConnectionInvitationViewModel : MembershipMessage
     {
         public long AccountId { get; set; }
 
@@ -13,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string Choice { get; set; }
 
         [Required]
-        public DeleteTransferConnectionInvitationCommand DeleteTransferConnectionInvitationCommand { get; set; }
+        public int? TransferConnectionInvitationId { get; set; }
 
         public TransferConnectionInvitationDto TransferConnectionInvitation { get; set; }
     }
