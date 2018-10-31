@@ -14,11 +14,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
     {
         private TransferConnectionInvitationsController _controller;
         private RejectedTransferConnectionInvitationViewModel _viewModel;
-        private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
+        private Mock<IMediator> _mediator;
 
         [SetUp]
         public void Arrange()
         {
+            _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(It.IsAny<IAsyncRequest<long>>()));
 
             _controller = new TransferConnectionInvitationsController(null, _mediator.Object);
