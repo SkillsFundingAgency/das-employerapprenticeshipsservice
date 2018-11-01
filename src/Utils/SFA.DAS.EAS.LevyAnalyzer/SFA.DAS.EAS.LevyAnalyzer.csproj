@@ -86,6 +86,9 @@
     <Compile Include="Interfaces\IRule.cs" />
     <Compile Include="Interfaces\IRuleEvaluationResult.cs" />
     <Compile Include="Interfaces\IRuleRepository.cs" />
+    <Compile Include="IoC\FinanceRegistry.cs" />
+    <Compile Include="Rules\OntimeLevyShouldResultInATransaction.cs" />
+    <Compile Include="Rules\LateLevyShouldNotResultInATransaction.cs" />
     <Compile Include="Rules\ShouldBeSomeLevyDeclarationsRule.cs" />
     <Compile Include="Rules\Infrastructure\RuleRepository.cs" />
     <Compile Include="Rules\Infrastructure\RuleEntryLevel.cs" />
@@ -121,6 +124,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
+      <Project>{c5880f73-59d6-4c59-a1a2-dba38d13e8dc}</Project>
+      <Name>SFA.DAS.EmployerFinance</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

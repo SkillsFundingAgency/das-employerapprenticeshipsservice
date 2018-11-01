@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StructureMap;
+﻿using StructureMap;
 
 namespace SFA.DAS.EAS.LevyAnalyzer.IoC
 {
@@ -14,6 +9,7 @@ namespace SFA.DAS.EAS.LevyAnalyzer.IoC
             return new Container(c =>
             {
                 c.AddRegistry<CommonRegistry>();
+                c.AddRegistry<FinanceRegistry>();
             });
         }
     }
