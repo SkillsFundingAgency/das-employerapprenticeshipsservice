@@ -83,6 +83,14 @@
     <Compile Include="Interfaces\ConnectionStringEntry.cs" />
     <Compile Include="Interfaces\DatabaseConfig.cs" />
     <Compile Include="Interfaces\DbConnectionFactory.cs" />
+    <Compile Include="Interfaces\IRule.cs" />
+    <Compile Include="Interfaces\IRuleEvaluationResult.cs" />
+    <Compile Include="Interfaces\IRuleRepository.cs" />
+    <Compile Include="Rules\ShouldBeSomeLevyDeclarationsRule.cs" />
+    <Compile Include="Rules\Infrastructure\RuleRepository.cs" />
+    <Compile Include="Rules\Infrastructure\RuleEntryLevel.cs" />
+    <Compile Include="Rules\Infrastructure\RuleEvaluationResult.cs" />
+    <Compile Include="Rules\Infrastructure\RuleEvaluationResultEntry.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Commands\AnalyzeCommand.cs" />
     <Compile Include="Commands\AnalyzeCommandConfig.cs" />

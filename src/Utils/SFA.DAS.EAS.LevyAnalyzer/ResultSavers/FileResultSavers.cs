@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.LevyAnalyzer.ResultSavers
             _configProvider = configProvider;
         }
 
-        public Task Save<TResult>(TResult results)
+        public Task SaveAsync<TResult>(TResult results)
         {
             var config = _configProvider.Get<ResultFileSaverConfig>();
 

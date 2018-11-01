@@ -4,6 +4,6 @@ namespace SFA.DAS.EAS.LevyAnalyzer.Interfaces
 {
     public interface IResultSaver
     {
-        Task Save<TResult>(TResult results);
+        Task SaveAsync<TResult>(TResult results);
     }
 }
