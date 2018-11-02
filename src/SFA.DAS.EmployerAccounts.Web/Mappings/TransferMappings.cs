@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
 
             CreateMap<GetRejectedTransferConnectionInvitationResponse, RejectedTransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore())
-                .ForMember(m => m.DeleteTransferConnectionInvitationCommand, o => o.MapFrom(r => r));
+                .ForMember(m => m.TransferConnectionInvitationId, o => o.MapFrom(r => r.TransferConnectionInvitation.Id));
 
             CreateMap<GetSentTransferConnectionInvitationResponse, SentTransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore());
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
 
             CreateMap<GetTransferConnectionInvitationResponse, TransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore())
-                .ForMember(m => m.DeleteTransferConnectionInvitationCommand, o => o.MapFrom(r => r));
+                .ForMember(m => m.TransferConnectionInvitationId, o => o.MapFrom(r => r.TransferConnectionInvitation.Id));
 
             CreateMap<GetTransferConnectionInvitationsResponse, TransferConnectionInvitationsViewModel>();
             CreateMap<GetTransferRequestsResponse, TransferRequestsViewModel>();
@@ -57,8 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
 
             CreateMap<SendTransferConnectionInvitationResponse, SendTransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore())
-                .ForMember(m => m.SendTransferConnectionInvitationCommand, o => o.MapFrom(r => r));
-
+                .ForMember(m => m.ReceiverAccountPublicHashedId, o => o.MapFrom(r => r.ReceiverAccount.HashedId));
         }
     }
 }
