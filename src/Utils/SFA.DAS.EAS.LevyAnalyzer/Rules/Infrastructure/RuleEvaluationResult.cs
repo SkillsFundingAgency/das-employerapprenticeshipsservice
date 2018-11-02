@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.EAS.LevyAnalyzer.Interfaces;
+using SFA.DAS.EAS.LevyAnalyser.Interfaces;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Rules.Infrastructure
+namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
 {
     public class RuleEvaluationResult : IRuleEvaluationResult
     {

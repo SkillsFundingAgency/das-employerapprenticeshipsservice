@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EAS.LevyAnalyzer.Interfaces;
+﻿using SFA.DAS.EAS.LevyAnalyser.Interfaces;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Repositories
+namespace SFA.DAS.EAS.LevyAnalyser.Repositories
 {
     public class DbContextFactory : IDbContextFactory
     {

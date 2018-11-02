@@ -2,9 +2,9 @@
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.LevyAnalyzer.Models;
+using SFA.DAS.EAS.LevyAnalyser.Models;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Repositories
+namespace SFA.DAS.EAS.LevyAnalyser.Repositories
 {
     public class FinanceDbContext : DbContext 
     {

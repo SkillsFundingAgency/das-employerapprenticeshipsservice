@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.LevyAnalyzer.Interfaces;
-using SFA.DAS.EAS.LevyAnalyzer.Rules.Infrastructure;
+using SFA.DAS.EAS.LevyAnalyser.Interfaces;
+using SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Commands
+namespace SFA.DAS.EAS.LevyAnalyser.Commands
 {
     public class AnalyzeCommand : ICommand
     {

@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using System.IO;
 using Newtonsoft.Json.Linq;
-using SFA.DAS.EAS.LevyAnalyzer.Interfaces;
+using SFA.DAS.EAS.LevyAnalyser.Interfaces;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Config
+namespace SFA.DAS.EAS.LevyAnalyser.Config
 {
     public class ConfigProvider : IConfigProvider
     {

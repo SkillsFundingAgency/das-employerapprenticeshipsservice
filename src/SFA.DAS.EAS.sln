@@ -169,9 +169,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.Acc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{2147967B-537D-4724-8C8F-F6D86F422AC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyAnalyzer", "Utils\SFA.DAS.EAS.LevyAnalyzer\SFA.DAS.EAS.LevyAnalyzer.csproj", "{F0D2AB9A-D11D-40BE-9B80-A3FDC42AE9F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyAnalyser", "Utils\SFA.DAS.EAS.LevyAnalyzer\SFA.DAS.EAS.LevyAnalyser.csproj", "{F0D2AB9A-D11D-40BE-9B80-A3FDC42AE9F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyAnalyzer.Tests", "SFA.DAS.EAS.LevyAnalyzer.Tests\SFA.DAS.EAS.LevyAnalyzer.Tests.csproj", "{3D548CEE-001B-49C6-AF05-BF509DD2F425}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyAnalyser.Tests", "SFA.DAS.EAS.LevyAnalyzer.Tests\SFA.DAS.EAS.LevyAnalyser.Tests.csproj", "{3D548CEE-001B-49C6-AF05-BF509DD2F425}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

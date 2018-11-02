@@ -1,7 +1,7 @@
-﻿using SFA.DAS.EAS.LevyAnalyzer.Models;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EAS.LevyAnalyser.Models;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Interfaces
+namespace SFA.DAS.EAS.LevyAnalyser.Interfaces
 {
     public interface IAccountRepository
     {

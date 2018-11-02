@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.LevyAnalyzer.Commands
+﻿namespace SFA.DAS.EAS.LevyAnalyser.Commands
 {
     class AnalyzeCommandConfig
     {

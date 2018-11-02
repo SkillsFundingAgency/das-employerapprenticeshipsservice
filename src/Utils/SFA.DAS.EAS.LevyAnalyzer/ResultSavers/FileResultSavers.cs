@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using SFA.DAS.EAS.LevyAnalyzer.Config;
-using SFA.DAS.EAS.LevyAnalyzer.Interfaces;
+using SFA.DAS.EAS.LevyAnalyser.Config;
+using SFA.DAS.EAS.LevyAnalyser.Interfaces;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.ResultSavers
+namespace SFA.DAS.EAS.LevyAnalyser.ResultSavers
 {
     public class FileResultSaver : IResultSaver
     {

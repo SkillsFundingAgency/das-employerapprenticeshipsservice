@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.LevyAnalyzer.Interfaces;
-using SFA.DAS.EAS.LevyAnalyzer.Models;
-using SFA.DAS.EAS.LevyAnalyzer.Rules;
-using SFA.DAS.EAS.LevyAnalyzer.Rules.Infrastructure;
-using SFA.DAS.EmployerFinance.Dtos;
-using SFA.DAS.EmployerFinance.Services;
+using SFA.DAS.EAS.LevyAnalyser.Rules;
+using SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Tests.Rules
+namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
 {
     [TestFixture]
     public class OntimeLevyShouldResultInATransactionTests

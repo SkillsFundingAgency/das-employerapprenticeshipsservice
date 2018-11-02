@@ -2,8 +2,10 @@
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using SFA.DAS.EAS.LevyAnalyser.Config;
+using SFA.DAS.EAS.LevyAnalyser.Interfaces;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Interfaces
+namespace SFA.DAS.EAS.LevyAnalyser.Repositories
 {
     public class DbConnectionFactory : IDbConnectionFactory
     {

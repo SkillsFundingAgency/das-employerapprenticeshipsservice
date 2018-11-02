@@ -1,7 +1,6 @@
-﻿using System.Data;
-using System.Data.Common;
+﻿using System.Data.Common;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Interfaces
+namespace SFA.DAS.EAS.LevyAnalyser.Interfaces
 {
     public interface IDbConnectionFactory
     {

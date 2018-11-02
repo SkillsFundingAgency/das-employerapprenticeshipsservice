@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.LevyAnalyzer.Config
+﻿namespace SFA.DAS.EAS.LevyAnalyser.Config
 {
     public class ResultFileSaverConfig
     {

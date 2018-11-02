@@ -1,10 +1,8 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using SFA.DAS.EAS.LevyAnalyzer.Interfaces;
-using SFA.DAS.EAS.LevyAnalyzer.Models;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EAS.LevyAnalyser.Interfaces;
+using SFA.DAS.EAS.LevyAnalyser.Models;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Repositories
+namespace SFA.DAS.EAS.LevyAnalyser.Repositories
 {
     public class AccountRepository : IAccountRepository
     {

@@ -1,9 +1,9 @@
-﻿using SFA.DAS.EAS.LevyAnalyzer.Config;
-using SFA.DAS.EAS.LevyAnalyzer.Interfaces;
-using SFA.DAS.EAS.LevyAnalyzer.ResultSavers;
+﻿using SFA.DAS.EAS.LevyAnalyser.Config;
+using SFA.DAS.EAS.LevyAnalyser.Interfaces;
+using SFA.DAS.EAS.LevyAnalyser.ResultSavers;
 using StructureMap;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.IoC
+namespace SFA.DAS.EAS.LevyAnalyser.IoC
 {
     public class CommonRegistry : Registry
     {

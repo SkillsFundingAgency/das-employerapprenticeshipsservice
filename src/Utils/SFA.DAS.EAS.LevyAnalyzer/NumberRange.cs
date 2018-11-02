@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SFA.DAS.EAS.LevyAnalyzer
+namespace SFA.DAS.EAS.LevyAnalyser
 {
     [Flags]
     public enum NumberRangeOptions

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.EAS.LevyAnalyzer.Interfaces;
-using SFA.DAS.EAS.LevyAnalyzer.Models;
+using SFA.DAS.EAS.LevyAnalyser.Interfaces;
+using SFA.DAS.EAS.LevyAnalyser.Models;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Rules.Infrastructure
+namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
 {
     public class RuleRepository : IRuleRepository
     {

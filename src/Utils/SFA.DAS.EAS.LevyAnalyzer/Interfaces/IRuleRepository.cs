@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.EAS.LevyAnalyzer.Models;
-using SFA.DAS.EAS.LevyAnalyzer.Rules.Infrastructure;
+using SFA.DAS.EAS.LevyAnalyser.Models;
+using SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Interfaces
+namespace SFA.DAS.EAS.LevyAnalyser.Interfaces
 {
+    /// <summary>
+    ///     Contains a collection of all the rules defined by the application.
+    /// </summary>
     public interface IRuleRepository
     {
         IEnumerable<RuleEvaluationResult> ApplyAllRules(Account account);

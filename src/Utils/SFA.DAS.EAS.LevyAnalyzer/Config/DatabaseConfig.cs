@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Interfaces
+namespace SFA.DAS.EAS.LevyAnalyser.Config
 {
     public class DatabaseConfig
     {

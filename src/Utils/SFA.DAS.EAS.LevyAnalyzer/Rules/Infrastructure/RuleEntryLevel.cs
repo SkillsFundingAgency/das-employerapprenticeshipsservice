@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.LevyAnalyzer.Rules.Infrastructure
+﻿namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
 {
     public enum RuleEntryLevel
     {

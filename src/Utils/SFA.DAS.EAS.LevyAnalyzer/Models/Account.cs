@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.LevyAnalyzer.Models
+﻿namespace SFA.DAS.EAS.LevyAnalyser.Models
 {
     public class Account
     {

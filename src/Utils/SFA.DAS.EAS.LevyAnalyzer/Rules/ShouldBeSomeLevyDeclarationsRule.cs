@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SFA.DAS.EAS.LevyAnalyzer.Interfaces;
-using SFA.DAS.EAS.LevyAnalyzer.Models;
-using SFA.DAS.EAS.LevyAnalyzer.Rules.Infrastructure;
+﻿using SFA.DAS.EAS.LevyAnalyser.Interfaces;
+using SFA.DAS.EAS.LevyAnalyser.Models;
+using SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure;
 
-namespace SFA.DAS.EAS.LevyAnalyzer.Rules
+namespace SFA.DAS.EAS.LevyAnalyser.Rules
 {
     public class ShouldBeSomeLevyDeclarationsRule : IRule
     {

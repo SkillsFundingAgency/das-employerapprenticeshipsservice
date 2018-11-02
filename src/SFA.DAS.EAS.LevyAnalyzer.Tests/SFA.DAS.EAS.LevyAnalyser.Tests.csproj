@@ -8,8 +8,8 @@
     <ProjectGuid>{3D548CEE-001B-49C6-AF05-BF509DD2F425}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFA.DAS.EAS.LevyAnalyzer.Tests</RootNamespace>
-    <AssemblyName>SFA.DAS.EAS.LevyAnalyzer.Tests</AssemblyName>
+    <RootNamespace>SFA.DAS.EAS.LevyAnalyser.Tests</RootNamespace>
+    <AssemblyName>SFA.DAS.EAS.LevyAnalyser.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestUtils\LevyAnalyzerTestFixtures.cs" />
     <Compile Include="Rules\OntimeLevyShouldResultInATransactionTests.cs" />
     <Compile Include="Rules\LateLevyShouldNotResultInATransactionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,11 +73,12 @@
       <Project>{c5880f73-59d6-4c59-a1a2-dba38d13e8dc}</Project>
       <Name>SFA.DAS.EmployerFinance</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Utils\SFA.DAS.EAS.LevyAnalyzer\SFA.DAS.EAS.LevyAnalyzer.csproj">
+    <ProjectReference Include="..\Utils\SFA.DAS.EAS.LevyAnalyzer\SFA.DAS.EAS.LevyAnalyser.csproj">
       <Project>{f0d2ab9a-d11d-40be-9b80-a3fdc42ae9f4}</Project>
-      <Name>SFA.DAS.EAS.LevyAnalyzer</Name>
+      <Name>SFA.DAS.EAS.LevyAnalyser</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

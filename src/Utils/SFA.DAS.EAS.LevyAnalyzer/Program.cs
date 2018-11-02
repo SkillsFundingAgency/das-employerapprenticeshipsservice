@@ -2,13 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CommandLine;
-using SFA.DAS.EAS.LevyAnalyzer.CommandLine;
-using SFA.DAS.EAS.LevyAnalyzer.Commands;
-using SFA.DAS.EAS.LevyAnalyzer.Interfaces;
+using SFA.DAS.EAS.LevyAnalyser.CommandLine;
+using SFA.DAS.EAS.LevyAnalyser.Commands;
+using SFA.DAS.EAS.LevyAnalyser.Interfaces;
 using StructureMap;
 
-
-namespace SFA.DAS.EAS.LevyAnalyzer
+namespace SFA.DAS.EAS.LevyAnalyser
 {
     internal class Program
     {
@@ -16,7 +15,7 @@ namespace SFA.DAS.EAS.LevyAnalyzer
 
         private static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<AnalyzeCommandLine>(args)
+            Parser.Default.ParseArguments<AnalyseCommandLine>(args)
                 .WithParsed(qcla => new Program().RunQuery(qcla));
         }
 
@@ -26,7 +25,7 @@ namespace SFA.DAS.EAS.LevyAnalyzer
             _container = IoC.IoC.InitialiseIoC();
         }
 
-        private void RunQuery(AnalyzeCommandLine args)
+        private void RunQuery(AnalyseCommandLine args)
         {
             SetConfigOverrides<AnalyzeCommandConfig>(config => config.AccountIds = args.AccountIds);
             RunCommand<AnalyzeCommand>();
