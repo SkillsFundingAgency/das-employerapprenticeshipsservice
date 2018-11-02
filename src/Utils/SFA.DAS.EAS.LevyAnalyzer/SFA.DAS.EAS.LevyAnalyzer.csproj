@@ -120,9 +120,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="SFA.DAS.EAS.LevyAnalyzer.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
