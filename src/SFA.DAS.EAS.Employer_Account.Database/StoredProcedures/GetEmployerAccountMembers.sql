@@ -2,15 +2,15 @@
 	@hashedAccountId VARCHAR(MAX)	
 AS
 	SELECT 
-		tm.*, s.ReceiveNotifications AS CanReceiveNotifications
+		tm.*, m.ReceiveNotifications AS CanReceiveNotifications
 	FROM 
 		[employer_account].[GetTeamMembers] tm
 	LEFT JOIN
-		[employer_account].[UserAccountSettings] s
+		[employer_account].[Membership] m
 	ON
-		tm.Id = s.UserId
+		tm.Id = m.UserId
 	AND
-		tm.AccountId = s.AccountId
+		tm.AccountId = m.AccountId
     WHERE 
 		tm.HashedId = @hashedAccountId
 GO

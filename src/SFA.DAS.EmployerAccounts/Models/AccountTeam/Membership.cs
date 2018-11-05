@@ -26,5 +26,6 @@ namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
 
         private Role? _role;
         private int? _roleId;
+        public virtual bool ReceiveNotifications { get; set; }
     }
 }

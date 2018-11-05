@@ -207,12 +207,10 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
             {
                 Account = account,
                 User = user,
-                Role = role
+                Role = role,
+                ReceiveNotifications = receiveNotifications
             };
             
-            var userAccountSetting = new UserAccountSetting(account, user, receiveNotifications);
-            
-            user.UserAccountSettings.Add(userAccountSetting);
             user.Memberships.Add(membership);
             _users.Add(user);
 

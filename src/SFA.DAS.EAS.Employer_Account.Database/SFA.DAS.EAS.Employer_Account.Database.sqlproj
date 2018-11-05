@@ -111,7 +111,6 @@
     <Build Include="StoredProcedures\UpdatePayeName_ByRef.sql" />
     <Build Include="StoredProcedures\RemoveLegalEntityFromAccount.sql" />
     <Build Include="StoredProcedures\GetEmployerAgreementsToRemove_ByAccountId.sql" />
-    <Build Include="Tables\UserAccountSettings.sql" />
     <Build Include="StoredProcedures\RemoveMembership.sql" />
     <Build Include="StoredProcedures\GetUserAccountSettings.sql" />
     <Build Include="UserDefinedTypes\UserNotificationSettingsTable.sql" />
@@ -154,6 +153,7 @@
     <None Include="Scripts\PostDeployment\CreateAgreementTemplates.sql" />
     <None Include="Scripts\PreDeployment\AML-2119-BackupAgreementDetails.sql" />
     <None Include="Scripts\PreDeployment\AML-2239-DeleteDuplicateAccountHistory.sql" />
+    <None Include="Scripts\PostDeployment\AML-2989-Consolidate-UserAccountSettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Invitation.sql" />

@@ -6,15 +6,14 @@ AS
 BEGIN
 
 	select
-	s.Id,
-	s.AccountId,
+	m.AccountId,
 	a.HashedId as HashedAccountId,
-	s.UserId,
+	m.UserId,
 	a.[Name],
-	s.ReceiveNotifications
-	from [employer_account].[UserAccountSettings] s
-	join [employer_account].[Account] a on a.Id = s.AccountId
-	join [employer_account].[User] u on u.Id = s.UserId
+	m.ReceiveNotifications
+	from [employer_account].[Membership] m
+	join [employer_account].[Account] a on a.Id = m.AccountId
+	join [employer_account].[User] u on u.Id = m.UserId
 	where
 	u.UserRef = @UserRef
 

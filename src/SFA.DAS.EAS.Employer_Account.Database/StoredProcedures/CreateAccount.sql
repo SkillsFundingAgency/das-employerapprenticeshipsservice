@@ -54,8 +54,6 @@ BEGIN
 
 	EXEC [employer_account].[CreateAccountHistory] @accountId, @employerRef,@addedDate
 
-	INSERT INTO [employer_account].[Membership](UserId, AccountId, RoleId) VALUES (@userId, @accountId, 1);
-
-	INSERT INTO [employer_account].[UserAccountSettings] (UserId, AccountId, ReceiveNotifications) VALUES (@userId, @accountId, 1)
+	INSERT INTO [employer_account].[Membership](UserId, AccountId, RoleId, ReceiveNotifications) VALUES (@userId, @accountId, 1, 1);
 
 END

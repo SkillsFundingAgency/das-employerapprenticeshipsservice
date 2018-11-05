@@ -12,6 +12,7 @@ Post-Deployment Script Template
 
 :r .\CreateAgreementTemplates.sql
 :r .\AML-2119-RestoreAgreementDetails.sql
+:r .\AML-2989-Consolidate-UserAccountSettings.sql
 
 IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%' AND @@servername NOT LIKE '%mo%')
 BEGIN
