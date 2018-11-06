@@ -1,22 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions.Common;
-using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
-namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
+namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
 {
-    public class WhenGettingAccountUsers : ApiClientTestBase
+    public class WhenGettingAccountUsersByInternalId : ApiClientTestBase
     {
         private TeamMemberViewModel _teamMember;
         private string _uri;
 
         public override void HttpClientSetup()
         {
-            _uri = $"/api/accounts/{TextualAccountId}/users";
+            _uri = $"/api/accounts/internal/{NumericalAccountId}/users";
             var absoluteUri = Configuration.ApiBaseUrl.TrimEnd('/') + _uri;
 
             _teamMember = new TeamMemberViewModel
@@ -34,16 +32,14 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         }
 
         [Test]
-        public async Task ThenThePayeSchemeIsReturned()
+        public async Task ThenTheCorrectEndpointIsCalled()
         {
-            // Act
-            var response = await ApiClient.GetAccountUsers(TextualAccountId);
-            var viewModel = response?.FirstOrDefault();
+            //Act
+            var actual = await ApiClient.GetAccountUsers(NumericalAccountId);
 
-            // Assert
-            Assert.IsNotNull(response);
-            Assert.IsNotNull(viewModel);
-            viewModel.IsSameOrEqualTo(_teamMember);
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.IsTrue(actual.Any());
         }
     }
 }

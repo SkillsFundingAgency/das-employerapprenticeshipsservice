@@ -9,6 +9,7 @@ namespace SFA.DAS.EmployerAccounts.Mappings
         public MembershipMappings()
         {
             CreateMap<Membership, MembershipContext>();
+            CreateMap<TeamMember, TeamMemberViewModel>();
         }
     }
 }

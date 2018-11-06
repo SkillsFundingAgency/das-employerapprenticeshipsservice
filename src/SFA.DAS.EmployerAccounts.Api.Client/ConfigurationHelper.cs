@@ -1,8 +1,8 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Threading.Tasks;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
+using Environment = System.Environment;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client
 {

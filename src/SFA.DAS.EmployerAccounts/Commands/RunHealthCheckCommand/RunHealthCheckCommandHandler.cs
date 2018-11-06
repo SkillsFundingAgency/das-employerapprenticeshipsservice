@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand

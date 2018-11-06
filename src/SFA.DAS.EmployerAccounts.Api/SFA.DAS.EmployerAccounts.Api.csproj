@@ -99,12 +99,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attributes\ApiAuthorizeAttribute.cs" />
+    <Compile Include="Controllers\EmployerAccountsController.cs" />
+    <Compile Include="Controllers\EmployerUserController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="ExceptionLoggers\ErrorLogger.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Orchestrators\AccountsOrchestrator.cs" />
+    <Compile Include="Orchestrators\OrchestratorResponse.cs" />
+    <Compile Include="Orchestrators\UsersOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

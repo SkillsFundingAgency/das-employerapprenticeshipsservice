@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions.Common;
-using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EmployerAccounts.Models.Account;
 
-namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
+namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
 {
     public class WhenGettingAUsersAccounts : ApiClientTestBase
     {

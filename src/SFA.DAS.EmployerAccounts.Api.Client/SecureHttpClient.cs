@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client
 {
-    internal class SecureHttpClient
+    public class SecureHttpClient
     {
         private readonly IEmployerAccountsApiClientConfiguration _configuration;
 
@@ -13,7 +13,12 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             _configuration = configuration;
         }
 
-        public async Task<string> GetAsync(string url)
+        protected SecureHttpClient()
+        {
+            // So we can mock for testing
+        }
+
+        public virtual async Task<string> GetAsync(string url)
         {
             var authenticationResult = await GetAuthenticationResult( _configuration.ClientId, _configuration.ClientSecret, _configuration.IdentifierUri, _configuration.Tenant).ConfigureAwait(false);
 

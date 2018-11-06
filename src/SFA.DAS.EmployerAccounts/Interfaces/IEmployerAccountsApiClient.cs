@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerAccounts.Api.Client
+namespace SFA.DAS.EmployerAccounts.Interfaces
 {
     public interface IEmployerAccountsApiClient
     {

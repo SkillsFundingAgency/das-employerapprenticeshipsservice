@@ -1,4 +1,5 @@
-﻿using StructureMap;
+﻿using SFA.DAS.EmployerAccounts.Interfaces;
+using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client
 {

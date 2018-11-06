@@ -1,6 +1,4 @@
-﻿using SFA.DAS.EAS.Account.Api.Types.Events.Account;
-
-namespace SFA.DAS.EmployerAccounts.Events
+﻿namespace SFA.DAS.EmployerAccounts.Events
 {
     public interface IAccountEventFactory
     {
