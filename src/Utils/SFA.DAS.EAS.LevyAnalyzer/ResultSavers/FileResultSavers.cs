@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SFA.DAS.EAS.LevyAnalyser.Config;
 using SFA.DAS.EAS.LevyAnalyser.Interfaces;
 
@@ -21,13 +22,27 @@ namespace SFA.DAS.EAS.LevyAnalyser.ResultSavers
 
             var fileName = System.IO.Path.Combine(config.FolderName, $"{typeof(TResult).Name}_{DateTime.Now:yyyyMMdd_HHmmss}.json");
 
-            var json = JsonConvert.SerializeObject(results);
+            var jsonSettings = GetJsonSettings();
+
+            var json = JsonConvert.SerializeObject(results, jsonSettings);
 
             System.IO.File.WriteAllText(fileName, json);
 
             Console.WriteLine($"Saved output to {fileName}");
 
             return Task.CompletedTask;
+        }
+
+        private JsonSerializerSettings GetJsonSettings()
+        {
+            var jsonSettings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+            };
+
+            jsonSettings.Converters.Add(new StringEnumConverter());
+
+            return jsonSettings;
         }
     }
 }

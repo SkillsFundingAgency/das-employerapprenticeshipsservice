@@ -12,10 +12,10 @@ namespace SFA.DAS.EAS.LevyAnalyser.Interfaces
 
         /// <summary>
         ///     Indicates whether the account obeys the rule. This will be false if 
-        ///     <see cref="Messages"/> contains any <see cref="RuleEntryLevel.Violation"/> messages.
+        ///     <see cref="Messages"/> contains any <see cref="RuleMessageLevel.Violation"/> messages.
         /// </summary>
         bool IsValid { get; }
 
-        IReadOnlyCollection<RuleEvaluationResultEntry> Messages { get; }
+        IReadOnlyCollection<RuleEvaluationMessage> Messages { get; }
     }
 }

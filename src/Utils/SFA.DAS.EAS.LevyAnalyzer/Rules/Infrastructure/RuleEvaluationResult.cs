@@ -1,11 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SFA.DAS.EAS.LevyAnalyser.Interfaces;
 
 namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
 {
+    /// <summary>
+    ///     Represents the result of evaluating a specific rule against an account.
+    ///     The rule may have a number of messages attached to it<see cref="Messages"/>
+    ///     which may add further information about the rule.
+    /// </summary>
     public class RuleEvaluationResult : IRuleEvaluationResult
     {
-        private readonly List<RuleEvaluationResultEntry> _messages = new List<RuleEvaluationResultEntry>();
+        private readonly List<RuleEvaluationMessage> _messages = new List<RuleEvaluationMessage>();
 
         public RuleEvaluationResult(string ruleName)
         {
@@ -13,32 +19,38 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
             IsValid = true;
         }
 
+        /// <summary>
+        ///     A descriptive, unique name for the rule.
+        /// </summary>
         public string RuleName { get; }
 
+        /// <summary>
+        ///     Did the rule validate the account without issue?
+        /// </summary>
         public bool IsValid { get; private set; }
 
-        public IReadOnlyCollection<RuleEvaluationResultEntry> Messages => _messages;
+        public IReadOnlyCollection<RuleEvaluationMessage> Messages => _messages;
 
         public void AddRuleViolation(string message)
         {
-            AddEntry(RuleEntryLevel.Violation, message);
+            AddEntry(RuleMessageLevel.Violation, message);
         }
 
         public void AddRuleWarning(string message)
         {
-            AddEntry(RuleEntryLevel.Suspicous, message);
+            AddEntry(RuleMessageLevel.Suspicous, message);
         }
 
         public void AddRuleInfo(string message)
         {
-            AddEntry(RuleEntryLevel.Info, message);
+            AddEntry(RuleMessageLevel.Info, message);
         }
 
-        private void AddEntry(RuleEntryLevel level, string message)
+        private void AddEntry(RuleMessageLevel level, string message)
         {
-            var result = new RuleEvaluationResultEntry(level, message);
+            var result = new RuleEvaluationMessage(level, message);
             _messages.Add(result);
-            if (result.Level != RuleEntryLevel.Info)
+            if (result.Level != RuleMessageLevel.Info)
             {
                 IsValid = false;
             }

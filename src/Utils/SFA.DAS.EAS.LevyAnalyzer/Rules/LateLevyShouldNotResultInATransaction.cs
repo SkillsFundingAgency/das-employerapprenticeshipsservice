@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
                 if (!_hmrcDateService.IsDateInPayrollPeriod(declaration.PayrollYear, declaration.PayrollMonth.Value, declaration.SubmissionDate.Value))
                 {
                     foundLate = true;
-                    validationResult.AddRuleInfo($"Submission {declaration.Id} for {declaration.PayrollYear}-{declaration.PayrollMonth} was submitted late on {declaration.SubmissionDate}");
+                    validationResult.AddRuleInfo($"Submission {declaration.Id} for period {declaration.PayrollMonth} year {declaration.PayrollYear} was submitted late on {declaration.SubmissionDate}");
 
                     if (account.Transactions.Any(txn => txn.SubmissionId == declaration.Id))
                     {

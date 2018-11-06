@@ -58,7 +58,9 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
 
         public void RunValidate(IRule rule, Action<RuleEvaluationResult, Account> check)
         {
-            var account = new Account(Transactions.ToArray(), Declarations.ToArray());
+            const long testAccountId = 123;
+
+            var account = new Account(testAccountId, Transactions.ToArray(), Declarations.ToArray());
 
             RuleEvaluationResult result = new RuleEvaluationResult(rule.Name);
 

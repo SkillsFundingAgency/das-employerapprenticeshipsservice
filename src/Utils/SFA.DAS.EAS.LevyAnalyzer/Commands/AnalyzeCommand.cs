@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.LevyAnalyser.Interfaces;
+using SFA.DAS.EAS.LevyAnalyser.Models;
 using SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure;
 
 namespace SFA.DAS.EAS.LevyAnalyser.Commands
@@ -30,18 +32,36 @@ namespace SFA.DAS.EAS.LevyAnalyser.Commands
         {
             var config = _configProvider.Get<AnalyzeCommandConfig>();
 
-            RuleEvaluationResult[] results = null;
+            var results = new AllAccountValidationResult
+            {
+                AccountIds = config.AccountIds
+            };
 
             foreach (var accountId in NumberRange.ToInts(config.AccountIds))
             {
                 var account = await _accountRepository.GetAccountAsync(accountId);
 
-                Console.WriteLine($"Fetched account {accountId} ({account.LevyDeclarations.Length} levy declarations - {account.Transactions.Length} transactions)");
+                Console.Write($"Fetched account {accountId} ({account.LevyDeclarations.Length} levy declarations - {account.Transactions.Length} transactions)...");
 
-                results = _ruleRepository.ApplyAllRules(account).ToArray();
+                var levyValidationResult = ValidateLevy(account);
+
+                Console.WriteLine($"{(levyValidationResult.IsValid ? "Valid" : "Invalid")}");
+
+                results.AddResult(levyValidationResult);
             }
 
             await _resultSaver.SaveAsync(results);
+        }
+
+        private AccountValidationResult ValidateLevy(Account account)
+        {
+            var result = new AccountValidationResult
+            {
+                AccountId = account.Id,
+                Rules = _ruleRepository.ApplyAllRules(account).ToArray()
+            };
+
+            return result;
         }
     }
 }

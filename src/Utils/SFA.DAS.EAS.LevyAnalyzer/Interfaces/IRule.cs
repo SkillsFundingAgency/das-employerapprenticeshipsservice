@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Interfaces
         /// <param name="validationResult">
         ///     Represents the results of applying this rule. The rule may add messages as info, warnings or violations
         ///     using the appropriate method on <see cref="RuleEvaluationResult"/>. The rule will be considered to violated 
-        ///     (i.e the account does not obey the rule) if the rule adds any <see cref="RuleEntryLevel.Violation"/> 
+        ///     (i.e the account does not obey the rule) if the rule adds any <see cref="RuleMessageLevel.Violation"/> 
         ///     level messages. 
         /// </param>
         void Validate(Account account, RuleEvaluationResult validationResult);

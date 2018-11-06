@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Repositories
 
                 var levyTask = await financeDb.GetLevyDeclarationsAsync(accountId);
 
-                return new Account(txnsTask, levyTask);
+                return new Account(accountId, txnsTask, levyTask);
             }
         }
     }
