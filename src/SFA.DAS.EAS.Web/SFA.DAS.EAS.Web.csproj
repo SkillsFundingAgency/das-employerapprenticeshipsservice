@@ -678,6 +678,7 @@
     <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
     <Content Include="Views\Organisation\ReviewNoChange.cshtml" />
     <Content Include="Views\Organisation\ReviewIncorrectDetails.cshtml" />
+    <Content Include="src\sass\_type.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />
@@ -1039,7 +1040,6 @@
     <Content Include="src\sass\_layouts.scss" />
     <Content Include="src\sass\_mixins.scss" />
     <Content Include="src\sass\_tables.scss" />
-    <Content Include="src\sass\_typography.scss" />
     <Content Include="src\sass\screen-ie8.scss" />
     <Content Include="src\sass\_panels.scss" />
     <Content Include="src\sass\_commitments.scss" />
