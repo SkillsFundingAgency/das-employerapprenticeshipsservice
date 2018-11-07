@@ -324,8 +324,6 @@
     <Compile Include="Queries\GetEmployerAgreementQueryTests\GetEmployerAgreementTests.cs" />
     <Compile Include="Queries\GetLegalEntityQueryTests\GetLegalEntityQueryTests.cs" />
     <Compile Include="Queries\GetTransferAllowanceTests\GetTransferAllowanceTests.cs" />
-    <Compile Include="Commands\RemoveLegalEntityTests\WhenIRemoveALegalEntity.cs" />
-    <Compile Include="Commands\RemoveLegalEntityTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\UnsubscribeNotificationTest\WhenUnsubscribingFromNotification.cs" />
     <Compile Include="Commands\UnsubscribeNotificationTest\WhenValidatingUnsubscribeCommand.cs" />
     <Compile Include="Commands\CreateEmployerAgreementTemplateTests\WhenICreateAnEmployerAgreementTemplate.cs" />
@@ -334,12 +332,9 @@
     <Compile Include="Commands\CreateOrganisationAddressTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIRemoveAPayeSchemeFromAnAccount.cs" />
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIValidateTheRequest.cs" />
-    <Compile Include="Commands\SignEmployerAgreementTests\WhenISignAnEmployerAgreement.cs" />
-    <Compile Include="Commands\SignEmployerAgreementTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\WhenUpdatingUserNotificationSettings.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\WhenValidatingTheCommand.cs" />
     <Compile Include="Factories\LevyEventFactoryTests\WhenICreateAnEvent.cs" />
-    <Compile Include="Factories\EmployerAgreementEventFactoryTests\WhenICreateAnEvent.cs" />
     <Compile Include="FakeTimeProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetActivitiesTests\WhenIGetActivities.cs" />

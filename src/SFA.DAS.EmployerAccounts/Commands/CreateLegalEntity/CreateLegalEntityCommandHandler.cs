@@ -6,7 +6,6 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Events;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Features;
@@ -19,6 +18,7 @@ using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
+using IGenericEventFactory = SFA.DAS.EmployerAccounts.Events.IGenericEventFactory;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
 {

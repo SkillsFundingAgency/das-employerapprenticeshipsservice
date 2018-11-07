@@ -72,38 +72,38 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
                 });
         }
 
-        [Test]
-        public Task RemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToRemoveTheOrg()
-        {
-            return RunAsync(
-                arrange: fixtures => fixtures.Orchestrator
-                                        .Setup(x => x.RemoveLegalAgreement(It.IsAny<ConfirmLegalAgreementToRemoveViewModel>(), fixtures.UserId))
-                                        .ReturnsAsync(new OrchestratorResponse<bool> { Status = HttpStatusCode.OK, FlashMessage = new FlashMessageViewModel() }),
-                act: fixtures => fixtures.RemoveOrganisation(),
-                assert: (fixtures, result) => fixtures.Orchestrator
-                        .Verify(x => x.RemoveLegalAgreement(It.IsAny<ConfirmLegalAgreementToRemoveViewModel>(), fixtures.UserId), Times.Once)
-                );
-        }
+        //[Test]
+        //public Task RemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToRemoveTheOrg()
+        //{
+        //    return RunAsync(
+        //        arrange: fixtures => fixtures.Orchestrator
+        //                                .Setup(x => x.RemoveLegalAgreement(It.IsAny<ConfirmLegalAgreementToRemoveViewModel>(), fixtures.UserId))
+        //                                .ReturnsAsync(new OrchestratorResponse<bool> { Status = HttpStatusCode.OK, FlashMessage = new FlashMessageViewModel() }),
+        //        act: fixtures => fixtures.RemoveOrganisation(),
+        //        assert: (fixtures, result) => fixtures.Orchestrator
+        //                .Verify(x => x.RemoveLegalAgreement(It.IsAny<ConfirmLegalAgreementToRemoveViewModel>(), fixtures.UserId), Times.Once)
+        //        );
+        //}
 
-        [TestCase(HttpStatusCode.Accepted, "Index", 0)]
-        [TestCase(HttpStatusCode.BadRequest, "ConfirmRemoveOrganisation", 1)]
-        [TestCase(HttpStatusCode.OK, "Index", 1)]
-        public Task RemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheActionRedirectsToTheCorrectViewWhenRemovingTheOrg(HttpStatusCode code, string viewName, int isFlashPopulated)
-        {
-            return RunAsync(
-                arrange: fixtures => fixtures.Orchestrator
-                    .Setup(x => x.RemoveLegalAgreement(It.IsAny<ConfirmLegalAgreementToRemoveViewModel>(), fixtures.UserId))
-                    .ReturnsAsync(new OrchestratorResponse<bool> { Status = code, FlashMessage = new FlashMessageViewModel() }),
-                act: fixtures => fixtures.RemoveOrganisation(),
-                assert: (fixtures, actualResult) =>
-                {
-                    Assert.IsNotNull(actualResult);
-                    var redirectResult = actualResult as RedirectToRouteResult;
-                    Assert.IsNotNull(redirectResult);
-                    Assert.AreEqual(viewName, redirectResult.RouteValues["Action"]);
-                    fixtures.FlashMessage.Verify(x => x.Create(It.IsAny<FlashMessageViewModel>(), "sfa-das-employerapprenticeshipsservice-flashmessage", 1), Times.Exactly(isFlashPopulated));
-                });
-        }
+        //[TestCase(HttpStatusCode.Accepted, "Index", 0)]
+        //[TestCase(HttpStatusCode.BadRequest, "ConfirmRemoveOrganisation", 1)]
+        //[TestCase(HttpStatusCode.OK, "Index", 1)]
+        //public Task RemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheActionRedirectsToTheCorrectViewWhenRemovingTheOrg(HttpStatusCode code, string viewName, int isFlashPopulated)
+        //{
+        //    return RunAsync(
+        //        arrange: fixtures => fixtures.Orchestrator
+        //            .Setup(x => x.RemoveLegalAgreement(It.IsAny<ConfirmLegalAgreementToRemoveViewModel>(), fixtures.UserId))
+        //            .ReturnsAsync(new OrchestratorResponse<bool> { Status = code, FlashMessage = new FlashMessageViewModel() }),
+        //        act: fixtures => fixtures.RemoveOrganisation(),
+        //        assert: (fixtures, actualResult) =>
+        //        {
+        //            Assert.IsNotNull(actualResult);
+        //            var redirectResult = actualResult as RedirectToRouteResult;
+        //            Assert.IsNotNull(redirectResult);
+        //            Assert.AreEqual(viewName, redirectResult.RouteValues["Action"]);
+        //            fixtures.FlashMessage.Verify(x => x.Create(It.IsAny<FlashMessageViewModel>(), "sfa-das-employerapprenticeshipsservice-flashmessage", 1), Times.Exactly(isFlashPopulated));
+        //        });
+        //}
 
         [Test]
         public Task NextSteps_WhenIViewNextSteps_ThenShouldShowIfUserCanSeeWizardWhenViewingNextSteps()

@@ -198,6 +198,7 @@
     <Compile Include="ViewModels\SelectOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\SendTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SentTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\SignAgreementViewModel.cs" />
     <Compile Include="ViewModels\SignInViewModel.cs" />
     <Compile Include="ViewModels\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />

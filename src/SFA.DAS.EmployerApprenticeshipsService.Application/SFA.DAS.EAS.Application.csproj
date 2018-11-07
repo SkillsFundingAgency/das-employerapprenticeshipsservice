@@ -432,9 +432,6 @@
     <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommandValidator.cs" />
     <Compile Include="Commands\ResolveRequestedChanges\ResolveRequestedChangesCommand.cs" />
     <Compile Include="Commands\ResolveRequestedChanges\ResolveRequestedChangesHandler.cs" />
-    <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommand.cs" />
-    <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommandHandler.cs" />
-    <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommandValidator.cs" />
     <Compile Include="Commands\SendTransferConnectionInvitation\SendTransferConnectionInvitationCommandHandler.cs" />
     <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationCommand.cs" />
     <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationHandler.cs" />
@@ -460,9 +457,6 @@
     <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommand.cs" />
     <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommandHandler.cs" />
     <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommandValidator.cs" />
-    <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommand.cs" />
-    <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandHandler.cs" />
-    <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandValidator.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />
@@ -478,12 +472,8 @@
     <Compile Include="Events\ProcessPayment\ProcessPaymentEvent.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEventHandler.cs" />
     <Compile Include="Factories\LevyEventFactory.cs" />
-    <Compile Include="Factories\AccountEventFactory.cs" />
-    <Compile Include="Factories\EmployerAgreementEventFactory.cs" />
     <Compile Include="Factories\GenericEventFactory.cs" />
     <Compile Include="Factories\ILevyEventFactory.cs" />
-    <Compile Include="Factories\IAccountEventFactory.cs" />
-    <Compile Include="Factories\IEmployerAgreementEventFactory.cs" />
     <Compile Include="Factories\IGenericEventFactory.cs" />
     <Compile Include="Factories\ILegalEntityEventFactory.cs" />
     <Compile Include="Factories\IPayeSchemeEventFactory.cs" />
@@ -729,6 +719,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj">
       <Project>{2035D46A-422F-438C-A460-39E60A9F6EAD}</Project>
       <Name>SFA.DAS.EmployerAccounts.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
+      <Project>{B520A3E4-8259-4309-94D4-4A99FD32D2F7}</Project>
+      <Name>SFA.DAS.EmployerAccounts</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
