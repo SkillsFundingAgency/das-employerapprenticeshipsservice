@@ -100,10 +100,12 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\ApiAuthorizeAttribute.cs" />
+    <Compile Include="Controllers\AccountLegalEntitiesController.cs" />
     <Compile Include="Controllers\AccountPayeSchemesController.cs" />
     <Compile Include="Controllers\EmployerAccountsController.cs" />
     <Compile Include="Controllers\EmployerUserController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
+    <Compile Include="Controllers\LegalEntitiesController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="ExceptionLoggers\ErrorLogger.cs" />
     <Compile Include="Global.asax.cs">

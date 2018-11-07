@@ -6,6 +6,7 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.LegalEntities;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client
 {
@@ -68,6 +69,24 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             var json = await _httpClient.GetAsync(url);
 
             return JsonConvert.DeserializeObject<List<ResourceViewModel>>(json);
+        }
+
+        public async Task<ICollection<ResourceViewModel>> GetLegalEntitiesConnectedToAccount(string accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/legalentities";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<List<ResourceViewModel>>(json);
+        }
+
+        public async Task<LegalEntityViewModel> GetLegalEntity(string accountId, long id)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/legalentities/{id}";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<LegalEntityViewModel>(json);
         }
 
         public async Task<T> GetResource<T>(string uri) where T : IAccountResource
