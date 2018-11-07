@@ -1,19 +1,70 @@
-﻿using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
+﻿using System;
+using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System.Web.Mvc;
+using AutoMapper;
+using MediatR;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
-    public class EmployerAgreementController : Controller
+    public class EmployerAgreementController : BaseController
     {
+        private readonly EmployerAgreementOrchestrator _orchestrator;
+        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
+
+
+
+        public EmployerAgreementController(IAuthenticationService owinWrapper,
+            EmployerAgreementOrchestrator orchestrator,
+            IAuthorizationService authorization,
+            IMultiVariantTestingService multiVariantTestingService,
+            ICookieStorageService<FlashMessageViewModel> flashMessage,
+            IMediator mediator,
+            IMapper mapper)
+            : base(owinWrapper, multiVariantTestingService, flashMessage)
+        {
+            if (owinWrapper == null)
+                throw new ArgumentNullException(nameof(owinWrapper));
+            if (orchestrator == null)
+                throw new ArgumentNullException(nameof(orchestrator));
+
+            _orchestrator = orchestrator;
+            _mediator = mediator;
+            _mapper = mapper;
+        }
+
+        public EmployerAgreementController(IAuthenticationService owinWrapper) : base(owinWrapper)
+        {
+        }
+
+
         [HttpGet]
         [Route("agreements")]
-        public ActionResult Index(string hashedAccountId, bool agreementSigned = false)
+        public async Task<ActionResult> Index(string hashedAccountId, bool agreementSigned = false)
         {
-            return Redirect(Url.LegacyEasAccountAction($"agreements?agreementSigned={agreementSigned}"));
+
+            var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+            if (flashMessage != null)
+            {
+                model.FlashMessage = flashMessage;
+            }
+
+            ViewBag.ShowConfirmation = agreementSigned && model.Data.EmployerAgreementsData.HasPendingAgreements;
+
+            return View(model);
+           
         }
 
         [HttpGet]
@@ -36,9 +87,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("agreements/unsigned/view")]
-        public ActionResult ViewUnsignedAgreements(string hashedAccountId)
+        public async Task<ActionResult> ViewUnsignedAgreements(string hashedAccountId)
         {
-            return Redirect(Url.LegacyEasAccountAction("agreements/unsigned/view"));
+            var agreements = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+
+            var unsignedAgreements = agreements.Data.EmployerAgreementsData.TryGetSinglePendingAgreement();
+
+            if (unsignedAgreements == null)
+                return RedirectToAction("Index");
+
+            var hashedAgreementId = unsignedAgreements.Pending.HashedAgreementId;
+
+            return RedirectToAction("AboutYourAgreement", new { agreementId = hashedAgreementId });
         }
 
         [HttpGet]
@@ -91,5 +151,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             return Redirect(Url.LegacyEasAccountAction($"agreements/{agreementId}/next"));
         }
+
     }
 }

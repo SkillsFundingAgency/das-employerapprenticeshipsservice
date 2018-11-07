@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -46,17 +47,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements")]
         public async Task<ActionResult> Index(string hashedAccountId, bool agreementSigned = false)
         {
-            var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            var flashMessage = GetFlashMessageViewModelFromCookie();
-            if (flashMessage != null)
-            {
-                model.FlashMessage = flashMessage;
-            }
-
-            ViewBag.ShowConfirmation = agreementSigned && model.Data.EmployerAgreementsData.HasPendingAgreements;
-
-            return View(model);
+            return Redirect(Url.EmployerAccountsAction("agreements"));
         }
 
         [HttpGet]
@@ -81,16 +72,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("agreements/unsigned/view")]
         public async Task<ActionResult> ViewUnsignedAgreements(string hashedAccountId)
         {
-            var agreements = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            var unsignedAgreements = agreements.Data.EmployerAgreementsData.TryGetSinglePendingAgreement();
-
-            if (unsignedAgreements == null)
-                return RedirectToAction("Index");
-
-            var hashedAgreementId = unsignedAgreements.Pending.HashedAgreementId;
-
-            return RedirectToAction("AboutYourAgreement", new { agreementId = hashedAgreementId });
+            return Redirect(Url.EmployerAccountsAction("agreements/unsigned/view"));
         }
 
         [HttpGet]

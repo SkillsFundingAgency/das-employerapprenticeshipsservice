@@ -143,6 +143,7 @@
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
+    <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="ViewModels\DeletedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\DismissTaskViewModel.cs" />
     <Compile Include="ViewModels\EmployerAccountViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAgreementListViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\EmployerTeamMembersViewModel.cs" />
     <Compile Include="ViewModels\FindOrganisationAddressViewModel.cs" />
@@ -642,6 +644,7 @@
     <Content Include="Views\Organisation\Review.cshtml" />
     <Content Include="Views\Organisation\ReviewIncorrectDetails.cshtml" />
     <Content Include="Views\Organisation\ReviewNoChange.cshtml" />
+    <Content Include="Views\EmployerAgreement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">

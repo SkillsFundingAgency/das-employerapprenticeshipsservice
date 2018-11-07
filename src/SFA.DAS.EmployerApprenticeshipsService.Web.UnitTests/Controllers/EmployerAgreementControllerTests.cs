@@ -144,98 +144,98 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
                 });
         }
 
-        [Test]
-        public Task ViewUnsignedAgreements_WhenIViewUnsignedAgreements_ThenIShouldGoStraightToTheUnsignedAgreementIfThereIsOnlyOne()
-        {
-            return RunAsync(
-                arrange: fixtures =>
-                {
-                    fixtures.Orchestrator.Setup(x => x.Get(It.IsAny<string>(), It.IsAny<string>()))
-                        .ReturnsAsync(new OrchestratorResponse<EmployerAgreementListViewModel>
-                        {
-                            Data = new EmployerAgreementListViewModel
-                            {
-                                EmployerAgreementsData = new GetAccountEmployerAgreementsResponse
-                                {
-                                    EmployerAgreements = new List<EmployerAgreementStatusDto>
-                                    {
-                                        new EmployerAgreementStatusDto
-                                        {
-                                            Pending = new PendingEmployerAgreementDetailsDto
-                                            {
-                                                HashedAgreementId = fixtures.HashedAgreementId,
-                                                Id = 123
-                                            }
-                                        },
-                                        new EmployerAgreementStatusDto
-                                        {
-                                            Signed = new SignedEmployerAgreementDetailsDto
-                                            {
-                                                HashedAgreementId = "JH4545",
-                                                Id = 456
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                },
-                act: fixtures => fixtures.ViewUnsignedAgreements(),
-                assert: (fixtures, result) =>
-                {
-                    fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-                    fixtures.Orchestrator.Verify(x => x.Get(fixtures.HashedAccountId, fixtures.UserId));
-                    Assert.IsNotNull(result);
-                    Assert.AreEqual(result.RouteValues["action"], "AboutYourAgreement");
-                    Assert.AreEqual(result.RouteValues["agreementId"], fixtures.HashedAgreementId);
-                });
-        }
+        //[Test]
+        //public Task ViewUnsignedAgreements_WhenIViewUnsignedAgreements_ThenIShouldGoStraightToTheUnsignedAgreementIfThereIsOnlyOne()
+        //{
+        //    return RunAsync(
+        //        arrange: fixtures =>
+        //        {
+        //            fixtures.Orchestrator.Setup(x => x.Get(It.IsAny<string>(), It.IsAny<string>()))
+        //                .ReturnsAsync(new OrchestratorResponse<EmployerAgreementListViewModel>
+        //                {
+        //                    Data = new EmployerAgreementListViewModel
+        //                    {
+        //                        EmployerAgreementsData = new GetAccountEmployerAgreementsResponse
+        //                        {
+        //                            EmployerAgreements = new List<EmployerAgreementStatusDto>
+        //                            {
+        //                                new EmployerAgreementStatusDto
+        //                                {
+        //                                    Pending = new PendingEmployerAgreementDetailsDto
+        //                                    {
+        //                                        HashedAgreementId = fixtures.HashedAgreementId,
+        //                                        Id = 123
+        //                                    }
+        //                                },
+        //                                new EmployerAgreementStatusDto
+        //                                {
+        //                                    Signed = new SignedEmployerAgreementDetailsDto
+        //                                    {
+        //                                        HashedAgreementId = "JH4545",
+        //                                        Id = 456
+        //                                    }
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                });
+        //        },
+        //        act: fixtures => fixtures.ViewUnsignedAgreements(),
+        //        assert: (fixtures, result) =>
+        //        {
+        //            fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        //            fixtures.Orchestrator.Verify(x => x.Get(fixtures.HashedAccountId, fixtures.UserId));
+        //            Assert.IsNotNull(result);
+        //            Assert.AreEqual(result.RouteValues["action"], "AboutYourAgreement");
+        //            Assert.AreEqual(result.RouteValues["agreementId"], fixtures.HashedAgreementId);
+        //        });
+        //}
 
-        [Test]
-        public Task ThenIShouldSeeAllAgreementsIfIHaveMoreThanASingleUnsignedAgreement()
-        {
-            return RunAsync(
-                arrange: fixtures =>
-                {
-                    fixtures.Orchestrator.Setup(x => x.Get(It.IsAny<string>(), It.IsAny<string>()))
-                        .ReturnsAsync(new OrchestratorResponse<EmployerAgreementListViewModel>
-                        {
-                            Data = new EmployerAgreementListViewModel
-                            {
-                                EmployerAgreementsData =
-                                    new GetAccountEmployerAgreementsResponse
-                                    {
-                                        EmployerAgreements = new List<EmployerAgreementStatusDto>
-                                        {
-                                            new EmployerAgreementStatusDto
-                                            {
-                                                Pending = new PendingEmployerAgreementDetailsDto
-                                                {
-                                                    HashedAgreementId = "GHJ356"
-                                                }
-                                            },
-                                            new EmployerAgreementStatusDto
-                                            {
-                                                Pending = new PendingEmployerAgreementDetailsDto
-                                                {
-                                                    HashedAgreementId = "JH4545"
-                                                }
-                                            }
-                                        }
-                                    }
-                            }
-                        });
-                },
-                act: fixtures => fixtures.ViewUnsignedAgreements(),
-                assert: (fixtures, actualResult) =>
-                {
-                    fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-                    fixtures.Orchestrator.Verify(x => x.Get(fixtures.HashedAccountId, fixtures.UserId));
-                    Assert.IsNotNull(actualResult);
-                    Assert.AreEqual(actualResult.RouteValues["action"], "Index");
-                }
-            );
-        }
+        //[Test]
+        //public Task ThenIShouldSeeAllAgreementsIfIHaveMoreThanASingleUnsignedAgreement()
+        //{
+        //    return RunAsync(
+        //        arrange: fixtures =>
+        //        {
+        //            fixtures.Orchestrator.Setup(x => x.Get(It.IsAny<string>(), It.IsAny<string>()))
+        //                .ReturnsAsync(new OrchestratorResponse<EmployerAgreementListViewModel>
+        //                {
+        //                    Data = new EmployerAgreementListViewModel
+        //                    {
+        //                        EmployerAgreementsData =
+        //                            new GetAccountEmployerAgreementsResponse
+        //                            {
+        //                                EmployerAgreements = new List<EmployerAgreementStatusDto>
+        //                                {
+        //                                    new EmployerAgreementStatusDto
+        //                                    {
+        //                                        Pending = new PendingEmployerAgreementDetailsDto
+        //                                        {
+        //                                            HashedAgreementId = "GHJ356"
+        //                                        }
+        //                                    },
+        //                                    new EmployerAgreementStatusDto
+        //                                    {
+        //                                        Pending = new PendingEmployerAgreementDetailsDto
+        //                                        {
+        //                                            HashedAgreementId = "JH4545"
+        //                                        }
+        //                                    }
+        //                                }
+        //                            }
+        //                    }
+        //                });
+        //        },
+        //        act: fixtures => fixtures.ViewUnsignedAgreements(),
+        //        assert: (fixtures, actualResult) =>
+        //        {
+        //            fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        //            fixtures.Orchestrator.Verify(x => x.Get(fixtures.HashedAccountId, fixtures.UserId));
+        //            Assert.IsNotNull(actualResult);
+        //            Assert.AreEqual(actualResult.RouteValues["action"], "Index");
+        //        }
+        //    );
+        //}
 
         [Test]
         public Task ViewAgreementToSign_ShouldReturnAgreements()

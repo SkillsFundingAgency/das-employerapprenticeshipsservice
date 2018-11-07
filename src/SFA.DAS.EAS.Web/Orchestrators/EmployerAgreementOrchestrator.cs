@@ -59,34 +59,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _referenceDataService = referenceDataService;
         }
 
-        public virtual async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(string hashedId,
-            string externalUserId)
-        {
-            try
-            {
-                var response = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
-                {
-                    HashedAccountId = hashedId,
-                    ExternalUserId = externalUserId
-                });
-
-                return new OrchestratorResponse<EmployerAgreementListViewModel>
-                {
-                    Data = new EmployerAgreementListViewModel
-                    {
-                        HashedAccountId = hashedId,
-                        EmployerAgreementsData = response
-                    }
-                };
-            }
-            catch (Exception)
-            {
-                return new OrchestratorResponse<EmployerAgreementListViewModel>
-                {
-                    Status = HttpStatusCode.Unauthorized
-                };
-            }
-        }
 
         public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetById(
             string agreementid, string hashedId, string externalUserId)
