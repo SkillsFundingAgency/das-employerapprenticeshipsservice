@@ -25,8 +25,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetStatisticsTests
             return RunAsync(f => f.Handle(), (f, r) => r.Should().NotBeNull()
                 .And.Match<GetStatisticsResponse>(r2 =>
                     r2.Statistics != null &&
-                    r2.Statistics.TotalAccounts == 2 &&
-                    r2.Statistics.TotalPayeSchemes == 4 &&
+                    // Todo: replace when decoupled
+                    //r2.Statistics.TotalAccounts == 2 &&
+                    //r2.Statistics.TotalPayeSchemes == 4 &&
                     r2.Statistics.TotalPayments == 2));
         }
     }
