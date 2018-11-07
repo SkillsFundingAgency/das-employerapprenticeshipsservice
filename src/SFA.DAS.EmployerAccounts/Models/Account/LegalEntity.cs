@@ -7,6 +7,7 @@ namespace SFA.DAS.EmployerAccounts.Models.Account
     public class LegalEntity
     {
         public virtual long Id { get; set; }
+        public virtual ICollection<AccountLegalEntity> AccountLegalEntities { get; set; } = new List<AccountLegalEntity>();
         public virtual ICollection<EmployerAgreement> Agreements { get; set; } = new List<EmployerAgreement>();
         public virtual string Code { get; set; }
         public virtual DateTime? DateOfIncorporation { get; set; }

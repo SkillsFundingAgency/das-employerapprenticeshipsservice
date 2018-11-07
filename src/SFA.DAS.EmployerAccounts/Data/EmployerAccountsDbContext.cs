@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 
@@ -25,6 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Data
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAccountSetting> UserAccountSettings { get; set; }
+        public virtual DbSet<Paye> Payees { get; set; }
 
         static EmployerAccountsDbContext()
         {

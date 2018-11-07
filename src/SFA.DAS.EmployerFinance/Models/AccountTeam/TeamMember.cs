@@ -1,5 +1,4 @@
-﻿using SFA.DAS.EAS.Account.Api.Types;
-using System;
+﻿using System;
 using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerFinance.Models.AccountTeam

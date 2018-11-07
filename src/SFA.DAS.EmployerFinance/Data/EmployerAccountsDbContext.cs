@@ -22,6 +22,7 @@ namespace SFA.DAS.EmployerFinance.Data
         public virtual DbSet<LegalEntity> LegalEntities { get; set; }
         public virtual DbSet<Membership> Memberships { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Paye> Payees { get; set; }
 
         static EmployerAccountsDbContext()
         {
