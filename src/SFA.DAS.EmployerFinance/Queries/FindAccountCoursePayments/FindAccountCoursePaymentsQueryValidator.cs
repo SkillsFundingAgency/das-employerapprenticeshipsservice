@@ -2,7 +2,6 @@ using SFA.DAS.Validation;
 using System;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments;
 
 namespace SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments
 {
