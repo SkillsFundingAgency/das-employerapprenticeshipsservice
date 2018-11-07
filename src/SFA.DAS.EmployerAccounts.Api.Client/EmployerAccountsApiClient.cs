@@ -89,6 +89,15 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             return JsonConvert.DeserializeObject<LegalEntityViewModel>(json);
         }
 
+        public async Task<PagedApiResponseViewModel<AccountLegalEntityViewModel>> GetPageOfAccountLegalEntities(int pageNumber = 1, int pageSize = 1000)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accountlegalentities?pageNumber={pageNumber}&pageSize={pageSize}";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<PagedApiResponseViewModel<AccountLegalEntityViewModel>>(json);
+        }
+
         public async Task<T> GetResource<T>(string uri) where T : IAccountResource
         {
             var absoluteUri = new Uri(new Uri(GetBaseUrl()), uri);
