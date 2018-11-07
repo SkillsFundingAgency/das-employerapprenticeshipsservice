@@ -6,7 +6,9 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.LegalEntities;
+using IAccountResource = SFA.DAS.EmployerAccounts.Models.Account.IAccountResource;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client
 {
@@ -96,6 +98,15 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             var json = await _httpClient.GetAsync(url);
 
             return JsonConvert.DeserializeObject<PagedApiResponseViewModel<AccountLegalEntityViewModel>>(json);
+        }
+
+        public async Task<EmployerAgreementView> GetEmployerAgreement(string accountId, string legalEntityId, string agreementId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/legalEntities/{legalEntityId}/agreements/{agreementId}/agreement";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<EmployerAgreementView>(json);
         }
 
         public async Task<T> GetResource<T>(string uri) where T : IAccountResource

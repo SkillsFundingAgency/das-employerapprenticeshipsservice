@@ -11,7 +11,7 @@ using SFA.DAS.EmployerAccounts.Models.LegalEntities;
 using SFA.DAS.EmployerAccounts.Queries.GetPagedAccountLegalEntities;
 using SFA.DAS.Testing;
 
-namespace SFA.DAS.EmployerAccounts.Api.UnitTests
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers
 {
     [TestFixture]
     public class AccountLegalEntitiesControllerTests : FluentTest<AccountLegalEntitiesControllerTestsFixture>

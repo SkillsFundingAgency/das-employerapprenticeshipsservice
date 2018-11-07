@@ -7,7 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 
-namespace SFA.DAS.EmployerAccounts.Api.UnitTests.AccountPayeSchemesControllerTests
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesControllerTests
 {
     [TestFixture]
     public class WhenIGetAPayeScheme : AccountPayeSchemesControllerTests

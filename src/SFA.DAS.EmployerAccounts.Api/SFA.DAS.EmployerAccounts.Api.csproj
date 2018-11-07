@@ -103,6 +103,7 @@
     <Compile Include="Controllers\AccountLegalEntitiesController.cs" />
     <Compile Include="Controllers\AccountPayeSchemesController.cs" />
     <Compile Include="Controllers\EmployerAccountsController.cs" />
+    <Compile Include="Controllers\EmployerAgreementController.cs" />
     <Compile Include="Controllers\EmployerUserController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\LegalEntitiesController.cs" />
@@ -112,6 +113,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Orchestrators\AccountsOrchestrator.cs" />
+    <Compile Include="Orchestrators\AgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\UsersOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

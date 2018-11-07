@@ -7,7 +7,7 @@ using SFA.DAS.EmployerAccounts.Api.Controllers;
 using SFA.DAS.EmployerAccounts.Models.LegalEntities;
 using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 
-namespace SFA.DAS.EmployerAccounts.Api.UnitTests.LegalEntitiesControllerTests
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesControllerTests
 {
     [TestFixture]
     public class WhenIGetALegalEntity

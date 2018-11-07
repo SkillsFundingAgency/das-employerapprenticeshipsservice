@@ -8,11 +8,11 @@ using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Api.UnitTests.LegalEntitiesControllerTests
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesControllerTests
 {
-    public abstract class LegalEntitiesControllerTests
+    public abstract class AccountPayeSchemesControllerTests
     {
-        protected LegalEntitiesController Controller;
+        protected AccountPayeSchemesController Controller;
         protected Mock<IMediator> Mediator;
         protected Mock<ILog> Logger;
         protected Mock<UrlHelper> UrlHelper;
@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.LegalEntitiesControllerTests
             Mapper = new Mock<IMapper>();
             HashingService = new Mock<IHashingService>();
             var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object);
-            Controller = new LegalEntitiesController(orchestrator, null);
+            Controller = new AccountPayeSchemesController(orchestrator);
 
             UrlHelper = new Mock<UrlHelper>();
             Controller.Url = UrlHelper.Object;

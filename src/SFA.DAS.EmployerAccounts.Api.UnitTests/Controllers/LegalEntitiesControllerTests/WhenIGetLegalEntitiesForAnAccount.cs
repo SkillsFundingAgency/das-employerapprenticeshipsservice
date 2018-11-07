@@ -12,24 +12,26 @@ using SFA.DAS.EmployerAccounts.Models.Transfers;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountByHashedId;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferAllowance;
 
-namespace SFA.DAS.EmployerAccounts.Api.UnitTests.AccountPayeSchemesControllerTests
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesControllerTests
 {
     [TestFixture]
-    public class WhenIGetPayeSchemesForAnAccount : AccountPayeSchemesControllerTests
+    public class WhenIGetLegalEntitiesForAnAccount : LegalEntitiesControllerTests
     {
         [Test]
-        public async Task ThenThePayeSchemesAreReturned()
+        public async Task ThenTheLegalEntitiesAreReturned()
         {
             var hashedAccountId = "ABC123";
-            var accountResponse = new GetEmployerAccountByHashedIdResponse { Account = new AccountDetail { LegalEntities = new List<long>(), PayeSchemes = new List<string> { "ABC/123", "ZZZ/999" } } };
+            var accountResponse = new GetEmployerAccountByHashedIdResponse { Account = new AccountDetail { LegalEntities = new List<long> { 1, 4 }, PayeSchemes = new List<string>() } };
             Mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(accountResponse);
 
             Mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceQuery>())).ReturnsAsync(new GetTransferAllowanceResponse { TransferAllowance = new TransferAllowance() });
 
-            UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, payeSchemeRef = accountResponse.Account.PayeSchemes[0].Replace(@"/", "%2f") })))).Returns($"/api/accounts/{hashedAccountId}/payeschemes/{accountResponse.Account.PayeSchemes[0].Replace(@"/", "%2f")}");
-            UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, payeSchemeRef = accountResponse.Account.PayeSchemes[1].Replace(@"/", "%2f") })))).Returns($"/api/accounts/{hashedAccountId}/payeschemes/{accountResponse.Account.PayeSchemes[1].Replace(@"/", "%2f")}");
+            UrlHelper.Setup(x => x.Route("GetLegalEntity", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, legalEntityId = accountResponse.Account.LegalEntities[0].ToString() }))))
+                     .Returns($"/api/accounts/{hashedAccountId}/legalentities/{accountResponse.Account.LegalEntities[0]}");
+            UrlHelper.Setup(x => x.Route("GetLegalEntity", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, legalEntityId = accountResponse.Account.LegalEntities[1].ToString() }))))
+                     .Returns($"/api/accounts/{hashedAccountId}/legalentities/{accountResponse.Account.LegalEntities[1]}");
 
-            var response = await Controller.GetPayeSchemes(hashedAccountId);
+            var response = await Controller.GetLegalEntities(hashedAccountId);
 
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<OkNegotiatedContentResult<ResourceList>>(response);
@@ -37,10 +39,10 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.AccountPayeSchemesControllerTes
 
             model?.Content.Should().NotBeNull();
 
-            foreach (var payeScheme in accountResponse.Account.PayeSchemes)
+            foreach (var legalEntity in accountResponse.Account.LegalEntities)
             {
-                var matchedScheme = model.Content.Single(x => x.Id == payeScheme);
-                matchedScheme.Href.Should().Be($"/api/accounts/{hashedAccountId}/payeschemes/{payeScheme.Replace(@"/", "%2f")}");
+                var matchedEntity = model.Content.Single(x => x.Id == legalEntity.ToString());
+                matchedEntity.Href.Should().Be($"/api/accounts/{hashedAccountId}/legalentities/{legalEntity}");
             }
         }
 
@@ -52,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.AccountPayeSchemesControllerTes
 
             Mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(accountResponse);
 
-            var response = await Controller.GetPayeSchemes(hashedAccountId);
+            var response = await Controller.GetLegalEntities(hashedAccountId);
 
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<NotFoundResult>(response);
