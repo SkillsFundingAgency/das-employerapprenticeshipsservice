@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using SFA.DAS.EAS.LevyAnalyser.ExtensionMethods;
 using SFA.DAS.EAS.LevyAnalyser.Interfaces;
 using SFA.DAS.EAS.LevyAnalyser.Models;
 using SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure;
@@ -19,7 +20,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
 
         public void Validate(Account account, RuleEvaluationResult validationResult)
         {
-            foreach (var declaration in account.LevyDeclarations)
+            foreach (var declaration in account.LevyDeclarations.ExcludePeriod12())
             {
                 if (_hmrcDateService.IsDateInPayrollPeriod(declaration.PayrollYear, declaration.PayrollMonth.Value, declaration.SubmissionDate.Value))
                 {

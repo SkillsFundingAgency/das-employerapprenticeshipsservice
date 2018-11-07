@@ -25,14 +25,15 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
 
         public List<LevyDeclaration> Declarations { get; set; }
 
-        public LevyAnalyzerTestFixtures WithLevy(long subsidyId, string payrollYear, byte payrollMonth, DateTime submissionDate, bool isOnTime)
+        public LevyAnalyzerTestFixtures WithLevy(long submissionId, string payrollYear, byte payrollMonth, DateTime submissionDate, bool isOnTime)
         {
             var levy = new LevyDeclaration
             {
-                Id = subsidyId,
+                Id = submissionId,
                 SubmissionDate = submissionDate,
                 PayrollYear = payrollYear,
-                PayrollMonth = payrollMonth
+                PayrollMonth = payrollMonth,
+                SubmissionId = submissionId
             };
 
             HmrcDateServiceMock

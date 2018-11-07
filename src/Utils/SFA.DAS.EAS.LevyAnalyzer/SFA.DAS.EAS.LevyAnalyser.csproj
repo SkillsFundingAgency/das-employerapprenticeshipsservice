@@ -82,6 +82,9 @@
     <Compile Include="CommandLine\AnalyzeCommandLine.cs" />
     <Compile Include="Config\ConnectionStringEntry.cs" />
     <Compile Include="Config\DatabaseConfig.cs" />
+    <Compile Include="ExtensionMethods\LevyDeclarationExtensions.cs" />
+    <Compile Include="PayrollPeriod.cs" />
+    <Compile Include="PayrollPeriodComparer.cs" />
     <Compile Include="Repositories\DbConnectionFactory.cs" />
     <Compile Include="Interfaces\IRule.cs" />
     <Compile Include="Interfaces\IRuleEvaluationResult.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="IoC\FinanceRegistry.cs" />
     <Compile Include="Rules\Infrastructure\AccountValidationResult.cs" />
     <Compile Include="Rules\Infrastructure\AllAccountValidationResult.cs" />
+    <Compile Include="Rules\SupercededLevyShouldNotResultInATransaction.cs" />
     <Compile Include="Rules\OntimeLevyShouldResultInATransaction.cs" />
     <Compile Include="Rules\LateLevyShouldNotResultInATransaction.cs" />
     <Compile Include="Rules\ShouldBeSomeLevyDeclarationsRule.cs" />

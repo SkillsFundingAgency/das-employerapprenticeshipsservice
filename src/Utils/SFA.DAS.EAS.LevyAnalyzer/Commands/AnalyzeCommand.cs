@@ -9,6 +9,12 @@ using SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure;
 
 namespace SFA.DAS.EAS.LevyAnalyser.Commands
 {
+
+    public class LevyProcessingInformation
+    {
+        public Account Account { get; set; }
+    }
+
     public class AnalyzeCommand : ICommand
     {
         private readonly IAccountRepository _accountRepository;
@@ -40,13 +46,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Commands
             foreach (var accountId in NumberRange.ToInts(config.AccountIds))
             {
                 var account = await _accountRepository.GetAccountAsync(accountId);
-
-                Console.Write($"Fetched account {accountId} ({account.LevyDeclarations.Length} levy declarations - {account.Transactions.Length} transactions)...");
-
                 var levyValidationResult = ValidateLevy(account);
-
-                Console.WriteLine($"{(levyValidationResult.IsValid ? "Valid" : "Invalid")}");
-
                 results.AddResult(levyValidationResult);
             }
 
@@ -55,11 +55,15 @@ namespace SFA.DAS.EAS.LevyAnalyser.Commands
 
         private AccountValidationResult ValidateLevy(Account account)
         {
+            Console.Write($"Fetched account {account.Id} ({account.LevyDeclarations.Length} levy declarations - {account.Transactions.Length} transactions)...");
+
             var result = new AccountValidationResult
             {
                 AccountId = account.Id,
                 Rules = _ruleRepository.ApplyAllRules(account).ToArray()
             };
+
+            Console.WriteLine($"{(result.IsValid ? "Valid" : "Invalid")}");
 
             return result;
         }
