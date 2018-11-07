@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
         public virtual long AccountId { get; set; }
         public virtual User User { get; set; }
         public virtual long UserId { get; set; }
-
+        public virtual DateTime CreatedDate { get; set; }
         public virtual Role Role
         {
             get => _role ?? (Role)_roleId.Value;

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
@@ -57,6 +59,23 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             var json = await _httpClient.GetAsync(url);
 
             return JsonConvert.DeserializeObject<ICollection<AccountDetailViewModel>>(json);
+        }
+
+        public async Task<ICollection<ResourceViewModel>> GetPayeSchemesConnectedToAccount(string accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/payeschemes";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<List<ResourceViewModel>>(json);
+        }
+
+        public async Task<T> GetResource<T>(string uri) where T : IAccountResource
+        {
+            var absoluteUri = new Uri(new Uri(GetBaseUrl()), uri);
+            var json = await _httpClient.GetAsync(absoluteUri.ToString());
+
+            return JsonConvert.DeserializeObject<T>(json);
         }
 
         private string GetBaseUrl()
