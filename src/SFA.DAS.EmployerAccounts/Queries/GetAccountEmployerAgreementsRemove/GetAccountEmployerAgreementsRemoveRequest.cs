@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
 {
     public class GetAccountEmployerAgreementsRemoveRequest : IAsyncRequest<GetAccountEmployerAgreementsRemoveResponse>
     {

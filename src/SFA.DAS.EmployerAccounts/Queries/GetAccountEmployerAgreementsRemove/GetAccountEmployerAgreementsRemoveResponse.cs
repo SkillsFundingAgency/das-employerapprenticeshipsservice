@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
-namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
 {
     public class GetAccountEmployerAgreementsRemoveResponse
     {

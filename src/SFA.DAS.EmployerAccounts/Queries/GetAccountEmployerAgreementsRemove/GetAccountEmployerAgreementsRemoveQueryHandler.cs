@@ -1,16 +1,16 @@
-using MediatR;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.HashingService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.HashingService;
+using SFA.DAS.Validation;
 
-namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
 {
     public class GetAccountEmployerAgreementsRemoveQueryHandler : IAsyncRequestHandler<GetAccountEmployerAgreementsRemoveRequest, GetAccountEmployerAgreementsRemoveResponse>
     {
@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
             {
                 foreach (var removeEmployerAgreementView in result)
                 {
-                    removeEmployerAgreementView.HashedAgreementId = _hashingService.HashValue(removeEmployerAgreementView.Id);
+                    removeEmployerAgreementView.HashedAgreementId = _hashingService.HashValue((long) removeEmployerAgreementView.Id);
                     removeEmployerAgreementView.HashedAccountId = message.HashedAccountId;
 
                     if (result.Count != 1)

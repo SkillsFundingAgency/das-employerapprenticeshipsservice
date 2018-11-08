@@ -184,6 +184,7 @@
     <Compile Include="ViewModels\InvitationViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberNextStepsViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberViewModel.cs" />
+    <Compile Include="ViewModels\LegalAgreementsToRemoveViewModel.cs" />
     <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
     <Compile Include="ViewModels\NavigationViewModel.cs" />
     <Compile Include="ViewModels\NotificationSettingsViewModel.cs" />
@@ -653,6 +654,7 @@
     <Content Include="Views\EmployerAgreement\View.cshtml" />
     <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
     <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
+    <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">

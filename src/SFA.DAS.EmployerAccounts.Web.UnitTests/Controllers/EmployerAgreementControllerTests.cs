@@ -24,13 +24,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
     [TestFixture]
     public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementControllerTestFixtures>
     {
-        //[Test]
-        //public Task GetOrganisationsToRemove_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToGetAccountsToRemove()
-        //{
-        //    return RunAsync(
-        //        act: fixtures => fixtures.GetOrganisationsToRemove(),
-        //        assert: (fixtures, result) => fixtures.Orchestrator.Verify(x => x.GetLegalAgreementsToRemove(fixtures.HashedAccountId, fixtures.UserId), Times.Once));
-        //}
+        [Test]
+        public Task GetOrganisationsToRemove_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToGetAccountsToRemove()
+        {
+            return RunAsync(
+                act: fixtures => fixtures.GetOrganisationsToRemove(),
+                assert: (fixtures, result) => fixtures.Orchestrator.Verify(x => x.GetLegalAgreementsToRemove(fixtures.HashedAccountId, fixtures.UserId), Times.Once));
+        }
 
         //[Test]
         //public Task ConfirmRemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToGetTheConfirmRemoveModel()
@@ -327,11 +327,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             return controller;
         }
 
-        //public Task<ActionResult> GetOrganisationsToRemove()
-        //{
-        //    var controller = CreateController();
-        //    return controller.GetOrganisationsToRemove(HashedAccountId);
-        //}
+        public Task<ActionResult> GetOrganisationsToRemove()
+        {
+            var controller = CreateController();
+            return controller.GetOrganisationsToRemove(HashedAccountId);
+        }
 
         //public Task<ActionResult> ConfirmRemoveOrganisation()
         //{

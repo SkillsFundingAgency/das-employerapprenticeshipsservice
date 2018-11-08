@@ -6,13 +6,13 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove;
-using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove;
 using SFA.DAS.HashingService;
+using SFA.DAS.Validation;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementsRemove
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreementsRemove
 {
     public class WhenIGetAccountEmployerAgreementsToRemove : QueryBaseTest<GetAccountEmployerAgreementsRemoveQueryHandler,GetAccountEmployerAgreementsRemoveRequest, GetAccountEmployerAgreementsRemoveResponse>
     {

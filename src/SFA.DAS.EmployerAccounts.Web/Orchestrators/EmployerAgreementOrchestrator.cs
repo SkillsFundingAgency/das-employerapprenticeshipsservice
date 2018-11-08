@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
@@ -306,6 +307,45 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         {
             var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
             return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
+        }
+
+
+
+        public virtual async Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, string userId)
+        {
+            var response = new OrchestratorResponse<LegalAgreementsToRemoveViewModel>();
+            try
+            {
+                var result = await _mediator.SendAsync(new GetAccountEmployerAgreementsRemoveRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = userId
+                });
+
+                response.Data = new LegalAgreementsToRemoveViewModel
+                {
+                    Agreements = result.Agreements
+
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                response.Status = HttpStatusCode.BadRequest;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = ex.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
+                response.Exception = ex;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+                response.Exception = ex;
+            }
+            return response;
         }
     }
 }

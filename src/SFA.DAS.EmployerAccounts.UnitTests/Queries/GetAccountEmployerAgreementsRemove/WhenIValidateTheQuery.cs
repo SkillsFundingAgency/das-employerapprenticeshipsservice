@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementsRemove
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreementsRemove
 {
     public class WhenIValidateTheQuery
     {

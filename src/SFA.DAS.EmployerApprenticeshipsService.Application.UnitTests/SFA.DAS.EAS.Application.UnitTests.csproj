@@ -342,8 +342,6 @@
     <Compile Include="Queries\GetAccountBalancesTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementRemove\WhenIGetAccountEmployerAgreementToRemove.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementRemove\WhenIValidateTheQuery.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementsRemove\WhenIGetAccountEmployerAgreementsToRemove.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementsRemove\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountPAYESchemes\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountPAYESchemes\WhenIGetAccountPayeSchemes.cs" />

@@ -256,9 +256,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("agreements/remove")]
-        public ActionResult GetOrganisationsToRemove(string hashedAccountId)
+        public async Task<ActionResult> GetOrganisationsToRemove(string hashedAccountId)
         {
-            return Redirect(Url.LegacyEasAccountAction("agreements/remove"));
+            var model = await _orchestrator.GetLegalAgreementsToRemove(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+
+            return View(model);
         }
 
         [HttpGet]

@@ -578,7 +578,6 @@
     <Compile Include="ViewModels\InvalidStateViewModel.cs" />
     <Compile Include="ViewModels\NotificationSettingsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\ConfirmLegalAgreementToRemoveViewModel.cs" />
-    <Compile Include="ViewModels\Organisation\LegalAgreementsToRemoveViewModel.cs" />
     <Compile Include="ViewModels\SummaryUnsubscribeViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
     <Compile Include="ViewModels\Organisation\AddLegalEntityViewModel.cs" />
@@ -1046,7 +1045,6 @@
     <Content Include="src\sass\_notifications.scss" />
     <Content Include="src\sass\_navigation.scss" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
-    <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="src\sass\_welcome.scss" />
     <Content Include="Views\Settings\NotificationSettings.cshtml" />
     <Content Include="Views\Settings\NotificationUnsubscribe.cshtml" />

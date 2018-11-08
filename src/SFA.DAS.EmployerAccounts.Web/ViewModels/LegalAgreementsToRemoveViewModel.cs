@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
-namespace SFA.DAS.EAS.Web.ViewModels.Organisation
+namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
     public class LegalAgreementsToRemoveViewModel : ViewModelBase
     {

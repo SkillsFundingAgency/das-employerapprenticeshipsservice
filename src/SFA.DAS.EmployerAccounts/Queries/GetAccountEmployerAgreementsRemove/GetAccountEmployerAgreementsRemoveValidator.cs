@@ -1,11 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using SFA.DAS.Authorization;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 
-namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
 {
     public class GetAccountEmployerAgreementsRemoveValidator : IValidator<GetAccountEmployerAgreementsRemoveRequest>
     {
