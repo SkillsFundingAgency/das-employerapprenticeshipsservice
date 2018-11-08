@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
         public void Validate_AccountHasLateDeclarationAndNoTransaction_IsValid()
         {
             var fixtures = new LevyAnalyzerTestFixtures()
-                .WithLevy(123, "18-19", 5, new DateTime(2018, 12, 25), false);
+                .WithLateLevy(123, "18-19", 5, new DateTime(2018, 12, 25));
 
             var rule = new LateLevyShouldNotResultInATransaction(fixtures.HmrcDateService);
 
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
         public void Validate_AccountHasLateDeclarationAndTransaction_IsInvalid()
         {
             var fixtures = new LevyAnalyzerTestFixtures()
-                .WithLevy(123, "18-19", 5, new DateTime(2018, 12, 25), false)
+                .WithLateLevy(123, "18-19", 5, new DateTime(2018, 12, 25))
                 .WithTransaction(123);
 
             var rule = new LateLevyShouldNotResultInATransaction(fixtures.HmrcDateService);

@@ -7,6 +7,10 @@ using SFA.DAS.EmployerFinance.Services;
 
 namespace SFA.DAS.EAS.LevyAnalyser.Rules
 {
+    /// <summary>
+    ///     Validates that late levy declarations do not result in a transaction.
+    ///     Only applies to non-period 12.
+    /// </summary>
     public class LateLevyShouldNotResultInATransaction : IRule
     {
         private readonly IHmrcDateService _hmrcDateService;
@@ -16,13 +20,15 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
             _hmrcDateService = hmrcDateService;
         }
 
+        public ValidationObject RequiredValidationObject => ValidationObject.Account;
+
         public string Name => nameof(LateLevyShouldNotResultInATransaction);
 
-        public void Validate(Account account, RuleEvaluationResult validationResult)
+        public void Validate(IValidateableObject account, RuleEvaluationResult validationResult)
         {
             bool foundLate = false;
 
-            foreach (var declaration in account.LevyDeclarations.ExcludePeriod12())
+            foreach (var declaration in account.LevyDeclarations.ExcludeInvalidDeclarations().ExcludePeriod12())
             {
                 if (!_hmrcDateService.IsDateInPayrollPeriod(declaration.PayrollYear, declaration.PayrollMonth.Value, declaration.SubmissionDate.Value))
                 {

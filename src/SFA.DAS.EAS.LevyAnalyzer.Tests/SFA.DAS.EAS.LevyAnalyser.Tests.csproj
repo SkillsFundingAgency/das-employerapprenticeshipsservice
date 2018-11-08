@@ -63,6 +63,7 @@
     <Compile Include="Extensions\LevyDeclarationExtensionsTests.cs" />
     <Compile Include="PayrollPeriodComparerTests.cs" />
     <Compile Include="Rules\SupercededLevyShouldNotResultInATransactionTests.cs" />
+    <Compile Include="Rules\LevyDeclaredForMonthShouldMatchExpectedTests.cs" />
     <Compile Include="TestUtils\LevyAnalyzerTestFixtures.cs" />
     <Compile Include="Rules\OntimeLevyShouldResultInATransactionTests.cs" />
     <Compile Include="Rules\LateLevyShouldNotResultInATransactionTests.cs" />

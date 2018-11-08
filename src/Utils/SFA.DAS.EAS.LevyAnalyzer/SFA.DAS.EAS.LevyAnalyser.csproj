@@ -82,7 +82,10 @@
     <Compile Include="CommandLine\AnalyzeCommandLine.cs" />
     <Compile Include="Config\ConnectionStringEntry.cs" />
     <Compile Include="Config\DatabaseConfig.cs" />
+    <Compile Include="ExtensionMethods\AccountExtensions.cs" />
     <Compile Include="ExtensionMethods\LevyDeclarationExtensions.cs" />
+    <Compile Include="Models\Employer.cs" />
+    <Compile Include="Models\IValidateableObject.cs" />
     <Compile Include="PayrollPeriod.cs" />
     <Compile Include="PayrollPeriodComparer.cs" />
     <Compile Include="Repositories\DbConnectionFactory.cs" />
@@ -90,12 +93,13 @@
     <Compile Include="Interfaces\IRuleEvaluationResult.cs" />
     <Compile Include="Interfaces\IRuleRepository.cs" />
     <Compile Include="IoC\FinanceRegistry.cs" />
+    <Compile Include="Rules\CalculatedLevyDeclation.cs" />
     <Compile Include="Rules\Infrastructure\AccountValidationResult.cs" />
     <Compile Include="Rules\Infrastructure\AllAccountValidationResult.cs" />
+    <Compile Include="Rules\LevyDeclaredForMonthShouldMatchExpected.cs" />
     <Compile Include="Rules\SupercededLevyShouldNotResultInATransaction.cs" />
     <Compile Include="Rules\OntimeLevyShouldResultInATransaction.cs" />
     <Compile Include="Rules\LateLevyShouldNotResultInATransaction.cs" />
-    <Compile Include="Rules\ShouldBeSomeLevyDeclarationsRule.cs" />
     <Compile Include="Rules\Infrastructure\RuleRepository.cs" />
     <Compile Include="Rules\Infrastructure\RuleEntryLevel.cs" />
     <Compile Include="Rules\Infrastructure\RuleEvaluationResult.cs" />

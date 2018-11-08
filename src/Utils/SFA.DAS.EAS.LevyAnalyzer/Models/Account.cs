@@ -1,19 +1,23 @@
-﻿namespace SFA.DAS.EAS.LevyAnalyser.Models
+﻿using System;
+
+namespace SFA.DAS.EAS.LevyAnalyser.Models
 {
-    public class Account
+    public class Account : IValidateableObject
     {
         public Account(
-            long id,
+            long accountId,
             TransactionLine[] transactions, 
             LevyDeclaration[] levyDeclarations)
         {
-            Id = id;
+            AccountId = accountId;
             Transactions = transactions;
             LevyDeclarations = levyDeclarations;
         }
 
-        public long Id { get; }
+        public long AccountId { get; }
         public TransactionLine[] Transactions { get; }
         public LevyDeclaration[] LevyDeclarations { get; }
+
+        public object Id => AccountId;
     }
 }

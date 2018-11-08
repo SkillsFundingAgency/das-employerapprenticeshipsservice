@@ -14,9 +14,9 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
         public bool IsValid => Accounts != null && Accounts.All(account => account.IsValid);
         public IReadOnlyCollection<AccountValidationResult> Accounts => _accountResults;
 
-        public void AddResult(AccountValidationResult accountResult)
+        public void AddResult(AccountValidationResult result)
         {
-            _accountResults.Add(accountResult);
+            _accountResults.Add(result);
         }
     }
 }

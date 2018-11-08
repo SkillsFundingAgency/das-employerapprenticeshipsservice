@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
         public void Validate_AccountWithOnTimeDeclarationAndTransaction_IsValid()
         {
             var fixtures = new LevyAnalyzerTestFixtures()
-                .WithLevy(123, "18-19", 5, new DateTime(2018, 12, 25), true)
+                .WithOntimeLevy(123, "18-19", 5, new DateTime(2018, 12, 25))
                 .WithTransaction(123);
 
             var rule = new OntimeLevyShouldResultInATransaction(fixtures.HmrcDateService);
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
         public void Validate_AccountWithOnTimeDeclarationAndNoTransaction_IsInvalid()
         {
             var fixtures = new LevyAnalyzerTestFixtures()
-                .WithLevy(123, "18-19", 5, new DateTime(2018, 12, 25), true);
+                .WithOntimeLevy(123, "18-19", 5, new DateTime(2018, 12, 25));
 
             var rule = new OntimeLevyShouldResultInATransaction(fixtures.HmrcDateService);
 

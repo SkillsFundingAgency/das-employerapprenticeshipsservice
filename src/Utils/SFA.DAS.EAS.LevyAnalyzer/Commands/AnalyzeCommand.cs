@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SFA.DAS.EAS.LevyAnalyser.Interfaces;
 using SFA.DAS.EAS.LevyAnalyser.Models;
 using SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure;
+using Exception = System.Exception;
 
 namespace SFA.DAS.EAS.LevyAnalyser.Commands
 {
@@ -46,12 +47,32 @@ namespace SFA.DAS.EAS.LevyAnalyser.Commands
             foreach (var accountId in NumberRange.ToInts(config.AccountIds))
             {
                 var account = await _accountRepository.GetAccountAsync(accountId);
-                var levyValidationResult = ValidateLevy(account);
-                results.AddResult(levyValidationResult);
+                if (TryValidateAccount(account, out var levyValidationResult))
+                {
+                    results.AddResult(levyValidationResult);
+                }
             }
 
             await _resultSaver.SaveAsync(results);
         }
+
+        private bool TryValidateAccount(Account account, out AccountValidationResult validationResult)
+        {
+            try
+            {
+                validationResult = ValidateLevy(account);
+            }
+            catch (Exception e)
+            {
+                Console.Write($"Failed to validate account - {e.Message}");
+                Console.Write($"Stack trace - {e.StackTrace}");
+                _resultSaver.SaveAsync(account);
+                validationResult = null;
+            }
+
+            return validationResult != null;
+        }
+
 
         private AccountValidationResult ValidateLevy(Account account)
         {
@@ -59,7 +80,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Commands
 
             var result = new AccountValidationResult
             {
-                AccountId = account.Id,
+                AccountId = account.AccountId,
                 Rules = _ruleRepository.ApplyAllRules(account).ToArray()
             };
 

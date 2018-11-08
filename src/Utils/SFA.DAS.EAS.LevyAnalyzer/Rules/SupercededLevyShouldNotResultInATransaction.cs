@@ -7,6 +7,11 @@ using SFA.DAS.EmployerFinance.Services;
 
 namespace SFA.DAS.EAS.LevyAnalyser.Rules
 {
+
+    /// <summary>
+    ///     Validates that only the latest on-time submission for a period results in a transaction.
+    ///     Only applies to non-period 12.
+    /// </summary>
     public class SupercededLevyShouldNotResultInATransaction : IRule
     {
         private readonly IHmrcDateService _hmrcDateService;
@@ -18,18 +23,15 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
 
         public string Name => nameof(SupercededLevyShouldNotResultInATransaction);
 
-        public void Validate(Account account, RuleEvaluationResult validationResult)
-        {
-            var x = account.LevyDeclarations
-                .ExcludePeriod12()
-                .ExcludeLateSubmissions(_hmrcDateService)
-                .GroupByPayrollPeriod();
+        public ValidationObject RequiredValidationObject => ValidationObject.Employer;
 
-            var periodsWithMultipleOntimeSubmissions = account.LevyDeclarations
+        public void Validate(IValidateableObject employer, RuleEvaluationResult validationResult)
+        {
+            var periodsWithMultipleOntimeSubmissions = employer.LevyDeclarations
                 .ExcludePeriod12()
                 .ExcludeLateSubmissions(_hmrcDateService)
                 .GroupByPayrollPeriod()
-                .Where(grp => grp.Count() > 1)
+                .Where(grp => grp.Declarations.Length > 1)
                 .ToArray();
 
             if (periodsWithMultipleOntimeSubmissions.Length == 0)
@@ -38,8 +40,9 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
             }
 
             var submissionsThatHaveBeenSupercededButStillHaveATransaction = periodsWithMultipleOntimeSubmissions
-                            .SelectMany(grp => grp.OrderByDescending(declaration => declaration.SubmissionDate).Skip(1))
-                            .Where(declaration => account.Transactions.Any(transaction => transaction.SubmissionId == declaration.SubmissionId));
+                            .Where(grp => grp.PayrollPeriod.PayrollMonth != 12)
+                            .SelectMany(grp => grp.Declarations.Reverse().Skip(1))
+                            .Where(declaration => employer.Transactions.Any(transaction => transaction.SubmissionId == declaration.SubmissionId));
 
             foreach (var declaration in submissionsThatHaveBeenSupercededButStillHaveATransaction)
             {

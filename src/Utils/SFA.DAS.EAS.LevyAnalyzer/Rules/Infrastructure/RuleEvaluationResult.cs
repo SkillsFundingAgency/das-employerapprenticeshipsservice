@@ -13,16 +13,28 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
     {
         private readonly List<RuleEvaluationMessage> _messages = new List<RuleEvaluationMessage>();
 
-        public RuleEvaluationResult(string ruleName)
+        public RuleEvaluationResult(string ruleName, ValidationObject validationObject, object id)
         {
             RuleName = ruleName;
             IsValid = true;
+            ValidationObject = validationObject;
+            Id = id;
         }
 
         /// <summary>
         ///     A descriptive, unique name for the rule.
         /// </summary>
         public string RuleName { get; }
+
+        /// <summary>
+        ///     The type of object being validated (either account or employer).
+        /// </summary>
+        public ValidationObject ValidationObject { get; set; }
+
+        /// <summary>
+        ///     The id of the object being validated. This is either the account id or the PAYE ref.
+        /// </summary>
+        public object Id { get; set; }
 
         /// <summary>
         ///     Did the rule validate the account without issue?
