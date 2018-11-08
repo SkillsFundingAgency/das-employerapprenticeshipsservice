@@ -61,11 +61,11 @@
     <Reference Include="SFA.DAS.Support.Shared, Version=2.1.11.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Support.Shared.2.1.11\lib\net462\SFA.DAS.Support.Shared.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.1.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.1.16\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.TokenService.Api.Types, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.TokenService.Api.Types, Version=1.1.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.1.16\lib\net45\SFA.DAS.TokenService.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

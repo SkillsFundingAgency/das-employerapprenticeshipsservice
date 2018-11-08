@@ -2,7 +2,6 @@
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Web.Extensions
-@using SFA.DAS.EmployerAccounts.Web.ViewModels
 @using SFA.DAS.Extensions
 
 <!DOCTYPE html>
@@ -177,7 +176,7 @@ if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetPro
                 <nav class="header-inner">
                     <ul role="menubar" id="global-nav-links">
                         <li><a href="@Url.Action("Index", "EmployerTeam")" class="@(ViewBag.Section == "home" ? "selected" : "")" role="menuitem">Home</a></li>
-                        <li><a href="@Url.LegacyEasAccountAction("finance")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
+                        <li><a href="@Url.EmployerFinanceAction("finance")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
                         @if (Html.IsAuthorized(FeatureType.Recruitments))
                             {
                                 <li><a href="@Url.EmployerRecruitAction()" role="menuitem">Recruitment</a></li>
