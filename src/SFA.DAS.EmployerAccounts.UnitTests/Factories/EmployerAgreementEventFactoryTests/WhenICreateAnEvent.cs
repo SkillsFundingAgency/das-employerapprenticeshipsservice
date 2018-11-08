@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Factories;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Factories.EmployerAgreementEventFactoryTests
 {

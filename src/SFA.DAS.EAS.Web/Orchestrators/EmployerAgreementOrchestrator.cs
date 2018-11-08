@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using SFA.DAS.EAS.Application.Commands.RemoveLegalEntity;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf;
@@ -11,7 +10,6 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using SFA.DAS.NLog.Logger;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.Authorization;
