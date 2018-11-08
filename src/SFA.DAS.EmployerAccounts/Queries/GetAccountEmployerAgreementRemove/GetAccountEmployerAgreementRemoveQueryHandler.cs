@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
+using SFA.DAS.Validation;
 
-namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementRemove
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove
 {
     public class GetAccountEmployerAgreementRemoveQueryHandler : IAsyncRequestHandler<GetAccountEmployerAgreementRemoveRequest, GetAccountEmployerAgreementRemoveResponse>
     {

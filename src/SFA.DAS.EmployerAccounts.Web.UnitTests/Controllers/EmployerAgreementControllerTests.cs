@@ -32,43 +32,43 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 assert: (fixtures, result) => fixtures.Orchestrator.Verify(x => x.GetLegalAgreementsToRemove(fixtures.HashedAccountId, fixtures.UserId), Times.Once));
         }
 
-        //[Test]
-        //public Task ConfirmRemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToGetTheConfirmRemoveModel()
-        //{
-        //    return RunAsync(
-        //        act: fixtures => fixtures.ConfirmRemoveOrganisation(),
-        //        assert: (fixtures, result) => fixtures.Orchestrator.Verify(
-        //            x => x.GetConfirmRemoveOrganisationViewModel(fixtures.HashedAgreementId, fixtures.HashedAccountId, fixtures.UserId), Times.Once));
-        //}
+        [Test]
+        public Task ConfirmRemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToGetTheConfirmRemoveModel()
+        {
+            return RunAsync(
+                act: fixtures => fixtures.ConfirmRemoveOrganisation(),
+                assert: (fixtures, result) => fixtures.Orchestrator.Verify(
+                    x => x.GetConfirmRemoveOrganisationViewModel(fixtures.HashedAgreementId, fixtures.HashedAccountId, fixtures.UserId), Times.Once));
+        }
 
-        //[Test]
-        //public Task ConfirmRemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheFlashMessageIsPopulatedFromTheCookieWhenGettingTheConfirmRemoveAction()
-        //{
-        //    return RunAsync(
-        //        arrange: fixtures =>
-        //        {
-        //            fixtures.FlashMessage
-        //                .Setup(x => x.Get("sfa-das-employerapprenticeshipsservice-flashmessage"))
-        //                .Returns(new FlashMessageViewModel { Headline = "" });
+        [Test]
+        public Task ConfirmRemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheFlashMessageIsPopulatedFromTheCookieWhenGettingTheConfirmRemoveAction()
+        {
+            return RunAsync(
+                arrange: fixtures =>
+                {
+                    fixtures.FlashMessage
+                        .Setup(x => x.Get("sfa-das-employerapprenticeshipsservice-flashmessage"))
+                        .Returns(new FlashMessageViewModel { Headline = "" });
 
-        //            fixtures.Orchestrator
-        //                .Setup(x => x.GetConfirmRemoveOrganisationViewModel(fixtures.HashedAgreementId, fixtures.HashedAccountId, fixtures.UserId))
-        //                .ReturnsAsync(new OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>
-        //                {
-        //                    Data = new ConfirmLegalAgreementToRemoveViewModel()
-        //                });
-        //        },
-        //        act: fixtures => fixtures.ConfirmRemoveOrganisation(),
-        //        assert: (fixtures, actualResult) =>
-        //        {
-        //            Assert.IsNotNull(actualResult);
-        //            var viewResult = actualResult as ViewResult;
-        //            Assert.IsNotNull(viewResult);
-        //            var actualModel = viewResult.Model as OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>;
-        //            Assert.IsNotNull(actualModel);
-        //            Assert.IsNotNull(actualModel.FlashMessage);
-        //        });
-        //}
+                    fixtures.Orchestrator
+                        .Setup(x => x.GetConfirmRemoveOrganisationViewModel(fixtures.HashedAgreementId, fixtures.HashedAccountId, fixtures.UserId))
+                        .ReturnsAsync(new OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>
+                        {
+                            Data = new ConfirmLegalAgreementToRemoveViewModel()
+                        });
+                },
+                act: fixtures => fixtures.ConfirmRemoveOrganisation(),
+                assert: (fixtures, actualResult) =>
+                {
+                    Assert.IsNotNull(actualResult);
+                    var viewResult = actualResult as ViewResult;
+                    Assert.IsNotNull(viewResult);
+                    var actualModel = viewResult.Model as OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>;
+                    Assert.IsNotNull(actualModel);
+                    Assert.IsNotNull(actualModel.FlashMessage);
+                });
+        }
 
         //[Test]
         //public Task RemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToRemoveTheOrg()
@@ -333,11 +333,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             return controller.GetOrganisationsToRemove(HashedAccountId);
         }
 
-        //public Task<ActionResult> ConfirmRemoveOrganisation()
-        //{
-        //    var controller = CreateController();
-        //    return controller.ConfirmRemoveOrganisation(HashedAgreementId, HashedAccountId);
-        //}
+        public Task<ActionResult> ConfirmRemoveOrganisation()
+        {
+            var controller = CreateController();
+            return controller.ConfirmRemoveOrganisation(HashedAgreementId, HashedAccountId);
+        }
 
         //public Task<ActionResult> RemoveOrganisation()
         //{

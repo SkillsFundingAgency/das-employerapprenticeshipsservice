@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -62,46 +61,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
 
-        public virtual async Task<OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string agreementId, string hashedAccountId, string userId)
-        {
-            var response = new OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>();
-            try
-            {
-                var result = await _mediator.SendAsync(new GetAccountEmployerAgreementRemoveRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    UserId = userId,
-                    HashedAgreementId = agreementId
-                });
-                response.Data = new ConfirmLegalAgreementToRemoveViewModel
-                {
-                    HashedAccountId = result.Agreement.HashedAccountId,
-                    HashedAgreementId = result.Agreement.HashedAgreementId,
-                    Id = result.Agreement.Id,
-                    Name = result.Agreement.Name,
-                    AgreementStatus = result.Agreement.Status
-                };
-            }
-            catch (InvalidRequestException ex)
-            {
-                response.Status = HttpStatusCode.BadRequest;
-                response.FlashMessage = new FlashMessageViewModel
-                {
-                    Headline = "Errors to fix",
-                    Message = "Check the following details:",
-                    ErrorMessages = ex.ErrorMessages,
-                    Severity = FlashMessageSeverityLevel.Error
-                };
-                response.Exception = ex;
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                response.Status = HttpStatusCode.Unauthorized;
-                response.Exception = ex;
-            }
-
-            return response;
-        }
 
       
     }

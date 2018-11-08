@@ -2,7 +2,6 @@
 using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System.Web.Mvc;
 using AutoMapper;
@@ -265,9 +264,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("agreements/remove/{agreementId}")]
-        public ActionResult ConfirmRemoveOrganisation(string agreementId, string hashedAccountId)
+        public async Task<ActionResult> ConfirmRemoveOrganisation(string agreementId, string hashedAccountId)
         {
-            return Redirect(Url.LegacyEasAccountAction($"agreements/{agreementId}/next"));
+            var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+            if (flashMessage != null)
+            {
+                model.FlashMessage = flashMessage;
+                model.Data.ErrorDictionary = model.FlashMessage.ErrorMessages;
+            }
+
+            return View(model);
+
         }
 
 

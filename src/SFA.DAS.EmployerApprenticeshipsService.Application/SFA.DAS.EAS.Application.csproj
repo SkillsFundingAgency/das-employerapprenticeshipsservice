@@ -526,10 +526,6 @@
     <Compile Include="Queries\GetLatestActivities\GetLatestActivitiesQuery.cs" />
     <Compile Include="Queries\GetLatestActivities\GetLatestActivitiesQueryHandler.cs" />
     <Compile Include="Queries\GetLatestActivities\GetLatestActivitiesResponse.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementRemove\GetAccountEmployerAgreementRemoveQueryHandler.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementRemove\GetAccountEmployerAgreementRemoveRequest.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementRemove\GetAccountEmployerAgreementRemoveResponse.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementRemove\GetAccountEmployerAgreementRemoveValidator.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsQueryHandler.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsResponse.cs" />

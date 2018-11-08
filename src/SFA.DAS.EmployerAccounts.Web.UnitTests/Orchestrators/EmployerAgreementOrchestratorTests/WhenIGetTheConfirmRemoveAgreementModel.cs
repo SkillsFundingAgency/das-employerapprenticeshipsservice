@@ -1,20 +1,20 @@
-using AutoMapper;
-using MediatR;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementRemove;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
+using MediatR;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove;
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
     public class WhenIGetTheConfirmRemoveAgreementModel
     {

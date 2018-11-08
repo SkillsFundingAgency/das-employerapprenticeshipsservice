@@ -340,8 +340,6 @@
     <Compile Include="Queries\GetActivitiesTests\WhenIGetActivities.cs" />
     <Compile Include="Queries\GetAccountBalancesTests\WhenIGetAccountBalances.cs" />
     <Compile Include="Queries\GetAccountBalancesTests\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementRemove\WhenIGetAccountEmployerAgreementToRemove.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementRemove\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountPAYESchemes\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountPAYESchemes\WhenIGetAccountPayeSchemes.cs" />
@@ -477,6 +475,7 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Queries\GetAccountEmployerAgreementRemove\" />
     <Folder Include="Queries\GetSignedEmployerAgreementPdfTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

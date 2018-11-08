@@ -1,6 +1,6 @@
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
-namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementRemove
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove
 {
     public class GetAccountEmployerAgreementRemoveResponse
     {

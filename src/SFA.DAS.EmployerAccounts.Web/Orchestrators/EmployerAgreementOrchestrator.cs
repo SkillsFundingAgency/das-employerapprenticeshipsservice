@@ -11,6 +11,7 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
@@ -345,6 +346,47 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 response.Status = HttpStatusCode.Unauthorized;
                 response.Exception = ex;
             }
+            return response;
+        }
+
+        public virtual async Task<OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string agreementId, string hashedAccountId, string userId)
+        {
+            var response = new OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>();
+            try
+            {
+                var result = await _mediator.SendAsync(new GetAccountEmployerAgreementRemoveRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = userId,
+                    HashedAgreementId = agreementId
+                });
+                response.Data = new ConfirmLegalAgreementToRemoveViewModel
+                {
+                    HashedAccountId = result.Agreement.HashedAccountId,
+                    HashedAgreementId = result.Agreement.HashedAgreementId,
+                    Id = result.Agreement.Id,
+                    Name = result.Agreement.Name,
+                    AgreementStatus = result.Agreement.Status
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                response.Status = HttpStatusCode.BadRequest;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = ex.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
+                response.Exception = ex;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+                response.Exception = ex;
+            }
+
             return response;
         }
     }

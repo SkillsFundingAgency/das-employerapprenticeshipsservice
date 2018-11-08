@@ -119,18 +119,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements/remove/{agreementId}")]
-        public async Task<ActionResult> ConfirmRemoveOrganisation(string agreementId, string hashedAccountId)
+        public async Task<ActionResult> ConfirmRemoveOrganisation(string agreementId)
         {
-            var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            var flashMessage = GetFlashMessageViewModelFromCookie();
-            if (flashMessage != null)
-            {
-                model.FlashMessage = flashMessage;
-                model.Data.ErrorDictionary = model.FlashMessage.ErrorMessages;
-            }
-
-            return View(model);
+            return Redirect(Url.EmployerAccountsAction($"agreements/remove/{agreementId}"));
         }
 
         [HttpPost]
