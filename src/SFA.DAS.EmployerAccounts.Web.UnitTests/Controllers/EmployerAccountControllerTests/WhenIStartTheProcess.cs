@@ -124,17 +124,5 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             Assert.IsNotNull(actualResult);
             Assert.AreEqual(ExpectedRedirectUrl, actualResult.Url);
         }
-            
-
-        //[Test]
-        //public void ThenTheCookieIsDeletedWhenIStartTheAddAccountProcess()
-        //{
-        //    //Act
-        //    _employerAccountController.SelectEmployer();
-
-        //    //Assert
-        //    _orchestrator.Verify(x => x.DeleteCookieData(It.IsAny<HttpContextBase>()), Times.Once);
-        //}
-        
     }
 }

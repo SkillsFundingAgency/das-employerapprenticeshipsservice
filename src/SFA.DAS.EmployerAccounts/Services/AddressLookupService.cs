@@ -7,13 +7,6 @@ using RestSharp;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models.PostcodeAnywhere;
 
-//using SFA.DAS.EAS.Domain.Configuration;
-//using SFA.DAS.EAS.Domain.Interfaces;
-//using SFA.DAS.EAS.Domain.Models.Employer;
-//using SFA.DAS.EAS.Infrastructure.Interfaces.REST;
-//using SFA.DAS.EAS.Infrastructure.Models;
-//using SFA.DAS.EAS.Infrastructure.Models.PostcodeAnywhere;
-
 namespace SFA.DAS.EmployerAccounts.Services
 {
     public class AddressLookupService : IAddressLookupService
