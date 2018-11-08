@@ -78,20 +78,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("signOut")]
         public ActionResult SignOut()
         {
-            OwinWrapper.SignOutUser();
-
-            var owinContext = HttpContext.GetOwinContext();
-            var authenticationManager = owinContext.Authentication;
-            var idToken = authenticationManager.User.FindFirst("id_token")?.Value;
-            var constants = new Constants(_configuration.Identity);
-
-            return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken));
+            return Redirect(Url.EmployerAccountsAction("service/signOut", false));
         }
 
         [Route("SignOutCleanup")]
         public void SignOutCleanup()
         {
-            OwinWrapper.SignOutUser();
         }
 
         [HttpGet]
