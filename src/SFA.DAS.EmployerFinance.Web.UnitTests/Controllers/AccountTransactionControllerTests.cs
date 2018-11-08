@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers
                     Data = new TransactionViewResultViewModel(DateTime.Now)
                     {
                         Account = new Account(),
-                        Model = new TransactionViewModel
+                        Model = new ViewModels.TransactionViewModel
                         {
                             Data = new AggregationData()
                         },

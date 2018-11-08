@@ -203,5 +203,38 @@ namespace SFA.DAS.EmployerFinance.Data
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
+
+
+        public async Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationView>(
+                sql: "[employer_financial].[GetLevyDeclarations_ByAccountId]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
+        }
+
+        public async Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId, string payrollYear, short payrollMonth)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@payrollYear", payrollYear, DbType.String);
+            parameters.Add("@payrollMonth", payrollMonth, DbType.Int16);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationView>(
+                sql: "[employer_financial].[GetLevyDeclarations_ByAccountPayrollMonthPayrollYear]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Account.Api.Types.Events.Levy;
+﻿using SFA.DAS.EmployerFinance.Events;
 
 namespace SFA.DAS.EmployerFinance.Factories
 {

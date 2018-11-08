@@ -17,5 +17,6 @@ namespace SFA.DAS.EmployerFinance.Data
         Task<List<TransactionLine>> GetAccountLevyTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
         Task<string> GetProviderName(long ukprn, long accountId, string periodEnd);
         Task<List<TransactionDownloadLine>> GetAllTransactionDetailsForAccountByDate(long accountId, DateTime fromDate, DateTime toDate);
+        Task<List<TransactionSummary>> GetAccountTransactionSummary(long accountId);
     }
 }

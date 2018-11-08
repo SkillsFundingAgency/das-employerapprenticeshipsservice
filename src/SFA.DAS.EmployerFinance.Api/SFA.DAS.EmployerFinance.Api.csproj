@@ -102,6 +102,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountLevyController.cs" />
+    <Compile Include="Controllers\AccountTransactionsController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
@@ -109,6 +111,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Orchestrator\AccountsOrchestrator.cs" />
+    <Compile Include="Orchestrator\AccountTransactionsOrchestrator.cs" />
+    <Compile Include="Orchestrator\OrchestratorResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

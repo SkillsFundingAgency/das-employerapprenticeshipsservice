@@ -10,7 +10,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Mappings
         [Test]
         public void ThenShouldUseValidConfiguration()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(HealthCheckMappings), typeof(PaymentMappings)));
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddProfiles(typeof(LevyMapping));
+
+                c.AddProfiles(typeof(HealthCheckMappings), typeof(PaymentMappings));
+            });
 
             config.AssertConfigurationIsValid();
         }

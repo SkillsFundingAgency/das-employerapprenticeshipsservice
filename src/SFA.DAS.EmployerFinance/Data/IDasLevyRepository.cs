@@ -18,5 +18,7 @@ namespace SFA.DAS.EmployerFinance.Data
         Task<DasDeclaration> GetSubmissionByEmprefPayrollYearAndMonth(string empRef, string payrollYear, short payrollMonth);
         Task ProcessDeclarations(long accountId, string empRef);
         Task ProcessPaymentData(long accountId);
+        Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId);
+        Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId, string payrollYear, short payrollMonth);
     }
 }

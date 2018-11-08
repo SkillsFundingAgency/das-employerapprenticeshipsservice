@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.EmployerFinance.Models.Account;
 using System;
+using SFA.DAS.EmployerFinance.Models.Transaction;
 
 namespace SFA.DAS.EmployerFinance.Web.ViewModels
 {
