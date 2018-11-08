@@ -562,10 +562,6 @@
     <Compile Include="Formatters\TransactionDowloads\DownloadFormatType.cs" />
     <Compile Include="Formatters\TransactionDowloads\ExcelTransactionFormatter.cs" />
     <Compile Include="Formatters\TransactionDowloads\ITransactionFormatter.cs" />
-    <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfQueryHandler.cs" />
-    <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfRequest.cs" />
-    <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfResponse.cs" />
-    <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfValidator.cs" />
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequestHandler.cs" />
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequestValidator.cs" />
@@ -652,10 +648,6 @@
     <Compile Include="Queries\GetReceivedTransferConnectionInvitation\GetReceivedTransferConnectionInvitationQuery.cs" />
     <Compile Include="Queries\GetReceivedTransferConnectionInvitation\GetReceivedTransferConnectionInvitationResponse.cs" />
     <Compile Include="Queries\GetSentTransferConnectionInvitation\GetSentTransferConnectionInvitationResponse.cs" />
-    <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfQueryHandler.cs" />
-    <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfRequest.cs" />
-    <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfResponse.cs" />
-    <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfValidator.cs" />
     <Compile Include="Queries\GetTeamUser\GetTeamUserHandler.cs" />
     <Compile Include="Queries\GetTeamUser\GetTeamMemberQuery.cs" />
     <Compile Include="Queries\GetTeamUser\GetTeamMemberResponse.cs" />

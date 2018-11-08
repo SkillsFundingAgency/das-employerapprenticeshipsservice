@@ -298,7 +298,6 @@
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenIGetPayeEnglishFractionHistory.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenRemovingAPayeScheme.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetTheConfirmRemoveAgreementModel.cs" />
-    <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetThePdfAgreement.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetAListOfAgreementsToRemove.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingAllUsers.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingUserAccounts.cs" />
@@ -317,6 +316,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
+      <Project>{B520A3E4-8259-4309-94D4-4A99FD32D2F7}</Project>
+      <Name>SFA.DAS.EmployerAccounts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
       <Name>SFA.DAS.EAS.Application</Name>

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
+using SFA.DAS.Validation;
 
-namespace SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf
+namespace SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf
 {
     public class GetSignedEmployerAgreementPdfQueryHandler : IAsyncRequestHandler<GetSignedEmployerAgreementPdfRequest, GetSignedEmployerAgreementPdfResponse>
     {
@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf
                 {nameof(legalAgreement.LegalEntityName), legalAgreement.LegalEntityName}
             };
 
-            var addressElements = legalAgreement.LegalEntityAddress.Split(',').ToList();
+            var addressElements = Enumerable.ToList<string>(legalAgreement.LegalEntityAddress.Split(','));
             
             for (var i = 0; i < 5; i++)
             {

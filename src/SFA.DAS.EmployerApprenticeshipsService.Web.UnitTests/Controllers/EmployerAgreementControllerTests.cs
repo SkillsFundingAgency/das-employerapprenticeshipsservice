@@ -105,44 +105,44 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
         //        });
         //}
 
-        [Test]
-        public Task NextSteps_WhenIViewNextSteps_ThenShouldShowIfUserCanSeeWizardWhenViewingNextSteps()
-        {
-            return RunAsync(
-                arrange: fixtures =>
-                {
-                    fixtures.OwinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(fixtures.UserId);
-                    fixtures.Orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
-                        .ReturnsAsync(true);
-                },
-                act: fixtures => fixtures.NextSteps(),
-                assert: (fixtures, actualResult) =>
-                {
-                    Assert.IsNotNull(actualResult);
-                    Assert.IsTrue(actualResult.Data.UserShownWizard);
-                    fixtures.Orchestrator.Verify(x => x.UserShownWizard(fixtures.UserId, fixtures.HashedAccountId), Times.Once);
-                }
-            );
-        }
+        //[Test]
+        //public Task NextSteps_WhenIViewNextSteps_ThenShouldShowIfUserCanSeeWizardWhenViewingNextSteps()
+        //{
+        //    return RunAsync(
+        //        arrange: fixtures =>
+        //        {
+        //            fixtures.OwinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(fixtures.UserId);
+        //            fixtures.Orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
+        //                .ReturnsAsync(true);
+        //        },
+        //        act: fixtures => fixtures.NextSteps(),
+        //        assert: (fixtures, actualResult) =>
+        //        {
+        //            Assert.IsNotNull(actualResult);
+        //            Assert.IsTrue(actualResult.Data.UserShownWizard);
+        //            fixtures.Orchestrator.Verify(x => x.UserShownWizard(fixtures.UserId, fixtures.HashedAccountId), Times.Once);
+        //        }
+        //    );
+        //}
 
-        [Test]
-        public Task NextSteps_WhenIViewNextSteps_ThenShouldShowIfUserCanSeeWizardWhenSelectingIncorrectChoiceForNextSteps()
-        {
-            return RunAsync(
-                arrange: fixtures =>
-                {
-                    fixtures.OwinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(fixtures.UserId);
-                    fixtures.Orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
-                        .ReturnsAsync(true);
-                },
-                act: fixtures => fixtures.NextSteps(),
-                assert: (fixtures, actualResult) =>
-                {
-                    Assert.IsNotNull(actualResult);
-                    Assert.IsTrue(actualResult.Data.UserShownWizard);
-                    fixtures.Orchestrator.Verify(x => x.UserShownWizard(fixtures.UserId, fixtures.HashedAccountId), Times.Once);
-                });
-        }
+        //[Test]
+        //public Task NextSteps_WhenIViewNextSteps_ThenShouldShowIfUserCanSeeWizardWhenSelectingIncorrectChoiceForNextSteps()
+        //{
+        //    return RunAsync(
+        //        arrange: fixtures =>
+        //        {
+        //            fixtures.OwinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(fixtures.UserId);
+        //            fixtures.Orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
+        //                .ReturnsAsync(true);
+        //        },
+        //        act: fixtures => fixtures.NextSteps(),
+        //        assert: (fixtures, actualResult) =>
+        //        {
+        //            Assert.IsNotNull(actualResult);
+        //            Assert.IsTrue(actualResult.Data.UserShownWizard);
+        //            fixtures.Orchestrator.Verify(x => x.UserShownWizard(fixtures.UserId, fixtures.HashedAccountId), Times.Once);
+        //        });
+        //}
 
         //[Test]
         //public Task ViewUnsignedAgreements_WhenIViewUnsignedAgreements_ThenIShouldGoStraightToTheUnsignedAgreementIfThereIsOnlyOne()
@@ -237,14 +237,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
         //    );
         //}
 
-        [Test]
-        public Task ViewAgreementToSign_ShouldReturnAgreements()
-        {
-            return RunAsync(arrange: fixtures => fixtures.WithUnsignedEmployerAgreement(),
-                act: fixtures => fixtures.SignedAgreement(),
-                assert: (fixtures, result) =>
-                    Assert.AreEqual(fixtures.GetAgreementToSignViewModel, fixtures.ViewResult.Model));
-        }
+        //[Test]
+        //public Task ViewAgreementToSign_ShouldReturnAgreements()
+        //{
+        //    return RunAsync(arrange: fixtures => fixtures.WithUnsignedEmployerAgreement(),
+        //        act: fixtures => fixtures.SignedAgreement(),
+        //        assert: (fixtures, result) =>
+        //            Assert.AreEqual(fixtures.GetAgreementToSignViewModel, fixtures.ViewResult.Model));
+        //}
     }
 
     public class EmployerAgreementControllerTestFixtures : FluentTestFixture
@@ -350,26 +350,26 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
             });
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementNextStepsViewModel>> NextSteps()
-        {
-            var controller = CreateController();
-            var result = await controller.NextSteps(HashedAccountId) as ViewResult;
-            var model = result?.Model as OrchestratorResponse<EmployerAgreementNextStepsViewModel>;
-            return model;
-        }
+        //public async Task<OrchestratorResponse<EmployerAgreementNextStepsViewModel>> NextSteps()
+        //{
+        //    var controller = CreateController();
+        //    var result = await controller.NextSteps(HashedAccountId) as ViewResult;
+        //    var model = result?.Model as OrchestratorResponse<EmployerAgreementNextStepsViewModel>;
+        //    return model;
+        //}
 
-        public async Task<RedirectToRouteResult> ViewUnsignedAgreements()
-        {
-            var controller = CreateController();
-            var result = await controller.ViewUnsignedAgreements(HashedAccountId) as RedirectToRouteResult;
-            return result;
-        }
+        //public async Task<RedirectToRouteResult> ViewUnsignedAgreements()
+        //{
+        //    var controller = CreateController();
+        //    var result = await controller.ViewUnsignedAgreements(HashedAccountId) as RedirectToRouteResult;
+        //    return result;
+        //}
 
-        public async Task<ViewResult> SignedAgreement()
-        {
-            var controller = CreateController();
-            ViewResult = await controller.SignAgreement(GetAgreementRequest) as ViewResult;
-            return ViewResult;
-        }
+        //public async Task<ViewResult> SignedAgreement()
+        //{
+        //    var controller = CreateController();
+        //    ViewResult = await controller.SignAgreement(GetAgreementRequest) as ViewResult;
+        //    return ViewResult;
+        //}
     }
 }

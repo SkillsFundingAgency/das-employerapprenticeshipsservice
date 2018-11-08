@@ -357,8 +357,6 @@
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetCharity\WhenIGetCharity.cs" />
     <Compile Include="Queries\GetCharity\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetEmployerAgreementPdfTests\WhenIGetTheEmployerAgreement.cs" />
-    <Compile Include="Queries\GetEmployerAgreementPdfTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementByIdTests\WhenIGetAnAgreement.cs" />
     <Compile Include="Queries\GetEmployerAgreementByIdTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetEmployerAgreementQueryTests\WhenIValidateTheQuery.cs" />
@@ -398,8 +396,6 @@
     <Compile Include="Queries\GetPreviousTransactionsCountTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIGetPublicSectorOrganisations.cs" />
     <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIValidateTheQuery.cs" />
-    <Compile Include="Queries\GetSignedEmployerAgreementPdfTests\WhenIGetTheSignedEmployerAgreement.cs" />
-    <Compile Include="Queries\GetSignedEmployerAgreementPdfTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetTeamMembers\WhenIGetTeamMembers.cs" />
     <Compile Include="Queries\GetTeamMembers\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetTransferConnectionsTests\WhenIGetTransferConnections.cs" />
@@ -446,6 +442,10 @@
       <Project>{2035D46A-422F-438C-A460-39E60A9F6EAD}</Project>
       <Name>SFA.DAS.EmployerAccounts.Messages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
+      <Project>{B520A3E4-8259-4309-94D4-4A99FD32D2F7}</Project>
+      <Name>SFA.DAS.EmployerAccounts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
       <Name>SFA.DAS.EAS.Application</Name>
@@ -478,7 +478,9 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Queries\GetSignedEmployerAgreementPdfTests\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

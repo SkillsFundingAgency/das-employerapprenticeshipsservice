@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.Authorization;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 
-namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf
+namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf
 {
     public class GetEmployerAgreementPdfValidator : IValidator<GetEmployerAgreementPdfRequest>
     {

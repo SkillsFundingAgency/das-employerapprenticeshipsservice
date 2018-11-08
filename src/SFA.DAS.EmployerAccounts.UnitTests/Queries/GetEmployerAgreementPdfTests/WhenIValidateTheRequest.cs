@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementPdfTests
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTests
 {
     public class WhenIValidateTheRequest
     {

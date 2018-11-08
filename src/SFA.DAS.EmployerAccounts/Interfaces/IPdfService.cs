@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.EAS.Domain.Interfaces
+namespace SFA.DAS.EmployerAccounts.Interfaces
 {
     public interface IPdfService
     {

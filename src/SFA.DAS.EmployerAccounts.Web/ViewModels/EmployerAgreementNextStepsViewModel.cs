@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.Web.ViewModels
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
     public class EmployerAgreementNextStepsViewModel
     {

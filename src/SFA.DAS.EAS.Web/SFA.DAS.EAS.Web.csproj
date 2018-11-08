@@ -552,7 +552,6 @@
     <Compile Include="ViewModels\DismissTaskViewModel.cs" />
     <Compile Include="ViewModels\EnvironmentDetailsViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IPaginationViewModel.cs" />
-    <Compile Include="ViewModels\EmployerAgreementNextStepsViewModel.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
@@ -579,7 +578,6 @@
     <Compile Include="ViewModels\InvalidStateViewModel.cs" />
     <Compile Include="ViewModels\NotificationSettingsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\ConfirmLegalAgreementToRemoveViewModel.cs" />
-    <Compile Include="ViewModels\Organisation\EmployerAgreementPdfViewModel.cs" />
     <Compile Include="ViewModels\Organisation\LegalAgreementsToRemoveViewModel.cs" />
     <Compile Include="ViewModels\SummaryUnsubscribeViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
@@ -952,7 +950,6 @@
     <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
-    <Content Include="Views\EmployerAgreement\View.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
@@ -1039,8 +1036,6 @@
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
     <Content Include="Views\Home\ServiceStartPage.cshtml" />
     <Content Include="Views\Organisation\OrganisationLegalAgreement.cshtml" />
-    <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
-    <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
     <Content Include="src\sass\_agreement.scss" />
     <Content Include="Views\Shared\_SetupAccount.cshtml" />
     <Content Include="Views\Home\SetupAccount.cshtml" />
@@ -1050,7 +1045,6 @@
     <Content Include="src\sass\_accordions.scss" />
     <Content Include="src\sass\_notifications.scss" />
     <Content Include="src\sass\_navigation.scss" />
-    <Content Include="Views\EmployerAgreement\Details.cshtml" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="src\sass\_welcome.scss" />
@@ -1062,7 +1056,6 @@
     <Content Include="Views\Shared\_SVGSprite.cshtml" />
     <Content Include="src\sass\_icons.scss" />
     <Content Include="src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
-    <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
     <Content Include="Views\OrganisationShared\SelectAddress.cshtml" />
     <Content Include="Views\OrganisationShared\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\OrganisationShared\FindAddress.cshtml" />

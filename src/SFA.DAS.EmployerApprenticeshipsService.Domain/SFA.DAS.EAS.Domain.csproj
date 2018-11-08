@@ -275,7 +275,6 @@
     <Compile Include="Interfaces\ICookieStorageService.cs" />
     <Compile Include="Interfaces\ICurrentDateTime.cs" />
     <Compile Include="Interfaces\IExcelService.cs" />
-    <Compile Include="Interfaces\IPdfService.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
     <Compile Include="Interfaces\IMultiVariantTestingService.cs" />
     <Compile Include="Interfaces\IRefreshEmployerLevyService.cs" />

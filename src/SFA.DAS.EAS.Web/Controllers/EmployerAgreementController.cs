@@ -7,7 +7,6 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
@@ -45,37 +44,37 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements")]
-        public async Task<ActionResult> Index(string hashedAccountId, bool agreementSigned = false)
+        public async Task<ActionResult> Index()
         {
             return Redirect(Url.EmployerAccountsAction("agreements"));
         }
 
         [HttpGet]
         [Route("agreements/{agreementId}/details")]
-        public async Task<ActionResult> Details(string agreementId, string hashedAccountId, FlashMessageViewModel flashMessage)
+        public async Task<ActionResult> Details(string agreementId)
         {
-           
+
             return
                 Redirect(Url.EmployerAccountsAction($"agreements/{agreementId}/details"));
         }
 
         [HttpGet]
         [Route("agreements/{agreementId}/view")]
-        public async Task<ActionResult> View(string agreementId, string hashedAccountId, FlashMessageViewModel flashMessage)
+        public async Task<ActionResult> View(string agreementId)
         {
-           return Redirect(Url.EmployerAccountsAction($"agreements/{agreementId}/view"));
+            return Redirect(Url.EmployerAccountsAction($"agreements/{agreementId}/view"));
         }
 
         [HttpGet]
         [Route("agreements/unsigned/view")]
-        public async Task<ActionResult> ViewUnsignedAgreements(string hashedAccountId)
+        public async Task<ActionResult> ViewUnsignedAgreements()
         {
             return Redirect(Url.EmployerAccountsAction("agreements/unsigned/view"));
         }
 
         [HttpGet]
         [Route("agreements/{agreementId}/about-your-agreement")]
-        public async Task<ActionResult> AboutYourAgreement(string agreementid, string hashedAccountId)
+        public async Task<ActionResult> AboutYourAgreement(string agreementid)
         {
             return Redirect(Url.EmployerAccountsAction($"agreements/{agreementid}/about-your-agreement"));
 
@@ -83,100 +82,32 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements/{agreementId}/sign-your-agreement")]
-        public async Task<ActionResult> SignAgreement(GetEmployerAgreementRequest request)
+        public async Task<ActionResult> SignAgreement(string agreementId)
         {
-            request.ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-
-            var response = await _mediator.SendAsync(request);
-            var viewModel = _mapper.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(response);
-
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        [Route("agreements/{agreementId}/sign")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Sign(string agreementId, string hashedAccountId)
-        {
-            return Redirect(Url.EmployerAccountsAction($"agreements/{agreementId}/sign"));
-            
+            return Redirect(Url.EmployerAccountsAction($"agreements/{agreementId}/sign-your-agreement"));
         }
 
         [HttpGet]
         [Route("agreements/{agreementId}/next")]
-        public async Task<ActionResult> NextSteps(string hashedAccountId)
+        public async Task<ActionResult> NextSteps(string agreementId)
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-
-            var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
-
-            var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel>
-            {
-                FlashMessage = GetFlashMessageViewModelFromCookie(),
-                Data = new EmployerAgreementNextStepsViewModel { UserShownWizard = userShownWizard }
-            };
-
-            return View(model);
+            return Redirect(Url.EmployerAccountsAction($"agreements/{agreementId}/next"));
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("agreements/{agreementId}/next")]
-        public async Task<ActionResult> NextSteps(int? choice, string hashedAccountId)
-        {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-
-            var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
-
-            switch (choice ?? 0)
-            {
-                case 1: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName);
-                case 2: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.TransfersControllerName);
-                case 3: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
-                default:
-                    var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel>
-                    {
-                        FlashMessage = GetFlashMessageViewModelFromCookie(),
-                        Data = new EmployerAgreementNextStepsViewModel
-                        {
-                            ErrorMessage = "You must select an option to continue.",
-                            UserShownWizard = userShownWizard
-                        }
-                    };
-                    return View(model); //No option entered
-            }
-        }
 
         [HttpGet]
         [Route("agreements/{agreementId}/agreement-pdf")]
-        public async Task<ActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
+        public async Task<ActionResult> GetPdfAgreement(string agreementId)
         {
+            return Redirect(Url.EmployerAccountsAction($"agreements/{agreementId}/agreement-pdf"));
 
-            var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId, agreementId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            if (stream.Data.PdfStream == null)
-            {
-                // ReSharper disable once Mvc.ViewNotResolved
-                return View(stream);
-            }
-
-            return new FileStreamResult(stream.Data.PdfStream, ControllerConstants.PdfContentTypeName);
         }
 
         [HttpGet]
         [Route("agreements/{agreementId}/signed-agreement-pdf")]
-        public async Task<ActionResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
+        public async Task<ActionResult> GetSignedPdfAgreement(string agreementId)
         {
-
-            var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId, agreementId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            if (stream.Data.PdfStream == null)
-            {
-                // ReSharper disable once Mvc.ViewNotResolved
-                return View(stream);
-            }
-
-            return new FileStreamResult(stream.Data.PdfStream, ControllerConstants.PdfContentTypeName);
+            return Redirect(Url.EmployerAccountsAction($"agreements/{agreementId}/signed-agreement-pdf"));
         }
 
         [HttpGet]

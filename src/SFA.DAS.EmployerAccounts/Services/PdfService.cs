@@ -3,10 +3,10 @@ using System.IO;
 using System.Threading.Tasks;
 using Aspose.Pdf;
 using Aspose.Pdf.Text;
-using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Infrastructure.Services
+namespace SFA.DAS.EmployerAccounts.Services
 {
     public class PdfService : AzureServiceBase<string>, IPdfService
     {

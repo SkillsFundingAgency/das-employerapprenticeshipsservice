@@ -171,6 +171,8 @@
     <Compile Include="ViewModels\DismissTaskViewModel.cs" />
     <Compile Include="ViewModels\EmployerAccountViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementListViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAgreementNextStepsViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAgreementPdfViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\EmployerTeamMembersViewModel.cs" />
     <Compile Include="ViewModels\FindOrganisationAddressViewModel.cs" />
@@ -646,6 +648,11 @@
     <Content Include="Views\Organisation\ReviewIncorrectDetails.cshtml" />
     <Content Include="Views\Organisation\ReviewNoChange.cshtml" />
     <Content Include="Views\EmployerAgreement\Index.cshtml" />
+    <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
+    <Content Include="Views\EmployerAgreement\Details.cshtml" />
+    <Content Include="Views\EmployerAgreement\View.cshtml" />
+    <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
+    <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">

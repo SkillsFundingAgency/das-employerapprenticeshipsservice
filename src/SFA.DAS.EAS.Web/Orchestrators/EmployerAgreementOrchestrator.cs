@@ -2,8 +2,6 @@
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf;
-using SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EAS.Application.Queries.GetTeamUser;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -64,84 +62,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
-        {
-            var pdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
-
-            try
-            {
-                var result = await _mediator.SendAsync(new GetEmployerAgreementPdfRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    HashedLegalAgreementId = agreementId,
-                    UserId = userId
-                });
-
-                pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel { PdfStream = result.FileStream };
-            }
-            catch (UnauthorizedAccessException)
-            {
-                pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
-                pdfEmployerAgreement.Status = HttpStatusCode.Unauthorized;
-            }
-            catch (Exception ex)
-            {
-                pdfEmployerAgreement.Exception = ex;
-                pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
-                pdfEmployerAgreement.Status = HttpStatusCode.NotFound;
-            }
-
-            return pdfEmployerAgreement;
-        }
-
-        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetSignedPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
-        {
-
-            var signedPdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
-
-            try
-            {
-                var result =
-                    await
-                        _mediator.SendAsync(new GetSignedEmployerAgreementPdfRequest
-                        {
-                            HashedAccountId = hashedAccountId,
-                            HashedLegalAgreementId = agreementId,
-                            UserId = userId
-                        });
-
-                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel { PdfStream = result.FileStream };
-
-                return signedPdfEmployerAgreement;
-            }
-            catch (InvalidRequestException ex)
-            {
-                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
-                signedPdfEmployerAgreement.Status = HttpStatusCode.BadRequest;
-                signedPdfEmployerAgreement.FlashMessage = new FlashMessageViewModel
-                {
-                    Headline = "Errors to fix",
-                    Message = "Check the following details:",
-                    ErrorMessages = ex.ErrorMessages,
-                    Severity = FlashMessageSeverityLevel.Error
-                };
-            }
-            catch (UnauthorizedAccessException)
-            {
-                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
-                signedPdfEmployerAgreement.Status = HttpStatusCode.Unauthorized;
-            }
-            catch (Exception ex)
-            {
-                signedPdfEmployerAgreement.Exception = ex;
-                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
-                signedPdfEmployerAgreement.Status = HttpStatusCode.NotFound;
-            }
-
-            return signedPdfEmployerAgreement;
-
-        }
-
+      
         public virtual async Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, string userId)
         {
             var response = new OrchestratorResponse<LegalAgreementsToRemoveViewModel>();
@@ -221,10 +142,5 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
       
-        public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
-        {
-            var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
-            return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
-        }
     }
 }

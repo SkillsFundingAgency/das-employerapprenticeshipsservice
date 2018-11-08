@@ -1,21 +1,22 @@
-﻿using AutoMapper;
-using MediatR;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf;
-using SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.NLog.Logger;
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
+using MediatR;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
+using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
     public class WhenIGetThePdfAgreement
     {
@@ -82,7 +83,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             var actual = await _orchestrator.GetSignedPdfEmployerAgreement("", "", "");
 
             //Assert
-            Assert.IsNotEmpty(actual.FlashMessage.ErrorMessages);
+            Assert.IsNotEmpty((IEnumerable) actual.FlashMessage.ErrorMessages);
             Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
         }
 

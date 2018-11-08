@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf
+namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf
 {
     public class GetEmployerAgreementPdfResponse
     {

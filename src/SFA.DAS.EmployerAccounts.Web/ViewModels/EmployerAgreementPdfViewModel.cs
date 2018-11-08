@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace SFA.DAS.EAS.Web.ViewModels.Organisation
+namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
     public class EmployerAgreementPdfViewModel : ViewModelBase
     {
