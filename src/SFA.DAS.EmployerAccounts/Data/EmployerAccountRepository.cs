@@ -57,6 +57,29 @@ namespace SFA.DAS.EmployerAccounts.Data
             return result.SingleOrDefault();
         }
 
+        public async Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@toDate", toDate);
+
+            var offset = pageSize * (pageNumber - 1);
+
+            var countResult = await _db.Value.Database.Connection.QueryAsync<int>(
+                sql: $"select count(*) from [employer_account].[Account] a;",
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<Account>(
+                sql: $"select a.* from [employer_account].[Account] a ORDER BY a.Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;",
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
+
+            return new Accounts<Account>
+            {
+                AccountsCount = countResult.First(),
+                AccountList = result.ToList()
+            };
+        }
+
 
         public async Task<AccountStats> GetAccountStats(long accountId)
         {

@@ -380,6 +380,7 @@
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Controllers\TransferConnectionsController.cs" />
     <Compile Include="ExceptionLoggers\ErrorLogger.cs" />
+    <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\ApiAuthorizeAttribute.cs" />

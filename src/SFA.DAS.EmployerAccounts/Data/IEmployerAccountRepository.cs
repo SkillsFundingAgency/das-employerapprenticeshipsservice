@@ -12,5 +12,6 @@ namespace SFA.DAS.EmployerAccounts.Data
         Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId);
         Task<AccountStats> GetAccountStats(long accountId);
         Task RenameAccount(long id, string name);
+        Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize);
     }
 }

@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.Api.Attributes;
+using SFA.DAS.EAS.Account.Api.Extensions;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
@@ -21,10 +22,18 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [Route("", Name = "AccountsIndex")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]   
-        public async Task<IHttpActionResult> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
+        public IHttpActionResult GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
+        {
+            return Redirect(Url.EmployerAccountsApiAction(Request.RequestUri.PathAndQuery));
+        }
+
+        [Route("2", Name = "AccountsIndex2")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAccounts2(string toDate = null, int pageSize = 1000, int pageNumber = 1)
         {
             var result = await _orchestrator.GetAllAccountsWithBalances(toDate, pageSize, pageNumber);
-            
+
             if (result.Status == HttpStatusCode.OK)
             {
                 result.Data.Data.ForEach(x => x.Href = Url.Route("GetAccount", new { hashedAccountId = x.AccountHashId }));
@@ -37,11 +46,18 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             }
         }
 
-
         [Route("{hashedAccountId}", Name = "GetAccount")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetAccount(string hashedAccountId)
+        public IHttpActionResult GetAccount(string hashedAccountId)
+        {
+            return Redirect(Url.EmployerAccountsApiAction(Request.RequestUri.PathAndQuery));
+        }
+
+        [Route("{hashedAccountId}/2", Name = "GetAccount2")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAccount2(string hashedAccountId)
         {
             var result = await _orchestrator.GetAccount(hashedAccountId);
 
@@ -74,11 +90,18 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
 
 
 
-
         [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
         [ApiAuthorize(Roles = "ReadAllAccountUsers")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetAccountUsers(string hashedAccountId)
+        public IHttpActionResult GetAccountUsers(string hashedAccountId)
+        {
+            return Redirect(Url.EmployerAccountsApiAction(Request.RequestUri.PathAndQuery));
+        }
+
+        [Route("{hashedAccountId}/users2", Name = "GetAccountUsers2")]
+        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAccountUsers2(string hashedAccountId)
         {
             var result = await _orchestrator.GetAccountTeamMembers(hashedAccountId);
 
@@ -86,7 +109,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             {
                 return NotFound();
             }
-           
+
             return Ok(result.Data);
         }
 
