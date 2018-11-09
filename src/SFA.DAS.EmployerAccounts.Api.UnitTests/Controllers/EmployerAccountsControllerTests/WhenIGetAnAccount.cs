@@ -1,20 +1,19 @@
-﻿using FluentAssertions;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
-using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.Transfers;
-using SFA.DAS.EAS.TestCommon.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
+using FluentAssertions;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Api.UnitTests.Extensions;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.Transfers;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountBalances;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountByHashedId;
+using SFA.DAS.EmployerAccounts.Queries.GetTransferAllowance;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsControllerTests
 {
     [TestFixture]
     public class WhenIGetAnAccount : EmployerAccountsControllerTests

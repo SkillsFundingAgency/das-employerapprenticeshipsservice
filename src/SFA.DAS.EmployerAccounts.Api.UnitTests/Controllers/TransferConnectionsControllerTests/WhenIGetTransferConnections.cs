@@ -4,11 +4,11 @@ using System.Web.Http.Results;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetTransferConnections;
+using SFA.DAS.EmployerAccounts.Api.Controllers;
+using SFA.DAS.EmployerAccounts.Models.TransferConnections;
+using SFA.DAS.EmployerAccounts.Queries.GetTransferConnections;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.TransferConnectionsControllerTests
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.TransferConnectionsControllerTests
 {
     [TestFixture]
     public class WhenIGetTransferConnections

@@ -4,16 +4,15 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.EmployerAccounts.Api.Controllers;
+using SFA.DAS.EmployerAccounts.Api.Orchestrators;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountBalances;
+using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsControllerTests
 {
     public abstract class EmployerAccountsControllerTests
     {

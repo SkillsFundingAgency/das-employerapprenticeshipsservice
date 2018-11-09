@@ -186,25 +186,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\AccountLegalEntitiesControllerTests.cs" />
-    <Compile Include="Controllers\AccountLevyControllerTests\AccountLevyControllerTests.cs" />
-    <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetAllLevyForAnAccount.cs" />
-    <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetLevyForAnAccountAndPeriod.cs" />
-    <Compile Include="Controllers\AccountPayeSchemesControllerTests\AccountPayeSchemesControllerTests.cs" />
-    <Compile Include="Controllers\AccountTransactionsControllerTests\WhenIGetTheTransactionSummaryForAnAccount.cs" />
-    <Compile Include="Controllers\AccountTransactionsControllerTests\WhenIGetTransactionsForAnAccount.cs" />
-    <Compile Include="Controllers\EmployerAccountsControllerTests\EmployerAccountsControllerTests.cs" />
-    <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAccounts.cs" />
-    <Compile Include="Controllers\AccountPayeSchemesControllerTests\WhenIGetAPayeScheme.cs" />
-    <Compile Include="Controllers\AccountPayeSchemesControllerTests\WhenIGetPayeSchemesForAnAccount.cs" />
-    <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAnAccount.cs" />
-    <Compile Include="Controllers\LegalEntitiesControllerTests\LegalEntitiesControllerTests.cs" />
-    <Compile Include="Controllers\LegalEntitiesControllerTests\WhenIGetALegalEntity.cs" />
-    <Compile Include="Controllers\LegalEntitiesControllerTests\WhenIGetLegalEntitiesForAnAccount.cs" />
-    <Compile Include="Controllers\StatisticsControllerTests\WhenIGetTheStatistics.cs" />
-    <Compile Include="Controllers\TransferConnectionsControllerTests\WhenIGetTransferConnections.cs" />
-    <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAnAccount.cs" />
-    <Compile Include="Orchestrators\AgreementOrchestratorTests\WhenIGetAnAgreement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -250,6 +231,10 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Orchestrators\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

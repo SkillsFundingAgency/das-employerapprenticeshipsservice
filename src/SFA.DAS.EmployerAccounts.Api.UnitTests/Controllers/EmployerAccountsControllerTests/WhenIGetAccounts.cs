@@ -1,18 +1,18 @@
-﻿using FluentAssertions;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.TestCommon.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
+using FluentAssertions;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Api.UnitTests.Extensions;
+using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountBalances;
+using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsControllerTests
 {
     [TestFixture]
     public class WhenIGetAccounts : EmployerAccountsControllerTests
@@ -27,10 +27,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var accountsResponse = new GetPagedEmployerAccountsResponse
             {
                 AccountsCount = 2,
-                Accounts = new List<Domain.Models.Account.Account>
+                Accounts = new List<Account>
                     {
-                        new Domain.Models.Account.Account {HashedId = "ABC123", Id = 123, Name = "Test 1"},
-                        new Domain.Models.Account.Account {HashedId = "ABC999", Id = 987, Name = "Test 2"}
+                        new Account {HashedId = "ABC123", Id = 123, Name = "Test 1"},
+                        new Account {HashedId = "ABC999", Id = 987, Name = "Test 2"}
                     }
             };
             Mediator.Setup(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageNumber == pageNumber && q.PageSize == pageSize && q.ToDate == toDate)))
@@ -99,9 +99,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var accountsResponse = new GetPagedEmployerAccountsResponse
             {
                 AccountsCount = 1,
-                Accounts = new List<Domain.Models.Account.Account>
+                Accounts = new List<Account>
                     {
-                        new Domain.Models.Account.Account {HashedId = "ABC123", Id = 123, Name = "Test 1"}
+                        new Account {HashedId = "ABC123", Id = 123, Name = "Test 1"}
                     }
             };
             Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>()))
@@ -124,10 +124,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var accountsResponse = new GetPagedEmployerAccountsResponse
             {
                 AccountsCount = 2,
-                Accounts = new List<Domain.Models.Account.Account>
+                Accounts = new List<Account>
                     {
-                        new Domain.Models.Account.Account {HashedId = "ABC123", Id = 123, Name = "Test 1"},
-                        new Domain.Models.Account.Account {HashedId = "ABC999", Id = 987, Name = "Test 2"}
+                        new Account {HashedId = "ABC123", Id = 123, Name = "Test 1"},
+                        new Account {HashedId = "ABC999", Id = 987, Name = "Test 2"}
                     }
             };
             Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>()))
@@ -151,10 +151,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var accountsResponse = new GetPagedEmployerAccountsResponse
             {
                 AccountsCount = 2,
-                Accounts = new List<Domain.Models.Account.Account>
+                Accounts = new List<Account>
                     {
-                        new Domain.Models.Account.Account {HashedId = "ABC123", Id = 123, Name = "Test 1"},
-                        new Domain.Models.Account.Account {HashedId = "ABC999", Id = 987, Name = "Test 2"}
+                        new Account {HashedId = "ABC123", Id = 123, Name = "Test 1"},
+                        new Account {HashedId = "ABC999", Id = 987, Name = "Test 2"}
                     }
             };
             Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>()))
@@ -180,9 +180,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var accountsResponse = new GetPagedEmployerAccountsResponse
             {
                 AccountsCount = 1,
-                Accounts = new List<Domain.Models.Account.Account>
+                Accounts = new List<Account>
                 {
-                    new Domain.Models.Account.Account
+                    new Account
                     {
                         HashedId = "ABC123",
                         Id = 123,
@@ -227,9 +227,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var accountsResponse = new GetPagedEmployerAccountsResponse
             {
                 AccountsCount = 1,
-                Accounts = new List<Domain.Models.Account.Account>
+                Accounts = new List<Account>
                 {
-                    new Domain.Models.Account.Account
+                    new Account
                     {
                         HashedId = "ABC123",
                         Id = 123,
