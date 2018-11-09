@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EmployerAccounts.Events.Account;
 
-namespace SFA.DAS.EAS.Application.Factories
+namespace SFA.DAS.EmployerAccounts.Factories
 {
     public class AccountEventFactory : IAccountEventFactory
     {

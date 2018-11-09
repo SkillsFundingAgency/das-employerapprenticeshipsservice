@@ -15,23 +15,18 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using SFA.DAS.EmployerAccounts.Web.App_Start;
-
+using System.Web.Mvc;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using SFA.DAS.EmployerAccounts.Web;
+using SFA.DAS.EmployerAccounts.Web.DependencyResolution;
+using StructureMap;
 using WebActivatorEx;
 
 [assembly: PreApplicationStartMethod(typeof(StructuremapMvc), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(StructuremapMvc), "End")]
 
-namespace SFA.DAS.EmployerAccounts.Web.App_Start {
-	using System.Web.Mvc;
-
-    using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-
-	using SFA.DAS.EmployerAccounts.Web.DependencyResolution;
-
-    using StructureMap;
-    
-	public static class StructuremapMvc {
+namespace SFA.DAS.EmployerAccounts.Web {
+    public static class StructuremapMvc {
         #region Public Properties
 
         public static StructureMapDependencyScope StructureMapDependencyScope { get; set; }

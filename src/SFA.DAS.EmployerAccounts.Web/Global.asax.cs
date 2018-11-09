@@ -23,7 +23,6 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using SFA.DAS.Configuration;
-using SFA.DAS.EmployerAccounts.Web.App_Start;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.UnitOfWork.NServiceBus;

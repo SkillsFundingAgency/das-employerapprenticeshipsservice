@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
-using SFA.DAS.EAS.Application.Dtos;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EmployerAccounts.Dtos;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EAS.Web.Mappings
+namespace SFA.DAS.EmployerAccounts.Web.Mappings
 {
     public class AgreementMappings : Profile
     {
         public AgreementMappings()
         {
+
             CreateMap<AgreementDto, EmployerAgreementView>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.StatusId))
                 .ForMember(dest => dest.LegalEntityAddress, opt => opt.MapFrom(src => src.LegalEntity.RegisteredAddress))
