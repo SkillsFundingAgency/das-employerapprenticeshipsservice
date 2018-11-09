@@ -108,7 +108,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrator.AccountsOrchestrat
 
         private IMapper ConfigureMapper()
         {
-            var profiles = Assembly.Load("SFA.DAS.EAS.Account.Api")
+            var profiles = Assembly.Load("SFA.DAS.EmployerAccounts.Api")
                 .GetTypes()
                 .Where(t => typeof(Profile).IsAssignableFrom(t))
                 .Select(t => (Profile)Activator.CreateInstance(t));

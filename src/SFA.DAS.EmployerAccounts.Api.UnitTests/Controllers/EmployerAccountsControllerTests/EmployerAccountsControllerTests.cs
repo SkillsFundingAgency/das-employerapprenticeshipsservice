@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
 
             var accountsResponse = new GetPagedEmployerAccountsResponse
             {
-                Accounts = new List<Domain.Models.Account.Account>()
+                Accounts = new List<Account>()
             };
             Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
 
