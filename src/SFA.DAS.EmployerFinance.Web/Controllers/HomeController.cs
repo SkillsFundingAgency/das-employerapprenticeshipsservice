@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Authentication;
+﻿using System.Web;
+using SFA.DAS.Authentication;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.EmployerFinance.Web.Helpers;
@@ -20,7 +21,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return Redirect(Url.LegacyEasAction(string.Empty));
         }
 
         [Authorize]
@@ -41,7 +42,18 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         {
             _owinWrapper.SignOutUser();
 
-            return new RedirectResult(Url.LegacyEasAction("service/signout"));
+            var owinContext = HttpContext.GetOwinContext();
+            var authenticationManager = owinContext.Authentication;
+            var idToken = authenticationManager.User.FindFirst("id_token")?.Value;
+            var constants = new Constants(_configuration.Identity);
+
+            return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken));
+        }
+
+        [Route("SignOutCleanup")]
+        public void SignOutCleanup()
+        {
+            _owinWrapper.SignOutUser();
         }
 
         [HttpGet]

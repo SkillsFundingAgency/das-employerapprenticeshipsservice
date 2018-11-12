@@ -28,6 +28,12 @@ using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using Environment = SFA.DAS.Configuration.Environment;
+using System.Configuration;
+using Microsoft.ApplicationInsights.Extensibility;
+using SFA.DAS.Audit.Client;
+using SFA.DAS.Audit.Types;
+using SFA.DAS.Audit.Client.Web;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
@@ -46,7 +52,20 @@ namespace SFA.DAS.EmployerAccounts.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             LoggingConfig.ConfigureLogging();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
+            WebMessageBuilders.Register();
+            WebMessageBuilders.UserIdClaim = DasClaimTypes.Id;
+            WebMessageBuilders.UserEmailClaim = DasClaimTypes.Email;
 
+            AuditMessageFactory.RegisterBuilder(m =>
+            {
+                m.Source = new Source
+                {
+                    Component = "EmployerAccounts-Web",
+                    System = "EmployerAccounts",
+                    Version = typeof(MvcApplication).Assembly.GetName().Version.ToString()
+                };
+            });
 
             if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local, Environment.At, Environment.Test))
             {
