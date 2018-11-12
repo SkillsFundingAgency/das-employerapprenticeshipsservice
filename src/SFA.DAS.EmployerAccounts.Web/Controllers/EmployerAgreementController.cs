@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
 
-            return Redirect(Url.LegacyEasAccountAction($"agreements/{agreementId}/view?{paramString}"));
+            return Redirect(Url.LegacyEasAccountAction($"agreements/{agreementId}/view{paramString}"));
         }
 
         [HttpGet]
@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var paramString = Request?.Url?.Query == null ? string.Empty : $"?{Request.Url.Query}";
 
-            return Redirect(Url.LegacyEasAccountAction($"agreements/{request.AgreementId}/sign-your-agreement?{paramString}"));
+            return Redirect(Url.LegacyEasAccountAction($"agreements/{request.AgreementId}/sign-your-agreement{paramString}"));
         }
 
         [HttpGet]

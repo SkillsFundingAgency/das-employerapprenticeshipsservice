@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance/transfer/details")]
         public ActionResult TransferDetail(GetTransferTransactionDetailsQuery query)
         {
-            return Redirect(Url.EmployerFinanceAction($"finance/transfer/details{Request?.Url?.Query}"));
+            return Redirect(Url.EmployerFinanceAction($"finance/transfer/details?{Request?.Url?.Query}"));
         }
 
         [Route("finance/levyDeclaration/details")]
