@@ -30,7 +30,6 @@ namespace SFA.DAS.EAS.Web
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
-
         public void Configuration(IAppBuilder app)
         {
             var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
