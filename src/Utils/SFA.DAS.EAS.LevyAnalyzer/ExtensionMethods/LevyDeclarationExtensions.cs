@@ -24,6 +24,14 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
             return declarations.Where(levy => levy.PayrollMonth < 12);
         }
 
+        /// <summary>
+        ///     Retain only period 12 declarations from the input stream.
+        /// </summary>
+        public static IEnumerable<LevyDeclaration> OnlyPeriod12(this IEnumerable<LevyDeclaration> declarations)
+        {
+            return declarations.Where(levy => levy.PayrollMonth == 12);
+        }
+
         public static bool IsValid(this LevyDeclaration declaration)
         {
             return declaration.PayrollMonth.HasValue &&
@@ -55,12 +63,25 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
         }
 
         /// <summary>
+        ///     Remove all declarations that were not late.
+        /// </summary>
+        public static IEnumerable<LevyDeclaration> OnlyLateSubmissions(
+            this IEnumerable<LevyDeclaration> declarations, IHmrcDateService hmrcDateService)
+        {
+            return declarations
+                .Where(declaration => declaration.IsValid() &&
+                                      !hmrcDateService.IsDateInPayrollPeriod(declaration.PayrollYear,
+                                          declaration.PayrollMonth.Value, declaration.SubmissionDate.Value));
+        }
+
+        /// <summary>
         ///     Returns active transactions (which are those that are valid, on-time and not-superseded)
         /// </summary>
         public static IEnumerable<LevyDeclaration> ActiveDeclarations(
             this IEnumerable<LevyDeclaration> declarations, IHmrcDateService hmrcDateService)
         {
-            foreach (var periodDeclarations in declarations.ExcludeLateSubmissions(hmrcDateService).GroupByPayrollPeriod())
+            foreach (var periodDeclarations in declarations.ExcludeLateSubmissions(hmrcDateService)
+                .GroupByPayrollPeriod())
             {
                 if (periodDeclarations.PayrollPeriod.PayrollMonth == 12)
                 {
@@ -74,6 +95,15 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
                     yield return periodDeclarations.Declarations.Last();
                 }
             }
+        }
+
+        /// <summary>
+        ///     Returns year end adjustments (i.e. period 12 values supplied late).
+        /// </summary>
+        public static IEnumerable<LevyDeclaration> YearEndAdjustments(
+            this IEnumerable<LevyDeclaration> declarations, IHmrcDateService hmrcDateService)
+        {
+            return declarations.OnlyPeriod12().OnlyLateSubmissions(hmrcDateService);
         }
 
         private static readonly PayrollPeriodComparer PayrollPeriodComparer = new PayrollPeriodComparer();
@@ -95,9 +125,11 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
         }
 
         /// <summary>
-        ///     Returns the monthly declared values from the list of declarations.
+        ///     Returns the monthly declared values from the list of declarations. This is calculated as the difference between
+        ///     the current month and the preceding month.
         /// </summary>
-        public static IEnumerable<CalculatedLevyDeclation> CalculateMonthlyValues(this IEnumerable<LevyDeclaration> levyDeclarations)
+        public static IEnumerable<CalculatedLevyDeclation> CalculateMonthlyValues(
+            this IEnumerable<LevyDeclaration> levyDeclarations)
         {
             LevyDeclaration previousDeclaration = null;
 
@@ -108,6 +140,20 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
                 previousDeclaration = declaration;
 
                 yield return result;
+            }
+        }
+
+        /// <summary>
+        ///     Returns the adjustment values for year end.
+        /// </summary>
+        public static IEnumerable<CalculatedLevyDeclation> CalculateYearEndAdjustments(
+            this IEnumerable<LevyDeclaration> levyDeclarations)
+        {
+            var yearEndAdjustmentsByYear = levyDeclarations.GroupByPayrollPeriod();
+
+            foreach (var yearEndAdjustments in yearEndAdjustmentsByYear)
+            {
+                    
             }
         }
     }

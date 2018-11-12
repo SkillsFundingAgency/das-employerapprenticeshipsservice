@@ -96,6 +96,7 @@
     <Compile Include="Rules\CalculatedLevyDeclation.cs" />
     <Compile Include="Rules\Infrastructure\AccountValidationResult.cs" />
     <Compile Include="Rules\Infrastructure\AllAccountValidationResult.cs" />
+    <Compile Include="Rules\YearEndAdjustmentsShouldBeCummulative.cs" />
     <Compile Include="Rules\LevyDeclaredForMonthShouldMatchExpected.cs" />
     <Compile Include="Rules\SupercededLevyShouldNotResultInATransaction.cs" />
     <Compile Include="Rules\OntimeLevyShouldResultInATransaction.cs" />
