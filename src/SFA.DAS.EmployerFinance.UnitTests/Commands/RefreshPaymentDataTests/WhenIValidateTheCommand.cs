@@ -21,7 +21,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             var actual = _validator.Validate(new RefreshPaymentDataCommand
             {
                 AccountId = 123123,
-                PaymentUrl = "http://someUrl",
                 PeriodEnd = "123"
             });
 
@@ -38,7 +37,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             //Assert
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string,string>("AccountId", "AccountId has not been supplied"), actual.ValidationDictionary );
-            Assert.Contains(new KeyValuePair<string,string>("PaymentUrl", "PaymentUrl has not been supplied"), actual.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("PeriodEnd", "PeriodEnd has not been supplied"), actual.ValidationDictionary );
         }
     }
