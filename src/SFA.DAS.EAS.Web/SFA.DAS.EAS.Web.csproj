@@ -654,7 +654,6 @@
     <Content Include="src\svg\tick.svg" />
     <Compile Include="WebRole.cs" />
     <Content Include="Views\Organisation\AddOrganisation.cshtml" />
-    <Content Include="Views\Organisation\OrganisationUpdatedNextSteps.cshtml" />
     <Content Include="Views\Activities\Index.cshtml" />
     <Content Include="Views\Shared\_ValidationSummary.cshtml" />
     <Content Include="Views\Activities\Latest.cshtml" />

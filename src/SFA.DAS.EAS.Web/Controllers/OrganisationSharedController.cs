@@ -17,10 +17,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
         }
 
-        /// <summary>
-        /// AML-2459: Unused entry point
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
         [Route("accounts/{HashedAccountId}/organisations/custom/add", Order = 0)]
         [Route("accounts/organisations/custom/add", Order = 1)]
@@ -29,10 +25,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerProjectionsAction("accounts/{HashedAccountId}/organisations/custom/add"));
         }
 
-        /// <summary>
-        /// AML-2459: Unused entry point
-        /// </summary>
-        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("accounts/{HashedAccountId}/organisations/custom/add", Order = 0)]
@@ -42,10 +34,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("accounts/{HashedAccountId}/organisations/custom/add"));
         }
 
-        /// <summary>
-        /// AML-2459: Unused entry point
-        /// </summary>
-        /// <returns></returns>
         [HttpPost]
         [Route("accounts/{HashedAccountId}/organisations/address/find", Order = 0)]
         [Route("accounts/organisations/address/find", Order = 1)]
@@ -54,10 +42,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("accounts/{HashedAccountId}/organisations/address/find"));
         }
 
-        /// <summary>
-        /// AML-2459: Unused entry point
-        /// </summary>
-        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("accounts/{HashedAccountId}/organisations/address/select", Order = 0)]
@@ -67,10 +51,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("accounts/{HashedAccountId}/organisations/address/select"));
         }
 
-        /// <summary>
-        /// AML-2459: Unused entry point
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
         [Route("accounts/{HashedAccountId}/organisations/address/update", Order = 0)]
         [Route("accounts/organisations/address/update", Order = 1)]
@@ -79,10 +59,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("accounts/{HashedAccountId}/organisations/address/update"));
         }
 
-        /// <summary>
-        /// AML-2459: Unused entry point
-        /// </summary>
-        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("accounts/{HashedAccountId}/organisations/address/update", Order = 0)]

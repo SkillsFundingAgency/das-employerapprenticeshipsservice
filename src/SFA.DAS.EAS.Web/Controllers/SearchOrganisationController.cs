@@ -15,10 +15,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return Redirect(Url.EmployerAccountsAction("organisations/search"));
         }
-        /// <summary>
-        /// AML-2459: Unused entry point
-        /// </summary>
-        /// <returns></returns>
+        
         [Route("{HashedAccountId}/organisations/search/results", Order = 0)]
         [Route("organisations/search/results", Order = 1)]
         public async Task<ActionResult> SearchForOrganisationResults()
@@ -28,10 +25,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction($"organisations/search/results{paramString}"));
         }
 
-        /// <summary>
-        /// AML-2459: Unused entry point
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
         [Route("{HashedAccountId}/organisations/search/manualAdd", Order = 0)]
         [Route("organisations/search/manualAdd", Order = 1)]

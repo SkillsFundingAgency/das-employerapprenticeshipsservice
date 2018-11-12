@@ -662,6 +662,7 @@
     <Content Include="Views\Shared\_Agreement_v1.cshtml" />
     <Content Include="Views\Shared\_Agreement_v2.cshtml" />
     <Content Include="Views\Shared\_Agreement_v2_changes.cshtml" />
+    <Content Include="Views\Organisation\OrganisationUpdatedNextSteps.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">
