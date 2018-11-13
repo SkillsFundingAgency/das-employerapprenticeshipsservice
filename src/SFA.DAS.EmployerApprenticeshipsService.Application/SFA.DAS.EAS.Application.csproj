@@ -331,10 +331,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommand.cs" />
-    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandHandler.cs" />
-    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandResponse.cs" />
-    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityValidator.cs" />
     <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressHandler.cs" />
     <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressRequest.cs" />
     <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressResponse.cs" />
@@ -347,9 +343,6 @@
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQuery.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesResponse.cs" />
-    <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommand.cs" />
-    <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommandHandler.cs" />
-    <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommandValidator.cs" />
     <Compile Include="DependencyResolution\ApprenticeshipLevyRegistry.cs" />
     <Compile Include="DependencyResolution\AuditRegistry.cs" />
     <Compile Include="DependencyResolution\AuthorizationRegistry.cs" />
@@ -448,9 +441,6 @@
     <Compile Include="Commands\AuditCommand\CreateAuditCommand.cs" />
     <Compile Include="Commands\AuditCommand\CreateAuditCommandHandler.cs" />
     <Compile Include="Commands\AuditCommand\CreateAuditCommandValidator.cs" />
-    <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommand.cs" />
-    <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommandHandler.cs" />
-    <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommandValidator.cs" />
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommand.cs" />
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommandHandler.cs" />
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommandResponse.cs" />
