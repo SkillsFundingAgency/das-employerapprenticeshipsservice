@@ -281,7 +281,6 @@
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIManageMyNotificationSettings.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIAddAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
-    <Compile Include="Controllers\EmployerAgreementControllerTests.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenIHandleNewRegistration.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenILoginAUser.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenILogout.cs" />

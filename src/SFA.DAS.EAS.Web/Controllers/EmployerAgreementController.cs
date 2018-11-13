@@ -19,27 +19,15 @@ namespace SFA.DAS.EAS.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAgreementController : BaseController
     {
-        private readonly EmployerAgreementOrchestrator _orchestrator;
-        private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
-
+       
         public EmployerAgreementController(IAuthenticationService owinWrapper,
-            EmployerAgreementOrchestrator orchestrator,
             IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IMediator mediator,
-            IMapper mapper)
+            ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));
-            if (orchestrator == null)
-                throw new ArgumentNullException(nameof(orchestrator));
-
-            _orchestrator = orchestrator;
-            _mediator = mediator;
-            _mapper = mapper;
         }
 
         [HttpGet]
@@ -112,7 +100,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements/remove")]
-        public async Task<ActionResult> GetOrganisationsToRemove(string hashedAccountId)
+        public async Task<ActionResult> GetOrganisationsToRemove()
         {
             return Redirect(Url.EmployerAccountsAction($"agreements/remove"));
         }
@@ -127,7 +115,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [Route("agreements/remove/{agreementId}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemoveOrganisation(string hashedAccountId, string agreementId, ConfirmLegalAgreementToRemoveViewModel model)
+        public async Task<ActionResult> RemoveOrganisation( string agreementId)
         {
             return Redirect(Url.EmployerAccountsAction($"agreements/remove/{agreementId}"));
         }
