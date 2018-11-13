@@ -331,10 +331,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressHandler.cs" />
-    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressRequest.cs" />
-    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressResponse.cs" />
-    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressValidator.cs" />
     <Compile Include="Extensions\AddressExtensions.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityRequest.cs" />

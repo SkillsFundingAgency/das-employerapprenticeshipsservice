@@ -325,8 +325,6 @@
     <Compile Include="Queries\GetTransferAllowanceTests\GetTransferAllowanceTests.cs" />
     <Compile Include="Commands\UnsubscribeNotificationTest\WhenUnsubscribingFromNotification.cs" />
     <Compile Include="Commands\UnsubscribeNotificationTest\WhenValidatingUnsubscribeCommand.cs" />
-    <Compile Include="Commands\CreateOrganisationAddressTests\WhenICreateAnAddress.cs" />
-    <Compile Include="Commands\CreateOrganisationAddressTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIRemoveAPayeSchemeFromAnAccount.cs" />
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\WhenUpdatingUserNotificationSettings.cs" />
