@@ -1,13 +1,6 @@
-﻿using AutoMapper;
-using MediatR;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Helpers;
-using SFA.DAS.EAS.Web.Orchestrators;
+﻿using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using System;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
@@ -32,14 +25,14 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements")]
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             return Redirect(Url.EmployerAccountsAction("agreements"));
         }
 
         [HttpGet]
         [Route("agreements/{agreementId}/details")]
-        public async Task<ActionResult> Details(string agreementId)
+        public ActionResult Details(string agreementId)
         {
 
             return
@@ -48,21 +41,21 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements/{agreementId}/view")]
-        public async Task<ActionResult> View(string agreementId)
+        public new ActionResult View(string agreementId)
         {
             return Redirect(Url.EmployerAccountsAction($"agreements/{agreementId}/view"));
         }
 
         [HttpGet]
         [Route("agreements/unsigned/view")]
-        public async Task<ActionResult> ViewUnsignedAgreements()
+        public ActionResult ViewUnsignedAgreements()
         {
             return Redirect(Url.EmployerAccountsAction("agreements/unsigned/view"));
         }
 
         [HttpGet]
         [Route("agreements/{agreementId}/about-your-agreement")]
-        public async Task<ActionResult> AboutYourAgreement(string agreementid)
+        public ActionResult AboutYourAgreement(string agreementid)
         {
             return Redirect(Url.EmployerAccountsAction($"agreements/{agreementid}/about-your-agreement"));
 
@@ -70,14 +63,14 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements/{agreementId}/sign-your-agreement")]
-        public async Task<ActionResult> SignAgreement(string agreementId)
+        public ActionResult SignAgreement(string agreementId)
         {
             return Redirect(Url.EmployerAccountsAction($"agreements/{agreementId}/sign-your-agreement"));
         }
 
         [HttpGet]
         [Route("agreements/{agreementId}/next")]
-        public async Task<ActionResult> NextSteps(string agreementId)
+        public ActionResult NextSteps(string agreementId)
         {
             return Redirect(Url.EmployerAccountsAction($"agreements/{agreementId}/next"));
         }
@@ -85,7 +78,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements/{agreementId}/agreement-pdf")]
-        public async Task<ActionResult> GetPdfAgreement(string agreementId)
+        public ActionResult GetPdfAgreement(string agreementId)
         {
             return Redirect(Url.EmployerAccountsAction($"agreements/{agreementId}/agreement-pdf"));
 
@@ -93,21 +86,21 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements/{agreementId}/signed-agreement-pdf")]
-        public async Task<ActionResult> GetSignedPdfAgreement(string agreementId)
+        public ActionResult GetSignedPdfAgreement(string agreementId)
         {
             return Redirect(Url.EmployerAccountsAction($"agreements/{agreementId}/signed-agreement-pdf"));
         }
 
         [HttpGet]
         [Route("agreements/remove")]
-        public async Task<ActionResult> GetOrganisationsToRemove()
+        public ActionResult GetOrganisationsToRemove()
         {
             return Redirect(Url.EmployerAccountsAction($"agreements/remove"));
         }
 
         [HttpGet]
         [Route("agreements/remove/{agreementId}")]
-        public async Task<ActionResult> ConfirmRemoveOrganisation(string agreementId)
+        public ActionResult ConfirmRemoveOrganisation(string agreementId)
         {
             return Redirect(Url.EmployerAccountsAction($"agreements/remove/{agreementId}"));
         }
@@ -115,7 +108,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [Route("agreements/remove/{agreementId}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemoveOrganisation( string agreementId)
+        public ActionResult RemoveOrganisation( string agreementId)
         {
             return Redirect(Url.EmployerAccountsAction($"agreements/remove/{agreementId}"));
         }

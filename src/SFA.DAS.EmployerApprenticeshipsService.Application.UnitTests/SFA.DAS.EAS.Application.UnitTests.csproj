@@ -320,7 +320,6 @@
     <Compile Include="Queries\GetAccountLegalEntities\WhenIGetAccountLegalEntities.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenValidatingAccountLegalEntities.cs" />
     <Compile Include="Queries\GetStatisticsTests\GetStatisticsQueryTests.cs" />
-    <Compile Include="Queries\GetEmployerAgreementQueryTests\GetEmployerAgreementTests.cs" />
     <Compile Include="Queries\GetLegalEntityQueryTests\GetLegalEntityQueryTests.cs" />
     <Compile Include="Queries\GetTransferAllowanceTests\GetTransferAllowanceTests.cs" />
     <Compile Include="Commands\UnsubscribeNotificationTest\WhenUnsubscribingFromNotification.cs" />
@@ -350,12 +349,9 @@
     <Compile Include="Queries\GetCharity\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementByIdTests\WhenIGetAnAgreement.cs" />
     <Compile Include="Queries\GetEmployerAgreementByIdTests\WhenIValidateTheQuery.cs" />
-    <Compile Include="Queries\GetEmployerAgreementQueryTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetLastLevyDeclarationsTests\WhenIGetLevyDeclarations.cs" />
     <Compile Include="Queries\GetLastLevyDeclarationsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriodTests\WhenIGetLevyDeclarations.cs" />
-    <Compile Include="Queries\GetOrganisationTests\WhenISearchForAnOrganisation.cs" />
-    <Compile Include="Queries\GetOrganisationTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetPayeSchemeByRefTests\WhenIGetAPayeScheme.cs" />
     <Compile Include="Queries\GetPayeSchemeByRefTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByAccountId.cs" />

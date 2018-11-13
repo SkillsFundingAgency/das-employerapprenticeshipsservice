@@ -16,5 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Models.Account
         public virtual string Sector { get; set; }
         public virtual OrganisationType Source { get; set; }
         public virtual string Status { get; set; }
+        public virtual ICollection<AccountLegalEntity> AccountLegalEntities { get; set; } = new List<AccountLegalEntity>();
+
     }
 }

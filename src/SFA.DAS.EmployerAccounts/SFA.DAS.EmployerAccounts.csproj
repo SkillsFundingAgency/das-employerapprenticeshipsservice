@@ -9,7 +9,6 @@
     <Compile Remove="Models\HmrcLevy\Employer.cs" />
     <Compile Remove="Models\HmrcLevy\EmployerLevyData.cs" />
     <Compile Remove="Models\HmrcLevy\EmpRefLevyInformation.cs" />
-    <Compile Remove="Models\HmrcLevy\EnglishFractionDeclarations.cs" />
     <Compile Remove="Models\HmrcLevy\LevyDeclarations.cs" />
     <Compile Remove="Models\HmrcLevy\Link.cs" />
     <Compile Remove="Models\HmrcLevy\Links.cs" />

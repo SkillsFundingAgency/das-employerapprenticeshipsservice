@@ -10,7 +10,7 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Events;
+using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
@@ -19,9 +19,9 @@ using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
-using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NServiceBus.Testing;
 using SFA.DAS.Validation;
+using IAccountEventFactory = SFA.DAS.EmployerAccounts.Factories.IAccountEventFactory;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
 {
@@ -29,7 +29,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
     {
         private Mock<IAccountRepository> _accountRepository;
         private CreateAccountCommandHandler _handler;
-        private Mock<IMessagePublisher> _messagePublisher;
         private Mock<IMediator> _mediator;
         private Mock<IValidator<CreateAccountCommand>> _validator;
         private Mock<IHashingService> _hashingService;
@@ -54,7 +53,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             _accountRepository.Setup(x => x.GetPayeSchemesByAccountId(ExpectedAccountId)).ReturnsAsync(new List<PayeView> { new PayeView { LegalEntityId = ExpectedLegalEntityId } });
             _accountRepository.Setup(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<short?>(), It.IsAny<string>())).ReturnsAsync(new CreateAccountResult { AccountId = ExpectedAccountId, LegalEntityId = 0L, EmployerAgreementId = 0L });
 
-            _messagePublisher = new Mock<IMessagePublisher>();
             _eventPublisher = new TestableEventPublisher();
             _mediator = new Mock<IMediator>();
 

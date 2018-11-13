@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         private Mock<IAccountRepository> _accountRepository;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IMediator> _mediator;
-        private Mock<Events.IGenericEventFactory> _genericEventFactory;
+        private Mock<IGenericEventFactory> _genericEventFactory;
         private CreateLegalEntityCommandHandler _commandHandler;
         private CreateLegalEntityCommand _command;
         private MembershipView _owner;
@@ -74,7 +74,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
                 .ReturnsAsync(_owner);
 
-            _genericEventFactory = new Mock<Events.IGenericEventFactory>();
+            _genericEventFactory = new Mock<IGenericEventFactory>();
             _legalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
             _hashingService = new Mock<IHashingService>();
             _agreementService = new Mock<IAgreementService>();

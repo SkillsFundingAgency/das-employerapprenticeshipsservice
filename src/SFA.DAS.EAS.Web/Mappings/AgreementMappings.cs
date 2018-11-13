@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using SFA.DAS.EAS.Application.Dtos;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
-using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Mappings
 {
@@ -20,9 +18,6 @@ namespace SFA.DAS.EAS.Web.Mappings
                 .ForMember(dest => dest.AccountLegalentityId, opt => opt.MapFrom(src => src.LegalEntity.AccountLegalEntityId))
                 .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opt => opt.MapFrom(src => src.LegalEntity.AccountLegalEntityPublicHashedId));
 
-            CreateMap<GetEmployerAgreementResponse, EmployerAgreementViewModel>()
-                .ForMember(dest => dest.PreviouslySignedEmployerAgreement, opt => opt.MapFrom(src => src.LastSignedAgreement))
-                .ForMember(dest => dest.OrganisationLookupPossible, opt => opt.Ignore());
         }
     }
 }
