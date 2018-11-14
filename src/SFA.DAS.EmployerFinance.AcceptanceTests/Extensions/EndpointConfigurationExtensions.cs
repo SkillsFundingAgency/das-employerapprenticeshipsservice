@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Azure;
 using NServiceBus;
@@ -17,8 +21,30 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 
         private static readonly ILog _log = new NLogLogger(typeof(EndpointConfigurationExtensions));
 
+
+
+
+        public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config,
+            Func<string> connectionStringBuilder)
+        {
+            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
+
+            // If we use SendLocal we can use the configured queue
+            config.UseAzureServiceBusTransport(isDevelopment, connectionStringBuilder, r =>
+            {
+                r.RouteToEndpoint(
+                    typeof(ImportLevyDeclarationsCommand).Assembly,
+                    typeof(ImportLevyDeclarationsCommand).Namespace,
+                    "SFA.DAS.EmployerFinance.AcceptanceTests");
+            });
+
+            return config;
+        }
+
+
         public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config)
         {
+            _log.Info("Setting NService bus to end point config");
             // It is important that we use the LearningTransport here to avoid clashes with the real message handler web job (which will be running in the AT env).
             config.UseAzureServiceBusTransport(null, r =>
                 {
@@ -38,9 +64,10 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             Action<TransportExtensions<LearningTransport>> transportSettings)
         {
             TransportExtensions<LearningTransport> config1 = config.UseTransport<LearningTransport>();
+            transportSettings?.Invoke(config1);
+
             config1.Transactions(TransportTransactionMode.ReceiveOnly);
             routing((RoutingSettings) config1.Routing<LearningTransport>());
-            transportSettings?.Invoke(config1);
             return config;
         }
 
@@ -67,7 +94,14 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             {
                 storageFolder = System.Environment.GetEnvironmentVariable(envVariableName);
                 _log.Debug($"Environment variable '{envVariableName}' resolved to folder name '{storageFolder}'");
+
+                if (string.IsNullOrWhiteSpace(storageFolder))
+                {
+                    LogEnvironmentVariables();
+                }
             }
+
+            _log.Debug($"Resolved folder {storageFolder} for learning transport storage folder");
 
             return !string.IsNullOrWhiteSpace(storageFolder);
         }
@@ -96,6 +130,22 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             }
 
             return !string.IsNullOrWhiteSpace(envVariableName);
+        }
+
+        private static void LogEnvironmentVariables()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(
+                "The variable name does not exist as an environment variable - the following environment variables exist");
+
+            foreach (DictionaryEntry env in System.Environment.GetEnvironmentVariables())
+            {
+                sb.Append(env.Key);
+                sb.Append('=');
+                sb.AppendLine(env.Value.ToString());
+            }
+
+            _log.Debug(sb.ToString());
         }
     }
 }

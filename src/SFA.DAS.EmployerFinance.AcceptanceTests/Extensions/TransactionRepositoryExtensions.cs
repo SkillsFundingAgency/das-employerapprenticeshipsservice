@@ -69,12 +69,18 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
                     // Note that when IsResultStable returns true we have already read the same result twice so the first true result means we have a sequence of 2, not 1.
                     actualStableReadCount = isSteady ? (actualStableReadCount == 0 ? 2 : actualStableReadCount + 1) : 0;
 
-                    _log.Debug($"stability-check:{thisStabilityCheck} isSteady:{isSteady} count:{result} current-steady-count:{actualStableReadCount} ");
+                    _log.Debug(
+                        $"stability-check:{thisStabilityCheck} isSteady:{isSteady} count:{result} current-steady-count:{actualStableReadCount} ");
                 }
             }
             catch (TaskCanceledException)
             {
                 // sink exception
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex, "Error occurred waiting for a levy declaration stable state");
+                throw;
             }
 
             return actualStableReadCount == requiredStableReadCount;

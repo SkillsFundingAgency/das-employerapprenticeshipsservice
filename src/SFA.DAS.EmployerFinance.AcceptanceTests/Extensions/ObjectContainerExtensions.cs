@@ -65,6 +65,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
                 }
                 catch (Exception ex)
                 {
+                    nestedContainer.GetInstance<ILog>().Error(ex, "An error occurred in ScopeAsync");
+
                     await unitOfWorkManager.EndAsync(ex).ConfigureAwait(false);
                     throw;
                 }

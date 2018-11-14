@@ -153,13 +153,11 @@
     <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.8.12.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.8.12\lib\net45\SFA.DAS.Tasks.API.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.1.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.1.16\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.TokenService.Api.Types, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Types.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.TokenService.Api.Types, Version=1.1.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.1.16\lib\net45\SFA.DAS.TokenService.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.6.0\lib\net45\StructureMap.dll</HintPath>
@@ -226,7 +224,6 @@
     <Compile Include="Extensions\StringEquivalenceOptionsTests.cs" />
     <Compile Include="Factories\WhenICreateARestClient.cs" />
     <Compile Include="Features\AgreementServiceTests.cs" />
-    <Compile Include="Mapping\PaymentMappingTests\WhenIMapAPaymentToPaymentDetails.cs" />
     <Compile Include="NoopExecutionPolicy.cs" />
     <Compile Include="Authorization\AuthorizationServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

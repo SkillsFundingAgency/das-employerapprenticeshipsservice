@@ -13,6 +13,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.UnitTests.Extensions
     {
         [TestCase("abc", "", false)]
         [TestCase("$(abc)", "ABC", true)]
+        [TestCase("$(abc.123)", "ABC_123", true)]
         public void TryToInterpretConfigValueAsEnvVariable(string configValue, string expectedVariable, bool expectedResult)
         {
             // act

@@ -1,11 +1,8 @@
-﻿@using System.Security.Policy
-@using Microsoft.ApplicationInsights.Extensibility
+﻿@using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerFinance.Web.Extensions
-@using SFA.DAS.EmployerFinance.Web.ViewModels
 @using SFA.DAS.Extensions
-@using StructureMap.Query
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -13,6 +10,19 @@
 <html lang="en">
 <!--<![endif]-->
 <head>
+
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-KWQBWGJ');</script>
+    <!-- End Google Tag Manager -->
+
     <meta charset="utf-8" />
     <title>@ViewBag.Title - Manage apprentices</title>
     @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDesc))
@@ -53,16 +63,6 @@
     <!-- This is from individual pages -->
     @RenderSection("gaDataLayer", false)
 
-    <!-- Google Tag Manager -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-83918739-9"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'UA-83918739-9');
-    </script>
-    <!-- End Google Tag Manager -->
-
     <script type="text/javascript">
         var appInsights = window.appInsights ||
             function(config) {
@@ -101,8 +101,10 @@
 <body id="@ViewBag.PageID">
 
     <!-- Google Tag Manager (noscript) -->
-    <script>(function (w, d, s, l, i) { w[l]‌‌=w[l]‌‌|| []‌‌; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' }); var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f); })(window, document, 'script', 'dataLayer', 'GTM-KWQBWGJ');</script>
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
     <!-- End Google Tag Manager (noscript) -->
 
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
@@ -164,13 +166,13 @@
                                     <a href="/" role="menuitem">Settings</a>
                                     <ul role="menu" class="js-hidden" id="settings-menu">
                                         <li>
-                                            <a href="@Url.LegacyEasAction("accounts")" role="menuitem" class="sub-menu-item">Your accounts</a>
+                                            <a href="@Url.EmployerAccountsAction("service/accounts", false)" role="menuitem" class="sub-menu-item">Your accounts</a>
                                         </li>
                                         @if (!DynamicExtensions.ParseHideNavFromViewBag(ViewBag))
                                         {
                                             <li>
                                                 @*<a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem" class="sub-menu-item">Rename account</a>*@
-                                                <a href="@Url.LegacyEasAccountAction($"rename")" role="menuitem" class="sub-menu-item">Rename account</a>
+                                                <a href="@Url.EmployerAccountsAction("rename")" role="menuitem" class="sub-menu-item">Rename account</a>
                                             </li>
                                         }
                                         <li>
@@ -182,7 +184,7 @@
                                         @if (!DynamicExtensions.ParseHideNavFromViewBag(ViewBag))
                                         {
                                             <li>
-                                                <a href="@Url.LegacyEasAction("settings/notifications")" class="sub-menu-item">Notification settings</a>
+                                                <a href="@Url.EmployerAccountsAction("settings/notifications", false)" class="sub-menu-item">Notification settings</a>
                                             </li>
                                         }
                                     </ul>
@@ -217,26 +219,26 @@
                 <nav class="header-inner">
                     <ul role="menubar" id="global-nav-links">
                         <li>
-                            <a href="@Url.LegacyEasAccountAction("teams")" class="@(ViewBag.Section == "home" ? "selected" : "")" role="menuitem">Home</a>
+                            <a href="@Url.EmployerAccountsAction("teams")" class="@(ViewBag.Section == "home" ? "selected" : "")" role="menuitem">Home</a>
                         </li>
                         <li>
                             <a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a>
                         </li>
                         @if (Html.IsAuthorized(FeatureType.Recruitments))
-                            {
-                                <li><a href="@Url.EmployerRecruitAction()" role="menuitem">Recruitment</a></li>
-                            }
+                        {
+                            <li><a href="@Url.EmployerRecruitAction()" role="menuitem">Recruitment</a></li>
+                        }
                         <li>
                             <a href="@Url.EmployerCommitmentsAction("apprentices/home")" class="@(controllerString == "EmployerCommitments" ? "selected" : "")" role="menuitem">Apprentices</a>
                         </li>
                         <li>
-                            <a href="@Url.LegacyEasAccountAction("teams/view")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Your team</a>
+                            <a href="@Url.EmployerAccountsAction("teams/view")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Your team</a>
                         </li>
                         <li>
-                            <a href="@Url.LegacyEasAccountAction("agreements")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Your organisations and agreements</a>
+                            <a href="@Url.EmployerAccountsAction("agreements")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Your organisations and agreements</a>
                         </li>
                         <li>
-                            <a href="@Url.LegacyEasAccountAction("schemes")" class="@(ViewBag.Section == "paye" ? "selected" : "")" role="menuitem">PAYE schemes</a>
+                            <a href="@Url.EmployerAccountsAction("schemes")" class="@(ViewBag.Section == "paye" ? "selected" : "")" role="menuitem">PAYE schemes</a>
                         </li>
                     </ul>
                 </nav>
