@@ -1,8 +1,10 @@
 ﻿using System.Data.Common;
 using System.Data.SqlClient;
+using Microsoft.Azure.Documents;
 using NServiceBus.Persistence;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.NServiceBus.ClientOutbox;
 using SFA.DAS.NServiceBus.SqlServer.ClientOutbox;
 using SFA.DAS.UnitOfWork;
@@ -14,6 +16,9 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public DataRegistry()
         {
+            For<IDocumentClient>().Use(c => c.GetInstance<IDocumentClientFactory>().CreateDocumentClient()).Singleton();
+            For<IDocumentClientFactory>().Use<DocumentClientFactory>();
+
             For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerAccountsConfiguration>().DatabaseConnectionString));
             For<EmployerAccountsDbContext>().Use(c => GetDbContext(c));
             For<EmployerFinanceDbContext>().Use(c => new EmployerFinanceDbContext(c.GetInstance<EmployerFinanceConfiguration>().DatabaseConnectionString));

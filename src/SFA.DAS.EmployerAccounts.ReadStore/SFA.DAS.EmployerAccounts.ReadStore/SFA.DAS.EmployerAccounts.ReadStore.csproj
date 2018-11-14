@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SFA.DAS.CosmosDb" Version="0.1.3" />
+    <PackageReference Include="SFA.DAS.CosmosDb" Version="0.1.5" />
   </ItemGroup>
 
   <ItemGroup>
