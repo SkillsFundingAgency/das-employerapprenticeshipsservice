@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SFA.DAS.CosmosDb" Version="0.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Application\Queries\" />
+  </ItemGroup>
+
+</Project>
