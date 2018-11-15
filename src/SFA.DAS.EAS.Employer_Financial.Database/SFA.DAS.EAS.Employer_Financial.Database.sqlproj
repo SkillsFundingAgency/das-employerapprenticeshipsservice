@@ -172,4 +172,7 @@
   <ItemGroup>
     <None Include="Scripts\PreDeployment\AML-2671-PopulateNullApprenticeshipCourseNames.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\PreDeployment\AML-2395-DropDeprecatedView.sql" />
+  </ItemGroup>
 </Project>

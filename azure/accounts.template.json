@@ -43,12 +43,8 @@
         "storageConnectionString": {
             "type": "string"
         },
-        "loadCertificateThumbprints": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Comma separated list of certificate thumbprints to load into the app service"
-            }
+        "tokenCertificateThumbprint": {
+            "type": "string"
         },
         "uiCustomHostname": {
             "type": "string",
@@ -150,7 +146,11 @@
                             },
                             {
                                 "name": "WEBSITE_LOAD_CERTIFICATES",
-                                "value": "[parameters('loadCertificateThumbprints')]"
+                                "value": "[parameters('tokenCertificateThumbprint')]"
+                            },
+                            {
+                                "name": "TokenCertificateThumbprint",
+                                "value": "[parameters('tokenCertificateThumbprint')]"
                             }
                         ]
                     },
