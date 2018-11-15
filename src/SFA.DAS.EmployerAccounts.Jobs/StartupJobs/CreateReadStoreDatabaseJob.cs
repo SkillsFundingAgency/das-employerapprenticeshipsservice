@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
                         {
                             new UniqueKey
                             {
-                                Paths = new Collection<string> { "/accountId" }
+                                Paths = new Collection<string> { "/accountId", "/metaData/schemaType" }
                             }
                         }
                 }

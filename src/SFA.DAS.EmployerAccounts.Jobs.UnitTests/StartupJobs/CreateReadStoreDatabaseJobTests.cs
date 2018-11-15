@@ -26,7 +26,8 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
                 It.Is<DocumentCollection>(d =>
                     d.Id == DocumentSettings.UsersCollectionName &&
                     d.PartitionKey.Paths.Contains("/userRef") &&
-                    d.UniqueKeyPolicy.UniqueKeys[0].Paths.Contains("/accountId")
+                    d.UniqueKeyPolicy.UniqueKeys[0].Paths.Contains("/accountId") &&
+                    d.UniqueKeyPolicy.UniqueKeys[0].Paths.Contains("/metaData/schemaType")
                 ), null), Times.Once));
         }
     }
