@@ -93,6 +93,25 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
             Assert.AreEqual(expectedYearEndAdjustment, fixtures.Result[1].EndOfYearAdjustmentAmount);
         }
 
+
+        [Test(Description = "The first adjustment should apply to the P12 declaration")]
+        public async Task Cleanup_SingleLevyAdjustmentAppliedToAnOntimePeriod12Submission_AdjustmentShouldUseTheP12Adjustment()
+        {
+            const decimal period12Value = 10000;
+            const decimal firstAdjustmentValue = 20000;
+
+            //Arrange 
+            var fixtures = new LevyImportCleanerStrategyTestFixtures()
+                .WithDeclaration(123, period12Value, "17-18", 12, new DateTime(2018, 03, 15))
+                .WithDeclaration(124, firstAdjustmentValue, "17-18", 12, new DateTime(2018, 09, 15));
+
+            // act
+            await fixtures.RunStrategy();
+
+            //Assert 
+            const decimal expectedYearEndAdjustment = (firstAdjustmentValue - period12Value) * -1; // adjustments are inverted
+        }
+
         [Test(Description = "A later adjustment should apply on top of earlier adjustments, not replace")]
         public async Task Cleanup_MultipleLevyAdjustments_LaterAdjustmentsShouldApplyToPriorAdjustments()
         {

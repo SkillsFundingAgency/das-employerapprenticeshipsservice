@@ -173,7 +173,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
         public async Task ThenIfTheSubmissionIsAnEndOfYearAdjustmentThePeriod12ValueWillBeTakenFromHmrcIfItExists()
         {
             const decimal period12Value = 5;
-            var period12SubmissionDate = new DateTime(2017, 04, 20);
+            var period12SubmissionDate = new DateTime(2017, 04, 19);
             const decimal yearEndAdjustment = 20;
             var yearEndAdjustmentSubmissionDate = new DateTime(2017, 05, 01);
 
@@ -183,9 +183,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
             List<DasDeclaration> savedDeclarations = null;
 
             //Arrange
-            _hmrcDateService.Setup(x => x.IsSubmissionEndOfYearAdjustment("16-17", 12, period12SubmissionDate)).Returns(false);
             _hmrcDateService.Setup(x => x.IsSubmissionEndOfYearAdjustment("16-17", 12, yearEndAdjustmentSubmissionDate)).Returns(true);
-            _hmrcDateService.Setup(x => x.IsDateInPayrollPeriod("16-17", 12, It.IsAny<DateTime>())).Returns(true);
+            _hmrcDateService.Setup(x => x.IsDateOntimeForPayrollPeriod("16-17", 12, period12SubmissionDate)).Returns(true);
+
             _levyRepository
                 .Setup(x => x.CreateEmployerDeclarations(It.IsAny<IEnumerable<DasDeclaration>>(), ExpectedEmpRef, ExpectedAccountId))
                 .Callback<IEnumerable<DasDeclaration>, string, long>((declarations, empref, accountId) => savedDeclarations = declarations.ToList())
