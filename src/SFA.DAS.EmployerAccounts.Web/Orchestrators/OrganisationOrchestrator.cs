@@ -225,59 +225,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        //private static string BuildAddressString(GetEmployerInformationResponse response)
-        //{
-        //    var addressBuilder = new StringBuilder();
-
-        //    if (!string.IsNullOrEmpty(response.AddressLine1))
-        //    {
-        //        addressBuilder.Append($"{response.AddressLine1}, ");
-        //    }
-
-        //    if (!string.IsNullOrEmpty(response.AddressLine2))
-        //    {
-        //        addressBuilder.Append($"{response.AddressLine2}, ");
-        //    }
-
-        //    if (!string.IsNullOrEmpty(response.TownOrCity))
-        //    {
-        //        addressBuilder.Append($"{response.TownOrCity}, ");
-        //    }
-
-        //    if (!string.IsNullOrEmpty(response.County))
-        //    {
-        //        addressBuilder.Append(string.IsNullOrEmpty(response.AddressPostcode)
-        //            ? $"{response.County}"
-        //            : $"{response.County}, ");
-        //    }
-
-        //    if (!string.IsNullOrEmpty(response.AddressPostcode))
-        //    {
-        //        addressBuilder.Append(response.AddressPostcode);
-        //    }
-
-        //    return addressBuilder.ToString();
-        //}
-
-        //public async Task<OrchestratorResponse<OrganisationDetailsViewModel>> CheckLegalEntityIsNotAddedToAccount(string hashedLegalEntityId, string userIdClaim, string legalEntityCode, OrganisationType organisationType)
-        //{
-        //    var accountLegalEntitiesHelper = new AccountLegalEntitiesHelper(_mediator);
-        //    var accountEntities = await accountLegalEntitiesHelper.GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
-
-        //    if (accountLegalEntitiesHelper.IsLegalEntityAlreadyAddedToAccount(accountEntities, null, legalEntityCode, organisationType))
-        //    {
-        //        var conflictResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
-        //        {
-        //            Data = new OrganisationDetailsViewModel(),
-        //            Status = HttpStatusCode.Conflict
-        //        };
-
-        //        return conflictResponse;
-        //    }
-
-        //    return null;
-        //}
-
         public OrchestratorResponse<OrganisationDetailsViewModel> StartConfirmOrganisationDetails(AddOrganisationAddressViewModel request)
         {
             return new OrchestratorResponse<OrganisationDetailsViewModel>
@@ -315,73 +262,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 }
             };
         }
-
-        //public virtual Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
-        //        string organisationName,
-        //        string userId,
-        //        string hashedAccountId)
-        //{
-        //    return this.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, string.Empty);
-        //}
-
-        //public virtual async Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
-        //    string organisationName,
-        //    string userId,
-        //    string hashedAccountId,
-        //    string hashedAgreementId)
-        //{
-        //    var showWizard = await UserShownWizard(userId, hashedAccountId);
-
-        //    return new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
-        //    {
-        //        Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName, ShowWizard = showWizard, HashedAgreementId = hashedAgreementId }
-        //    };
-        //}
-
-        //public async Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string accountLegalEntityPublicHashedId)
-        //{
-        //    var currentDetails = await MediatR.Mediator.SendAsync(new GetAccountLegalEntityRequest
-        //    {
-        //        AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(accountLegalEntityPublicHashedId)
-        //    });
-
-        //    var refreshedDetails = await MediatR.Mediator.SendAsync(new GetOrganisationByIdRequest
-        //    {
-        //        Identifier = currentDetails.AccountLegalEntity.Identifier,
-        //        OrganisationType = currentDetails.AccountLegalEntity.OrganisationType
-        //    });
-
-        //    OrganisationUpdatesAvailable CheckForUpdate(string currentValue, string updatedValue, OrganisationUpdatesAvailable includeIfDifferent)
-        //    {
-        //        // The address will be stored with leading and trailing spaces removed, so the change comparison will exclude these.
-        //        // Also, the names and addresses returned by CH search and get by id are inconsistent. Specifically the spacing within a 
-        //        // name of address are different. To counter this one or spaces will be considered to be equivalent. 
-        //        if (!currentValue.IsEquivalent(updatedValue, StringEquivalenceOptions.IgnoreLeadingSpaces | StringEquivalenceOptions.IgnoreTrailingSpaces | StringEquivalenceOptions.MultipleSpacesAreEquivalent))
-        //        {
-        //            return includeIfDifferent;
-        //        }
-
-        //        return OrganisationUpdatesAvailable.None;
-        //    }
-
-        //    var result = new OrchestratorResponse<ReviewOrganisationAddressViewModel>
-        //    {
-        //        Data = new ReviewOrganisationAddressViewModel
-        //        {
-        //            DataSourceFriendlyName = currentDetails.AccountLegalEntity.OrganisationType.GetFriendlyName(),
-        //            AccountLegalEntityPublicHashedId = accountLegalEntityPublicHashedId,
-        //            OrganisationName = currentDetails.AccountLegalEntity.Name,
-        //            OrganisationAddress = currentDetails.AccountLegalEntity.Address,
-        //            RefreshedName = refreshedDetails.Organisation.Name,
-        //            RefreshedAddress = refreshedDetails.Organisation.Address.FormatAddress(),
-        //        }
-        //    };
-
-        //    result.Data.UpdatesAvailable = CheckForUpdate(result.Data.OrganisationName, result.Data.RefreshedName, OrganisationUpdatesAvailable.Name) |
-        //                                   CheckForUpdate(result.Data.OrganisationAddress, result.Data.RefreshedAddress, OrganisationUpdatesAvailable.Address);
-
-        //    return result;
-        //}
 
         public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
         {
