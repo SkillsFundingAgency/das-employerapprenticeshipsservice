@@ -7,7 +7,7 @@ using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Queries
 {
-    public class HasRoleQueryHandler : IApiRequestHandler<HasRoleQuery, HasRoleQueryResult>
+    internal class HasRoleQueryHandler : IApiRequestHandler<HasRoleQuery, HasRoleQueryResult>
     {
         private readonly IUsersRolesRepository _usersRolesRepository;
 

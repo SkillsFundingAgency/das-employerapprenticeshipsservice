@@ -52,12 +52,12 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
 
     public class HasRoleQueryHandlerTestsFixture
     {
-        public HasRoleQuery Query { get; set; }
+        internal HasRoleQuery Query { get; set; }
         public CancellationToken CancellationToken { get; set; }
-        public IApiRequestHandler<HasRoleQuery,HasRoleQueryResult> Handler { get; set; }
-        public Mock<IUsersRolesRepository> MockUserRolesRepository { get; set; }
+        internal IApiRequestHandler<HasRoleQuery,HasRoleQueryResult> Handler { get; set; }
+        internal Mock<IUsersRolesRepository> MockUserRolesRepository { get; set; }
         internal IOrderedQueryable<UserRoles> DocumentQuery { get; set; }
-        public List<UserRoles> Roles { get; set; }
+        internal List<UserRoles> Roles { get; set; }
 
         public HasRoleQueryHandlerTestsFixture()
         {
@@ -72,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
             Handler = new HasRoleQueryHandler(MockUserRolesRepository.Object);
         }
 
-        public Task<HasRoleQueryResult> Handle()
+        internal Task<HasRoleQueryResult> Handle()
         {
             return Handler.Handle(Query, CancellationToken);
         }

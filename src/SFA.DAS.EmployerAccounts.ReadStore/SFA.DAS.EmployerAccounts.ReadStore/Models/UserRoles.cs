@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Models
 {
-    public class UserRoles : Document
+    internal class UserRoles : Document
     {
         [JsonProperty("userRef")] public Guid UserRef { get; protected set; }
 

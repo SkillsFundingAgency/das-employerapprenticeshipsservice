@@ -6,7 +6,7 @@ using SFA.DAS.EmployerAccounts.Types.Models;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Queries
 {
-    public class HasRoleQuery : IApiRequest<HasRoleQueryResult>
+    internal class HasRoleQuery : IApiRequest<HasRoleQueryResult>
     {
         public Guid UserRef { get; set; }
         public long EmployerAccountId { get; set; }
