@@ -17,4 +17,8 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj" />
+  </ItemGroup>
+
 </Project>

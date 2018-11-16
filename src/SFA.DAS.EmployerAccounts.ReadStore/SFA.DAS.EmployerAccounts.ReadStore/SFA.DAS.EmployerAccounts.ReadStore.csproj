@@ -13,4 +13,8 @@
     <Folder Include="Application\Queries\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\SFA.DAS.EmployerAccounts.Types\SFA.DAS.EmployerAccounts.Types.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -4,7 +4,7 @@ using SFA.DAS.CosmosDb;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Models
 {
-    internal abstract class Document : IDocument
+    public abstract class Document : IDocument
     {
         [JsonProperty("id")]
         public virtual Guid Id { get; set; }
