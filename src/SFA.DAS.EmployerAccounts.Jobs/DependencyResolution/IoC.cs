@@ -7,12 +7,15 @@ namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
     {
         public static IContainer Initialize()
         {
-            return new Container(c =>
+            var container = new Container(c =>
             {
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
+
+            ServiceLocator.Initialize(container);
+            return container;
         }
     }
 }
