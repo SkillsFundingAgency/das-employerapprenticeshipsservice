@@ -22,6 +22,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         private EmployerAccountsDbContext GetDbContext(IContext context)
         {
             var unitOfWorkContext = context.GetInstance<IUnitOfWorkContext>();
+            // neither of these resolve in ioc.
             var clientSession = unitOfWorkContext.TryGet<IClientOutboxTransaction>();
             var serverSession = unitOfWorkContext.TryGet<SynchronizedStorageSession>();
             var sqlSession = clientSession?.GetSqlSession() ?? serverSession.GetSqlSession();

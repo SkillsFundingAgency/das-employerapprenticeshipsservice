@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,13 +12,18 @@ using System.Web.Http.ExceptionHandling;
 using Microsoft.Owin.Testing;
 using Moq;
 using Newtonsoft.Json;
+using NServiceBus.Settings;
+using NServiceBus.UniformSession;
 using NUnit.Framework;
 using Owin;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Account.Api;
 using SFA.DAS.EAS.Account.Api.Controllers;
+using SFA.DAS.EAS.Account.Api.DependencyResolution;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.UnitOfWork;
 using StructureMap;
 using WebApi.StructureMap;
 
@@ -175,6 +181,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             {
                 c.For<ILoggingContext>().Use(Mock.Of<ILoggingContext>());
                 c.For<IPublicHashingService>().Use(Mock.Of<IPublicHashingService>());
+                //===============
+                c.For<IUniformSession>().Use(Mock.Of<IUniformSession>());
+                c.For<ReadOnlySettings>().Use(Mock.Of<ReadOnlySettings>());
+                c.For<IUnitOfWorkManager>().Use(Mock.Of<IUnitOfWorkManager>());
             });
 
             _dependencyResolver = new IntegrationTestDependencyResolver(container);
