@@ -31,8 +31,8 @@ namespace SFA.DAS.EAS.Support.Web
             var siteConnectorSettings = ioc.GetService<ISiteValidatorSettings>();
             GlobalConfiguration.Configuration.MessageHandlers.Add(new TokenValidationHandler(siteConnectorSettings, logger));
             GlobalFilters.Filters.Add(new TokenValidationFilter(siteConnectorSettings, logger));
+            GlobalFilters.Filters.Add(new System.Web.Mvc.AuthorizeAttribute { Roles = "das-support-portal" });
             
-
             logger.Info("Web role started");
         }
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
