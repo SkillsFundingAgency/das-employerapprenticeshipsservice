@@ -356,6 +356,9 @@
                     },
                     "keyVaultResourceGroup": {
                         "value": "[parameters('keyVaultResourceGroup')]"
+                    },
+                    "serverFarmId": {
+                        "value": "[reference('WorkerAppServicePlan').outputs.appServicePlanId.value]"
                     }
                 }
             }
