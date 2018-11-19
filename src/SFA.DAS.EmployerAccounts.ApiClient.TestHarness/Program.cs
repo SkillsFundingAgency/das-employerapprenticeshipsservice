@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.ApiClient.TestHarness
                 try
                 {
                     var apiClient = container.GetInstance<IEmployerAccountsApiClient>();
-                    var hasRoleRequest = new HasRoleRequest { EmployerAccountId = 112, UserRef = Guid.NewGuid(), Roles = new []{ Role.Owner }};
+                    var hasRoleRequest = new HasRoleRequest { EmployerAccountId = 112, UserRef = Guid.Parse("ed7e1ffa-2308-4199-498d-c068b58e852e"), Roles = new []{ Role.Owner }};
                     var response = await apiClient.HasRole(hasRoleRequest, CancellationToken.None);
 
                     Console.WriteLine("HasRole: " + response);
