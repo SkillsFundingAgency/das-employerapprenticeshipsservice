@@ -10,5 +10,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Interfaces
     public interface IRuleRepository
     {
         IRuleSetEvaluationResult ApplyAllRules(Account account);
+
+        IReadOnlyCollection<IRule> AvailableRules { get; }
     }
 }

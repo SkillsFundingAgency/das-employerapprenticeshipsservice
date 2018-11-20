@@ -79,8 +79,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLine\AccountCommandLine.cs" />
+    <Compile Include="CommandLine\ListRulesCommandLine.cs" />
     <Compile Include="CommandLine\AnalyzeCommandLine.cs" />
     <Compile Include="CommandLine\ConfigCommandLine.cs" />
+    <Compile Include="Commands\ListRulesCommand.cs" />
     <Compile Include="Config\ConnectionStringEntry.cs" />
     <Compile Include="Config\DatabaseConfig.cs" />
     <Compile Include="ExtensionMethods\AccountExtensions.cs" />

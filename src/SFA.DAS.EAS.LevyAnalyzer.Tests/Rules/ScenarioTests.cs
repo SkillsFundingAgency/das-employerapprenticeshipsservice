@@ -7,6 +7,10 @@ using SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils;
 
 namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
 {
+    /// <summary>
+    ///     This class has a test for each of the scenarios that are described in the spreadsheet 
+    ///     attached to ticket AML-2998.
+    /// </summary>
     [TestFixture]
     public class ScenarioTests
     {

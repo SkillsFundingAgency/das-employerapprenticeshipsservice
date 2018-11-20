@@ -15,8 +15,9 @@ namespace SFA.DAS.EAS.LevyAnalyser
 
         private static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<AnalyseCommandLine>(args)
-                .WithParsed(qcla => new Program(qcla.ConfigLocation).RunQuery(qcla));
+            Parser.Default.ParseArguments<AnalyseCommandLine, ListRulesCommandLine>(args)
+                .WithParsed<AnalyseCommandLine>(commandLine => new Program(commandLine.ConfigLocation).RunAnalyser(commandLine))
+                .WithParsed<ListRulesCommandLine>(commandLine => new Program(string.Empty).ListRules(commandLine));
         }
 
         public Program(string configLocation)
@@ -24,10 +25,15 @@ namespace SFA.DAS.EAS.LevyAnalyser
             _container = IoC.IoC.InitialiseIoC(configLocation);
         }
 
-        private void RunQuery(AnalyseCommandLine args)
+        private void RunAnalyser(AnalyseCommandLine args)
         {
             SetConfigOverrides<AnalyzeCommandConfig>(config => config.AccountIds = args.AccountIds);
             RunCommand<AnalyzeCommand>();
+        }
+
+        private void ListRules(ListRulesCommandLine args)
+        {
+            RunCommand<ListRulesCommand>();
         }
 
         private void RunCommand<TCommand>() where TCommand : ICommand

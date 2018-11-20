@@ -43,6 +43,8 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
             return result;
         }
 
+        public IReadOnlyCollection<IRule> AvailableRules => _allRules;
+
         private RuleEvaluationResult ApplyRule(IValidateableObject account, IRule rule)
         {
             var result = new RuleEvaluationResult(rule.Name, rule.RequiredValidationObject, account.Id);
