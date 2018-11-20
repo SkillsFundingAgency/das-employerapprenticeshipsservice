@@ -8,3 +8,5 @@ AS
 	FROM [employer_financial].[TransactionLine]
 	WHERE AccountId = @AccountId
 	GROUP BY YEAR(DateCreated), MONTH(DateCreated)
+
+

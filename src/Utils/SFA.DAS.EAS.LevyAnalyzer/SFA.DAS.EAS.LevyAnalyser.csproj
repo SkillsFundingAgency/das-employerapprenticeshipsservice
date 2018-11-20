@@ -80,10 +80,16 @@
   <ItemGroup>
     <Compile Include="CommandLine\AccountCommandLine.cs" />
     <Compile Include="CommandLine\AnalyzeCommandLine.cs" />
+    <Compile Include="CommandLine\ConfigCommandLine.cs" />
     <Compile Include="Config\ConnectionStringEntry.cs" />
     <Compile Include="Config\DatabaseConfig.cs" />
     <Compile Include="ExtensionMethods\AccountExtensions.cs" />
+    <Compile Include="ExtensionMethods\EmumerableLevyDeclarationExtensions.cs" />
+    <Compile Include="ExtensionMethods\IValidateableObjectExtensions.cs" />
     <Compile Include="ExtensionMethods\LevyDeclarationExtensions.cs" />
+    <Compile Include="ExtensionMethods\PeriodDeclarations.cs" />
+    <Compile Include="ExtensionMethods\YearDeclarations.cs" />
+    <Compile Include="Interfaces\IRuleSetEvaluationResult.cs" />
     <Compile Include="Models\Employer.cs" />
     <Compile Include="Models\IValidateableObject.cs" />
     <Compile Include="PayrollPeriod.cs" />
@@ -93,12 +99,14 @@
     <Compile Include="Interfaces\IRuleEvaluationResult.cs" />
     <Compile Include="Interfaces\IRuleRepository.cs" />
     <Compile Include="IoC\FinanceRegistry.cs" />
+    <Compile Include="Rules\CalculatedYearEndAdjustment.cs" />
     <Compile Include="Rules\CalculatedLevyDeclation.cs" />
     <Compile Include="Rules\Infrastructure\AccountValidationResult.cs" />
     <Compile Include="Rules\Infrastructure\AllAccountValidationResult.cs" />
+    <Compile Include="Rules\Infrastructure\RuleSetEvaluationResult.cs" />
     <Compile Include="Rules\YearEndAdjustmentsShouldBeCummulative.cs" />
     <Compile Include="Rules\LevyDeclaredForMonthShouldMatchExpected.cs" />
-    <Compile Include="Rules\SupercededLevyShouldNotResultInATransaction.cs" />
+    <Compile Include="Rules\SupersededLevyShouldNotResultInATransaction.cs" />
     <Compile Include="Rules\OntimeLevyShouldResultInATransaction.cs" />
     <Compile Include="Rules\LateLevyShouldNotResultInATransaction.cs" />
     <Compile Include="Rules\Infrastructure\RuleRepository.cs" />

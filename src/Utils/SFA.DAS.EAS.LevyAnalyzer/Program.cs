@@ -16,13 +16,12 @@ namespace SFA.DAS.EAS.LevyAnalyser
         private static void Main(string[] args)
         {
             Parser.Default.ParseArguments<AnalyseCommandLine>(args)
-                .WithParsed(qcla => new Program().RunQuery(qcla));
+                .WithParsed(qcla => new Program(qcla.ConfigLocation).RunQuery(qcla));
         }
 
-
-        public Program()
+        public Program(string configLocation)
         {
-            _container = IoC.IoC.InitialiseIoC();
+            _container = IoC.IoC.InitialiseIoC(configLocation);
         }
 
         private void RunQuery(AnalyseCommandLine args)

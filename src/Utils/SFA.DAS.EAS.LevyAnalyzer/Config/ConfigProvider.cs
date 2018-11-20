@@ -8,9 +8,17 @@ namespace SFA.DAS.EAS.LevyAnalyser.Config
 {
     public class ConfigProvider : IConfigProvider
     {
+        private readonly string _configLocation;
+
         private readonly ConcurrentDictionary<Type, object> _config = new ConcurrentDictionary<Type, object>();
-        private readonly Lazy<JObject> _fullConfigFile = new Lazy<JObject>(LoadConfigFile);
+        private readonly Lazy<JObject> _fullConfigFile;
         private const string ConfigFileName = "SFA.DAS.EAS.LevyAnalyzer.json";
+
+        public ConfigProvider(string configLocation)
+        {
+            _configLocation = configLocation;
+            _fullConfigFile = new Lazy<JObject>(LoadConfigFile);
+        }
 
         public TConfigType Get<TConfigType>() where TConfigType : class, new()
         {
@@ -22,14 +30,34 @@ namespace SFA.DAS.EAS.LevyAnalyser.Config
             return _fullConfigFile.Value.Value<JObject>(configType.Name).ToObject(configType);
         }
 
-        private static JObject LoadConfigFile()
+        private JObject LoadConfigFile()
         {
-            if (!File.Exists(ConfigFileName))
+            var configFileName = GetConfigFileName();
+
+            return JObject.Parse(File.ReadAllText(configFileName));
+        }
+
+        private string GetConfigFileName()
+        {
+            // Nothing supplied...
+            if (string.IsNullOrWhiteSpace(_configLocation))
             {
-                throw new FileNotFoundException($"The required config file {ConfigFileName} foes not exist", ConfigFileName);
+                return ConfigFileName;
             }
 
-            return JObject.Parse(File.ReadAllText(ConfigFileName));
+            // Only a directory name...
+            if (Directory.Exists(_configLocation))
+            {
+                return Path.Combine(_configLocation, ConfigFileName);
+            }
+
+            // A full file path...
+            if (File.Exists(_configLocation))
+            {
+                return _configLocation;
+            }
+
+            throw new FileNotFoundException($"The configuration file {_configLocation} was not found");
         }
     }
 }

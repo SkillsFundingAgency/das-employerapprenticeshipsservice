@@ -11,6 +11,14 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
     /// <summary>
     ///     Validates that year end adjustments are cumulative, regardless of what is used for a period 12 value.
     /// </summary>
+    /// <remarks>
+    ///     Cumulative means that an adjustment adjusts prior adjustments, not replaces.
+    ///     Example:
+    ///         P12 declaration  £200
+    ///         P12 adjustment 1 £300
+    ///         P12 adjustment 2 £350
+    ///     Should have transactions £200, £100 and £50, not £200, £100 and £150.
+    /// </remarks>
     public class YearEndAdjustmentsShouldBeCummulative : IRule
     {
         private readonly IHmrcDateService _hmrcDateService;
@@ -26,18 +34,23 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
 
         public void Validate(IValidateableObject employer, RuleEvaluationResult validationResult)
         {
-            var declarations = employer.LevyDeclarations
-                                    .YearEndAdjustments(_hmrcDateService)
-                                    .OrderBy(declaration => declaration.SubmissionDate);
+            var yearEndAdjustments = employer.LevyDeclarations.CalculateYearEndAdjustments(_hmrcDateService).ToArray();
 
-            foreach (var declaration in declarations.CalculateMonthlyValues())
+            validationResult.AddRuleInfo($"Account has {yearEndAdjustments.Length} year end adjustments");
+
+            foreach (var yearEndAdjustment in yearEndAdjustments)
             {
-                var matchingTransaction = employer.Transactions.First(transaction =>
-                    transaction.SubmissionId == declaration.CurrentDeclaration.SubmissionId && transaction.EmpRef == employer.Id.ToString());
-
-                if (matchingTransaction.LevyDeclared != declaration.CalculatedLevyAmountForMonth)
+                if (!employer.TryGetMatchingTransaction(yearEndAdjustment.CurrentDeclaration,
+                    out var matchingTransaction))
                 {
-                    validationResult.AddRuleViolation($"The levy declared for period {declaration.CurrentDeclaration.PayrollYear} / {declaration.CurrentDeclaration.PayrollMonth} should be {declaration.CalculatedLevyAmountForMonth} but is actually {matchingTransaction.LevyDeclared}");
+                    validationResult.AddRuleViolation($"The year end adjustment {yearEndAdjustment.CurrentDeclaration.SubmissionId} does not have a corresponding transaction");
+                    continue;
+                }
+
+                if (matchingTransaction.LevyDeclared != yearEndAdjustment.CalculatedAdjustment)
+                {
+                    validationResult.AddRuleViolation(
+                        $"The year end adjustment {yearEndAdjustment.CurrentDeclaration.SubmissionId} declared for period {yearEndAdjustment.CurrentDeclaration.PayrollYear} / {yearEndAdjustment.CurrentDeclaration.PayrollMonth} should be {yearEndAdjustment.CalculatedAdjustment} but is actually {matchingTransaction.LevyDeclared}");
                 }
             }
         }

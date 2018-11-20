@@ -12,23 +12,22 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
     ///     Validates that only the latest on-time submission for a period results in a transaction.
     ///     Only applies to non-period 12.
     /// </summary>
-    public class SupercededLevyShouldNotResultInATransaction : IRule
+    public class SupersededLevyShouldNotResultInATransaction : IRule
     {
         private readonly IHmrcDateService _hmrcDateService;
 
-        public SupercededLevyShouldNotResultInATransaction(IHmrcDateService hmrcDateService)
+        public SupersededLevyShouldNotResultInATransaction(IHmrcDateService hmrcDateService)
         {
             _hmrcDateService = hmrcDateService;
         }
 
-        public string Name => nameof(SupercededLevyShouldNotResultInATransaction);
+        public string Name => nameof(SupersededLevyShouldNotResultInATransaction);
 
         public ValidationObject RequiredValidationObject => ValidationObject.Employer;
 
         public void Validate(IValidateableObject employer, RuleEvaluationResult validationResult)
         {
             var periodsWithMultipleOntimeSubmissions = employer.LevyDeclarations
-                .ExcludePeriod12()
                 .ExcludeLateSubmissions(_hmrcDateService)
                 .GroupByPayrollPeriod()
                 .Where(grp => grp.Declarations.Length > 1)
@@ -36,15 +35,16 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
 
             if (periodsWithMultipleOntimeSubmissions.Length == 0)
             {
+                validationResult.AddRuleInfo($"Account has no superseded declarations");
                 return;
             }
 
-            var submissionsThatHaveBeenSupercededButStillHaveATransaction = periodsWithMultipleOntimeSubmissions
+            var submissionsThatHaveBeenSupersededButStillHaveATransaction = periodsWithMultipleOntimeSubmissions
                             .Where(grp => grp.PayrollPeriod.PayrollMonth != 12)
                             .SelectMany(grp => grp.Declarations.Reverse().Skip(1))
                             .Where(declaration => employer.Transactions.Any(transaction => transaction.SubmissionId == declaration.SubmissionId));
 
-            foreach (var declaration in submissionsThatHaveBeenSupercededButStillHaveATransaction)
+            foreach (var declaration in submissionsThatHaveBeenSupersededButStillHaveATransaction)
             {
                 validationResult.AddRuleViolation($"Submission {declaration.SubmissionId} for period {declaration.PayrollYear}/{declaration.PayrollMonth} was superseded but there is a transaction for this.");
             }

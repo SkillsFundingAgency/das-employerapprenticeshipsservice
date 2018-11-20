@@ -7,9 +7,9 @@ namespace SFA.DAS.EAS.LevyAnalyser.IoC
 {
     public class CommonRegistry : Registry
     {
-        public CommonRegistry()
+        public CommonRegistry(string configLocation)
         {
-            For<IConfigProvider>().Use<ConfigProvider>().Singleton();
+            For<IConfigProvider>().Use(new ConfigProvider(configLocation)).Singleton();
             For<IResultSaver>().Use<FileResultSaver>();
 
             Scan(scan =>

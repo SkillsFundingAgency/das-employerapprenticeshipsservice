@@ -9,6 +9,6 @@ namespace SFA.DAS.EAS.LevyAnalyser.Interfaces
     /// </summary>
     public interface IRuleRepository
     {
-        IEnumerable<RuleEvaluationResult> ApplyAllRules(Account account);
+        IRuleSetEvaluationResult ApplyAllRules(Account account);
     }
 }

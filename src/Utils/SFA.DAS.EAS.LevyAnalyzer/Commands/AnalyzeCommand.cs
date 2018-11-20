@@ -10,12 +10,6 @@ using Exception = System.Exception;
 
 namespace SFA.DAS.EAS.LevyAnalyser.Commands
 {
-
-    public class LevyProcessingInformation
-    {
-        public Account Account { get; set; }
-    }
-
     public class AnalyzeCommand : ICommand
     {
         private readonly IAccountRepository _accountRepository;
@@ -81,7 +75,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Commands
             var result = new AccountValidationResult
             {
                 AccountId = account.AccountId,
-                Rules = _ruleRepository.ApplyAllRules(account).ToArray()
+                Rules = _ruleRepository.ApplyAllRules(account)
             };
 
             Console.WriteLine($"{(result.IsValid ? "Valid" : "Invalid")}");

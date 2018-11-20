@@ -32,12 +32,15 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
 
             foreach (var declaration in declarations.CalculateMonthlyValues())
             {
-                var matchingTransaction = employer.Transactions.First(transaction =>
-                    transaction.SubmissionId == declaration.CurrentDeclaration.SubmissionId && transaction.EmpRef == employer.Id.ToString());
+                if (!employer.TryGetMatchingTransaction(declaration.CurrentDeclaration, out var matchingTransaction))
+                {
+                    validationResult.AddRuleViolation($"Levy {declaration.CurrentDeclaration.SubmissionId} for period {declaration.CurrentDeclaration.PayrollYear} / {declaration.CurrentDeclaration.PayrollMonth} does not have a matching transaction.");
+                    continue;
+                }
 
                 if (matchingTransaction.LevyDeclared != declaration.CalculatedLevyAmountForMonth)
                 {
-                    validationResult.AddRuleViolation($"The levy declared for period {declaration.CurrentDeclaration.PayrollYear} / {declaration.CurrentDeclaration.PayrollMonth} should be {declaration.CalculatedLevyAmountForMonth} but is actually {matchingTransaction.LevyDeclared}");
+                    validationResult.AddRuleViolation($"The levy {declaration.CurrentDeclaration.SubmissionId} declared for period {declaration.CurrentDeclaration.PayrollYear} / {declaration.CurrentDeclaration.PayrollMonth} should be {declaration.CalculatedLevyAmountForMonth} but is actually {matchingTransaction.LevyDeclared}");
                 }
             }
         }

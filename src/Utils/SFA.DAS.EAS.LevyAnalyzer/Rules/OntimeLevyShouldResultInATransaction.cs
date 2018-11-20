@@ -28,23 +28,15 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
         public void Validate(IValidateableObject account, RuleEvaluationResult validationResult)
         {
 
-            foreach (var declaration in account.LevyDeclarations.ExcludeInvalidDeclarations().ExcludePeriod12())
+            var nonSupercededOnTimeDeclarations = account.LevyDeclarations
+                .ActiveDeclarations(_hmrcDateService)
+                .OrderBy(declaration => declaration.SubmissionDate);
+
+            foreach (var declaration in nonSupercededOnTimeDeclarations)
             {
-                try
+                if (!account.TryGetMatchingTransaction(declaration, out _))
                 {
-                    if (_hmrcDateService.IsDateInPayrollPeriod(declaration.PayrollYear, declaration.PayrollMonth.Value, declaration.SubmissionDate.Value))
-                    {
-                        if (account.Transactions.All(txn => txn.SubmissionId.HasValue && txn.SubmissionId != declaration.Id))
-                        {
-                            validationResult.AddRuleViolation($"The on-time submission {declaration.Id} is missing an associated transaction");
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"Failed to process transaction - {e.Message}");
-                    Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(declaration));
-                    throw;
+                    validationResult.AddRuleViolation($"The on-time submission {declaration.Id} is missing an associated transaction");
                 }
             }
         }

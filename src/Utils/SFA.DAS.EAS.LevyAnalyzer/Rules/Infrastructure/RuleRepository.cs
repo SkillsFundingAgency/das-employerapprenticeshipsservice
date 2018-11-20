@@ -14,16 +14,18 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
             _allRules = allRules;
         }
 
-        public IEnumerable<RuleEvaluationResult> ApplyAllRules(Account account)
+        public IRuleSetEvaluationResult ApplyAllRules(Account account)
         {
             Employer[] employersInAccount = null;
+
+            var result = new RuleSetEvaluationResult();
 
             foreach (var rule in _allRules)
             {
                 switch (rule.RequiredValidationObject)
                 {
                     case ValidationObject.Account:
-                        yield return ApplyRule(account, rule);
+                        result.AddRuleResult(ApplyRule(account, rule));
                         break;
 
                     case ValidationObject.Employer:
@@ -31,12 +33,14 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
 
                         foreach (var employer in employersInAccount)
                         {
-                            yield return ApplyRule(employer, rule);
+                            result.AddRuleResult(ApplyRule(employer, rule));
                         }
 
                         break;
                 }
             }
+
+            return result;
         }
 
         private RuleEvaluationResult ApplyRule(IValidateableObject account, IRule rule)

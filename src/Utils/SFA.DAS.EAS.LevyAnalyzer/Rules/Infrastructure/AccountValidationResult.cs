@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using SFA.DAS.EAS.LevyAnalyser.Interfaces;
 
 namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
 {
@@ -8,7 +9,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
     public class AccountValidationResult
     {
         public long AccountId { get; set; }
-        public bool IsValid => Rules != null && Rules.All(rule => rule.IsValid);
-        public RuleEvaluationResult[] Rules { get; set; }
+        public bool IsValid => Rules.IsValid;
+        public IRuleSetEvaluationResult Rules { get; set; }
     }
 }
