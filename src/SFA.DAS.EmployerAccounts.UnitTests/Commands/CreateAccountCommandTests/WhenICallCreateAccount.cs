@@ -29,7 +29,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
     {
         private Mock<IAccountRepository> _accountRepository;
         private CreateAccountCommandHandler _handler;
-        private Mock<IMessagePublisher> _messagePublisher;
         private Mock<IMediator> _mediator;
         private Mock<IValidator<CreateAccountCommand>> _validator;
         private Mock<IHashingService> _hashingService;
@@ -42,8 +41,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
+        private const long ExpectedEmployerAgreementId = 864;
+        private const long ExpectedAccountLegalEntityId = 333;
         private const string ExpectedHashString = "123ADF23";
         private const string ExpectedPublicHashString = "SCUFF";
+        private const string ExpectedAccountLegalEntityPublicHashString = "ALEPUB";
 
         private User _user;
 
@@ -52,9 +54,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         {
             _accountRepository = new Mock<IAccountRepository>();
             _accountRepository.Setup(x => x.GetPayeSchemesByAccountId(ExpectedAccountId)).ReturnsAsync(new List<PayeView> { new PayeView { LegalEntityId = ExpectedLegalEntityId } });
-            _accountRepository.Setup(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<short?>(), It.IsAny<string>())).ReturnsAsync(new CreateAccountResult { AccountId = ExpectedAccountId, LegalEntityId = 0L, EmployerAgreementId = 0L });
+            _accountRepository.Setup(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<short?>(), It.IsAny<string>())).ReturnsAsync(new CreateAccountResult { AccountId = ExpectedAccountId, LegalEntityId = ExpectedLegalEntityId, EmployerAgreementId = ExpectedEmployerAgreementId, AccountLegalEntityId = ExpectedAccountLegalEntityId });
 
-            _messagePublisher = new Mock<IMessagePublisher>();
             _eventPublisher = new TestableEventPublisher();
             _mediator = new Mock<IMediator>();
 
@@ -71,6 +72,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
 
             _externalhashingService = new Mock<IPublicHashingService>();
             _externalhashingService.Setup(x => x.HashValue(ExpectedAccountId)).Returns(ExpectedPublicHashString);
+            _externalhashingService.Setup(x => x.HashValue(ExpectedAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
 
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _accountEventFactory = new Mock<IAccountEventFactory>();
@@ -264,8 +266,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         [Test]
         public async Task ThenACreatedAccountEventIsPublished()
         {
+            const string organisationName = "Org";
+
             //Arrange
-            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.Ref.ToString() };
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", OrganisationName = organisationName, ExternalUserId = _user.Ref.ToString() };
 
             //Act
             await _handler.Handle(createAccountCommand);
@@ -274,8 +278,35 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             var createdAccountEvent = _eventPublisher.Events.OfType<CreatedAccountEvent>().Single();
 
             createdAccountEvent.AccountId.Should().Be(ExpectedAccountId);
+            createdAccountEvent.PublicHashedId.Should().Be(ExpectedPublicHashString);
+            createdAccountEvent.Name.Should().Be(organisationName);
             createdAccountEvent.UserName.Should().Be(_user.FullName);
             createdAccountEvent.UserRef.Should().Be(_user.Ref);
+        }
+
+        [Test]
+        public async Task ThenAAddedLegalEntityEventIsPublished()
+        {
+            const string organisationName = "Org";
+
+            //Arrange
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", OrganisationName = organisationName, ExternalUserId = _user.Ref.ToString() };
+
+            //Act
+            await _handler.Handle(createAccountCommand);
+
+            //Assert
+            var addedLegalEntityEvent = _eventPublisher.Events.OfType<AddedLegalEntityEvent>().Single();
+
+            addedLegalEntityEvent.AgreementId.Should().Be(ExpectedEmployerAgreementId);
+            addedLegalEntityEvent.LegalEntityId.Should().Be(ExpectedLegalEntityId);
+            addedLegalEntityEvent.OrganisationName.Should().Be(organisationName);
+            addedLegalEntityEvent.AccountId.Should().Be(ExpectedAccountId);
+            addedLegalEntityEvent.AccountLegalEntityId.Should().Be(ExpectedAccountLegalEntityId);
+            addedLegalEntityEvent.AccountLegalEntityPublicHashedId.Should().Be(ExpectedAccountLegalEntityPublicHashString);
+            addedLegalEntityEvent.UserName.Should().Be(_user.FullName);
+            addedLegalEntityEvent.UserRef.Should().Be(_user.Ref);
+            //addedLegalEntityEvent.Created.Should().Be(rightAboutNow);
         }
     }
 }
