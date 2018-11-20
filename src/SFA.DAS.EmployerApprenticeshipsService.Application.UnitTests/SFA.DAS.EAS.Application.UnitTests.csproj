@@ -327,8 +327,6 @@
     <Compile Include="Queries\GetTransferAllowanceTests\GetTransferAllowanceTests.cs" />
     <Compile Include="Commands\RemoveLegalEntityTests\WhenIRemoveALegalEntity.cs" />
     <Compile Include="Commands\RemoveLegalEntityTests\WhenIValidateTheCommand.cs" />
-    <Compile Include="Commands\UnsubscribeNotificationTest\WhenUnsubscribingFromNotification.cs" />
-    <Compile Include="Commands\UnsubscribeNotificationTest\WhenValidatingUnsubscribeCommand.cs" />
     <Compile Include="Commands\CreateEmployerAgreementTemplateTests\WhenICreateAnEmployerAgreementTemplate.cs" />
     <Compile Include="Commands\CreateLegalEntityCommandTests\WhenICallCreateLegalEntity.cs" />
     <Compile Include="Commands\CreateOrganisationAddressTests\WhenICreateAnAddress.cs" />
@@ -337,8 +335,6 @@
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\SignEmployerAgreementTests\WhenISignAnEmployerAgreement.cs" />
     <Compile Include="Commands\SignEmployerAgreementTests\WhenIValidateTheRequest.cs" />
-    <Compile Include="Commands\UpdateUserNotificationSettings\WhenUpdatingUserNotificationSettings.cs" />
-    <Compile Include="Commands\UpdateUserNotificationSettings\WhenValidatingTheCommand.cs" />
     <Compile Include="Factories\LevyEventFactoryTests\WhenICreateAnEvent.cs" />
     <Compile Include="Factories\EmployerAgreementEventFactoryTests\WhenICreateAnEvent.cs" />
     <Compile Include="FakeTimeProvider.cs" />
@@ -416,8 +412,6 @@
     <Compile Include="Queries\GetUserInvitations\WhenIRequestHowManyInvitationsIHave.cs" />
     <Compile Include="Queries\GetUserInvitations\WhenIRequestUserInvitations.cs" />
     <Compile Include="Queries\GetUserInvitations\WhenIValidateTheRequestForNumberOfInvitations.cs" />
-    <Compile Include="Queries\GetUserNotificationSettings\WhenIGetUserNotificationSettings.cs" />
-    <Compile Include="Queries\GetUserNotificationSettings\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUsersTests\WhenIGetUsers.cs" />
     <Compile Include="Queries\GetUserByRefTests\WhenIGetAUser.cs" />
     <Compile Include="Queries\GetUserByRefTests\WhenIValidatedTheQuery.cs" />

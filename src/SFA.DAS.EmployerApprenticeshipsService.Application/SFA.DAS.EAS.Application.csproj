@@ -439,15 +439,9 @@
     <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommandHandler.cs" />
     <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommandValidator.cs" />
     <Compile Include="Commands\SendTransferConnectionInvitation\SendTransferConnectionInvitationCommandHandler.cs" />
-    <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationCommand.cs" />
-    <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationHandler.cs" />
-    <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationValidator.cs" />
     <Compile Include="Commands\UpdateShowWizard\UpdateShowAccountWizardCommand.cs" />
     <Compile Include="Commands\UpdateShowWizard\UpdateShowAccountWizardCommandHandler.cs" />
     <Compile Include="Commands\UpdateShowWizard\UpdateShowAccountWizardCommandValidator.cs" />
-    <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommand.cs" />
-    <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommandHandler.cs" />
-    <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsValidator.cs" />
     <Compile Include="Commands\AddPayeToAccount\AddPayeToAccountCommand.cs" />
     <Compile Include="Commands\AddPayeToAccount\AddPayeToAccountCommandValidator.cs" />
     <Compile Include="Commands\AddPayeToAccount\AddPayeToAccountCommandHandler.cs" />
@@ -705,10 +699,6 @@
     <Compile Include="Queries\GetUserInvitations\GetUserInvitationsQueryHandler.cs" />
     <Compile Include="Queries\GetUserInvitations\GetUserInvitationsRequest.cs" />
     <Compile Include="Queries\GetUserInvitations\GetUserInvitationsResponse.cs" />
-    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQuery.cs" />
-    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQueryHandler.cs" />
-    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQueryResponse.cs" />
-    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQueryValidator.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQuery.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryHandler.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryResponse.cs" />

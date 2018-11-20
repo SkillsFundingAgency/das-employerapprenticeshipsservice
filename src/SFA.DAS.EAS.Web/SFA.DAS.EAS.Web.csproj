@@ -523,7 +523,6 @@
     <Compile Include="Controllers\OrganisationSharedController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
-    <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsController.cs" />
     <Compile Include="Controllers\TransfersController.cs" />
     <Compile Include="Extensions\DynamicExtentions.cs" />
@@ -536,7 +535,6 @@
     <Compile Include="Mappings\TransferMappings.cs" />
     <Compile Include="Orchestrators\IOrchestratorCookie.cs" />
     <Compile Include="Orchestrators\TaskOrchestrator.cs" />
-    <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
     <Compile Include="ViewModels\AccountPaye\PayeSchemeNextStepsViewModel.cs" />
     <Compile Include="ViewModels\Activities\ActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Activities\LatestActivitiesViewModel.cs" />
@@ -1064,8 +1062,6 @@
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="src\sass\_welcome.scss" />
-    <Content Include="Views\Settings\NotificationSettings.cshtml" />
-    <Content Include="Views\Settings\NotificationUnsubscribe.cshtml" />
     <Content Include="Views\Shared\Pagination.cshtml" />
     <Content Include="src\sass\_search.scss" />
     <Content Include="Views\EmployerAccountPaye\NextSteps.cshtml" />

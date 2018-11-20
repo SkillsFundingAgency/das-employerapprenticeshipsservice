@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
@@ -45,7 +44,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("{HashedAccountId}/rename")]
-        public async Task<ActionResult> RenameAccount(string hashedAccountId)
+        public ActionResult RenameAccount(string hashedAccountId)
         {
             return Redirect(Url.EmployerAccountsAction("rename"));
         }
