@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.LevyAnalyser.ExtensionMethods;
 using SFA.DAS.EAS.LevyAnalyser.Interfaces;
 using SFA.DAS.EAS.LevyAnalyser.Models;
 using SFA.DAS.EAS.LevyAnalyser.Rules;
@@ -102,6 +105,18 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
             check(result, account);
         }
 
+        /// <summary>
+        ///     Assert that the declarations and transactions that have been set up pass all the 
+        ///     rules defined in the system. Once verified each transaction will be temporarily removed 
+        ///     to verify the rules now fail.
+        /// </summary>
+        public void AssertAllRulesAreValidAndThenCheckNegativeCase()
+        {
+            AssertAllRulesAreValid();
+
+            RemoveEachTranactionInTurnAndAssertAllRulesAreFailing();
+        }
+
         public void AssertAllRulesAreValid()
         {
             var account = CreateAccount();
@@ -114,6 +129,39 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
             {
                 DumpValidationMessages(ruleSetEvaluationResult);
                 Assert.Fail("Expected the rule set to pass but it has failed");
+            }
+        }
+
+        public void RemoveEachTranactionInTurnAndAssertAllRulesAreFailing()
+        {
+            for (int i = 0; i < Transactions.Count; i++)
+            {
+                RemoveSpecifiedTransactionAndAssertAllRulesAreFailing(i);
+            }
+        }
+
+        public void RemoveSpecifiedTransactionAndAssertAllRulesAreFailing(int transactionIndex)
+        {
+            Assert.IsTrue(Transactions.Count > transactionIndex, $"Cannot use method {nameof(RemoveSpecifiedTransactionAndAssertAllRulesAreFailing)} to remove index {transactionIndex} for this test because the test has only set up {Transactions.Count} transactions");
+
+            var transactionToRemove = Transactions[transactionIndex];
+            Transactions.RemoveAt(transactionIndex);
+            try
+            {
+                var account = CreateAccount();
+
+                var ruleRepository = _lazyRuleRepository.Value;
+
+                var ruleSetEvaluationResult = ruleRepository.ApplyAllRules(account);
+
+                if (ruleSetEvaluationResult.IsValid)
+                {
+                    Assert.Fail("Expected the rule set to fail but it has passed");
+                }
+            }
+            finally
+            {
+                Transactions.Insert(transactionIndex, transactionToRemove);
             }
         }
 
@@ -136,6 +184,71 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
                     Assert.Fail("Expected the rule to fail but it has passed");
                 }
             });
+        }
+
+        /// <summary>
+        ///     Verifies that the supplied declarations consists of only the supplied submission ids.
+        /// </summary>
+        public void AssertActiveDeclarations(params long[] submissionIds)
+        {
+            var matchResults = new []
+            {
+                new List<long>(), new List<long>(), new List<long>()
+            };
+
+            const int expectedAndFound = 0;
+            const int expectedButNotFound = 1;
+            const int foundButNotExpected = 2;
+
+            var sourceList = Declarations.ActiveDeclarations(HmrcDateService).ToList();
+
+            foreach (var submissionId in submissionIds)
+            {
+                var matched = sourceList.SingleOrDefault(declaration => declaration.SubmissionId == submissionId);
+
+                if (matched != null)
+                {
+                    matchResults[expectedAndFound].Add(submissionId);
+                    sourceList.Remove(matched);
+                }
+                else
+                {
+                    matchResults[expectedButNotFound].Add(submissionId);
+                }
+            }
+
+            matchResults[foundButNotExpected].AddRange(sourceList.Select(declaration => declaration.SubmissionId));
+
+            var sb = new StringBuilder();
+
+            var foundErrors = AddSubmissionIds(sb,
+                                  "The following submissions were expected to be active but were not:",
+                                  matchResults[expectedButNotFound])
+                              ||
+                              AddSubmissionIds(sb,
+                                  "The following submissions were not unexpectedly found to be active:",
+                                  matchResults[foundButNotExpected]);
+
+            Assert.IsFalse(foundErrors, "The active submissions are not those expected");
+        }
+
+        private bool AddSubmissionIds(StringBuilder sb, string message, List<long> submissionIds)
+        {
+            if (submissionIds.Count == 0)
+            {
+                return false;
+            }
+
+            sb.AppendLine(message);
+            foreach (var submissionId in submissionIds)
+            {
+                sb.Append(submissionId);
+                sb.Append(", ");
+            }
+
+            sb.Length = sb.Length - 2;
+
+            return true;
         }
 
         private LevyAnalyzerTestFixtures WithLevy(long submissionId, string payrollYear, byte payrollMonth, DateTime submissionDate, bool isOnTime, decimal levyDueYtd)
@@ -169,7 +282,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
 
         private void DumpValidationMessages(IRuleEvaluationResult result)
         {
-            var msg = $"{result.RuleName} : {(result.IsValid ? "Valid" : "Violated")}";
+            var msg = $"{result.RuleName} : {(result.IsValid ? "Pass" : "Violated")}";
             Console.WriteLine(msg);
             Console.WriteLine(new string('-', msg.Length));
 

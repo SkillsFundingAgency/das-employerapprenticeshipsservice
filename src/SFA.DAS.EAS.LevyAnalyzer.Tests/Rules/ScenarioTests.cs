@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
                 .WithTransaction(130, 100)
                 .WithTransaction(131, 100);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
 
                 .WithTransaction(132, 1200);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
                 .WithTransaction(131, 100)
                 .WithTransaction(132, 100);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -115,7 +115,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
                 .WithTransaction(130, 100)
                 .WithTransaction(131, 100);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -135,7 +135,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
                 .WithLateLevy(130, "18-19", 10, new DateTime(2019, 02, 10), 1000)
                 .WithLateLevy(131, "18-19", 11, new DateTime(2019, 03, 10), 1100);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
 
@@ -149,7 +149,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
 
                 .WithTransaction(122, 200);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -158,13 +158,13 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
             var fixtures = new LevyAnalyzerTestFixtures()
                 .WithEmpRef("ABC/012345")
                 .WithOntimeLevy(121, "18-19", 2, new DateTime(2018, 05, 10), 100)
-                .WithOntimeLevy(122, "18-19", 12, new DateTime(2019, 04, 11), 200)
-                .WithOntimeLevy(123, "18-19", 12, new DateTime(2019, 04, 10), 400)
+                .WithOntimeLevy(122, "18-19", 12, new DateTime(2019, 04, 10), 200)
+                .WithOntimeLevy(123, "18-19", 12, new DateTime(2019, 04, 11), 400)
 
                 .WithTransaction(121, 100)
                 .WithTransaction(123, 300);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -172,12 +172,12 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
         {
             var fixtures = new LevyAnalyzerTestFixtures()
                 .WithEmpRef("ABC/012345")
-                .WithOntimeLevy(122, "18-19", 12, new DateTime(2019, 04, 11), 200)
-                .WithOntimeLevy(123, "18-19", 12, new DateTime(2019, 04, 10), 400)
+                .WithOntimeLevy(122, "18-19", 12, new DateTime(2019, 04, 10), 200)
+                .WithOntimeLevy(123, "18-19", 12, new DateTime(2019, 04, 11), 400)
 
                 .WithTransaction(123, 400);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -190,7 +190,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
                 .WithTransaction(122, 200)
                 .WithTransaction(123, 200);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -203,7 +203,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
                 .WithTransaction(122, 200)
                 .WithTransaction(123, -100);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -216,7 +216,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
                 .WithTransaction(122, 200)
                 .WithTransaction(123, -100);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -228,7 +228,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
 
                 .WithTransaction(123, 100);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -242,7 +242,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
                 .WithTransaction(122, 300)
                 .WithTransaction(123, 200);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -256,7 +256,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
                 .WithTransaction(122, 300)
                 .WithTransaction(123, 200);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -275,7 +275,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
                 .WithTransaction(124, 300)
                 .WithTransaction(125, 400);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -292,7 +292,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
                 .WithTransaction(123, 400)
                 .WithTransaction(124, 500);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
 
         [Test]
@@ -308,7 +308,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
                 .WithTransaction(123, 400)
                 .WithTransaction(124, 300);
 
-            fixtures.AssertAllRulesAreValid();
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
         }
     }
 }

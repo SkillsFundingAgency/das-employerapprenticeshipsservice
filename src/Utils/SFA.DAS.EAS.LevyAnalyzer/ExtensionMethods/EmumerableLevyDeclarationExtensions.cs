@@ -114,6 +114,11 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
                     yield return period12Declaration;
                 }
             }
+
+            if (lastOntime != null)
+            {
+                yield return lastOntime;
+            }
         }
 
         /// <summary>
